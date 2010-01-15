@@ -1,12 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
-<TextView android:id="@+id/dbContent"
-    android:layout_width="wrap_content" 
-    android:layout_height="wrap_content" 
-    android:text=""
-    />
+	android:padding="30dip"
+	android:orientation="horizontal" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	<LinearLayout android:orientation="vertical"
+		android:layout_height="wrap_content" android:layout_width="fill_parent"
+		android:layout_gravity="center">
+		<TextView android:text="@string/app_name"
+			android:layout_height="wrap_content" android:layout_width="wrap_content"
+			android:layout_gravity="center" android:layout_margin="25dip"
+			android:textSize="24.5sp" />
+		<Button android:id="@+id/main_open_database_button"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:text="@string/open_button_text" />
+		<Button android:id="@+id/main_open_recent_button"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:text="@string/recent_button_text" />
+		<Button android:id="@+id/main_option_button"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:text="@string/option_button_text" />
+		<Button android:id="@+id/main_about_button"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:text="@string/about_button_text" />
+		<Button android:id="@+id/main_exit_button"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:text="@string/exit_button_text" />
+	</LinearLayout>
 </LinearLayout>

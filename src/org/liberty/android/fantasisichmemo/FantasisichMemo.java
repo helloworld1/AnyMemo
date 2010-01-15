@@ -15,9 +15,9 @@ public class FantasisichMemo extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        Intent myIntent = new Intent();
-        myIntent.setClass(this, FileBrowser.class);
-        startActivityForResult(myIntent, 1);
+        //Intent myIntent = new Intent();
+        //myIntent.setClass(this, FileBrowser.class);
+        //startActivityForResult(myIntent, 1);
         /*
         myIntent.setClass(this, MemoScreen.class);
         myIntent.putExtra("mode", "acq");
@@ -25,18 +25,15 @@ public class FantasisichMemo extends Activity {
         */
         
         
-        mDBView = (TextView)findViewById(R.id.dbContent);
         //Item resItem;
         //resItem = dbHelper.getItemById(4, 0);
         //mDBView.setText(new StringBuilder().append(resItem.getNote()));
-        mDBView.setText(new StringBuilder().append(dbPath).append(dbName));
         
     }
     
     public void onResume(){
     	super.onResume();
     	if(returnValue == 1){
-        mDBView = (TextView)findViewById(R.id.dbContent);
         mDBView.setText(new StringBuilder().append(dbPath).append(dbName));
         Item resItem;
         DatabaseHelper dbHelper = new DatabaseHelper(this, dbPath, dbName);
