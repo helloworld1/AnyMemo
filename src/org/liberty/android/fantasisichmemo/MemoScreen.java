@@ -1,15 +1,18 @@
 package org.liberty.android.fantasisichmemo;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -62,6 +65,23 @@ public class MemoScreen extends Activity {
 			this.updateMemoScreen();
 		}
 
+	}
+	
+	public boolean onCreateOptionsMenu(Menu menu){
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.memo_screen_menu, menu);
+		return true;
+	}
+	
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	    case R.id.menuback:
+	    	finish();
+	        return true;
+	    case R.id.menudetail:
+	        return true;
+	    }
+	    return false;
 	}
 
 	public boolean onTouchEvent(MotionEvent event) {
@@ -125,7 +145,7 @@ public class MemoScreen extends Activity {
 			
 
 	private void updateMemoScreen() {
-		// update the main screen according to the currentItem
+		// update the main screen according to the shcurrentItem
 		
 		OnClickListener backButtonListener = new OnClickListener() {
 			// Finish the current activity and go back to the last activity.

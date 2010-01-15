@@ -4,4 +4,6 @@
     <string name="app_name">FantasisichMemo</string>
     <string name="up_one_level">..</string>
     <string name="current_dir">.</string>
+    <string name="back_button_text">Back</string>
+    <string name="detail_button_text">Detail</string>
 </resources>
