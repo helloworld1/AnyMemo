@@ -1,7 +1,7 @@
 package org.liberty.android.fantasisichmemo;
 
 import java.util.ArrayList;
-import java.util.ListIterator;
+import java.util.Map;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -14,8 +14,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class MemoScreen extends Activity {
-	private ArrayList<Item> acqQueue;
-	private ArrayList<Item> revQueue;
+	//
+	private ArrayList<Item> learnQueue;
+	//private ArrayList<Item> acqQueue;
+	//private ArrayList<Item> revQueue;
 	private DatabaseHelper dbHelper;
 	private String dbName;
 	private String dbPath;
@@ -23,6 +25,8 @@ public class MemoScreen extends Activity {
 	private boolean showAnswer;
 	private int newGrade = -1;
 	private Item currentItem;
+	private final int WINDOW_SIZE = 10;
+	private boolean queueEmpty;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -32,16 +36,12 @@ public class MemoScreen extends Activity {
 		// acq and rev should be different processes in different learning algorithm
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
-			mode = extras.getString("mode");
-			if (!mode.equals("acq") && !mode.equals("rev")) {
-				mode = null;
-			}
 			dbPath = extras.getString("dbpath");
 			dbName = extras.getString("dbname");
 		}
 		this.prepare();
 		this.feedData();
-		if(acqQueue.isEmpty() && revQueue.isEmpty()){
+		if(!learnQueue.isEmpty()){
 			OnClickListener backButtonListener = new OnClickListener() {
 				// Finish the current activity and go back to the last activity.
 				// It should be the main screen.
@@ -52,7 +52,7 @@ public class MemoScreen extends Activity {
 			AlertDialog alertDialog = new AlertDialog.Builder(this)
 			.create();
 			alertDialog.setTitle("No item");
-			alertDialog.setMessage("There is no "+ mode + "items for now.");
+			alertDialog.setMessage("There is no items for now.");
 			alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Back",
 					backButtonListener);
 			alertDialog.show();
@@ -80,33 +80,50 @@ public class MemoScreen extends Activity {
 	private void prepare() {
 		// Empty the queue, init the db
 		dbHelper = new DatabaseHelper(this, dbPath, dbName);
-		acqQueue = new ArrayList<Item>();
-		revQueue = new ArrayList<Item>();
+		learnQueue = new ArrayList<Item>();
 		this.newGrade = -1;
+		this.queueEmpty = true;
 	}
 
-	private void feedData() {
+	private int feedData() {
 		// Feed the 10 items to acq queue
 		// or feed all items to rev queue
 		// from the database
-		if (mode.equals("acq")) {
-			this.feedDataFromAcq(10);
-			if (acqQueue.isEmpty()) {
-				currentItem = null;
-			} else {
-				// We set the currerntItem to the first item in queue
-				currentItem = acqQueue.get(0);
+		Item item;
+		int id = -1;
+		for(int i = learnQueue.size(); i < WINDOW_SIZE; i++){
+			item = dbHelper.getItemById(id, 2); // Revision first
+			if(item == null){
+				item = dbHelper.getItemById(id, 1); // Then learn new if no revision.
+				if(item == null){
+					break;
+				}
+				else{
+					learnQueue.add(item);
+					
+				}
 			}
-		} else if (mode.equals("rev")) {
-			this.feedDataFromRev(0);
-			if (revQueue.isEmpty()) {
-				currentItem = null;
-			} else {
-				currentItem = revQueue.get(0);
+			else{
+				learnQueue.add(item);
 			}
-
+			id = item.getId() + 1;
+			
+		}
+		switch(learnQueue.size()){
+		case 0: // No item in queue
+			queueEmpty = true;
+			return 2;
+		case WINDOW_SIZE: // Queue full
+			queueEmpty = false;
+			return 0;
+		default: // There are some items in the queue
+			queueEmpty = false;
+			return 1;
+				
 		}
 	}
+			
+			
 
 	private void updateMemoScreen() {
 		// update the main screen according to the currentItem
@@ -118,113 +135,23 @@ public class MemoScreen extends Activity {
 				finish();
 			}
 		};
-		if (mode.equals("acq")) {
-				// When the acq queue is empty we try to feed data again
-				if (acqQueue.isEmpty()) {
-					prepare();
-					feedData();
-					if(!acqQueue.isEmpty()){
-					// If the data is successfully fed, we ask user if 
-					// he/she want to continue learning
-					
-					OnClickListener yesButtonListener = new OnClickListener() {
-						public void onClick(DialogInterface arg0, int arg1) {
-							updateMemoScreen();
-
-						}
-					};
-					OnClickListener noButtonListener = new OnClickListener() {
-						public void onClick(DialogInterface arg0, int arg1) {
-
-						}
-					};
-					AlertDialog alertDialog = new AlertDialog.Builder(this)
-							.create();
-					alertDialog.setTitle("Congratulations!");
-					alertDialog
-							.setMessage("You have learned 10 items. Do you want to learn more?");
-					alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
-							yesButtonListener);
-					alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
-							noButtonListener);
-					alertDialog.show();
-				} else {
-					// If the queue is still empty, there is no new items in database.
-					// So we ask user to go back the main screen.
-					
-					AlertDialog alertDialog = new AlertDialog.Builder(this)
-							.create();
-					alertDialog.setTitle("No Data in Database");
-					alertDialog
-							.setMessage("You have learned all the new items in database");
-					alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Back",
-							backButtonListener);
-					alertDialog.show();
-
-				}
-			}
-
-			 else {
-				currentItem = acqQueue.get(0);
-				this.displayQA(currentItem);
-			}
-		} else if (mode.equals("rev")) {
-			// The revision process is different. It ask user to review all items
-			// So if there is no items in the queue, there shouldn't be any items
-			// for revision in the database.
-			// We can only ask user to go back.
+		if(queueEmpty == false){
+			currentItem = learnQueue.get(0);
+			this.displayQA(currentItem);
+		}
+		else{
+			AlertDialog alertDialog = new AlertDialog.Builder(this)
+			.create();
+			alertDialog.setTitle("No item");
+			alertDialog.setMessage("There is no items for now.");
+			alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Back",
+					backButtonListener);
+			alertDialog.show();
 			
-				if (revQueue.isEmpty()) {
-					AlertDialog alertDialog = new AlertDialog.Builder(this)
-							.create();
-					alertDialog.setTitle("Congratulations!");
-					alertDialog.setMessage("You have completed revision!");
-					alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Back",
-							backButtonListener);
-					alertDialog.show();
-				}
-
-			 else {
-				currentItem = revQueue.get(0);
-				this.displayQA(currentItem);
-			}
 		}
+		
 	}
 
-	private void feedDataFromAcq(int numberOfItems) {
-		// Feed n items from the acq queue.
-		Item item;
-		int id = -1;
-		if (numberOfItems == 0) {
-			numberOfItems = 65536;
-		}
-		for (int i = 0; i < numberOfItems; i++) {
-			item = dbHelper.getItemById(id, 1);
-			if (item == null) {
-				break;
-			}
-			acqQueue.add(item);
-			id = item.getId() + 1;
-
-		}
-	}
-
-	private void feedDataFromRev(int numberOfItems) {
-		// Feed n items from rev queue
-		Item item;
-		int id = -1;
-		if (numberOfItems == 0) {
-			numberOfItems = 65536;
-		}
-		for (int i = 0; i < numberOfItems; i++) {
-			item = dbHelper.getItemById(id, 2);
-			if (item == null) {
-				break;
-			}
-			revQueue.add(item);
-			id = item.getId() + 1;
-		}
-	}
 
 	private void displayQA(Item item) {
 		// Display question and answer according to item
@@ -244,24 +171,14 @@ public class MemoScreen extends Activity {
 		// If the return value is failure, the item will be appended to the tail of the queue.
 
 		boolean success = currentItem.processAnswer(newGrade);
-		if (mode.equals("acq")) {
-			if (success == true) {
-				acqQueue.remove(0);
-				dbHelper.updateItem(currentItem);
-			} else {
-				acqQueue.remove(0);
-				acqQueue.add(currentItem);
-			}
-
-		} else if (mode.equals("rev")) {
-			if (success == true) {
-				revQueue.remove(0);
-				dbHelper.updateItem(currentItem);
-			} else {
-				revQueue.remove(0);
-				revQueue.add(currentItem);
-			}
+		if (success == true) {
+			learnQueue.remove(0);
+			dbHelper.updateItem(currentItem);
+		} else {
+			learnQueue.remove(0);
+			learnQueue.add(currentItem);
 		}
+
 		this.showAnswer = false;
 		// Now the currentItem is the next item, so we need to udpate the screen.
 		

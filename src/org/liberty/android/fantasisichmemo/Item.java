@@ -57,6 +57,9 @@ public final class Item {
 	public int getId(){
 		return this._id;
 	}
+	public boolean isNew(){
+		return acq_reps == 0 ? true : false;
+	}
 	
 	public String[] getLearningData(){
 		// the string array is in the sequence that is required in the DatabaseHelper.updateItem
