@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/menuback"
-          android:title="@string/back_button_text" />
+          android:title="@string/back_menu_text" />
     <item android:id="@+id/menudetail"
-          android:title="@string/detail_button_text" />
+          android:title="@string/detail_menu_text" />
 </menu>
