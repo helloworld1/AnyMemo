@@ -42,7 +42,14 @@ public class FantasisichMemo extends Activity {
         DatabaseHelper dbHelper = new DatabaseHelper(this, dbPath, dbName);
         resItem = dbHelper.getItemById(4, 0);
         mDBView.setText(new StringBuilder().append(resItem.getQuestion()));
+        Intent myIntent = new Intent();
+        myIntent.setClass(this, MemoScreen.class);
+        myIntent.putExtra("dbname", dbName);
+        myIntent.putExtra("dbpath", dbPath);
+        startActivity(myIntent);
+        returnValue = 0;
     	}
+    	
     	
     }
     public void onActivityResult(int requestCode, int resultCode, Intent data){

@@ -16,8 +16,6 @@ import android.widget.TextView;
 public class MemoScreen extends Activity {
 	//
 	private ArrayList<Item> learnQueue;
-	//private ArrayList<Item> acqQueue;
-	//private ArrayList<Item> revQueue;
 	private DatabaseHelper dbHelper;
 	private String dbName;
 	private String dbPath;
@@ -27,6 +25,9 @@ public class MemoScreen extends Activity {
 	private Item currentItem;
 	private final int WINDOW_SIZE = 10;
 	private boolean queueEmpty;
+	private int idMaxSeen;
+	private int scheduledItemCount;
+	private int newItemCount;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -40,8 +41,7 @@ public class MemoScreen extends Activity {
 			dbName = extras.getString("dbname");
 		}
 		this.prepare();
-		this.feedData();
-		if(!learnQueue.isEmpty()){
+		if(this.feedData() == 2){ // The queue is still empty
 			OnClickListener backButtonListener = new OnClickListener() {
 				// Finish the current activity and go back to the last activity.
 				// It should be the main screen.
@@ -83,6 +83,9 @@ public class MemoScreen extends Activity {
 		learnQueue = new ArrayList<Item>();
 		this.newGrade = -1;
 		this.queueEmpty = true;
+		this.idMaxSeen = -1;
+		this.scheduledItemCount = dbHelper.getScheduledCount();
+		this.newItemCount = dbHelper.getNewCount();
 	}
 
 	private int feedData() {
@@ -90,23 +93,19 @@ public class MemoScreen extends Activity {
 		// or feed all items to rev queue
 		// from the database
 		Item item;
-		int id = -1;
+		this.setTitle("Scheduled: " + dbHelper.getScheduledCount() + " / New: " + dbHelper.getNewCount());
 		for(int i = learnQueue.size(); i < WINDOW_SIZE; i++){
-			item = dbHelper.getItemById(id, 2); // Revision first
+			item = dbHelper.getItemById(idMaxSeen + 1, 2); // Revision first
 			if(item == null){
-				item = dbHelper.getItemById(id, 1); // Then learn new if no revision.
-				if(item == null){
-					break;
-				}
-				else{
-					learnQueue.add(item);
-					
-				}
+				item = dbHelper.getItemById(idMaxSeen + 1, 1); // Then learn new if no revision.
 			}
-			else{
+			if(item != null){
 				learnQueue.add(item);
 			}
-			id = item.getId() + 1;
+			else{
+				break;
+			}
+			idMaxSeen = item.getId();
 			
 		}
 		switch(learnQueue.size()){
@@ -135,6 +134,7 @@ public class MemoScreen extends Activity {
 				finish();
 			}
 		};
+		feedData();
 		if(queueEmpty == false){
 			currentItem = learnQueue.get(0);
 			this.displayQA(currentItem);
@@ -170,10 +170,19 @@ public class MemoScreen extends Activity {
 		// If the return value is success, the user will not need to see this item today.
 		// If the return value is failure, the item will be appended to the tail of the queue.
 
+		boolean isNewItem = currentItem.isNew();
 		boolean success = currentItem.processAnswer(newGrade);
 		if (success == true) {
 			learnQueue.remove(0);
-			dbHelper.updateItem(currentItem);
+			if(isNewItem){
+				this.newItemCount -= 1;
+			}
+			else{
+				this.scheduledItemCount -= 1;
+			}
+			if(queueEmpty != true){
+				dbHelper.updateItem(currentItem);
+			}
 		} else {
 			learnQueue.remove(0);
 			learnQueue.add(currentItem);
