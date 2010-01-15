@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent">
+	<LinearLayout android:orientation="vertical"
+		android:layout_width="fill_parent" android:layout_height="fill_parent"
+		android:layout_weight="1">
+
+		<TextView android:id="@+id/question" android:text="Hello 111"
+			android:textSize="16pt" android:layout_width="fill_parent"
+			android:layout_height="fill_parent" android:layout_weight="1" />
+		<TextView android:id="@+id/answer" android:text="Hello 222"
+			android:textSize="16pt" android:layout_width="fill_parent"
+			android:layout_height="fill_parent" android:layout_weight="1" />
+		<LinearLayout android:orientation="horizontal"
+			android:layout_width="fill_parent" android:layout_height="fill_parent"
+			android:layout_weight="1.5">
+			<Button android:id="@+id/But00" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_marginLeft="10dip"
+				android:text="Button 00" />
+			<Button android:id="@+id/But01" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_marginLeft="10dip"
+				android:text="Button 01" />
+			<Button android:id="@+id/But02" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_marginLeft="10dip"
+				android:text="Button 02" />
+		</LinearLayout>
+		<LinearLayout android:orientation="horizontal"
+			android:layout_width="fill_parent" android:layout_height="fill_parent"
+			android:layout_weight="1.5">
+			<Button android:id="@+id/But03" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_marginLeft="10dip"
+				android:text="Button 03" />
+			<Button android:id="@+id/But04" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_marginLeft="10dip"
+				android:text="Button 04" />
+			<Button android:id="@+id/But05" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_marginLeft="10dip"
+				android:text="Button 05" />
+		</LinearLayout>
+	</LinearLayout>
+
+</LinearLayout>
