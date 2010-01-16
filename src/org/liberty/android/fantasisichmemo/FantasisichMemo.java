@@ -90,6 +90,11 @@ public class FantasisichMemo extends Activity implements OnClickListener{
     			
     		}
     	}
+    	if(v == btnOption){
+    		Intent myIntent = new Intent();
+    		myIntent.setClass(this, OptionScreen.class);
+    		startActivity(myIntent);
+    	}
     }
     
     public void onResume(){

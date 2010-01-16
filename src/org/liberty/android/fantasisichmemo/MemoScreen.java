@@ -10,6 +10,7 @@ import java.util.Set;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 
 public class MemoScreen extends Activity {
 	//
+	public static final String PREFS_NAME = "FantasisichMemoPrefs";
 	private ArrayList<Item> learnQueue;
 	private DatabaseHelper dbHelper;
 	private String dbName;
@@ -44,7 +46,7 @@ public class MemoScreen extends Activity {
 	private String answerLocale = "US";
 	private TTS questionTTS;
 	private TTS answerTTS;
-	private boolean autoSpeak;
+	private boolean autoaudioSetting;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -83,6 +85,10 @@ public class MemoScreen extends Activity {
 	}
 	
 	private void loadSettings(){
+		// Here is the global settings from the preferences
+		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+    	autoaudioSetting = settings.getBoolean("autoaudio", true);
+		
 		HashMap hm = dbHelper.getSettings();
 		Set set = hm.entrySet();
 		Iterator i = set.iterator();
@@ -181,8 +187,6 @@ public class MemoScreen extends Activity {
 		}
 		this.questionTTS = new TTS(this, ql);
 		this.answerTTS = new TTS(this, al);
-		autoSpeak = true;
-		
 		
 	}
 
@@ -279,7 +283,7 @@ public class MemoScreen extends Activity {
 		}
 		questionView.setTextSize((float)questionFontSize);
 		answerView.setTextSize((float)answerFontSize);
-		if(autoSpeak){
+		if(autoaudioSetting){
 			if(this.showAnswer == false){
 				questionTTS.sayText(currentItem.getQuestion());
 			}
