@@ -1,7 +1,10 @@
 package org.liberty.android.fantasisichmemo;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,6 +21,7 @@ public class FantasisichMemo extends Activity implements OnClickListener{
 	private Button btnOption;
 	private Button btnAbout;
 	private Button btnExit;
+	private static final String PREFS_NAME = "FantasisichMemoPrefs";
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,9 @@ public class FantasisichMemo extends Activity implements OnClickListener{
         myIntent.putExtra("mode", "acq");
         startActivity(myIntent);
         */
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        this.dbName = settings.getString("dbname", null);
+        this.dbPath = settings.getString("dbpath", null);
         
         
         //Item resItem;
@@ -53,6 +60,7 @@ public class FantasisichMemo extends Activity implements OnClickListener{
     	if(v == btnNew){
            Intent myIntent = new Intent();
            myIntent.setClass(this, FileBrowser.class);
+           myIntent.putExtra("default_root", dbPath);
            startActivityForResult(myIntent, 1);
             
     	}
@@ -60,17 +68,46 @@ public class FantasisichMemo extends Activity implements OnClickListener{
     		finish();
     	}
     	
+    	if(v == btnRecent){
+    		if(dbName != null && dbPath != null){
+    			Intent myIntent = new Intent();
+    			myIntent.setClass(this, MemoScreen.class);
+    			myIntent.putExtra("dbname", dbName);
+    			myIntent.putExtra("dbpath", dbPath);
+    			startActivity(myIntent);
+    		}
+    		else{
+    			AlertDialog alertDialog = new AlertDialog.Builder(this)
+    			.create();
+    			alertDialog.setTitle("No database");
+    			alertDialog.setMessage("There is recently opened database");
+				alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Back",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface arg0, int arg1) {
+							}
+						});
+    			alertDialog.show();
+    			
+    		}
+    	}
     }
     
     public void onResume(){
     	super.onResume();
     	if(returnValue == 1){
-        Intent myIntent = new Intent();
-        myIntent.setClass(this, MemoScreen.class);
-        myIntent.putExtra("dbname", dbName);
-        myIntent.putExtra("dbpath", dbPath);
-        startActivity(myIntent);
-        returnValue = 0;
+    		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+    		SharedPreferences.Editor editor = settings.edit();
+    		editor.putString("dbname", this.dbName);
+    		editor.putString("dbpath", this.dbPath);
+    		editor.commit();
+    		
+    		
+    		Intent myIntent = new Intent();
+    		myIntent.setClass(this, MemoScreen.class);
+    		myIntent.putExtra("dbname", dbName);
+    		myIntent.putExtra("dbpath", dbPath);
+    		startActivity(myIntent);
+    		returnValue = 0;
     	}
     	
     	

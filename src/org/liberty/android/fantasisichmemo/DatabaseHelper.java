@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -185,7 +188,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return resultItem;
 	}
 	
-	void updateItem(Item item){
+	public void updateItem(Item item){
 		// Only update the learn_tbl
 		try{
 			myDatabase.execSQL("UPDATE learn_tbl SET date_learn = ?, interval = ?, grade = ?, easiness = ?, acq_reps = ?, ret_reps = ?, lapses = ?, acq_reps_since_lapse = ?, ret_reps_since_lapse = ? WHERE _id = ?", item.getLearningData());
@@ -198,18 +201,50 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		
 	}
 	
-	int getScheduledCount(){
+	public int getScheduledCount(){
 		Cursor result = myDatabase.rawQuery("SELECT count(_id) FROM learn_tbl WHERE round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval > 0 AND acq_reps > 0", null);
 		result.moveToFirst();
 		return result.getInt(0);
 	}
 	
-	int getNewCount(){
+	public int getNewCount(){
 		Cursor result = myDatabase.rawQuery("SELECT count(_id) FROM learn_tbl WHERE acq_reps = 0", null);
 		result.moveToFirst();
 		return result.getInt(0);
 	}
 	
+	public HashMap getSettings(){
+		// Dump all the key/value pairs from the learn_tbl
+		String key;
+		String value;
+		HashMap hm = new HashMap();
+		
+		
+		Cursor result = myDatabase.rawQuery("SELECT * FROM control_tbl", null);
+		int count = result.getCount();
+		for(int i = 0; i < count; i++){
+			if(i == 0){
+				result.moveToFirst();
+			}
+			else{
+				result.moveToNext();
+			}
+			key = result.getString(result.getColumnIndex("ctrl_key"));
+			value = result.getString(result.getColumnIndex("value"));
+			hm.put(key, value);
+		}
+		return hm;
+	}
+	
+	public void setSettings(HashMap hm){
+		// Update the control_tbl in database using the hm
+		Set set = hm.entrySet();
+		Iterator i = set.iterator();
+		while(i.hasNext()){
+			Map.Entry me = (Map.Entry)i.next();
+			myDatabase.execSQL("REPLACE INTO control_tbl values(?, ?)", new String[]{me.getKey().toString(), me.getValue().toString()});
+		}
+	}
 
 	
 }

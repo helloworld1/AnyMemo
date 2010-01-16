@@ -18,21 +18,31 @@ import android.widget.ListView;
 
 public class FileBrowser extends ListActivity {
 	private enum DISPLAYMODE{ABSOLUTE, RELATIVE;}
-	private final DISPLAYMODE displayMode = DISPLAYMODE.ABSOLUTE;
+	private final DISPLAYMODE displayMode = DISPLAYMODE.RELATIVE;
 	private List<String> directoryEntries = new ArrayList<String>();
 	private File currentDirectory = new File("/");
+	private String defaultRoot;
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		
+		Bundle extras = getIntent().getExtras();
+		defaultRoot = extras.getString("default_root");
 		
 		browseToRoot();
 	}
 	
 	private void browseToRoot(){
-		browseTo(new File("/"));
+		if(defaultRoot == null){
+			browseTo(new File(getString(R.string.default_sd_path)));
+		}
+		else{
+			browseTo(new File(defaultRoot + "/"));
+		}
 	}
 	
 	private void browseTo(final File aDirectory){
 		if(aDirectory.isDirectory()){
+			this.setTitle(aDirectory.getPath());
 			this.currentDirectory = aDirectory;
 			fill(aDirectory.listFiles());
 		}

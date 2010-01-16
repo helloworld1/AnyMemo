@@ -6,10 +6,11 @@
     <string name="current_dir">.</string>
     <string name="back_menu_text">Back</string>
     <string name="detail_menu_text">Detail</string>
-    <string name="open_button_text">Open New Database</string>
+    <string name="open_button_text">Open Database</string>
     <string name="recent_button_text">Open Recent Database</string>
     <string name="option_button_text">Options</string>
     <string name="about_button_text">About</string>
     <string name="exit_button_text">Exit Program</string>
+    <string name="default_sd_path">/sdcard/</string>
     
 </resources>

@@ -1,6 +1,10 @@
 package org.liberty.android.fantasisichmemo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -13,7 +17,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -32,6 +35,12 @@ public class MemoScreen extends Activity {
 	private int idMaxSeen;
 	private int scheduledItemCount;
 	private int newItemCount;
+	private double questionFontSize = 23.5;
+	private double answerFontSize = 23.5;
+	private String questionAlign = "center";
+	private String answerAlign = "center";
+	private String questionLocale = "US";
+	private String answerLocale = "US";
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -45,6 +54,7 @@ public class MemoScreen extends Activity {
 			dbName = extras.getString("dbname");
 		}
 		this.prepare();
+		this.loadSettings();
 		if(this.feedData() == 2){ // The queue is still empty
 			OnClickListener backButtonListener = new OnClickListener() {
 				// Finish the current activity and go back to the last activity.
@@ -66,6 +76,33 @@ public class MemoScreen extends Activity {
 			this.updateMemoScreen();
 		}
 
+	}
+	
+	private void loadSettings(){
+		HashMap hm = dbHelper.getSettings();
+		Set set = hm.entrySet();
+		Iterator i = set.iterator();
+		while(i.hasNext()){
+			Map.Entry me = (Map.Entry)i.next();
+			if((me.getKey().toString()).equals("question_font_size")){
+				this.questionFontSize = new Double(me.getValue().toString());
+			}
+			if(me.getKey().toString().equals("answer_font_size")){
+				this.answerFontSize = new Double(me.getValue().toString());
+			}
+			if(me.getKey().toString().equals("question_align")){
+				this.questionAlign = me.getValue().toString();
+			}
+			if(me.getKey().toString().equals("answer_align")){
+				this.answerAlign = me.getValue().toString();
+			}
+			if(me.getKey().toString().equals("question_locale")){
+				this.questionLocale = me.getValue().toString();
+			}
+			if(me.getKey().toString().equals("answer_locale")){
+				this.answerLocale = me.getValue().toString();
+			}
+		}
 	}
 	
 	public boolean onCreateOptionsMenu(Menu menu){
@@ -176,12 +213,32 @@ public class MemoScreen extends Activity {
 
 	private void displayQA(Item item) {
 		// Display question and answer according to item
+		this.setTitle(this.getTitle() + " / current id: " + item.getId() );
 		TextView questionView = (TextView) findViewById(R.id.question);
 		TextView answerView = (TextView) findViewById(R.id.answer);
 		questionView.setText(new StringBuilder().append(item.getQuestion()));
 		answerView.setText(new StringBuilder().append(item.getAnswer()));
-		questionView.setGravity(Gravity.CENTER);
-		answerView.setGravity(Gravity.CENTER);
+		if(questionAlign == "center"){
+			questionView.setGravity(Gravity.CENTER);
+		}
+		else if(questionAlign == "right"){
+			questionView.setGravity(Gravity.RIGHT);
+			
+		}
+		else{
+			questionView.setGravity(Gravity.LEFT);
+		}
+		if(answerAlign == "center"){
+			answerView.setGravity(Gravity.CENTER);
+		} else if(answerAlign == "right"){
+			answerView.setGravity(Gravity.RIGHT);
+			
+		}
+		else{
+			answerView.setGravity(Gravity.LEFT);
+		}
+		questionView.setTextSize((float)questionFontSize);
+		answerView.setTextSize((float)answerFontSize);
 		this.buttonBinding();
 
 	}
