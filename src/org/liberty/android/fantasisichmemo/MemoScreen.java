@@ -44,6 +44,7 @@ public class MemoScreen extends Activity {
 	private String answerLocale = "US";
 	private TTS questionTTS;
 	private TTS answerTTS;
+	private boolean autoSpeak;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -180,6 +181,7 @@ public class MemoScreen extends Activity {
 		}
 		this.questionTTS = new TTS(this, ql);
 		this.answerTTS = new TTS(this, al);
+		autoSpeak = true;
 		
 		
 	}
@@ -256,19 +258,19 @@ public class MemoScreen extends Activity {
 		TextView answerView = (TextView) findViewById(R.id.answer);
 		questionView.setText(new StringBuilder().append(item.getQuestion()));
 		answerView.setText(new StringBuilder().append(item.getAnswer()));
-		if(questionAlign == "center"){
+		if(questionAlign.equals("center")){
 			questionView.setGravity(Gravity.CENTER);
 		}
-		else if(questionAlign == "right"){
+		else if(questionAlign.equals("right")){
 			questionView.setGravity(Gravity.RIGHT);
 			
 		}
 		else{
 			questionView.setGravity(Gravity.LEFT);
 		}
-		if(answerAlign == "center"){
+		if(answerAlign.equals("center")){
 			answerView.setGravity(Gravity.CENTER);
-		} else if(answerAlign == "right"){
+		} else if(answerAlign.equals("right")){
 			answerView.setGravity(Gravity.RIGHT);
 			
 		}
@@ -277,6 +279,14 @@ public class MemoScreen extends Activity {
 		}
 		questionView.setTextSize((float)questionFontSize);
 		answerView.setTextSize((float)answerFontSize);
+		if(autoSpeak){
+			if(this.showAnswer == false){
+				questionTTS.sayText(currentItem.getQuestion());
+			}
+			else{
+				answerTTS.sayText(currentItem.getAnswer());
+			}
+		}
 		this.buttonBinding();
 
 	}
