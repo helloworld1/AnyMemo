@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -179,6 +180,8 @@ public class MemoScreen extends Activity {
 		TextView answerView = (TextView) findViewById(R.id.answer);
 		questionView.setText(new StringBuilder().append(item.getQuestion()));
 		answerView.setText(new StringBuilder().append(item.getAnswer()));
+		questionView.setGravity(Gravity.CENTER);
+		answerView.setGravity(Gravity.CENTER);
 		this.buttonBinding();
 
 	}
