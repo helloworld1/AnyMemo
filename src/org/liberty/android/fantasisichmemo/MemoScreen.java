@@ -3,6 +3,7 @@ package org.liberty.android.fantasisichmemo;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -41,6 +42,8 @@ public class MemoScreen extends Activity {
 	private String answerAlign = "center";
 	private String questionLocale = "US";
 	private String answerLocale = "US";
+	private TTS questionTTS;
+	private TTS answerTTS;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -54,7 +57,7 @@ public class MemoScreen extends Activity {
 			dbName = extras.getString("dbname");
 		}
 		this.prepare();
-		this.loadSettings();
+		
 		if(this.feedData() == 2){ // The queue is still empty
 			OnClickListener backButtonListener = new OnClickListener() {
 				// Finish the current activity and go back to the last activity.
@@ -118,7 +121,13 @@ public class MemoScreen extends Activity {
 	        return true;
 	    case R.id.menudetail:
 	        return true;
+	    case R.id.menuspeakquestion:
+	    	questionTTS.sayText(this.currentItem.getQuestion());
+	    case R.id.menuspeakanswer:
+	    	answerTTS.sayText(this.currentItem.getAnswer());
+	    	
 	    }
+	    	
 	    return false;
 	}
 
@@ -134,6 +143,7 @@ public class MemoScreen extends Activity {
 		return true;
 
 	}
+	
 
 	private void prepare() {
 		// Empty the queue, init the db
@@ -144,6 +154,32 @@ public class MemoScreen extends Activity {
 		this.idMaxSeen = -1;
 		this.scheduledItemCount = dbHelper.getScheduledCount();
 		this.newItemCount = dbHelper.getNewCount();
+		this.loadSettings();
+		// Get question and answer locale
+		Locale ql;
+		Locale al;
+		if(questionLocale.equals("US")){
+			ql = Locale.US;
+		}
+		else if(questionLocale.equals("DE")){
+			ql = Locale.GERMAN;
+		}
+		else{
+			ql = Locale.US;
+		}
+		if(answerLocale.equals("US")){
+			al = Locale.US;
+		}
+		else if(answerLocale.equals("DE")){
+			al = Locale.GERMAN;
+		}
+		else{
+			al = Locale.US;
+		}
+		this.questionTTS = new TTS(this, ql);
+		this.answerTTS = new TTS(this, al);
+		
+		
 	}
 
 	private int feedData() {

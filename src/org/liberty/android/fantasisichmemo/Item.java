@@ -27,7 +27,7 @@ public final class Item {
 	private String answer;
 	private String note;
 	
-	public void Item(){
+	public Item(){
 		this._id = 0;
 		this.date_learn = "2010-01-01";
 		this.interval = 0;
