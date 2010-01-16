@@ -123,8 +123,10 @@ public class MemoScreen extends Activity {
 	        return true;
 	    case R.id.menuspeakquestion:
 	    	questionTTS.sayText(this.currentItem.getQuestion());
+	    	break;
 	    case R.id.menuspeakanswer:
 	    	answerTTS.sayText(this.currentItem.getAnswer());
+	    	break;
 	    	
 	    }
 	    	
