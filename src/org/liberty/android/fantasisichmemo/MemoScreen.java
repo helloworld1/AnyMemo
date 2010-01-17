@@ -10,6 +10,7 @@ import java.util.Set;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnDismissListener;
@@ -73,8 +74,22 @@ public class MemoScreen extends Activity{
 		loadingDialog.setOnDismissListener(dismissListener);
 		loadingDialog.show();
 		prepare();
+	}
+	public void onResume(){
+		super.onResume();
+		OnDismissListener dismissListener = new OnDismissListener(){
+			public void onDismiss(DialogInterface arg0){
+				//
+				updateMemoScreen();
+			}
+		};
 		
-
+		loadingDialog = new AlertDialog.Builder(this).create();
+		loadingDialog.setMessage("Loading");
+		loadingDialog.setOnDismissListener(dismissListener);
+		loadingDialog.show();
+		prepare();
+		//this.updateMemoScreen();
 	}
 	
 	
@@ -130,6 +145,15 @@ public class MemoScreen extends Activity{
 	    	answerTTS.sayText(this.currentItem.getAnswer());
 	    	break;
 	    	
+	    case R.id.menusettings:
+    		Intent myIntent = new Intent();
+    		myIntent.setClass(this, SettingsScreen.class);
+    		myIntent.putExtra("dbname", this.dbName);
+    		myIntent.putExtra("dbpath", this.dbPath);
+    		startActivity(myIntent);
+    		//finish();
+	    	break;
+	    	
 	    }
 	    	
 	    return false;
@@ -140,8 +164,10 @@ public class MemoScreen extends Activity{
 		int eventAction = event.getAction();
 		switch (eventAction) {
 		case MotionEvent.ACTION_DOWN:
-			this.showAnswer ^= true;
-			updateMemoScreen();
+			if(this.showAnswer == false){
+				this.showAnswer ^= true;
+				updateMemoScreen();
+			}
 
 		}
 		return true;

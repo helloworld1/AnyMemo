@@ -6,16 +6,17 @@
     <application android:icon="@drawable/icon" android:label="@string/app_name"
     			android:debuggable="true">
         <activity android:name=".FantasisichMemo"
-                  android:label="@string/app_name">
+                  android:label="@string/app_name"
+                  android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".FileBrowser"></activity>
-        <activity android:name=".MemoScreen"></activity>
-        <activity android:name=".OptionScreen"></activity>
-        <activity android:name=".SettingsScreen"></activity>
+        <activity android:name=".FileBrowser" android:screenOrientation="portrait"></activity>
+        <activity android:name=".MemoScreen" android:screenOrientation="portrait"></activity>
+        <activity android:name=".OptionScreen" android:screenOrientation="portrait"></activity>
+        <activity android:name=".SettingsScreen" android:screenOrientation="portrait"></activity>
 
     </application>
 

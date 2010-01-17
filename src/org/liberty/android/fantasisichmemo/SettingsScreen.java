@@ -169,8 +169,6 @@ public class SettingsScreen extends Activity implements OnClickListener {
     	hm.put("answer_locale", localeList[answerLocaleSpinner.getSelectedItemPosition()]);
     	dbHelper.setSettings(hm);
     	
-    	
-    	
     }
     
     public void onClick(View v){
