@@ -187,6 +187,10 @@ public class MemoScreen extends Activity {
 		}
 		this.questionTTS = new TTS(this, ql);
 		this.answerTTS = new TTS(this, al);
+		if(this.autoaudioSetting){
+			questionTTS.sayText("");
+			answerTTS.sayText("");
+		}
 		
 	}
 
