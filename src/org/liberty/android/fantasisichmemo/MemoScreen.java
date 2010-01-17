@@ -16,6 +16,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.speech.tts.TextToSpeech;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +25,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MemoScreen extends Activity{
 	//
@@ -49,7 +51,7 @@ public class MemoScreen extends Activity{
 	private TTS questionTTS;
 	private TTS answerTTS;
 	private boolean autoaudioSetting = true;
-	private AlertDialog loadingDialog;
+	private AlertDialog loadingDialog = null;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -65,15 +67,33 @@ public class MemoScreen extends Activity{
 		OnDismissListener dismissListener = new OnDismissListener(){
 			public void onDismiss(DialogInterface arg0){
 				//
+				if(autoaudioSetting == true){
+				}
 				updateMemoScreen();
 			}
 		};
+		OnClickListener okButtonListener = new OnClickListener(){
+			public void onClick(DialogInterface arg0, int arg1){
+				updateMemoScreen();
+			}
+		};
+			
 		
-		loadingDialog = new AlertDialog.Builder(this).create();
-		loadingDialog.setMessage("Loading");
-		loadingDialog.setOnDismissListener(dismissListener);
-		loadingDialog.show();
+		
 		prepare();
+		
+		if(questionTTS.sayText("") != TextToSpeech.SUCCESS && autoaudioSetting == true){
+			loadingDialog = new AlertDialog.Builder(this).create();
+			loadingDialog.setTitle("Alert");
+			loadingDialog.setMessage("The automatic question and answer speaking is now on!");
+			//loadingDialog.setOnDismissListener(dismissListener);
+			loadingDialog.setButton("OK", okButtonListener);
+			loadingDialog.show();
+		}
+		else{
+			this.updateMemoScreen();
+			
+		}
 	}
 	public void onResume(){
 		super.onResume();
@@ -231,7 +251,9 @@ public class MemoScreen extends Activity{
 
 			
 			//this.updateMemoScreen();
-			loadingDialog.dismiss();
+			if(loadingDialog != null){
+				loadingDialog.dismiss();
+			}
 		}
 		
 	}

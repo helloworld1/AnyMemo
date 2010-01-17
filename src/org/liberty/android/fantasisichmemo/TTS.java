@@ -11,11 +11,13 @@ public class TTS implements TextToSpeech.OnInitListener{
 	
 	private Locale myLocale;
 	private int errorCode;
+	private	boolean init;
 	
 	public TTS(Context context, Locale locale){
 		myTTS = new TextToSpeech(context, this);
 		myLocale = locale;
-		errorCode = 0;
+		init = false;
+		
 		
 	}
 	
@@ -35,18 +37,17 @@ public class TTS implements TextToSpeech.OnInitListener{
 			Log.e("TTS engine", "Cannot init the TextToSpeech");
 			errorCode = 2;
 		}
+		init = true;
 		
 	}
 	
+	public boolean isInit(){
+		return init;
+	}
+	
 	public int sayText(String s){
-		if(this.errorCode == 0){
-			
-			int status = myTTS.speak(s, TextToSpeech.QUEUE_FLUSH, null);
-			return status;
-		}
-		else{
-			return this.errorCode;
-		}
+		int status = myTTS.speak(s, TextToSpeech.QUEUE_FLUSH, null);
+		return status;
 		
 	}
 }
