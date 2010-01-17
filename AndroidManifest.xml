@@ -14,6 +14,7 @@
         <activity android:name=".FileBrowser"></activity>
         <activity android:name=".MemoScreen"></activity>
         <activity android:name=".OptionScreen"></activity>
+        <activity android:name=".SettingsScreen"></activity>
 
     </application>
 

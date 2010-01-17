@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -21,7 +22,6 @@ public class FantasisichMemo extends Activity implements OnClickListener{
 	private Button btnOption;
 	private Button btnAbout;
 	private Button btnExit;
-	private static final String PREFS_NAME = "FantasisichMemoPrefs";
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,7 +45,8 @@ public class FantasisichMemo extends Activity implements OnClickListener{
         myIntent.putExtra("mode", "acq");
         startActivity(myIntent);
         */
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+       // SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+    		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         this.dbName = settings.getString("dbname", null);
         this.dbPath = settings.getString("dbpath", null);
         
@@ -95,12 +96,21 @@ public class FantasisichMemo extends Activity implements OnClickListener{
     		myIntent.setClass(this, OptionScreen.class);
     		startActivity(myIntent);
     	}
+    	if(v == btnAbout){
+    		Intent myIntent = new Intent();
+    		myIntent.setClass(this, SettingsScreen.class);
+    		myIntent.putExtra("dbname", "quickgerman.xml.db");
+    		myIntent.putExtra("dbpath", "/sdcard/");
+    		startActivity(myIntent);
+    		
+    	}
     }
     
     public void onResume(){
     	super.onResume();
     	if(returnValue == 1){
-    		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+    		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+    		//SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
     		SharedPreferences.Editor editor = settings.edit();
     		editor.putString("dbname", this.dbName);
     		editor.putString("dbpath", this.dbPath);

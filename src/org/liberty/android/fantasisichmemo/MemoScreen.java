@@ -13,6 +13,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,7 +25,6 @@ import android.widget.TextView;
 
 public class MemoScreen extends Activity {
 	//
-	public static final String PREFS_NAME = "FantasisichMemoPrefs";
 	private ArrayList<Item> learnQueue;
 	private DatabaseHelper dbHelper;
 	private String dbName;
@@ -46,7 +46,7 @@ public class MemoScreen extends Activity {
 	private String answerLocale = "US";
 	private TTS questionTTS;
 	private TTS answerTTS;
-	private boolean autoaudioSetting;
+	private boolean autoaudioSetting = true;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -86,7 +86,7 @@ public class MemoScreen extends Activity {
 	
 	private void loadSettings(){
 		// Here is the global settings from the preferences
-		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
     	autoaudioSetting = settings.getBoolean("autoaudio", true);
 		
 		HashMap hm = dbHelper.getSettings();
@@ -239,6 +239,7 @@ public class MemoScreen extends Activity {
 		feedData();
 		if(queueEmpty == false){
 			currentItem = learnQueue.get(0);
+
 			this.displayQA(currentItem);
 		}
 		else{
@@ -283,6 +284,7 @@ public class MemoScreen extends Activity {
 		}
 		questionView.setTextSize((float)questionFontSize);
 		answerView.setTextSize((float)answerFontSize);
+
 		if(autoaudioSetting){
 			if(this.showAnswer == false){
 				questionTTS.sayText(currentItem.getQuestion());
