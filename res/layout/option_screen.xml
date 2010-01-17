@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:key="FantasisichMemoPrefs"
+        android:title="Global Settings Settings">
+    <CheckBoxPreference
+            android:key="autoaudio"
+            android:title="@string/autoaudio" 
+            android:defaultValue="true"
+            android:summary="@string/autoaudio_summary"
+            />
+ 
+</PreferenceScreen> 

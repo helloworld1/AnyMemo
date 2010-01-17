@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string-array name="font_size_list">
+	<item>12</item>
+	<item>14</item>
+	<item>16</item>
+	<item>20</item>
+	<item>24</item>
+	<item>32</item>
+	<item>36</item>
+	<item>48</item>
+</string-array>
+
+<string-array name="align_list">
+	<item>left</item>
+	<item>center</item>
+	<item>right</item>
+</string-array>
+
+<string-array name="locale_list">
+	<item>US</item>
+	<item>UK</item>
+	<item>FR</item>
+	<item>DE</item>
+	<item>IT</item>
+	<item>ES</item>
+	<item>Other</item>
+</string-array>
+
+</resources>

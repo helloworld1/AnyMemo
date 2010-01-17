@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="fill_parent"
+	android:layout_width="fill_parent"
+	android:orientation="vertical">
+	
+	<TextView
+		android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dip"
+        android:text="@string/settings_question_font_size"
+        
+    />
+    <Spinner
+    	android:id="@+id/question_font_size_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:drawSelectorOnTop="true"
+        android:prompt="@string/settings_question_font_size_prompt"
+        />
+	<TextView
+		android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dip"
+        android:text="@string/settings_answer_font_size"
+        
+    />
+    <Spinner
+    	android:id="@+id/answer_font_size_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:drawSelectorOnTop="true"
+        android:prompt="@string/settings_answer_font_size_prompt"
+        />
+	<TextView
+		android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dip"
+        android:text="@string/settings_question_align"
+        
+    />
+    <Spinner
+    	android:id="@+id/question_align_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:drawSelectorOnTop="true"
+        android:prompt="@string/settings_question_align_prompt"
+        />
+	<TextView
+		android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dip"
+        android:text="@string/settings_answer_align"
+        
+    />
+    <Spinner
+    	android:id="@+id/answer_align_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:drawSelectorOnTop="true"
+        android:prompt="@string/settings_answer_align_prompt"
+        />
+	<TextView
+		android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dip"
+        android:text="@string/settings_question_locale"
+        
+    />
+    <Spinner
+    	android:id="@+id/question_locale_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:drawSelectorOnTop="true"
+        android:prompt="@string/settings_question_locale_prompt"
+        />
+	<TextView
+		android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dip"
+        android:text="@string/settings_answer_locale"
+        
+    />
+    <Spinner
+    	android:id="@+id/answer_locale_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:drawSelectorOnTop="true"
+        android:prompt="@string/settings_answer_locale_prompt"
+        />
+        
+        
+        
+
+	<LinearLayout android:orientation="horizontal"
+		android:layout_width="fill_parent" android:layout_height="wrap_content">
+		<Button android:id="@+id/settting_save" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:layout_marginLeft="3dip"
+			android:text="@string/settings_save" />
+		<Button android:id="@+id/setting_discard" android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:layout_marginLeft="3dip"
+			android:text="@string/settings_discard" />
+	</LinearLayout> 
+
+</LinearLayout>
+	
+
+
