@@ -6,6 +6,7 @@
     <string name="current_dir">.</string>
     <string name="back_menu_text">Back</string>
     <string name="detail_menu_text">Detail</string>
+    <string name="settings_menu_text">Detail</string>
     <string name="speak_question_menu_text">Speak Question</string>
     <string name="speak_answer_menu_text">Speak Answer</string>
     <string name="open_button_text">Open Database</string>

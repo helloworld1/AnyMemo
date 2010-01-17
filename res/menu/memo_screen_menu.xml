@@ -4,6 +4,8 @@
           android:title="@string/back_menu_text" />
     <item android:id="@+id/menudetail"
           android:title="@string/detail_menu_text" />
+    <item android:id="@+id/menusettings"
+  		  android:title="@string/settings_menu_text" />
     <item android:id="@+id/menuspeakquestion"
           android:title="@string/speak_question_menu_text" />
     <item android:id="@+id/menuspeakanswer"

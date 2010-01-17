@@ -19,6 +19,10 @@ public class TTS implements TextToSpeech.OnInitListener{
 		
 	}
 	
+	public void shutdown(){
+		myTTS.shutdown();
+	}
+	
 	public void onInit(int status){
 		if(status == TextToSpeech.SUCCESS){
 			int result = myTTS.setLanguage(myLocale);
@@ -35,12 +39,13 @@ public class TTS implements TextToSpeech.OnInitListener{
 	}
 	
 	public int sayText(String s){
-		if(errorCode == 0){
-			myTTS.speak(s, TextToSpeech.QUEUE_FLUSH, null);
-			return 0;
+		if(this.errorCode == 0){
+			
+			int status = myTTS.speak(s, TextToSpeech.QUEUE_FLUSH, null);
+			return status;
 		}
 		else{
-			return errorCode;
+			return this.errorCode;
 		}
 		
 	}

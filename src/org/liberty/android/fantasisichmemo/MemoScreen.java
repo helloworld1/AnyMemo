@@ -12,6 +12,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
+import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Gravity;
@@ -23,7 +24,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class MemoScreen extends Activity {
+public class MemoScreen extends Activity{
 	//
 	private ArrayList<Item> learnQueue;
 	private DatabaseHelper dbHelper;
@@ -47,6 +48,7 @@ public class MemoScreen extends Activity {
 	private TTS questionTTS;
 	private TTS answerTTS;
 	private boolean autoaudioSetting = true;
+	private AlertDialog loadingDialog;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -59,30 +61,22 @@ public class MemoScreen extends Activity {
 			dbPath = extras.getString("dbpath");
 			dbName = extras.getString("dbname");
 		}
-		this.prepare();
+		OnDismissListener dismissListener = new OnDismissListener(){
+			public void onDismiss(DialogInterface arg0){
+				//
+				updateMemoScreen();
+			}
+		};
 		
-		if(this.feedData() == 2){ // The queue is still empty
-			OnClickListener backButtonListener = new OnClickListener() {
-				// Finish the current activity and go back to the last activity.
-				// It should be the main screen.
-				public void onClick(DialogInterface arg0, int arg1) {
-					finish();
-				}
-			};
-			AlertDialog alertDialog = new AlertDialog.Builder(this)
-			.create();
-			alertDialog.setTitle("No item");
-			alertDialog.setMessage("There is no items for now.");
-			alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Back",
-					backButtonListener);
-			alertDialog.show();
-			
-		}
-		else{
-			this.updateMemoScreen();
-		}
+		loadingDialog = new AlertDialog.Builder(this).create();
+		loadingDialog.setMessage("Loading");
+		loadingDialog.setOnDismissListener(dismissListener);
+		loadingDialog.show();
+		prepare();
+		
 
 	}
+	
 	
 	private void loadSettings(){
 		// Here is the global settings from the preferences
@@ -124,6 +118,7 @@ public class MemoScreen extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 	    case R.id.menuback:
+	    	dbHelper.close();
 	    	finish();
 	        return true;
 	    case R.id.menudetail:
@@ -187,9 +182,30 @@ public class MemoScreen extends Activity {
 		}
 		this.questionTTS = new TTS(this, ql);
 		this.answerTTS = new TTS(this, al);
-		if(this.autoaudioSetting){
-			questionTTS.sayText("");
-			answerTTS.sayText("");
+		
+		if(this.feedData() == 2){ // The queue is still empty
+			OnClickListener backButtonListener = new OnClickListener() {
+				// Finish the current activity and go back to the last activity.
+				// It should be the main screen.
+				public void onClick(DialogInterface arg0, int arg1) {
+					dbHelper.close();
+					finish();
+				}
+			};
+			AlertDialog alertDialog = new AlertDialog.Builder(this) 
+			.create();
+			alertDialog.setTitle("No item");
+			alertDialog.setMessage("There is no items for now.");
+			alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Back",
+					backButtonListener);
+			alertDialog.show();
+			
+		}
+		else{
+
+			
+			//this.updateMemoScreen();
+			loadingDialog.dismiss();
 		}
 		
 	}
@@ -237,6 +253,7 @@ public class MemoScreen extends Activity {
 			// Finish the current activity and go back to the last activity.
 			// It should be the main screen.
 			public void onClick(DialogInterface arg0, int arg1) {
+				dbHelper.close();
 				finish();
 			}
 		};
@@ -289,13 +306,17 @@ public class MemoScreen extends Activity {
 		questionView.setTextSize((float)questionFontSize);
 		answerView.setTextSize((float)answerFontSize);
 
+		int status= -10;
 		if(autoaudioSetting){
 			if(this.showAnswer == false){
-				questionTTS.sayText(currentItem.getQuestion());
+				status = questionTTS.sayText(currentItem.getQuestion());
 			}
 			else{
-				answerTTS.sayText(currentItem.getAnswer());
+				status = answerTTS.sayText(currentItem.getAnswer());
 			}
+		}
+		if(status == 0 || status != 0){
+			status = status + 1 -1;
 		}
 		this.buttonBinding();
 
