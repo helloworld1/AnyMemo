@@ -1,0 +1,45 @@
+<html>
+<head>
+<style type="text/css">
+p
+{
+font-family:"Times New Roman";
+font-size:16pt;
+}
+
+</style>
+</head>
+<body>
+<h1 style="text-align:center">  FantasisichMemo </h1>
+<div style="text-align:center"> Ver 1.0 By Liberty </div>
+<h2>1. Introduction </h2>
+<p>This program implement the 10 puzzle problem, which is the course project of  CS 6613, Fall 2009. Basically it is an extension of the traditional 8 puzzle or 15 puzzle but with 2 blank tiles. </p>
+<p>This program uses the A* graph search algorithm with the Manhattan distance as heuristic function. Extra credit of the project is implemented. The GUI is a web page, user can click to move tiles and use this method to set the initial state and goal state. User can also use random function to generate a random state and set it to initial state or goal state or both. </p>
+
+
+<h2>3. Algorithm Implementation</h2>
+<h3> Data structures </h3>
+<p> The closed list which stores every non-repeated node is a linear table. In order to maintain the tree structure of the nodes, each node is assigned an id, which is the position of the closed list. The node will remember the parent node, so it can track back to the root. The fringe that stores the expanded node is also a priority queue.<p>
+<h3> Algorithm </h3>
+<p> The algorithm is the A* graph search. First the program will expand the root node and put the successors in the fringe. Then it will expand the node that has the least step cost. Before expanding a node, the goal state is checked. Also the repeated state will not be expanded. After the program find out the goal stae, it will trace back to the root using the parent id.</p>
+
+<h2>4. Program Implementation</h2>
+<p>The program is written in Javascript that complys with W3C ECMA 1.8 standard. The program design is object-oriented prototype-based programming. The 10puzzle.html will load the start function and the start function will create the Puzzle prototype. The Puzzle prototype has a Solver object.</p>
+<h3>Global Prototypes</h3>
+<p>Puzzle prototype: This prototype is used to display the UI and the handle the mouse events. It also record the user input state and pass it to the a Solver object.</p>
+<p>Solver prototype: This prototype contains the main algorithm and data structure.Start: This is just like a main function.</p>
+<h3>Member prototypes</h3>
+The code is well-commneted. See the code for details.
+
+<h2>A. File List</h2>
+<p>
+*.png: Image files that used to display board and this readme.<br />
+10puzzle.html: Program's HTML file, use web browser to open it.<br />
+10puzzle.js: Source code of the program<br />
+readme.html: You are reading now.</p>
+
+
+
+
+</body>
+</html>
