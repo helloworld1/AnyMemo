@@ -16,7 +16,6 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.speech.tts.TextToSpeech;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,7 +24,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MemoScreen extends Activity{
 	//
@@ -33,7 +31,6 @@ public class MemoScreen extends Activity{
 	private DatabaseHelper dbHelper;
 	private String dbName;
 	private String dbPath;
-	private String mode;
 	private boolean showAnswer;
 	private int newGrade = -1;
 	private Item currentItem;
@@ -64,6 +61,8 @@ public class MemoScreen extends Activity{
 			dbPath = extras.getString("dbpath");
 			dbName = extras.getString("dbname");
 		}
+		
+		/*
 		OnDismissListener dismissListener = new OnDismissListener(){
 			public void onDismiss(DialogInterface arg0){
 				//
@@ -93,7 +92,7 @@ public class MemoScreen extends Activity{
 		else{
 			this.updateMemoScreen();
 			
-		}
+		}*/
 	}
 	public void onResume(){
 		super.onResume();
@@ -110,6 +109,13 @@ public class MemoScreen extends Activity{
 		loadingDialog.show();
 		prepare();
 		//this.updateMemoScreen();
+	}
+	
+	public void onDestroy(){
+		super.onDestroy();
+		dbHelper.close();
+		questionTTS.shutdown();
+		answerTTS.shutdown();
 	}
 	
 	
@@ -153,7 +159,6 @@ public class MemoScreen extends Activity{
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 	    case R.id.menuback:
-	    	dbHelper.close();
 	    	finish();
 	        return true;
 	    case R.id.menudetail:
@@ -214,6 +219,18 @@ public class MemoScreen extends Activity{
 		else if(questionLocale.equals("DE")){
 			ql = Locale.GERMAN;
 		}
+		else if(questionLocale.equals("UK")){
+			ql = Locale.UK;
+		}
+		else if(questionLocale.equals("FR")){
+			ql = Locale.FRANCE;
+		}
+		else if(questionLocale.equals("IT")){
+			ql = Locale.ITALY;
+		}
+		else if(questionLocale.equals("ES")){
+			ql = new Locale("es", "ES");
+		}
 		else{
 			ql = Locale.US;
 		}
@@ -222,6 +239,18 @@ public class MemoScreen extends Activity{
 		}
 		else if(answerLocale.equals("DE")){
 			al = Locale.GERMAN;
+		}
+		else if(answerLocale.equals("UK")){
+			al = Locale.UK;
+		}
+		else if(answerLocale.equals("FR")){
+			al = Locale.FRANCE;
+		}
+		else if(answerLocale.equals("IT")){
+			al = Locale.ITALY;
+		}
+		else if(answerLocale.equals("ES")){
+			al = new Locale("es", "ES");
 		}
 		else{
 			al = Locale.US;
@@ -234,7 +263,6 @@ public class MemoScreen extends Activity{
 				// Finish the current activity and go back to the last activity.
 				// It should be the main screen.
 				public void onClick(DialogInterface arg0, int arg1) {
-					dbHelper.close();
 					finish();
 				}
 			};
@@ -301,7 +329,6 @@ public class MemoScreen extends Activity{
 			// Finish the current activity and go back to the last activity.
 			// It should be the main screen.
 			public void onClick(DialogInterface arg0, int arg1) {
-				dbHelper.close();
 				finish();
 			}
 		};

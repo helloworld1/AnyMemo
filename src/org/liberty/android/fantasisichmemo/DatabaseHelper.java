@@ -245,6 +245,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			myDatabase.execSQL("REPLACE INTO control_tbl values(?, ?)", new String[]{me.getKey().toString(), me.getValue().toString()});
 		}
 	}
+	
+	public void wipeLearnData(){
+		this.myDatabase.execSQL("UPDATE learn_tbl SET date_learn = '2010-01-01', interval = 0, grade = 0, easiness = 0.0, acq_reps = 0, ret_reps  = 0, lapses = 0, acq_reps_since_lapse = 0, ret_reps_since_lapse = 0");
+	}
 
 	
 }

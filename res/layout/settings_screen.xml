@@ -19,9 +19,8 @@
         android:drawSelectorOnTop="true"
         android:prompt="@string/settings_question_font_size_prompt"
         />
-    </TableRow>
-    
-    <TableRow>
+        </TableRow>
+        <TableRow>
 	<TextView
 		android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -104,11 +103,20 @@
         android:prompt="@string/settings_answer_locale_prompt"
         />
     </TableRow>
-        
-        
-        
-    <TableRow>
 
+
+
+
+	<TableRow>
+		<CheckBox android:id="@+id/checkbox_wipe"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:text="@string/settings_wipe" />
+	</TableRow>
+    
+    
+    
+
+<TableRow>
 	<LinearLayout android:orientation="horizontal"
 		android:layout_width="fill_parent" android:layout_height="wrap_content">
 		<Button android:id="@+id/settting_save" android:layout_width="wrap_content"

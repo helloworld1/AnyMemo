@@ -17,6 +17,7 @@
         <activity android:name=".MemoScreen" android:screenOrientation="portrait"></activity>
         <activity android:name=".OptionScreen" android:screenOrientation="portrait"></activity>
         <activity android:name=".SettingsScreen" android:screenOrientation="portrait"></activity>
+        <activity android:name=".DetailScreen" android:screenOrientation="portrait"></activity>
 
     </application>
 

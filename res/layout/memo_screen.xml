@@ -14,28 +14,28 @@
 		<LinearLayout android:orientation="horizontal"
 			android:layout_width="fill_parent" android:layout_height="fill_parent"
 			android:layout_weight="1.5">
-			<Button android:id="@+id/But00" android:layout_width="wrap_content"
+			<Button android:id="@+id/But00" android:layout_width="fill_parent"
 				android:layout_height="wrap_content" android:layout_marginLeft="10dip"
-				android:text="Button 00" />
-			<Button android:id="@+id/But01" android:layout_width="wrap_content"
+				android:text="0 Forget" android:layout_weight="1" />
+			<Button android:id="@+id/But01" android:layout_width="fill_parent"
 				android:layout_height="wrap_content" android:layout_marginLeft="10dip"
-				android:text="Button 01" />
-			<Button android:id="@+id/But02" android:layout_width="wrap_content"
+				android:text="1 Forget" android:layout_weight="1"/>
+			<Button android:id="@+id/But02" android:layout_width="fill_parent" 
 				android:layout_height="wrap_content" android:layout_marginLeft="10dip"
-				android:text="Button 02" />
+				android:text="2 Insane" android:layout_weight="1"/>
 		</LinearLayout>
 		<LinearLayout android:orientation="horizontal"
 			android:layout_width="fill_parent" android:layout_height="fill_parent"
 			android:layout_weight="1.5">
-			<Button android:id="@+id/But03" android:layout_width="wrap_content"
+			<Button android:id="@+id/But03" android:layout_width="fill_parent"
 				android:layout_height="wrap_content" android:layout_marginLeft="10dip"
-				android:text="Button 03" />
-			<Button android:id="@+id/But04" android:layout_width="wrap_content"
+				android:text="3 Hard" android:layout_weight="1"/>
+			<Button android:id="@+id/But04" android:layout_width="fill_parent"
 				android:layout_height="wrap_content" android:layout_marginLeft="10dip"
-				android:text="Button 04" />
-			<Button android:id="@+id/But05" android:layout_width="wrap_content"
+				android:text="4 Good" android:layout_weight="1"/>
+			<Button android:id="@+id/But05" android:layout_width="fill_parent"
 				android:layout_height="wrap_content" android:layout_marginLeft="10dip"
-				android:text="Button 05" />
+				android:text="5 Bright" android:layout_weight="1"/>
 		</LinearLayout>
 	</LinearLayout>
 

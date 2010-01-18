@@ -22,7 +22,9 @@ public class TTS implements TextToSpeech.OnInitListener{
 	}
 	
 	public void shutdown(){
-		myTTS.shutdown();
+		if(init == true){
+			myTTS.shutdown();
+		}
 	}
 	
 	public void onInit(int status){

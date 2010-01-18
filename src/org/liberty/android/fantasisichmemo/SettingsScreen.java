@@ -6,11 +6,14 @@ import java.util.Map;
 import java.util.Set;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Spinner;
 
 public class SettingsScreen extends Activity implements OnClickListener {
@@ -20,6 +23,7 @@ public class SettingsScreen extends Activity implements OnClickListener {
 	Spinner answerAlignSpinner;
 	Spinner questionLocaleSpinner;
 	Spinner answerLocaleSpinner;
+	CheckBox wipeCheckbox;
 	Button btnSave;
 	Button btnDiscard;
 	DatabaseHelper dbHelper;
@@ -50,6 +54,10 @@ public class SettingsScreen extends Activity implements OnClickListener {
         answerLocaleSpinner.setAdapter(localeAdapter);
         
         setInitialPosition();
+        
+        wipeCheckbox = (CheckBox)findViewById(R.id.checkbox_wipe);
+        
+        wipeCheckbox.setOnClickListener(this);
         
         btnSave = (Button)findViewById(R.id.settting_save);
         btnSave.setOnClickListener(this);
@@ -174,11 +182,28 @@ public class SettingsScreen extends Activity implements OnClickListener {
     public void onClick(View v){
     	if(v == btnSave){
     		updateSettings();
+    		if(wipeCheckbox.isChecked()){
+    			dbHelper.wipeLearnData();
+    		}
     		dbHelper.close();
     		finish();
     	}
     	if(v == btnDiscard){
     		finish();
+    	}
+    	
+    	if(v == wipeCheckbox){
+    		if(wipeCheckbox.isChecked()){
+    			AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+    			alertDialog.setTitle("Warning!");
+    			alertDialog.setMessage("ALL Learning Progress will be reset upon clicking Save!");
+    			alertDialog.setButton("OK",  new DialogInterface.OnClickListener(){
+    				public void onClick(DialogInterface arg0, int arg1){
+    					
+    				}
+    			});
+    			alertDialog.show();
+    		}
     	}
     	
     }
