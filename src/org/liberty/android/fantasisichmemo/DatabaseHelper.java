@@ -136,7 +136,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			query += "AND acq_reps = 0 LIMIT 1";
 		}
 		else if(flag == 2){
-			query += "AND round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval > 0 AND acq_reps > 0 LIMIT 1";
+			query += "AND round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval >= 0 AND acq_reps > 0 LIMIT 1";
 		}
 		else{
 			query += "LIMIT 1";
@@ -202,7 +202,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	}
 	
 	public int getScheduledCount(){
-		Cursor result = myDatabase.rawQuery("SELECT count(_id) FROM learn_tbl WHERE round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval > 0 AND acq_reps > 0", null);
+		Cursor result = myDatabase.rawQuery("SELECT count(_id) FROM learn_tbl WHERE round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval >= 0 AND acq_reps > 0", null);
 		result.moveToFirst();
 		return result.getInt(0);
 	}

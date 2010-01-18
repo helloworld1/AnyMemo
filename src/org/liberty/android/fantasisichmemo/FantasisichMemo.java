@@ -98,9 +98,7 @@ public class FantasisichMemo extends Activity implements OnClickListener{
     	}
     	if(v == btnAbout){
     		Intent myIntent = new Intent();
-    		myIntent.setClass(this, SettingsScreen.class);
-    		myIntent.putExtra("dbname", "quickgerman.xml.db");
-    		myIntent.putExtra("dbpath", "/sdcard/");
+    		myIntent.setClass(this, AboutScreen.class);
     		startActivity(myIntent);
     		
     	}

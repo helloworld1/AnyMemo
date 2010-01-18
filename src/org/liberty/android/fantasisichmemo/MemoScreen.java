@@ -161,14 +161,13 @@ public class MemoScreen extends Activity{
 	    case R.id.menuback:
 	    	finish();
 	        return true;
-	    case R.id.menudetail:
-	        return true;
 	    case R.id.menuspeakquestion:
 	    	questionTTS.sayText(this.currentItem.getQuestion());
-	    	break;
+	    	return true;
+	    	
 	    case R.id.menuspeakanswer:
 	    	answerTTS.sayText(this.currentItem.getAnswer());
-	    	break;
+	    	return true;
 	    	
 	    case R.id.menusettings:
     		Intent myIntent = new Intent();
@@ -177,8 +176,16 @@ public class MemoScreen extends Activity{
     		myIntent.putExtra("dbpath", this.dbPath);
     		startActivity(myIntent);
     		//finish();
-	    	break;
+    		return true;
 	    	
+	    case R.id.menudetail:
+	    
+    		Intent myIntent1 = new Intent();
+    		myIntent1.setClass(this, DetailScreen.class);
+    		myIntent1.putExtra("dbname", this.dbName);
+    		myIntent1.putExtra("dbpath", this.dbPath);
+    		startActivity(myIntent1);
+    		return true;
 	    }
 	    	
 	    return false;
