@@ -128,7 +128,6 @@ public class FileBrowser extends ListActivity {
 					}
 					else if(clickedFile.isFile()){
 						Intent resultIntent = new Intent();
-						Bundle resultBundle = new Bundle();
 		
 						resultIntent.putExtra("org.liberty.android.fantasisichmemo.dbName", clickedFile.getName());
 						resultIntent.putExtra("org.liberty.android.fantasisichmemo.dbPath", clickedFile.getParent());

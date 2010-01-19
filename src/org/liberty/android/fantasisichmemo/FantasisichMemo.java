@@ -10,12 +10,10 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.TextView;
 
 public class FantasisichMemo extends Activity implements OnClickListener{
 	private String dbName;
 	private String dbPath;
-	private TextView mDBView;
 	private int returnValue;
 	private Button btnNew;
 	private Button btnRecent;

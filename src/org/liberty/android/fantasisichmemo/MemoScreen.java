@@ -124,11 +124,11 @@ public class MemoScreen extends Activity{
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
     	autoaudioSetting = settings.getBoolean("autoaudio", true);
 		
-		HashMap hm = dbHelper.getSettings();
-		Set set = hm.entrySet();
-		Iterator i = set.iterator();
+		HashMap<String, String> hm = dbHelper.getSettings();
+		Set<Map.Entry<String, String>> set = hm.entrySet();
+		Iterator<Map.Entry<String, String> > i = set.iterator();
 		while(i.hasNext()){
-			Map.Entry me = (Map.Entry)i.next();
+			Map.Entry<String, String> me = i.next();
 			if((me.getKey().toString()).equals("question_font_size")){
 				this.questionFontSize = new Double(me.getValue().toString());
 			}
@@ -184,6 +184,7 @@ public class MemoScreen extends Activity{
     		myIntent1.setClass(this, DetailScreen.class);
     		myIntent1.putExtra("dbname", this.dbName);
     		myIntent1.putExtra("dbpath", this.dbPath);
+    		myIntent1.putExtra("itemid", currentItem.getId());
     		startActivity(myIntent1);
     		return true;
 	    }

@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import org.apache.http.ParseException;
 
 import android.util.Log;
 
@@ -66,41 +65,49 @@ public final class Item {
 		return new String[]{date_learn, new Integer(interval).toString(), new Integer(grade).toString(), new Double(easiness).toString(), new Integer(acq_reps).toString(), new Integer(ret_reps).toString(), new Integer(lapses).toString(), new Integer(acq_reps_since_lapse).toString(), new Integer(ret_reps_since_lapse).toString(), new Integer(_id).toString()};
 	}
 	
-	public void setData(HashMap hm){
-		Set set = hm.entrySet();
-		Iterator i = set.iterator();
+	public void setData(HashMap<String, String> hm){
+		Set<Map.Entry<String, String>> set = hm.entrySet();
+		Iterator<Map.Entry<String, String> > i = set.iterator();
 		while(i.hasNext()){
-			Map.Entry me = (Map.Entry)i.next();
+			Map.Entry<String, String> me = (Map.Entry<String, String>)i.next();
 			if(((String)me.getKey()) == "_id"){
-				this._id = ((Integer)hm.get("_id")).intValue();
+				this._id = Integer.parseInt(hm.get("_id")); 
 			}
 			if(((String)me.getKey()) == "date_learn"){
-				this.date_learn = (String)hm.get("date_learn");
+				this.date_learn = hm.get("date_learn");
 			}
 			if(((String)me.getKey()) == "interval"){
-				this.interval = ((Integer)hm.get("interval")).intValue();
+				this.interval = Integer.parseInt(hm.get("interval")); 
 			}
 			if(((String)me.getKey()) == "grade"){
-				this.grade = ((Integer)hm.get("grade")).intValue();
-			}
-			if(((String)me.getKey()) == "grade"){
-				this.easiness = ((Double)hm.get("easiness")).doubleValue();
+				this.grade = Integer.parseInt(hm.get("grade")); 			}
+			if(((String)me.getKey()) == "easiness"){
+				this.easiness = Double.parseDouble(hm.get("easiness"));
 				
 			}
+			if(((String)me.getKey()) == "lapses"){
+				this.lapses = Integer.parseInt(hm.get("lapses")); 
+			}
+			if(((String)me.getKey()) == "acq_reps"){
+				this.acq_reps =Integer.parseInt(hm.get("acq_reps")); 
+			}
+			if(((String)me.getKey()) == "ret_reps"){
+				this.ret_reps = Integer.parseInt(hm.get("ret_reps")); 
+			}
 			if(((String)me.getKey()) == "acq_reps_since_lapse"){
-				this.acq_reps_since_lapse = ((Integer)hm.get("acq_reps_since_lapse")).intValue();
+				this.acq_reps_since_lapse = Integer.parseInt(hm.get("acq_reps_since_lapse")); 
 				
 			}
 			if(((String)me.getKey()) == "ret_reps_since_lapse"){
-				this.ret_reps_since_lapse = ((Integer)hm.get("ret_reps_since_lapse")).intValue();
+				this.ret_reps_since_lapse = Integer.parseInt(hm.get("ret_reps_since_lapse")); 
 				
 			}
 			if(((String)me.getKey()) == "question"){
-				this.question = (String)hm.get("question");
+				this.question = hm.get("question");
 				
 			}
 			if(((String)me.getKey()) == "answer"){
-				this.answer = (String)hm.get("answer");
+				this.answer = hm.get("answer");
 				
 			}
 			if(((String)me.getKey()) == "note"){

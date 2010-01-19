@@ -129,7 +129,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		// flag = 0 means no condition
 		// flag = 1 means new items, the items user have never seen
 		// flag = 2 means item due, they need to be reviewed.
-		HashMap hm = new HashMap();
+		HashMap<String, String> hm = new HashMap<String, String>();
 		//ArrayList<String> list = new ArrayList<String>();
 		String query = "SELECT learn_tbl._id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, question, answer, note FROM dict_tbl INNER JOIN learn_tbl ON dict_tbl._id=learn_tbl._id WHERE dict_tbl._id >= " + id + " ";
 		if(flag == 1){
@@ -162,7 +162,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		
 		result.moveToFirst();
 		//int resultId =	result.getInt(result.getColumnIndex("_id"));
-		hm.put("_id", new Integer(result.getInt(result.getColumnIndex("_id"))));
+		hm.put("_id", Integer.toString(result.getInt(result.getColumnIndex("_id"))));
 		hm.put("question", result.getString(result.getColumnIndex("question")));
 		hm.put("answer", result.getString(result.getColumnIndex("answer")));
 		hm.put("note", result.getString(result.getColumnIndex("note")));
@@ -174,13 +174,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		//}
 		//result.moveToFirst();
 		hm.put("date_learn", result.getString(result.getColumnIndex("date_learn")));
-		hm.put("interval", new Integer(result.getInt(result.getColumnIndex("interval"))));
-		hm.put("grade", new Integer(result.getInt(result.getColumnIndex("grade"))));
-		hm.put("easiness", new Double(result.getDouble(result.getColumnIndex("grade"))));
-		hm.put("acq_reps", new Integer(result.getInt(result.getColumnIndex("acq_reps"))));
-		hm.put("ret_reps", new Integer(result.getInt(result.getColumnIndex("ret_reps"))));
-		hm.put("acq_reps_since_lapse", new Integer(result.getInt(result.getColumnIndex("acq_reps_since_lapse"))));
-		hm.put("ret_reps_since_lapse", new Integer(result.getInt(result.getColumnIndex("ret_reps_since_lapse"))));
+		hm.put("interval", Integer.toString(result.getInt(result.getColumnIndex("interval"))));
+		hm.put("grade", Integer.toString(result.getInt(result.getColumnIndex("grade"))));
+		hm.put("easiness", Double.toString(result.getDouble(result.getColumnIndex("grade"))));
+		hm.put("acq_reps", Integer.toString(result.getInt(result.getColumnIndex("acq_reps"))));
+		hm.put("ret_reps", Integer.toString(result.getInt(result.getColumnIndex("ret_reps"))));
+		hm.put("acq_reps_since_lapse", Integer.toString(result.getInt(result.getColumnIndex("acq_reps_since_lapse"))));
+		hm.put("ret_reps_since_lapse", Integer.toString(result.getInt(result.getColumnIndex("ret_reps_since_lapse"))));
 		
 		
 		Item resultItem = new Item();
@@ -213,11 +213,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return result.getInt(0);
 	}
 	
-	public HashMap getSettings(){
+	public HashMap<String, String> getSettings(){
 		// Dump all the key/value pairs from the learn_tbl
 		String key;
 		String value;
-		HashMap hm = new HashMap();
+		HashMap<String, String> hm = new HashMap<String, String>();
 		
 		
 		Cursor result = myDatabase.rawQuery("SELECT * FROM control_tbl", null);
@@ -236,12 +236,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return hm;
 	}
 	
-	public void setSettings(HashMap hm){
+	public void deleteItem(Item item){
+		myDatabase.execSQL("DELETE FROM learn_tbl where _id = ?", new String[]{"" + item.getId()});
+		myDatabase.execSQL("DELETE FROM dict_tbl where _id = ?", new String[]{"" + item.getId()});
+	}
+	
+	public void setSettings(HashMap<String, String> hm){
 		// Update the control_tbl in database using the hm
-		Set set = hm.entrySet();
-		Iterator i = set.iterator();
+		Set<Map.Entry<String, String>> set = hm.entrySet();
+		Iterator<Map.Entry<String, String> > i = set.iterator();
 		while(i.hasNext()){
-			Map.Entry me = (Map.Entry)i.next();
+			Map.Entry<String, String> me = i.next();
 			myDatabase.execSQL("REPLACE INTO control_tbl values(?, ?)", new String[]{me.getKey().toString(), me.getValue().toString()});
 		}
 	}

@@ -7,18 +7,9 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="wrap_content"
   android:layout_height="wrap_content"
-  android:scrollbars="vertical">
-  <TableRow>
-  			<Button android:id="@+id/but_detail_back" android:layout_width="fill_parent"
-				android:layout_height="wrap_content" android:layout_marginLeft="10dip"
-				android:text="3 Hard" android:layout_weight="1"/>
-			<Button android:id="@+id/but_detail_update" android:layout_width="fill_parent"
-				android:layout_height="wrap_content" android:layout_marginLeft="10dip"
-				android:text="4 Good" android:layout_weight="1"/>
-			<Button android:id="@+id/but_detail_delete" android:layout_width="fill_parent"
-				android:layout_height="wrap_content" android:layout_marginLeft="10dip"
-				android:text="5 Bright" android:layout_weight="1"/>
-  </TableRow>
+  android:scrollbars="vertical"
+  android:clipChildren="true"
+  android:stretchColumns="2">
   <TableRow>
   <TextView android:text="_id"
   			android:padding="3dip"/>
@@ -135,6 +126,21 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@android:drawable/editbox_background"/>
+  </TableRow>
+  <TableRow>
+			<Button android:id="@+id/but_detail_update" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_marginLeft="0dip" 
+				android:layout_marginRight="50dip" android:text="Write Changes" android:layout_weight="1"/>
+  </TableRow>
+  <TableRow>
+			<Button android:id="@+id/but_detail_delete" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:layout_marginLeft="0dip"
+				android:layout_marginRight="50dip" android:text="Delete Item" android:layout_weight="1"/>
+  </TableRow>
+  <TableRow>
+  			<Button android:id="@+id/but_detail_back" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_marginLeft="0dip"
+				android:layout_marginRight="50dip" android:text="Back" android:layout_weight="1"/>
   </TableRow>
 </TableLayout>
 </ScrollView>
