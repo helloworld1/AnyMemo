@@ -201,6 +201,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		
 	}
 	
+	public void updateQA(Item item){
+		myDatabase.execSQL("UPDATE dict_tbl SET question = ?, answer = ?, note = ?", new String[]{item.getQuestion(), item.getAnswer(), item.getNote()});
+	}
+	
 	public int getScheduledCount(){
 		Cursor result = myDatabase.rawQuery("SELECT count(_id) FROM learn_tbl WHERE round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval >= 0 AND acq_reps > 0", null);
 		result.moveToFirst();

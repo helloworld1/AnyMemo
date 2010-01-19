@@ -111,6 +111,7 @@ public class DetailScreen extends Activity implements OnClickListener{
     	hm.put("ret_reps_since_lapse", retRepsSinceLapseEntry.getText().toString());
     	currentItem.setData(hm);
     	dbHelper.updateItem(currentItem);
+    	dbHelper.updateQA(currentItem);
     }
     
     public void onClick(View v){
