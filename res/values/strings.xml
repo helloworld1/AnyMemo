@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, FantasisichMemo!</string>
-    <string name="app_name">FantasisichMemo</string>
+    <string name="app_name">FantastischMemo</string>
     <string name="up_one_level">..</string>
     <string name="current_dir">.</string>
     <string name="back_menu_text">Back</string>
