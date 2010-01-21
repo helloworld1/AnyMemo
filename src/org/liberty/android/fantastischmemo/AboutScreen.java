@@ -12,6 +12,7 @@ public class AboutScreen extends Activity{
 	private WebView webview;
 	
 	public void onCreate(Bundle savedInstanceState) {
+		// This will load the about.html as the about screen
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.about_screen);
 		webview = (WebView) findViewById(R.id.about_webview);

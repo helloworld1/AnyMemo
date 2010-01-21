@@ -100,6 +100,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		}
 		result = myDatabase.rawQuery("SELECT _id FROM learn_tbl", null);
 		count_learn = result.getCount();
+		result.close();
 		if(count_learn != count_dict){
 			this.myDatabase.execSQL("DELETE FROM learn_tbl");
 			this.myDatabase.execSQL("INSERT INTO learn_tbl(_id) SELECT _id FROM dict_tbl");
@@ -208,13 +209,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public int getScheduledCount(){
 		Cursor result = myDatabase.rawQuery("SELECT count(_id) FROM learn_tbl WHERE round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval >= 0 AND acq_reps > 0", null);
 		result.moveToFirst();
-		return result.getInt(0);
+		int res = result.getInt(0);
+		result.close();
+		return res;
+		
 	}
 	
 	public int getNewCount(){
 		Cursor result = myDatabase.rawQuery("SELECT count(_id) FROM learn_tbl WHERE acq_reps = 0", null);
 		result.moveToFirst();
-		return result.getInt(0);
+		int res = result.getInt(0);
+		result.close();
+		return res;
 	}
 	
 	public HashMap<String, String> getSettings(){
@@ -237,6 +243,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			value = result.getString(result.getColumnIndex("value"));
 			hm.put(key, value);
 		}
+		result.close();
 		return hm;
 	}
 	

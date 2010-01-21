@@ -13,13 +13,27 @@ font-size:16pt;
 <h1 style="text-align:center">  FantastischMemo </h1>
 <div style="text-align:center"> Ver 1.0 By Liberty </div>
 <h2>1. Introduction </h2>
-<p>This program implement the 10 puzzle problem, which is the course project of  CS 6613, Fall 2009. Basically it is an extension of the traditional 8 puzzle or 15 puzzle but with 2 blank tiles. </p>
-<p>This program uses the A* graph search algorithm with the Manhattan distance as heuristic function. Extra credit of the project is implemented. The GUI is a web page, user can click to move tiles and use this method to set the initial state and goal state. User can also use random function to generate a random state and set it to initial state or goal state or both. </p>
+<p>FantastischMemo is a spaced repetation flashcard learning software. It implement a slightly modified Mnemosyne algorithm to maximize the learning efficient. The key features are as follows: 
+<ul>
+<li> Well tested and highly efficient Mnemosyne algorithm for fast learning</li>
+<li> Text-to-Speech feature to aid language learning. Support multiple languages </li>
+<li> PC tool is provided to convert Mnemosyne XML, CSV, tab TXT file to the database </li>
+<li> A collection of database is provided in Market to try out. </li>
+<li> Text format can be changed to fit different database and screen size. </li>
+<li> Each flashcard can be edited or deleted on the device. </li>
+<li> Simple, easy-to-use and power saving interface. </li>
 
+</ul>
+</p>
 
-<h2>3. Algorithm Implementation</h2>
-<h3> Data structures </h3>
-<p> The closed list which stores every non-repeated node is a linear table. In order to maintain the tree structure of the nodes, each node is assigned an id, which is the position of the closed list. The node will remember the parent node, so it can track back to the root. The fringe that stores the expanded node is also a priority queue.<p>
+<h2>2. How to use</h2>
+<h3>2.1 Install/Open/Close Databases </h3>
+<p> To install a database, you can use the Use the FantastischMemo DB Installer in the market to get a collection of converted database. It will automatically copy db to your sdcard/fantastischmemo directory. Or you can convert the Mnemosyne XML or CSV or Tab(txt) files to anywhere in SD card. 
+</p>
+<p> To open a database, you just press Open Database and select the .db file in the ugly file browser. You can also open recetently opened database immediately by "Open Recent Database".</p>
+<p> To close the program, you can just press the back key or select back from the menu and "Exit" from the main screen. </p>
+<h3>2.2 How to memorize the flashcard </h3>
+<p>
 <h3> Algorithm </h3>
 <p> The algorithm is the A* graph search. First the program will expand the root node and put the successors in the fringe. Then it will expand the node that has the least step cost. Before expanding a node, the goal state is checked. Also the repeated state will not be expanded. After the program find out the goal stae, it will trace back to the root using the parent id.</p>
 

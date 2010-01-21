@@ -458,6 +458,7 @@ public class MemoScreen extends Activity{
 			learnQueue.remove(0);
 			if(isNewItem){
 				this.newItemCount -= 1;
+				
 			}
 			else{
 				this.scheduledItemCount -= 1;
@@ -468,6 +469,8 @@ public class MemoScreen extends Activity{
 		} else {
 			learnQueue.remove(0);
 			learnQueue.add(currentItem);
+			dbHelper.updateItem(currentItem);
+			
 		}
 
 		this.showAnswer = false;

@@ -111,7 +111,7 @@ public class SettingsScreen extends Activity implements OnClickListener {
 				
 			}
 			if(me.getKey().toString().equals("question_align")){
-				String res = me.getValue().toString();
+				String res = me.getValue();
 				int index;
 				if(res.equals("left")){
 					index = 0;
@@ -125,7 +125,7 @@ public class SettingsScreen extends Activity implements OnClickListener {
 				questionAlignSpinner.setSelection(index);
 			}
 			if(me.getKey().toString().equals("answer_align")){
-				String res = me.getValue().toString();
+				String res = me.getValue();
 				int index;
 				if(res.equals("left")){
 					index = 0;
@@ -139,7 +139,7 @@ public class SettingsScreen extends Activity implements OnClickListener {
 				answerAlignSpinner.setSelection(index);
 			}
 			if(me.getKey().toString().equals("question_locale")){
-				String res = me.getValue().toString();
+				String res = me.getValue();
 				String[] localeList = getResources().getStringArray(R.array.locale_list);
 				int index = 0;
 				for(String str : localeList){

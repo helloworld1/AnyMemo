@@ -35,7 +35,9 @@ public class FileBrowser extends ListActivity {
 	
 	private void browseToRoot(){
 		if(defaultRoot == null){
-			browseTo(new File(getString(R.string.default_sd_path)));
+			File sdPath = new File(getString(R.string.default_sd_path));
+			sdPath.mkdir();
+			browseTo(sdPath);
 		}
 		else{
 			browseTo(new File(defaultRoot + "/"));

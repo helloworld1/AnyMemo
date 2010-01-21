@@ -119,9 +119,9 @@ public class DetailScreen extends Activity implements OnClickListener{
     
     public void onDestroy(){
     	super.onDestroy();
+    	dbHelper.close();
     	Intent resultIntent = new Intent();
     	setResult(Activity.RESULT_CANCELED, resultIntent);
-    	dbHelper.close();
     	
     }
     
