@@ -158,6 +158,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		//System.out.println("The result is: " + result.getString(0));
 		//return result.getString(1);
 		if(result.getCount() == 0){
+			result.close();
 			return null; 
 		}
 		
@@ -186,6 +187,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		
 		Item resultItem = new Item();
 		resultItem.setData(hm);
+		result.close();
 		return resultItem;
 	}
 	

@@ -11,7 +11,8 @@ font-size:16pt;
 </head>
 <body>
 <h1 style="text-align:center">  FantastischMemo </h1>
-<div style="text-align:center"> Ver 1.0 By Liberty </div>
+<div style="text-align:center"> Ver 1.0 </div>
+<div style="text-align:center"> Author: Haowen Ning, Qi Wang </div>
 <h2>1. Introduction </h2>
 <p>FantastischMemo is a spaced repetation flashcard learning software. It implement a slightly modified Mnemosyne algorithm to maximize the learning efficient. The key features are as follows: 
 <ul>
@@ -33,24 +34,31 @@ font-size:16pt;
 <p> To open a database, you just press Open Database and select the .db file in the ugly file browser. You can also open recetently opened database immediately by "Open Recent Database".</p>
 <p> To close the program, you can just press the back key or select back from the menu and "Exit" from the main screen. </p>
 <h3>2.2 How to memorize the flashcard </h3>
-<p>
-<h3> Algorithm </h3>
-<p> The algorithm is the A* graph search. First the program will expand the root node and put the successors in the fringe. Then it will expand the node that has the least step cost. Before expanding a node, the goal state is checked. Also the repeated state will not be expanded. After the program find out the goal stae, it will trace back to the root using the parent id.</p>
+<p> In the flashcard screen, you will see the question with the answer hidden. When you press the screen, the answer will be shown and you need to grade yourself by clicking the grading button. The meaning of the grades are:
+<ul>
+<li> Grade 0: You have forgotten the card completely. </li>
+<li> Grade 1: You have forgotten the card completely. </li>
+<li> Grade 2: Barely correct answer. </li>
+<li> Grade 3: Correct answer but with much effort. </li>
+<li> Grade 4: Correct answe, with some effort</li>
+<li> Grade 5: Correct answer, but without any difficulties. </li> 
+</ul>
+</p>
+<p> After selecting the grade, the next question will be shown. The title bar will show the number of scheduled cards for repetation and the new cards left. You need to decide how long to use this software each day. Generally speaking 30-60min is the best.
+</p>
+<h3> 2.3 How to use the Text-to-Speech function</h3>
+<p> Text-to-Speech function is available for Android OS 1.6+ and it currently can speak English(US, UK), Italian, German, French and Spanish. To use this function, you can set up the automatic speech function in the Option in main screen so that every question answer will be spoken out according to the Locale information in the database. If you do not want automatic speaking, you can also let the phone read the individual word in the menu of the flashcard screen.
+</p>
+ 
+<h3>2.4 How to edit the database</h3>
+<p> This program now provides some basic function to edit the database through the "Settings" and "Detail" menu items in flashcard screen. In settings screen you can edit the format of the question and answer, and also the locale of them. In "Detail" screen, you can edit anything or delete the item. </p>
 
-<h2>4. Program Implementation</h2>
-<p>The program is written in Javascript that complys with W3C ECMA 1.8 standard. The program design is object-oriented prototype-based programming. The 10puzzle.html will load the start function and the start function will create the Puzzle prototype. The Puzzle prototype has a Solver object.</p>
-<h3>Global Prototypes</h3>
-<p>Puzzle prototype: This prototype is used to display the UI and the handle the mouse events. It also record the user input state and pass it to the a Solver object.</p>
-<p>Solver prototype: This prototype contains the main algorithm and data structure.Start: This is just like a main function.</p>
-<h3>Member prototypes</h3>
-The code is well-commneted. See the code for details.
+<h2>3. Related websites</h2>
+<p> The Database converter and releated information can be found on the official website: <a href="http://sites.google.com/site/fantastischmemo/">http://sites.google.com/site/fantastischmemo/</a>. The source code of the program can be found on <a href="https://sourceforge.net/projects/fantasisichmemo/">https://sourceforge.net/projects/fantasisichmemo/</a>. To get the card databases, you can go to mnemosyne website to download the XML or TXT and then use the converter on PC to convert it to FantastischMemo format: <a href="http://www.mnemosyne-proj.org/downloads/cards.php">http://www.mnemosyne-proj.org/downloads/cards.php</a></p> 
 
-<h2>A. File List</h2>
-<p>
-*.png: Image files that used to display board and this readme.<br />
-10puzzle.html: Program's HTML file, use web browser to open it.<br />
-10puzzle.js: Source code of the program<br />
-readme.html: You are reading now.</p>
+<h2>4. Licence</h2>
+<p> The source code is licences uncer GPLv2, you are freely distribute/modify the source code as long as you mention the licence and the original author.
+
 
 
 
