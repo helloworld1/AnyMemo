@@ -157,7 +157,7 @@ public class DetailScreen extends Activity implements OnClickListener{
     		AlertDialog alertDialog = new AlertDialog.Builder(this)
 			.create();
 			alertDialog.setTitle("Warning");
-			alertDialog.setMessage("Do you really want to delete this item?");
+			alertDialog.setMessage("Do you really want to update this item?");
 			alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface arg0, int arg1) {
