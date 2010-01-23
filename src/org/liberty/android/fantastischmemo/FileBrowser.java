@@ -4,8 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.liberty.android.fantastischmemo.R;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;

@@ -1,7 +1,5 @@
 package org.liberty.android.fantastischmemo;
 
-import org.liberty.android.fantastischmemo.R;
-
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 

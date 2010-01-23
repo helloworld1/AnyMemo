@@ -2,8 +2,6 @@ package org.liberty.android.fantastischmemo;
 
 import java.util.HashMap;
 
-import org.liberty.android.fantastischmemo.R;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;

@@ -7,8 +7,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import org.liberty.android.fantastischmemo.R;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;

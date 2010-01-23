@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">FantastischMemo</string>
+    <string name="app_name">FantastischMemo Free</string>
     <string name="up_one_level">..</string>
     <string name="current_dir">.</string>
     <string name="back_menu_text">Back</string>
@@ -11,6 +11,7 @@
     <string name="open_button_text">Open Database</string>
     <string name="recent_button_text">Open Recent Database</string>
     <string name="option_button_text">Options</string>
+    <string name="download_button_text">Download DB Collection</string>
     <string name="about_button_text">About</string>
     <string name="exit_button_text">Exit Program</string>
     <string name="default_sd_path">/sdcard/fantastischmemo</string>
