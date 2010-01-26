@@ -120,7 +120,7 @@ public final class Item {
 	}
 	
 	private int randomNumber(int min, int max){
-		return min + (new Random()).nextInt(max - min);
+		return min + (new Random()).nextInt(max - min + 1);
 	}
 	private int calculateIntervalNoise(int interval){
 		int noise;
