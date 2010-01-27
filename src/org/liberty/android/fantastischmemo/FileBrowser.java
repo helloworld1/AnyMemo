@@ -2,6 +2,7 @@ package org.liberty.android.fantastischmemo;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import android.app.Activity;
@@ -83,11 +84,21 @@ public class FileBrowser extends ListActivity {
 		case RELATIVE:
 			int currentPathStringLength = this.currentDirectory.getAbsolutePath().length();
 			for(File file: files){
-				this.directoryEntries.add(file.getAbsolutePath().substring(currentPathStringLength));
+				if(file.isDirectory() || file.getName().endsWith(".db")){
+					this.directoryEntries.add(file.getAbsolutePath().substring(currentPathStringLength));
+				}
 				
 			}
 		}
 		ArrayAdapter<String> directoryList = new ArrayAdapter<String>(this, R.layout.file_browser, this.directoryEntries);
+		directoryList.sort(new Comparator<String>() {
+			public int compare(String s1, String s2){
+				return s1.compareTo(s2);
+			}
+			public boolean equals(String s1, String s2){
+				return s1.equals(s2);
+			}
+		});
 		this.setListAdapter(directoryList);
 	}
 	
