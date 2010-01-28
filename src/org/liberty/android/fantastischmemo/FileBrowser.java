@@ -23,6 +23,7 @@ public class FileBrowser extends ListActivity {
 	private List<String> directoryEntries = new ArrayList<String>();
 	private File currentDirectory = new File("/");
 	private String defaultRoot;
+	private String fileExtension = ".db";
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		
@@ -84,8 +85,11 @@ public class FileBrowser extends ListActivity {
 		case RELATIVE:
 			int currentPathStringLength = this.currentDirectory.getAbsolutePath().length();
 			for(File file: files){
-				if(file.isDirectory() || file.getName().endsWith(".db")){
-					this.directoryEntries.add(file.getAbsolutePath().substring(currentPathStringLength));
+				if(file.isDirectory()){
+						this.directoryEntries.add(file.getAbsolutePath().substring(currentPathStringLength) + "/");
+				}
+				if(file.getName().endsWith(fileExtension)){
+						this.directoryEntries.add(file.getAbsolutePath().substring(currentPathStringLength));
 				}
 				
 			}
@@ -93,7 +97,21 @@ public class FileBrowser extends ListActivity {
 		ArrayAdapter<String> directoryList = new ArrayAdapter<String>(this, R.layout.file_browser, this.directoryEntries);
 		directoryList.sort(new Comparator<String>() {
 			public int compare(String s1, String s2){
-				return s1.compareTo(s2);
+				if(s1.equals("..")){
+					return -1;
+				}
+				else if(s2.equals("..")){
+					return 1;
+				}
+				else if(s1.endsWith("/") && !s2.endsWith("/")){
+					return -1;
+				}
+				else if(s2.endsWith("/") && !s1.endsWith("/")){
+					return 1;
+				}
+				else{
+					return s1.compareTo(s2);
+				}
 			}
 			public boolean equals(String s1, String s2){
 				return s1.equals(s2);

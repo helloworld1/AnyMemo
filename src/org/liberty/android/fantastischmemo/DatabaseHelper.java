@@ -22,12 +22,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private final String DB_NAME;
 	private SQLiteDatabase myDatabase;
 	private final Context myContext;
+		
 	public DatabaseHelper(Context context, String dbPath, String dbName){
 		super(context, dbName, null, 1);
 		DB_PATH = dbPath;
 		DB_NAME = dbName;
 		this.myContext = context;
 		this.openDatabase();
+	}
+	
+	public DatabaseHelper(Context context, String dbPath, String dbName, int noOpen){
+		super(context, dbName, null, 1);
+		DB_PATH = dbPath;
+		DB_NAME = dbName;
+		this.myContext = context;
+		if(noOpen == 0){
+			this.openDatabase();
+		}
 	}
 	
 	public void createDatabase() throws IOException{
@@ -52,7 +63,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			String myPath = DB_PATH + DB_NAME;
 			checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
 		}
-		catch(SQLiteException e){
+		catch(SQLiteException e){  
 		}
 		
 		if(checkDB != null){
@@ -84,6 +95,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		}
 		catch(Exception e){
 			Log.e("First", "Database error first here!: " + e.toString());
+			throw new SQLException();
 			
 		}
 		try{
@@ -225,6 +237,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		result.close();
 		return res;
 	}
+	
+	public int getTotalCount(){
+		Cursor result = myDatabase.rawQuery("SELECT count(_id) FROM learn_tbl",  null);
+		result.moveToFirst();
+		int res = result.getInt(0);
+		result.close();
+		return res;
+	}
+	
 	
 	public HashMap<String, String> getSettings(){
 		// Dump all the key/value pairs from the learn_tbl

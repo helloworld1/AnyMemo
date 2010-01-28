@@ -61,10 +61,15 @@ public class FantastischMemo extends Activity implements OnClickListener{
     
     public void onClick(View v){
     	if(v == btnNew){
+    		/*
            Intent myIntent = new Intent();
            myIntent.setClass(this, FileBrowser.class);
            myIntent.putExtra("default_root", dbPath);
            startActivityForResult(myIntent, 1);
+           */
+    		Intent myIntent = new Intent();
+    		myIntent.setClass(this, OpenScreen.class);
+    		startActivity(myIntent);
             
     	}
     	if(v == btnExit){
