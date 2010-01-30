@@ -10,7 +10,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 public class RecentOpenList {
-	final int MAX_LIST_NUMBER = 5;
+	public static final int MAX_LIST_NUMBER = 5;
 	final Context mContext;
 	List<HashMap<String, String>> recentList;
 	Integer i = Integer.valueOf(1);;

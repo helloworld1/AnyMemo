@@ -13,9 +13,6 @@
 		<Button android:id="@+id/main_open_database_button"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:text="@string/open_button_text" />
-		<Button android:id="@+id/main_open_recent_button"
-			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:text="@string/recent_button_text" />
 		<Button android:id="@+id/main_option_button"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:text="@string/option_button_text" />

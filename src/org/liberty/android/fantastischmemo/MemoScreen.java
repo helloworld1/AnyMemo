@@ -314,8 +314,8 @@ public class MemoScreen extends Activity{
 			};
 			AlertDialog alertDialog = new AlertDialog.Builder(this) 
 			.create();
-			alertDialog.setTitle("No item");
-			alertDialog.setMessage("There is no items for now.");
+			alertDialog.setTitle(this.getString(R.string.memo_no_item_title));
+			alertDialog.setMessage(this.getString(R.string.memo_no_item_message));
 			alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Back",
 					backButtonListener);
 			alertDialog.show();
@@ -337,7 +337,7 @@ public class MemoScreen extends Activity{
 		// or feed all items to rev queue
 		// from the database
 		Item item;
-		this.setTitle("Scheduled: " + dbHelper.getScheduledCount() + " / New: " + dbHelper.getNewCount());
+		this.setTitle(this.getString(R.string.stat_scheduled) + dbHelper.getScheduledCount() + " / " + this.getString(R.string.stat_new) + dbHelper.getNewCount());
 		for(int i = learnQueue.size(); i < WINDOW_SIZE; i++){
 			item = dbHelper.getItemById(idMaxSeen + 1, 2); // Revision first
 			if(item == null){
@@ -387,8 +387,8 @@ public class MemoScreen extends Activity{
 		else{
 			AlertDialog alertDialog = new AlertDialog.Builder(this)
 			.create();
-			alertDialog.setTitle("No item");
-			alertDialog.setMessage("There is no items for now.");
+			alertDialog.setTitle(this.getString(R.string.memo_no_item_title));
+			alertDialog.setMessage(this.getString(R.string.memo_no_item_message));
 			alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Back",
 					backButtonListener);
 			alertDialog.show();
@@ -400,7 +400,7 @@ public class MemoScreen extends Activity{
 
 	private void displayQA(Item item) {
 		// Display question and answer according to item
-		this.setTitle(this.getTitle() + " / current id: " + item.getId() );
+		this.setTitle(this.getTitle() + " / " + this.getString(R.string.memo_current_id) + item.getId() );
 		TextView questionView = (TextView) findViewById(R.id.question);
 		TextView answerView = (TextView) findViewById(R.id.answer);
 		questionView.setText(new StringBuilder().append(item.getQuestion()));
@@ -494,7 +494,7 @@ public class MemoScreen extends Activity{
 			btn3.setVisibility(View.INVISIBLE);
 			btn4.setVisibility(View.INVISIBLE);
 			btn5.setVisibility(View.INVISIBLE);
-			answer.setText(new StringBuilder().append("?\n Show answer"));
+			answer.setText(new StringBuilder().append(this.getString(R.string.memo_show_answer)));
 
 		} else {
 			View.OnClickListener btn0Listener = new View.OnClickListener() {

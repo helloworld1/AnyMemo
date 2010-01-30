@@ -29,6 +29,7 @@ public class FileBrowser extends ListActivity {
 		
 		Bundle extras = getIntent().getExtras();
 		defaultRoot = extras.getString("default_root");
+		fileExtension = extras.getString("file_extension");
 		
 		browseToRoot();
 	}

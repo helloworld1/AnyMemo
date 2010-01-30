@@ -8,6 +8,9 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -17,7 +20,7 @@ public class FantastischMemo extends Activity implements OnClickListener{
 	private String dbPath;
 	private int returnValue;
 	private Button btnNew;
-	private Button btnRecent;
+	//private Button btnRecent;
 	private Button btnOption;
 	private Button btnAbout;
 	private Button btnExit;
@@ -28,13 +31,13 @@ public class FantastischMemo extends Activity implements OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         btnNew = (Button)this.findViewById(R.id.main_open_database_button);
-        btnRecent = (Button)this.findViewById(R.id.main_open_recent_button);
+        //btnRecent = (Button)this.findViewById(R.id.main_open_recent_button);
         btnOption = (Button)this.findViewById(R.id.main_option_button);
         btnDownload = (Button)this.findViewById(R.id.main_download_button);
         btnAbout = (Button)this.findViewById(R.id.main_about_button);
         btnExit = (Button)this.findViewById(R.id.main_exit_button);
         btnNew.setOnClickListener(this);
-        btnRecent.setOnClickListener(this);
+        //btnRecent.setOnClickListener(this);
         btnOption.setOnClickListener(this);
         btnAbout.setOnClickListener(this);
         btnDownload.setOnClickListener(this);
@@ -76,6 +79,7 @@ public class FantastischMemo extends Activity implements OnClickListener{
     		finish();
     	}
     	
+    	/*
     	if(v == btnRecent){
     		if(dbName != null && dbPath != null){
     			Intent myIntent = new Intent();
@@ -97,7 +101,7 @@ public class FantastischMemo extends Activity implements OnClickListener{
     			alertDialog.show();
     			
     		}
-    	}
+    	}*/
     	if(v == btnOption){
     		Intent myIntent = new Intent();
     		myIntent.setClass(this, OptionScreen.class);
@@ -153,4 +157,25 @@ public class FantastischMemo extends Activity implements OnClickListener{
     		
     	}
     }
+    
+	public boolean onCreateOptionsMenu(Menu menu){
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main_screen_menu, menu);
+		return true;
+	}
+	
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	    case R.id.mainmenu_clear:
+	    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+	    	SharedPreferences.Editor editor = settings.edit();
+	    	editor.clear();
+			editor.commit();
+			Intent refresh = new Intent(this, FantastischMemo.class);
+			startActivity(refresh);
+			this.finish();
+			return true;
+	    }
+	    return false;
+	}
 }

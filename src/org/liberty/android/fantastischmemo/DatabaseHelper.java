@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -57,13 +59,58 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		}
 	}
 	
+	public void createDatabaseFromList(List<String> questionList, List<String> answerList, List<String> categoryList) throws IOException{
+		boolean dbExist = checkDatabase();
+		if(dbExist){
+			throw new IOException("DB already exist");
+		}
+		try{
+		myDatabase = SQLiteDatabase.openDatabase(DB_PATH + "/" + DB_NAME, null, SQLiteDatabase.OPEN_READWRITE | SQLiteDatabase.CREATE_IF_NECESSARY);
+		}
+		catch(Exception e){
+			Log.e("DB open error here", e.toString());
+		}
+		
+		myDatabase.execSQL("CREATE TABLE dict_tbl(_id INTEGER PRIMARY KEY ASC AUTOINCREMENT, question TEXT, answer TEXT, note TEXT, category TEXT)");
+		myDatabase.execSQL("CREATE TABLE learn_tbl(_id INTEGER PRIMARY KEY ASC AUTOINCREMENT, date_learn, interval, grade INTEGER, easiness REAL, acq_reps INTEGER, ret_reps INTEGER, lapses INTEGER, acq_reps_since_lapse INTEGER, ret_reps_since_lapse INTEGER)");
+		myDatabase.execSQL("CREATE TABLE control_tbl(ctrl_key TEXT, value TEXT)");
+		ListIterator<String> liq = questionList.listIterator();
+		ListIterator<String> lia = answerList.listIterator();
+		ListIterator<String> lic = categoryList.listIterator();
+		
+		myDatabase.beginTransaction();
+		try{
+			while(liq.hasNext() && lia.hasNext()){
+				String category;
+				if(lic.hasNext()){
+					category = lic.next();
+				}
+				else{
+					category = "";
+				}
+				myDatabase.execSQL("INSERT INTO dict_tbl(question,answer,category) VALUES(?, ?, ?)", new String[]{liq.next(), lia.next(), category});
+				
+				
+			}
+			this.myDatabase.execSQL("DELETE FROM learn_tbl");
+			this.myDatabase.execSQL("INSERT INTO learn_tbl(_id) SELECT _id FROM dict_tbl");
+			this.myDatabase.execSQL("UPDATE learn_tbl SET date_learn = '2010-01-01', interval = 0, grade = 0, easiness = 0.0, acq_reps = 0, ret_reps  = 0, lapses = 0, acq_reps_since_lapse = 0, ret_reps_since_lapse = 0");
+			myDatabase.setTransactionSuccessful();
+		}
+		finally{
+			myDatabase.endTransaction();
+		}
+		
+	}
+	
 	public boolean checkDatabase(){
 		SQLiteDatabase checkDB = null;
 		try{
-			String myPath = DB_PATH + DB_NAME;
+			String myPath = DB_PATH + "/" + DB_NAME;
 			checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
 		}
 		catch(SQLiteException e){  
+			checkDB = null;
 		}
 		
 		if(checkDB != null){
@@ -74,7 +121,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	
 	private void copyDatabase() throws IOException{
 		InputStream myInput = myContext.getAssets().open(DB_NAME);
-		String outFilename = DB_PATH + DB_NAME;
+		String outFilename = DB_PATH + "/" + DB_NAME;
 		OutputStream myOutput = new FileOutputStream(outFilename);
 		byte[] buffer = new byte[1024];
 		int length;
@@ -87,11 +134,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	}
 	
 	public void openDatabase() throws SQLException{
-		String myPath = DB_PATH + DB_NAME;
+		String myPath = DB_PATH + "/" + DB_NAME;
 		Cursor result;
 		int count_dict = 0, count_learn = 0;
 		try{
-		myDatabase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
+		myDatabase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE | SQLiteDatabase.CREATE_IF_NECESSARY);
 		}
 		catch(Exception e){
 			Log.e("First", "Database error first here!: " + e.toString());
@@ -101,6 +148,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		try{
 			result = myDatabase.rawQuery("SELECT _id FROM dict_tbl", null);
 			count_dict = result.getCount();
+			result.close();
 		}
 		catch(Exception e){
 			//new AlertDialog.Builder(this).setMessage(e.toString()).show();	
@@ -198,9 +246,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		hm.put("ret_reps_since_lapse", Integer.toString(result.getInt(result.getColumnIndex("ret_reps_since_lapse"))));
 		
 		
+		result.close();
 		Item resultItem = new Item();
 		resultItem.setData(hm);
-		result.close();
 		return resultItem;
 	}
 	
@@ -283,7 +331,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		while(i.hasNext()){
 			Map.Entry<String, String> me = i.next();
 			myDatabase.execSQL("REPLACE INTO control_tbl values(?, ?)", new String[]{me.getKey().toString(), me.getValue().toString()});
-		}
+		} 
 	}
 	
 	public void wipeLearnData(){
