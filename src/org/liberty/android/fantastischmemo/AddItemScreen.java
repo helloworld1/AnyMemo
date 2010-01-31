@@ -17,8 +17,11 @@ public class AddItemScreen extends Activity implements OnClickListener{
 	private Button btnEdit;
 	private Button btnGotoid;
 	private Button btnBack;
+	private Button btnNext;
+	private Button btnPrevious;
 	private String dbName;
 	private String dbPath;
+	private int openId = -1;
 	private DatabaseHelper dbHelper;
 	
     public void onCreate(Bundle savedInstanceState) {
@@ -28,6 +31,7 @@ public class AddItemScreen extends Activity implements OnClickListener{
 		if (extras != null) {
 			dbPath = extras.getString("dbpath");
 			dbName = extras.getString("dbname");
+			openId = extras.getInt("openid");
 		}
 		dbHelper = new DatabaseHelper(this, dbPath, dbName);
 		
@@ -39,11 +43,46 @@ public class AddItemScreen extends Activity implements OnClickListener{
         btnEdit = (Button)findViewById(R.id.add_item_but_edit);
         btnGotoid = (Button)findViewById(R.id.add_item_but_gotoid);
         btnBack = (Button)findViewById(R.id.add_item_but_back);
+        btnNext = (Button)findViewById(R.id.add_item_but_next);
+        btnPrevious = (Button)findViewById(R.id.add_item_but_previous);
         btnNew.setOnClickListener(this);
         btnEdit.setOnClickListener(this);
         btnGotoid.setOnClickListener(this);
         btnBack.setOnClickListener(this);
+        btnNext.setOnClickListener(this);
+        btnPrevious.setOnClickListener(this);
+        if(openId != -1 && dbHelper.getNewId() > openId){
+        	entryId.setText("" + openId);
+        	Item item = dbHelper.getItemById(openId, 0);
+        	entryQuestion.setText(item.getQuestion());
+        	entryAnswer.setText(item.getAnswer());
+        }
         
+    }
+    
+    private void setEntryById(int id){
+    	int maxId = dbHelper.getNewId();
+    	if(id == 0){
+    		id = 1;
+    	}
+    	if(maxId == id){
+    		entryQuestion.setText("");
+    		entryAnswer.setText("");
+    		entryId.setText("" + id);
+    	}
+    	else if(maxId < id){
+    		entryId.setText("" + maxId);
+    		entryQuestion.setText("");
+    		entryAnswer.setText("");
+    	}
+    	else if(maxId > id && id > 0){
+    		Item item = dbHelper.getItemById(id, 0);
+    		entryQuestion.setText(item.getQuestion());
+    		entryAnswer.setText(item.getAnswer());
+    		entryId.setText("" + id);
+    	}
+    
+    	
     }
     
     @Override
@@ -79,25 +118,34 @@ public class AddItemScreen extends Activity implements OnClickListener{
 			catch(Exception e){
 				return;
 			}
-			int maxId = dbHelper.getNewId();
-			if(maxId == id){
-				entryQuestion.setText("");
-				entryAnswer.setText("");
-			}
-			else if(maxId < id){
-				entryId.setText("" + maxId);
-				entryQuestion.setText("");
-				entryAnswer.setText("");
-			}
-			else if(maxId > id && id != -1){
-				Item item = dbHelper.getItemById(id, 0);
-				entryQuestion.setText(item.getQuestion());
-				entryAnswer.setText(item.getAnswer());
-			}
+			setEntryById(id);
 		}
 		
 		if(v == btnBack){
 			finish();
+		}
+		
+		if(v == btnNext){
+			int id = -1;
+			try{
+				id = Integer.parseInt(entryId.getText().toString());
+			}
+			catch(Exception e){
+				return;
+			}
+			setEntryById(id + 1);
+			
+		}
+		if(v == btnPrevious){
+			int id = -1;
+			try{
+				id = Integer.parseInt(entryId.getText().toString());
+			}
+			catch(Exception e){
+				return;
+			}
+			setEntryById(id - 1);
+			
 		}
 		
 	}

@@ -80,11 +80,12 @@ public class FantastischMemo extends Activity implements OnClickListener{
     		finish();
     	}
     	if(v == btnEdit){
-    		Intent myIntent = new Intent();
-    		myIntent.setClass(this, AddItemScreen.class);
-    		myIntent.putExtra("dbname", "verbi_italiani.db");
-    		myIntent.putExtra("dbpath", "/sdcard");
-    		startActivity(myIntent);
+            Intent myIntent = new Intent();
+            myIntent.setClass(this, FileBrowser.class);
+            myIntent.putExtra("default_root", dbPath);
+            myIntent.putExtra("file_extension", ".db");
+            startActivityForResult(myIntent, 2);
+    		
     	}
     	
     	/*
@@ -149,6 +150,7 @@ public class FantastischMemo extends Activity implements OnClickListener{
     	}
     	
     	
+    	
     }
     public void onActivityResult(int requestCode, int resultCode, Intent data){
     	super.onActivityResult(requestCode, resultCode, data);
@@ -159,6 +161,19 @@ public class FantastischMemo extends Activity implements OnClickListener{
     			dbPath = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
     			dbPath += "/";
     			returnValue = 1;
+    			
+    		}
+    	case 2:
+    		if(resultCode == Activity.RESULT_OK){
+    			Intent myIntent = new Intent();
+    			myIntent.setClass(this, AddItemScreen.class);
+    			dbName = data.getStringExtra("org.liberty.android.fantastischmemo.dbName");
+    			dbPath = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
+    			dbPath += "/";
+    			myIntent.putExtra("dbname", dbName);
+    			myIntent.putExtra("dbpath", dbPath);
+    			myIntent.putExtra("openid", 1);
+    			startActivity(myIntent);
     			
     		}
     		

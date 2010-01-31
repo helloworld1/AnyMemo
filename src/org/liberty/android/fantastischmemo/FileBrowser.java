@@ -8,13 +8,18 @@ import java.util.List;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 
 public class FileBrowser extends ListActivity {
@@ -24,12 +29,14 @@ public class FileBrowser extends ListActivity {
 	private File currentDirectory = new File("/");
 	private String defaultRoot;
 	private String fileExtension = ".db";
+	private Context mContext;
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		
 		Bundle extras = getIntent().getExtras();
 		defaultRoot = extras.getString("default_root");
 		fileExtension = extras.getString("file_extension");
+		mContext = this;
 		
 		browseToRoot();
 	}
@@ -178,6 +185,80 @@ public class FileBrowser extends ListActivity {
 		}
 		
 		
+	}
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu){
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.file_browser_menu, menu);
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.file_browser_createdb:{
+			AlertDialog.Builder alert = new AlertDialog.Builder(this);
+			alert.setTitle(this.getString(R.string.fb_create_db));
+			alert.setMessage(this.getString(R.string.fb_create_db_message));
+			final EditText input = new EditText(this);
+			alert.setView(input);
+			alert.setPositiveButton(this.getString(R.string.ok_text), new DialogInterface.OnClickListener(){
+				@Override
+				public void onClick(DialogInterface dialog, int which ){
+					String value = input.getText().toString();
+					if(!value.endsWith(".db")){
+						value += ".db";
+					}
+					DatabaseHelper dbHelper = new DatabaseHelper(mContext, currentDirectory.getAbsolutePath(), value, 1);
+					try{
+						dbHelper.createEmptyDatabase();
+					}
+					catch(Exception e){
+					}
+					dbHelper.close();
+					browseTo(currentDirectory);
+					
+				}
+			});
+			alert.setNegativeButton(this.getString(R.string.cancel_text), new DialogInterface.OnClickListener(){
+				@Override
+				public void onClick(DialogInterface dialog, int which ){
+					
+				}
+			});
+			alert.show();
+			return true;
+		}
+		
+		case R.id.file_browser_createdirectory:{
+			AlertDialog.Builder alert = new AlertDialog.Builder(this);
+			alert.setTitle(this.getString(R.string.fb_create_dir));
+			alert.setMessage(this.getString(R.string.fb_create_dir_message));
+			final EditText input = new EditText(this);
+			alert.setView(input);
+			alert.setPositiveButton(this.getString(R.string.ok_text), new DialogInterface.OnClickListener(){
+				@Override
+				public void onClick(DialogInterface dialog, int which ){
+					String value = input.getText().toString();
+					File newDir = new File(currentDirectory + "/" + value);
+					newDir.mkdir();
+					browseTo(currentDirectory);
+					
+				}
+			});
+			alert.setNegativeButton(this.getString(R.string.cancel_text), new DialogInterface.OnClickListener(){
+				@Override
+				public void onClick(DialogInterface dialog, int which ){
+					
+					
+				}
+			});
+			alert.show();
+			return true;
+		}
+				
+	    }
+	    return false;
 	}
 
 }

@@ -3,6 +3,8 @@
     <string name="app_name">FantastischMemo Free</string>
     <string name="up_one_level">..</string>
     <string name="current_dir">.</string>
+    <string name="ok_text">OK</string>
+    <string name="cancel_text">Cancel</string>
     <string name="back_menu_text">Back</string>
     <string name="detail_menu_text">Detail</string>
     <string name="settings_menu_text">Settings</string>
@@ -54,5 +56,13 @@
     <string name="add_screen_edit">Edit</string>
     <string name="add_screen_gotoid">Go to ID</string>
     <string name="add_screen_back">Back</string>
+    <string name="add_screen_next">Next</string>
+    <string name="add_screen_previous">Previous</string>
+    <string name="fb_create_db">Create New DB</string>
+    <string name="fb_create_dir">Create New Folder</string>
+    <string name="fb_create_db_message">Please enter the name of new database.</string>
+    <string name="fb_create_dir_message">Please enter the name of new folder.</string>
+    
+    
     
 </resources>

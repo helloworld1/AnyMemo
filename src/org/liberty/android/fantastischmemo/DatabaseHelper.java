@@ -59,6 +59,40 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		}
 	}
 	
+	public void createEmptyDatabase() throws IOException{
+		boolean dbExist = checkDatabase();
+		if(dbExist){
+			throw new IOException("DB already exist");
+		}
+		try{
+		myDatabase = SQLiteDatabase.openDatabase(DB_PATH + "/" + DB_NAME, null, SQLiteDatabase.OPEN_READWRITE | SQLiteDatabase.CREATE_IF_NECESSARY);
+		}
+		catch(Exception e){
+			Log.e("DB open error here", e.toString());
+		}
+		
+		myDatabase.execSQL("CREATE TABLE dict_tbl(_id INTEGER PRIMARY KEY ASC AUTOINCREMENT, question TEXT, answer TEXT, note TEXT, category TEXT)");
+		myDatabase.execSQL("CREATE TABLE learn_tbl(_id INTEGER PRIMARY KEY ASC AUTOINCREMENT, date_learn, interval, grade INTEGER, easiness REAL, acq_reps INTEGER, ret_reps INTEGER, lapses INTEGER, acq_reps_since_lapse INTEGER, ret_reps_since_lapse INTEGER)");
+		myDatabase.execSQL("CREATE TABLE control_tbl(ctrl_key TEXT, value TEXT)");
+		
+		myDatabase.beginTransaction();
+		try{
+			this.myDatabase.execSQL("DELETE FROM learn_tbl");
+			this.myDatabase.execSQL("INSERT INTO learn_tbl(_id) SELECT _id FROM dict_tbl");
+			this.myDatabase.execSQL("UPDATE learn_tbl SET date_learn = '2010-01-01', interval = 0, grade = 0, easiness = 0.0, acq_reps = 0, ret_reps  = 0, lapses = 0, acq_reps_since_lapse = 0, ret_reps_since_lapse = 0");
+			this.myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('question_locale', 'US')");
+			this.myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('answer_locale', 'US')");
+			this.myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('question_align', 'center')");
+			this.myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('answer_align', 'center')");
+			this.myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('question_font_size', '24')");
+			this.myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('answer_font_size', '24')");
+			myDatabase.setTransactionSuccessful();
+		}
+		finally{
+			myDatabase.endTransaction();
+		}
+		
+	}
 	public void createDatabaseFromList(List<String> questionList, List<String> answerList, List<String> categoryList) throws IOException{
 		boolean dbExist = checkDatabase();
 		if(dbExist){
