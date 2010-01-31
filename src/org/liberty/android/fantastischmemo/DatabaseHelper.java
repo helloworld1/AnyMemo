@@ -384,7 +384,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		Cursor result = this.myDatabase.rawQuery("SELECT _id FROM dict_tbl ORDER BY _id DESC LIMIT 1", null);
 		if(result.getCount() != 1){
 			result.close();
-			return -1;
+			return 1;
 		}
 		result.moveToFirst();
 		int res = result.getInt(result.getColumnIndex("_id"));

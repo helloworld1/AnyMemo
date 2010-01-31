@@ -53,7 +53,7 @@
     <string name="add_screen_question">Question</string>
     <string name="add_screen_answer">Answer</string>
     <string name="add_screen_new">New</string>
-    <string name="add_screen_edit">Edit</string>
+    <string name="add_screen_edit">Save</string>
     <string name="add_screen_gotoid">Go to ID</string>
     <string name="add_screen_back">Back</string>
     <string name="add_screen_next">Next</string>
