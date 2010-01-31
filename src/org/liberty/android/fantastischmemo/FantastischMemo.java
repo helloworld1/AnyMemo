@@ -20,7 +20,7 @@ public class FantastischMemo extends Activity implements OnClickListener{
 	private String dbPath;
 	private int returnValue;
 	private Button btnNew;
-	//private Button btnRecent;
+	private Button btnEdit;
 	private Button btnOption;
 	private Button btnAbout;
 	private Button btnExit;
@@ -32,12 +32,13 @@ public class FantastischMemo extends Activity implements OnClickListener{
         setContentView(R.layout.main);
         btnNew = (Button)this.findViewById(R.id.main_open_database_button);
         //btnRecent = (Button)this.findViewById(R.id.main_open_recent_button);
+        btnEdit= (Button)this.findViewById(R.id.main_edit_button);
         btnOption = (Button)this.findViewById(R.id.main_option_button);
         btnDownload = (Button)this.findViewById(R.id.main_download_button);
         btnAbout = (Button)this.findViewById(R.id.main_about_button);
         btnExit = (Button)this.findViewById(R.id.main_exit_button);
         btnNew.setOnClickListener(this);
-        //btnRecent.setOnClickListener(this);
+        btnEdit.setOnClickListener(this);
         btnOption.setOnClickListener(this);
         btnAbout.setOnClickListener(this);
         btnDownload.setOnClickListener(this);
@@ -77,6 +78,13 @@ public class FantastischMemo extends Activity implements OnClickListener{
     	}
     	if(v == btnExit){
     		finish();
+    	}
+    	if(v == btnEdit){
+    		Intent myIntent = new Intent();
+    		myIntent.setClass(this, AddItemScreen.class);
+    		myIntent.putExtra("dbname", "verbi_italiani.db");
+    		myIntent.putExtra("dbpath", "/sdcard");
+    		startActivity(myIntent);
     	}
     	
     	/*

@@ -24,8 +24,9 @@
   			android:padding="3dip"/>
   <EditText
         android:id="@+id/entry_question"
-        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_width="0dip"
+        android:inputType="textShortMessage|textMultiLine"
         android:background="@android:drawable/editbox_background"/>
   </TableRow>
   <TableRow>
@@ -33,8 +34,9 @@
   			android:padding="3dip"/>
   <EditText
         android:id="@+id/entry_answer"
-        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_width="0dip"
+        android:inputType="textShortMessage|textMultiLine"
         android:background="@android:drawable/editbox_background"/>
   </TableRow>
   <TableRow>

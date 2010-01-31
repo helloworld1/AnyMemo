@@ -144,25 +144,28 @@ public class OpenScreen extends Activity implements OnItemClickListener {
     		break;
     	
     	case ACTIVITY_XML:
-			XMLConverter conv = null;
-			AlertDialog.Builder ad = new AlertDialog.Builder( this );
-			ad.setPositiveButton( "OK", null );
-			String xmlPath = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
-			String xmlName = data.getStringExtra("org.liberty.android.fantastischmemo.dbName");
-			try{
-				conv = new XMLConverter(this, xmlPath, xmlName);
-				conv.outputDB();
-				ad.setTitle( "Success" );
-				ad.setMessage( "The XML is successfully converted and stored as" + xmlPath + "/" + xmlName.replaceAll(".xml", ".db"));
-				
-				//conv.outputTabFile();
-			}
-			catch(Exception e){
-				Log.e("XMLError",e.toString());
-				ad.setTitle("Failed");
-				ad.setMessage("Fail to convert " + xmlPath + "/" + xmlName + " Exception: " + e.toString());
-			}
-			ad.show();
+    		if(resultCode == Activity.RESULT_OK){
+    			XMLConverter conv = null;
+    			AlertDialog.Builder ad = new AlertDialog.Builder( this );
+    			ad.setPositiveButton( "OK", null );
+    			String xmlPath = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
+    			String xmlName = data.getStringExtra("org.liberty.android.fantastischmemo.dbName");
+    			try{
+    				conv = new XMLConverter(this, xmlPath, xmlName);
+    				conv.outputDB();
+    				ad.setTitle( "Success" );
+    				ad.setMessage( "The XML is successfully converted and stored as" + xmlPath + "/" + xmlName.replaceAll(".xml", ".db"));
+    				
+    				//conv.outputTabFile();
+    			}
+    			catch(Exception e){
+    				Log.e("XMLError",e.toString());
+    				ad.setTitle("Failed");
+    				ad.setMessage("Fail to convert " + xmlPath + "/" + xmlName + " Exception: " + e.toString());
+    			}
+    			ad.show();
+    		}
+    		break;
     		
     		
     	}

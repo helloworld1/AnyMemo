@@ -95,6 +95,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			this.myDatabase.execSQL("DELETE FROM learn_tbl");
 			this.myDatabase.execSQL("INSERT INTO learn_tbl(_id) SELECT _id FROM dict_tbl");
 			this.myDatabase.execSQL("UPDATE learn_tbl SET date_learn = '2010-01-01', interval = 0, grade = 0, easiness = 0.0, acq_reps = 0, ret_reps  = 0, lapses = 0, acq_reps_since_lapse = 0, ret_reps_since_lapse = 0");
+			this.myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('question_locale', 'US')");
+			this.myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('answer_locale', 'US')");
+			this.myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('question_align', 'center')");
+			this.myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('answer_align', 'center')");
+			this.myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('question_font_size', '24')");
+			this.myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('answer_font_size', '24')");
+			
 			myDatabase.setTransactionSuccessful();
 		}
 		finally{
@@ -338,5 +345,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		this.myDatabase.execSQL("UPDATE learn_tbl SET date_learn = '2010-01-01', interval = 0, grade = 0, easiness = 0.0, acq_reps = 0, ret_reps  = 0, lapses = 0, acq_reps_since_lapse = 0, ret_reps_since_lapse = 0");
 	}
 
+	
+	public int getNewId(){
+		Cursor result = this.myDatabase.rawQuery("SELECT _id FROM dict_tbl ORDER BY _id DESC LIMIT 1", null);
+		if(result.getCount() != 1){
+			result.close();
+			return -1;
+		}
+		result.moveToFirst();
+		int res = result.getInt(result.getColumnIndex("_id"));
+		res += 1;
+		return res;
+	}
+	
+	public void addOrReplaceItem(Item item){
+		this.myDatabase.execSQL("REPLACE INTO dict_tbl(_id, question, answer) VALUES(?, ?, ?)", new String[]{"" + item.getId(), item.getQuestion(), item.getAnswer()});
+		this.myDatabase.execSQL("REPLACE INTO learn_tbl(_id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse) VALUES (?, '2010-01-01', 0, 0, 0.0, 0, 0, 0, 0, 0)", new String[]{"" + item.getId()});
+		
+	}
 	
 }

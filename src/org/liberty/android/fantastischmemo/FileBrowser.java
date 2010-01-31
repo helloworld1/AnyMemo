@@ -45,6 +45,7 @@ public class FileBrowser extends ListActivity {
 		}
 	}
 	
+	
 	private void browseTo(final File aDirectory){
 		if(aDirectory.isDirectory()){
 			this.setTitle(aDirectory.getPath());

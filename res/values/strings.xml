@@ -14,6 +14,7 @@
     <string name="download_button_text">Download DB Collection</string>
     <string name="about_button_text">About</string>
     <string name="exit_button_text">Exit Program</string>
+    <string name="edit_button_text">Create/Edit Database</string>
     <string name="default_sd_path">/sdcard/fantastischmemo</string>
     <string name="autoaudio">Automatic Speak</string>
     <string name="autoaudio_summary">The question and answer will be read automatically</string>
@@ -46,5 +47,12 @@
     <string name="open_import_xml">Import From XML</string>
     <string name="clear_all_pref">Reset All Preference</string>
     <string name="clear_recent_list">Clear Recent List</string>
+    <string name="add_screen_id">ID</string>
+    <string name="add_screen_question">Question</string>
+    <string name="add_screen_answer">Answer</string>
+    <string name="add_screen_new">New</string>
+    <string name="add_screen_edit">Edit</string>
+    <string name="add_screen_gotoid">Go to ID</string>
+    <string name="add_screen_back">Back</string>
     
 </resources>
