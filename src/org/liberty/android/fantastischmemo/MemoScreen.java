@@ -52,6 +52,7 @@ public class MemoScreen extends Activity{
 	private AlertDialog loadingDialog = null;
 	
 	private int returnValue = 0;
+	private boolean initFeed;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -65,6 +66,7 @@ public class MemoScreen extends Activity{
 			dbPath = extras.getString("dbpath");
 			dbName = extras.getString("dbname");
 		}
+		initFeed = true;
 		
 		/*
 		OnDismissListener dismissListener = new OnDismissListener(){
@@ -334,8 +336,24 @@ public class MemoScreen extends Activity{
 		}
 		
 	}
+	
 
 	private int feedData() {
+		if(initFeed){
+			initFeed = false;
+			
+			boolean feedResult = dbHelper.getListItems(-1, WINDOW_SIZE, this.learnQueue);
+			if(feedResult == true){
+				idMaxSeen = learnQueue.get(learnQueue.size() - 1).getId();
+				return 0;
+			}
+			else{
+				return 2;
+			}
+			
+		}
+		else{
+		
 		// Feed the 10 items to acq queue
 		// or feed all items to rev queue
 		// from the database
@@ -367,6 +385,7 @@ public class MemoScreen extends Activity{
 			queueEmpty = false;
 			return 1;
 				
+		}
 		}
 	}
 			

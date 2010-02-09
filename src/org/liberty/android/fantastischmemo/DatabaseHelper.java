@@ -226,6 +226,134 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		
 	}
 	
+	public boolean getListItems(int id, int windowSize, List<Item> list){
+		// These function are related to read db operation
+		// flag = 0 means no condition
+		// flag = 1 means new items, the items user have never seen
+		// flag = 2 means item due, they need to be reviewed.
+
+		HashMap<String, String> hm = new HashMap<String, String>();
+		String acqQuery;
+		String retQuery;
+		// ArrayList<String> list = new ArrayList<String>();
+		String query = "SELECT learn_tbl._id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, question, answer, note FROM dict_tbl INNER JOIN learn_tbl ON dict_tbl._id=learn_tbl._id WHERE dict_tbl._id >= "
+				+ id + " ";
+		Cursor acqResult;
+		Cursor retResult;
+		// result = myDatabase.query(true, "dict_tbl", null, querySelection,
+		// null, null, null, "_id", null);
+		// result = myDatabase.query("dict_tbl", null, querySelection, null,
+		// null, null, "_id");
+		// result = myDatabase.query(true, "dict_tbl", null, querySelection,
+		// null, null, null, null, "1");
+		retQuery = query
+				+ "AND round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval >= 0 AND acq_reps > 0 LIMIT "
+				+ windowSize;
+
+		try {
+			retResult = myDatabase.rawQuery(retQuery, null);
+		} catch (Exception e) {
+			Log.e("Query item error", e.toString());
+			return false;
+		}
+		if (retResult.getCount() > 0) {
+			Cursor result = retResult;
+			retResult.moveToFirst();
+			do {
+				hm.put("_id", Integer.toString(result.getInt(result
+						.getColumnIndex("_id"))));
+				hm.put("question", result.getString(result
+						.getColumnIndex("question")));
+				hm.put("answer", result.getString(result
+						.getColumnIndex("answer")));
+				hm.put("note", result.getString(result.getColumnIndex("note")));
+				hm.put("date_learn", result.getString(result
+						.getColumnIndex("date_learn")));
+				hm.put("interval", Integer.toString(result.getInt(result
+						.getColumnIndex("interval"))));
+				hm.put("grade", Integer.toString(result.getInt(result
+						.getColumnIndex("grade"))));
+				hm.put("easiness", Double.toString(result.getDouble(result
+						.getColumnIndex("grade"))));
+				hm.put("acq_reps", Integer.toString(result.getInt(result
+						.getColumnIndex("acq_reps"))));
+				hm.put("ret_reps", Integer.toString(result.getInt(result
+						.getColumnIndex("ret_reps"))));
+				hm.put("lapses", Integer.toString(result.getInt(result
+						.getColumnIndex("lapses"))));
+				hm.put("acq_reps_since_lapse",Integer.toString(result.getInt(result
+														.getColumnIndex("acq_reps_since_lapse"))));
+				hm.put("ret_reps_since_lapse", Integer.toString(result.getInt(result
+														.getColumnIndex("ret_reps_since_lapse"))));
+				Item resultItem = new Item();
+				resultItem.setData(hm);
+				list.add(resultItem);
+			} while (result.moveToNext());
+		}
+		retResult.close();
+
+		int remainingSize = windowSize - list.size();
+
+		if (remainingSize > 0) {
+
+			acqQuery = query + "AND acq_reps = 0 LIMIT " + remainingSize;
+			try {
+				acqResult = myDatabase.rawQuery(acqQuery, null);
+			} catch (Exception e) {
+				Log.e("Query item error", e.toString());
+				return false;
+			}
+
+			// System.out.println("The result is: " + result.getString(0));
+			// return result.getString(1);
+			if (acqResult.getCount() > 0) {
+				Cursor result = acqResult;
+				acqResult.moveToFirst();
+				do {
+					hm.put("_id", Integer.toString(result.getInt(result
+							.getColumnIndex("_id"))));
+					hm.put("question", result.getString(result
+							.getColumnIndex("question")));
+					hm.put("answer", result.getString(result
+							.getColumnIndex("answer")));
+					hm.put("note", result.getString(result
+							.getColumnIndex("note")));
+					hm.put("date_learn", result.getString(result
+							.getColumnIndex("date_learn")));
+					hm.put("interval", Integer.toString(result.getInt(result
+							.getColumnIndex("interval"))));
+					hm.put("grade", Integer.toString(result.getInt(result
+							.getColumnIndex("grade"))));
+					hm.put("easiness", Double.toString(result.getDouble(result
+							.getColumnIndex("grade"))));
+					hm.put("acq_reps", Integer.toString(result.getInt(result
+							.getColumnIndex("acq_reps"))));
+					hm.put("ret_reps", Integer.toString(result.getInt(result
+							.getColumnIndex("ret_reps"))));
+					hm.put("lapses", Integer.toString(result.getInt(result
+							.getColumnIndex("lapses"))));
+					hm.put("acq_reps_since_lapse", Integer.toString(result
+							.getInt(result
+									.getColumnIndex("acq_reps_since_lapse"))));
+					hm.put("ret_reps_since_lapse", Integer.toString(result
+							.getInt(result
+									.getColumnIndex("ret_reps_since_lapse"))));
+					Item resultItem = new Item();
+					resultItem.setData(hm);
+					list.add(resultItem);
+				} while (result.moveToNext());
+			}
+			acqResult.close();
+
+		}
+		if (list.size() <= 0) {
+			return false;
+		} else {
+			return true;
+		}
+		
+	}
+	
 	public Item getItemById(int id, int flag){
 		// These function are related to read db operation
 		// flag = 0 means no condition
@@ -389,6 +517,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		result.moveToFirst();
 		int res = result.getInt(result.getColumnIndex("_id"));
 		res += 1;
+		result.close();
 		return res;
 	}
 	
