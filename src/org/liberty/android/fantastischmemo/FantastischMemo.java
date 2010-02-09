@@ -1,11 +1,20 @@
 package org.liberty.android.fantastischmemo;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -55,6 +64,36 @@ public class FantastischMemo extends Activity implements OnClickListener{
         this.dbPath = settings.getString("dbpath", null);
         
         
+        boolean firstTime = settings.getBoolean("first_time", true);
+        File sdPath = new File(getString(R.string.default_sd_path));
+        sdPath.mkdir();
+        if(!sdPath.canRead()){
+        	DialogInterface.OnClickListener exitButtonListener = new DialogInterface.OnClickListener(){
+        		public void onClick(DialogInterface arg0, int arg1){
+        			finish();
+        		}
+        	};
+        	AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        	alertDialog.setTitle("SD card not available");
+        	alertDialog.setMessage("Please insert SD card and run again!");
+        	alertDialog.setButton("Exit", exitButtonListener);
+        	alertDialog.show();
+        }
+        if(firstTime == true){
+        	SharedPreferences.Editor editor = settings.edit();
+        	editor.putBoolean("first_time", false);
+    		editor.putString("recentdbname0", getString(R.string.default_db_name));
+    		editor.putString("recentdbpath0", getString(R.string.default_sd_path));
+        	editor.commit();
+			try{
+				copyFile(getString(R.string.default_db_name));
+			}
+			catch(IOException e){
+				Log.e("Copy file error", e.toString());
+				
+			}
+			
+        }
         //Item resItem;
         //resItem = dbHelper.getItemById(4, 0);
         //mDBView.setText(new StringBuilder().append(resItem.getNote()));
@@ -198,5 +237,31 @@ public class FantastischMemo extends Activity implements OnClickListener{
 			return true;
 	    }
 	    return false;
+	}
+	
+	private void copyFile(String source) throws IOException{
+		String rootPath = getResources().getString(R.string.default_sd_path);
+		File newDir = new File(rootPath);
+		boolean result = newDir.mkdir();
+		if(result == false){
+			Log.e("Error", "result false");
+		}
+		
+		InputStream in = null;
+		OutputStream out = null;
+		in = getResources().getAssets().open(source);
+		
+		File outFile = new File(rootPath + source);
+		//getFileStreamPath(rootPath).mkdir();
+		outFile.createNewFile();
+		
+		out = new FileOutputStream(outFile);
+		byte[] buf = new byte[1024];
+		int len;
+		while ((len = in.read(buf)) > 0) {
+			out.write(buf, 0, len);
+		}
+		in.close();
+		out.close();
 	}
 }

@@ -182,6 +182,22 @@ public final class Item {
 		
 		
 	}
+	
+	public boolean isScheduled(){
+		Date currentDate = new Date();
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String now = formatter.format(currentDate);
+		int actualInterval = diffDate(now, this.date_learn);
+		int scheduleInterval = this.interval;
+		//actualInterval = actualInterval == 0 ? actualInterval + 1 : actualInterval;
+		if(scheduleInterval <= actualInterval && this.acq_reps > 0){
+			return true;
+		}
+		else{
+			return false;
+		}
+		
+	}
 
 	public boolean processAnswer(int newGrade){
 		Date currentDate = new Date();

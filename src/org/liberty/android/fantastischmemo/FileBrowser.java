@@ -45,6 +45,7 @@ public class FileBrowser extends ListActivity {
 		if(defaultRoot == null){
 			File sdPath = new File(getString(R.string.default_sd_path));
 			sdPath.mkdir();
+			
 			browseTo(sdPath);
 		}
 		else{
@@ -260,5 +261,7 @@ public class FileBrowser extends ListActivity {
 	    }
 	    return false;
 	}
+	
 
 }
+

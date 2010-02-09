@@ -17,7 +17,8 @@
     <string name="about_button_text">About</string>
     <string name="exit_button_text">Exit Program</string>
     <string name="edit_button_text">Create/Edit Database</string>
-    <string name="default_sd_path">/sdcard/fantastischmemo</string>
+    <string name="default_sd_path">/sdcard/fantastischmemo/</string>
+    <string name="default_db_name">french-body-parts.db</string>
     <string name="autoaudio">Automatic Speak</string>
     <string name="autoaudio_summary">The question and answer will be read automatically</string>
     <string name="memo_show_answer">\?\nShow Answer</string>

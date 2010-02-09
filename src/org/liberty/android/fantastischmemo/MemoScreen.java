@@ -15,6 +15,7 @@ import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
+import android.os.Debug;
 import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.Menu;
@@ -55,6 +56,7 @@ public class MemoScreen extends Activity{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.memo_screen);
+		//Debug.startMethodTracing("memo");
 		
 		// The extra mode field is passed from intent.
 		// acq and rev should be different processes in different learning algorithm
@@ -137,6 +139,7 @@ public class MemoScreen extends Activity{
 		dbHelper.close();
 		questionTTS.shutdown();
 		answerTTS.shutdown();
+		//Debug.stopMethodTracing();
 	}
 	
 	
@@ -337,7 +340,8 @@ public class MemoScreen extends Activity{
 		// or feed all items to rev queue
 		// from the database
 		Item item;
-		this.setTitle(this.getString(R.string.stat_scheduled) + dbHelper.getScheduledCount() + " / " + this.getString(R.string.stat_new) + dbHelper.getNewCount());
+		//this.setTitle(this.getString(R.string.stat_scheduled) + dbHelper.getScheduledCount() + " / " + this.getString(R.string.stat_new) + dbHelper.getNewCount());
+		this.setTitle(this.getString(R.string.stat_scheduled) + this.scheduledItemCount + " / " + this.getString(R.string.stat_new) + this.newItemCount);
 		for(int i = learnQueue.size(); i < WINDOW_SIZE; i++){
 			item = dbHelper.getItemById(idMaxSeen + 1, 2); // Revision first
 			if(item == null){
@@ -450,24 +454,27 @@ public class MemoScreen extends Activity{
 		// If the return value is success, the user will not need to see this item today.
 		// If the return value is failure, the item will be appended to the tail of the queue.
 
-		boolean isNewItem = currentItem.isNew();
+		boolean scheduled = currentItem.isScheduled();
 		boolean success = currentItem.processAnswer(newGrade);
 		if (success == true) {
 			learnQueue.remove(0);
-			if(isNewItem){
-				this.newItemCount -= 1;
-				
-			}
-			else{
-				this.scheduledItemCount -= 1;
-			}
 			if(queueEmpty != true){
 				dbHelper.updateItem(currentItem);
+			}
+			if(scheduled){
+				this.scheduledItemCount -= 1;
+			}
+			else{
+				this.newItemCount -= 1;
 			}
 		} else {
 			learnQueue.remove(0);
 			learnQueue.add(currentItem);
 			dbHelper.updateItem(currentItem);
+			if(!scheduled){
+				this.scheduledItemCount += 1;
+				this.newItemCount -= 1;
+			}
 			
 		}
 
