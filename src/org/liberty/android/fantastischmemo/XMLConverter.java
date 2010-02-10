@@ -107,10 +107,10 @@ public class XMLConverter extends org.xml.sax.helpers.DefaultHandler{
 		if(localName.equals("cat")){
 			this.inCategory = true;
 		}
-		if(localName.equals("Q")){
+		if(localName.equals("Q") || localName.equals("Question")){
 			this.inQuestion = true;
 		}
-		if(localName.equals("A")){
+		if(localName.equals("A") || localName.equals("Answer")){
 			this.inAnser = true;
 		}
 		
@@ -125,11 +125,11 @@ public class XMLConverter extends org.xml.sax.helpers.DefaultHandler{
 			categoryList.add(characterBuf.toString());
 			this.inCategory = false;
 		}
-		if(localName.equals("Q")){
+		if(localName.equals("Q")|| localName.equals("Question")){
 			questionList.add(characterBuf.toString());
 			this.inQuestion = false;
 		}
-		if(localName.equals("A")){
+		if(localName.equals("A")|| localName.equals("Answer")){
 			answerList.add(characterBuf.toString());
 			this.inAnser = false;
 		}

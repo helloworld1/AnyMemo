@@ -139,8 +139,12 @@ public class MemoScreen extends Activity{
 	public void onDestroy(){
 		super.onDestroy();
 		dbHelper.close();
-		questionTTS.shutdown();
-		answerTTS.shutdown();
+		if(questionTTS != null){
+			questionTTS.shutdown();
+		}
+		if(answerTTS != null){
+			answerTTS.shutdown();
+		}
 		//Debug.stopMethodTracing();
 	}
 	
@@ -188,11 +192,15 @@ public class MemoScreen extends Activity{
 	    	finish();
 	        return true;
 	    case R.id.menuspeakquestion:
-	    	questionTTS.sayText(this.currentItem.getQuestion());
+	    	if(questionTTS != null){
+	    		questionTTS.sayText(this.currentItem.getQuestion());
+	    	}
 	    	return true;
 	    	
 	    case R.id.menuspeakanswer:
-	    	answerTTS.sayText(this.currentItem.getAnswer());
+	    	if(answerTTS != null){
+	    		answerTTS.sayText(this.currentItem.getAnswer());
+	    	}
 	    	return true;
 	    	
 	    case R.id.menusettings:
@@ -283,7 +291,7 @@ public class MemoScreen extends Activity{
 			ql = new Locale("es", "ES");
 		}
 		else{
-			ql = Locale.US;
+			ql = null;
 		}
 		if(answerLocale.equals("US")){
 			al = Locale.US;
@@ -304,10 +312,20 @@ public class MemoScreen extends Activity{
 			al = new Locale("es", "ES");
 		}
 		else{
-			al = Locale.US;
+			al = null;
 		}
-		this.questionTTS = new TTS(this, ql);
-		this.answerTTS = new TTS(this, al);
+		if(ql != null){
+			this.questionTTS = new TTS(this, ql);
+		}
+		else{
+			this.questionTTS = null;
+		}
+		if(al != null){
+			this.answerTTS = new TTS(this, al);
+		}
+		else{
+			this.answerTTS = null;
+		}
 		
 		if(this.feedData() == 2){ // The queue is still empty
 			OnClickListener backButtonListener = new OnClickListener() {
@@ -453,10 +471,14 @@ public class MemoScreen extends Activity{
 		int status= -10;
 		if(autoaudioSetting){
 			if(this.showAnswer == false){
-				status = questionTTS.sayText(currentItem.getQuestion());
+				if(questionTTS != null){
+					status = questionTTS.sayText(currentItem.getQuestion());
+				}
 			}
 			else{
-				status = answerTTS.sayText(currentItem.getAnswer());
+				if(answerTTS != null){
+					status = answerTTS.sayText(currentItem.getAnswer());
+				}
 			}
 		}
 		if(status == 0 || status != 0){
