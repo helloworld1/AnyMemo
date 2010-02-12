@@ -24,6 +24,8 @@ public class SettingsScreen extends Activity implements OnClickListener {
 	Spinner answerAlignSpinner;
 	Spinner questionLocaleSpinner;
 	Spinner answerLocaleSpinner;
+	Spinner htmlSpinner;
+	Spinner ratioSpinner;
 	CheckBox wipeCheckbox;
 	Button btnSave;
 	Button btnDiscard;
@@ -53,6 +55,16 @@ public class SettingsScreen extends Activity implements OnClickListener {
         questionLocaleSpinner.setAdapter(localeAdapter);
         answerLocaleSpinner = (Spinner)findViewById(R.id.answer_locale_spinner);
         answerLocaleSpinner.setAdapter(localeAdapter);
+        
+        htmlSpinner = (Spinner)findViewById(R.id.html_spinner);
+        ArrayAdapter<CharSequence> htmlAdapter = ArrayAdapter.createFromResource(this, R.array.html_list, android.R.layout.simple_spinner_item);
+        htmlAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        htmlSpinner.setAdapter(htmlAdapter);
+        
+        ratioSpinner = (Spinner)findViewById(R.id.ratio_spinner);
+        ArrayAdapter<CharSequence> ratioAdapter = ArrayAdapter.createFromResource(this, R.array.ratio_list, android.R.layout.simple_spinner_item);
+        ratioAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ratioSpinner.setAdapter(ratioAdapter);
         
         setInitialPosition();
         
@@ -94,7 +106,7 @@ public class SettingsScreen extends Activity implements OnClickListener {
 				questionFontSizeSpinner.setSelection(index);
 				
 			}
-			if(me.getKey().toString().equals("answer_font_size")){
+			else if(me.getKey().toString().equals("answer_font_size")){
 				
 				Double res = new Double(me.getValue().toString());
 				String[] fontSizeList = getResources().getStringArray(R.array.font_size_list);
@@ -108,7 +120,7 @@ public class SettingsScreen extends Activity implements OnClickListener {
 				answerFontSizeSpinner.setSelection(index);
 				
 			}
-			if(me.getKey().toString().equals("question_align")){
+			else if(me.getKey().toString().equals("question_align")){
 				String res = me.getValue();
 				int index;
 				if(res.equals("left")){
@@ -122,7 +134,7 @@ public class SettingsScreen extends Activity implements OnClickListener {
 				}
 				questionAlignSpinner.setSelection(index);
 			}
-			if(me.getKey().toString().equals("answer_align")){
+			else if(me.getKey().toString().equals("answer_align")){
 				String res = me.getValue();
 				int index;
 				if(res.equals("left")){
@@ -136,7 +148,7 @@ public class SettingsScreen extends Activity implements OnClickListener {
 				}
 				answerAlignSpinner.setSelection(index);
 			}
-			if(me.getKey().toString().equals("question_locale")){
+			else if(me.getKey().toString().equals("question_locale")){
 				String res = me.getValue();
 				String[] localeList = getResources().getStringArray(R.array.locale_list);
 				int index = 0;
@@ -148,7 +160,7 @@ public class SettingsScreen extends Activity implements OnClickListener {
 				}
 				questionLocaleSpinner.setSelection(index);
 			}
-			if(me.getKey().toString().equals("answer_locale")){
+			else if(me.getKey().toString().equals("answer_locale")){
 				String res = me.getValue().toString();
 				String[] localeList = getResources().getStringArray(R.array.locale_list);
 				int index = 0;
@@ -160,6 +172,33 @@ public class SettingsScreen extends Activity implements OnClickListener {
 				}
 				answerLocaleSpinner.setSelection(index);
 			}
+			
+			else if(me.getKey().toString().equals("html_display")){
+				String res = me.getValue();
+				String[] htmlList = getResources().getStringArray(R.array.html_list);
+				int index = 0;
+				for(String str : htmlList){
+					if(str.equals(res)){
+						break;
+					}
+					index++;
+				}
+				htmlSpinner.setSelection(index);
+			}
+			else if(me.getKey().toString().equals("ratio")){
+				String res = me.getValue();
+				String[] ratioList = getResources().getStringArray(R.array.ratio_list);
+				int index = 0;
+				for(String str : ratioList){
+					if(str.equals(res)){
+						break;
+					}
+					index++;
+				}
+				ratioSpinner.setSelection(index);
+				
+			}
+			
 		}
     	
     	
@@ -170,12 +209,16 @@ public class SettingsScreen extends Activity implements OnClickListener {
     	String[] fontSizeList = getResources().getStringArray(R.array.font_size_list);
     	String[] alignList = getResources().getStringArray(R.array.align_list);
     	String[] localeList = getResources().getStringArray(R.array.locale_list);
+    	String[] htmlList = getResources().getStringArray(R.array.html_list);
+    	String[] ratioList = getResources().getStringArray(R.array.ratio_list);
     	hm.put("question_font_size", fontSizeList[questionFontSizeSpinner.getSelectedItemPosition()]);
     	hm.put("answer_font_size", fontSizeList[answerFontSizeSpinner.getSelectedItemPosition()]);
     	hm.put("question_align", alignList[questionAlignSpinner.getSelectedItemPosition()]);
     	hm.put("answer_align", alignList[answerAlignSpinner.getSelectedItemPosition()]);
     	hm.put("question_locale", localeList[questionLocaleSpinner.getSelectedItemPosition()]);
     	hm.put("answer_locale", localeList[answerLocaleSpinner.getSelectedItemPosition()]);
+    	hm.put("html_display", htmlList[htmlSpinner.getSelectedItemPosition()]);
+    	hm.put("ratio", ratioList[ratioSpinner.getSelectedItemPosition()]);
     	dbHelper.setSettings(hm);
     	
     }

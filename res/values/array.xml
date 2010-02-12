@@ -26,5 +26,18 @@
 	<item>ES</item>
 	<item>Other</item>
 </string-array>
+<string-array name="html_list">
+	<item>none</item>
+	<item>both</item>
+	<item>question</item>
+	<item>answer</item>
+</string-array>
+<string-array name="ratio_list">
+	<item>50%</item>
+	<item>65%</item>
+	<item>35%</item>
+	<item>75%</item>
+	<item>25%</item>
+</string-array>
 
 </resources>

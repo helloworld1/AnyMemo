@@ -37,6 +37,8 @@
     <string name="settings_question_locale_prompt">Locale</string>
     <string name="settings_answer_locale">Answer Locale</string>
     <string name="settings_answer_locale_prompt">Locale</string>
+    <string name="settings_html_display">Display in HTML</string>
+    <string name="settings_ratio">Q/A Display Ratio</string>
     <string name="settings_wipe">Wipe All Progress</string>
     <string name="settings_save">Save</string>
     <string name="settings_discard">Discard</string>

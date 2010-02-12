@@ -107,6 +107,40 @@
         android:prompt="@string/settings_answer_locale_prompt"
         />
     </TableRow>
+    
+    <TableRow>
+	<TextView
+		android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dip"
+        android:text="@string/settings_html_display"
+        
+    />
+    <Spinner
+    	android:id="@+id/html_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:drawSelectorOnTop="true"
+        android:prompt="@string/settings_html_display"
+        />
+    </TableRow>
+    
+    <TableRow>
+	<TextView
+		android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dip"
+        android:text="@string/settings_ratio"
+        
+    />
+    <Spinner
+    	android:id="@+id/ratio_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:drawSelectorOnTop="true"
+        android:prompt="@string/settings_ratio"
+        />
+    </TableRow>
 
 
 

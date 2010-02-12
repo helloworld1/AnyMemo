@@ -15,8 +15,8 @@ import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
-import android.os.Debug;
 import android.preference.PreferenceManager;
+import android.text.Html;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,7 +24,9 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.LinearLayout.LayoutParams;
 
 public class MemoScreen extends Activity{
 	//
@@ -46,18 +48,22 @@ public class MemoScreen extends Activity{
 	private String answerAlign = "center";
 	private String questionLocale = "US";
 	private String answerLocale = "US";
+	private String htmlDisplay = "none";
+	private String qaRatio = "50%";
 	private TTS questionTTS;
 	private TTS answerTTS;
 	private boolean autoaudioSetting = true;
 	private AlertDialog loadingDialog = null;
+	
+	
 	
 	private int returnValue = 0;
 	private boolean initFeed;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.memo_screen);
 		//Debug.startMethodTracing("memo");
+		setContentView(R.layout.memo_screen);
 		
 		// The extra mode field is passed from intent.
 		// acq and rev should be different processes in different learning algorithm
@@ -176,6 +182,12 @@ public class MemoScreen extends Activity{
 			}
 			if(me.getKey().toString().equals("answer_locale")){
 				this.answerLocale = me.getValue().toString();
+			}
+			if(me.getKey().toString().equals("html_display")){
+				this.htmlDisplay = me.getValue().toString();
+			}
+			if(me.getKey().toString().equals("ratio")){
+				this.qaRatio = me.getValue().toString();
 			}
 		}
 	}
@@ -326,6 +338,14 @@ public class MemoScreen extends Activity{
 		else{
 			this.answerTTS = null;
 		}
+		LinearLayout layoutQuestion = (LinearLayout)findViewById(R.id.layout_question);
+		LinearLayout layoutAnswer = (LinearLayout)findViewById(R.id.layout_answer);
+		float qRatio = Float.valueOf(qaRatio.substring(0, qaRatio.length() - 1));
+		float aRatio = 100.0f - qRatio;
+		qRatio /= 50.0;
+		aRatio /= 50.0;
+		layoutQuestion.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, qRatio));
+		layoutAnswer.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, aRatio));
 		
 		if(this.feedData() == 2){ // The queue is still empty
 			OnClickListener backButtonListener = new OnClickListener() {
@@ -444,17 +464,51 @@ public class MemoScreen extends Activity{
 		this.setTitle(this.getTitle() + " / " + this.getString(R.string.memo_current_id) + item.getId() );
 		TextView questionView = (TextView) findViewById(R.id.question);
 		TextView answerView = (TextView) findViewById(R.id.answer);
-		questionView.setText(new StringBuilder().append(item.getQuestion()));
-		answerView.setText(new StringBuilder().append(item.getAnswer()));
+		
+		
+		if(this.htmlDisplay.equals("both")){
+			CharSequence sq = Html.fromHtml(item.getQuestion());
+			CharSequence sa = Html.fromHtml(item.getAnswer());
+			
+			questionView.setText(sq);
+			answerView.setText(sa);
+			
+		}
+		else if(this.htmlDisplay.equals("question")){
+			CharSequence sq = Html.fromHtml(item.getQuestion());
+			questionView.setText(sq);
+			answerView.setText(new StringBuilder().append(item.getAnswer()));
+		}
+		else if(this.htmlDisplay.equals("answer")){
+			questionView.setText(new StringBuilder().append(item.getQuestion()));
+			CharSequence sa = Html.fromHtml(item.getAnswer());
+			answerView.setText(sa);
+		}
+		else{
+			questionView.setText(new StringBuilder().append(item.getQuestion()));
+			answerView.setText(new StringBuilder().append(item.getAnswer()));
+		}
+		
 		if(questionAlign.equals("center")){
 			questionView.setGravity(Gravity.CENTER);
+			LinearLayout layoutQuestion = (LinearLayout)findViewById(R.id.layout_question);
+			LinearLayout layoutAnswer = (LinearLayout)findViewById(R.id.layout_answer);
+			layoutQuestion.setGravity(Gravity.CENTER);
+			layoutAnswer.setGravity(Gravity.CENTER);
 		}
 		else if(questionAlign.equals("right")){
 			questionView.setGravity(Gravity.RIGHT);
-			
+			LinearLayout layoutQuestion = (LinearLayout)findViewById(R.id.layout_question);
+			LinearLayout layoutAnswer = (LinearLayout)findViewById(R.id.layout_answer);
+			layoutQuestion.setGravity(Gravity.NO_GRAVITY);
+			layoutAnswer.setGravity(Gravity.NO_GRAVITY);
 		}
 		else{
 			questionView.setGravity(Gravity.LEFT);
+			LinearLayout layoutQuestion = (LinearLayout)findViewById(R.id.layout_question);
+			LinearLayout layoutAnswer = (LinearLayout)findViewById(R.id.layout_answer);
+			layoutQuestion.setGravity(Gravity.NO_GRAVITY);
+			layoutAnswer.setGravity(Gravity.NO_GRAVITY);
 		}
 		if(answerAlign.equals("center")){
 			answerView.setGravity(Gravity.CENTER);
@@ -543,6 +597,9 @@ public class MemoScreen extends Activity{
 			btn4.setVisibility(View.INVISIBLE);
 			btn5.setVisibility(View.INVISIBLE);
 			answer.setText(new StringBuilder().append(this.getString(R.string.memo_show_answer)));
+			answer.setGravity(Gravity.CENTER);
+			LinearLayout layoutAnswer = (LinearLayout)findViewById(R.id.layout_answer);
+			layoutAnswer.setGravity(Gravity.CENTER);
 
 		} else {
 			View.OnClickListener btn0Listener = new View.OnClickListener() {

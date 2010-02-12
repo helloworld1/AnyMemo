@@ -48,7 +48,14 @@ public class TTS implements TextToSpeech.OnInitListener{
 	}
 	
 	public int sayText(String s){
-		int status = myTTS.speak(s, TextToSpeech.QUEUE_FLUSH, null);
+		// Replace break with period
+		String processed_str = s.replaceAll("\\<br\\>", ". " );
+		// Remove HTML
+		processed_str = processed_str.replaceAll("\\<.*?>", "");
+		// Remove () [] 
+		processed_str = processed_str.replaceAll("[\\[\\]\\(\\)]", "");
+
+		int status = myTTS.speak(processed_str, TextToSpeech.QUEUE_FLUSH, null);
 		return status;
 		
 	}
