@@ -54,6 +54,9 @@ public class MemoScreen extends Activity{
 	private TTS answerTTS;
 	private boolean autoaudioSetting = true;
 	private AlertDialog loadingDialog = null;
+	private boolean questionUserAudio = false;
+	private boolean answerUserAudio = false;
+	private SpeakWord mSpeakWord = null;
 	
 	
 	
@@ -207,11 +210,17 @@ public class MemoScreen extends Activity{
 	    	if(questionTTS != null){
 	    		questionTTS.sayText(this.currentItem.getQuestion());
 	    	}
+	    	else if(questionUserAudio){
+	    		mSpeakWord.speakWord(currentItem.getQuestion());
+	    	}
 	    	return true;
 	    	
 	    case R.id.menuspeakanswer:
 	    	if(answerTTS != null){
 	    		answerTTS.sayText(this.currentItem.getAnswer());
+	    	}
+	    	else if(answerUserAudio){
+	    		mSpeakWord.speakWord(currentItem.getAnswer());
 	    	}
 	    	return true;
 	    	
@@ -302,6 +311,10 @@ public class MemoScreen extends Activity{
 		else if(questionLocale.equals("ES")){
 			ql = new Locale("es", "ES");
 		}
+		else if(questionLocale.equals("User Audio")){
+			this.questionUserAudio= true;
+			ql = null;
+		}
 		else{
 			ql = null;
 		}
@@ -323,6 +336,10 @@ public class MemoScreen extends Activity{
 		else if(answerLocale.equals("ES")){
 			al = new Locale("es", "ES");
 		}
+		else if(answerLocale.equals("User Audio")){
+			this.answerUserAudio = true;
+			al = null;
+		}
 		else{
 			al = null;
 		}
@@ -337,6 +354,9 @@ public class MemoScreen extends Activity{
 		}
 		else{
 			this.answerTTS = null;
+		}
+		if(questionUserAudio || answerUserAudio){
+			mSpeakWord = new SpeakWord(this.getString(R.string.default_audio_path));
 		}
 		LinearLayout layoutQuestion = (LinearLayout)findViewById(R.id.layout_question);
 		LinearLayout layoutAnswer = (LinearLayout)findViewById(R.id.layout_answer);
@@ -528,10 +548,18 @@ public class MemoScreen extends Activity{
 				if(questionTTS != null){
 					status = questionTTS.sayText(currentItem.getQuestion());
 				}
+				else if(questionUserAudio){
+					mSpeakWord.speakWord(currentItem.getQuestion());
+					
+				}
 			}
 			else{
 				if(answerTTS != null){
 					status = answerTTS.sayText(currentItem.getAnswer());
+				}
+				else if(answerUserAudio){
+					mSpeakWord.speakWord(currentItem.getAnswer());
+					
 				}
 			}
 		}

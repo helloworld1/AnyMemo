@@ -24,6 +24,7 @@
 	<item>DE</item>
 	<item>IT</item>
 	<item>ES</item>
+	<item>User Audio</item>
 	<item>Other</item>
 </string-array>
 <string-array name="html_list">

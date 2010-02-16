@@ -18,6 +18,7 @@
     <string name="exit_button_text">Exit Program</string>
     <string name="edit_button_text">Create/Edit Database</string>
     <string name="default_sd_path">/sdcard/fantastischmemo/</string>
+    <string name="default_audio_path">/sdcard/fantastischmemo/voice</string>
     <string name="default_db_name">french-body-parts.db</string>
     <string name="autoaudio">Automatic Speak</string>
     <string name="autoaudio_summary">The question and answer will be read automatically</string>
@@ -33,9 +34,9 @@
     <string name="settings_question_align_prompt">Text Alignment</string>
     <string name="settings_answer_align">Answer Text Alignment</string>
     <string name="settings_answer_align_prompt">Text Alignment</string>
-    <string name="settings_question_locale">Question Locale</string>
+    <string name="settings_question_locale">Question Audio</string>
     <string name="settings_question_locale_prompt">Locale</string>
-    <string name="settings_answer_locale">Answer Locale</string>
+    <string name="settings_answer_locale">Answer Audio</string>
     <string name="settings_answer_locale_prompt">Locale</string>
     <string name="settings_html_display">Display in HTML</string>
     <string name="settings_ratio">Q/A Display Ratio</string>

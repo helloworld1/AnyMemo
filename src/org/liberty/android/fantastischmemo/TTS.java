@@ -12,6 +12,7 @@ public class TTS implements TextToSpeech.OnInitListener{
 	private Locale myLocale;
 	private int errorCode;
 	private	boolean init;
+	private int version;
 	
 	public TTS(Context context, Locale locale){
 		myTTS = new TextToSpeech(context, this);
@@ -48,16 +49,17 @@ public class TTS implements TextToSpeech.OnInitListener{
 	}
 	
 	public int sayText(String s){
+		int status;
 		// Replace break with period
 		String processed_str = s.replaceAll("\\<br\\>", ". " );
 		// Remove HTML
 		processed_str = processed_str.replaceAll("\\<.*?>", "");
 		// Remove () [] 
 		processed_str = processed_str.replaceAll("[\\[\\]\\(\\)]", "");
-
-		int status = myTTS.speak(processed_str, TextToSpeech.QUEUE_FLUSH, null);
-		return status;
 		
+		status = myTTS.speak(processed_str, TextToSpeech.QUEUE_FLUSH, null);
+		
+		return status;
 	}
 }
 	
