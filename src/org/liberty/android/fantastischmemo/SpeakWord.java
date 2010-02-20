@@ -35,7 +35,7 @@ public class SpeakWord {
 			audioFile = new File(candidateFile + word + s);
 			
 			if(audioFile.exists()){
-				candidateFile = candidateFile + word + ".wav";
+				candidateFile = candidateFile + word + s;
 				break;
 			}
 		}
