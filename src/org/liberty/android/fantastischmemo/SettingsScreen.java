@@ -97,11 +97,16 @@ public class SettingsScreen extends Activity implements OnClickListener {
 				Double res = new Double(me.getValue().toString());
 				String[] fontSizeList = getResources().getStringArray(R.array.font_size_list);
 				int index = 0;
+				boolean found = false;
 				for(String str:fontSizeList){
 					if(res.doubleValue() <= (new Double(str)).doubleValue()){
+						found = true;
 						break;
 					}
 					index += 1;
+				}
+				if(found == false){
+					index = 0;
 				}
 				questionFontSizeSpinner.setSelection(index);
 				
@@ -111,11 +116,16 @@ public class SettingsScreen extends Activity implements OnClickListener {
 				Double res = new Double(me.getValue().toString());
 				String[] fontSizeList = getResources().getStringArray(R.array.font_size_list);
 				int index = 0;
+				boolean found = false;
 				for(String str:fontSizeList){
 					if(res.doubleValue() <= (new Double(str)).doubleValue()){
+						found = true;
 						break;
 					}
 					index += 1;
+				}
+				if(found == false){
+					index = 0;
 				}
 				answerFontSizeSpinner.setSelection(index);
 				
@@ -152,11 +162,16 @@ public class SettingsScreen extends Activity implements OnClickListener {
 				String res = me.getValue();
 				String[] localeList = getResources().getStringArray(R.array.locale_list);
 				int index = 0;
+				boolean found = false;
 				for(String str : localeList){
 					if(str.equals(res)){
+						found = true;
 						break;
 					}
 					index ++;
+				}
+				if(found == false){
+					index = 0;
 				}
 				questionLocaleSpinner.setSelection(index);
 			}
@@ -164,11 +179,16 @@ public class SettingsScreen extends Activity implements OnClickListener {
 				String res = me.getValue().toString();
 				String[] localeList = getResources().getStringArray(R.array.locale_list);
 				int index = 0;
+				boolean found = false;
 				for(String str : localeList){
 					if(str.equals(res)){
+						found = true;
 						break;
 					}
 					index ++;
+				}
+				if(found == false){
+					index = 0;
 				}
 				answerLocaleSpinner.setSelection(index);
 			}
@@ -177,11 +197,16 @@ public class SettingsScreen extends Activity implements OnClickListener {
 				String res = me.getValue();
 				String[] htmlList = getResources().getStringArray(R.array.html_list);
 				int index = 0;
+				boolean found = false;
 				for(String str : htmlList){
 					if(str.equals(res)){
+						found = true;
 						break;
 					}
 					index++;
+				}
+				if(found == false){
+					index = 0;
 				}
 				htmlSpinner.setSelection(index);
 			}
@@ -189,11 +214,16 @@ public class SettingsScreen extends Activity implements OnClickListener {
 				String res = me.getValue();
 				String[] ratioList = getResources().getStringArray(R.array.ratio_list);
 				int index = 0;
+				boolean found = false;
 				for(String str : ratioList){
 					if(str.equals(res)){
+						found = true;
 						break;
 					}
 					index++;
+				}
+				if(found == false){
+					index = 0;
 				}
 				ratioSpinner.setSelection(index);
 				

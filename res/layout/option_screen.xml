@@ -2,7 +2,7 @@
 <PreferenceScreen
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:key="FantastischMemoPrefs"
-        android:title="Global Settings Settings">
+        android:title="@string/global_settings">
     <CheckBoxPreference
             android:key="autoaudio"
             android:title="@string/autoaudio" 
