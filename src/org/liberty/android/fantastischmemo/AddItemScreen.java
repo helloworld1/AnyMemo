@@ -103,7 +103,22 @@ public class AddItemScreen extends Activity implements OnClickListener{
 		
 		if(v == btnEdit){
 			HashMap<String, String> hm = new HashMap<String, String>();
-			hm.put("_id", entryId.getText().toString());
+            // Chick if id is a integer;
+            String myid = entryId.getText().toString();
+            int intId;
+            try{
+                intId = Integer.parseInt(myid);
+                if(intId < 0){
+                    throw new NumberFormatException();
+                }
+            }
+            catch(NumberFormatException e){
+                intId = dbHelper.getNewId();
+                myid = Integer.toString(intId);
+                entryId.setText(myid);
+            }
+
+			hm.put("_id", myid);
 			hm.put("question", entryQuestion.getText().toString());
 			hm.put("answer", entryAnswer.getText().toString());
 			Item item = new Item();
