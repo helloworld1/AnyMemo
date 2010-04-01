@@ -103,7 +103,7 @@ public class AddItemScreen extends Activity implements OnClickListener{
 		
 		if(v == btnEdit){
 			HashMap<String, String> hm = new HashMap<String, String>();
-            // Chick if id is a integer;
+            // Check if id is an integer;
             String myid = entryId.getText().toString();
             int intId;
             try{

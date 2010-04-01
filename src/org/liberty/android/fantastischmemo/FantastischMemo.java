@@ -28,8 +28,6 @@ public class FantastischMemo extends Activity implements OnClickListener{
 	private int returnValue;
 	private Button btnNew;
 	private Button btnEdit;
-	private Button btnOption;
-	private Button btnAbout;
 	private Button btnExit;
 	private Button btnDownload;
     /** Called when the activity is first created. */
@@ -37,29 +35,19 @@ public class FantastischMemo extends Activity implements OnClickListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
         btnNew = (Button)this.findViewById(R.id.main_open_database_button);
-        //btnRecent = (Button)this.findViewById(R.id.main_open_recent_button);
         btnEdit= (Button)this.findViewById(R.id.main_edit_button);
-        btnOption = (Button)this.findViewById(R.id.main_option_button);
         btnDownload = (Button)this.findViewById(R.id.main_download_button);
-        btnAbout = (Button)this.findViewById(R.id.main_about_button);
         btnExit = (Button)this.findViewById(R.id.main_exit_button);
         btnNew.setOnClickListener(this);
         btnEdit.setOnClickListener(this);
-        btnOption.setOnClickListener(this);
-        btnAbout.setOnClickListener(this);
         btnDownload.setOnClickListener(this);
         btnExit.setOnClickListener(this);
-        //Intent myIntent = new Intent();
-        //myIntent.setClass(this, FileBrowser.class);
-        //startActivityForResult(myIntent, 1);
-        /*
-        myIntent.setClass(this, MemoScreen.class);
-        myIntent.putExtra("mode", "acq");
-        startActivity(myIntent);
-        */
-       // SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-    		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+
+        
+        /* not used for now, will use it in later version */
+    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         this.dbName = settings.getString("dbname", null);
         this.dbPath = settings.getString("dbpath", null);
         
@@ -94,20 +82,11 @@ public class FantastischMemo extends Activity implements OnClickListener{
 			}
 			
         }
-        //Item resItem;
-        //resItem = dbHelper.getItemById(4, 0);
-        //mDBView.setText(new StringBuilder().append(resItem.getNote()));
         
     }
     
     public void onClick(View v){
     	if(v == btnNew){
-    		/*
-           Intent myIntent = new Intent();
-           myIntent.setClass(this, FileBrowser.class);
-           myIntent.putExtra("default_root", dbPath);
-           startActivityForResult(myIntent, 1);
-           */
     		Intent myIntent = new Intent();
     		myIntent.setClass(this, OpenScreen.class);
     		startActivity(myIntent);
@@ -116,6 +95,7 @@ public class FantastischMemo extends Activity implements OnClickListener{
     	if(v == btnExit){
     		finish();
     	}
+
     	if(v == btnEdit){
             Intent myIntent = new Intent();
             myIntent.setClass(this, FileBrowser.class);
@@ -125,45 +105,11 @@ public class FantastischMemo extends Activity implements OnClickListener{
     		
     	}
     	
-    	/*
-    	if(v == btnRecent){
-    		if(dbName != null && dbPath != null){
-    			Intent myIntent = new Intent();
-    			myIntent.setClass(this, MemoScreen.class);
-    			myIntent.putExtra("dbname", dbName);
-    			myIntent.putExtra("dbpath", dbPath);
-    			startActivity(myIntent);
-    		}
-    		else{
-    			AlertDialog alertDialog = new AlertDialog.Builder(this)
-    			.create();
-    			alertDialog.setTitle("No database");
-    			alertDialog.setMessage("There is recently opened database");
-				alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Back",
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface arg0, int arg1) {
-							}
-						});
-    			alertDialog.show();
-    			
-    		}
-    	}*/
-    	if(v == btnOption){
-    		Intent myIntent = new Intent();
-    		myIntent.setClass(this, OptionScreen.class);
-    		startActivity(myIntent);
-    	}
     	if(v == btnDownload){
     		Intent myIntent = new Intent(Intent.ACTION_VIEW);
     		Uri u = Uri.parse("market://search?q=pname:org.liberty.android.fminstaller");
     		myIntent.setData(u);
     		startActivity(myIntent);
-    	}
-    	if(v == btnAbout){
-    		Intent myIntent = new Intent();
-    		myIntent.setClass(this, AboutScreen.class);
-    		startActivity(myIntent);
-    		
     	}
     }
     
@@ -225,6 +171,7 @@ public class FantastischMemo extends Activity implements OnClickListener{
 	}
 	
 	public boolean onOptionsItemSelected(MenuItem item) {
+    	Intent myIntent = new Intent();
 	    switch (item.getItemId()) {
 	    case R.id.mainmenu_clear:
 	    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
@@ -235,6 +182,15 @@ public class FantastischMemo extends Activity implements OnClickListener{
 			startActivity(refresh);
 			this.finish();
 			return true;
+        case R.id.mainmenu_option:
+    		myIntent.setClass(this, OptionScreen.class);
+    		startActivity(myIntent);
+            return true;
+
+    	case R.id.mainmenu_about: 
+    		myIntent.setClass(this, AboutScreen.class);
+    		startActivity(myIntent);
+            return true;
 	    }
 	    return false;
 	}

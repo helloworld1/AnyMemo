@@ -128,7 +128,7 @@ public final class Item {
 			noise = 0;
 		}
 		else if(interval == 1){
-			noise = randomNumber(0, 1);
+			noise = randomNumber(0, 0);
 		}
 		else if(interval <= 10){
 			noise = randomNumber(-1, 1);
