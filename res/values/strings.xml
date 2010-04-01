@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Fantastisch Memo\nFree</string>
+    <string name="app_name">Fantastisch Memo</string>
+    <string name="app_full_name">Fantastisch Memo\nFree</string>
     <string name="up_one_level">..</string>
     <string name="current_dir">.</string>
     <string name="ok_text">OK</string>
