@@ -2,8 +2,10 @@ package org.liberty.android.fantastischmemo;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.ListIterator;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -16,69 +18,81 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.AdapterView;
+import android.widget.TextView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.AdapterView.OnItemClickListener;
+import android.view.View.OnClickListener;
+import android.content.Context;
 
-public class OpenScreen extends Activity implements OnItemClickListener {
+public class OpenScreen extends Activity implements OnItemClickListener, OnClickListener {
 
-	public final static String ITEM_TITLE = "title";
-	public final static String ITEM_CAPTION = "caption";
-	private final int ACTIVITY_DB = 1;
-	private final int ACTIVITY_XML = 2;
-	
 	private String dbName;
 	private String dbPath;
 	private int returnValue;
-	private RecentOpenList mRecentOpenList;
-	private List<HashMap<String, String>> recentList;
+    private Context mContext;
+    private RecentOpenList mRecentOpenList;
+    private ListView recentListView;
+    private ArrayList<RecentItem> recentItemList;
+    private Button openButton;
+    private Button importButton;
 
-	public Map<String,?> createItem(String title, String caption) {
-		Map<String,String> item = new HashMap<String,String>();
-		item.put(ITEM_TITLE, title);
-		item.put(ITEM_CAPTION, caption);
-		return item;
-	}
+    private final int ACTIVITY_DB = 1;
+    private final int ACTIVITY_XML = 2;
+
+
+	private List<HashMap<String, String>> recentList;
+    public final static String TAG = "org.liberty.android.fantastischmemo.OpenScreen";
 
 	@Override
-	public void onCreate(Bundle icicle) {
-		super.onCreate(icicle);
-		
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+        setContentView(R.layout.open_screen);
+        mContext = this;
+        mRecentOpenList = new RecentOpenList(this);
+        openButton = (Button)findViewById(R.id.open_screen_open_exist);
+        importButton = (Button)findViewById(R.id.open_screen_import);
+        openButton.setOnClickListener(this);
+        importButton.setOnClickListener(this);
 
 	}
 
-	public void onItemClick(AdapterView<?> parentView, View childView, int position, long id) {
-		if(position == 1){
-            Intent myIntent = new Intent();
+    @Override
+    public void onClick(View v){
+        Intent myIntent = new Intent();
+
+        if(v == openButton){
             myIntent.setClass(this, FileBrowser.class);
             myIntent.putExtra("default_root", dbPath);
             myIntent.putExtra("file_extension", ".db");
             startActivityForResult(myIntent, ACTIVITY_DB);
-		}
-		
-		if(position == 2){
-			
-            Intent myIntent = new Intent();
+        }
+
+        if(v == importButton){
             myIntent.setClass(this, FileBrowser.class);
             myIntent.putExtra("default_root", dbPath);
             myIntent.putExtra("file_extension", ".xml");
             startActivityForResult(myIntent, ACTIVITY_XML);
-            
-			
-		}
+        }
+
+    }
+
+    @Override
+	public void onItemClick(AdapterView<?> parentView, View childView, int position, long id) {
 		
-		if(position >= 4){
     		Intent myIntent = new Intent();
     		myIntent.setClass(this, MemoScreen.class);
-    		this.dbPath = recentList.get(position - 4).get("recentdbpath");
-    		this.dbName = recentList.get(position - 4).get("recentdbname");
+    		this.dbPath = recentList.get(position).get("recentdbpath");
+    		this.dbName = recentList.get(position).get("recentdbname");
     		myIntent.putExtra("dbname", dbName);
     		myIntent.putExtra("dbpath", dbPath);
     		mRecentOpenList.writeNewList(dbPath, dbName);
     		startActivity(myIntent);
-		}
 		
 	}
 	
@@ -104,30 +118,23 @@ public class OpenScreen extends Activity implements OnItemClickListener {
     		returnValue = 0;
     	}
     	
-		List<Map<String,?>> recentItemList = new LinkedList<Map<String,?>>();
+		recentItemList = new ArrayList<RecentItem>();
     	
 		// Fill the recent open list from the pref
 		mRecentOpenList = new RecentOpenList(this);
 		recentList = mRecentOpenList.getList();
 		
 		for(HashMap<String, String> hm : recentList){
-			recentItemList.add(createItem(hm.get("recentdbname"), this.getString(R.string.stat_total) + hm.get("recentdbtotal") + " " + this.getString(R.string.stat_new) + hm.get("recentnew") + " " + this.getString(R.string.stat_scheduled) + hm.get("recentscheduled")));
-			
+			recentItemList.add(new RecentItem(hm.get("recentdbname"), this.getString(R.string.stat_total) + hm.get("recentdbtotal") + " " + this.getString(R.string.stat_new) + hm.get("recentnew") + " " + this.getString(R.string.stat_scheduled) + hm.get("recentscheduled")));
 		}
 
 
-		SeparatedListAdapter adapter = new SeparatedListAdapter(this);
-		adapter.addSection("Open New", new ArrayAdapter<String>(this,
-			R.layout.open_screen_item, new String[] { this.getString(R.string.open_open_new_db), this.getString(R.string.open_import_xml) }));
-		adapter.addSection("Open Recently", new SimpleAdapter(this, recentItemList, R.layout.open_screen_complex,
-			new String[] { ITEM_TITLE, ITEM_CAPTION }, new int[]{R.id.list_complex_title, R.id.list_complex_caption} ));
+        
+        recentListView = (ListView)findViewById(R.id.recent_open_list);
+        recentListView.setAdapter(new RecentListAdapter(this, R.layout.open_screen_recent_item, recentItemList));
 
-		ListView list = new ListView(this);
-		list.setOnItemClickListener(this);
+		recentListView.setOnItemClickListener(this);
 		
-		list.setAdapter(adapter);
-		this.setContentView(list);
-    	
     	
     }
     public void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -195,6 +202,152 @@ public class OpenScreen extends Activity implements OnItemClickListener {
 	    }
 	    return false;
 	}
-	
 
+    
+    private class RecentItem{
+        String mFileName;
+        String mInfo;
+
+        public RecentItem(){
+        }
+
+        public RecentItem(String name, String info){
+            mFileName = name;
+            mInfo = info;
+        }
+
+        public String getFileName(){
+            return mFileName;
+        }
+
+        public String getInfo(){
+            return mInfo;
+        }
+
+        public void setFilename(String name){
+            mFileName = name;
+        }
+
+        public void setInfo(String info){
+            mInfo = info;
+        }
+
+    }
+
+    private class RecentListAdapter extends ArrayAdapter<RecentItem>{
+        private ArrayList<RecentItem> mItems;
+
+        public RecentListAdapter(Context context, int textViewResourceId, ArrayList<RecentItem> items){
+            super(context, textViewResourceId, items);
+            mItems = items;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent){
+            View v = convertView;
+            if(v == null){
+                LayoutInflater li = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                v = li.inflate(R.layout.open_screen_recent_item, null);
+            }
+            RecentItem recentItem = mItems.get(position);
+            if(recentItem != null){
+                TextView filenameView = (TextView)v.findViewById(R.id.recent_item_filename);
+                TextView infoView = (TextView)v.findViewById(R.id.recent_item_info);
+                filenameView.setText(recentItem.getFileName());
+                infoView.setText(recentItem.getInfo());
+            }
+            return v;
+        }
+
+    }
+
+    private class RecentOpenList {
+        public static final int MAX_LIST_NUMBER = 5;
+        final Context mContext;
+        List<HashMap<String, String>> recentList;
+        Integer i = Integer.valueOf(1);;
+        
+        public RecentOpenList(Context context){
+            recentList = new LinkedList<HashMap<String, String>>();
+            mContext = context; 
+            fetchListFromPref();
+        }
+        
+        public List<HashMap<String, String>> getList(){
+            ListIterator<HashMap<String, String>> it = recentList.listIterator();
+            while(it.hasNext()){
+                HashMap<String,  String> hm = (HashMap<String, String>)it.next();
+                String dbname = hm.get("recentdbname");
+                String dbpath = hm.get("recentdbpath");
+                
+                DatabaseHelper dbHelper = new DatabaseHelper(mContext, dbpath, dbname, 1);
+                if(dbHelper.checkDatabase() == false){
+                    it.remove();
+                }
+                else{
+                    dbHelper.openDatabase();
+                    hm.put("recentdbtotal", "" + dbHelper.getTotalCount());
+                    hm.put("recentscheduled", "" + dbHelper.getScheduledCount());
+                    hm.put("recentnew", "" + dbHelper.getNewCount());
+                    dbHelper.close();
+                    it.set(hm);
+                }
+                
+            }
+            return recentList;
+        }
+        
+        private void fetchListFromPref(){
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
+            for(int i = 0; i < MAX_LIST_NUMBER; i++){
+                String dbName = settings.getString("recentdbname" + i, null);
+                String dbPath = settings.getString("recentdbpath" + i, null);
+                if(dbName == null || dbPath == null){ 
+                    break;
+                }
+                HashMap<String, String> hm = new HashMap<String, String>();
+                hm.put("recentdbname", dbName);
+                hm.put("recentdbpath", dbPath);
+                recentList.add(hm);
+            }
+        }
+        
+        public void writeNewList(String dbpath, String dbname){
+            HashMap<String, String> hm = new HashMap<String, String>();
+            hm.put("recentdbname", dbname);
+            hm.put("recentdbpath", dbpath);
+            ListIterator<HashMap<String, String>> it = recentList.listIterator();
+            while(it.hasNext()){
+                HashMap<String, String> h = it.next();
+                
+                if(h.get("recentdbname").equals(dbname)){
+                    it.remove();
+                }
+            }
+            if(recentList.size() < MAX_LIST_NUMBER){
+                recentList.add(0, hm);
+            }
+            else{
+                recentList.remove(recentList.size() - 1);
+                recentList.add(0, hm);
+            }
+            int i = 0;
+            for(HashMap<String, String> h : recentList){
+                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
+                //SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString("recentdbname" + i, h.get("recentdbname"));
+                editor.putString("recentdbpath" + i, h.get("recentdbpath"));
+                editor.commit();
+                i += 1;
+                
+            }
+            
+        }
+        
+
+
+    }
+
+            
 }

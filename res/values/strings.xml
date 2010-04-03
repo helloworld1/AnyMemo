@@ -13,6 +13,7 @@
     <string name="speak_answer_menu_text">Speak Answer</string>
     <string name="open_button_text">Open Database</string>
     <string name="recent_button_text">Open Recent Database</string>
+    <string name="recent_databases">Recent Databases</string>
     <string name="option_button_text">Options</string>
     <string name="download_button_text">Download DB Collection</string>
     <string name="about_button_text">About</string>

@@ -21,14 +21,14 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical" >
         <TextView
-            android:id="@+id/list_complex_title"
+            android:id="@+id/recent_item_filename"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:ellipsize="marquee"
             android:textAppearance="?android:attr/textAppearanceLarge" />
         <TextView
-            android:id="@+id/list_complex_caption"
+            android:id="@+id/recent_item_info"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"
