@@ -15,11 +15,6 @@ public class RecentOpenList {
 	List<HashMap<String, String>> recentList;
 	Integer i = Integer.valueOf(1);;
 	
-	
-	
-	
-	
-	
 	public RecentOpenList(Context context){
 		recentList = new LinkedList<HashMap<String, String>>();
 		mContext = context; 
