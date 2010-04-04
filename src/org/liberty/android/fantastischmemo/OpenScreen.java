@@ -9,9 +9,11 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
@@ -41,6 +43,8 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
     private ArrayList<RecentItem> recentItemList;
     private Button openButton;
     private Button importButton;
+    private ProgressDialog mProgressDialog;
+    private Handler mHandler;
 
     private final int ACTIVITY_DB = 1;
     private final int ACTIVITY_XML = 2;
@@ -59,6 +63,7 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
         importButton = (Button)findViewById(R.id.open_screen_import);
         openButton.setOnClickListener(this);
         importButton.setOnClickListener(this);
+        mHandler = new Handler();
 
 	}
 
@@ -116,24 +121,40 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
     		myIntent.putExtra("dbpath", dbPath);
     		startActivity(myIntent);
     		returnValue = 0;
+            return;
     	}
+            mProgressDialog = ProgressDialog.show(this, "Please Wait...", "Refreshing Recent database list...", true);
+
+            recentListView = (ListView)findViewById(R.id.recent_open_list);
+            recentListView.setOnItemClickListener(this);
+
+            Thread loadingThread = new Thread(){
+                public void run(){
+
     	
-		recentItemList = new ArrayList<RecentItem>();
-    	
-		// Fill the recent open list from the pref
-		mRecentOpenList = new RecentOpenList(this);
-		recentList = mRecentOpenList.getList();
-		
-		for(HashMap<String, String> hm : recentList){
-			recentItemList.add(new RecentItem(hm.get("recentdbname"), this.getString(R.string.stat_total) + hm.get("recentdbtotal") + " " + this.getString(R.string.stat_new) + hm.get("recentnew") + " " + this.getString(R.string.stat_scheduled) + hm.get("recentscheduled")));
-		}
+            recentItemList = new ArrayList<RecentItem>();
+            
+            // Fill the recent open list from the pref
+            mRecentOpenList = new RecentOpenList(mContext);
+            recentList = mRecentOpenList.getList();
+            Log.v(TAG, "RecentList number"+ recentList.size());
+            
+            for(HashMap<String, String> hm : recentList){
+                recentItemList.add(new RecentItem(hm.get("recentdbname"), mContext.getString(R.string.stat_total) + hm.get("recentdbtotal") + " " + mContext.getString(R.string.stat_new) + hm.get("recentnew") + " " + mContext.getString(R.string.stat_scheduled) + hm.get("recentscheduled")));
+            }
 
 
-        
-        recentListView = (ListView)findViewById(R.id.recent_open_list);
-        recentListView.setAdapter(new RecentListAdapter(this, R.layout.open_screen_recent_item, recentItemList));
+            mHandler.post(new Runnable(){
+                public void run(){
+            
+            recentListView.setAdapter(new RecentListAdapter(mContext, R.layout.open_screen_recent_item, recentItemList));
+            mProgressDialog.dismiss();
 
-		recentListView.setOnItemClickListener(this);
+                }
+            });
+                }
+            };
+            loadingThread.start();
 		
     	
     }
