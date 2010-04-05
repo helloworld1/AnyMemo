@@ -30,6 +30,7 @@ import android.os.Handler;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.LinearLayout.LayoutParams;
+import android.util.Log;
 
 
 public class MemoScreen extends Activity{
@@ -63,11 +64,15 @@ public class MemoScreen extends Activity{
 	private SpeakWord mSpeakWord = null;
     private Context mContext;
     private Handler mHandler;
+    private AlertDialog.Builder mAlert;
+
 	
 	
 	
 	private int returnValue = 0;
 	private boolean initFeed;
+
+    public final static String TAG = "org.liberty.android.fantastischmemo.MemoScreen";
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -81,6 +86,8 @@ public class MemoScreen extends Activity{
 		initFeed = true;
 		
         mHandler = new Handler();
+        mContext = this;
+
 
         mProgressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_database), true);
 
@@ -91,7 +98,7 @@ public class MemoScreen extends Activity{
                     mHandler.post(new Runnable(){
                         public void run(){
                             mProgressDialog.dismiss();
-                            updateMemoScreen();
+                            //updateMemoScreen();
                         }
                     });
                 }
@@ -103,12 +110,6 @@ public class MemoScreen extends Activity{
 	public void onResume(){
 		super.onResume();
 		if(returnValue == 1){
-			OnDismissListener dismissListener = new OnDismissListener(){
-				public void onDismiss(DialogInterface arg0){
-					//
-					updateMemoScreen();
-				}
-			};
 			
 			prepare();
 			returnValue = 0;
@@ -337,26 +338,35 @@ public class MemoScreen extends Activity{
 		}
 		
 		if(this.feedData() == 2){ // The queue is still empty
-			OnClickListener backButtonListener = new OnClickListener() {
-				// Finish the current activity and go back to the last activity.
-				// It should be the main screen.
-				public void onClick(DialogInterface arg0, int arg1) {
-					finish();
-				}
-			};
-			AlertDialog alertDialog = new AlertDialog.Builder(this) 
-			.create();
-			alertDialog.setTitle(this.getString(R.string.memo_no_item_title));
-			alertDialog.setMessage(this.getString(R.string.memo_no_item_message));
-			alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Back",
-					backButtonListener);
-			alertDialog.show();
+            mHandler.post(new Runnable(){
+                @Override
+                public void run(){
+                    mAlert = new AlertDialog.Builder(mContext);
+                    OnClickListener backButtonListener = new OnClickListener() {
+                        // Finish the current activity and go back to the last activity.
+                        // It should be the main screen.
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            finish();
+                        }
+                    };
+                    mAlert.setPositiveButton( getString(R.string.back_menu_text), backButtonListener );
+                    mAlert.setTitle(getString(R.string.memo_no_item_title));
+                    mAlert.setMessage(getString(R.string.memo_no_item_message));
+                    mAlert.show();
+                }
+            });
 			
 		}
 		else{
 
 			
-			//this.updateMemoScreen();
+            mHandler.post(new Runnable(){
+                @Override
+                public void run(){
+			        updateMemoScreen();
+                }
+            });
+
 		}
 		
 	}
