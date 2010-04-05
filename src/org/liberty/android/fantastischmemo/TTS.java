@@ -13,6 +13,7 @@ public class TTS implements TextToSpeech.OnInitListener{
 	private int errorCode;
 	private	boolean init;
 	private int version;
+    public final static String TAG = "org.liberty.android.fantastischmemo.TTS";
 	
 	public TTS(Context context, Locale locale){
 		myTTS = new TextToSpeech(context, this);
@@ -29,7 +30,10 @@ public class TTS implements TextToSpeech.OnInitListener{
 	}
 	
 	public void onInit(int status){
-		if(status == TextToSpeech.SUCCESS){
+        if(myTTS == null){
+            Log.e(TAG, "TTS is NULL");
+        }
+		if(myTTS != null && status == TextToSpeech.SUCCESS){
 			int result = myTTS.setLanguage(myLocale);
 			if(result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED){
 				Log.e("TTS engine", "Language is not available");

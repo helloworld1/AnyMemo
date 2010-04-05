@@ -46,6 +46,11 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
     private ProgressDialog mProgressDialog;
     private Handler mHandler;
 
+    /* This part is added for threading data sharing */
+    private Intent tmpIntent = null;
+    private AlertDialog.Builder mAlert;
+
+
     private final int ACTIVITY_DB = 1;
     private final int ACTIVITY_XML = 2;
 
@@ -104,7 +109,10 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
 	
     public void onResume(){
     	super.onResume();
-    	if(returnValue == 1){
+        if(returnValue == ACTIVITY_XML){
+            return;
+        }
+    	if(returnValue == ACTIVITY_DB){
     		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
     		//SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
     		SharedPreferences.Editor editor = settings.edit();
@@ -123,7 +131,7 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
     		returnValue = 0;
             return;
     	}
-            mProgressDialog = ProgressDialog.show(this, "Please Wait...", "Refreshing Recent database list...", true);
+            mProgressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_recent_list), true);
 
             recentListView = (ListView)findViewById(R.id.recent_open_list);
             recentListView.setOnItemClickListener(this);
@@ -137,7 +145,6 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
             // Fill the recent open list from the pref
             mRecentOpenList = new RecentOpenList(mContext);
             recentList = mRecentOpenList.getList();
-            Log.v(TAG, "RecentList number"+ recentList.size());
             
             for(HashMap<String, String> hm : recentList){
                 recentItemList.add(new RecentItem(hm.get("recentdbname"), mContext.getString(R.string.stat_total) + hm.get("recentdbtotal") + " " + mContext.getString(R.string.stat_new) + hm.get("recentnew") + " " + mContext.getString(R.string.stat_scheduled) + hm.get("recentscheduled")));
@@ -166,32 +173,49 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
     			dbName = data.getStringExtra("org.liberty.android.fantastischmemo.dbName");
     			dbPath = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
     			dbPath += "/";
-    			returnValue = 1;
+    			returnValue = ACTIVITY_DB;
     			
     		}
     		break;
     	
     	case ACTIVITY_XML:
     		if(resultCode == Activity.RESULT_OK){
-    			XMLConverter conv = null;
-    			AlertDialog.Builder ad = new AlertDialog.Builder( this );
-    			ad.setPositiveButton( "OK", null );
-    			String xmlPath = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
-    			String xmlName = data.getStringExtra("org.liberty.android.fantastischmemo.dbName");
-    			try{
-    				conv = new XMLConverter(this, xmlPath, xmlName);
-    				conv.outputDB();
-    				ad.setTitle( "Success" );
-    				ad.setMessage( "The XML is successfully converted and stored as" + xmlPath + "/" + xmlName.replaceAll(".xml", ".db"));
-    				
-    				//conv.outputTabFile();
-    			}
-    			catch(Exception e){
-    				Log.e("XMLError",e.toString());
-    				ad.setTitle("Failed");
-    				ad.setMessage("Fail to convert " + xmlPath + "/" + xmlName + " Exception: " + e.toString());
-    			}
-    			ad.show();
+                returnValue = ACTIVITY_XML;
+
+                mProgressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_import), true);
+                tmpIntent = data;
+                Thread convertThread = new Thread(){
+                    @Override
+                    public void run(){
+                        XMLConverter conv = null;
+                        mAlert = new AlertDialog.Builder(mContext);
+                        mAlert.setPositiveButton( "OK", null );
+                        String xmlPath = tmpIntent.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
+                        String xmlName = tmpIntent.getStringExtra("org.liberty.android.fantastischmemo.dbName");
+                        try{
+                            conv = new XMLConverter(mContext, xmlPath, xmlName);
+                            conv.outputDB();
+                            mAlert.setTitle( "Success" );
+                            mAlert.setMessage( "The XML is successfully converted and stored as" + xmlPath + "/" + xmlName.replaceAll(".xml", ".db"));
+                            
+                            //conv.outputTabFile();
+                        }
+                        catch(Exception e){
+                            Log.e("XMLError",e.toString());
+                            mAlert.setTitle("Failed");
+                            mAlert.setMessage("Fail to convert " + xmlPath + "/" + xmlName + " Exception: " + e.toString());
+                        }
+                        mHandler.post(new Runnable(){
+                            @Override
+                            public void run(){
+                                mProgressDialog.dismiss();
+                                mAlert.show();
+                            }
+                        });
+                    }
+                };
+                convertThread.start();
+
     		}
     		break;
     		

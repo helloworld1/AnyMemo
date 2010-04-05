@@ -14,7 +14,7 @@
 			android:id="@+id/scroll_question"
 			android:layout_height="wrap_content"
 			android:layout_width="fill_parent">
-		<TextView android:id="@+id/question" android:text="Hello 111"
+		<TextView android:id="@+id/question" android:text="FantastischMemo"
 			android:textSize="16pt" android:layout_width="fill_parent"
 			android:layout_height="wrap_content"/>
 		</ScrollView>
@@ -34,13 +34,16 @@
 			android:id="@+id/scroll_answer"
 			android:layout_height="wrap_content"
 			android:layout_width="fill_parent">
-		<TextView android:id="@+id/answer" android:text="Hello 222"
-			android:textSize="16pt" android:layout_width="fill_parent"
+		<TextView android:id="@+id/answer" 
+            android:text="Fantastic Memory Experience"
+			android:textSize="16pt" 
+            android:layout_width="fill_parent"
 			android:layout_height="wrap_content" />
 		</ScrollView>
 		</LinearLayout>
 		<LinearLayout android:orientation="horizontal"
-			android:layout_width="fill_parent" android:layout_height="fill_parent"
+			android:layout_width="fill_parent" 
+            android:layout_height="fill_parent"
 			android:layout_weight="1.5">
 			<Button android:id="@+id/But00" android:layout_width="fill_parent"
 				android:layout_height="wrap_content" android:layout_marginLeft="10dip"

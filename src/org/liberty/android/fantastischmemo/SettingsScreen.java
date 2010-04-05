@@ -7,9 +7,12 @@ import java.util.Set;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -18,22 +21,29 @@ import android.widget.CheckBox;
 import android.widget.Spinner;
 
 public class SettingsScreen extends Activity implements OnClickListener {
-	Spinner questionFontSizeSpinner;
-	Spinner answerFontSizeSpinner;
-	Spinner questionAlignSpinner;
-	Spinner answerAlignSpinner;
-	Spinner questionLocaleSpinner;
-	Spinner answerLocaleSpinner;
-	Spinner htmlSpinner;
-	Spinner ratioSpinner;
-	CheckBox wipeCheckbox;
-	Button btnSave;
-	Button btnDiscard;
-	DatabaseHelper dbHelper;
+	private Spinner questionFontSizeSpinner;
+	private Spinner answerFontSizeSpinner;
+	private Spinner questionAlignSpinner;
+	private Spinner answerAlignSpinner;
+	private Spinner questionLocaleSpinner;
+	private Spinner answerLocaleSpinner;
+	private Spinner htmlSpinner;
+	private Spinner ratioSpinner;
+	private CheckBox wipeCheckbox;
+	private Button btnSave;
+	private Button btnDiscard;
+	private DatabaseHelper dbHelper;
+    private Handler mHandler;
+    private Context mContext;
+    private ProgressDialog mProgressDialog;
+    
+
 	
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_screen);
+        mContext = this;
+        mHandler = new Handler();
         
         questionFontSizeSpinner = (Spinner)findViewById(R.id.question_font_size_spinner);
         ArrayAdapter<CharSequence> fontSizeAdapter = ArrayAdapter.createFromResource(this, R.array.font_size_list, android.R.layout.simple_spinner_item);
@@ -262,16 +272,29 @@ public class SettingsScreen extends Activity implements OnClickListener {
     
     public void onClick(View v){
     	if(v == btnSave){
-    		updateSettings();
-    		if(wipeCheckbox.isChecked()){
-    			
-    			
-    			dbHelper.wipeLearnData();
-    		}
-    		dbHelper.close();
-        	Intent resultIntent = new Intent();
-        	setResult(Activity.RESULT_OK, resultIntent);    			
-    		finish();
+            mProgressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_save), true);
+            Thread savingThread = new Thread(){
+                @Override
+                public void run(){
+                    updateSettings();
+                    if(wipeCheckbox.isChecked()){
+                        
+                        
+                        dbHelper.wipeLearnData();
+                    }
+                    dbHelper.close();
+                    mHandler.post(new Runnable(){
+                        @Override
+                        public void run(){
+                            mProgressDialog.dismiss();
+                            Intent resultIntent = new Intent();
+                            setResult(Activity.RESULT_OK, resultIntent);    			
+                            finish();
+                        }
+                    });
+                }
+            };
+            savingThread.start();
     	}
     	if(v == btnDiscard){
         	Intent resultIntent = new Intent();

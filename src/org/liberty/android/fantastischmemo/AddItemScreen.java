@@ -3,7 +3,10 @@ package org.liberty.android.fantastischmemo;
 import java.util.HashMap;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Handler;
+import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -23,11 +26,19 @@ public class AddItemScreen extends Activity implements OnClickListener{
 	private String dbPath;
 	private int openId = -1;
 	private DatabaseHelper dbHelper;
+    private Handler mHandler;
+    private Context mContext;
+    private ProgressDialog mProgressDialog;
+
+    /* This is used for multi threading */
+    private String tmpId;
 	
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_item_screen);
 		Bundle extras = getIntent().getExtras();
+        mHandler = new Handler();
+        mContext = this;
 		if (extras != null) {
 			dbPath = extras.getString("dbpath");
 			dbName = extras.getString("dbname");
@@ -102,28 +113,50 @@ public class AddItemScreen extends Activity implements OnClickListener{
 		}
 		
 		if(v == btnEdit){
-			HashMap<String, String> hm = new HashMap<String, String>();
-            // Check if id is an integer;
-            String myid = entryId.getText().toString();
-            int intId;
-            try{
-                intId = Integer.parseInt(myid);
-                if(intId < 0){
-                    throw new NumberFormatException();
-                }
-            }
-            catch(NumberFormatException e){
-                intId = dbHelper.getNewId();
-                myid = Integer.toString(intId);
-                entryId.setText(myid);
-            }
 
-			hm.put("_id", myid);
-			hm.put("question", entryQuestion.getText().toString());
-			hm.put("answer", entryAnswer.getText().toString());
-			Item item = new Item();
-			item.setData(hm);
-			dbHelper.addOrReplaceItem(item);
+            mProgressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_save), true);
+            Thread savingThread = new Thread(){
+                @Override
+                public void run(){
+                    HashMap<String, String> hm = new HashMap<String, String>();
+                    // Check if id is an integer;
+                    String myid = entryId.getText().toString();
+                    int intId = -1;
+
+                    tmpId = null;
+
+                    try{
+                        intId = Integer.parseInt(myid);
+                        if(intId < 0){
+                            throw new NumberFormatException();
+                        }
+                    }
+                    catch(NumberFormatException e){
+                        intId = dbHelper.getNewId();
+                        myid = Integer.toString(intId);
+                        //entryId.setText(myid);
+                        tmpId = myid;
+                    }
+                    hm.put("_id", myid);
+                    hm.put("question", entryQuestion.getText().toString());
+                    hm.put("answer", entryAnswer.getText().toString());
+                    Item item = new Item();
+                    item.setData(hm);
+                    dbHelper.addOrReplaceItem(item);
+                    mHandler.post(new Runnable(){
+                        @Override
+                        public void run(){
+                            if(tmpId != null){
+                                entryId.setText(tmpId);
+                            }
+                                
+                        //entryId.setText(myid);
+                            mProgressDialog.dismiss();
+                        }
+                    });
+                }
+            };
+            savingThread.start();
 		}
 		if(v == btnGotoid){
 			int id = -1;

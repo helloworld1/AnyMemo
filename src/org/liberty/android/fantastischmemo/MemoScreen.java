@@ -9,12 +9,14 @@ import java.util.Set;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
+import android.content.Context;
 import android.preference.PreferenceManager;
 import android.text.Html;
 import android.view.Gravity;
@@ -24,14 +26,16 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.os.Handler;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.LinearLayout.LayoutParams;
 
+
 public class MemoScreen extends Activity{
 	//
 	private ArrayList<Item> learnQueue;
-	private DatabaseHelper dbHelper;
+	private DatabaseHelper dbHelper = null;
 	private String dbName;
 	private String dbPath;
 	private boolean showAnswer;
@@ -53,10 +57,12 @@ public class MemoScreen extends Activity{
 	private TTS questionTTS;
 	private TTS answerTTS;
 	private boolean autoaudioSetting = true;
-	private AlertDialog loadingDialog = null;
+    private ProgressDialog mProgressDialog = null;
 	private boolean questionUserAudio = false;
 	private boolean answerUserAudio = false;
 	private SpeakWord mSpeakWord = null;
+    private Context mContext;
+    private Handler mHandler;
 	
 	
 	
@@ -65,11 +71,8 @@ public class MemoScreen extends Activity{
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//Debug.startMethodTracing("memo");
 		setContentView(R.layout.memo_screen);
 		
-		// The extra mode field is passed from intent.
-		// acq and rev should be different processes in different learning algorithm
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			dbPath = extras.getString("dbpath");
@@ -77,50 +80,26 @@ public class MemoScreen extends Activity{
 		}
 		initFeed = true;
 		
-		/*
-		OnDismissListener dismissListener = new OnDismissListener(){
-			public void onDismiss(DialogInterface arg0){
-				//
-				if(autoaudioSetting == true){
-				}
-				updateMemoScreen();
-			}
-		};
-		OnClickListener okButtonListener = new OnClickListener(){
-			public void onClick(DialogInterface arg0, int arg1){
-				updateMemoScreen();
-			}
-		};
-			
+        mHandler = new Handler();
+
+        mProgressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_database), true);
+
 		
-		
-		prepare();
-		
-		if(questionTTS.sayText("") != TextToSpeech.SUCCESS && autoaudioSetting == true){
-			loadingDialog = new AlertDialog.Builder(this).create();
-			loadingDialog.setTitle("Alert");
-			loadingDialog.setMessage("The automatic question and answer speaking is now on!");
-			//loadingDialog.setOnDismissListener(dismissListener);
-			loadingDialog.setButton("OK", okButtonListener);
-			loadingDialog.show();
-		}
-		else{
-			this.updateMemoScreen();
-			
-		}*/
-		OnDismissListener dismissListener = new OnDismissListener(){
-			public void onDismiss(DialogInterface arg0){
-				//
-				updateMemoScreen();
-			}
-		};
-		
-		loadingDialog = new AlertDialog.Builder(this).create();
-		loadingDialog.setMessage("Loading");
-		loadingDialog.setOnDismissListener(dismissListener);
-		loadingDialog.show();
-		prepare();
+            Thread loadingThread = new Thread(){
+                public void run(){
+                    prepare();
+                    mHandler.post(new Runnable(){
+                        public void run(){
+                            mProgressDialog.dismiss();
+                            updateMemoScreen();
+                        }
+                    });
+                }
+            };
+            loadingThread.start();
+
 	}
+
 	public void onResume(){
 		super.onResume();
 		if(returnValue == 1){
@@ -131,10 +110,6 @@ public class MemoScreen extends Activity{
 				}
 			};
 			
-			loadingDialog = new AlertDialog.Builder(this).create();
-			loadingDialog.setMessage("Loading");
-			loadingDialog.setOnDismissListener(dismissListener);
-			loadingDialog.show();
 			prepare();
 			returnValue = 0;
 		}
@@ -282,14 +257,16 @@ public class MemoScreen extends Activity{
 
 	private void prepare() {
 		// Empty the queue, init the db
-		dbHelper = new DatabaseHelper(this, dbPath, dbName);
+        if(dbHelper == null){
+            dbHelper = new DatabaseHelper(mContext, dbPath, dbName);
+        }
 		learnQueue = new ArrayList<Item>();
-		this.newGrade = -1;
-		this.queueEmpty = true;
-		this.idMaxSeen = -1;
-		this.scheduledItemCount = dbHelper.getScheduledCount();
-		this.newItemCount = dbHelper.getNewCount();
-		this.loadSettings();
+		newGrade = -1;
+		queueEmpty = true;
+		idMaxSeen = -1;
+		scheduledItemCount = dbHelper.getScheduledCount();
+		newItemCount = dbHelper.getNewCount();
+		loadSettings();
 		// Get question and answer locale
 		Locale ql;
 		Locale al;
@@ -358,14 +335,6 @@ public class MemoScreen extends Activity{
 		if(questionUserAudio || answerUserAudio){
 			mSpeakWord = new SpeakWord(this.getString(R.string.default_audio_path));
 		}
-		LinearLayout layoutQuestion = (LinearLayout)findViewById(R.id.layout_question);
-		LinearLayout layoutAnswer = (LinearLayout)findViewById(R.id.layout_answer);
-		float qRatio = Float.valueOf(qaRatio.substring(0, qaRatio.length() - 1));
-		float aRatio = 100.0f - qRatio;
-		qRatio /= 50.0;
-		aRatio /= 50.0;
-		layoutQuestion.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, qRatio));
-		layoutAnswer.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, aRatio));
 		
 		if(this.feedData() == 2){ // The queue is still empty
 			OnClickListener backButtonListener = new OnClickListener() {
@@ -388,9 +357,6 @@ public class MemoScreen extends Activity{
 
 			
 			//this.updateMemoScreen();
-			if(loadingDialog != null){
-				loadingDialog.dismiss();
-			}
 		}
 		
 	}
@@ -400,7 +366,7 @@ public class MemoScreen extends Activity{
 		if(initFeed){
 			initFeed = false;
 			
-			boolean feedResult = dbHelper.getListItems(-1, WINDOW_SIZE, this.learnQueue);
+			boolean feedResult = dbHelper.getListItems(-1, WINDOW_SIZE, learnQueue);
 			if(feedResult == true){
 				idMaxSeen = learnQueue.get(learnQueue.size() - 1).getId();
 				return 0;
@@ -412,12 +378,8 @@ public class MemoScreen extends Activity{
 		}
 		else{
 		
-		// Feed the 10 items to acq queue
-		// or feed all items to rev queue
-		// from the database
 		Item item;
-		//this.setTitle(this.getString(R.string.stat_scheduled) + dbHelper.getScheduledCount() + " / " + this.getString(R.string.stat_new) + dbHelper.getNewCount());
-		this.setTitle(this.getString(R.string.stat_scheduled) + this.scheduledItemCount + " / " + this.getString(R.string.stat_new) + this.newItemCount);
+		setTitle(getString(R.string.stat_scheduled) + scheduledItemCount + " / " + getString(R.string.stat_new) + newItemCount);
 		for(int i = learnQueue.size(); i < WINDOW_SIZE; i++){
 			item = dbHelper.getItemById(idMaxSeen + 1, 2); // Revision first
 			if(item == null){
@@ -459,6 +421,14 @@ public class MemoScreen extends Activity{
 				finish();
 			}
 		};
+		LinearLayout layoutQuestion = (LinearLayout)findViewById(R.id.layout_question);
+		LinearLayout layoutAnswer = (LinearLayout)findViewById(R.id.layout_answer);
+		float qRatio = Float.valueOf(qaRatio.substring(0, qaRatio.length() - 1));
+		float aRatio = 100.0f - qRatio;
+		qRatio /= 50.0;
+		aRatio /= 50.0;
+		layoutQuestion.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, qRatio));
+		layoutAnswer.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, aRatio));
 		feedData();
 		if(queueEmpty == false){
 			currentItem = learnQueue.get(0);
