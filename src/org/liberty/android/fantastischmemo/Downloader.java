@@ -55,6 +55,7 @@ public class Downloader extends Activity implements OnItemClickListener{
     private ProgressDialog mProgressDialog;
     private Context mContext;
     private AlertDialog alertDialog;
+    private Thread downloadThread;
     private final String urlHead = "http://192.168.245.101/~Liberty/";
     private final String urlDb = "WordListsForChinese/db/";
             
@@ -209,7 +210,7 @@ public class Downloader extends Activity implements OnItemClickListener{
             URL myURL = new URL(url);
             URLConnection ucon = myURL.openConnection();
             OutputStream out;
-            File outFile = new File("/sdcard/" + filename);
+            File outFile = new File(getString(R.string.default_sd_path) + filename);
             outFile.createNewFile();
             out  =new FileOutputStream(outFile);
             byte[] buf = new byte[1024];
@@ -243,8 +244,7 @@ public class Downloader extends Activity implements OnItemClickListener{
         }
         else if(mStage == 2){
             clickPosition = position;
-            mProgressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_downloading), true);
-            Thread downloadThread = new Thread(){
+            downloadThread = new Thread(){
                 @Override
                 public void run(){
                     String filename = mDatabaseList.get(clickPosition).get("FileName");
@@ -277,7 +277,30 @@ public class Downloader extends Activity implements OnItemClickListener{
                     });
                 }
             };
-            downloadThread.start();
+
+            new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.downloader_download_alert) + mDatabaseList.get(clickPosition).get("FileName"))
+                .setMessage(getString(R.string.downloader_download_alert_message) + mDatabaseList.get(clickPosition).get("DBNote"))
+                .setPositiveButton(getString(R.string.yes_text), new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1){
+                        mHandler.post(new Runnable(){
+                            @Override
+                            public void run(){
+                                mProgressDialog = ProgressDialog.show(mContext, getString(R.string.loading_please_wait), getString(R.string.loading_downloading), true);
+                            }
+                        });
+                        downloadThread.start();
+                    }
+                })
+                .setNegativeButton(getString(R.string.no_text), new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1){
+                    }
+                })
+                .show();
+
+
         }
 
 

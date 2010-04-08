@@ -6,6 +6,8 @@
     <string name="current_dir">.</string>
     <string name="ok_text">OK</string>
     <string name="cancel_text">Cancel</string>
+    <string name="yes_text">Yes</string>
+    <string name="no_text">No</string>
     <string name="back_menu_text">Back</string>
     <string name="detail_menu_text">Detail</string>
     <string name="settings_menu_text">Settings</string>
@@ -82,6 +84,8 @@
     <string name="downloader_download_success_message">The database has been stored in: /sdcard/fantastischmemo/</string>
     <string name="downloader_download_fail">Download failed</string>
     <string name="downloader_download_fail_message">Please check connection and try again</string>
+    <string name="downloader_download_alert">Download: </string>
+    <string name="downloader_download_alert_message">Details: </string>
 
     
     

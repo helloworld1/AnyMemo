@@ -9,7 +9,7 @@
         android:layout_height="wrap_content" 
         android:id="@+id/downloader_top_text"
         android:textSize="12.5pt"
-        android:padding="20dip"
+        android:padding="5dip"
         android:gravity="center"/>
     <ListView
         android:id="@+id/downloader_list"
