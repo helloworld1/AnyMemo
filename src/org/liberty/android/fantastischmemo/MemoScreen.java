@@ -349,7 +349,7 @@ public class MemoScreen extends Activity{
                             finish();
                         }
                     };
-                    mAlert.setPositiveButton( getString(R.string.back_menu_text), backButtonListener );
+                    mAlert.setPositiveButton(getString(R.string.back_menu_text), backButtonListener );
                     mAlert.setTitle(getString(R.string.memo_no_item_title));
                     mAlert.setMessage(getString(R.string.memo_no_item_message));
                     mAlert.show();

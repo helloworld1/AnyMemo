@@ -106,9 +106,11 @@ public class FantastischMemo extends Activity implements OnClickListener{
     	}
     	
     	if(v == btnDownload){
-    		Intent myIntent = new Intent(Intent.ACTION_VIEW);
-    		Uri u = Uri.parse("market://search?q=pname:org.liberty.android.fminstaller");
-    		myIntent.setData(u);
+    		//Intent myIntent = new Intent(Intent.ACTION_VIEW);
+    		//Uri u = Uri.parse("market://search?q=pname:org.liberty.android.fminstaller");
+    		//myIntent.setData(u);
+            Intent myIntent = new Intent();
+            myIntent.setClass(this, Downloader.class);
     		startActivity(myIntent);
     	}
     }

@@ -8,34 +8,43 @@ import java.util.List;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.ViewGroup;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.ImageView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
-public class FileBrowser extends ListActivity {
+public class FileBrowser extends Activity implements OnItemClickListener{
 	private enum DISPLAYMODE{ABSOLUTE, RELATIVE;}
 	private final DISPLAYMODE displayMode = DISPLAYMODE.RELATIVE;
-	private List<String> directoryEntries = new ArrayList<String>();
+	private ArrayList<String> directoryEntries = new ArrayList<String>();
 	private File currentDirectory = new File("/");
 	private String defaultRoot;
 	private String fileExtension = ".db";
 	private Context mContext;
+    private ListView fbListView;
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		
 		Bundle extras = getIntent().getExtras();
 		defaultRoot = extras.getString("default_root");
 		fileExtension = extras.getString("file_extension");
+        setContentView(R.layout.file_browser);
 		mContext = this;
 		
 		browseToRoot();
@@ -104,7 +113,9 @@ public class FileBrowser extends ListActivity {
 				
 			}
 		}
-		ArrayAdapter<String> directoryList = new ArrayAdapter<String>(this, R.layout.file_browser, this.directoryEntries);
+
+        fbListView = (ListView)findViewById(R.id.file_list);
+		FileBrowserAdapter directoryList = new FileBrowserAdapter(this, R.layout.filebrowser_item, directoryEntries);
 		directoryList.sort(new Comparator<String>() {
 			public int compare(String s1, String s2){
 				if(s1.equals("..")){
@@ -127,7 +138,8 @@ public class FileBrowser extends ListActivity {
 				return s1.equals(s2);
 			}
 		});
-		this.setListAdapter(directoryList);
+	    fbListView.setAdapter(directoryList);
+        fbListView.setOnItemClickListener(this);
 	}
 	
 	private void openFile(File aDirectory){
@@ -143,8 +155,8 @@ public class FileBrowser extends ListActivity {
 		}
 	}
 	
-	protected void onListItemClick(ListView l, View v, int position, long id){
-		super.onListItemClick(l, v, position, id);
+    @Override
+	public void onItemClick(AdapterView<?> parentView, View childView, int position, long id){
 		String selectedFileString = this.directoryEntries.get(position);
 		if(selectedFileString.equals(getString(R.string.current_dir))){
 			this.browseTo(this.currentDirectory);
@@ -261,6 +273,47 @@ public class FileBrowser extends ListActivity {
 	    }
 	    return false;
 	}
+
+    private class FileBrowserAdapter extends ArrayAdapter<String>{
+        private ArrayList<String> mItems;
+
+        public FileBrowserAdapter(Context context, int textViewResourceId, ArrayList<String> items){
+            super(context, textViewResourceId, items);
+            mItems = items;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent){
+            View v = convertView;
+            if(v == null){
+                LayoutInflater li = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                v = li.inflate(R.layout.filebrowser_item, null);
+            }
+            String name = mItems.get(position);
+            if(name != null){
+                TextView tv = (TextView)v.findViewById(R.id.file_name);
+                ImageView iv = (ImageView)v.findViewById(R.id.file_icon);
+                if(name.endsWith("/")){
+                    iv.setImageResource(R.drawable.dir);
+                    name = name.substring(0, name.length() - 1);
+
+                }
+                else if(name.equals("..")){
+                    iv.setImageResource(R.drawable.back);
+                }
+                else{
+                    iv.setImageResource(R.drawable.database24);
+                }
+
+                if(name.charAt(0) == '/'){
+                    name = name.substring(1, name.length());
+                }
+
+                tv.setText(name);
+            }
+            return v;
+        }
+    }
 	
 
 }

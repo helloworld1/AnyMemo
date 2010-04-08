@@ -4,8 +4,18 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
+    <TextView
+        android:layout_width="fill_parent" 
+        android:layout_height="wrap_content" 
+        android:id="@+id/downloader_top_text"
+        android:textSize="12.5pt"
+        android:padding="20dip"
+        android:gravity="center"/>
     <ListView
-        android:id="@+id/file_list"
+        android:id="@+id/downloader_list"
         android:layout_width="fill_parent" 
         android:layout_height="wrap_content" />
 </LinearLayout>
+
+
+        
