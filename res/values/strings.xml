@@ -17,7 +17,7 @@
     <string name="recent_button_text">Open Recent Database</string>
     <string name="recent_databases">Recent Databases</string>
     <string name="option_button_text">Options</string>
-    <string name="download_button_text">Download DB Collection</string>
+    <string name="download_button_text">Download Databases</string>
     <string name="about_button_text">About</string>
     <string name="exit_button_text">Exit Program</string>
     <string name="edit_button_text">Create/Edit Database</string>
@@ -83,7 +83,7 @@
     <string name="downloader_download_success">Successfully Downloaded</string>
     <string name="downloader_download_success_message">The database has been stored in: /sdcard/fantastischmemo/</string>
     <string name="downloader_download_fail">Download failed</string>
-    <string name="downloader_download_fail_message">Please check connection and try again</string>
+    <string name="downloader_download_fail_message">Database with the same name exist in /sdcard/fantastischmemo or connection fail. Please check connection and delete the exist database.</string>
     <string name="downloader_download_alert">Download: </string>
     <string name="downloader_download_alert_message">Details: </string>
 

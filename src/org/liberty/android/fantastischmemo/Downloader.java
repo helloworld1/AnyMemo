@@ -56,7 +56,7 @@ public class Downloader extends Activity implements OnItemClickListener{
     private Context mContext;
     private AlertDialog alertDialog;
     private Thread downloadThread;
-    private final String urlHead = "http://192.168.245.101/~Liberty/";
+    private final String urlHead = "http://fantastischmemo.xtreemhost.com/download/WordLists/";
     private final String urlDb = "WordListsForChinese/db/";
             
 
@@ -206,13 +206,17 @@ public class Downloader extends Activity implements OnItemClickListener{
     }
 
     private boolean downloadFile(String url, String filename){
+        File outFile = new File(getString(R.string.default_sd_path) + filename);
         try{
-            URL myURL = new URL(url);
-            URLConnection ucon = myURL.openConnection();
             OutputStream out;
-            File outFile = new File(getString(R.string.default_sd_path) + filename);
+            if(outFile.exists()){
+                return false;
+            }
             outFile.createNewFile();
             out  =new FileOutputStream(outFile);
+
+            URL myURL = new URL(url);
+            URLConnection ucon = myURL.openConnection();
             byte[] buf = new byte[1024];
 
             InputStream is = ucon.getInputStream();
@@ -229,6 +233,9 @@ public class Downloader extends Activity implements OnItemClickListener{
         }
         catch(Exception e){
             Log.e(TAG, "Error downloading", e);
+            if(outFile.exists()){
+                outFile.delete();
+            }
             return false;
         }
     }
