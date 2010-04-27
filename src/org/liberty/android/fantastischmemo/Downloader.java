@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.View.OnKeyListener;
 import android.view.KeyEvent;
 import android.util.Log;
+import android.text.Html;
 
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -49,6 +50,7 @@ public class Downloader extends Activity implements OnItemClickListener{
     private TextView topText;
     private Handler mHandler;
     private ArrayList<HashMap<String, String>> mDatabaseList;
+    private ArrayList<HashMap<String, String>> mFilterDatabaseList;
     private ArrayList<String> categoryArray;
     private ArrayList<String> databaseArray;
     private ListView mListView;
@@ -139,8 +141,13 @@ public class Downloader extends Activity implements OnItemClickListener{
     private void refreshDatabaseList(String category){
         mStage = 2;
         databaseArray = new ArrayList<String>();
+        mFilterDatabaseList = new ArrayList<HashMap<String, String>>();
+
         for(HashMap<String, String> hm : mDatabaseList){
-            databaseArray.add(hm.get("DBName"));
+            if(hm.get("DBCategory").equals(category)){
+                mFilterDatabaseList.add(hm);
+                databaseArray.add(hm.get("DBName"));
+            }
         }
 
         mListView.setAdapter(new ArrayAdapter(this, android.R.layout.simple_list_item_1, databaseArray));
@@ -179,12 +186,14 @@ public class Downloader extends Activity implements OnItemClickListener{
                     String dbnote = jsonItem.getString("DBNote");
                     String dbcategory = jsonItem.getString("DBCategory");
                     String filename = jsonItem.getString("FileName");
+                    String dbpath = jsonItem.getString("DBPath");
                     HashMap<String, String> hm = new HashMap<String, String>();
                     hm.put("DBName", dbname);
                     hm.put("DBType", dbtype);
                     hm.put("DBNote", dbnote);
                     hm.put("DBCategory", dbcategory);
                     hm.put("FileName", filename);
+                    hm.put("DBPath", dbpath);
                     mDatabaseList.add(hm);
 
                 }
@@ -254,10 +263,11 @@ public class Downloader extends Activity implements OnItemClickListener{
             downloadThread = new Thread(){
                 @Override
                 public void run(){
-                    String filename = mDatabaseList.get(clickPosition).get("FileName");
+                    String filename = mFilterDatabaseList.get(clickPosition).get("FileName");
                     downloadStatus = false;
                     try{
-                        downloadStatus = downloadFile(urlHead + urlDb + URLEncoder.encode(filename, "UTF-8"), filename);
+                        Log.v(TAG, "Download address: " + urlHead + mFilterDatabaseList.get(clickPosition).get("DBPath") + URLEncoder.encode(filename, "UTF-8"));
+                        downloadStatus = downloadFile(urlHead + mFilterDatabaseList.get(clickPosition).get("DBPath") + URLEncoder.encode(filename, "UTF-8"), filename);
                     }
                     catch(UnsupportedEncodingException e){
                     }
@@ -273,7 +283,7 @@ public class Downloader extends Activity implements OnItemClickListener{
                             alertDialog.setButton(getString(R.string.ok_text), okButtonListener);
                             if(downloadStatus){
                             alertDialog.setTitle(getString(R.string.downloader_download_success));
-                            alertDialog.setMessage(getString(R.string.downloader_download_success_message) + mDatabaseList.get(clickPosition).get("FileName"));
+                            alertDialog.setMessage(getString(R.string.downloader_download_success_message) + mFilterDatabaseList.get(clickPosition).get("FileName"));
                         }
                         else{
                             alertDialog.setTitle(getString(R.string.downloader_download_fail));
@@ -286,8 +296,8 @@ public class Downloader extends Activity implements OnItemClickListener{
             };
 
             new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.downloader_download_alert) + mDatabaseList.get(clickPosition).get("FileName"))
-                .setMessage(getString(R.string.downloader_download_alert_message) + mDatabaseList.get(clickPosition).get("DBNote"))
+                .setTitle(getString(R.string.downloader_download_alert) + mFilterDatabaseList.get(clickPosition).get("FileName"))
+                .setMessage(Html.fromHtml(getString(R.string.downloader_download_alert_message) + mFilterDatabaseList.get(clickPosition).get("DBNote")))
                 .setPositiveButton(getString(R.string.yes_text), new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface arg0, int arg1){

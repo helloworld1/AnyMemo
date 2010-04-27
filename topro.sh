@@ -1,12 +1,12 @@
 #!/bin/bash
 
 cd ..
-if [ -d "FantastischMemoPro" ]
+if [ -d "AnyMemoPro" ]
 then
-	rm -rf FantastischMemoPro
+	rm -rf AnyMemoPro
 fi
-cp FantastischMemo FantastischMemoPro -r
-cd FantastischMemoPro
+cp AnyMemo AnyMemoPro -r
+cd AnyMemoPro
 mv src/org/liberty/android/fantastischmemo src/org/liberty/android/fantastischmemopro
 
 find ./ -type f -name "*.java" | xargs sed -i 's/org\.liberty\.android\.fantastischmemo/org\.liberty\.android\.fantastischmemopro/g'
