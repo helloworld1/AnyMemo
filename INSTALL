@@ -1,1 +1,4 @@
 Use ant to compile the project
+$ ant debug
+Then use 
+$ adb install bin/AnyMemo-debug.apk

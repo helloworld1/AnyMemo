@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">AnyMemo</string>
-    <string name="app_full_name">AnyMemo\nFree</string>
+    <string name="app_full_name">AnyMemo Free</string>
     <string name="app_version">2.0.0</string>
     <string name="up_one_level">..</string>
     <string name="current_dir">.</string>
@@ -82,13 +82,13 @@
     <string name="downloader_connection_error">Connection error</string>
     <string name="downloader_connection_error_message">Cannot connect to server. Please make sure the internet connection</string>
     <string name="downloader_download_success">Successfully Downloaded</string>
-    <string name="downloader_download_success_message">The database has been stored in: /sdcard/fantastischmemo/</string>
+    <string name="downloader_download_success_message">The database has been stored in: /sdcard/anymemo/</string>
     <string name="downloader_download_fail">Download failed</string>
-    <string name="downloader_download_fail_message">Database with the same name exist in /sdcard/fantastischmemo or connection fail. Please check connection and delete the exist database.</string>
+    <string name="downloader_download_fail_message">Database with the same name exist in /sdcard/anymemo or connection fail. Please check connection and delete the exist database.</string>
     <string name="downloader_download_alert">Download: </string>
     <string name="downloader_download_alert_message">Details: </string>
     <string name="what_is_new">Important Notice</string>
-    <string name="what_is_new_message">The incoming 2.0 version is planned to change name to AnyMemo. If you have any good name suggestion please send email to mrlhwliberty@gmail.com or leave a comment on the Android Market. Thank you.</string>
+    <string name="what_is_new_message">FantastischMemo has been renamed to AnyMemo from version 2.0 and on. Several thing has changed:\n 1. the default path is /sdcard/anymemo now.\n 2. FM DB installer is now obsolete. We are in favor of the built-in downloading function.\n 3. We now use github to host the source code.\n 4. The official website has changed, see "about" through the menu.\n 5. Previous DBs are still working.</string>
 
     
     
