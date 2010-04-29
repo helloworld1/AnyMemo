@@ -10,6 +10,8 @@ import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -22,6 +24,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 import android.content.Context;
+import android.util.Log;
 
 public class XMLConverter extends org.xml.sax.helpers.DefaultHandler{
 	private Context mContext;
@@ -31,10 +34,21 @@ public class XMLConverter extends org.xml.sax.helpers.DefaultHandler{
 	private XMLReader xr;
 	private String fileName;
 	private String filePath;
+    private long timeOfStart = 0L;
 	public Locator mLocator;
 	private List<String> questionList;
 	private List<String> answerList;
 	private List<String> categoryList;
+    private List<String> datelearnList;
+    private List<Integer> intervalList;
+    private List<Double> easinessList;
+    private List<Integer> gradeList;
+    private List<Integer> lapsesList;
+    private List<Integer> acrpList;
+    private List<Integer> rtrpList;
+    private List<Integer> arslList;
+    private List<Integer> rrslList;
+
 	
 	private boolean inItem = false;
 	private boolean inQuestion = false;
@@ -44,7 +58,9 @@ public class XMLConverter extends org.xml.sax.helpers.DefaultHandler{
 	private boolean isReadCharacters = false;
 	
 	private StringBuffer characterBuf;
-	
+	private final long MILLSECS_PER_DAY = 24 * 60 * 60 * 1000;
+    private final String TAG = "org.liberty.android.fantastischmemo.XMLConverter";
+
 	
 	
 	public XMLConverter(Context context, String filePath, String fileName) throws MalformedURLException, SAXException, ParserConfigurationException, IOException{
@@ -55,6 +71,16 @@ public class XMLConverter extends org.xml.sax.helpers.DefaultHandler{
 		questionList = new LinkedList<String>();
 		answerList = new LinkedList<String>();
 		categoryList = new LinkedList<String>();
+        datelearnList = new LinkedList<String>();
+        intervalList = new LinkedList<Integer>();
+        easinessList = new LinkedList<Double>();
+        gradeList = new LinkedList<Integer>();
+        lapsesList = new LinkedList<Integer>();
+        acrpList = new LinkedList<Integer>();
+        rtrpList = new LinkedList<Integer>();
+        arslList = new LinkedList<Integer>();
+        rrslList = new LinkedList<Integer>();
+
 		spf = SAXParserFactory.newInstance();
 		sp = spf.newSAXParser();
 		xr = sp.getXMLReader();
@@ -89,19 +115,82 @@ public class XMLConverter extends org.xml.sax.helpers.DefaultHandler{
 	
 	public void outputDB() throws IOException{
 		DatabaseHelper dbHelper = new DatabaseHelper(mContext, filePath, fileName.replaceAll(".xml", ".db"), 1);
-		dbHelper.createDatabaseFromList(questionList, answerList, categoryList);
+        Log.v(TAG, "Counts: " + questionList.size() + " " + easinessList.size() + " " + acrpList.size() + " " + arslList.size());
+		dbHelper.createDatabaseFromList(questionList, answerList, categoryList, datelearnList, intervalList, easinessList, gradeList, lapsesList, acrpList, rtrpList, arslList, rrslList);
 		dbHelper.close();
 		
 		
 	}
 	
 	public void startElement(String namespaceURI, String localName, String qName, Attributes atts) throws SAXException{
+        if(localName.equals("mnemosyne")){
+            try{
+                timeOfStart = Long.parseLong(atts.getValue("time_of_start"));
+                Log.v(TAG, "Time of start: " + timeOfStart);
+            }
+            catch(Exception e){
+                Log.e(TAG, "parse time_of_start error", e);
+            }
+
+        }
+
 		if(localName.equals("item")){
 			this.inItem = true;
 			String idAttr = atts.getValue("id");
 			if(idAttr.endsWith("inv")){
 				this.isInv = true;
 			}
+            String grAttr = atts.getValue("gr");
+            if(grAttr != null){
+                gradeList.add(Integer.parseInt(grAttr));
+            }
+            String eAttr = atts.getValue("e");
+            if(eAttr != null){
+                easinessList.add(Double.parseDouble(eAttr));
+            }
+            String acrpAttr = atts.getValue("ac_rp");
+            String uAttr = atts.getValue("u");
+            if(acrpAttr != null){
+                int acrp = Integer.parseInt(acrpAttr);
+                if(uAttr != null){
+                    if(Integer.parseInt(uAttr) == 1){
+                        acrp = 0;
+                    }
+                }
+
+                acrpList.add(new Integer(acrp));
+            }
+            String rtrpAttr = atts.getValue("rt_rp");
+            if(rtrpAttr != null){
+                rtrpList.add(Integer.valueOf(rtrpAttr));
+            }
+            String lpsAttr = atts.getValue("lps");
+            if(lpsAttr != null){
+                lapsesList.add(Integer.valueOf(lpsAttr));
+            }
+            String acqrplAttr = atts.getValue("ac_rp_l");
+            if(acqrplAttr != null){
+                arslList.add(Integer.valueOf(acqrplAttr));
+            }
+            String rtrplAttr = atts.getValue("rt_rp_l");
+            if(rtrplAttr != null){
+                rrslList.add(Integer.valueOf(rtrplAttr));
+            }
+            String lrpAttr = atts.getValue("l_rp");
+            if(lrpAttr != null && timeOfStart != 0L){
+                long lrp = Long.parseLong(lrpAttr);
+                Date date = new Date(timeOfStart * 1000L + lrp * MILLSECS_PER_DAY);
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                String strDate = formatter.format(date);
+                datelearnList.add(strDate);
+            }
+
+            String nrpAttr = atts.getValue("n_rp");
+            if(nrpAttr != null && lrpAttr != null){
+                long lrp = Long.parseLong(lrpAttr);
+                long nrp = Long.parseLong(nrpAttr);
+                intervalList.add(new Integer((int)(nrp - lrp)));
+            }
 		}
 		characterBuf = new StringBuffer();
 		if(localName.equals("cat")){

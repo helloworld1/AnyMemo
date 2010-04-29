@@ -24,6 +24,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private final String DB_NAME;
 	private SQLiteDatabase myDatabase;
 	private final Context myContext;
+    private static final String TAG = "org.liberty.android.fantastischmemo.DatabaseHelper";
 		
 	public DatabaseHelper(Context context, String dbPath, String dbName){
 		super(context, dbName, null, 1);
@@ -93,7 +94,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		}
 		
 	}
-	public void createDatabaseFromList(List<String> questionList, List<String> answerList, List<String> categoryList) throws IOException{
+	public void createDatabaseFromList(List<String> questionList, List<String> answerList, List<String> categoryList, List<String> datelearnList, List<Integer> intervalList, List<Double> easinessList, List<Integer> gradeList, List<Integer> lapsesList, List<Integer> acrpList, List<Integer> rtrpList, List<Integer> arslList, List<Integer> rrslList) throws IOException{
 		boolean dbExist = checkDatabase();
 		if(dbExist){
 			throw new IOException("DB already exist");
@@ -111,7 +112,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		ListIterator<String> liq = questionList.listIterator();
 		ListIterator<String> lia = answerList.listIterator();
 		ListIterator<String> lic = categoryList.listIterator();
-		
+		ListIterator<String> liDatelearn = datelearnList.listIterator();
+		ListIterator<Integer> liInterval = intervalList.listIterator();
+		ListIterator<Double> liEasiness = easinessList.listIterator();
+		ListIterator<Integer> liGrade = gradeList.listIterator();
+		ListIterator<Integer> liLapses = lapsesList.listIterator();
+		ListIterator<Integer> liAcrp = acrpList.listIterator();
+		ListIterator<Integer> liRtrp = rtrpList.listIterator();
+		ListIterator<Integer> liArsl = arslList.listIterator();
+		ListIterator<Integer> liRrsl = rrslList.listIterator();
+        String date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse;
+
 		myDatabase.beginTransaction();
 		try{
 			while(liq.hasNext() && lia.hasNext()){
@@ -122,19 +133,42 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				else{
 					category = "";
 				}
+                if(questionList.size() == arslList.size()){
+                    date_learn = liDatelearn.next();
+                    Log.v(TAG, date_learn);
+                    interval = liInterval.next().toString();
+                    grade = liGrade.next().toString();
+                    easiness = liEasiness.next().toString();
+                    acq_reps = liAcrp.next().toString();
+                    ret_reps = liRtrp.next().toString();
+                    lapses = liLapses.next().toString();
+                    acq_reps_since_lapse = liArsl.next().toString();
+                    ret_reps_since_lapse = liRrsl.next().toString();
+                }
+                else{
+                    date_learn = "2010-01-01";
+                    interval = "0";
+                    grade = "0";
+                    easiness = "0.0";
+                    acq_reps = "0";
+                    ret_reps = "0";
+                    lapses = "0";
+                    acq_reps_since_lapse = "0";
+                    ret_reps_since_lapse = "0";
+                }
 				myDatabase.execSQL("INSERT INTO dict_tbl(question,answer,category) VALUES(?, ?, ?)", new String[]{liq.next(), lia.next(), category});
-				
+
+			    myDatabase.execSQL("INSERT INTO learn_tbl(date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", new String[]{date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse});
 				
 			}
-			this.myDatabase.execSQL("DELETE FROM learn_tbl");
-			this.myDatabase.execSQL("INSERT INTO learn_tbl(_id) SELECT _id FROM dict_tbl");
-			this.myDatabase.execSQL("UPDATE learn_tbl SET date_learn = '2010-01-01', interval = 0, grade = 0, easiness = 0.0, acq_reps = 0, ret_reps  = 0, lapses = 0, acq_reps_since_lapse = 0, ret_reps_since_lapse = 0");
-			this.myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('question_locale', 'US')");
-			this.myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('answer_locale', 'US')");
-			this.myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('question_align', 'center')");
-			this.myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('answer_align', 'center')");
-			this.myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('question_font_size', '24')");
-			this.myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('answer_font_size', '24')");
+			//myDatabase.execSQL("DELETE FROM learn_tbl");
+			//myDatabase.execSQL("INSERT INTO learn_tbl(_id) SELECT _id FROM dict_tbl");
+			myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('question_locale', 'US')");
+			myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('answer_locale', 'US')");
+			myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('question_align', 'center')");
+			myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('answer_align', 'center')");
+			myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('question_font_size', '24')");
+			myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('answer_font_size', '24')");
 			
 			myDatabase.setTransactionSuccessful();
 		}
