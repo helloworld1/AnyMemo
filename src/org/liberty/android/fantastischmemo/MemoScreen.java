@@ -34,7 +34,6 @@ import android.util.Log;
 
 
 public class MemoScreen extends Activity{
-	//
 	private ArrayList<Item> learnQueue;
 	private DatabaseHelper dbHelper = null;
 	private String dbName;
@@ -42,6 +41,7 @@ public class MemoScreen extends Activity{
 	private boolean showAnswer;
 	private int newGrade = -1;
 	private Item currentItem;
+    // How many words to learn at a time (rolling)
 	private final int WINDOW_SIZE = 10;
 	private boolean queueEmpty;
 	private int idMaxSeen;
@@ -66,9 +66,6 @@ public class MemoScreen extends Activity{
     private Handler mHandler;
     private AlertDialog.Builder mAlert;
 
-	
-	
-	
 	private int returnValue = 0;
 	private boolean initFeed;
 
@@ -94,11 +91,11 @@ public class MemoScreen extends Activity{
 		
             Thread loadingThread = new Thread(){
                 public void run(){
+                    // Pre load cards (The number is specified in Window size varable)
                     prepare();
                     mHandler.post(new Runnable(){
                         public void run(){
                             mProgressDialog.dismiss();
-                            //updateMemoScreen();
                         }
                     });
                 }
@@ -118,7 +115,6 @@ public class MemoScreen extends Activity{
 			returnValue = 0;
 		}
 		
-		//this.updateMemoScreen();
 	}
 	
 	public void onDestroy(){
@@ -130,7 +126,6 @@ public class MemoScreen extends Activity{
 		if(answerTTS != null){
 			answerTTS.shutdown();
 		}
-		//Debug.stopMethodTracing();
 	}
 	
 	
@@ -241,9 +236,11 @@ public class MemoScreen extends Activity{
     public void onActivityResult(int requestCode, int resultCode, Intent data){
     	super.onActivityResult(requestCode, resultCode, data);
     	switch(requestCode){
+        
     	
     	case 1:
     	case 2:
+            // Determine whether to update the screen
     		if(resultCode == Activity.RESULT_OK){
     			returnValue = 1;
     		}
@@ -358,6 +355,7 @@ public class MemoScreen extends Activity{
 			
 		}
 		else{
+            // When feeding is done, update the screen
 
 			
             mHandler.post(new Runnable(){
@@ -422,11 +420,11 @@ public class MemoScreen extends Activity{
 			
 
 	private void updateMemoScreen() {
-		// update the main screen according to the shcurrentItem
+		// update the main screen according to the currentItem
 		
 		OnClickListener backButtonListener = new OnClickListener() {
 			// Finish the current activity and go back to the last activity.
-			// It should be the main screen.
+			// It should be the open screen.
 			public void onClick(DialogInterface arg0, int arg1) {
 				finish();
 			}
@@ -590,80 +588,78 @@ public class MemoScreen extends Activity{
 	private void buttonBinding() {
 		// This function will bind the button event and show/hide button
 		// according to the showAnswer varible.
-		Button btn0 = (Button) findViewById(R.id.But00);
-		Button btn1 = (Button) findViewById(R.id.But01);
-		Button btn2 = (Button) findViewById(R.id.But02);
-		Button btn3 = (Button) findViewById(R.id.But03);
-		Button btn4 = (Button) findViewById(R.id.But04);
-		Button btn5 = (Button) findViewById(R.id.But05);
+		Button[] btns = {(Button) findViewById(R.id.But00), (Button) findViewById(R.id.But01), (Button) findViewById(R.id.But02), (Button) findViewById(R.id.But03), (Button) findViewById(R.id.But04), (Button) findViewById(R.id.But05)};
 		TextView answer = (TextView) findViewById(R.id.answer);
 		if (showAnswer == false) {
-			btn0.setVisibility(View.INVISIBLE);
-			btn1.setVisibility(View.INVISIBLE);
-			btn2.setVisibility(View.INVISIBLE);
-			btn3.setVisibility(View.INVISIBLE);
-			btn4.setVisibility(View.INVISIBLE);
-			btn5.setVisibility(View.INVISIBLE);
+            for(Button btn : btns){
+                btn.setVisibility(View.INVISIBLE);
+            }
 			answer.setText(new StringBuilder().append(this.getString(R.string.memo_show_answer)));
 			answer.setGravity(Gravity.CENTER);
 			LinearLayout layoutAnswer = (LinearLayout)findViewById(R.id.layout_answer);
 			layoutAnswer.setGravity(Gravity.CENTER);
 
 		} else {
-			View.OnClickListener btn0Listener = new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					newGrade = 0;
-					clickHandling();
-				}
-			};
-			View.OnClickListener btn1Listener = new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					newGrade = 1;
-					clickHandling();
-				}
-			};
-			View.OnClickListener btn2Listener = new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					newGrade = 2;
-					clickHandling();
-				}
-			};
-			View.OnClickListener btn3Listener = new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					newGrade = 3;
-					clickHandling();
-				}
-			};
-			View.OnClickListener btn4Listener = new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					newGrade = 4;
-					clickHandling();
-				}
-			};
-			View.OnClickListener btn5Listener = new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					newGrade = 5;
-					clickHandling();
-				}
-			};
-			btn0.setVisibility(View.VISIBLE);
-			btn1.setVisibility(View.VISIBLE);
-			btn2.setVisibility(View.VISIBLE);
-			btn3.setVisibility(View.VISIBLE);
-			btn4.setVisibility(View.VISIBLE);
-			btn5.setVisibility(View.VISIBLE);
-			btn0.setOnClickListener(btn0Listener);
-			btn1.setOnClickListener(btn1Listener);
-			btn2.setOnClickListener(btn2Listener);
-			btn3.setOnClickListener(btn3Listener);
-			btn4.setOnClickListener(btn4Listener);
-			btn5.setOnClickListener(btn5Listener);
+            btns[0].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    newGrade = 0;
+                    clickHandling();
+                }
+            });
+            btns[1].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    newGrade = 1;
+                    clickHandling();
+                }
+            });
+            btns[2].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    newGrade = 2;
+                    clickHandling();
+                }
+            });
+            btns[3].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    newGrade = 3;
+                    clickHandling();
+                }
+            });
+            btns[4].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    newGrade = 4;
+                    clickHandling();
+                }
+            });
+            btns[5].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    newGrade = 5;
+                    clickHandling();
+                }
+            });
+            for(Button btn : btns){
+			    btn.setVisibility(View.VISIBLE);
+            }
+            String[] btnsText = {getString(R.string.memo_btn0_text),getString(R.string.memo_btn1_text),getString(R.string.memo_btn2_text),getString(R.string.memo_btn3_text),getString(R.string.memo_btn4_text),getString(R.string.memo_btn5_text)};
+            for(int i = 0; i < btns.length; i++){
+                Item tmpItem = null;
+                try{
+                    tmpItem = (Item)currentItem.clone();
+                }
+                catch(Exception e){
+                    Log.e(TAG, "Error cloning", e);
+                }
+                if(tmpItem != null){
+                    tmpItem.processAnswer(i);
+                    //btns[i].setText(btnsText[i] + "+" + tmpItem.getInterval());
+                    btns[i].setText(btnsText[i]);
+                }
+            }
 
 		}
 	}

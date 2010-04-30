@@ -30,6 +30,12 @@
     <string name="memo_show_answer">\?\nShow Answer</string>
     <string name="memo_no_item_title">No Item</string>
     <string name="memo_no_item_message">There is no item to learn for now.</string>
+    <string name="memo_btn0_text">Forget</string>
+    <string name="memo_btn1_text">Forget</string>
+    <string name="memo_btn2_text">Insane</string>
+    <string name="memo_btn3_text">Hard</string>
+    <string name="memo_btn4_text">Good</string>
+    <string name="memo_btn5_text">Bright</string>
     <string name="memo_current_id">Current ID: </string>
     <string name="global_settings">Global Settings</string>
     <string name="settings_question_font_size">Question Font Size</string>

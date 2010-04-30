@@ -178,7 +178,7 @@ public class XMLConverter extends org.xml.sax.helpers.DefaultHandler{
             }
             String lrpAttr = atts.getValue("l_rp");
             if(lrpAttr != null && timeOfStart != 0L){
-                long lrp = Long.parseLong(lrpAttr);
+                long lrp = Math.round(Double.parseDouble(lrpAttr));
                 Date date = new Date(timeOfStart * 1000L + lrp * MILLSECS_PER_DAY);
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                 String strDate = formatter.format(date);
@@ -187,8 +187,8 @@ public class XMLConverter extends org.xml.sax.helpers.DefaultHandler{
 
             String nrpAttr = atts.getValue("n_rp");
             if(nrpAttr != null && lrpAttr != null){
-                long lrp = Long.parseLong(lrpAttr);
-                long nrp = Long.parseLong(nrpAttr);
+                long lrp = Math.round(Double.parseDouble(lrpAttr));
+                long nrp = Math.round(Double.parseDouble(nrpAttr));
                 intervalList.add(new Integer((int)(nrp - lrp)));
             }
 		}

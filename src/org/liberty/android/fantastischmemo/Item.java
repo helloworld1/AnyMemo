@@ -11,7 +11,7 @@ import java.util.Set;
 
 import android.util.Log;
 
-public final class Item {
+public final class Item implements Cloneable{
 	private int _id;
 	private String date_learn;
 	private int interval;
@@ -48,7 +48,11 @@ public final class Item {
 	public String getAnswer(){
 		return this.answer;
 	}
-	
+    
+    public int getInterval(){
+        return this.interval;
+    }
+
 	public String getNote(){
 		return this.note;
 	}
@@ -59,6 +63,26 @@ public final class Item {
 	public boolean isNew(){
 		return acq_reps == 0 ? true : false;
 	}
+
+    public Object clone() throws CloneNotSupportedException{
+        Item itemClone = (Item)super.clone();
+        itemClone._id = this._id;
+        itemClone.date_learn = this.date_learn;
+        itemClone.interval = this.interval;
+        itemClone.grade = this.grade;
+        itemClone.easiness = this.easiness;
+        itemClone.acq_reps = this.acq_reps;
+        itemClone.ret_reps = this.ret_reps;
+        itemClone.lapses = this.lapses;
+        itemClone.acq_reps_since_lapse = this.acq_reps_since_lapse;
+        itemClone.ret_reps_since_lapse = this.ret_reps_since_lapse;
+        itemClone.question = this.question;
+        itemClone.answer = this.answer;
+        itemClone.note = this.note;
+
+        return itemClone;
+
+    }
 	
 	public String[] getLearningData(){
 		// the string array is in the sequence that is required in the DatabaseHelper.updateItem
@@ -131,7 +155,7 @@ public final class Item {
 			noise = randomNumber(0, 0);
 		}
 		else if(interval <= 10){
-			noise = randomNumber(-1, 1);
+			noise = randomNumber(0, 1);
 		}
 		else if(interval <= 60){
 			noise = randomNumber(-3, 3);
