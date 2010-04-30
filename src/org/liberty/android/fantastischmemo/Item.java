@@ -25,6 +25,7 @@ public final class Item implements Cloneable{
 	private String question;
 	private String answer;
 	private String note;
+    public final static String TAG = "org.liberty.android.fantastischmemo.Item";
 	
 	public Item(){
 		this._id = 0;
@@ -147,15 +148,16 @@ public final class Item implements Cloneable{
 		return min + (new Random()).nextInt(max - min + 1);
 	}
 	private int calculateIntervalNoise(int interval){
+        // Noise value based on Mnymosyne
 		int noise;
 		if(interval == 0){
 			noise = 0;
 		}
 		else if(interval == 1){
-			noise = randomNumber(0, 0);
+			noise = randomNumber(0, 1);
 		}
 		else if(interval <= 10){
-			noise = randomNumber(0, 1);
+			noise = randomNumber(-1, 1);
 		}
 		else if(interval <= 60){
 			noise = randomNumber(-3, 3);
@@ -190,6 +192,7 @@ public final class Item implements Cloneable{
 	}
 	
 	private int diffDate(String date1, String date2){
+        // The days betwween to date of date1 and date2 in format below.
 		final long MILLSECS_PER_DAY = 24 * 60 * 60 * 1000;
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		Date d1, d2;
@@ -223,13 +226,26 @@ public final class Item implements Cloneable{
 		
 	}
 
-	public boolean processAnswer(int newGrade){
+	public int processAnswer(int newGrade, boolean dryRun){
+        // dryRun will leave the original one intact
+        // and return the interval
+        // if dryRun is false, the return value only show success or not
 		Date currentDate = new Date();
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		String now = formatter.format(currentDate);
 		int actualInterval = diffDate(now, this.date_learn);
 		int scheduleInterval = this.interval;
 		int newInterval = 0;
+        Item cloneItem = null;
+        if(dryRun){
+            try{
+                cloneItem = (Item)this.clone();
+            }
+            catch(Exception e){
+                Log.e(TAG, "Error cloning", e);
+                cloneItem = null;
+            }
+        }
 		boolean returnValue = false;
 		if(actualInterval == 0){
 			actualInterval = 1;
@@ -307,11 +323,34 @@ public final class Item implements Cloneable{
 				Log.e("Interval error", "Interval is 0 in wrong place");
 			}
 		}
-		int noise = calculateIntervalNoise(newInterval);
-		this.interval = newInterval + noise;
-		this.grade = newGrade;
-		this.date_learn = now;
-		return returnValue;
+        if(dryRun == true){
+            // dryRun does not include the noise in the return value!!
+            if(cloneItem != null){
+                this.interval = cloneItem.interval;
+                this._id = cloneItem._id;
+                this.date_learn = cloneItem.date_learn;
+                this.interval = cloneItem.interval;
+                this.grade = cloneItem.grade;
+                this.easiness = cloneItem.easiness;
+                this.acq_reps = cloneItem.acq_reps;
+                this.ret_reps = cloneItem.ret_reps;
+                this.lapses = cloneItem.lapses;
+                this.acq_reps_since_lapse = cloneItem.acq_reps_since_lapse;
+                this.ret_reps_since_lapse = cloneItem.ret_reps_since_lapse;
+                this.question = cloneItem.question;
+                this.answer = cloneItem.answer;
+                this.note = cloneItem.note;
+            }
+            return newInterval;
+        }
+        else{
+		    int noise = calculateIntervalNoise(newInterval);
+            this.interval = newInterval + noise;
+            this.grade = newGrade;
+            this.date_learn = now;
+            // 1 means success ,0 means fail
+            return returnValue ? 1 : 0;
+        }
 	}
 	
 }

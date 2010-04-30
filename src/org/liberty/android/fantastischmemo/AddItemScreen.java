@@ -7,10 +7,14 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 public class AddItemScreen extends Activity implements OnClickListener{
 	private EditText entryId;
@@ -29,6 +33,7 @@ public class AddItemScreen extends Activity implements OnClickListener{
     private Handler mHandler;
     private Context mContext;
     private ProgressDialog mProgressDialog;
+    private static final String TAG = "org.liberty.android.fantastischmemo.AddItemScreen";
 
     /* This is used for multi threading */
     private String tmpId;
@@ -197,5 +202,36 @@ public class AddItemScreen extends Activity implements OnClickListener{
 		}
 		
 	}
+    @Override
+	public boolean onCreateOptionsMenu(Menu menu){
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.add_screen_menu, menu);
+		return true;
+	}
+	
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	    case R.id.add_menudetail:
+            if(openId >= 0 && openId < dbHelper.getNewId()){
+                Intent myIntent1 = new Intent();
+                myIntent1.setClass(this, DetailScreen.class);
+                myIntent1.putExtra("dbname", this.dbName);
+                myIntent1.putExtra("dbpath", this.dbPath);
+                myIntent1.putExtra("itemid", openId);
+                startActivity(myIntent1);
+            }
+    		return true;
+	    case R.id.add_menusettings:
+    		Intent myIntent = new Intent();
+    		myIntent.setClass(this, SettingsScreen.class);
+    		myIntent.putExtra("dbname", this.dbName);
+    		myIntent.putExtra("dbpath", this.dbPath);
+            startActivity(myIntent);
+    		//finish();
+    		return true;
+        }
+        return false;
+    }
+            
 
 }

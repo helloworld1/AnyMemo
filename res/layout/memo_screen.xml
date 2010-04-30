@@ -44,29 +44,29 @@
 		<LinearLayout android:orientation="horizontal"
 			android:layout_width="fill_parent" 
             android:layout_height="fill_parent"
-			android:layout_weight="1.5">
+			android:layout_weight="1.45">
 			<Button android:id="@+id/But00" android:layout_width="fill_parent"
 				android:layout_height="wrap_content" android:layout_marginLeft="10dip"
-				android:text="0 Forget" android:layout_weight="1" />
+				android:text="0 Forget\n+0" android:layout_weight="1" />
 			<Button android:id="@+id/But01" android:layout_width="fill_parent"
 				android:layout_height="wrap_content" android:layout_marginLeft="10dip"
-				android:text="1 Forget" android:layout_weight="1"/>
+				android:text="1 Forget\n+0" android:layout_weight="1"/>
 			<Button android:id="@+id/But02" android:layout_width="fill_parent" 
 				android:layout_height="wrap_content" android:layout_marginLeft="10dip"
-				android:text="2 Insane" android:layout_weight="1"/>
+				android:text="2 Insane\n+1" android:layout_weight="1"/>
 		</LinearLayout>
 		<LinearLayout android:orientation="horizontal"
 			android:layout_width="fill_parent" android:layout_height="fill_parent"
-			android:layout_weight="1.5">
+			android:layout_weight="1.45">
 			<Button android:id="@+id/But03" android:layout_width="fill_parent"
 				android:layout_height="wrap_content" android:layout_marginLeft="10dip"
-				android:text="3 Hard" android:layout_weight="1"/>
+				android:text="3 Hard\n+3" android:layout_weight="1"/>
 			<Button android:id="@+id/But04" android:layout_width="fill_parent"
 				android:layout_height="wrap_content" android:layout_marginLeft="10dip"
-				android:text="4 Good" android:layout_weight="1"/>
+				android:text="4 Good\n+4" android:layout_weight="1"/>
 			<Button android:id="@+id/But05" android:layout_width="fill_parent"
 				android:layout_height="wrap_content" android:layout_marginLeft="10dip"
-				android:text="5 Bright" android:layout_weight="1"/>
+				android:text="5 Bright\n+5" android:layout_weight="1"/>
 		</LinearLayout>
 		</LinearLayout>
 

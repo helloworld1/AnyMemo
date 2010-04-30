@@ -33,13 +33,12 @@ import android.widget.LinearLayout.LayoutParams;
 import android.util.Log;
 
 
-public class MemoScreen extends Activity{
+public class MemoScreen extends Activity implements View.OnClickListener{
 	private ArrayList<Item> learnQueue;
 	private DatabaseHelper dbHelper = null;
 	private String dbName;
 	private String dbPath;
 	private boolean showAnswer;
-	private int newGrade = -1;
 	private Item currentItem;
     // How many words to learn at a time (rolling)
 	private final int WINDOW_SIZE = 10;
@@ -65,6 +64,7 @@ public class MemoScreen extends Activity{
     private Context mContext;
     private Handler mHandler;
     private AlertDialog.Builder mAlert;
+	private Button[] btns = {null, null, null, null, null, null}; 
 
 	private int returnValue = 0;
 	private boolean initFeed;
@@ -84,6 +84,15 @@ public class MemoScreen extends Activity{
 		
         mHandler = new Handler();
         mContext = this;
+        btns[0] = (Button) findViewById(R.id.But00);
+        btns[1] = (Button) findViewById(R.id.But01);
+        btns[2] = (Button) findViewById(R.id.But02);
+        btns[3] = (Button) findViewById(R.id.But03);
+        btns[4] = (Button) findViewById(R.id.But04);
+        btns[5] = (Button) findViewById(R.id.But05);
+        for(Button btn : btns){
+            btn.setOnClickListener(this);
+        }
 
 
         mProgressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_database), true);
@@ -259,7 +268,6 @@ public class MemoScreen extends Activity{
             dbHelper = new DatabaseHelper(mContext, dbPath, dbName);
         }
 		learnQueue = new ArrayList<Item>();
-		newGrade = -1;
 		queueEmpty = true;
 		idMaxSeen = -1;
 		scheduledItemCount = dbHelper.getScheduledCount();
@@ -548,47 +556,53 @@ public class MemoScreen extends Activity{
 
 	}
 
-	private void clickHandling() {
-		
-		// When user click on the button of grade, it will update the item information
-		// according to the grade.
-		// If the return value is success, the user will not need to see this item today.
-		// If the return value is failure, the item will be appended to the tail of the queue.
+    @Override
+    public void onClick(View v){
+        for(int i = 0; i < btns.length; i++){
+            if(v == btns[i]){
+                // i is also the grade for the button
+                int grade = i;
+                // When user click on the button of grade, it will update the item information
+                // according to the grade.
+                // If the return value is success, the user will not need to see this item today.
+                // If the return value is failure, the item will be appended to the tail of the queue.
 
-		boolean scheduled = currentItem.isScheduled();
-		boolean success = currentItem.processAnswer(newGrade);
-		if (success == true) {
-			learnQueue.remove(0);
-			if(queueEmpty != true){
-				dbHelper.updateItem(currentItem);
-			}
-			if(scheduled){
-				this.scheduledItemCount -= 1;
-			}
-			else{
-				this.newItemCount -= 1;
-			}
-		} else {
-			learnQueue.remove(0);
-			learnQueue.add(currentItem);
-			dbHelper.updateItem(currentItem);
-			if(!scheduled){
-				this.scheduledItemCount += 1;
-				this.newItemCount -= 1;
-			}
-			
-		}
+                boolean scheduled = currentItem.isScheduled();
+                boolean success = currentItem.processAnswer(grade, false) > 0 ? true : false;
+                if (success == true) {
+                    learnQueue.remove(0);
+                    if(queueEmpty != true){
+                        dbHelper.updateItem(currentItem);
+                    }
+                    if(scheduled){
+                        this.scheduledItemCount -= 1;
+                    }
+                    else{
+                        this.newItemCount -= 1;
+                    }
+                } else {
+                    learnQueue.remove(0);
+                    learnQueue.add(currentItem);
+                    dbHelper.updateItem(currentItem);
+                    if(!scheduled){
+                        this.scheduledItemCount += 1;
+                        this.newItemCount -= 1;
+                    }
+                    
+                }
 
-		this.showAnswer = false;
-		// Now the currentItem is the next item, so we need to udpate the screen.
-		
-		this.updateMemoScreen();
-	}
+                this.showAnswer = false;
+                // Now the currentItem is the next item, so we need to udpate the screen.
+                this.updateMemoScreen();
+                break;
+            }
+        }
+
+    }
 
 	private void buttonBinding() {
 		// This function will bind the button event and show/hide button
 		// according to the showAnswer varible.
-		Button[] btns = {(Button) findViewById(R.id.But00), (Button) findViewById(R.id.But01), (Button) findViewById(R.id.But02), (Button) findViewById(R.id.But03), (Button) findViewById(R.id.But04), (Button) findViewById(R.id.But05)};
 		TextView answer = (TextView) findViewById(R.id.answer);
 		if (showAnswer == false) {
             for(Button btn : btns){
@@ -600,68 +614,15 @@ public class MemoScreen extends Activity{
 			layoutAnswer.setGravity(Gravity.CENTER);
 
 		} else {
-            btns[0].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    newGrade = 0;
-                    clickHandling();
-                }
-            });
-            btns[1].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    newGrade = 1;
-                    clickHandling();
-                }
-            });
-            btns[2].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    newGrade = 2;
-                    clickHandling();
-                }
-            });
-            btns[3].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    newGrade = 3;
-                    clickHandling();
-                }
-            });
-            btns[4].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    newGrade = 4;
-                    clickHandling();
-                }
-            });
-            btns[5].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    newGrade = 5;
-                    clickHandling();
-                }
-            });
+            // Show all buttons when user has clicked the screen.
             for(Button btn : btns){
 			    btn.setVisibility(View.VISIBLE);
             }
             String[] btnsText = {getString(R.string.memo_btn0_text),getString(R.string.memo_btn1_text),getString(R.string.memo_btn2_text),getString(R.string.memo_btn3_text),getString(R.string.memo_btn4_text),getString(R.string.memo_btn5_text)};
             for(int i = 0; i < btns.length; i++){
-                Item tmpItem = null;
-                try{
-                    tmpItem = (Item)currentItem.clone();
-                }
-                catch(Exception e){
-                    Log.e(TAG, "Error cloning", e);
-                }
-                if(tmpItem != null){
-                    tmpItem.processAnswer(i);
-                    //btns[i].setText(btnsText[i] + "+" + tmpItem.getInterval());
-                    btns[i].setText(btnsText[i]);
-                }
+                // This part will display the days to review
+                    btns[i].setText(btnsText[i] + "\n+" + currentItem.processAnswer(i, true));
             }
-
 		}
 	}
-
 }
