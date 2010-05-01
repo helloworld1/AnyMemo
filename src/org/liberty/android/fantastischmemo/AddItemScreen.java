@@ -212,12 +212,21 @@ public class AddItemScreen extends Activity implements OnClickListener{
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 	    case R.id.add_menudetail:
-            if(openId >= 0 && openId < dbHelper.getNewId()){
+            int intId = -1;
+            String myid = entryId.getText().toString();
+            try{
+                intId = Integer.parseInt(myid);
+            }
+            catch(NumberFormatException e){
+                intId = -1;
+            }
+
+            if(intId >= 0 && intId < dbHelper.getNewId()){
                 Intent myIntent1 = new Intent();
                 myIntent1.setClass(this, DetailScreen.class);
                 myIntent1.putExtra("dbname", this.dbName);
                 myIntent1.putExtra("dbpath", this.dbPath);
-                myIntent1.putExtra("itemid", openId);
+                myIntent1.putExtra("itemid", intId);
                 startActivity(myIntent1);
             }
     		return true;
