@@ -49,7 +49,7 @@ class DBExporter{
         }
         int count = 0;
         long timeOfStart = 0L;
-        String id, u, gr, e, ac_rp, rt_rp, lps, ac_rp_l, rt_rp_l, l_rp, n_rp;
+        String id, u, gr, e, ac_rp, rt_rp, lps, ac_rp_l, rt_rp_l, l_rp, n_rp, question,  answer;
         // Now write the xml to the file
         for(Item item : itemList){
             // At the first item, we write all metadata
@@ -79,6 +79,7 @@ class DBExporter{
             else{
                 u = "0";
             }
+            // Add 1 here to avoid rounding problem
             long duration = (item.getDatelearnUnix() - timeOfStart) / SEC_PER_DAY + 1;
 
 
@@ -86,10 +87,19 @@ class DBExporter{
             l_rp = Long.toString(duration);
             n_rp = Long.toString(interval + duration);
 
+            // Replace the illegal symbols from the question and answer
+            question = item.getQuestion();
+            answer = item.getAnswer();
+            question = question.replaceAll("<", "&lt;");
+            question = question.replaceAll(">", "&gt;");
+            answer = answer.replaceAll("<", "&lt;");
+            answer = answer.replaceAll(">", "&gt;");
+
+
             outxml.print("<item id=\"" + id + "\" u=\"" + u +"\" gr=\"" + gr +"\" e=\"" + e + "\" ac_rp=\"" + ac_rp + "\" rt_rp=\"" + rt_rp + "\" lps=\"" + lps + "\" ac_rp_l=\"" + ac_rp_l + "\" rt_rp_l=\"" + rt_rp_l + "\" l_rp=\"" + l_rp + "\" n_rp=\"" + n_rp + "\">\n");
             outxml.print("<cat>" + dbName + "</cat>\n");
-            outxml.print("<Q>" + item.getQuestion() + "</Q>\n");
-            outxml.print("<A>" + item.getAnswer() + "</A>\n");
+            outxml.print("<Q>" + question + "</Q>\n");
+            outxml.print("<A>" + answer + "</A>\n");
             outxml.print("</item>\n");
             if(outxml.checkError()){
                 throw new IOException("Error writing xml on id: " + id);
