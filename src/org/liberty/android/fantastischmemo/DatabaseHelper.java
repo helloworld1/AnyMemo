@@ -315,7 +315,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				hm.put("grade", Integer.toString(result.getInt(result
 						.getColumnIndex("grade"))));
 				hm.put("easiness", Double.toString(result.getDouble(result
-						.getColumnIndex("grade"))));
+						.getColumnIndex("easiness"))));
 				hm.put("acq_reps", Integer.toString(result.getInt(result
 						.getColumnIndex("acq_reps"))));
 				hm.put("ret_reps", Integer.toString(result.getInt(result
@@ -366,7 +366,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 					hm.put("grade", Integer.toString(result.getInt(result
 							.getColumnIndex("grade"))));
 					hm.put("easiness", Double.toString(result.getDouble(result
-							.getColumnIndex("grade"))));
+							.getColumnIndex("easiness"))));
 					hm.put("acq_reps", Integer.toString(result.getInt(result
 							.getColumnIndex("acq_reps"))));
 					hm.put("ret_reps", Integer.toString(result.getInt(result
