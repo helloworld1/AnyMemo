@@ -33,7 +33,7 @@ public final class Item implements Cloneable{
 		this.date_learn = "2010-01-01";
 		this.interval = 0;
 		this.grade = 0;
-		this.easiness = 0.0;
+		this.easiness = 2.5;
 		this.acq_reps = 0;
 		this.ret_reps = 0;
 		this.lapses = 0;
@@ -260,8 +260,12 @@ public final class Item implements Cloneable{
 		if(actualInterval == 0){
 			actualInterval = 1;
 		}
+        // new item (unseen = 1 in mnemosyne)
 		if(this.acq_reps == 0){
 			this.acq_reps = 1;
+            // 2.5 is 40% difficult.
+            // Taken from Mnemosyne
+            this.easiness = 2.5;
 			this.acq_reps_since_lapse = 1;
 			newInterval = calculateInitialInterval(newGrade);
 			if(newGrade >= 2){

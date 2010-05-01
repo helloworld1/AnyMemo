@@ -80,7 +80,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		try{
 			this.myDatabase.execSQL("DELETE FROM learn_tbl");
 			this.myDatabase.execSQL("INSERT INTO learn_tbl(_id) SELECT _id FROM dict_tbl");
-			this.myDatabase.execSQL("UPDATE learn_tbl SET date_learn = '2010-01-01', interval = 0, grade = 0, easiness = 0.0, acq_reps = 0, ret_reps  = 0, lapses = 0, acq_reps_since_lapse = 0, ret_reps_since_lapse = 0");
+			this.myDatabase.execSQL("UPDATE learn_tbl SET date_learn = '2010-01-01', interval = 0, grade = 0, easiness = 2.5, acq_reps = 0, ret_reps  = 0, lapses = 0, acq_reps_since_lapse = 0, ret_reps_since_lapse = 0");
 			this.myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('question_locale', 'US')");
 			this.myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('answer_locale', 'US')");
 			this.myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('question_align', 'center')");
@@ -149,7 +149,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     date_learn = "2010-01-01";
                     interval = "0";
                     grade = "0";
-                    easiness = "0.0";
+                    easiness = "2.5";
                     acq_reps = "0";
                     ret_reps = "0";
                     lapses = "0";
@@ -239,7 +239,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		if(count_learn != count_dict){
 			this.myDatabase.execSQL("DELETE FROM learn_tbl");
 			this.myDatabase.execSQL("INSERT INTO learn_tbl(_id) SELECT _id FROM dict_tbl");
-			this.myDatabase.execSQL("UPDATE learn_tbl SET date_learn = '2010-01-01', interval = 0, grade = 0, easiness = 0.0, acq_reps = 0, ret_reps  = 0, lapses = 0, acq_reps_since_lapse = 0, ret_reps_since_lapse = 0");
+			this.myDatabase.execSQL("UPDATE learn_tbl SET date_learn = '2010-01-01', interval = 0, grade = 0, easiness = 2.5, acq_reps = 0, ret_reps  = 0, lapses = 0, acq_reps_since_lapse = 0, ret_reps_since_lapse = 0");
 		}
 		
 		
@@ -448,7 +448,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		hm.put("date_learn", result.getString(result.getColumnIndex("date_learn")));
 		hm.put("interval", Integer.toString(result.getInt(result.getColumnIndex("interval"))));
 		hm.put("grade", Integer.toString(result.getInt(result.getColumnIndex("grade"))));
-		hm.put("easiness", Double.toString(result.getDouble(result.getColumnIndex("grade"))));
+		hm.put("easiness", Double.toString(result.getDouble(result.getColumnIndex("easiness"))));
 		hm.put("acq_reps", Integer.toString(result.getInt(result.getColumnIndex("acq_reps"))));
 		hm.put("ret_reps", Integer.toString(result.getInt(result.getColumnIndex("ret_reps"))));
 		hm.put("lapses", Integer.toString(result.getInt(result.getColumnIndex("lapses"))));
@@ -545,7 +545,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	}
 	
 	public void wipeLearnData(){
-		this.myDatabase.execSQL("UPDATE learn_tbl SET date_learn = '2010-01-01', interval = 0, grade = 0, easiness = 0.0, acq_reps = 0, ret_reps  = 0, lapses = 0, acq_reps_since_lapse = 0, ret_reps_since_lapse = 0");
+		this.myDatabase.execSQL("UPDATE learn_tbl SET date_learn = '2010-01-01', interval = 0, grade = 0, easiness = 2.5, acq_reps = 0, ret_reps  = 0, lapses = 0, acq_reps_since_lapse = 0, ret_reps_since_lapse = 0");
 	}
 
 	
@@ -564,7 +564,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	
 	public void addOrReplaceItem(Item item){
 		this.myDatabase.execSQL("REPLACE INTO dict_tbl(_id, question, answer) VALUES(?, ?, ?)", new String[]{"" + item.getId(), item.getQuestion(), item.getAnswer()});
-		this.myDatabase.execSQL("REPLACE INTO learn_tbl(_id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse) VALUES (?, '2010-01-01', 0, 0, 0.0, 0, 0, 0, 0, 0)", new String[]{"" + item.getId()});
+		this.myDatabase.execSQL("REPLACE INTO learn_tbl(_id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse) VALUES (?, '2010-01-01', 0, 0, 2.5, 0, 0, 0, 0, 0)", new String[]{"" + item.getId()});
 		
 	}
 	
