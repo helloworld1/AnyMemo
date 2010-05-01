@@ -1,6 +1,7 @@
 package org.liberty.android.fantastischmemo;
 
 import java.text.SimpleDateFormat;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -53,6 +54,15 @@ public final class Item implements Cloneable{
     public int getInterval(){
         return this.interval;
     }
+
+    public long getDatelearnUnix() throws ParseException{
+        // Get the datelearn in unix time * 1000
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = formatter.parse(this.date_learn);
+        return date.getTime() / 1000;
+    }
+
+
 
 	public String getNote(){
 		return this.note;

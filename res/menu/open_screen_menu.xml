@@ -4,6 +4,9 @@
   <item android:id="@+id/openmenu_clear"
   		android:icon="@android:drawable/ic_menu_delete"
   		android:title="@string/clear_recent_list"/>
+  <item android:id="@+id/openmenu_export_xml"
+  		android:icon="@android:drawable/ic_menu_share"
+  		android:title="@string/export_xml"/>
   	
   
 </menu>

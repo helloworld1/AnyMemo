@@ -265,6 +265,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		// flag = 0 means no condition
 		// flag = 1 means new items, the items user have never seen
 		// flag = 2 means item due, they need to be reviewed.
+        // windowSize = -1 means all items from id and on
 
 		HashMap<String, String> hm = new HashMap<String, String>();
 		String acqQuery;
@@ -280,9 +281,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		// null, null, "_id");
 		// result = myDatabase.query(true, "dict_tbl", null, querySelection,
 		// null, null, null, null, "1");
-		retQuery = query
-				+ "AND round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval >= 0 AND acq_reps > 0 LIMIT "
-				+ windowSize;
+        if(windowSize >= 0){
+            retQuery = query
+                    + "AND round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval >= 0 AND acq_reps > 0 LIMIT "
+                    + windowSize;
+        }
+        else{
+            retQuery = query;
+        }
+
 
 		try {
 			retResult = myDatabase.rawQuery(retQuery, null);

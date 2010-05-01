@@ -53,6 +53,7 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
 
     private final int ACTIVITY_DB = 1;
     private final int ACTIVITY_XML = 2;
+    private final int ACTIVITY_EXPORT_XML = 3;
 
 
 	private List<HashMap<String, String>> recentList;
@@ -195,15 +196,15 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
                         try{
                             conv = new XMLConverter(mContext, xmlPath, xmlName);
                             conv.outputDB();
-                            mAlert.setTitle( "Success" );
-                            mAlert.setMessage( "The XML is successfully converted and stored as" + xmlPath + "/" + xmlName.replaceAll(".xml", ".db"));
+                            mAlert.setTitle(getString(R.string.success));
+                            mAlert.setMessage(getString(R.string.success_import)+ " " + xmlPath + "/" + xmlName.replaceAll(".xml", ".db"));
                             
                             //conv.outputTabFile();
                         }
                         catch(Exception e){
                             Log.e("XMLError",e.toString());
-                            mAlert.setTitle("Failed");
-                            mAlert.setMessage("Fail to convert " + xmlPath + "/" + xmlName + " Exception: " + e.toString());
+                            mAlert.setTitle(getString(R.string.fail));
+                            mAlert.setMessage(getString(R.string.fail_import) + " " + xmlPath + "/" + xmlName + " Exception: " + e.toString());
                         }
                         mHandler.post(new Runnable(){
                             @Override
@@ -218,6 +219,44 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
 
     		}
     		break;
+    	case ACTIVITY_EXPORT_XML:
+    		if(resultCode == Activity.RESULT_OK){
+                returnValue = ACTIVITY_XML;
+
+                mProgressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_export), true);
+                tmpIntent = data;
+                Thread convertThread = new Thread(){
+                    @Override
+                    public void run(){
+                        String dbPath = tmpIntent.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
+                        String dbName = tmpIntent.getStringExtra("org.liberty.android.fantastischmemo.dbName");
+                        mAlert = new AlertDialog.Builder(mContext);
+                        mAlert.setPositiveButton( "OK", null );
+                        try{
+                            DBExporter exporter = new DBExporter(mContext, dbPath, dbName);
+                            exporter.writeXML();
+                            mAlert.setTitle(getString(R.string.success));
+                            mAlert.setMessage(getString(R.string.success_export)+ " " + dbPath + "/" + dbName.replaceAll(".db", ".xml"));
+                        }
+                        catch(Exception e){
+                            Log.e(TAG, "XML export error", e);
+                            mAlert.setTitle(getString(R.string.fail));
+                            mAlert.setMessage(getString(R.string.fail_export) + " " + dbPath + "/" + dbName + " Exception: " + e.toString());
+                        }
+
+                        mHandler.post(new Runnable(){
+                            @Override
+                            public void run(){
+                                mProgressDialog.dismiss();
+                                mAlert.show();
+                            }
+                        });
+                    }
+                };
+                convertThread.start();
+
+            }
+
     		
     		
     	}
@@ -244,6 +283,14 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
 			startActivity(refresh);
 			this.finish();
 			return true;
+        
+        case R.id.openmenu_export_xml:
+            Intent myIntent = new Intent();
+            myIntent.setClass(this, FileBrowser.class);
+            myIntent.putExtra("default_root", dbPath);
+            myIntent.putExtra("file_extension", ".db");
+            startActivityForResult(myIntent, ACTIVITY_EXPORT_XML);
+
 	    }
 	    return false;
 	}
