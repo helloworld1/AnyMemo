@@ -40,6 +40,10 @@ public class MemoScreen extends Activity implements View.OnClickListener{
 	private String dbPath;
 	private boolean showAnswer;
 	private Item currentItem;
+    // prevItem is used to undo
+    private Item prevItem = null;
+    private int prevScheduledItemCount;
+    private int prevNewItemCount;
     // How many words to learn at a time (rolling)
 	private final int WINDOW_SIZE = 10;
 	private boolean queueEmpty;
@@ -64,6 +68,7 @@ public class MemoScreen extends Activity implements View.OnClickListener{
     private Context mContext;
     private Handler mHandler;
     private AlertDialog.Builder mAlert;
+    // Six grading buttons
 	private Button[] btns = {null, null, null, null, null, null}; 
 
 	private int returnValue = 0;
@@ -222,6 +227,35 @@ public class MemoScreen extends Activity implements View.OnClickListener{
     		myIntent1.putExtra("itemid", currentItem.getId());
     		startActivityForResult(myIntent1, 2);
     		return true;
+
+        case R.id.menuundo:
+            if(prevItem != null){
+                try{
+                    currentItem = (Item)prevItem.clone();
+                }
+                catch(CloneNotSupportedException e){
+                    Log.e(TAG, "Can not clone", e);
+                }
+                prevItem = null;
+                learnQueue.add(0, currentItem);
+                if(learnQueue.size() >= WINDOW_SIZE){
+                    learnQueue.remove(learnQueue.size() - 1);
+                }
+                newItemCount = prevNewItemCount;
+                scheduledItemCount = prevScheduledItemCount;
+                this.showAnswer = false;
+                this.updateMemoScreen();
+            }
+            else{
+                new AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.undo_fail_text))
+                    .setMessage(getString(R.string.undo_fail_message))
+                    .setNeutralButton(R.string.ok_text, null)
+                    .create()
+                    .show();
+            }
+            return true;
+
 	    }
 	    	
 	    return false;
@@ -566,6 +600,17 @@ public class MemoScreen extends Activity implements View.OnClickListener{
                 // according to the grade.
                 // If the return value is success, the user will not need to see this item today.
                 // If the return value is failure, the item will be appended to the tail of the queue.
+
+                prevScheduledItemCount = scheduledItemCount;
+                prevNewItemCount = newItemCount;
+
+                try{
+                    prevItem = (Item)currentItem.clone();
+                }
+                catch(CloneNotSupportedException e){
+                    Log.e(TAG, "Can not clone", e);
+                }
+
 
                 boolean scheduled = currentItem.isScheduled();
                 boolean success = currentItem.processAnswer(grade, false) > 0 ? true : false;

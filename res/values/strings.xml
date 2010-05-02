@@ -14,6 +14,9 @@
     <string name="settings_menu_text">Settings</string>
     <string name="speak_question_menu_text">Speak Question</string>
     <string name="speak_answer_menu_text">Speak Answer</string>
+    <string name="undo_text">Undo</string>
+    <string name="undo_fail_text">Unable to undo</string>
+    <string name="undo_fail_message">You can only undo 1 card.</string>
     <string name="open_button_text">Open Database</string>
     <string name="recent_button_text">Open Recent Database</string>
     <string name="recent_databases">Recent Databases</string>
