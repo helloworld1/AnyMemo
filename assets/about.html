@@ -11,7 +11,7 @@ font-size:16pt;
 </head>
 <body>
 <h1 style="text-align:center">  AnyMemo Free Edition</h1>
-<div style="text-align:center"> Ver 2.3.0 </div>
+<div style="text-align:center"> Ver 2.3.2 </div>
 <div style="text-align:center"> Author: Haowen Ning, Qi Wang </div>
 <div style="text-align:center"> <a href=http://fantastischmemo.xtreemhost.com/>Official Website</a> </div>
 <h2>1. Introduction </h2>
@@ -30,10 +30,64 @@ font-size:16pt;
 </ul>
 </p>
 
-<h2>2. Version History</h2>
+
+
+<h2>2. How to use</h2>
+<h3>2.1 Install/Open/Close Databases </h3>
+<p> To install a database, you can use the Use the AnyMemo DB Installer in the market to get a collection of converted database. It will automatically copy db to your sdcard/anymemo directory. Or you can convert the Mnemosyne XML or CSV or TXT (Tab separation) files to anywhere in SD card. 
+</p>
+<p> The program also have an XML importing function built in. You can convert Mnemosyne's XML file to the database. </p>
+<p> To open a database, you just press Open Database and select the .db file in the ugly file browser or one from recent list.</p>
+<p> To close the program, you can just press the back key or select back from the menu and "Exit" from the main screen. </p>
+<h3>2.2 How to memorize the flashcard </h3>
+<p> In the flashcard screen, you will see the question with the answer hidden. When you press the screen, the answer will be shown and you need to grade yourself by clicking the grading button. The meanings of the grades are:
+<ul>
+<li> Grade 0: You have forgotten the card completely. </li>
+<li> Grade 1: You have forgotten the card completely. </li>
+<li> Grade 2: Barely correct answer. </li>
+<li> Grade 3: Correct answer with much effort. </li>
+<li> Grade 4: Correct answer with some effort</li>
+<li> Grade 5: Correct answer without any difficulties. </li> 
+</ul>
+</p>
+<p> After selecting the grade, the next question will be shown. The title bar will show the number of scheduled cards for repetition and the new cards left. You need to decide how long to use this software each day. Generally speaking 30-60min is the best.
+</p>
+<h3>2.3 How to use the Text-to-Speech function</h3>
+<p> Text-to-Speech function is available for Android OS 1.6+ and it currently can speak English (US, UK), Italian, German, French and Spanish. To use this function, you can set up the automatic speech function in the Option in main screen so that every question answer will be spoken out according to the Locale information in the database. If you do not want automatic speaking, you can also let the phone read the individual word in the menu of the flashcard screen.
+</p>
+ 
+<h3>2.4 How to edit the database</h3>
+<p>In the main screen you can use "Create/Edit Database" to edit databases. In the file browser screen you can create the new database through the menu.</p>
+<p> This program also provides some basic function to edit the database through the "Settings" and "Detail" menu items in flashcard screen. In "Settings" screen you can edit the format of the question and answer, and also the locale of them. In "Detail" screen, you can edit anything or delete the item. </p>
+
+<h2>3. Related websites</h2>
+<p> The Database converter and related information can be found on the official website: <a href="http://fantastischmemo.xtreemhost.com/">http://fantastischmemo.xtreemhost.com/</a>. The source code of the program can be found on <a href="http://github.com/helloworld1/AnyMemo">http://github.com/helloworld1/AnyMemo</a></p> 
+
+<h2>4. Licence</h2>
+<p> The source code is licenced under GPLv2, you are freely distribute/modify the source code as long as you mention the licence and the original author.
+</p>
+<h2>5. Acknowledgement</h2>
+<p> We would like to thank williamfeng to suggest the program's name. Also we appreciate pomelo422 a lot for the UI design and suggestions. If anyone who is missing, please let us know by sending email.
+</p>
+
+<h2>6. Version History</h2>
+<p>version 2.3.2
+<ul>
+<li>Critical Bug Fix: Fix the SRS algorithm problem when you score (2-inane).</li>
+<li>Enhance: Purge some debug code in the downloader.</li>
+<li>Enhance: Modify the grade button score to conform Mnemosyne.</li>
+</ul>
+</p>
+<p>version 2.3.1
+<ul>
+<li>Bug Fix: Fix the bug in Mnemosyne XML exporting with special symbol of XML.</li>
+<li>Enhancement: Rearrange the about screen.</li>
+</ul>
+</p>
 <p>version 2.3.0
 <ul>
 <li>New Feature: Export to Mnemosyne XML with learning progress.</li>
+<li>Bug Fix: Fix a critical bug in the easiness calculation.</li>
 </ul>
 </p>
 <p>version 2.2.0
@@ -144,46 +198,5 @@ font-size:16pt;
 <ul>
 <li>The title bar will display statistic information </li>
 </ul>
-
-
-<h2>3. How to use</h2>
-<h3>3.1 Install/Open/Close Databases </h3>
-<p> To install a database, you can use the Use the AnyMemo DB Installer in the market to get a collection of converted database. It will automatically copy db to your sdcard/fantastischmemo directory. Or you can convert the Mnemosyne XML or CSV or TXT (Tab separation) files to anywhere in SD card. 
-</p>
-<p> The program also have an XML importing function built in. You can convert Mnemosyne's XML file to the database. </p>
-<p> To open a database, you just press Open Database and select the .db file in the ugly file browser or one from recent list.</p>
-<p> To close the program, you can just press the back key or select back from the menu and "Exit" from the main screen. </p>
-<h3>3.2 How to memorize the flashcard </h3>
-<p> In the flashcard screen, you will see the question with the answer hidden. When you press the screen, the answer will be shown and you need to grade yourself by clicking the grading button. The meanings of the grades are:
-<ul>
-<li> Grade 0: You have forgotten the card completely. </li>
-<li> Grade 1: You have forgotten the card completely. </li>
-<li> Grade 2: Barely correct answer. </li>
-<li> Grade 3: Correct answer with much effort. </li>
-<li> Grade 4: Correct answer with some effort</li>
-<li> Grade 5: Correct answer without any difficulties. </li> 
-</ul>
-</p>
-<p> After selecting the grade, the next question will be shown. The title bar will show the number of scheduled cards for repetition and the new cards left. You need to decide how long to use this software each day. Generally speaking 30-60min is the best.
-</p>
-<h3>3.3 How to use the Text-to-Speech function</h3>
-<p> Text-to-Speech function is available for Android OS 1.6+ and it currently can speak English (US, UK), Italian, German, French and Spanish. To use this function, you can set up the automatic speech function in the Option in main screen so that every question answer will be spoken out according to the Locale information in the database. If you do not want automatic speaking, you can also let the phone read the individual word in the menu of the flashcard screen.
-</p>
- 
-<h3>3.4 How to edit the database</h3>
-<p>In the main screen you can use "Create/Edit Database" to edit databases. In the file browser screen you can create the new database through the menu.</p>
-<p> This program also provides some basic function to edit the database through the "Settings" and "Detail" menu items in flashcard screen. In "Settings" screen you can edit the format of the question and answer, and also the locale of them. In "Detail" screen, you can edit anything or delete the item. </p>
-
-<h2>4. Related websites</h2>
-<p> The Database converter and related information can be found on the official website: <a href="http://fantastischmemo.xtreemhost.com/">http://fantastischmemo.xtreemhost.com/</a>. The source code of the program can be found on <a href="http://github.com/helloworld1/AnyMemo">http://github.com/helloworld1/AnyMemo</a></p> 
-
-<h2>5. Licence</h2>
-<p> The source code is licenced under GPLv2, you are freely distribute/modify the source code as long as you mention the licence and the original author.
-</p>
-<h2>6. Acknowledgement</h2>
-<p> We would like to thank williamfeng to suggest the program's name. Also we appreciate pomelo422 a lot for the UI design and suggestions. If anyone who is missing, please let us know by sending email.
-</p>
-
-
 </body>
 </html>

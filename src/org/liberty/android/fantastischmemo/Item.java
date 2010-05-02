@@ -283,7 +283,7 @@ public final class Item implements Cloneable{
 			newInterval = 1;
 			returnValue = true;
 		}
-		else if(this.grade >= 2 && newGrade <= 2){
+		else if(this.grade >= 2 && newGrade <= 1){
 			this.ret_reps += 1;
 			this.lapses += 1;
 			this.acq_reps_since_lapse = 0;

@@ -162,7 +162,7 @@ public class Downloader extends Activity implements OnItemClickListener{
         HttpResponse response;
         try{
             response = httpclient.execute(httpget);
-            Log.i(TAG, "Response: " + response.getStatusLine().toString());
+            //Log.i(TAG, "Response: " + response.getStatusLine().toString());
             HttpEntity entity = response.getEntity();
 
             if(entity != null){
@@ -176,7 +176,7 @@ public class Downloader extends Activity implements OnItemClickListener{
                     sb.append(line + "\n");
                 }
                 result = sb.toString();
-                Log.i(TAG, "RESULT" + result);
+               // Log.i(TAG, "RESULT" + result);
 
                 JSONArray jsonArray = new JSONArray(result);
                 for(int i = 0; i < jsonArray.length(); i++){
