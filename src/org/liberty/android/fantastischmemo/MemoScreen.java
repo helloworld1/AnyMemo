@@ -10,6 +10,7 @@ import java.util.Set;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.graphics.drawable.Drawable;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,6 +20,9 @@ import android.os.Bundle;
 import android.content.Context;
 import android.preference.PreferenceManager;
 import android.text.Html;
+import android.text.Html.TagHandler;
+import android.text.Html.ImageGetter;
+import android.text.Editable;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,11 +33,13 @@ import android.widget.Button;
 import android.os.Handler;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TextView.BufferType;
 import android.widget.LinearLayout.LayoutParams;
 import android.util.Log;
+import org.xml.sax.XMLReader;
 
 
-public class MemoScreen extends Activity implements View.OnClickListener{
+public class MemoScreen extends Activity implements View.OnClickListener, ImageGetter, TagHandler{
 	private ArrayList<Item> learnQueue;
 	private DatabaseHelper dbHelper = null;
 	private String dbName;
@@ -507,11 +513,11 @@ public class MemoScreen extends Activity implements View.OnClickListener{
 		
 		
 		if(this.htmlDisplay.equals("both")){
-			CharSequence sq = Html.fromHtml(item.getQuestion());
-			CharSequence sa = Html.fromHtml(item.getAnswer());
+			//CharSequence sq = Html.fromHtml(item.getQuestion(), this, this);
+			//CharSequence sa = Html.fromHtml(item.getAnswer(), this, this);
 			
-			questionView.setText(sq);
-			answerView.setText(sa);
+			questionView.setText(Html.fromHtml(item.getQuestion(), this, this), TextView.BufferType.SPANNABLE);
+			answerView.setText(Html.fromHtml(item.getAnswer(), this, this), TextView.BufferType.SPANNABLE );
 			
 		}
 		else if(this.htmlDisplay.equals("question")){
@@ -670,4 +676,19 @@ public class MemoScreen extends Activity implements View.OnClickListener{
             }
 		}
 	}
+
+    @Override
+    public Drawable getDrawable(String source){
+        Log.v(TAG, "Source: " + source);
+        Drawable d = mContext.getResources().getDrawable(R.drawable.icon);
+        d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
+        return d;
+    }
+
+    @Override
+    public void handleTag(boolean opening, String tag, Editable output, XMLReader xmlReader){
+        return;
+    }
+
+
 }
