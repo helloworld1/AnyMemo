@@ -71,6 +71,11 @@ public final class Item implements Cloneable{
 	public int getId(){
 		return this._id;
 	}
+
+    public void setId(int id){
+        this._id = id;
+    }
+
 	public boolean isNew(){
 		return acq_reps == 0 ? true : false;
 	}

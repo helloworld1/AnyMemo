@@ -7,7 +7,7 @@
     >
     <Button
         android:id="@+id/open_screen_open_exist"
-        android:text="@string/recent_button_text"
+        android:text="@string/open_open_new_db"
         android:layout_width="300dip" 
         android:layout_height="wrap_content"
         android:layout_gravity="center"

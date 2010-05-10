@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
@@ -259,12 +260,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
 		
 	}
+
+    public boolean getListItems(int id, int windowSize, List<Item> list){
+        // Return non-shuffled items
+        return getListItems(id, windowSize, list, false);
+    }
 	
-	public boolean getListItems(int id, int windowSize, List<Item> list){
-		// These function are related to read db operation
-		// flag = 0 means no condition
-		// flag = 1 means new items, the items user have never seen
-		// flag = 2 means item due, they need to be reviewed.
+	public boolean getListItems(int id, int windowSize, List<Item> list, boolean shuffle){
         // windowSize = -1 means all items from id and on
 
 		HashMap<String, String> hm = new HashMap<String, String>();
@@ -285,10 +287,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             retQuery = query
                     + "AND round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval >= 0 AND acq_reps > 0 LIMIT "
                     + windowSize;
+            if(shuffle == true){
+                retQuery += "ORDER BY RANDOM() LIMIT " + windowSize;
+            }
         }
         else{
             retQuery = query;
+            if(shuffle == true){
+                retQuery += "ORDER BY RANDOM()";
+            }
         }
+
+
 
 
 		try {
@@ -548,7 +558,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		this.myDatabase.execSQL("UPDATE learn_tbl SET date_learn = '2010-01-01', interval = 0, grade = 0, easiness = 2.5, acq_reps = 0, ret_reps  = 0, lapses = 0, acq_reps_since_lapse = 0, ret_reps_since_lapse = 0");
 	}
 
-	
+    public void shuffleDatabase(){
+        List<Item> itemList = new LinkedList<Item>();
+        getListItems(0, -1, itemList, true);
+        int count = 1;
+        myDatabase.beginTransaction();
+        try{
+            for(Item item : itemList){
+                item.setId(count);
+                updateItem(item);
+                updateQA(item);
+                count += 1;
+            }
+			myDatabase.setTransactionSuccessful();
+        }
+        finally{
+			myDatabase.endTransaction();
+        }
+    }
+
 	public int getNewId(){
 		Cursor result = this.myDatabase.rawQuery("SELECT _id FROM dict_tbl ORDER BY _id DESC LIMIT 1", null);
 		if(result.getCount() != 1){

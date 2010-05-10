@@ -30,6 +30,7 @@ public class SettingsScreen extends Activity implements OnClickListener {
 	private Spinner htmlSpinner;
 	private Spinner ratioSpinner;
 	private CheckBox wipeCheckbox;
+	private CheckBox shuffleCheckbox;
 	private Button btnSave;
 	private Button btnDiscard;
 	private DatabaseHelper dbHelper;
@@ -79,8 +80,10 @@ public class SettingsScreen extends Activity implements OnClickListener {
         setInitialPosition();
         
         wipeCheckbox = (CheckBox)findViewById(R.id.checkbox_wipe);
-        
         wipeCheckbox.setOnClickListener(this);
+
+        shuffleCheckbox = (CheckBox)findViewById(R.id.checkbox_shuffle);
+        shuffleCheckbox.setOnClickListener(this);
         
         btnSave = (Button)findViewById(R.id.settting_save);
         btnSave.setOnClickListener(this);
@@ -282,6 +285,9 @@ public class SettingsScreen extends Activity implements OnClickListener {
                         
                         dbHelper.wipeLearnData();
                     }
+                    if(shuffleCheckbox.isChecked()){
+                        dbHelper.shuffleDatabase();
+                    }
                     dbHelper.close();
                     mHandler.post(new Runnable(){
                         @Override
@@ -304,15 +310,22 @@ public class SettingsScreen extends Activity implements OnClickListener {
     	
     	if(v == wipeCheckbox){
     		if(wipeCheckbox.isChecked()){
-    			AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-    			alertDialog.setTitle("Warning!");
-    			alertDialog.setMessage("ALL Learning Progress will be reset upon clicking Save!");
-    			alertDialog.setButton("OK",  new DialogInterface.OnClickListener(){
-    				public void onClick(DialogInterface arg0, int arg1){
-    					
-    				}
-    			});
-    			alertDialog.show();
+    			new AlertDialog.Builder(this)
+    			    .setTitle(getString(R.string.warning_text))
+    			    .setMessage(getString(R.string.settings_wipe_warning))
+    			    .setPositiveButton(getString(R.string.ok_text), null)
+                    .create()
+                    .show();
+    		}
+    	}
+    	if(v == shuffleCheckbox){
+    		if(shuffleCheckbox.isChecked()){
+    			new AlertDialog.Builder(this)
+    			    .setTitle(getString(R.string.warning_text))
+    			    .setMessage(getString(R.string.settings_shuffle_warning))
+    			    .setPositiveButton(getString(R.string.ok_text), null)
+                    .create()
+                    .show();
     		}
     	}
     	
