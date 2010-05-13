@@ -55,6 +55,8 @@
     <string name="settings_answer_locale_prompt">Locale</string>
     <string name="settings_html_display">Display in HTML</string>
     <string name="settings_ratio">Q/A Display Ratio</string>
+    <string name="settings_text_color">Text Color</string>
+    <string name="settings_bg_color">Background Color</string>
     <string name="settings_wipe">Wipe All Progress</string>
     <string name="settings_shuffle">Shuffle cards</string>
     <string name="settings_save">Save</string>

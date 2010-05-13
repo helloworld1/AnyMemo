@@ -48,6 +48,8 @@ public class SettingsScreen extends Activity implements OnClickListener {
 	private Spinner answerLocaleSpinner;
 	private Spinner htmlSpinner;
 	private Spinner ratioSpinner;
+    private Spinner textColorSpinner;
+    private Spinner bgColorSpinner;
 	private CheckBox wipeCheckbox;
 	private CheckBox shuffleCheckbox;
 	private Button btnSave;
@@ -95,6 +97,13 @@ public class SettingsScreen extends Activity implements OnClickListener {
         ArrayAdapter<CharSequence> ratioAdapter = ArrayAdapter.createFromResource(this, R.array.ratio_list, android.R.layout.simple_spinner_item);
         ratioAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ratioSpinner.setAdapter(ratioAdapter);
+
+        ArrayAdapter<CharSequence> colorAdapter = ArrayAdapter.createFromResource(this, R.array.color_list, android.R.layout.simple_spinner_item);
+        colorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        textColorSpinner = (Spinner)findViewById(R.id.text_color_spinner);
+        textColorSpinner.setAdapter(colorAdapter);
+        bgColorSpinner = (Spinner)findViewById(R.id.bg_color_spinner);
+        bgColorSpinner.setAdapter(colorAdapter);
         
         setInitialPosition();
         
@@ -260,6 +269,42 @@ public class SettingsScreen extends Activity implements OnClickListener {
 				ratioSpinner.setSelection(index);
 				
 			}
+			else if(me.getKey().toString().equals("text_color")){
+				String res = me.getValue();
+				String[] colorList = getResources().getStringArray(R.array.color_list);
+				int index = 0;
+				boolean found = false;
+				for(String str : colorList){
+					if(str.equals(res)){
+						found = true;
+						break;
+					}
+					index++;
+				}
+				if(found == false){
+					index = 0;
+				}
+				textColorSpinner.setSelection(index);
+				
+			}
+			else if(me.getKey().toString().equals("bg_color")){
+				String res = me.getValue();
+				String[] colorList = getResources().getStringArray(R.array.color_list);
+				int index = 0;
+				boolean found = false;
+				for(String str : colorList){
+					if(str.equals(res)){
+						found = true;
+						break;
+					}
+					index++;
+				}
+				if(found == false){
+					index = 0;
+				}
+				bgColorSpinner.setSelection(index);
+				
+			}
 			
 		}
     	
@@ -273,6 +318,7 @@ public class SettingsScreen extends Activity implements OnClickListener {
     	String[] localeList = getResources().getStringArray(R.array.locale_list);
     	String[] htmlList = getResources().getStringArray(R.array.html_list);
     	String[] ratioList = getResources().getStringArray(R.array.ratio_list);
+    	String[] colorList = getResources().getStringArray(R.array.color_list);
     	hm.put("question_font_size", fontSizeList[questionFontSizeSpinner.getSelectedItemPosition()]);
     	hm.put("answer_font_size", fontSizeList[answerFontSizeSpinner.getSelectedItemPosition()]);
     	hm.put("question_align", alignList[questionAlignSpinner.getSelectedItemPosition()]);
@@ -281,6 +327,8 @@ public class SettingsScreen extends Activity implements OnClickListener {
     	hm.put("answer_locale", localeList[answerLocaleSpinner.getSelectedItemPosition()]);
     	hm.put("html_display", htmlList[htmlSpinner.getSelectedItemPosition()]);
     	hm.put("ratio", ratioList[ratioSpinner.getSelectedItemPosition()]);
+    	hm.put("text_color", colorList[textColorSpinner.getSelectedItemPosition()]);
+    	hm.put("bg_color", colorList[bgColorSpinner.getSelectedItemPosition()]);
     	dbHelper.setSettings(hm);
     	
     }

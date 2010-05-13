@@ -26,6 +26,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import android.graphics.Color;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -48,6 +49,7 @@ import android.widget.Button;
 import android.os.Handler;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ScrollView;
 import android.widget.LinearLayout.LayoutParams;
 import android.util.Log;
 
@@ -77,6 +79,8 @@ public class MemoScreen extends Activity implements View.OnClickListener{
 	private String answerLocale = "US";
 	private String htmlDisplay = "none";
 	private String qaRatio = "50%";
+    private String textColor = "Default";
+    private String bgColor = "Default";
 	private TTS questionTTS;
 	private TTS answerTTS;
 	private boolean autoaudioSetting = true;
@@ -196,6 +200,12 @@ public class MemoScreen extends Activity implements View.OnClickListener{
 			if(me.getKey().toString().equals("ratio")){
 				this.qaRatio = me.getValue().toString();
 			}
+			if(me.getKey().toString().equals("text_color")){
+                this.textColor = me.getValue().toString();
+            }
+			if(me.getKey().toString().equals("bg_color")){
+                this.bgColor = me.getValue().toString();
+            }
 		}
 	}
 	
@@ -394,6 +404,7 @@ public class MemoScreen extends Activity implements View.OnClickListener{
 		if(questionUserAudio || answerUserAudio){
 			mSpeakWord = new SpeakWord(this.getString(R.string.default_audio_path));
 		}
+        setScreenColor();
 		
 		if(this.feedData() == 2){ // The queue is still empty
             mHandler.post(new Runnable(){
@@ -689,4 +700,35 @@ public class MemoScreen extends Activity implements View.OnClickListener{
             }
 		}
 	}
+    
+    private void setScreenColor(){
+        // Set both text and the background color
+		TextView questionView = (TextView) findViewById(R.id.question);
+		TextView answerView = (TextView) findViewById(R.id.answer);
+        View root = (View)findViewById(R.id.memo_screen_root);
+        int[] colorMap = {Color.BLACK, Color.WHITE, Color.RED, Color.GREEN, Color.BLUE, Color.CYAN, Color.MAGENTA, Color.YELLOW};
+    	String[] colorList = getResources().getStringArray(R.array.color_list);
+        if(!textColor.equals("Default")){
+            for(int i = 0; i < colorMap.length; i++){
+                if(textColor.equals(colorList[i])){
+                    questionView.setTextColor(colorMap[i - 1]);
+                    answerView.setTextColor(colorMap[i - 1]);
+                    answerView.invalidate();
+
+                    break;
+                }
+            }
+        }
+        if(!bgColor.equals("Default")){
+            for(int i = 0; i < colorMap.length; i++){
+                if(bgColor.equals(colorList[i])){
+                    if(root!= null){
+                        root.setBackgroundColor(colorMap[i]);
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
 }
