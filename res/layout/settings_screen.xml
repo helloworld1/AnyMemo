@@ -6,7 +6,6 @@
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_height="fill_parent"
 	android:layout_width="fill_parent"
-    android:id="@+id/memo_screen_root"
 	android:orientation="vertical"
 	android:stretchColumns="1">
 	<TableRow>

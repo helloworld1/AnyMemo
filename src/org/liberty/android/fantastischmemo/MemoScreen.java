@@ -48,6 +48,7 @@ import android.view.View;
 import android.widget.Button;
 import android.os.Handler;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.ScrollView;
 import android.widget.LinearLayout.LayoutParams;
@@ -404,7 +405,6 @@ public class MemoScreen extends Activity implements View.OnClickListener{
 		if(questionUserAudio || answerUserAudio){
 			mSpeakWord = new SpeakWord(this.getString(R.string.default_audio_path));
 		}
-        setScreenColor();
 		
 		if(this.feedData() == 2){ // The queue is still empty
             mHandler.post(new Runnable(){
@@ -509,6 +509,8 @@ public class MemoScreen extends Activity implements View.OnClickListener{
 		aRatio /= 50.0;
 		layoutQuestion.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, qRatio));
 		layoutAnswer.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, aRatio));
+        // Set both background and text color
+        setScreenColor();
 		feedData();
 		if(queueEmpty == false){
 			currentItem = learnQueue.get(0);
@@ -705,7 +707,7 @@ public class MemoScreen extends Activity implements View.OnClickListener{
         // Set both text and the background color
 		TextView questionView = (TextView) findViewById(R.id.question);
 		TextView answerView = (TextView) findViewById(R.id.answer);
-        View root = (View)findViewById(R.id.memo_screen_root);
+        LinearLayout root = (LinearLayout)findViewById(R.id.memo_screen_root);
         int[] colorMap = {Color.BLACK, Color.WHITE, Color.RED, Color.GREEN, Color.BLUE, Color.CYAN, Color.MAGENTA, Color.YELLOW};
     	String[] colorList = getResources().getStringArray(R.array.color_list);
         if(!textColor.equals("Default")){
@@ -713,8 +715,6 @@ public class MemoScreen extends Activity implements View.OnClickListener{
                 if(textColor.equals(colorList[i])){
                     questionView.setTextColor(colorMap[i - 1]);
                     answerView.setTextColor(colorMap[i - 1]);
-                    answerView.invalidate();
-
                     break;
                 }
             }
@@ -723,7 +723,7 @@ public class MemoScreen extends Activity implements View.OnClickListener{
             for(int i = 0; i < colorMap.length; i++){
                 if(bgColor.equals(colorList[i])){
                     if(root!= null){
-                        root.setBackgroundColor(colorMap[i]);
+                        root.setBackgroundColor(colorMap[i - 1]);
                     }
                     break;
                 }
