@@ -711,7 +711,7 @@ public class MemoScreen extends Activity implements View.OnClickListener{
         int[] colorMap = {Color.BLACK, Color.WHITE, Color.RED, Color.GREEN, Color.BLUE, Color.CYAN, Color.MAGENTA, Color.YELLOW};
     	String[] colorList = getResources().getStringArray(R.array.color_list);
         if(!textColor.equals("Default")){
-            for(int i = 0; i < colorMap.length; i++){
+            for(int i = 1; i <= colorMap.length; i++){
                 if(textColor.equals(colorList[i])){
                     questionView.setTextColor(colorMap[i - 1]);
                     answerView.setTextColor(colorMap[i - 1]);
@@ -720,7 +720,7 @@ public class MemoScreen extends Activity implements View.OnClickListener{
             }
         }
         if(!bgColor.equals("Default")){
-            for(int i = 0; i < colorMap.length; i++){
+            for(int i = 0; i <= colorMap.length; i++){
                 if(bgColor.equals(colorList[i])){
                     if(root!= null){
                         root.setBackgroundColor(colorMap[i - 1]);
