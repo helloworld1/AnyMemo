@@ -40,5 +40,16 @@
 	<item>75%</item>
 	<item>25%</item>
 </string-array>
+<string-array name="color_list">
+    <item>Default</item>
+    <item>Black</item>
+    <item>White</item>
+    <item>Red</item>
+    <item>Green</item>
+    <item>Blue</item>
+    <item>Cyan</item>
+    <item>Magenta</item>
+    <item>Yellow</item>
+</string-array>
 
 </resources>

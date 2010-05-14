@@ -1,3 +1,22 @@
+/*
+Copyright (C) 2010 Haowen Ning
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+*/
 package org.liberty.android.fantastischmemo;
 
 import java.util.ArrayList;
@@ -7,6 +26,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import android.graphics.Color;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -32,8 +52,10 @@ import android.view.View;
 import android.widget.Button;
 import android.os.Handler;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.TextView.BufferType;
+import android.widget.ScrollView;
 import android.widget.LinearLayout.LayoutParams;
 import android.util.Log;
 import org.xml.sax.XMLReader;
@@ -64,6 +86,8 @@ public class MemoScreen extends Activity implements View.OnClickListener, ImageG
 	private String answerLocale = "US";
 	private String htmlDisplay = "none";
 	private String qaRatio = "50%";
+    private String textColor = "Default";
+    private String bgColor = "Default";
 	private TTS questionTTS;
 	private TTS answerTTS;
 	private boolean autoaudioSetting = true;
@@ -183,6 +207,12 @@ public class MemoScreen extends Activity implements View.OnClickListener, ImageG
 			if(me.getKey().toString().equals("ratio")){
 				this.qaRatio = me.getValue().toString();
 			}
+			if(me.getKey().toString().equals("text_color")){
+                this.textColor = me.getValue().toString();
+            }
+			if(me.getKey().toString().equals("bg_color")){
+                this.bgColor = me.getValue().toString();
+            }
 		}
 	}
 	
@@ -485,6 +515,8 @@ public class MemoScreen extends Activity implements View.OnClickListener, ImageG
 		aRatio /= 50.0;
 		layoutQuestion.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, qRatio));
 		layoutAnswer.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, aRatio));
+        // Set both background and text color
+        setScreenColor();
 		feedData();
 		if(queueEmpty == false){
 			currentItem = learnQueue.get(0);
@@ -676,6 +708,7 @@ public class MemoScreen extends Activity implements View.OnClickListener, ImageG
             }
 		}
 	}
+<<<<<<< HEAD
 
     @Override
     public Drawable getDrawable(String source){
@@ -691,4 +724,35 @@ public class MemoScreen extends Activity implements View.OnClickListener, ImageG
     }
 
 
+=======
+    
+    private void setScreenColor(){
+        // Set both text and the background color
+		TextView questionView = (TextView) findViewById(R.id.question);
+		TextView answerView = (TextView) findViewById(R.id.answer);
+        LinearLayout root = (LinearLayout)findViewById(R.id.memo_screen_root);
+        int[] colorMap = {Color.BLACK, Color.WHITE, Color.RED, Color.GREEN, Color.BLUE, Color.CYAN, Color.MAGENTA, Color.YELLOW};
+    	String[] colorList = getResources().getStringArray(R.array.color_list);
+        if(!textColor.equals("Default")){
+            for(int i = 1; i <= colorMap.length; i++){
+                if(textColor.equals(colorList[i])){
+                    questionView.setTextColor(colorMap[i - 1]);
+                    answerView.setTextColor(colorMap[i - 1]);
+                    break;
+                }
+            }
+        }
+        if(!bgColor.equals("Default")){
+            for(int i = 0; i <= colorMap.length; i++){
+                if(bgColor.equals(colorList[i])){
+                    if(root!= null){
+                        root.setBackgroundColor(colorMap[i - 1]);
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+>>>>>>> master
 }

@@ -13,7 +13,6 @@ rm -rf gen
 
 find ./ -type f -name "*.java" | xargs sed -i 's/org\.liberty\.android\.fantastischmemo/org\.liberty\.android\.fantastischmemolite/g'
 find ./ -type f -name "*.xml" | xargs sed -i 's/org\.liberty\.android\.fantastischmemo/org\.liberty\.android\.fantastischmemolite/g'
-sed -i 's/Free Edition/Lite Edition/g' ./assets/about.html
 sed -i 's/AnyMemo Free/AnyMemo Lite/g' ./res/values/strings.xml
 sed -i 's/\"app_name\">AnyMemo/\"app_name\">AnyMemo Lite/g' ./res/values/strings.xml
 rm ./src/org/liberty/android/fantastischmemolite/TTS.java
