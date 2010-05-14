@@ -65,10 +65,12 @@ public class AnyMemo extends Activity implements OnClickListener{
         btnExit.setOnClickListener(this);
 
         
-        /* not used for now, will use it in later version */
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         this.dbName = settings.getString("dbname", null);
         this.dbPath = settings.getString("dbpath", null);
+        /* Check the version, if it is updated from an older version
+         * , it will show a dialog
+         */
         String savedVersion = settings.getString("saved_version", "");
         String thisVersion = getResources().getString(R.string.app_version);
         
@@ -88,6 +90,9 @@ public class AnyMemo extends Activity implements OnClickListener{
         	alertDialog.setButton("Exit", exitButtonListener);
         	alertDialog.show();
         }
+        /* First time installation! It will install the sample db
+         * to /sdcard/AnyMemo
+         */
         if(firstTime == true){
         	SharedPreferences.Editor editor = settings.edit();
         	editor.putBoolean("first_time", false);
@@ -111,10 +116,18 @@ public class AnyMemo extends Activity implements OnClickListener{
                 .setTitle(getString(R.string.what_is_new))
                 .setMessage(getString(R.string.what_is_new_message))
                 .setPositiveButton(getString(R.string.ok_text), null)
+                .setNegativeButton(getString(R.string.about_version), new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1){
+                        Intent myIntent = new Intent();
+                        myIntent.setAction(Intent.ACTION_VIEW);
+                        myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
+                        myIntent.setData(Uri.parse("http://fantastischmemo.xtreemhost.com/index.php?p=1_6_Version-History"));
+                        startActivity(myIntent);
+                    }
+                })
                 .show();
         }
-            
-        
     }
     
     public void onClick(View v){
@@ -141,6 +154,7 @@ public class AnyMemo extends Activity implements OnClickListener{
     		//Intent myIntent = new Intent(Intent.ACTION_VIEW);
     		//Uri u = Uri.parse("market://search?q=pname:org.liberty.android.fminstaller");
     		//myIntent.setData(u);
+            /* Now we have our downloader */
             Intent myIntent = new Intent();
             myIntent.setClass(this, Downloader.class);
     		startActivity(myIntent);
@@ -151,7 +165,6 @@ public class AnyMemo extends Activity implements OnClickListener{
     	super.onResume();
     	if(returnValue == 1){
     		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-    		//SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
     		SharedPreferences.Editor editor = settings.edit();
     		editor.putString("dbname", this.dbName);
     		editor.putString("dbpath", this.dbPath);
@@ -221,9 +234,32 @@ public class AnyMemo extends Activity implements OnClickListener{
     		startActivity(myIntent);
             return true;
 
+        case R.id.mainmenu_help:
+            myIntent.setAction(Intent.ACTION_VIEW);
+            myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
+            myIntent.setData(Uri.parse("http://fantastischmemo.xtreemhost.com/index.php?p=1_7_Guide"));
+            startActivity(myIntent);
+            return true;
+
     	case R.id.mainmenu_about: 
-    		myIntent.setClass(this, AboutScreen.class);
-    		startActivity(myIntent);
+    		//myIntent.setClass(this, AboutScreen.class);
+    		//startActivity(myIntent);
+            /* About screen is now obsolete */
+            new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.about_title) + " " + getString(R.string.app_full_name) + " " + getString(R.string.app_version))
+                .setMessage(getString(R.string.about_text))
+                .setPositiveButton(getString(R.string.ok_text), null)
+                .setNegativeButton(getString(R.string.about_version), new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1){
+                        Intent myIntent = new Intent();
+                        myIntent.setAction(Intent.ACTION_VIEW);
+                        myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
+                        myIntent.setData(Uri.parse("http://fantastischmemo.xtreemhost.com/index.php?p=1_6_Version-History"));
+                        startActivity(myIntent);
+                    }
+                })
+                .show();
             return true;
 	    }
 	    return false;

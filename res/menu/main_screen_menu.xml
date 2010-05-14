@@ -7,8 +7,11 @@
     <item android:id="@+id/mainmenu_option"
   		android:icon="@android:drawable/ic_menu_preferences"
   		android:title="@string/option_button_text" />
-    <item android:id="@+id/mainmenu_about"
+    <item android:id="@+id/mainmenu_help"
   		android:icon="@android:drawable/ic_menu_help"
+  		android:title="@string/help_button_text" />
+    <item android:id="@+id/mainmenu_about"
+  		android:icon="@android:drawable/ic_menu_info_details"
   		android:title="@string/about_button_text" />
 
 </menu>
