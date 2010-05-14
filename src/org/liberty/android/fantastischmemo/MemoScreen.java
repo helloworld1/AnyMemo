@@ -708,7 +708,6 @@ public class MemoScreen extends Activity implements View.OnClickListener, ImageG
             }
 		}
 	}
-<<<<<<< HEAD
 
     @Override
     public Drawable getDrawable(String source){
@@ -724,8 +723,6 @@ public class MemoScreen extends Activity implements View.OnClickListener, ImageG
     }
 
 
-=======
-    
     private void setScreenColor(){
         // Set both text and the background color
 		TextView questionView = (TextView) findViewById(R.id.question);
@@ -753,6 +750,4 @@ public class MemoScreen extends Activity implements View.OnClickListener, ImageG
             }
         }
     }
-
->>>>>>> master
 }
