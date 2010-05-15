@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.Date;
 
 import android.graphics.Color;
 import android.app.Activity;
@@ -45,14 +46,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Display;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.os.Handler;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TextView;
-import android.widget.ScrollView;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.util.Log;
+import android.os.SystemClock;
 
 
 public class MemoScreen extends Activity implements View.OnClickListener{
@@ -82,6 +85,7 @@ public class MemoScreen extends Activity implements View.OnClickListener{
 	private String qaRatio = "50%";
     private String textColor = "Default";
     private String bgColor = "Default";
+    private boolean btnOneRow = false;
 	private TTS questionTTS;
 	private TTS answerTTS;
 	private boolean autoaudioSetting = true;
@@ -92,13 +96,15 @@ public class MemoScreen extends Activity implements View.OnClickListener{
     private Context mContext;
     private Handler mHandler;
     private AlertDialog.Builder mAlert;
-    // Six grading buttons
+    /* Six grading buttons */
 	private Button[] btns = {null, null, null, null, null, null}; 
 
 	private int returnValue = 0;
 	private boolean initFeed;
 
     public final static String TAG = "org.liberty.android.fantastischmemo.MemoScreen";
+    /* The hold event time */
+    private final int HOLD_THRESHOLD = 1000;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -113,12 +119,7 @@ public class MemoScreen extends Activity implements View.OnClickListener{
 		
         mHandler = new Handler();
         mContext = this;
-        btns[0] = (Button) findViewById(R.id.But00);
-        btns[1] = (Button) findViewById(R.id.But01);
-        btns[2] = (Button) findViewById(R.id.But02);
-        btns[3] = (Button) findViewById(R.id.But03);
-        btns[4] = (Button) findViewById(R.id.But04);
-        btns[5] = (Button) findViewById(R.id.But05);
+        createButtons();
         for(Button btn : btns){
             btn.setOnClickListener(this);
         }
@@ -171,6 +172,9 @@ public class MemoScreen extends Activity implements View.OnClickListener{
 		// Here is the global settings from the preferences
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
     	autoaudioSetting = settings.getBoolean("autoaudio", true);
+        btnOneRow = settings.getBoolean("btnonerow", false);
+    
+        
 		
 		HashMap<String, String> hm = dbHelper.getSettings();
 		Set<Map.Entry<String, String>> set = hm.entrySet();
@@ -294,12 +298,18 @@ public class MemoScreen extends Activity implements View.OnClickListener{
 	public boolean onTouchEvent(MotionEvent event) {
 		// When the screen is touched, it will uncover answer
 		int eventAction = event.getAction();
+        long holdTime = SystemClock.uptimeMillis() - event.getDownTime();
 		switch (eventAction) {
-		case MotionEvent.ACTION_DOWN:
-			if(this.showAnswer == false){
+		case MotionEvent.ACTION_UP:
+			if(this.showAnswer == false && holdTime < HOLD_THRESHOLD){
 				this.showAnswer ^= true;
 				updateMemoScreen();
 			}
+            else if(holdTime > HOLD_THRESHOLD){
+                Log.v(TAG, "HOLD HOLD HOLD" + SystemClock.uptimeMillis());
+                Log.v(TAG, "HOLD time" + event.getDownTime());
+                Log.v(TAG, "Event time" +event.getEventTime());
+            }
 
 		}
 		return true;
@@ -691,16 +701,27 @@ public class MemoScreen extends Activity implements View.OnClickListener{
 			layoutAnswer.setGravity(Gravity.CENTER);
 
 		} else {
-            // Show all buttons when user has clicked the screen.
+
             for(Button btn : btns){
 			    btn.setVisibility(View.VISIBLE);
             }
-            String[] btnsText = {getString(R.string.memo_btn0_text),getString(R.string.memo_btn1_text),getString(R.string.memo_btn2_text),getString(R.string.memo_btn3_text),getString(R.string.memo_btn4_text),getString(R.string.memo_btn5_text)};
-            for(int i = 0; i < btns.length; i++){
+            if(btnOneRow){
+                //btns[0].setVisibility(View.GONE);
+                String[] btnsText = {getString(R.string.memo_btn0_brief_text),getString(R.string.memo_btn1_brief_text),getString(R.string.memo_btn2_brief_text),getString(R.string.memo_btn3_brief_text),getString(R.string.memo_btn4_brief_text),getString(R.string.memo_btn5_brief_text)};
+                for(int i = 0; i < btns.length; i++){
+                    btns[i].setText(btnsText[i]);
+                }
+            }
+            else{
+            // This is only for two line mode
+            // Show all buttons when user has clicked the screen.
+                String[] btnsText = {getString(R.string.memo_btn0_text),getString(R.string.memo_btn1_text),getString(R.string.memo_btn2_text),getString(R.string.memo_btn3_text),getString(R.string.memo_btn4_text),getString(R.string.memo_btn5_text)};
+                for(int i = 0; i < btns.length; i++){
                 // This part will display the days to review
                     btns[i].setText(btnsText[i] + "\n+" + currentItem.processAnswer(i, true));
+                }
             }
-		}
+        }
 	}
     
     private void setScreenColor(){
@@ -731,4 +752,57 @@ public class MemoScreen extends Activity implements View.OnClickListener{
         }
     }
 
+    private void createButtons(){
+        /* First load the settings */
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        btnOneRow = settings.getBoolean("btnonerow", false);
+        /* Dynamically create button depending on the button settings
+         * One Line or Two Lines for now.
+         * The buttons are dynamically created.
+         */
+        RelativeLayout layout = (RelativeLayout)findViewById(R.id.memo_screen_button_layout);
+        int id = 0;
+        /* Make up an id using this base */
+        int base = 0x21212;
+        Display display = ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        int width = display.getWidth(); 
+        Log.v(TAG, "layout Width: " + width);
+        if(btnOneRow){
+            for(int i = 0; i < 6; i++){
+                RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(
+                        width / 6,
+                        RelativeLayout.LayoutParams.WRAP_CONTENT
+                ); 
+                if(i != 0){
+                    p.addRule(RelativeLayout.RIGHT_OF, id);
+                }
+                btns[i] = new Button(this);
+                btns[i].setId(base + i);
+                layout.addView(btns[i], p);
+                id = btns[i].getId();
+            }
+        }
+        else{
+            for(int i = 0; i < 6; i++){
+                RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(
+                        width / 3,
+                        RelativeLayout.LayoutParams.WRAP_CONTENT
+                ); 
+                if(i != 0 && i != 3){
+                    p.addRule(RelativeLayout.RIGHT_OF, id);
+                }
+                else if(i == 3){
+                    p.addRule(RelativeLayout.BELOW, base);
+                }
+                if(i > 3){
+                    p.addRule(RelativeLayout.ALIGN_TOP, base + 3);
+                }
+                btns[i] = new Button(this);
+                btns[i].setId(base + i);
+                layout.addView(btns[i], p);
+                id = btns[i].getId();
+            }
+        }
+
+    }
 }

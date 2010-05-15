@@ -19,11 +19,10 @@
         <activity android:name=".FileBrowser" android:screenOrientation="portrait"></activity>
         <activity android:name=".MemoScreen" android:screenOrientation="portrait"></activity>
         <activity android:name=".OptionScreen" android:screenOrientation="portrait"></activity>
-        <activity android:name=".SettingsScreen" android:screenOrientation="portrait"></activity>
-        <activity android:name=".DetailScreen" android:screenOrientation="portrait"></activity>
-        <activity android:name=".AboutScreen" android:screenOrientation="portrait"></activity>
+        <activity android:name=".SettingsScreen" ></activity>
+        <activity android:name=".DetailScreen"></activity>
         <activity android:name=".AddItemScreen"></activity>
-        <activity android:name=".Downloader"></activity>
+        <activity android:name=".Downloader" android:screenOrientation="portrait"></activity>
 
     </application>
      <uses-sdk android:minSdkVersion="4" />

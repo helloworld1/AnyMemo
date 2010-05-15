@@ -31,6 +31,8 @@
     <string name="default_db_name">french-body-parts.db</string>
     <string name="autoaudio">Automatic Speak</string>
     <string name="autoaudio_summary">The question and answer will be read automatically</string>
+    <string name="btnonerow">Compact Grade Button </string>
+    <string name="btnonerow_summary">The button with 0 to 5 score is diplayed in 1 rows instead of 2.</string>
     <string name="memo_show_answer">\?\nShow Answer</string>
     <string name="memo_no_item_title">No Item</string>
     <string name="memo_no_item_message">There is no item to learn for now.</string>
@@ -40,6 +42,12 @@
     <string name="memo_btn3_text">3 Hard</string>
     <string name="memo_btn4_text">4 Good</string>
     <string name="memo_btn5_text">5 Bright</string>
+    <string name="memo_btn0_brief_text">0</string>
+    <string name="memo_btn1_brief_text">1</string>
+    <string name="memo_btn2_brief_text">2</string>
+    <string name="memo_btn3_brief_text">3</string>
+    <string name="memo_btn4_brief_text">4</string>
+    <string name="memo_btn5_brief_text">5</string>
     <string name="memo_current_id">Current ID: </string>
     <string name="global_settings">Global Settings</string>
     <string name="settings_question_font_size">Question Font Size</string>
@@ -112,7 +120,7 @@
     <string name="downloader_download_alert">Download: </string>
     <string name="downloader_download_alert_message">Details: </string>
     <string name="about_title">About</string>
-    <string name="about_text">AnyMemo, formally FantastischMemo, is a spaced repetition flashcard learning software. It implements a slightly modified Mnemosyne algorithm to maximize the learning efficien</string>
+    <string name="about_text">Advanced spaced repetition flashcard learning software.\n\nAuthors: Haowen Ning, Qi Wang\n\nAcknowledge: pomelo422, Lyndsey Percival, John Rissler</string>
     <string name="about_version">Version History</string>
     <string name="what_is_new">Changelog</string>
     <string name="what_is_new_message">See Full Graphical version guide, please click version history button.\nVersion 2.5.0\n1. Now the background and text color can be customized in settings.\n2. New online help.\n3. the About is now just a dialog to display brief information.</string>
