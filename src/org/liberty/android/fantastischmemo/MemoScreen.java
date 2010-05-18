@@ -48,12 +48,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Display;
 import android.view.WindowManager;
+import android.view.LayoutInflater;
 import android.widget.Button;
 import android.os.Handler;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.EditText;
 import android.util.Log;
 import android.os.SystemClock;
 
@@ -65,11 +67,11 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
 	private String dbPath;
 	private boolean showAnswer;
 	private Item currentItem;
-    // prevItem is used to undo
+    /* prevItem is used to undo */
     private Item prevItem = null;
     private int prevScheduledItemCount;
     private int prevNewItemCount;
-    // How many words to learn at a time (rolling)
+    /* How many words to learn at a time (rolling) */
 	private final int WINDOW_SIZE = 10;
 	private boolean queueEmpty;
 	private int idMaxSeen;
@@ -133,7 +135,7 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
 		
             Thread loadingThread = new Thread(){
                 public void run(){
-                    // Pre load cards (The number is specified in Window size varable)
+                    /* Pre load cards (The number is specified in Window size varable) */
                     prepare();
                     mHandler.post(new Runnable(){
                         public void run(){
@@ -148,6 +150,7 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
 
 	public void onResume(){
 		super.onResume();
+        /* Refresh depending on where it returns. */
 		if(returnValue == 1){
 			
 			prepare();
@@ -160,12 +163,13 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
 	}
 
     private void restartActivity(){
-    		Intent myIntent = new Intent();
-    		myIntent.setClass(MemoScreen.this, MemoScreen.class);
-    		myIntent.putExtra("dbname", dbName);
-    		myIntent.putExtra("dbpath", dbPath);
-            finish();
-    		startActivity(myIntent);
+        /* restart the current activity */
+        Intent myIntent = new Intent();
+        myIntent.setClass(MemoScreen.this, MemoScreen.class);
+        myIntent.putExtra("dbname", dbName);
+        myIntent.putExtra("dbpath", dbPath);
+        finish();
+        startActivity(myIntent);
     }
 	
 	public void onDestroy(){
@@ -181,7 +185,7 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
 	
 	
 	private void loadSettings(){
-		// Here is the global settings from the preferences
+		/* Here is the global settings from the preferences */
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
     	autoaudioSetting = settings.getBoolean("autoaudio", true);
         btnOneRow = settings.getBoolean("btnonerow", false);
@@ -315,7 +319,7 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
     	
     	case 1:
     	case 2:
-            // Determine whether to update the screen
+            /* Determine whether to update the screen */
     		if(resultCode == Activity.RESULT_OK){
     			returnValue = 1;
     		}
@@ -329,7 +333,7 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
 	
 
 	private void prepare() {
-		// Empty the queue, init the db
+		/* Empty the queue, init the db */
         if(dbHelper == null){
             dbHelper = new DatabaseHelper(mContext, dbPath, dbName);
         }
@@ -339,7 +343,7 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
 		scheduledItemCount = dbHelper.getScheduledCount();
 		newItemCount = dbHelper.getNewCount();
 		loadSettings();
-		// Get question and answer locale
+		/* Get question and answer locale */
 		Locale ql;
 		Locale al;
 		if(questionLocale.equals("US")){
@@ -494,15 +498,11 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
 			
 
 	private void updateMemoScreen() {
-		// update the main screen according to the currentItem
+		/* update the main screen according to the currentItem */
 		
-		OnClickListener backButtonListener = new OnClickListener() {
-			// Finish the current activity and go back to the last activity.
-			// It should be the open screen.
-			public void onClick(DialogInterface arg0, int arg1) {
-				finish();
-			}
-		};
+        /* The q/a ratio is not as whe it seems
+         * It displays differently on the screen
+         */
 		LinearLayout layoutQuestion = (LinearLayout)findViewById(R.id.layout_question);
 		LinearLayout layoutAnswer = (LinearLayout)findViewById(R.id.layout_answer);
 		float qRatio = Float.valueOf(qaRatio.substring(0, qaRatio.length() - 1));
@@ -511,7 +511,7 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
 		aRatio /= 50.0;
 		layoutQuestion.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, qRatio));
 		layoutAnswer.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, aRatio));
-        // Set both background and text color
+        /* Set both background and text color */
         setScreenColor();
 		feedData();
 		if(queueEmpty == false){
@@ -520,13 +520,19 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
 			this.displayQA(currentItem);
 		}
 		else{
-			AlertDialog alertDialog = new AlertDialog.Builder(this)
-			.create();
-			alertDialog.setTitle(this.getString(R.string.memo_no_item_title));
-			alertDialog.setMessage(this.getString(R.string.memo_no_item_message));
-			alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Back",
-					backButtonListener);
-			alertDialog.show();
+			new AlertDialog.Builder(this)
+			    .setTitle(this.getString(R.string.memo_no_item_title))
+			    .setMessage(this.getString(R.string.memo_no_item_message))
+			    .setNeutralButton(getString(R.string.back_menu_text), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        /* Finish the current activity and go back to the last activity.
+                         * It should be the open screen. */
+                        finish();
+                    }
+                })
+                .create()
+                .show();
 			
 		}
 		
@@ -534,13 +540,14 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
 
 
 	private void displayQA(Item item) {
-		// Display question and answer according to item
+		/* Display question and answer according to item */
 		this.setTitle(this.getTitle() + " / " + this.getString(R.string.memo_current_id) + item.getId() );
 		TextView questionView = (TextView) findViewById(R.id.question);
 		TextView answerView = (TextView) findViewById(R.id.answer);
 		
 		
 		if(this.htmlDisplay.equals("both")){
+            /* Use HTML to display */
 			CharSequence sq = Html.fromHtml(item.getQuestion());
 			CharSequence sa = Html.fromHtml(item.getAnswer());
 			
@@ -563,6 +570,7 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
 			answerView.setText(new StringBuilder().append(item.getAnswer()));
 		}
 		
+        /* Here is tricky to set up the alignment of the text */
 		if(questionAlign.equals("center")){
 			questionView.setGravity(Gravity.CENTER);
 			LinearLayout layoutQuestion = (LinearLayout)findViewById(R.id.layout_question);
@@ -596,11 +604,10 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
 		questionView.setTextSize((float)questionFontSize);
 		answerView.setTextSize((float)answerFontSize);
 
-		int status= -10;
 		if(autoaudioSetting){
 			if(this.showAnswer == false){
 				if(questionTTS != null){
-					status = questionTTS.sayText(currentItem.getQuestion());
+					questionTTS.sayText(currentItem.getQuestion());
 				}
 				else if(questionUserAudio){
 					mSpeakWord.speakWord(currentItem.getQuestion());
@@ -609,16 +616,13 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
 			}
 			else{
 				if(answerTTS != null){
-					status = answerTTS.sayText(currentItem.getAnswer());
+					answerTTS.sayText(currentItem.getAnswer());
 				}
 				else if(answerUserAudio){
 					mSpeakWord.speakWord(currentItem.getAnswer());
 					
 				}
 			}
-		}
-		if(status == 0 || status != 0){
-			status = status + 1 -1;
 		}
 		this.buttonBinding();
 
@@ -636,12 +640,13 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
 
         for(int i = 0; i < btns.length; i++){
             if(v == btns[i]){
-                // i is also the grade for the button
+                /* i is also the grade for the button */
                 int grade = i;
-                // When user click on the button of grade, it will update the item information
-                // according to the grade.
-                // If the return value is success, the user will not need to see this item today.
-                // If the return value is failure, the item will be appended to the tail of the queue.
+                /* When user click on the button of grade, it will update the item information
+                 * according to the grade.
+                 * If the return value is success, the user will not need to see this item today.
+                 * If the return value is failure, the item will be appended to the tail of the queue. 
+                 * */
 
                 prevScheduledItemCount = scheduledItemCount;
                 prevNewItemCount = newItemCount;
@@ -655,6 +660,9 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
 
 
                 boolean scheduled = currentItem.isScheduled();
+                /* The processAnswer will return the interval
+                 * if it is 0, it means failure.
+                 */
                 boolean success = currentItem.processAnswer(grade, false) > 0 ? true : false;
                 if (success == true) {
                     learnQueue.remove(0);
@@ -679,7 +687,7 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
                 }
 
                 this.showAnswer = false;
-                // Now the currentItem is the next item, so we need to udpate the screen.
+                /* Now the currentItem is the next item, so we need to udpate the screen. */
                 this.updateMemoScreen();
                 break;
             }
@@ -698,8 +706,9 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
         
 
 	private void buttonBinding() {
-		// This function will bind the button event and show/hide button
-		// according to the showAnswer varible.
+		/* This function will bind the button event and show/hide button
+         * according to the showAnswer varible.
+         * */
 		TextView answer = (TextView) findViewById(R.id.answer);
 		if (showAnswer == false) {
             for(Button btn : btns){
@@ -716,6 +725,7 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
 			    btn.setVisibility(View.VISIBLE);
             }
             if(btnOneRow){
+                /* Do we still keep the 0 button? */
                 //btns[0].setVisibility(View.GONE);
                 String[] btnsText = {getString(R.string.memo_btn0_brief_text),getString(R.string.memo_btn1_brief_text),getString(R.string.memo_btn2_brief_text),getString(R.string.memo_btn3_brief_text),getString(R.string.memo_btn4_brief_text),getString(R.string.memo_btn5_brief_text)};
                 for(int i = 0; i < btns.length; i++){
@@ -741,6 +751,7 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
         LinearLayout root = (LinearLayout)findViewById(R.id.memo_screen_root);
         int[] colorMap = {Color.BLACK, Color.WHITE, Color.RED, Color.GREEN, Color.BLUE, Color.CYAN, Color.MAGENTA, Color.YELLOW};
     	String[] colorList = getResources().getStringArray(R.array.color_list);
+        /* Default color will do nothing */
         if(!textColor.equals("Default")){
             for(int i = 1; i <= colorMap.length; i++){
                 if(textColor.equals(colorList[i])){
@@ -817,12 +828,46 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
     }
 
     private void showEditDialog(){
+        /* This method will show the dialog after long click 
+         * on the screen 
+         * */
         new AlertDialog.Builder(this)
             .setTitle(getString(R.string.memo_edit_dialog_title))
             .setItems(R.array.memo_edit_dialog_list, new DialogInterface.OnClickListener(){
                 public void onClick(DialogInterface dialog, int which){
                     if(which == 0){
                         /* Edit current card */
+                        LayoutInflater factory = LayoutInflater.from(MemoScreen.this);
+                        final View editView = factory.inflate(R.layout.edit_dialog, null);
+                        EditText eq = (EditText)editView.findViewById(R.id.edit_dialog_question_entry);
+                        EditText ea = (EditText)editView.findViewById(R.id.edit_dialog_answer_entry);
+                        eq.setText(currentItem.getQuestion());
+                        ea.setText(currentItem.getAnswer());
+                        /* This is a customized dialog inflated from XML */
+                        new AlertDialog.Builder(MemoScreen.this)
+                            .setTitle(getString(R.string.memo_edit_dialog_title))
+                            .setView(editView)
+			                .setPositiveButton(getString(R.string.settings_save),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface arg0, int arg1) {
+                                        EditText eq = (EditText)editView.findViewById(R.id.edit_dialog_question_entry);
+                                        EditText ea = (EditText)editView.findViewById(R.id.edit_dialog_answer_entry);
+                                        String qText = eq.getText().toString();
+                                        String aText = ea.getText().toString();
+                                        HashMap<String, String> hm = new HashMap<String, String>();
+                                        hm.put("question", qText);
+                                        hm.put("answer", aText);
+                                        currentItem.setData(hm);
+                                        dbHelper.updateQA(currentItem);
+                                        updateMemoScreen();
+
+                                    }
+                                })
+			                .setNegativeButton(getString(R.string.cancel_text), null)
+                            .create()
+                            .show();
+
+
                     }
                     if(which == 1){
                         /* Delete current card */
@@ -842,6 +887,20 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
                     }
                     if(which == 2){
                         /* Skip this card forever */
+                        new AlertDialog.Builder(MemoScreen.this)
+                            .setTitle(getString(R.string.skip_text))
+                            .setMessage(getString(R.string.skip_warning))
+			                .setPositiveButton(getString(R.string.yes_text),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface arg0, int arg1) {
+                                        currentItem.skip();
+                                        dbHelper.updateItem(currentItem);
+                                        restartActivity();
+                                    }
+                                })
+			                .setNegativeButton(getString(R.string.no_text), null)
+                            .create()
+                            .show();
                     }
                 }
             })

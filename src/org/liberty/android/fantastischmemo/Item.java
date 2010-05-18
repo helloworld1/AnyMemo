@@ -99,6 +99,15 @@ public final class Item implements Cloneable{
 		return acq_reps == 0 ? true : false;
 	}
 
+    public void skip(){
+        /* This will set a super long interval so it will never appear */
+        interval = 100000;
+        grade = 5;
+        /* I have seen it */
+        acq_reps = 1;
+        easiness = 10.0;
+    }
+
     public Object clone() throws CloneNotSupportedException{
         Item itemClone = (Item)super.clone();
         itemClone._id = this._id;

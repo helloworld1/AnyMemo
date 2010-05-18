@@ -78,6 +78,8 @@
     <string name="detail_back">Back</string>
     <string name="detail_delete">Delete</string>
     <string name="delete_warning">Do you really want to delete this card?</string>
+    <string name="skip_text">Skip</string>
+    <string name="skip_warning">This item will never appear for learning. Do you want to skip it?</string>
     <string name="stat_total">Total: </string>
     <string name="stat_scheduled">Scheduled: </string>
     <string name="stat_new">New: </string>
