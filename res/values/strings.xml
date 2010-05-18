@@ -69,11 +69,13 @@
     <string name="settings_bg_color">Background Color</string>
     <string name="settings_wipe">Wipe All Progress</string>
     <string name="settings_shuffle">Shuffle cards</string>
+    <string name="settings_inverse">Inverse cards</string>
     <string name="settings_save">Save</string>
     <string name="settings_discard">Discard</string>
     <string name="warning_text">Warning</string>
     <string name="settings_wipe_warning">ALL Learning Progress will be reset upon clicking Save!</string>
     <string name="settings_shuffle_warning">This operation will shuffle all cards and can NOT be undone. Please think before writing changes</string>
+    <string name="settings_inverse_warning">This operation will inverse the questions and answers of ALL cards.</string>
     <string name="detail_update">Write Changes</string>
     <string name="detail_back">Back</string>
     <string name="detail_delete">Delete</string>

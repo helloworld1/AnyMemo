@@ -52,6 +52,7 @@ public class SettingsScreen extends Activity implements OnClickListener {
     private Spinner bgColorSpinner;
 	private CheckBox wipeCheckbox;
 	private CheckBox shuffleCheckbox;
+	private CheckBox inverseCheckbox;
 	private Button btnSave;
 	private Button btnDiscard;
 	private DatabaseHelper dbHelper;
@@ -67,6 +68,7 @@ public class SettingsScreen extends Activity implements OnClickListener {
         mContext = this;
         mHandler = new Handler();
         
+        /* Properly set up all the Views */
         questionFontSizeSpinner = (Spinner)findViewById(R.id.question_font_size_spinner);
         ArrayAdapter<CharSequence> fontSizeAdapter = ArrayAdapter.createFromResource(this, R.array.font_size_list, android.R.layout.simple_spinner_item);
         fontSizeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -105,6 +107,7 @@ public class SettingsScreen extends Activity implements OnClickListener {
         bgColorSpinner = (Spinner)findViewById(R.id.bg_color_spinner);
         bgColorSpinner.setAdapter(colorAdapter);
         
+        /* Get the spinner's initial item */
         setInitialPosition();
         
         wipeCheckbox = (CheckBox)findViewById(R.id.checkbox_wipe);
@@ -112,6 +115,9 @@ public class SettingsScreen extends Activity implements OnClickListener {
 
         shuffleCheckbox = (CheckBox)findViewById(R.id.checkbox_shuffle);
         shuffleCheckbox.setOnClickListener(this);
+
+        inverseCheckbox = (CheckBox)findViewById(R.id.checkbox_inverse);
+        inverseCheckbox.setOnClickListener(this);
         
         btnSave = (Button)findViewById(R.id.settting_save);
         btnSave.setOnClickListener(this);
@@ -355,6 +361,9 @@ public class SettingsScreen extends Activity implements OnClickListener {
                     if(shuffleCheckbox.isChecked()){
                         dbHelper.shuffleDatabase();
                     }
+                    if(inverseCheckbox.isChecked()){
+                        dbHelper.inverseQA();
+                    }
                     dbHelper.close();
                     mHandler.post(new Runnable(){
                         @Override
@@ -374,11 +383,15 @@ public class SettingsScreen extends Activity implements OnClickListener {
         	setResult(Activity.RESULT_CANCELED, resultIntent);    			
     		finish();
     	}
-    	
+
+        /* Display the warnings when these checkbox are checked
+         * The actual events are handled in the btnSave
+         */
     	if(v == wipeCheckbox){
     		if(wipeCheckbox.isChecked()){
     			new AlertDialog.Builder(this)
     			    .setTitle(getString(R.string.warning_text))
+                    .setIcon(R.drawable.alert_dialog_icon)
     			    .setMessage(getString(R.string.settings_wipe_warning))
     			    .setPositiveButton(getString(R.string.ok_text), null)
                     .create()
@@ -389,7 +402,19 @@ public class SettingsScreen extends Activity implements OnClickListener {
     		if(shuffleCheckbox.isChecked()){
     			new AlertDialog.Builder(this)
     			    .setTitle(getString(R.string.warning_text))
+                    .setIcon(R.drawable.alert_dialog_icon)
     			    .setMessage(getString(R.string.settings_shuffle_warning))
+    			    .setPositiveButton(getString(R.string.ok_text), null)
+                    .create()
+                    .show();
+    		}
+    	}
+    	if(v == inverseCheckbox){
+    		if(inverseCheckbox.isChecked()){
+    			new AlertDialog.Builder(this)
+    			    .setTitle(getString(R.string.warning_text))
+                    .setIcon(R.drawable.alert_dialog_icon)
+    			    .setMessage(getString(R.string.settings_inverse_warning))
     			    .setPositiveButton(getString(R.string.ok_text), null)
                     .create()
                     .show();

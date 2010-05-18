@@ -614,5 +614,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		this.myDatabase.execSQL("REPLACE INTO learn_tbl(_id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse) VALUES (?, '2010-01-01', 0, 0, 2.5, 0, 0, 0, 0, 0)", new String[]{"" + item.getId()});
 		
 	}
+
+    public void inverseQA(){
+        List<Item> itemList = new LinkedList<Item>();
+        getListItems(0, -1, itemList);
+        myDatabase.beginTransaction();
+        try{
+            /* First inverse QA */
+            for(Item item : itemList){
+                item.inverseQA();
+                updateItem(item);
+                updateQA(item);
+            }
+            /* Then inverse control table */
+            HashMap<String, String> hm = getSettings();
+            String qLocale = hm.get("question_locale");
+            String aLocale = hm.get("answer_locale");
+            String qAlign = hm.get("question_align");
+            String aAlign = hm.get("answer_align");
+            String qFont = hm.get("question_font_size");
+            String aFont = hm.get("answer_font_size");
+            hm.put("question_locale", aLocale);
+            hm.put("answer_locale", qLocale);
+            hm.put("question_align", aAlign);
+            hm.put("answer_align", qAlign);
+            hm.put("question_font_size", aFont);
+            hm.put("answer_font_size", qFont);
+            setSettings(hm);
+
+			myDatabase.setTransactionSuccessful();
+        }
+        finally{
+			myDatabase.endTransaction();
+        }
+    }
 	
 }

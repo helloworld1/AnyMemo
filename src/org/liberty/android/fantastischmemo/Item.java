@@ -399,5 +399,11 @@ public final class Item implements Cloneable{
             return returnValue ? 1 : 0;
         }
 	}
+
+    public void inverseQA(){
+        String tmp = answer;
+        answer = question;
+        question = tmp;
+    }
 	
 }
