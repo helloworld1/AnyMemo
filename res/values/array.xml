@@ -51,5 +51,10 @@
     <item>Magenta</item>
     <item>Yellow</item>
 </string-array>
+<string-array name="memo_edit_dialog_list">
+    <item>Edit current card</item>
+    <item>Delete current card</item>
+    <item>Skip this card forever</item>
+</string-array>
 
 </resources>

@@ -58,7 +58,7 @@ import android.util.Log;
 import android.os.SystemClock;
 
 
-public class MemoScreen extends Activity implements View.OnClickListener{
+public class MemoScreen extends Activity implements View.OnClickListener, View.OnLongClickListener{
 	private ArrayList<Item> learnQueue;
 	private DatabaseHelper dbHelper = null;
 	private String dbName;
@@ -123,6 +123,9 @@ public class MemoScreen extends Activity implements View.OnClickListener{
         for(Button btn : btns){
             btn.setOnClickListener(this);
         }
+        LinearLayout root = (LinearLayout)findViewById(R.id.memo_screen_root);
+        root.setOnClickListener(this);
+        root.setOnLongClickListener(this);
 
 
         mProgressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_database), true);
@@ -155,6 +158,15 @@ public class MemoScreen extends Activity implements View.OnClickListener{
 		}
 		
 	}
+
+    private void restartActivity(){
+    		Intent myIntent = new Intent();
+    		myIntent.setClass(MemoScreen.this, MemoScreen.class);
+    		myIntent.putExtra("dbname", dbName);
+    		myIntent.putExtra("dbpath", dbPath);
+            finish();
+    		startActivity(myIntent);
+    }
 	
 	public void onDestroy(){
 		super.onDestroy();
@@ -295,26 +307,6 @@ public class MemoScreen extends Activity implements View.OnClickListener{
 	    return false;
 	}
 
-	public boolean onTouchEvent(MotionEvent event) {
-		// When the screen is touched, it will uncover answer
-		int eventAction = event.getAction();
-        long holdTime = SystemClock.uptimeMillis() - event.getDownTime();
-		switch (eventAction) {
-		case MotionEvent.ACTION_UP:
-			if(this.showAnswer == false && holdTime < HOLD_THRESHOLD){
-				this.showAnswer ^= true;
-				updateMemoScreen();
-			}
-            else if(holdTime > HOLD_THRESHOLD){
-                Log.v(TAG, "HOLD HOLD HOLD" + SystemClock.uptimeMillis());
-                Log.v(TAG, "HOLD time" + event.getDownTime());
-                Log.v(TAG, "Event time" +event.getEventTime());
-            }
-
-		}
-		return true;
-
-	}
 	
     public void onActivityResult(int requestCode, int resultCode, Intent data){
     	super.onActivityResult(requestCode, resultCode, data);
@@ -634,6 +626,14 @@ public class MemoScreen extends Activity implements View.OnClickListener{
 
     @Override
     public void onClick(View v){
+        if(v == (LinearLayout)findViewById(R.id.memo_screen_root)){
+            /* Handle the short click of the whole screen */
+			if(this.showAnswer == false){
+				this.showAnswer ^= true;
+				updateMemoScreen();
+			}
+        }
+
         for(int i = 0; i < btns.length; i++){
             if(v == btns[i]){
                 // i is also the grade for the button
@@ -686,6 +686,16 @@ public class MemoScreen extends Activity implements View.OnClickListener{
         }
 
     }
+
+    @Override
+    public boolean onLongClick(View v){
+        if(v == (LinearLayout)findViewById(R.id.memo_screen_root)){
+            showEditDialog();
+            return true;
+        }
+        return false;
+    }
+        
 
 	private void buttonBinding() {
 		// This function will bind the button event and show/hide button
@@ -805,4 +815,41 @@ public class MemoScreen extends Activity implements View.OnClickListener{
         }
 
     }
+
+    private void showEditDialog(){
+        new AlertDialog.Builder(this)
+            .setTitle(getString(R.string.memo_edit_dialog_title))
+            .setItems(R.array.memo_edit_dialog_list, new DialogInterface.OnClickListener(){
+                public void onClick(DialogInterface dialog, int which){
+                    if(which == 0){
+                        /* Edit current card */
+                    }
+                    if(which == 1){
+                        /* Delete current card */
+                        new AlertDialog.Builder(MemoScreen.this)
+                            .setTitle(getString(R.string.detail_delete))
+                            .setMessage(getString(R.string.delete_warning))
+			                .setPositiveButton(getString(R.string.yes_text),
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface arg0, int arg1) {
+                                        dbHelper.deleteItem(currentItem);
+                                        restartActivity();
+                                    }
+                                })
+			                .setNegativeButton(getString(R.string.no_text), null)
+                            .create()
+                            .show();
+                    }
+                    if(which == 2){
+                        /* Skip this card forever */
+                    }
+                }
+            })
+            .create()
+            .show();
+    }
+
+
+
+
 }

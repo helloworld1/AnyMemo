@@ -153,8 +153,8 @@ public class DetailScreen extends Activity implements OnClickListener{
     		AlertDialog alertDialog = new AlertDialog.Builder(this)
 			.create();
 			alertDialog.setTitle("Warning");
-			alertDialog.setMessage("Do you really want to delete this item?");
-			alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
+			alertDialog.setMessage(getString(R.string.delete_warning));
+			alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.yes_text),
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface arg0, int arg1) {
 							dbHelper.deleteItem(currentItem);
@@ -163,7 +163,7 @@ public class DetailScreen extends Activity implements OnClickListener{
 							finish();
 						}
 					});
-			alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
+			alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.no_text),
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface arg0, int arg1) {
 						}
