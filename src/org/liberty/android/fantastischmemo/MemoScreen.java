@@ -574,32 +574,32 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
 		if(questionAlign.equals("center")){
 			questionView.setGravity(Gravity.CENTER);
 			LinearLayout layoutQuestion = (LinearLayout)findViewById(R.id.layout_question);
-			LinearLayout layoutAnswer = (LinearLayout)findViewById(R.id.layout_answer);
 			layoutQuestion.setGravity(Gravity.CENTER);
-			layoutAnswer.setGravity(Gravity.CENTER);
 		}
 		else if(questionAlign.equals("right")){
 			questionView.setGravity(Gravity.RIGHT);
 			LinearLayout layoutQuestion = (LinearLayout)findViewById(R.id.layout_question);
-			LinearLayout layoutAnswer = (LinearLayout)findViewById(R.id.layout_answer);
 			layoutQuestion.setGravity(Gravity.NO_GRAVITY);
-			layoutAnswer.setGravity(Gravity.NO_GRAVITY);
 		}
 		else{
 			questionView.setGravity(Gravity.LEFT);
 			LinearLayout layoutQuestion = (LinearLayout)findViewById(R.id.layout_question);
-			LinearLayout layoutAnswer = (LinearLayout)findViewById(R.id.layout_answer);
 			layoutQuestion.setGravity(Gravity.NO_GRAVITY);
-			layoutAnswer.setGravity(Gravity.NO_GRAVITY);
 		}
 		if(answerAlign.equals("center")){
 			answerView.setGravity(Gravity.CENTER);
+			LinearLayout layoutAnswer = (LinearLayout)findViewById(R.id.layout_answer);
+			layoutAnswer.setGravity(Gravity.CENTER);
 		} else if(answerAlign.equals("right")){
 			answerView.setGravity(Gravity.RIGHT);
+			LinearLayout layoutAnswer = (LinearLayout)findViewById(R.id.layout_answer);
+			layoutAnswer.setGravity(Gravity.NO_GRAVITY);
 			
 		}
 		else{
 			answerView.setGravity(Gravity.LEFT);
+			LinearLayout layoutAnswer = (LinearLayout)findViewById(R.id.layout_answer);
+			layoutAnswer.setGravity(Gravity.NO_GRAVITY);
 		}
 		questionView.setTextSize((float)questionFontSize);
 		answerView.setTextSize((float)answerFontSize);
