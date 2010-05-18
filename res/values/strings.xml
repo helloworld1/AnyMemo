@@ -103,6 +103,7 @@
     <string name="fb_create_dir">Create New Folder</string>
     <string name="fb_create_db_message">Please enter the name of new database.</string>
     <string name="fb_create_dir_message">Please enter the name of new folder.</string>
+    <string name="fb_edit_dialog_title">Edit</string>
     <string name="loading_please_wait">Please Wait...</string>
     <string name="loading_recent_list">Loading Recent List...</string>
     <string name="loading_database">Loading Database...</string>

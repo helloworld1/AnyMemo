@@ -29,6 +29,7 @@ import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -47,8 +48,9 @@ import android.widget.ImageView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.util.Log;
 
-public class FileBrowser extends Activity implements OnItemClickListener{
+public class FileBrowser extends Activity implements OnItemClickListener, OnItemLongClickListener{
 	private enum DISPLAYMODE{ABSOLUTE, RELATIVE;}
 	private final DISPLAYMODE displayMode = DISPLAYMODE.RELATIVE;
 	private ArrayList<String> directoryEntries = new ArrayList<String>();
@@ -57,6 +59,7 @@ public class FileBrowser extends Activity implements OnItemClickListener{
 	private String fileExtension = ".db";
 	private Context mContext;
     private ListView fbListView;
+    private final static String TAG = "org.liberty.android.fantastischmemo.FileBrowser";
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		
@@ -99,12 +102,6 @@ public class FileBrowser extends Activity implements OnItemClickListener{
 					//
 				}
 			};
-			AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-			alertDialog.setTitle("Question");
-			alertDialog.setMessage("Do you want to open this file?\n" + aDirectory.getName());
-			alertDialog.setButton("OK", okButtonListener);
-			alertDialog.setButton("Cancel", cancelButtonListener);
-			
 		}
 	}
 	
@@ -159,6 +156,7 @@ public class FileBrowser extends Activity implements OnItemClickListener{
 		});
 	    fbListView.setAdapter(directoryList);
         fbListView.setOnItemClickListener(this);
+        fbListView.setOnItemLongClickListener(this);
 	}
 	
 	private void openFile(File aDirectory){
@@ -218,6 +216,74 @@ public class FileBrowser extends Activity implements OnItemClickListener{
 		
 		
 	}
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?>  parent, View  view, int position, long id){
+		String selectedFileString = this.directoryEntries.get(position);
+		if(selectedFileString.equals(getString(R.string.current_dir))){
+            /* Do nothing */
+		}
+		else if(selectedFileString.equals(getString(R.string.up_one_level))){
+            /* Do nithing */
+		}
+		else{
+            final int pos = position;
+			final File clickedFile;
+			switch(this.displayMode){
+			case RELATIVE:
+				clickedFile = new File(this.currentDirectory.getAbsolutePath() + this.directoryEntries.get(position));
+				break;
+			case ABSOLUTE:
+				clickedFile = new File(this.directoryEntries.get(position));
+				break;
+            default:
+                clickedFile = new File(this.currentDirectory.getAbsolutePath() + this.directoryEntries.get(position));
+			}
+			if(clickedFile != null){
+				try{
+					if(clickedFile.isDirectory()){
+						this.browseTo(clickedFile);
+					}
+					else if(clickedFile.isFile()){
+						Intent resultIntent = new Intent();
+		
+						resultIntent.putExtra("org.liberty.android.fantastischmemo.dbName", clickedFile.getName());
+						resultIntent.putExtra("org.liberty.android.fantastischmemo.dbPath", clickedFile.getParent());
+                        new AlertDialog.Builder(this)
+                            .setTitle(getString(R.string.fb_edit_dialog_title))
+                            .setItems(R.array.fb_dialog_list, new DialogInterface.OnClickListener(){
+                                @Override
+                                public void onClick(DialogInterface dialog, int which){
+                                    if(which == 0){
+                                        /* Delete */
+                                        clickedFile.delete();
+                                        File dir = new File(clickedFile.getParent());
+                                        Log.v(TAG, "DIR: " + dir.toString());
+                                        browseTo(dir);
+                                    }
+                                    if(which == 1){
+                                        /* Clone */
+                                    }
+
+
+                                }
+                            })
+                            .create()
+                            .show();
+
+					}
+				}
+		
+				catch(Exception e){
+					new AlertDialog.Builder(this).setMessage(e.toString()).show();
+					browseTo(new File("/"));
+				}
+			}
+		}
+        return true;
+
+    }
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu){
 		MenuInflater inflater = getMenuInflater();
@@ -228,67 +294,58 @@ public class FileBrowser extends Activity implements OnItemClickListener{
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.file_browser_createdb:{
-			AlertDialog.Builder alert = new AlertDialog.Builder(this);
-			alert.setTitle(this.getString(R.string.fb_create_db));
-			alert.setMessage(this.getString(R.string.fb_create_db_message));
-			final EditText input = new EditText(this);
-			alert.setView(input);
-			alert.setPositiveButton(this.getString(R.string.ok_text), new DialogInterface.OnClickListener(){
-				@Override
-				public void onClick(DialogInterface dialog, int which ){
-					String value = input.getText().toString();
-					if(!value.endsWith(".db")){
-						value += ".db";
-					}
-					DatabaseHelper dbHelper = new DatabaseHelper(mContext, currentDirectory.getAbsolutePath(), value, 1);
-					try{
-						dbHelper.createEmptyDatabase();
-					}
-					catch(Exception e){
-					}
-					dbHelper.close();
-					browseTo(currentDirectory);
-					
-				}
-			});
-			alert.setNegativeButton(this.getString(R.string.cancel_text), new DialogInterface.OnClickListener(){
-				@Override
-				public void onClick(DialogInterface dialog, int which ){
-					
-				}
-			});
-			alert.show();
-			return true;
-		}
-		
-		case R.id.file_browser_createdirectory:{
-			AlertDialog.Builder alert = new AlertDialog.Builder(this);
-			alert.setTitle(this.getString(R.string.fb_create_dir));
-			alert.setMessage(this.getString(R.string.fb_create_dir_message));
-			final EditText input = new EditText(this);
-			alert.setView(input);
-			alert.setPositiveButton(this.getString(R.string.ok_text), new DialogInterface.OnClickListener(){
-				@Override
-				public void onClick(DialogInterface dialog, int which ){
-					String value = input.getText().toString();
-					File newDir = new File(currentDirectory + "/" + value);
-					newDir.mkdir();
-					browseTo(currentDirectory);
-					
-				}
-			});
-			alert.setNegativeButton(this.getString(R.string.cancel_text), new DialogInterface.OnClickListener(){
-				@Override
-				public void onClick(DialogInterface dialog, int which ){
-					
-					
-				}
-			});
-			alert.show();
-			return true;
-		}
-				
+            case R.id.file_browser_createdb:{
+                final EditText input = new EditText(this);
+                new AlertDialog.Builder(this)
+                    .setTitle(this.getString(R.string.fb_create_db))
+                    .setMessage(this.getString(R.string.fb_create_db_message))
+                    .setView(input)
+                    .setPositiveButton(this.getString(R.string.ok_text), new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which ){
+                        String value = input.getText().toString();
+                        if(!value.endsWith(".db")){
+                            value += ".db";
+                        }
+                        DatabaseHelper dbHelper = new DatabaseHelper(mContext, currentDirectory.getAbsolutePath(), value, 1);
+                        try{
+                            dbHelper.createEmptyDatabase();
+                        }
+                        catch(Exception e){
+                        }
+                        dbHelper.close();
+                        browseTo(currentDirectory);
+                        
+                    }
+                })
+                .setNegativeButton(this.getString(R.string.cancel_text), null) 
+                .create()
+                .show();
+                return true;
+            }
+            
+            case R.id.file_browser_createdirectory:{
+                final EditText input = new EditText(this);
+                new AlertDialog.Builder(this)
+                    .setTitle(this.getString(R.string.fb_create_dir))
+                    .setMessage(this.getString(R.string.fb_create_dir_message))
+                    .setView(input)
+                    .setPositiveButton(this.getString(R.string.ok_text), new DialogInterface.OnClickListener(){
+                    @Override
+                        public void onClick(DialogInterface dialog, int which ){
+                            String value = input.getText().toString();
+                            File newDir = new File(currentDirectory + "/" + value);
+                            newDir.mkdir();
+                            browseTo(currentDirectory);
+                            
+                        }
+                    })
+                    .setNegativeButton(this.getString(R.string.cancel_text), null)
+                    .create()
+                    .show();
+                return true;
+                
+            }
 	    }
 	    return false;
 	}

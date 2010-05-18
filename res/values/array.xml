@@ -56,5 +56,10 @@
     <item>Delete current card</item>
     <item>Skip this card forever</item>
 </string-array>
+<string-array name="fb_dialog_list">
+    <item>Delete</item>
+    <item>Clone</item>
+    <item>Rename</item>
+</string-array>
 
 </resources>
