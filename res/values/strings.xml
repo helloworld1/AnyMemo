@@ -129,7 +129,7 @@
     <string name="about_text">Advanced spaced repetition flashcard learning software.\n\nAuthors: Haowen Ning, Qi Wang\n\nAcknowledge: pomelo422, Lyndsey Percival, John Rissler</string>
     <string name="about_version">Version History</string>
     <string name="what_is_new">Changelog</string>
-    <string name="what_is_new_message">See Graphical guide of new features, please click version history button.\nVersion 2.7.0\n1. New Feature: Add a new edit dialog by touching and holding the screen when learning.\n2. New Feature: Edit the current card via the edit dialog.\n3. New Feature: Delete the current card via the edit dialog.\n4. New Feature: Skip a card forever via the edit dialog.\n4. New Feature: Inverse the question and answer in the settings in the menu of the card screen.\n5.Bug Fix: The alignment settings of answer is not working correctly.</string>
+    <string name="what_is_new_message">See Graphical guide of new features, please click version history button.\nVersion 2.7.0\n1. New Feature: Add a new edit dialog by touching and holding the screen when learning.\n2. New Feature: Edit the current card via the edit dialog.\n3. New Feature: Delete the current card via the edit dialog.\n4. New Feature: Skip a card forever via the edit dialog.\n5. New Feature: Inverse the question and answer in the settings in the menu of the card screen.\n6. Bug Fix: The alignment settings of answer is not working correctly.</string>
 
     
     
