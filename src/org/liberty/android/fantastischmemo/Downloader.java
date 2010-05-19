@@ -97,7 +97,12 @@ public class Downloader extends Activity implements OnItemClickListener{
         setContentView(R.layout.downloader);
         mDatabaseList = new ArrayList<HashMap<String, String>>();
         mHandler = new Handler();
-        mProgressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_connect_net), true);
+        mProgressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_connect_net), true, true, new DialogInterface.OnCancelListener(){
+            @Override
+            public void onCancel(DialogInterface dialog){
+                finish();
+            }
+        });
 
         topText = (TextView)findViewById(R.id.downloader_top_text);
         mListView = (ListView)findViewById(R.id.downloader_list);

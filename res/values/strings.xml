@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">AnyMemo</string>
     <string name="app_full_name">AnyMemo Free</string>
-    <string name="app_version">2.7.0</string>
+    <string name="app_version">2.8.0</string>
     <string name="up_one_level">..</string>
     <string name="current_dir">.</string>
     <string name="ok_text">OK</string>
@@ -120,7 +120,7 @@
     <string name="fail_export">Fail to export </string>
     <string name="loading_export">Exporting to XML...\n It may take a long while.</string>
     <string name="loading_save">Saving changes...</string>
-    <string name="loading_connect_net">Refreshing list from internet...</string>
+    <string name="loading_connect_net">Refreshing list from internet...\nPress back key to cancel.</string>
     <string name="loading_downloading">Downloading... It may take a while.</string>
     <string name="downloader_connection_error">Connection error</string>
     <string name="downloader_connection_error_message">Cannot connect to server. Please make sure the internet connection</string>
@@ -134,7 +134,7 @@
     <string name="about_text">Advanced spaced repetition flashcard learning software.\n\nAuthors: Haowen Ning, Qi Wang\n\nAcknowledge: pomelo422, Lyndsey Percival, John Rissler</string>
     <string name="about_version">Version History</string>
     <string name="what_is_new">Changelog</string>
-    <string name="what_is_new_message">See Graphical guide of new features, please click version history button.\nVersion 2.7.0\n1. New Feature: Add a new edit dialog by touching and holding the screen when learning.\n2. New Feature: Edit the current card via the edit dialog.\n3. New Feature: Delete the current card via the edit dialog.\n4. New Feature: Skip a card forever via the edit dialog.\n5. New Feature: Inverse the question and answer in the settings in the menu of the card screen.\n6. Bug Fix: The alignment settings of answer is not working correctly.</string>
+    <string name="what_is_new_message">See Graphical guide of new features, please click version history button.\nVersion 2.8.0\n1. New Feature: Delete a file in file manager by long press a file.\n2. New Feature: Clone a file in file manager.\n3. New Feature: Rename a file in file manager.\n4. Enhance: The font size in file list is now larger.\n5. Enhance: The official website is now anymemo.org. All links are moved to anymemo.org.\n6. Enahnce: The list refreshing in Downloader can be canceled.</string>
 
     
     
