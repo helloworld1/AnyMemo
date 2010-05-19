@@ -20,6 +20,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo;
 
 import java.io.File;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -237,6 +242,7 @@ public class FileBrowser extends Activity implements OnItemClickListener, OnItem
 				clickedFile = new File(this.directoryEntries.get(position));
 				break;
             default:
+                /* Since clickedFile is final, it have to be initiated */
                 clickedFile = new File(this.currentDirectory.getAbsolutePath() + this.directoryEntries.get(position));
 			}
 			if(clickedFile != null){
@@ -245,10 +251,6 @@ public class FileBrowser extends Activity implements OnItemClickListener, OnItem
 						this.browseTo(clickedFile);
 					}
 					else if(clickedFile.isFile()){
-						Intent resultIntent = new Intent();
-		
-						resultIntent.putExtra("org.liberty.android.fantastischmemo.dbName", clickedFile.getName());
-						resultIntent.putExtra("org.liberty.android.fantastischmemo.dbPath", clickedFile.getParent());
                         new AlertDialog.Builder(this)
                             .setTitle(getString(R.string.fb_edit_dialog_title))
                             .setItems(R.array.fb_dialog_list, new DialogInterface.OnClickListener(){
@@ -261,9 +263,61 @@ public class FileBrowser extends Activity implements OnItemClickListener, OnItem
                                         Log.v(TAG, "DIR: " + dir.toString());
                                         browseTo(dir);
                                     }
-                                    if(which == 1){
+                                    else if(which == 1){
                                         /* Clone */
+                                        String srcDir = clickedFile.getAbsolutePath();
+                                        String destDir = srcDir.replaceAll(".db", ".clone.db");
+                                        try{
+                                            copyFile(srcDir, destDir);
+                                        }
+                                        catch(IOException e){
+                                            new AlertDialog.Builder(FileBrowser.this)
+                                                .setTitle(getString(R.string.fail))
+                                                .setMessage(getString(R.string.fb_fail_to_clone) + "\nError: " + e.toString())
+                                                .setNeutralButton(getString(R.string.ok_text), null)
+                                                .create()
+                                                .show();
+                                        }
+
+                                        browseTo(new File(clickedFile.getParent()));
                                     }
+                                    else if(which == 2){
+                                        /* rename card */
+                                        final EditText input = new EditText(FileBrowser.this);
+                                        input.setText(clickedFile.getAbsolutePath());
+                                        new AlertDialog.Builder(FileBrowser.this)
+                                            .setTitle(getString(R.string.fb_rename))
+                                            .setMessage(getString(R.string.fb_rename_message))
+                                            .setView(input)
+                                            .setPositiveButton(getString(R.string.ok_text), new DialogInterface.OnClickListener(){
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which ){
+                                                String value = input.getText().toString();
+                                                if(!value.equals(clickedFile.getAbsolutePath())){
+                                                    try{
+                                                        copyFile(clickedFile.getAbsolutePath(), value);
+                                                        clickedFile.delete();
+                                                    }
+                                                    catch(IOException e){
+                                                        new AlertDialog.Builder(FileBrowser.this)
+                                                            .setTitle(getString(R.string.fail))
+                                                            .setMessage(getString(R.string.fb_rename_fail) + "\nError: " + e.toString())
+                                                            .setNeutralButton(getString(R.string.ok_text), null)
+                                                            .create()
+                                                            .show();
+                                                    }
+
+                                                }
+
+                                                browseTo(currentDirectory);
+                                                
+                                            }
+                                        })
+                                        .setNegativeButton(getString(R.string.cancel_text), null) 
+                                        .create()
+                                        .show();
+                                    }
+
 
 
                                 }
@@ -390,6 +444,23 @@ public class FileBrowser extends Activity implements OnItemClickListener, OnItem
             return v;
         }
     }
+
+	private void copyFile(String source, String dest) throws IOException{
+        File sourceFile = new File(source);
+        File destFile = new File(dest);
+		
+        destFile.createNewFile();
+		InputStream in = new FileInputStream(sourceFile);
+		OutputStream out = new FileOutputStream(destFile);
+		
+		byte[] buf = new byte[1024];
+		int len;
+		while ((len = in.read(buf)) > 0) {
+			out.write(buf, 0, len);
+		}
+		in.close();
+		out.close();
+	}
 	
 
 }
