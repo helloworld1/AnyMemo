@@ -77,7 +77,7 @@ public class Downloader extends Activity implements OnItemClickListener{
     private Context mContext;
     private AlertDialog alertDialog;
     private Thread downloadThread;
-    private final String urlHead = "http://www.anymemo.org/download/WordLists/";
+    private final String urlHead = "http://anymemo.org/download/WordLists/";
     private final String urlDb = "WordListsForChinese/db/";
             
 
