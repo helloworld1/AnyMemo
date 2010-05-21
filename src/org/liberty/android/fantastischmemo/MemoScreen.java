@@ -60,13 +60,8 @@ import android.util.Log;
 import android.os.SystemClock;
 
 
-public class MemoScreen extends Activity implements View.OnClickListener, View.OnLongClickListener{
+public class MemoScreen extends MemoScreenBase implements View.OnClickListener, View.OnLongClickListener{
 	private ArrayList<Item> learnQueue;
-	private DatabaseHelper dbHelper = null;
-	private String dbName;
-	private String dbPath;
-	private boolean showAnswer;
-	private Item currentItem;
     /* prevItem is used to undo */
     private Item prevItem = null;
     private int prevScheduledItemCount;
@@ -77,37 +72,21 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
 	private int idMaxSeen;
 	private int scheduledItemCount;
 	private int newItemCount;
-	private double questionFontSize = 23.5;
-	private double answerFontSize = 23.5;
-	private String questionAlign = "center";
-	private String answerAlign = "center";
-	private String questionLocale = "US";
-	private String answerLocale = "US";
-	private String htmlDisplay = "none";
-	private String qaRatio = "50%";
-    private String textColor = "Default";
-    private String bgColor = "Default";
-    private boolean btnOneRow = false;
 	private TTS questionTTS;
 	private TTS answerTTS;
-	private boolean autoaudioSetting = true;
-    private ProgressDialog mProgressDialog = null;
-	private boolean questionUserAudio = false;
-	private boolean answerUserAudio = false;
-	private SpeakWord mSpeakWord = null;
     private Context mContext;
     private Handler mHandler;
-    private AlertDialog.Builder mAlert;
+    private SpeakWord mSpeakWord;
     /* Six grading buttons */
 	private Button[] btns = {null, null, null, null, null, null}; 
 
-	private int returnValue = 0;
 	private boolean initFeed;
 
     public final static String TAG = "org.liberty.android.fantastischmemo.MemoScreen";
     /* The hold event time */
     private final int HOLD_THRESHOLD = 1000;
 
+    @Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.memo_screen);
@@ -148,30 +127,7 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
 
 	}
 
-	public void onResume(){
-		super.onResume();
-        /* Refresh depending on where it returns. */
-		if(returnValue == 1){
-			
-			prepare();
-			returnValue = 0;
-		}
-		else{
-			returnValue = 0;
-		}
-		
-	}
-
-    private void restartActivity(){
-        /* restart the current activity */
-        Intent myIntent = new Intent();
-        myIntent.setClass(MemoScreen.this, MemoScreen.class);
-        myIntent.putExtra("dbname", dbName);
-        myIntent.putExtra("dbpath", dbPath);
-        finish();
-        startActivity(myIntent);
-    }
-	
+    @Override
 	public void onDestroy(){
 		super.onDestroy();
 		dbHelper.close();
@@ -182,60 +138,42 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
 			answerTTS.shutdown();
 		}
 	}
-	
-	
-	private void loadSettings(){
-		/* Here is the global settings from the preferences */
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-    	autoaudioSetting = settings.getBoolean("autoaudio", true);
-        btnOneRow = settings.getBoolean("btnonerow", false);
-    
-        
-		
-		HashMap<String, String> hm = dbHelper.getSettings();
-		Set<Map.Entry<String, String>> set = hm.entrySet();
-		Iterator<Map.Entry<String, String> > i = set.iterator();
-		while(i.hasNext()){
-			Map.Entry<String, String> me = i.next();
-			if((me.getKey().toString()).equals("question_font_size")){
-				this.questionFontSize = new Double(me.getValue().toString());
-			}
-			if(me.getKey().toString().equals("answer_font_size")){
-				this.answerFontSize = new Double(me.getValue().toString());
-			}
-			if(me.getKey().toString().equals("question_align")){
-				this.questionAlign = me.getValue().toString();
-			}
-			if(me.getKey().toString().equals("answer_align")){
-				this.answerAlign = me.getValue().toString();
-			}
-			if(me.getKey().toString().equals("question_locale")){
-				this.questionLocale = me.getValue().toString();
-			}
-			if(me.getKey().toString().equals("answer_locale")){
-				this.answerLocale = me.getValue().toString();
-			}
-			if(me.getKey().toString().equals("html_display")){
-				this.htmlDisplay = me.getValue().toString();
-			}
-			if(me.getKey().toString().equals("ratio")){
-				this.qaRatio = me.getValue().toString();
-			}
-			if(me.getKey().toString().equals("text_color")){
-                this.textColor = me.getValue().toString();
-            }
-			if(me.getKey().toString().equals("bg_color")){
-                this.bgColor = me.getValue().toString();
-            }
+
+    @Override
+	public void onResume(){
+		super.onResume();
+        /* Refresh depending on where it returns. */
+        Log.v(TAG, "PREPARE PREPARE");
+		if(returnValue == 1){
+			prepare();
+			returnValue = 0;
 		}
+		else{
+			returnValue = 0;
+		}
+		
 	}
+    @Override
+    protected void restartActivity(){
+        /* restart the current activity */
+        Intent myIntent = new Intent();
+        myIntent.setClass(MemoScreen.this, MemoScreen.class);
+        myIntent.putExtra("dbname", dbName);
+        myIntent.putExtra("dbpath", dbPath);
+        finish();
+        startActivity(myIntent);
+    }
 	
+	
+	
+    @Override
 	public boolean onCreateOptionsMenu(Menu menu){
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.memo_screen_menu, menu);
 		return true;
 	}
 	
+    @Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 	    case R.id.menuback:
@@ -293,8 +231,9 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
                 }
                 newItemCount = prevNewItemCount;
                 scheduledItemCount = prevScheduledItemCount;
-                this.showAnswer = false;
-                this.updateMemoScreen();
+                showAnswer = false;
+                updateMemoScreen();
+                autoSpeak();
             }
             else{
                 new AlertDialog.Builder(this)
@@ -311,28 +250,8 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
 	    return false;
 	}
 
-	
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
-    	super.onActivityResult(requestCode, resultCode, data);
-    	switch(requestCode){
-        
-    	
-    	case 1:
-    	case 2:
-            /* Determine whether to update the screen */
-    		if(resultCode == Activity.RESULT_OK){
-    			returnValue = 1;
-    		}
-    		if(resultCode == Activity.RESULT_CANCELED){
-    			returnValue = 0;
-    		}
-    		
-    		
-    	}
-    }
-	
-
-	private void prepare() {
+    @Override
+	protected void prepare() {
 		/* Empty the queue, init the db */
         if(dbHelper == null){
             dbHelper = new DatabaseHelper(mContext, dbPath, dbName);
@@ -416,21 +335,21 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
             mHandler.post(new Runnable(){
                 @Override
                 public void run(){
-                    mAlert = new AlertDialog.Builder(mContext);
-                    OnClickListener backButtonListener = new OnClickListener() {
+                    new AlertDialog.Builder(mContext)
+                        .setTitle(getString(R.string.memo_no_item_title))
+                        .setMessage(getString(R.string.memo_no_item_message))
+                        .setPositiveButton(getString(R.string.back_menu_text),new OnClickListener() {
                         // Finish the current activity and go back to the last activity.
                         // It should be the main screen.
                         public void onClick(DialogInterface arg0, int arg1) {
                             finish();
                         }
-                    };
-                    mAlert.setPositiveButton(getString(R.string.back_menu_text), backButtonListener );
-                    mAlert.setTitle(getString(R.string.memo_no_item_title));
-                    mAlert.setMessage(getString(R.string.memo_no_item_message));
-                    mAlert.show();
+                    })
+                        .create()
+                        .show();
+                    
                 }
             });
-			
 		}
 		else{
             // When feeding is done, update the screen
@@ -440,6 +359,7 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
                 @Override
                 public void run(){
 			        updateMemoScreen();
+                    autoSpeak();
                 }
             });
 
@@ -448,7 +368,8 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
 	}
 	
 
-	private int feedData() {
+    @Override
+	protected int feedData() {
 		if(initFeed){
 			initFeed = false;
 			
@@ -496,138 +417,6 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
 	}
 			
 			
-
-	private void updateMemoScreen() {
-		/* update the main screen according to the currentItem */
-		
-        /* The q/a ratio is not as whe it seems
-         * It displays differently on the screen
-         */
-		LinearLayout layoutQuestion = (LinearLayout)findViewById(R.id.layout_question);
-		LinearLayout layoutAnswer = (LinearLayout)findViewById(R.id.layout_answer);
-		float qRatio = Float.valueOf(qaRatio.substring(0, qaRatio.length() - 1));
-		float aRatio = 100.0f - qRatio;
-		qRatio /= 50.0;
-		aRatio /= 50.0;
-		layoutQuestion.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, qRatio));
-		layoutAnswer.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, aRatio));
-        /* Set both background and text color */
-        setScreenColor();
-		feedData();
-		if(queueEmpty == false){
-			currentItem = learnQueue.get(0);
-
-			this.displayQA(currentItem);
-		}
-		else{
-			new AlertDialog.Builder(this)
-			    .setTitle(this.getString(R.string.memo_no_item_title))
-			    .setMessage(this.getString(R.string.memo_no_item_message))
-			    .setNeutralButton(getString(R.string.back_menu_text), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        /* Finish the current activity and go back to the last activity.
-                         * It should be the open screen. */
-                        finish();
-                    }
-                })
-                .create()
-                .show();
-			
-		}
-		
-	}
-
-
-	private void displayQA(Item item) {
-		/* Display question and answer according to item */
-		this.setTitle(this.getTitle() + " / " + this.getString(R.string.memo_current_id) + item.getId() );
-		TextView questionView = (TextView) findViewById(R.id.question);
-		TextView answerView = (TextView) findViewById(R.id.answer);
-		
-		
-		if(this.htmlDisplay.equals("both")){
-            /* Use HTML to display */
-			CharSequence sq = Html.fromHtml(item.getQuestion());
-			CharSequence sa = Html.fromHtml(item.getAnswer());
-			
-			questionView.setText(sq);
-			answerView.setText(sa);
-			
-		}
-		else if(this.htmlDisplay.equals("question")){
-			CharSequence sq = Html.fromHtml(item.getQuestion());
-			questionView.setText(sq);
-			answerView.setText(new StringBuilder().append(item.getAnswer()));
-		}
-		else if(this.htmlDisplay.equals("answer")){
-			questionView.setText(new StringBuilder().append(item.getQuestion()));
-			CharSequence sa = Html.fromHtml(item.getAnswer());
-			answerView.setText(sa);
-		}
-		else{
-			questionView.setText(new StringBuilder().append(item.getQuestion()));
-			answerView.setText(new StringBuilder().append(item.getAnswer()));
-		}
-		
-        /* Here is tricky to set up the alignment of the text */
-		if(questionAlign.equals("center")){
-			questionView.setGravity(Gravity.CENTER);
-			LinearLayout layoutQuestion = (LinearLayout)findViewById(R.id.layout_question);
-			layoutQuestion.setGravity(Gravity.CENTER);
-		}
-		else if(questionAlign.equals("right")){
-			questionView.setGravity(Gravity.RIGHT);
-			LinearLayout layoutQuestion = (LinearLayout)findViewById(R.id.layout_question);
-			layoutQuestion.setGravity(Gravity.NO_GRAVITY);
-		}
-		else{
-			questionView.setGravity(Gravity.LEFT);
-			LinearLayout layoutQuestion = (LinearLayout)findViewById(R.id.layout_question);
-			layoutQuestion.setGravity(Gravity.NO_GRAVITY);
-		}
-		if(answerAlign.equals("center")){
-			answerView.setGravity(Gravity.CENTER);
-			LinearLayout layoutAnswer = (LinearLayout)findViewById(R.id.layout_answer);
-			layoutAnswer.setGravity(Gravity.CENTER);
-		} else if(answerAlign.equals("right")){
-			answerView.setGravity(Gravity.RIGHT);
-			LinearLayout layoutAnswer = (LinearLayout)findViewById(R.id.layout_answer);
-			layoutAnswer.setGravity(Gravity.NO_GRAVITY);
-			
-		}
-		else{
-			answerView.setGravity(Gravity.LEFT);
-			LinearLayout layoutAnswer = (LinearLayout)findViewById(R.id.layout_answer);
-			layoutAnswer.setGravity(Gravity.NO_GRAVITY);
-		}
-		questionView.setTextSize((float)questionFontSize);
-		answerView.setTextSize((float)answerFontSize);
-
-		if(autoaudioSetting){
-			if(this.showAnswer == false){
-				if(questionTTS != null){
-					questionTTS.sayText(currentItem.getQuestion());
-				}
-				else if(questionUserAudio){
-					mSpeakWord.speakWord(currentItem.getQuestion());
-					
-				}
-			}
-			else{
-				if(answerTTS != null){
-					answerTTS.sayText(currentItem.getAnswer());
-				}
-				else if(answerUserAudio){
-					mSpeakWord.speakWord(currentItem.getAnswer());
-					
-				}
-			}
-		}
-		this.buttonBinding();
-
-	}
-
     @Override
     public void onClick(View v){
         if(v == (LinearLayout)findViewById(R.id.memo_screen_root)){
@@ -635,6 +424,7 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
 			if(this.showAnswer == false){
 				this.showAnswer ^= true;
 				updateMemoScreen();
+                autoSpeak();
 			}
         }
 
@@ -688,7 +478,8 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
 
                 this.showAnswer = false;
                 /* Now the currentItem is the next item, so we need to udpate the screen. */
-                this.updateMemoScreen();
+                updateMemoScreen();
+                autoSpeak();
                 break;
             }
         }
@@ -705,7 +496,8 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
     }
         
 
-	private void buttonBinding() {
+    @Override
+	protected void buttonBinding() {
 		/* This function will bind the button event and show/hide button
          * according to the showAnswer varible.
          * */
@@ -744,36 +536,9 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
         }
 	}
     
-    private void setScreenColor(){
-        // Set both text and the background color
-		TextView questionView = (TextView) findViewById(R.id.question);
-		TextView answerView = (TextView) findViewById(R.id.answer);
-        LinearLayout root = (LinearLayout)findViewById(R.id.memo_screen_root);
-        int[] colorMap = {Color.BLACK, Color.WHITE, Color.RED, Color.GREEN, Color.BLUE, Color.CYAN, Color.MAGENTA, Color.YELLOW};
-    	String[] colorList = getResources().getStringArray(R.array.color_list);
-        /* Default color will do nothing */
-        if(!textColor.equals("Default")){
-            for(int i = 1; i <= colorMap.length; i++){
-                if(textColor.equals(colorList[i])){
-                    questionView.setTextColor(colorMap[i - 1]);
-                    answerView.setTextColor(colorMap[i - 1]);
-                    break;
-                }
-            }
-        }
-        if(!bgColor.equals("Default")){
-            for(int i = 0; i <= colorMap.length; i++){
-                if(bgColor.equals(colorList[i])){
-                    if(root!= null){
-                        root.setBackgroundColor(colorMap[i - 1]);
-                    }
-                    break;
-                }
-            }
-        }
-    }
 
-    private void createButtons(){
+    @Override
+    protected void createButtons(){
         /* First load the settings */
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         btnOneRow = settings.getBoolean("btnonerow", false);
@@ -827,88 +592,40 @@ public class MemoScreen extends Activity implements View.OnClickListener, View.O
 
     }
 
-    private void showEditDialog(){
-        /* This method will show the dialog after long click 
-         * on the screen 
-         * */
-        new AlertDialog.Builder(this)
-            .setTitle(getString(R.string.memo_edit_dialog_title))
-            .setItems(R.array.memo_edit_dialog_list, new DialogInterface.OnClickListener(){
-                public void onClick(DialogInterface dialog, int which){
-                    if(which == 0){
-                        /* Edit current card */
-                        LayoutInflater factory = LayoutInflater.from(MemoScreen.this);
-                        final View editView = factory.inflate(R.layout.edit_dialog, null);
-                        EditText eq = (EditText)editView.findViewById(R.id.edit_dialog_question_entry);
-                        EditText ea = (EditText)editView.findViewById(R.id.edit_dialog_answer_entry);
-                        eq.setText(currentItem.getQuestion());
-                        ea.setText(currentItem.getAnswer());
-                        /* This is a customized dialog inflated from XML */
-                        new AlertDialog.Builder(MemoScreen.this)
-                            .setTitle(getString(R.string.memo_edit_dialog_title))
-                            .setView(editView)
-			                .setPositiveButton(getString(R.string.settings_save),
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface arg0, int arg1) {
-                                        EditText eq = (EditText)editView.findViewById(R.id.edit_dialog_question_entry);
-                                        EditText ea = (EditText)editView.findViewById(R.id.edit_dialog_answer_entry);
-                                        String qText = eq.getText().toString();
-                                        String aText = ea.getText().toString();
-                                        HashMap<String, String> hm = new HashMap<String, String>();
-                                        hm.put("question", qText);
-                                        hm.put("answer", aText);
-                                        currentItem.setData(hm);
-                                        dbHelper.updateQA(currentItem);
-                                        updateMemoScreen();
-
-                                    }
-                                })
-			                .setNegativeButton(getString(R.string.cancel_text), null)
-                            .create()
-                            .show();
-
-
-                    }
-                    if(which == 1){
-                        /* Delete current card */
-                        new AlertDialog.Builder(MemoScreen.this)
-                            .setTitle(getString(R.string.detail_delete))
-                            .setMessage(getString(R.string.delete_warning))
-			                .setPositiveButton(getString(R.string.yes_text),
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface arg0, int arg1) {
-                                        dbHelper.deleteItem(currentItem);
-                                        restartActivity();
-                                    }
-                                })
-			                .setNegativeButton(getString(R.string.no_text), null)
-                            .create()
-                            .show();
-                    }
-                    if(which == 2){
-                        /* Skip this card forever */
-                        new AlertDialog.Builder(MemoScreen.this)
-                            .setTitle(getString(R.string.skip_text))
-                            .setMessage(getString(R.string.skip_warning))
-			                .setPositiveButton(getString(R.string.yes_text),
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface arg0, int arg1) {
-                                        currentItem.skip();
-                                        dbHelper.updateItem(currentItem);
-                                        restartActivity();
-                                    }
-                                })
-			                .setNegativeButton(getString(R.string.no_text), null)
-                            .create()
-                            .show();
-                    }
-                }
-            })
-            .create()
-            .show();
+    @Override
+    protected boolean fetchCurrentItem(){
+        if(queueEmpty == false){
+			currentItem = learnQueue.get(0);
+            /* Successfully fetch */
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
+    private void autoSpeak(){
 
+        if(autoaudioSetting){
+            if(this.showAnswer == false){
+                if(questionTTS != null){
+                    questionTTS.sayText(currentItem.getQuestion());
+                }
+                else if(questionUserAudio){
+                    mSpeakWord.speakWord(currentItem.getQuestion());
 
+                }
+            }
+            else{
+                if(answerTTS != null){
+                    answerTTS.sayText(currentItem.getAnswer());
+                }
+                else if(answerUserAudio){
+                    mSpeakWord.speakWord(currentItem.getAnswer());
+
+                }
+            }
+        }
+    }
 
 }
