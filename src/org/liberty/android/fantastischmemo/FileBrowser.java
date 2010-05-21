@@ -258,10 +258,22 @@ public class FileBrowser extends Activity implements OnItemClickListener, OnItem
                                 public void onClick(DialogInterface dialog, int which){
                                     if(which == 0){
                                         /* Delete */
-                                        clickedFile.delete();
-                                        File dir = new File(clickedFile.getParent());
-                                        Log.v(TAG, "DIR: " + dir.toString());
-                                        browseTo(dir);
+                                        new AlertDialog.Builder(FileBrowser.this)
+                                            .setTitle(getString(R.string.detail_delete))
+                                            .setMessage(getString(R.string.fb_delete_message))
+                                            .setPositiveButton(getString(R.string.detail_delete), new DialogInterface.OnClickListener(){
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which ){
+                                                    clickedFile.delete();
+                                                    File dir = new File(clickedFile.getParent());
+                                                    Log.v(TAG, "DIR: " + dir.toString());
+                                                    browseTo(dir);
+                                                }
+                                            })
+                                            .setNegativeButton(getString(R.string.cancel_text), null)
+                                            .create()
+                                            .show();
+
                                     }
                                     else if(which == 1){
                                         /* Clone */
