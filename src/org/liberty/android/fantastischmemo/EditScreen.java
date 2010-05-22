@@ -95,12 +95,6 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
         if (!mLibrary.load()) {
             finish();
         }
-        //LinearLayout root = (LinearLayout)findViewById(R.id.memo_screen_root);
-        //LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, 0);
-        //GestureOverlayView goView = new GestureOverlayView(this);
-        //goView.addOnGesturePerformedListener(this);
-        //root.addView(goView, p);
-        //
         GestureOverlayView gestures = (GestureOverlayView) findViewById(R.id.gesture_overlay);
         gestures.addOnGesturePerformedListener(this);
         prepare();
@@ -139,6 +133,10 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
         }
         totalItem = dbHelper.getTotalCount();
         currentItem = dbHelper.getItemById(currentId, 0);
+        /* Re-fetch the id in case that the item with id 1 is 
+         * deleted.
+         */
+        currentId = currentItem.getId();
         if(currentItem == null){
             new AlertDialog.Builder(mContext)
                 .setTitle(getString(R.string.memo_no_item_title))
@@ -190,6 +188,11 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
 
     @Override
     protected void restartActivity(){
+        prepare();
+        if(totalItem != dbHelper.getTotalCount()){
+            totalItem -= 1;
+            maxId -= 1;
+        }
     }
 
     @Override
@@ -204,38 +207,17 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
                 // Show the spell
                 Log.v(TAG, "Gesture: " + prediction.name);
                 if(prediction.name.equals("swipe-right")){
-                    do{
-                        if(currentId <= 1){
-                            currentId = 1;
-                            break;
-                        }
-                        currentId -= 1;
-                        currentItem = dbHelper.getItemById(currentId, 0);
-                    }
-                    while(currentItem.getId() != currentId);
+                    getPreviousItem();
 
                 }
                 else if(prediction.name.equals("swipe-left")){
-                    do{
-                        if(currentId >= maxId){
-                            currentId = 1;
-                            break;
-                        }
-                        currentId += 1;
-                        currentItem = dbHelper.getItemById(currentId, 0);
-                    }
-                    while(currentItem.getId() != currentId);
+                    getNextItem();
                 }
                 else if(prediction.name.equals("o") || prediction.name.equals("o2")){
                     doEdit();
                 }
                 else if(prediction.name.equals("cross")){
-                    if(currentId == maxId){
-                        maxId -= 1;
-                    }
                     doDelete();
-                    currentId = (currentId != maxId) ? currentId + 1 : maxId;
-                    totalItem -= 1;
                 }
 
 		        setTitle(getString(R.string.stat_total) + totalItem);
@@ -244,4 +226,33 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
         }
     }
 
+    private void getNextItem(){
+        if(totalItem > 0){
+            do{
+                if(currentId < maxId){
+                    currentId = currentId + 1;
+                }
+                else{
+                    currentId = 1;
+                }
+                currentItem = dbHelper.getItemById(currentId, 0);
+            }
+            while(currentItem.getId() != currentId);
+        }
+    }
+
+    private void getPreviousItem(){
+        if(totalItem > 0){
+            do{
+                if(currentId > 0){
+                    currentId = currentId - 1;
+                }
+                else{
+                    currentId = maxId;
+                }
+                currentItem = dbHelper.getItemById(currentId, 0);
+            }
+            while(currentItem.getId() != currentId);
+        }
+    }
 }

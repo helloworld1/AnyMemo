@@ -561,6 +561,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public void deleteItem(Item item){
 		myDatabase.execSQL("DELETE FROM learn_tbl where _id = ?", new String[]{"" + item.getId()});
 		myDatabase.execSQL("DELETE FROM dict_tbl where _id = ?", new String[]{"" + item.getId()});
+		myDatabase.execSQL("UPDATE dict_tbl SET _id = _id - 1 where _id > ?", new String[]{"" + item.getId()});
+		myDatabase.execSQL("UPDATE learn_tbl SET _id = _id - 1 where _id > ?", new String[]{"" + item.getId()});
 	}
 	
 	public void setSettings(HashMap<String, String> hm){
