@@ -352,74 +352,86 @@ public abstract class MemoScreenBase extends Activity{
             .setItems(R.array.memo_edit_dialog_list, new DialogInterface.OnClickListener(){
                 public void onClick(DialogInterface dialog, int which){
                     if(which == 0){
-                        /* Edit current card */
-                        LayoutInflater factory = LayoutInflater.from(MemoScreenBase.this);
-                        final View editView = factory.inflate(R.layout.edit_dialog, null);
-                        EditText eq = (EditText)editView.findViewById(R.id.edit_dialog_question_entry);
-                        EditText ea = (EditText)editView.findViewById(R.id.edit_dialog_answer_entry);
-                        eq.setText(currentItem.getQuestion());
-                        ea.setText(currentItem.getAnswer());
                         /* This is a customized dialog inflated from XML */
-                        new AlertDialog.Builder(MemoScreenBase.this)
-                            .setTitle(getString(R.string.memo_edit_dialog_title))
-                            .setView(editView)
-			                .setPositiveButton(getString(R.string.settings_save),
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface arg0, int arg1) {
-                                        EditText eq = (EditText)editView.findViewById(R.id.edit_dialog_question_entry);
-                                        EditText ea = (EditText)editView.findViewById(R.id.edit_dialog_answer_entry);
-                                        String qText = eq.getText().toString();
-                                        String aText = ea.getText().toString();
-                                        HashMap<String, String> hm = new HashMap<String, String>();
-                                        hm.put("question", qText);
-                                        hm.put("answer", aText);
-                                        currentItem.setData(hm);
-                                        dbHelper.updateQA(currentItem);
-                                        updateMemoScreen();
-
-                                    }
-                                })
-			                .setNegativeButton(getString(R.string.cancel_text), null)
-                            .create()
-                            .show();
-
-
+                        doEdit();
                     }
                     if(which == 1){
                         /* Delete current card */
-                        new AlertDialog.Builder(MemoScreenBase.this)
-                            .setTitle(getString(R.string.detail_delete))
-                            .setMessage(getString(R.string.delete_warning))
-			                .setPositiveButton(getString(R.string.yes_text),
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface arg0, int arg1) {
-                                        dbHelper.deleteItem(currentItem);
-                                        restartActivity();
-                                    }
-                                })
-			                .setNegativeButton(getString(R.string.no_text), null)
-                            .create()
-                            .show();
+                        doDelete();
                     }
                     if(which == 2){
                         /* Skip this card forever */
-                        new AlertDialog.Builder(MemoScreenBase.this)
-                            .setTitle(getString(R.string.skip_text))
-                            .setMessage(getString(R.string.skip_warning))
-			                .setPositiveButton(getString(R.string.yes_text),
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface arg0, int arg1) {
-                                        currentItem.skip();
-                                        dbHelper.updateItem(currentItem);
-                                        restartActivity();
-                                    }
-                                })
-			                .setNegativeButton(getString(R.string.no_text), null)
-                            .create()
-                            .show();
+                        doSkip();
                     }
                 }
             })
+            .create()
+            .show();
+    }
+
+    protected void doEdit(){
+        /* Edit current card */
+        /* This is a customized dialog inflated from XML */
+        LayoutInflater factory = LayoutInflater.from(MemoScreenBase.this);
+        final View editView = factory.inflate(R.layout.edit_dialog, null);
+        EditText eq = (EditText)editView.findViewById(R.id.edit_dialog_question_entry);
+        EditText ea = (EditText)editView.findViewById(R.id.edit_dialog_answer_entry);
+        eq.setText(currentItem.getQuestion());
+        ea.setText(currentItem.getAnswer());
+        new AlertDialog.Builder(MemoScreenBase.this)
+            .setTitle(getString(R.string.memo_edit_dialog_title))
+            .setView(editView)
+            .setPositiveButton(getString(R.string.settings_save),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        EditText eq = (EditText)editView.findViewById(R.id.edit_dialog_question_entry);
+                        EditText ea = (EditText)editView.findViewById(R.id.edit_dialog_answer_entry);
+                        String qText = eq.getText().toString();
+                        String aText = ea.getText().toString();
+                        HashMap<String, String> hm = new HashMap<String, String>();
+                        hm.put("question", qText);
+                        hm.put("answer", aText);
+                        currentItem.setData(hm);
+                        dbHelper.updateQA(currentItem);
+                        updateMemoScreen();
+
+                    }
+                })
+            .setNegativeButton(getString(R.string.cancel_text), null)
+            .create()
+            .show();
+    }
+
+    protected void doDelete(){
+        new AlertDialog.Builder(MemoScreenBase.this)
+            .setTitle(getString(R.string.detail_delete))
+            .setMessage(getString(R.string.delete_warning))
+            .setPositiveButton(getString(R.string.yes_text),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        dbHelper.deleteItem(currentItem);
+                        restartActivity();
+                    }
+                })
+            .setNegativeButton(getString(R.string.no_text), null)
+            .create()
+            .show();
+    }
+
+    protected void doSkip(){
+
+        new AlertDialog.Builder(MemoScreenBase.this)
+            .setTitle(getString(R.string.skip_text))
+            .setMessage(getString(R.string.skip_warning))
+            .setPositiveButton(getString(R.string.yes_text),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        currentItem.skip();
+                        dbHelper.updateItem(currentItem);
+                        restartActivity();
+                    }
+                })
+            .setNegativeButton(getString(R.string.no_text), null)
             .create()
             .show();
     }

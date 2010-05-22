@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_goto_id"
+  		  android:icon="@android:drawable/ic_menu_directions"  
+          android:title="@string/goto_id_text" />
+    <item android:id="@+id/menudetail"
+  		  android:icon="@android:drawable/ic_menu_edit"
+          android:title="@string/detail_menu_text" />
+    <item android:id="@+id/menusettings"
+  		  android:icon="@android:drawable/ic_menu_preferences"
+  		  android:title="@string/settings_menu_text" />
+    <item android:id="@+id/menuback"
+  		  android:icon="@drawable/back_icon"  
+          android:title="@string/back_menu_text" />
+</menu>

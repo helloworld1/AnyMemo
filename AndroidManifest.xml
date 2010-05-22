@@ -22,6 +22,7 @@
         <activity android:name=".SettingsScreen" ></activity>
         <activity android:name=".DetailScreen"></activity>
         <activity android:name=".AddItemScreen"></activity>
+        <activity android:name=".EditScreen"></activity>
         <activity android:name=".Downloader" android:screenOrientation="portrait"></activity>
 
     </application>

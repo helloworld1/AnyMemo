@@ -84,11 +84,12 @@ public class AnyMemo extends Activity implements OnClickListener{
         			finish();
         		}
         	};
-        	AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        	alertDialog.setTitle("SD card not available");
-        	alertDialog.setMessage("Please insert SD card and run again!");
-        	alertDialog.setButton("Exit", exitButtonListener);
-        	alertDialog.show();
+        	new AlertDialog.Builder(this)
+        	    .setTitle("SD card not available")
+        	    .setMessage("Please insert SD card and run again!")
+        	    .setNeutralButton("Exit", exitButtonListener)
+                .create()
+                .show();
         }
         /* First time installation! It will install the sample db
          * to /sdcard/AnyMemo
@@ -196,7 +197,7 @@ public class AnyMemo extends Activity implements OnClickListener{
     	case 2:
     		if(resultCode == Activity.RESULT_OK){
     			Intent myIntent = new Intent();
-    			myIntent.setClass(this, AddItemScreen.class);
+    			myIntent.setClass(this, EditScreen.class);
     			dbName = data.getStringExtra("org.liberty.android.fantastischmemo.dbName");
     			dbPath = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
     			dbPath += "/";
