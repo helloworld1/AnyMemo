@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/menu_goto_id"
-  		  android:icon="@android:drawable/ic_menu_directions"  
-          android:title="@string/goto_id_text" />
-    <item android:id="@+id/menudetail"
+    <item 
+        android:id="@+id/editmenu_goto_id"
+  	    android:icon="@android:drawable/ic_menu_directions"  
+        android:title="@string/goto_id_text" />
+    <item 
+        android:id="@+id/editmenu_edit_id"
+        android:icon="@android:drawable/ic_menu_edit"  
+        android:title="@string/memo_edit_dialog_title" />
+    <item 
+        android:id="@+id/editmenu_delete_id"
+        android:icon="@android:drawable/ic_menu_delete"  
+        android:title="@string/detail_delete" />
+    <item android:id="@+id/editmenu_detail_id"
   		  android:icon="@android:drawable/ic_menu_edit"
           android:title="@string/detail_menu_text" />
-    <item android:id="@+id/menusettings"
+    <item android:id="@+id/editmenu_settings_id"
   		  android:icon="@android:drawable/ic_menu_preferences"
   		  android:title="@string/settings_menu_text" />
     <item android:id="@+id/menuback"

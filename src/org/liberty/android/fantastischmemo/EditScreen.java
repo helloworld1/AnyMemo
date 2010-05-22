@@ -67,7 +67,7 @@ import android.gesture.Prediction;
 import android.gesture.GestureOverlayView.OnGesturePerformedListener;
 
 
-public class EditScreen extends MemoScreenBase implements OnGesturePerformedListener{
+public class EditScreen extends MemoScreenBase implements OnGesturePerformedListener, View.OnClickListener{
 
     private int currentId = -1;
     private int totalItem = -1;
@@ -75,6 +75,11 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
     private Context mContext;
     private Handler mHandler;
     private GestureLibrary mLibrary;
+    private Button newButton;
+    private Button nextButton;
+    private Button prevButton;
+    private Item savedItem = null;
+
     private static final String TAG = "org.liberty.android.fantastischmemo.EditScreen";
 
     @Override
@@ -97,20 +102,9 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
         }
         GestureOverlayView gestures = (GestureOverlayView) findViewById(R.id.gesture_overlay);
         gestures.addOnGesturePerformedListener(this);
+        createButtons();
+        buttonBinding();
         prepare();
-    }
-
-    @Override
-	public void onResume(){
-        super.onResume();
-        /* Refresh depending on where it returns. */
-		if(returnValue == 1){
-			prepare();
-			returnValue = 0;
-		}
-		else{
-			returnValue = 0;
-		}
     }
 
     @Override
@@ -120,24 +114,28 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
     }
 
     @Override
+    public void onClick(View v){
+        if(v == newButton){
+            createNewItem();
+        }
+        if(v == nextButton){
+            getNextItem();
+        }
+        if(v == prevButton){
+            getPreviousItem();
+        }
+
+    }
+
+    @Override
     protected void prepare(){
         if(dbHelper == null){
             dbHelper = new DatabaseHelper(mContext, dbPath, dbName);
         }
 		loadSettings();
-        if(currentId == -1){
-            currentId = 1;
-        }
-        if(maxId == -1){
-            maxId = dbHelper.getNewId() - 1;
-        }
+        maxId = dbHelper.getNewId() - 1;
         totalItem = dbHelper.getTotalCount();
-        currentItem = dbHelper.getItemById(currentId, 0);
-        /* Re-fetch the id in case that the item with id 1 is 
-         * deleted.
-         */
-        currentId = currentItem.getId();
-        if(currentItem == null){
+        if(totalItem <= 0){
             new AlertDialog.Builder(mContext)
                 .setTitle(getString(R.string.memo_no_item_title))
                 .setMessage(getString(R.string.memo_no_item_message))
@@ -151,8 +149,22 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
                 .create()
                 .show();
         }
-		setTitle(getString(R.string.stat_total) + totalItem);
-        updateMemoScreen();
+        else{
+            if(currentId < 1){
+                currentId = 1;
+            }
+            else if(currentId > maxId){
+                currentId = maxId;
+            }
+
+            currentItem = dbHelper.getItemById(currentId, 0);
+            /* Re-fetch the id in case that the item with id 1 is 
+             * deleted.
+             */
+            currentId = currentItem.getId();
+            setTitle(getString(R.string.stat_total) + totalItem);
+            updateMemoScreen();
+        }
     }
 
     @Override
@@ -170,15 +182,73 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
 
     @Override
 	public boolean onOptionsItemSelected(MenuItem item){
+	    switch (item.getItemId()) {
+	        case R.id.editmenu_edit_id:
+                doEdit();
+                return true;
+
+            case R.id.editmenu_delete_id:
+                doDelete();
+                return true;
+
+            case R.id.editmenu_detail_id:
+                Intent myIntent1 = new Intent();
+                myIntent1.setClass(this, DetailScreen.class);
+                myIntent1.putExtra("dbname", this.dbName);
+                myIntent1.putExtra("dbpath", this.dbPath);
+                myIntent1.putExtra("itemid", currentItem.getId());
+                startActivityForResult(myIntent1, 2);
+                return true;
+
+            case R.id.editmenu_settings_id:
+                Intent myIntent = new Intent();
+                myIntent.setClass(this, SettingsScreen.class);
+                myIntent.putExtra("dbname", this.dbName);
+                myIntent.putExtra("dbpath", this.dbPath);
+                startActivityForResult(myIntent, 1);
+                //finish();
+                return true;
+        }
         return false;
     }
 
     @Override
     protected void createButtons(){
+        /* Make up an id using this base */
+        int base = 0x31212;
+        RelativeLayout layout = (RelativeLayout)findViewById(R.id.memo_screen_button_layout);
+        Display display = ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        int width = display.getWidth(); 
+
+        newButton = new Button(this);
+        newButton.setText(getString(R.string.add_screen_new));
+        newButton.setId(base);
+        RelativeLayout.LayoutParams p1 = new RelativeLayout.LayoutParams(width / 3, RelativeLayout.LayoutParams.WRAP_CONTENT); 
+        layout.addView(newButton, p1);
+
+
+        prevButton = new Button(this);
+        prevButton.setText(getString(R.string.add_screen_previous));
+        prevButton.setId(base + 1);
+        RelativeLayout.LayoutParams p2 = new RelativeLayout.LayoutParams(width / 3, RelativeLayout.LayoutParams.WRAP_CONTENT); 
+        p2.addRule(RelativeLayout.RIGHT_OF, base);
+        layout.addView(prevButton, p2);
+
+        nextButton = new Button(this);
+        nextButton.setText(getString(R.string.add_screen_next));
+        nextButton.setId(base + 2);
+        RelativeLayout.LayoutParams p3 = new RelativeLayout.LayoutParams(width / 3, RelativeLayout.LayoutParams.WRAP_CONTENT); 
+        p3.addRule(RelativeLayout.RIGHT_OF, base + 1);
+        layout.addView(nextButton, p3);
+
+
     }
 
     @Override
 	protected void buttonBinding(){
+        newButton.setOnClickListener(this);
+        nextButton.setOnClickListener(this);
+        prevButton.setOnClickListener(this);
     }
 
     @Override
@@ -188,10 +258,18 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
 
     @Override
     protected void restartActivity(){
-        prepare();
-        if(totalItem != dbHelper.getTotalCount()){
-            totalItem -= 1;
-            maxId -= 1;
+    }
+
+    @Override protected void refreshAfterNewItem(){
+        int max = dbHelper.getNewId() - 1;
+        if(max != maxId){
+            currentId = max;
+            prepare();
+        }
+        else{
+            if(savedItem != null){
+                currentItem = savedItem;
+            }
         }
     }
 
@@ -220,8 +298,6 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
                     doDelete();
                 }
 
-		        setTitle(getString(R.string.stat_total) + totalItem);
-                updateMemoScreen();
             }
         }
     }
@@ -239,7 +315,23 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
             }
             while(currentItem.getId() != currentId);
         }
+        setTitle(getString(R.string.stat_total) + totalItem);
+        updateMemoScreen();
     }
+
+    @Override
+    protected void doDelete(){
+        super.doDelete();
+    }
+
+    @Override
+    protected void refreshAfterDeleteItem(){
+        setTitle(getString(R.string.stat_total) + totalItem);
+        updateMemoScreen();
+        prepare();
+    }
+
+
 
     private void getPreviousItem(){
         if(totalItem > 0){
@@ -254,5 +346,21 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
             }
             while(currentItem.getId() != currentId);
         }
+        setTitle(getString(R.string.stat_total) + totalItem);
+        updateMemoScreen();
     }
+    
+    private void createNewItem(){
+        /* Reuse the doEdit to get the edit dialog
+         * and display the edit dialog
+         */
+        savedItem = currentItem;
+        Item newItem = new Item();
+        newItem.setId(dbHelper.getNewId());
+        currentItem = newItem;
+        doEdit();
+    }
+
+        
+        
 }

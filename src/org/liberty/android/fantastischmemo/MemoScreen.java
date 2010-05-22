@@ -140,20 +140,6 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
 	}
 
     @Override
-	public void onResume(){
-		super.onResume();
-        /* Refresh depending on where it returns. */
-        Log.v(TAG, "PREPARE PREPARE");
-		if(returnValue == 1){
-			prepare();
-			returnValue = 0;
-		}
-		else{
-			returnValue = 0;
-		}
-		
-	}
-    @Override
     protected void restartActivity(){
         /* restart the current activity */
         Intent myIntent = new Intent();
@@ -163,8 +149,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
         finish();
         startActivity(myIntent);
     }
-	
-	
+
 	
     @Override
 	public boolean onCreateOptionsMenu(Menu menu){
@@ -626,6 +611,14 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
                 }
             }
         }
+    }
+
+    @Override protected void refreshAfterNewItem(){
+    }
+
+    @Override
+    protected void refreshAfterDeleteItem(){
+        restartActivity();
     }
 
 }

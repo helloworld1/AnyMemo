@@ -120,12 +120,24 @@ public abstract class MemoScreenBase extends Activity{
 
     abstract protected void restartActivity();	
 
+    abstract protected void refreshAfterNewItem();
+
+    abstract protected void refreshAfterDeleteItem();
+
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
     }
 
 	public void onResume(){
         super.onResume();
+        /* Refresh depending on where it returns. */
+		if(returnValue == 1){
+			prepare();
+			returnValue = 0;
+		}
+		else{
+			returnValue = 0;
+		}
     }
 
 
@@ -392,12 +404,18 @@ public abstract class MemoScreenBase extends Activity{
                         hm.put("question", qText);
                         hm.put("answer", aText);
                         currentItem.setData(hm);
-                        dbHelper.updateQA(currentItem);
+                        //dbHelper.updateQA(currentItem);
+                        dbHelper.addOrReplaceItem(currentItem);
                         updateMemoScreen();
-
+                        refreshAfterNewItem();
                     }
                 })
-            .setNegativeButton(getString(R.string.cancel_text), null)
+            .setNegativeButton(getString(R.string.cancel_text),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        refreshAfterNewItem();
+                    }
+                })
             .create()
             .show();
     }
@@ -410,7 +428,7 @@ public abstract class MemoScreenBase extends Activity{
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface arg0, int arg1) {
                         dbHelper.deleteItem(currentItem);
-                        restartActivity();
+                        refreshAfterDeleteItem();
                     }
                 })
             .setNegativeButton(getString(R.string.no_text), null)
