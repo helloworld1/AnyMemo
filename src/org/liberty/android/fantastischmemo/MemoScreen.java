@@ -613,7 +613,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
         }
     }
 
-    @Override protected void refreshAfterNewItem(){
+    @Override protected void refreshAfterEditItem(){
     }
 
     @Override

@@ -120,7 +120,7 @@ public abstract class MemoScreenBase extends Activity{
 
     abstract protected void restartActivity();	
 
-    abstract protected void refreshAfterNewItem();
+    abstract protected void refreshAfterEditItem();
 
     abstract protected void refreshAfterDeleteItem();
 
@@ -407,13 +407,13 @@ public abstract class MemoScreenBase extends Activity{
                         //dbHelper.updateQA(currentItem);
                         dbHelper.addOrReplaceItem(currentItem);
                         updateMemoScreen();
-                        refreshAfterNewItem();
+                        refreshAfterEditItem();
                     }
                 })
             .setNegativeButton(getString(R.string.cancel_text),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface arg0, int arg1) {
-                        refreshAfterNewItem();
+                        refreshAfterEditItem();
                     }
                 })
             .create()

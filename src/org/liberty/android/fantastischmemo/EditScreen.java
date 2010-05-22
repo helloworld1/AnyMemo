@@ -136,18 +136,9 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
         maxId = dbHelper.getNewId() - 1;
         totalItem = dbHelper.getTotalCount();
         if(totalItem <= 0){
-            new AlertDialog.Builder(mContext)
-                .setTitle(getString(R.string.memo_no_item_title))
-                .setMessage(getString(R.string.memo_no_item_message))
-                .setPositiveButton(getString(R.string.back_menu_text),new OnClickListener() {
-                // Finish the current activity and go back to the last activity.
-                // It should be the main screen.
-                public void onClick(DialogInterface arg0, int arg1) {
-                        finish();
-                    }
-                })
-                .create()
-                .show();
+            /* Ask user to create a new card when the db is empty */
+            createNewItem();
+        
         }
         else{
             if(currentId < 1){
@@ -253,6 +244,7 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
 
     @Override
     protected boolean fetchCurrentItem(){
+        /* Dummy, there is no queue in this activity */
         return true;
     }
 
@@ -260,17 +252,31 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
     protected void restartActivity(){
     }
 
-    @Override protected void refreshAfterNewItem(){
+    @Override 
+    protected void refreshAfterEditItem(){
         int max = dbHelper.getNewId() - 1;
         if(max != maxId){
             currentId = max;
             prepare();
+        }
+        else if(max == 0){
+            /* If user cancel editing,
+             * it will exit the activity.
+             */
+            finish();
         }
         else{
             if(savedItem != null){
                 currentItem = savedItem;
             }
         }
+    }
+
+    @Override
+    protected void refreshAfterDeleteItem(){
+        setTitle(getString(R.string.stat_total) + totalItem);
+        updateMemoScreen();
+        prepare();
     }
 
     @Override
@@ -319,17 +325,6 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
         updateMemoScreen();
     }
 
-    @Override
-    protected void doDelete(){
-        super.doDelete();
-    }
-
-    @Override
-    protected void refreshAfterDeleteItem(){
-        setTitle(getString(R.string.stat_total) + totalItem);
-        updateMemoScreen();
-        prepare();
-    }
 
 
 
