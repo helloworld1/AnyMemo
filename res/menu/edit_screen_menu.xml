@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item 
-        android:id="@+id/editmenu_goto_id"
-  	    android:icon="@android:drawable/ic_menu_directions"  
-        android:title="@string/goto_id_text" />
+        android:id="@+id/editmenu_search_id"
+  	    android:icon="@android:drawable/ic_menu_search"  
+        android:title="@string/search_text" />
     <item 
         android:id="@+id/editmenu_edit_id"
         android:icon="@android:drawable/ic_menu_edit"  

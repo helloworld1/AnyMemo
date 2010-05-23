@@ -50,6 +50,7 @@ import android.view.Display;
 import android.view.WindowManager;
 import android.view.LayoutInflater;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.os.Handler;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -79,6 +80,7 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
     private Button nextButton;
     private Button prevButton;
     private Item savedItem = null;
+    private boolean searchInflated = false;
 
     private static final String TAG = "org.liberty.android.fantastischmemo.EditScreen";
 
@@ -118,11 +120,20 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
         if(v == newButton){
             createNewItem();
         }
-        if(v == nextButton){
+        else if(v == nextButton){
             getNextItem();
         }
-        if(v == prevButton){
+        else if(v == prevButton){
             getPreviousItem();
+        }
+        else if(v == (ImageButton)findViewById(R.id.search_close_btn)){
+            dismissSearchOverlay();
+        }
+        else if(v == (ImageButton)findViewById(R.id.search_next_btn)){
+            doSearch(true);
+        }
+        else if(v == (ImageButton)findViewById(R.id.search_previous_btn)){
+            doSearch(false);
         }
 
     }
@@ -174,6 +185,10 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
     @Override
 	public boolean onOptionsItemSelected(MenuItem item){
 	    switch (item.getItemId()) {
+            case R.id.editmenu_search_id:
+                createSearchOverlay();
+                return true;
+
 	        case R.id.editmenu_edit_id:
                 doEdit();
                 return true;
@@ -185,8 +200,8 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
             case R.id.editmenu_detail_id:
                 Intent myIntent1 = new Intent();
                 myIntent1.setClass(this, DetailScreen.class);
-                myIntent1.putExtra("dbname", this.dbName);
-                myIntent1.putExtra("dbpath", this.dbPath);
+                myIntent1.putExtra("dbname", dbName);
+                myIntent1.putExtra("dbpath", dbPath);
                 myIntent1.putExtra("itemid", currentItem.getId());
                 startActivityForResult(myIntent1, 2);
                 return true;
@@ -194,8 +209,8 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
             case R.id.editmenu_settings_id:
                 Intent myIntent = new Intent();
                 myIntent.setClass(this, SettingsScreen.class);
-                myIntent.putExtra("dbname", this.dbName);
-                myIntent.putExtra("dbpath", this.dbPath);
+                myIntent.putExtra("dbname", dbName);
+                myIntent.putExtra("dbpath", dbPath);
                 startActivityForResult(myIntent, 1);
                 //finish();
                 return true;
@@ -356,6 +371,67 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
         doEdit();
     }
 
-        
+    private void createSearchOverlay(){
+        if(searchInflated == false){
+            LinearLayout root = (LinearLayout)findViewById(R.id.memo_screen_root);
+            LayoutInflater.from(this).inflate(R.layout.search_overlay, root);
+            ImageButton close = (ImageButton)findViewById(R.id.search_close_btn);
+            close.setOnClickListener(this);
+            ImageButton prev = (ImageButton)findViewById(R.id.search_previous_btn);
+            prev.setOnClickListener(this);
+            ImageButton next = (ImageButton)findViewById(R.id.search_next_btn);
+            next.setOnClickListener(this);
+            searchInflated = true;
+
+        }
+        else{
+            LinearLayout layout = (LinearLayout)findViewById(R.id.search_root);
+            layout.setVisibility(View.VISIBLE);
+        }
+
+
+    }
+
+    private void dismissSearchOverlay(){
+        if(searchInflated == true){
+            LinearLayout layout = (LinearLayout)findViewById(R.id.search_root);
+            layout.setVisibility(View.GONE);
+        }
+    }
+
+    private void doSearch(boolean forward){
+        EditText et = (EditText)findViewById(R.id.search_entry);
+        String text = et.getText().toString();
+        boolean processed = false;
+        if(text.charAt(0) == '#'){
+            String num = text.substring(1);
+            int intNum = 0;
+            try{
+                intNum = Integer.parseInt(num);
+                if(intNum > 0 && intNum <= maxId){
+                    currentItem = dbHelper.getItemById(intNum, 0);
+                    if(currentItem != null){
+                        currentId = intNum;
+                        prepare();
+                        processed = true;
+                        return;
+                    }
+                }
+
+            }
+            catch(NumberFormatException e){
+            }
+        }
+        if(processed == false && !text.equals("")){
+            text = text.replace('*', '%');
+            text = text.replace('?', '_');
+            int resId = dbHelper.searchItem(currentItem.getId(), text, forward);
+            if(resId > 0){
+                currentItem = dbHelper.getItemById(resId, 0);
+                currentId = currentItem.getId();
+                prepare();
+            }
+        }
+    }
         
 }

@@ -99,6 +99,7 @@
     <string name="add_screen_back">Back</string>
     <string name="add_screen_next">Next</string>
     <string name="add_screen_previous">Previous</string>
+    <string name="search_text">Search</string>
     <string name="goto_id_text">Go to ID</string>
     <string name="fb_create_db">Create New DB</string>
     <string name="fb_create_dir">Create New Folder</string>

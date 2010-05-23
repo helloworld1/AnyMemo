@@ -650,5 +650,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			myDatabase.endTransaction();
         }
     }
+    public int searchItem(int currentId, String text, boolean forward){
+        /* based on currentID, this method can search one item
+         * forward or backward
+         */
+        Cursor result;
+        text = "%" + text + "%";
+        if(forward == true){
+            result = this.myDatabase.rawQuery("SELECT _id FROM dict_tbl where (question LIKE ? OR answer LIKE ?) AND _id > ? LIMIT 1 ", new String[]{text, text, "" + currentId});
+        }
+        else{
+            /* search backward */
+            result = this.myDatabase.rawQuery("SELECT _id FROM dict_tbl where (question LIKE ? OR answer LIKE ?) AND _id < ? LIMIT 1 ", new String[]{text, text, "" + currentId});
+        }
+
+		if(result.getCount() != 1){
+			result.close();
+			return -1;
+		}
+		result.moveToFirst();
+		int res = result.getInt(result.getColumnIndex("_id"));
+		result.close();
+		return res;
+    }
+
 	
 }
