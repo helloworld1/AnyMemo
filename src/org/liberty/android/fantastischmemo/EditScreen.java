@@ -59,6 +59,7 @@ import android.widget.TextView;
 import android.widget.EditText;
 import android.util.Log;
 import android.os.SystemClock;
+import android.net.Uri;
 
 import android.gesture.Gesture;
 import android.gesture.GestureLibraries;
@@ -184,7 +185,15 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
 
     @Override
 	public boolean onOptionsItemSelected(MenuItem item){
+        Intent myIntent = new Intent();
 	    switch (item.getItemId()) {
+            case R.id.editmenu_help:
+                myIntent.setAction(Intent.ACTION_VIEW);
+                myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
+                myIntent.setData(Uri.parse(getString(R.string.website_help_edit)));
+                startActivity(myIntent);
+                return true;
+
             case R.id.editmenu_search_id:
                 createSearchOverlay();
                 return true;
@@ -198,16 +207,14 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
                 return true;
 
             case R.id.editmenu_detail_id:
-                Intent myIntent1 = new Intent();
-                myIntent1.setClass(this, DetailScreen.class);
-                myIntent1.putExtra("dbname", dbName);
-                myIntent1.putExtra("dbpath", dbPath);
-                myIntent1.putExtra("itemid", currentItem.getId());
-                startActivityForResult(myIntent1, 2);
+                myIntent.setClass(this, DetailScreen.class);
+                myIntent.putExtra("dbname", dbName);
+                myIntent.putExtra("dbpath", dbPath);
+                myIntent.putExtra("itemid", currentItem.getId());
+                startActivityForResult(myIntent, 2);
                 return true;
 
             case R.id.editmenu_settings_id:
-                Intent myIntent = new Intent();
                 myIntent.setClass(this, SettingsScreen.class);
                 myIntent.putExtra("dbname", dbName);
                 myIntent.putExtra("dbpath", dbPath);

@@ -33,6 +33,8 @@
     <string name="autoaudio_summary">The question and answer will be read automatically</string>
     <string name="btnonerow">Compact Grade Button </string>
     <string name="btnonerow_summary">The button with 0 to 5 score is diplayed in 1 rows instead of 2.</string>
+    <string name="copyclipboard">Automatic copy to clipboard</string>
+    <string name="copyclipboard_summary">The question will be automatically copied to clipboard</string>
     <string name="memo_show_answer">\?\nShow Answer</string>
     <string name="memo_no_item_title">No Item</string>
     <string name="memo_no_item_message">There is no item to learn for now.</string>
@@ -137,6 +139,13 @@
     <string name="about_text">Advanced spaced repetition flashcard learning software.\n\nAuthors: Haowen Ning, Qi Wang\n\nAcknowledge: pomelo422, Lyndsey Percival, John Rissler</string>
     <string name="about_version">Version History</string>
     <string name="what_is_new">Changelog</string>
-    <string name="what_is_new_message">See Graphical guide of new features, please click version history button.\nVersion 3.0.0\n1. New Feature: New card preview/edit screen with gesture support. Please check the on-line help at anymemo.org.\n2. Enhance: deletion will maintain the ID coherience.</string>
+    <string name="website_main">http://anymemo.org</string>
+    <string name="website_json">http://anymemo.org/download/WordLists/json.php</string>
+    <string name="website_download_head">http://anymemo.org/download/WordLists/</string>
+    <string name="website_help_main">http://anymemo.org/index.php?p=1_7_Guide</string>
+    <string name="website_version">http://anymemo.org/index.php?p=1_6_Version-History</string>
+    <string name="website_help_memo">http://anymemo.org/index.php?p=1_7_Guide#sec22</string>
+    <string name="website_help_edit">http://anymemo.org/index.php?p=1_7_Guide#sec3</string>
+    <string name="what_is_new_message">See Graphical guide of new features, please click version history button.\nVersion 3.0.0\n1. New Feature: New card preview/edit screen with gesture support. Please check the on-line help at anymemo.org.\n2. New Feature: Online help from menu.\n3. New Feature: Automatic copy the question to clipboard.\n4. Enhance: deletion will maintain the ID coherience.\n5. Enhance: Add compatibility with Android 2.2 (Froyo)</string>
     
 </resources>

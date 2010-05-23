@@ -58,6 +58,7 @@ import android.widget.TextView;
 import android.widget.EditText;
 import android.util.Log;
 import android.os.SystemClock;
+import android.net.Uri;
 
 
 public class MemoScreen extends MemoScreenBase implements View.OnClickListener, View.OnLongClickListener{
@@ -105,8 +106,16 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
             btn.setOnClickListener(this);
         }
         LinearLayout root = (LinearLayout)findViewById(R.id.memo_screen_root);
+
         root.setOnClickListener(this);
         root.setOnLongClickListener(this);
+        /* This is a workaround for the unknown change of the 
+         * behavior in Android 2.2. 
+         * If this event is not set, it will not handle the event
+         * of the root
+         */
+		TextView answerView = (TextView) findViewById(R.id.answer);
+        answerView.setOnClickListener(this);
 
 
         mProgressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_database), true);
@@ -126,6 +135,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
             loadingThread.start();
 
 	}
+
 
     @Override
 	public void onDestroy(){
@@ -160,9 +170,13 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
 	
     @Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+        Intent myIntent = new Intent();
 	    switch (item.getItemId()) {
-	    case R.id.menuback:
-	    	finish();
+	    case R.id.menu_memo_help:
+            myIntent.setAction(Intent.ACTION_VIEW);
+            myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
+            myIntent.setData(Uri.parse(getString(R.string.website_help_memo)));
+            startActivity(myIntent);
 	        return true;
 	    case R.id.menuspeakquestion:
 	    	if(questionTTS != null){
@@ -183,7 +197,6 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
 	    	return true;
 	    	
 	    case R.id.menusettings:
-    		Intent myIntent = new Intent();
     		myIntent.setClass(this, SettingsScreen.class);
     		myIntent.putExtra("dbname", this.dbName);
     		myIntent.putExtra("dbpath", this.dbPath);
@@ -192,13 +205,11 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
     		return true;
 	    	
 	    case R.id.menudetail:
-	    
-    		Intent myIntent1 = new Intent();
-    		myIntent1.setClass(this, DetailScreen.class);
-    		myIntent1.putExtra("dbname", this.dbName);
-    		myIntent1.putExtra("dbpath", this.dbPath);
-    		myIntent1.putExtra("itemid", currentItem.getId());
-    		startActivityForResult(myIntent1, 2);
+    		myIntent.setClass(this, DetailScreen.class);
+    		myIntent.putExtra("dbname", this.dbName);
+    		myIntent.putExtra("dbpath", this.dbPath);
+    		myIntent.putExtra("itemid", currentItem.getId());
+    		startActivityForResult(myIntent, 2);
     		return true;
 
         case R.id.menuundo:
@@ -404,7 +415,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
 			
     @Override
     public void onClick(View v){
-        if(v == (LinearLayout)findViewById(R.id.memo_screen_root)){
+        if(v == (LinearLayout)findViewById(R.id.memo_screen_root) || v== (TextView) findViewById(R.id.answer)){
             /* Handle the short click of the whole screen */
 			if(this.showAnswer == false){
 				this.showAnswer ^= true;

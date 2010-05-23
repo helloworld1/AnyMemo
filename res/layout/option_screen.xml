@@ -13,5 +13,10 @@
         android:title="@string/btnonerow" 
         android:defaultValue="false"
         android:summary="@string/btnonerow_summary" />
+    <CheckBoxPreference
+        android:key="copyclipboard"
+        android:title="@string/copyclipboard" 
+        android:defaultValue="true"
+        android:summary="@string/copyclipboard_summary" />
  
 </PreferenceScreen> 

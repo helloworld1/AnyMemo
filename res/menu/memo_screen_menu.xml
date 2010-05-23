@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/menuback"
-  		  android:icon="@drawable/back_icon"  
-          android:title="@string/back_menu_text" />
+    <item android:id="@+id/menuundo"
+  		  android:icon="@drawable/undo_icon"
+          android:title="@string/undo_text" />
     <item android:id="@+id/menudetail"
   		  android:icon="@android:drawable/ic_menu_edit"
           android:title="@string/detail_menu_text" />
@@ -15,7 +15,7 @@
     <item android:id="@+id/menuspeakanswer"
   		  android:icon="@drawable/speak_a_48"
           android:title="@string/speak_answer_menu_text" />
-    <item android:id="@+id/menuundo"
-  		  android:icon="@drawable/undo_icon"
-          android:title="@string/undo_text" />
+    <item android:id="@+id/menu_memo_help"
+  		  android:icon="@android:drawable/ic_menu_help"  
+          android:title="@string/help_button_text" />
 </menu>

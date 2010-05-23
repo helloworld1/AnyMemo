@@ -17,6 +17,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
+
 package org.liberty.android.fantastischmemo;
 
 import android.app.Activity;
@@ -77,8 +78,6 @@ public class Downloader extends Activity implements OnItemClickListener{
     private Context mContext;
     private AlertDialog alertDialog;
     private Thread downloadThread;
-    private final String urlHead = "http://anymemo.org/download/WordLists/";
-    private final String urlDb = "WordListsForChinese/db/";
             
 
     /* mStage = 1: category selection
@@ -112,7 +111,7 @@ public class Downloader extends Activity implements OnItemClickListener{
         Thread connectThread = new Thread(){
             @Override
             public void run(){
-                if(obtainJSON(urlHead + "json.php")){
+                if(obtainJSON(getString(R.string.website_json))){
                     mHandler.post(new Runnable(){
                         @Override
                         public void run(){
@@ -290,8 +289,8 @@ public class Downloader extends Activity implements OnItemClickListener{
                     String filename = mFilterDatabaseList.get(clickPosition).get("FileName");
                     downloadStatus = false;
                     try{
-                        Log.v(TAG, "Download address: " + urlHead + mFilterDatabaseList.get(clickPosition).get("DBPath") + URLEncoder.encode(filename, "UTF-8"));
-                        downloadStatus = downloadFile(urlHead + mFilterDatabaseList.get(clickPosition).get("DBPath") + URLEncoder.encode(filename, "UTF-8"), filename);
+                        Log.v(TAG, "Download address: " + getString(R.string.website_download_head) + mFilterDatabaseList.get(clickPosition).get("DBPath") + URLEncoder.encode(filename, "UTF-8"));
+                        downloadStatus = downloadFile(getString(R.string.website_download_head) + mFilterDatabaseList.get(clickPosition).get("DBPath") + URLEncoder.encode(filename, "UTF-8"), filename);
                     }
                     catch(UnsupportedEncodingException e){
                     }

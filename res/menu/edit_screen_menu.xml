@@ -18,7 +18,7 @@
     <item android:id="@+id/editmenu_settings_id"
   		  android:icon="@android:drawable/ic_menu_preferences"
   		  android:title="@string/settings_menu_text" />
-    <item android:id="@+id/menuback"
-  		  android:icon="@drawable/back_icon"  
-          android:title="@string/back_menu_text" />
+    <item android:id="@+id/editmenu_help"
+  		  android:icon="@android:drawable/ic_menu_help"  
+          android:title="@string/help_button_text" />
 </menu>

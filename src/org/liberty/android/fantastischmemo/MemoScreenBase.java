@@ -40,6 +40,7 @@ import android.os.Bundle;
 import android.content.Context;
 import android.preference.PreferenceManager;
 import android.text.Html;
+import android.text.ClipboardManager;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -93,6 +94,7 @@ public abstract class MemoScreenBase extends Activity{
     protected ProgressDialog mProgressDialog = null;
 	protected boolean questionUserAudio = false;
 	protected boolean answerUserAudio = false;
+    protected boolean copyClipboard = true;
 	//private SpeakWord mSpeakWord = null;
     //private Context mContext;
     //private Handler mHandler;
@@ -151,6 +153,7 @@ public abstract class MemoScreenBase extends Activity{
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
     	autoaudioSetting = settings.getBoolean("autoaudio", true);
         btnOneRow = settings.getBoolean("btnonerow", false);
+        copyClipboard = settings.getBoolean("copyclipboard", true);
 		
 		HashMap<String, String> hm = dbHelper.getSettings();
 		Set<Map.Entry<String, String>> set = hm.entrySet();
@@ -248,6 +251,10 @@ public abstract class MemoScreenBase extends Activity{
 			
 		}
         else{
+            if(copyClipboard){
+                ClipboardManager cm = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
+                cm.setText(currentItem.getQuestion());
+            }
 			displayQA(currentItem);
         }
 		

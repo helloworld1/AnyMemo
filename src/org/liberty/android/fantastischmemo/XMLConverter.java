@@ -30,7 +30,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Date;
+import java.util.TimeZone;
+import java.util.Calendar;
 import java.text.SimpleDateFormat;
+
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -145,6 +148,12 @@ public class XMLConverter extends org.xml.sax.helpers.DefaultHandler{
         if(localName.equals("mnemosyne")){
             try{
                 timeOfStart = Long.parseLong(atts.getValue("time_of_start"));
+                /* Convert to local time */
+                //Calendar nc = Calendar.getInstance();
+                //TimeZone tz = nc.getTimeZone();
+                //int offset = tz.getOffset(timeOfStart);
+                //timeOfStart -= offset;
+
                 Log.v(TAG, "Time of start: " + timeOfStart);
             }
             catch(Exception e){
