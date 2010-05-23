@@ -454,15 +454,4 @@ public abstract class MemoScreenBase extends Activity{
             .create()
             .show();
     }
-
-    protected void disableGesture(){
-        GestureOverlayView goView = (GestureOverlayView)findViewById(R.id.gesture_overlay);
-        goView.removeAllOnGestureListeners();
-        goView.setGestureVisible(false);
-    }
-
-
-
-
-
 }

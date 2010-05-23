@@ -107,7 +107,6 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
         LinearLayout root = (LinearLayout)findViewById(R.id.memo_screen_root);
         root.setOnClickListener(this);
         root.setOnLongClickListener(this);
-        disableGesture();
 
 
         mProgressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_database), true);

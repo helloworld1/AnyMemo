@@ -1,12 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.gesture.GestureOverlayView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/gesture_overlay"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"    
-    android:gestureStrokeType="multiple"
-    android:eventsInterceptionEnabled="true"
-    android:orientation="vertical">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/memo_screen_root"
 	android:layout_width="fill_parent"
@@ -58,7 +50,4 @@
         android:layout_height="wrap_content"
         android:id="@+id/memo_screen_button_layout" 
         android:layout_gravity="bottom"/>
-
-
 </LinearLayout>
-</android.gesture.GestureOverlayView>

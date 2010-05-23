@@ -87,7 +87,7 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
     @Override
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-		setContentView(R.layout.memo_screen);
+		setContentView(R.layout.memo_screen_gesture);
 		
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
