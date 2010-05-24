@@ -158,7 +158,7 @@ public class Downloader extends Activity implements OnItemClickListener{
         }
         mListView.setAdapter(new ArrayAdapter(this, android.R.layout.simple_list_item_1, categoryArray));
         mListView.setOnItemClickListener(this);
-        topText.setText("Categories");
+        topText.setText(getString(R.string.downloader_categories));
     }
 
     private void refreshDatabaseList(String category){
@@ -175,7 +175,7 @@ public class Downloader extends Activity implements OnItemClickListener{
 
         mListView.setAdapter(new ArrayAdapter(this, android.R.layout.simple_list_item_1, databaseArray));
         mListView.setOnItemClickListener(this);
-        topText.setText("Databases");
+        topText.setText(getString(R.string.downloader_databases));
     }
 
 
