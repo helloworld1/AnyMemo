@@ -128,7 +128,7 @@
     <string name="downloader_download_alert">下载: </string>
     <string name="downloader_download_alert_message">详情: </string>
     <string name="about_title">关于</string>
-    <string name="about_text">记忆辅助软件.\n\n作者: Haowen Ning, Qi Wang\n\nAcknowledge: pomelo422, williamfeng, jim4ever, Lyndsey Percival, John Rissler</string>
+    <string name="about_text">记忆辅助软件.\n\n作者: Haowen Ning, Qi Wang\n\n感谢: pomelo422, williamfeng, jim4ever, Lyndsey Percival, John Rissler</string>
     <string name="about_version">版本历史</string>
     <string name="what_is_new">Changelog</string>
     <string name="downloader_categories">分类</string>
