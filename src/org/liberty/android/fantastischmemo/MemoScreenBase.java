@@ -107,7 +107,7 @@ public abstract class MemoScreenBase extends Activity{
 
     private final static String TAG = "org.liberty.android.fantastischmemo.MemoScreenBase";
 
-	abstract protected void prepare();
+	abstract protected boolean prepare();
 
 	abstract protected int feedData();
 	

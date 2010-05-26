@@ -107,13 +107,39 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
         gestures.addOnGesturePerformedListener(this);
         createButtons();
         buttonBinding();
-        prepare();
+        if(prepare() == false){
+            new AlertDialog.Builder(mContext)
+                .setTitle(getString(R.string.open_database_error_title))
+                .setMessage(getString(R.string.open_database_error_message))
+                .setPositiveButton(getString(R.string.back_menu_text), new OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        finish();
+                    }
+                })
+                .setNegativeButton(getString(R.string.help_button_text), new OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        Intent myIntent = new Intent();
+                        myIntent.setAction(Intent.ACTION_VIEW);
+                        myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
+                        myIntent.setData(Uri.parse(getString(R.string.website_help_error_open)));
+                        startActivity(myIntent);
+                        finish();
+
+                    }
+                })
+                .create()
+                .show();
+        }
     }
 
     @Override
 	public void onDestroy(){
         super.onDestroy();
-		dbHelper.close();
+        try{
+            dbHelper.close();
+        }
+        catch(Exception e){
+        }
     }
 
     @Override
@@ -140,9 +166,15 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
     }
 
     @Override
-    protected void prepare(){
+    protected boolean prepare(){
         if(dbHelper == null){
-            dbHelper = new DatabaseHelper(mContext, dbPath, dbName);
+            try{
+                dbHelper = new DatabaseHelper(mContext, dbPath, dbName);
+            }
+            catch(Exception e){
+                return false;
+            }
+
         }
 		loadSettings();
         maxId = dbHelper.getNewId() - 1;
@@ -168,6 +200,7 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
             setTitle(getString(R.string.stat_total) + totalItem);
             updateMemoScreen();
         }
+        return true;
     }
 
     @Override

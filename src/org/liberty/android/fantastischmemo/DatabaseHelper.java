@@ -40,28 +40,21 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-	private final String DB_PATH;
-	private final String DB_NAME;
+	private final String dbPath;
+	private final String dbName;
 	private SQLiteDatabase myDatabase;
-	private final Context myContext;
+	private final Context mContext;
     private static final String TAG = "org.liberty.android.fantastischmemo.DatabaseHelper";
 		
-	public DatabaseHelper(Context context, String dbPath, String dbName){
-		super(context, dbName, null, 1);
-		DB_PATH = dbPath;
-		DB_NAME = dbName;
-		this.myContext = context;
-		this.openDatabase();
-	}
-	
-	public DatabaseHelper(Context context, String dbPath, String dbName, int noOpen){
-		super(context, dbName, null, 1);
-		DB_PATH = dbPath;
-		DB_NAME = dbName;
-		this.myContext = context;
-		if(noOpen == 0){
-			this.openDatabase();
-		}
+	public DatabaseHelper(Context context, String path, String name) throws SQLException{
+		super(context, name, null, 1);
+		dbPath = path;
+		dbName = name;
+		mContext = context;
+		openDatabase();
+        if(!checkDatabase()){
+            throw new SQLException("Database check failed.");
+        }
 	}
 	
 	public void createDatabase() throws IOException{
@@ -86,7 +79,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			throw new IOException("DB already exist");
 		}
 		try{
-		myDatabase = SQLiteDatabase.openDatabase(DB_PATH + "/" + DB_NAME, null, SQLiteDatabase.OPEN_READWRITE | SQLiteDatabase.CREATE_IF_NECESSARY);
+		myDatabase = SQLiteDatabase.openDatabase(dbPath + "/" + dbName, null, SQLiteDatabase.OPEN_READWRITE | SQLiteDatabase.CREATE_IF_NECESSARY);
 		}
 		catch(Exception e){
 			Log.e("DB open error here", e.toString());
@@ -120,7 +113,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			throw new IOException("DB already exist");
 		}
 		try{
-		myDatabase = SQLiteDatabase.openDatabase(DB_PATH + "/" + DB_NAME, null, SQLiteDatabase.OPEN_READWRITE | SQLiteDatabase.CREATE_IF_NECESSARY);
+		myDatabase = SQLiteDatabase.openDatabase(dbPath + "/" + dbName, null, SQLiteDatabase.OPEN_READWRITE | SQLiteDatabase.CREATE_IF_NECESSARY);
 		}
 		catch(Exception e){
 			Log.e("DB open error here", e.toString());
@@ -199,24 +192,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	}
 	
 	public boolean checkDatabase(){
-		SQLiteDatabase checkDB = null;
-		try{
-			String myPath = DB_PATH + "/" + DB_NAME;
-			checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
-		}
-		catch(SQLiteException e){  
-			checkDB = null;
-		}
-		
-		if(checkDB != null){
-			checkDB.close();
-		}
-		return checkDB != null ? true : false;
+        boolean checkDB = false;
+        try{
+            /* Check dict_tbl */
+            getNewId();
+            /* Check learn_tbl */
+            getTotalCount();
+            checkDB = true;
+        }
+        catch(Exception e){
+            checkDB = false;
+        }
+
+		return checkDB; 
 	}
 	
 	private void copyDatabase() throws IOException{
-		InputStream myInput = myContext.getAssets().open(DB_NAME);
-		String outFilename = DB_PATH + "/" + DB_NAME;
+		InputStream myInput = mContext.getAssets().open(dbName);
+		String outFilename = dbPath + "/" + dbName;
 		OutputStream myOutput = new FileOutputStream(outFilename);
 		byte[] buffer = new byte[1024];
 		int length;
@@ -229,26 +222,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	}
 	
 	public void openDatabase() throws SQLException{
-		String myPath = DB_PATH + "/" + DB_NAME;
+		String myPath = dbPath + "/" + dbName;
 		Cursor result;
 		int count_dict = 0, count_learn = 0;
-		try{
 		myDatabase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE | SQLiteDatabase.CREATE_IF_NECESSARY);
-		}
-		catch(Exception e){
-			Log.e("First", "Database error first here!: " + e.toString());
-			throw new SQLException();
-			
-		}
-		try{
-			result = myDatabase.rawQuery("SELECT _id FROM dict_tbl", null);
-			count_dict = result.getCount();
-			result.close();
-		}
-		catch(Exception e){
-			//new AlertDialog.Builder(this).setMessage(e.toString()).show();	
-			Log.e("Second", "Database error here!: " + e.toString());
-		}
+        result = myDatabase.rawQuery("SELECT _id FROM dict_tbl", null);
+        count_dict = result.getCount();
+        result.close();
 		
 		if(count_dict == 0){
 			return;
@@ -257,6 +237,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		count_learn = result.getCount();
 		result.close();
 		if(count_learn != count_dict){
+            /* Reconstruct learn_tbl if error found */
 			this.myDatabase.execSQL("DELETE FROM learn_tbl");
 			this.myDatabase.execSQL("INSERT INTO learn_tbl(_id) SELECT _id FROM dict_tbl");
 			this.myDatabase.execSQL("UPDATE learn_tbl SET date_learn = '2010-01-01', interval = 0, grade = 0, easiness = 2.5, acq_reps = 0, ret_reps  = 0, lapses = 0, acq_reps_since_lapse = 0, ret_reps_since_lapse = 0");

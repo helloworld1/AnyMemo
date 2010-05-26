@@ -122,10 +122,34 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
             Thread loadingThread = new Thread(){
                 public void run(){
                     /* Pre load cards (The number is specified in Window size varable) */
-                    prepare();
+                    final boolean isPrepared = prepare();
                     mHandler.post(new Runnable(){
                         public void run(){
                             mProgressDialog.dismiss();
+                            if(isPrepared == false){
+                                new AlertDialog.Builder(mContext)
+                                    .setTitle(getString(R.string.open_database_error_title))
+                                    .setMessage(getString(R.string.open_database_error_message))
+                                    .setPositiveButton(getString(R.string.back_menu_text), new OnClickListener() {
+                                        public void onClick(DialogInterface arg0, int arg1) {
+                                            finish();
+                                        }
+                                    })
+                                    .setNegativeButton(getString(R.string.help_button_text), new OnClickListener() {
+                                        public void onClick(DialogInterface arg0, int arg1) {
+                                            Intent myIntent = new Intent();
+                                            myIntent.setAction(Intent.ACTION_VIEW);
+                                            myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
+                                            myIntent.setData(Uri.parse(getString(R.string.website_help_error_open)));
+                                            startActivity(myIntent);
+                                            finish();
+
+                                        }
+                                    })
+                                    .create()
+                                    .show();
+                            }
+
                         }
                     });
                 }
@@ -138,7 +162,11 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
     @Override
 	public void onDestroy(){
 		super.onDestroy();
-		dbHelper.close();
+        try{
+            dbHelper.close();
+        }
+        catch(Exception e){
+        }
 		if(questionTTS != null){
 			questionTTS.shutdown();
 		}
@@ -245,10 +273,16 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
 	}
 
     @Override
-	protected void prepare() {
+	protected boolean prepare() {
 		/* Empty the queue, init the db */
         if(dbHelper == null){
-            dbHelper = new DatabaseHelper(mContext, dbPath, dbName);
+            try{
+                dbHelper = new DatabaseHelper(mContext, dbPath, dbName);
+            }
+            catch(Exception e){
+                return false;
+            }
+
         }
 		learnQueue = new ArrayList<Item>();
 		queueEmpty = true;
@@ -358,6 +392,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
             });
 
 		}
+        return true;
 		
 	}
 	

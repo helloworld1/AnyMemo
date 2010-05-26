@@ -78,7 +78,20 @@ public class DetailScreen extends Activity implements OnClickListener{
 			dbName = extras.getString("dbname");
 			itemId = extras.getInt("itemid");
 			
-			dbHelper = new DatabaseHelper(this, dbPath, dbName);
+            try{
+                dbHelper = new DatabaseHelper(this, dbPath, dbName);
+            }
+            catch(Exception e){
+                new AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.open_database_error_title))
+                    .setMessage(getString(R.string.open_database_error_message))
+                    .setPositiveButton(getString(R.string.back_menu_text) + " " + e.toString(), null)
+                    .create()
+                    .show();
+                finish();
+                return;
+            }
+
 			currentItem = dbHelper.getItemById(itemId, 0);
 		}
 		else{

@@ -373,13 +373,13 @@ public class FileBrowser extends Activity implements OnItemClickListener, OnItem
                         if(!value.endsWith(".db")){
                             value += ".db";
                         }
-                        DatabaseHelper dbHelper = new DatabaseHelper(mContext, currentDirectory.getAbsolutePath(), value, 1);
                         try{
+                            DatabaseHelper dbHelper = new DatabaseHelper(mContext, currentDirectory.getAbsolutePath(), value);
                             dbHelper.createEmptyDatabase();
+                            dbHelper.close();
                         }
                         catch(Exception e){
                         }
-                        dbHelper.close();
                         browseTo(currentDirectory);
                         
                     }

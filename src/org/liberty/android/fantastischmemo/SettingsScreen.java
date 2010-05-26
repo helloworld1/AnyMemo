@@ -134,7 +134,19 @@ public class SettingsScreen extends Activity implements OnClickListener {
 			dbPath = extras.getString("dbpath");
 			dbName = extras.getString("dbname");
 		}
-		dbHelper = new DatabaseHelper(this, dbPath, dbName);
+        try{
+            dbHelper = new DatabaseHelper(this, dbPath, dbName);
+        }
+        catch(Exception e){
+            new AlertDialog.Builder(mContext)
+                .setTitle(getString(R.string.open_database_error_title))
+                .setMessage(getString(R.string.open_database_error_message))
+                .setPositiveButton(getString(R.string.back_menu_text) + " " + e.toString(), null)
+                .create()
+                .show();
+            finish();
+            return;
+        }
 		HashMap<String, String> hm= dbHelper.getSettings();
 		Set<Map.Entry<String, String>> set = hm.entrySet();
 		Iterator<Map.Entry<String, String> > i = set.iterator();

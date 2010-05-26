@@ -25,6 +25,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
+import android.database.SQLException;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
@@ -135,12 +136,11 @@ public class XMLConverter extends org.xml.sax.helpers.DefaultHandler{
 		
 	}
 	
-	public void outputDB() throws IOException{
-		DatabaseHelper dbHelper = new DatabaseHelper(mContext, filePath, fileName.replaceAll(".xml", ".db"), 1);
+	public void outputDB() throws IOException, SQLException{
+        DatabaseHelper dbHelper = new DatabaseHelper(mContext, filePath, fileName.replaceAll(".xml", ".db"));
         Log.v(TAG, "Counts: " + questionList.size() + " " + easinessList.size() + " " + acrpList.size() + " " + arslList.size());
 		dbHelper.createDatabaseFromList(questionList, answerList, categoryList, datelearnList, intervalList, easinessList, gradeList, lapsesList, acrpList, rtrpList, arslList, rrslList);
 		dbHelper.close();
-		
 		
 	}
 	

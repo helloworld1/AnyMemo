@@ -388,15 +388,23 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
             ListIterator<HashMap<String, String>> it = recentList.listIterator();
             while(it.hasNext()){
                 HashMap<String,  String> hm = (HashMap<String, String>)it.next();
+                DatabaseHelper dbHelper = null;
+
                 String dbname = hm.get("recentdbname");
                 String dbpath = hm.get("recentdbpath");
                 
-                DatabaseHelper dbHelper = new DatabaseHelper(mContext, dbpath, dbname, 1);
-                if(dbHelper.checkDatabase() == false){
+                boolean checkResult = false;
+                try{
+                    dbHelper = new DatabaseHelper(mContext, dbpath, dbname);
+                    checkResult = true;
+                }
+                catch(Exception e){
+                    checkResult = false;
+                }
+                if(checkResult == false){
                     it.remove();
                 }
                 else{
-                    dbHelper.openDatabase();
                     hm.put("recentdbtotal", "" + dbHelper.getTotalCount());
                     hm.put("recentscheduled", "" + dbHelper.getScheduledCount());
                     hm.put("recentnew", "" + dbHelper.getNewCount());
