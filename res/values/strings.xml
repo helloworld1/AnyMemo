@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">AnyMemo</string>
     <string name="app_full_name">AnyMemo Free</string>
-    <string name="app_version">3.0.1</string>
+    <string name="app_version">3.0.3</string>
     <string name="up_one_level">..</string>
     <string name="current_dir">.</string>
     <string name="ok_text">OK</string>
@@ -148,6 +148,6 @@
     <string name="website_help_edit">http://anymemo.org/index.php?p=1_7_Guide#sec3</string>
     <string name="downloader_categories">Categories</string>
     <string name="downloader_databases">Databases</string>
-    <string name="what_is_new_message">See Graphical guide of new features, please click version history button.\nVersion3.0.1\n1. Chinese localization.\nVersion 3.0.0\n1. New Feature: New card preview/edit screen with gesture support. Please check the on-line help at anymemo.org.\n2. New Feature: Online help from menu.\n3. New Feature: Automatic copy the question to clipboard.\n4. Enhance: deletion will maintain the ID coherience.\n5. Enhance: Add compatibility with Android 2.2 (Froyo)</string>
+    <string name="what_is_new_message">See Graphical guide of new features, please click version history button.\nVersion 3.0.3\n1. Try to fix the file list size issue on Droid/Milestone\nVersion 3.0.2\n1. Import malformed mnemosyne XML file.\n2. Fix a crash issue when pulling out the keyboard.\nVersion3.0.1\n1. Chinese localization.\nVersion 3.0.0\n1. New Feature: New card preview/edit screen with gesture support. Please check the on-line help at anymemo.org.\n2. New Feature: Online help from menu.\n3. New Feature: Automatic copy the question to clipboard.\n4. Enhance: deletion will maintain the ID coherience.\n5. Enhance: Add compatibility with Android 2.2 (Froyo)</string>
     
 </resources>

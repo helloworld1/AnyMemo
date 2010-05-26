@@ -15,5 +15,5 @@
         android:layout_height="wrap_content" 
         android:singleLine="true"
         android:ellipsize="marquee"
-        android:textSize="12.5pt"/>
+        android:textSize="30.5sp"/>
 </LinearLayout>

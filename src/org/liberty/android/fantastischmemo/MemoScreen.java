@@ -84,8 +84,6 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
 	private boolean initFeed;
 
     public final static String TAG = "org.liberty.android.fantastischmemo.MemoScreen";
-    /* The hold event time */
-    private final int HOLD_THRESHOLD = 1000;
 
     @Override
 	public void onCreate(Bundle savedInstanceState) {

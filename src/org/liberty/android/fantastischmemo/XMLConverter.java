@@ -178,6 +178,10 @@ public class XMLConverter extends org.xml.sax.helpers.DefaultHandler{
             }
             String acrpAttr = atts.getValue("ac_rp");
             String uAttr = atts.getValue("u");
+            String rtrpAttr = atts.getValue("rt_rp");
+            if(rtrpAttr != null){
+                rtrpList.add(Integer.valueOf(rtrpAttr));
+            }
             if(acrpAttr != null){
                 int acrp = Integer.parseInt(acrpAttr);
                 if(uAttr != null){
@@ -185,12 +189,14 @@ public class XMLConverter extends org.xml.sax.helpers.DefaultHandler{
                         acrp = 0;
                     }
                 }
+                if(Integer.valueOf(rtrpAttr) != 0 && acrp == 0){
+                    /* This is a workaround for the malformed
+                     * XML file.
+                     */
+                    acrp = Integer.valueOf(rtrpAttr) / 2 + 1;
+                }
 
                 acrpList.add(new Integer(acrp));
-            }
-            String rtrpAttr = atts.getValue("rt_rp");
-            if(rtrpAttr != null){
-                rtrpList.add(Integer.valueOf(rtrpAttr));
             }
             String lpsAttr = atts.getValue("lps");
             if(lpsAttr != null){
