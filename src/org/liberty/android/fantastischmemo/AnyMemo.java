@@ -32,6 +32,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
@@ -76,7 +77,7 @@ public class AnyMemo extends Activity implements OnClickListener{
         
         
         boolean firstTime = settings.getBoolean("first_time", true);
-        File sdPath = new File(getString(R.string.default_sd_path));
+        File sdPath = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir));
         sdPath.mkdir();
         if(!sdPath.canRead()){
         	DialogInterface.OnClickListener exitButtonListener = new DialogInterface.OnClickListener(){
@@ -98,7 +99,7 @@ public class AnyMemo extends Activity implements OnClickListener{
         	SharedPreferences.Editor editor = settings.edit();
         	editor.putBoolean("first_time", false);
     		editor.putString("recentdbname0", getString(R.string.default_db_name));
-    		editor.putString("recentdbpath0", getString(R.string.default_sd_path));
+    		editor.putString("recentdbpath0", Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir));
         	editor.commit();
 			try{
 				copyFile(getString(R.string.default_db_name));
@@ -267,7 +268,7 @@ public class AnyMemo extends Activity implements OnClickListener{
 	}
 	
 	private void copyFile(String source) throws IOException{
-		String rootPath = getResources().getString(R.string.default_sd_path);
+		String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
 		File newDir = new File(rootPath);
 		boolean result = newDir.mkdir();
 		if(result == false){

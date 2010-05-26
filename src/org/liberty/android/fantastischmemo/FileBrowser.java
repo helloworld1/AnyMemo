@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import android.os.Environment;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -79,7 +80,7 @@ public class FileBrowser extends Activity implements OnItemClickListener, OnItem
 	
 	private void browseToRoot(){
 		if(defaultRoot == null){
-			File sdPath = new File(getString(R.string.default_sd_path));
+			File sdPath = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir));
 			sdPath.mkdir();
 			
 			browseTo(sdPath);

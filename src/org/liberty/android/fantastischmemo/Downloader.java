@@ -25,6 +25,7 @@ import android.app.ProgressDialog;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Environment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.widget.TextView;
@@ -238,7 +239,8 @@ public class Downloader extends Activity implements OnItemClickListener{
     }
 
     private boolean downloadFile(String url, String filename){
-        File outFile = new File(getString(R.string.default_sd_path) + filename);
+        String sdpath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
+        File outFile = new File(sdpath + filename);
         try{
             OutputStream out;
             if(outFile.exists()){
@@ -289,8 +291,27 @@ public class Downloader extends Activity implements OnItemClickListener{
                     String filename = mFilterDatabaseList.get(clickPosition).get("FileName");
                     downloadStatus = false;
                     try{
-                        Log.v(TAG, "Download address: " + getString(R.string.website_download_head) + mFilterDatabaseList.get(clickPosition).get("DBPath") + URLEncoder.encode(filename, "UTF-8"));
                         downloadStatus = downloadFile(getString(R.string.website_download_head) + mFilterDatabaseList.get(clickPosition).get("DBPath") + URLEncoder.encode(filename, "UTF-8"), filename);
+                        if(downloadStatus == true){
+                            String sdpath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
+                            try{
+                                DatabaseHelper dh = new DatabaseHelper(mContext, sdpath, filename);
+                                dh.close();
+                            }
+                            catch(Exception e){
+                                downloadStatus = false;
+                                File dbFile = new File(sdpath + filename);
+                                Log.v(TAG, dbFile.toString());
+                                if(dbFile.delete()){
+                                    Log.v(TAG, "TRUE");
+                                }
+                                else{
+                                    Log.v(TAG, "FALSE");
+                                }
+
+                            }
+                        }
+
                     }
                     catch(UnsupportedEncodingException e){
                     }

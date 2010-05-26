@@ -37,6 +37,7 @@ import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
+import android.os.Environment;
 import android.content.Context;
 import android.preference.PreferenceManager;
 import android.text.Html;
@@ -356,7 +357,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
 			this.answerTTS = null;
 		}
 		if(questionUserAudio || answerUserAudio){
-			mSpeakWord = new SpeakWord(this.getString(R.string.default_audio_path));
+			mSpeakWord = new SpeakWord(Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_audio_dir));
 		}
 		
 		if(this.feedData() == 2){ // The queue is still empty

@@ -26,8 +26,8 @@
     <string name="help_button_text">Help</string>
     <string name="exit_button_text">Exit Program</string>
     <string name="edit_button_text">Preview/Edit Database</string>
-    <string name="default_sd_path">/sdcard/anymemo/</string>
-    <string name="default_audio_path">/sdcard/anymemo/voice</string>
+    <string name="default_dir">/anymemo/</string>
+    <string name="default_audio_dir">/anymemo/voice</string>
     <string name="default_db_name">french-body-parts.db</string>
     <string name="autoaudio">Automatic Speak</string>
     <string name="autoaudio_summary">The question and answer will be read automatically</string>
@@ -132,7 +132,7 @@
     <string name="downloader_download_success">Successfully Downloaded</string>
     <string name="downloader_download_success_message">The database has been stored in: /sdcard/anymemo/</string>
     <string name="downloader_download_fail">Download failed</string>
-    <string name="downloader_download_fail_message">Database with the same name exist in /sdcard/anymemo or connection fail. Please check connection and delete the exist database.</string>
+    <string name="downloader_download_fail_message">Causes:\n1. Database with the same name exist in /sdcard/anymemo\n2. Connection fail.\n3. Server issue, please report bug.\nYou can delete the db with the same name or try again.</string>
     <string name="downloader_download_alert">Download: </string>
     <string name="downloader_download_alert_message">Details: </string>
     <string name="about_title">About</string>
