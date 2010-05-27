@@ -24,6 +24,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -41,6 +42,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.content.res.Configuration;
 
 public class AnyMemo extends Activity implements OnClickListener{
 	private String dbName;
@@ -54,6 +56,20 @@ public class AnyMemo extends Activity implements OnClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        Locale locale;
+        if(!settings.getBoolean("autolocale", false)){
+            /* Force to use the default language */
+            locale = new Locale("en_US");
+        }
+        else{
+            /* Or get the language from the system */
+            locale = Locale.getDefault();
+        }
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+
         setContentView(R.layout.main);
 
         btnNew = (Button)this.findViewById(R.id.main_open_database_button);
@@ -66,7 +82,6 @@ public class AnyMemo extends Activity implements OnClickListener{
         btnExit.setOnClickListener(this);
 
         
-    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         this.dbName = settings.getString("dbname", null);
         this.dbPath = settings.getString("dbpath", null);
         /* Check the version, if it is updated from an older version

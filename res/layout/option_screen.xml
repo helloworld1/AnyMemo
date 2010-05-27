@@ -18,5 +18,10 @@
         android:title="@string/copyclipboard" 
         android:defaultValue="true"
         android:summary="@string/copyclipboard_summary" />
+    <CheckBoxPreference
+        android:key="autolocale"
+        android:title="@string/autolocale_title" 
+        android:defaultValue="true"
+        android:summary="@string/autolocale_summary" />
  
 </PreferenceScreen> 
