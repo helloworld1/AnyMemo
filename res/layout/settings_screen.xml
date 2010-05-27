@@ -130,14 +130,14 @@
 		android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dip"
-        android:text="@string/settings_text_color"
+        android:text="@string/settings_question_text_color"
         />
     <Spinner
-        android:id="@+id/text_color_spinner"
+        android:id="@+id/question_text_color_spinner"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:drawSelectorOnTop="true"
-        android:prompt="@string/settings_text_color"
+        android:prompt="@string/settings_question_text_color"
     />
     </TableRow>
 
@@ -146,14 +146,46 @@
 		android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dip"
-        android:text="@string/settings_bg_color"
+        android:text="@string/settings_question_bg_color"
         />
     <Spinner
-        android:id="@+id/bg_color_spinner"
+        android:id="@+id/question_bg_color_spinner"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:drawSelectorOnTop="true"
-        android:prompt="@string/settings_bg_color"
+        android:prompt="@string/settings_question_bg_color"
+    />
+    </TableRow>
+
+    <TableRow>
+    <TextView
+		android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dip"
+        android:text="@string/settings_answer_text_color"
+        />
+    <Spinner
+        android:id="@+id/answer_text_color_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:drawSelectorOnTop="true"
+        android:prompt="@string/settings_answer_text_color"
+    />
+    </TableRow>
+
+    <TableRow>
+    <TextView
+		android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dip"
+        android:text="@string/settings_answer_bg_color"
+        />
+    <Spinner
+        android:id="@+id/answer_bg_color_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:drawSelectorOnTop="true"
+        android:prompt="@string/settings_answer_bg_color"
     />
     </TableRow>
 

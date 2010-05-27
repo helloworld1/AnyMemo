@@ -48,8 +48,10 @@ public class SettingsScreen extends Activity implements OnClickListener {
 	private Spinner answerLocaleSpinner;
 	private Spinner htmlSpinner;
 	private Spinner ratioSpinner;
-    private Spinner textColorSpinner;
-    private Spinner bgColorSpinner;
+    private Spinner questionTextColorSpinner;
+    private Spinner answerTextColorSpinner;
+    private Spinner questionBgColorSpinner;
+    private Spinner answerBgColorSpinner;
 	private CheckBox wipeCheckbox;
 	private CheckBox shuffleCheckbox;
 	private CheckBox inverseCheckbox;
@@ -102,10 +104,14 @@ public class SettingsScreen extends Activity implements OnClickListener {
 
         ArrayAdapter<CharSequence> colorAdapter = ArrayAdapter.createFromResource(this, R.array.color_list, android.R.layout.simple_spinner_item);
         colorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        textColorSpinner = (Spinner)findViewById(R.id.text_color_spinner);
-        textColorSpinner.setAdapter(colorAdapter);
-        bgColorSpinner = (Spinner)findViewById(R.id.bg_color_spinner);
-        bgColorSpinner.setAdapter(colorAdapter);
+        questionTextColorSpinner = (Spinner)findViewById(R.id.question_text_color_spinner);
+        questionTextColorSpinner.setAdapter(colorAdapter);
+        answerTextColorSpinner = (Spinner)findViewById(R.id.answer_text_color_spinner);
+        answerTextColorSpinner.setAdapter(colorAdapter);
+        questionBgColorSpinner = (Spinner)findViewById(R.id.question_bg_color_spinner);
+        questionBgColorSpinner.setAdapter(colorAdapter);
+        answerBgColorSpinner = (Spinner)findViewById(R.id.answer_bg_color_spinner);
+        answerBgColorSpinner.setAdapter(colorAdapter);
         
         /* Get the spinner's initial item */
         setInitialPosition();
@@ -219,6 +225,10 @@ public class SettingsScreen extends Activity implements OnClickListener {
 			}
 			else if(me.getKey().toString().equals("question_locale")){
 				String res = me.getValue();
+                /* Compatible with old database */
+                if(res.equals("Other")){
+                    res = "Disabled";
+                }
 				String[] localeList = getResources().getStringArray(R.array.locale_list);
 				int index = 0;
 				boolean found = false;
@@ -235,7 +245,11 @@ public class SettingsScreen extends Activity implements OnClickListener {
 				questionLocaleSpinner.setSelection(index);
 			}
 			else if(me.getKey().toString().equals("answer_locale")){
+                /* Compatible with old database */
 				String res = me.getValue().toString();
+                if(res.equals("Other")){
+                    res = "Disabled";
+                }
 				String[] localeList = getResources().getStringArray(R.array.locale_list);
 				int index = 0;
 				boolean found = false;
@@ -246,6 +260,7 @@ public class SettingsScreen extends Activity implements OnClickListener {
 					}
 					index ++;
 				}
+
 				if(found == false){
 					index = 0;
 				}
@@ -287,7 +302,7 @@ public class SettingsScreen extends Activity implements OnClickListener {
 				ratioSpinner.setSelection(index);
 				
 			}
-			else if(me.getKey().toString().equals("text_color")){
+			else if(me.getKey().toString().equals("question_text_color")){
 				String res = me.getValue();
 				String[] colorList = getResources().getStringArray(R.array.color_list);
 				int index = 0;
@@ -302,10 +317,10 @@ public class SettingsScreen extends Activity implements OnClickListener {
 				if(found == false){
 					index = 0;
 				}
-				textColorSpinner.setSelection(index);
+				questionTextColorSpinner.setSelection(index);
 				
 			}
-			else if(me.getKey().toString().equals("bg_color")){
+			else if(me.getKey().toString().equals("answer_text_color")){
 				String res = me.getValue();
 				String[] colorList = getResources().getStringArray(R.array.color_list);
 				int index = 0;
@@ -320,7 +335,43 @@ public class SettingsScreen extends Activity implements OnClickListener {
 				if(found == false){
 					index = 0;
 				}
-				bgColorSpinner.setSelection(index);
+				answerTextColorSpinner.setSelection(index);
+				
+			}
+			else if(me.getKey().toString().equals("question_bg_color")){
+				String res = me.getValue();
+				String[] colorList = getResources().getStringArray(R.array.color_list);
+				int index = 0;
+				boolean found = false;
+				for(String str : colorList){
+					if(str.equals(res)){
+						found = true;
+						break;
+					}
+					index++;
+				}
+				if(found == false){
+					index = 0;
+				}
+				questionBgColorSpinner.setSelection(index);
+				
+			}
+			else if(me.getKey().toString().equals("answer_bg_color")){
+				String res = me.getValue();
+				String[] colorList = getResources().getStringArray(R.array.color_list);
+				int index = 0;
+				boolean found = false;
+				for(String str : colorList){
+					if(str.equals(res)){
+						found = true;
+						break;
+					}
+					index++;
+				}
+				if(found == false){
+					index = 0;
+				}
+				answerBgColorSpinner.setSelection(index);
 				
 			}
 			
@@ -345,8 +396,10 @@ public class SettingsScreen extends Activity implements OnClickListener {
     	hm.put("answer_locale", localeList[answerLocaleSpinner.getSelectedItemPosition()]);
     	hm.put("html_display", htmlList[htmlSpinner.getSelectedItemPosition()]);
     	hm.put("ratio", ratioList[ratioSpinner.getSelectedItemPosition()]);
-    	hm.put("text_color", colorList[textColorSpinner.getSelectedItemPosition()]);
-    	hm.put("bg_color", colorList[bgColorSpinner.getSelectedItemPosition()]);
+    	hm.put("question_text_color", colorList[questionTextColorSpinner.getSelectedItemPosition()]);
+    	hm.put("answer_text_color", colorList[answerTextColorSpinner.getSelectedItemPosition()]);
+    	hm.put("question_bg_color", colorList[questionBgColorSpinner.getSelectedItemPosition()]);
+    	hm.put("answer_bg_color", colorList[answerBgColorSpinner.getSelectedItemPosition()]);
     	dbHelper.setSettings(hm);
     	
     }

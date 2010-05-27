@@ -1,0 +1,6 @@
+.DS_Store
+*.swp
+*.properties
+build.xml
+gen/
+bin/

@@ -18,6 +18,7 @@
 </string-array>
 
 <string-array name="locale_list">
+	<item>Disabled</item>
 	<item>US</item>
 	<item>UK</item>
 	<item>FR</item>
@@ -25,7 +26,6 @@
 	<item>IT</item>
 	<item>ES</item>
 	<item>User Audio</item>
-	<item>Other</item>
 </string-array>
 <string-array name="html_list">
 	<item>none</item>

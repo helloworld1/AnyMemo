@@ -59,8 +59,10 @@
     <string name="settings_answer_locale_prompt">區域</string>
     <string name="settings_html_display">顯示在HTML</string>
     <string name="settings_ratio">問答顯示比例</string>
-    <string name="settings_text_color">文本顏色</string>
-    <string name="settings_bg_color">背景顏色</string>
+    <string name="settings_question_text_color">問題文本顏色</string>
+    <string name="settings_answer_text_color">答案文本顏色</string>
+    <string name="settings_question_bg_color">問題背景顏色</string>
+    <string name="settings_answer_bg_color">答案背景顏色</string>
     <string name="settings_wipe">還原所有選項</string>
     <string name="settings_shuffle">打亂順序</string>
     <string name="settings_inverse">逆向</string>

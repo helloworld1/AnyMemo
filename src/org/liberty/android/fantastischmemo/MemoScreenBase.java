@@ -87,8 +87,10 @@ public abstract class MemoScreenBase extends Activity{
 	protected String answerLocale = "US";
 	protected String htmlDisplay = "none";
 	protected String qaRatio = "50%";
-    protected String textColor = "Default";
-    protected String bgColor = "Default";
+    protected String questionTextColor = "Default";
+    protected String answerTextColor = "Default";
+    protected String questionBgColor = "Default";
+    protected String answerBgColor = "Default";
     protected boolean btnOneRow = false;
 	protected boolean autoaudioSetting = true;
     protected ProgressDialog mProgressDialog = null;
@@ -184,11 +186,17 @@ public abstract class MemoScreenBase extends Activity{
 			if(me.getKey().toString().equals("ratio")){
 				this.qaRatio = me.getValue().toString();
 			}
-			if(me.getKey().toString().equals("text_color")){
-                this.textColor = me.getValue().toString();
+			if(me.getKey().toString().equals("question_text_color")){
+                this.questionTextColor = me.getValue().toString();
             }
-			if(me.getKey().toString().equals("bg_color")){
-                this.bgColor = me.getValue().toString();
+			if(me.getKey().toString().equals("answer_text_color")){
+                this.answerTextColor = me.getValue().toString();
+            }
+			if(me.getKey().toString().equals("question_bg_color")){
+                this.questionBgColor = me.getValue().toString();
+            }
+			if(me.getKey().toString().equals("answer_bg_color")){
+                this.answerBgColor = me.getValue().toString();
             }
 		}
 	}
@@ -337,25 +345,39 @@ public abstract class MemoScreenBase extends Activity{
         // Set both text and the background color
 		TextView questionView = (TextView) findViewById(R.id.question);
 		TextView answerView = (TextView) findViewById(R.id.answer);
-        LinearLayout root = (LinearLayout)findViewById(R.id.memo_screen_root);
+        LinearLayout questionLayout = (LinearLayout)findViewById(R.id.layout_question);
+        LinearLayout answerLayout = (LinearLayout)findViewById(R.id.layout_answer);
         int[] colorMap = {Color.BLACK, Color.WHITE, Color.RED, Color.GREEN, Color.BLUE, Color.CYAN, Color.MAGENTA, Color.YELLOW};
     	String[] colorList = getResources().getStringArray(R.array.color_list);
         /* Default color will do nothing */
-        if(!textColor.equals("Default")){
+        if(!questionTextColor.equals("Default")){
             for(int i = 1; i <= colorMap.length; i++){
-                if(textColor.equals(colorList[i])){
+                if(questionTextColor.equals(colorList[i])){
                     questionView.setTextColor(colorMap[i - 1]);
+                    break;
+                }
+            }
+        }
+        if(!answerTextColor.equals("Default")){
+            for(int i = 1; i <= colorMap.length; i++){
+                if(answerTextColor.equals(colorList[i])){
                     answerView.setTextColor(colorMap[i - 1]);
                     break;
                 }
             }
         }
-        if(!bgColor.equals("Default")){
+        if(!questionBgColor.equals("Default")){
             for(int i = 0; i <= colorMap.length; i++){
-                if(bgColor.equals(colorList[i])){
-                    if(root!= null){
-                        root.setBackgroundColor(colorMap[i - 1]);
-                    }
+                if(questionBgColor.equals(colorList[i])){
+                    questionLayout.setBackgroundColor(colorMap[i - 1]);
+                    break;
+                }
+            }
+        }
+        if(!answerBgColor.equals("Default")){
+            for(int i = 0; i <= colorMap.length; i++){
+                if(answerBgColor.equals(colorList[i])){
+                    answerLayout.setBackgroundColor(colorMap[i - 1]);
                     break;
                 }
             }
