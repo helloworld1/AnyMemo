@@ -172,6 +172,7 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
                 dbHelper = new DatabaseHelper(mContext, dbPath, dbName);
             }
             catch(Exception e){
+                Log.e(TAG, "Error" + e.toString(), e);
                 return false;
             }
 

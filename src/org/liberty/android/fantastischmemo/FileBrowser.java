@@ -362,6 +362,7 @@ public class FileBrowser extends Activity implements OnItemClickListener, OnItem
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
             case R.id.file_browser_createdb:{
+                /* Create a new DB */
                 final EditText input = new EditText(this);
                 new AlertDialog.Builder(this)
                     .setTitle(this.getString(R.string.fb_create_db))

@@ -281,6 +281,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
                 dbHelper = new DatabaseHelper(mContext, dbPath, dbName);
             }
             catch(Exception e){
+                Log.e(TAG, "Error" + e.toString(), e);
                 return false;
             }
 

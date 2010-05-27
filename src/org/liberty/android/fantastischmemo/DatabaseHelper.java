@@ -23,6 +23,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -50,36 +51,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		super(context, name, null, 1);
 		dbPath = path;
 		dbName = name;
+        File dbfile = new File(dbPath + "/" + dbName);
 		mContext = context;
-		openDatabase();
-        if(!checkDatabase()){
-            throw new SQLException("Database check failed.");
+        /* So if the database does not exist, it will create a new one */
+        if(dbfile.exists()){
+            openDatabase();
+            if(!checkDatabase()){
+                throw new SQLException("Database check failed.");
+            }
         }
 	}
 	
 	public void createDatabase() throws IOException{
-		boolean dbExist = checkDatabase();
-		if(dbExist){
+        File dbfile = new File(dbPath + "/" + dbName);
+		if(dbfile.exists()){
 		}
 		else{
 			this.getReadableDatabase();
-			try{
-				copyDatabase();
-			}
-			catch(IOException e){
-				throw new Error("Error copying database");
-			}
-			
+            copyDatabase();
 		}
 	}
 	
 	public void createEmptyDatabase() throws IOException{
-		boolean dbExist = checkDatabase();
-		if(dbExist){
+        File dbfile = new File(dbPath + "/" + dbName);
+		if(dbfile.exists()){
 			throw new IOException("DB already exist");
 		}
 		try{
-		myDatabase = SQLiteDatabase.openDatabase(dbPath + "/" + dbName, null, SQLiteDatabase.OPEN_READWRITE | SQLiteDatabase.CREATE_IF_NECESSARY);
+            myDatabase = SQLiteDatabase.openDatabase(dbPath + "/" + dbName, null, SQLiteDatabase.OPEN_READWRITE | SQLiteDatabase.CREATE_IF_NECESSARY);
 		}
 		catch(Exception e){
 			Log.e("DB open error here", e.toString());

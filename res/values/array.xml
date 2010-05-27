@@ -19,13 +19,13 @@
 
 <string-array name="locale_list">
 	<item>Disabled</item>
+	<item>User Audio</item>
 	<item>US</item>
 	<item>UK</item>
 	<item>FR</item>
 	<item>DE</item>
 	<item>IT</item>
 	<item>ES</item>
-	<item>User Audio</item>
 </string-array>
 <string-array name="html_list">
 	<item>none</item>
