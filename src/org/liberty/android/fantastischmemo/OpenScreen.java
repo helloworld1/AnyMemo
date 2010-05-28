@@ -397,6 +397,7 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
                 try{
                     dbHelper = new DatabaseHelper(mContext, dbpath, dbname);
                     checkResult = true;
+                    dbHelper.close();
                 }
                 catch(Exception e){
                     checkResult = false;
@@ -405,6 +406,7 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
                     it.remove();
                 }
                 else{
+                    dbHelper = new DatabaseHelper(mContext, dbpath, dbname);
                     hm.put("recentdbtotal", "" + dbHelper.getTotalCount());
                     hm.put("recentscheduled", "" + dbHelper.getScheduledCount());
                     hm.put("recentnew", "" + dbHelper.getNewCount());

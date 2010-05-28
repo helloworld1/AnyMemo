@@ -52,18 +52,28 @@ public class AnyMemo extends Activity implements OnClickListener{
 	private Button btnEdit;
 	private Button btnExit;
 	private Button btnDownload;
+    private final static String TAG = "org.liberty.android.fantastischmemo.AnyMemo";
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         Locale locale;
-        if(!settings.getBoolean("autolocale", false)){
-            /* Force to use the default language */
-            locale = new Locale("en_US");
+        /* Handle Locale */
+        String localeSetting = settings.getString("interface_locale", "Auto Detect");
+        Log.v(TAG, "Locale " + localeSetting);
+
+        /* Force to use the a language */
+        if(localeSetting.equals("English")){
+            locale = Locale.US;
+        }
+        else if(localeSetting.equals("Simplified Chinese")){
+            locale = Locale.SIMPLIFIED_CHINESE;
+        }
+        else if(localeSetting.equals("Traditional Chinese")){
+            locale = Locale.TRADITIONAL_CHINESE;
         }
         else{
-            /* Or get the language from the system */
             locale = Locale.getDefault();
         }
         Configuration config = new Configuration();

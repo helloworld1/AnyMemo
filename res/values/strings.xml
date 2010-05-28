@@ -154,8 +154,8 @@
     <string name="open_database_error_title">Error opening database</string>
 
     <string name="open_database_error_message">AnyMemo can not open this database. This is due to various reasons. Please visit our website anymemo.org FAQ section for resolutions or contact me for bug report.</string>
-    <string name="autolocale_title">Use system-wide locale for interface</string>
-    <string name="autolocale_summary">Use system locale setting for the interface language. Please restart app.</string>
+    <string name="interface_locale_title">Interface Language</string>
+    <string name="interface_locale_summary">Choose the language of the user interface. Restarting AnyMemo is needed.</string>
     <string name="what_is_new_message">See Graphical guide of new features, please click version history button.\nVersion 3.1.0\n1. New Feature: Customize the question and answer color separately.\n2. Enhance: More robust and friendly error handling.\n3. Enhance: Change the Other in audio setting to Disabled.\n4. Enhance: change the list size again.\n5. Enhance: If the database is corrupted after downloading, it will be automatically deleted.\n6. Bug Fix: Fix issues when using non standard SD card directory.</string>
     
 </resources>

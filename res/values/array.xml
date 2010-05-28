@@ -61,5 +61,11 @@
     <item>Clone</item>
     <item>Rename</item>
 </string-array>
+<string-array name="interface_locale_list">
+    <item>Auto Detect</item>
+    <item>English</item>
+    <item>Simplified Chinese</item>
+    <item>Traditional Chinese</item>
+</string-array>
 
 </resources>

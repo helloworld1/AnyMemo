@@ -54,11 +54,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         File dbfile = new File(dbPath + "/" + dbName);
 		mContext = context;
         /* So if the database does not exist, it will create a new one */
-        if(dbfile.exists()){
-            openDatabase();
-            if(!checkDatabase()){
-                throw new SQLException("Database check failed.");
-            }
+        openDatabase();
+        if(!checkDatabase()){
+            throw new SQLException("Database check failed.");
         }
 	}
 	
@@ -72,37 +70,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		}
 	}
 	
-	public void createEmptyDatabase() throws IOException{
-        File dbfile = new File(dbPath + "/" + dbName);
+	public static void createEmptyDatabase(String path, String name) throws IOException, SQLException{
+        File dbfile = new File(path + "/" + name);
 		if(dbfile.exists()){
 			throw new IOException("DB already exist");
 		}
-		try{
-            myDatabase = SQLiteDatabase.openDatabase(dbPath + "/" + dbName, null, SQLiteDatabase.OPEN_READWRITE | SQLiteDatabase.CREATE_IF_NECESSARY);
-		}
-		catch(Exception e){
-			Log.e("DB open error here", e.toString());
-		}
+        SQLiteDatabase database = SQLiteDatabase.openDatabase(path + "/" + name, null, SQLiteDatabase.OPEN_READWRITE | SQLiteDatabase.CREATE_IF_NECESSARY);
 		
-		myDatabase.execSQL("CREATE TABLE dict_tbl(_id INTEGER PRIMARY KEY ASC AUTOINCREMENT, question TEXT, answer TEXT, note TEXT, category TEXT)");
-		myDatabase.execSQL("CREATE TABLE learn_tbl(_id INTEGER PRIMARY KEY ASC AUTOINCREMENT, date_learn, interval, grade INTEGER, easiness REAL, acq_reps INTEGER, ret_reps INTEGER, lapses INTEGER, acq_reps_since_lapse INTEGER, ret_reps_since_lapse INTEGER)");
-		myDatabase.execSQL("CREATE TABLE control_tbl(ctrl_key TEXT, value TEXT)");
+		database.execSQL("CREATE TABLE dict_tbl(_id INTEGER PRIMARY KEY ASC AUTOINCREMENT, question TEXT, answer TEXT, note TEXT, category TEXT)");
+		database.execSQL("CREATE TABLE learn_tbl(_id INTEGER PRIMARY KEY ASC AUTOINCREMENT, date_learn, interval, grade INTEGER, easiness REAL, acq_reps INTEGER, ret_reps INTEGER, lapses INTEGER, acq_reps_since_lapse INTEGER, ret_reps_since_lapse INTEGER)");
+		database.execSQL("CREATE TABLE control_tbl(ctrl_key TEXT, value TEXT)");
 		
-		myDatabase.beginTransaction();
+		database.beginTransaction();
 		try{
-			this.myDatabase.execSQL("DELETE FROM learn_tbl");
-			this.myDatabase.execSQL("INSERT INTO learn_tbl(_id) SELECT _id FROM dict_tbl");
-			this.myDatabase.execSQL("UPDATE learn_tbl SET date_learn = '2010-01-01', interval = 0, grade = 0, easiness = 2.5, acq_reps = 0, ret_reps  = 0, lapses = 0, acq_reps_since_lapse = 0, ret_reps_since_lapse = 0");
-			this.myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('question_locale', 'US')");
-			this.myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('answer_locale', 'US')");
-			this.myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('question_align', 'center')");
-			this.myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('answer_align', 'center')");
-			this.myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('question_font_size', '24')");
-			this.myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('answer_font_size', '24')");
-			myDatabase.setTransactionSuccessful();
+			database.execSQL("DELETE FROM learn_tbl");
+			database.execSQL("INSERT INTO learn_tbl(_id) SELECT _id FROM dict_tbl");
+			database.execSQL("UPDATE learn_tbl SET date_learn = '2010-01-01', interval = 0, grade = 0, easiness = 2.5, acq_reps = 0, ret_reps  = 0, lapses = 0, acq_reps_since_lapse = 0, ret_reps_since_lapse = 0");
+			database.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('question_locale', 'US')");
+			database.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('answer_locale', 'US')");
+			database.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('question_align', 'center')");
+			database.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('answer_align', 'center')");
+			database.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('question_font_size', '24')");
+			database.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('answer_font_size', '24')");
+			database.setTransactionSuccessful();
 		}
 		finally{
-			myDatabase.endTransaction();
+			database.endTransaction();
+            database.close();
 		}
 		
 	}
@@ -224,7 +218,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		String myPath = dbPath + "/" + dbName;
 		Cursor result;
 		int count_dict = 0, count_learn = 0;
-		myDatabase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE | SQLiteDatabase.CREATE_IF_NECESSARY);
+		myDatabase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
         result = myDatabase.rawQuery("SELECT _id FROM dict_tbl", null);
         count_dict = result.getCount();
         result.close();

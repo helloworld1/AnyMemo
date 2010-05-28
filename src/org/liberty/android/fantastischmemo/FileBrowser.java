@@ -376,9 +376,8 @@ public class FileBrowser extends Activity implements OnItemClickListener, OnItem
                             value += ".db";
                         }
                         try{
-                            DatabaseHelper dbHelper = new DatabaseHelper(mContext, currentDirectory.getAbsolutePath(), value);
-                            dbHelper.createEmptyDatabase();
-                            dbHelper.close();
+                            /* create an empty database */
+                            DatabaseHelper.createEmptyDatabase(currentDirectory.getAbsolutePath(), value);
                         }
                         catch(Exception e){
                         }
