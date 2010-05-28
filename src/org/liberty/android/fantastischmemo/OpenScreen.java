@@ -386,32 +386,25 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
         
         public List<HashMap<String, String>> getList(){
             ListIterator<HashMap<String, String>> it = recentList.listIterator();
+            int counter = 0;
             while(it.hasNext()){
+                counter += 1;
                 HashMap<String,  String> hm = (HashMap<String, String>)it.next();
                 DatabaseHelper dbHelper = null;
 
                 String dbname = hm.get("recentdbname");
                 String dbpath = hm.get("recentdbpath");
                 
-                boolean checkResult = false;
                 try{
-                    dbHelper = new DatabaseHelper(mContext, dbpath, dbname);
-                    checkResult = true;
-                    dbHelper.close();
-                }
-                catch(Exception e){
-                    checkResult = false;
-                }
-                if(checkResult == false){
-                    it.remove();
-                }
-                else{
                     dbHelper = new DatabaseHelper(mContext, dbpath, dbname);
                     hm.put("recentdbtotal", "" + dbHelper.getTotalCount());
                     hm.put("recentscheduled", "" + dbHelper.getScheduledCount());
                     hm.put("recentnew", "" + dbHelper.getNewCount());
                     dbHelper.close();
                     it.set(hm);
+                }
+                catch(Exception e){
+                    Log.e(TAG, "recent list database open error" + e, e);
                 }
                 
             }
@@ -420,11 +413,25 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
         
         private void fetchListFromPref(){
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
+            boolean checkResult = false;
             for(int i = 0; i < MAX_LIST_NUMBER; i++){
                 String dbName = settings.getString("recentdbname" + i, null);
                 String dbPath = settings.getString("recentdbpath" + i, null);
-                if(dbName == null || dbPath == null){ 
-                    break;
+                if(dbName == null || dbPath == null){
+                    continue;
+                }
+
+                try{
+                    DatabaseHelper dbHelper = new DatabaseHelper(mContext, dbPath, dbName);
+                    checkResult = true;
+                    dbHelper.close();
+                }
+                catch(Exception e){
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putString("recentdbname" + i, null);
+                    editor.putString("recentdbpath" + i, null);
+                    editor.commit();
+                    continue;
                 }
                 HashMap<String, String> hm = new HashMap<String, String>();
                 hm.put("recentdbname", dbName);
@@ -453,16 +460,20 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
                 recentList.add(0, hm);
             }
             int i = 0;
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
+            SharedPreferences.Editor editor = settings.edit();
             for(HashMap<String, String> h : recentList){
-                SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
                 //SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-                SharedPreferences.Editor editor = settings.edit();
                 editor.putString("recentdbname" + i, h.get("recentdbname"));
                 editor.putString("recentdbpath" + i, h.get("recentdbpath"));
-                editor.commit();
                 i += 1;
-                
             }
+            /* Fix the duplication issue in some rare cases */
+            for(;i < MAX_LIST_NUMBER; i++){
+                editor.putString("recentdbname" + i, null);
+            }
+            editor.commit();
+
             
         }
         
