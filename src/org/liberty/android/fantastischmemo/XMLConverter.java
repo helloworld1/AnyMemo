@@ -137,7 +137,9 @@ public class XMLConverter extends org.xml.sax.helpers.DefaultHandler{
 	}
 	
 	public void outputDB() throws IOException, SQLException{
-        DatabaseHelper dbHelper = new DatabaseHelper(mContext, filePath, fileName.replaceAll(".xml", ".db"));
+        String name = fileName.replaceAll(".xml", ".db");
+        DatabaseHelper.createEmptyDatabase(filePath, name);
+        DatabaseHelper dbHelper = new DatabaseHelper(mContext, filePath, name);
         Log.v(TAG, "Counts: " + questionList.size() + " " + easinessList.size() + " " + acrpList.size() + " " + arslList.size());
 		dbHelper.createDatabaseFromList(questionList, answerList, categoryList, datelearnList, intervalList, easinessList, gradeList, lapsesList, acrpList, rtrpList, arslList, rrslList);
 		dbHelper.close();

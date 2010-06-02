@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">AnyMemo</string>
     <string name="app_full_name">AnyMemo Free</string>
-    <string name="app_version">3.2.0</string>
+    <string name="app_version">3.2.1</string>
     <string name="up_one_level">..</string>
     <string name="current_dir">.</string>
     <string name="ok_text">OK</string>
@@ -156,6 +156,6 @@
     <string name="open_database_error_message">AnyMemo can not open this database. This is due to various reasons. Please visit our website anymemo.org FAQ section for resolutions or contact me for bug report.</string>
     <string name="interface_locale_title">Interface Language</string>
     <string name="interface_locale_summary">Choose the language of the user interface. Restarting AnyMemo is needed.</string>
-    <string name="what_is_new_message">See Graphical guide of new features, please click version history button.\nVersion 3.2.0\n1. New Feature: Interface language selection option.\n2. Bug Fix: Fix some memory leak problem.\n3. Bug Fix: Fix a regression that the deleted database will crash the program in recent list.</string>
+    <string name="what_is_new_message">See Graphical guide of new features, please click version history button.\nVersion 3.2.1\n1. Bug Fix: Fix the database duplication in the recent database list.\n2. Bug Fix: Fix a regression bug that cause problem in XML importing due to the database security changes.\n3. Enhance:Slightly improve the importing speed.\n4. Enhance: Increase the speed of refreshing recent database list\nVersion 3.2.0\n1. New Feature: Interface language selection option.\n2. Bug Fix: Fix some memory leak problem.\n3. Bug Fix: Fix a regression that the deleted database will crash the program in recent list.</string>
     
 </resources>

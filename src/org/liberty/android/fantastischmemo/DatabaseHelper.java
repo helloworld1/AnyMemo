@@ -101,20 +101,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		
 	}
 	public void createDatabaseFromList(List<String> questionList, List<String> answerList, List<String> categoryList, List<String> datelearnList, List<Integer> intervalList, List<Double> easinessList, List<Integer> gradeList, List<Integer> lapsesList, List<Integer> acrpList, List<Integer> rtrpList, List<Integer> arslList, List<Integer> rrslList) throws IOException{
-		boolean dbExist = checkDatabase();
-		if(dbExist){
-			throw new IOException("DB already exist");
-		}
-		try{
-		myDatabase = SQLiteDatabase.openDatabase(dbPath + "/" + dbName, null, SQLiteDatabase.OPEN_READWRITE | SQLiteDatabase.CREATE_IF_NECESSARY);
-		}
-		catch(Exception e){
-			Log.e("DB open error here", e.toString());
-		}
 		
-		myDatabase.execSQL("CREATE TABLE dict_tbl(_id INTEGER PRIMARY KEY ASC AUTOINCREMENT, question TEXT, answer TEXT, note TEXT, category TEXT)");
-		myDatabase.execSQL("CREATE TABLE learn_tbl(_id INTEGER PRIMARY KEY ASC AUTOINCREMENT, date_learn, interval, grade INTEGER, easiness REAL, acq_reps INTEGER, ret_reps INTEGER, lapses INTEGER, acq_reps_since_lapse INTEGER, ret_reps_since_lapse INTEGER)");
-		myDatabase.execSQL("CREATE TABLE control_tbl(ctrl_key TEXT, value TEXT)");
 		ListIterator<String> liq = questionList.listIterator();
 		ListIterator<String> lia = answerList.listIterator();
 		ListIterator<String> lic = categoryList.listIterator();
@@ -167,14 +154,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			    myDatabase.execSQL("INSERT INTO learn_tbl(date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", new String[]{date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse});
 				
 			}
-			//myDatabase.execSQL("DELETE FROM learn_tbl");
-			//myDatabase.execSQL("INSERT INTO learn_tbl(_id) SELECT _id FROM dict_tbl");
-			myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('question_locale', 'US')");
-			myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('answer_locale', 'US')");
-			myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('question_align', 'center')");
-			myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('answer_align', 'center')");
-			myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('question_font_size', '24')");
-			myDatabase.execSQL("INSERT INTO control_tbl(ctrl_key, value) VALUES('answer_font_size', '24')");
 			
 			myDatabase.setTransactionSuccessful();
 		}
