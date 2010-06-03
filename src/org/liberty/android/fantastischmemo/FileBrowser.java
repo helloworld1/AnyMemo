@@ -129,7 +129,7 @@ public class FileBrowser extends Activity implements OnItemClickListener, OnItem
 				if(file.isDirectory()){
 						this.directoryEntries.add(file.getAbsolutePath().substring(currentPathStringLength) + "/");
 				}
-				if(file.getName().endsWith(fileExtension)){
+				if(file.getName().toLowerCase().endsWith(fileExtension.toLowerCase())){
 						this.directoryEntries.add(file.getAbsolutePath().substring(currentPathStringLength));
 				}
 				
