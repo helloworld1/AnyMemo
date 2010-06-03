@@ -31,6 +31,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Environment;
 import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -38,6 +39,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Spinner;
+import android.widget.EditText;
 
 public class SettingsScreen extends Activity implements OnClickListener {
 	private Spinner questionFontSizeSpinner;
@@ -55,12 +57,19 @@ public class SettingsScreen extends Activity implements OnClickListener {
 	private CheckBox wipeCheckbox;
 	private CheckBox shuffleCheckbox;
 	private CheckBox inverseCheckbox;
+    private CheckBox qTypefaceCheckbox;
+    private CheckBox aTypefaceCheckbox;
+    private EditText qTypefaceEdit;
+    private EditText aTypefaceEdit;
+
 	private Button btnSave;
 	private Button btnDiscard;
 	private DatabaseHelper dbHelper;
     private Handler mHandler;
     private Context mContext;
     private ProgressDialog mProgressDialog;
+    private final int ACTIVITY_TTF_QUESTION = 3;
+    private final int ACTIVITY_TTF_ANSWER = 4;
     
 
 	
@@ -114,7 +123,6 @@ public class SettingsScreen extends Activity implements OnClickListener {
         answerBgColorSpinner.setAdapter(colorAdapter);
         
         /* Get the spinner's initial item */
-        setInitialPosition();
         
         wipeCheckbox = (CheckBox)findViewById(R.id.checkbox_wipe);
         wipeCheckbox.setOnClickListener(this);
@@ -129,6 +137,17 @@ public class SettingsScreen extends Activity implements OnClickListener {
         btnSave.setOnClickListener(this);
         btnDiscard = (Button)findViewById(R.id.setting_discard);
         btnDiscard.setOnClickListener(this);
+
+        qTypefaceCheckbox = (CheckBox)findViewById(R.id.checkbox_typeface_question);
+
+        aTypefaceCheckbox = (CheckBox)findViewById(R.id.checkbox_typeface_answer);
+        qTypefaceEdit = (EditText)findViewById(R.id.edit_typeface_question);
+        aTypefaceEdit = (EditText)findViewById(R.id.edit_typeface_answer);
+        qTypefaceEdit.setOnClickListener(this);
+        aTypefaceEdit.setOnClickListener(this);
+        setInitialPosition();
+
+        
         
         
     }
@@ -374,6 +393,21 @@ public class SettingsScreen extends Activity implements OnClickListener {
 				answerBgColorSpinner.setSelection(index);
 				
 			}
+            else if(me.getKey().toString().equals("question_typeface")){
+				String res = me.getValue();
+                if(!res.equals("")){
+                    qTypefaceCheckbox.setChecked(true);
+                    qTypefaceEdit.setText(res);
+                }
+            }
+            else if(me.getKey().toString().equals("answer_typeface")){
+				String res = me.getValue();
+                if(!res.equals("")){
+                    aTypefaceCheckbox.setChecked(true);
+                    aTypefaceEdit.setText(res);
+                }
+            }
+
 			
 		}
     	
@@ -400,6 +434,18 @@ public class SettingsScreen extends Activity implements OnClickListener {
     	hm.put("answer_text_color", colorList[answerTextColorSpinner.getSelectedItemPosition()]);
     	hm.put("question_bg_color", colorList[questionBgColorSpinner.getSelectedItemPosition()]);
     	hm.put("answer_bg_color", colorList[answerBgColorSpinner.getSelectedItemPosition()]);
+        if(qTypefaceCheckbox.isChecked()){
+            hm.put("question_typeface", qTypefaceEdit.getText().toString());
+        }
+        else{
+            hm.put("question_typeface", "");
+        }
+        if(aTypefaceCheckbox.isChecked()){
+            hm.put("answer_typeface", aTypefaceEdit.getText().toString());
+        }
+        else{
+            hm.put("answer_typeface", "");
+        }
     	dbHelper.setSettings(hm);
     	
     }
@@ -485,7 +531,50 @@ public class SettingsScreen extends Activity implements OnClickListener {
                     .show();
     		}
     	}
+
+        if(v == qTypefaceEdit){
+            Intent myIntent = new Intent();
+            myIntent.setClass(this, FileBrowser.class);
+            myIntent.putExtra("default_root", Environment.getExternalStorageDirectory().getAbsolutePath());
+            myIntent.putExtra("file_extension", ".ttf");
+            startActivityForResult(myIntent, ACTIVITY_TTF_QUESTION);
+        }
+
+        if(v == aTypefaceEdit){
+            Intent myIntent = new Intent();
+            myIntent.setClass(this, FileBrowser.class);
+            myIntent.putExtra("default_root", Environment.getExternalStorageDirectory().getAbsolutePath());
+            myIntent.putExtra("file_extension", ".ttf");
+            startActivityForResult(myIntent, ACTIVITY_TTF_ANSWER);
+        }
+
     	
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+    	super.onActivityResult(requestCode, resultCode, data);
+        String fontFilename = null;
+        String dbName, dbPath;
+    	switch(requestCode){
+    	    case ACTIVITY_TTF_QUESTION:
+    			dbName = data.getStringExtra("org.liberty.android.fantastischmemo.dbName");
+    			dbPath = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
+                if(dbName != null && dbPath != null){
+                    fontFilename = dbPath + "/" + dbName;
+                    qTypefaceEdit.setText(fontFilename);
+                }
+                break;
+    	    case ACTIVITY_TTF_ANSWER:
+    			dbName = data.getStringExtra("org.liberty.android.fantastischmemo.dbName");
+    			dbPath = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
+                if(dbName != null && dbPath != null){
+                    fontFilename = dbPath + "/" + dbName;
+                    aTypefaceEdit.setText(fontFilename);
+                }
+                break;
+        }
+                
+                
     }
     
 }

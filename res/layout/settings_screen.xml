@@ -206,6 +206,33 @@
         android:prompt="@string/settings_ratio"
         />
     </TableRow>
+        
+
+    <TableRow>
+		<CheckBox 
+            android:id="@+id/checkbox_typeface_question"
+			android:layout_width="wrap_content" 
+            android:layout_height="wrap_content"
+			android:text="@string/settings_typeface_question" />
+        <EditText
+            android:id="@+id/edit_typeface_question"
+			android:layout_width="fill_parent" 
+            android:layout_height="wrap_content" />
+
+    </TableRow>
+
+    <TableRow>
+		<CheckBox 
+            android:id="@+id/checkbox_typeface_answer"
+			android:layout_width="wrap_content" 
+            android:layout_height="wrap_content"
+			android:text="@string/settings_typeface_answer" />
+        <EditText
+            android:id="@+id/edit_typeface_answer"
+			android:layout_width="fill_parent" 
+            android:layout_height="wrap_content" />
+
+    </TableRow>
 
 
 	<TableRow>

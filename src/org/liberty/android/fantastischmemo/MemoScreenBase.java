@@ -60,6 +60,7 @@ import android.widget.TextView;
 import android.widget.EditText;
 import android.util.Log;
 import android.os.SystemClock;
+import android.graphics.Typeface;
 
 
 public abstract class MemoScreenBase extends Activity{
@@ -97,6 +98,8 @@ public abstract class MemoScreenBase extends Activity{
 	protected boolean questionUserAudio = false;
 	protected boolean answerUserAudio = false;
     protected boolean copyClipboard = true;
+    protected String questionTypeface = "";
+    protected String answerTypeface = "";
 	//private SpeakWord mSpeakWord = null;
     //private Context mContext;
     //private Handler mHandler;
@@ -198,6 +201,12 @@ public abstract class MemoScreenBase extends Activity{
 			if(me.getKey().toString().equals("answer_bg_color")){
                 this.answerBgColor = me.getValue().toString();
             }
+			if(me.getKey().toString().equals("question_typeface")){
+                this.questionTypeface = me.getValue().toString();
+            }
+			if(me.getKey().toString().equals("answer_typeface")){
+                this.answerTypeface = me.getValue().toString();
+            }
 		}
 	}
 
@@ -275,12 +284,28 @@ public abstract class MemoScreenBase extends Activity{
 		this.setTitle(this.getTitle() + " / " + this.getString(R.string.memo_current_id) + item.getId() );
 		TextView questionView = (TextView) findViewById(R.id.question);
 		TextView answerView = (TextView) findViewById(R.id.answer);
+        /* Set the typeface of question an d answer */
+        if(!questionTypeface.equals("")){
+            Typeface qt = Typeface.createFromFile(questionTypeface);
+            if(qt != null){
+                questionView.setTypeface(qt);
+            }
+
+        }
+        if(!answerTypeface.equals("")){
+            Typeface at = Typeface.createFromFile(answerTypeface);
+            if(at != null){
+                answerView.setTypeface(at);
+            }
+
+        }
 		
 		
 		if(this.htmlDisplay.equals("both")){
             /* Use HTML to display */
 			CharSequence sq = Html.fromHtml(item.getQuestion());
 			CharSequence sa = Html.fromHtml(item.getAnswer());
+
 			
 			questionView.setText(sq);
 			answerView.setText(sa);
