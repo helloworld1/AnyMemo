@@ -557,19 +557,23 @@ public class SettingsScreen extends Activity implements OnClickListener {
         String dbName, dbPath;
     	switch(requestCode){
     	    case ACTIVITY_TTF_QUESTION:
-    			dbName = data.getStringExtra("org.liberty.android.fantastischmemo.dbName");
-    			dbPath = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
-                if(dbName != null && dbPath != null){
-                    fontFilename = dbPath + "/" + dbName;
-                    qTypefaceEdit.setText(fontFilename);
+                if(resultCode == Activity.RESULT_OK){
+                    dbName = data.getStringExtra("org.liberty.android.fantastischmemo.dbName");
+                    dbPath = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
+                    if(dbName != null && dbPath != null){
+                        fontFilename = dbPath + "/" + dbName;
+                        qTypefaceEdit.setText(fontFilename);
+                    }
                 }
                 break;
     	    case ACTIVITY_TTF_ANSWER:
-    			dbName = data.getStringExtra("org.liberty.android.fantastischmemo.dbName");
-    			dbPath = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
-                if(dbName != null && dbPath != null){
-                    fontFilename = dbPath + "/" + dbName;
-                    aTypefaceEdit.setText(fontFilename);
+                if(resultCode == Activity.RESULT_OK){
+                    dbName = data.getStringExtra("org.liberty.android.fantastischmemo.dbName");
+                    dbPath = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
+                    if(dbName != null && dbPath != null){
+                        fontFilename = dbPath + "/" + dbName;
+                        aTypefaceEdit.setText(fontFilename);
+                    }
                 }
                 break;
         }
