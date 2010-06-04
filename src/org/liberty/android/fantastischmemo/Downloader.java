@@ -210,14 +210,12 @@ public class Downloader extends Activity implements OnItemClickListener{
                     String dbnote = jsonItem.getString("DBNote");
                     String dbcategory = jsonItem.getString("DBCategory");
                     String filename = jsonItem.getString("FileName");
-                    String dbpath = jsonItem.getString("DBPath");
                     HashMap<String, String> hm = new HashMap<String, String>();
                     hm.put("DBName", dbname);
                     hm.put("DBType", dbtype);
                     hm.put("DBNote", dbnote);
                     hm.put("DBCategory", dbcategory);
                     hm.put("FileName", filename);
-                    hm.put("DBPath", dbpath);
                     mDatabaseList.add(hm);
 
                 }
@@ -291,7 +289,7 @@ public class Downloader extends Activity implements OnItemClickListener{
                     String filename = mFilterDatabaseList.get(clickPosition).get("FileName");
                     downloadStatus = false;
                     try{
-                        downloadStatus = downloadFile(getString(R.string.website_download_head) + mFilterDatabaseList.get(clickPosition).get("DBPath") + URLEncoder.encode(filename, "UTF-8"), filename);
+                        downloadStatus = downloadFile(getString(R.string.website_download_head)+ URLEncoder.encode(filename, "UTF-8"), filename);
                         if(downloadStatus == true){
                             String sdpath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
                             try{
