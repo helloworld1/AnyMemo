@@ -36,6 +36,12 @@
     <string name="memo_btn3_text">3 困難</string>
     <string name="memo_btn4_text">4 記住</string>
     <string name="memo_btn5_text">5 太簡單</string>
+    <string name="memo_btn0_help_text">完全忘記了答案</string>
+    <string name="memo_btn1_help_text">完全忘記了答案</string>
+    <string name="memo_btn2_help_text">勉強記住一些，間隔時間太長了</string>
+    <string name="memo_btn3_help_text">差不多記住，但是花費了很大功夫來想</string>
+    <string name="memo_btn4_help_text">想了一會兒，但是記住了。間隔時間大概正好。</string>
+    <string name="memo_btn5_help_text">毫不費力得到答案，大概間隔時間太斷了。</string>
     <string name="memo_btn0_brief_text">0</string>
     <string name="memo_btn1_brief_text">1</string>
     <string name="memo_btn2_brief_text">2</string>
@@ -54,8 +60,8 @@
     <string name="settings_answer_align">答案文本對齊</string>
     <string name="settings_answer_align_prompt">文本對齊</string>
     <string name="settings_question_locale">問題音頻</string>
-    <string name="settings_question_locale_prompt">區域(Other為禁用朗讀)</string>
-    <string name="settings_answer_locale">答案音頻(Other為禁用朗讀)</string>
+    <string name="settings_question_locale_prompt">區域(Disabled為禁用朗讀)</string>
+    <string name="settings_answer_locale">答案音頻(Disabled為禁用朗讀)</string>
     <string name="settings_answer_locale_prompt">區域</string>
     <string name="settings_html_display">顯示在HTML</string>
     <string name="settings_ratio">問答顯示比例</string>
@@ -65,13 +71,13 @@
     <string name="settings_answer_bg_color">答案背景顏色</string>
     <string name="settings_wipe">還原所有選項</string>
     <string name="settings_shuffle">打亂順序</string>
-    <string name="settings_inverse">逆向</string>
+    <string name="settings_inverse">交換問題答案</string>
     <string name="settings_save">保存</string>
     <string name="settings_discard">放棄</string>
     <string name="warning_text">警告</string>
     <string name="settings_wipe_warning">所有的學習進度將擦除！</string>
     <string name="settings_shuffle_warning">此操作將重新打亂學習卡片，請三思！</string>
-    <string name="settings_inverse_warning">此操作將逆向顯示學習卡片。</string>
+    <string name="settings_inverse_warning">此操作將交換問題答案順序。</string>
     <string name="detail_update">寫入修改</string>
     <string name="detail_back">後退</string>
     <string name="detail_delete">刪除</string>
@@ -81,7 +87,7 @@
     <string name="stat_total">總計: </string>
     <string name="stat_scheduled">復習: </string>
     <string name="stat_new">新卡片: </string>
-    <string name="open_open_new_db">打開存在的數據庫</string>
+    <string name="open_open_new_db">打開卡上的數據庫</string>
     <string name="open_import_xml">從XML中導入</string>
     <string name="clear_all_pref">重設所有設置</string>
     <string name="clear_recent_list">清除最近列表</string>
@@ -135,6 +141,13 @@
     <string name="what_is_new">Changelog</string>
     <string name="downloader_categories">分類</string>
     <string name="downloader_databases">數據庫</string>
+    <string name="open_database_error_title">打開數據庫錯誤</string>
+
+    <string name="open_database_error_message">AnyMemo不能打開該數據庫。有多種可能原因，請參考 anymemo.org 的FAQ部分。或者向我發Bug報告。</string>
+    <string name="interface_locale_title">界面語言</string>
+    <string name="interface_locale_summary">選擇界面的語言。需要重啟AnyMemo。</string>
+    <string name="settings_typeface_question">自定問題字體</string>
+    <string name="settings_typeface_answer">自定答案字體</string>
     <string name="what_is_new_message">查看圖文新功能介紹,請點版本歷史.</string>
     
 </resources>

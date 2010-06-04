@@ -57,6 +57,7 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.EditText;
+import android.widget.Toast;
 import android.util.Log;
 import android.os.SystemClock;
 import android.net.Uri;
@@ -103,6 +104,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
         createButtons();
         for(Button btn : btns){
             btn.setOnClickListener(this);
+            btn.setOnLongClickListener(this);
         }
         LinearLayout root = (LinearLayout)findViewById(R.id.memo_screen_root);
 
@@ -523,6 +525,14 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
             showEditDialog();
             return true;
         }
+        String[] helpText = {getString(R.string.memo_btn0_help_text),getString(R.string.memo_btn1_help_text),getString(R.string.memo_btn2_help_text),getString(R.string.memo_btn3_help_text),getString(R.string.memo_btn4_help_text),getString(R.string.memo_btn5_help_text)};
+        for(int i = 0; i < 6; i++){
+            if(v == btns[i]){
+                Toast.makeText(this, helpText[i], Toast.LENGTH_SHORT).show();
+            }
+        }
+
+
         return false;
     }
         
