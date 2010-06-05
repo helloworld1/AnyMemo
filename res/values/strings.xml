@@ -164,6 +164,7 @@
     <string name="interface_locale_summary">Choose the language of the user interface. Restarting AnyMemo is needed.</string>
     <string name="settings_typeface_question">User Question Font</string>
     <string name="settings_typeface_answer">User Answer Font</string>
+    <string name="learn_ahead">Cram Review</string>
     <string name="what_is_new_message">See Graphical guide of new features, please click version history button.\nVersion 3.3.2\n1. New Feature: Display help when long press the grading buttons.\n2. Enhance: Update the Chinese translation.\n3. Enhance: Change the description of the grading buttons.\nVersion 3.3.1\n1. Enhance: Update the downloading address.\nVersion 3.3.0\n1. New Feature: Customize the font for the card via the settings.</string>
     
 </resources>

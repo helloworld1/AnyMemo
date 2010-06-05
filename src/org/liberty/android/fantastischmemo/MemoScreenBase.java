@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo;
 
+import org.amr.arabic.ArabicUtilities;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -282,6 +284,7 @@ public abstract class MemoScreenBase extends Activity{
 	private void displayQA(Item item) {
 		/* Display question and answer according to item */
 		this.setTitle(this.getTitle() + " / " + this.getString(R.string.memo_current_id) + item.getId() );
+        
 		TextView questionView = (TextView) findViewById(R.id.question);
 		TextView answerView = (TextView) findViewById(R.id.answer);
         /* Set the typeface of question an d answer */
@@ -303,27 +306,32 @@ public abstract class MemoScreenBase extends Activity{
 		
 		if(this.htmlDisplay.equals("both")){
             /* Use HTML to display */
-			CharSequence sq = Html.fromHtml(item.getQuestion());
-			CharSequence sa = Html.fromHtml(item.getAnswer());
+			CharSequence sq = Html.fromHtml(ArabicUtilities.reshape(item.getQuestion()));
+			CharSequence sa = Html.fromHtml(ArabicUtilities.reshape(item.getAnswer()));
+			//CharSequence sa = Html.fromHtml(item.getAnswer());
 
 			
-			questionView.setText(sq);
-			answerView.setText(sa);
+			//questionView.setText(ArabicUtilities.reshape(sq.toString()));
+			//answerView.setText(ArabicUtilities.reshape(sa.toString()));
+            questionView.setText(sq);
+            answerView.setText(sa);
 			
 		}
 		else if(this.htmlDisplay.equals("question")){
-			CharSequence sq = Html.fromHtml(item.getQuestion());
+			CharSequence sq = Html.fromHtml(ArabicUtilities.reshape(item.getQuestion()));
 			questionView.setText(sq);
-			answerView.setText(new StringBuilder().append(item.getAnswer()));
+            answerView.setText(ArabicUtilities.reshape(item.getAnswer()));
 		}
 		else if(this.htmlDisplay.equals("answer")){
-			questionView.setText(new StringBuilder().append(item.getQuestion()));
-			CharSequence sa = Html.fromHtml(item.getAnswer());
+            questionView.setText(ArabicUtilities.reshape(item.getQuestion()));
+			CharSequence sa = Html.fromHtml(ArabicUtilities.reshape(item.getAnswer()));
 			answerView.setText(sa);
 		}
 		else{
-			questionView.setText(new StringBuilder().append(item.getQuestion()));
-			answerView.setText(new StringBuilder().append(item.getAnswer()));
+			//questionView.setText(new StringBuilder().append(item.getQuestion()));
+			//answerView.setText(new StringBuilder().append(item.getAnswer()));
+            questionView.setText(ArabicUtilities.reshape(item.getQuestion()));
+            answerView.setText(ArabicUtilities.reshape(item.getAnswer()));
 		}
 		
         /* Here is tricky to set up the alignment of the text */

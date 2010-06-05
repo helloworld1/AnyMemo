@@ -235,32 +235,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public boolean getListItems(int id, int windowSize, List<Item> list){
         // Return non-shuffled items
-        return getListItems(id, windowSize, list, false);
+        return getListItems(id, windowSize, list, false, false);
     }
+
 	
 	public boolean getListItems(int id, int windowSize, List<Item> list, boolean shuffle){
+        return getListItems(id, windowSize, list, shuffle, false);
+    }
+	public boolean getListItems(int id, int windowSize, List<Item> list, boolean shuffle, boolean ahead){
         // windowSize = -1 means all items from id and on
 
 		HashMap<String, String> hm = new HashMap<String, String>();
 		String acqQuery;
 		String retQuery;
-		// ArrayList<String> list = new ArrayList<String>();
 		String query = "SELECT learn_tbl._id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, question, answer, note FROM dict_tbl INNER JOIN learn_tbl ON dict_tbl._id=learn_tbl._id WHERE dict_tbl._id >= "
 				+ id + " ";
 		Cursor acqResult;
 		Cursor retResult;
-		// result = myDatabase.query(true, "dict_tbl", null, querySelection,
-		// null, null, null, "_id", null);
-		// result = myDatabase.query("dict_tbl", null, querySelection, null,
-		// null, null, "_id");
-		// result = myDatabase.query(true, "dict_tbl", null, querySelection,
-		// null, null, null, null, "1");
         if(windowSize >= 0){
-            retQuery = query
-                    + "AND round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval >= 0 AND acq_reps > 0 LIMIT "
-                    + windowSize;
-            if(shuffle == true){
-                retQuery += "ORDER BY RANDOM() LIMIT " + windowSize;
+            if(ahead == true){
+                /* Randomly choose the item ahead of time */
+                Log.v(TAG, "AHead in database");
+		        retQuery = "SELECT learn_tbl._id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, question, answer, note FROM dict_tbl INNER JOIN learn_tbl ON dict_tbl._id=learn_tbl._id WHERE round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval < 0 AND acq_reps > 0 ORDER BY RANDOM() LIMIT " + windowSize;
+            }
+            else{
+                retQuery = query
+                        + "AND round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval >= 0 AND acq_reps > 0 LIMIT "
+                        + windowSize;
+                if(shuffle == true){
+                    retQuery += "ORDER BY RANDOM() LIMIT " + windowSize;
+                }
             }
         }
         else{
@@ -275,6 +279,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 		try {
 			retResult = myDatabase.rawQuery(retQuery, null);
+            Log.v(TAG, "Query: " + retResult.getCount());
 		} catch (Exception e) {
 			Log.e("Query item error", e.toString());
 			return false;
@@ -312,8 +317,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				resultItem.setData(hm);
 				list.add(resultItem);
 			} while (result.moveToNext());
+            retResult.close();
 		}
-		retResult.close();
+        else if(ahead == true){
+            retResult.close();
+            return false;
+        }
 
 		int remainingSize = windowSize - list.size();
 
@@ -382,6 +391,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		// flag = 0 means no condition
 		// flag = 1 means new items, the items user have never seen
 		// flag = 2 means item due, they need to be reviewed.
+        // flag = 3 means items that is ahead of time
 		HashMap<String, String> hm = new HashMap<String, String>();
 		//ArrayList<String> list = new ArrayList<String>();
 		String query = "SELECT learn_tbl._id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, question, answer, note FROM dict_tbl INNER JOIN learn_tbl ON dict_tbl._id=learn_tbl._id WHERE dict_tbl._id >= " + id + " ";
@@ -391,9 +401,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		else if(flag == 2){
 			query += "AND round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval >= 0 AND acq_reps > 0 LIMIT 1";
 		}
+        else if (flag == 3){
+		    query = "SELECT learn_tbl._id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, question, answer, note FROM dict_tbl INNER JOIN learn_tbl ON dict_tbl._id=learn_tbl._id WHERE round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval < 0 AND acq_reps > 0 ORDER BY RANDOM() LIMIT 1";
+        }
 		else{
 			query += "LIMIT 1";
-			
 		}
 		Cursor result;
 		//result = myDatabase.query(true, "dict_tbl", null, querySelection, null, null, null, "_id", null);

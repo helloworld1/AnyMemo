@@ -80,6 +80,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
     private Context mContext;
     private Handler mHandler;
     private SpeakWord mSpeakWord;
+    private boolean learnAhead;
     /* Six grading buttons */
 	private Button[] btns = {null, null, null, null, null, null}; 
 
@@ -96,6 +97,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
 		if (extras != null) {
 			dbPath = extras.getString("dbpath");
 			dbName = extras.getString("dbname");
+            learnAhead = extras.getBoolean("learn_ahead");
 		}
 		initFeed = true;
 		
@@ -406,46 +408,65 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
 		if(initFeed){
 			initFeed = false;
 			
-			boolean feedResult = dbHelper.getListItems(-1, WINDOW_SIZE, learnQueue);
+            boolean feedResult;
+            if(learnAhead){
+                feedResult = dbHelper.getListItems(-1, WINDOW_SIZE, learnQueue, false, true);
+                Log.v(TAG, "Initial, cram" + feedResult + " Size: " + learnQueue.size());
+            }
+            else{
+                feedResult = dbHelper.getListItems(-1, WINDOW_SIZE, learnQueue);
+            }
 			if(feedResult == true){
 				idMaxSeen = learnQueue.get(learnQueue.size() - 1).getId();
 				return 0;
 			}
 			else{
-				return 2;
+                return 2;
 			}
 			
 		}
 		else{
-		
-		Item item;
-		setTitle(getString(R.string.stat_scheduled) + scheduledItemCount + " / " + getString(R.string.stat_new) + newItemCount);
-		for(int i = learnQueue.size(); i < WINDOW_SIZE; i++){
-			item = dbHelper.getItemById(idMaxSeen + 1, 2); // Revision first
-			if(item == null){
-				item = dbHelper.getItemById(idMaxSeen + 1, 1); // Then learn new if no revision.
-			}
-			if(item != null){
-				learnQueue.add(item);
-			}
-			else{
-				break;
-			}
-			idMaxSeen = item.getId();
-			
-		}
-		switch(learnQueue.size()){
-		case 0: // No item in queue
-			queueEmpty = true;
-			return 2;
-		case WINDOW_SIZE: // Queue full
-			queueEmpty = false;
-			return 0;
-		default: // There are some items in the queue
-			queueEmpty = false;
-			return 1;
-				
-		}
+            Item item;
+            if(!learnAhead){
+                setTitle(getString(R.string.stat_scheduled) + scheduledItemCount + " / " + getString(R.string.stat_new) + newItemCount);
+            }
+            else{
+                setTitle(getString(R.string.learn_ahead));
+            }
+            for(int i = learnQueue.size(); i < WINDOW_SIZE; i++){
+                if(learnAhead){
+                    Log.v(TAG, "feed, cram");
+                    /* Flag = 3 for randomly choose item from future */
+                    item = dbHelper.getItemById(0, 3);
+                    learnQueue.add(item);
+                }
+                else{
+                    item = dbHelper.getItemById(idMaxSeen + 1, 2); // Revision first
+                    if(item == null){
+                        item = dbHelper.getItemById(idMaxSeen + 1, 1); // Then learn new if no revision.
+                    }
+                    if(item != null){
+                        learnQueue.add(item);
+                    }
+                    else{
+                        break;
+                    }
+                }
+                idMaxSeen = item.getId();
+                
+            }
+            switch(learnQueue.size()){
+            case 0: // No item in queue
+                queueEmpty = true;
+                return 2;
+            case WINDOW_SIZE: // Queue full
+                queueEmpty = false;
+                return 0;
+            default: // There are some items in the queue
+                queueEmpty = false;
+                return 1;
+                    
+            }
 		}
 	}
 			

@@ -115,14 +115,15 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
     @Override
 	public void onItemClick(AdapterView<?> parentView, View childView, int position, long id) {
 		
-    		Intent myIntent = new Intent();
-    		myIntent.setClass(this, MemoScreen.class);
-    		this.dbPath = recentList.get(position).get("recentdbpath");
-    		this.dbName = recentList.get(position).get("recentdbname");
-    		myIntent.putExtra("dbname", dbName);
-    		myIntent.putExtra("dbpath", dbPath);
-    		mRecentOpenList.writeNewList(dbPath, dbName);
-    		startActivity(myIntent);
+        Intent myIntent = new Intent();
+        myIntent.setClass(this, MemoScreen.class);
+        this.dbPath = recentList.get(position).get("recentdbpath");
+        this.dbName = recentList.get(position).get("recentdbname");
+        myIntent.putExtra("dbname", dbName);
+        myIntent.putExtra("dbpath", dbPath);
+        myIntent.putExtra("learn_ahead", true);
+        mRecentOpenList.writeNewList(dbPath, dbName);
+        startActivity(myIntent);
 		
 	}
 	
