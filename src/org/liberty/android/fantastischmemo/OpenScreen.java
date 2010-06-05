@@ -121,7 +121,6 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
         this.dbName = recentList.get(position).get("recentdbname");
         myIntent.putExtra("dbname", dbName);
         myIntent.putExtra("dbpath", dbPath);
-        myIntent.putExtra("learn_ahead", true);
         mRecentOpenList.writeNewList(dbPath, dbName);
         startActivity(myIntent);
 		

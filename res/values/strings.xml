@@ -37,7 +37,7 @@
     <string name="copyclipboard_summary">The question will be automatically copied to clipboard</string>
     <string name="memo_show_answer">\?\nShow Answer</string>
     <string name="memo_no_item_title">No Item</string>
-    <string name="memo_no_item_message">There is no item to learn for now.</string>
+    <string name="memo_no_item_message">There is no item to learn for now. Go back is recommended. Use the cram review to learn ahead of time.</string>
     <string name="memo_btn0_text">0 Forget</string>
     <string name="memo_btn1_text">1 Forget</string>
     <string name="memo_btn2_text">2 Very Hard</string>

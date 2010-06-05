@@ -128,7 +128,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				}
                 if(questionList.size() == arslList.size()){
                     date_learn = liDatelearn.next();
-                    Log.v(TAG, date_learn);
                     interval = liInterval.next().toString();
                     grade = liGrade.next().toString();
                     easiness = liEasiness.next().toString();
@@ -255,7 +254,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if(windowSize >= 0){
             if(ahead == true){
                 /* Randomly choose the item ahead of time */
-                Log.v(TAG, "AHead in database");
 		        retQuery = "SELECT learn_tbl._id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, question, answer, note FROM dict_tbl INNER JOIN learn_tbl ON dict_tbl._id=learn_tbl._id WHERE round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval < 0 AND acq_reps > 0 ORDER BY RANDOM() LIMIT " + windowSize;
             }
             else{
@@ -279,7 +277,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 		try {
 			retResult = myDatabase.rawQuery(retQuery, null);
-            Log.v(TAG, "Query: " + retResult.getCount());
 		} catch (Exception e) {
 			Log.e("Query item error", e.toString());
 			return false;
@@ -317,12 +314,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				resultItem.setData(hm);
 				list.add(resultItem);
 			} while (result.moveToNext());
-            retResult.close();
 		}
         else if(ahead == true){
             retResult.close();
             return false;
         }
+        retResult.close();
 
 		int remainingSize = windowSize - list.size();
 

@@ -265,6 +265,17 @@ public abstract class MemoScreenBase extends Activity{
                         finish();
                     }
                 })
+                .setNegativeButton(getString(R.string.learn_ahead), new OnClickListener(){
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        finish();
+                        Intent myIntent = new Intent();
+                        myIntent.setClass(MemoScreenBase.this, MemoScreen.class);
+                        myIntent.putExtra("dbname", dbName);
+                        myIntent.putExtra("dbpath", dbPath);
+                        myIntent.putExtra("learn_ahead", true);
+                        startActivity(myIntent);
+                    }
+                })
                 .create()
                 .show();
 			

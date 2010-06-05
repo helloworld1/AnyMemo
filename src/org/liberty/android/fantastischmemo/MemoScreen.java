@@ -373,10 +373,22 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
                         .setTitle(getString(R.string.memo_no_item_title))
                         .setMessage(getString(R.string.memo_no_item_message))
                         .setPositiveButton(getString(R.string.back_menu_text),new OnClickListener() {
-                        // Finish the current activity and go back to the last activity.
-                        // It should be the main screen.
+                            /* Finish the current activity and go back to the last activity.
+                             *It should be the main screen.
+                             */
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                finish();
+                            }
+                        })
+                        .setNegativeButton(getString(R.string.learn_ahead), new OnClickListener(){
                         public void onClick(DialogInterface arg0, int arg1) {
                             finish();
+                            Intent myIntent = new Intent();
+                            myIntent.setClass(MemoScreen.this, MemoScreen.class);
+                            myIntent.putExtra("dbname", dbName);
+                            myIntent.putExtra("dbpath", dbPath);
+                            myIntent.putExtra("learn_ahead", true);
+                            startActivity(myIntent);
                         }
                     })
                         .create()
@@ -411,7 +423,6 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
             boolean feedResult;
             if(learnAhead){
                 feedResult = dbHelper.getListItems(-1, WINDOW_SIZE, learnQueue, false, true);
-                Log.v(TAG, "Initial, cram" + feedResult + " Size: " + learnQueue.size());
             }
             else{
                 feedResult = dbHelper.getListItems(-1, WINDOW_SIZE, learnQueue);
@@ -435,7 +446,6 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
             }
             for(int i = learnQueue.size(); i < WINDOW_SIZE; i++){
                 if(learnAhead){
-                    Log.v(TAG, "feed, cram");
                     /* Flag = 3 for randomly choose item from future */
                     item = dbHelper.getItemById(0, 3);
                     learnQueue.add(item);
@@ -614,7 +624,6 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
         int base = 0x21212;
         Display display = ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         int width = display.getWidth(); 
-        Log.v(TAG, "layout Width: " + width);
         if(btnOneRow){
             for(int i = 0; i < 6; i++){
                 RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(
