@@ -602,7 +602,15 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
                 String[] btnsText = {getString(R.string.memo_btn0_text),getString(R.string.memo_btn1_text),getString(R.string.memo_btn2_text),getString(R.string.memo_btn3_text),getString(R.string.memo_btn4_text),getString(R.string.memo_btn5_text)};
                 for(int i = 0; i < btns.length; i++){
                 // This part will display the days to review
-                    btns[i].setText(btnsText[i] + "\n+" + currentItem.processAnswer(i, true));
+                    if(!learnAhead){
+                        btns[i].setText(btnsText[i] + "\n+" + currentItem.processAnswer(i, true));
+                    }
+                    else{
+                        /* In cram review mode, we do not estimate the 
+                         * days to learn 
+                         */
+                        btns[i].setText(btnsText[i]);
+                    }
                 }
             }
         }

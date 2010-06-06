@@ -322,6 +322,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         retResult.close();
 
 		int remainingSize = windowSize - list.size();
+        /* We do not add new item to the cram review list */
+        if(ahead == true){
+            if(list.size() <= 0){
+                return false;
+            }
+            else{
+                return true;
+            }
+        }
 
 		if (remainingSize > 0) {
 

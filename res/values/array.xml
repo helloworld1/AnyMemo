@@ -71,7 +71,7 @@
 <string-array name="open_screen_menu_list">
     <item>Study</item>
     <item>Cram Review</item>
-    <item>Preview</item>
+    <item>Preview / Edit</item>
     <item>Edit Database Settings</item>
     <item>Delete</item>
 </string-array>
