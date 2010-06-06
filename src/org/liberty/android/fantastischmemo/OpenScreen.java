@@ -25,6 +25,7 @@ import java.util.ListIterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
+import java.io.File;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -48,10 +49,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.view.View.OnClickListener;
 import android.content.Context;
+import android.content.DialogInterface;
 
-public class OpenScreen extends Activity implements OnItemClickListener, OnClickListener {
+public class OpenScreen extends Activity implements OnItemClickListener, OnClickListener, OnItemLongClickListener {
 
 	private String dbName;
 	private String dbPath;
@@ -113,6 +116,14 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
     }
 
     @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id){
+        this.dbPath = recentList.get(position).get("recentdbpath");
+        this.dbName = recentList.get(position).get("recentdbname");
+        showMenuDialog(dbPath, dbName);
+        return true;
+		
+	}
+    @Override
 	public void onItemClick(AdapterView<?> parentView, View childView, int position, long id) {
 		
         Intent myIntent = new Intent();
@@ -155,6 +166,7 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
 
             recentListView = (ListView)findViewById(R.id.recent_open_list);
             recentListView.setOnItemClickListener(this);
+            recentListView.setOnItemLongClickListener(this);
 
             Thread loadingThread = new Thread(){
                 public void run(){
@@ -479,6 +491,78 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
         
 
 
+    }
+
+    protected void showMenuDialog(String dbPath, String dbName){
+        /* Display the menu when long clicking the item */
+        final String path = dbPath;
+        final String name = dbName;
+        new AlertDialog.Builder(this)
+            .setTitle(getString(R.string.menu_text))
+            .setItems(R.array.open_screen_menu_list, new DialogInterface.OnClickListener(){
+                public void onClick(DialogInterface dialog, int which){
+                    if(which == 0){
+                        /* Open database normally*/
+                        Intent myIntent = new Intent();
+                        myIntent.setClass(OpenScreen.this, MemoScreen.class);
+                        myIntent.putExtra("dbname", name);
+                        myIntent.putExtra("dbpath", path);
+                        mRecentOpenList.writeNewList(path, name);
+                        startActivity(myIntent);
+                    }
+                    if(which == 1){
+                        /* Cram Review */
+                        Intent myIntent = new Intent();
+                        myIntent.setClass(OpenScreen.this, MemoScreen.class);
+                        myIntent.putExtra("dbname", name);
+                        myIntent.putExtra("dbpath", path);
+                        myIntent.putExtra("learn_ahead", true);
+                        mRecentOpenList.writeNewList(path, name);
+                        startActivity(myIntent);
+                    }
+                    if(which == 2){
+                        /* Preview card */
+                        Intent myIntent = new Intent();
+                        myIntent.setClass(OpenScreen.this, EditScreen.class);
+                        myIntent.putExtra("dbname", name);
+                        myIntent.putExtra("dbpath", path);
+                        mRecentOpenList.writeNewList(path, name);
+                        startActivity(myIntent);
+                    }
+                    if(which == 3){
+                        /* Edit database settings*/
+                        Intent myIntent = new Intent();
+                        myIntent.setClass(OpenScreen.this, SettingsScreen.class);
+                        myIntent.putExtra("dbname", name);
+                        myIntent.putExtra("dbpath", path);
+                        mRecentOpenList.writeNewList(path, name);
+                        startActivity(myIntent);
+                    }
+                    if(which == 4){
+                        /* Delete this database */
+                        new AlertDialog.Builder(OpenScreen.this)
+                            .setTitle(getString(R.string.detail_delete))
+                            .setMessage(getString(R.string.fb_delete_message))
+                            .setPositiveButton(getString(R.string.detail_delete), new DialogInterface.OnClickListener(){
+                                @Override
+                                public void onClick(DialogInterface dialog, int which ){
+                                    File fileToDelete = new File(path + "/" + name);
+                                    fileToDelete.delete();
+                                    finish();
+                                    Intent myIntent = new Intent();
+                                    myIntent.setClass(OpenScreen.this, OpenScreen.class);
+                                    startActivity(myIntent);
+                                    
+                                }
+                            })
+                            .setNegativeButton(getString(R.string.cancel_text), null)
+                            .create()
+                            .show();
+                    }
+                }
+            })
+            .create()
+            .show();
     }
 
             
