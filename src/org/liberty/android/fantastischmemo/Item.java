@@ -328,13 +328,13 @@ public final class Item implements Cloneable{
 			this.ret_reps_since_lapse += 1;
 			returnValue = true;
 			if(actualInterval >= scheduleInterval){
-				if(grade == 2){
+				if(newGrade == 2){
 					this.easiness -= 0.16;
 				}
-				if(grade == 3){
+				if(newGrade == 3){
 					this.easiness -= 0.14;
 				}
-				if(grade == 5){
+				if(newGrade == 5){
 					this.easiness += 0.10;
 				}
 				if(this.easiness < 1.3){
