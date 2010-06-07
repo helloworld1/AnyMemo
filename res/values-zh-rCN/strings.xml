@@ -29,12 +29,12 @@
     <string name="copyclipboard_summary">问题将自动复制到剪切板</string>
     <string name="memo_show_answer">\?\n显示答案</string>
     <string name="memo_no_item_title">无卡片</string>
-    <string name="memo_no_item_message">目前没有学习卡片</string>
+    <string name="memo_no_item_message">目前没有学习卡片，建议退出。另外还可以强制复习未来将复习的卡片</string>
     <string name="memo_btn0_text">0 忘记</string>
     <string name="memo_btn1_text">1 忘记</string>
-    <string name="memo_btn2_text">2 勉强</string>
+    <string name="memo_btn2_text">2 太困难</string>
     <string name="memo_btn3_text">3 困难</string>
-    <string name="memo_btn4_text">4 记住</string>
+    <string name="memo_btn4_text">4 简单</string>
     <string name="memo_btn5_text">5 太简单</string>
     <string name="memo_btn0_help_text">完全忘记了答案</string>
     <string name="memo_btn1_help_text">完全忘记了答案</string>
@@ -149,5 +149,7 @@
     <string name="settings_typeface_question">自定问题字体</string>
     <string name="settings_typeface_answer">自定答案字体</string>
     <string name="what_is_new_message">查看图文新功能介绍,请点版本历史.</string>
+    <string name="learn_ahead">强制复习</string>
+    <string name="menu_text">菜单</string>
     
 </resources>
