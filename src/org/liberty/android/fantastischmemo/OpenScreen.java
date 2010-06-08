@@ -25,11 +25,13 @@ import java.util.ListIterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.io.File;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.database.SQLException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -132,7 +134,11 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
         this.dbName = recentList.get(position).get("recentdbname");
         myIntent.putExtra("dbname", dbName);
         myIntent.putExtra("dbpath", dbPath);
-        mRecentOpenList.writeNewList(dbPath, dbName);
+        try{
+            mRecentOpenList.writeNewList(dbPath, dbName);
+        }
+        catch(InterruptedException e){
+        }
         startActivity(myIntent);
 		
 	}
@@ -151,7 +157,11 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
     		editor.putString("dbpath", this.dbPath);
     		editor.commit();
     		
-    		mRecentOpenList.writeNewList(this.dbPath, this.dbName);
+            try{
+                mRecentOpenList.writeNewList(this.dbPath, this.dbName);
+            }
+            catch(InterruptedException e){
+            }
     		
     		
     		Intent myIntent = new Intent();
@@ -162,35 +172,47 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
     		returnValue = 0;
             return;
     	}
-            mProgressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_recent_list), true);
 
             recentListView = (ListView)findViewById(R.id.recent_open_list);
             recentListView.setOnItemClickListener(this);
             recentListView.setOnItemLongClickListener(this);
-
-            Thread loadingThread = new Thread(){
-                public void run(){
-
-    	
+            /* pre loading stat */
             recentItemList = new ArrayList<RecentItem>();
             
             // Fill the recent open list from the pref
             mRecentOpenList = new RecentOpenList(mContext);
-            recentList = mRecentOpenList.getList();
-            
+            ArrayList<RecentItem> preRecentItemList = new ArrayList<RecentItem>();
+            recentList = mRecentOpenList.getPreList();
             for(HashMap<String, String> hm : recentList){
-                recentItemList.add(new RecentItem(hm.get("recentdbname"), mContext.getString(R.string.stat_total) + hm.get("recentdbtotal") + " " + mContext.getString(R.string.stat_new) + hm.get("recentnew") + " " + mContext.getString(R.string.stat_scheduled) + hm.get("recentscheduled")));
+                preRecentItemList.add(new RecentItem(hm.get("recentdbname"), getString(R.string.loading_recent_list))); 
             }
+            recentListView.setAdapter(new RecentListAdapter(mContext, R.layout.open_screen_recent_item, preRecentItemList));
 
-
-            mHandler.post(new Runnable(){
+            Thread loadingThread = new Thread(){
                 public void run(){
-            
-            recentListView.setAdapter(new RecentListAdapter(mContext, R.layout.open_screen_recent_item, recentItemList));
-            mProgressDialog.dismiss();
+                    /* Get list with stat info */
+                    try{
+                        recentList = mRecentOpenList.getList();
+                        
+                        for(HashMap<String, String> hm : recentList){
+                            recentItemList.add(new RecentItem(hm.get("recentdbname"), mContext.getString(R.string.stat_total) + hm.get("recentdbtotal") + " " + mContext.getString(R.string.stat_new) + hm.get("recentnew") + " " + mContext.getString(R.string.stat_scheduled) + hm.get("recentscheduled")));
+                        }
 
-                }
-            });
+                        if(mHandler != null){
+
+                            mHandler.post(new Runnable(){
+                                public void run(){
+                            
+                                    recentListView.setAdapter(new RecentListAdapter(mContext, R.layout.open_screen_recent_item, recentItemList));
+                            //mProgressDialog.dismiss();
+
+                                }
+                            });
+                        }
+                    }
+                    catch(Exception e){
+                        Log.e(TAG, "Error refreshing", e);
+                    }
                 }
             };
             loadingThread.start();
@@ -312,7 +334,7 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
 			editor.commit();
 			Intent refresh = new Intent(this, OpenScreen.class);
 			startActivity(refresh);
-			this.finish();
+			finish();
 			return true;
         
         case R.id.openmenu_export_xml:
@@ -389,36 +411,57 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
         final Context mContext;
         List<HashMap<String, String>> recentList;
         Integer i = Integer.valueOf(1);;
+        /* signal = 0, no lock
+         * signal = 1, locked
+         * signal = 2, require to unlock
+         */
+        public AtomicInteger signal;
         
         public RecentOpenList(Context context){
             recentList = new LinkedList<HashMap<String, String>>();
             mContext = context; 
             fetchListFromPref();
+            signal = new AtomicInteger(0);
+        }
+
+        public List<HashMap<String, String>> getPreList(){
+            /* without statistics info */
+            return recentList;
         }
         
-        public List<HashMap<String, String>> getList(){
+        public List<HashMap<String, String>> getList() throws SQLException, InterruptedException{
             ListIterator<HashMap<String, String>> it = recentList.listIterator();
             int counter = 0;
-            while(it.hasNext()){
+            signal.set(1);
+            while(it.hasNext() && signal.get() == 1){
                 counter += 1;
                 HashMap<String,  String> hm = (HashMap<String, String>)it.next();
                 DatabaseHelper dbHelper = null;
 
                 String dbname = hm.get("recentdbname");
                 String dbpath = hm.get("recentdbpath");
-                
+
                 try{
+                
                     dbHelper = new DatabaseHelper(mContext, dbpath, dbname);
                     hm.put("recentdbtotal", "" + dbHelper.getTotalCount());
                     hm.put("recentscheduled", "" + dbHelper.getScheduledCount());
                     hm.put("recentnew", "" + dbHelper.getNewCount());
                     dbHelper.close();
-                    it.set(hm);
                 }
-                catch(Exception e){
-                    Log.e(TAG, "recent list database open error" + e, e);
+                catch(SQLException e){
+                    signal.set(0);
+                    throw new SQLException(e.toString());
                 }
+                it.set(hm);
                 
+            }
+
+            if(signal.getAndSet(0) == 2){
+                throw new InterruptedException("Interrupt updating list");
+            }
+            else{
+                signal.set(0);
             }
             return recentList;
         }
@@ -452,10 +495,15 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
             }
         }
         
-        public void writeNewList(String dbpath, String dbname){
+        public void writeNewList(String dbpath, String dbname) throws InterruptedException{
             HashMap<String, String> hm = new HashMap<String, String>();
             hm.put("recentdbname", dbname);
             hm.put("recentdbpath", dbpath);
+            signal.compareAndSet(1, 2);
+            while(signal.get() != 0){
+                Thread.sleep(10);
+            }
+            signal.set(1);
             ListIterator<HashMap<String, String>> it = recentList.listIterator();
             while(it.hasNext()){
                 HashMap<String, String> h = it.next();
@@ -471,6 +519,8 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
                 recentList.remove(recentList.size() - 1);
                 recentList.add(0, hm);
             }
+            signal.compareAndSet(1, 0);
+
             int i = 0;
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
             SharedPreferences.Editor editor = settings.edit();
@@ -507,7 +557,11 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
                         myIntent.setClass(OpenScreen.this, MemoScreen.class);
                         myIntent.putExtra("dbname", name);
                         myIntent.putExtra("dbpath", path);
-                        mRecentOpenList.writeNewList(path, name);
+                        try{
+                            mRecentOpenList.writeNewList(path, name);
+                        }
+                        catch(InterruptedException e){
+                        }
                         startActivity(myIntent);
                     }
                     if(which == 1){
@@ -517,7 +571,11 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
                         myIntent.putExtra("dbname", name);
                         myIntent.putExtra("dbpath", path);
                         myIntent.putExtra("learn_ahead", true);
-                        mRecentOpenList.writeNewList(path, name);
+                        try{
+                            mRecentOpenList.writeNewList(path, name);
+                        }
+                        catch(InterruptedException e){
+                        }
                         startActivity(myIntent);
                     }
                     if(which == 2){
@@ -526,7 +584,13 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
                         myIntent.setClass(OpenScreen.this, EditScreen.class);
                         myIntent.putExtra("dbname", name);
                         myIntent.putExtra("dbpath", path);
-                        mRecentOpenList.writeNewList(path, name);
+                        try{
+                            mRecentOpenList.writeNewList(path, name);
+                        }
+                        catch(InterruptedException e){
+                        }
+
+
                         startActivity(myIntent);
                     }
                     if(which == 3){
@@ -535,7 +599,11 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
                         myIntent.setClass(OpenScreen.this, SettingsScreen.class);
                         myIntent.putExtra("dbname", name);
                         myIntent.putExtra("dbpath", path);
-                        mRecentOpenList.writeNewList(path, name);
+                        try{
+                            mRecentOpenList.writeNewList(path, name);
+                        }
+                        catch(InterruptedException e){
+                        }
                         startActivity(myIntent);
                     }
                     if(which == 4){
