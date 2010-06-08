@@ -74,8 +74,8 @@ class DBExporter{
             // At the first item, we write all metadata
             if(count == 0){
                 //timeOfStart = item.getDatelearnUnix();
-                // 2000-01-01 23:80
-                timeOfStart = 946771080L;
+                // 2000-01-01 12:00
+                timeOfStart = 946728000L;
                 outxml.print("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
                 outxml.print("<mnemosyne core_version=\"1\" time_of_start=\"" + timeOfStart + "\" >\n");
                 outxml.print("<category active=\"1\">\n");

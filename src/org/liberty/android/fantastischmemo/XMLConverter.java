@@ -151,10 +151,12 @@ public class XMLConverter extends org.xml.sax.helpers.DefaultHandler{
             try{
                 timeOfStart = Long.parseLong(atts.getValue("time_of_start"));
                 /* Convert to local time */
+                /*
                 Calendar nc = Calendar.getInstance();
                 TimeZone tz = nc.getTimeZone();
                 int offset = tz.getOffset(timeOfStart);
                 timeOfStart -= offset;
+                */
 
                 Log.v(TAG, "Time of start: " + timeOfStart);
             }
