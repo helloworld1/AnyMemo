@@ -92,7 +92,7 @@ public class DetailScreen extends Activity implements OnClickListener{
                 return;
             }
 
-			currentItem = dbHelper.getItemById(itemId, 0);
+			currentItem = dbHelper.getItemById(itemId, 0, null);
 		}
 		else{
 			dbHelper = null;

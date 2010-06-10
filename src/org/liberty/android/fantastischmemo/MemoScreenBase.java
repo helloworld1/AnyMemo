@@ -143,6 +143,12 @@ public abstract class MemoScreenBase extends Activity{
 
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			dbPath = extras.getString("dbpath");
+			dbName = extras.getString("dbname");
+            activeFilter = extras.getString("active_filter");
+		}
     }
 
 	public void onResume(){
@@ -544,6 +550,7 @@ public abstract class MemoScreenBase extends Activity{
         final ArrayList<String> filterArray = dbHelper.getRecentFilters();
         if(filterArray != null){
             filterList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, filterArray));
+            /* Click to set the text edit */
             filterList.setOnItemClickListener(new OnItemClickListener(){
                 public void onItemClick(AdapterView<?> parentView, View childView, int position, long id){
                     filterEdit.setText(filterArray.get(position));
@@ -559,11 +566,29 @@ public abstract class MemoScreenBase extends Activity{
                 @Override
                 public void onClick(DialogInterface arg0, int arg1) {
                     dbHelper.setRecentFilters(filterEdit.getText().toString());
+                    activeFilter = filterEdit.getText().toString();
+                    restartActivity();
                 }
             })
             .setNegativeButton(getString(R.string.cancel_text), null)
             .create()
             .show();
     }
+
+    protected void showFilterFailureDialog(){
+        new AlertDialog.Builder(this)
+            .setTitle(getString(R.string.filter_failure_title))
+            .setMessage(getString(R.string.filter_failure_message))
+            .setPositiveButton(getString(R.string.ok_text), new DialogInterface.OnClickListener(){
+                public void onClick(DialogInterface arg0, int arg1){
+                    activeFilter = "";
+                    restartActivity();
+                }
+            })
+            .create()
+            .show();
+    }
+
+
 }
 

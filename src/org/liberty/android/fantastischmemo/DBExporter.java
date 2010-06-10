@@ -62,7 +62,7 @@ class DBExporter{
             throw new IOException("Can't open: " + fullpath);
         }
         List<Item> itemList = new LinkedList<Item>();
-        boolean result = dbHelper.getListItems(1, -1, itemList);
+        boolean result = dbHelper.getListItems(1, -1, itemList, 0, null);
         if(result == false){
             throw new IOException("Can't retrieve items for database: " + dbPath + "/" + dbName);
         }

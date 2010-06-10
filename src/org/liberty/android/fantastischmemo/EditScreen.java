@@ -90,11 +90,6 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
         super.onCreate(savedInstanceState);
 		setContentView(R.layout.memo_screen_gesture);
 		
-		Bundle extras = getIntent().getExtras();
-		if (extras != null) {
-			dbPath = extras.getString("dbpath");
-			dbName = extras.getString("dbname");
-		}
         mContext = this;
 
         mHandler = new Handler();
@@ -193,7 +188,7 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
                 currentId = maxId;
             }
 
-            currentItem = dbHelper.getItemById(currentId, 0);
+            currentItem = dbHelper.getItemById(currentId, 0, activeFilter);
             /* Re-fetch the id in case that the item with id 1 is 
              * deleted.
              */
@@ -255,6 +250,11 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
                 startActivityForResult(myIntent, 1);
                 //finish();
                 return true;
+
+            case R.id.menu_edit_filter:
+                doFilter();
+                return true;
+
         }
         return false;
     }
@@ -306,6 +306,7 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
 
     @Override
     protected void restartActivity(){
+
     }
 
     @Override 
@@ -366,39 +367,52 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
 
     private void getNextItem(){
         if(totalItem > 0){
-            do{
-                if(currentId < maxId){
-                    currentId = currentId + 1;
+            for(int i = 0; i < maxId; i++){
+
+                currentId = currentId % maxId + 1;
+                currentItem = dbHelper.getItemById(currentId, 0, activeFilter);
+                if(currentItem == null){
+                    continue;
                 }
-                else{
-                    currentId = 1;
+                if(currentItem.getId() == currentId){
+                    break;
                 }
-                currentItem = dbHelper.getItemById(currentId, 0);
             }
-            while(currentItem.getId() != currentId);
         }
-        setTitle(getString(R.string.stat_total) + totalItem);
-        updateMemoScreen();
+        if(currentItem != null){
+            setTitle(getString(R.string.stat_total) + totalItem);
+            updateMemoScreen();
+        }
+        else{
+            showFilterFailureDialog();
+        }
+        
     }
-
-
-
 
     private void getPreviousItem(){
         if(totalItem > 0){
-            do{
-                if(currentId > 0){
-                    currentId = currentId - 1;
-                }
-                else{
+            for(int i = 0; i < maxId; i++){
+
+                currentId = (currentId - 1) % maxId;
+                if(currentId < 1){
                     currentId = maxId;
                 }
-                currentItem = dbHelper.getItemById(currentId, 0);
+                currentItem = dbHelper.getItemById(currentId, 0, activeFilter);
+                if(currentItem == null){
+                    continue;
+                }
+                if(currentItem.getId() == currentId){
+                    break;
+                }
             }
-            while(currentItem.getId() != currentId);
         }
-        setTitle(getString(R.string.stat_total) + totalItem);
-        updateMemoScreen();
+        if(currentItem != null){
+            setTitle(getString(R.string.stat_total) + totalItem);
+            updateMemoScreen();
+        }
+        else{
+            showFilterFailureDialog();
+        }
     }
     
     private void createNewItem(){
@@ -450,7 +464,7 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
             try{
                 intNum = Integer.parseInt(num);
                 if(intNum > 0 && intNum <= maxId){
-                    currentItem = dbHelper.getItemById(intNum, 0);
+                    currentItem = dbHelper.getItemById(intNum, 0, activeFilter);
                     if(currentItem != null){
                         currentId = intNum;
                         prepare();
@@ -468,7 +482,7 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
             text = text.replace('?', '_');
             int resId = dbHelper.searchItem(currentItem.getId(), text, forward);
             if(resId > 0){
-                currentItem = dbHelper.getItemById(resId, 0);
+                currentItem = dbHelper.getItemById(resId, 0, activeFilter);
                 currentId = currentItem.getId();
                 prepare();
             }

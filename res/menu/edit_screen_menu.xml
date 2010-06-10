@@ -18,6 +18,9 @@
     <item android:id="@+id/editmenu_settings_id"
   		  android:icon="@android:drawable/ic_menu_preferences"
   		  android:title="@string/settings_menu_text" />
+    <item android:id="@+id/menu_edit_filter"
+          android:title="@string/filter_text"
+  		  android:icon="@android:drawable/ic_menu_search" />
     <item android:id="@+id/editmenu_help"
   		  android:icon="@android:drawable/ic_menu_help"  
           android:title="@string/help_button_text" />

@@ -32,6 +32,8 @@ import java.util.ListIterator;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -236,58 +238,72 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		
 	}
 
-    public boolean getListItems(int id, int windowSize, List<Item> list){
-        // Return non-shuffled items
-        return getListItems(id, windowSize, list, false, false);
-    }
-
-	
-	public boolean getListItems(int id, int windowSize, List<Item> list, boolean shuffle){
-        return getListItems(id, windowSize, list, shuffle, false);
-    }
-	public boolean getListItems(int id, int windowSize, List<Item> list, boolean shuffle, boolean ahead){
-        // windowSize = -1 means all items from id and on
+	public boolean getListItems(int id, int windowSize, List<Item> list, int flag, String filter){
+        /* id: from which ID
+         * list: the return list
+         * ret: only ret items
+         * flag = 0 means no condition
+         * flag = 1 means new items, the items user have never seen (acq=0)
+         * flag = 2 means item due, they need to be reviewed. (ret)
+         * flag = 3 means items that is ahead of time (cram)
+         * flag = 4 means both ret and acq items, but ret comes first
+         * shuffle: shuffle items
+         */
 
 		HashMap<String, String> hm = new HashMap<String, String>();
-		String acqQuery;
-		String retQuery;
-		String query = "SELECT learn_tbl._id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, question, answer, note FROM dict_tbl INNER JOIN learn_tbl ON dict_tbl._id=learn_tbl._id WHERE dict_tbl._id >= "
-				+ id + " ";
-		Cursor acqResult;
-		Cursor retResult;
+		Cursor result;
+
+		String query = "SELECT learn_tbl._id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, question, answer, note FROM dict_tbl INNER JOIN learn_tbl ON dict_tbl._id=learn_tbl._id WHERE dict_tbl._id >= " + id + " ";
+		if(flag == 1){
+			query += "AND acq_reps = 0 ";
+		}
+		else if(flag == 2 || flag == 4){
+			query += "AND round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval >= 0 AND acq_reps > 0 ";
+		}
+        else if (flag == 3){
+		    query = "SELECT learn_tbl._id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, question, answer, note FROM dict_tbl INNER JOIN learn_tbl ON dict_tbl._id=learn_tbl._id WHERE round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval < 0 AND acq_reps > 0 ";
+        }
+        if(filter != null){
+            if(Pattern.matches("#\\d+-\\d+", filter)){
+                Pattern p = Pattern.compile("\\d+");
+                Matcher m = p.matcher(filter);
+                m.find();
+                String min = m.group();
+                m.find();
+                String max = m.group();
+                query += "AND learn_tbl._id >=" + min + " AND learn_tbl._id <= " + max + " ";
+            }
+            else if(Pattern.matches("#\\d+", filter)){
+                Pattern p = Pattern.compile("\\d+");
+                Matcher m = p.matcher(filter);
+                m.find();
+                String min = m.group();
+                query += "AND learn_tbl._id >= " + min + " ";
+            }
+            else if(!filter.equals("")){
+                /* Replace * and ? to % and _ used in SQL */
+                filter = filter.replace("*", "%");
+                filter = filter.replace("?", "_");
+                
+                query += "AND ((question LIKE '" + filter + "') OR (answer LIKE '" + filter + "') OR (note LIKE '" + filter + "') OR (category LIKE '" + filter +"')) ";
+            }
+        }
+
+        if(flag == 3){
+            query += "ORDER BY RANDOM() ";
+        }
         if(windowSize >= 0){
-            if(ahead == true){
-                /* Randomly choose the item ahead of time */
-		        retQuery = "SELECT learn_tbl._id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, question, answer, note FROM dict_tbl INNER JOIN learn_tbl ON dict_tbl._id=learn_tbl._id WHERE round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval < 0 AND acq_reps > 0 ORDER BY RANDOM() LIMIT " + windowSize;
-            }
-            else{
-                retQuery = query
-                        + "AND round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval >= 0 AND acq_reps > 0 LIMIT "
-                        + windowSize;
-                if(shuffle == true){
-                    retQuery += "ORDER BY RANDOM() LIMIT " + windowSize;
-                }
-            }
+            query += "LIMIT " + windowSize;
         }
-        else{
-            retQuery = query;
-            if(shuffle == true){
-                retQuery += "ORDER BY RANDOM()";
-            }
-        }
-
-
-
 
 		try {
-			retResult = myDatabase.rawQuery(retQuery, null);
+			result = myDatabase.rawQuery(query, null);
 		} catch (Exception e) {
-			Log.e("Query item error", e.toString());
+			Log.e(TAG, "Query list items error", e);
 			return false;
 		}
-		if (retResult.getCount() > 0) {
-			Cursor result = retResult;
-			retResult.moveToFirst();
+		if (result.getCount() > 0) {
+			result.moveToFirst();
 			do {
 				hm.put("_id", Integer.toString(result.getInt(result
 						.getColumnIndex("_id"))));
@@ -319,104 +335,74 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				list.add(resultItem);
 			} while (result.moveToNext());
 		}
-        else if(ahead == true){
-            retResult.close();
+        result.close();
+        if(flag == 4){
+		    int remainingSize = windowSize - list.size();
+            if(remainingSize > 0){
+                List<Item> retList = new ArrayList<Item>();
+                /* Get the new items (acq = 0) */
+                getListItems(id, remainingSize, retList, 1, filter);
+                list.addAll(retList);
+            }
+        }
+        if(list.size() == 0){
             return false;
         }
-        retResult.close();
-
-		int remainingSize = windowSize - list.size();
-        /* We do not add new item to the cram review list */
-        if(ahead == true){
-            if(list.size() <= 0){
-                return false;
-            }
-            else{
-                return true;
-            }
+        else{
+            return true;
         }
-
-		if (remainingSize > 0) {
-
-			acqQuery = query + "AND acq_reps = 0 LIMIT " + remainingSize;
-			try {
-				acqResult = myDatabase.rawQuery(acqQuery, null);
-			} catch (Exception e) {
-				Log.e("Query item error", e.toString());
-				return false;
-			}
-
-			// System.out.println("The result is: " + result.getString(0));
-			// return result.getString(1);
-			if (acqResult.getCount() > 0) {
-				Cursor result = acqResult;
-				acqResult.moveToFirst();
-				do {
-					hm.put("_id", Integer.toString(result.getInt(result
-							.getColumnIndex("_id"))));
-					hm.put("question", result.getString(result
-							.getColumnIndex("question")));
-					hm.put("answer", result.getString(result
-							.getColumnIndex("answer")));
-					hm.put("note", result.getString(result
-							.getColumnIndex("note")));
-					hm.put("date_learn", result.getString(result
-							.getColumnIndex("date_learn")));
-					hm.put("interval", Integer.toString(result.getInt(result
-							.getColumnIndex("interval"))));
-					hm.put("grade", Integer.toString(result.getInt(result
-							.getColumnIndex("grade"))));
-					hm.put("easiness", Double.toString(result.getDouble(result
-							.getColumnIndex("easiness"))));
-					hm.put("acq_reps", Integer.toString(result.getInt(result
-							.getColumnIndex("acq_reps"))));
-					hm.put("ret_reps", Integer.toString(result.getInt(result
-							.getColumnIndex("ret_reps"))));
-					hm.put("lapses", Integer.toString(result.getInt(result
-							.getColumnIndex("lapses"))));
-					hm.put("acq_reps_since_lapse", Integer.toString(result
-							.getInt(result
-									.getColumnIndex("acq_reps_since_lapse"))));
-					hm.put("ret_reps_since_lapse", Integer.toString(result
-							.getInt(result
-									.getColumnIndex("ret_reps_since_lapse"))));
-					Item resultItem = new Item();
-					resultItem.setData(hm);
-					list.add(resultItem);
-				} while (result.moveToNext());
-			}
-			acqResult.close();
-
-		}
-		if (list.size() <= 0) {
-			return false;
-		} else {
-			return true;
-		}
-		
 	}
 	
-	public Item getItemById(int id, int flag){
+	public Item getItemById(int id, int flag, String filter){
 		// These function are related to read db operation
 		// flag = 0 means no condition
 		// flag = 1 means new items, the items user have never seen
 		// flag = 2 means item due, they need to be reviewed.
         // flag = 3 means items that is ahead of time
+        // filter = null or filter = "": no filter
+        // filter = #numA-#numB, items between numA and numB
 		HashMap<String, String> hm = new HashMap<String, String>();
-		//ArrayList<String> list = new ArrayList<String>();
 		String query = "SELECT learn_tbl._id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, question, answer, note FROM dict_tbl INNER JOIN learn_tbl ON dict_tbl._id=learn_tbl._id WHERE dict_tbl._id >= " + id + " ";
 		if(flag == 1){
-			query += "AND acq_reps = 0 LIMIT 1";
+			query += "AND acq_reps = 0 ";
 		}
 		else if(flag == 2){
-			query += "AND round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval >= 0 AND acq_reps > 0 LIMIT 1";
+			query += "AND round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval >= 0 AND acq_reps > 0 ";
 		}
         else if (flag == 3){
-		    query = "SELECT learn_tbl._id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, question, answer, note FROM dict_tbl INNER JOIN learn_tbl ON dict_tbl._id=learn_tbl._id WHERE round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval < 0 AND acq_reps > 0 ORDER BY RANDOM() LIMIT 1";
+		    query = "SELECT learn_tbl._id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, question, answer, note FROM dict_tbl INNER JOIN learn_tbl ON dict_tbl._id=learn_tbl._id WHERE round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval < 0 AND acq_reps > 0 ";
         }
-		else{
-			query += "LIMIT 1";
-		}
+        if(filter != null){
+            if(Pattern.matches("#\\d+-\\d+", filter)){
+                Pattern p = Pattern.compile("\\d+");
+                Matcher m = p.matcher(filter);
+                m.find();
+                String min = m.group();
+                m.find();
+                String max = m.group();
+                query += "AND learn_tbl._id >=" + min + " AND learn_tbl._id <= " + max + " ";
+            }
+            else if(Pattern.matches("#\\d+", filter)){
+                Pattern p = Pattern.compile("\\d+");
+                Matcher m = p.matcher(filter);
+                m.find();
+                String min = m.group();
+                query += "AND learn_tbl._id >= " + min + " ";
+            }
+            else if(!filter.equals("")){
+                /* Replace * and ? to % and _ used in SQL */
+                filter = filter.replace("*", "%");
+                filter = filter.replace("?", "_");
+                
+                query += "AND ((question LIKE '" + filter + "') OR (answer LIKE '" + filter + "') OR (note LIKE '" + filter + "') OR (category LIKE '" + filter +"')) ";
+            }
+        }
+
+        if(flag == 3){
+            query += "ORDER BY RANDOM() ";
+        }
+        query += "LIMIT 1";
+
 		Cursor result;
 		//result = myDatabase.query(true, "dict_tbl", null, querySelection, null, null, null, "_id", null);
 		//result = myDatabase.query("dict_tbl", null, querySelection, null, null, null, "_id");
@@ -556,7 +542,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void shuffleDatabase(){
         List<Item> itemList = new LinkedList<Item>();
-        getListItems(0, -1, itemList, true);
+        getListItems(0, -1, itemList, 0, null);
         int count = 1;
         myDatabase.beginTransaction();
         try{
@@ -594,7 +580,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void inverseQA(){
         List<Item> itemList = new LinkedList<Item>();
-        getListItems(0, -1, itemList);
+        getListItems(0, -1, itemList, 0, null);
         myDatabase.beginTransaction();
         try{
             /* First inverse QA */

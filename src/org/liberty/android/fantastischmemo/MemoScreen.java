@@ -95,8 +95,6 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
 		
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
-			dbPath = extras.getString("dbpath");
-			dbName = extras.getString("dbname");
             learnAhead = extras.getBoolean("learn_ahead");
 		}
 		initFeed = true;
@@ -187,6 +185,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
         myIntent.setClass(MemoScreen.this, MemoScreen.class);
         myIntent.putExtra("dbname", dbName);
         myIntent.putExtra("dbpath", dbPath);
+        myIntent.putExtra("active_filter", activeFilter);
         finish();
         startActivity(myIntent);
     }
@@ -426,10 +425,10 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
 			
             boolean feedResult;
             if(learnAhead){
-                feedResult = dbHelper.getListItems(-1, WINDOW_SIZE, learnQueue, false, true);
+                feedResult = dbHelper.getListItems(-1, WINDOW_SIZE, learnQueue, 3, activeFilter);
             }
             else{
-                feedResult = dbHelper.getListItems(-1, WINDOW_SIZE, learnQueue);
+                feedResult = dbHelper.getListItems(-1, WINDOW_SIZE, learnQueue, 4, activeFilter);
             }
 			if(feedResult == true){
 				idMaxSeen = learnQueue.get(learnQueue.size() - 1).getId();
@@ -451,13 +450,13 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
             for(int i = learnQueue.size(); i < WINDOW_SIZE; i++){
                 if(learnAhead){
                     /* Flag = 3 for randomly choose item from future */
-                    item = dbHelper.getItemById(0, 3);
+                    item = dbHelper.getItemById(0, 3, activeFilter);
                     learnQueue.add(item);
                 }
                 else{
-                    item = dbHelper.getItemById(idMaxSeen + 1, 2); // Revision first
+                    item = dbHelper.getItemById(idMaxSeen + 1, 2, activeFilter); // Revision first
                     if(item == null){
-                        item = dbHelper.getItemById(idMaxSeen + 1, 1); // Then learn new if no revision.
+                        item = dbHelper.getItemById(idMaxSeen + 1, 1, activeFilter); // Then learn new if no revision.
                     }
                     if(item != null){
                         learnQueue.add(item);
@@ -468,6 +467,17 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
                 }
                 idMaxSeen = item.getId();
                 
+            }
+            if(learnQueue.size() == 0 && !learnAhead){
+                /* Workaround for the db inconsistent by the filter function
+                 * It refill the items from the beginning
+                 */
+                scheduledItemCount = dbHelper.getScheduledCount();
+                newItemCount = dbHelper.getNewCount();
+                if((scheduledItemCount + newItemCount) != 0){
+                    dbHelper.getListItems(-1, WINDOW_SIZE, learnQueue, 4, activeFilter);
+                }
+
             }
             switch(learnQueue.size()){
             case 0: // No item in queue
