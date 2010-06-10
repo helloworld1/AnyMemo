@@ -166,6 +166,7 @@
     <string name="settings_typeface_answer">User Answer Font</string>
     <string name="learn_ahead">Cram Review</string>
     <string name="menu_text">Menu</string>
+    <string name="filter_text">Filter</string>
     <string name="what_is_new_message">See Graphical guide of new features, please click version history button.\nVersion 3.5.0\n1. Enhance: Faster loading in "open database" screen\n2. Enhance: Better editing dialog with scroll bar.\n3. Bug fix: Importing is not working correctly in some timezone.</string>
     
 </resources>

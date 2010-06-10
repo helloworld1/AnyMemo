@@ -272,6 +272,10 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
             }
             return true;
 
+        case R.id.menu_memo_filter:
+            doFilter();
+            return true;
+
 	    }
 	    	
 	    return false;

@@ -29,6 +29,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.ListIterator;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
@@ -39,6 +40,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 	private final String dbPath;
@@ -645,5 +649,55 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return res;
     }
 
-	
+    public void setRecentFilters(String newFilter){
+        /* Store from the newest to the oldest*/
+        ArrayList<String> filterList = getRecentFilters();
+        JSONArray jsonFilters = null;
+        String storedFilter;
+        if(filterList == null){
+            filterList = new ArrayList<String>();
+        }
+
+        /* Remove duplicates */
+        for(int i = 0; i < filterList.size(); i++){
+            if(newFilter.equals(filterList.get(i))){
+                filterList.remove(i);
+                break;
+            }
+        }
+        filterList.add(0, newFilter);
+
+        /* Save to database */
+        HashMap<String, String> hm = new HashMap<String, String>();
+        hm.put("recent_filters_json", (new JSONArray(filterList)).toString());
+        setSettings(hm);
+    }
+
+    public ArrayList<String> getRecentFilters(){
+        HashMap<String, String> hm = getSettings();
+        String jsonStr = hm.get("recent_filters_json");
+        ArrayList<String> filterList;
+        if(jsonStr == null){
+            return null;
+        }
+        JSONArray jsonFilters = null;
+        try{
+            jsonFilters = new JSONArray(jsonStr);
+        }
+        catch(JSONException e){
+            return null;
+        }
+
+        filterList = new ArrayList<String>();
+
+        for(int i = 0; i < jsonFilters.length(); i++){
+            try{
+                filterList.add(jsonFilters.getString(i));
+            }
+            catch(JSONException e){
+                Log.e(TAG, "JSON parse error. ", e);
+            }
+        }
+        return filterList;
+    }
 }

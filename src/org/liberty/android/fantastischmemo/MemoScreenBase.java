@@ -52,6 +52,7 @@ import android.view.View;
 import android.view.Display;
 import android.view.WindowManager;
 import android.view.LayoutInflater;
+import android.view.ViewGroup;
 import android.gesture.GestureOverlayView;
 import android.widget.Button;
 import android.os.Handler;
@@ -60,6 +61,10 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.ArrayAdapter;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView;
 import android.util.Log;
 import android.os.SystemClock;
 import android.graphics.Typeface;
@@ -102,6 +107,8 @@ public abstract class MemoScreenBase extends Activity{
     protected boolean copyClipboard = true;
     protected String questionTypeface = "";
     protected String answerTypeface = "";
+    protected String activeFilter = "";
+
 	//private SpeakWord mSpeakWord = null;
     //private Context mContext;
     //private Handler mHandler;
@@ -440,6 +447,7 @@ public abstract class MemoScreenBase extends Activity{
                     if(which == 0){
                         /* This is a customized dialog inflated from XML */
                         doEdit();
+                        //doFilter();
                     }
                     if(which == 1){
                         /* Delete current card */
@@ -527,4 +535,35 @@ public abstract class MemoScreenBase extends Activity{
             .create()
             .show();
     }
+
+    protected void doFilter(){
+        LayoutInflater factory = LayoutInflater.from(MemoScreenBase.this);
+        View filterView = factory.inflate(R.layout.filter_dialog, (ViewGroup)findViewById(R.id.filter_dialog_root));
+        final EditText filterEdit = (EditText)filterView.findViewById(R.id.filter_dialog_edit);
+        final ListView filterList = (ListView)filterView.findViewById(R.id.filter_list);
+        final ArrayList<String> filterArray = dbHelper.getRecentFilters();
+        if(filterArray != null){
+            filterList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, filterArray));
+            filterList.setOnItemClickListener(new OnItemClickListener(){
+                public void onItemClick(AdapterView<?> parentView, View childView, int position, long id){
+                    filterEdit.setText(filterArray.get(position));
+                }
+            });
+        }
+
+
+        new AlertDialog.Builder(MemoScreenBase.this)
+            .setTitle(getString(R.string.filter_text))
+            .setView(filterView)
+            .setPositiveButton(getString(R.string.filter_text), new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+                    dbHelper.setRecentFilters(filterEdit.getText().toString());
+                }
+            })
+            .setNegativeButton(getString(R.string.cancel_text), null)
+            .create()
+            .show();
+    }
 }
+
