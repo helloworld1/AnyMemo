@@ -66,7 +66,6 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
     private ListView recentListView;
     private ArrayList<RecentItem> recentItemList;
     private Button openButton;
-    private Button importButton;
     private ProgressDialog mProgressDialog;
     private Handler mHandler;
 
@@ -76,8 +75,8 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
 
 
     private final int ACTIVITY_DB = 1;
-    private final int ACTIVITY_XML = 2;
-    private final int ACTIVITY_EXPORT_XML = 3;
+    private final int ACTIVITY_IMPORT_MNEMOSYNE_XML = 2;
+    private final int ACTIVITY_EXPORT_MNEMOSYNE_XML = 3;
 
 
 	private List<HashMap<String, String>> recentList;
@@ -90,9 +89,7 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
         mContext = this;
         mRecentOpenList = new RecentOpenList(this);
         openButton = (Button)findViewById(R.id.open_screen_open_exist);
-        importButton = (Button)findViewById(R.id.open_screen_import);
         openButton.setOnClickListener(this);
-        importButton.setOnClickListener(this);
         mHandler = new Handler();
 
 	}
@@ -106,13 +103,6 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
             myIntent.putExtra("default_root", dbPath);
             myIntent.putExtra("file_extension", ".db");
             startActivityForResult(myIntent, ACTIVITY_DB);
-        }
-
-        if(v == importButton){
-            myIntent.setClass(this, FileBrowser.class);
-            myIntent.putExtra("default_root", dbPath);
-            myIntent.putExtra("file_extension", ".xml");
-            startActivityForResult(myIntent, ACTIVITY_XML);
         }
 
     }
@@ -146,7 +136,7 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
 	
     public void onResume(){
     	super.onResume();
-        if(returnValue == ACTIVITY_XML){
+        if(returnValue == ACTIVITY_IMPORT_MNEMOSYNE_XML){
             return;
         }
     	if(returnValue == ACTIVITY_DB){
@@ -232,9 +222,9 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
     		}
     		break;
     	
-    	case ACTIVITY_XML:
+    	case ACTIVITY_IMPORT_MNEMOSYNE_XML:
     		if(resultCode == Activity.RESULT_OK){
-                returnValue = ACTIVITY_XML;
+                returnValue = ACTIVITY_IMPORT_MNEMOSYNE_XML;
 
                 mProgressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_import), true);
                 tmpIntent = data;
@@ -272,9 +262,9 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
 
     		}
     		break;
-    	case ACTIVITY_EXPORT_XML:
+    	case ACTIVITY_EXPORT_MNEMOSYNE_XML:
     		if(resultCode == Activity.RESULT_OK){
-                returnValue = ACTIVITY_XML;
+                returnValue = ACTIVITY_EXPORT_MNEMOSYNE_XML;
 
                 mProgressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_export), true);
                 tmpIntent = data;
@@ -322,6 +312,7 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
 	}
 	
 	public boolean onOptionsItemSelected(MenuItem item) {
+        Intent myIntent;
 	    switch (item.getItemId()) {
 	    case R.id.openmenu_clear:
 	    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
@@ -336,13 +327,24 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
 			startActivity(refresh);
 			finish();
 			return true;
+
+        case R.id.openmenu_import_mnemosyne_xml:
+            myIntent = new Intent();
+            myIntent.setClass(this, FileBrowser.class);
+            myIntent.putExtra("default_root", dbPath);
+            myIntent.putExtra("file_extension", ".xml");
+            startActivityForResult(myIntent, ACTIVITY_IMPORT_MNEMOSYNE_XML);
+            return true;
+            
+
         
         case R.id.openmenu_export_xml:
-            Intent myIntent = new Intent();
+            myIntent = new Intent();
             myIntent.setClass(this, FileBrowser.class);
             myIntent.putExtra("default_root", dbPath);
             myIntent.putExtra("file_extension", ".db");
-            startActivityForResult(myIntent, ACTIVITY_EXPORT_XML);
+            startActivityForResult(myIntent, ACTIVITY_EXPORT_MNEMOSYNE_XML);
+            return true;
 
 	    }
 	    return false;
@@ -407,7 +409,7 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
     }
 
     private class RecentOpenList {
-        public static final int MAX_LIST_NUMBER = 5;
+        public static final int MAX_LIST_NUMBER = 7;
         final Context mContext;
         List<HashMap<String, String>> recentList;
         Integer i = Integer.valueOf(1);;

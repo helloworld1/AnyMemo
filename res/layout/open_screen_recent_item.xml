@@ -4,9 +4,10 @@
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
 	android:orientation="horizontal"
-	android:paddingTop="10dip"
-	android:paddingBottom="10dip"
-	android:paddingLeft="15dip"
+	android:paddingTop="5dip"
+	android:paddingBottom="5dip"
+	android:paddingLeft="1dip"
+	android:paddingRight="1dip"
 	>
     <ImageView
         android:id="@+id/open_screen_db_icon"

@@ -533,7 +533,7 @@ public abstract class MemoScreenBase extends Activity{
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface arg0, int arg1) {
                         currentItem.skip();
-                        dbHelper.updateItem(currentItem);
+                        dbHelper.updateItem(currentItem, false);
                         restartActivity();
                     }
                 })
@@ -565,9 +565,17 @@ public abstract class MemoScreenBase extends Activity{
             .setPositiveButton(getString(R.string.filter_text), new DialogInterface.OnClickListener(){
                 @Override
                 public void onClick(DialogInterface arg0, int arg1) {
-                    dbHelper.setRecentFilters(filterEdit.getText().toString());
                     activeFilter = filterEdit.getText().toString();
+                    if(!activeFilter.equals("")){
+                        dbHelper.setRecentFilters(filterEdit.getText().toString());
+                    }
                     restartActivity();
+                }
+            })
+            .setNeutralButton(getString(R.string.clear_filter_text), new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+                    deleteFilterRecentList();
                 }
             })
             .setNegativeButton(getString(R.string.cancel_text), null)
@@ -588,6 +596,23 @@ public abstract class MemoScreenBase extends Activity{
             .create()
             .show();
     }
+
+    protected void deleteFilterRecentList(){
+        new AlertDialog.Builder(this)
+            .setTitle(getString(R.string.warning_text))
+            .setMessage(getString(R.string.clear_filter_message))
+            .setPositiveButton(getString(R.string.ok_text), new DialogInterface.OnClickListener(){
+                public void onClick(DialogInterface arg0, int arg1){
+                    dbHelper.deleteFilters();
+                    activeFilter = "";
+                    restartActivity();
+                }
+            })
+            .setNegativeButton(getString(R.string.cancel_text), null)
+            .create()
+            .show();
+    }
+
 
 
 }

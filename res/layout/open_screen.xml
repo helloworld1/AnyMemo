@@ -12,13 +12,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:drawableLeft="@drawable/file_manager" />
-    <Button
-        android:id="@+id/open_screen_import"
-        android:text="@string/open_import_xml"
-        android:layout_width="300dip" 
-        android:layout_gravity="center"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/import_xml" />
         
     <TextView
         android:layout_width="fill_parent" 

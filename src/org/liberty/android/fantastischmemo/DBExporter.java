@@ -68,7 +68,7 @@ class DBExporter{
         }
         int count = 0;
         long timeOfStart = 0L;
-        String id, u, gr, e, ac_rp, rt_rp, lps, ac_rp_l, rt_rp_l, l_rp, n_rp, question,  answer;
+        String id, u, gr, e, ac_rp, rt_rp, lps, ac_rp_l, rt_rp_l, l_rp, n_rp, question, answer, category;
         // Now write the xml to the file
         for(Item item : itemList){
             // At the first item, we write all metadata
@@ -109,6 +109,7 @@ class DBExporter{
             // Replace the illegal symbols from the question and answer
             question = item.getQuestion();
             answer = item.getAnswer();
+            category = item.getCategory();
             question = question.replaceAll("<", "&lt;");
             question = question.replaceAll(">", "&gt;");
             question = question.replaceAll("&", "&amp;");
@@ -119,10 +120,22 @@ class DBExporter{
             answer = answer.replaceAll("&", "&amp;");
             answer = answer.replaceAll("'", "&apos;");
             answer = answer.replaceAll("\"", "&quot;");
+            category = category.replaceAll("<", "&lt;");
+            category = category.replaceAll(">", "&gt;");
+            category = category.replaceAll("&", "&amp;");
+            category = category.replaceAll("'", "&apos;");
+            category = category.replaceAll("\"", "&quot;");
 
 
             outxml.print("<item id=\"" + id + "\" u=\"" + u +"\" gr=\"" + gr +"\" e=\"" + e + "\" ac_rp=\"" + ac_rp + "\" rt_rp=\"" + rt_rp + "\" lps=\"" + lps + "\" ac_rp_l=\"" + ac_rp_l + "\" rt_rp_l=\"" + rt_rp_l + "\" l_rp=\"" + l_rp + "\" n_rp=\"" + n_rp + "\">\n");
-            outxml.print("<cat>" + dbName + "</cat>\n");
+
+            if(category.equals("")){
+                outxml.print("<cat>" + dbName + "</cat>\n");
+            }
+            else{
+                outxml.print("<cat>" + category + "</cat>\n");
+            }
+
             outxml.print("<Q>" + question + "</Q>\n");
             outxml.print("<A>" + answer + "</A>\n");
             outxml.print("</item>\n");

@@ -44,8 +44,19 @@
   			android:padding="3dip"/>
   <EditText
         android:id="@+id/entry_note"
-        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_width="0dip"
+        android:inputType="textMultiLine"
+        android:background="@android:drawable/editbox_background"/>
+  </TableRow>
+  <TableRow>
+  <TextView android:text="category"
+  			android:padding="3dip"/>
+  <EditText
+        android:id="@+id/entry_category"
+        android:layout_height="wrap_content"
+        android:layout_width="0dip"
+        android:inputType="textMultiLine"
         android:background="@android:drawable/editbox_background"/>
   </TableRow>
   <TableRow>

@@ -45,6 +45,7 @@ public final class Item implements Cloneable{
 	private String question;
 	private String answer;
 	private String note;
+    private String category;
     public final static String TAG = "org.liberty.android.fantastischmemo.Item";
 	
 	public Item(){
@@ -61,6 +62,7 @@ public final class Item implements Cloneable{
 		this.question = "";
 		this.answer = "";
 		this.note = "";
+		this.category = "";
 	}
 	public String getQuestion(){
 		return this.question;
@@ -86,6 +88,10 @@ public final class Item implements Cloneable{
 	public String getNote(){
 		return this.note;
 	}
+
+    public String getCategory(){
+        return this.category;
+    }
 	
 	public int getId(){
 		return this._id;
@@ -180,6 +186,10 @@ public final class Item implements Cloneable{
 			}
 			if(((String)me.getKey()) == "note"){
 				this.note = (String)hm.get("note");
+				
+			}
+			if(((String)me.getKey()) == "category"){
+				this.category = (String)hm.get("category");
 				
 			}
 			

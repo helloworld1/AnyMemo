@@ -467,6 +467,9 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
                     learnQueue.add(item);
                 }
                 else{
+                    /* Search out the maxRetId and maxNew Id
+                     * before queuing in order to achive consistence
+                     */
                     for(int j = 0; j < learnQueue.size(); j++){
                         Item qItem = learnQueue.get(j);
                         if(qItem.isScheduled()){
@@ -483,18 +486,15 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
                     }
                     item = dbHelper.getItemById(maxRetId + 1, 2, activeFilter); // Revision first
                     if(item != null){
-                        Log.v(TAG, "GET GET 1111: " + item.getId());
                         maxRetId = item.getId();
                     }
                     else{
                         item = dbHelper.getItemById(maxNewId + 1, 1, activeFilter); // Then learn new if no revision.
                         if(item != null){
-                            Log.v(TAG, "GET GET 2222: " + item.getId());
                             maxNewId = item.getId();
                         }
                     }
                     if(item != null){
-                        Log.v(TAG, "GET GET 3333: " + item.getId());
                         learnQueue.add(item);
                     }
                     else{
@@ -502,25 +502,6 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
                     }
                 }
             }
-            for (int i = 0; i < learnQueue.size(); i++){
-                    Log.v(TAG, "Queue " + i + " id " + learnQueue.get(i).getId());
-            }
-            Log.v(TAG, "maxRetId " + maxRetId);
-            Log.v(TAG, "maxNewId " + maxNewId);
-            //if(learnQueue.size() == 0 && !learnAhead){
-            //    /* Workaround for the db inconsistent by the filter function
-            //     * It refill the items from the beginning
-            //     */
-            //    scheduledItemCount = dbHelper.getScheduledCount();
-            //    newItemCount = dbHelper.getNewCount();
-            //    if((scheduledItemCount + newItemCount) != 0){
-            //        dbHelper.getListItems(-1, WINDOW_SIZE, learnQueue, 4, activeFilter);
-            //    }
-            //    if(learnQueue.size() != 0){
-            //        idMaxSeen = learnQueue.get(0).getId();
-            //    }
-
-            //}
             switch(learnQueue.size()){
             case 0: // No item in queue
                 return 2;
@@ -572,10 +553,10 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
                  */
                 boolean success = currentItem.processAnswer(grade, false) > 0 ? true : false;
                 if (success == true) {
-                    learnQueue.remove(0);
                     if(learnQueue.size() != 0){
-                        dbHelper.updateItem(currentItem);
+                        learnQueue.remove(0);
                     }
+                    dbHelper.updateItem(currentItem, false);
                     if(scheduled){
                         this.scheduledItemCount -= 1;
                     }
@@ -583,9 +564,11 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
                         this.newItemCount -= 1;
                     }
                 } else {
-                    learnQueue.remove(0);
+                    if(learnQueue.size() != 0){
+                        learnQueue.remove(0);
+                    }
                     learnQueue.add(currentItem);
-                    dbHelper.updateItem(currentItem);
+                    dbHelper.updateItem(currentItem, false);
                     if(!scheduled){
                         this.scheduledItemCount += 1;
                         this.newItemCount -= 1;

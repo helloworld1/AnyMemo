@@ -169,6 +169,11 @@
     <string name="filter_text">Filter</string>
     <string name="filter_failure_title">Filter failed</string>
     <string name="filter_failure_message">There is no matching for the this filter. So it is disabled.</string>
+    <string name="import_text">Import</string>
+    <string name="export_text">Export</string>
+    <string name="clear_filter_text">Clear</string>
+    <string name="clear_filter_message">Do you really want to delete the filters recent list?</string>
+    <string name="import_mnemosyne_xml_text">Import Mnemosyne XML</string>
     <string name="what_is_new_message">See Graphical guide of new features, please click version history button.\nVersion 3.6.0\n1. New Feature: Advanced filter in the learning and preview screen.</string>
     
 </resources>

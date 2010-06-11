@@ -253,7 +253,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		HashMap<String, String> hm = new HashMap<String, String>();
 		Cursor result;
 
-		String query = "SELECT learn_tbl._id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, question, answer, note FROM dict_tbl INNER JOIN learn_tbl ON dict_tbl._id=learn_tbl._id WHERE dict_tbl._id >= " + id + " ";
+		String query = "SELECT learn_tbl._id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, question, answer, note, category FROM dict_tbl INNER JOIN learn_tbl ON dict_tbl._id=learn_tbl._id WHERE dict_tbl._id >= " + id + " ";
 		if(flag == 1){
 			query += "AND acq_reps = 0 ";
 		}
@@ -261,7 +261,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			query += "AND round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval >= 0 AND acq_reps > 0 ";
 		}
         else if (flag == 3){
-		    query = "SELECT learn_tbl._id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, question, answer, note FROM dict_tbl INNER JOIN learn_tbl ON dict_tbl._id=learn_tbl._id WHERE round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval < 0 AND acq_reps > 0 ";
+		    query = "SELECT learn_tbl._id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, question, answer, note, category FROM dict_tbl INNER JOIN learn_tbl ON dict_tbl._id=learn_tbl._id WHERE round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval < 0 AND acq_reps > 0 ";
         }
         if(filter != null){
             if(Pattern.matches("#\\d+-\\d+", filter)){
@@ -284,8 +284,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 /* Replace * and ? to % and _ used in SQL */
                 filter = filter.replace("*", "%");
                 filter = filter.replace("?", "_");
+
+                /* First remove white spaces at beginning */
+                String realFilter = filter.replaceAll("^\\s+", "");
+
+                String control = filter.length() >= 2 ? filter.substring(0, 2) : "";
+
+                /* Also remove the control text */
+                realFilter = realFilter.replaceAll("^%\\w\\s+", "");
+                Log.v(TAG, "Control " + control);
+                Log.v(TAG, "Filter " + realFilter);
+
                 
-                query += "AND ((question LIKE '" + filter + "') OR (answer LIKE '" + filter + "') OR (note LIKE '" + filter + "') OR (category LIKE '" + filter +"')) ";
+                if(control.equals("%q")){
+                    query += "AND ((question LIKE '" + realFilter + "')) ";
+                }
+                else if(control.equals("%a")){
+                    query += "AND ((answer LIKE '" + realFilter + "')) ";
+                }
+                else if(control.equals("%n")){
+                    query += "AND ((note LIKE '" + realFilter + "')) ";
+                }
+                else if(control.equals("%c")){
+                    query += "AND ((category LIKE '" + realFilter + "')) ";
+                }
+                else{
+                    query += "AND ((question LIKE '" + realFilter + "') OR (answer LIKE '" + realFilter + "') OR (note LIKE '" + realFilter + "') OR (category LIKE '" + realFilter +"')) ";
+                }
             }
         }
 
@@ -312,6 +337,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				hm.put("answer", result.getString(result
 						.getColumnIndex("answer")));
 				hm.put("note", result.getString(result.getColumnIndex("note")));
+				hm.put("category", result.getString(result.getColumnIndex("category")));
 				hm.put("date_learn", result.getString(result
 						.getColumnIndex("date_learn")));
 				hm.put("interval", Integer.toString(result.getInt(result
@@ -362,17 +388,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // filter = null or filter = "": no filter
         // filter = #numA-#numB, items between numA and numB
 		HashMap<String, String> hm = new HashMap<String, String>();
-		String query = "SELECT learn_tbl._id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, question, answer, note FROM dict_tbl INNER JOIN learn_tbl ON dict_tbl._id=learn_tbl._id WHERE dict_tbl._id >= " + id + " ";
+		String query = "SELECT learn_tbl._id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, question, answer, note, category FROM dict_tbl INNER JOIN learn_tbl ON dict_tbl._id=learn_tbl._id WHERE dict_tbl._id >= " + id + " ";
 		if(flag == 1){
 			query += "AND acq_reps = 0 ";
-            Log.v(TAG, "FLAG 1 " + id);
 		}
 		else if(flag == 2){
 			query += "AND round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval >= 0 AND acq_reps > 0 ";
-            Log.v(TAG, "FLAG 2 " + id);
 		}
         else if (flag == 3){
-		    query = "SELECT learn_tbl._id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, question, answer, note FROM dict_tbl INNER JOIN learn_tbl ON dict_tbl._id=learn_tbl._id WHERE round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval < 0 AND acq_reps > 0 ";
+		    query = "SELECT learn_tbl._id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, question, answer, note, category FROM dict_tbl INNER JOIN learn_tbl ON dict_tbl._id=learn_tbl._id WHERE round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval < 0 AND acq_reps > 0 ";
         }
         if(filter != null){
             if(Pattern.matches("#\\d+-\\d+", filter)){
@@ -396,7 +420,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 filter = filter.replace("*", "%");
                 filter = filter.replace("?", "_");
                 
-                query += "AND ((question LIKE '" + filter + "') OR (answer LIKE '" + filter + "') OR (note LIKE '" + filter + "') OR (category LIKE '" + filter +"')) ";
+                /* First remove white spaces at beginning */
+                String realFilter = filter.replaceAll("^\\s+", "");
+
+                String control = filter.length() >= 2 ? filter.substring(0, 2) : "";
+
+                /* Also remove the control text */
+                realFilter = realFilter.replaceAll("^%\\w\\s+", "");
+                Log.v(TAG, "Control " + control);
+                Log.v(TAG, "Filter " + realFilter);
+
+                
+                if(control.equals("%q")){
+                    query += "AND ((question LIKE '" + realFilter + "')) ";
+                }
+                else if(control.equals("%a")){
+                    query += "AND ((answer LIKE '" + realFilter + "')) ";
+                }
+                else if(control.equals("%n")){
+                    query += "AND ((note LIKE '" + realFilter + "')) ";
+                }
+                else if(control.equals("%c")){
+                    query += "AND ((category LIKE '" + realFilter + "')) ";
+                }
+                else{
+                    query += "AND ((question LIKE '" + realFilter + "') OR (answer LIKE '" + realFilter + "') OR (note LIKE '" + realFilter + "') OR (category LIKE '" + realFilter +"')) ";
+                }
             }
         }
 
@@ -430,6 +479,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		hm.put("question", result.getString(result.getColumnIndex("question")));
 		hm.put("answer", result.getString(result.getColumnIndex("answer")));
 		hm.put("note", result.getString(result.getColumnIndex("note")));
+		hm.put("category", result.getString(result.getColumnIndex("category")));
 		
 		//querySelection = " _id = " + resultId;
 		//result = myDatabase.query(true, "learn_tbl", null, querySelection, null, null, null, null, "1");
@@ -454,21 +504,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return resultItem;
 	}
 	
-	public void updateItem(Item item){
+	public void updateItem(Item item, boolean updateQA){
 		// Only update the learn_tbl
 		try{
 			myDatabase.execSQL("UPDATE learn_tbl SET date_learn = ?, interval = ?, grade = ?, easiness = ?, acq_reps = ?, ret_reps = ?, lapses = ?, acq_reps_since_lapse = ?, ret_reps_since_lapse = ? WHERE _id = ?", item.getLearningData());
-
+            if(updateQA){
+                myDatabase.execSQL("UPDATE dict_tbl SET question = ?, answer = ?, note = ?, category = ? WHERE _id = ?", new String[]{item.getQuestion(), item.getAnswer(), item.getNote(), item.getCategory(), Integer.toString(item.getId())});
+            }
 		}
 		catch(Exception e){
 			Log.e("Query error in updateItem!", e.toString());
 			
 		}
 		
-	}
-	
-	public void updateQA(Item item){
-		myDatabase.execSQL("UPDATE dict_tbl SET question = ?, answer = ?, note = ? WHERE _id = ?", new String[]{item.getQuestion(), item.getAnswer(), item.getNote(), Integer.toString(item.getId())});
 	}
 	
 	public int getScheduledCount(){
@@ -550,8 +598,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         try{
             for(Item item : itemList){
                 item.setId(count);
-                updateItem(item);
-                updateQA(item);
+                updateItem(item, true);
                 count += 1;
             }
 			myDatabase.setTransactionSuccessful();
@@ -575,7 +622,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	}
 	
 	public void addOrReplaceItem(Item item){
-		this.myDatabase.execSQL("REPLACE INTO dict_tbl(_id, question, answer) VALUES(?, ?, ?)", new String[]{"" + item.getId(), item.getQuestion(), item.getAnswer()});
+		this.myDatabase.execSQL("REPLACE INTO dict_tbl(_id, question, answer, note, category) VALUES(?, ?, ?, ?, ?)", new String[]{"" + item.getId(), item.getQuestion(), item.getAnswer(), item.getNote(), item.getCategory()});
 		this.myDatabase.execSQL("REPLACE INTO learn_tbl(_id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse) VALUES (?, '2010-01-01', 0, 0, 2.5, 0, 0, 0, 0, 0)", new String[]{"" + item.getId()});
 		
 	}
@@ -588,8 +635,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             /* First inverse QA */
             for(Item item : itemList){
                 item.inverseQA();
-                updateItem(item);
-                updateQA(item);
+                updateItem(item, true);
             }
             /* Then inverse control table */
             HashMap<String, String> hm = getSettings();
@@ -687,5 +733,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         }
         return filterList;
+    }
+    
+    public void deleteFilters(){
+        HashMap<String, String> hm = new HashMap<String, String>();
+        hm.put("recent_filters_json", "");
+        setSettings(hm);
     }
 }

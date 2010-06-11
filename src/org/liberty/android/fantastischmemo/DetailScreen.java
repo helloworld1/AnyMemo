@@ -37,6 +37,7 @@ public class DetailScreen extends Activity implements OnClickListener{
 	private EditText questionEntry;
 	private EditText answerEntry;
 	private EditText noteEntry;
+	private EditText categoryEntry;
 	private EditText dateLearnEntry;
 	private EditText intervalEntry;
 	private EditText gradeEntry;
@@ -61,6 +62,7 @@ public class DetailScreen extends Activity implements OnClickListener{
         questionEntry = (EditText)findViewById(R.id.entry_question);
         answerEntry = (EditText)findViewById(R.id.entry_answer);
         noteEntry = (EditText)findViewById(R.id.entry_note);
+        categoryEntry = (EditText)findViewById(R.id.entry_category);
         dateLearnEntry = (EditText)findViewById(R.id.entry_date_learn);
         intervalEntry = (EditText)findViewById(R.id.entry_interval);
         gradeEntry = (EditText)findViewById(R.id.entry_grade);
@@ -114,6 +116,7 @@ public class DetailScreen extends Activity implements OnClickListener{
     	questionEntry.setText(currentItem.getQuestion());
     	answerEntry.setText(currentItem.getAnswer());
     	noteEntry.setText(currentItem.getNote());
+        categoryEntry.setText(currentItem.getCategory());
     	
     	String[] learnData = currentItem.getLearningData();
     	dateLearnEntry.setText(learnData[0]);
@@ -133,6 +136,7 @@ public class DetailScreen extends Activity implements OnClickListener{
     	hm.put("question", questionEntry.getText().toString());
     	hm.put("answer", answerEntry.getText().toString());
     	hm.put("note", noteEntry.getText().toString());
+    	hm.put("category", categoryEntry.getText().toString());
     	hm.put("date_learn", dateLearnEntry.getText().toString());
     	hm.put("interval", intervalEntry.getText().toString());
     	hm.put("grade", gradeEntry.getText().toString());
@@ -143,8 +147,7 @@ public class DetailScreen extends Activity implements OnClickListener{
     	hm.put("acq_reps_since_lapse", acqRepsSinceLapseEntry.getText().toString());
     	hm.put("ret_reps_since_lapse", retRepsSinceLapseEntry.getText().toString());
     	currentItem.setData(hm);
-    	dbHelper.updateItem(currentItem);
-    	dbHelper.updateQA(currentItem);
+    	dbHelper.updateItem(currentItem, true);
     }
     
     public void onDestroy(){
