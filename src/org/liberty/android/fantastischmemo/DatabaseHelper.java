@@ -365,9 +365,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		String query = "SELECT learn_tbl._id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, question, answer, note FROM dict_tbl INNER JOIN learn_tbl ON dict_tbl._id=learn_tbl._id WHERE dict_tbl._id >= " + id + " ";
 		if(flag == 1){
 			query += "AND acq_reps = 0 ";
+            Log.v(TAG, "FLAG 1 " + id);
 		}
 		else if(flag == 2){
 			query += "AND round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval >= 0 AND acq_reps > 0 ";
+            Log.v(TAG, "FLAG 2 " + id);
 		}
         else if (flag == 3){
 		    query = "SELECT learn_tbl._id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, question, answer, note FROM dict_tbl INNER JOIN learn_tbl ON dict_tbl._id=learn_tbl._id WHERE round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval < 0 AND acq_reps > 0 ";

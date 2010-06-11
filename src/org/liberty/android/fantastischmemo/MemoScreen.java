@@ -71,8 +71,8 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
     private int prevNewItemCount;
     /* How many words to learn at a time (rolling) */
 	private final int WINDOW_SIZE = 10;
-	private boolean queueEmpty;
-	private int idMaxSeen;
+	private int maxNewId;
+	private int maxRetId;
 	private int scheduledItemCount;
 	private int newItemCount;
 	private TTS questionTTS;
@@ -294,8 +294,8 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
 
         }
 		learnQueue = new ArrayList<Item>();
-		queueEmpty = true;
-		idMaxSeen = -1;
+        maxNewId = -1;
+        maxRetId = -1;
 		scheduledItemCount = dbHelper.getScheduledCount();
 		newItemCount = dbHelper.getNewCount();
 		loadSettings();
@@ -431,7 +431,20 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
                 feedResult = dbHelper.getListItems(-1, WINDOW_SIZE, learnQueue, 4, activeFilter);
             }
 			if(feedResult == true){
-				idMaxSeen = learnQueue.get(learnQueue.size() - 1).getId();
+                for(int i = 0; i < learnQueue.size(); i++){
+                    Item qItem = learnQueue.get(i);
+                    if(qItem.isScheduled()){
+                        if(maxRetId < qItem.getId()){
+                            maxRetId = qItem.getId();
+                        }
+                    }
+                    else{
+                        if(maxNewId < qItem.getId()){
+                            maxNewId = qItem.getId();
+                        }
+                    }
+
+                }
 				return 0;
 			}
 			else{
@@ -454,40 +467,66 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
                     learnQueue.add(item);
                 }
                 else{
-                    item = dbHelper.getItemById(idMaxSeen + 1, 2, activeFilter); // Revision first
-                    if(item == null){
-                        item = dbHelper.getItemById(idMaxSeen + 1, 1, activeFilter); // Then learn new if no revision.
+                    for(int j = 0; j < learnQueue.size(); j++){
+                        Item qItem = learnQueue.get(j);
+                        if(qItem.isScheduled()){
+                            if(maxRetId < qItem.getId()){
+                                maxRetId = qItem.getId();
+                            }
+                        }
+                        else{
+                            if(maxNewId < qItem.getId()){
+                                maxNewId = qItem.getId();
+                            }
+                        }
+
+                    }
+                    item = dbHelper.getItemById(maxRetId + 1, 2, activeFilter); // Revision first
+                    if(item != null){
+                        Log.v(TAG, "GET GET 1111: " + item.getId());
+                        maxRetId = item.getId();
+                    }
+                    else{
+                        item = dbHelper.getItemById(maxNewId + 1, 1, activeFilter); // Then learn new if no revision.
+                        if(item != null){
+                            Log.v(TAG, "GET GET 2222: " + item.getId());
+                            maxNewId = item.getId();
+                        }
                     }
                     if(item != null){
+                        Log.v(TAG, "GET GET 3333: " + item.getId());
                         learnQueue.add(item);
                     }
                     else{
                         break;
                     }
                 }
-                idMaxSeen = item.getId();
-                
             }
-            if(learnQueue.size() == 0 && !learnAhead){
-                /* Workaround for the db inconsistent by the filter function
-                 * It refill the items from the beginning
-                 */
-                scheduledItemCount = dbHelper.getScheduledCount();
-                newItemCount = dbHelper.getNewCount();
-                if((scheduledItemCount + newItemCount) != 0){
-                    dbHelper.getListItems(-1, WINDOW_SIZE, learnQueue, 4, activeFilter);
-                }
+            for (int i = 0; i < learnQueue.size(); i++){
+                    Log.v(TAG, "Queue " + i + " id " + learnQueue.get(i).getId());
+            }
+            Log.v(TAG, "maxRetId " + maxRetId);
+            Log.v(TAG, "maxNewId " + maxNewId);
+            //if(learnQueue.size() == 0 && !learnAhead){
+            //    /* Workaround for the db inconsistent by the filter function
+            //     * It refill the items from the beginning
+            //     */
+            //    scheduledItemCount = dbHelper.getScheduledCount();
+            //    newItemCount = dbHelper.getNewCount();
+            //    if((scheduledItemCount + newItemCount) != 0){
+            //        dbHelper.getListItems(-1, WINDOW_SIZE, learnQueue, 4, activeFilter);
+            //    }
+            //    if(learnQueue.size() != 0){
+            //        idMaxSeen = learnQueue.get(0).getId();
+            //    }
 
-            }
+            //}
             switch(learnQueue.size()){
             case 0: // No item in queue
-                queueEmpty = true;
                 return 2;
             case WINDOW_SIZE: // Queue full
-                queueEmpty = false;
                 return 0;
             default: // There are some items in the queue
-                queueEmpty = false;
                 return 1;
                     
             }
@@ -534,7 +573,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
                 boolean success = currentItem.processAnswer(grade, false) > 0 ? true : false;
                 if (success == true) {
                     learnQueue.remove(0);
-                    if(queueEmpty != true){
+                    if(learnQueue.size() != 0){
                         dbHelper.updateItem(currentItem);
                     }
                     if(scheduled){
@@ -687,7 +726,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
 
     @Override
     protected boolean fetchCurrentItem(){
-        if(queueEmpty == false){
+        if(learnQueue.size() != 0){
 			currentItem = learnQueue.get(0);
             /* Successfully fetch */
             return true;
