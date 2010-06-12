@@ -55,6 +55,61 @@ class DBExporter{
         }
     }
 
+    public void writeQATXT() throws Exception{
+        String fullpath = dbPath + "/" + dbName.replaceAll(".db", ".txt");
+        PrintWriter outtxt = new PrintWriter(new BufferedWriter(new FileWriter(fullpath)));
+        if(outtxt.checkError()){
+            throw new IOException("Can't open: " + fullpath);
+        }
+        List<Item> itemList = new LinkedList<Item>();
+        boolean result = dbHelper.getListItems(1, -1, itemList, 0, null);
+        if(result == false){
+            throw new IOException("Can't retrieve items for database: " + dbPath + "/" + dbName);
+        }
+        for(Item item : itemList){
+            outtxt.print("Q: " + item.getQuestion() + "\n");
+            outtxt.print("A: " + item.getAnswer() + "\n\n");
+        }
+        outtxt.close();
+        dbHelper.close();
+    }
+
+    public void writeTabTXT() throws Exception{
+        String fullpath = dbPath + "/" + dbName.replaceAll(".db", ".txt");
+        PrintWriter outtxt = new PrintWriter(new BufferedWriter(new FileWriter(fullpath)));
+        if(outtxt.checkError()){
+            throw new IOException("Can't open: " + fullpath);
+        }
+        List<Item> itemList = new LinkedList<Item>();
+        boolean result = dbHelper.getListItems(1, -1, itemList, 0, null);
+        if(result == false){
+            throw new IOException("Can't retrieve items for database: " + dbPath + "/" + dbName);
+        }
+        for(Item item : itemList){
+            outtxt.print(item.getQuestion() + "\t" + item.getAnswer() + "\t" + item.getCategory() + "\n");
+        }
+        outtxt.close();
+        dbHelper.close();
+    }
+
+    public void writeCSV() throws Exception{
+        String fullpath = dbPath + "/" + dbName.replaceAll(".db", ".csv");
+        PrintWriter outtxt = new PrintWriter(new BufferedWriter(new FileWriter(fullpath)));
+        if(outtxt.checkError()){
+            throw new IOException("Can't open: " + fullpath);
+        }
+        List<Item> itemList = new LinkedList<Item>();
+        boolean result = dbHelper.getListItems(1, -1, itemList, 0, null);
+        if(result == false){
+            throw new IOException("Can't retrieve items for database: " + dbPath + "/" + dbName);
+        }
+        for(Item item : itemList){
+            outtxt.print("\"" + item.getQuestion() + "\",\"" + item.getAnswer() + "\",\"" + item.getCategory() + "\"\n");
+        }
+        outtxt.close();
+        dbHelper.close();
+    }
+
     public void writeXML() throws Exception{
         String fullpath = dbPath + "/" + dbName.replaceAll(".db", ".xml");
         PrintWriter outxml = new PrintWriter(new BufferedWriter(new FileWriter(fullpath)));

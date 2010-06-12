@@ -77,6 +77,9 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
     private final int ACTIVITY_DB = 1;
     private final int ACTIVITY_IMPORT_MNEMOSYNE_XML = 2;
     private final int ACTIVITY_EXPORT_MNEMOSYNE_XML = 3;
+    private final int ACTIVITY_EXPORT_TABTXT = 4;
+    private final int ACTIVITY_EXPORT_QATXT = 5;
+    private final int ACTIVITY_EXPORT_CSV= 6;
 
 
 	private List<HashMap<String, String>> recentList;
@@ -211,19 +214,16 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
     }
     public void onActivityResult(int requestCode, int resultCode, Intent data){
     	super.onActivityResult(requestCode, resultCode, data);
-    	switch(requestCode){
-    	case ACTIVITY_DB:
-    		if(resultCode == Activity.RESULT_OK){
+        final int request = requestCode;
+        if(resultCode == Activity.RESULT_OK){
+    		if(requestCode == ACTIVITY_DB){
     			dbName = data.getStringExtra("org.liberty.android.fantastischmemo.dbName");
     			dbPath = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
     			dbPath += "/";
     			returnValue = ACTIVITY_DB;
     			
     		}
-    		break;
-    	
-    	case ACTIVITY_IMPORT_MNEMOSYNE_XML:
-    		if(resultCode == Activity.RESULT_OK){
+    		else if(requestCode == ACTIVITY_IMPORT_MNEMOSYNE_XML){
                 returnValue = ACTIVITY_IMPORT_MNEMOSYNE_XML;
 
                 mProgressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_import), true);
@@ -261,9 +261,7 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
                 convertThread.start();
 
     		}
-    		break;
-    	case ACTIVITY_EXPORT_MNEMOSYNE_XML:
-    		if(resultCode == Activity.RESULT_OK){
+            else if (requestCode == ACTIVITY_EXPORT_MNEMOSYNE_XML || requestCode == ACTIVITY_EXPORT_QATXT || requestCode == ACTIVITY_EXPORT_TABTXT || requestCode == ACTIVITY_EXPORT_CSV){
                 returnValue = ACTIVITY_EXPORT_MNEMOSYNE_XML;
 
                 mProgressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_export), true);
@@ -274,12 +272,26 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
                         String dbPath = tmpIntent.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
                         String dbName = tmpIntent.getStringExtra("org.liberty.android.fantastischmemo.dbName");
                         mAlert = new AlertDialog.Builder(mContext);
-                        mAlert.setPositiveButton( "OK", null );
+                        mAlert.setPositiveButton(getString(R.string.ok_text), null );
                         try{
                             DBExporter exporter = new DBExporter(mContext, dbPath, dbName);
-                            exporter.writeXML();
+                            if(request == ACTIVITY_EXPORT_MNEMOSYNE_XML){
+                                exporter.writeXML();
+                                mAlert.setMessage(getString(R.string.success_export)+ " " + dbPath + "/" + dbName.replaceAll(".db", ".xml"));
+                            }
+                            else if(request == ACTIVITY_EXPORT_QATXT){
+                                exporter.writeQATXT();
+                                mAlert.setMessage(getString(R.string.success_export)+ " " + dbPath + "/" + dbName.replaceAll(".db", ".txt"));
+                            }
+                            else if(request == ACTIVITY_EXPORT_TABTXT){
+                                exporter.writeTabTXT();
+                                mAlert.setMessage(getString(R.string.success_export)+ " " + dbPath + "/" + dbName.replaceAll(".db", ".txt"));
+                            }
+                            else if(request == ACTIVITY_EXPORT_CSV){
+                                exporter.writeCSV();
+                                mAlert.setMessage(getString(R.string.success_export)+ " " + dbPath + "/" + dbName.replaceAll(".db", ".csv"));
+                            }
                             mAlert.setTitle(getString(R.string.success));
-                            mAlert.setMessage(getString(R.string.success_export)+ " " + dbPath + "/" + dbName.replaceAll(".db", ".xml"));
                         }
                         catch(Exception e){
                             Log.e(TAG, "XML export error", e);
@@ -300,8 +312,6 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
 
             }
 
-    		
-    		
     	}
     }
     
@@ -336,8 +346,6 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
             startActivityForResult(myIntent, ACTIVITY_IMPORT_MNEMOSYNE_XML);
             return true;
             
-
-        
         case R.id.openmenu_export_xml:
             myIntent = new Intent();
             myIntent.setClass(this, FileBrowser.class);
@@ -346,6 +354,29 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
             startActivityForResult(myIntent, ACTIVITY_EXPORT_MNEMOSYNE_XML);
             return true;
 
+        case R.id.openmenu_export_tab_txt:
+            myIntent = new Intent();
+            myIntent.setClass(this, FileBrowser.class);
+            myIntent.putExtra("default_root", dbPath);
+            myIntent.putExtra("file_extension", ".db");
+            startActivityForResult(myIntent, ACTIVITY_EXPORT_TABTXT);
+            return true;
+
+        case R.id.openmenu_export_qa_txt:
+            myIntent = new Intent();
+            myIntent.setClass(this, FileBrowser.class);
+            myIntent.putExtra("default_root", dbPath);
+            myIntent.putExtra("file_extension", ".db");
+            startActivityForResult(myIntent, ACTIVITY_EXPORT_QATXT);
+            return true;
+
+        case R.id.openmenu_export_csv:
+            myIntent = new Intent();
+            myIntent.setClass(this, FileBrowser.class);
+            myIntent.putExtra("default_root", dbPath);
+            myIntent.putExtra("file_extension", ".db");
+            startActivityForResult(myIntent, ACTIVITY_EXPORT_CSV);
+            return true;
 	    }
 	    return false;
 	}
