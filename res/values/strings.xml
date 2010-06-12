@@ -148,13 +148,13 @@
     <string name="about_version">Version History</string>
     <string name="what_is_new">Changelog</string>
     <string name="website_main">http://anymemo.org</string>
-    <string name="website_json">http://anymemo.org/download/WordLists/json-databases.php</string>
-    <string name="website_download_head">http://anymemo.org/download/WordLists/download.php?wordlistname=DatabasesTable&amp;filename=</string>
-    <string name="website_help_main">http://anymemo.org/index.php?p=1_7_Guide</string>
-    <string name="website_version">http://anymemo.org/index.php?p=1_6_Version-History</string>
-    <string name="website_help_memo">http://anymemo.org/index.php?p=1_7_Guide#sec22</string>
-    <string name="website_help_edit">http://anymemo.org/index.php?p=1_7_Guide#sec3</string>
-    <string name="website_help_error_open">http://anymemo.org/index.php?p=1_11_FAQ#25</string>
+    <string name="website_json">http://anymemo.org/pages/json-databases.php</string>
+    <string name="website_download_head">http://anymemo.org/pages/download.php?wordlistname=DatabasesTable&amp;filename=</string>
+    <string name="website_help_main">http://anymemo.org/index.php?page=guide</string>
+    <string name="website_version">http://anymemo.org/index.php?page=version</string>
+    <string name="website_help_memo">http://anymemo.org/index.php?page=guide#sec22</string>
+    <string name="website_help_edit">http://anymemo.org/index.php?page=guide#sec3</string>
+    <string name="website_help_error_open">http://anymemo.org/index.php?page=faq#25</string>
     <string name="downloader_categories">Categories</string>
     <string name="downloader_databases">Databases</string>
     <string name="open_database_error_title">Error opening database</string>
