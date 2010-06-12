@@ -12,6 +12,9 @@
             <item
                 android:id="@+id/openmenu_import_mnemosyne_xml"
                 android:title="@string/import_mnemosyne_xml_text" />
+            <item
+                android:id="@+id/openmenu_import_tab_txt"
+                android:title="@string/import_tab_txt" />
         </menu>
     </item>
 

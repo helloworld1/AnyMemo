@@ -167,6 +167,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		}
 		
 	}
+
+    public void insertListItems(List<Item> itemList){
+		ListIterator<Item> li = itemList.listIterator();
+		myDatabase.beginTransaction();
+		try{
+			while(li.hasNext()){
+                addOrReplaceItem(li.next());
+            }
+			myDatabase.setTransactionSuccessful();
+        }
+        finally{
+			myDatabase.endTransaction();
+        }
+    }
 	
 	public boolean checkDatabase(){
         boolean checkDB = false;
@@ -623,7 +637,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	
 	public void addOrReplaceItem(Item item){
 		this.myDatabase.execSQL("REPLACE INTO dict_tbl(_id, question, answer, note, category) VALUES(?, ?, ?, ?, ?)", new String[]{"" + item.getId(), item.getQuestion(), item.getAnswer(), item.getNote(), item.getCategory()});
-		this.myDatabase.execSQL("REPLACE INTO learn_tbl(_id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse) VALUES (?, '2010-01-01', 0, 0, 2.5, 0, 0, 0, 0, 0)", new String[]{"" + item.getId()});
+		this.myDatabase.execSQL("REPLACE INTO learn_tbl(date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, _id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", item.getLearningData());
 		
 	}
 

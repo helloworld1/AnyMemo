@@ -25,7 +25,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
-import android.database.SQLException;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,6 +32,7 @@ import java.util.ListIterator;
 import java.util.Date;
 import java.util.TimeZone;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.text.SimpleDateFormat;
 
 
@@ -46,11 +46,9 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-import android.content.Context;
 import android.util.Log;
 
-public class XMLConverter extends org.xml.sax.helpers.DefaultHandler{
-	private Context mContext;
+public class MnemosyneXMLConverter extends org.xml.sax.helpers.DefaultHandler{
 	private URL mXMLUrl;
 	private SAXParserFactory spf;
 	private SAXParser sp;
@@ -59,18 +57,9 @@ public class XMLConverter extends org.xml.sax.helpers.DefaultHandler{
 	private String filePath;
     private long timeOfStart = 0L;
 	public Locator mLocator;
-	private List<String> questionList;
-	private List<String> answerList;
-	private List<String> categoryList;
-    private List<String> datelearnList;
-    private List<Integer> intervalList;
-    private List<Double> easinessList;
-    private List<Integer> gradeList;
-    private List<Integer> lapsesList;
-    private List<Integer> acrpList;
-    private List<Integer> rtrpList;
-    private List<Integer> arslList;
-    private List<Integer> rrslList;
+    private List<Item> itemList;
+    private Item currentItem;
+    private int count = 1;
 
 	
 	private boolean inItem = false;
@@ -82,27 +71,15 @@ public class XMLConverter extends org.xml.sax.helpers.DefaultHandler{
 	
 	private StringBuffer characterBuf;
 	private final long MILLSECS_PER_DAY = 24 * 60 * 60 * 1000;
-    private final String TAG = "org.liberty.android.fantastischmemo.XMLConverter";
+    private final String TAG = "org.liberty.android.fantastischmemo.MnemosyneXMLConverter";
 
 	
 	
-	public XMLConverter(Context context, String filePath, String fileName) throws MalformedURLException, SAXException, ParserConfigurationException, IOException{
-		mContext = context;
+	public MnemosyneXMLConverter(String filePath, String fileName) throws MalformedURLException, SAXException, ParserConfigurationException, IOException{
 		this.filePath = filePath;
 		this.fileName = fileName;
 		mXMLUrl = new URL("file:///" + filePath + "/" + fileName);
-		questionList = new LinkedList<String>();
-		answerList = new LinkedList<String>();
-		categoryList = new LinkedList<String>();
-        datelearnList = new LinkedList<String>();
-        intervalList = new LinkedList<Integer>();
-        easinessList = new LinkedList<Double>();
-        gradeList = new LinkedList<Integer>();
-        lapsesList = new LinkedList<Integer>();
-        acrpList = new LinkedList<Integer>();
-        rtrpList = new LinkedList<Integer>();
-        arslList = new LinkedList<Integer>();
-        rrslList = new LinkedList<Integer>();
+		itemList = new LinkedList<Item>();
 
 		spf = SAXParserFactory.newInstance();
 		sp = spf.newSAXParser();
@@ -114,36 +91,8 @@ public class XMLConverter extends org.xml.sax.helpers.DefaultHandler{
 		
 	}
 	
-	public void outputTabFile() throws IOException{
-		File file = new File(filePath + "/" + fileName);
-		file.createNewFile();
-		FileOutputStream fileOutStream = new FileOutputStream(file);
-		BufferedOutputStream buf = new BufferedOutputStream(fileOutStream, 8192);
-		OutputStreamWriter outStream = new OutputStreamWriter(buf);
-		
-		ListIterator<String> liq = questionList.listIterator();
-		ListIterator<String> lia = answerList.listIterator();
-		ListIterator<String> lic = categoryList.listIterator();
-		
-		while(liq.hasNext() && lia.hasNext()){
-			outStream.write("Q: " + liq.next() + "\n");
-			outStream.write("A: " + lia.next() + "\n");
-		}
-		outStream.close();
-		buf.close();
-		fileOutStream.close();
-		
-		
-	}
-	
-	public void outputDB() throws IOException, SQLException{
-        String name = fileName.replaceAll(".xml", ".db");
-        DatabaseHelper.createEmptyDatabase(filePath, name);
-        DatabaseHelper dbHelper = new DatabaseHelper(mContext, filePath, name);
-        Log.v(TAG, "Counts: " + questionList.size() + " " + easinessList.size() + " " + acrpList.size() + " " + arslList.size());
-		dbHelper.createDatabaseFromList(questionList, answerList, categoryList, datelearnList, intervalList, easinessList, gradeList, lapsesList, acrpList, rtrpList, arslList, rrslList);
-		dbHelper.close();
-		
+	public List<Item> outputList() {
+        return itemList;
 	}
 	
 	public void startElement(String namespaceURI, String localName, String qName, Attributes atts) throws SAXException{
@@ -165,8 +114,11 @@ public class XMLConverter extends org.xml.sax.helpers.DefaultHandler{
             }
 
         }
-
 		if(localName.equals("item")){
+            currentItem = new Item();
+            currentItem.setId(count);
+            HashMap<String, String> hm = new HashMap<String, String>();
+            count += 1;
 			this.inItem = true;
 			String idAttr = atts.getValue("id");
 			if(idAttr.endsWith("inv")){
@@ -174,17 +126,17 @@ public class XMLConverter extends org.xml.sax.helpers.DefaultHandler{
 			}
             String grAttr = atts.getValue("gr");
             if(grAttr != null){
-                gradeList.add(Integer.parseInt(grAttr));
+                hm.put("grade", grAttr);
             }
             String eAttr = atts.getValue("e");
             if(eAttr != null){
-                easinessList.add(Double.parseDouble(eAttr));
+                hm.put("easiness", eAttr);
             }
             String acrpAttr = atts.getValue("ac_rp");
             String uAttr = atts.getValue("u");
             String rtrpAttr = atts.getValue("rt_rp");
             if(rtrpAttr != null){
-                rtrpList.add(Integer.valueOf(rtrpAttr));
+                hm.put("ret_reps", rtrpAttr);
             }
             if(acrpAttr != null){
                 int acrp = Integer.parseInt(acrpAttr);
@@ -200,19 +152,19 @@ public class XMLConverter extends org.xml.sax.helpers.DefaultHandler{
                     acrp = Integer.valueOf(rtrpAttr) / 2 + 1;
                 }
 
-                acrpList.add(new Integer(acrp));
+                hm.put("acq_reps", "" + acrp);
             }
             String lpsAttr = atts.getValue("lps");
             if(lpsAttr != null){
-                lapsesList.add(Integer.valueOf(lpsAttr));
+                hm.put("lapses", lpsAttr);
             }
             String acqrplAttr = atts.getValue("ac_rp_l");
             if(acqrplAttr != null){
-                arslList.add(Integer.valueOf(acqrplAttr));
+                hm.put("acq_reps_since_lapse", acqrplAttr);
             }
             String rtrplAttr = atts.getValue("rt_rp_l");
             if(rtrplAttr != null){
-                rrslList.add(Integer.valueOf(rtrplAttr));
+                hm.put("ret_reps_since_lapse", rtrplAttr);
             }
             String lrpAttr = atts.getValue("l_rp");
             if(lrpAttr != null && timeOfStart != 0L){
@@ -220,15 +172,16 @@ public class XMLConverter extends org.xml.sax.helpers.DefaultHandler{
                 Date date = new Date(timeOfStart * 1000L + lrp * MILLSECS_PER_DAY);
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                 String strDate = formatter.format(date);
-                datelearnList.add(strDate);
+                hm.put("date_learn", strDate);
             }
 
             String nrpAttr = atts.getValue("n_rp");
             if(nrpAttr != null && lrpAttr != null){
                 long lrp = Math.round(Double.parseDouble(lrpAttr));
                 long nrp = Math.round(Double.parseDouble(nrpAttr));
-                intervalList.add(new Integer((int)(nrp - lrp)));
+                hm.put("interval", "" + (nrp - lrp));
             }
+            currentItem.setData(hm);
 		}
 		characterBuf = new StringBuffer();
 		if(localName.equals("cat")){
@@ -247,17 +200,18 @@ public class XMLConverter extends org.xml.sax.helpers.DefaultHandler{
 		if(localName.equals("item")){
 			this.inItem = false;
 			this.isInv = false;
+            itemList.add(currentItem);
 		}
 		if(localName.equals("cat")){
-			categoryList.add(characterBuf.toString());
+            currentItem.setCategory(characterBuf.toString());
 			this.inCategory = false;
 		}
 		if(localName.equals("Q")|| localName.equals("Question")){
-			questionList.add(characterBuf.toString());
+            currentItem.setQuestion(characterBuf.toString());
 			this.inQuestion = false;
 		}
 		if(localName.equals("A")|| localName.equals("Answer")){
-			answerList.add(characterBuf.toString());
+            currentItem.setAnswer(characterBuf.toString());
 			this.inAnser = false;
 		}
 		

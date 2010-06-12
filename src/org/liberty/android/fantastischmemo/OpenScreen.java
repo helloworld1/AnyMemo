@@ -80,6 +80,9 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
     private final int ACTIVITY_EXPORT_TABTXT = 4;
     private final int ACTIVITY_EXPORT_QATXT = 5;
     private final int ACTIVITY_EXPORT_CSV= 6;
+    private final int ACTIVITY_IMPORT_TABTXT = 7;
+    private final int ACTIVITY_IMPORT_QATXT = 8;
+    private final int ACTIVITY_IMPORT_CSV= 9;
 
 
 	private List<HashMap<String, String>> recentList;
@@ -223,7 +226,7 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
     			returnValue = ACTIVITY_DB;
     			
     		}
-    		else if(requestCode == ACTIVITY_IMPORT_MNEMOSYNE_XML){
+    		else if(requestCode == ACTIVITY_IMPORT_MNEMOSYNE_XML || requestCode == ACTIVITY_IMPORT_TABTXT || requestCode == ACTIVITY_IMPORT_QATXT){
                 returnValue = ACTIVITY_IMPORT_MNEMOSYNE_XML;
 
                 mProgressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_import), true);
@@ -231,23 +234,29 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
                 Thread convertThread = new Thread(){
                     @Override
                     public void run(){
-                        XMLConverter conv = null;
+                        DBImporter importer = null;
                         mAlert = new AlertDialog.Builder(mContext);
                         mAlert.setPositiveButton( "OK", null );
-                        String xmlPath = tmpIntent.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
-                        String xmlName = tmpIntent.getStringExtra("org.liberty.android.fantastischmemo.dbName");
+                        String filePath = tmpIntent.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
+                        String fileName = tmpIntent.getStringExtra("org.liberty.android.fantastischmemo.dbName");
                         try{
-                            conv = new XMLConverter(mContext, xmlPath, xmlName);
-                            conv.outputDB();
+                            importer = new DBImporter(mContext, filePath, fileName);
+                            if(request == ACTIVITY_IMPORT_MNEMOSYNE_XML){
+                                importer.ImportMnemosyneXML();
+                                mAlert.setMessage(getString(R.string.success_import)+ " " + filePath + "/" + fileName.replaceAll(".xml", ".db"));
+                            }
+                            else if(request == ACTIVITY_IMPORT_TABTXT){
+                                mAlert.setMessage(getString(R.string.success_import)+ " " + filePath + "/" + fileName.replaceAll(".txt", ".db"));
+                                importer.ImportTabTXT();
+                            }
                             mAlert.setTitle(getString(R.string.success));
-                            mAlert.setMessage(getString(R.string.success_import)+ " " + xmlPath + "/" + xmlName.replaceAll(".xml", ".db"));
                             
                             //conv.outputTabFile();
                         }
                         catch(Exception e){
                             Log.e("XMLError",e.toString());
                             mAlert.setTitle(getString(R.string.fail));
-                            mAlert.setMessage(getString(R.string.fail_import) + " " + xmlPath + "/" + xmlName + " Exception: " + e.toString());
+                            mAlert.setMessage(getString(R.string.fail_import) + " " + filePath + "/" + fileName + " Exception: " + e.toString());
                         }
                         mHandler.post(new Runnable(){
                             @Override
@@ -345,6 +354,15 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
             myIntent.putExtra("file_extension", ".xml");
             startActivityForResult(myIntent, ACTIVITY_IMPORT_MNEMOSYNE_XML);
             return true;
+
+        case R.id.openmenu_import_tab_txt:
+            myIntent = new Intent();
+            myIntent.setClass(this, FileBrowser.class);
+            myIntent.putExtra("default_root", dbPath);
+            myIntent.putExtra("file_extension", ".txt");
+            startActivityForResult(myIntent, ACTIVITY_IMPORT_TABTXT);
+            return true;
+
             
         case R.id.openmenu_export_xml:
             myIntent = new Intent();

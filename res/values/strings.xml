@@ -124,14 +124,14 @@
     <string name="loading_please_wait">Please Wait...</string>
     <string name="loading_recent_list">Loading Recent List...</string>
     <string name="loading_database">Loading Database...</string>
-    <string name="loading_import">Importing XML...\n It should take a while. The speed is about 150 cards per second on a Tmobile G1.</string>
+    <string name="loading_import">Importing ...\n It may take a long while.</string>
     <string name="success">Success</string>
     <string name="fail">Failed</string>
     <string name="success_import">The XML is successfully converted and stored as</string>
     <string name="fail_import">Fail to convert </string>
     <string name="success_export">Successfully export to </string>
     <string name="fail_export">Fail to export </string>
-    <string name="loading_export">Exporting to XML...\n It may take a long while.</string>
+    <string name="loading_export">Exporting...\n It may take a long while.</string>
     <string name="loading_save">Saving changes...</string>
     <string name="loading_connect_net">Refreshing list from internet...\nPress back key to cancel.</string>
     <string name="loading_downloading">Downloading... It may take a while.</string>

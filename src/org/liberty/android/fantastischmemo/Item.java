@@ -67,10 +67,19 @@ public final class Item implements Cloneable{
 	public String getQuestion(){
 		return this.question;
 	}
+
+    public void setQuestion(String q){
+        this.question = q;
+    }
 	
 	public String getAnswer(){
 		return this.answer;
 	}
+
+    public void setAnswer(String a){
+        this.answer = a;
+    }
+
     
     public int getInterval(){
         return this.interval;
@@ -89,8 +98,16 @@ public final class Item implements Cloneable{
 		return this.note;
 	}
 
+    public void setNote(String n){
+        this.note = n;
+    }
+
     public String getCategory(){
         return this.category;
+    }
+
+    public void setCategory(String c){
+        this.category = c;
     }
 	
 	public int getId(){
@@ -174,11 +191,9 @@ public final class Item implements Cloneable{
 			}
 			if(((String)me.getKey()) == "ret_reps_since_lapse"){
 				this.ret_reps_since_lapse = Integer.parseInt(hm.get("ret_reps_since_lapse")); 
-				
 			}
 			if(((String)me.getKey()) == "question"){
 				this.question = hm.get("question");
-				
 			}
 			if(((String)me.getKey()) == "answer"){
 				this.answer = hm.get("answer");
