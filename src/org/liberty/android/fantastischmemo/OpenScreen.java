@@ -83,6 +83,7 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
     private final int ACTIVITY_IMPORT_TABTXT = 7;
     private final int ACTIVITY_IMPORT_QATXT = 8;
     private final int ACTIVITY_IMPORT_CSV= 9;
+    private final int ACTIVITY_IMPORT_SUPERMEMO_XML = 10;
 
 
 	private List<HashMap<String, String>> recentList;
@@ -226,8 +227,8 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
     			returnValue = ACTIVITY_DB;
     			
     		}
-    		else if(requestCode == ACTIVITY_IMPORT_MNEMOSYNE_XML || requestCode == ACTIVITY_IMPORT_TABTXT || requestCode == ACTIVITY_IMPORT_QATXT){
-                returnValue = ACTIVITY_IMPORT_MNEMOSYNE_XML;
+    		else if(requestCode == ACTIVITY_IMPORT_MNEMOSYNE_XML || requestCode == ACTIVITY_IMPORT_TABTXT || requestCode == ACTIVITY_IMPORT_QATXT || requestCode == ACTIVITY_IMPORT_QATXT || requestCode ==ACTIVITY_IMPORT_SUPERMEMO_XML){
+                returnValue = ACTIVITY_IMPORT_SUPERMEMO_XML;
 
                 mProgressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_import), true);
                 tmpIntent = data;
@@ -249,12 +250,20 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
                                 mAlert.setMessage(getString(R.string.success_import)+ " " + filePath + "/" + fileName.replaceAll(".txt", ".db"));
                                 importer.ImportTabTXT();
                             }
+                            else if(request == ACTIVITY_IMPORT_QATXT){
+                                mAlert.setMessage(getString(R.string.success_import)+ " " + filePath + "/" + fileName.replaceAll(".txt", ".db"));
+                                importer.ImportQATXT();
+                            }
+                            else if(request == ACTIVITY_IMPORT_SUPERMEMO_XML){
+                                importer.ImportSupermemoXML();
+                                mAlert.setMessage(getString(R.string.success_import)+ " " + filePath + "/" + fileName.replaceAll(".xml", ".db"));
+                            }
+
                             mAlert.setTitle(getString(R.string.success));
                             
-                            //conv.outputTabFile();
                         }
                         catch(Exception e){
-                            Log.e("XMLError",e.toString());
+                            Log.e(TAG, "Import error", e);
                             mAlert.setTitle(getString(R.string.fail));
                             mAlert.setMessage(getString(R.string.fail_import) + " " + filePath + "/" + fileName + " Exception: " + e.toString());
                         }
@@ -394,6 +403,22 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
             myIntent.putExtra("default_root", dbPath);
             myIntent.putExtra("file_extension", ".db");
             startActivityForResult(myIntent, ACTIVITY_EXPORT_CSV);
+            return true;
+
+        case R.id.openmenu_import_qa_txt:
+            myIntent = new Intent();
+            myIntent.setClass(this, FileBrowser.class);
+            myIntent.putExtra("default_root", dbPath);
+            myIntent.putExtra("file_extension", ".txt");
+            startActivityForResult(myIntent, ACTIVITY_IMPORT_QATXT);
+            return true;
+
+        case R.id.openmenu_import_supermemo_xml:
+            myIntent = new Intent();
+            myIntent.setClass(this, FileBrowser.class);
+            myIntent.putExtra("default_root", dbPath);
+            myIntent.putExtra("file_extension", ".xml");
+            startActivityForResult(myIntent, ACTIVITY_IMPORT_SUPERMEMO_XML);
             return true;
 	    }
 	    return false;

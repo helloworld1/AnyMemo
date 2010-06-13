@@ -61,14 +61,6 @@ public class MnemosyneXMLConverter extends org.xml.sax.helpers.DefaultHandler{
     private Item currentItem;
     private int count = 1;
 
-	
-	private boolean inItem = false;
-	private boolean inQuestion = false;
-	private boolean inAnser = false;
-	private boolean inCategory = false;
-	private boolean isInv = false;
-	private boolean isReadCharacters = false;
-	
 	private StringBuffer characterBuf;
 	private final long MILLSECS_PER_DAY = 24 * 60 * 60 * 1000;
     private final String TAG = "org.liberty.android.fantastischmemo.MnemosyneXMLConverter";
@@ -119,11 +111,7 @@ public class MnemosyneXMLConverter extends org.xml.sax.helpers.DefaultHandler{
             currentItem.setId(count);
             HashMap<String, String> hm = new HashMap<String, String>();
             count += 1;
-			this.inItem = true;
 			String idAttr = atts.getValue("id");
-			if(idAttr.endsWith("inv")){
-				this.isInv = true;
-			}
             String grAttr = atts.getValue("gr");
             if(grAttr != null){
                 hm.put("grade", grAttr);
@@ -184,35 +172,20 @@ public class MnemosyneXMLConverter extends org.xml.sax.helpers.DefaultHandler{
             currentItem.setData(hm);
 		}
 		characterBuf = new StringBuffer();
-		if(localName.equals("cat")){
-			this.inCategory = true;
-		}
-		if(localName.equals("Q") || localName.equals("Question")){
-			this.inQuestion = true;
-		}
-		if(localName.equals("A") || localName.equals("Answer")){
-			this.inAnser = true;
-		}
-		
 	}
 	
 	public void endElement(String namespaceURI, String localName, String qName) throws SAXException{
 		if(localName.equals("item")){
-			this.inItem = false;
-			this.isInv = false;
             itemList.add(currentItem);
 		}
 		if(localName.equals("cat")){
             currentItem.setCategory(characterBuf.toString());
-			this.inCategory = false;
 		}
 		if(localName.equals("Q")|| localName.equals("Question")){
             currentItem.setQuestion(characterBuf.toString());
-			this.inQuestion = false;
 		}
 		if(localName.equals("A")|| localName.equals("Answer")){
             currentItem.setAnswer(characterBuf.toString());
-			this.inAnser = false;
 		}
 		
 	}

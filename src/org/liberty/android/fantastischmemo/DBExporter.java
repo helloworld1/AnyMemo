@@ -86,7 +86,7 @@ class DBExporter{
             throw new IOException("Can't retrieve items for database: " + dbPath + "/" + dbName);
         }
         for(Item item : itemList){
-            outtxt.print(item.getQuestion() + "\t" + item.getAnswer() + "\t" + item.getCategory() + "\n");
+            outtxt.print(item.getQuestion().replace("\n", "<br />") + "\t" + item.getAnswer().replace("\n", "<br />") + "\t" + item.getCategory().replace("\n", " ") + "\n");
         }
         outtxt.close();
         dbHelper.close();
@@ -104,7 +104,7 @@ class DBExporter{
             throw new IOException("Can't retrieve items for database: " + dbPath + "/" + dbName);
         }
         for(Item item : itemList){
-            outtxt.print("\"" + item.getQuestion() + "\",\"" + item.getAnswer() + "\",\"" + item.getCategory() + "\"\n");
+            outtxt.print("\"" + item.getQuestion().replace("\n", "<br />") + "\",\"" + item.getAnswer().replace("\n", "<br />") + "\",\"" + item.getCategory().replace("\n", " ") + "\"\n");
         }
         outtxt.close();
         dbHelper.close();
