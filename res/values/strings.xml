@@ -181,6 +181,6 @@
     <string name="import_tab_txt">Import Tab-separated TXT</string>
     <string name="import_csv">Import CSV</string>
     <string name="import_supermemo_xml_text">Import SuperMemo PPC XML</string>
-    <string name="what_is_new_message">See Graphical guide of new features, please click version history button.\nVersion 4.0.0\n1. New Feature: Advanced filter for the cards. Please read user guide to get how to use.\n2. New Feature: Import SuperMemo PPC XML with learning progress, Tab TXT and QA Text. \n3. New Feature: Export Tab Txt, QA Txt, CSV.\n4. Enhance: Improve the open screens interface\n5. Enhance: Slightly faster when learning cards.\n6. Enhance: Add category editing in detail screen.\n7. Bug fix: Rewrite the learning process to fix the database inconsistance introduced by user editing.</string>
+    <string name="what_is_new_message">See Graphical guide of new features, please click version history button.\nVersion 4.0.0\n1. New Feature: Advanced filter for the cards. Please read user guide "Filters and Categories" in our website. It is a very useful function if used properly.\n2. New Feature: Import SuperMemo PPC XML with learning progress, Tab TXT and QA Text. \n3. New Feature: Export Tab Txt, QA Txt, CSV.\n4. Enhance: Improve the open screens interface\n5. Enhance: Slightly faster when learning cards.\n6. Enhance: Add category editing in detail screen.\n7. Bug fix: Rewrite the learning process to fix the database inconsistance introduced by user editing.</string>
     
 </resources>
