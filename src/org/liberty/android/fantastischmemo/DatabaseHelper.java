@@ -393,7 +393,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 	}
 	
-	public Item getItemById(int id, int flag, String filter){
+	public Item getItemById(int id, int flag, boolean forward, String filter){
 		// These function are related to read db operation
 		// flag = 0 means no condition
 		// flag = 1 means new items, the items user have never seen
@@ -402,7 +402,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // filter = null or filter = "": no filter
         // filter = #numA-#numB, items between numA and numB
 		HashMap<String, String> hm = new HashMap<String, String>();
-		String query = "SELECT learn_tbl._id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, question, answer, note, category FROM dict_tbl INNER JOIN learn_tbl ON dict_tbl._id=learn_tbl._id WHERE dict_tbl._id >= " + id + " ";
+		String query = "SELECT learn_tbl._id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, question, answer, note, category FROM dict_tbl INNER JOIN learn_tbl ON dict_tbl._id=learn_tbl._id WHERE dict_tbl._id " + (forward ? ">=" : "<=") +  id + " ";
 		if(flag == 1){
 			query += "AND acq_reps = 0 ";
 		}
@@ -465,6 +465,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         if(flag == 3){
             query += "ORDER BY RANDOM() ";
+        }
+        else{
+            query += "ORDER BY learn_tbl._id " + (forward ? "ASC " : "DESC ");
         }
         query += "LIMIT 1";
 

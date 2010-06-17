@@ -463,7 +463,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
             for(int i = learnQueue.size(); i < WINDOW_SIZE; i++){
                 if(learnAhead){
                     /* Flag = 3 for randomly choose item from future */
-                    item = dbHelper.getItemById(0, 3, activeFilter);
+                    item = dbHelper.getItemById(0, 3, true, activeFilter);
                     learnQueue.add(item);
                 }
                 else{
@@ -484,12 +484,12 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
                         }
 
                     }
-                    item = dbHelper.getItemById(maxRetId + 1, 2, activeFilter); // Revision first
+                    item = dbHelper.getItemById(maxRetId + 1, 2, true, activeFilter); // Revision first
                     if(item != null){
                         maxRetId = item.getId();
                     }
                     else{
-                        item = dbHelper.getItemById(maxNewId + 1, 1, activeFilter); // Then learn new if no revision.
+                        item = dbHelper.getItemById(maxNewId + 1, 1, true, activeFilter); // Then learn new if no revision.
                         if(item != null){
                             maxNewId = item.getId();
                         }

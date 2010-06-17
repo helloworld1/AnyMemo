@@ -188,7 +188,7 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
                 currentId = maxId;
             }
 
-            currentItem = dbHelper.getItemById(currentId, 0, activeFilter);
+            currentItem = dbHelper.getItemById(currentId, 0, true, activeFilter);
             /* Re-fetch the id in case that the item with id 1 is 
              * deleted.
              */
@@ -367,19 +367,14 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
 
     private void getNextItem(){
         if(totalItem > 0){
-            for(int i = 0; i < maxId; i++){
-
-                currentId = currentId % maxId + 1;
-                currentItem = dbHelper.getItemById(currentId, 0, activeFilter);
-                if(currentItem == null){
-                    continue;
-                }
-                if(currentItem.getId() == currentId){
-                    break;
-                }
+            currentId += 1;
+            currentItem = dbHelper.getItemById(currentId, 0, true, activeFilter);
+            if(currentItem == null){
+                currentItem = dbHelper.getItemById(0, 0, true, activeFilter);
             }
         }
         if(currentItem != null){
+            currentId = currentItem.getId();
             setTitle(getString(R.string.stat_total) + totalItem);
             updateMemoScreen();
         }
@@ -391,22 +386,16 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
 
     private void getPreviousItem(){
         if(totalItem > 0){
-            for(int i = 0; i < maxId; i++){
-
-                currentId = (currentId - 1) % maxId;
-                if(currentId < 1){
-                    currentId = maxId;
-                }
-                currentItem = dbHelper.getItemById(currentId, 0, activeFilter);
-                if(currentItem == null){
-                    continue;
-                }
-                if(currentItem.getId() == currentId){
-                    break;
-                }
+            currentId -= 1;
+            currentItem = dbHelper.getItemById(currentId, 0, false, activeFilter);
+            if(currentItem == null){
+                currentItem = dbHelper.getItemById(maxId, 0, false, activeFilter);
             }
         }
+
+
         if(currentItem != null){
+            currentId = currentItem.getId();
             setTitle(getString(R.string.stat_total) + totalItem);
             updateMemoScreen();
         }
@@ -464,7 +453,7 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
             try{
                 intNum = Integer.parseInt(num);
                 if(intNum > 0 && intNum <= maxId){
-                    currentItem = dbHelper.getItemById(intNum, 0, activeFilter);
+                    currentItem = dbHelper.getItemById(intNum, 0, true, activeFilter);
                     if(currentItem != null){
                         currentId = intNum;
                         prepare();
@@ -482,7 +471,7 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
             text = text.replace('?', '_');
             int resId = dbHelper.searchItem(currentItem.getId(), text, forward);
             if(resId > 0){
-                currentItem = dbHelper.getItemById(resId, 0, activeFilter);
+                currentItem = dbHelper.getItemById(resId, 0, true, activeFilter);
                 currentId = currentItem.getId();
                 prepare();
             }
