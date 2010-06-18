@@ -649,6 +649,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
 			    btn.setVisibility(View.VISIBLE);
             }
             if(btnStyle.equals(btnStyleList[1])){
+                /* Mnemosyne, one line button */
                 /* Do we still keep the 0 button? */
                 //btns[0].setVisibility(View.GONE);
                 String[] btnsText = {getString(R.string.memo_btn0_brief_text),getString(R.string.memo_btn1_brief_text),getString(R.string.memo_btn2_brief_text),getString(R.string.memo_btn3_brief_text),getString(R.string.memo_btn4_brief_text),getString(R.string.memo_btn5_brief_text)};
@@ -657,11 +658,18 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
                 }
             }
             else if(btnStyle.equals(btnStyleList[2])){
-                btns[0].setVisibility(View.GONE);
+                /* Anki, no grade 1 and 2 */
+                btns[1].setVisibility(View.GONE);
                 btns[2].setVisibility(View.GONE);
                 String[] btnsText = {getString(R.string.memo_btn0_anki_text),getString(R.string.memo_btn1_anki_text),getString(R.string.memo_btn2_anki_text),getString(R.string.memo_btn3_anki_text),getString(R.string.memo_btn4_anki_text),getString(R.string.memo_btn5_anki_text)};
                 for(int i = 0; i < btns.length; i++){
                     btns[i].setText(btnsText[i]);
+                    if(!learnAhead){
+                        btns[i].setText(btnsText[i] + "\n+" + currentItem.processAnswer(i, true));
+                    }
+                    else{
+                        btns[i].setText(btnsText[i]);
+                    }
                 }
             }
             else{
@@ -689,60 +697,37 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
     protected void createButtons(){
         /* First load the settings */
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        /* Dynamically create button depending on the button settings
-         * One Line or Two Lines for now.
-         * The buttons are dynamically created.
-         */
-        RelativeLayout layout = (RelativeLayout)findViewById(R.id.memo_screen_button_layout);
-        int id = 0;
-        /* Make up an id using this base */
-        int base = 0x21212;
-        Display display = ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        int width = display.getWidth(); 
         String[] btnStyleList = getResources().getStringArray(R.array.button_style_list);
-        if(!btnStyle.equals(btnStyleList[0])){
-            for(int i = 0; i < 6; i++){
-                int w;
-                /* Anki style button has only 4 buttons */
-                if(btnStyle.equals(btnStyleList[2])){
-                    w = width / 4;
-                }
-                else{
-                    w = width / 6;
-                }
-                RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(
-                        w,
-                        RelativeLayout.LayoutParams.WRAP_CONTENT
-                ); 
-                if(i != 0){
-                    p.addRule(RelativeLayout.RIGHT_OF, id);
-                }
-                btns[i] = new Button(this);
-                btns[i].setId(base + i);
-                layout.addView(btns[i], p);
-                id = btns[i].getId();
-            }
+        btnStyle = settings.getString("button_style", btnStyleList[0]);
+        if(btnStyle.equals(btnStyleList[1])){
+            LinearLayout root = (LinearLayout)findViewById(R.id.memo_screen_root);
+            LayoutInflater.from(this).inflate(R.layout.grade_buttons_mnemosyne, root);
+            btns[0] = (Button)findViewById(R.id.grade_btn_mnemosyne_0);
+            btns[1] = (Button)findViewById(R.id.grade_btn_mnemosyne_1);
+            btns[2] = (Button)findViewById(R.id.grade_btn_mnemosyne_2);
+            btns[3] = (Button)findViewById(R.id.grade_btn_mnemosyne_3);
+            btns[4] = (Button)findViewById(R.id.grade_btn_mnemosyne_4);
+            btns[5] = (Button)findViewById(R.id.grade_btn_mnemosyne_5);
+        }
+        else if(btnStyle.equals(btnStyleList[2])){
+            LinearLayout root = (LinearLayout)findViewById(R.id.memo_screen_root);
+            LayoutInflater.from(this).inflate(R.layout.grade_buttons_anki, root);
+            btns[0] = (Button)findViewById(R.id.grade_btn_anki_0);
+            btns[1] = (Button)findViewById(R.id.grade_btn_anki_1);
+            btns[2] = (Button)findViewById(R.id.grade_btn_anki_2);
+            btns[3] = (Button)findViewById(R.id.grade_btn_anki_3);
+            btns[4] = (Button)findViewById(R.id.grade_btn_anki_4);
+            btns[5] = (Button)findViewById(R.id.grade_btn_anki_5);
         }
         else{
-            for(int i = 0; i < 6; i++){
-                RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(
-                        width / 3,
-                        RelativeLayout.LayoutParams.WRAP_CONTENT
-                ); 
-                if(i != 0 && i != 3){
-                    p.addRule(RelativeLayout.RIGHT_OF, id);
-                }
-                else if(i == 3){
-                    p.addRule(RelativeLayout.BELOW, base);
-                }
-                if(i > 3){
-                    p.addRule(RelativeLayout.ALIGN_TOP, base + 3);
-                }
-                btns[i] = new Button(this);
-                btns[i].setId(base + i);
-                layout.addView(btns[i], p);
-                id = btns[i].getId();
-            }
+            LinearLayout root = (LinearLayout)findViewById(R.id.memo_screen_root);
+            LayoutInflater.from(this).inflate(R.layout.grade_buttons_anymemo, root);
+            btns[0] = (Button)findViewById(R.id.grade_btn_anymemo_0);
+            btns[1] = (Button)findViewById(R.id.grade_btn_anymemo_1);
+            btns[2] = (Button)findViewById(R.id.grade_btn_anymemo_2);
+            btns[3] = (Button)findViewById(R.id.grade_btn_anymemo_3);
+            btns[4] = (Button)findViewById(R.id.grade_btn_anymemo_4);
+            btns[5] = (Button)findViewById(R.id.grade_btn_anymemo_5);
         }
 
     }

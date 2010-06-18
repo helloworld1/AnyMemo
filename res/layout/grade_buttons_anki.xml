@@ -1,0 +1,44 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/grade_buttons_anki"
+	android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_gravity="bottom">
+    <Button 
+        android:id="@+id/grade_btn_anki_0" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        android:layout_weight="1"
+        android:layout_marginLeft="1dip" />
+    <Button 
+        android:id="@+id/grade_btn_anki_1" 
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="gone" />
+    <Button 
+        android:id="@+id/grade_btn_anki_2" 
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="gone" />
+    <Button 
+        android:id="@+id/grade_btn_anki_3" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        android:layout_weight="1"
+        android:layout_marginLeft="1dip" />
+    <Button 
+        android:id="@+id/grade_btn_anki_4" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        android:layout_weight="1"
+        android:layout_marginLeft="1dip" />
+    <Button 
+        android:id="@+id/grade_btn_anki_5" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        android:layout_weight="1"
+        android:layout_marginLeft="1dip" />
+</LinearLayout>

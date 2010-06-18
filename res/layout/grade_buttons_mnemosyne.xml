@@ -1,0 +1,44 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/grade_buttons_mmnemosyne"
+	android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_gravity="bottom">
+    <Button 
+        android:id="@+id/grade_btn_mnemosyne_0" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        android:layout_weight="1"
+        android:layout_marginLeft="1dip" />
+    <Button 
+        android:id="@+id/grade_btn_mnemosyne_1" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        android:layout_weight="1"
+        android:layout_marginLeft="1dip" />
+    <Button 
+        android:id="@+id/grade_btn_mnemosyne_2" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        android:layout_weight="1"
+        android:layout_marginLeft="1dip" />
+    <Button 
+        android:id="@+id/grade_btn_mnemosyne_3" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        android:layout_weight="1"
+        android:layout_marginLeft="1dip" />
+    <Button 
+        android:id="@+id/grade_btn_mnemosyne_4" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        android:layout_weight="1"
+        android:layout_marginLeft="1dip" />
+    <Button 
+        android:id="@+id/grade_btn_mnemosyne_5" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        android:layout_weight="1"
+        android:layout_marginLeft="1dip" />
+</LinearLayout>
