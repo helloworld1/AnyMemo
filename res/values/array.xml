@@ -76,4 +76,19 @@
     <item>Delete</item>
 </string-array>
 
+<string-array name="speech_ctl_list">
+    <item>0. Manually</item>
+    <item>1. Tap to speak</item>
+    <item>2. Automatic speak</item>
+    <item>3. Both 1 and 2</item>
+</string-array>
+
+<string-array name="button_style_list">
+    <item>AnyMemo</item>
+    <item>Mnemosyne</item>
+    <item>Anki</item>
+</string-array>
+
+
+
 </resources>

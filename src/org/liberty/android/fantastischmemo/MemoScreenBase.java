@@ -100,7 +100,8 @@ public abstract class MemoScreenBase extends Activity{
     protected String questionBgColor = "Default";
     protected String answerBgColor = "Default";
     protected boolean btnOneRow = false;
-	protected boolean autoaudioSetting = true;
+    protected String btnStyle = "";
+    protected String speechCtl = "";
     protected ProgressDialog mProgressDialog = null;
 	protected boolean questionUserAudio = false;
 	protected boolean answerUserAudio = false;
@@ -171,8 +172,8 @@ public abstract class MemoScreenBase extends Activity{
 	protected void loadSettings(){
 		/* Here is the global settings from the preferences */
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-    	autoaudioSetting = settings.getBoolean("autoaudio", true);
-        btnOneRow = settings.getBoolean("btnonerow", false);
+        speechCtl = settings.getString("speech_ctl", getResources().getStringArray(R.array.speech_ctl_list)[0]);
+        btnStyle = settings.getString("button_style", getResources().getStringArray(R.array.button_style_list)[0]);
         copyClipboard = settings.getBoolean("copyclipboard", true);
 		
 		HashMap<String, String> hm = dbHelper.getSettings();

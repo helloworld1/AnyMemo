@@ -517,6 +517,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
 			
     @Override
     public void onClick(View v){
+        String[] speechCtlList = getResources().getStringArray(R.array.speech_ctl_list);
         if(v == (LinearLayout)findViewById(R.id.memo_screen_root) || v== (TextView) findViewById(R.id.answer)){
             /* Handle the short click of the whole screen */
 			if(this.showAnswer == false){
@@ -525,6 +526,28 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
                 autoSpeak();
 			}
         }
+
+        if(v == (TextView) findViewById(R.id.question)){
+			if(this.showAnswer == false){
+				this.showAnswer = true;
+				updateMemoScreen();
+                autoSpeak();
+			}
+            else if(speechCtl.equals(speechCtlList[1]) || speechCtl.equals(speechCtlList[3])){
+                /* Workaround to trick the autoAudio to speak question */
+                showAnswer = false;
+                autoSpeak();
+                showAnswer = true;
+            }
+        }
+        if(v == (TextView) findViewById(R.id.answer)){
+            if(showAnswer == true && (speechCtl.equals(speechCtlList[1]) || speechCtl.equals(speechCtlList[3]))){
+                /* showAnswer is ture so autoSpeak will speak answer */
+                autoSpeak();
+                showAnswer = true;
+            }
+        }
+
 
         for(int i = 0; i < btns.length; i++){
             if(v == btns[i]){
@@ -620,14 +643,23 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
 			layoutAnswer.setGravity(Gravity.CENTER);
 
 		} else {
+            String[] btnStyleList = getResources().getStringArray(R.array.button_style_list);
 
             for(Button btn : btns){
 			    btn.setVisibility(View.VISIBLE);
             }
-            if(btnOneRow){
+            if(btnStyle.equals(btnStyleList[1])){
                 /* Do we still keep the 0 button? */
                 //btns[0].setVisibility(View.GONE);
                 String[] btnsText = {getString(R.string.memo_btn0_brief_text),getString(R.string.memo_btn1_brief_text),getString(R.string.memo_btn2_brief_text),getString(R.string.memo_btn3_brief_text),getString(R.string.memo_btn4_brief_text),getString(R.string.memo_btn5_brief_text)};
+                for(int i = 0; i < btns.length; i++){
+                    btns[i].setText(btnsText[i]);
+                }
+            }
+            else if(btnStyle.equals(btnStyleList[2])){
+                btns[0].setVisibility(View.GONE);
+                btns[2].setVisibility(View.GONE);
+                String[] btnsText = {getString(R.string.memo_btn0_anki_text),getString(R.string.memo_btn1_anki_text),getString(R.string.memo_btn2_anki_text),getString(R.string.memo_btn3_anki_text),getString(R.string.memo_btn4_anki_text),getString(R.string.memo_btn5_anki_text)};
                 for(int i = 0; i < btns.length; i++){
                     btns[i].setText(btnsText[i]);
                 }
@@ -657,7 +689,6 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
     protected void createButtons(){
         /* First load the settings */
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        btnOneRow = settings.getBoolean("btnonerow", false);
         /* Dynamically create button depending on the button settings
          * One Line or Two Lines for now.
          * The buttons are dynamically created.
@@ -668,10 +699,19 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
         int base = 0x21212;
         Display display = ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         int width = display.getWidth(); 
-        if(btnOneRow){
+        String[] btnStyleList = getResources().getStringArray(R.array.button_style_list);
+        if(!btnStyle.equals(btnStyleList[0])){
             for(int i = 0; i < 6; i++){
+                int w;
+                /* Anki style button has only 4 buttons */
+                if(btnStyle.equals(btnStyleList[2])){
+                    w = width / 4;
+                }
+                else{
+                    w = width / 6;
+                }
                 RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(
-                        width / 6,
+                        w,
                         RelativeLayout.LayoutParams.WRAP_CONTENT
                 ); 
                 if(i != 0){
@@ -720,8 +760,9 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
     }
 
     private void autoSpeak(){
+        String[] speechCtlList = getResources().getStringArray(R.array.speech_ctl_list);
 
-        if(autoaudioSetting){
+        if(speechCtl.equals(speechCtlList[2]) || speechCtl.equals(speechCtlList[3])){
             if(this.showAnswer == false){
                 if(questionTTS != null){
                     questionTTS.sayText(currentItem.getQuestion());

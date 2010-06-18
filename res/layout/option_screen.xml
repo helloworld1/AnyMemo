@@ -3,21 +3,20 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:key="FantastischMemoPrefs"
     android:title="@string/global_settings">
-    <CheckBoxPreference
-        android:key="autoaudio"
-        android:title="@string/autoaudio" 
-        android:defaultValue="true"
-        android:summary="@string/autoaudio_summary" />
-    <CheckBoxPreference
-        android:key="btnonerow"
-        android:title="@string/btnonerow" 
-        android:defaultValue="false"
+    <ListPreference
+        android:key="speech_ctl"
+        android:title="@string/speech_ctl_title" 
+        android:defaultValue="0. Manually"
+        android:entries="@array/speech_ctl_list"
+        android:entryValues="@array/speech_ctl_list"
+        android:summary="@string/speech_ctl_summary" />
+    <ListPreference
+        android:key="button_style"
+        android:title="@string/button_style_title" 
+        android:defaultValue="AnyMemo"
+        android:entries="@array/button_style_list"
+        android:entryValues="@array/button_style_list"
         android:summary="@string/btnonerow_summary" />
-    <CheckBoxPreference
-        android:key="copyclipboard"
-        android:title="@string/copyclipboard" 
-        android:defaultValue="true"
-        android:summary="@string/copyclipboard_summary" />
     <ListPreference
         android:key="interface_locale"
         android:title="@string/interface_locale_title" 
@@ -25,5 +24,10 @@
         android:entries="@array/interface_locale_list"
         android:entryValues="@array/interface_locale_list"
         android:summary="@string/interface_locale_summary" />
+    <CheckBoxPreference
+        android:key="copyclipboard"
+        android:title="@string/copyclipboard" 
+        android:defaultValue="true"
+        android:summary="@string/copyclipboard_summary" />
  
 </PreferenceScreen> 
