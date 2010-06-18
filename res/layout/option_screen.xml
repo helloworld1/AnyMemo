@@ -16,7 +16,7 @@
         android:defaultValue="AnyMemo"
         android:entries="@array/button_style_list"
         android:entryValues="@array/button_style_list"
-        android:summary="@string/btnonerow_summary" />
+        android:summary="@string/button_style_summary" />
     <ListPreference
         android:key="interface_locale"
         android:title="@string/interface_locale_title" 

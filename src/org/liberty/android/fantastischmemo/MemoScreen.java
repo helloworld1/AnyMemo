@@ -108,14 +108,13 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
         }
         LinearLayout root = (LinearLayout)findViewById(R.id.memo_screen_root);
 
-        root.setOnClickListener(this);
+        //root.setOnClickListener(this);
         root.setOnLongClickListener(this);
-        /* This is a workaround for the unknown change of the 
-         * behavior in Android 2.2. 
-         * If this event is not set, it will not handle the event
-         * of the root
-         */
+        /* Click the q and a to speak if this option is 
+         * enabled */
 		TextView answerView = (TextView) findViewById(R.id.answer);
+		TextView questionView= (TextView) findViewById(R.id.question);
+        questionView.setOnClickListener(this);
         answerView.setOnClickListener(this);
 
 
@@ -518,36 +517,34 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
     @Override
     public void onClick(View v){
         String[] speechCtlList = getResources().getStringArray(R.array.speech_ctl_list);
-        if(v == (LinearLayout)findViewById(R.id.memo_screen_root) || v== (TextView) findViewById(R.id.answer)){
+        if(v == (TextView) findViewById(R.id.answer)){
             /* Handle the short click of the whole screen */
-			if(this.showAnswer == false){
-				this.showAnswer ^= true;
-				updateMemoScreen();
-                autoSpeak();
-			}
-        }
-
-        if(v == (TextView) findViewById(R.id.question)){
 			if(this.showAnswer == false){
 				this.showAnswer = true;
 				updateMemoScreen();
                 autoSpeak();
 			}
-            else if(speechCtl.equals(speechCtlList[1]) || speechCtl.equals(speechCtlList[3])){
-                /* Workaround to trick the autoAudio to speak question */
-                showAnswer = false;
-                autoSpeak();
-                showAnswer = true;
-            }
-        }
-        if(v == (TextView) findViewById(R.id.answer)){
-            if(showAnswer == true && (speechCtl.equals(speechCtlList[1]) || speechCtl.equals(speechCtlList[3]))){
+            else if((speechCtl.equals(speechCtlList[1]) || speechCtl.equals(speechCtlList[3]))){
                 /* showAnswer is ture so autoSpeak will speak answer */
-                autoSpeak();
-                showAnswer = true;
+                if(answerTTS != null){
+                    answerTTS.sayText(currentItem.getAnswer());
+                }
+                else if(questionUserAudio){
+                    mSpeakWord.speakWord(currentItem.getAnswer());
+                }
             }
         }
 
+        if(v == (TextView) findViewById(R.id.question)){
+            if((speechCtl.equals(speechCtlList[1]) || speechCtl.equals(speechCtlList[3]))){
+                if(questionTTS != null){
+                    questionTTS.sayText(currentItem.getQuestion());
+                }
+                else if(questionUserAudio){
+                    mSpeakWord.speakWord(currentItem.getQuestion());
+                }
+            }
+        }
 
         for(int i = 0; i < btns.length; i++){
             if(v == btns[i]){
