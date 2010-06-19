@@ -261,34 +261,13 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
 
     @Override
     protected void createButtons(){
-        /* Make up an id using this base */
-        int base = 0x31212;
-        RelativeLayout layout = (RelativeLayout)findViewById(R.id.memo_screen_button_layout);
-        Display display = ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        int width = display.getWidth(); 
+        /* Inflate buttons from XML */
+        LinearLayout root = (LinearLayout)findViewById(R.id.layout_buttons);
+        LayoutInflater.from(this).inflate(R.layout.edit_screen_buttons, root);
 
-        newButton = new Button(this);
-        newButton.setText(getString(R.string.add_screen_new));
-        newButton.setId(base);
-        RelativeLayout.LayoutParams p1 = new RelativeLayout.LayoutParams(width / 3, RelativeLayout.LayoutParams.WRAP_CONTENT); 
-        layout.addView(newButton, p1);
-
-
-        prevButton = new Button(this);
-        prevButton.setText(getString(R.string.add_screen_previous));
-        prevButton.setId(base + 1);
-        RelativeLayout.LayoutParams p2 = new RelativeLayout.LayoutParams(width / 3, RelativeLayout.LayoutParams.WRAP_CONTENT); 
-        p2.addRule(RelativeLayout.RIGHT_OF, base);
-        layout.addView(prevButton, p2);
-
-        nextButton = new Button(this);
-        nextButton.setText(getString(R.string.add_screen_next));
-        nextButton.setId(base + 2);
-        RelativeLayout.LayoutParams p3 = new RelativeLayout.LayoutParams(width / 3, RelativeLayout.LayoutParams.WRAP_CONTENT); 
-        p3.addRule(RelativeLayout.RIGHT_OF, base + 1);
-        layout.addView(nextButton, p3);
-
-
+        newButton = (Button)findViewById(R.id.edit_screen_btn_new);
+        prevButton = (Button)findViewById(R.id.edit_screen_btn_prev);
+        nextButton = (Button)findViewById(R.id.edit_screen_btn_next);
     }
 
     @Override

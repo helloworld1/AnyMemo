@@ -698,8 +698,8 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         String[] btnStyleList = getResources().getStringArray(R.array.button_style_list);
         btnStyle = settings.getString("button_style", btnStyleList[0]);
+        LinearLayout root = (LinearLayout)findViewById(R.id.layout_buttons);
         if(btnStyle.equals(btnStyleList[1])){
-            LinearLayout root = (LinearLayout)findViewById(R.id.memo_screen_root);
             LayoutInflater.from(this).inflate(R.layout.grade_buttons_mnemosyne, root);
             btns[0] = (Button)findViewById(R.id.grade_btn_mnemosyne_0);
             btns[1] = (Button)findViewById(R.id.grade_btn_mnemosyne_1);
@@ -709,7 +709,6 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
             btns[5] = (Button)findViewById(R.id.grade_btn_mnemosyne_5);
         }
         else if(btnStyle.equals(btnStyleList[2])){
-            LinearLayout root = (LinearLayout)findViewById(R.id.memo_screen_root);
             LayoutInflater.from(this).inflate(R.layout.grade_buttons_anki, root);
             btns[0] = (Button)findViewById(R.id.grade_btn_anki_0);
             btns[1] = (Button)findViewById(R.id.grade_btn_anki_1);
@@ -719,7 +718,6 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
             btns[5] = (Button)findViewById(R.id.grade_btn_anki_5);
         }
         else{
-            LinearLayout root = (LinearLayout)findViewById(R.id.memo_screen_root);
             LayoutInflater.from(this).inflate(R.layout.grade_buttons_anymemo, root);
             btns[0] = (Button)findViewById(R.id.grade_btn_anymemo_0);
             btns[1] = (Button)findViewById(R.id.grade_btn_anymemo_1);

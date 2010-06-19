@@ -44,10 +44,9 @@
                 android:layout_height="wrap_content" />
         </ScrollView>
     </LinearLayout>
-    <RelativeLayout
+    <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/memo_screen_button_layout" 
-        android:layout_gravity="bottom"/>
+        android:id="@+id/layout_buttons" />
 </LinearLayout>

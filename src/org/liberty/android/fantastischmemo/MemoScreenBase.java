@@ -222,7 +222,7 @@ public abstract class MemoScreenBase extends Activity{
                 }
                 else{
                     colors = new ArrayList<Integer>();
-                    Log.v(TAG, "Color String: " + colorString);
+                    // Log.v(TAG, "Color String: " + colorString);
                     String[] ca = colorString.split(" ");
                     for(int j = 0; j < ca.length; j++){
                         colors.add(j, Integer.parseInt(ca[j]));
@@ -253,9 +253,6 @@ public abstract class MemoScreenBase extends Activity{
     	}
     }
 	
-			
-			
-
 	protected void updateMemoScreen() {
 		/* update the main screen according to the currentItem */
 		
@@ -414,12 +411,16 @@ public abstract class MemoScreenBase extends Activity{
             LinearLayout questionLayout = (LinearLayout)findViewById(R.id.layout_question);
             LinearLayout answerLayout = (LinearLayout)findViewById(R.id.layout_answer);
             LinearLayout horizontalLine = (LinearLayout)findViewById(R.id.horizontalLine);
+            LinearLayout buttonLayout = (LinearLayout)findViewById(R.id.layout_buttons);
             questionView.setTextColor(colors.get(0));
             answerView.setTextColor(colors.get(1));
             questionLayout.setBackgroundColor(colors.get(2));
             answerLayout.setBackgroundColor(colors.get(3));
+            buttonLayout.setBackgroundColor(colors.get(3));
             horizontalLine.setBackgroundColor(colors.get(4));
         }
+            TextView questionView = (TextView) findViewById(R.id.question);
+
 
     }
 
