@@ -48,6 +48,12 @@
     <string name="memo_btn3_brief_text">3</string>
     <string name="memo_btn4_brief_text">4</string>
     <string name="memo_btn5_brief_text">5</string>
+    <string name="memo_btn0_anki_text">完全忘记</string>
+    <string name="memo_btn1_anki_text">完全忘记</string>
+    <string name="memo_btn2_anki_text">比较顺利</string>
+    <string name="memo_btn3_anki_text">比较顺利</string>
+    <string name="memo_btn4_anki_text">简单</string>
+    <string name="memo_btn5_anki_text">非常简单</string>
     <string name="memo_current_id">当前卡ID: </string>
     <string name="memo_edit_dialog_title">编辑</string>
     <string name="global_settings">全局设置</string>
@@ -151,5 +157,32 @@
     <string name="what_is_new_message">查看图文新功能介绍,请点版本历史.</string>
     <string name="learn_ahead">强制复习</string>
     <string name="menu_text">菜单</string>
-    
+    <string name="filter_text">过滤器</string>
+    <string name="filter_failure_title">过滤失败</string>
+    <string name="filter_failure_message">没有卡片能匹配当前过滤器，当前过滤器已经禁用</string>
+    <string name="import_text">导入</string>
+    <string name="export_text">导出</string>
+    <string name="clear_filter_text">清空</string>
+    <string name="clear_filter_message">清空最近列表?</string>
+    <string name="import_mnemosyne_xml_text">导入Mnemosyne XML</string>
+    <string name="export_qa_txt">导出QA TXT</string>
+    <string name="export_tab_txt">导出Tab分割的TXT</string>
+    <string name="export_csv">导出CSV</string>
+    <string name="import_qa_txt">导入QA TXT</string>
+    <string name="import_tab_txt">导出Tab分割的TXT</string>
+    <string name="import_csv">导入CSV</string>
+    <string name="import_supermemo_xml_text">导入SuperMemo PPC XML</string>
+    <string name="speech_ctl_title">语音模式</string>
+    <string name="speech_ctl_summary">如何调用朗读卡片的功能</string>
+    <string name="button_style_title">按键模式</string>
+    <string name="button_style_summary">更改用户按键的软件习惯.</string>
+    <string name="settings_customize_color">自定义颜色</string>
+    <string name="color_button_text">选择颜色</string>
+   	<string name="color_dialog_title">选择颜色</string>
+	<string name="color_h">色度</string>
+	<string name="color_s">饱和度</string>
+	<string name="color_v">亮度</string>
+    <string name="fullscreen_title">全屏模式</string>
+    <string name="fullscreen_summary">卡片为全屏模式</string>
+    <string name="edit_dialog_category">分类</string>
 </resources>

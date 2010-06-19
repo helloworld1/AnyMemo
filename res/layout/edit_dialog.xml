@@ -34,5 +34,18 @@
             android:minLines="3"
             android:gravity="top"
             android:background="@android:drawable/editbox_background"/>
+        <TextView 
+            android:text="@string/edit_dialog_category"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="3dip"/>
+        <EditText
+            android:id="@+id/edit_dialog_category_entry"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:minLines="3"
+            android:gravity="top"
+            android:background="@android:drawable/editbox_background"/>
     </LinearLayout>
 </ScrollView>

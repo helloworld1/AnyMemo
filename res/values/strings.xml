@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">AnyMemo</string>
     <string name="app_full_name">AnyMemo Free</string>
-    <string name="app_version">4.0.1</string>
+    <string name="app_version">4.1.0</string>
     <string name="up_one_level">..</string>
     <string name="current_dir">.</string>
     <string name="ok_text">OK</string>
@@ -199,7 +199,8 @@
 	<string name="color_v">value</string>
     <string name="fullscreen_title">Fullscreen Mode</string>
     <string name="fullscreen_summary">Display cards in fullscreen mode.</string>
+    <string name="edit_dialog_category">Category</string>
 
-    <string name="what_is_new_message">See Graphical guide of new features, please click version history button.\nVersion 4.0.1\n1. Enhance: The performance of "next" and "prev" is improved dramatically.\nVersion 4.0.0\n1. New Feature: Advanced filter for the cards. Please read user guide "Filters and Categories" in our website. It is a very useful function if used properly.\n2. New Feature: Import SuperMemo PPC XML with learning progress, Tab TXT and QA Text. \n3. New Feature: Export Tab Txt, QA Txt, CSV.\n4. Enhance: Improve the open screens interface\n5. Enhance: Slightly faster when learning cards.\n6. Enhance: Add category editing in detail screen.\n7. Bug fix: Rewrite the learning process to fix the database inconsistance introduced by user editing.</string>
+    <string name="what_is_new_message">See Graphical guide of new features, please click version history button.\nVersion 4.1.0\n1. New Feature: Advanced color customization.\n2. New Feature: More clean setting interface.\n3. New Feature: Speech mode selection. Add option to tap question or answer to speak.\n4. New Feature: New grade button style selection dialog in options. Add Anki style buttons.\n5. New Feature: Add fullscreen option\n6. Enhance: The button background is now the same as the answer.\n7. Enahnce: The category can be edited in the edit dialog.\n8. Enhance: Tap show answer to show answer. Otherwise, it does nothing.\n9. Enhance: The default separator color is now gray.</string>
     
 </resources>

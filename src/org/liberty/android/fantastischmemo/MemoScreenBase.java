@@ -457,23 +457,25 @@ public abstract class MemoScreenBase extends Activity{
         /* This is a customized dialog inflated from XML */
         LayoutInflater factory = LayoutInflater.from(MemoScreenBase.this);
         final View editView = factory.inflate(R.layout.edit_dialog, null);
-        EditText eq = (EditText)editView.findViewById(R.id.edit_dialog_question_entry);
-        EditText ea = (EditText)editView.findViewById(R.id.edit_dialog_answer_entry);
+        final EditText eq = (EditText)editView.findViewById(R.id.edit_dialog_question_entry);
+        final EditText ea = (EditText)editView.findViewById(R.id.edit_dialog_answer_entry);
+        final EditText ca = (EditText)editView.findViewById(R.id.edit_dialog_category_entry);
         eq.setText(currentItem.getQuestion());
         ea.setText(currentItem.getAnswer());
+        ca.setText(currentItem.getCategory());
         new AlertDialog.Builder(MemoScreenBase.this)
             .setTitle(getString(R.string.memo_edit_dialog_title))
             .setView(editView)
             .setPositiveButton(getString(R.string.settings_save),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface arg0, int arg1) {
-                        EditText eq = (EditText)editView.findViewById(R.id.edit_dialog_question_entry);
-                        EditText ea = (EditText)editView.findViewById(R.id.edit_dialog_answer_entry);
                         String qText = eq.getText().toString();
                         String aText = ea.getText().toString();
+                        String cText = ca.getText().toString();
                         HashMap<String, String> hm = new HashMap<String, String>();
                         hm.put("question", qText);
                         hm.put("answer", aText);
+                        hm.put("category", cText);
                         currentItem.setData(hm);
                         //dbHelper.updateQA(currentItem);
                         dbHelper.addOrReplaceItem(currentItem);
