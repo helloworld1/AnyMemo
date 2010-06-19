@@ -83,9 +83,9 @@
     <string name="settings_answer_text_color">Answer Text Color</string>
     <string name="settings_question_bg_color">Question Background Color</string>
     <string name="settings_answer_bg_color">AnswerBackground Color</string>
-    <string name="settings_wipe">Wipe All Progress</string>
+    <string name="settings_wipe">Wipe All Learning Progress</string>
     <string name="settings_shuffle">Shuffle cards</string>
-    <string name="settings_inverse">Inverse cards</string>
+    <string name="settings_inverse">Inverse the Q and A of cards</string>
     <string name="settings_save">Save</string>
     <string name="settings_discard">Discard</string>
     <string name="warning_text">Warning</string>
@@ -168,8 +168,8 @@
     <string name="open_database_error_message">AnyMemo can not open this database. This is due to various reasons. Please visit our website anymemo.org FAQ section for resolutions or contact me for bug report.</string>
     <string name="interface_locale_title">Interface Language</string>
     <string name="interface_locale_summary">Choose the language of the user interface. Restarting AnyMemo is needed.</string>
-    <string name="settings_typeface_question">User Question Font</string>
-    <string name="settings_typeface_answer">User Answer Font</string>
+    <string name="settings_typeface_question">User-defined Question Font</string>
+    <string name="settings_typeface_answer">User-defined Answer Font</string>
     <string name="learn_ahead">Cram Review</string>
     <string name="menu_text">Menu</string>
     <string name="filter_text">Filter</string>
@@ -191,6 +191,13 @@
     <string name="speech_ctl_summary">How to invoke the speaking function when learning.</string>
     <string name="button_style_title">Grade Button Style</string>
     <string name="button_style_summary">Change the style of grading button when learning.</string>
+    <string name="settings_customize_color">Customize Colors</string>
+    <string name="color_button_text">Select Color</string>
+   	<string name="color_dialog_title">Color Selection</string>
+	<string name="color_h">hue</string>
+	<string name="color_s">saturation</string>
+	<string name="color_v">value</string>
+
     <string name="what_is_new_message">See Graphical guide of new features, please click version history button.\nVersion 4.0.1\n1. Enhance: The performance of "next" and "prev" is improved dramatically.\nVersion 4.0.0\n1. New Feature: Advanced filter for the cards. Please read user guide "Filters and Categories" in our website. It is a very useful function if used properly.\n2. New Feature: Import SuperMemo PPC XML with learning progress, Tab TXT and QA Text. \n3. New Feature: Export Tab Txt, QA Txt, CSV.\n4. Enhance: Improve the open screens interface\n5. Enhance: Slightly faster when learning cards.\n6. Enhance: Add category editing in detail screen.\n7. Bug fix: Rewrite the learning process to fix the database inconsistance introduced by user editing.</string>
     
 </resources>

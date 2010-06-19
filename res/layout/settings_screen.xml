@@ -3,7 +3,12 @@
     android:scrollbars="vertical"
     android:layout_height="fill_parent"
     android:layout_width="fill_parent"> 
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent"
+    android:orientation="vertical" > 
+
+<TableLayout
 	android:layout_height="fill_parent"
 	android:layout_width="fill_parent"
 	android:orientation="vertical"
@@ -23,240 +28,199 @@
         android:drawSelectorOnTop="true"
         android:prompt="@string/settings_question_font_size_prompt"
         />
+    </TableRow>
+    <TableRow>
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
+            android:text="@string/settings_answer_font_size"
+            
+        />
+        <Spinner
+            android:id="@+id/answer_font_size_spinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:drawSelectorOnTop="true"
+            android:prompt="@string/settings_answer_font_size_prompt"
+            />
         </TableRow>
+        
+    <TableRow>
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
+            android:text="@string/settings_question_align"
+            
+        />
+        <Spinner
+            android:id="@+id/question_align_spinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:drawSelectorOnTop="true"
+            android:prompt="@string/settings_question_align_prompt"
+            />
+    </TableRow>
+    
+    <TableRow>
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
+            android:text="@string/settings_answer_align"
+            
+        />
+        
+        <Spinner
+            android:id="@+id/answer_align_spinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:drawSelectorOnTop="true"
+            android:prompt="@string/settings_answer_align_prompt"
+            />
+    </TableRow>
+    <TableRow>
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
+            android:text="@string/settings_question_locale"
+            
+        />
+        <Spinner
+            android:id="@+id/question_locale_spinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:drawSelectorOnTop="true"
+            android:prompt="@string/settings_question_locale_prompt"
+            />
+    </TableRow>
+    <TableRow>
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
+            android:text="@string/settings_answer_locale"
+            
+        />
+        <Spinner
+            android:id="@+id/answer_locale_spinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:drawSelectorOnTop="true"
+            android:prompt="@string/settings_answer_locale_prompt"
+            />
+        </TableRow>
+        
         <TableRow>
-	<TextView
-		android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dip"
-        android:text="@string/settings_answer_font_size"
-        
-    />
-    <Spinner
-    	android:id="@+id/answer_font_size_spinner"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:drawSelectorOnTop="true"
-        android:prompt="@string/settings_answer_font_size_prompt"
-        />
-    </TableRow>
-    
-    <TableRow>
-	<TextView
-		android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dip"
-        android:text="@string/settings_question_align"
-        
-    />
-    <Spinner
-    	android:id="@+id/question_align_spinner"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:drawSelectorOnTop="true"
-        android:prompt="@string/settings_question_align_prompt"
-        />
-    </TableRow>
-    
-    <TableRow>
-	<TextView
-		android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dip"
-        android:text="@string/settings_answer_align"
-        
-    />
-    
-    <Spinner
-    	android:id="@+id/answer_align_spinner"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:drawSelectorOnTop="true"
-        android:prompt="@string/settings_answer_align_prompt"
-        />
-    </TableRow>
-    <TableRow>
-	<TextView
-		android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dip"
-        android:text="@string/settings_question_locale"
-        
-    />
-    <Spinner
-    	android:id="@+id/question_locale_spinner"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:drawSelectorOnTop="true"
-        android:prompt="@string/settings_question_locale_prompt"
-        />
-    </TableRow>
-    <TableRow>
-	<TextView
-		android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dip"
-        android:text="@string/settings_answer_locale"
-        
-    />
-    <Spinner
-    	android:id="@+id/answer_locale_spinner"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:drawSelectorOnTop="true"
-        android:prompt="@string/settings_answer_locale_prompt"
-        />
-    </TableRow>
-    
-    <TableRow>
-	<TextView
-		android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dip"
-        android:text="@string/settings_html_display"
-        
-    />
-    <Spinner
-    	android:id="@+id/html_spinner"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:drawSelectorOnTop="true"
-        android:prompt="@string/settings_html_display"
-        />
-    </TableRow>
-
-    <TableRow>
-    <TextView
-		android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dip"
-        android:text="@string/settings_question_text_color"
-        />
-    <Spinner
-        android:id="@+id/question_text_color_spinner"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:drawSelectorOnTop="true"
-        android:prompt="@string/settings_question_text_color"
-    />
-    </TableRow>
-
-    <TableRow>
-    <TextView
-		android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dip"
-        android:text="@string/settings_question_bg_color"
-        />
-    <Spinner
-        android:id="@+id/question_bg_color_spinner"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:drawSelectorOnTop="true"
-        android:prompt="@string/settings_question_bg_color"
-    />
-    </TableRow>
-
-    <TableRow>
-    <TextView
-		android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dip"
-        android:text="@string/settings_answer_text_color"
-        />
-    <Spinner
-        android:id="@+id/answer_text_color_spinner"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:drawSelectorOnTop="true"
-        android:prompt="@string/settings_answer_text_color"
-    />
-    </TableRow>
-
-    <TableRow>
-    <TextView
-		android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dip"
-        android:text="@string/settings_answer_bg_color"
-        />
-    <Spinner
-        android:id="@+id/answer_bg_color_spinner"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:drawSelectorOnTop="true"
-        android:prompt="@string/settings_answer_bg_color"
-    />
-    </TableRow>
-
-    
-    <TableRow>
-	<TextView
-		android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dip"
-        android:text="@string/settings_ratio"
-        
-    />
-    <Spinner
-    	android:id="@+id/ratio_spinner"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:drawSelectorOnTop="true"
-        android:prompt="@string/settings_ratio"
-        />
-    </TableRow>
-        
-
-    <TableRow>
-		<CheckBox 
-            android:id="@+id/checkbox_typeface_question"
-			android:layout_width="wrap_content" 
+        <TextView
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-			android:text="@string/settings_typeface_question" />
-        <EditText
-            android:id="@+id/edit_typeface_question"
-			android:layout_width="fill_parent" 
-            android:layout_height="wrap_content" />
-
-    </TableRow>
-
-    <TableRow>
-		<CheckBox 
-            android:id="@+id/checkbox_typeface_answer"
-			android:layout_width="wrap_content" 
+            android:layout_marginTop="3dip"
+            android:text="@string/settings_html_display"
+            
+        />
+        <Spinner
+            android:id="@+id/html_spinner"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-			android:text="@string/settings_typeface_answer" />
-        <EditText
-            android:id="@+id/edit_typeface_answer"
-			android:layout_width="fill_parent" 
-            android:layout_height="wrap_content" />
-
-    </TableRow>
+            android:drawSelectorOnTop="true"
+            android:prompt="@string/settings_html_display"
+            />
+        </TableRow>
 
 
-	<TableRow>
-		<CheckBox android:id="@+id/checkbox_wipe"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:text="@string/settings_wipe" />
-	</TableRow>
+        
+        <TableRow>
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
+            android:text="@string/settings_ratio"
+            
+        />
+        <Spinner
+            android:id="@+id/ratio_spinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:drawSelectorOnTop="true"
+            android:prompt="@string/settings_ratio"
+            />
+        </TableRow>
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="2dip"
+            android:background="#FF909090" />
+        <TableRow>
+            <CheckBox
+                android:id="@+id/checkbox_customize_color"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_customize_color" />
+        </TableRow>
+        <TableRow
+            android:id="@+id/color_row">
+            <Spinner
+                android:id="@+id/color_item_spinner"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:drawSelectorOnTop="true"
+                android:prompt="@string/settings_customize_color"
+                />
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/settings_color_button"
+                android:text="@string/color_button_text" />
+        </TableRow>
 
-	<TableRow>
-		<CheckBox android:id="@+id/checkbox_shuffle"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:text="@string/settings_shuffle" />
-	</TableRow>
+    </TableLayout>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dip"
+        android:background="#FF909090" />
+    <LinearLayout
+        android:layout_width="fill_parent" 
+        android:layout_height="wrap_content" 
+        android:orientation="vertical" >
+            <CheckBox 
+                android:id="@+id/checkbox_typeface_question"
+                android:layout_width="wrap_content" 
+                android:layout_height="wrap_content"
+                android:text="@string/settings_typeface_question" />
+            <EditText
+                android:id="@+id/edit_typeface_question"
+                android:layout_width="fill_parent" 
+                android:layout_height="wrap_content" />
+            <CheckBox 
+                android:id="@+id/checkbox_typeface_answer"
+                android:layout_width="wrap_content" 
+                android:layout_height="wrap_content"
+                android:text="@string/settings_typeface_answer" />
+            <EditText
+                android:id="@+id/edit_typeface_answer"
+                android:layout_width="fill_parent" 
+                android:layout_height="wrap_content" />
+    </LinearLayout>
 
-	<TableRow>
-		<CheckBox android:id="@+id/checkbox_inverse"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:text="@string/settings_inverse" />
-	</TableRow>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dip"
+        android:background="#FF909090" />
+
+    <CheckBox android:id="@+id/checkbox_wipe"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="@string/settings_wipe" />
+
+    <CheckBox android:id="@+id/checkbox_shuffle"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="@string/settings_shuffle" />
+
+    <CheckBox android:id="@+id/checkbox_inverse"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="@string/settings_inverse" />
     
-    
-    
-
-<TableRow>
 	<LinearLayout android:orientation="horizontal"
 		android:layout_width="fill_parent" android:layout_height="wrap_content">
 		<Button android:id="@+id/settting_save" android:layout_width="wrap_content"
@@ -266,9 +230,7 @@
 			android:layout_height="wrap_content" android:layout_marginLeft="3dip"
 			android:text="@string/settings_discard" />
 	</LinearLayout> 
-    </TableRow>
-
-</TableLayout>
+</LinearLayout>
 </ScrollView>
 
 

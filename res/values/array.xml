@@ -89,6 +89,30 @@
     <item>Anki</item>
 </string-array>
 
+<string-array name="color_item_list">
+    <item>Question Text</item>
+    <item>Answer Text</item>
+    <item>Question Background</item>
+    <item>Answer Background</item>
+    <item>Seperator</item>
+</string-array>
+
+<integer-array name="default_color_list">
+    <item>0xffffffff</item>
+    <item>0xffffffff</item>
+    <item>0xff000000</item>
+    <item>0xff000000</item>
+    <item>0xFF909090</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+    <item>0</item>
+</integer-array>
+
 
 
 </resources>

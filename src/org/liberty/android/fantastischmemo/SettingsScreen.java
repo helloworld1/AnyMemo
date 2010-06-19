@@ -19,10 +19,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo;
 
+/* This will pick the color */
+import org.color.ColorDialog;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -40,8 +45,10 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.EditText;
+import android.widget.TableRow;
+import android.widget.AdapterView;
 
-public class SettingsScreen extends Activity implements OnClickListener {
+public class SettingsScreen extends Activity implements View.OnClickListener, ColorDialog.OnClickListener {
 	private Spinner questionFontSizeSpinner;
 	private Spinner answerFontSizeSpinner;
 	private Spinner questionAlignSpinner;
@@ -61,6 +68,11 @@ public class SettingsScreen extends Activity implements OnClickListener {
     private CheckBox aTypefaceCheckbox;
     private EditText qTypefaceEdit;
     private EditText aTypefaceEdit;
+    private TableRow colorRow;
+    private Spinner colorSpinner;
+    private CheckBox colorCheckbox;
+    private Button colorButton;
+    private ArrayList<Integer> colors;
 
 	private Button btnSave;
 	private Button btnDiscard;
@@ -113,14 +125,24 @@ public class SettingsScreen extends Activity implements OnClickListener {
 
         ArrayAdapter<CharSequence> colorAdapter = ArrayAdapter.createFromResource(this, R.array.color_list, android.R.layout.simple_spinner_item);
         colorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        questionTextColorSpinner = (Spinner)findViewById(R.id.question_text_color_spinner);
-        questionTextColorSpinner.setAdapter(colorAdapter);
-        answerTextColorSpinner = (Spinner)findViewById(R.id.answer_text_color_spinner);
-        answerTextColorSpinner.setAdapter(colorAdapter);
-        questionBgColorSpinner = (Spinner)findViewById(R.id.question_bg_color_spinner);
-        questionBgColorSpinner.setAdapter(colorAdapter);
-        answerBgColorSpinner = (Spinner)findViewById(R.id.answer_bg_color_spinner);
-        answerBgColorSpinner.setAdapter(colorAdapter);
+
+        colorRow = (TableRow)findViewById(R.id.color_row);
+        colorSpinner = (Spinner)findViewById(R.id.color_item_spinner);
+        ArrayAdapter<CharSequence> colorItemAdapter = ArrayAdapter.createFromResource(this, R.array.color_item_list, android.R.layout.simple_spinner_item);
+        colorItemAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        colorSpinner.setAdapter(colorItemAdapter);
+        
+
+
+        colorButton = (Button)findViewById(R.id.settings_color_button);
+        colorButton.setOnClickListener(this);
+        /* Initial the default value of colors */
+        int[] ia = getResources().getIntArray(R.array.default_color_list);
+        colors = new ArrayList<Integer>();
+        for(int i : ia){
+            colors.add(i);
+        }
+
         
         /* Get the spinner's initial item */
         
@@ -139,16 +161,18 @@ public class SettingsScreen extends Activity implements OnClickListener {
         btnDiscard.setOnClickListener(this);
 
         qTypefaceCheckbox = (CheckBox)findViewById(R.id.checkbox_typeface_question);
+        qTypefaceCheckbox.setOnClickListener(this);
 
         aTypefaceCheckbox = (CheckBox)findViewById(R.id.checkbox_typeface_answer);
+        aTypefaceCheckbox.setOnClickListener(this);
+        colorCheckbox = (CheckBox)findViewById(R.id.checkbox_customize_color);
         qTypefaceEdit = (EditText)findViewById(R.id.edit_typeface_question);
         aTypefaceEdit = (EditText)findViewById(R.id.edit_typeface_answer);
         qTypefaceEdit.setOnClickListener(this);
         aTypefaceEdit.setOnClickListener(this);
+        qTypefaceEdit.setVisibility(View.GONE);
+        aTypefaceEdit.setVisibility(View.GONE);
         setInitialPosition();
-
-        
-        
         
     }
     
@@ -321,83 +345,28 @@ public class SettingsScreen extends Activity implements OnClickListener {
 				ratioSpinner.setSelection(index);
 				
 			}
-			else if(me.getKey().toString().equals("question_text_color")){
-				String res = me.getValue();
-				String[] colorList = getResources().getStringArray(R.array.color_list);
-				int index = 0;
-				boolean found = false;
-				for(String str : colorList){
-					if(str.equals(res)){
-						found = true;
-						break;
-					}
-					index++;
-				}
-				if(found == false){
-					index = 0;
-				}
-				questionTextColorSpinner.setSelection(index);
-				
-			}
-			else if(me.getKey().toString().equals("answer_text_color")){
-				String res = me.getValue();
-				String[] colorList = getResources().getStringArray(R.array.color_list);
-				int index = 0;
-				boolean found = false;
-				for(String str : colorList){
-					if(str.equals(res)){
-						found = true;
-						break;
-					}
-					index++;
-				}
-				if(found == false){
-					index = 0;
-				}
-				answerTextColorSpinner.setSelection(index);
-				
-			}
-			else if(me.getKey().toString().equals("question_bg_color")){
-				String res = me.getValue();
-				String[] colorList = getResources().getStringArray(R.array.color_list);
-				int index = 0;
-				boolean found = false;
-				for(String str : colorList){
-					if(str.equals(res)){
-						found = true;
-						break;
-					}
-					index++;
-				}
-				if(found == false){
-					index = 0;
-				}
-				questionBgColorSpinner.setSelection(index);
-				
-			}
-			else if(me.getKey().toString().equals("answer_bg_color")){
-				String res = me.getValue();
-				String[] colorList = getResources().getStringArray(R.array.color_list);
-				int index = 0;
-				boolean found = false;
-				for(String str : colorList){
-					if(str.equals(res)){
-						found = true;
-						break;
-					}
-					index++;
-				}
-				if(found == false){
-					index = 0;
-				}
-				answerBgColorSpinner.setSelection(index);
-				
-			}
+            else if(me.getKey().toString().equals("colors")){
+                String res = me.getValue();
+                if(!res.equals("")){
+                    colorCheckbox.setChecked(true);
+                    String[] ca = res.split(" ");
+                    for(int j = 0; j < ca.length; j++){
+                        colors.add(j, Integer.parseInt(ca[j]));
+                    }
+                }
+                else{
+                    colorCheckbox.setChecked(false);
+                }
+            }
             else if(me.getKey().toString().equals("question_typeface")){
 				String res = me.getValue();
                 if(!res.equals("")){
                     qTypefaceCheckbox.setChecked(true);
                     qTypefaceEdit.setText(res);
+                    qTypefaceEdit.setVisibility(View.VISIBLE);
+                }
+                else{
+                    qTypefaceEdit.setVisibility(View.GONE);
                 }
             }
             else if(me.getKey().toString().equals("answer_typeface")){
@@ -405,11 +374,24 @@ public class SettingsScreen extends Activity implements OnClickListener {
                 if(!res.equals("")){
                     aTypefaceCheckbox.setChecked(true);
                     aTypefaceEdit.setText(res);
+                    aTypefaceEdit.setVisibility(View.VISIBLE);
+                }
+                else{
+                    aTypefaceEdit.setVisibility(View.GONE);
                 }
             }
-
 			
 		}
+        
+        /* Set the colorSpinner's event to retrieve the color */
+        colorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            public void onItemSelected(AdapterView adapterView, View view, int position, long id){
+                colorButton.setTextColor(colors.get(position));
+
+            }
+            public void onNothingSelected(AdapterView adapterView){
+            }
+        });
     	
     	
     }
@@ -430,10 +412,21 @@ public class SettingsScreen extends Activity implements OnClickListener {
     	hm.put("answer_locale", localeList[answerLocaleSpinner.getSelectedItemPosition()]);
     	hm.put("html_display", htmlList[htmlSpinner.getSelectedItemPosition()]);
     	hm.put("ratio", ratioList[ratioSpinner.getSelectedItemPosition()]);
-    	hm.put("question_text_color", colorList[questionTextColorSpinner.getSelectedItemPosition()]);
-    	hm.put("answer_text_color", colorList[answerTextColorSpinner.getSelectedItemPosition()]);
-    	hm.put("question_bg_color", colorList[questionBgColorSpinner.getSelectedItemPosition()]);
-    	hm.put("answer_bg_color", colorList[answerBgColorSpinner.getSelectedItemPosition()]);
+        /* Store colors using space separated string */
+        String colorString = "";
+        if(colorCheckbox.isChecked()){
+            for(int i = 0; i < colors.size(); i++){
+                if(i != 0){
+                    colorString += " ";
+                }
+                colorString += colors.get(i).toString();
+            }
+            hm.put("colors", colorString);
+        }
+        else{
+            hm.put("colors", "");
+        }
+
         if(qTypefaceCheckbox.isChecked()){
             hm.put("question_typeface", qTypefaceEdit.getText().toString());
         }
@@ -548,7 +541,36 @@ public class SettingsScreen extends Activity implements OnClickListener {
             startActivityForResult(myIntent, ACTIVITY_TTF_ANSWER);
         }
 
-    	
+        if(v == qTypefaceCheckbox){
+            if(qTypefaceCheckbox.isChecked()){
+                qTypefaceEdit.setVisibility(View.VISIBLE);
+            }
+            else{
+                qTypefaceEdit.setVisibility(View.GONE);
+            }
+        }
+
+        if(v == aTypefaceCheckbox){
+            if(aTypefaceCheckbox.isChecked()){
+                aTypefaceEdit.setVisibility(View.VISIBLE);
+            }
+            else{
+                aTypefaceEdit.setVisibility(View.GONE);
+            }
+        }
+
+        if(v == colorButton){
+            int pos = colorSpinner.getSelectedItemPosition();
+            ColorDialog dialog = new ColorDialog(this, colorButton, colors.get(pos), this);
+            dialog.show();
+        }
+    }
+
+    @Override
+    public void onClick(View view, int color){
+        int pos = colorSpinner.getSelectedItemPosition();
+        colorButton.setTextColor(color);
+        colors.set(pos, color);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data){
