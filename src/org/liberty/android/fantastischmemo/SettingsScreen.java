@@ -127,6 +127,7 @@ public class SettingsScreen extends Activity implements View.OnClickListener, Co
         colorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         colorRow = (TableRow)findViewById(R.id.color_row);
+        colorRow.setVisibility(View.GONE);
         colorSpinner = (Spinner)findViewById(R.id.color_item_spinner);
         ArrayAdapter<CharSequence> colorItemAdapter = ArrayAdapter.createFromResource(this, R.array.color_item_list, android.R.layout.simple_spinner_item);
         colorItemAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -166,6 +167,7 @@ public class SettingsScreen extends Activity implements View.OnClickListener, Co
         aTypefaceCheckbox = (CheckBox)findViewById(R.id.checkbox_typeface_answer);
         aTypefaceCheckbox.setOnClickListener(this);
         colorCheckbox = (CheckBox)findViewById(R.id.checkbox_customize_color);
+        colorCheckbox.setOnClickListener(this);
         qTypefaceEdit = (EditText)findViewById(R.id.edit_typeface_question);
         aTypefaceEdit = (EditText)findViewById(R.id.edit_typeface_answer);
         qTypefaceEdit.setOnClickListener(this);
@@ -353,9 +355,11 @@ public class SettingsScreen extends Activity implements View.OnClickListener, Co
                     for(int j = 0; j < ca.length; j++){
                         colors.add(j, Integer.parseInt(ca[j]));
                     }
+                    colorRow.setVisibility(View.VISIBLE);
                 }
                 else{
                     colorCheckbox.setChecked(false);
+                    colorRow.setVisibility(View.GONE);
                 }
             }
             else if(me.getKey().toString().equals("question_typeface")){
@@ -563,6 +567,15 @@ public class SettingsScreen extends Activity implements View.OnClickListener, Co
             int pos = colorSpinner.getSelectedItemPosition();
             ColorDialog dialog = new ColorDialog(this, colorButton, colors.get(pos), this);
             dialog.show();
+        }
+
+        if(v == colorCheckbox){
+            if(colorCheckbox.isChecked()){
+                colorRow.setVisibility(View.VISIBLE);
+            }
+            else{
+                colorRow.setVisibility(View.GONE);
+            }
         }
     }
 

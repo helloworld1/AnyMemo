@@ -98,10 +98,10 @@
 </string-array>
 
 <integer-array name="default_color_list">
-    <item>0xffffffff</item>
-    <item>0xffffffff</item>
-    <item>0xff000000</item>
-    <item>0xff000000</item>
+    <item>0xFFEAEAEA</item>
+    <item>0xFFEAEAEA</item>
+    <item>0xFF000000</item>
+    <item>0xFF000000</item>
     <item>0xFF909090</item>
     <item>0</item>
     <item>0</item>

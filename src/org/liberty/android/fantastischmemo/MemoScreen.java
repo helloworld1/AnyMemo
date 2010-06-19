@@ -91,6 +91,8 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
     @Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+   
 		setContentView(R.layout.memo_screen);
 		
 		Bundle extras = getIntent().getExtras();

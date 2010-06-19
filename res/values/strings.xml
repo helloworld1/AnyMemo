@@ -33,7 +33,7 @@
     <string name="autoaudio_summary">The question and answer will be read automatically</string>
     <string name="btnonerow">Compact Grade Button </string>
     <string name="btnonerow_summary">The button with 0 to 5 score is diplayed in 1 rows instead of 2.</string>
-    <string name="copyclipboard">Automatic copy to clipboard</string>
+    <string name="copyclipboard">Copy to Clipboard</string>
     <string name="copyclipboard_summary">The question will be automatically copied to clipboard</string>
     <string name="memo_show_answer">\?\nShow Answer</string>
     <string name="memo_no_item_title">No Item</string>
@@ -168,8 +168,8 @@
     <string name="open_database_error_message">AnyMemo can not open this database. This is due to various reasons. Please visit our website anymemo.org FAQ section for resolutions or contact me for bug report.</string>
     <string name="interface_locale_title">Interface Language</string>
     <string name="interface_locale_summary">Choose the language of the user interface. Restarting AnyMemo is needed.</string>
-    <string name="settings_typeface_question">User-defined Question Font</string>
-    <string name="settings_typeface_answer">User-defined Answer Font</string>
+    <string name="settings_typeface_question">User-defined Question Font (TTF)</string>
+    <string name="settings_typeface_answer">User-defined Answer Font (TTF)</string>
     <string name="learn_ahead">Cram Review</string>
     <string name="menu_text">Menu</string>
     <string name="filter_text">Filter</string>
@@ -197,6 +197,8 @@
 	<string name="color_h">hue</string>
 	<string name="color_s">saturation</string>
 	<string name="color_v">value</string>
+    <string name="fullscreen_title">Fullscreen Mode</string>
+    <string name="fullscreen_summary">Display cards in fullscreen mode.</string>
 
     <string name="what_is_new_message">See Graphical guide of new features, please click version history button.\nVersion 4.0.1\n1. Enhance: The performance of "next" and "prev" is improved dramatically.\nVersion 4.0.0\n1. New Feature: Advanced filter for the cards. Please read user guide "Filters and Categories" in our website. It is a very useful function if used properly.\n2. New Feature: Import SuperMemo PPC XML with learning progress, Tab TXT and QA Text. \n3. New Feature: Export Tab Txt, QA Txt, CSV.\n4. Enhance: Improve the open screens interface\n5. Enhance: Slightly faster when learning cards.\n6. Enhance: Add category editing in detail screen.\n7. Bug fix: Rewrite the learning process to fix the database inconsistance introduced by user editing.</string>
     

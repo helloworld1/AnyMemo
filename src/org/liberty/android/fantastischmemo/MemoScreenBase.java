@@ -50,8 +50,9 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Display;
-import android.view.WindowManager;
 import android.view.LayoutInflater;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.ViewGroup;
 import android.gesture.GestureOverlayView;
 import android.widget.Button;
@@ -148,6 +149,11 @@ public abstract class MemoScreenBase extends Activity{
 			dbName = extras.getString("dbname");
             activeFilter = extras.getString("active_filter");
 		}
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        if(settings.getBoolean("fullscreen_mode", false)){
+            requestWindowFeature(Window.FEATURE_NO_TITLE);  
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);  
+        }
     }
 
 	public void onResume(){
