@@ -261,7 +261,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
          * flag = 2 means item due, they need to be reviewed. (ret)
          * flag = 3 means items that is ahead of time (cram)
          * flag = 4 means both ret and acq items, but ret comes first
-         * shuffle: shuffle items
+         * flag = 5: shuffle items no other condition
          */
 
 		HashMap<String, String> hm = new HashMap<String, String>();
@@ -328,7 +328,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         }
 
-        if(flag == 3){
+        if(flag == 3 || flag == 5){
             query += "ORDER BY RANDOM() ";
         }
         if(windowSize >= 0){
@@ -609,7 +609,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void shuffleDatabase(){
         List<Item> itemList = new LinkedList<Item>();
-        getListItems(0, -1, itemList, 0, null);
+        getListItems(0, -1, itemList, 5, null);
         int count = 1;
         myDatabase.beginTransaction();
         try{
