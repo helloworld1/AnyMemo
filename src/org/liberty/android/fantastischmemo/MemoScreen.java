@@ -111,6 +111,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
         LinearLayout root = (LinearLayout)findViewById(R.id.memo_screen_root);
 
         //root.setOnClickListener(this);
+        root.setOnClickListener(this);
         root.setOnLongClickListener(this);
         /* Click the q and a to speak if this option is 
          * enabled */
@@ -518,7 +519,19 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
 			
     @Override
     public void onClick(View v){
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        
         String[] speechCtlList = getResources().getStringArray(R.array.speech_ctl_list);
+        String[] touchAreaList = getResources().getStringArray(R.array.touch_area_list);
+        String touchArea = settings.getString("touch_area", touchAreaList[0]);
+        if(touchArea.equals(touchAreaList[0]) && v == (LinearLayout)findViewById(R.id.memo_screen_root)){
+			if(this.showAnswer == false){
+				this.showAnswer = true;
+				updateMemoScreen();
+                autoSpeak();
+			}
+        }
+
         if(v == (TextView) findViewById(R.id.answer)){
             /* Handle the short click of the whole screen */
 			if(this.showAnswer == false){

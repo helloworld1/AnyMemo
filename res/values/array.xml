@@ -97,6 +97,11 @@
     <item>Seperator</item>
 </string-array>
 
+<string-array name="touch_area_list">
+    <item>Whole Screen</item>
+    <item>Answer Text</item>
+</string-array>
+
 <integer-array name="default_color_list">
     <item>0xFFBEBEBE</item>
     <item>0xFFBEBEBE</item>
