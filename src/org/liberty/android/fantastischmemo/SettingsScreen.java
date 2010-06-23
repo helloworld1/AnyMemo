@@ -47,6 +47,10 @@ import android.widget.Spinner;
 import android.widget.EditText;
 import android.widget.TableRow;
 import android.widget.AdapterView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.net.Uri;
 
 public class SettingsScreen extends Activity implements View.OnClickListener, ColorDialog.OnClickListener {
 	private Spinner questionFontSizeSpinner;
@@ -456,35 +460,7 @@ public class SettingsScreen extends Activity implements View.OnClickListener, Co
     
     public void onClick(View v){
     	if(v == btnSave){
-            mProgressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_save), true);
-            Thread savingThread = new Thread(){
-                @Override
-                public void run(){
-                    updateSettings();
-                    if(wipeCheckbox.isChecked()){
-                        
-                        
-                        dbHelper.wipeLearnData();
-                    }
-                    if(shuffleCheckbox.isChecked()){
-                        dbHelper.shuffleDatabase();
-                    }
-                    if(inverseCheckbox.isChecked()){
-                        dbHelper.inverseQA();
-                    }
-                    dbHelper.close();
-                    mHandler.post(new Runnable(){
-                        @Override
-                        public void run(){
-                            mProgressDialog.dismiss();
-                            Intent resultIntent = new Intent();
-                            setResult(Activity.RESULT_OK, resultIntent);    			
-                            finish();
-                        }
-                    });
-                }
-            };
-            savingThread.start();
+            doSave();
     	}
     	if(v == btnDiscard){
         	Intent resultIntent = new Intent();
@@ -615,5 +591,68 @@ public class SettingsScreen extends Activity implements View.OnClickListener, Co
                 
                 
     }
+
+	public boolean onCreateOptionsMenu(Menu menu){
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.settings_menu, menu);
+		return true;
+	}
+	
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	    case R.id.settingsmenu_save:
+            doSave();
+            return true;
+
+        case R.id.settingsmenu_discard:
+        	Intent resultIntent = new Intent();
+        	setResult(Activity.RESULT_CANCELED, resultIntent);    			
+    		finish();
+            return true;
+
+        case R.id.settingsmenu_help:
+            Intent myIntent = new Intent();
+            myIntent.setAction(Intent.ACTION_VIEW);
+            myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
+            myIntent.setData(Uri.parse(getString(R.string.website_help_settings)));
+            startActivity(myIntent);
+	        return true;
+
+        }
+        return false;
+    }
+
+    private void doSave(){
+        mProgressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_save), true);
+        Thread savingThread = new Thread(){
+            @Override
+            public void run(){
+                updateSettings();
+                if(wipeCheckbox.isChecked()){
+                    
+                    
+                    dbHelper.wipeLearnData();
+                }
+                if(shuffleCheckbox.isChecked()){
+                    dbHelper.shuffleDatabase();
+                }
+                if(inverseCheckbox.isChecked()){
+                    dbHelper.inverseQA();
+                }
+                dbHelper.close();
+                mHandler.post(new Runnable(){
+                    @Override
+                    public void run(){
+                        mProgressDialog.dismiss();
+                        Intent resultIntent = new Intent();
+                        setResult(Activity.RESULT_OK, resultIntent);    			
+                        finish();
+                    }
+                });
+            }
+        };
+        savingThread.start();
+    }
+
     
 }

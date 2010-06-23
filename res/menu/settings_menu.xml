@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/settingsmenu_save"
+	    android:icon="@android:drawable/ic_menu_save"
+  		android:title="@string/settings_save" />
+    <item android:id="@+id/settingsmenu_discard"
+	    android:icon="@drawable/back_icon"
+  		android:title="@string/settings_discard" />
+    <item android:id="@+id/settingsmenu_help"
+	    android:icon="@android:drawable/ic_menu_help"
+  		android:title="@string/help_button_text" />
+</menu>

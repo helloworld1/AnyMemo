@@ -159,6 +159,7 @@
     <string name="website_help_main">http://anymemo.org/index.php?page=guide</string>
     <string name="website_version">http://anymemo.org/index.php?page=version</string>
     <string name="website_help_memo">http://anymemo.org/index.php?page=guide#sec22</string>
+    <string name="website_help_settings">http://anymemo.org/index.php?page=guide#sec5</string>
     <string name="website_help_edit">http://anymemo.org/index.php?page=guide#sec3</string>
     <string name="website_help_error_open">http://anymemo.org/index.php?page=faq#25</string>
     <string name="downloader_categories">Categories</string>
@@ -201,6 +202,6 @@
     <string name="fullscreen_summary">Display cards in fullscreen mode.</string>
     <string name="edit_dialog_category">Category</string>
 
-    <string name="what_is_new_message">See Graphical guide of new features, please click version history button.\nVersion 4.1.0\n1. New Feature: Advanced color customization.\n2. New Feature: More clean setting interface.\n3. New Feature: Speech mode selection. Add option to tap question or answer to speak.\n4. New Feature: New grade button style selection dialog in options. Add Anki style buttons.\n5. New Feature: Add fullscreen option\n6. Enhance: The button background is now the same as the answer.\n7. Enahnce: The category can be edited in the edit dialog.\n8. Enhance: Tap show answer to show answer. Otherwise, it does nothing.\n9. Enhance: The default separator color is now gray.</string>
+    <string name="what_is_new_message">See Graphical guide of new features, please click version history button.\nVersion 4.1.0\n1. New Feature: Advanced color customization.\n2. New Feature: More clean setting interface.\n3. New Feature: Speech mode selection. Add option to tap question or answer to speak.\n4. New Feature: New grade button style selection dialog in options. Add Anki style buttons.\n5. New Feature: Add fullscreen option\n6. Enhance: The button background is now the same as the answer.\n7. Enahnce: The category can be edited in the edit dialog.\n8. Enhance: Tap show answer to show answer. Otherwise, it does nothing.\n9. Enhance: The default separator color is now gray.\n10. Enhance: Update Chinese translation.</string>
     
 </resources>
