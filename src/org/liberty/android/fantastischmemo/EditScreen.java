@@ -390,6 +390,9 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
         savedItem = currentItem;
         Item newItem = new Item();
         newItem.setId(dbHelper.getNewId());
+        if(currentItem != null){
+            newItem.setCategory(currentItem.getCategory());
+        }
         currentItem = newItem;
         doEdit();
     }
