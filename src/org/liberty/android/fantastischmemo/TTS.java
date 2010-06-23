@@ -77,8 +77,11 @@ public class TTS implements TextToSpeech.OnInitListener{
 		String processed_str = s.replaceAll("\\<br\\>", ". " );
 		// Remove HTML
 		processed_str = processed_str.replaceAll("\\<.*?>", "");
-		// Remove () [] 
-		processed_str = processed_str.replaceAll("[\\[\\]\\(\\)]", "");
+		// Remove () [] and their content
+		processed_str = processed_str.replaceAll("\\[.*?\\]", "");
+        // Remove the XML special character
+		processed_str = processed_str.replaceAll("\\[.*?\\]", "");
+		processed_str = processed_str.replaceAll("&.*?;", "");
 		
 		status = myTTS.speak(processed_str, TextToSpeech.QUEUE_FLUSH, null);
 		
