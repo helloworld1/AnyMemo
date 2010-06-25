@@ -68,6 +68,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView;
 import android.util.Log;
 import android.os.SystemClock;
+import android.os.Environment;
 import android.graphics.Typeface;
 
 
@@ -105,6 +106,7 @@ public abstract class MemoScreenBase extends Activity{
     protected String questionTypeface = "";
     protected String answerTypeface = "";
     protected String activeFilter = "";
+    protected String audioLocation = "";
     /* The colors for various elements
      * null means default color */
     protected ArrayList<Integer> colors = null;
@@ -159,7 +161,10 @@ public abstract class MemoScreenBase extends Activity{
 	public void onResume(){
         super.onResume();
         /* Refresh depending on where it returns. */
-		if(returnValue == 1){
+        if(returnValue == 2){
+            restartActivity();
+        }
+        else if(returnValue == 1){
 			prepare();
 			returnValue = 0;
 		}
@@ -174,6 +179,8 @@ public abstract class MemoScreenBase extends Activity{
     }
 
 	protected void loadSettings(){
+        /* Set a default audio location */
+        audioLocation = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_audio_dir);
 		/* Here is the global settings from the preferences */
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         speechCtl = settings.getString("speech_ctl", getResources().getStringArray(R.array.speech_ctl_list)[0]);
@@ -229,6 +236,12 @@ public abstract class MemoScreenBase extends Activity{
                     }
                 }
             }
+            if(me.getKey().toString().equals("audio_location")){
+                String loc = me.getValue().toString();
+                if(!loc.equals("")){
+                    audioLocation = loc;
+                }
+            }
 
 		}
 	}
@@ -240,14 +253,26 @@ public abstract class MemoScreenBase extends Activity{
         
     	
     	case 1:
+            
+    		if(resultCode == Activity.RESULT_OK){
+                /* Restart the Memo activity */
+    			returnValue = 2;
+    		}
+    		else if(resultCode == Activity.RESULT_CANCELED){
+    			returnValue = 0;
+    		}
+            break;
+            
     	case 2:
             /* Determine whether to update the screen */
     		if(resultCode == Activity.RESULT_OK){
+                /* Just reload data */
     			returnValue = 1;
     		}
-    		if(resultCode == Activity.RESULT_CANCELED){
+    		else if(resultCode == Activity.RESULT_CANCELED){
     			returnValue = 0;
     		}
+            break;
     		
     		
     	}

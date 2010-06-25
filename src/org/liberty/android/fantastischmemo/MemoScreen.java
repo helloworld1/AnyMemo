@@ -343,7 +343,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
 			this.answerTTS = null;
 		}
 		if(questionUserAudio || answerUserAudio){
-			mSpeakWord = new SpeakWord(Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_audio_dir));
+			mSpeakWord = new SpeakWord(audioLocation);
 		}
 		
 		if(this.feedData() == 2){ // The queue is still empty
@@ -372,6 +372,12 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
                             startActivity(myIntent);
                         }
                     })
+                        .setOnCancelListener(new DialogInterface.OnCancelListener(){
+                            public void onCancel(DialogInterface dialog){
+                                finish();
+                            }
+                        })
+
                         .create()
                         .show();
                     

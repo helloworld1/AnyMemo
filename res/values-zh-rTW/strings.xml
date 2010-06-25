@@ -142,7 +142,7 @@
     <string name="downloader_download_alert">下載: </string>
     <string name="downloader_download_alert_message">詳情: </string>
     <string name="about_title">關于</string>
-    <string name="about_text">記憶輔助軟件.\n\n作者: Haowen Ning, Qi Wang\n\n感謝: pomelo422, williamfeng, jim4ever, Lyndsey Percival, John Rissler</string>
+    <string name="about_text">記憶輔助軟件。&lt;br /&gt;&lt;br /&gt;作者: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;官方網站: &lt;a href="http://anymemo.org"&gt;anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;感謝: pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;翻譯者: jim4ever</string>
     <string name="about_version">版本歷史</string>
     <string name="what_is_new">Changelog</string>
     <string name="downloader_categories">分類</string>
@@ -185,4 +185,9 @@
     <string name="fullscreen_title">全屏模式</string>
     <string name="fullscreen_summary">卡片為全屏模式</string>
     <string name="edit_dialog_category">分類</string>
+    <string name="touch_area_title">屏幕區域設置</string>
+    <string name="touch_area_summary">點擊哪裡來顯示答案</string>
+    <string name="settings_audio_location_title">設置自定義語音位置</string>
+    <string name="tts_tip_user_audio">請將音頻文件放到下面的指定位置</string>
+    <string name="tts_tip_extender">下載Text-to-Speech Extender後才能朗讀這種語言</string>
 </resources>

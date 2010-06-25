@@ -285,6 +285,9 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
 
     @Override
     protected void restartActivity(){
+        loadSettings();
+        updateMemoScreen();
+        
 
     }
 

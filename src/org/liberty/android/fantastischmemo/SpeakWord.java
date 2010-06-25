@@ -30,6 +30,7 @@ import android.util.Log;
 public class SpeakWord {
 	String mAudioDir;
 	MediaPlayer mp;
+    private final String TAG = "org.liberty.android.fantastischmemo.SpeakWord";
 		
 	public SpeakWord(String audioDir){
 		mAudioDir = audioDir;
@@ -49,6 +50,9 @@ public class SpeakWord {
 		// Remove white spaces
         word = word.replaceAll("^\\s+", "");
         word = word.replaceAll("\\s+$", "");
+        if(word.length() < 1){
+            return false;
+        }
 		
 		for(String s : fileType){
 			audioFile = new File(candidateFile + word + s);
@@ -80,8 +84,8 @@ public class SpeakWord {
 			}
 			mp.reset();
 		}
-		catch(IOException e){
-			Log.e("SpeakWord Error", e.toString());
+		catch(Exception e){
+			Log.e(TAG, "Speak error", e);
 			return false;
 		}
 		return true;

@@ -48,10 +48,12 @@ import android.widget.EditText;
 import android.widget.TableRow;
 import android.widget.LinearLayout;
 import android.widget.AdapterView;
+import android.widget.Toast;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.net.Uri;
+import android.os.Environment;
 
 public class SettingsScreen extends Activity implements View.OnClickListener, ColorDialog.OnClickListener {
 	private Spinner questionFontSizeSpinner;
@@ -119,6 +121,27 @@ public class SettingsScreen extends Activity implements View.OnClickListener, Co
         questionLocaleSpinner.setAdapter(localeAdapter);
         answerLocaleSpinner = (Spinner)findViewById(R.id.answer_locale_spinner);
         answerLocaleSpinner.setAdapter(localeAdapter);
+        AdapterView.OnItemSelectedListener localeListener = new AdapterView.OnItemSelectedListener(){
+            public void onItemSelected(AdapterView adapterView, View view, int position, long id){
+                /* This is the position os "User Audio" */
+                if(position == 1){
+                    audioLocationLayout.setVisibility(View.VISIBLE);
+                    Toast.makeText(mContext, getString(R.string.tts_tip_user_audio), Toast.LENGTH_SHORT).show();
+                }
+                else if(position > 7){
+                    Toast.makeText(mContext, getString(R.string.tts_tip_extender), Toast.LENGTH_SHORT).show();
+                }
+
+                if(answerLocaleSpinner.getSelectedItemPosition() != 1 && questionLocaleSpinner.getSelectedItemPosition() != 1){
+                    audioLocationLayout.setVisibility(View.GONE);
+                }
+            }
+            public void onNothingSelected(AdapterView adapterView){
+                audioLocationLayout.setVisibility(View.GONE);
+            }
+        };
+        questionLocaleSpinner.setOnItemSelectedListener(localeListener);
+        answerLocaleSpinner.setOnItemSelectedListener(localeListener);
         
         htmlSpinner = (Spinner)findViewById(R.id.html_spinner);
         ArrayAdapter<CharSequence> htmlAdapter = ArrayAdapter.createFromResource(this, R.array.html_list, android.R.layout.simple_spinner_item);
@@ -179,6 +202,8 @@ public class SettingsScreen extends Activity implements View.OnClickListener, Co
         aTypefaceEdit = (EditText)findViewById(R.id.edit_typeface_answer);
         audioLocationEdit = (EditText)findViewById(R.id.settings_audio_location);
         audioLocationLayout = (LinearLayout)findViewById(R.id.settings_audio_location_view);
+        audioLocationLayout.setVisibility(View.GONE);
+        audioLocationEdit.setText(Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_audio_dir));
         
 
         qTypefaceEdit.setOnClickListener(this);
@@ -285,6 +310,9 @@ public class SettingsScreen extends Activity implements View.OnClickListener, Co
                 if(res.equals("Other")){
                     res = "Disabled";
                 }
+                else if(res.equals("User Audio")){
+                    audioLocationEdit.setVisibility(View.VISIBLE);
+                }
 				String[] localeList = getResources().getStringArray(R.array.locale_list);
 				int index = 0;
 				boolean found = false;
@@ -305,6 +333,9 @@ public class SettingsScreen extends Activity implements View.OnClickListener, Co
 				String res = me.getValue().toString();
                 if(res.equals("Other")){
                     res = "Disabled";
+                }
+                else if(res.equals("User Audio")){
+                    audioLocationEdit.setVisibility(View.VISIBLE);
                 }
 				String[] localeList = getResources().getStringArray(R.array.locale_list);
 				int index = 0;
@@ -395,6 +426,16 @@ public class SettingsScreen extends Activity implements View.OnClickListener, Co
                     aTypefaceEdit.setVisibility(View.GONE);
                 }
             }
+            else if(me.getKey().toString().equals("audio_location")){
+				String res = me.getValue();
+                if(res.equals("")){
+                    audioLocationEdit.setText(Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_audio_dir));
+                }
+                else{
+                    audioLocationEdit.setText(res);
+                }
+
+            }
 			
 		}
         
@@ -427,6 +468,7 @@ public class SettingsScreen extends Activity implements View.OnClickListener, Co
     	hm.put("answer_locale", localeList[answerLocaleSpinner.getSelectedItemPosition()]);
     	hm.put("html_display", htmlList[htmlSpinner.getSelectedItemPosition()]);
     	hm.put("ratio", ratioList[ratioSpinner.getSelectedItemPosition()]);
+        hm.put("audio_location", audioLocationEdit.getText().toString());
         /* Store colors using space separated string */
         String colorString = "";
         if(colorCheckbox.isChecked()){
