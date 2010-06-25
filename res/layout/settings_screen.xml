@@ -14,20 +14,20 @@
 	android:orientation="vertical"
 	android:stretchColumns="1">
 	<TableRow>
-	<TextView
-		android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dip"
-        android:text="@string/settings_question_font_size"
-        
-    />
-    <Spinner
-    	android:id="@+id/question_font_size_spinner"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:drawSelectorOnTop="true"
-        android:prompt="@string/settings_question_font_size_prompt"
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
+            android:text="@string/settings_question_font_size"
+            
         />
+        <Spinner
+            android:id="@+id/question_font_size_spinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:drawSelectorOnTop="true"
+            android:prompt="@string/settings_question_font_size_prompt"
+            />
     </TableRow>
     <TableRow>
         <TextView
@@ -47,20 +47,17 @@
         </TableRow>
         
     <TableRow>
-    <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dip"
-            android:text="@string/settings_question_align"
-            
-        />
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dip"
+                android:text="@string/settings_question_align" />
         <Spinner
             android:id="@+id/question_align_spinner"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:drawSelectorOnTop="true"
-            android:prompt="@string/settings_question_align_prompt"
-            />
+            android:prompt="@string/settings_question_align_prompt" />
     </TableRow>
     
     <TableRow>
@@ -68,97 +65,99 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dip"
-            android:text="@string/settings_answer_align"
-            
-        />
-        
+            android:text="@string/settings_answer_align" />
         <Spinner
             android:id="@+id/answer_align_spinner"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:drawSelectorOnTop="true"
-            android:prompt="@string/settings_answer_align_prompt"
-            />
+            android:prompt="@string/settings_answer_align_prompt" />
     </TableRow>
-    <TableRow>
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dip"
-            android:text="@string/settings_question_locale"
-            
-        />
-        <Spinner
-            android:id="@+id/question_locale_spinner"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:drawSelectorOnTop="true"
-            android:prompt="@string/settings_question_locale_prompt"
-            />
-    </TableRow>
-    <TableRow>
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dip"
-            android:text="@string/settings_answer_locale"
-            
-        />
-        <Spinner
-            android:id="@+id/answer_locale_spinner"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:drawSelectorOnTop="true"
-            android:prompt="@string/settings_answer_locale_prompt"
-            />
-        </TableRow>
         
-        <TableRow>
+    <TableRow>
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dip"
-            android:text="@string/settings_html_display"
-            
-        />
+            android:text="@string/settings_html_display" />
         <Spinner
             android:id="@+id/html_spinner"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:drawSelectorOnTop="true"
-            android:prompt="@string/settings_html_display"
-            />
-        </TableRow>
-
-
-        
-        <TableRow>
+            android:prompt="@string/settings_html_display" />
+    </TableRow>
+    
+    <TableRow>
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dip"
-            android:text="@string/settings_ratio"
-            
-        />
+            android:text="@string/settings_ratio" />
         <Spinner
             android:id="@+id/ratio_spinner"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:drawSelectorOnTop="true"
-            android:prompt="@string/settings_ratio"
-            />
-        </TableRow>
-        <View
+            android:prompt="@string/settings_ratio" />
+    </TableRow>
+    <TableRow>
+        <TextView
             android:layout_width="fill_parent"
-            android:layout_height="2dip"
-            android:background="#FF909090" />
-        <TableRow>
-            <CheckBox
-                android:id="@+id/checkbox_customize_color"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/settings_customize_color" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
+            android:text="@string/settings_question_locale" />
+        <Spinner
+            android:id="@+id/question_locale_spinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:drawSelectorOnTop="true"
+            android:prompt="@string/settings_question_locale_prompt" />
+    </TableRow>
+    <TableRow>
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
+            android:text="@string/settings_answer_locale" />
+        <Spinner
+            android:id="@+id/answer_locale_spinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:drawSelectorOnTop="true"
+            android:prompt="@string/settings_answer_locale_prompt" />
         </TableRow>
+    </TableLayout>
+    <LinearLayout
+        android:layout_width="fill_parent" 
+        android:layout_height="wrap_content" 
+        android:id="@+id/settings_audio_location_view"
+        android:orientation="vertical" >
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
+            android:text="@string/settings_audio_location_title" />
+        <EditText
+            android:id="@+id/settings_audio_location"
+            android:layout_width="fill_parent" 
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dip"
+        android:background="#FF909090" />
+    <CheckBox
+        android:id="@+id/checkbox_customize_color"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/settings_customize_color" />
+    <TableLayout
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:orientation="vertical"
+        android:stretchColumns="1">
         <TableRow
             android:id="@+id/color_row">
             <Spinner

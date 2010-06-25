@@ -46,6 +46,7 @@ import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.EditText;
 import android.widget.TableRow;
+import android.widget.LinearLayout;
 import android.widget.AdapterView;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -72,6 +73,8 @@ public class SettingsScreen extends Activity implements View.OnClickListener, Co
     private CheckBox aTypefaceCheckbox;
     private EditText qTypefaceEdit;
     private EditText aTypefaceEdit;
+    private EditText audioLocationEdit;
+    private LinearLayout audioLocationLayout;
     private TableRow colorRow;
     private Spinner colorSpinner;
     private CheckBox colorCheckbox;
@@ -174,6 +177,10 @@ public class SettingsScreen extends Activity implements View.OnClickListener, Co
         colorCheckbox.setOnClickListener(this);
         qTypefaceEdit = (EditText)findViewById(R.id.edit_typeface_question);
         aTypefaceEdit = (EditText)findViewById(R.id.edit_typeface_answer);
+        audioLocationEdit = (EditText)findViewById(R.id.settings_audio_location);
+        audioLocationLayout = (LinearLayout)findViewById(R.id.settings_audio_location_view);
+        
+
         qTypefaceEdit.setOnClickListener(this);
         aTypefaceEdit.setOnClickListener(this);
         qTypefaceEdit.setVisibility(View.GONE);

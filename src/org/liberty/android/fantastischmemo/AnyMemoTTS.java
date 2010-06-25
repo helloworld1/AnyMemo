@@ -20,55 +20,37 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo;
 
 import java.util.Locale;
+import java.util.HashMap;
 
 import android.content.Context;
-import android.speech.tts.TextToSpeech;
+import com.google.tts.TextToSpeechBeta;
+import com.google.tts.TextToSpeechBeta.Engine;
+import android.util.Log;
 import android.util.Log;
 
-public class TTS implements TextToSpeech.OnInitListener{
-	private TextToSpeech myTTS;
+
+public class AnyMemoTTS implements TextToSpeechBeta.OnInitListener{
+	private TextToSpeechBeta myTTS;
 	
 	private Locale myLocale;
 	private int errorCode;
 	private	boolean init;
 	private int version;
     public final static String TAG = "org.liberty.android.fantastischmemo.TTS";
+
+    public void onInit(int status, int version){
+    }
 	
-	public TTS(Context context, Locale locale){
-		myTTS = new TextToSpeech(context, this);
+	public AnyMemoTTS(Context context, Locale locale){
+		myTTS = new TextToSpeechBeta(context, this);
 		myLocale = locale;
 		init = false;
-		
-		
 	}
 	
 	public void shutdown(){
 		if(init == true){
 			myTTS.shutdown();
 		}
-	}
-	
-	public void onInit(int status){
-        if(myTTS == null){
-            Log.e(TAG, "TTS is NULL");
-        }
-		if(myTTS != null && status == TextToSpeech.SUCCESS){
-			int result = myTTS.setLanguage(myLocale);
-			if(result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED){
-				Log.e("TTS engine", "Language is not available");
-				errorCode = 1;
-			}
-		}
-		else{
-			Log.e("TTS engine", "Cannot init the TextToSpeech");
-			errorCode = 2;
-		}
-		init = true;
-		
-	}
-	
-	public boolean isInit(){
-		return init;
 	}
 	
 	public int sayText(String s){
@@ -82,10 +64,12 @@ public class TTS implements TextToSpeech.OnInitListener{
         // Remove the XML special character
 		processed_str = processed_str.replaceAll("\\[.*?\\]", "");
 		processed_str = processed_str.replaceAll("&.*?;", "");
+
+        myTTS.setLanguage(myLocale);
+        myTTS.speak(s, 0, null);
 		
-		status = myTTS.speak(processed_str, TextToSpeech.QUEUE_FLUSH, null);
-		
-		return status;
+		return 0;
 	}
+
 }
 	

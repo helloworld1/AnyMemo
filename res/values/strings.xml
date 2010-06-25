@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">AnyMemo</string>
     <string name="app_full_name">AnyMemo Free</string>
-    <string name="app_version">4.1.0</string>
+    <string name="app_version">4.2.0</string>
     <string name="up_one_level">..</string>
     <string name="current_dir">.</string>
     <string name="ok_text">OK</string>
@@ -150,7 +150,7 @@
     <string name="downloader_download_alert">Download: </string>
     <string name="downloader_download_alert_message">Details: </string>
     <string name="about_title">About</string>
-    <string name="about_text">Advanced spaced repetition flashcard learning software.\n\nAuthors: Haowen Ning, Qi Wang\n\nAcknowledge: pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler\n\nTranslators: jim4ever</string>
+    <string name="about_text">Advanced spaced repetition flashcard learning software.&lt;br /&gt;&lt;br /&gt;Authors: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;Website: &lt;a href="http://anymemo.org"&gt;anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Acknowledge: pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;Translators: jim4ever</string>
     <string name="about_version">Version History</string>
     <string name="what_is_new">Changelog</string>
     <string name="website_main">http://anymemo.org</string>
@@ -158,9 +158,9 @@
     <string name="website_download_head">http://anymemo.org/pages/download.php?wordlistname=DatabasesTable&amp;filename=</string>
     <string name="website_help_main">http://anymemo.org/index.php?page=guide</string>
     <string name="website_version">http://anymemo.org/index.php?page=version</string>
-    <string name="website_help_memo">http://anymemo.org/index.php?page=guide#sec22</string>
-    <string name="website_help_settings">http://anymemo.org/index.php?page=guide#sec5</string>
-    <string name="website_help_edit">http://anymemo.org/index.php?page=guide#sec3</string>
+    <string name="website_help_memo">http://anymemo.org/index.php?page=guide2#sec22</string>
+    <string name="website_help_settings">http://anymemo.org/index.php?page=guide5#sec5</string>
+    <string name="website_help_edit">http://anymemo.org/index.php?page=guide3#sec3</string>
     <string name="website_help_error_open">http://anymemo.org/index.php?page=faq#25</string>
     <string name="downloader_categories">Categories</string>
     <string name="downloader_databases">Databases</string>
@@ -203,8 +203,7 @@
     <string name="edit_dialog_category">Category</string>
     <string name="touch_area_title">Touch Area</string>
     <string name="touch_area_summary">Touch where to uncover the question</string>
-
-
-    <string name="what_is_new_message">See Graphical guide of new features, please click version history button.\nVersion 4.1.0\n1. New Feature: Advanced color customization.\n2. New Feature: More clean setting interface.\n3. New Feature: Speech mode selection. Add option to tap question or answer to speak.\n4. New Feature: New grade button style selection dialog in options. Add Anki style buttons.\n5. New Feature: Add fullscreen option\n6. Enhance: The button background is now the same as the answer.\n7. Enahnce: The category can be edited in the edit dialog.\n8. Enhance: Tap show answer to show answer. Otherwise, it does nothing.\n9. Enhance: The default separator color is now gray.\n10. Enhance: Update Chinese translation.</string>
+    <string name="settings_audio_location_title">Set user audio location</string>
+    <string name="what_is_new_message">See Graphical guide of new features, please click version history button. or visit &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt;</string>
     
 </resources>

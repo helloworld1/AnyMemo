@@ -42,7 +42,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 import android.content.res.Configuration;
+import android.text.method.LinkMovementMethod;
+import android.text.Html;
 
 public class AnyMemo extends Activity implements OnClickListener{
 	private String dbName;
@@ -139,9 +142,14 @@ public class AnyMemo extends Activity implements OnClickListener{
         	SharedPreferences.Editor editor = settings.edit();
             editor.putString("saved_version", thisVersion);
             editor.commit();
+
+            View alertView = View.inflate(this, R.layout.link_alert, null);
+            TextView textView = (TextView)alertView.findViewById(R.id.link_alert_message);
+            textView.setText(Html.fromHtml(getString(R.string.what_is_new_message)));
+            textView.setMovementMethod(LinkMovementMethod.getInstance());
             new AlertDialog.Builder(this)
+                .setView(alertView)
                 .setTitle(getString(R.string.what_is_new))
-                .setMessage(getString(R.string.what_is_new_message))
                 .setPositiveButton(getString(R.string.ok_text), null)
                 .setNegativeButton(getString(R.string.about_version), new DialogInterface.OnClickListener(){
                     @Override
@@ -272,9 +280,13 @@ public class AnyMemo extends Activity implements OnClickListener{
     		//myIntent.setClass(this, AboutScreen.class);
     		//startActivity(myIntent);
             /* About screen is now obsolete */
+            View alertView = View.inflate(this, R.layout.link_alert, null);
+            TextView textView = (TextView)alertView.findViewById(R.id.link_alert_message);
+            textView.setText(Html.fromHtml(getString(R.string.about_text)));
+            textView.setMovementMethod(LinkMovementMethod.getInstance());
             new AlertDialog.Builder(this)
+                .setView(alertView)
                 .setTitle(getString(R.string.about_title) + " " + getString(R.string.app_full_name) + " " + getString(R.string.app_version))
-                .setMessage(getString(R.string.about_text))
                 .setPositiveButton(getString(R.string.ok_text), null)
                 .setNegativeButton(getString(R.string.about_version), new DialogInterface.OnClickListener(){
                     @Override

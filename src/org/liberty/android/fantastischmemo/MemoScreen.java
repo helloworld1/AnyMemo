@@ -75,8 +75,8 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
 	private int maxRetId;
 	private int scheduledItemCount;
 	private int newItemCount;
-	private TTS questionTTS;
-	private TTS answerTTS;
+	private AnyMemoTTS questionTTS;
+	private AnyMemoTTS answerTTS;
     private Context mContext;
     private Handler mHandler;
     private SpeakWord mSpeakWord;
@@ -301,67 +301,43 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
 		scheduledItemCount = dbHelper.getScheduledCount();
 		newItemCount = dbHelper.getNewCount();
 		loadSettings();
+		Locale ql = new Locale(questionLocale.toLowerCase());
+		Locale al = new Locale(answerLocale.toLowerCase());;
 		/* Get question and answer locale */
-		Locale ql;
-		Locale al;
 		if(questionLocale.equals("US")){
 			ql = Locale.US;
 		}
-		else if(questionLocale.equals("DE")){
-			ql = Locale.GERMAN;
-		}
 		else if(questionLocale.equals("UK")){
 			ql = Locale.UK;
-		}
-		else if(questionLocale.equals("FR")){
-			ql = Locale.FRANCE;
-		}
-		else if(questionLocale.equals("IT")){
-			ql = Locale.ITALY;
-		}
-		else if(questionLocale.equals("ES")){
-			ql = new Locale("es", "ES");
 		}
 		else if(questionLocale.equals("User Audio")){
 			this.questionUserAudio= true;
 			ql = null;
 		}
-		else{
+		else if(questionLocale.equals("") || questionLocale.toLowerCase().equals("disabled") || questionLocale.toLowerCase().equals("other")){
 			ql = null;
 		}
 		if(answerLocale.equals("US")){
 			al = Locale.US;
 		}
-		else if(answerLocale.equals("DE")){
-			al = Locale.GERMAN;
-		}
 		else if(answerLocale.equals("UK")){
 			al = Locale.UK;
-		}
-		else if(answerLocale.equals("FR")){
-			al = Locale.FRANCE;
-		}
-		else if(answerLocale.equals("IT")){
-			al = Locale.ITALY;
-		}
-		else if(answerLocale.equals("ES")){
-			al = new Locale("es", "ES");
 		}
 		else if(answerLocale.equals("User Audio")){
 			this.answerUserAudio = true;
 			al = null;
 		}
-		else{
-			al = null;
-		}
+		else if(answerLocale.equals("") || answerLocale.toLowerCase().equals("disabled") || answerLocale.toLowerCase().equals("other")){
+            al = null;
+        }
 		if(ql != null){
-			this.questionTTS = new TTS(this, ql);
+			this.questionTTS = new AnyMemoTTS(this, ql);
 		}
 		else{
 			this.questionTTS = null;
 		}
 		if(al != null){
-			this.answerTTS = new TTS(this, al);
+			this.answerTTS = new AnyMemoTTS(this, al);
 		}
 		else{
 			this.answerTTS = null;

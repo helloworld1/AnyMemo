@@ -38,6 +38,7 @@ import android.view.View.OnKeyListener;
 import android.view.KeyEvent;
 import android.util.Log;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -336,10 +337,14 @@ public class Downloader extends Activity implements OnItemClickListener{
                     });
                 }
             };
+            View alertView = View.inflate(Downloader.this, R.layout.link_alert, null);
+            TextView textView = (TextView)alertView.findViewById(R.id.link_alert_message);
+            textView.setMovementMethod(LinkMovementMethod.getInstance());
+            textView.setText(Html.fromHtml(getString(R.string.downloader_download_alert_message) + mFilterDatabaseList.get(clickPosition).get("DBNote")));
 
             new AlertDialog.Builder(this)
+                .setView(alertView)
                 .setTitle(getString(R.string.downloader_download_alert) + mFilterDatabaseList.get(clickPosition).get("FileName"))
-                .setMessage(Html.fromHtml(getString(R.string.downloader_download_alert_message) + mFilterDatabaseList.get(clickPosition).get("DBNote")))
                 .setPositiveButton(getString(R.string.yes_text), new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface arg0, int arg1){

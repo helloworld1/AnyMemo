@@ -26,6 +26,36 @@
 	<item>DE</item>
 	<item>IT</item>
 	<item>ES</item>
+	<item>AF</item>
+	<item>BS</item>
+	<item>CY</item>
+	<item>CZ</item>
+	<item>EL</item>
+	<item>EO</item>
+	<item>FI</item>
+	<item>HI</item>
+	<item>HR</item>
+	<item>HU</item>
+	<item>ID</item>
+	<item>IS</item>
+	<item>IT</item>
+	<item>KU</item>
+	<item>LA</item>
+	<item>MK</item>
+	<item>NL</item>
+	<item>NO</item>
+	<item>PL</item>
+	<item>PT</item>
+	<item>RO</item>
+	<item>RU</item>
+	<item>SK</item>
+	<item>SR</item>
+	<item>SV</item>
+	<item>SW</item>
+	<item>TA</item>
+	<item>TR</item>
+	<item>VI</item>
+	<item>ZH</item>
 </string-array>
 <string-array name="html_list">
 	<item>none</item>
