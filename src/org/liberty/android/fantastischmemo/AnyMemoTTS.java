@@ -34,7 +34,6 @@ public class AnyMemoTTS implements TextToSpeechBeta.OnInitListener{
 	
 	private Locale myLocale;
 	private int errorCode;
-	private	boolean init;
 	private int version;
     public final static String TAG = "org.liberty.android.fantastischmemo.TTS";
 
@@ -44,13 +43,10 @@ public class AnyMemoTTS implements TextToSpeechBeta.OnInitListener{
 	public AnyMemoTTS(Context context, Locale locale){
 		myTTS = new TextToSpeechBeta(context, this);
 		myLocale = locale;
-		init = false;
 	}
 	
 	public void shutdown(){
-		if(init == true){
 			myTTS.shutdown();
-		}
 	}
 	
 	public int sayText(String s){
