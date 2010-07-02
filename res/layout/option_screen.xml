@@ -41,5 +41,9 @@
         android:title="@string/fullscreen_title" 
         android:defaultValue="false"
         android:summary="@string/fullscreen_summary" />
- 
+    <CheckBoxPreference
+        android:key="portrait_only"
+        android:title="@string/portrait_only_title" 
+        android:defaultValue="false"
+        android:summary="@string/portrait_only_summary" />
 </PreferenceScreen> 

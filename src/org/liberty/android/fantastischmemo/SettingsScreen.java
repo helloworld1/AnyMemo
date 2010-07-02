@@ -54,6 +54,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.net.Uri;
 import android.os.Environment;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.content.pm.ActivityInfo;
 
 public class SettingsScreen extends Activity implements View.OnClickListener, ColorDialog.OnClickListener {
 	private Spinner questionFontSizeSpinner;
@@ -99,6 +102,12 @@ public class SettingsScreen extends Activity implements View.OnClickListener, Co
         setContentView(R.layout.settings_screen);
         mContext = this;
         mHandler = new Handler();
+        /* Disable the orientation change accordingly */
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        if(settings.getBoolean("portrait_only", false)){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+
         
         /* Properly set up all the Views */
         questionFontSizeSpinner = (Spinner)findViewById(R.id.question_font_size_spinner);

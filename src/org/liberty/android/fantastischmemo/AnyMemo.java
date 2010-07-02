@@ -294,7 +294,7 @@ public class AnyMemo extends Activity implements OnClickListener{
                         Intent myIntent = new Intent();
                         myIntent.setAction(Intent.ACTION_VIEW);
                         myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
-                        myIntent.setData(Uri.parse("http://anymemo.org/index.php?p=1_6_Version-History"));
+                        myIntent.setData(Uri.parse(getString(R.string.website_version)));
                         startActivity(myIntent);
                     }
                 })
