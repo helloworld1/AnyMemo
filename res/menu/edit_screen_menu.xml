@@ -12,15 +12,19 @@
         android:id="@+id/editmenu_delete_id"
         android:icon="@android:drawable/ic_menu_delete"  
         android:title="@string/detail_delete" />
-    <item android:id="@+id/editmenu_detail_id"
-  		  android:icon="@android:drawable/ic_menu_edit"
-          android:title="@string/detail_menu_text" />
+    <item 
+        android:id="@+id/editmenu_list_id"
+        android:icon="@android:drawable/ic_menu_view"  
+        android:title="@string/list_mode_text" />
     <item android:id="@+id/editmenu_settings_id"
   		  android:icon="@android:drawable/ic_menu_preferences"
   		  android:title="@string/settings_menu_text" />
     <item android:id="@+id/menu_edit_filter"
           android:title="@string/filter_text"
   		  android:icon="@android:drawable/ic_menu_search" />
+    <item android:id="@+id/editmenu_detail_id"
+  		  android:icon="@android:drawable/ic_menu_edit"
+          android:title="@string/detail_menu_text" />
     <item android:id="@+id/editmenu_help"
   		  android:icon="@android:drawable/ic_menu_help"  
           android:title="@string/help_button_text" />

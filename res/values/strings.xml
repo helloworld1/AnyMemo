@@ -209,5 +209,6 @@
     <string name="what_is_new_message">See Graphical guide of new features, please click version history button. or visit official website:&lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt;&lt;br /&gt;</string>
     <string name="portrait_only_title">Portrait Only</string>
     <string name="portrait_only_summary">Completely disable screen orientation changes in all screens</string>
+    <string name="list_mode_text">List Mode</string>
     
 </resources>

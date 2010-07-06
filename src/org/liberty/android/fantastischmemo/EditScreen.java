@@ -255,6 +255,13 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
                 doFilter();
                 return true;
 
+            case R.id.editmenu_list_id:
+    			myIntent.setClass(this, ListEditScreen.class);
+    			myIntent.putExtra("dbname", dbName);
+    			myIntent.putExtra("dbpath", dbPath);
+    			myIntent.putExtra("openid", currentItem.getId());
+    			startActivity(myIntent);
+                return true;
         }
         return false;
     }

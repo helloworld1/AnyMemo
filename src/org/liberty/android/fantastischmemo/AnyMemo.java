@@ -232,6 +232,7 @@ public class AnyMemo extends Activity implements OnClickListener{
     		if(resultCode == Activity.RESULT_OK){
     			Intent myIntent = new Intent();
     			myIntent.setClass(this, EditScreen.class);
+    			//myIntent.setClass(this, ListEditScreen.class);
     			dbName = data.getStringExtra("org.liberty.android.fantastischmemo.dbName");
     			dbPath = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
     			dbPath += "/";
