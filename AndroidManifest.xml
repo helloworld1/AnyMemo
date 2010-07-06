@@ -44,8 +44,9 @@
             android:configChanges="orientation|keyboardHidden" >
         </activity>
         <activity
-            android:configChanges="orientation|keyboardHidden"
-            android:name=".ListEditScreen" />
+            android:name=".ListEditScreen"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden" />
 
     </application>
 

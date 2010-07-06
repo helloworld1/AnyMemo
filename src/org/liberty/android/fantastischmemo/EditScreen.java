@@ -262,6 +262,9 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
     			myIntent.putExtra("openid", currentItem.getId());
     			startActivity(myIntent);
                 return true;
+
+            case R.id.editmenu_merge_id:
+                return true;
         }
         return false;
     }

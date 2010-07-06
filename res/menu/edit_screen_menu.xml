@@ -25,6 +25,8 @@
     <item android:id="@+id/editmenu_detail_id"
   		  android:icon="@android:drawable/ic_menu_edit"
           android:title="@string/detail_menu_text" />
+    <item android:id="@+id/editmenu_merge_id"
+          android:title="@string/merge_db_text" />
     <item android:id="@+id/editmenu_help"
   		  android:icon="@android:drawable/ic_menu_help"  
           android:title="@string/help_button_text" />

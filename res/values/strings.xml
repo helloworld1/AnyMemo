@@ -210,5 +210,6 @@
     <string name="portrait_only_title">Portrait Only</string>
     <string name="portrait_only_summary">Completely disable screen orientation changes in all screens</string>
     <string name="list_mode_text">List Mode</string>
+    <string name="merge_db_text">Merge DB</string>
     
 </resources>

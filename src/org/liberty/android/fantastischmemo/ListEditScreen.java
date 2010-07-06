@@ -55,7 +55,7 @@ public class ListEditScreen extends Activity{
 		if (extras != null) {
             dbPath = extras.getString("dbpath");
             dbName = extras.getString("dbname");
-            initPosition = extras.getInt("openid");
+            initPosition = extras.getInt("openid") - 1;
 		}
         final ProgressDialog progressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_database), true);
         new Thread(){
