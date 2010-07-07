@@ -662,6 +662,7 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
                         myIntent.setClass(OpenScreen.this, EditScreen.class);
                         myIntent.putExtra("dbname", name);
                         myIntent.putExtra("dbpath", path);
+                        myIntent.putExtra("openid", 1);
                         try{
                             mRecentOpenList.writeNewList(path, name);
                         }

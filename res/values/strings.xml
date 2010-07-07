@@ -215,4 +215,6 @@
     <string name="merge_fail_title">Merge Success</string>
     <string name="merge_success_message">Successfully merge databases:</string>
     <string name="merge_fail_message">Fail to merge databases. Error:</string>
+    <string name="merging_title">Merging...</string>
+    <string name="merging_summary">Merging databases. Please wait.</string>
 </resources>
