@@ -211,5 +211,8 @@
     <string name="portrait_only_summary">Completely disable screen orientation changes in all screens</string>
     <string name="list_mode_text">List Mode</string>
     <string name="merge_db_text">Merge DB</string>
-    
+    <string name="merge_success_title">Merge Success</string>
+    <string name="merge_fail_title">Merge Success</string>
+    <string name="merge_success_message">Successfully merge databases:</string>
+    <string name="merge_fail_message">Fail to merge databases. Error:</string>
 </resources>

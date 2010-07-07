@@ -26,6 +26,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.Date;
+import java.util.Comparator;
+import java.util.Collections;
 
 import android.graphics.Color;
 import android.app.Activity;
@@ -82,6 +84,7 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
     private Button prevButton;
     private Item savedItem = null;
     private boolean searchInflated = false;
+    private final int ACTIVITY_MERGE = 1;
 
     private static final String TAG = "org.liberty.android.fantastischmemo.EditScreen";
 
@@ -264,9 +267,96 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
                 return true;
 
             case R.id.editmenu_merge_id:
+                myIntent.setClass(this, FileBrowser.class);
+                myIntent.putExtra("default_root", dbPath);
+                myIntent.putExtra("file_extension", ".db");
+                startActivityForResult(myIntent, ACTIVITY_MERGE);
+
                 return true;
         }
         return false;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+    	super.onActivityResult(requestCode, resultCode, data);
+        final int request = requestCode;
+        final Intent myData = data;
+        if(resultCode == Activity.RESULT_OK){
+    		if(requestCode == ACTIVITY_MERGE){
+                final ProgressDialog progressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_import), true);
+                new Thread(){
+                    @Override
+                    public void run(){
+                        final String name = myData.getStringExtra("org.liberty.android.fantastischmemo.dbName");
+                        final String path = myData.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
+                        try{
+                            DatabaseHelper dbHelper2 = new DatabaseHelper(mContext, path, name);
+                            final ArrayList<Item> items1 = new ArrayList<Item>();
+                            final ArrayList<Item> items2 = new ArrayList<Item>();
+                            dbHelper.getListItems(-1, -1, items1, 0, null); dbHelper2.getListItems(-1, -1, items2, 0, null); dbHelper2.close();
+                            /* Merge the items1 and items2 */
+                            final int totalItems = items1.size() + items2.size();
+                            final int items1Size = items1.size();
+                            final int items2Size = items2.size();
+                            /* Modify the IDs of the item1
+                             * so it will be like:
+                             * 1 -- cur, cur + item2Size --- totalItems
+                             */
+                            for(int i = currentId; i < items1Size; i++){
+                                Item tmpItem = items1.get(i);
+                                tmpItem.setId(tmpItem.getId() + items2Size);
+                                items1.set(i, tmpItem);
+                            }
+                            for(int i = 0; i < items2Size; i++){
+                                Item tmpItem = items2.get(i);
+                                tmpItem.setId(tmpItem.getId() + currentId);
+                                items2.set(i, tmpItem);
+                            }
+                            items1.addAll(items2);
+                            /* sort the items in the order of ID */
+                            Collections.sort(items1, new Comparator<Item>() {
+                                public int compare(Item i1, Item i2){
+                                    if(i1.getId() < i2.getId()){
+                                        return -1;
+                                    }
+                                    else{
+                                        return 1;
+                                    }
+                                }
+                            });
+                            dbHelper.insertListItems(items1);
+                        }
+                        catch(Exception e){
+                            mHandler.post(new Runnable(){
+                                @Override
+                                public void run(){
+                                    progressDialog.dismiss();
+                                    new AlertDialog.Builder(mContext)
+                                        .setTitle(R.string.merge_fail_title)
+                                        .setMessage(getString(R.string.merge_fail_message) + " " + e.toString())
+                                        .setPositiveButton(R.string.ok_text, null)
+                                        .show();
+
+                                }
+                            });
+                        }
+                        mHandler.post(new Runnable(){
+                            @Override
+                            public void run(){
+                                progressDialog.dismiss();
+                                new AlertDialog.Builder(mContext)
+                                    .setTitle(R.string.merge_success_title)
+                                    .setMessage(getString(R.string.merge_success_message) + " " + dbName + ", " + name)
+                                    .setPositiveButton(R.string.ok_text, null)
+                                    .show();
+
+                            }
+                        });
+                    }
+                }.start();
+            }
+        }
     }
 
     @Override

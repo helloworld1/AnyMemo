@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo;
 
+import org.amr.arabic.ArabicUtilities;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,6 +35,7 @@ import android.widget.ListView;
 import android.widget.SectionIndexer;
 import android.app.ProgressDialog;
 import android.util.Log;
+import android.text.Html;
 
 
 import java.util.ArrayList;
@@ -106,8 +109,10 @@ public class ListEditScreen extends Activity{
             TextView answerView = (TextView)convertView.findViewById(R.id.item_answer);
 
             idView.setText("" + mItems.get(position).getId());
-            questionView.setText("" + mItems.get(position).getQuestion());
-            answerView.setText("" + mItems.get(position).getAnswer());
+            //questionView.setText(Html.fromHtml(ArabicUtilities.reshape(mItems.get(position).getQuestion())));
+            //answerView.setText(Html.fromHtml(ArabicUtilities.reshape(mItems.get(position).getAnswer())));
+            questionView.setText(mItems.get(position).getQuestion());
+            answerView.setText(mItems.get(position).getAnswer());
 
             return convertView;
         }
