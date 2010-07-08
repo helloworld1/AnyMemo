@@ -217,4 +217,8 @@
     <string name="merge_fail_message">Fail to merge databases. Error:</string>
     <string name="merging_title">Merging...</string>
     <string name="merging_summary">Merging databases. Please wait.</string>
+    <string name="merge_method_title">Merge method</string>
+    <string name="merge_method_message">Where to merge the database?</string>
+    <string name="merge_method_here">After Here</string>
+    <string name="merge_method_end">At the End</string>
 </resources>

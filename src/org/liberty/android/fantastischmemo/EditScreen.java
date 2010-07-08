@@ -26,8 +26,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.Date;
-import java.util.Comparator;
-import java.util.Collections;
 
 import android.graphics.Color;
 import android.app.Activity;
@@ -287,7 +285,26 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
         final int request = requestCode;
         if(resultCode == Activity.RESULT_OK){
     		if(requestCode == ACTIVITY_MERGE){
-                doMerge(data);
+                new AlertDialog.Builder(this)
+                    .setTitle(R.string.merge_method_title)
+                    .setMessage(R.string.merge_method_message)
+                    .setPositiveButton(R.string.merge_method_here, new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            doMerge(data);
+                        }
+                    })
+                    .setNeutralButton(R.string.merge_method_end, new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            /* set the current item to the last one */
+                            currentItem = dbHelper.getItemById(maxId, 0, true, activeFilter);
+                            currentId = currentItem.getId();
+                            doMerge(data);
+                        }
+                    })
+                    .create()
+                    .show();
                 returnValue = 0;
             }
         }
@@ -509,41 +526,7 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
                 final String name = data.getStringExtra("org.liberty.android.fantastischmemo.dbName");
                 final String path = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
                 try{
-                    DatabaseHelper dbHelper2 = new DatabaseHelper(mContext, path, name);
-                    final ArrayList<Item> items1 = new ArrayList<Item>();
-                    final ArrayList<Item> items2 = new ArrayList<Item>();
-                    dbHelper.getListItems(-1, -1, items1, 0, null); dbHelper2.getListItems(-1, -1, items2, 0, null); dbHelper2.close();
-                    /* Merge the items1 and items2 */
-                    final int totalItems = items1.size() + items2.size();
-                    final int items1Size = items1.size();
-                    final int items2Size = items2.size();
-                    /* Modify the IDs of the item1
-                     * so it will be like:
-                     * 1 -- cur, cur + item2Size --- totalItems
-                     */
-                    for(int i = currentId; i < items1Size; i++){
-                        Item tmpItem = items1.get(i);
-                        tmpItem.setId(tmpItem.getId() + items2Size);
-                        items1.set(i, tmpItem);
-                    }
-                    for(int i = 0; i < items2Size; i++){
-                        Item tmpItem = items2.get(i);
-                        tmpItem.setId(tmpItem.getId() + currentId);
-                        items2.set(i, tmpItem);
-                    }
-                    items1.addAll(items2);
-                    /* sort the items in the order of ID */
-                    Collections.sort(items1, new Comparator<Item>() {
-                        public int compare(Item i1, Item i2){
-                            if(i1.getId() < i2.getId()){
-                                return -1;
-                            }
-                            else{
-                                return 1;
-                            }
-                        }
-                    });
-                    dbHelper.insertListItems(items1);
+                    dbHelper.mergeDatabase(path, name, currentId);
                 }
                 catch(final Exception e){
                     mHandler.post(new Runnable(){

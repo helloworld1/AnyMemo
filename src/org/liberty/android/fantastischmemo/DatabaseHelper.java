@@ -34,6 +34,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.Comparator;
+import java.util.Collections;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -756,5 +758,49 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         HashMap<String, String> hm = new HashMap<String, String>();
         hm.put("recent_filters_json", "");
         setSettings(hm);
+    }
+
+    public void mergeDatabase(String dbpath, String dbname, int fromId) throws Exception{
+        if(fromId >= getNewId() || fromId < 1){
+            throw new Exception("Invalid fromId in mergeDatabase");
+        }
+        DatabaseHelper dbHelper2 = new DatabaseHelper(mContext, dbpath, dbname);
+        final ArrayList<Item> items1 = new ArrayList<Item>();
+        final ArrayList<Item> items2 = new ArrayList<Item>();
+        getListItems(-1, -1, items1, 0, null); 
+        dbHelper2.getListItems(-1, -1, items2, 0, null); 
+        dbHelper2.close();
+        /* Merge the items1 and items2 */
+        final int totalItems = items1.size() + items2.size();
+        final int items1Size = items1.size();
+        final int items2Size = items2.size();
+        /* Modify the IDs of the item1
+         * so it will be like:
+         * 1 -- cur, cur + item2Size --- totalItems
+         */
+        for(int i = fromId; i < items1Size; i++){
+            Item tmpItem = items1.get(i);
+            tmpItem.setId(tmpItem.getId() + items2Size);
+            items1.set(i, tmpItem);
+        }
+        for(int i = 0; i < items2Size; i++){
+            Item tmpItem = items2.get(i);
+            tmpItem.setId(tmpItem.getId() + fromId);
+            items2.set(i, tmpItem);
+        }
+        items1.addAll(items2);
+        /* sort the items in the order of ID */
+        Collections.sort(items1, new Comparator<Item>() {
+            public int compare(Item i1, Item i2){
+                if(i1.getId() < i2.getId()){
+                    return -1;
+                }
+                else{
+                    return 1;
+                }
+            }
+        });
+        insertListItems(items1);
+
     }
 }
