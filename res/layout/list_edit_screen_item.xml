@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1.5"
         android:layout_marginTop="3dip"
+        android:textSize="16sp"
     />
     <TextView
         android:id="@+id/item_question"
@@ -17,6 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_marginTop="3dip"
+        android:textSize="16sp"
     />
     <TextView
         android:id="@+id/item_answer"
@@ -24,5 +26,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_marginTop="3dip"
+        android:textSize="16sp"
     />
 </LinearLayout>
