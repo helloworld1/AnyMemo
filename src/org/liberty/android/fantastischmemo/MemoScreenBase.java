@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo;
 
 import org.amr.arabic.ArabicUtilities;
+import org.xml.sax.XMLReader;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +31,8 @@ import java.util.Set;
 import java.util.Date;
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.text.Editable;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -71,9 +74,11 @@ import android.util.Log;
 import android.os.SystemClock;
 import android.os.Environment;
 import android.graphics.Typeface;
+import android.text.Html.TagHandler;
+import android.text.Html.ImageGetter;
 
 
-public abstract class MemoScreenBase extends Activity{
+public abstract class MemoScreenBase extends Activity implements TagHandler, ImageGetter{
     //protected ArrayList<Item> learnQueue;
 	protected DatabaseHelper dbHelper = null;
 	protected String dbName;
@@ -365,8 +370,8 @@ public abstract class MemoScreenBase extends Activity{
 		
 		if(this.htmlDisplay.equals("both")){
             /* Use HTML to display */
-			CharSequence sq = Html.fromHtml(ArabicUtilities.reshape(item.getQuestion()));
-			CharSequence sa = Html.fromHtml(ArabicUtilities.reshape(item.getAnswer()));
+			CharSequence sq = Html.fromHtml(ArabicUtilities.reshape(item.getQuestion()), this, this);
+			CharSequence sa = Html.fromHtml(ArabicUtilities.reshape(item.getAnswer()), this, this);
 			//CharSequence sa = Html.fromHtml(item.getAnswer());
 
 			
@@ -626,6 +631,19 @@ public abstract class MemoScreenBase extends Activity{
             .setNegativeButton(getString(R.string.cancel_text), null)
             .create()
             .show();
+    }
+
+    @Override
+    public Drawable getDrawable(String source){
+        Log.v(TAG, "Source: " + source);
+        Drawable d = getResources().getDrawable(R.drawable.icon);
+        d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
+        return d;
+    }
+
+    @Override
+    public void handleTag(boolean opening, String tag, Editable output, XMLReader xmlReader){
+        return;
     }
 
 

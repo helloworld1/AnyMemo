@@ -82,7 +82,7 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
     private Button prevButton;
     private Item savedItem = null;
     private boolean searchInflated = false;
-    private final int ACTIVITY_MERGE = 1;
+    private final int ACTIVITY_MERGE = 10;
 
     private static final String TAG = "org.liberty.android.fantastischmemo.EditScreen";
 
