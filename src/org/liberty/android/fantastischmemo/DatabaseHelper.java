@@ -767,7 +767,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         DatabaseHelper dbHelper2 = new DatabaseHelper(mContext, dbpath, dbname);
         final ArrayList<Item> items1 = new ArrayList<Item>();
         final ArrayList<Item> items2 = new ArrayList<Item>();
-        getListItems(-1, -1, items1, 0, null); 
+        getListItems(fromId + 1, -1, items1, 0, null); 
         dbHelper2.getListItems(-1, -1, items2, 0, null); 
         dbHelper2.close();
         /* Merge the items1 and items2 */
@@ -778,7 +778,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
          * so it will be like:
          * 1 -- cur, cur + item2Size --- totalItems
          */
-        for(int i = fromId; i < items1Size; i++){
+        for(int i = 0; i < items1Size; i++){
             Item tmpItem = items1.get(i);
             tmpItem.setId(tmpItem.getId() + items2Size);
             items1.set(i, tmpItem);
@@ -790,6 +790,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         items1.addAll(items2);
         /* sort the items in the order of ID */
+        /*
         Collections.sort(items1, new Comparator<Item>() {
             public int compare(Item i1, Item i2){
                 if(i1.getId() < i2.getId()){
@@ -800,6 +801,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 }
             }
         });
+        */
         insertListItems(items1);
 
     }

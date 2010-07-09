@@ -28,6 +28,8 @@
     <string name="edit_button_text">Preview/Edit Database</string>
     <string name="default_dir">/anymemo/</string>
     <string name="default_audio_dir">/anymemo/voice</string>
+    <string name="default_image_dir">/anymemo/images</string>
+
     <string name="default_db_name">french-body-parts.db</string>
     <string name="autoaudio">Automatic Speak</string>
     <string name="autoaudio_summary">The question and answer will be read automatically</string>

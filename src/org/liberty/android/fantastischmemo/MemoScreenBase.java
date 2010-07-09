@@ -22,6 +22,10 @@ package org.liberty.android.fantastischmemo;
 import org.amr.arabic.ArabicUtilities;
 import org.xml.sax.XMLReader;
 
+import java.io.InputStream;
+import java.io.FileInputStream;
+import java.net.URL;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -636,7 +640,39 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
     @Override
     public Drawable getDrawable(String source){
         Log.v(TAG, "Source: " + source);
-        Drawable d = getResources().getDrawable(R.drawable.icon);
+        /* Try the image in /sdcard/anymemo/images/dbname/myimg.png */
+        try{
+            String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_image_dir) + "/" + dbName + "/" + source;
+            Drawable d = Drawable.createFromStream(new FileInputStream(filePath), source);
+            d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
+            return d;
+        }
+        catch(Exception e){
+        }
+
+        /* Try the image in /sdcard/anymemo/images/myimg.png */
+        try{
+            String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_image_dir) + "/" + source;
+            Drawable d = Drawable.createFromStream(new FileInputStream(filePath), source);
+            d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
+            return d;
+        }
+        catch(Exception e){
+        }
+
+        /* Try the image from internet */
+        try{
+            String url = source;
+            String src_name = source; 
+            Drawable d = Drawable.createFromStream(((InputStream)new URL(url).getContent()), src_name);
+            d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
+            return d;
+        }
+        catch(Exception e){
+        }
+
+        /* Fallback, display default image */
+        Drawable d = getResources().getDrawable(R.drawable.picture);
         d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
         return d;
     }

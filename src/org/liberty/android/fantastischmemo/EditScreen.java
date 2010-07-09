@@ -92,7 +92,9 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
 		setContentView(R.layout.memo_screen_gesture);
 		Bundle extras = getIntent().getExtras();
 		if(extras != null) {
-			currentId = extras.getInt("openid", 1);
+            if(currentId < 0){
+                currentId = extras.getInt("openid", 1);
+            }
         }
 		
         mContext = this;
@@ -140,6 +142,22 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
         }
         catch(Exception e){
         }
+    }
+
+    @Override 
+    public void onSaveInstanceState(Bundle outState) 
+    {
+        
+        outState.putInt("id", currentId);
+        super.onSaveInstanceState(outState); 
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) 
+    {
+        super.onRestoreInstanceState(savedInstanceState);
+        currentId = savedInstanceState.getInt("id", 1);
+        prepare();
     }
 
     @Override
@@ -341,7 +359,7 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
         Intent myIntent = new Intent(this, EditScreen.class);
         myIntent.putExtra("dbname", dbName);
         myIntent.putExtra("dbpath", dbPath);
-        myIntent.putExtra("openid", currentId);
+        myIntent.putExtra("openid", currentItem.getId());
         finish();
         startActivity(myIntent);
     }
