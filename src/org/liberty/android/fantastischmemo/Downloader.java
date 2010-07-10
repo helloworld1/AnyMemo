@@ -280,14 +280,14 @@ public class Downloader extends Activity implements OnItemClickListener{
                     }
                     else{
                         ins = new BufferedInputStream
-                            (zipfile.getInputStream(entry));
+                            (zipfile.getInputStream(entry), 8192);
                         int count;
-                        byte data[] = new byte[2048];
+                        byte data[] = new byte[8192];
                         FileOutputStream fos = new 
                             FileOutputStream(sdpath + "/" + entry.getName());
                         dest = new 
-                            BufferedOutputStream(fos, 2048);
-                        while ((count = ins.read(data, 0, 2048)) 
+                            BufferedOutputStream(fos, 8192);
+                        while ((count = ins.read(data, 0, 8192)) 
                                 != -1) {
                             dest.write(data, 0, count);
                         }

@@ -792,4 +792,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         insertListItems(items1);
 
     }
+
+    public void insertItem(Item item, int id){
+        /* Insert item after id */
+        /* This is a tricky part! UPDATE dict_tbl SET +id = _id - 1 won't work
+         * because it will conflict with the unique constraint
+         */
+        myDatabase.execSQL("UPDATE dict_tbl SET _id = _id - 99999 WHERE _id > ?", new String[]{"" + id});
+        myDatabase.execSQL("UPDATE learn_tbl SET _id = _id - 99999 WHERE _id > ?", new String[]{"" + id});
+        myDatabase.execSQL("UPDATE dict_tbl SET _id = _id + 100000 WHERE _id < 0");
+        myDatabase.execSQL("UPDATE learn_tbl SET _id = _id + 100000 WHERE _id < 0");
+        item.setId(id + 1);
+        addOrReplaceItem(item);
+    }
 }

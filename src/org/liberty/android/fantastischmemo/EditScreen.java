@@ -81,8 +81,10 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
     private Button nextButton;
     private Button prevButton;
     private Item savedItem = null;
+    private Item copyItem = null;
     private boolean searchInflated = false;
     private final int ACTIVITY_MERGE = 10;
+    
 
     private static final String TAG = "org.liberty.android.fantastischmemo.EditScreen";
 
@@ -292,6 +294,14 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
                 myIntent.putExtra("file_extension", ".db");
                 startActivityForResult(myIntent, ACTIVITY_MERGE);
 
+                return true;
+            
+            case R.id.editmenu_copy_id:
+                doCopy();
+                return true;
+
+            case R.id.editmenu_paste_id:
+                doPaste();
                 return true;
         }
         return false;
@@ -582,6 +592,18 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
                 });
             }
         }.start();
+    }
+
+    private void doCopy(){
+        copyItem = currentItem;
+    }
+
+    private void doPaste(){
+        if(copyItem != null){
+            dbHelper.insertItem(copyItem, currentId);
+            currentId += 1;
+            prepare();
+        }
     }
 
         
