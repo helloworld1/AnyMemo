@@ -529,7 +529,7 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
             text = text.replace('?', '_');
             int resId = dbHelper.searchItem(currentItem.getId(), text, forward);
             if(resId > 0){
-                currentItem = dbHelper.getItemById(resId, 0, true, activeFilter);
+                currentItem = dbHelper.getItemById(resId, 0, forward, activeFilter);
                 currentId = currentItem.getId();
                 prepare();
             }

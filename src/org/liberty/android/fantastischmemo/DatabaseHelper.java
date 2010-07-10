@@ -689,7 +689,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         else{
             /* search backward */
-            result = this.myDatabase.rawQuery("SELECT _id FROM dict_tbl where (question LIKE ? OR answer LIKE ?) AND _id < ? LIMIT 1 ", new String[]{text, text, "" + currentId});
+            result = this.myDatabase.rawQuery("SELECT _id FROM dict_tbl where (question LIKE ? OR answer LIKE ?) AND _id < ? ORDER BY _id DESC LIMIT 1 ", new String[]{text, text, "" + currentId});
         }
 
 		if(result.getCount() != 1){
@@ -789,19 +789,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             items2.set(i, tmpItem);
         }
         items1.addAll(items2);
-        /* sort the items in the order of ID */
-        /*
-        Collections.sort(items1, new Comparator<Item>() {
-            public int compare(Item i1, Item i2){
-                if(i1.getId() < i2.getId()){
-                    return -1;
-                }
-                else{
-                    return 1;
-                }
-            }
-        });
-        */
         insertListItems(items1);
 
     }
