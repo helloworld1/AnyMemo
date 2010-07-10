@@ -52,10 +52,14 @@ import java.io.File;
 import java.io.OutputStream;
 import java.io.FileOutputStream;
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipEntry;
+import java.util.Enumeration;
  
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -260,9 +264,41 @@ public class Downloader extends Activity implements OnItemClickListener{
             }
             out.close();
             is.close();
-            return true;
+            /* Uncompress the zip file that contains images */
+            if(filename.endsWith(".zip")){
 
-            
+                BufferedOutputStream dest = null;
+                BufferedInputStream ins = null;
+                ZipEntry entry;
+                ZipFile zipfile = new ZipFile(outFile);
+                Enumeration<?> e = zipfile.entries();
+                while(e.hasMoreElements()) {
+                    entry = (ZipEntry) e.nextElement();
+                    Log.v(TAG, "Extracting: " +entry);
+                    if(entry.isDirectory()){
+                        new File(sdpath + "/" + entry.getName()).mkdir();
+                    }
+                    else{
+                        ins = new BufferedInputStream
+                            (zipfile.getInputStream(entry));
+                        int count;
+                        byte data[] = new byte[2048];
+                        FileOutputStream fos = new 
+                            FileOutputStream(sdpath + "/" + entry.getName());
+                        dest = new 
+                            BufferedOutputStream(fos, 2048);
+                        while ((count = ins.read(data, 0, 2048)) 
+                                != -1) {
+                            dest.write(data, 0, count);
+                        }
+                        dest.flush();
+                        dest.close();
+                        ins.close();
+                    }
+                }
+                outFile.delete();
+            }
+            return true;
         }
         catch(Exception e){
             Log.e(TAG, "Error downloading", e);
@@ -291,6 +327,7 @@ public class Downloader extends Activity implements OnItemClickListener{
                     downloadStatus = false;
                     try{
                         downloadStatus = downloadFile(getString(R.string.website_download_head)+ URLEncoder.encode(filename, "UTF-8"), filename);
+                        filename = filename.replace(".zip", ".db");
                         if(downloadStatus == true){
                             String sdpath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
                             try{
