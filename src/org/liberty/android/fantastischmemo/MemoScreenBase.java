@@ -40,6 +40,7 @@ import android.text.Editable;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -132,6 +133,7 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
 	//private boolean initFeed;
 
     private final static String TAG = "org.liberty.android.fantastischmemo.MemoScreenBase";
+    protected final static int DIALOG_EDIT = 20;
 
 	abstract protected boolean prepare();
 
@@ -494,14 +496,9 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
     protected void doEdit(){
         /* Edit current card */
         /* This is a customized dialog inflated from XML */
-        LayoutInflater factory = LayoutInflater.from(MemoScreenBase.this);
-        final View editView = factory.inflate(R.layout.edit_dialog, null);
-        final EditText eq = (EditText)editView.findViewById(R.id.edit_dialog_question_entry);
-        final EditText ea = (EditText)editView.findViewById(R.id.edit_dialog_answer_entry);
-        final EditText ca = (EditText)editView.findViewById(R.id.edit_dialog_category_entry);
-        eq.setText(currentItem.getQuestion());
-        ea.setText(currentItem.getAnswer());
-        ca.setText(currentItem.getCategory());
+        showDialog(DIALOG_EDIT);
+
+        /*
         new AlertDialog.Builder(MemoScreenBase.this)
             .setTitle(getString(R.string.memo_edit_dialog_title))
             .setView(editView)
@@ -530,6 +527,7 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
                 })
             .create()
             .show();
+            */
     }
 
     protected void doDelete(){
@@ -682,7 +680,35 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
         return;
     }
 
+    @Override
+    protected Dialog onCreateDialog(int id){
+        Dialog dialog = null;
+        Context appContext = this.getApplicationContext();
+
+        switch(id){
+            case DIALOG_EDIT:
+                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM,
+                              WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
 
 
+                LayoutInflater factory = LayoutInflater.from(MemoScreenBase.this);
+                final View editView = factory.inflate(R.layout.edit_dialog, null);
+                final EditText eq = (EditText)editView.findViewById(R.id.edit_dialog_question_entry);
+                final EditText ea = (EditText)editView.findViewById(R.id.edit_dialog_answer_entry);
+                final EditText ca = (EditText)editView.findViewById(R.id.edit_dialog_category_entry);
+                eq.setText(currentItem.getQuestion());
+                ea.setText(currentItem.getAnswer());
+                ca.setText(currentItem.getCategory());
+                dialog = new Dialog(this, R.style.edit_dialog_style);
+                dialog.setContentView(editView);
+                dialog.setTitle(R.string.memo_edit_dialog_title);
+                break;
+            default:
+                dialog = super.onCreateDialog(id);
+                break;
+
+        }
+        return dialog;
+    }
 }
 

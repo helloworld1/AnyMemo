@@ -1,51 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView 
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="wrap_content"
-    android:layout_width="fill_parent">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+    <ScrollView 
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:layout_width="fill_parent">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+            <TextView 
+                android:text="@string/add_screen_question"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dip"/>
+            <EditText
+                android:id="@+id/edit_dialog_question_entry"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:inputType="textMultiLine"
+                android:minLines="3"
+                android:gravity="top"
+                android:layout_weight="1"
+                android:background="@android:drawable/editbox_background"/>
+            <TextView 
+                android:text="@string/add_screen_answer"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dip"/>
+            <EditText
+                android:id="@+id/edit_dialog_answer_entry"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:inputType="textMultiLine"
+                android:gravity="top"
+                android:minLines="3"
+                android:layout_weight="1"
+                android:background="@android:drawable/editbox_background"/>
+            <TextView 
+                android:text="@string/edit_dialog_category"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dip"/>
+            <EditText
+                android:id="@+id/edit_dialog_category_entry"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:inputType="textMultiLine"
+                android:gravity="top"
+                android:minLines="3"
+                android:layout_weight="1"
+                android:background="@android:drawable/editbox_background"/>
+        </LinearLayout>
+    </ScrollView>
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <TextView 
-            android:text="@string/add_screen_question"
+        android:orientation="horizontal">
+        <Button 
+            android:id="@+id/edit_dialog_button_save" 
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:padding="3dip"/>
-        <EditText
-            android:id="@+id/edit_dialog_question_entry"
+            android:layout_height="wrap_content" 
+            android:text="@string/settings_save"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip" />
+        <Button 
+            android:id="@+id/edit_dialog_button_cancel" 
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
-            android:minLines="3"
-            android:gravity="top"
-            android:background="@android:drawable/editbox_background"/>
-        <TextView 
-            android:text="@string/add_screen_answer"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:padding="3dip"/>
-        <EditText
-            android:id="@+id/edit_dialog_answer_entry"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
-            android:minLines="3"
-            android:gravity="top"
-            android:background="@android:drawable/editbox_background"/>
-        <TextView 
-            android:text="@string/edit_dialog_category"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:padding="3dip"/>
-        <EditText
-            android:id="@+id/edit_dialog_category_entry"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
-            android:minLines="3"
-            android:gravity="top"
-            android:background="@android:drawable/editbox_background"/>
+            android:layout_height="wrap_content" 
+            android:layout_weight="1"
+            android:text="@string/cancel_text"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip" />
     </LinearLayout>
-</ScrollView>
+</LinearLayout>
+            
+
+        
+
+
