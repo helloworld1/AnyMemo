@@ -63,6 +63,7 @@ import android.view.LayoutInflater;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.ViewGroup;
+import android.view.KeyEvent;
 import android.gesture.GestureOverlayView;
 import android.widget.Button;
 import android.os.Handler;
@@ -682,13 +683,13 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
 
     @Override
     protected Dialog onCreateDialog(int id){
-        Dialog dialog = null;
         Context appContext = this.getApplicationContext();
 
         switch(id){
-            case DIALOG_EDIT:
+            case DIALOG_EDIT:{
                  getWindow().setFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM,
                               WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+
 
 
                 LayoutInflater factory = LayoutInflater.from(MemoScreenBase.this);
@@ -696,19 +697,105 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
                 final EditText eq = (EditText)editView.findViewById(R.id.edit_dialog_question_entry);
                 final EditText ea = (EditText)editView.findViewById(R.id.edit_dialog_answer_entry);
                 final EditText ca = (EditText)editView.findViewById(R.id.edit_dialog_category_entry);
+                final Button btnDlgSave = (Button)editView.findViewById(R.id.edit_dialog_button_save);
+                final Button btnDlgCancel = (Button)editView.findViewById(R.id.edit_dialog_button_cancel);
+
+
+                final Dialog dialog = new Dialog(this, R.style.edit_dialog_style);
+                dialog.setContentView(editView);
+                dialog.setTitle(R.string.memo_edit_dialog_title);
+
                 eq.setText(currentItem.getQuestion());
                 ea.setText(currentItem.getAnswer());
                 ca.setText(currentItem.getCategory());
-                dialog = new Dialog(this, R.style.edit_dialog_style);
-                dialog.setContentView(editView);
-                dialog.setTitle(R.string.memo_edit_dialog_title);
-                break;
+                Log.v(TAG, "CURRENT: " + currentItem.getQuestion());
+
+                btnDlgSave.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        String qText = eq.getText().toString();
+                        String aText = ea.getText().toString();
+                        String cText = ca.getText().toString();
+                        HashMap<String, String> hm = new HashMap<String, String>();
+                        hm.put("question", qText);
+                        hm.put("answer", aText);
+                        hm.put("category", cText);
+                        currentItem.setData(hm);
+                        dbHelper.addOrReplaceItem(currentItem);
+                        updateMemoScreen();
+                        refreshAfterEditItem();
+                        removeDialog(DIALOG_EDIT);
+                    }
+                });
+                btnDlgCancel.setOnClickListener(new View.OnClickListener(){
+                    public void onClick(View v) {
+                        String qText = eq.getText().toString();
+                        String aText = ea.getText().toString();
+                        String cText = ca.getText().toString();
+                        if(!qText.equals(currentItem.getQuestion()) || !aText.equals(currentItem.getAnswer()) || !cText.equals(currentItem.getCategory())){
+                            new AlertDialog.Builder(MemoScreenBase.this)
+                                .setTitle(R.string.warning_text)
+                                .setMessage(R.string.edit_dialog_unsave_warning)
+                                .setPositiveButton(R.string.yes_text, new DialogInterface.OnClickListener(){
+                                    public void onClick(DialogInterface  dialog, int which){
+                            refreshAfterEditItem();
+                            removeDialog(DIALOG_EDIT);
+
+                                    }
+                                })
+                                .setNegativeButton(R.string.no_text, null)
+                                .create()
+                                .show();
+                                
+                        }
+                        else{
+                            refreshAfterEditItem();
+                            removeDialog(DIALOG_EDIT);
+                        }
+                    }
+                });
+
+                dialog.setOnKeyListener(new DialogInterface.OnKeyListener(){
+                    public  boolean onKey(DialogInterface  dialog, int keyCode, KeyEvent  event){
+                        if(event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK){
+                            String qText = eq.getText().toString();
+                            String aText = ea.getText().toString();
+                            String cText = ca.getText().toString();
+                            if(!qText.equals(currentItem.getQuestion()) || !aText.equals(currentItem.getAnswer()) || !cText.equals(currentItem.getCategory())){
+                                new AlertDialog.Builder(MemoScreenBase.this)
+                                    .setTitle(R.string.warning_text)
+                                    .setMessage(R.string.edit_dialog_unsave_warning)
+                                    .setPositiveButton(R.string.yes_text, new DialogInterface.OnClickListener(){
+                                        public void onClick(DialogInterface  dialog, int which){
+                                refreshAfterEditItem();
+                                removeDialog(DIALOG_EDIT);
+
+                                        }
+                                    })
+                                    .setNegativeButton(R.string.no_text, null)
+                                    .create()
+                                    .show();
+                                    
+                            }
+                            else{
+                                refreshAfterEditItem();
+                                removeDialog(DIALOG_EDIT);
+                            }
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+
+
+                
+
+                return dialog;
+            }
+
             default:
-                dialog = super.onCreateDialog(id);
-                break;
+                return null;
 
         }
-        return dialog;
     }
 }
 

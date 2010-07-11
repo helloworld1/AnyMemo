@@ -225,5 +225,6 @@
     <string name="merge_method_end">At the End</string>
     <string name="copy_text">Copy</string>
     <string name="paste_text">Paste</string>
+    <string name="edit_dialog_unsave_warning">The current card is modify but not saved. Are you sure to exit?</string>
 
 </resources>
