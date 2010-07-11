@@ -146,9 +146,9 @@
     <string name="downloader_connection_error">Connection error</string>
     <string name="downloader_connection_error_message">Cannot connect to server. Please make sure the internet connection</string>
     <string name="downloader_download_success">Successfully Downloaded</string>
-    <string name="downloader_download_success_message">The database has been stored in: /sdcard/anymemo/</string>
+    <string name="downloader_download_success_message">The database has been stored in: </string>
     <string name="downloader_download_fail">Download failed</string>
-    <string name="downloader_download_fail_message">Causes:\n1. Database with the same name exist in /sdcard/anymemo\n2. Connection fail.\n3. Server issue, please report bug.\nYou can delete the db with the same name or try again.</string>
+    <string name="downloader_download_fail_message">Failed to download this database. Error Message:</string>
     <string name="downloader_download_alert">Download: </string>
     <string name="downloader_download_alert_message">Details: </string>
     <string name="about_title">About</string>
@@ -214,7 +214,7 @@
     <string name="list_mode_text">List Mode</string>
     <string name="merge_db_text">Merge DB</string>
     <string name="merge_success_title">Merge Success</string>
-    <string name="merge_fail_title">Merge Success</string>
+    <string name="merge_fail_title">Merge Failed</string>
     <string name="merge_success_message">Successfully merge databases:</string>
     <string name="merge_fail_message">Fail to merge databases. Error:</string>
     <string name="merging_title">Merging...</string>

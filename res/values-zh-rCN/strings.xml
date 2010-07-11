@@ -138,7 +138,7 @@
     <string name="downloader_download_success">成功下载</string>
     <string name="downloader_download_success_message">数据库已存入: /sdcard/anymemo/</string>
     <string name="downloader_download_fail">下载失败</string>
-    <string name="downloader_download_fail_message">在/sdcard/anymemo中发现同名数据或连接失败，请确认连接或删除同名数据.</string>
+    <string name="downloader_download_fail_message">下载失败。错误信息：</string>
     <string name="downloader_download_alert">下载: </string>
     <string name="downloader_download_alert_message">详情: </string>
     <string name="about_title">关于</string>
@@ -190,4 +190,21 @@
     <string name="settings_audio_location_title">设置自定义语音位置</string>
     <string name="tts_tip_user_audio">请将音频文件放到下面的指定位置</string>
     <string name="tts_tip_extender">下载Text-to-Speech Extender后才能朗读这种语言</string>
+    <string name="portrait_only_title">禁用屏幕转向</string>
+    <string name="portrait_only_summary">在所有的屏幕中禁用转向</string>
+    <string name="list_mode_text">列表</string>
+    <string name="merge_db_text">合并数据库</string>
+    <string name="merge_success_title">合并成功</string>
+    <string name="merge_fail_title">合并失败</string>
+    <string name="merge_success_message">成功合并数据库:</string>
+    <string name="merge_fail_message">错误信息:</string>
+    <string name="merging_title">合并中...</string>
+    <string name="merging_summary">正在合并数据库, 请稍候.</string>
+    <string name="merge_method_title">合并方式</string>
+    <string name="merge_method_message">合并到哪儿?</string>
+    <string name="merge_method_here">这个卡片后</string>
+    <string name="merge_method_end">数据库末尾</string>
+    <string name="copy_text">复制</string>
+    <string name="paste_text">粘贴</string>
+    <string name="edit_dialog_unsave_warning">当前卡更改了还未保存，是否退出?</string>
 </resources>

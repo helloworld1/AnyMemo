@@ -138,7 +138,7 @@
     <string name="downloader_download_success">成功下載</string>
     <string name="downloader_download_success_message">數據庫已存入: /sdcard/anymemo/</string>
     <string name="downloader_download_fail">下載失敗</string>
-    <string name="downloader_download_fail_message">在/sdcard/anymemo中發現同名數據或連接失敗，請確認連接或刪除同名數據.</string>
+    <string name="downloader_download_fail_message">下載失敗。錯誤信息：</string>
     <string name="downloader_download_alert">下載: </string>
     <string name="downloader_download_alert_message">詳情: </string>
     <string name="about_title">關于</string>
@@ -190,4 +190,21 @@
     <string name="settings_audio_location_title">設置自定義語音位置</string>
     <string name="tts_tip_user_audio">請將音頻文件放到下面的指定位置</string>
     <string name="tts_tip_extender">下載Text-to-Speech Extender後才能朗讀這種語言</string>
+    <string name="portrait_only_title">禁用屏幕轉向</string>
+    <string name="portrait_only_summary">在所有的屏幕中禁用轉向</string>
+    <string name="list_mode_text">列表</string>
+    <string name="merge_db_text">合並數據庫</string>
+    <string name="merge_success_title">合並成功</string>
+    <string name="merge_fail_title">合並失敗</string>
+    <string name="merge_success_message">成功合並數據庫:</string>
+    <string name="merge_fail_message">錯誤信息:</string>
+    <string name="merging_title">合並中...</string>
+    <string name="merging_summary">正在合並數據庫, 請稍候.</string>
+    <string name="merge_method_title">合並方式</string>
+    <string name="merge_method_message">合並到哪兒?</string>
+    <string name="merge_method_here">這個卡片後</string>
+    <string name="merge_method_end">數據庫末尾</string>
+    <string name="copy_text">復制</string>
+    <string name="paste_text">粘貼</string>
+    <string name="edit_dialog_unsave_warning">當前卡更改了還未保存，是否退出?</string>
 </resources>

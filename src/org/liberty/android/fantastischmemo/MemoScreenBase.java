@@ -708,7 +708,6 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
                 eq.setText(currentItem.getQuestion());
                 ea.setText(currentItem.getAnswer());
                 ca.setText(currentItem.getCategory());
-                Log.v(TAG, "CURRENT: " + currentItem.getQuestion());
 
                 btnDlgSave.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {

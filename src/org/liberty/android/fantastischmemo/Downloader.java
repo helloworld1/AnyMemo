@@ -241,71 +241,77 @@ public class Downloader extends Activity implements OnItemClickListener{
         }
     }
 
-    private boolean downloadFile(String url, String filename){
+    private void downloadFile(String url, String filename) throws Exception{
         String sdpath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
         File outFile = new File(sdpath + filename);
         try{
             OutputStream out;
             if(outFile.exists()){
-                return false;
+                throw new IOException("Database already exist!");
             }
-            outFile.createNewFile();
-            out  =new FileOutputStream(outFile);
+            try{
+                outFile.createNewFile();
+                out  =new FileOutputStream(outFile);
 
-            URL myURL = new URL(url);
-            URLConnection ucon = myURL.openConnection();
-            byte[] buf = new byte[1024];
+                URL myURL = new URL(url);
+                URLConnection ucon = myURL.openConnection();
+                byte[] buf = new byte[1024];
 
-            InputStream is = ucon.getInputStream();
-            BufferedInputStream bis = new BufferedInputStream(is);
-            int len = 0;
-            while((len = bis.read(buf)) != -1){
-                out.write(buf, 0, len);
-            }
-            out.close();
-            is.close();
-            /* Uncompress the zip file that contains images */
-            if(filename.endsWith(".zip")){
-
-                BufferedOutputStream dest = null;
-                BufferedInputStream ins = null;
-                ZipEntry entry;
-                ZipFile zipfile = new ZipFile(outFile);
-                Enumeration<?> e = zipfile.entries();
-                while(e.hasMoreElements()) {
-                    entry = (ZipEntry) e.nextElement();
-                    Log.v(TAG, "Extracting: " +entry);
-                    if(entry.isDirectory()){
-                        new File(sdpath + "/" + entry.getName()).mkdir();
-                    }
-                    else{
-                        ins = new BufferedInputStream
-                            (zipfile.getInputStream(entry), 8192);
-                        int count;
-                        byte data[] = new byte[8192];
-                        FileOutputStream fos = new 
-                            FileOutputStream(sdpath + "/" + entry.getName());
-                        dest = new 
-                            BufferedOutputStream(fos, 8192);
-                        while ((count = ins.read(data, 0, 8192)) 
-                                != -1) {
-                            dest.write(data, 0, count);
-                        }
-                        dest.flush();
-                        dest.close();
-                        ins.close();
-                    }
+                InputStream is = ucon.getInputStream();
+                BufferedInputStream bis = new BufferedInputStream(is);
+                int len = 0;
+                while((len = bis.read(buf)) != -1){
+                    out.write(buf, 0, len);
                 }
-                outFile.delete();
+                out.close();
+                is.close();
+                /* Uncompress the zip file that contains images */
+                if(filename.endsWith(".zip")){
+
+                    BufferedOutputStream dest = null;
+                    BufferedInputStream ins = null;
+                    ZipEntry entry;
+                    ZipFile zipfile = new ZipFile(outFile);
+                    Enumeration<?> e = zipfile.entries();
+                    while(e.hasMoreElements()) {
+                        entry = (ZipEntry) e.nextElement();
+                        Log.v(TAG, "Extracting: " +entry);
+                        if(entry.isDirectory()){
+                            new File(sdpath + "/" + entry.getName()).mkdir();
+                        }
+                        else{
+                            ins = new BufferedInputStream
+                                (zipfile.getInputStream(entry), 8192);
+                            int count;
+                            byte data[] = new byte[8192];
+                            FileOutputStream fos = new FileOutputStream(sdpath + "/" + entry.getName());
+                            dest = new BufferedOutputStream(fos, 8192);
+                            while ((count = ins.read(data, 0, 8192)) != -1) {
+                                dest.write(data, 0, count);
+                            }
+                            dest.flush();
+                            dest.close();
+                            ins.close();
+                        }
+                    }
+                    /* Delete the zip file if it is successfully decompressed */
+                    outFile.delete();
+                }
+                filename = filename.replace(".zip", ".db");
+                DatabaseHelper dh = new DatabaseHelper(mContext, sdpath, filename);
+                dh.close();
             }
-            return true;
+            catch(Exception e){
+                if(outFile.exists()){
+                    outFile.delete();
+                }
+                throw new Exception(e);
+            }
+
         }
         catch(Exception e){
             Log.e(TAG, "Error downloading", e);
-            if(outFile.exists()){
-                outFile.delete();
-            }
-            return false;
+            throw new Exception(e);
         }
     }
 
@@ -324,54 +330,36 @@ public class Downloader extends Activity implements OnItemClickListener{
                 @Override
                 public void run(){
                     String filename = mFilterDatabaseList.get(clickPosition).get("FileName");
-                    downloadStatus = false;
                     try{
-                        downloadStatus = downloadFile(getString(R.string.website_download_head)+ URLEncoder.encode(filename, "UTF-8"), filename);
+                        downloadFile(getString(R.string.website_download_head)+ URLEncoder.encode(filename, "UTF-8"), filename);
                         filename = filename.replace(".zip", ".db");
-                        if(downloadStatus == true){
-                            String sdpath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
-                            try{
-                                DatabaseHelper dh = new DatabaseHelper(mContext, sdpath, filename);
-                                dh.close();
+                        String sdpath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
+                        final File dbFile = new File(sdpath + filename);
+                        mHandler.post(new Runnable(){
+                            public void run(){
+                                mProgressDialog.dismiss();
+                                new AlertDialog.Builder(Downloader.this)
+                                    .setTitle(R.string.downloader_download_success)
+                                    .setMessage(getString(R.string.downloader_download_success_message) + dbFile.toString())
+                                    .setPositiveButton(R.string.ok_text, null)
+                                    .create()
+                                    .show();
                             }
-                            catch(Exception e){
-                                downloadStatus = false;
-                                File dbFile = new File(sdpath + filename);
-                                Log.v(TAG, dbFile.toString());
-                                if(dbFile.delete()){
-                                    Log.v(TAG, "TRUE");
-                                }
-                                else{
-                                    Log.v(TAG, "FALSE");
-                                }
-
+                        });
+                    }
+                    catch(final Exception e){
+                        mHandler.post(new Runnable(){
+                            public void run(){
+                                mProgressDialog.dismiss();
+                                new AlertDialog.Builder(Downloader.this)
+                                    .setTitle(R.string.downloader_download_fail)
+                                    .setMessage(getString(R.string.downloader_download_fail_message) + " " + e.toString())
+                                    .setPositiveButton(R.string.ok_text, null)
+                                    .create()
+                                    .show();
                             }
-                        }
-
+                        });
                     }
-                    catch(UnsupportedEncodingException e){
-                    }
-                    mHandler.post(new Runnable(){
-                        @Override
-                        public void run(){
-                            mProgressDialog.dismiss();
-                            DialogInterface.OnClickListener okButtonListener = new DialogInterface.OnClickListener(){
-                                public void onClick(DialogInterface arg0, int arg1){
-                                }
-                            };
-                            alertDialog = new AlertDialog.Builder(mContext).create();
-                            alertDialog.setButton(getString(R.string.ok_text), okButtonListener);
-                            if(downloadStatus){
-                            alertDialog.setTitle(getString(R.string.downloader_download_success));
-                            alertDialog.setMessage(getString(R.string.downloader_download_success_message) + mFilterDatabaseList.get(clickPosition).get("FileName"));
-                        }
-                        else{
-                            alertDialog.setTitle(getString(R.string.downloader_download_fail));
-                            alertDialog.setMessage(getString(R.string.downloader_download_fail_message));
-                        }
-                            alertDialog.show();
-                        }
-                    });
                 }
             };
             View alertView = View.inflate(Downloader.this, R.layout.link_alert, null);
@@ -394,11 +382,7 @@ public class Downloader extends Activity implements OnItemClickListener{
                         downloadThread.start();
                     }
                 })
-                .setNegativeButton(getString(R.string.no_text), new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1){
-                    }
-                })
+                .setNegativeButton(getString(R.string.no_text), null)
                 .show();
 
 
