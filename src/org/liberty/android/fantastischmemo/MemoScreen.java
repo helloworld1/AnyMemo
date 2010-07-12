@@ -343,7 +343,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
 			this.answerTTS = null;
 		}
 		if(questionUserAudio || answerUserAudio){
-			mSpeakWord = new SpeakWord(audioLocation);
+			mSpeakWord = new SpeakWord(audioLocation, dbName);
 		}
 		
 		if(this.feedData() == 2){ // The queue is still empty

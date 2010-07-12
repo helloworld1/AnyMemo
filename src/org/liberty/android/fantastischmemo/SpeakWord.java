@@ -23,6 +23,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 import android.media.MediaPlayer;
 import android.util.Log;
@@ -30,17 +33,20 @@ import android.util.Log;
 public class SpeakWord {
 	String mAudioDir;
 	MediaPlayer mp;
+    String dbName;
     private final String TAG = "org.liberty.android.fantastischmemo.SpeakWord";
 		
-	public SpeakWord(String audioDir){
+	public SpeakWord(String audioDir, String dbname){
 		mAudioDir = audioDir;
 		mp = new MediaPlayer();
+        dbName = dbname;
 	}
 	
-	public boolean speakWord(String word){
+	public boolean speakWord(final String text){
 		File audioFile = null;
 		String[] fileType = {".ogg", ".wav", ".mp3"};
 		String candidateFile =  mAudioDir + "/";
+        String word = text;
 		// Replace break with period
 		word = word.replaceAll("\\<br\\>", ". " );
 		// Remove HTML
@@ -53,15 +59,31 @@ public class SpeakWord {
         if(word.length() < 1){
             return false;
         }
+        /* Find the audio file in tags */
+        Pattern p = Pattern.compile("[A-Za-z0-9_-]+\\.(ogg|mp3|wav)");
+        Matcher m = p.matcher(text);
+        if(m.find()){
+           String audioTag = m.group();
+           Log.v(TAG, "Text: " + text);
+           Log.v(TAG, "Audio TAG: " + audioTag);
+           audioFile = new File(mAudioDir + "/" + dbName + "/" + audioTag);
+           if(!audioFile.exists()){
+               audioFile = new File(mAudioDir + "/" + audioTag);
+           }
+        }
+        
+
 		
-		for(String s : fileType){
-			audioFile = new File(candidateFile + word + s);
-			
-			if(audioFile.exists()){
-				candidateFile = candidateFile + word + s;
-				break;
-			}
-		}
+        if(audioFile == null || !audioFile.exists()){
+            for(String s : fileType){
+                audioFile = new File(candidateFile + word + s);
+                
+                if(audioFile.exists()){
+                    candidateFile = candidateFile + word + s;
+                    break;
+                }
+            }
+        }
 		if(audioFile == null || !audioFile.exists()){
 			for(String s : fileType){
 				audioFile = new File(candidateFile + word.substring(0, 1) + "/" + word + s);
@@ -76,13 +98,22 @@ public class SpeakWord {
 		}
 		
 		try{
-			FileInputStream fis = new FileInputStream(audioFile);
-			mp.setDataSource(fis.getFD());
-			mp.prepare();
-			mp.start();
-			while(mp.isPlaying()){
-			}
-			mp.reset();
+			final FileInputStream fis = new FileInputStream(audioFile);
+            new Thread(){
+                public void run(){
+                    try{
+                        mp.setDataSource(fis.getFD());
+                        mp.prepare();
+                        mp.start();
+                        while(mp.isPlaying()){
+                        }
+                        mp.reset();
+                    }
+                    catch(Exception e){
+                    }
+                    
+                }
+            }.start();
 		}
 		catch(Exception e){
 			Log.e(TAG, "Speak error", e);
