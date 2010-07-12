@@ -153,7 +153,7 @@ public class FileBrowser extends Activity implements OnItemClickListener, OnItem
 					return 1;
 				}
 				else{
-					return s1.compareTo(s2);
+					return (s1.toLowerCase()).compareTo(s2.toLowerCase());
 				}
 			}
 			public boolean equals(String s1, String s2){

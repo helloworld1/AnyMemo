@@ -226,5 +226,6 @@
     <string name="copy_text">Copy</string>
     <string name="paste_text">Paste</string>
     <string name="edit_dialog_unsave_warning">The current card is modify but not saved. Are you sure to exit?</string>
+    <string name="downloader_extract_zip">Extracting... Please wait.</string>
 
 </resources>

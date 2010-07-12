@@ -84,6 +84,7 @@ public class Downloader extends Activity implements OnItemClickListener{
     private Context mContext;
     private AlertDialog alertDialog;
     private Thread downloadThread;
+    private int mDownloadProgress = 0;
             
 
     /* mStage = 1: category selection
@@ -244,6 +245,15 @@ public class Downloader extends Activity implements OnItemClickListener{
     private void downloadFile(String url, String filename) throws Exception{
         String sdpath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
         File outFile = new File(sdpath + filename);
+        mHandler.post(new Runnable(){
+            public void run(){
+                mProgressDialog = new ProgressDialog(mContext);
+                mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                mProgressDialog.setMessage(getString(R.string.loading_downloading));
+                mProgressDialog.show();
+
+            }
+        });
         try{
             OutputStream out;
             if(outFile.exists()){
@@ -255,18 +265,48 @@ public class Downloader extends Activity implements OnItemClickListener{
 
                 URL myURL = new URL(url);
                 URLConnection ucon = myURL.openConnection();
-                byte[] buf = new byte[1024];
+                final int fileSize = ucon.getContentLength();
+                mDownloadProgress = 0;
+                mHandler.post(new Runnable(){
+                    public void run(){
+                        mProgressDialog.setMax(fileSize);
+                    }
+                });
+
+                byte[] buf = new byte[8192];
 
                 InputStream is = ucon.getInputStream();
-                BufferedInputStream bis = new BufferedInputStream(is);
+                BufferedInputStream bis = new BufferedInputStream(is, 8192);
+                Runnable increaseProgress = new Runnable(){
+                    public void run(){
+                        mProgressDialog.setProgress(mDownloadProgress);
+                    }
+                };
                 int len = 0;
+                int lenSum = 0;
                 while((len = bis.read(buf)) != -1){
                     out.write(buf, 0, len);
+                    lenSum += len;
+                    if(lenSum > fileSize / 50){
+                        /* This is tricky.
+                         * The UI thread can not be updated too often.
+                         * So we update it only 50 times
+                         */
+                        mDownloadProgress += lenSum;
+                        lenSum = 0;
+                        mHandler.post(increaseProgress);
+                    }
                 }
                 out.close();
                 is.close();
                 /* Uncompress the zip file that contains images */
                 if(filename.endsWith(".zip")){
+                    mHandler.post(new Runnable(){
+                        public void run(){
+                            mProgressDialog.setProgress(fileSize);
+                            mProgressDialog.setMessage(getString(R.string.downloader_extract_zip));
+                        }
+                    });
 
                     BufferedOutputStream dest = null;
                     BufferedInputStream ins = null;
@@ -297,6 +337,7 @@ public class Downloader extends Activity implements OnItemClickListener{
                     /* Delete the zip file if it is successfully decompressed */
                     outFile.delete();
                 }
+                /* Check if the db is correct */
                 filename = filename.replace(".zip", ".db");
                 DatabaseHelper dh = new DatabaseHelper(mContext, sdpath, filename);
                 dh.close();
@@ -373,12 +414,6 @@ public class Downloader extends Activity implements OnItemClickListener{
                 .setPositiveButton(getString(R.string.yes_text), new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface arg0, int arg1){
-                        mHandler.post(new Runnable(){
-                            @Override
-                            public void run(){
-                                mProgressDialog = ProgressDialog.show(mContext, getString(R.string.loading_please_wait), getString(R.string.loading_downloading), true);
-                            }
-                        });
                         downloadThread.start();
                     }
                 })
