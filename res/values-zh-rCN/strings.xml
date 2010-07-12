@@ -207,4 +207,5 @@
     <string name="copy_text">复制</string>
     <string name="paste_text">粘贴</string>
     <string name="edit_dialog_unsave_warning">当前卡更改了还未保存，是否退出?</string>
+    <string name="downloader_extract_zip">正在解压缩，请稍候。</string>
 </resources>

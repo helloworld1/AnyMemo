@@ -341,6 +341,11 @@ public class Downloader extends Activity implements OnItemClickListener{
                 filename = filename.replace(".zip", ".db");
                 DatabaseHelper dh = new DatabaseHelper(mContext, sdpath, filename);
                 dh.close();
+                mHandler.post(new Runnable(){
+                    public void run(){
+                        mProgressDialog.dismiss();
+                    }
+                });
             }
             catch(Exception e){
                 if(outFile.exists()){
@@ -378,7 +383,6 @@ public class Downloader extends Activity implements OnItemClickListener{
                         final File dbFile = new File(sdpath + filename);
                         mHandler.post(new Runnable(){
                             public void run(){
-                                mProgressDialog.dismiss();
                                 new AlertDialog.Builder(Downloader.this)
                                     .setTitle(R.string.downloader_download_success)
                                     .setMessage(getString(R.string.downloader_download_success_message) + dbFile.toString())
@@ -391,7 +395,6 @@ public class Downloader extends Activity implements OnItemClickListener{
                     catch(final Exception e){
                         mHandler.post(new Runnable(){
                             public void run(){
-                                mProgressDialog.dismiss();
                                 new AlertDialog.Builder(Downloader.this)
                                     .setTitle(R.string.downloader_download_fail)
                                     .setMessage(getString(R.string.downloader_download_fail_message) + " " + e.toString())

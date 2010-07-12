@@ -110,6 +110,7 @@ public class SpeakWord {
                         mp.reset();
                     }
                     catch(Exception e){
+                        Log.e(TAG, "Error loading audio. Maybe it is race condition", e);
                     }
                     
                 }
