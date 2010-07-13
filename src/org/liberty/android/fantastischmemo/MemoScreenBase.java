@@ -686,6 +686,7 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
         Context appContext = this.getApplicationContext();
 
         switch(id){
+            /* The edit dialog can be displayed using showDialog(DIALOG_EDIT)*/
             case DIALOG_EDIT:{
                  getWindow().setFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM,
                               WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
