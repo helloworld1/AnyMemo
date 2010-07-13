@@ -516,6 +516,12 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
         String text = et.getText().toString();
         boolean processed = false;
         Item searchItem = null;
+        if(text == null){
+            return;
+        }
+        else if(text.equals("")){
+            return;
+        }
         if(text.charAt(0) == '#'){
             String num = text.substring(1);
             int intNum = 0;

@@ -12,27 +12,27 @@
 
 	<ImageButton 
 		android:id="@+id/search_previous_btn" 
-		android:layout_width="40dip"
-		android:layout_height="40dip" 
+		android:layout_width="50dip"
+		android:layout_height="50dip" 
 		android:layout_below="@+id/search_previous"
 		android:src="@drawable/previous" />
 	<ImageButton 
 		android:id="@+id/search_next_btn" 
-		android:layout_width="40dip"
-		android:layout_height="40dip" 
+		android:layout_width="50dip"
+		android:layout_height="50dip" 
 		android:layout_below="@+id/search_next"
 		android:src="@drawable/next" />
   	<EditText
         android:id="@+id/search_entry"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
+        android:layout_height="50dip"
         android:lines="1"
         android:layout_weight="1"
         android:background="@android:drawable/editbox_background"/>
 	<ImageButton 
 		android:id="@+id/search_close_btn" 
-		android:layout_width="40dip"
-		android:layout_height="40dip" 
+		android:layout_width="50dip"
+		android:layout_height="50dip" 
         android:layout_gravity="right"
 		android:src="@drawable/close" />
 </LinearLayout>
