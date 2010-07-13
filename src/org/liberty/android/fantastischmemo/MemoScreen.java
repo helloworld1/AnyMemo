@@ -31,11 +31,13 @@ import android.graphics.Color;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnDismissListener;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Environment;
 import android.content.Context;
@@ -78,13 +80,14 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
 	private AnyMemoTTS questionTTS;
 	private AnyMemoTTS answerTTS;
     private Context mContext;
-    private Handler mHandler;
     private SpeakWord mSpeakWord;
     private boolean learnAhead;
     /* Six grading buttons */
 	private Button[] btns = {null, null, null, null, null, null}; 
 
 	private boolean initFeed;
+    /* Set an id of the loading dialog */
+    private final int DIALOG_LOADING_PROGRESS = 20;
 
     public final static String TAG = "org.liberty.android.fantastischmemo.MemoScreen";
 
@@ -121,16 +124,22 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
         answerView.setOnClickListener(this);
 
 
-        mProgressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_database), true);
 
 		
             Thread loadingThread = new Thread(){
                 public void run(){
                     /* Pre load cards (The number is specified in Window size varable) */
+                    mHandler.post(new Runnable(){
+                        public void run(){
+                            removeDialog(DIALOG_LOADING_PROGRESS);
+                            showDialog(DIALOG_LOADING_PROGRESS);
+                        }
+                    });
+
                     final boolean isPrepared = prepare();
                     mHandler.post(new Runnable(){
                         public void run(){
-                            mProgressDialog.dismiss();
+                            removeDialog(DIALOG_LOADING_PROGRESS);
                             if(isPrepared == false){
                                 new AlertDialog.Builder(mContext)
                                     .setTitle(getString(R.string.open_database_error_title))
@@ -167,6 +176,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
     @Override
 	public void onDestroy(){
 		super.onDestroy();
+        removeDialog(DIALOG_LOADING_PROGRESS);
         try{
             dbHelper.close();
         }
@@ -191,6 +201,14 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
         finish();
         startActivity(myIntent);
     }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        restartActivity();
+    }
+
+
 
 	
     @Override
@@ -769,5 +787,24 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
     protected void refreshAfterDeleteItem(){
         restartActivity();
     }
+
+    @Override
+    protected Dialog onCreateDialog(int id){
+        switch(id){
+            case DIALOG_LOADING_PROGRESS:{
+                ProgressDialog progressDialog = new ProgressDialog(MemoScreen.this);
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.setTitle(getString(R.string.loading_please_wait));
+                progressDialog.setMessage(getString(R.string.loading_database));
+                progressDialog.setCancelable(false);
+
+                return progressDialog;
+            }
+            default:
+                return super.onCreateDialog(id);
+
+        }
+    }
+
 
 }

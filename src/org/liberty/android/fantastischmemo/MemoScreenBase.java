@@ -111,7 +111,6 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
 	protected String qaRatio = "50%";
     protected String btnStyle = "";
     protected String speechCtl = "";
-    protected ProgressDialog mProgressDialog = null;
 	protected boolean questionUserAudio = false;
 	protected boolean answerUserAudio = false;
     protected boolean copyClipboard = true;
@@ -126,6 +125,7 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
 	//private SpeakWord mSpeakWord = null;
     //private Context mContext;
     //private Handler mHandler;
+    protected volatile Handler mHandler;
     //private AlertDialog.Builder mAlert;
     /* Six grading buttons */
 	//private Button[] btns = {null, null, null, null, null, null}; 
@@ -134,7 +134,7 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
 	//private boolean initFeed;
 
     private final static String TAG = "org.liberty.android.fantastischmemo.MemoScreenBase";
-    protected final static int DIALOG_EDIT = 20;
+    protected final static int DIALOG_EDIT = 30;
 
 	abstract protected boolean prepare();
 
@@ -177,6 +177,8 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
 
 	public void onResume(){
         super.onResume();
+        mHandler = new Handler();
+
         /* Refresh depending on where it returns. */
         if(returnValue == 2){
             restartActivity();
@@ -683,7 +685,6 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
 
     @Override
     protected Dialog onCreateDialog(int id){
-        Context appContext = this.getApplicationContext();
 
         switch(id){
             case DIALOG_EDIT:{
@@ -792,7 +793,7 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
             }
 
             default:
-                return null;
+                return super.onCreateDialog(id);
 
         }
     }

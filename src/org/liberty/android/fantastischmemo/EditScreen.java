@@ -75,7 +75,6 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
     private int totalItem = -1;
     private int maxId = -1;
     private Context mContext;
-    private Handler mHandler;
     private GestureLibrary mLibrary;
     private Button newButton;
     private Button nextButton;
