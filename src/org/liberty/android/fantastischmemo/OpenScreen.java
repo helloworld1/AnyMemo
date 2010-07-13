@@ -55,6 +55,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.view.View.OnClickListener;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.ActivityInfo;
 
 public class OpenScreen extends Activity implements OnItemClickListener, OnClickListener, OnItemLongClickListener {
 
@@ -98,6 +99,11 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
         openButton = (Button)findViewById(R.id.open_screen_open_exist);
         openButton.setOnClickListener(this);
         mHandler = new Handler();
+    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        /* set if the orientation change is allowed */
+        if(!settings.getBoolean("allow_orientation", true)){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
 
 	}
 

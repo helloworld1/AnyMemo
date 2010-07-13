@@ -60,9 +60,9 @@ public class DetailScreen extends Activity implements OnClickListener{
 	
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /* Disable the orientation change accordingly */
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        if(settings.getBoolean("portrait_only", false)){
+    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        /* set if the orientation change is allowed */
+        if(!settings.getBoolean("allow_orientation", true)){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
         setContentView(R.layout.detail_screen);	

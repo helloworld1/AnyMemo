@@ -42,8 +42,8 @@
         android:defaultValue="false"
         android:summary="@string/fullscreen_summary" />
     <CheckBoxPreference
-        android:key="portrait_only"
-        android:title="@string/portrait_only_title" 
+        android:key="allow_orientation"
+        android:title="@string/allow_orientation_title" 
         android:defaultValue="false"
-        android:summary="@string/portrait_only_summary" />
+        android:summary="@string/allow_orientation_summary" />
 </PreferenceScreen> 

@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.content.Intent;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
@@ -36,6 +37,8 @@ import android.widget.SectionIndexer;
 import android.app.ProgressDialog;
 import android.util.Log;
 import android.text.Html;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 
 import java.util.ArrayList;
@@ -60,6 +63,11 @@ public class ListEditScreen extends Activity{
             dbName = extras.getString("dbname");
             initPosition = extras.getInt("openid") - 1;
 		}
+    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        /* set if the orientation change is allowed */
+        if(!settings.getBoolean("allow_orientation", true)){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
         final ProgressDialog progressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_database), true);
         new Thread(){
             public void run(){

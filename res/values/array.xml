@@ -82,6 +82,7 @@
 </string-array>
 <string-array name="memo_edit_dialog_list">
     <item>Edit current card</item>
+    <item>Go to Preview/Edit Screen</item>
     <item>Delete current card</item>
     <item>Skip this card forever</item>
 </string-array>

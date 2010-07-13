@@ -169,7 +169,7 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
             requestWindowFeature(Window.FEATURE_NO_TITLE);  
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);  
         }
-        if(settings.getBoolean("portrait_only", false)){
+        if(!settings.getBoolean("allow_orientation", true)){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
 
@@ -483,10 +483,19 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
                         //doFilter();
                     }
                     if(which == 1){
+                        /* Go to preview/edit screen */
+                        Intent myIntent = new Intent(MemoScreenBase.this, EditScreen.class);
+                        myIntent.putExtra("dbname", dbName);
+                        myIntent.putExtra("dbpath", dbPath);
+                        myIntent.putExtra("openid", currentItem.getId());
+                        myIntent.putExtra("active_filter", activeFilter);
+                        startActivity(myIntent);
+                    }
+                    if(which == 2){
                         /* Delete current card */
                         doDelete();
                     }
-                    if(which == 2){
+                    if(which == 3){
                         /* Skip this card forever */
                         doSkip();
                     }

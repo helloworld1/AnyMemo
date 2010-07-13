@@ -41,6 +41,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
+import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.ViewGroup;
@@ -55,6 +56,8 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.util.Log;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 public class FileBrowser extends Activity implements OnItemClickListener, OnItemLongClickListener{
 	private enum DISPLAYMODE{ABSOLUTE, RELATIVE;}
@@ -74,6 +77,11 @@ public class FileBrowser extends Activity implements OnItemClickListener, OnItem
 		fileExtension = extras.getString("file_extension");
         setContentView(R.layout.file_browser);
 		mContext = this;
+    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        /* set if the orientation change is allowed */
+        if(!settings.getBoolean("allow_orientation", true)){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
 		
 		browseToRoot();
 	}
