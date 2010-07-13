@@ -369,6 +369,7 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
         myIntent.putExtra("dbname", dbName);
         myIntent.putExtra("dbpath", dbPath);
         myIntent.putExtra("openid", currentItem.getId());
+        myIntent.putExtra("active_filter", activeFilter);
         finish();
         startActivity(myIntent);
     }
@@ -514,15 +515,17 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
         EditText et = (EditText)findViewById(R.id.search_entry);
         String text = et.getText().toString();
         boolean processed = false;
+        Item searchItem = null;
         if(text.charAt(0) == '#'){
             String num = text.substring(1);
             int intNum = 0;
             try{
                 intNum = Integer.parseInt(num);
                 if(intNum > 0 && intNum <= maxId){
-                    currentItem = dbHelper.getItemById(intNum, 0, true, activeFilter);
-                    if(currentItem != null){
+                    searchItem = dbHelper.getItemById(intNum, 0, true, activeFilter);
+                    if(searchItem != null){
                         currentId = intNum;
+                        currentItem = searchItem;
                         prepare();
                         processed = true;
                         return;
@@ -538,9 +541,12 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
             text = text.replace('?', '_');
             int resId = dbHelper.searchItem(currentItem.getId(), text, forward);
             if(resId > 0){
-                currentItem = dbHelper.getItemById(resId, 0, forward, activeFilter);
-                currentId = currentItem.getId();
-                prepare();
+                searchItem = dbHelper.getItemById(resId, 0, forward, activeFilter);
+                if(searchItem != null){
+                    currentItem = searchItem;
+                    currentId = searchItem.getId();
+                    prepare();
+                }
             }
         }
     }
