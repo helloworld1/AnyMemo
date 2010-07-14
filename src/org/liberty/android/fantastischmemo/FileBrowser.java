@@ -57,6 +57,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.util.Log;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.preference.PreferenceManager;
 
 public class FileBrowser extends Activity implements OnItemClickListener, OnItemLongClickListener{
@@ -79,7 +80,7 @@ public class FileBrowser extends Activity implements OnItemClickListener, OnItem
 		mContext = this;
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         /* set if the orientation change is allowed */
-        if(!settings.getBoolean("allow_orientation", true)){
+        if(!settings.getBoolean("allow_orientation", false)){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
 		
@@ -482,6 +483,11 @@ public class FileBrowser extends Activity implements OnItemClickListener, OnItem
 		in.close();
 		out.close();
 	}
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
 	
 
 }

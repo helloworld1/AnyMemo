@@ -24,6 +24,7 @@ import android.preference.PreferenceActivity;
 import android.content.pm.ActivityInfo;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.content.res.Configuration;
 
 public class OptionScreen extends PreferenceActivity{
 	public static final String PREFS_NAME = "fantastischhMemoPrefs";
@@ -33,9 +34,14 @@ public class OptionScreen extends PreferenceActivity{
         addPreferencesFromResource(R.layout.option_screen);
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         /* set if the orientation change is allowed */
-        if(!settings.getBoolean("allow_orientation", true)){
+        if(!settings.getBoolean("allow_orientation", false)){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
         
 

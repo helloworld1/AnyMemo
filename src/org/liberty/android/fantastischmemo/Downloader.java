@@ -70,6 +70,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import android.content.res.Configuration;
 
 
 public class Downloader extends Activity implements OnItemClickListener{
@@ -443,6 +444,11 @@ public class Downloader extends Activity implements OnItemClickListener{
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 
 }

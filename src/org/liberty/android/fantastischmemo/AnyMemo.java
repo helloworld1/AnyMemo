@@ -45,6 +45,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.content.res.Configuration;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.text.method.LinkMovementMethod;
 import android.text.Html;
 
@@ -63,7 +64,7 @@ public class AnyMemo extends Activity implements OnClickListener{
         super.onCreate(savedInstanceState);
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         /* set if the orientation change is allowed */
-        if(!settings.getBoolean("allow_orientation", true)){
+        if(!settings.getBoolean("allow_orientation", false)){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
         Locale locale;
@@ -335,4 +336,9 @@ public class AnyMemo extends Activity implements OnClickListener{
 		in.close();
 		out.close();
 	}
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
 }

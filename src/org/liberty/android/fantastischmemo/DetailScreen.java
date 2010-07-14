@@ -33,6 +33,7 @@ import android.widget.EditText;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 
 public class DetailScreen extends Activity implements OnClickListener{
 	
@@ -62,7 +63,7 @@ public class DetailScreen extends Activity implements OnClickListener{
         super.onCreate(savedInstanceState);
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         /* set if the orientation change is allowed */
-        if(!settings.getBoolean("allow_orientation", true)){
+        if(!settings.getBoolean("allow_orientation", false)){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
         setContentView(R.layout.detail_screen);	
@@ -219,6 +220,10 @@ public class DetailScreen extends Activity implements OnClickListener{
     	}
     	
     }
-	
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+
 
 }

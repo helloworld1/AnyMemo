@@ -32,6 +32,7 @@ import java.util.Arrays;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -57,6 +58,7 @@ import android.os.Environment;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 
 public class SettingsScreen extends Activity implements View.OnClickListener, ColorDialog.OnClickListener {
 	private Spinner questionFontSizeSpinner;
@@ -91,9 +93,9 @@ public class SettingsScreen extends Activity implements View.OnClickListener, Co
 	private DatabaseHelper dbHelper;
     private Handler mHandler;
     private Context mContext;
-    private ProgressDialog mProgressDialog;
     private final int ACTIVITY_TTF_QUESTION = 3;
     private final int ACTIVITY_TTF_ANSWER = 4;
+    private final int DIALOG_SAVING_ID = 48;
     
 
 	
@@ -104,7 +106,7 @@ public class SettingsScreen extends Activity implements View.OnClickListener, Co
         mHandler = new Handler();
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         /* set if the orientation change is allowed */
-        if(!settings.getBoolean("allow_orientation", true)){
+        if(!settings.getBoolean("allow_orientation", false)){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
 
@@ -681,7 +683,7 @@ public class SettingsScreen extends Activity implements View.OnClickListener, Co
     }
 
     private void doSave(){
-        mProgressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_save), true);
+        showDialog(DIALOG_SAVING_ID);
         Thread savingThread = new Thread(){
             @Override
             public void run(){
@@ -701,7 +703,7 @@ public class SettingsScreen extends Activity implements View.OnClickListener, Co
                 mHandler.post(new Runnable(){
                     @Override
                     public void run(){
-                        mProgressDialog.dismiss();
+                        removeDialog(DIALOG_SAVING_ID);
                         Intent resultIntent = new Intent();
                         setResult(Activity.RESULT_OK, resultIntent);    			
                         finish();
@@ -711,6 +713,25 @@ public class SettingsScreen extends Activity implements View.OnClickListener, Co
         };
         savingThread.start();
     }
+
+    @Override
+    protected Dialog onCreateDialog(int id){
+
+        switch(id){
+            case DIALOG_SAVING_ID:
+                return ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_save), true);
+            default:
+                return super.onCreateDialog(id);
+
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+                
+                
 
     
 }

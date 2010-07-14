@@ -37,7 +37,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnDismissListener;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Environment;
 import android.content.Context;
@@ -202,11 +201,6 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
         startActivity(myIntent);
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        restartActivity();
-    }
 
 
 

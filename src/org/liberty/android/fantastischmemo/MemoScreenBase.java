@@ -82,6 +82,7 @@ import android.os.Environment;
 import android.graphics.Typeface;
 import android.text.Html.TagHandler;
 import android.text.Html.ImageGetter;
+import android.content.res.Configuration;
 
 
 public abstract class MemoScreenBase extends Activity implements TagHandler, ImageGetter{
@@ -169,7 +170,7 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
             requestWindowFeature(Window.FEATURE_NO_TITLE);  
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);  
         }
-        if(!settings.getBoolean("allow_orientation", true)){
+        if(!settings.getBoolean("allow_orientation", false)){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
 
@@ -807,5 +808,11 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
 
         }
     }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+	
 }
 
