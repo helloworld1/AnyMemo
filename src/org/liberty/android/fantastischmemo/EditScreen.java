@@ -216,9 +216,14 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
             /* Re-fetch the id in case that the item with id 1 is 
              * deleted.
              */
-            currentId = currentItem.getId();
-            setTitle(getString(R.string.stat_total) + totalItem);
-            updateMemoScreen();
+            if(currentItem == null){
+                currentItem = dbHelper.getItemById(currentId, 0, true, null);
+            }
+            if(currentItem != null){
+                currentId = currentItem.getId();
+                setTitle(getString(R.string.stat_total) + totalItem);
+                updateMemoScreen();
+            }
         }
         return true;
     }
