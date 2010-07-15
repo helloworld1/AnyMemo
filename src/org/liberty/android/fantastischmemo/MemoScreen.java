@@ -81,6 +81,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
     private Context mContext;
     private SpeakWord mSpeakWord;
     private boolean learnAhead;
+    private boolean enableTTSExtended = false;
     /* Six grading buttons */
 	private Button[] btns = {null, null, null, null, null, null}; 
 
@@ -110,6 +111,10 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
             btn.setOnClickListener(this);
             btn.setOnLongClickListener(this);
         }
+        /* Load some global settings */
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        enableTTSExtended = settings.getBoolean("enable_tts_extended", false);
+
         LinearLayout root = (LinearLayout)findViewById(R.id.memo_screen_root);
 
         //root.setOnClickListener(this);
@@ -343,13 +348,23 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
             al = null;
         }
 		if(ql != null){
-			this.questionTTS = new AnyMemoTTS(this, ql);
+            if(enableTTSExtended){
+                questionTTS = new AnyMemoTTSExtended(this ,ql);
+            }
+            else{
+                questionTTS = new AnyMemoTTSPlatform(this, ql);
+            }
 		}
 		else{
 			this.questionTTS = null;
 		}
 		if(al != null){
-			this.answerTTS = new AnyMemoTTS(this, al);
+            if(enableTTSExtended){
+                answerTTS = new AnyMemoTTSExtended(this ,al);
+            }
+            else{
+                answerTTS = new AnyMemoTTSPlatform(this, al);
+            }
 		}
 		else{
 			this.answerTTS = null;

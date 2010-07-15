@@ -208,4 +208,8 @@
     <string name="paste_text">粘贴</string>
     <string name="edit_dialog_unsave_warning">当前卡更改了还未保存，是否退出?</string>
     <string name="downloader_extract_zip">正在解压缩，请稍候。</string>
+    <string name="allow_orientation_title">横屏</string>
+    <string name="allow_orientation_summary">自动切换横屏和竖屏</string>
+    <string name="enable_tts_extended_title">开启TTS Extended</string>
+    <string name="enable_tts_extended_summary">开启Text-to-Speech Extended以增加合成发音的语言 </string>
 </resources>

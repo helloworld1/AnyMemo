@@ -26,46 +26,14 @@ import android.content.Context;
 import com.google.tts.TextToSpeechBeta;
 import com.google.tts.TextToSpeechBeta.Engine;
 import android.util.Log;
-import android.util.Log;
 
 
-public class AnyMemoTTS implements TextToSpeechBeta.OnInitListener{
-	private TextToSpeechBeta myTTS;
-	
-	private Locale myLocale;
-	private int errorCode;
-	private int version;
-    public final static String TAG = "org.liberty.android.fantastischmemo.TTS";
+public interface AnyMemoTTS{
 
-    public void onInit(int status, int version){
-    }
-	
-	public AnyMemoTTS(Context context, Locale locale){
-		myTTS = new TextToSpeechBeta(context, this);
-		myLocale = locale;
-	}
-	
-	public void shutdown(){
-			myTTS.shutdown();
-	}
-	
-	public int sayText(String s){
-		int status;
-		// Replace break with period
-		String processed_str = s.replaceAll("\\<br\\>", ". " );
-		// Remove HTML
-		processed_str = processed_str.replaceAll("\\<.*?>", "");
-		// Remove () [] and their content
-		processed_str = processed_str.replaceAll("\\[.*?\\]", "");
-        // Remove the XML special character
-		processed_str = processed_str.replaceAll("\\[.*?\\]", "");
-		processed_str = processed_str.replaceAll("&.*?;", "");
 
-        myTTS.setLanguage(myLocale);
-        myTTS.speak(s, 0, null);
-		
-		return 0;
-	}
+    public void shutdown();
 
+    public int sayText(String s);
 }
+
 	

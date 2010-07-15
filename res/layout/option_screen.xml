@@ -46,4 +46,9 @@
         android:title="@string/allow_orientation_title" 
         android:defaultValue="false"
         android:summary="@string/allow_orientation_summary" />
+    <CheckBoxPreference
+        android:key="enable_tts_extended"
+        android:title="@string/enable_tts_extended_title" 
+        android:defaultValue="false"
+        android:summary="@string/enable_tts_extended_summary" />
 </PreferenceScreen> 
