@@ -189,7 +189,7 @@
     <string name="touch_area_summary">点击哪里来显示答案</string>
     <string name="settings_audio_location_title">设置自定义语音位置</string>
     <string name="tts_tip_user_audio">请将音频文件放到下面的指定位置</string>
-    <string name="tts_tip_extender">下载Text-to-Speech Extender后才能朗读这种语言</string>
+    <string name="tts_tip_extender">下载Text-to-Speech Extended后才能朗读这种语言</string>
     <string name="portrait_only_title">禁用屏幕转向</string>
     <string name="portrait_only_summary">在所有的屏幕中禁用转向</string>
     <string name="list_mode_text">列表</string>
