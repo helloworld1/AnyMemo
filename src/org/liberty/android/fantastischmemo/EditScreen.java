@@ -498,6 +498,9 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
             prev.setOnClickListener(this);
             ImageButton next = (ImageButton)findViewById(R.id.search_next_btn);
             next.setOnClickListener(this);
+
+            EditText editEntry = (EditText)findViewById(R.id.search_entry);
+            editEntry.requestFocus();
             searchInflated = true;
 
         }
