@@ -34,6 +34,8 @@ import android.widget.TextView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SectionIndexer;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView;
 import android.app.ProgressDialog;
 import android.util.Log;
 import android.text.Html;
@@ -45,7 +47,7 @@ import android.content.res.Configuration;
 import java.util.ArrayList;
 
 
-public class ListEditScreen extends Activity{
+public class ListEditScreen extends Activity implements OnItemClickListener{
     private String dbPath = null;
     private String dbName = null;
     private static String TAG = "org.liberty.android.fantastischmemo.ListEditScreen";
@@ -83,6 +85,7 @@ public class ListEditScreen extends Activity{
                         ListView listView = (ListView)findViewById(R.id.item_list);
                         listView.setAdapter(mAdapter);
                         listView.setSelection(initPosition);
+                        listView.setOnItemClickListener(ListEditScreen.this);
                         progressDialog.dismiss();
                         
                     }
@@ -92,9 +95,26 @@ public class ListEditScreen extends Activity{
 
     }
 
+    /* In order to handle orientation change correctly */
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+	public void onItemClick(AdapterView<?> parentView, View childView, int position, long id){
+        /* Click to go back to EditScreern with specific card cliced */
+        TextView tvi = (TextView)childView.findViewById(R.id.item_id);
+        int itemId = 1;
+        try{
+            itemId = Integer.parseInt(tvi.getText().toString());
+        }
+        catch(NumberFormatException e){
+        }
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("id", itemId);
+        setResult(Activity.RESULT_OK, resultIntent);
+        finish();
     }
 
     private class ItemListAdapter extends ArrayAdapter<Item> implements SectionIndexer{

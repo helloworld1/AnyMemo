@@ -83,6 +83,7 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
     private Item copyItem = null;
     private boolean searchInflated = false;
     private final int ACTIVITY_MERGE = 10;
+    private final int ACTIVITY_LIST = 100;
     
 
     private static final String TAG = "org.liberty.android.fantastischmemo.EditScreen";
@@ -289,7 +290,7 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
     			myIntent.putExtra("dbname", dbName);
     			myIntent.putExtra("dbpath", dbPath);
     			myIntent.putExtra("openid", currentItem.getId());
-    			startActivity(myIntent);
+    			startActivityForResult(myIntent, ACTIVITY_LIST);
                 return true;
 
             case R.id.editmenu_merge_id:
@@ -338,6 +339,19 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
                     .create()
                     .show();
                 returnValue = 0;
+            }
+            if(requestCode == ACTIVITY_LIST){
+                currentId = data.getIntExtra("id", 1);
+
+                /* In case the id for the current item is null
+                 * which is unlikely to happen */
+                Item savedCurrent = currentItem;
+                currentItem = dbHelper.getItemById(currentId, 0, true, activeFilter);
+                if(currentItem == null){
+                    currentItem = savedItem;
+                }
+
+                restartActivity();
             }
         }
     }
