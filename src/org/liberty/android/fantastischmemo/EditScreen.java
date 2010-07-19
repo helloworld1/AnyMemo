@@ -387,7 +387,13 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
         Intent myIntent = new Intent(this, EditScreen.class);
         myIntent.putExtra("dbname", dbName);
         myIntent.putExtra("dbpath", dbPath);
-        myIntent.putExtra("openid", currentItem.getId());
+        if(currentItem != null){
+            myIntent.putExtra("openid", currentItem.getId());
+        }
+        else{
+            myIntent.putExtra("openid", currentId);
+        }
+
         myIntent.putExtra("active_filter", activeFilter);
         finish();
         startActivity(myIntent);
