@@ -71,7 +71,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
     private int prevScheduledItemCount;
     private int prevNewItemCount;
     /* How many words to learn at a time (rolling) */
-	private final int WINDOW_SIZE = 10;
+	private int learningQueueSize= 10;
 	private int maxNewId;
 	private int maxRetId;
 	private int scheduledItemCount;
@@ -114,6 +114,20 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
         /* Load some global settings */
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         enableTTSExtended = settings.getBoolean("enable_tts_extended", false);
+        /* Load learning queue size from the preference */
+        try{
+            String size = settings.getString("learning_queue_size", "10");
+            int tmpSize = Integer.parseInt(size);
+            if(tmpSize > 0){
+                learningQueueSize = tmpSize;
+            }
+            else{
+                learningQueueSize = 10;
+            }
+        }
+        catch(Exception e){
+            learningQueueSize = 10;
+        }
 
         LinearLayout root = (LinearLayout)findViewById(R.id.memo_screen_root);
 
@@ -271,7 +285,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
                 }
                 prevItem = null;
                 learnQueue.add(0, currentItem);
-                if(learnQueue.size() >= WINDOW_SIZE){
+                if(learnQueue.size() >= learningQueueSize){
                     learnQueue.remove(learnQueue.size() - 1);
                 }
                 newItemCount = prevNewItemCount;
@@ -436,10 +450,10 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
 			
             boolean feedResult;
             if(learnAhead){
-                feedResult = dbHelper.getListItems(-1, WINDOW_SIZE, learnQueue, 3, activeFilter);
+                feedResult = dbHelper.getListItems(-1, learningQueueSize, learnQueue, 3, activeFilter);
             }
             else{
-                feedResult = dbHelper.getListItems(-1, WINDOW_SIZE, learnQueue, 4, activeFilter);
+                feedResult = dbHelper.getListItems(-1, learningQueueSize, learnQueue, 4, activeFilter);
             }
 			if(feedResult == true){
                 for(int i = 0; i < learnQueue.size(); i++){
@@ -471,7 +485,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
             else{
                 setTitle(getString(R.string.learn_ahead));
             }
-            for(int i = learnQueue.size(); i < WINDOW_SIZE; i++){
+            for(int i = learnQueue.size(); i < learningQueueSize; i++){
                 if(learnAhead){
                     /* Flag = 3 for randomly choose item from future */
                     item = dbHelper.getItemById(0, 3, true, activeFilter);
@@ -513,14 +527,16 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
                     }
                 }
             }
-            switch(learnQueue.size()){
-            case 0: // No item in queue
+            int size = learnQueue.size();
+            if(size == 0){
+                /* No new items */
                 return 2;
-            case WINDOW_SIZE: // Queue full
+            }
+            else if(size == learningQueueSize){
                 return 0;
-            default: // There are some items in the queue
+            }
+            else{
                 return 1;
-                    
             }
 		}
 	}

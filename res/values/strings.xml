@@ -231,5 +231,7 @@
     <string name="allow_orientation_summary">Automatic change screen orientation. Restarting AnyMemo is needed.</string>
     <string name="enable_tts_extended_title">Enable TTS Extended</string>
     <string name="enable_tts_extended_summary">Enable the Text-to-Speech Extended to speak more languages. </string>
+    <string name="learn_queue_size_title">Learning Queue Size</string>
+    <string name="learn_queue_size_summary">Control the internal flow of learning. Be careful!</string>
 
 </resources>

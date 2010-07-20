@@ -51,4 +51,9 @@
         android:title="@string/enable_tts_extended_title" 
         android:defaultValue="false"
         android:summary="@string/enable_tts_extended_summary" />
+    <EditTextPreference
+        android:key="learning_queue_size"
+        android:defaultValue="10"
+        android:title="@string/learn_queue_size_title"
+        android:summary="@string/learn_queue_size_summary" />
 </PreferenceScreen> 
