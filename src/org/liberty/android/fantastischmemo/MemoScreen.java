@@ -26,6 +26,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.Date;
+import java.util.Collections;
 
 import android.graphics.Color;
 import android.app.Activity;
@@ -82,6 +83,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
     private SpeakWord mSpeakWord;
     private boolean learnAhead;
     private boolean enableTTSExtended = false;
+    private boolean shufflingCards = false;
     /* Six grading buttons */
 	private Button[] btns = {null, null, null, null, null, null}; 
 
@@ -128,6 +130,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
         catch(Exception e){
             learningQueueSize = 10;
         }
+        shufflingCards = settings.getBoolean("shuffling_cards", false);
 
         LinearLayout root = (LinearLayout)findViewById(R.id.memo_screen_root);
 
@@ -470,6 +473,10 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
                     }
 
                 }
+                /* Shuffling the queue */
+                if(shufflingCards){
+                    Collections.shuffle(learnQueue);
+                }
 				return 0;
 			}
 			else{
@@ -536,6 +543,10 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
                 return 0;
             }
             else{
+                /* Shuffling the queue */
+                if(shufflingCards){
+                    Collections.shuffle(learnQueue);
+                }
                 return 1;
             }
 		}

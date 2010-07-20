@@ -3,57 +3,74 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:key="FantastischMemoPrefs"
     android:title="@string/global_settings">
-    <ListPreference
-        android:key="speech_ctl"
-        android:title="@string/speech_ctl_title" 
-        android:defaultValue="0. Manually"
-        android:entries="@array/speech_ctl_list"
-        android:entryValues="@array/speech_ctl_list"
-        android:summary="@string/speech_ctl_summary" />
-    <ListPreference
-        android:key="button_style"
-        android:title="@string/button_style_title" 
-        android:defaultValue="AnyMemo"
-        android:entries="@array/button_style_list"
-        android:entryValues="@array/button_style_list"
-        android:summary="@string/button_style_summary" />
-    <ListPreference
-        android:key="touch_area"
-        android:title="@string/touch_area_title"
-        android:defaultValue="Whole Screen"
-        android:entries="@array/touch_area_list"
-        android:entryValues="@array/touch_area_list"
-        android:summary="@string/touch_area_summary" />
-    <ListPreference
-        android:key="interface_locale"
-        android:title="@string/interface_locale_title" 
-        android:defaultValue="Auto Detect"
-        android:entries="@array/interface_locale_list"
-        android:entryValues="@array/interface_locale_list"
-        android:summary="@string/interface_locale_summary" />
-    <CheckBoxPreference
-        android:key="copyclipboard"
-        android:title="@string/copyclipboard" 
-        android:defaultValue="true"
-        android:summary="@string/copyclipboard_summary" />
-    <CheckBoxPreference
-        android:key="fullscreen_mode"
-        android:title="@string/fullscreen_title" 
-        android:defaultValue="false"
-        android:summary="@string/fullscreen_summary" />
-    <CheckBoxPreference
-        android:key="allow_orientation"
-        android:title="@string/allow_orientation_title" 
-        android:defaultValue="false"
-        android:summary="@string/allow_orientation_summary" />
-    <CheckBoxPreference
-        android:key="enable_tts_extended"
-        android:title="@string/enable_tts_extended_title" 
-        android:defaultValue="false"
-        android:summary="@string/enable_tts_extended_summary" />
-    <EditTextPreference
-        android:key="learning_queue_size"
-        android:defaultValue="10"
-        android:title="@string/learn_queue_size_title"
-        android:summary="@string/learn_queue_size_summary" />
+    <PreferenceCategory
+        android:title="@string/actions_category">
+        <ListPreference
+            android:key="speech_ctl"
+            android:title="@string/speech_ctl_title" 
+            android:defaultValue="0. Manually"
+            android:entries="@array/speech_ctl_list"
+            android:entryValues="@array/speech_ctl_list"
+            android:summary="@string/speech_ctl_summary" />
+        <ListPreference
+            android:key="touch_area"
+            android:title="@string/touch_area_title"
+            android:defaultValue="Whole Screen"
+            android:entries="@array/touch_area_list"
+            android:entryValues="@array/touch_area_list"
+            android:summary="@string/touch_area_summary" />
+        <CheckBoxPreference
+            android:key="copyclipboard"
+            android:title="@string/copyclipboard" 
+            android:defaultValue="true"
+            android:summary="@string/copyclipboard_summary" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/learning_category">
+        <ListPreference
+            android:key="button_style"
+            android:title="@string/button_style_title" 
+            android:defaultValue="AnyMemo"
+            android:entries="@array/button_style_list"
+            android:entryValues="@array/button_style_list"
+            android:summary="@string/button_style_summary" />
+        <EditTextPreference
+            android:key="learning_queue_size"
+            android:defaultValue="10"
+            android:title="@string/learn_queue_size_title"
+            android:summary="@string/learn_queue_size_summary" />
+        <CheckBoxPreference
+            android:key="shuffling_cards"
+            android:title="@string/shuffling_cards_title" 
+            android:defaultValue="false"
+            android:summary="@string/shuffling_cards_summary" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/interface_category">
+        <ListPreference
+            android:key="interface_locale"
+            android:title="@string/interface_locale_title" 
+            android:defaultValue="Auto Detect"
+            android:entries="@array/interface_locale_list"
+            android:entryValues="@array/interface_locale_list"
+            android:summary="@string/interface_locale_summary" />
+        <CheckBoxPreference
+            android:key="fullscreen_mode"
+            android:title="@string/fullscreen_title" 
+            android:defaultValue="false"
+            android:summary="@string/fullscreen_summary" />
+        <CheckBoxPreference
+            android:key="allow_orientation"
+            android:title="@string/allow_orientation_title" 
+            android:defaultValue="false"
+            android:summary="@string/allow_orientation_summary" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/misc_category">
+        <CheckBoxPreference
+            android:key="enable_tts_extended"
+            android:title="@string/enable_tts_extended_title" 
+            android:defaultValue="false"
+            android:summary="@string/enable_tts_extended_summary" />
+    </PreferenceCategory>
 </PreferenceScreen> 

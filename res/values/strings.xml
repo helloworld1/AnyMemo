@@ -233,5 +233,11 @@
     <string name="enable_tts_extended_summary">Enable the Text-to-Speech Extended to speak more languages. </string>
     <string name="learn_queue_size_title">Learning Queue Size</string>
     <string name="learn_queue_size_summary">Control the internal flow of learning. Be careful!</string>
+    <string name="actions_category">Actions</string>
+    <string name="learning_category">Learning</string>
+    <string name="interface_category">Interface</string>
+    <string name="misc_category">Misc</string>
+    <string name="shuffling_cards_title">Shuffle Cards</string>
+    <string name="shuffling_cards_summary">Shuffle the cards in learning queue. It does not shuffle globally though.</string>
 
 </resources>
