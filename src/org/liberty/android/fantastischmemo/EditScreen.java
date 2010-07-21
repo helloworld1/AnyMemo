@@ -222,17 +222,10 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
             }
             if(currentItem != null){
                 currentId = currentItem.getId();
-                setTitle(getString(R.string.stat_total) + totalItem);
                 updateMemoScreen();
             }
         }
         return true;
-    }
-
-    @Override
-    protected int feedData(){
-        /* Dummy feed Data */
-        return 1;
     }
 
     @Override
@@ -375,12 +368,6 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
     }
 
     @Override
-    protected boolean fetchCurrentItem(){
-        /* Dummy, there is no queue in this activity */
-        return true;
-    }
-
-    @Override
     protected void restartActivity(){
         //loadSettings();
         //updateMemoScreen();
@@ -421,9 +408,14 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
 
     @Override
     protected void refreshAfterDeleteItem(){
-        setTitle(getString(R.string.stat_total) + totalItem);
         updateMemoScreen();
         prepare();
+    }
+
+    @Override
+	protected void displayQA(Item item) {
+        super.displayQA(item);
+        setTitle(getString(R.string.stat_total) + totalItem + " / " + this.getString(R.string.memo_current_id) + currentId);
     }
 
     @Override
@@ -465,7 +457,6 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
         }
         if(currentItem != null){
             currentId = currentItem.getId();
-            setTitle(getString(R.string.stat_total) + totalItem);
             updateMemoScreen();
         }
         else{
@@ -486,7 +477,6 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
 
         if(currentItem != null){
             currentId = currentItem.getId();
-            setTitle(getString(R.string.stat_total) + totalItem);
             updateMemoScreen();
         }
         else{

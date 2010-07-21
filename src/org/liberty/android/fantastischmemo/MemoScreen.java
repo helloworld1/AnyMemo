@@ -446,7 +446,6 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
 	}
 	
 
-    @Override
 	protected int feedData() {
 		if(initFeed){
 			initFeed = false;
@@ -477,21 +476,17 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
                 if(shufflingCards){
                     Collections.shuffle(learnQueue);
                 }
+                currentItem = learnQueue.get(0);
 				return 0;
 			}
 			else{
+                currentItem = null;
                 return 2;
 			}
 			
 		}
 		else{
             Item item;
-            if(!learnAhead){
-                setTitle(getString(R.string.stat_scheduled) + scheduledItemCount + " / " + getString(R.string.stat_new) + newItemCount);
-            }
-            else{
-                setTitle(getString(R.string.learn_ahead));
-            }
             for(int i = learnQueue.size(); i < learningQueueSize; i++){
                 if(learnAhead){
                     /* Flag = 3 for randomly choose item from future */
@@ -537,13 +532,16 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
             int size = learnQueue.size();
             if(size == 0){
                 /* No new items */
+                currentItem = null;
                 return 2;
             }
             else if(size == learningQueueSize){
+                currentItem = learnQueue.get(0);
                 return 0;
             }
             else{
                 /* Shuffling the queue */
+                currentItem = learnQueue.get(0);
                 if(shufflingCards){
                     Collections.shuffle(learnQueue);
                 }
@@ -649,6 +647,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
 
                 this.showAnswer = false;
                 /* Now the currentItem is the next item, so we need to udpate the screen. */
+                feedData();
                 updateMemoScreen();
                 autoSpeak();
                 break;
@@ -778,18 +777,6 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
 
     }
 
-    @Override
-    protected boolean fetchCurrentItem(){
-        if(learnQueue.size() != 0){
-			currentItem = learnQueue.get(0);
-            /* Successfully fetch */
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-
     private void autoSpeak(){
         String[] speechCtlList = getResources().getStringArray(R.array.speech_ctl_list);
 
@@ -815,7 +802,8 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
         }
     }
 
-    @Override protected void refreshAfterEditItem(){
+    @Override
+    protected void refreshAfterEditItem(){
         updateMemoScreen();
     }
 
@@ -840,6 +828,19 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
                 return super.onCreateDialog(id);
 
         }
+    }
+
+    @Override
+	protected void displayQA(Item item) {
+        /* Override this method to display the title bar properly */
+        super.displayQA(item);
+        if(!learnAhead){
+            setTitle(getString(R.string.stat_scheduled) + scheduledItemCount + " / " + getString(R.string.stat_new) + newItemCount + " / " + getString(R.string.memo_current_id) + currentItem.getId());
+        }
+        else{
+            setTitle(getString(R.string.learn_ahead) + " / " + getString(R.string.memo_current_id) + currentItem.getId());
+        }
+
     }
 
 

@@ -86,22 +86,14 @@ import android.content.res.Configuration;
 
 
 public abstract class MemoScreenBase extends Activity implements TagHandler, ImageGetter{
-    //protected ArrayList<Item> learnQueue;
 	protected DatabaseHelper dbHelper = null;
 	protected String dbName;
 	protected String dbPath;
 	protected boolean showAnswer;
 	protected Item currentItem;
-    /* prevItem is used to undo */
-    //private Item prevItem = null;
     private int prevScheduledItemCount;
     private int prevNewItemCount;
-    /* How many words to learn at a time (rolling) */
-	//private final int WINDOW_SIZE = 10;
-	//private boolean queueEmpty;
-	//private int idMaxSeen;
-	//private int scheduledItemCount;
-	//private int newItemCount;
+
 	protected double questionFontSize = 23.5;
 	protected double answerFontSize = 23.5;
 	protected String questionAlign = "center";
@@ -123,13 +115,7 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
      * null means default color */
     protected ArrayList<Integer> colors = null;
 
-	//private SpeakWord mSpeakWord = null;
-    //private Context mContext;
-    //private Handler mHandler;
     protected volatile Handler mHandler;
-    //private AlertDialog.Builder mAlert;
-    /* Six grading buttons */
-	//private Button[] btns = {null, null, null, null, null, null}; 
 
 	protected int returnValue = 0;
 	//private boolean initFeed;
@@ -139,8 +125,6 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
 
 	abstract protected boolean prepare();
 
-	abstract protected int feedData();
-	
 	abstract public boolean onCreateOptionsMenu(Menu menu);
 	
 	abstract public boolean onOptionsItemSelected(MenuItem item);
@@ -148,8 +132,6 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
     abstract protected void createButtons();
 
 	abstract protected void buttonBinding();
-
-    protected abstract boolean fetchCurrentItem();
 
     abstract protected void restartActivity();	
 
@@ -314,9 +296,7 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
 		layoutAnswer.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, aRatio));
         /* Set both background and text color */
         setScreenColor();
-		feedData();
-        fetchCurrentItem();
-		if(fetchCurrentItem() == false){
+		if(currentItem == null){
 			new AlertDialog.Builder(this)
 			    .setTitle(this.getString(R.string.memo_no_item_title))
 			    .setMessage(this.getString(R.string.memo_no_item_message))
@@ -353,11 +333,8 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
 		
 	}
 
-
-
-	private void displayQA(Item item) {
+	protected void displayQA(Item item) {
 		/* Display question and answer according to item */
-		this.setTitle(this.getTitle() + " / " + this.getString(R.string.memo_current_id) + item.getId() );
         
 		TextView questionView = (TextView) findViewById(R.id.question);
 		TextView answerView = (TextView) findViewById(R.id.answer);
