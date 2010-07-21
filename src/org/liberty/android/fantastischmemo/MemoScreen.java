@@ -541,10 +541,10 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
             }
             else{
                 /* Shuffling the queue */
-                currentItem = learnQueue.get(0);
                 if(shufflingCards){
                     Collections.shuffle(learnQueue);
                 }
+                currentItem = learnQueue.get(0);
                 return 1;
             }
 		}
