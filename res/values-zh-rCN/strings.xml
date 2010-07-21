@@ -212,4 +212,12 @@
     <string name="allow_orientation_summary">自动切换横屏和竖屏</string>
     <string name="enable_tts_extended_title">开启TTS Extended</string>
     <string name="enable_tts_extended_summary">开启Text-to-Speech Extended以增加合成发音的语言 </string>
+    <string name="learn_queue_size_title">学习队列大小</string>
+    <string name="learn_queue_size_summary">修改容忍错误卡片的数量，请谨慎修改。</string>
+    <string name="actions_category">行为</string>
+    <string name="learning_category">学习</string>
+    <string name="interface_category">界面</string>
+    <string name="misc_category">杂项</string>
+    <string name="shuffling_cards_title">局部打乱卡片</string>
+    <string name="shuffling_cards_summary">学习的时候不按编号顺序来复习。</string>
 </resources>

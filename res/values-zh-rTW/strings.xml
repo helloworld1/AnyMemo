@@ -189,7 +189,7 @@
     <string name="touch_area_summary">點擊哪裡來顯示答案</string>
     <string name="settings_audio_location_title">設置自定義語音位置</string>
     <string name="tts_tip_user_audio">請將音頻文件放到下面的指定位置</string>
-    <string name="tts_tip_extender">下載Text-to-Speech Extender後才能朗讀這種語言</string>
+    <string name="tts_tip_extender">下載Text-to-Speech Extended後才能朗讀這種語言</string>
     <string name="portrait_only_title">禁用屏幕轉向</string>
     <string name="portrait_only_summary">在所有的屏幕中禁用轉向</string>
     <string name="list_mode_text">列表</string>
@@ -212,4 +212,12 @@
     <string name="allow_orientation_summary">自動切換橫屏和豎屏</string>
     <string name="enable_tts_extended_title">開啟TTS Extended</string>
     <string name="enable_tts_extended_summary">開啟Text-to-Speech Extended以增加合成發音的語言 </string>
+    <string name="learn_queue_size_title">學習隊列大小</string>
+    <string name="learn_queue_size_summary">修改容忍錯誤卡片的數量，請謹慎修改。</string>
+    <string name="actions_category">行為</string>
+    <string name="learning_category">學習</string>
+    <string name="interface_category">界面</string>
+    <string name="misc_category">雜項</string>
+    <string name="shuffling_cards_title">局部打亂卡片</string>
+    <string name="shuffling_cards_summary">學習的時候不按編號順序來復習。</string>
 </resources>
