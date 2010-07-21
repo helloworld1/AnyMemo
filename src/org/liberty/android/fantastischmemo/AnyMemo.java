@@ -83,7 +83,7 @@ public class AnyMemo extends Activity implements OnClickListener{
             locale = Locale.TRADITIONAL_CHINESE;
         }
         else if(localeSetting.equals("Czech")){
-            locale = new Locale("CZ");
+            locale = new Locale("CS");
         }
         else{
             locale = Locale.getDefault();
