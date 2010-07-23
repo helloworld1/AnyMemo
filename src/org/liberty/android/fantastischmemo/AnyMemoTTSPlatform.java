@@ -21,12 +21,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo;
 
 import java.util.Locale;
-import java.util.HashMap;
 
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
-import android.speech.tts.TextToSpeech.Engine;
-import android.util.Log;
 
 public class AnyMemoTTSPlatform implements AnyMemoTTS, TextToSpeech.OnInitListener{
 	private TextToSpeech myTTS;

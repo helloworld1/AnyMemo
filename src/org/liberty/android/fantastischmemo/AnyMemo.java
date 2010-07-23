@@ -45,7 +45,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.content.res.Configuration;
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.text.method.LinkMovementMethod;
 import android.text.Html;
 

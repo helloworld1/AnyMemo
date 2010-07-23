@@ -20,45 +20,41 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo;
 
 /* This will pick the color */
-import org.color.ColorDialog;
-
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.ArrayList;
-import java.util.Arrays;
+
+import org.color.ColorDialog;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Environment;
+import android.app.ProgressDialog;
 import android.content.Context;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.Spinner;
-import android.widget.EditText;
-import android.widget.TableRow;
-import android.widget.LinearLayout;
-import android.widget.AdapterView;
-import android.widget.Toast;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.net.Uri;
-import android.os.Environment;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TableRow;
+import android.widget.Toast;
 
 public class SettingsScreen extends Activity implements View.OnClickListener, ColorDialog.OnClickListener {
 	private Spinner questionFontSizeSpinner;

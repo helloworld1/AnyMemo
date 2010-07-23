@@ -4,3 +4,7 @@
 build.xml
 gen/
 bin/
+/bin
+/libs
+/bin
+/libs

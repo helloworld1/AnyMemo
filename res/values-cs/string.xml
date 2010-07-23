@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
     <string name="ok_text">OK</string>
     <string name="cancel_text">Cancel</string>
     <string name="yes_text">Ano</string>
