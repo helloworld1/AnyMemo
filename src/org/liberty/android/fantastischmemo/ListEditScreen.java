@@ -63,7 +63,7 @@ public class ListEditScreen extends Activity implements OnItemClickListener{
 		}
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         /* set if the orientation change is allowed */
-        if(!settings.getBoolean("allow_orientation", false)){
+        if(!settings.getBoolean("allow_orientation", true)){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
         final ProgressDialog progressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_database), true);

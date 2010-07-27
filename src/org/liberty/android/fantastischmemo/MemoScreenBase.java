@@ -139,7 +139,7 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
             requestWindowFeature(Window.FEATURE_NO_TITLE);  
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);  
         }
-        if(!settings.getBoolean("allow_orientation", false)){
+        if(!settings.getBoolean("allow_orientation", true)){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
 

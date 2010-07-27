@@ -62,7 +62,7 @@
         <CheckBoxPreference
             android:key="allow_orientation"
             android:title="@string/allow_orientation_title" 
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:summary="@string/allow_orientation_summary" />
     </PreferenceCategory>
     <PreferenceCategory

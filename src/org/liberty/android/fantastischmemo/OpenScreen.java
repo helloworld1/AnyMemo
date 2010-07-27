@@ -99,7 +99,7 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
         mHandler = new Handler();
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         /* set if the orientation change is allowed */
-        if(!settings.getBoolean("allow_orientation", false)){
+        if(!settings.getBoolean("allow_orientation", true)){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
 

@@ -59,7 +59,7 @@ public class AnyMemoTTSPlatform implements AnyMemoTTS, TextToSpeech.OnInitListen
 		processed_str = processed_str.replaceAll("&.*?;", "");
 
         myTTS.setLanguage(myLocale);
-        myTTS.speak(s, 0, null);
+        myTTS.speak(processed_str, 0, null);
 		
 		return 0;
 	}
