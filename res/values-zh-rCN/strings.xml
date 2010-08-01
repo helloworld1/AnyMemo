@@ -142,7 +142,7 @@
     <string name="downloader_download_alert">下载: </string>
     <string name="downloader_download_alert_message">详情: </string>
     <string name="about_title">关于</string>
-    <string name="about_text">记忆辅助软件。&lt;br /&gt;&lt;br /&gt;作者: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;官方网站: &lt;a href="http://anymemo.org"&gt;anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;感谢: pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;翻译者: jim4ever</string>
+    <string name="about_text">记忆辅助软件。&lt;br /&gt;&lt;br /&gt;作者: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;官方网站: &lt;a href="http://anymemo.org"&gt;anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;感谢: pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;翻译者: paw3lk, jim4ever</string>
     <string name="about_version">版本历史</string>
     <string name="what_is_new">Changelog</string>
     <string name="downloader_categories">分类</string>

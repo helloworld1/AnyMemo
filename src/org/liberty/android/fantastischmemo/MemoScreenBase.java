@@ -70,6 +70,17 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.ArrayAdapter;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView;
+import android.util.Log;
+import android.os.SystemClock;
+import android.os.Environment;
+import android.graphics.Typeface;
+import android.text.Html.TagHandler;
+import android.text.Html.ImageGetter;
+import android.content.res.Configuration;
+import android.view.inputmethod.InputMethodManager;
 
 
 public abstract class MemoScreenBase extends Activity implements TagHandler, ImageGetter{
@@ -697,6 +708,13 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
                         currentItem.setData(hm);
                         dbHelper.addOrReplaceItem(currentItem);
                         updateMemoScreen();
+                        try{
+                            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(dialog.findViewById(R.id.edit_dialog_root).getWindowToken(), 0);
+                        }
+                        catch(Exception e){
+                            Log.e(TAG, "Input method problems here", e);
+                        }
                         refreshAfterEditItem();
                         removeDialog(DIALOG_EDIT);
                     }
@@ -711,20 +729,38 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
                                 .setTitle(R.string.warning_text)
                                 .setMessage(R.string.edit_dialog_unsave_warning)
                                 .setPositiveButton(R.string.yes_text, new DialogInterface.OnClickListener(){
-                                    public void onClick(DialogInterface  dialog, int which){
-                            refreshAfterEditItem();
-                            removeDialog(DIALOG_EDIT);
+                                    public void onClick(DialogInterface  d, int which){
+                                        try{
+                                            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                                            imm.hideSoftInputFromWindow(dialog.findViewById(R.id.edit_dialog_root).getWindowToken(), 0);
+                                        }
+                                        catch(Exception e){
+                                            Log.e(TAG, "Input method problems here", e);
+                                        }
+                                        refreshAfterEditItem();
+                                        removeDialog(DIALOG_EDIT);
 
                                     }
-                                })
-                                .setNegativeButton(R.string.no_text, null)
+                                }) .setNegativeButton(R.string.no_text, null)
                                 .create()
                                 .show();
                                 
                         }
                         else{
+                            /* Hide the keyboard before closing
+                             * this is a known android bug
+                             * issue 7115
+                             * */
+                            try{
+                                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(dialog.findViewById(R.id.edit_dialog_root).getWindowToken(), 0);
+                            }
+                            catch(Exception e){
+                                Log.e(TAG, "Input method problems here", e);
+                            }
                             refreshAfterEditItem();
                             removeDialog(DIALOG_EDIT);
+
                         }
                     }
                 });
