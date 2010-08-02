@@ -309,8 +309,36 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
                 return true;
 
             case R.id.editmenu_remove_dup_id:
-                dbHelper.removeDuplicates();
-                restartActivity();
+                final ProgressDialog progressDialog = ProgressDialog.show(this, getString(R.string.removing_dup_title), getString(R.string.removing_dup_summary), true);
+                progressDialog.dismiss();
+                final Thread removingThread = new Thread(){
+                    public void run(){
+                        mHandler.post(new Runnable(){
+                            public void run(){
+                                progressDialog.show();
+                            }
+                        });
+                        dbHelper.removeDuplicates();
+                        mHandler.post(new Runnable(){
+                            public void run(){
+                                progressDialog.dismiss();
+                                restartActivity();
+                            }
+                        });
+                    }
+                };
+                new AlertDialog.Builder(this)
+                    .setTitle(R.string.remove_dup_text)
+                    .setMessage(R.string.removing_dup_warning)
+                    .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            removingThread.start();
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel_text, null)
+                    .create()
+                    .show();
+
                 return true;
                 
         }
