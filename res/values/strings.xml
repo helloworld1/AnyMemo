@@ -239,5 +239,8 @@
     <string name="misc_category">Misc</string>
     <string name="shuffling_cards_title">Shuffle Cards</string>
     <string name="shuffling_cards_summary">Shuffle the cards for reviewing. It does not shuffle new cards globally.</string>
+    <string name="swap_qa_text">Swap Q and A</string>
+    <string name="remove_dup_text">Remove duplicates</string>
+
 
 </resources>

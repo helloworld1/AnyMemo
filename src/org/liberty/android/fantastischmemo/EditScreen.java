@@ -301,6 +301,18 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
             case R.id.editmenu_paste_id:
                 doPaste();
                 return true;
+
+            case R.id.editmenu_swap_qa_id:
+                currentItem.inverseQA();
+                dbHelper.addOrReplaceItem(currentItem);
+                restartActivity();
+                return true;
+
+            case R.id.editmenu_remove_dup_id:
+                dbHelper.removeDuplicates();
+                restartActivity();
+                return true;
+                
         }
         return false;
     }
