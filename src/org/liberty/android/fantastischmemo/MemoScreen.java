@@ -835,10 +835,10 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
         /* Override this method to display the title bar properly */
         super.displayQA(item);
         if(!learnAhead){
-            setTitle(getString(R.string.stat_scheduled) + scheduledItemCount + " / " + getString(R.string.stat_new) + newItemCount + " / " + getString(R.string.memo_current_id) + currentItem.getId());
+            setTitle(getString(R.string.stat_scheduled) + scheduledItemCount + " / " + getString(R.string.stat_new) + newItemCount + " / " + getString(R.string.memo_current_id) + currentItem.getId() + " / " +  currentItem.getCategory());
         }
         else{
-            setTitle(getString(R.string.learn_ahead) + " / " + getString(R.string.memo_current_id) + currentItem.getId());
+            setTitle(getString(R.string.learn_ahead) + " / " + getString(R.string.memo_current_id) + currentItem.getId() + " / " + currentItem.getCategory());
         }
 
     }

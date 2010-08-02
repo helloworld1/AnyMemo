@@ -455,7 +455,7 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
     @Override
 	protected void displayQA(Item item) {
         super.displayQA(item);
-        setTitle(getString(R.string.stat_total) + totalItem + " / " + this.getString(R.string.memo_current_id) + currentId);
+        setTitle(getString(R.string.stat_total) + totalItem + " / " + this.getString(R.string.memo_current_id) + currentId + " / " + currentItem.getCategory());
     }
 
     @Override
