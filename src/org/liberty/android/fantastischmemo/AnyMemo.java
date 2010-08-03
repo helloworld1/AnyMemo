@@ -175,6 +175,9 @@ public class AnyMemo extends Activity implements OnClickListener{
                 })
                 .show();
         }
+
+        /* Go directly to other screen based on user settings */
+        gotoScreen(settings.getString("startup_screen", ""));
     }
     
     public void onClick(View v){
@@ -346,5 +349,37 @@ public class AnyMemo extends Activity implements OnClickListener{
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+    }
+
+    private void gotoScreen(String screenName){
+        if(screenName == null){
+            return;
+        }
+        else if(screenName.equals("Open Screen")){
+            Intent myIntent = new Intent();
+    		myIntent.setClass(this, OpenScreen.class);
+    		startActivity(myIntent);
+        }
+        else if(screenName.equals("Memo Screen")){
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+    		Intent myIntent = new Intent();
+    		myIntent.setClass(this, MemoScreen.class);
+    		myIntent.putExtra("dbname", settings.getString("recentdbname0", ""));
+    		myIntent.putExtra("dbpath", settings.getString("recentdbpath0", ""));
+    		startActivity(myIntent);
+    		returnValue = 0;
+        }
+        else if(screenName.equals("Edit Screen")){
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+    		Intent myIntent = new Intent();
+    		myIntent.setClass(this, EditScreen.class);
+    		myIntent.putExtra("dbname", settings.getString("recentdbname0", ""));
+    		myIntent.putExtra("dbpath", settings.getString("recentdbpath0", ""));
+            myIntent.putExtra("openid", 1);
+    		startActivity(myIntent);
+    		returnValue = 0;
+        }
+
+
     }
 }

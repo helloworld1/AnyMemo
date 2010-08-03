@@ -150,6 +150,11 @@
     <item>0</item>
 </integer-array>
 
-
+<string-array name="startup_screen_list">
+    <item>Main Screen</item>
+    <item>Open Screen</item>
+    <item>Memo Screen</item>
+    <item>Edit Screen</item>
+</string-array>
 
 </resources>

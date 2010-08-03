@@ -244,5 +244,7 @@
     <string name="removing_dup_title">Removing duplicates</string>
     <string name="removing_dup_warning">Removing duplicate cards will take a very long time depending on the database size. Interrupting the process will result in a corrupted database!</string>
     <string name="removing_dup_summary">Removing duplicate cards. It will take a long time for large databases.</string>
+    <string name="startup_title">Start-up Screen</string>
+    <string name="startup_summary">Set up the start-up screen.</string>
 
 </resources>
