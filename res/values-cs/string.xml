@@ -222,4 +222,11 @@
     <string name="misc_category">Různé</string>
     <string name="shuffling_cards_title">Zamíchat karty</string>
     <string name="shuffling_cards_summary">Zamíchá karty ve frontě učení. Není to však globální zamíchání.</string>
+    <string name="swap_qa_text">Výměna ? a =</string>
+    <string name="remove_dup_text">Odstranění duplikátů</string>
+    <string name="removing_dup_title">Odstraňuji duplikáty</string>
+    <string name="removing_dup_warning">Odstranění duplicitních karet může trvat velmi dlouhou dobu, v závislosti na velikosti databáze. Přerušení procesu může mít za následek porušení databáze!</string>
+    <string name="removing_dup_summary">Odstraňují se duplicitní karty. Může to trvat delší dobu, podle velikosti databáze.</string>
+    <string name="startup_title">Startovací obrazovka</string>
+    <string name="startup_summary">Nastavení startovací obrazovky.</string>
 </resources>
