@@ -223,10 +223,6 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
         finish();
         startActivity(myIntent);
     }
-
-
-
-
 	
     @Override
 	public boolean onCreateOptionsMenu(Menu menu){

@@ -1,4 +1,8 @@
 Use ant to compile the project
+$ android update project --name AnyMemo --target [YOUR TARGET ID HERE] --path .
+$ cd jni
+$ ndk-build
+$ cd ..
 $ ant debug
 Then use 
 $ adb install bin/AnyMemo-debug.apk
