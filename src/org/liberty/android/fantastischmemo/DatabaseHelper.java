@@ -236,16 +236,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			this.myDatabase.execSQL("UPDATE learn_tbl SET date_learn = '2010-01-01', interval = 0, grade = 0, easiness = 2.5, acq_reps = 0, ret_reps  = 0, lapses = 0, acq_reps_since_lapse = 0, ret_reps_since_lapse = 0");
 		}
 		
-		
 	}
-	//@Override
+
 	public synchronized void close(){
 		if(myDatabase != null){
 			myDatabase.close();
 		}
 		super.close();
 	}
-	//@Override
+
 	public void onCreate(SQLiteDatabase db){
 		
 	}
@@ -808,6 +807,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void removeDuplicates(){
+        /*
         myDatabase.execSQL("DELETE FROM dict_tbl WHERE _id NOT IN (SELECT MIN(_id) FROM dict_tbl GROUP BY question)");
         myDatabase.execSQL("DELETE FROM learn_tbl WHERE _id NOT IN (SELECT _id FROM dict_tbl)");
         Cursor result;
@@ -837,6 +837,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		finally{
 			myDatabase.endTransaction();
 		}
+        */
+        removeDuplicatesNative();
+        
 
     }
+
+    static{
+        System.loadLibrary("native_db_helper");
+    }
+
+    public native void removeDuplicatesNative();
+
+    /* Create necessary triggers to maintain the _id coherence */
+    public native void createTriggers();
 }

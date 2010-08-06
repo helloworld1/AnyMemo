@@ -442,6 +442,7 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
         else{
             if(savedItem != null){
                 currentItem = savedItem;
+                currentId = savedItem.getId();
             }
         }
     }

@@ -489,36 +489,6 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
         /* This is a customized dialog inflated from XML */
         showDialog(DIALOG_EDIT);
 
-        /*
-        new AlertDialog.Builder(MemoScreenBase.this)
-            .setTitle(getString(R.string.memo_edit_dialog_title))
-            .setView(editView)
-            .setPositiveButton(getString(R.string.settings_save),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        String qText = eq.getText().toString();
-                        String aText = ea.getText().toString();
-                        String cText = ca.getText().toString();
-                        HashMap<String, String> hm = new HashMap<String, String>();
-                        hm.put("question", qText);
-                        hm.put("answer", aText);
-                        hm.put("category", cText);
-                        currentItem.setData(hm);
-                        //dbHelper.updateQA(currentItem);
-                        dbHelper.addOrReplaceItem(currentItem);
-                        updateMemoScreen();
-                        refreshAfterEditItem();
-                    }
-                })
-            .setNegativeButton(getString(R.string.cancel_text),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        refreshAfterEditItem();
-                    }
-                })
-            .create()
-            .show();
-            */
     }
 
     protected void doDelete(){
