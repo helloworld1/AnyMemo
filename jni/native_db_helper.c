@@ -31,42 +31,26 @@ void get_full_dbpath(JNIEnv* env, jobject obj){
     (*env) -> ReleaseStringUTFChars(env, dbpath_jstr, dbpath);
 }
 
-void Java_org_liberty_android_fantastischmemo_DatabaseHelper_createTriggers(JNIEnv* env, jobject obj){
-    sqlite3* database;
-    char* errMsg = NULL;
-    get_full_dbpath(env, obj);
-    /* Open databases */
-    if(sqlite3_open(fulldbpath, &database)){
+int getCount(sqlite3* database){
+    int count;
+    sqlite3_stmt* stmt;
+    /* count the number of _id */
+    if(sqlite3_prepare_v2(database, "SELECT COUNT(_id) FROM dict_tbl", -1, &stmt, NULL) != SQLITE_OK){
+        __android_log_write(ANDROID_LOG_ERROR, TAG, "Error when count total number of records");
         __android_log_write(ANDROID_LOG_ERROR, TAG, sqlite3_errmsg(database));
-        sqlite3_close(database);
-        return;
+        return -1;
     }
-    __android_log_write(ANDROID_LOG_INFO, TAG, "Success here");
-    /* Maintain the _id coherience using trigger */
-    if(sqlite3_exec(database, 
-        "CREATE TRIGGER IF NOT EXISTS dict_tbl_id_coherence \
-        AFTER DELETE ON dict_tbl \
-        BEGIN \
-            UPDATE dict_tbl SET _id = _id - 1 WHERE _id > old._id; \
-        END; \
-        CREATE TRIGGER IF NOT EXISTS learn_tbl_id_coherence \
-        AFTER DELETE ON learn_tbl \
-        BEGIN \
-            UPDATE learn_tbl SET _id = _id - 1 WHERE _id > old._id; \
-        END;" 
-        , NULL, NULL, &errMsg) != SQLITE_OK){
-        __android_log_write(ANDROID_LOG_ERROR, TAG, "Error when creating triggers");
-        __android_log_write(ANDROID_LOG_ERROR, TAG, errMsg);
-        return;
-    }
+    sqlite3_step(stmt);
+    count = sqlite3_column_int(stmt, 0);
+    sqlite3_finalize(stmt);
+    return count;
 }
+
 void Java_org_liberty_android_fantastischmemo_DatabaseHelper_removeDuplicatesNative(JNIEnv* env, jobject obj)
 {
     int i;
     sqlite3* database;
     char* errMsg = NULL;
-    sqlite3_stmt* stmt;
-    int count;
     char buf[250];
 
     get_full_dbpath(env, obj);
@@ -94,18 +78,6 @@ void Java_org_liberty_android_fantastischmemo_DatabaseHelper_removeDuplicatesNat
     }
 
     /* Maintain ID coherence */
-    /* First count the number of _id */
-    /*
-    if(sqlite3_prepare_v2(database, "SELECT COUNT(_id) FROM dict_tbl", -1, &stmt, NULL) != SQLITE_OK){
-        __android_log_write(ANDROID_LOG_ERROR, TAG, "Error when count total number of records");
-        __android_log_write(ANDROID_LOG_ERROR, TAG, sqlite3_errmsg(database));
-        return;
-    }
-    sqlite3_step(stmt);
-    count = sqlite3_column_int(stmt, 0);
-    sqlite3_finalize(stmt);
-    __android_log_print(ANDROID_LOG_VERBOSE, TAG, "Columns: %d", count);
-    */
 
     if(sqlite3_exec(database, 
         "CREATE TABLE IF NOT EXISTS tmp_count \

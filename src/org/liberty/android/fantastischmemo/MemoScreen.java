@@ -219,6 +219,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
         myIntent.putExtra("dbname", dbName);
         myIntent.putExtra("dbpath", dbPath);
         myIntent.putExtra("active_filter", activeFilter);
+        myIntent.putExtra("learn_ahead", learnAhead);
         finish();
         startActivity(myIntent);
     }
@@ -413,6 +414,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
                             myIntent.putExtra("dbname", dbName);
                             myIntent.putExtra("dbpath", dbPath);
                             myIntent.putExtra("learn_ahead", true);
+                            myIntent.putExtra("active_filter", activeFilter);
                             startActivity(myIntent);
                         }
                     })

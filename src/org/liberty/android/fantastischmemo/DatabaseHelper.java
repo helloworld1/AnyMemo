@@ -849,6 +849,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public native void removeDuplicatesNative();
 
-    /* Create necessary triggers to maintain the _id coherence */
-    public native void createTriggers();
 }
