@@ -142,54 +142,56 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
 		TextView answerView = (TextView) findViewById(R.id.answer);
 		TextView questionView= (TextView) findViewById(R.id.question);
         questionView.setOnClickListener(this);
+        questionView.setOnLongClickListener(this);
         answerView.setOnClickListener(this);
+        answerView.setOnLongClickListener(this);
 
 
 
 		
-            Thread loadingThread = new Thread(){
-                public void run(){
-                    /* Pre load cards (The number is specified in Window size varable) */
-                    mHandler.post(new Runnable(){
-                        public void run(){
-                            removeDialog(DIALOG_LOADING_PROGRESS);
-                            showDialog(DIALOG_LOADING_PROGRESS);
+        Thread loadingThread = new Thread(){
+            public void run(){
+                /* Pre load cards (The number is specified in Window size varable) */
+                mHandler.post(new Runnable(){
+                    public void run(){
+                        removeDialog(DIALOG_LOADING_PROGRESS);
+                        showDialog(DIALOG_LOADING_PROGRESS);
+                    }
+                });
+
+                final boolean isPrepared = prepare();
+                mHandler.post(new Runnable(){
+                    public void run(){
+                        removeDialog(DIALOG_LOADING_PROGRESS);
+                        if(isPrepared == false){
+                            new AlertDialog.Builder(mContext)
+                                .setTitle(getString(R.string.open_database_error_title))
+                                .setMessage(getString(R.string.open_database_error_message))
+                                .setPositiveButton(getString(R.string.back_menu_text), new OnClickListener() {
+                                    public void onClick(DialogInterface arg0, int arg1) {
+                                        finish();
+                                    }
+                                })
+                                .setNegativeButton(getString(R.string.help_button_text), new OnClickListener() {
+                                    public void onClick(DialogInterface arg0, int arg1) {
+                                        Intent myIntent = new Intent();
+                                        myIntent.setAction(Intent.ACTION_VIEW);
+                                        myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
+                                        myIntent.setData(Uri.parse(getString(R.string.website_help_error_open)));
+                                        startActivity(myIntent);
+                                        finish();
+
+                                    }
+                                })
+                                .create()
+                                .show();
                         }
-                    });
 
-                    final boolean isPrepared = prepare();
-                    mHandler.post(new Runnable(){
-                        public void run(){
-                            removeDialog(DIALOG_LOADING_PROGRESS);
-                            if(isPrepared == false){
-                                new AlertDialog.Builder(mContext)
-                                    .setTitle(getString(R.string.open_database_error_title))
-                                    .setMessage(getString(R.string.open_database_error_message))
-                                    .setPositiveButton(getString(R.string.back_menu_text), new OnClickListener() {
-                                        public void onClick(DialogInterface arg0, int arg1) {
-                                            finish();
-                                        }
-                                    })
-                                    .setNegativeButton(getString(R.string.help_button_text), new OnClickListener() {
-                                        public void onClick(DialogInterface arg0, int arg1) {
-                                            Intent myIntent = new Intent();
-                                            myIntent.setAction(Intent.ACTION_VIEW);
-                                            myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
-                                            myIntent.setData(Uri.parse(getString(R.string.website_help_error_open)));
-                                            startActivity(myIntent);
-                                            finish();
-
-                                        }
-                                    })
-                                    .create()
-                                    .show();
-                            }
-
-                        }
-                    });
-                }
-            };
-            loadingThread.start();
+                    }
+                });
+            }
+        };
+        loadingThread.start();
 
 	}
 
@@ -277,12 +279,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
 
         case R.id.menuundo:
             if(prevItem != null){
-                try{
-                    currentItem = (Item)prevItem.clone();
-                }
-                catch(CloneNotSupportedException e){
-                    Log.e(TAG, "Can not clone", e);
-                }
+                currentItem = (Item)prevItem.clone();
                 prevItem = null;
                 learnQueue.add(0, currentItem);
                 if(learnQueue.size() >= learningQueueSize){
@@ -556,21 +553,31 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
         String[] speechCtlList = getResources().getStringArray(R.array.speech_ctl_list);
         String[] touchAreaList = getResources().getStringArray(R.array.touch_area_list);
         String touchArea = settings.getString("touch_area", touchAreaList[0]);
-        if(touchArea.equals(touchAreaList[0]) && v == (LinearLayout)findViewById(R.id.memo_screen_root)){
-			if(this.showAnswer == false){
-				this.showAnswer = true;
-				updateMemoScreen();
-                autoSpeak();
-			}
+        LinearLayout root = (LinearLayout)findViewById(R.id.memo_screen_root);
+		TextView answerView = (TextView) findViewById(R.id.answer);
+		TextView questionView= (TextView) findViewById(R.id.question);
+
+        if((speechCtl.equals(speechCtlList[1]) || speechCtl.equals(speechCtlList[3])) && v == questionView ){
+            if(questionTTS != null){
+                questionTTS.sayText(currentItem.getQuestion());
+            }
+            else if(questionUserAudio){
+                mSpeakWord.speakWord(currentItem.getQuestion());
+            }
+        }
+        else if(touchArea.equals(touchAreaList[0]) && showAnswer == false && (v == root || v == questionView || v == answerView)){
+            this.showAnswer = true;
+            updateMemoScreen();
+            autoSpeak();
         }
 
-        if(v == (TextView) findViewById(R.id.answer)){
-            /* Handle the short click of the whole screen */
-			if(this.showAnswer == false){
-				this.showAnswer = true;
-				updateMemoScreen();
+        else if(v == answerView){
+            if(showAnswer == false){
+                this.showAnswer = true;
+                updateMemoScreen();
                 autoSpeak();
-			}
+            }
+
             else if((speechCtl.equals(speechCtlList[1]) || speechCtl.equals(speechCtlList[3]))){
                 /* showAnswer is ture so autoSpeak will speak answer */
                 if(answerTTS != null){
@@ -582,16 +589,6 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
             }
         }
 
-        if(v == (TextView) findViewById(R.id.question)){
-            if((speechCtl.equals(speechCtlList[1]) || speechCtl.equals(speechCtlList[3]))){
-                if(questionTTS != null){
-                    questionTTS.sayText(currentItem.getQuestion());
-                }
-                else if(questionUserAudio){
-                    mSpeakWord.speakWord(currentItem.getQuestion());
-                }
-            }
-        }
 
         for(int i = 0; i < btns.length; i++){
             if(v == btns[i]){
@@ -606,12 +603,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
                 prevScheduledItemCount = scheduledItemCount;
                 prevNewItemCount = newItemCount;
 
-                try{
-                    prevItem = (Item)currentItem.clone();
-                }
-                catch(CloneNotSupportedException e){
-                    Log.e(TAG, "Can not clone", e);
-                }
+                prevItem = (Item)currentItem.clone();
 
 
                 boolean scheduled = currentItem.isScheduled();
@@ -656,7 +648,10 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
 
     @Override
     public boolean onLongClick(View v){
-        if(v == (LinearLayout)findViewById(R.id.memo_screen_root)){
+        LinearLayout root = (LinearLayout)findViewById(R.id.memo_screen_root);
+		TextView answerView = (TextView) findViewById(R.id.answer);
+		TextView questionView= (TextView) findViewById(R.id.question);
+        if(v == root || v == answerView || v == questionView){
             showEditDialog();
             return true;
         }
