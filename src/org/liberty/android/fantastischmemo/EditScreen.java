@@ -79,7 +79,6 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
     private Button newButton;
     private Button nextButton;
     private Button prevButton;
-    private Item savedItem = null;
     private Item copyItem = null;
     private boolean searchInflated = false;
     private final int ACTIVITY_MERGE = 10;
@@ -378,11 +377,13 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
 
                 /* In case the id for the current item is null
                  * which is unlikely to happen */
-                Item savedCurrent = currentItem;
+                Item savedCurrent = currentItem.clone();
                 currentItem = dbHelper.getItemById(currentId, 0, true, activeFilter);
+
                 if(currentItem == null){
-                    currentItem = savedItem;
+                    currentItem = savedCurrent;
                 }
+                /* Go to specific card id returned by activity */
 
                 restartActivity();
             }
@@ -440,9 +441,8 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
             finish();
         }
         else{
-            if(savedItem != null){
-                currentItem = savedItem;
-                currentId = savedItem.getId();
+            if(currentItem.isEmpty()){
+                prepare();
             }
         }
     }
@@ -529,12 +529,15 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
         /* Reuse the doEdit to get the edit dialog
          * and display the edit dialog
          */
-        savedItem = currentItem;
         Item newItem = new Item();
         newItem.setId(dbHelper.getNewId());
         if(currentItem != null){
             newItem.setCategory(currentItem.getCategory());
         }
+        /* the tricky here is that the currentId is not modified.
+         * it is only modified the success edit.
+         * If not the prepare() will restore the oritinal item 
+         */
         currentItem = newItem;
         doEdit();
     }

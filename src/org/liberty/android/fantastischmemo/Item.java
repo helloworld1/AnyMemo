@@ -131,8 +131,8 @@ public final class Item implements Cloneable{
         easiness = 10.0;
     }
 
-    public Object clone() throws CloneNotSupportedException{
-        Item itemClone = (Item)super.clone();
+    public Item clone(){
+        Item itemClone = new Item();
         itemClone._id = this._id;
         itemClone.date_learn = this.date_learn;
         itemClone.interval = this.interval;
@@ -146,6 +146,7 @@ public final class Item implements Cloneable{
         itemClone.question = this.question;
         itemClone.answer = this.answer;
         itemClone.note = this.note;
+        itemClone.category = this.category;
 
         return itemClone;
 
@@ -429,6 +430,15 @@ public final class Item implements Cloneable{
         String tmp = answer;
         answer = question;
         question = tmp;
+    }
+
+    public boolean isEmpty(){
+        if(question.equals("") && answer.equals("") && category.equals("")){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 	
 }
