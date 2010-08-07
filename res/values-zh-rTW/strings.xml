@@ -220,4 +220,11 @@
     <string name="misc_category">雜項</string>
     <string name="shuffling_cards_title">局部打亂卡片</string>
     <string name="shuffling_cards_summary">學習的時候不按編號順序來復習。</string>
+    <string name="swap_qa_text">交換問題答案</string>
+    <string name="remove_dup_text">去除重復卡片</string>
+    <string name="removing_dup_title">去除重復卡片</string>
+    <string name="removing_dup_warning">去除重復卡片會花較長時間，過程不能中斷，否則會損壞數據庫!</string>
+    <string name="removing_dup_summary">正在去除重復卡片，請稍候...</string>
+    <string name="startup_title">初始界面</string>
+    <string name="startup_summary">設置啟動程序時候載入的界面，可以設置恢復上次打開的數據庫。</string>
 </resources>

@@ -220,4 +220,11 @@
     <string name="misc_category">杂项</string>
     <string name="shuffling_cards_title">局部打乱卡片</string>
     <string name="shuffling_cards_summary">学习的时候不按编号顺序来复习。</string>
+    <string name="swap_qa_text">交换问题答案</string>
+    <string name="remove_dup_text">去除重复卡片</string>
+    <string name="removing_dup_title">去除重复卡片</string>
+    <string name="removing_dup_warning">去除重复卡片会花较长时间，过程不能中断，否则会损坏数据库!</string>
+    <string name="removing_dup_summary">正在去除重复卡片，请稍候...</string>
+    <string name="startup_title">初始界面</string>
+    <string name="startup_summary">设置启动程序时候载入的界面，可以设置恢复上次打开的数据库。</string>
 </resources>
