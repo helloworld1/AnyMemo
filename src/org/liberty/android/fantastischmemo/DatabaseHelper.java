@@ -81,7 +81,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static void createEmptyDatabase(String path, String name) throws IOException, SQLException{
         File dbfile = new File(path + "/" + name);
 		if(dbfile.exists()){
-			throw new IOException("DB already exist");
+			// throw new IOException("DB already exist");
+            /* Create a backup and overwrite  it instead poping up an error */
+            File backupFile = new File(dbfile.getAbsolutePath().replaceAll(".db$", ".old.db"));
+            if(backupFile.exists()){
+                backupFile.delete();
+            }
+            dbfile.renameTo(backupFile);
 		}
         SQLiteDatabase database = SQLiteDatabase.openDatabase(path + "/" + name, null, SQLiteDatabase.OPEN_READWRITE | SQLiteDatabase.CREATE_IF_NECESSARY);
 		
