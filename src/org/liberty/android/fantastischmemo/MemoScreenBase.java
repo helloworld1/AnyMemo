@@ -290,11 +290,25 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
 		LinearLayout layoutQuestion = (LinearLayout)findViewById(R.id.layout_question);
 		LinearLayout layoutAnswer = (LinearLayout)findViewById(R.id.layout_answer);
 		float qRatio = Float.valueOf(qaRatio.substring(0, qaRatio.length() - 1));
-		float aRatio = 100.0f - qRatio;
-		qRatio /= 50.0;
-		aRatio /= 50.0;
-		layoutQuestion.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, qRatio));
-		layoutAnswer.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, aRatio));
+
+        if(qRatio > 99.0f){
+            layoutAnswer.setVisibility(View.GONE);
+            layoutQuestion.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
+            layoutAnswer.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
+        }
+        else if(qRatio < 1.0f){
+            layoutQuestion.setVisibility(View.GONE);
+            layoutQuestion.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
+            layoutAnswer.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
+        }
+        else{
+
+            float aRatio = 100.0f - qRatio;
+            qRatio /= 50.0;
+            aRatio /= 50.0;
+            layoutQuestion.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, qRatio));
+            layoutAnswer.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, aRatio));
+        }
         /* Set both background and text color */
         setScreenColor();
 		if(currentItem == null){
