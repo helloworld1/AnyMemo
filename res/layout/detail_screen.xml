@@ -146,9 +146,9 @@
 				android:layout_marginRight="50dip" android:text="@string/detail_update" android:layout_weight="1"/>
   </TableRow>
   <TableRow>
-			<Button android:id="@+id/but_detail_delete" android:layout_width="fill_parent"
+			<Button android:id="@+id/but_detail_reset" android:layout_width="fill_parent"
 				android:layout_height="wrap_content" android:layout_marginLeft="0dip"
-				android:layout_marginRight="50dip" android:text="@string/detail_delete" android:layout_weight="1"/>
+				android:layout_marginRight="50dip" android:text="@string/detail_reset" android:layout_weight="1"/>
   </TableRow>
   <TableRow>
   			<Button android:id="@+id/but_detail_back" android:layout_width="wrap_content"

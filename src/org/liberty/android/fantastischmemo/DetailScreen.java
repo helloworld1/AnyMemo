@@ -55,7 +55,7 @@ public class DetailScreen extends Activity implements OnClickListener{
 	private Item currentItem;
 	Button backButton;
 	Button updateButton;
-	Button deleteButton;
+	Button resetButton;
 	
 	
 	
@@ -111,9 +111,9 @@ public class DetailScreen extends Activity implements OnClickListener{
 		}
 		backButton = (Button)findViewById(R.id.but_detail_back);
 		updateButton = (Button)findViewById(R.id.but_detail_update);
-		deleteButton = (Button)findViewById(R.id.but_detail_delete);
+		resetButton = (Button)findViewById(R.id.but_detail_reset);
 		backButton.setOnClickListener(this);
-		deleteButton.setOnClickListener(this);
+		resetButton.setOnClickListener(this);
 		updateButton.setOnClickListener(this);
 		
 		loadEntries();
@@ -174,26 +174,16 @@ public class DetailScreen extends Activity implements OnClickListener{
     		setResult(Activity.RESULT_CANCELED, resultIntent);
     		finish();
     	}
-    	if(v == deleteButton){
-    		AlertDialog alertDialog = new AlertDialog.Builder(this)
-			.create();
-			alertDialog.setTitle("Warning");
-			alertDialog.setMessage(getString(R.string.delete_warning));
-			alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.yes_text),
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface arg0, int arg1) {
-							dbHelper.deleteItem(currentItem);
-							Intent resultIntent = new Intent();
-							setResult(Activity.RESULT_OK, resultIntent);
-							finish();
-						}
-					});
-			alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.no_text),
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface arg0, int arg1) {
-						}
-					});
-			alertDialog.show();
+    	if(v == resetButton){
+            dateLearnEntry.setText("2010-01-01");
+            intervalEntry.setText("0");
+            gradeEntry.setText("0");
+            easinessEntry.setText("2.5");
+            acqRepsEntry.setText("0");
+            retRepsEntry.setText("0");
+            lapsesEntry.setText("0");
+            acqRepsSinceLapseEntry.setText("0");
+            retRepsSinceLapseEntry.setText("0");
     	}
     	if(v == updateButton){
     		AlertDialog alertDialog = new AlertDialog.Builder(this)

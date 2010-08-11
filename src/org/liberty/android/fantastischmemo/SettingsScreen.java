@@ -584,7 +584,7 @@ public class SettingsScreen extends Activity implements View.OnClickListener, Co
         if(v == qTypefaceCheckbox){
             if(qTypefaceCheckbox.isChecked()){
                 qTypefaceEdit.setVisibility(View.VISIBLE);
-                if(!aTypefaceEdit.getText().toString().equals("")){
+                if(qTypefaceEdit.getText().toString().equals("") && !aTypefaceEdit.getText().toString().equals("")){
                     qTypefaceEdit.setText(aTypefaceEdit.getText());
                 }
             }
@@ -596,7 +596,7 @@ public class SettingsScreen extends Activity implements View.OnClickListener, Co
         if(v == aTypefaceCheckbox){
             if(aTypefaceCheckbox.isChecked()){
                 aTypefaceEdit.setVisibility(View.VISIBLE);
-                if(!qTypefaceEdit.getText().toString().equals("")){
+                if(aTypefaceEdit.getText().toString().equals("") && !qTypefaceEdit.getText().toString().equals("")){
                     aTypefaceEdit.setText(qTypefaceEdit.getText());
                 }
             }
