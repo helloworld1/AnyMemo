@@ -222,5 +222,15 @@
     <string name="misc_category">Inne</string>
     <string name="shuffling_cards_title">Przetasuj karty</string>
     <string name="shuffling_cards_summary">Przetasuj karty do powtórki. Nowe karty nie zostaną przetasowane globalnie.</string>
-
+    <string name="swap_qa_text">Zamień pytania z odpowiedziami</string>
+    <string name="remove_dup_text">Usuń duplikaty</string>
+    <string name="removing_dup_title">Usuwanie duplikatów</string>
+    <string name="removing_dup_warning">Usuwanie duplikatów to
+    czasochłonny proces w zależności od rozmiaru bazy danych. Przerwanie
+    tego procesu spowoduje uszkodzenie bazy!</string>
+    <string name="removing_dup_summary">Usuwanie zduplikowanych kart. To
+    może trochę potrwać w przypadku dużych baz danych.</string>
+    <string name="startup_title">Ekran startowy</string>
+    <string name="startup_summary">Skonfiguruj ekran startowy</string>
+    <string name="detail_reset">Skasuj dane postępu nauki</string>
 </resources>
