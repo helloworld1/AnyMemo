@@ -227,4 +227,5 @@
     <string name="removing_dup_summary">正在去除重復卡片，請稍候...</string>
     <string name="startup_title">初始界面</string>
     <string name="startup_summary">設置啟動程序時候載入的界面，可以設置恢復上次打開的數據庫。</string>
+    <string name="detail_reset">重置學習信息</string>
 </resources>
