@@ -235,12 +235,13 @@ public class AnyMemo extends Activity implements OnClickListener{
     public void onActivityResult(int requestCode, int resultCode, Intent data){
     	super.onActivityResult(requestCode, resultCode, data);
     	switch(requestCode){
-    	case (1):
+    	case 1:
     		if(resultCode == Activity.RESULT_OK){
     			dbName = data.getStringExtra("org.liberty.android.fantastischmemo.dbName");
     			dbPath = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
     			dbPath += "/";
     			returnValue = 1;
+                break;
     			
     		}
     	case 2:
@@ -255,11 +256,20 @@ public class AnyMemo extends Activity implements OnClickListener{
     			myIntent.putExtra("dbpath", dbPath);
     			myIntent.putExtra("openid", 1);
     			startActivity(myIntent);
+                break;
     			
     		}
-    		
+        case 3:
+            restartActivity();
+            break;
     		
     	}
+    }
+
+    public void restartActivity(){
+        Intent myIntent = new Intent(this, AnyMemo.class);
+        finish();
+        startActivity(myIntent);
     }
     
 	public boolean onCreateOptionsMenu(Menu menu){
@@ -282,7 +292,7 @@ public class AnyMemo extends Activity implements OnClickListener{
 			return true;
         case R.id.mainmenu_option:
     		myIntent.setClass(this, OptionScreen.class);
-    		startActivity(myIntent);
+    		startActivityForResult(myIntent, 3);
             return true;
 
         case R.id.mainmenu_help:
