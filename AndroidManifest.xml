@@ -49,6 +49,17 @@
         <activity
             android:name=".ListEditScreen"
             android:configChanges="orientation|keyboardHidden" />
+        <receiver
+            android:name=".NotificationReceiver"
+            android:process=":remote" />
+        <receiver
+            android:name=".SetAlarmReceiver" >
+            <intent-filter>
+                <action
+                    android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
 
     </application>
 

@@ -48,6 +48,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.text.method.LinkMovementMethod;
 import android.text.Html;
+import android.content.Context;
 
 public class AnyMemo extends Activity implements OnClickListener{
 	private String dbName;
@@ -178,6 +179,7 @@ public class AnyMemo extends Activity implements OnClickListener{
 
         /* Go directly to other screen based on user settings */
         gotoScreen(settings.getString("startup_screen", ""));
+        SetAlarmReceiver.setAlarm(this);
     }
     
     public void onClick(View v){
@@ -260,6 +262,7 @@ public class AnyMemo extends Activity implements OnClickListener{
     			
     		}
         case 3:
+            /* Going back from the option screen */
             restartActivity();
             break;
     		
@@ -392,4 +395,5 @@ public class AnyMemo extends Activity implements OnClickListener{
 
 
     }
+
 }
