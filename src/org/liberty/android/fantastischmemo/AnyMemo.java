@@ -179,7 +179,7 @@ public class AnyMemo extends Activity implements OnClickListener{
 
         /* Go directly to other screen based on user settings */
         gotoScreen(settings.getString("startup_screen", ""));
-        SetAlarmReceiver.setAlarm(this);
+        SetAlarmReceiver.setNotificationAlarm(this);
     }
     
     public void onClick(View v){
@@ -395,5 +395,6 @@ public class AnyMemo extends Activity implements OnClickListener{
 
 
     }
+
 
 }

@@ -33,18 +33,29 @@ public class SetAlarmReceiver extends BroadcastReceiver{
 
     @Override
     public void onReceive(Context context, Intent intent){
-        Log.v(TAG, "RECIVE RECEIVE RECEIVE FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
+        setNotificationAlarm(context);
+        setWidgetUpdateAlarm(context);
     }
 
-    public static void setAlarm(Context context){
+    public static void setNotificationAlarm(Context context){
         /* Set an alarm for the notification */
         Log.v(TAG, "Set ALARM here!");
         AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent myIntent = new Intent(context, NotificationReceiver.class);
+        Intent myIntent = new Intent(context, AlarmReceiver.class);
+        myIntent.putExtra("alarm_request_code", AlarmReceiver.NOTIFICATION_ALARM);
         PendingIntent sender = PendingIntent.getBroadcast(context, ALARM_REQUEST_CODE, myIntent, 0);
         am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 15000, sender);
-
-
     }
+
+    public static void setWidgetUpdateAlarm(Context context){
+        /* Set an alarm for the widget to update it*/
+        Log.v(TAG, "Set ALARM here!");
+        AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        Intent myIntent = new Intent(context, AlarmReceiver.class);
+        myIntent.putExtra("alarm_request_code", AlarmReceiver.WIDGET_ALARM);
+        PendingIntent sender = PendingIntent.getBroadcast(context, ALARM_REQUEST_CODE, myIntent, 0);
+        am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 15000, sender);
+    }
+
 }
 
