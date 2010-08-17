@@ -42,19 +42,41 @@ public class SetAlarmReceiver extends BroadcastReceiver{
         Log.v(TAG, "Set ALARM here!");
         AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent myIntent = new Intent(context, AlarmReceiver.class);
-        myIntent.putExtra("alarm_request_code", AlarmReceiver.NOTIFICATION_ALARM);
+        myIntent.putExtra("request_code", AlarmReceiver.ALARM_NOTIFICATION);
         PendingIntent sender = PendingIntent.getBroadcast(context, ALARM_REQUEST_CODE, myIntent, 0);
-        am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 15000, sender);
+        //am.set(AlarmManager.RTC, System.currentTimeMillis() + 15000, sender);
+        am.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis(), 10000, sender);
+    }
+
+    public static void cancelNotificationAlarm(Context context){
+        /* Set an alarm for the notification */
+        Log.v(TAG, "Set ALARM here!");
+        AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        Intent myIntent = new Intent(context, AlarmReceiver.class);
+        myIntent.putExtra("request_code", AlarmReceiver.ALARM_NOTIFICATION);
+        PendingIntent sender = PendingIntent.getBroadcast(context, ALARM_REQUEST_CODE, myIntent, 0);
+        am.cancel(sender);
     }
 
     public static void setWidgetUpdateAlarm(Context context){
         /* Set an alarm for the widget to update it*/
-        Log.v(TAG, "Set ALARM here!");
+        Log.v(TAG, "Set ALARM here Update Widget!");
         AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent myIntent = new Intent(context, AlarmReceiver.class);
-        myIntent.putExtra("alarm_request_code", AlarmReceiver.WIDGET_ALARM);
-        PendingIntent sender = PendingIntent.getBroadcast(context, ALARM_REQUEST_CODE, myIntent, 0);
-        am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 15000, sender);
+        myIntent.putExtra("request_code", AlarmReceiver.ALARM_WIDGET);
+        PendingIntent sender = PendingIntent.getBroadcast(context, ALARM_REQUEST_CODE + 1, myIntent, 0);
+        //am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 15000, sender);
+        am.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis(), 10000, sender);
+    }
+
+    public static void cancelWidgetUpdateAlarm(Context context){
+        Log.v(TAG, "Cancel Widget ALARM here !");
+        AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        Intent myIntent = new Intent(context, AlarmReceiver.class);
+        myIntent.putExtra("request_code", AlarmReceiver.ALARM_WIDGET);
+        PendingIntent sender = PendingIntent.getBroadcast(context, ALARM_REQUEST_CODE + 1, myIntent, 0);
+        //am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 15000, sender);
+        am.cancel(sender);
     }
 
 }

@@ -6,9 +6,10 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:background="@drawable/am_widget_frame"
-    android:paddingTop="15dp"
-    android:paddingBottom="10dp"
+    android:paddingTop="11dp"
+    android:paddingBottom="11dp"
     android:paddingLeft="15dp"
+    android:paddingRight="15dp"
     android:layout_height="fill_parent" >
     <TextView 
         android:layout_width="fill_parent"
@@ -20,19 +21,19 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textColor="#000000"
-        android:id="@+id/widget_db_name"
-    	android:text="DB: " />
+        android:singleLine="true"
+        android:id="@+id/widget_db_name" />
     <TextView 
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/widget_review_count"
-        android:textColor="#000000"
-    	android:text="Review: " />
+        android:singleLine="true"
+        android:textColor="#000000" />
     <TextView 
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/widget_new_count"
-        android:textColor="#000000"
-    	android:text="New: " />
+        android:singleLine="true"
+        android:textColor="#000000" />
 </LinearLayout>
 

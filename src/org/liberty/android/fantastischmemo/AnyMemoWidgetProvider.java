@@ -33,20 +33,32 @@ import java.util.Date;
 
 public class AnyMemoWidgetProvider extends AppWidgetProvider{
 
+    @Override
+    public void onEnabled(Context context){
+        super.onEnabled(context);
+        SetAlarmReceiver.setWidgetUpdateAlarm(context);
+    }
+
+    @Override
+    public void onDisabled(Context context){
+        super.onDisabled(context);
+        SetAlarmReceiver.cancelWidgetUpdateAlarm(context);
+    }
+
+    @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds){
-        /*
         final int N = appWidgetIds.length;
         for(int i = 0; i < N; i++){
             int appWidgetId = appWidgetIds[i];
             Intent intent = new Intent(context, AnyMemo.class);
+            intent.putExtra("startup_screen", "Open Screen");
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget);
             views.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);
-            views.setTextViewText(R.id.widget_db_name, (new Date()).toString());
             appWidgetManager.updateAppWidget(appWidgetId, views);
-        }*/
+        }
         Intent myIntent = new Intent(context, AnyMemoService.class);
-        myIntent.putExtra("service_request_code", AnyMemoService.UPDATE_WIDGET);
+        myIntent.putExtra("request_code", AnyMemoService.UPDATE_WIDGET);
         context.startService(myIntent);
     }
 }

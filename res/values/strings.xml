@@ -248,5 +248,7 @@
     <string name="startup_summary">Set up the start-up screen.</string>
     <string name="detail_reset">Reset learning data</string>
     <string name="anymemo_widget_name">AnyMemo Widget</string>
+    <string name="db_text">DB</string>
+    <string name="widget_fail_fetch">No recently opened database.</string>
 
 </resources>

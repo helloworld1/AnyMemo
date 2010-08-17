@@ -177,9 +177,19 @@ public class AnyMemo extends Activity implements OnClickListener{
                 .show();
         }
 
-        /* Go directly to other screen based on user settings */
-        gotoScreen(settings.getString("startup_screen", ""));
         SetAlarmReceiver.setNotificationAlarm(this);
+        //SetAlarmReceiver.setWidgetUpdateAlarm(this);
+
+        /* Go directly to other screen based on user settings */
+        String startScreen = "";
+		Bundle extras = getIntent().getExtras();
+		if(extras != null) {
+            startScreen = extras.getString("startup_screen");
+        }
+        if(startScreen == null || startScreen.equals("")){
+            startScreen = settings.getString("startup_screen", "");
+        }
+        gotoScreen(startScreen);
     }
     
     public void onClick(View v){

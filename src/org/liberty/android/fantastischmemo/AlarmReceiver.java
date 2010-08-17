@@ -27,8 +27,8 @@ import android.util.Log;
 
 
 public class AlarmReceiver extends BroadcastReceiver{
-    public static int NOTIFICATION_ALARM = 1;
-    public static int WIDGET_ALARM = 2;
+    public static int ALARM_NOTIFICATION = 1;
+    public static int ALARM_WIDGET = 2;
     private final static String TAG = "org.liberty.android.fantastischmemo.AlarmReceiver";
     @Override
     public void onReceive(Context context, Intent intent){
@@ -37,16 +37,19 @@ public class AlarmReceiver extends BroadcastReceiver{
             Log.e(TAG, "Receive NULL extras");
             return;
         }
-        int alarmReq = extras.getInt("alarm_request_code", 0);
-        if((alarmReq & NOTIFICATION_ALARM) != 0){
+        int alarmReq = extras.getInt("request_code", 0);
+        Log.v(TAG, "Receive req: " + Integer.toString(alarmReq));
+        if((alarmReq & ALARM_NOTIFICATION) != 0){
+            Log.v(TAG, "ALARM NOTIFICATION_ALARM");
             Intent myIntent = new Intent(context, AnyMemoService.class);
-            myIntent.putExtra("service_request_code", AnyMemoService.UPDATE_NOTIFICATION);
+            myIntent.putExtra("request_code", AnyMemoService.UPDATE_NOTIFICATION);
             context.startService(myIntent);
         }
 
-        if((alarmReq & NOTIFICATION_ALARM) != 0){
+        if((alarmReq & ALARM_WIDGET) != 0){
+            Log.v(TAG, "ALARM WIDGET");
             Intent myIntent = new Intent(context, AnyMemoService.class);
-            myIntent.putExtra("service_request_code", AnyMemoService.UPDATE_WIDGET);
+            myIntent.putExtra("request_code", AnyMemoService.UPDATE_WIDGET);
             context.startService(myIntent);
         }
     }
