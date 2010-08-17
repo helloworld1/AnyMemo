@@ -250,5 +250,7 @@
     <string name="anymemo_widget_name">AnyMemo Widget</string>
     <string name="db_text">DB</string>
     <string name="widget_fail_fetch">No recently opened database.</string>
+    <string name="notification_text">Notification</string>
+    <string name="notification_summary">Display information on the notification area even AnyMemo is not opened</string>
 
 </resources>

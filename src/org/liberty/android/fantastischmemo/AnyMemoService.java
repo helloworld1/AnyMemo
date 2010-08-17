@@ -43,6 +43,7 @@ import android.preference.PreferenceManager;
 public class AnyMemoService extends Service{
     public static int UPDATE_WIDGET = 1;
     public static int UPDATE_NOTIFICATION = 2;
+    public static int CANCEL_NOTIFICATION = 4;
     private final int NOTIFICATION_ID = 4829352;
     private final static String TAG = "org.liberty.android.fantastischmemo.AnyMemoService";
 
@@ -61,6 +62,11 @@ public class AnyMemoService extends Service{
         if((serviceReq & UPDATE_NOTIFICATION) != 0){
             showNotification();
         }
+
+        if((serviceReq & CANCEL_NOTIFICATION) != 0){
+            cancelNotification();
+        }
+
     }
 
     @Override
@@ -105,6 +111,15 @@ public class AnyMemoService extends Service{
         }
     }
 
+    private void cancelNotification(){
+        try{
+            NotificationManager notificationManager = (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.cancel(NOTIFICATION_ID);
+        }
+        catch(Exception e){
+        }
+    }
+
     private class DatabaseInfo{
         private String dbName;
         private String dbPath;
@@ -145,7 +160,4 @@ public class AnyMemoService extends Service{
             return revCount;
         }
     }
-
-        
-
 }

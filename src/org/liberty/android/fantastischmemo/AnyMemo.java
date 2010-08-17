@@ -191,6 +191,14 @@ public class AnyMemo extends Activity implements OnClickListener{
         }
         gotoScreen(startScreen);
     }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        Intent myIntent = new Intent(this, AnyMemoService.class);
+        myIntent.putExtra("request_code", AnyMemoService.CANCEL_NOTIFICATION);
+        startService(myIntent);
+    }
     
     public void onClick(View v){
     	if(v == btnNew){

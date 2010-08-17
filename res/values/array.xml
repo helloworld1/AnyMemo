@@ -159,4 +159,12 @@
     <item>Edit Screen</item>
 </string-array>
 
+<string-array name="notification_interval_list">
+    <item>Disabled</item>
+    <item>1 hr</item>
+    <item>6 hr</item>
+    <item>12 hr</item>
+    <item>24 hr</item>
+</string-array>
+
 </resources>

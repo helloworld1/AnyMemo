@@ -26,26 +26,59 @@ import android.app.PendingIntent;
 import android.app.AlarmManager;
 import android.content.Context;
 import android.util.Log;
+import java.util.Calendar;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 public class SetAlarmReceiver extends BroadcastReceiver{
+    /* This class contains the static methods to set up the alarm
+     * also it is a receiver that can be invoked every boot time.
+     */
     private final static String TAG = "org.liberty.android.fantastischmemo.SetAlarmReceiver";
     private final static int ALARM_REQUEST_CODE = 1548345;
 
     @Override
     public void onReceive(Context context, Intent intent){
         setNotificationAlarm(context);
-        setWidgetUpdateAlarm(context);
     }
 
     public static void setNotificationAlarm(Context context){
         /* Set an alarm for the notification */
         Log.v(TAG, "Set ALARM here!");
+        /* Set interval from the settings */
+
+    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        String s = settings.getString("notification_interval", "24 hr");
+        long interval = AlarmManager.INTERVAL_DAY;
+        if(s.equals("Disabled")){
+            return;
+        }
+        else if(s.equals("1 hr")){
+            interval = AlarmManager.INTERVAL_HOUR * 1;
+        }
+        else if(s.equals("6 hr")){
+            interval = AlarmManager.INTERVAL_HOUR * 6;
+        }
+        else if(s.equals("12 hr")){
+            interval = AlarmManager.INTERVAL_HOUR * 12;
+        }
+        else if(s.equals("24 hr")){
+            interval = AlarmManager.INTERVAL_HOUR * 24;
+        }
+
         AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent myIntent = new Intent(context, AlarmReceiver.class);
         myIntent.putExtra("request_code", AlarmReceiver.ALARM_NOTIFICATION);
         PendingIntent sender = PendingIntent.getBroadcast(context, ALARM_REQUEST_CODE, myIntent, 0);
+        /* Set up the alarm time */
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 7);
+        calendar.set(Calendar.MINUTE, 5);
+        calendar.set(Calendar.SECOND, 3);
+
+
         //am.set(AlarmManager.RTC, System.currentTimeMillis() + 15000, sender);
-        am.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis(), 10000, sender);
+        am.setInexactRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), AlarmManager.INTERVAL_HALF_DAY, sender);
     }
 
     public static void cancelNotificationAlarm(Context context){
@@ -66,7 +99,7 @@ public class SetAlarmReceiver extends BroadcastReceiver{
         myIntent.putExtra("request_code", AlarmReceiver.ALARM_WIDGET);
         PendingIntent sender = PendingIntent.getBroadcast(context, ALARM_REQUEST_CODE + 1, myIntent, 0);
         //am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 15000, sender);
-        am.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis(), 10000, sender);
+        am.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis(), AlarmManager.INTERVAL_HOUR, sender);
     }
 
     public static void cancelWidgetUpdateAlarm(Context context){

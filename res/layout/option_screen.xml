@@ -70,6 +70,13 @@
             android:entries="@array/startup_screen_list"
             android:entryValues="@array/startup_screen_list"
             android:summary="@string/startup_summary" />
+        <ListPreference
+            android:key="notification_interval"
+            android:title="@string/notification_text"
+            android:defaultValue="24 hr"
+            android:entries="@array/notification_interval_list"
+            android:entryValues="@array/notification_interval_list"
+            android:summary="@string/notification_summary" />
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/misc_category">
