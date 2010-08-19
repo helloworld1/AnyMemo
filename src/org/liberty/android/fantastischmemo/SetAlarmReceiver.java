@@ -98,7 +98,6 @@ public class SetAlarmReceiver extends BroadcastReceiver{
         Intent myIntent = new Intent(context, AlarmReceiver.class);
         myIntent.putExtra("request_code", AlarmReceiver.ALARM_WIDGET);
         PendingIntent sender = PendingIntent.getBroadcast(context, ALARM_REQUEST_CODE + 1, myIntent, 0);
-        //am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 15000, sender);
         am.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis(), AlarmManager.INTERVAL_HOUR, sender);
     }
 
@@ -108,7 +107,6 @@ public class SetAlarmReceiver extends BroadcastReceiver{
         Intent myIntent = new Intent(context, AlarmReceiver.class);
         myIntent.putExtra("request_code", AlarmReceiver.ALARM_WIDGET);
         PendingIntent sender = PendingIntent.getBroadcast(context, ALARM_REQUEST_CODE + 1, myIntent, 0);
-        //am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 15000, sender);
         am.cancel(sender);
     }
 

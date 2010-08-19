@@ -86,6 +86,10 @@ public class AnyMemoService extends Service{
             updateViews.setTextViewText(R.id.widget_new_count, getString(R.string.stat_new) + " " + dbInfo.getNewCount());
             Intent intent = new Intent(this, AnyMemo.class);
             intent.putExtra("screen", "Memo Screen");
+            /* Cancel the current pending intent to prevent some
+             * strange behaviors when changing the extra bundle
+             * of the intent 
+             */
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
             updateViews.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);
             manager.updateAppWidget(thisWidget, updateViews);

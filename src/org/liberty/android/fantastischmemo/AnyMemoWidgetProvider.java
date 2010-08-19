@@ -40,7 +40,6 @@ public class AnyMemoWidgetProvider extends AppWidgetProvider{
     public void onEnabled(Context context){
         super.onEnabled(context);
         SetAlarmReceiver.setWidgetUpdateAlarm(context);
-        Log.v(TAG, "Widget Enabled!");
     }
 
     @Override
@@ -51,11 +50,12 @@ public class AnyMemoWidgetProvider extends AppWidgetProvider{
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds){
-        final int N = appWidgetIds.length;
-        Log.v(TAG, "Widget Updated!");
 
         Intent myIntent = new Intent(context, AnyMemoService.class);
         myIntent.putExtra("request_code", AnyMemoService.UPDATE_WIDGET);
+        /* Use the service to update, otherwise it may cause some
+         * strange behaviors 
+         */
         context.startService(myIntent);
     }
 
