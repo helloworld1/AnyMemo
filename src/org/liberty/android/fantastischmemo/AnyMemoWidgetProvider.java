@@ -33,10 +33,21 @@ import java.util.Date;
 
 public class AnyMemoWidgetProvider extends AppWidgetProvider{
 
+    private final static String TAG = "org.liberty.android.fantastischmemo.AnyMemoWidgetProvider";
+
     @Override
     public void onEnabled(Context context){
         super.onEnabled(context);
         SetAlarmReceiver.setWidgetUpdateAlarm(context);
+        Intent intent = new Intent(context, AnyMemo.class);
+        intent.putExtra("screen", "Memo Screen");
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget);
+        views.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);
+        views.setOnClickPendingIntent(R.id.widget_db_name, pendingIntent);
+        views.setOnClickPendingIntent(R.id.widget_review_count, pendingIntent);
+        views.setOnClickPendingIntent(R.id.widget_new_count, pendingIntent);
+        Log.v(TAG, "Widget Enabled!");
     }
 
     @Override
@@ -48,13 +59,18 @@ public class AnyMemoWidgetProvider extends AppWidgetProvider{
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds){
         final int N = appWidgetIds.length;
+        Log.v(TAG, "Widget Updated!");
         for(int i = 0; i < N; i++){
             int appWidgetId = appWidgetIds[i];
             Intent intent = new Intent(context, AnyMemo.class);
-            intent.putExtra("startup_screen", "Open Screen");
+            intent.putExtra("screen", "Memo Screen");
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget);
+            Log.v(TAG, "Widget Set Click!");
             views.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);
+            //views.setOnClickPendingIntent(R.id.widget_db_name, pendingIntent);
+            //views.setOnClickPendingIntent(R.id.widget_review_count, pendingIntent);
+            //views.setOnClickPendingIntent(R.id.widget_new_count, pendingIntent);
             appWidgetManager.updateAppWidget(appWidgetId, views);
         }
         Intent myIntent = new Intent(context, AnyMemoService.class);

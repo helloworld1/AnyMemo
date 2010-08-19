@@ -66,6 +66,7 @@ public class AnyMemoService extends Service{
         if((serviceReq & CANCEL_NOTIFICATION) != 0){
             cancelNotification();
         }
+        stopSelf();
 
     }
 
@@ -95,9 +96,10 @@ public class AnyMemoService extends Service{
         try{
             DatabaseInfo dbInfo = new DatabaseInfo(this);
             Intent myIntent = new Intent(this, AnyMemo.class);
-            myIntent.putExtra("startup_screen", "Open Screen");
+            myIntent.putExtra("screen", "Open Screen");
             NotificationManager notificationManager = (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
             Notification notification = new Notification(R.drawable.icon, getString(R.string.app_name), System.currentTimeMillis());
+            notification.flags |= Notification.FLAG_AUTO_CANCEL;
             PendingIntent pIntent = PendingIntent.getActivity(this, 0, myIntent, 0);
             notification.setLatestEventInfo(this, dbInfo.getDbName(), getString(R.string.stat_scheduled) + " " + dbInfo.getRevCount(), pIntent);
 

@@ -228,4 +228,9 @@
     <string name="startup_title">初始界面</string>
     <string name="startup_summary">设置启动程序时候载入的界面，可以设置恢复上次打开的数据库。</string>
     <string name="detail_reset">重置学习信息</string>
+    <string name="anymemo_widget_name">AnyMemo桌面工具</string>
+    <string name="db_text">数据库</string>
+    <string name="widget_fail_fetch">没有数据库</string>
+    <string name="notification_text">定时提醒</string>
+    <string name="notification_summary">设定定时提醒的时间间隔。</string>   
 </resources>

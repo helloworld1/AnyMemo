@@ -228,4 +228,9 @@
     <string name="startup_title">初始界面</string>
     <string name="startup_summary">設置啟動程序時候載入的界面，可以設置恢復上次打開的數據庫。</string>
     <string name="detail_reset">重置學習信息</string>
+    <string name="anymemo_widget_name">AnyMemo桌面工具</string>
+    <string name="db_text">數據庫</string>
+    <string name="widget_fail_fetch">沒有數據庫</string>
+    <string name="notification_text">定時提醒</string>
+    <string name="notification_summary">設定定時提醒的時間間隔。</string>   
 </resources>

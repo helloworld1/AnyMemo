@@ -229,4 +229,10 @@
     <string name="removing_dup_summary">Odstraňují se duplicitní karty. Může to trvat delší dobu, podle velikosti databáze.</string>
     <string name="startup_title">Startovací obrazovka</string>
     <string name="startup_summary">Nastavení startovací obrazovky.</string>
+    <string name="anymemo_widget_name">AnyMemo Widget</string>
+    <string name="db_text">DB</string>
+    <string name="widget_fail_fetch">Chybí databáze.</string>
+    <string name="notification_text">Oznámení</string>
+    <string name="notification_summary">Zobrazení informací v oznamovací oblasti
++ani AnyMemo nejsou otevřeny</string>
 </resources>

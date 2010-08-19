@@ -63,7 +63,7 @@ public class SetAlarmReceiver extends BroadcastReceiver{
             interval = AlarmManager.INTERVAL_HOUR * 12;
         }
         else if(s.equals("24 hr")){
-            interval = AlarmManager.INTERVAL_HOUR * 24;
+            interval = AlarmManager.INTERVAL_HOUR * 24 - 10;
         }
 
         AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
@@ -78,7 +78,7 @@ public class SetAlarmReceiver extends BroadcastReceiver{
 
 
         //am.set(AlarmManager.RTC, System.currentTimeMillis() + 15000, sender);
-        am.setInexactRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), AlarmManager.INTERVAL_HALF_DAY, sender);
+        am.setInexactRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), interval, sender);
     }
 
     public static void cancelNotificationAlarm(Context context){

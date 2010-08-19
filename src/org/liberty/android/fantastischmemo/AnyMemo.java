@@ -184,7 +184,9 @@ public class AnyMemo extends Activity implements OnClickListener{
         String startScreen = "";
 		Bundle extras = getIntent().getExtras();
 		if(extras != null) {
-            startScreen = extras.getString("startup_screen");
+            Log.v(TAG, "BUndle content: " + extras.toString());
+            startScreen = extras.getString("screen");
+            Log.v(TAG, "BUndle content screen: " + startScreen);
         }
         if(startScreen == null || startScreen.equals("")){
             startScreen = settings.getString("startup_screen", "");
@@ -196,8 +198,9 @@ public class AnyMemo extends Activity implements OnClickListener{
     public void onDestroy(){
         super.onDestroy();
         Intent myIntent = new Intent(this, AnyMemoService.class);
-        myIntent.putExtra("request_code", AnyMemoService.CANCEL_NOTIFICATION);
+        myIntent.putExtra("request_code", AnyMemoService.CANCEL_NOTIFICATION | AnyMemoService.UPDATE_WIDGET);
         startService(myIntent);
+        SetAlarmReceiver.setWidgetUpdateAlarm(this);
     }
     
     public void onClick(View v){

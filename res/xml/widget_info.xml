@@ -2,6 +2,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:minWidth="146dp"
     android:minHeight="72dp"
-    android:updatePeriodMillis="3600000"
+    android:updatePeriodMillis="0"
     android:initialLayout="@layout/widget" />
     <!-- android:configure="org.liberty.android.AnyMemo" > -->
