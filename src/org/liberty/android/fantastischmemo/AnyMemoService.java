@@ -84,9 +84,14 @@ public class AnyMemoService extends Service{
             updateViews.setTextViewText(R.id.widget_db_name, dbInfo.getDbName());
             updateViews.setTextViewText(R.id.widget_review_count, getString(R.string.stat_scheduled) + " " + dbInfo.getRevCount());
             updateViews.setTextViewText(R.id.widget_new_count, getString(R.string.stat_new) + " " + dbInfo.getNewCount());
+            Intent intent = new Intent(this, AnyMemo.class);
+            intent.putExtra("screen", "Memo Screen");
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+            updateViews.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);
             manager.updateAppWidget(thisWidget, updateViews);
         }
         catch(Exception e){
+            Log.e(TAG, "Update widget error", e);
             updateViews.setTextViewText(R.id.widget_db_name, getString(R.string.widget_fail_fetch));
             manager.updateAppWidget(thisWidget, updateViews);
         }
@@ -100,7 +105,7 @@ public class AnyMemoService extends Service{
             NotificationManager notificationManager = (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
             Notification notification = new Notification(R.drawable.icon, getString(R.string.app_name), System.currentTimeMillis());
             notification.flags |= Notification.FLAG_AUTO_CANCEL;
-            PendingIntent pIntent = PendingIntent.getActivity(this, 0, myIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+            PendingIntent pIntent = PendingIntent.getActivity(this, 0, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
             notification.setLatestEventInfo(this, dbInfo.getDbName(), getString(R.string.stat_scheduled) + " " + dbInfo.getRevCount(), pIntent);
 
             notificationManager.notify(NOTIFICATION_ID, notification);

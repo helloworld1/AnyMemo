@@ -28,13 +28,13 @@ import android.app.PendingIntent;
 import android.widget.RemoteViews;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.net.Uri;
 import java.util.Date;
 
 
 public class AnyMemoWidgetProvider extends AppWidgetProvider{
 
     private final static String TAG = "org.liberty.android.fantastischmemo.AnyMemoWidgetProvider";
-    private PendingIntent pendingIntent;
 
     @Override
     public void onEnabled(Context context){
@@ -45,30 +45,18 @@ public class AnyMemoWidgetProvider extends AppWidgetProvider{
 
     @Override
     public void onDisabled(Context context){
-        super.onDisabled(context);
         SetAlarmReceiver.cancelWidgetUpdateAlarm(context);
+        super.onDisabled(context);
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds){
         final int N = appWidgetIds.length;
         Log.v(TAG, "Widget Updated!");
-        for(int i = 0; i < N; i++){
-            int appWidgetId = appWidgetIds[i];
-            Intent intent = new Intent(context, AnyMemo.class);
-            intent.putExtra("screen", "Memo Screen");
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
-            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget);
-            Log.v(TAG, "Widget Set Click!");
-            views.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);
-            //views.setOnClickPendingIntent(R.id.widget_db_name, pendingIntent);
-            //views.setOnClickPendingIntent(R.id.widget_review_count, pendingIntent);
-            //views.setOnClickPendingIntent(R.id.widget_new_count, pendingIntent);
-            appWidgetManager.updateAppWidget(appWidgetId, views);
-        }
 
         Intent myIntent = new Intent(context, AnyMemoService.class);
         myIntent.putExtra("request_code", AnyMemoService.UPDATE_WIDGET);
         context.startService(myIntent);
     }
+
 }
