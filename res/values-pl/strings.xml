@@ -233,4 +233,9 @@
     <string name="startup_title">Ekran startowy</string>
     <string name="startup_summary">Skonfiguruj ekran startowy</string>
     <string name="detail_reset">Skasuj dane postępu nauki</string>
+    <string name="anymemo_widget_name">AnyMemo Widget</string>
+    <string name="db_text">BD</string>
+    <string name="widget_fail_fetch">Brak bazy danych.</string>
+    <string name="notification_text">Powiadomienie</string>
+    <string name="notification_summary">Wyświetl informację na pasku powiadomień nawet jeśli AnyMemo nie jest uruchomione.</string>
 </resources>

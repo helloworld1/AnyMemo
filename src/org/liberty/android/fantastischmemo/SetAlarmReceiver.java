@@ -73,7 +73,7 @@ public class SetAlarmReceiver extends BroadcastReceiver{
         /* Set up the alarm time */
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 7);
-        calendar.set(Calendar.MINUTE, 5);
+        calendar.set(Calendar.MINUTE, 2);
         calendar.set(Calendar.SECOND, 3);
 
 

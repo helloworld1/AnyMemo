@@ -34,19 +34,12 @@ import java.util.Date;
 public class AnyMemoWidgetProvider extends AppWidgetProvider{
 
     private final static String TAG = "org.liberty.android.fantastischmemo.AnyMemoWidgetProvider";
+    private PendingIntent pendingIntent;
 
     @Override
     public void onEnabled(Context context){
         super.onEnabled(context);
         SetAlarmReceiver.setWidgetUpdateAlarm(context);
-        Intent intent = new Intent(context, AnyMemo.class);
-        intent.putExtra("screen", "Memo Screen");
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget);
-        views.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);
-        views.setOnClickPendingIntent(R.id.widget_db_name, pendingIntent);
-        views.setOnClickPendingIntent(R.id.widget_review_count, pendingIntent);
-        views.setOnClickPendingIntent(R.id.widget_new_count, pendingIntent);
         Log.v(TAG, "Widget Enabled!");
     }
 
@@ -64,7 +57,7 @@ public class AnyMemoWidgetProvider extends AppWidgetProvider{
             int appWidgetId = appWidgetIds[i];
             Intent intent = new Intent(context, AnyMemo.class);
             intent.putExtra("screen", "Memo Screen");
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget);
             Log.v(TAG, "Widget Set Click!");
             views.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);
@@ -73,6 +66,7 @@ public class AnyMemoWidgetProvider extends AppWidgetProvider{
             //views.setOnClickPendingIntent(R.id.widget_new_count, pendingIntent);
             appWidgetManager.updateAppWidget(appWidgetId, views);
         }
+
         Intent myIntent = new Intent(context, AnyMemoService.class);
         myIntent.putExtra("request_code", AnyMemoService.UPDATE_WIDGET);
         context.startService(myIntent);
