@@ -45,6 +45,8 @@ public class AnyMemoService extends Service{
     public static int UPDATE_NOTIFICATION = 2;
     public static int CANCEL_NOTIFICATION = 4;
     private final int NOTIFICATION_ID = 4829352;
+    private final int NOTIFICATION_REQ = 17239203;
+    private final int WIDGET_REQ = 23579234;
     private final static String TAG = "org.liberty.android.fantastischmemo.AnyMemoService";
 
     @Override
@@ -66,7 +68,7 @@ public class AnyMemoService extends Service{
         if((serviceReq & CANCEL_NOTIFICATION) != 0){
             cancelNotification();
         }
-        stopSelf();
+        //stopSelf();
 
     }
 
@@ -92,13 +94,11 @@ public class AnyMemoService extends Service{
             updateViews.setTextViewText(R.id.widget_new_count, "");
         }
         finally{
-            /* Cancel the current pending intent to prevent some
-             * strange behaviors when changing the extra bundle
-             * of the intent
-             */
+            /* Set on click event */
             Intent intent = new Intent(this, AnyMemo.class);
             intent.putExtra("screen", "Memo Screen");
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, WIDGET_REQ, intent, PendingIntent.FLAG_CANCEL_CURRENT);
             updateViews.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);
             manager.updateAppWidget(thisWidget, updateViews);
         }
@@ -109,10 +109,11 @@ public class AnyMemoService extends Service{
             DatabaseInfo dbInfo = new DatabaseInfo(this);
             Intent myIntent = new Intent(this, AnyMemo.class);
             myIntent.putExtra("screen", "Memo Screen");
+            myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             NotificationManager notificationManager = (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
             Notification notification = new Notification(R.drawable.icon, getString(R.string.app_name), System.currentTimeMillis());
             notification.flags |= Notification.FLAG_AUTO_CANCEL;
-            PendingIntent pIntent = PendingIntent.getActivity(this, 0, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+            PendingIntent pIntent = PendingIntent.getActivity(this, NOTIFICATION_REQ, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
             notification.setLatestEventInfo(this, dbInfo.getDbName(), getString(R.string.stat_scheduled) + " " + dbInfo.getRevCount(), pIntent);
 
             notificationManager.notify(NOTIFICATION_ID, notification);

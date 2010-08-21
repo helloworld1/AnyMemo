@@ -203,7 +203,7 @@ public class AnyMemo extends Activity implements OnClickListener{
         Intent myIntent = new Intent(this, AnyMemoService.class);
         myIntent.putExtra("request_code", AnyMemoService.CANCEL_NOTIFICATION | AnyMemoService.UPDATE_WIDGET);
         startService(myIntent);
-        SetAlarmReceiver.setWidgetUpdateAlarm(this);
+        //SetAlarmReceiver.setWidgetUpdateAlarm(this);
     }
     
     public void onClick(View v){
