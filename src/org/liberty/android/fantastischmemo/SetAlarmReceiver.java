@@ -54,8 +54,7 @@ public class SetAlarmReceiver extends BroadcastReceiver{
             return;
         }
         else if(s.equals("1 hr")){
-            //interval = AlarmManager.INTERVAL_HOUR * 1;
-            interval = 10000;
+            interval = AlarmManager.INTERVAL_HOUR * 1;
         }
         else if(s.equals("6 hr")){
             interval = AlarmManager.INTERVAL_HOUR * 6;
