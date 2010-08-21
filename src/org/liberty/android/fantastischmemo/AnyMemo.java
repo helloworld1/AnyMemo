@@ -89,6 +89,9 @@ public class AnyMemo extends Activity implements OnClickListener{
         else if(localeSetting.equals("Polish")){
             locale = new Locale("PL");
         }
+        else if(localeSetting.equals("Russian")){
+            locale = new Locale("RU");
+        }
         else{
             locale = Locale.getDefault();
         }
