@@ -26,10 +26,10 @@
     <string name="btnonerow">Компактные Кнопки Отметок </string>
     <string name="btnonerow_summary">Кнопки от 0 до 5 очков показываются в 1 строчку вместо 2.</string>
     <string name="copyclipboard">Копировать в Буфер</string>
-    <string name="copyclipboard_summary">Вопрос будет автоматически скопирован в буфер</string>
+    <string name="copyclipboard_summary">Вопрос будет автоматически скопирован в буфер.</string>
     <string name="memo_show_answer">\?\nПоказать Ответ</string>
     <string name="memo_no_item_title">Нет Объекта</string>
-    <string name="memo_no_item_message">Нет объектов для изучения. Рекомендуем вернутся назад. Используйте Режим Зазубривания чтобы учить наперёд.</string>
+    <string name="memo_no_item_message">Нет объектов для изучения. Рекомендуем вернутся назад. Используйте Режим Зубрёжка чтобы учить карточки наперёд.</string>
     <string name="memo_btn0_text">0 Забыто</string>
     <string name="memo_btn1_text">1 Забыто</string>
     <string name="memo_btn2_text">2 ОчТяжело</string>
@@ -96,7 +96,7 @@
     <string name="open_open_new_db">Открыть Существующие Базы</string>
     <string name="open_import_xml">Импортировать из XML</string>
     <string name="clear_all_pref">Сбросить Установки</string>
-    <string name="clear_recent_list">Очистик Список Недавних</string>
+    <string name="clear_recent_list">Очистить Список Последних Баз</string>
     <string name="export_xml">Эспорт Mnemosyne XML</string>
     <string name="add_screen_id">ID</string>
     <string name="add_screen_question">Вопрос</string>
@@ -142,7 +142,7 @@
     <string name="downloader_download_alert">Загрузка: </string>
     <string name="downloader_download_alert_message">Подробности: </string>
     <string name="about_title">О программе</string>
-    <string name="about_text">Программа для заучивания наизусть карточек с продвинутой системой повторений.&lt;br /&gt;&lt;br /&gt;Авторы: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;Вебсайт: &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Признательность: pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;Перевёл: Александр Гоменюк</string>
+    <string name="about_text">Программа для заучивания наизусть информации на карточках и продвинутой системой повторений.&lt;br /&gt;&lt;br /&gt;Авторы: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;Вебсайт: &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Признательность: pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;Перевёл: Александр Гоменюк</string>
     <string name="about_version">История Версий</string>
     <string name="what_is_new">Установлена Новая Версия</string>
     <string name="downloader_categories">Разделы</string>
@@ -154,7 +154,7 @@
     <string name="interface_locale_summary">Выбор языка интерфейса. Требуется перезагрузка.</string>
     <string name="settings_typeface_question">Собственный Шрифт Вопроса (TTF)</string>
     <string name="settings_typeface_answer">Собственный Шрифт Ответа (TTF)</string>
-    <string name="learn_ahead">Режим Зазубривания</string>
+    <string name="learn_ahead">Зубрёжка</string>
     <string name="menu_text">Меню</string>
     <string name="filter_text">Фильтр</string>
     <string name="filter_failure_title">Ошибка при установке фильтра</string>
@@ -182,10 +182,10 @@
 	<string name="color_s">насыщенность</string>
 	<string name="color_v">значение</string>
     <string name="fullscreen_title">Полноэкранный Режим</string>
-    <string name="fullscreen_summary">Показывать карточки в полноэкранном режиме</string>
+    <string name="fullscreen_summary">Показывать карточки в полноэкранном режиме.</string>
     <string name="edit_dialog_category">Раздел</string>
     <string name="touch_area_title">Зона Касания</string>
-    <string name="touch_area_summary">Где касаться, чтобы открыть открыть ответ</string>
+    <string name="touch_area_summary">Где касаться, чтобы открыть открыть ответ.</string>
     <string name="settings_audio_location_title">Установка расположения аудио пользователя</string>
     <string name="tts_tip_user_audio">Чтобы использовать аудио пользователя, вы должны положить аудиофайлы в каталог, указанный ниже</string>
     <string name="tts_tip_extender">Загрузите Text-to-Speech Extended и выберите движок eSpeak. Также включите голосовые опции в AnyMemo.</string>
@@ -219,9 +219,9 @@
     <string name="interface_category">Итерфейс</string>
     <string name="misc_category">Разное</string>
     <string name="shuffling_cards_title">Мешать Карточки</string>
-    <string name="shuffling_cards_summary">Перемешивать карточки. Карточки в базах не перемешиваются.</string>
+    <string name="shuffling_cards_summary">Перемешивать карточки. В базах карточки не перемешаются.</string>
     <string name="swap_qa_text">Поменять местами В и О</string>
-    <string name="remove_dup_text">Удалить дупликаты</string>
+    <string name="remove_dup_text">Удалить дубликаты</string>
     <string name="removing_dup_title">Удаление дубликатов</string>
     <string name="removing_dup_warning">Удаление дубликатов карточек займёт много времени в зависимости от размера базы. Прерывание процесса повредит базу!</string>
     <string name="removing_dup_summary">Удаление дубликатов карточек. Займёт много времени для больших баз.</string>
@@ -232,6 +232,6 @@
     <string name="db_text">DB</string>
     <string name="widget_fail_fetch">Нет базы.</string>
     <string name="notification_text">Уведомления</string>
-    <string name="notification_summary">Показывать информацию в области уведомлени даже если AnyMemo не открыта</string>
+    <string name="notification_summary">Показывать информацию в области уведомлений.</string>
 
 </resources>
