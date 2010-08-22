@@ -26,10 +26,10 @@
     <string name="btnonerow">Компактные Кнопки Отметок </string>
     <string name="btnonerow_summary">Кнопки от 0 до 5 очков показываются в 1 строчку вместо 2.</string>
     <string name="copyclipboard">Копировать в Буфер</string>
-    <string name="copyclipboard_summary">Вопрос будет автоматически скопирован в буфер.</string>
+    <string name="copyclipboard_summary">Вопрос будет автоматически скопирован в буфер обмена.</string>
     <string name="memo_show_answer">\?\nПоказать Ответ</string>
     <string name="memo_no_item_title">Нет Объекта</string>
-    <string name="memo_no_item_message">Нет объектов для изучения. Рекомендуем вернутся назад. Используйте Режим Зубрёжка чтобы учить карточки наперёд.</string>
+    <string name="memo_no_item_message">Нет объектов для изучения. Рекомендуем вернуться назад. Нажмите Зубрёжка чтобы учить карточки наперёд.</string>
     <string name="memo_btn0_text">0 Забыто</string>
     <string name="memo_btn1_text">1 Забыто</string>
     <string name="memo_btn2_text">2 ОчТяжело</string>
@@ -232,6 +232,6 @@
     <string name="db_text">DB</string>
     <string name="widget_fail_fetch">Нет базы.</string>
     <string name="notification_text">Уведомления</string>
-    <string name="notification_summary">Показывать информацию в области уведомлений.</string>
+    <string name="notification_summary">Показывать напоминания в области уведомлений.</string>
 
 </resources>
