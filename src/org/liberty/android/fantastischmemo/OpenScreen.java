@@ -235,7 +235,7 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
     			returnValue = ACTIVITY_DB;
     			
     		}
-    		else if(requestCode == ACTIVITY_IMPORT_MNEMOSYNE_XML || requestCode == ACTIVITY_IMPORT_TABTXT || requestCode == ACTIVITY_IMPORT_QATXT || requestCode == ACTIVITY_IMPORT_QATXT || requestCode ==ACTIVITY_IMPORT_SUPERMEMO_XML){
+    		else if(requestCode == ACTIVITY_IMPORT_MNEMOSYNE_XML || requestCode == ACTIVITY_IMPORT_TABTXT || requestCode == ACTIVITY_IMPORT_QATXT || requestCode == ACTIVITY_IMPORT_QATXT || requestCode ==ACTIVITY_IMPORT_SUPERMEMO_XML || requestCode == ACTIVITY_IMPORT_CSV){
                 returnValue = ACTIVITY_IMPORT_SUPERMEMO_XML;
 
                 mProgressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_import), true);
@@ -257,6 +257,7 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
                             else if(request == ACTIVITY_IMPORT_TABTXT){
                                 mAlert.setMessage(getString(R.string.success_import)+ " " + filePath + "/" + fileName.replaceAll(".txt", ".db"));
                                 importer.ImportTabTXT();
+                                //importer.ImportCSV();
                             }
                             else if(request == ACTIVITY_IMPORT_QATXT){
                                 mAlert.setMessage(getString(R.string.success_import)+ " " + filePath + "/" + fileName.replaceAll(".txt", ".db"));
@@ -265,6 +266,10 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
                             else if(request == ACTIVITY_IMPORT_SUPERMEMO_XML){
                                 importer.ImportSupermemoXML();
                                 mAlert.setMessage(getString(R.string.success_import)+ " " + filePath + "/" + fileName.replaceAll(".xml", ".db"));
+                            }
+                            else if(request == ACTIVITY_IMPORT_CSV){
+                                importer.ImportCSV();
+                                mAlert.setMessage(getString(R.string.success_import)+ " " + filePath + "/" + fileName.replaceAll(".csv", ".db"));
                             }
 
                             mAlert.setTitle(getString(R.string.success));
@@ -378,6 +383,14 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
             myIntent.putExtra("default_root", dbPath);
             myIntent.putExtra("file_extension", ".txt");
             startActivityForResult(myIntent, ACTIVITY_IMPORT_TABTXT);
+            return true;
+
+        case R.id.openmenu_import_csv:
+            myIntent = new Intent();
+            myIntent.setClass(this, FileBrowser.class);
+            myIntent.putExtra("default_root", dbPath);
+            myIntent.putExtra("file_extension", ".csv");
+            startActivityForResult(myIntent, ACTIVITY_IMPORT_CSV);
             return true;
 
             

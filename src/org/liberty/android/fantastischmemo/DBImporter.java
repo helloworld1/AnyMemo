@@ -33,7 +33,9 @@ import java.util.Date;
 import java.util.TimeZone;
 import java.util.Calendar;
 import java.util.HashMap;
+import android.util.Log;
 import java.text.SimpleDateFormat;
+import au.com.bytecode.opencsv.CSVReader;
 
 import android.content.Context;
 
@@ -48,6 +50,32 @@ public class DBImporter{
         filePath = path;
         fileName = name;
         mContext = context;
+    }
+
+    public void ImportCSV() throws Exception{
+        String fullname = filePath + "/" + fileName;
+        CSVReader reader = new CSVReader(new FileReader(fullname));
+        String[] nextLine;
+        int count = 0;
+        LinkedList<Item> itemList = new LinkedList<Item>();
+        while((nextLine = reader.readNext()) != null){
+            if(nextLine.length < 2){
+                throw new Exception("Malformed CSV file. Please make sure the CSV's first column is question, second one is answer and the optinal third one is category");
+            }
+            count++;
+            Item item = new Item();
+            item.setId(count);
+            item.setQuestion(nextLine[0]);
+            item.setAnswer(nextLine[1]);
+            if(nextLine.length >= 3){
+                item.setCategory(nextLine[2]);
+            }
+            itemList.add(item);
+        }
+        DatabaseHelper.createEmptyDatabase(filePath, fileName.replace(".csv", ".db"));
+        DatabaseHelper dbHelper =  new DatabaseHelper(mContext, filePath, fileName.replace(".csv", ".db"));
+        dbHelper.insertListItems(itemList);
+        dbHelper.close();
     }
 
     public void ImportMnemosyneXML() throws Exception{
@@ -73,38 +101,28 @@ public class DBImporter{
     }
 
     public void ImportTabTXT() throws Exception{
-        String fullpath = filePath + "/" + fileName;
-        DatabaseHelper.createEmptyDatabase(filePath, fileName.replace(".txt", ".db"));
-        DatabaseHelper dbHelper =  new DatabaseHelper(mContext, filePath, fileName.replace(".txt", ".db"));
-        BufferedReader txtfile = new BufferedReader(new FileReader(fullpath));
-        String line;
-        int count = 1;
+        String fullname = filePath + "/" + fileName;
+        CSVReader reader = new CSVReader(new FileReader(fullname), '\t');
+        String[] nextLine;
+        int count = 0;
         LinkedList<Item> itemList = new LinkedList<Item>();
-        while((line = txtfile.readLine()) != null){
-            String[] split = line.split("\t");
+        while((nextLine = reader.readNext()) != null){
+            if(nextLine.length < 2){
+                throw new Exception("Malformed TXT file. Please make sure the CSV's first column is question, second one is answer and the optinal third one is category");
+            }
+            count++;
             Item item = new Item();
             item.setId(count);
-            if(split.length < 2){
-                continue;
+            item.setQuestion(nextLine[0]);
+            item.setAnswer(nextLine[1]);
+            if(nextLine.length >= 3){
+                item.setCategory(nextLine[2]);
             }
-
-            HashMap<String, String> hm = new HashMap<String, String>();
-            hm.put("question", split[0]);
-            hm.put("answer", split[1]);
-            if(split.length > 2){
-                hm.put("category", split[2]);
-            }
-            item.setData(hm);
             itemList.add(item);
-            count += 1;
         }
-        if(!itemList.isEmpty()){
-            dbHelper.insertListItems(itemList);
-        }
-        HashMap<String, String>hm = new HashMap<String, String>();
-        hm.put("html_display", "both");
-        dbHelper.setSettings(hm);
-        txtfile.close();
+        DatabaseHelper.createEmptyDatabase(filePath, fileName.replace(".txt", ".db"));
+        DatabaseHelper dbHelper =  new DatabaseHelper(mContext, filePath, fileName.replace(".txt", ".db"));
+        dbHelper.insertListItems(itemList);
         dbHelper.close();
     }
 

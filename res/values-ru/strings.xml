@@ -131,7 +131,7 @@
     <string name="fail_export">Не удалось экспортировать </string>
     <string name="loading_export">Экспортирование...\n Это может занять много времени.</string>
     <string name="loading_save">Сохранение изменений...</string>
-    <string name="loading_connect_net">Обновление списка через интернет...\nНажмите Назад для отмены.</string>
+    <string name="loading_connect_net">Идёт обновление списка через интернет...\nНажмите Назад для отмены.</string>
     <string name="loading_downloading">Загрузка... Это может занять некоторое время.</string>
     <string name="downloader_connection_error">Ошибка связи</string>
     <string name="downloader_connection_error_message">Не могу соединиться с сервером. Убедитесь в наличии соединения интернет</string>
@@ -227,7 +227,7 @@
     <string name="removing_dup_summary">Удаление дубликатов карточек. Займёт много времени для больших баз.</string>
     <string name="startup_title">Экран При Загрузке</string>
     <string name="startup_summary">Установить экран при загрузке программы.</string>
-    <string name="detail_reset">Сброс данных обучения</string>
+    <string name="detail_reset">Сбросить информацию об изучении</string>
     <string name="anymemo_widget_name">AnyMemo Виджет</string>
     <string name="db_text">DB</string>
     <string name="widget_fail_fetch">Нет базы.</string>

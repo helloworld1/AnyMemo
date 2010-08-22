@@ -16,6 +16,9 @@
                 android:id="@+id/openmenu_import_supermemo_xml"
                 android:title="@string/import_supermemo_xml_text" />
             <item
+                android:id="@+id/openmenu_import_csv"
+                android:title="@string/import_csv" />
+            <item
                 android:id="@+id/openmenu_import_tab_txt"
                 android:title="@string/import_tab_txt" />
             <item

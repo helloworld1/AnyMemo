@@ -26,6 +26,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.LinkedList;
+import au.com.bytecode.opencsv.CSVWriter;
 
 
 class DBExporter{
@@ -76,39 +77,45 @@ class DBExporter{
 
     public void writeTabTXT() throws Exception{
         String fullpath = dbPath + "/" + dbName.replaceAll(".db", ".txt");
-        PrintWriter outtxt = new PrintWriter(new BufferedWriter(new FileWriter(fullpath)));
-        if(outtxt.checkError()){
-            throw new IOException("Can't open: " + fullpath);
-        }
+
+        CSVWriter writer = new CSVWriter(new FileWriter(fullpath), '\t');
         List<Item> itemList = new LinkedList<Item>();
         boolean result = dbHelper.getListItems(1, -1, itemList, 0, null);
         if(result == false){
             throw new IOException("Can't retrieve items for database: " + dbPath + "/" + dbName);
         }
+        String[] entries = new String[3];
         for(Item item : itemList){
-            outtxt.print(item.getQuestion().replace("\n", "<br />") + "\t" + item.getAnswer().replace("\n", "<br />") + "\t" + item.getCategory().replace("\n", " ") + "\n");
+            entries[0] = item.getQuestion();
+            entries[1] = item.getAnswer();
+            entries[2] = item.getCategory();
+            writer.writeNext(entries);
         }
-        outtxt.close();
+        writer.close();
         dbHelper.close();
     }
 
     public void writeCSV() throws Exception{
         String fullpath = dbPath + "/" + dbName.replaceAll(".db", ".csv");
-        PrintWriter outtxt = new PrintWriter(new BufferedWriter(new FileWriter(fullpath)));
-        if(outtxt.checkError()){
-            throw new IOException("Can't open: " + fullpath);
-        }
+
+        CSVWriter writer = new CSVWriter(new FileWriter(fullpath));
         List<Item> itemList = new LinkedList<Item>();
         boolean result = dbHelper.getListItems(1, -1, itemList, 0, null);
         if(result == false){
             throw new IOException("Can't retrieve items for database: " + dbPath + "/" + dbName);
         }
+        String[] entries = new String[3];
         for(Item item : itemList){
-            outtxt.print("\"" + item.getQuestion().replace("\n", "<br />") + "\",\"" + item.getAnswer().replace("\n", "<br />") + "\",\"" + item.getCategory().replace("\n", " ") + "\"\n");
+            entries[0] = item.getQuestion();
+            entries[1] = item.getAnswer();
+            entries[2] = item.getCategory();
+            writer.writeNext(entries);
         }
-        outtxt.close();
+        writer.close();
         dbHelper.close();
     }
+
+
 
     public void writeXML() throws Exception{
         String fullpath = dbPath + "/" + dbName.replaceAll(".db", ".xml");
