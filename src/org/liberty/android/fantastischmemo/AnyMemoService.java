@@ -68,7 +68,7 @@ public class AnyMemoService extends Service{
         if((serviceReq & CANCEL_NOTIFICATION) != 0){
             cancelNotification();
         }
-        //stopSelf();
+        stopSelf();
 
     }
 

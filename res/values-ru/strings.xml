@@ -227,7 +227,7 @@
     <string name="removing_dup_summary">Удаление дубликатов карточек. Займёт много времени для больших баз.</string>
     <string name="startup_title">Экран При Загрузке</string>
     <string name="startup_summary">Установить экран при загрузке программы.</string>
-    <string name="detail_reset">Сбросить информацию об изучении</string>
+    <string name="detail_reset">Сбросить Прогресс</string>
     <string name="anymemo_widget_name">AnyMemo Виджет</string>
     <string name="db_text">DB</string>
     <string name="widget_fail_fetch">Нет базы.</string>
