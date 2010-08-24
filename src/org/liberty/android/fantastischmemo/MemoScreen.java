@@ -771,6 +771,9 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
     }
 
     private void autoSpeak(){
+        if(currentItem == null){
+            return;
+        }
         String[] speechCtlList = getResources().getStringArray(R.array.speech_ctl_list);
 
         if(speechCtl.equals(speechCtlList[2]) || speechCtl.equals(speechCtlList[3])){
