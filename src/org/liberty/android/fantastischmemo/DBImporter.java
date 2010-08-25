@@ -171,10 +171,10 @@ public class DBImporter{
                 if(isQ == true){
                     isQ = false;
                     aBuf = new StringBuffer();
-                    aBuf.append("<br />" + line.replaceAll("A:\\s*", ""));
+                    aBuf.append(line.replaceAll("A:\\s*", ""));
                 }
                 else{
-                    aBuf.append(line.replaceAll("A:\\s*", ""));
+                    aBuf.append("<br />" + line.replaceAll("A:\\s*", ""));
                 }
             }
             else{
