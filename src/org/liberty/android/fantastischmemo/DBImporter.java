@@ -139,6 +139,10 @@ public class DBImporter{
         StringBuffer aBuf = null;
         Item item;
         while((line = txtfile.readLine()) != null){
+            /* remove BOM */
+            Log.v(TAG, "LINE: " + line);
+            line = line.replace("\uFEFF", "");
+
             String head = "";
             if(line.length() >= 2){
                 head = line.substring(0, 2);
