@@ -49,6 +49,9 @@
         <activity
             android:name=".ListEditScreen"
             android:configChanges="orientation|keyboardHidden" />
+        <activity
+            android:name=".DownloaderAnyMemo"
+            android:configChanges="orientation|keyboardHidden" />
         <receiver
             android:name=".AlarmReceiver"
             android:process=":remote" />

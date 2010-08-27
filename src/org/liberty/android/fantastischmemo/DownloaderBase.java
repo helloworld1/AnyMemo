@@ -44,11 +44,90 @@ import android.view.MenuItem;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.KeyEvent;
 
 
-public abstract class DownloaderBase extends Activity{
+public abstract class DownloaderBase extends Activity implements OnItemClickListener{
+
+    private static final String TAG = "org.liberty.android.fantastischmemo.DownloaderBase";
+
+
+
+    /*
+     * Retrieve the data when the user first open the
+     * Downloader
+     */
+    abstract protected void initialRetrieve();
+
+    /*
+     * Retrieve the data when the user has clicked a category
+     */
+    abstract protected void openCategory(DownloadItem di);
+
+    /*
+     * Get specific item from the Adapter or else
+     */
+    abstract protected DownloadItem getDownloadItem(int position);
+
+    /*
+     * Go back to the previous list
+     */
+
+    abstract protected void goBack();
+    
+    /*
+     * Download the database based on the info
+     */
+    abstract protected void fetchDatabase(DownloadItem di);
+
+    @Override
+	public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        /* The file browser's is reused here because they are similar*/
+        setContentView(R.layout.file_browser);
+        ListView listView = (ListView)findViewById(R.id.file_list);
+        listView.setOnItemClickListener(this);
+        initialRetrieve();
+    }
+
+
 
     
+    @Override
+	public void onItemClick(AdapterView<?> parentView, View childView, int position, long id){
+        /* Click to go back to EditScreern with specific card cliced */
+        DownloadItem di = getDownloadItem(position);
+        if(di == null){
+            return;
+        }
+        if(di.getType() == DownloadItem.TYPE_CATEGORY){
+            openCategory(di);
+        }
+        else if(di.getType() == DownloadItem.TYPE_UP){
+            goBack();
+        }
+        else if(di.getType() == DownloadItem.TYPE_DATABASE){
+            fetchDatabase(di);
+        }
+    }
+
+    /*
+     * go back when the user has pressed back key
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            goBack();
+        }
+        return false;
+    }
+
+    
+    /* 
+     * Helper class to provide the info for each items 
+     * that could be categories, databases and other
+     * special things
+     */
     protected class DownloadItem{
         public static final int TYPE_CATEGORY = 1;
         public static final int TYPE_DATABASE = 2;
@@ -62,7 +141,10 @@ public abstract class DownloaderBase extends Activity{
         }
 
         public DownloadItem(int type, String title, String description, String address){
-
+            this.type = type;
+            this.title = title;
+            this.description = description;
+            this.address = address;
         }
 
         public void setType(int type){
@@ -98,9 +180,14 @@ public abstract class DownloaderBase extends Activity{
         }
 
     }
-    private class DownloadListAdapter extends ArrayAdapter<DownloadItem>{
+    protected class DownloadListAdapter extends ArrayAdapter<DownloadItem>{
         private ArrayList<DownloadItem> mDownloadItems;
 
+        public DownloadListAdapter(Context context, int textViewResourceId){
+            super(context, textViewResourceId);
+            mDownloadItems = new ArrayList<DownloadItem>();
+
+        }
         public DownloadListAdapter(Context context, int textViewResourceId, ArrayList<DownloadItem> items){
             super(context, textViewResourceId, items);
             mDownloadItems = items;
