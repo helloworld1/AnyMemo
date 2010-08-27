@@ -156,7 +156,7 @@
     <string name="about_version">Version History</string>
     <string name="what_is_new">New Version Installed</string>
     <string name="website_main">http://anymemo.org</string>
-    <string name="website_json">http://anymemo.org/pages/json-databases.php</string>
+    <string name="website_json">http://anymemo.org/pages/json.php</string>
     <string name="website_download_head">http://anymemo.org/pages/download.php?wordlistname=DatabasesTable&amp;filename=</string>
     <string name="website_help_main">http://anymemo.org/index.php?page=guide</string>
     <string name="website_version">http://anymemo.org/index.php?page=version</string>

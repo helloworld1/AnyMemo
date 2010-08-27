@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.os.Bundle;
 import android.content.Context;
@@ -98,6 +99,7 @@ public abstract class DownloaderBase extends Activity implements OnItemClickList
         /* Click to go back to EditScreern with specific card cliced */
         DownloadItem di = getDownloadItem(position);
         if(di == null){
+            Log.e(TAG, "NULL Download Item");
             return;
         }
         if(di.getType() == DownloadItem.TYPE_CATEGORY){
@@ -136,8 +138,10 @@ public abstract class DownloaderBase extends Activity implements OnItemClickList
         private String title = "";
         private String description = "";
         private String address = "";
+        private HashMap<String, String> extras;
 
         public DownloadItem(){
+            extras = new HashMap<String, String>();
         }
 
         public DownloadItem(int type, String title, String description, String address){
@@ -145,6 +149,7 @@ public abstract class DownloaderBase extends Activity implements OnItemClickList
             this.title = title;
             this.description = description;
             this.address = address;
+            extras = new HashMap<String, String>();
         }
 
         public void setType(int type){
@@ -163,6 +168,10 @@ public abstract class DownloaderBase extends Activity implements OnItemClickList
             this.address = address;
         }
 
+        public void setExtras(String key, String item){
+            this.extras.put(key, item);
+        }
+
         public int getType(){
             return type;
         }
@@ -179,30 +188,27 @@ public abstract class DownloaderBase extends Activity implements OnItemClickList
             return address;
         }
 
+        public String getExtras(String key){
+            return this.extras.get(key);
+        }
+
+
     }
     protected class DownloadListAdapter extends ArrayAdapter<DownloadItem>{
-        private ArrayList<DownloadItem> mDownloadItems;
 
         public DownloadListAdapter(Context context, int textViewResourceId){
             super(context, textViewResourceId);
-            mDownloadItems = new ArrayList<DownloadItem>();
 
         }
         public DownloadListAdapter(Context context, int textViewResourceId, ArrayList<DownloadItem> items){
             super(context, textViewResourceId, items);
-            mDownloadItems = items;
         }
 
-        @Override
-        public void add(DownloadItem item){
-            super.add(item);
-            mDownloadItems.add(item);
-        }
 
-        @Override
-        public void clear(){
-            super.clear();
-            mDownloadItems.clear();
+        public void addList(ArrayList<DownloadItem> list){
+            for(DownloadItem di : list){
+                add(di);
+            }
         }
 
         @Override
@@ -213,7 +219,7 @@ public abstract class DownloaderBase extends Activity implements OnItemClickList
                 /* Reuse the filebrowser's resources */
                 v = li.inflate(R.layout.filebrowser_item, null);
             }
-            DownloadItem item = mDownloadItems.get(position);
+            DownloadItem item = getItem(position);
             if(item != null){
                 TextView tv = (TextView)v.findViewById(R.id.file_name);
                 ImageView iv = (ImageView)v.findViewById(R.id.file_icon);
