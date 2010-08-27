@@ -7,8 +7,8 @@
     <string name="back_menu_text">Назад</string>
     <string name="detail_menu_text">Подробности</string>
     <string name="settings_menu_text">Настройки</string>
-    <string name="speak_question_menu_text">Озвучить Вопрос</string>
-    <string name="speak_answer_menu_text">Озвучить Ответ</string>
+    <string name="speak_question_menu_text">Звук Вопроса</string>
+    <string name="speak_answer_menu_text">Звук Ответа</string>
     <string name="undo_text">Отменить</string>
     <string name="undo_fail_text">Невозможно отменить</string>
     <string name="undo_fail_message">Отменить возможно только одну карточку.</string>
@@ -136,13 +136,13 @@
     <string name="downloader_connection_error">Ошибка связи</string>
     <string name="downloader_connection_error_message">Не могу соединиться с сервером. Убедитесь в наличии соединения интернет</string>
     <string name="downloader_download_success">Успешно Загружено</string>
-    <string name="downloader_download_success_message">База была сохранена: </string>
+    <string name="downloader_download_success_message">База сохранена: </string>
     <string name="downloader_download_fail">Неудача при Загрузке</string>
     <string name="downloader_download_fail_message">Не удалось загрузить базу. Сообщение Ошибки:</string>
     <string name="downloader_download_alert">Загрузка: </string>
     <string name="downloader_download_alert_message">Подробности: </string>
     <string name="about_title">О программе</string>
-    <string name="about_text">Программа для заучивания наизусть информации на карточках и продвинутой системой повторений.&lt;br /&gt;&lt;br /&gt;Авторы: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;Вебсайт: &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Признательность: pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;Перевёл: Александр Гоменюк</string>
+    <string name="about_text">Программа для заучивания наизусть информации на карточках и продвинутой системой повторений.&lt;br /&gt;&lt;br /&gt;Авторы: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;Вебсайт: &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Признательность: pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;Переводчики: Ladislav, jim4ever, paw3lk, Александр Гоменюк</string>
     <string name="about_version">История Версий</string>
     <string name="what_is_new">Установлена Новая Версия</string>
     <string name="downloader_categories">Разделы</string>
