@@ -21,10 +21,11 @@ package org.liberty.android.fantastischmemo;
 
 import java.util.ArrayList;
 import java.util.Stack;
-import java.net.URLEncoder;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipEntry;
 import java.util.Enumeration;
+import java.util.Comparator;
+import java.net.URLEncoder;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -38,6 +39,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+
 
 import android.os.Bundle;
 import android.content.Context;
@@ -107,6 +109,7 @@ public class DownloaderAnyMemo extends DownloaderBase{
                     mHandler.post(new Runnable(){
                         public void run(){
                             dlAdapter.addList(list);
+                            sortAdapter();
                             mProgressDialog.dismiss();
                         }
                     });
@@ -151,6 +154,7 @@ public class DownloaderAnyMemo extends DownloaderBase{
                         public void run(){
                             dlAdapter.clear();
                             dlAdapter.addList(list);
+                            sortAdapter();
                             listView.setSelection(0);
                             mProgressDialog.dismiss();
                         }
@@ -472,6 +476,16 @@ public class DownloaderAnyMemo extends DownloaderBase{
         return databaseList;
     }
 
+    private void sortAdapter(){
+        dlAdapter.sort(new Comparator<DownloadItem>(){
+            public int compare(DownloadItem di1, DownloadItem di2){
+                return (di1.getTitle().toLowerCase()).compareTo(di2.getTitle().toLowerCase());
+            }
 
+            public boolean equals(DownloadItem di1, DownloadItem di2){
+                return di1.getTitle().equals(di2.getTitle());
+            }
+        });
+    }
 
 }
