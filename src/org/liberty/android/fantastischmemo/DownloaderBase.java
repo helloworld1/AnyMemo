@@ -30,6 +30,9 @@ import android.app.ProgressDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView;
@@ -46,7 +49,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.KeyEvent;
-import android.content.res.Configuration;
+import android.preference.PreferenceManager;
 
 
 public abstract class DownloaderBase extends Activity implements OnItemClickListener{
@@ -90,6 +93,11 @@ public abstract class DownloaderBase extends Activity implements OnItemClickList
         ListView listView = (ListView)findViewById(R.id.file_list);
         listView.setOnItemClickListener(this);
         initialRetrieve();
+    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        /* set if the orientation change is allowed */
+        if(!settings.getBoolean("allow_orientation", true)){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
     }
 
     @Override
