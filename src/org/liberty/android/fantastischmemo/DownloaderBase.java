@@ -46,6 +46,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.KeyEvent;
+import android.content.res.Configuration;
 
 
 public abstract class DownloaderBase extends Activity implements OnItemClickListener{
@@ -89,6 +90,11 @@ public abstract class DownloaderBase extends Activity implements OnItemClickList
         ListView listView = (ListView)findViewById(R.id.file_list);
         listView.setOnItemClickListener(this);
         initialRetrieve();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 
 
@@ -246,6 +252,7 @@ public abstract class DownloaderBase extends Activity implements OnItemClickList
             }
             return v;
         }
+        
     }
 }
 
