@@ -2,7 +2,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     <string name="app_name">AnyMemo</string>
     <string name="app_full_name">AnyMemo Free</string>
-    <string name="app_version">6.1.2</string>
+    <string name="app_version">6.2.0</string>
     <string name="up_one_level">..</string>
     <string name="current_dir">.</string>
     <string name="ok_text">OK</string>
@@ -144,7 +144,7 @@
     <string name="loading_connect_net">Refreshing list from internet...\nPress back key to cancel.</string>
     <string name="loading_downloading">Downloading... It may take a while.</string>
     <string name="downloader_connection_error">Connection error</string>
-    <string name="downloader_connection_error_message">Cannot connect to server. Please make sure the internet connection</string>
+    <string name="downloader_connection_error_message">Cannot connect to server. Please make sure the internet connection.</string>
     <string name="downloader_download_success">Successfully Downloaded</string>
     <string name="downloader_download_success_message">The database has been stored in: </string>
     <string name="downloader_download_fail">Download failed</string>
@@ -156,7 +156,7 @@
     <string name="about_version">Version History</string>
     <string name="what_is_new">New Version Installed</string>
     <string name="website_main">http://anymemo.org</string>
-    <string name="website_json">http://anymemo.org/pages/json-databases.php</string>
+    <string name="website_json">http://anymemo.org/pages/json.php</string>
     <string name="website_download_head">http://anymemo.org/pages/download.php?wordlistname=DatabasesTable&amp;filename=</string>
     <string name="website_help_main">http://anymemo.org/index.php?page=guide</string>
     <string name="website_version">http://anymemo.org/index.php?page=version</string>

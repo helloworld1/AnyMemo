@@ -232,7 +232,8 @@ public class AnyMemo extends Activity implements OnClickListener{
     		//myIntent.setData(u);
             /* Now we have our downloader */
             Intent myIntent = new Intent();
-            myIntent.setClass(this, Downloader.class);
+            //myIntent.setClass(this, Downloader.class);
+            myIntent.setClass(this, DownloaderAnyMemo.class);
     		startActivity(myIntent);
     	}
     }
