@@ -211,6 +211,16 @@ public abstract class DownloaderBase extends Activity implements OnItemClickList
             }
         }
 
+        public ArrayList<DownloadItem> getList(){
+            ArrayList<DownloadItem> list = new ArrayList<DownloadItem>();
+            int count = getCount();
+
+            for(int i = 0; i < count; i++){
+                list.add(getItem(i));
+            }
+            return list;
+        }
+
         @Override
         public View getView(int position, View convertView, ViewGroup parent){
             View v = convertView;
