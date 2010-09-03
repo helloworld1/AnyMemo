@@ -106,10 +106,9 @@ public class DownloaderFE extends DownloaderBase{
         listView.setAdapter(dlAdapter);
 
         final EditText input = new EditText(this);
-        input.setText("liberty@live.com");
         new AlertDialog.Builder(this)
-            .setTitle(getString(R.string.fb_rename))
-            .setMessage(getString(R.string.fb_rename_message))
+            .setTitle(getString(R.string.fe_search_title))
+            .setMessage(getString(R.string.fe_search_message))
             .setView(input)
             .setPositiveButton(getString(R.string.ok_text), new DialogInterface.OnClickListener(){
             @Override
@@ -137,8 +136,8 @@ public class DownloaderFE extends DownloaderBase{
                                 public void run(){
                                     mProgressDialog.dismiss();
                                     new AlertDialog.Builder(DownloaderFE.this)
-                                        .setTitle("Error")
-                                        .setMessage(e.toString())
+                                        .setTitle(R.string.downloader_connection_error)
+                                        .setMessage(getString(R.string.downloader_connection_error_message) + e.toString())
                                         .setPositiveButton(getString(R.string.ok_text), new DialogInterface.OnClickListener(){
                                             @Override
                                             public void onClick(DialogInterface dialog, int which ){
@@ -194,6 +193,41 @@ public class DownloaderFE extends DownloaderBase{
             .setPositiveButton(getString(R.string.yes_text), new DialogInterface.OnClickListener(){
                 @Override
                 public void onClick(DialogInterface arg0, int arg1){
+                    mProgressDialog = ProgressDialog.show(DownloaderFE.this, getString(R.string.loading_please_wait), getString(R.string.loading_downloading));
+                    new Thread(){
+                        public void run(){
+                            try{
+                                downloadDatabase(di);
+                                mHandler.post(new Runnable(){
+                                    public void run(){
+                                        mProgressDialog.dismiss();
+                                        String dbpath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
+                                        new AlertDialog.Builder(DownloaderFE.this)
+                                            .setTitle(R.string.downloader_download_success)
+                                            .setMessage(getString(R.string.downloader_download_success_message) + dbpath + di.getTitle() + ".db")
+                                            .setPositiveButton(R.string.ok_text, null)
+                                            .create()
+                                            .show();
+                                    }
+                                });
+
+                            }
+                            catch(final Exception e){
+                                Log.e(TAG, "Error downloading", e);
+                                mHandler.post(new Runnable(){
+                                    public void run(){
+                                        mProgressDialog.dismiss();
+                                        new AlertDialog.Builder(DownloaderFE.this)
+                                            .setTitle(R.string.downloader_download_fail)
+                                            .setMessage(getString(R.string.downloader_download_fail_message) + " " + e.toString())
+                                            .setPositiveButton(R.string.ok_text, null)
+                                            .create()
+                                            .show();
+                                    }
+                                });
+                            }
+                        }
+                    }.start();
                 }
             })
             .setNegativeButton(getString(R.string.no_text), null)
@@ -249,7 +283,6 @@ public class DownloaderFE extends DownloaderBase{
             for(int j = 0; j < childNodeNumber; j++){
                 Node childNode = childNodes.item(j);
                 if(childNode.hasChildNodes()){
-                    Log.v(TAG, "Node: " + childNode.getNodeName() + " Value: " + childNode.getFirstChild().getNodeValue());
                     di.setType(DownloadItem.TYPE_DATABASE);
                     if(childNode.getNodeName().equals("title")){
                         di.setTitle(childNode.getFirstChild().getNodeValue());
@@ -270,14 +303,75 @@ public class DownloaderFE extends DownloaderBase{
         return diList;
     }
 
+    private void downloadDatabase(DownloadItem di) throws Exception{
+        HttpClient httpclient = new DefaultHttpClient();
+        String url = di.getAddress();
+        Log.i(TAG, "Url: " + url);
+        HttpGet httpget = new HttpGet(url);
+        HttpResponse response;
+        response = httpclient.execute(httpget);
+        Log.i(TAG, "Response: " + response.getStatusLine().toString());
+        HttpEntity entity = response.getEntity();
+
+        if(entity == null){
+            throw new Exception("Null entity error");
+        }
+
+        InputStream instream = entity.getContent();
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder documentBuilder = factory.newDocumentBuilder();
+        Document doc = documentBuilder.parse(instream);
+        NodeList nodes = doc.getElementsByTagName("cardSet");
+        nodes = doc.getElementsByTagName("error");
+
+        if(nodes.getLength() > 0){
+            throw new Exception("Invalid ID to retrieve the database!");
+        }
+
+        List<Item> itemList = new LinkedList<Item>();
+        nodes = doc.getElementsByTagName("flashcard");
+
+        int nodeNumber = nodes.getLength();
+        for(int i = 0;i < nodeNumber; i++){
+            Node node = nodes.item(i);
+            if(!node.hasChildNodes()){
+                continue;
+            }
+            NodeList childNodes = node.getChildNodes();
+
+            int childNodeNumber = childNodes.getLength();
+            Item item = new Item();
+            item.setId(i + 1);
+            for(int j = 0; j < childNodeNumber; j++){
+                Node childNode = childNodes.item(j);
+                if(childNode.hasChildNodes()){
+                    if(childNode.getNodeName().equals("question")){
+                        item.setQuestion(childNode.getFirstChild().getNodeValue());
+                    }
+                    else if(childNode.getNodeName().equals("answer")){
+                        item.setAnswer(childNode.getFirstChild().getNodeValue());
+                    }
+                }
+            }
+            if(!item.getQuestion().equals("")){
+                itemList.add(item);
+            }
+        }
+        instream.close();
+        /* Now create the databased from the itemList */
+
+        String dbname = di.getTitle() + ".db";
+        String dbpath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
+        DatabaseHelper.createEmptyDatabase(dbpath, dbname);
+        DatabaseHelper dbHelper = new DatabaseHelper(this, dbpath, dbname);
+        dbHelper.insertListItems(itemList);
+        dbHelper.close();
+    }
+
     private boolean validateEmail(String testString){
         Pattern p = Pattern.compile("^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Za-z]{2,4}$");
         Matcher m = p.matcher(testString);
         return m.matches();
     }
-
-        
-
-
 
 }

@@ -231,11 +231,29 @@ public class AnyMemo extends Activity implements OnClickListener{
     		//Uri u = Uri.parse("market://search?q=pname:org.liberty.android.fminstaller");
     		//myIntent.setData(u);
             /* Now we have our downloader */
-            Intent myIntent = new Intent();
             //myIntent.setClass(this, Downloader.class);
-            myIntent.setClass(this, DownloaderFE.class);
-    		startActivity(myIntent);
-    	}
+            new AlertDialog.Builder(this)
+                .setTitle(R.string.downloader_chooser)
+                .setItems(R.array.download_source_list, new DialogInterface.OnClickListener(){
+                    public void  onClick(DialogInterface dialog, int which){
+                        Intent myIntent = new Intent();
+                        switch(which){
+                            case 0:
+                                myIntent.setClass(AnyMemo.this, DownloaderAnyMemo.class);
+                                startActivity(myIntent);
+                                break;
+
+                            case 1:
+                                myIntent.setClass(AnyMemo.this, DownloaderFE.class);
+                                startActivity(myIntent);
+                                break;
+                        }
+                                
+                    }
+                })
+                .create()
+                .show();
+        }
     }
     
     public void onResume(){
