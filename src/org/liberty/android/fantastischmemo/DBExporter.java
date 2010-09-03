@@ -172,6 +172,15 @@ class DBExporter{
             question = item.getQuestion();
             answer = item.getAnswer();
             category = item.getCategory();
+            if(question == null){
+                question = "";
+            }
+            if(answer == null){
+                answer = "";
+            }
+            if(category == null){
+                category = "";
+            }
             question = question.replaceAll("<", "&lt;");
             question = question.replaceAll(">", "&gt;");
             question = question.replaceAll("&", "&amp;");
