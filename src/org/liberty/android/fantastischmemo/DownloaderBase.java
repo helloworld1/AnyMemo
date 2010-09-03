@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 
 import android.os.Bundle;
@@ -214,12 +215,9 @@ public abstract class DownloaderBase extends Activity implements OnItemClickList
             super(context, textViewResourceId);
 
         }
-        public DownloadListAdapter(Context context, int textViewResourceId, ArrayList<DownloadItem> items){
-            super(context, textViewResourceId, items);
-        }
 
 
-        public void addList(ArrayList<DownloadItem> list){
+        public void addList(List<DownloadItem> list){
             for(DownloadItem di : list){
                 add(di);
             }
