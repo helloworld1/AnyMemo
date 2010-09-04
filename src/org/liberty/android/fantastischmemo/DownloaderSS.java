@@ -106,32 +106,96 @@ public class DownloaderSS extends DownloaderBase implements ListView.OnScrollLis
         listView = (ListView)findViewById(R.id.file_list);
         listView.setOnScrollListener(this);
         listView.setAdapter(dlAdapter);
-        try{
-            categoryList = retrieveCategories();
-        }
-        catch(Exception e){
-            Log.e(TAG, "Error retrieveing categories", e);
-        }
-        showRootCategories();
+        mProgressDialog = ProgressDialog.show(DownloaderSS.this, getString(R.string.loading_please_wait), getString(R.string.loading_connect_net), true, true, new DialogInterface.OnCancelListener(){
+            @Override
+            public void onCancel(DialogInterface dialog){
+                finish();
+            }
+        });
+        new Thread(){
+            public void run(){
+                try{
+                    categoryList = retrieveCategories();
+                    mHandler.post(new Runnable(){
+                        public void run(){
+                            showRootCategories();
+                            mProgressDialog.dismiss();
+                        }
+                    });
+                }
+                catch(final Exception e){
+                    mHandler.post(new Runnable(){
+                        public void run(){
+                            mProgressDialog.dismiss();
+                            new AlertDialog.Builder(DownloaderSS.this)
+                                .setTitle(R.string.downloader_connection_error)
+                                .setMessage(getString(R.string.downloader_connection_error_message) + e.toString())
+                                .setPositiveButton(getString(R.string.ok_text), new DialogInterface.OnClickListener(){
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which ){
+                                        finish();
+                                    }
+                                })
+                                .create()
+                                .show();
+                        }
+                    });
+                }
+
+            }
+        }.start();
+
 
     }
 
-    protected void openCategory(DownloadItem di){
-        dlStack.push(dlAdapter.getList());
-        categoryIdStack.push(di.getExtras("id"));
-        dlAdapter.clear();
-        for(DownloadItem i : categoryList){
-            if(i.getExtras("pid").equals(di.getExtras("id"))){
-                dlAdapter.add(i);
+    protected void openCategory(final DownloadItem di){
+        mProgressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_connect_net), true, true, new DialogInterface.OnCancelListener(){
+            @Override
+            public void onCancel(DialogInterface dialog){
+                finish();
             }
-        }
-        try{
-            List<DownloadItem> databaseList = retrieveDatabaseList(di);
-            dlAdapter.addList(databaseList);
-        }
-        catch(Exception e){
-            Log.e(TAG, "Error retrieving the database list", e);
-        }
+        });
+        new Thread(){
+            public void run(){
+                try{
+                    final List<DownloadItem> databaseList = retrieveDatabaseList(di);
+                    dlStack.push(dlAdapter.getList());
+                    categoryIdStack.push(di.getExtras("id"));
+                    mHandler.post(new Runnable(){
+                        public void run(){
+                            dlAdapter.clear();
+                            for(DownloadItem i : categoryList){
+                                if(i.getExtras("pid").equals(di.getExtras("id"))){
+                                    dlAdapter.add(i);
+                                }
+                            }
+                            dlAdapter.addList(databaseList);
+                            listView.setSelection(0);
+                            mProgressDialog.dismiss();
+                        }
+                    });
+
+                }
+                catch(final Exception e){
+                    mHandler.post(new Runnable(){
+                        public void run(){
+                            Log.e(TAG, "Error obtaining databases", e);
+                            new AlertDialog.Builder(DownloaderSS.this)
+                                .setTitle(getString(R.string.downloader_connection_error))
+                                .setMessage(getString(R.string.downloader_connection_error_message) + e.toString())
+                                .setNeutralButton(getString(R.string.back_menu_text), new DialogInterface.OnClickListener(){
+                                    @Override
+                                    public void onClick(DialogInterface arg0, int arg1){
+                                        finish();
+                                    }
+                                })
+                                .create()
+                                .show();
+                            }
+                        });
+                }
+            }
+        }.start();
     }
 
     protected DownloadItem getDownloadItem(int position){
@@ -209,7 +273,6 @@ public class DownloaderSS extends DownloaderBase implements ListView.OnScrollLis
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount){
-        Log.v(TAG , "first: " + firstVisibleItem + " count: " + visibleItemCount+ " total: " + totalItemCount);
         if(totalItemCount <= 0 ){
             return;
         }
@@ -219,7 +282,6 @@ public class DownloaderSS extends DownloaderBase implements ListView.OnScrollLis
                 try{
                     int page = Integer.parseInt(di.getExtras("page"));
                     page += 1;
-                    Log.v(TAG, "New Page: " + page);
                     DownloadItem nextPage = new DownloadItem();
                     nextPage.setExtras("id", categoryIdStack.peek());
                     nextPage.setExtras("page", Integer.toString(page));
@@ -228,7 +290,7 @@ public class DownloaderSS extends DownloaderBase implements ListView.OnScrollLis
 
                 }
                 catch(Exception e){
-                    Log.v(TAG, "Error to scroll", e);
+                    Log.e(TAG, "Error to scroll", e);
                 }
             }
 
@@ -244,9 +306,6 @@ public class DownloaderSS extends DownloaderBase implements ListView.OnScrollLis
         JSONArray jsonArray = new JSONArray(downloadJSONString(SS_API_GET_CATEGORIES));
         for(int i = 0; i < jsonArray.length(); i++){
             JSONObject jsonItem = jsonArray.getJSONObject(i);
-            Log.v(TAG, jsonItem.getString("name"));
-            Log.v(TAG, "" + jsonItem.getInt("id"));
-            Log.v(TAG, "" + jsonItem.getInt("parentId"));
             DownloadItem di = new DownloadItem();
             di.setType(DownloadItem.TYPE_CATEGORY);
             di.setTitle(jsonItem.getString("name"));
@@ -272,7 +331,6 @@ public class DownloaderSS extends DownloaderBase implements ListView.OnScrollLis
             page = "1";
         }
 
-        Log.v(TAG, "Retrieve Url: " + url);
 
         JSONArray jsonArray = new JSONArray(downloadJSONString(url));
         for(int i = 0; i < jsonArray.length(); i++){
