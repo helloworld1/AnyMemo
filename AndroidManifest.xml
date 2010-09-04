@@ -55,6 +55,9 @@
         <activity
             android:name=".DownloaderFE"
             android:configChanges="orientation|keyboardHidden" />
+        <activity
+            android:name=".DownloaderSS"
+            android:configChanges="orientation|keyboardHidden" />
         <receiver
             android:name=".AlarmReceiver"
             android:process=":remote" />

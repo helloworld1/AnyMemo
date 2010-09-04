@@ -171,6 +171,7 @@
 <string-array name="download_source_list">
     <item>http://anymemo.org (default)</item>
     <item>http://flashcardexchange.com (experimental)</item>
+    <item>http://studystack.com (experimental)</item>
 </string-array>
 
 </resources>
