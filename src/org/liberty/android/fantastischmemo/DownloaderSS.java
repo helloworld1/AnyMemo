@@ -41,6 +41,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 import android.os.Bundle;
 import android.content.Context;
@@ -56,6 +58,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.AbsListView;
 import android.util.Log;
 import android.os.Environment;
 import android.view.Menu;
@@ -80,13 +83,14 @@ import org.json.JSONObject;
 /*
  * This is the downloader class for StudyStack
  */
-public class DownloaderSS extends DownloaderBase{
+public class DownloaderSS extends DownloaderBase implements ListView.OnScrollListener{
     private static final String TAG = "org.liberty.android.fantastischmemo.DownloaderSS";
     private static final String SS_API_GET_DECK = "http://www.studystack.com/servlet/json?studyStackId=";
     private static final String SS_API_GET_CATEGORIES = "http://www.studystack.com/servlet/categoryListJson";
     private static final String SS_API_GET_CATEGORY_CONTENT = "http://www.studystack.com/servlet/categoryStackListJson?sortOrder=stars&categoryId=";
     private DownloadListAdapter dlAdapter;
     private Stack<List<DownloadItem>> dlStack;
+    private Stack<String> categoryIdStack;
     private ListView listView;
     private ProgressDialog mProgressDialog;
     private int mDownloadProgress;
@@ -97,8 +101,10 @@ public class DownloaderSS extends DownloaderBase{
     protected void initialRetrieve(){
         dlAdapter = new DownloadListAdapter(this, R.layout.filebrowser_item);
         dlStack = new Stack<List<DownloadItem>>();
+        categoryIdStack = new Stack<String>();
         mHandler = new Handler();
         listView = (ListView)findViewById(R.id.file_list);
+        listView.setOnScrollListener(this);
         listView.setAdapter(dlAdapter);
         try{
             categoryList = retrieveCategories();
@@ -112,6 +118,7 @@ public class DownloaderSS extends DownloaderBase{
 
     protected void openCategory(DownloadItem di){
         dlStack.push(dlAdapter.getList());
+        categoryIdStack.push(di.getExtras("id"));
         dlAdapter.clear();
         for(DownloadItem i : categoryList){
             if(i.getExtras("pid").equals(di.getExtras("id"))){
@@ -139,15 +146,102 @@ public class DownloaderSS extends DownloaderBase{
             dlAdapter.clear();
             dlAdapter.addList(dlStack.pop());
             listView.setSelection(0);
+            if(!categoryIdStack.empty()){
+                categoryIdStack.pop();
+            }
         }
     }
 
-    protected void fetchDatabase(DownloadItem di){
+    protected void fetchDatabase(final DownloadItem di){
+        View alertView = View.inflate(this, R.layout.link_alert, null);
+        TextView textView = (TextView)alertView.findViewById(R.id.link_alert_message);
+        textView.setMovementMethod(LinkMovementMethod.getInstance());
+        textView.setText(Html.fromHtml(getString(R.string.downloader_download_alert_message) + di.getDescription()));
+
+        new AlertDialog.Builder(this)
+            .setView(alertView)
+            .setTitle(getString(R.string.downloader_download_alert) + di.getTitle())
+            .setPositiveButton(getString(R.string.yes_text), new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface arg0, int arg1){
+                    mProgressDialog = ProgressDialog.show(DownloaderSS.this, getString(R.string.loading_please_wait), getString(R.string.loading_downloading));
+                    new Thread(){
+                        public void run(){
+                            try{
+                                downloadDatabase(di);
+                                mHandler.post(new Runnable(){
+                                    public void run(){
+                                        mProgressDialog.dismiss();
+                                        String dbpath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
+                                        new AlertDialog.Builder(DownloaderSS.this)
+                                            .setTitle(R.string.downloader_download_success)
+                                            .setMessage(getString(R.string.downloader_download_success_message) + dbpath + di.getTitle() + ".db")
+                                            .setPositiveButton(R.string.ok_text, null)
+                                            .create()
+                                            .show();
+                                    }
+                                });
+
+                            }
+                            catch(final Exception e){
+                                Log.e(TAG, "Error downloading", e);
+                                mHandler.post(new Runnable(){
+                                    public void run(){
+                                        mProgressDialog.dismiss();
+                                        new AlertDialog.Builder(DownloaderSS.this)
+                                            .setTitle(R.string.downloader_download_fail)
+                                            .setMessage(getString(R.string.downloader_download_fail_message) + " " + e.toString())
+                                            .setPositiveButton(R.string.ok_text, null)
+                                            .create()
+                                            .show();
+                                    }
+                                });
+                            }
+                        }
+                    }.start();
+                }
+            })
+            .setNegativeButton(getString(R.string.no_text), null)
+            .show();
+    }
+
+
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount){
+        Log.v(TAG , "first: " + firstVisibleItem + " count: " + visibleItemCount+ " total: " + totalItemCount);
+        if(totalItemCount <= 0 ){
+            return;
+        }
+        if(totalItemCount >= 25 && (firstVisibleItem + visibleItemCount == totalItemCount)){
+            DownloadItem di = dlAdapter.getItem(totalItemCount - 1);
+            if(di.getType() == DownloadItem.TYPE_DATABASE){
+                try{
+                    int page = Integer.parseInt(di.getExtras("page"));
+                    page += 1;
+                    Log.v(TAG, "New Page: " + page);
+                    DownloadItem nextPage = new DownloadItem();
+                    nextPage.setExtras("id", categoryIdStack.peek());
+                    nextPage.setExtras("page", Integer.toString(page));
+                    List<DownloadItem> nextPageItems = retrieveDatabaseList(nextPage);
+                    dlAdapter.addList(nextPageItems);
+
+                }
+                catch(Exception e){
+                    Log.v(TAG, "Error to scroll", e);
+                }
+            }
+
+        }
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
     }
 
     private List<DownloadItem> retrieveCategories() throws Exception{
         List<DownloadItem> diList = new LinkedList<DownloadItem>();
-        JSONArray jsonArray = getJSONArray(SS_API_GET_CATEGORIES);
+        JSONArray jsonArray = new JSONArray(downloadJSONString(SS_API_GET_CATEGORIES));
         for(int i = 0; i < jsonArray.length(); i++){
             JSONObject jsonItem = jsonArray.getJSONObject(i);
             Log.v(TAG, jsonItem.getString("name"));
@@ -158,6 +252,8 @@ public class DownloaderSS extends DownloaderBase{
             di.setTitle(jsonItem.getString("name"));
             di.setExtras("id", jsonItem.getString("id"));
             di.setExtras("pid", jsonItem.getString("parentId"));
+            di.setExtras("page", "1");
+
             if(di.getTitle() != null){
                 diList.add(di);
             }
@@ -168,8 +264,17 @@ public class DownloaderSS extends DownloaderBase{
     private List<DownloadItem> retrieveDatabaseList(DownloadItem category) throws Exception{
         List<DownloadItem> diList = new LinkedList<DownloadItem>();
         String url = SS_API_GET_CATEGORY_CONTENT + category.getExtras("id");
+        String page = category.getExtras("page");
+        if(page != null){
+            url += "&page=" + page;
+        }
+        else{
+            page = "1";
+        }
 
-        JSONArray jsonArray = getJSONArray(url);
+        Log.v(TAG, "Retrieve Url: " + url);
+
+        JSONArray jsonArray = new JSONArray(downloadJSONString(url));
         for(int i = 0; i < jsonArray.length(); i++){
             JSONObject jsonItem = jsonArray.getJSONObject(i);
             DownloadItem di = new DownloadItem();
@@ -177,6 +282,8 @@ public class DownloaderSS extends DownloaderBase{
             di.setTitle(jsonItem.getString("stackName"));
             di.setDescription(jsonItem.getString("description"));
             di.setExtras("id", jsonItem.getString("id"));
+            di.setAddress(SS_API_GET_DECK + jsonItem.getString("id"));
+            di.setExtras("page", page);
             if(di.getTitle() != null){
                 diList.add(di);
             }
@@ -184,7 +291,7 @@ public class DownloaderSS extends DownloaderBase{
         return diList;
     }
     
-    private JSONArray getJSONArray(String url) throws Exception{
+    private String downloadJSONString(String url) throws Exception{
         HttpClient httpclient = new DefaultHttpClient();
         HttpGet httpget = new HttpGet(url);
         HttpResponse response;
@@ -206,9 +313,8 @@ public class DownloaderSS extends DownloaderBase{
             sb.append(line + "\n");
         }
         result = sb.toString();
-        Log.i(TAG, "RESULT" + result);
 
-        return new JSONArray(result);
+        return result;
     }
 
     private void showRootCategories(){
@@ -220,6 +326,34 @@ public class DownloaderSS extends DownloaderBase{
                 dlAdapter.add(di);
             }
         }
+    }
+    
+    private void downloadDatabase(DownloadItem di) throws Exception{
+        String url = di.getAddress();
+        String jsonString = downloadJSONString(url);
+        JSONObject jsonObject = new JSONObject(jsonString);
+        JSONArray jsonDataArray = jsonObject.getJSONArray("data");
+        List<Item> itemList = new LinkedList<Item>();
+        for(int i = 0; i < jsonDataArray.length(); i++){
+            JSONArray jsonItemArray = jsonDataArray.getJSONArray(i);
+            String question = jsonItemArray.getString(0);
+            String answer = jsonItemArray.getString(1);
+            if(question != null && !question.equals("")){
+                Item item = new Item();
+                item.setQuestion(question);
+                item.setAnswer(answer);
+                item.setId(i + 1);
+                itemList.add(item);
+            }
+            
+        }
+        String dbname = di.getTitle() + ".db";
+        String dbpath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
+        DatabaseHelper.createEmptyDatabase(dbpath, dbname);
+        DatabaseHelper dbHelper = new DatabaseHelper(this, dbpath, dbname);
+        dbHelper.insertListItems(itemList);
+        dbHelper.close();
+
     }
 }
 

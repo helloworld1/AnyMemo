@@ -167,6 +167,12 @@ public abstract class DownloaderBase extends Activity implements OnItemClickList
             extras = new HashMap<String, String>();
         }
 
+        public DownloadItem clone(){
+            DownloadItem newItem = new DownloadItem(this.type, this.title, this.description, this.address);
+            newItem.extras = (HashMap<String, String>)this.extras.clone();
+            return newItem;
+        }
+
         public void setType(int type){
             this.type = type;
         }
