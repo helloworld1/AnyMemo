@@ -27,11 +27,12 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.io.Serializable;
 
 
 import android.util.Log;
 
-public final class Item implements Cloneable{
+public final class Item implements Cloneable, Serializable{
 	private int _id;
 	private String date_learn;
 	private int interval;

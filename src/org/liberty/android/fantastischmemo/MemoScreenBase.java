@@ -276,7 +276,16 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
     			returnValue = 0;
     		}
             break;
-    		
+
+        case DIALOG_EDIT:
+    		if(resultCode == Activity.RESULT_OK){
+                /* Just reload data */
+    			returnValue = 1;
+    		}
+    		else if(resultCode == Activity.RESULT_CANCELED){
+    			returnValue = 0;
+    		}
+            break;
     		
     	}
     }
@@ -501,8 +510,13 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
     protected void doEdit(){
         /* Edit current card */
         /* This is a customized dialog inflated from XML */
-        showDialog(DIALOG_EDIT);
+        //showDialog(DIALOG_EDIT);
+        Intent myIntent = new Intent(this, CardEditor.class);
+        myIntent.putExtra("item", currentItem);
+        myIntent.putExtra("dbpath", dbPath);
+        myIntent.putExtra("dbname", dbName);
 
+        startActivityForResult(myIntent, DIALOG_EDIT);
     }
 
     protected void doDelete(){

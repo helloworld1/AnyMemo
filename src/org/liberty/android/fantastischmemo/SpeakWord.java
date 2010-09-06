@@ -59,6 +59,7 @@ public class SpeakWord {
         if(word.length() < 1){
             return false;
         }
+           Log.v(TAG, "Text: " + text);
         /* Find the audio file in tags */
         Pattern p = Pattern.compile("[A-Za-z0-9_-]+\\.(ogg|mp3|wav)");
         Matcher m = p.matcher(text);

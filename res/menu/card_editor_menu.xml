@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item 
+        android:id="@+id/editor_menu_br"
+        android:title="@string/edit_menu_br_text" />
+    <item 
+        android:id="@+id/editor_menu_image"
+        android:title="@string/edit_menu_image_text" />
+    <item 
+        android:id="@+id/editor_menu_audio"
+        android:title="@string/edit_menu_audio_text" />
+</menu>

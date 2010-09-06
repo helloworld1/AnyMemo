@@ -583,7 +583,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
                 if(answerTTS != null){
                     answerTTS.sayText(currentItem.getAnswer());
                 }
-                else if(questionUserAudio){
+                else if(answerUserAudio){
                     mSpeakWord.speakWord(currentItem.getAnswer());
                 }
             }

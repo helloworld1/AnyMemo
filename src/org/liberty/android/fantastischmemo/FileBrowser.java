@@ -57,6 +57,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.util.Log;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.preference.PreferenceManager;
 
@@ -66,7 +67,7 @@ public class FileBrowser extends Activity implements OnItemClickListener, OnItem
 	private ArrayList<String> directoryEntries = new ArrayList<String>();
 	private File currentDirectory = new File("/");
 	private String defaultRoot;
-	private String fileExtension = ".db";
+	private String[] fileExtensions;
 	private Context mContext;
     private ListView fbListView;
     private final static String TAG = "org.liberty.android.fantastischmemo.FileBrowser";
@@ -75,7 +76,7 @@ public class FileBrowser extends Activity implements OnItemClickListener, OnItem
 		
 		Bundle extras = getIntent().getExtras();
 		defaultRoot = extras.getString("default_root");
-		fileExtension = extras.getString("file_extension");
+		fileExtensions = extras.getString("file_extension").split(",");
         setContentView(R.layout.file_browser);
 		mContext = this;
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
@@ -83,12 +84,15 @@ public class FileBrowser extends Activity implements OnItemClickListener, OnItem
         if(!settings.getBoolean("allow_orientation", true)){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
+        if(defaultRoot == null){
+            defaultRoot = settings.getString("saved_fb_path", null);
+        }
 		
 		browseToRoot();
 	}
 	
 	private void browseToRoot(){
-		if(defaultRoot == null){
+		if(defaultRoot == null || defaultRoot.equals("")){
 			File sdPath = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir));
 			sdPath.mkdir();
 			
@@ -138,9 +142,11 @@ public class FileBrowser extends Activity implements OnItemClickListener, OnItem
 				if(file.isDirectory()){
 						this.directoryEntries.add(file.getAbsolutePath().substring(currentPathStringLength) + "/");
 				}
-				if(file.getName().toLowerCase().endsWith(fileExtension.toLowerCase())){
-						this.directoryEntries.add(file.getAbsolutePath().substring(currentPathStringLength));
-				}
+                for(String fileExtension : fileExtensions){
+                    if(file.getName().toLowerCase().endsWith(fileExtension.toLowerCase())){
+                            this.directoryEntries.add(file.getAbsolutePath().substring(currentPathStringLength));
+                    }
+                }
 				
 			}
 		}
@@ -212,10 +218,17 @@ public class FileBrowser extends Activity implements OnItemClickListener, OnItem
 						this.browseTo(clickedFile);
 					}
 					else if(clickedFile.isFile()){
+                        /* Save the current path */
+                        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+
+                        SharedPreferences.Editor editor = settings.edit();
+                        editor.putString("saved_fb_path", clickedFile.getParent());
+                        editor.commit();
 						Intent resultIntent = new Intent();
 		
 						resultIntent.putExtra("org.liberty.android.fantastischmemo.dbName", clickedFile.getName());
 						resultIntent.putExtra("org.liberty.android.fantastischmemo.dbPath", clickedFile.getParent());
+
 						this.setResult(Activity.RESULT_OK, resultIntent);
 						finish();
 						
@@ -453,8 +466,17 @@ public class FileBrowser extends Activity implements OnItemClickListener, OnItem
                 else if(name.equals("..")){
                     iv.setImageResource(R.drawable.back);
                 }
+                else if(name.endsWith(".png") || name.endsWith(".jpg") || name.endsWith(".tif")){
+                    iv.setImageResource(R.drawable.picture);
+                }
+                else if(name.endsWith(".ogg") || name.endsWith(".mp3") || name.endsWith(".wav")){
+                    iv.setImageResource(R.drawable.audio);
+                }
+                else if(name.endsWith(".txt") || name.endsWith(".csv") || name.endsWith(".xml")){
+                    iv.setImageResource(R.drawable.text);
+                }
                 else{
-                    iv.setImageResource(R.drawable.database24);
+                    iv.setImageResource(R.drawable.database);
                 }
 
                 if(name.charAt(0) == '/'){
@@ -467,7 +489,7 @@ public class FileBrowser extends Activity implements OnItemClickListener, OnItem
         }
     }
 
-	private void copyFile(String source, String dest) throws IOException{
+	public static void copyFile(String source, String dest) throws IOException{
         File sourceFile = new File(source);
         File destFile = new File(dest);
 		
