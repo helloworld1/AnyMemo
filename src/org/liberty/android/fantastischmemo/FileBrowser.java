@@ -466,7 +466,7 @@ public class FileBrowser extends Activity implements OnItemClickListener, OnItem
                 else if(name.equals("..")){
                     iv.setImageResource(R.drawable.back);
                 }
-                else if(name.endsWith(".png") || name.endsWith(".jpg") || name.endsWith(".tif")){
+                else if(name.endsWith(".png") || name.endsWith(".jpg") || name.endsWith(".tif") || name.endsWith(".bmp")){
                     iv.setImageResource(R.drawable.picture);
                 }
                 else if(name.endsWith(".ogg") || name.endsWith(".mp3") || name.endsWith(".wav")){

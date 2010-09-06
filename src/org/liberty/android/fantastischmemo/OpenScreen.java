@@ -104,6 +104,7 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
         if(!settings.getBoolean("allow_orientation", true)){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
+        dbPath = settings.getString("dbpath", null);
 
 	}
 

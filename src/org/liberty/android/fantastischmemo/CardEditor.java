@@ -177,7 +177,7 @@ public class CardEditor extends Activity implements View.OnClickListener{
             case R.id.editor_menu_image:
                 if(focusView == questionEdit || focusView ==answerEdit || focusView == categoryEdit){
                     Intent myIntent = new Intent(this, FileBrowser.class);
-                    myIntent.putExtra("file_extension", ".png,.jpg,.tif");
+                    myIntent.putExtra("file_extension", ".png,.jpg,.tif,.bmp");
                     startActivityForResult(myIntent, ACTIVITY_IMAGE_FILE);
                 }
                 return true;
