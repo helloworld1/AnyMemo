@@ -279,7 +279,9 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
 
         case DIALOG_EDIT:
     		if(resultCode == Activity.RESULT_OK){
-                /* Just reload data */
+                /* In case of creating new items, this should be handled
+                 * separated by different screens */
+                refreshAfterEditItem();
     			returnValue = 1;
     		}
     		else if(resultCode == Activity.RESULT_CANCELED){
@@ -364,16 +366,22 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
 		TextView answerView = (TextView) findViewById(R.id.answer);
         /* Set the typeface of question an d answer */
         if(!questionTypeface.equals("")){
-            Typeface qt = Typeface.createFromFile(questionTypeface);
-            if(qt != null){
+            try{
+                Typeface qt = Typeface.createFromFile(questionTypeface);
                 questionView.setTypeface(qt);
+            }
+            catch(Exception e){
+                Log.e(TAG, "Typeface error when setting question font", e);
             }
 
         }
         if(!answerTypeface.equals("")){
-            Typeface at = Typeface.createFromFile(answerTypeface);
-            if(at != null){
+            try{
+                Typeface at = Typeface.createFromFile(answerTypeface);
                 answerView.setTypeface(at);
+            }
+            catch(Exception e){
+                Log.e(TAG, "Typeface error when setting answer font", e);
             }
 
         }

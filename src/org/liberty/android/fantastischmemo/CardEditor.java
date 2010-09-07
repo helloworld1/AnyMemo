@@ -84,6 +84,7 @@ public class CardEditor extends Activity implements View.OnClickListener{
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 		setContentView(R.layout.edit_dialog);
+        setTitle(R.string.memo_edit_dialog_title);
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			currentItem = (Item)extras.getSerializable("item");
