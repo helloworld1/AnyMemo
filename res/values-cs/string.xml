@@ -233,6 +233,11 @@
     <string name="db_text">DB</string>
     <string name="widget_fail_fetch">Chybí databáze.</string>
     <string name="notification_text">Oznámení</string>
-    <string name="notification_summary">Zobrazení informací v oznamovací oblasti
-+ani AnyMemo nejsou otevřeny</string>
+    <string name="notification_summary">Zobrazení informací v oznamovací oblastiani AnyMemo nejsou otevřeny</string>
+    <string name="downloader_chooser">Vyberte zdroj</string>
+    <string name="fe_search_title">Přihlásit se nebo Vyhledat</string>
+    <string name="fe_search_message">Pro přihlášení můžete zadat vaši emailovouadresu registrovanou u účtu na flashcardexchange.com (např. test@example.com) nebo hledat karty s konkrétní značkou (např. španělština).</string>
+    <string name="edit_menu_br_text">Přidat br značku</string>
+    <string name="edit_menu_image_text">Přidat obrázek</string>
+    <string name="edit_menu_audio_text">Přidat audio</string>
 </resources>
