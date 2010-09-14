@@ -515,12 +515,12 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
             .show();
     }
 
-    protected void doEdit(){
+    protected void doEdit(Item item){
         /* Edit current card */
         /* This is a customized dialog inflated from XML */
         //showDialog(DIALOG_EDIT);
         Intent myIntent = new Intent(this, CardEditor.class);
-        myIntent.putExtra("item", currentItem);
+        myIntent.putExtra("item", item);
         myIntent.putExtra("dbpath", dbPath);
         myIntent.putExtra("dbname", dbName);
 

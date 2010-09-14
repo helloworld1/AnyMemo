@@ -238,4 +238,10 @@
     <string name="widget_fail_fetch">Brak bazy danych.</string>
     <string name="notification_text">Powiadomienie</string>
     <string name="notification_summary">Wyświetl informację na pasku powiadomień nawet jeśli AnyMemo nie jest uruchomione.</string>
+    <string name="downloader_chooser">Wybierz źródło</string>
+    <string name="fe_search_title">Zaloguj się lub szukaj</string>
+    <string name="fe_search_message">Możesz wpisać swój adres emailowy zarejestrowany na flashcardexchange.com by się zalogować (np.  test@example.com) bądź szukać kart z konkretnymi tagami (np.  spanish).</string>
+    <string name="edit_menu_br_text">Dodaj tag br</string>
+    <string name="edit_menu_image_text">Dodaj obraz</string>
+    <string name="edit_menu_audio_text">Dodaj dźwięk</string>
 </resources>
