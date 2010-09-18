@@ -190,7 +190,7 @@
     <string name="import_tab_txt">Import Tab-separated TXT</string>
     <string name="import_csv">Import CSV</string>
     <string name="import_supermemo_xml_text">Import SuperMemo PPC XML</string>
-    <string name="speech_ctl_title">Speech Mode</string>
+    <string name="speech_ctl_title">Automatic speaking</string>
     <string name="speech_ctl_summary">How to invoke the speaking function when learning.</string>
     <string name="button_style_title">Grade Button Style</string>
     <string name="button_style_summary">Change the style of grading button when learning.</string>
