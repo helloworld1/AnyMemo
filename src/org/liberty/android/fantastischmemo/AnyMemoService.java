@@ -38,6 +38,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.graphics.Color;
 
 
 public class AnyMemoService extends Service{
@@ -84,8 +85,30 @@ public class AnyMemoService extends Service{
         try{
             DatabaseInfo dbInfo = new DatabaseInfo(this);
             updateViews.setTextViewText(R.id.widget_db_name, dbInfo.getDbName());
-            updateViews.setTextViewText(R.id.widget_review_count, getString(R.string.stat_scheduled) + " " + dbInfo.getRevCount());
+            int revCount = dbInfo.getRevCount();
+            /* Display different colors for different review number*/
             updateViews.setTextViewText(R.id.widget_new_count, getString(R.string.stat_new) + " " + dbInfo.getNewCount());
+            if(revCount == 0){
+                updateViews.setTextViewText(R.id.widget_review_count, getString(R.string.widget_no_review));
+                /* Dark green color */
+                updateViews.setTextColor(R.id.widget_review_count, 0xFF009F00);
+            }
+            else{
+                updateViews.setTextViewText(R.id.widget_review_count, getString(R.string.stat_scheduled) + " " + dbInfo.getRevCount());
+                if(revCount <= 10){
+                    updateViews.setTextColor(R.id.widget_review_count, 0xFF009F00);
+                }
+                else if(revCount <= 50){
+                    updateViews.setTextColor(R.id.widget_review_count, Color.BLACK);
+                }
+                else if(revCount <= 100){
+                    updateViews.setTextColor(R.id.widget_review_count, Color.MAGENTA);
+                }
+                else{
+                    updateViews.setTextColor(R.id.widget_review_count, Color.RED);
+                }
+            }
+
         }
         catch(Exception e){
             Log.e(TAG, "Update widget error", e);
