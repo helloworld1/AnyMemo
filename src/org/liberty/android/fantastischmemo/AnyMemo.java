@@ -180,6 +180,7 @@ public class AnyMemo extends Activity implements OnClickListener{
                 .show();
         }
 
+        SetAlarmReceiver.cancelNotificationAlarm(this);
         SetAlarmReceiver.setNotificationAlarm(this);
         //SetAlarmReceiver.setWidgetUpdateAlarm(this);
 

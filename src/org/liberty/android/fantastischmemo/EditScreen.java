@@ -250,7 +250,7 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
                 return true;
 
 	        case R.id.editmenu_edit_id:
-                doEdit();
+                doEdit(currentItem);
                 return true;
 
             case R.id.editmenu_delete_id:
@@ -478,7 +478,7 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
                     getNextItem();
                 }
                 else if(prediction.name.equals("o") || prediction.name.equals("o2")){
-                    doEdit();
+                    doEdit(currentItem);
                 }
                 else if(prediction.name.equals("cross")){
                     doDelete();
@@ -538,8 +538,7 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
          * it is only modified the success edit.
          * If not the prepare() will restore the oritinal item 
          */
-        currentItem = newItem;
-        doEdit();
+        doEdit(newItem);
     }
 
     private void createSearchOverlay(){

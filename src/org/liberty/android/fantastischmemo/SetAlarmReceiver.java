@@ -71,14 +71,28 @@ public class SetAlarmReceiver extends BroadcastReceiver{
         myIntent.putExtra("request_code", AlarmReceiver.ALARM_NOTIFICATION);
         PendingIntent sender = PendingIntent.getBroadcast(context, ALARM_REQUEST_CODE, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         /* Set up the alarm time */
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 7);
-        calendar.set(Calendar.MINUTE, 2);
-        calendar.set(Calendar.SECOND, 3);
+        Calendar due = Calendar.getInstance();
+        due.set(Calendar.HOUR_OF_DAY, 7);
+        due.set(Calendar.MINUTE, 2);
+        due.set(Calendar.SECOND, 3);
+        due.add(Calendar.SECOND, (int)(interval / 1000));
+        Calendar now = Calendar.getInstance();
+        /* 
+         * Decide to set the time to "due" or the now + interval
+         * This will avoid the alarm triggering when setting.
+         */
+        if(now.compareTo(due) == 1){
+            now.add(Calendar.SECOND, (int)(interval / 1000));
+            am.setInexactRepeating(AlarmManager.RTC, now.getTimeInMillis(), interval, sender);
+            Log.v(TAG, "now alarm");
+        }
+        else{
+            am.setInexactRepeating(AlarmManager.RTC, due.getTimeInMillis(), interval, sender);
+            Log.v(TAG, "due alarm");
+        }
 
 
         //am.set(AlarmManager.RTC, System.currentTimeMillis() + 15000, sender);
-        am.setInexactRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), interval, sender);
     }
 
     public static void cancelNotificationAlarm(Context context){

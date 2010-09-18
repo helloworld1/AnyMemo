@@ -489,7 +489,7 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
                 public void onClick(DialogInterface dialog, int which){
                     if(which == 0){
                         /* This is a customized dialog inflated from XML */
-                        doEdit();
+                        doEdit(currentItem);
                         //doFilter();
                     }
                     if(which == 1){
