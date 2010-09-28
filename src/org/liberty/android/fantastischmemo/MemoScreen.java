@@ -549,59 +549,104 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
 	}
 
     
+    // 1.6 compatibility issue, this can be enabled in the future
+    //@Override
+    //public boolean onKeyDown(int keyCode, KeyEvent event){
+    //    /* According to http://android-developers.blogspot.com/2009/12/back-and-other-hard-keys-three-stories.html */
+    //    if(volumeKeyShortcut){
+    //        if(keyCode == KeyEvent.KEYCODE_VOLUME_UP){
+    //            event.startTracking();
+    //            return true;
+    //        }
+    //        else if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
+    //            event.startTracking();
+    //            return true;
+    //        }
+    //    }
+    //    return super.onKeyDown(keyCode, event);
+    //}
+
+    //@Override
+    //public boolean onKeyLongPress(int keyCode, KeyEvent event){
+    //    /* Long press to scroe the card */
+    //    if(volumeKeyShortcut){
+    //        if(keyCode == KeyEvent.KEYCODE_VOLUME_UP){
+    //            if(showAnswer == false){
+    //                TextView answerView = (TextView) findViewById(R.id.answer);
+    //                /* Reveal the answer if it is now shown */
+    //                this.onClick(answerView);
+    //            }
+    //            else{
+    //                Toast.makeText(this, getString(R.string.grade_text) + " 2", Toast.LENGTH_SHORT).show();
+    //                handleGradeButtonClick(2);
+    //            }
+    //            return true;
+    //        }
+    //        else if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
+    //            if(showAnswer == false){
+    //                TextView answerView = (TextView) findViewById(R.id.answer);
+    //                this.onClick(answerView);
+    //            }
+    //            else{
+    //                Toast.makeText(this, getString(R.string.grade_text) + " 4", Toast.LENGTH_SHORT).show();
+    //                handleGradeButtonClick(4);
+    //            }
+    //            return true;
+    //        }
+    //    }
+    //    return super.onKeyLongPress(keyCode, event);
+    //}
+
+    //@Override
+    //public boolean onKeyUp(int keyCode, KeyEvent event){
+    //    /* Short press to scroe the card */
+
+    //    if(volumeKeyShortcut){
+    //        if(keyCode == KeyEvent.KEYCODE_VOLUME_UP && event.isTracking() && !event.isCanceled()){
+    //            if(showAnswer == false){
+    //                TextView answerView = (TextView) findViewById(R.id.answer);
+    //                this.onClick(answerView);
+    //            }
+    //            else{
+    //                Toast.makeText(this, getString(R.string.grade_text) + " 0", Toast.LENGTH_SHORT).show();
+    //                handleGradeButtonClick(0);
+    //            }
+    //            return true;
+    //        }
+    //        if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN && event.isTracking() && !event.isCanceled()){
+    //            if(showAnswer == false){
+    //                TextView answerView = (TextView) findViewById(R.id.answer);
+    //                this.onClick(answerView);
+    //            }
+    //            else{
+    //                Toast.makeText(this, getString(R.string.grade_text) + " 3", Toast.LENGTH_SHORT).show();
+    //                handleGradeButtonClick(3);
+    //            }
+    //            return true;
+    //        }
+    //    }
+    //    return super.onKeyUp(keyCode, event);
+    //}
+    
+    /* This version only handle short click */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event){
-        /* According to http://android-developers.blogspot.com/2009/12/back-and-other-hard-keys-three-stories.html */
         if(volumeKeyShortcut){
             if(keyCode == KeyEvent.KEYCODE_VOLUME_UP){
-                event.startTracking();
                 return true;
             }
             else if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
-                event.startTracking();
                 return true;
             }
         }
         return super.onKeyDown(keyCode, event);
     }
-
-    @Override
-    public boolean onKeyLongPress(int keyCode, KeyEvent event){
-        /* Long press to scroe the card */
-        if(volumeKeyShortcut){
-            if(keyCode == KeyEvent.KEYCODE_VOLUME_UP){
-                if(showAnswer == false){
-                    TextView answerView = (TextView) findViewById(R.id.answer);
-                    /* Reveal the answer if it is now shown */
-                    this.onClick(answerView);
-                }
-                else{
-                    Toast.makeText(this, getString(R.string.grade_text) + " 2", Toast.LENGTH_SHORT).show();
-                    handleGradeButtonClick(2);
-                }
-                return true;
-            }
-            else if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
-                if(showAnswer == false){
-                    TextView answerView = (TextView) findViewById(R.id.answer);
-                    this.onClick(answerView);
-                }
-                else{
-                    Toast.makeText(this, getString(R.string.grade_text) + " 4", Toast.LENGTH_SHORT).show();
-                    handleGradeButtonClick(4);
-                }
-                return true;
-            }
-        }
-        return super.onKeyLongPress(keyCode, event);
-    }
-
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event){
         /* Short press to scroe the card */
 
         if(volumeKeyShortcut){
-            if(keyCode == KeyEvent.KEYCODE_VOLUME_UP && event.isTracking() && !event.isCanceled()){
+            if(keyCode == KeyEvent.KEYCODE_VOLUME_UP){
                 if(showAnswer == false){
                     TextView answerView = (TextView) findViewById(R.id.answer);
                     this.onClick(answerView);
@@ -612,7 +657,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
                 }
                 return true;
             }
-            if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN && event.isTracking() && !event.isCanceled()){
+            if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
                 if(showAnswer == false){
                     TextView answerView = (TextView) findViewById(R.id.answer);
                     this.onClick(answerView);
