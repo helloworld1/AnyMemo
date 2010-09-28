@@ -52,6 +52,7 @@ import android.view.View;
 import android.view.Display;
 import android.view.WindowManager;
 import android.view.LayoutInflater;
+import android.view.KeyEvent;
 import android.widget.Button;
 import android.os.Handler;
 import android.widget.LinearLayout;
@@ -84,6 +85,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
     private boolean learnAhead;
     private boolean enableTTSExtended = false;
     private boolean shufflingCards = false;
+    private boolean volumeKeyShortcut = false;
     /* Six grading buttons */
 	private Button[] btns = {null, null, null, null, null, null}; 
 
@@ -116,6 +118,7 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
         /* Load some global settings */
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         enableTTSExtended = settings.getBoolean("enable_tts_extended", false);
+        volumeKeyShortcut = settings.getBoolean("enable_volume_key", false);
         /* Load learning queue size from the preference */
         try{
             String size = settings.getString("learning_queue_size", "10");
@@ -544,7 +547,87 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
             }
 		}
 	}
-			
+
+    
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+        /* According to http://android-developers.blogspot.com/2009/12/back-and-other-hard-keys-three-stories.html */
+        if(volumeKeyShortcut){
+            if(keyCode == KeyEvent.KEYCODE_VOLUME_UP){
+                event.startTracking();
+                return true;
+            }
+            else if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
+                event.startTracking();
+                return true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onKeyLongPress(int keyCode, KeyEvent event){
+        /* Long press to scroe the card */
+        if(volumeKeyShortcut){
+            if(keyCode == KeyEvent.KEYCODE_VOLUME_UP){
+                if(showAnswer == false){
+                    TextView answerView = (TextView) findViewById(R.id.answer);
+                    /* Reveal the answer if it is now shown */
+                    this.onClick(answerView);
+                }
+                else{
+                    Toast.makeText(this, getString(R.string.grade_text) + " 2", Toast.LENGTH_SHORT).show();
+                    handleGradeButtonClick(2);
+                }
+                return true;
+            }
+            else if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
+                if(showAnswer == false){
+                    TextView answerView = (TextView) findViewById(R.id.answer);
+                    this.onClick(answerView);
+                }
+                else{
+                    Toast.makeText(this, getString(R.string.grade_text) + " 4", Toast.LENGTH_SHORT).show();
+                    handleGradeButtonClick(4);
+                }
+                return true;
+            }
+        }
+        return super.onKeyLongPress(keyCode, event);
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event){
+        /* Short press to scroe the card */
+
+        if(volumeKeyShortcut){
+            if(keyCode == KeyEvent.KEYCODE_VOLUME_UP && event.isTracking() && !event.isCanceled()){
+                if(showAnswer == false){
+                    TextView answerView = (TextView) findViewById(R.id.answer);
+                    this.onClick(answerView);
+                }
+                else{
+                    Toast.makeText(this, getString(R.string.grade_text) + " 0", Toast.LENGTH_SHORT).show();
+                    handleGradeButtonClick(0);
+                }
+                return true;
+            }
+            if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN && event.isTracking() && !event.isCanceled()){
+                if(showAnswer == false){
+                    TextView answerView = (TextView) findViewById(R.id.answer);
+                    this.onClick(answerView);
+                }
+                else{
+                    Toast.makeText(this, getString(R.string.grade_text) + " 3", Toast.LENGTH_SHORT).show();
+                    handleGradeButtonClick(3);
+                }
+                return true;
+            }
+        }
+        return super.onKeyUp(keyCode, event);
+    }
+
+
 			
     @Override
     public void onClick(View v){
@@ -593,57 +676,60 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
         for(int i = 0; i < btns.length; i++){
             if(v == btns[i]){
                 /* i is also the grade for the button */
-                int grade = i;
-                /* When user click on the button of grade, it will update the item information
-                 * according to the grade.
-                 * If the return value is success, the user will not need to see this item today.
-                 * If the return value is failure, the item will be appended to the tail of the queue. 
-                 * */
-
-                prevScheduledItemCount = scheduledItemCount;
-                prevNewItemCount = newItemCount;
-
-                prevItem = (Item)currentItem.clone();
-
-
-                boolean scheduled = currentItem.isScheduled();
-                /* The processAnswer will return the interval
-                 * if it is 0, it means failure.
-                 */
-                boolean success = currentItem.processAnswer(grade, false) > 0 ? true : false;
-                if (success == true) {
-                    if(learnQueue.size() != 0){
-                        learnQueue.remove(0);
-                    }
-                    dbHelper.updateItem(currentItem, false);
-                    if(scheduled){
-                        this.scheduledItemCount -= 1;
-                    }
-                    else{
-                        this.newItemCount -= 1;
-                    }
-                } else {
-                    if(learnQueue.size() != 0){
-                        learnQueue.remove(0);
-                    }
-                    learnQueue.add(currentItem);
-                    dbHelper.updateItem(currentItem, false);
-                    if(!scheduled){
-                        this.scheduledItemCount += 1;
-                        this.newItemCount -= 1;
-                    }
-                    
-                }
-
-                this.showAnswer = false;
-                /* Now the currentItem is the next item, so we need to udpate the screen. */
-                feedData();
-                updateMemoScreen();
-                autoSpeak();
+                handleGradeButtonClick(i);
                 break;
             }
         }
 
+    }
+
+    private void handleGradeButtonClick(int grade){
+        /* When user click on the button of grade, it will update the item information
+         * according to the grade.
+         * If the return value is success, the user will not need to see this item today.
+         * If the return value is failure, the item will be appended to the tail of the queue. 
+         * */
+
+        prevScheduledItemCount = scheduledItemCount;
+        prevNewItemCount = newItemCount;
+
+        prevItem = (Item)currentItem.clone();
+
+
+        boolean scheduled = currentItem.isScheduled();
+        /* The processAnswer will return the interval
+         * if it is 0, it means failure.
+         */
+        boolean success = currentItem.processAnswer(grade, false) > 0 ? true : false;
+        if (success == true) {
+            if(learnQueue.size() != 0){
+                learnQueue.remove(0);
+            }
+            dbHelper.updateItem(currentItem, false);
+            if(scheduled){
+                this.scheduledItemCount -= 1;
+            }
+            else{
+                this.newItemCount -= 1;
+            }
+        } else {
+            if(learnQueue.size() != 0){
+                learnQueue.remove(0);
+            }
+            learnQueue.add(currentItem);
+            dbHelper.updateItem(currentItem, false);
+            if(!scheduled){
+                this.scheduledItemCount += 1;
+                this.newItemCount -= 1;
+            }
+            
+        }
+
+        this.showAnswer = false;
+        /* Now the currentItem is the next item, so we need to udpate the screen. */
+        feedData();
+        updateMemoScreen();
+        autoSpeak();
     }
 
     @Override

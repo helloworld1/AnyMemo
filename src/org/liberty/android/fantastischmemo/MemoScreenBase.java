@@ -195,38 +195,38 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
 		Iterator<Map.Entry<String, String> > i = set.iterator();
 		while(i.hasNext()){
 			Map.Entry<String, String> me = i.next();
-			if((me.getKey().toString()).equals("question_font_size")){
-				this.questionFontSize = new Double(me.getValue().toString());
+			if((me.getKey()).equals("question_font_size")){
+				this.questionFontSize = new Double(me.getValue());
 			}
-			if(me.getKey().toString().equals("answer_font_size")){
-				this.answerFontSize = new Double(me.getValue().toString());
+			if(me.getKey().equals("answer_font_size")){
+				this.answerFontSize = new Double(me.getValue());
 			}
-			if(me.getKey().toString().equals("question_align")){
-				this.questionAlign = me.getValue().toString();
+			if(me.getKey().equals("question_align")){
+				this.questionAlign = me.getValue();
 			}
-			if(me.getKey().toString().equals("answer_align")){
-				this.answerAlign = me.getValue().toString();
+			if(me.getKey().equals("answer_align")){
+				this.answerAlign = me.getValue();
 			}
-			if(me.getKey().toString().equals("question_locale")){
-				this.questionLocale = me.getValue().toString();
+			if(me.getKey().equals("question_locale")){
+				this.questionLocale = me.getValue();
 			}
-			if(me.getKey().toString().equals("answer_locale")){
-				this.answerLocale = me.getValue().toString();
+			if(me.getKey().equals("answer_locale")){
+				this.answerLocale = me.getValue();
 			}
-			if(me.getKey().toString().equals("html_display")){
-				this.htmlDisplay = me.getValue().toString();
+			if(me.getKey().equals("html_display")){
+				this.htmlDisplay = me.getValue();
 			}
-			if(me.getKey().toString().equals("ratio")){
-				this.qaRatio = me.getValue().toString();
+			if(me.getKey().equals("ratio")){
+				this.qaRatio = me.getValue();
 			}
-			if(me.getKey().toString().equals("question_typeface")){
-                this.questionTypeface = me.getValue().toString();
+			if(me.getKey().equals("question_typeface")){
+                this.questionTypeface = me.getValue();
             }
-			if(me.getKey().toString().equals("answer_typeface")){
-                this.answerTypeface = me.getValue().toString();
+			if(me.getKey().equals("answer_typeface")){
+                this.answerTypeface = me.getValue();
             }
-            if(me.getKey().toString().equals("colors")){
-                String colorString = me.getValue().toString();
+            if(me.getKey().equals("colors")){
+                String colorString = me.getValue();
                 if(colorString.equals("")){
                     colors = null;
                 }
@@ -365,7 +365,7 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
 		TextView questionView = (TextView) findViewById(R.id.question);
 		TextView answerView = (TextView) findViewById(R.id.answer);
         /* Set the typeface of question an d answer */
-        if(!questionTypeface.equals("")){
+        if(questionTypeface != null && !questionTypeface.equals("")){
             try{
                 Typeface qt = Typeface.createFromFile(questionTypeface);
                 questionView.setTypeface(qt);
@@ -375,7 +375,7 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
             }
 
         }
-        if(!answerTypeface.equals("")){
+        if(answerTypeface != null && !answerTypeface.equals("")){
             try{
                 Typeface at = Typeface.createFromFile(answerTypeface);
                 answerView.setTypeface(at);

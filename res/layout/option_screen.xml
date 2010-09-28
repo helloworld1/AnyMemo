@@ -24,6 +24,11 @@
             android:title="@string/copyclipboard" 
             android:defaultValue="true"
             android:summary="@string/copyclipboard_summary" />
+        <CheckBoxPreference
+            android:key="enable_volume_key"
+            android:title="@string/enable_volume_key_text"
+            android:defaultValue="false"
+            android:summary="@string/enable_volume_key_summary" />
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/learning_category">

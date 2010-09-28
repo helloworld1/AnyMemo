@@ -355,10 +355,13 @@ public class DownloaderAnyMemo extends DownloaderBase{
                     /* Delete the zip file if it is successfully decompressed */
                     outFile.delete();
                 }
-                /* Check if the db is correct */
-                filename = filename.replace(".zip", ".db");
-                DatabaseHelper dh = new DatabaseHelper(DownloaderAnyMemo.this, sdpath, filename);
-                dh.close();
+                /* We do not check ttf file as db */
+                if(!filename.toLowerCase().endsWith(".ttf")){
+                    /* Check if the db is correct */
+                    filename = filename.replace(".zip", ".db");
+                    DatabaseHelper dh = new DatabaseHelper(DownloaderAnyMemo.this, sdpath, filename);
+                    dh.close();
+                }
             }
             catch(Exception e){
                 if(outFile.exists()){
