@@ -162,6 +162,11 @@ public class DownloaderFE extends DownloaderBase{
                 finish();
             }
         })
+        .setOnCancelListener(new DialogInterface.OnCancelListener(){
+            public void onCancel(DialogInterface dialog){
+                finish();
+            }
+        })
         .create()
         .show();
     }

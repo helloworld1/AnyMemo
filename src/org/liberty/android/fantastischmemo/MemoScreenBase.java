@@ -345,6 +345,11 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
                         startActivity(myIntent);
                     }
                 })
+                .setOnCancelListener(new DialogInterface.OnCancelListener(){
+                    public void onCancel(DialogInterface dialog){
+                        finish();
+                    }
+                })
                 .create()
                 .show();
 			

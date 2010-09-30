@@ -735,6 +735,15 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
          * If the return value is failure, the item will be appended to the tail of the queue. 
          * */
 
+        if(currentItem == null){
+            /* 
+             * Prevent problems when clicking button too fast 
+             * because they can click it before the "empty database" dialog
+             * showing up.
+             */
+            return;
+        }
+
         prevScheduledItemCount = scheduledItemCount;
         prevNewItemCount = newItemCount;
 
