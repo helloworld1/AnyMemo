@@ -244,4 +244,8 @@
     <string name="edit_menu_br_text">Dodaj tag br</string>
     <string name="edit_menu_image_text">Dodaj obraz</string>
     <string name="edit_menu_audio_text">Dodaj dźwięk</string>
+    <string name="widget_no_review">Brak kart do powtórki.</string>
+    <string name="grade_text">Ocena</string>
+    <string name="enable_volume_key_text">Włącz przyciski sprzętowe</string>
+    <string name="enable_volume_key_summary">Użyj przycisków Głośniej/Ciszej by oceniać karty podczas nauki.</string>
 </resources>

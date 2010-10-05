@@ -263,23 +263,22 @@ public final class Item implements Cloneable, Serializable{
 	
 	private int diffDate(String date1, String date2){
         // The days betwween to date of date1 and date2 in format below.
-		final long MILLSECS_PER_DAY = 24 * 60 * 60 * 1000;
+		final double MILLSECS_PER_DAY = 86400000.0;
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		Date d1, d2;
 		int difference = 0;
 		try{
 			d1 = formatter.parse(date1);
 			d2 = formatter.parse(date2);
-			difference = (int)((d1.getTime() - d2.getTime()) / MILLSECS_PER_DAY);
+			difference = (int)Math.round((d1.getTime() - d2.getTime()) / MILLSECS_PER_DAY);
 		}
 		catch(Exception e){
 			Log.e("diffDate parse error!", e.toString());
 		}
 		return difference;
-		
-		
 	}
-	
+
+
 	public boolean isScheduled(){
 		Date currentDate = new Date();
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
