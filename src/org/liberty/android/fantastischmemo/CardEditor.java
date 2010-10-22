@@ -126,6 +126,7 @@ public class CardEditor extends Activity implements View.OnClickListener{
                 finish();
             }
             Intent resultIntent = new Intent();
+            resultIntent.putExtra("item", currentItem);
         	setResult(Activity.RESULT_OK, resultIntent);    			
             finish();
 

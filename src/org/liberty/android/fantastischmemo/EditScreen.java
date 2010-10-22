@@ -444,6 +444,9 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
             if(currentItem.isEmpty()){
                 prepare();
             }
+            else{
+                updateMemoScreen();
+            }
         }
     }
 
