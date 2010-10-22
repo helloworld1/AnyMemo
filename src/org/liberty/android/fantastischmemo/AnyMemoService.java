@@ -57,6 +57,7 @@ public class AnyMemoService extends Service{
             Log.e(TAG, "Extras is NULL!");
             return;
         }
+            Log.v(TAG, "Service now!");
         
 		int serviceReq = extras.getInt("request_code", 0);
         if((serviceReq & UPDATE_WIDGET) != 0){
@@ -130,6 +131,9 @@ public class AnyMemoService extends Service{
     private void showNotification(){
         try{
             DatabaseInfo dbInfo = new DatabaseInfo(this);
+            if(dbInfo.getRevCount() < 10){
+                return;
+            }
             Intent myIntent = new Intent(this, AnyMemo.class);
             myIntent.putExtra("screen", "Memo Screen");
             myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
