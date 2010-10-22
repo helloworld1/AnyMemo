@@ -352,8 +352,30 @@ public class AnyMemo extends Activity implements OnClickListener{
             myIntent.setData(Uri.parse(getString(R.string.website_help_main)));
             startActivity(myIntent);
             return true;
+    	case R.id.mainmenu_donate: {
+            View alertView = View.inflate(this, R.layout.link_alert, null);
+            TextView textView = (TextView)alertView.findViewById(R.id.link_alert_message);
+            textView.setText(Html.fromHtml(getString(R.string.donate_summary)));
+            textView.setMovementMethod(LinkMovementMethod.getInstance());
+            new AlertDialog.Builder(this)
+                .setView(alertView)
+                .setTitle(R.string.donate_text)
+                .setPositiveButton(getString(R.string.buy_pro_text), new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1){
+                        Intent myIntent = new Intent();
+                        myIntent.setAction(Intent.ACTION_VIEW);
+                        myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
+                        myIntent.setData(Uri.parse(getString(R.string.anymemo_pro_link)));
+                        startActivity(myIntent);
+                    }
+                })
+                .setNegativeButton(getString(R.string.cancel_text), null)
+                .show();
+            return true;
+        }
 
-    	case R.id.mainmenu_about: 
+    	case R.id.mainmenu_about: {
     		//myIntent.setClass(this, AboutScreen.class);
     		//startActivity(myIntent);
             /* About screen is now obsolete */
@@ -376,7 +398,8 @@ public class AnyMemo extends Activity implements OnClickListener{
                     }
                 })
                 .show();
-            return true;
+                return true;
+            }
 	    }
 	    return false;
 	}

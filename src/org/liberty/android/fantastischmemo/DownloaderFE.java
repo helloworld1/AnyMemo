@@ -57,6 +57,8 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.widget.ArrayAdapter;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView;
@@ -104,8 +106,12 @@ public class DownloaderFE extends DownloaderBase{
         dlAdapter = new DownloadListAdapter(this, R.layout.filebrowser_item);
         listView = (ListView)findViewById(R.id.file_list);
         listView.setAdapter(dlAdapter);
+        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        final SharedPreferences.Editor editor = settings.edit();
+        String prevInput = settings.getString("prev_fe_input", "");
 
         final EditText input = new EditText(this);
+        input.setText(prevInput);
         new AlertDialog.Builder(this)
             .setTitle(getString(R.string.fe_search_title))
             .setMessage(getString(R.string.fe_search_message))
@@ -114,6 +120,8 @@ public class DownloaderFE extends DownloaderBase{
             @Override
             public void onClick(DialogInterface dialog, int which ){
                 final String value = input.getText().toString();
+                editor.putString("prev_fe_input", value);
+                editor.commit();
                 mProgressDialog = ProgressDialog.show(DownloaderFE.this, getString(R.string.loading_please_wait), getString(R.string.loading_connect_net), true, true, new DialogInterface.OnCancelListener(){
                     @Override
                     public void onCancel(DialogInterface dialog){

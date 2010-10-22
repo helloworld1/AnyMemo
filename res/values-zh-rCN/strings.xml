@@ -243,4 +243,6 @@
     <string name="grade_text">评分：</string>
     <string name="enable_volume_key_text">使用键盘来评分</string>
     <string name="enable_volume_key_summary">记忆卡片时可以用音量键来对当前卡片打分。</string>
+    <string name="enable_third_party_arabic_title">启用第三方阿拉伯语引擎</string>
+    <string name="enable_third_party_arabic_summary">使用agawish的Better-Arabic-Reshaper阿拉伯语引擎(测试版)</string>
 </resources>
