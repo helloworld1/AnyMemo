@@ -44,7 +44,6 @@ public class SetAlarmReceiver extends BroadcastReceiver{
 
     public static void setNotificationAlarm(Context context){
         /* Set an alarm for the notification */
-        Log.v(TAG, "Set ALARM here!");
         /* Set interval from the settings */
 
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
@@ -84,11 +83,9 @@ public class SetAlarmReceiver extends BroadcastReceiver{
         if(now.compareTo(due) == 1){
             now.add(Calendar.SECOND, (int)(interval / 1000));
             am.setInexactRepeating(AlarmManager.RTC, now.getTimeInMillis(), interval, sender);
-            Log.v(TAG, "now alarm");
         }
         else{
             am.setInexactRepeating(AlarmManager.RTC, due.getTimeInMillis(), interval, sender);
-            Log.v(TAG, "due alarm");
         }
 
 
@@ -97,7 +94,6 @@ public class SetAlarmReceiver extends BroadcastReceiver{
 
     public static void cancelNotificationAlarm(Context context){
         /* Set an alarm for the notification */
-        Log.v(TAG, "Set ALARM here!");
         AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent myIntent = new Intent(context, AlarmReceiver.class);
         myIntent.putExtra("request_code", AlarmReceiver.ALARM_NOTIFICATION);
@@ -107,7 +103,6 @@ public class SetAlarmReceiver extends BroadcastReceiver{
 
     public static void setWidgetUpdateAlarm(Context context){
         /* Set an alarm for the widget to update it*/
-        Log.v(TAG, "Set ALARM here Update Widget!");
         AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent myIntent = new Intent(context, AlarmReceiver.class);
         myIntent.putExtra("request_code", AlarmReceiver.ALARM_WIDGET);
@@ -116,7 +111,6 @@ public class SetAlarmReceiver extends BroadcastReceiver{
     }
 
     public static void cancelWidgetUpdateAlarm(Context context){
-        Log.v(TAG, "Cancel Widget ALARM here !");
         AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent myIntent = new Intent(context, AlarmReceiver.class);
         myIntent.putExtra("request_code", AlarmReceiver.ALARM_WIDGET);

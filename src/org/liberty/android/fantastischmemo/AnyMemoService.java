@@ -57,6 +57,7 @@ public class AnyMemoService extends Service{
             Log.e(TAG, "Extras is NULL!");
             return;
         }
+            Log.v(TAG, "Service now!");
         
 		int serviceReq = extras.getInt("request_code", 0);
         if((serviceReq & UPDATE_WIDGET) != 0){
