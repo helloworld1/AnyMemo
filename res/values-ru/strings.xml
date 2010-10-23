@@ -23,7 +23,7 @@
     <string name="edit_button_text">Просмотр/Правка Базы</string>
     <string name="autoaudio">Озвучивать Автоматически</string>
     <string name="autoaudio_summary">Вопрос и ответ будут прочитаны автоматически</string>
-    <string name="btnonerow">Компактные Кнопки Отметок </string>
+    <string name="btnonerow">Компактные Кнопки Оценок </string>
     <string name="btnonerow_summary">Кнопки от 0 до 5 очков показываются в 1 строчку вместо 2.</string>
     <string name="copyclipboard">Копировать в Буфер</string>
     <string name="copyclipboard_summary">Вопрос будет автоматически скопирован в буфер обмена.</string>
@@ -173,8 +173,8 @@
     <string name="import_supermemo_xml_text">Импорт SuperMemo PPC XML</string>
     <string name="speech_ctl_title">Режим Речи</string>
     <string name="speech_ctl_summary">Когда включать функции речи при обучении.</string>
-    <string name="button_style_title">Стиль Кнопок Отметок</string>
-    <string name="button_style_summary">Изменение стиля кнопок отметок при обучении.</string>
+    <string name="button_style_title">Стиль Кнопок Оценок</string>
+    <string name="button_style_summary">Изменение стиля кнопок оценок при обучении.</string>
     <string name="settings_customize_color">Настроить Цвета</string>
     <string name="color_button_text">Выбрать Цвет</string>
    	<string name="color_dialog_title">Выбор Цвета</string>
@@ -243,6 +243,11 @@
     <string name="grade_text">Оценка</string>
     <string name="enable_volume_key_text">Горячие клавиши</string>
     <string name="enable_volume_key_summary">Использовать клавиши громкости для выставления оценок.</string>
+    <string name="enable_third_party_arabic_title">3rd-party Arabic Engine</string>
+    <string name="enable_third_party_arabic_summary">Разрешить движок арабского agawish Better-Arabic-Reshaper (альфа).</string>
+    <string name="donate_text">Donate</string>
+    <string name="buy_pro_text">Купить Pro версию</string>
+    <string name="donate_summary">Вы можете поддержать проект AnyMemo, купив pro версию в Android Market, или заплатить онлайн на сайте &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;. Спасибо за ваше участие.</string>
 
 
 </resources>
