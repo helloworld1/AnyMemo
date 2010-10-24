@@ -248,4 +248,9 @@
     <string name="grade_text">Ocena</string>
     <string name="enable_volume_key_text">Włącz przyciski sprzętowe</string>
     <string name="enable_volume_key_summary">Użyj przycisków Głośniej/Ciszej by oceniać karty podczas nauki.</string>
+    <string name="enable_third_party_arabic_title">Użyj zewnętrznego silnika języka arabskiego</string>
+    <string name="enable_third_party_arabic_summary">Użyj silnika języka arabskiego Better-Arabic-Reshaper autorstwa agawish</string>
+    <string name="donate_text">Złóż darowiznę</string>
+    <string name="buy_pro_text">Kup wersję Pro</string>
+    <string name="donate_summary">Możesz złożyć darowiznę twórcom projektu AnyMemo kupując wersję Pro z Marketu Android bądź na stronie anymemo.org. Podziękowania za wsparcie.</string>
 </resources>
