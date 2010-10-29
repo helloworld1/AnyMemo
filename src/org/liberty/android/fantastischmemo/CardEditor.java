@@ -229,10 +229,15 @@ public class CardEditor extends Activity implements View.OnClickListener{
                         path = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
                         addTextToView((EditText)focusView, "<img src=\"" + name + "\" />");
                         /* Copy the image to correct location */
-                        String imagePath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_image_dir) + "/" + dbName + "/";
+                        String imageRoot = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_image_dir) + "/";
+                        String imagePath = imageRoot + dbName + "/";
+                        new File(imageRoot).mkdir();
                         new File(imagePath).mkdir();
                         try{
-                            FileBrowser.copyFile(path + "/" + name, imagePath + name);
+                            String target = imagePath + name;
+                            if(!(new File(target)).exists()){
+                                FileBrowser.copyFile(path + "/" + name, target);
+                            }
                         }
                         catch(Exception e){
                             Log.e(TAG, "Error copying image", e);
@@ -248,10 +253,15 @@ public class CardEditor extends Activity implements View.OnClickListener{
                         path = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
                         addTextToView((EditText)focusView, "<audio src=\"" + name + "\" />");
                         /* Copy the image to correct location */
-                        String audioPath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_audio_dir) + "/" + dbName + "/";
+                        String audioRoot = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_audio_dir) + "/";
+                        String audioPath = audioRoot + dbName + "/";
+                        new File(audioRoot).mkdir();
                         new File(audioPath).mkdir();
                         try{
-                            FileBrowser.copyFile(path + "/" + name, audioPath + name);
+                            String target = audioPath + name;
+                            if(!(new File(target)).exists()){
+                                FileBrowser.copyFile(path + "/" + name, audioPath + name);
+                            }
                         }
                         catch(Exception e){
                             Log.e(TAG, "Error copying audio", e);
