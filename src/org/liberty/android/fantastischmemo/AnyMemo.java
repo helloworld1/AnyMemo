@@ -19,6 +19,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo;
 
+import org.liberty.android.fantastischmemo.downloader.*;
+import org.liberty.android.fantastischmemo.cardscreen.*;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;

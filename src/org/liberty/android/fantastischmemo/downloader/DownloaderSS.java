@@ -17,7 +17,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-package org.liberty.android.fantastischmemo;
+package org.liberty.android.fantastischmemo.downloader;
+
+import org.liberty.android.fantastischmemo.*;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -84,7 +86,7 @@ import org.json.JSONObject;
  * This is the downloader class for StudyStack
  */
 public class DownloaderSS extends DownloaderBase implements ListView.OnScrollListener{
-    private static final String TAG = "org.liberty.android.fantastischmemo.DownloaderSS";
+    private static final String TAG = "org.liberty.android.fantastischmemo.downloader.DownloaderSS";
     private static final String SS_API_GET_DECK = "http://www.studystack.com/servlet/json?studyStackId=";
     private static final String SS_API_GET_CATEGORIES = "http://www.studystack.com/servlet/categoryListJson";
     private static final String SS_API_GET_CATEGORY_CONTENT = "http://www.studystack.com/servlet/categoryStackListJson?sortOrder=stars&categoryId=";

@@ -17,7 +17,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-package org.liberty.android.fantastischmemo;
+package org.liberty.android.fantastischmemo.downloader;
+
+import org.liberty.android.fantastischmemo.*;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -77,7 +79,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class DownloaderAnyMemo extends DownloaderBase{
-    private static final String TAG = "org.liberty.android.fantastischmemo.DownloaderAnyMemo";
+    private static final String TAG = "org.liberty.android.fantastischmemo.downloader.DownloaderAnyMemo";
     private DownloadListAdapter dlAdapter;
     /* 
      * dlStack caches the previous result so user can press 

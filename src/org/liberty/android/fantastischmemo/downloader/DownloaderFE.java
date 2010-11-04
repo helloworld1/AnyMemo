@@ -17,7 +17,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-package org.liberty.android.fantastischmemo;
+package org.liberty.android.fantastischmemo.downloader;
+
+import org.liberty.android.fantastischmemo.*;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -87,7 +89,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
  * Download from FlashcardExchange using its web api
  */
 public class DownloaderFE extends DownloaderBase{
-    private static final String TAG = "org.liberty.android.fantastischmemo.DownloaderFE";
+    private static final String TAG = "org.liberty.android.fantastischmemo.downloader.DownloaderFE";
     private static final String FE_API_EMAIL = "http://xml.flashcardexchange.com/android/email/";
     private static final String FE_API_TAG = "http://xml.flashcardexchange.com/android/tag/";
     private static final String FE_API_FLASHCARDS = "http://xml.flashcardexchange.com/android/flashcards/";
