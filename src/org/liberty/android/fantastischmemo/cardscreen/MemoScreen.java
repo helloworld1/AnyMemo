@@ -120,23 +120,6 @@ public class MemoScreen extends MemoScreenBase implements View.OnClickListener, 
         }
         /* Load some global settings */
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        enableTTSExtended = settings.getBoolean("enable_tts_extended", false);
-        volumeKeyShortcut = settings.getBoolean("enable_volume_key", false);
-        /* Load learning queue size from the preference */
-        try{
-            String size = settings.getString("learning_queue_size", "10");
-            int tmpSize = Integer.parseInt(size);
-            if(tmpSize > 0){
-                learningQueueSize = tmpSize;
-            }
-            else{
-                learningQueueSize = 10;
-            }
-        }
-        catch(Exception e){
-            learningQueueSize = 10;
-        }
-        shufflingCards = settings.getBoolean("shuffling_cards", false);
 
         LinearLayout root = (LinearLayout)findViewById(R.id.memo_screen_root);
 
