@@ -813,40 +813,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void removeDuplicates(){
-        /*
-        myDatabase.execSQL("DELETE FROM dict_tbl WHERE _id NOT IN (SELECT MIN(_id) FROM dict_tbl GROUP BY question)");
-        myDatabase.execSQL("DELETE FROM learn_tbl WHERE _id NOT IN (SELECT _id FROM dict_tbl)");
-        Cursor result;
-        result = myDatabase.rawQuery("SELECT _id FROM dict_tbl", null);
-        int count_dict = result.getCount();
-		myDatabase.beginTransaction();
-        result.close();
-		try{
-            for(int i = 1; i <= count_dict; i++){
-                myDatabase.execSQL("UPDATE dict_tbl SET _id = _id - 99999");
-                myDatabase.execSQL("UPDATE learn_tbl SET _id = _id - 99999");
-            }
-			myDatabase.setTransactionSuccessful();
-		}
-		finally{
-			myDatabase.endTransaction();
-		}
-		myDatabase.beginTransaction();
-        try{
-            for(int i = 1; i <= count_dict; i++){
-                myDatabase.execSQL("UPDATE dict_tbl SET _id = ? WHERE _id IN (SELECT MIN(_id) FROM dict_tbl)", new String[]{Integer.toString(i)});
-                myDatabase.execSQL("UPDATE learn_tbl SET _id = ? WHERE _id IN (SELECT MIN(_id) FROM learn_tbl)", new String[]{Integer.toString(i)});
-            }
-
-			myDatabase.setTransactionSuccessful();
-		}
-		finally{
-			myDatabase.endTransaction();
-		}
-        */
         removeDuplicatesNative();
-        
-
     }
 
     static{
