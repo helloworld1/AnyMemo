@@ -88,8 +88,7 @@ import android.content.res.Configuration;
 import android.view.inputmethod.InputMethodManager;
 
 
-public abstract class MemoScreenBase extends Activity implements TagHandler, ImageGetter{
-	protected DatabaseHelper dbHelper = null;
+public abstract class MemoScreenBase extends Activity {
 	protected String dbName;
 	protected String dbPath;
 	protected boolean showAnswer;
@@ -211,202 +210,6 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
     	}
     }
 	
-	protected void updateMemoScreen() {
-		/* update the main screen according to the currentItem */
-		
-        /* The q/a ratio is not as whe it seems
-         * It displays differently on the screen
-         */
-		LinearLayout layoutQuestion = (LinearLayout)findViewById(R.id.layout_question);
-		LinearLayout layoutAnswer = (LinearLayout)findViewById(R.id.layout_answer);
-		float qRatio = Float.valueOf(qaRatio.substring(0, qaRatio.length() - 1));
-
-        if(qRatio > 99.0f){
-            layoutAnswer.setVisibility(View.GONE);
-            layoutQuestion.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
-            layoutAnswer.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
-        }
-        else if(qRatio < 1.0f){
-            layoutQuestion.setVisibility(View.GONE);
-            layoutQuestion.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
-            layoutAnswer.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
-        }
-        else{
-
-            float aRatio = 100.0f - qRatio;
-            qRatio /= 50.0;
-            aRatio /= 50.0;
-            layoutQuestion.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, qRatio));
-            layoutAnswer.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, aRatio));
-        }
-        /* Set both background and text color */
-        setScreenColor();
-		if(currentItem == null){
-			new AlertDialog.Builder(this)
-			    .setTitle(this.getString(R.string.memo_no_item_title))
-			    .setMessage(this.getString(R.string.memo_no_item_message))
-			    .setNeutralButton(getString(R.string.back_menu_text), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        /* Finish the current activity and go back to the last activity.
-                         * It should be the open screen. */
-                        finish();
-                    }
-                })
-                .setNegativeButton(getString(R.string.learn_ahead), new OnClickListener(){
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        finish();
-                        Intent myIntent = new Intent();
-                        myIntent.setClass(MemoScreenBase.this, MemoScreen.class);
-                        myIntent.putExtra("dbname", dbName);
-                        myIntent.putExtra("dbpath", dbPath);
-                        myIntent.putExtra("learn_ahead", true);
-                        startActivity(myIntent);
-                    }
-                })
-                .setOnCancelListener(new DialogInterface.OnCancelListener(){
-                    public void onCancel(DialogInterface dialog){
-                        finish();
-                    }
-                })
-                .create()
-                .show();
-			
-		}
-        else{
-            if(copyClipboard){
-                ClipboardManager cm = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
-                cm.setText(currentItem.getQuestion());
-            }
-			displayQA(currentItem);
-        }
-		
-	}
-
-	protected void displayQA(Item item) {
-		/* Display question and answer according to item */
-        
-		TextView questionView = (TextView) findViewById(R.id.question);
-		TextView answerView = (TextView) findViewById(R.id.answer);
-        /* Set the typeface of question an d answer */
-        if(questionTypeface != null && !questionTypeface.equals("")){
-            try{
-                Typeface qt = Typeface.createFromFile(questionTypeface);
-                questionView.setTypeface(qt);
-            }
-            catch(Exception e){
-                Log.e(TAG, "Typeface error when setting question font", e);
-            }
-
-        }
-        if(answerTypeface != null && !answerTypeface.equals("")){
-            try{
-                Typeface at = Typeface.createFromFile(answerTypeface);
-                answerView.setTypeface(at);
-            }
-            catch(Exception e){
-                Log.e(TAG, "Typeface error when setting answer font", e);
-            }
-
-        }
-
-        String sq, sa;
-        if(enableThirdPartyArabic){
-            sq = ArabicUtilities.reshape(item.getQuestion());
-            sa = ArabicUtilities.reshape(item.getAnswer());
-        }
-        else{
-            sq = item.getQuestion();
-            sa = item.getAnswer();
-        }
-		
-		
-		if(this.htmlDisplay.equals("both")){
-            /* Use HTML to display */
-
-			//CharSequence sa = Html.fromHtml(item.getAnswer());
-
-			
-			//questionView.setText(ArabicUtilities.reshape(sq.toString()));
-			//answerView.setText(ArabicUtilities.reshape(sa.toString()));
-            questionView.setText(Html.fromHtml(sq, this, this));
-            answerView.setText(Html.fromHtml(sa, this, this));
-		}
-		else if(this.htmlDisplay.equals("question")){
-            questionView.setText(Html.fromHtml(sq, this, this));
-            answerView.setText(sa);
-		}
-		else if(this.htmlDisplay.equals("answer")){
-            answerView.setText(Html.fromHtml(sa, this, this));
-            questionView.setText(sq);
-		}
-		else{
-			//questionView.setText(new StringBuilder().append(item.getQuestion()));
-			//answerView.setText(new StringBuilder().append(item.getAnswer()));
-            questionView.setText(sq);
-            answerView.setText(sa);
-		}
-		
-        /* Here is tricky to set up the alignment of the text */
-		if(questionAlign.equals("center")){
-			questionView.setGravity(Gravity.CENTER);
-			LinearLayout layoutQuestion = (LinearLayout)findViewById(R.id.layout_question);
-			layoutQuestion.setGravity(Gravity.CENTER);
-		}
-		else if(questionAlign.equals("right")){
-			questionView.setGravity(Gravity.RIGHT);
-			LinearLayout layoutQuestion = (LinearLayout)findViewById(R.id.layout_question);
-			layoutQuestion.setGravity(Gravity.NO_GRAVITY);
-		}
-		else{
-			questionView.setGravity(Gravity.LEFT);
-			LinearLayout layoutQuestion = (LinearLayout)findViewById(R.id.layout_question);
-			layoutQuestion.setGravity(Gravity.NO_GRAVITY);
-		}
-		if(answerAlign.equals("center")){
-			answerView.setGravity(Gravity.CENTER);
-			LinearLayout layoutAnswer = (LinearLayout)findViewById(R.id.layout_answer);
-			layoutAnswer.setGravity(Gravity.CENTER);
-		} else if(answerAlign.equals("right")){
-			answerView.setGravity(Gravity.RIGHT);
-			LinearLayout layoutAnswer = (LinearLayout)findViewById(R.id.layout_answer);
-			layoutAnswer.setGravity(Gravity.NO_GRAVITY);
-			
-		}
-		else{
-			answerView.setGravity(Gravity.LEFT);
-			LinearLayout layoutAnswer = (LinearLayout)findViewById(R.id.layout_answer);
-			layoutAnswer.setGravity(Gravity.NO_GRAVITY);
-		}
-		questionView.setTextSize((float)questionFontSize);
-		answerView.setTextSize((float)answerFontSize);
-
-		buttonBinding();
-
-	}
-
-
-    
-    private void setScreenColor(){
-        // Set both text and the background color
-        if(colors != null){
-            TextView questionView = (TextView) findViewById(R.id.question);
-            TextView answerView = (TextView) findViewById(R.id.answer);
-            LinearLayout questionLayout = (LinearLayout)findViewById(R.id.layout_question);
-            LinearLayout answerLayout = (LinearLayout)findViewById(R.id.layout_answer);
-            LinearLayout horizontalLine = (LinearLayout)findViewById(R.id.horizontalLine);
-            LinearLayout buttonLayout = (LinearLayout)findViewById(R.id.layout_buttons);
-            questionView.setTextColor(colors.get(0));
-            answerView.setTextColor(colors.get(1));
-            questionLayout.setBackgroundColor(colors.get(2));
-            answerLayout.setBackgroundColor(colors.get(3));
-            buttonLayout.setBackgroundColor(colors.get(3));
-            horizontalLine.setBackgroundColor(colors.get(4));
-        }
-            TextView questionView = (TextView) findViewById(R.id.question);
-
-
-    }
 
 
     protected void showEditDialog(){
@@ -492,50 +295,6 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
     }
 
 
-    @Override
-    public Drawable getDrawable(String source){
-        Log.v(TAG, "Source: " + source);
-        /* Try the image in /sdcard/anymemo/images/dbname/myimg.png */
-        try{
-            String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_image_dir) + "/" + dbName + "/" + source;
-            Drawable d = Drawable.createFromStream(new FileInputStream(filePath), source);
-            d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
-            return d;
-        }
-        catch(Exception e){
-        }
-
-        /* Try the image in /sdcard/anymemo/images/myimg.png */
-        try{
-            String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_image_dir) + "/" + source;
-            Drawable d = Drawable.createFromStream(new FileInputStream(filePath), source);
-            d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
-            return d;
-        }
-        catch(Exception e){
-        }
-
-        /* Try the image from internet */
-        try{
-            String url = source;
-            String src_name = source; 
-            Drawable d = Drawable.createFromStream(((InputStream)new URL(url).getContent()), src_name);
-            d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
-            return d;
-        }
-        catch(Exception e){
-        }
-
-        /* Fallback, display default image */
-        Drawable d = getResources().getDrawable(R.drawable.picture);
-        d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
-        return d;
-    }
-
-    @Override
-    public void handleTag(boolean opening, String tag, Editable output, XMLReader xmlReader){
-        return;
-    }
 
     @Override
     protected Dialog onCreateDialog(int id){
@@ -565,6 +324,52 @@ public abstract class MemoScreenBase extends Activity implements TagHandler, Ima
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
     }
+
+    public void showNoItemDialog(){
+        new AlertDialog.Builder(this)
+            .setTitle(this.getString(R.string.memo_no_item_title))
+            .setMessage(this.getString(R.string.memo_no_item_message))
+            .setNeutralButton(getString(R.string.back_menu_text), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+                    /* Finish the current activity and go back to the last activity.
+                     * It should be the open screen. */
+                    finish();
+                }
+            })
+            .setNegativeButton(getString(R.string.learn_ahead), new OnClickListener(){
+                public void onClick(DialogInterface arg0, int arg1) {
+                    finish();
+                    Intent myIntent = new Intent();
+                    myIntent.setClass(MemoScreenBase.this, MemoScreen.class);
+                    myIntent.putExtra("dbname", dbName);
+                    myIntent.putExtra("dbpath", dbPath);
+                    myIntent.putExtra("learn_ahead", true);
+                    startActivity(myIntent);
+                }
+            })
+            .setOnCancelListener(new DialogInterface.OnCancelListener(){
+                public void onCancel(DialogInterface dialog){
+                    finish();
+                }
+            })
+            .create()
+            .show();
+    }
+
+    public void getFromClickboard(){
+        if(copyClipboard){
+            ClipboardManager cm = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
+            cm.setText(currentItem.getQuestion());
+        }
+    }
+
+    public void setButtonColors(){
+            LinearLayout buttonLayout = (LinearLayout)findViewById(R.id.layout_buttons);
+            buttonLayout.setBackgroundColor(colors.get(3));
+    }
+
+
 	
 }
 

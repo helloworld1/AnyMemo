@@ -117,6 +117,7 @@ public class SettingManager{
     private boolean shufflingCards = false;
     private boolean volumeKeyShortcut = false;
     private boolean enableTTSExtended = false;
+    private boolean fullscreenMode = false;
     /* The colors for various elements
      * null means default color */
     protected ArrayList<Integer> colors = null;
@@ -203,6 +204,10 @@ public class SettingManager{
         return filters;
     }
 
+    public ArrayList<String> getColors(){
+        return colors;
+    }
+
     public String getAudioLocation(){
         return audioLocation;
     }
@@ -223,6 +228,10 @@ public class SettingManager{
         return enableTTSExtended;
     }
 
+    public boolean getFullscreenMode(){
+        return fullscreenMode;
+    }
+
     private void loadGlobalOptions(){
         speechCtl = settings.getString("speech_ctl", getResources().getStringArray(R.array.speech_ctl_list)[0]);
         btnStyle = settings.getString("button_style", getResources().getStringArray(R.array.button_style_list)[0]);
@@ -230,6 +239,7 @@ public class SettingManager{
 
         enableTTSExtended = settings.getBoolean("enable_tts_extended", false);
         volumeKeyShortcut = settings.getBoolean("enable_volume_key", false);
+        fullscreenMode = settings.getBoolean("fullscreen_mode", false);
         /* Load learning queue size from the preference */
         try{
             String size = settings.getString("learning_queue_size", "10");
@@ -314,7 +324,7 @@ public class SettingManager{
 
 
 
-    public enum Alignment{
+    public static enum Alignment{
         LEFT,
         RIGHT,
         CENTER;
@@ -332,7 +342,7 @@ public class SettingManager{
         }
     }
 
-    public enum HTMLDisplayType{
+    public static enum HTMLDisplayType{
         BOTH,
         QUESTION,
         ANSWER;
@@ -350,7 +360,7 @@ public class SettingManager{
         }
     }
 
-    public enum ButtonStyle{
+    public static enum ButtonStyle{
         ANYMEMO,
         MNEMOSYNE,
         ANKI;
@@ -369,7 +379,7 @@ public class SettingManager{
         }
     }
 
-    public enum SpeechControlMethod{
+    public static enum SpeechControlMethod{
         MANUAL,
         TAP,
         AUTO,

@@ -816,6 +816,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         removeDuplicatesNative();
     }
 
+    public boolean checkFilterValidity(String filter){
+        if(getItemById(0, 0, true, activeFilter) == null){
+            return false;
+        }
+        else{
+            return true;
+        }
+
+    }
+
     static{
         System.loadLibrary("native_db_helper");
     }
