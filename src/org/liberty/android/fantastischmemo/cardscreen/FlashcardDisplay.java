@@ -120,6 +120,13 @@ public class FlashcardDisplay implements TagHandler, ImageGetter{
         return flashcardView;
     }
 
+    public View getQuestionView(){
+        return questionView;
+    }
+    
+    public View getAnswerView(){
+        return answerView;
+    }
 
 	public void updateView(Item item) {
         if(currentItem == null){
@@ -130,8 +137,15 @@ public class FlashcardDisplay implements TagHandler, ImageGetter{
         setQARatio(ratio);
         setScreenColor(colors);
         displayQA(item);
-		
 	}
+
+    public void showAnswer(){
+        answerView.setVisibility(View.VISIBLE);
+    }
+
+    public void hideAnswer(){
+        answerView.setVisibility(View.INVISIBLE);
+    }
 
 	protected void displayQA(Item item) {
 		/* Display question and answer according to item */
