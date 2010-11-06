@@ -212,34 +212,28 @@ public class FlashcardDisplay implements TagHandler, ImageGetter{
         /* Here is tricky to set up the alignment of the text */
 		if(questionAlign == SettingManager.Alignment.CENTER){
 			questionView.setGravity(Gravity.CENTER);
-			LinearLayout layoutQuestion = (LinearLayout)flashcardView.findViewById(R.id.layout_question);
-			layoutQuestion.setGravity(Gravity.CENTER);
+			questionLayout.setGravity(Gravity.CENTER);
 		}
 		else if(questionAlign == SettingManager.Alignment.RIGHT){
 			questionView.setGravity(Gravity.RIGHT);
-			LinearLayout layoutQuestion = (LinearLayout)flashcardView.findViewById(R.id.layout_question);
-			layoutQuestion.setGravity(Gravity.NO_GRAVITY);
+			questionLayout.setGravity(Gravity.NO_GRAVITY);
 		}
 		else{
 			questionView.setGravity(Gravity.LEFT);
-			LinearLayout layoutQuestion = (LinearLayout)flashcardView.findViewById(R.id.layout_question);
-			layoutQuestion.setGravity(Gravity.NO_GRAVITY);
+			questionLayout.setGravity(Gravity.NO_GRAVITY);
 		}
 		if(answerAlign == SettingManager.Alignment.CENTER){
 			answerView.setGravity(Gravity.CENTER);
-			LinearLayout layoutAnswer = (LinearLayout)flashcardView.findViewById(R.id.layout_answer);
-			layoutAnswer.setGravity(Gravity.CENTER);
+			answerLayout.setGravity(Gravity.CENTER);
 		} 
         else if(answerAlign == SettingManager.Alignment.RIGHT){
 			answerView.setGravity(Gravity.RIGHT);
-			LinearLayout layoutAnswer = (LinearLayout)flashcardView.findViewById(R.id.layout_answer);
-			layoutAnswer.setGravity(Gravity.NO_GRAVITY);
+			answerLayout.setGravity(Gravity.NO_GRAVITY);
 			
 		}
 		else{
 			answerView.setGravity(Gravity.LEFT);
-			LinearLayout layoutAnswer = (LinearLayout)flashcardView.findViewById(R.id.layout_answer);
-			layoutAnswer.setGravity(Gravity.NO_GRAVITY);
+			answerLayout.setGravity(Gravity.NO_GRAVITY);
 		}
 		questionView.setTextSize(settingManager.getQuestionFontSize());
 		answerView.setTextSize(settingManager.getAnswerFontSize());

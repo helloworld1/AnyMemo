@@ -3,16 +3,5 @@
     android:id="@+id/memo_screen_root"
 	android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:layout_weight="1">
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/layout_card" />
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/layout_buttons" />
+    android:orientation="vertical" >
 </LinearLayout>

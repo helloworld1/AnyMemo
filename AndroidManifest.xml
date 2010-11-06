@@ -29,7 +29,7 @@
             android:name=".FileBrowser"
             android:configChanges="orientation|keyboardHidden" />
         <activity 
-            android:name=".MemoScreen"
+            android:name=".cardscreen.MemoScreen"
             android:configChanges="orientation|keyboardHidden" />
         <activity 
             android:name=".OptionScreen"

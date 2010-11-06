@@ -86,9 +86,41 @@ import android.content.res.Configuration;
 import android.view.inputmethod.InputMethodManager;
 
 public class MemoScreen extends Activity{
+    private String dbPath = "";
+    private String dbName = "";
+    private String activeFilter = "";
+    private FlashcardDisplay flashcardDisplay;
+    private ControlButtons controlButtons;
+    private SettingManager settingManager;
     @Override
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+		setContentView(R.layout.memo_screen_layout);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            dbPath = extras.getString("dbpath");
+            dbName = extras.getString("dbname");
+            activeFilter = extras.getString("active_filter");
+        }
+        settingManager = new SettingManager(this, dbPath, dbName);
+        flashcardDisplay = new FlashcardDisplay(this, settingManager);
+        controlButtons = new MnemosyneGradeButtons(this);
+        composeViews();
+        Item item = new Item();
+        item.setQuestion("hello hello");
+        item.setAnswer("World World");
+        flashcardDisplay.updateView(item);
+    }
+
+    private void composeViews(){
+        LinearLayout memoRoot = (LinearLayout)findViewById(R.id.memo_screen_root);
+
+        LinearLayout flashcardDisplayView = (LinearLayout)flashcardDisplay.getView();
+        LinearLayout controlButtonsView = (LinearLayout)controlButtons.getView();
+
+        memoRoot.addView(flashcardDisplayView, -1, -1);
+        memoRoot.addView(controlButtonsView, -1, -2);
+        flashcardDisplayView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
     }
 }
 
