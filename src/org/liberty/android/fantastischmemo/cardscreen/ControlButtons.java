@@ -23,6 +23,7 @@ import org.liberty.android.fantastischmemo.*;
 
 import android.widget.Button;
 import android.view.View;
+import java.util.Map;
 
 interface ControlButtons{
     public Map<String, Button> getButtons();

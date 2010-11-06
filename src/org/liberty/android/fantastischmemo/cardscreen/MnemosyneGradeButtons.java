@@ -25,6 +25,8 @@ import android.widget.Button;
 import android.view.View;
 import java.util.HashMap;
 import java.util.Map;
+import android.content.Context;
+import android.view.LayoutInflater;
 
 public class MnemosyneGradeButtons implements ControlButtons{
     private Context mContext;
@@ -34,7 +36,7 @@ public class MnemosyneGradeButtons implements ControlButtons{
     public MnemosyneGradeButtons(Context context){
         mContext = context;
         LayoutInflater factory = LayoutInflater.from(mContext);
-        buttonView = factory.inflate(R.id.grade_buttons_mnemosyne);
+        buttonView = factory.inflate(R.layout.grade_buttons_mnemosyne, null);
         grade0 = (Button)buttonView.findViewById(R.id.grade_btn_mnemosyne_0);
         grade1 = (Button)buttonView.findViewById(R.id.grade_btn_mnemosyne_1);
         grade2 = (Button)buttonView.findViewById(R.id.grade_btn_mnemosyne_2);

@@ -67,6 +67,7 @@ import android.view.WindowManager;
 import android.view.ViewGroup;
 import android.view.KeyEvent;
 import android.gesture.GestureOverlayView;
+import android.database.SQLException;
 import android.widget.Button;
 import android.os.Handler;
 import android.widget.LinearLayout;
@@ -124,12 +125,12 @@ public class SettingManager{
 
     public SettingManager(Context context){
         mContext = context;
-		settings = PreferenceManager.getDefaultSharedPreferences(this);
+		settings = PreferenceManager.getDefaultSharedPreferences(context);
         loadGlobalOptions();
     }
 
     public SettingManager(Context context, String dbPath, String dbName) throws SQLException{
-        this.SettingManager(context);
+        this(context);
         dbHelper = new DatabaseHelper(context, dbPath, dbName);
         loadDBSettings();
     }
@@ -138,12 +139,12 @@ public class SettingManager{
         return enableThirdPartyArabic;
     }
 
-    public double getQuestionFontSize(){
-        double questionFontSize;
+    public float getQuestionFontSize(){
+        return (float)questionFontSize;
     }
 
     public float getAnswerFontSize(){
-        return answerFontSize;
+        return (float)answerFontSize;
     }
 
     public Alignment getQuestionAlign(){
@@ -166,13 +167,13 @@ public class SettingManager{
         return ButtonStyle.parse(btnStyle);
     }
 
-    public SpeechControlMethod getSpeechControlMethod((){
+    public SpeechControlMethod getSpeechControlMethod(){
         return SpeechControlMethod.parse(speechCtl);
     }
 
     public boolean getQuestionUserAudio(){
-		questionLocale.equals("User Audio"){
-            return true
+		if(questionLocale.equals("User Audio")){
+            return true;
 		}
         else{
             return false;
@@ -180,7 +181,7 @@ public class SettingManager{
     }
 
     public boolean getAnswerUserAudio(){
-        answerLocale.equals("User Audio"){
+        if(answerLocale.equals("User Audio")){
             return true;
 		}
         else{
@@ -204,7 +205,7 @@ public class SettingManager{
         return filters;
     }
 
-    public ArrayList<String> getColors(){
+    public ArrayList<Integer> getColors(){
         return colors;
     }
 
@@ -232,9 +233,28 @@ public class SettingManager{
         return fullscreenMode;
     }
 
+    public String getDbName(){
+        if(dbHelper != null){
+            return dbHelper.getDbName();
+        }
+        else{
+            throw new IllegalStateException();
+        }
+    }
+
+    public String getDbPath(){
+        if(dbHelper != null){
+            return dbHelper.getDbPath();
+        }
+        else{
+            throw new IllegalStateException();
+        }
+    }
+
+
     private void loadGlobalOptions(){
-        speechCtl = settings.getString("speech_ctl", getResources().getStringArray(R.array.speech_ctl_list)[0]);
-        btnStyle = settings.getString("button_style", getResources().getStringArray(R.array.button_style_list)[0]);
+        speechCtl = settings.getString("speech_ctl", mContext.getResources().getStringArray(R.array.speech_ctl_list)[0]);
+        btnStyle = settings.getString("button_style", mContext.getResources().getStringArray(R.array.button_style_list)[0]);
         copyClipboard = settings.getBoolean("copyclipboard", true);
 
         enableTTSExtended = settings.getBoolean("enable_tts_extended", false);
@@ -259,7 +279,7 @@ public class SettingManager{
 
 	private void loadDBSettings(){
         /* Set a default audio location */
-        audioLocation = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_audio_dir);
+        audioLocation = Environment.getExternalStorageDirectory().getAbsolutePath() + mContext.getString(R.string.default_audio_dir);
 		/* Here is the global settings from the preferences */
 		
 		HashMap<String, String> hm = dbHelper.getSettings();
@@ -323,7 +343,6 @@ public class SettingManager{
 	}
 
 
-
     public static enum Alignment{
         LEFT,
         RIGHT,
@@ -351,7 +370,7 @@ public class SettingManager{
             if(a.equals("question")){
                 return QUESTION;
             }
-            else if((a.equals("answer")){
+            else if(a.equals("answer")){
                 return ANSWER;
             }
             else{
@@ -365,11 +384,11 @@ public class SettingManager{
         MNEMOSYNE,
         ANKI;
 
-        public static parse(String a){
+        public static ButtonStyle parse(String a){
             if(a.equals("Mnemosyne")){
                 return MNEMOSYNE;
             }
-            else if((a.equals("Anki")){
+            else if(a.equals("Anki")){
                 return ANKI;
             }
             else{
@@ -385,14 +404,14 @@ public class SettingManager{
         AUTO,
         AUTOTAP;
 
-        public static parse(String a){
+        public static SpeechControlMethod parse(String a){
             if(a.startsWith("0")){
                 return MANUAL;
             }
-            else if((a.startsWith("1")){
+            else if(a.startsWith("1")){
                 return TAP;
             }
-            else if((a.startsWith("2")){
+            else if(a.startsWith("2")){
                 return AUTO;
             }
             else{

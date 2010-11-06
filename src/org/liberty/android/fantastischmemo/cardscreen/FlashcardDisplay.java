@@ -88,7 +88,8 @@ import android.content.res.Configuration;
 import android.view.inputmethod.InputMethodManager;
 
 public class FlashcardDisplay implements TagHandler, ImageGetter{
-    private Context mContext
+    private final static String TAG = "org.liberty.android.fantastischmemo.cardscreen.FlashcardDisplay";
+    private Context mContext;
     private View flashcardView;
     private LinearLayout questionLayout;
     private LinearLayout answerLayout;
@@ -99,8 +100,7 @@ public class FlashcardDisplay implements TagHandler, ImageGetter{
 
 
     public FlashcardDisplay(Context context){
-        SettingManager manager = new SettingManager(context);
-        FlashcardDisplay(context, manager)
+        this(context, new SettingManager(context));
     }
 
     public FlashcardDisplay(Context context, SettingManager manager){
@@ -129,12 +129,12 @@ public class FlashcardDisplay implements TagHandler, ImageGetter{
     }
 
 	public void updateView(Item item) {
-        if(currentItem == null){
+        if(item == null){
             return;
         }
         float qaRatio = settingManager.getQARatio();
-        ArrayList<String> colors = settingManager.getColors();
-        setQARatio(ratio);
+        ArrayList<Integer> colors = settingManager.getColors();
+        setQARatio(qaRatio);
         setScreenColor(colors);
         displayQA(item);
 	}
@@ -212,54 +212,53 @@ public class FlashcardDisplay implements TagHandler, ImageGetter{
         /* Here is tricky to set up the alignment of the text */
 		if(questionAlign == SettingManager.Alignment.CENTER){
 			questionView.setGravity(Gravity.CENTER);
-			LinearLayout layoutQuestion = (LinearLayout)findViewById(R.id.layout_question);
+			LinearLayout layoutQuestion = (LinearLayout)flashcardView.findViewById(R.id.layout_question);
 			layoutQuestion.setGravity(Gravity.CENTER);
 		}
 		else if(questionAlign == SettingManager.Alignment.RIGHT){
 			questionView.setGravity(Gravity.RIGHT);
-			LinearLayout layoutQuestion = (LinearLayout)findViewById(R.id.layout_question);
+			LinearLayout layoutQuestion = (LinearLayout)flashcardView.findViewById(R.id.layout_question);
 			layoutQuestion.setGravity(Gravity.NO_GRAVITY);
 		}
 		else{
 			questionView.setGravity(Gravity.LEFT);
-			LinearLayout layoutQuestion = (LinearLayout)findViewById(R.id.layout_question);
+			LinearLayout layoutQuestion = (LinearLayout)flashcardView.findViewById(R.id.layout_question);
 			layoutQuestion.setGravity(Gravity.NO_GRAVITY);
 		}
 		if(answerAlign == SettingManager.Alignment.CENTER){
 			answerView.setGravity(Gravity.CENTER);
-			LinearLayout layoutAnswer = (LinearLayout)findViewById(R.id.layout_answer);
+			LinearLayout layoutAnswer = (LinearLayout)flashcardView.findViewById(R.id.layout_answer);
 			layoutAnswer.setGravity(Gravity.CENTER);
 		} 
         else if(answerAlign == SettingManager.Alignment.RIGHT){
 			answerView.setGravity(Gravity.RIGHT);
-			LinearLayout layoutAnswer = (LinearLayout)findViewById(R.id.layout_answer);
+			LinearLayout layoutAnswer = (LinearLayout)flashcardView.findViewById(R.id.layout_answer);
 			layoutAnswer.setGravity(Gravity.NO_GRAVITY);
 			
 		}
 		else{
 			answerView.setGravity(Gravity.LEFT);
-			LinearLayout layoutAnswer = (LinearLayout)findViewById(R.id.layout_answer);
+			LinearLayout layoutAnswer = (LinearLayout)flashcardView.findViewById(R.id.layout_answer);
 			layoutAnswer.setGravity(Gravity.NO_GRAVITY);
 		}
-		questionView.setTextSize((float)questionFontSize);
-		answerView.setTextSize((float)answerFontSize);
+		questionView.setTextSize(settingManager.getQuestionFontSize());
+		answerView.setTextSize(settingManager.getAnswerFontSize());
 	}
 
 
     
-    private void setScreenColor(colors){
+    private void setScreenColor(ArrayList<Integer> colors){
         // Set both text and the background color
         if(colors != null){
             questionView.setTextColor(colors.get(0));
             answerView.setTextColor(colors.get(1));
             questionLayout.setBackgroundColor(colors.get(2));
             answerLayout.setBackgroundColor(colors.get(3));
-            separated.setBackgroundColor(colors.get(4));
+            separator.setBackgroundColor(colors.get(4));
         }
     }
 
-    private void setQARatio(qaRatio){
-		float qRatio = Float.valueOf(qaRatio.substring(0, qaRatio.length() - 1));
+    private void setQARatio(float qRatio){
 
         if(qRatio > 99.0f){
             answerLayout.setVisibility(View.GONE);
@@ -286,7 +285,7 @@ public class FlashcardDisplay implements TagHandler, ImageGetter{
         Log.v(TAG, "Source: " + source);
         /* Try the image in /sdcard/anymemo/images/dbname/myimg.png */
         try{
-            String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_image_dir) + "/" + dbName + "/" + source;
+            String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + mContext.getString(R.string.default_image_dir) + "/" + settingManager.getDbName()+ "/" + source;
             Drawable d = Drawable.createFromStream(new FileInputStream(filePath), source);
             d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
             return d;
@@ -296,7 +295,7 @@ public class FlashcardDisplay implements TagHandler, ImageGetter{
 
         /* Try the image in /sdcard/anymemo/images/myimg.png */
         try{
-            String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_image_dir) + "/" + source;
+            String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + mContext.getString(R.string.default_image_dir) + "/" + source;
             Drawable d = Drawable.createFromStream(new FileInputStream(filePath), source);
             d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
             return d;
@@ -316,7 +315,7 @@ public class FlashcardDisplay implements TagHandler, ImageGetter{
         }
 
         /* Fallback, display default image */
-        Drawable d = getResources().getDrawable(R.drawable.picture);
+        Drawable d = mContext.getResources().getDrawable(R.drawable.picture);
         d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
         return d;
     }

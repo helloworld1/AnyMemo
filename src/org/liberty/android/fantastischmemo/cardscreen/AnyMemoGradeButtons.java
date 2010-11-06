@@ -25,16 +25,18 @@ import android.widget.Button;
 import android.view.View;
 import java.util.HashMap;
 import java.util.Map;
+import android.content.Context;
+import android.view.LayoutInflater;
 
 public class AnyMemoGradeButtons implements ControlButtons{
     private Context mContext;
     private View buttonView;
     private Button grade0, grade1, grade2, grade3, grade4, grade5;
     private HashMap<String, Button> hm;
-    public AnyMemoButtons(Context context){
+    public AnyMemoGradeButtons(Context context){
         mContext = context;
         LayoutInflater factory = LayoutInflater.from(mContext);
-        buttonView = factory.inflate(R.id.grade_buttons_anymemo);
+        buttonView = factory.inflate(R.layout.grade_buttons_anymemo, null);
         grade0 = (Button)buttonView.findViewById(R.id.grade_btn_anymemo_0);
         grade1 = (Button)buttonView.findViewById(R.id.grade_btn_anymemo_1);
         grade2 = (Button)buttonView.findViewById(R.id.grade_btn_anymemo_2);

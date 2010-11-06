@@ -85,7 +85,7 @@ import android.text.Html.ImageGetter;
 import android.content.res.Configuration;
 import android.view.inputmethod.InputMethodManager;
 
-public class Filter extends Activity implements OnClickListener{
+public class Filter extends Activity implements View.OnClickListener{
 
     private final static String TAG = "org.liberty.android.fantastischmemo.cardscreen.Filter";
     private Context mContext;
@@ -95,9 +95,11 @@ public class Filter extends Activity implements OnClickListener{
     private DatabaseHelper dbHelper = null;
     private Button filterButton;
     private Button clearButton;
+    private View filterView;
     private Button cancelButton;
     private String dbPath;
     private String dbName;
+    private ArrayList<String> filterArray;
 
 
     @Override
@@ -111,17 +113,17 @@ public class Filter extends Activity implements OnClickListener{
         cancelButton = (Button)findViewById(R.id.filter_button_cancel);
 
 
-        setTitle(R.string.filter_text)
+        setTitle(R.string.filter_text);
 		Bundle extras = getIntent().getExtras();
 		if(extras != null) {
-            dbPath = extras.getString("dbpath", null);
-            dbName = extras.getString("dbname", null);
+            dbPath = extras.getString("dbpath");
+            dbName = extras.getString("dbname");
         }
         try{
             dbHelper = new DatabaseHelper(this, dbPath, dbName);
         }
-        catch(Exception){
-            Log.e(TAG, "Error opening the database", e):
+        catch(Exception e){
+            Log.e(TAG, "Error opening the database", e);
             finish();
         }
         filterArray = dbHelper.getRecentFilters();
@@ -156,7 +158,7 @@ public class Filter extends Activity implements OnClickListener{
         }
         else if(v == cancelButton){
             Intent resultIntent = new Intent();
-            setResult(Activity.RESULT_CANCEL, resultIntent);	
+            setResult(Activity.RESULT_CANCELED, resultIntent);	
             finish();
         }
     }

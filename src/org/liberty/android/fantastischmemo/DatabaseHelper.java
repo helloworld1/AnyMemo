@@ -817,13 +817,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public boolean checkFilterValidity(String filter){
-        if(getItemById(0, 0, true, activeFilter) == null){
+        if(getItemById(0, 0, true, filter) == null){
             return false;
         }
         else{
             return true;
         }
 
+    }
+
+    public String getDbName(){
+        return dbName;
+    }
+
+    public String getDbPath(){
+        return dbPath;
     }
 
     static{

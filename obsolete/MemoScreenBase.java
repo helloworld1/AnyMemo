@@ -305,12 +305,6 @@ public abstract class MemoScreenBase extends Activity {
                  getWindow().setFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM,
                               WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
 
-
-
-
-
-                
-
                 return dialog;
             }
 

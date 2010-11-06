@@ -7,6 +7,4 @@
     android:gestureStrokeType="multiple"
     android:eventsInterceptionEnabled="true"
     android:orientation="vertical">
-    <include
-        layout="@layout/memo_screen" />
 </android.gesture.GestureOverlayView>
