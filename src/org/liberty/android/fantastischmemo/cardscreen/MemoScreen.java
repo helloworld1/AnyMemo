@@ -101,12 +101,15 @@ public class MemoScreen extends AMActivity{
     private Item currentItem = null;
     private Item prevItem = null;
     private ItemQueueManager queueManager;
+    private Handler mHandler;
+    private final int DIALOG_LOADING_PROGRESS = 100;
 
     @Override
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 		setContentView(R.layout.memo_screen_layout);
         Bundle extras = getIntent().getExtras();
+        mHandler = new Handler();
         if (extras != null) {
             dbPath = extras.getString("dbpath");
             dbName = extras.getString("dbname");
@@ -118,18 +121,28 @@ public class MemoScreen extends AMActivity{
         initTTS();
         queueManager = new ItemQueueManager(this, dbPath, dbName);
         queueManager.setFilter(activeFilter);
-        queueManager.initQueue();
+
         composeViews();
-        currentItem = queueManager.updateAndNext(null);
         hideButtons();
-        if(currentItem == null){
-            showNoItemDialog();
-        }
-        else{
-            flashcardDisplay.updateView(currentItem, false);
-            hideButtons();
-            setListeners();
-        }
+        showDialog(DIALOG_LOADING_PROGRESS);
+        new Thread(){
+            public void run(){
+                queueManager.initQueue();
+                currentItem = queueManager.updateAndNext(null);
+                mHandler.post(new Runnable(){
+                    public void run(){
+                        if(currentItem == null){
+                            showNoItemDialog();
+                        }
+                        else{
+                            flashcardDisplay.updateView(currentItem, false);
+                            setListeners();
+                        }
+                        removeDialog(DIALOG_LOADING_PROGRESS);
+                    }
+                });
+            }
+        }.start();
     }
 
     @Override
@@ -231,6 +244,24 @@ public class MemoScreen extends AMActivity{
         }
 
         return false;
+    }
+
+    @Override
+    public Dialog onCreateDialog(int id){
+        switch(id){
+            case DIALOG_LOADING_PROGRESS:{
+                ProgressDialog progressDialog = new ProgressDialog(MemoScreen.this);
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.setTitle(getString(R.string.loading_please_wait));
+                progressDialog.setMessage(getString(R.string.loading_database));
+                progressDialog.setCancelable(false);
+
+                return progressDialog;
+            }
+            default:
+                return super.onCreateDialog(id);
+
+        }
     }
 
     private void setListeners(){
