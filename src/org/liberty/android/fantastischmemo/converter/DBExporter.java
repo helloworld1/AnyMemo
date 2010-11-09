@@ -28,6 +28,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.LinkedList;
+import java.util.ArrayList;
 import au.com.bytecode.opencsv.CSVWriter;
 
 
@@ -64,9 +65,9 @@ public class DBExporter{
         if(outtxt.checkError()){
             throw new IOException("Can't open: " + fullpath);
         }
-        List<Item> itemList = new LinkedList<Item>();
-        boolean result = dbHelper.getListItems(1, -1, itemList, 0, null);
-        if(result == false){
+        ArrayList<Item> itemList = new ArrayList<Item>();
+        itemList = dbHelper.getListItems(1, -1, 0, null);
+        if(itemList == null || itemList.size() == 0){
             throw new IOException("Can't retrieve items for database: " + dbPath + "/" + dbName);
         }
         for(Item item : itemList){
@@ -81,9 +82,9 @@ public class DBExporter{
         String fullpath = dbPath + "/" + dbName.replaceAll(".db", ".txt");
 
         CSVWriter writer = new CSVWriter(new FileWriter(fullpath), '\t');
-        List<Item> itemList = new LinkedList<Item>();
-        boolean result = dbHelper.getListItems(1, -1, itemList, 0, null);
-        if(result == false){
+        ArrayList<Item> itemList = new ArrayList<Item>();
+        itemList = dbHelper.getListItems(1, -1, 0, null);
+        if(itemList == null || itemList.size() == 0){
             throw new IOException("Can't retrieve items for database: " + dbPath + "/" + dbName);
         }
         String[] entries = new String[3];
@@ -101,9 +102,9 @@ public class DBExporter{
         String fullpath = dbPath + "/" + dbName.replaceAll(".db", ".csv");
 
         CSVWriter writer = new CSVWriter(new FileWriter(fullpath));
-        List<Item> itemList = new LinkedList<Item>();
-        boolean result = dbHelper.getListItems(1, -1, itemList, 0, null);
-        if(result == false){
+        ArrayList<Item> itemList = new ArrayList<Item>();
+        itemList = dbHelper.getListItems(1, -1, 0, null);
+        if(itemList == null || itemList.size() == 0){
             throw new IOException("Can't retrieve items for database: " + dbPath + "/" + dbName);
         }
         String[] entries = new String[3];
@@ -125,9 +126,9 @@ public class DBExporter{
         if(outxml.checkError()){
             throw new IOException("Can't open: " + fullpath);
         }
-        List<Item> itemList = new LinkedList<Item>();
-        boolean result = dbHelper.getListItems(1, -1, itemList, 0, null);
-        if(result == false){
+        ArrayList<Item> itemList = new ArrayList<Item>();
+        itemList = dbHelper.getListItems(1, -1, 0, null);
+        if(itemList == null || itemList.size() == 0){
             throw new IOException("Can't retrieve items for database: " + dbPath + "/" + dbName);
         }
         int count = 0;

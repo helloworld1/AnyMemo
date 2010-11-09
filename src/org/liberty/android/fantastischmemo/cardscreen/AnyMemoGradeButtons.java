@@ -43,7 +43,7 @@ public class AnyMemoGradeButtons implements ControlButtons{
         grade3 = (Button)buttonView.findViewById(R.id.grade_btn_anymemo_3);
         grade4 = (Button)buttonView.findViewById(R.id.grade_btn_anymemo_4);
         grade5 = (Button)buttonView.findViewById(R.id.grade_btn_anymemo_5);
-        HashMap<String, Button> hm = new HashMap<String, Button>();
+        hm = new HashMap<String, Button>();
         hm.put("0", grade0);
         hm.put("1", grade1);
         hm.put("2", grade2);

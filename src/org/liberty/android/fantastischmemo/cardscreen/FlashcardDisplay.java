@@ -128,7 +128,7 @@ public class FlashcardDisplay implements TagHandler, ImageGetter{
         return answerView;
     }
 
-	public void updateView(Item item) {
+	public void updateView(Item item, boolean showAnswer) {
         if(item == null){
             return;
         }
@@ -137,15 +137,27 @@ public class FlashcardDisplay implements TagHandler, ImageGetter{
         setQARatio(qaRatio);
         setScreenColor(colors);
         displayQA(item);
+        if(showAnswer == false){
+            answerView.setText(R.string.memo_show_answer);
+        }
 	}
 
-    public void showAnswer(){
-        answerView.setVisibility(View.VISIBLE);
+    public void setQuestionLayoutClickListener(View.OnClickListener l){
+        questionLayout.setOnClickListener(l);
     }
 
-    public void hideAnswer(){
-        answerView.setVisibility(View.INVISIBLE);
+    public void setAnswerLayoutClickListener(View.OnClickListener l){
+        answerLayout.setOnClickListener(l);
     }
+
+    public void setQuestionTextClickListener(View.OnClickListener l){
+        questionView.setOnClickListener(l);
+    }
+
+    public void setAnswerTextClickListener(View.OnClickListener l){
+        answerView.setOnClickListener(l);
+    }
+
 
 	protected void displayQA(Item item) {
 		/* Display question and answer according to item */

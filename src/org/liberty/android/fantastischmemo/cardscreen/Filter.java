@@ -95,7 +95,6 @@ public class Filter extends Activity implements View.OnClickListener{
     private DatabaseHelper dbHelper = null;
     private Button filterButton;
     private Button clearButton;
-    private View filterView;
     private Button cancelButton;
     private String dbPath;
     private String dbName;
@@ -106,8 +105,8 @@ public class Filter extends Activity implements View.OnClickListener{
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 		setContentView(R.layout.filter_dialog);
-        filterEdit = (EditText)filterView.findViewById(R.id.filter_dialog_edit);
-        filterList = (ListView)filterView.findViewById(R.id.filter_list);
+        filterEdit = (EditText)findViewById(R.id.filter_dialog_edit);
+        filterList = (ListView)findViewById(R.id.filter_list);
         filterButton = (Button)findViewById(R.id.filter_button_filter);
         clearButton = (Button)findViewById(R.id.filter_button_clear);
         cancelButton = (Button)findViewById(R.id.filter_button_cancel);
@@ -136,6 +135,22 @@ public class Filter extends Activity implements View.OnClickListener{
                 }
             });
         }
+        filterButton.setOnClickListener(this);
+        clearButton.setOnClickListener(this);
+        cancelButton.setOnClickListener(this);
+    }
+
+    @Override 
+    public void onDestroy(){
+        if(dbHelper != null){
+            try{
+                dbHelper.close();
+            }
+            catch(Exception e){
+                Log.e(TAG, "Error closing database", e);
+            }
+        }
+        super.onDestroy();
     }
 
     @Override

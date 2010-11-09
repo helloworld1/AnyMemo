@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.cardscreen;
 
 import org.liberty.android.fantastischmemo.*;
+import org.liberty.android.fantastischmemo.tts.*;
 
 import org.amr.arabic.ArabicUtilities;
 import org.xml.sax.XMLReader;
@@ -29,6 +30,7 @@ import java.io.FileInputStream;
 import java.net.URL;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -84,14 +86,22 @@ import android.text.Html.TagHandler;
 import android.text.Html.ImageGetter;
 import android.content.res.Configuration;
 import android.view.inputmethod.InputMethodManager;
+import android.net.Uri;
 
-public class MemoScreen extends Activity{
+public class MemoScreen extends AMActivity{
+    private final static String TAG = "org.liberty.android.fantastischmemo.cardscreen.MemoScreen";
     private String dbPath = "";
     private String dbName = "";
     private String activeFilter = "";
     private FlashcardDisplay flashcardDisplay;
     private ControlButtons controlButtons;
     private SettingManager settingManager;
+    private AnyMemoTTS questionTTS = null;
+    private AnyMemoTTS answerTTS = null;
+    private Item currentItem = null;
+    private Item prevItem = null;
+    private ItemQueueManager queueManager;
+
     @Override
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -104,13 +114,169 @@ public class MemoScreen extends Activity{
         }
         settingManager = new SettingManager(this, dbPath, dbName);
         flashcardDisplay = new FlashcardDisplay(this, settingManager);
-        controlButtons = new MnemosyneGradeButtons(this);
+        controlButtons = new AnyMemoGradeButtons(this);
+        initTTS();
+        queueManager = new ItemQueueManager(this, dbPath, dbName);
+        queueManager.setFilter(activeFilter);
+        queueManager.initQueue();
         composeViews();
-        Item item = new Item();
-        item.setQuestion("hello hello");
-        item.setAnswer("World World");
-        flashcardDisplay.updateView(item);
+        currentItem = queueManager.updateAndNext(null);
+        hideButtons();
+        if(currentItem == null){
+            showNoItemDialog();
+        }
+        else{
+            flashcardDisplay.updateView(currentItem, false);
+            hideButtons();
+            setListeners();
+        }
     }
+
+    @Override
+    public void onDestroy(){
+        if(settingManager != null){
+            settingManager.close();
+            settingManager = null;
+        }
+        if(questionTTS != null){
+            questionTTS.shutdown();
+        }
+        if(answerTTS != null){
+            answerTTS.shutdown();
+        }
+        super.onDestroy();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.memo_screen_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_memo_help:
+            {
+                Intent myIntent = new Intent();
+                myIntent.setAction(Intent.ACTION_VIEW);
+                myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
+                myIntent.setData(Uri.parse(getString(R.string.website_help_memo)));
+                startActivity(myIntent);
+                return true;
+            }
+            case R.id.menuspeakquestion:
+            {
+                if(questionTTS != null && currentItem != null){
+                    questionTTS.sayText(currentItem.getQuestion());
+                }
+                return true;
+            }
+
+            case R.id.menuspeakanswer:
+            {
+                if(answerTTS != null && currentItem != null){
+                    answerTTS.sayText(currentItem.getQuestion());
+                }
+                return true;
+            }
+
+            case R.id.menusettings:
+            {
+                Intent myIntent = new Intent(this, SettingsScreen.class);
+                myIntent.putExtra("dbname", dbName);
+                myIntent.putExtra("dbpath", dbPath);
+                startActivityForResult(myIntent, 1);
+                return true;
+            }
+
+            case R.id.menudetail:
+            {
+                Intent myIntent = new Intent(this, DetailScreen.class);
+                myIntent.putExtra("dbname", this.dbName);
+                myIntent.putExtra("dbpath", this.dbPath);
+                myIntent.putExtra("itemid", currentItem.getId());
+                startActivityForResult(myIntent, 2);
+                return true;
+            }
+
+            case R.id.menuundo:
+            {
+                if(prevItem != null){
+                    currentItem = prevItem.clone();
+                    prevItem = null;
+                    flashcardDisplay.updateView(currentItem, false);
+                    hideButtons();
+                }
+                else{
+                    new AlertDialog.Builder(this)
+                        .setTitle(getString(R.string.undo_fail_text))
+                        .setMessage(getString(R.string.undo_fail_message))
+                        .setNeutralButton(R.string.ok_text, null)
+                        .create()
+                        .show();
+                }
+                return true;
+            }
+
+            case R.id.menu_memo_filter:
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void setListeners(){
+        View.OnClickListener showAnswerListener = new View.OnClickListener(){
+            public void onClick(View v){
+                if(currentItem != null){
+                    showButtons();
+                    flashcardDisplay.updateView(currentItem, true);
+                    controlButtons.getView().setVisibility(View.VISIBLE);
+                }
+            }
+        };
+        flashcardDisplay.setQuestionLayoutClickListener(showAnswerListener);
+        flashcardDisplay.setAnswerLayoutClickListener(showAnswerListener);
+        Map<String, Button> hm = controlButtons.getButtons();
+        for(int i = 0; i < 6; i++){
+            Button b = hm.get(Integer.valueOf(i).toString());
+            b.setOnClickListener(getGradeButtonListener(i));
+            b.setText(Integer.valueOf(i).toString() + " +" + currentItem.processAnswer(i, true));
+        }
+    }
+
+    private View.OnClickListener getGradeButtonListener(final int grade){
+        return new View.OnClickListener(){
+            public void onClick(View v){
+                prevItem = currentItem.clone();
+                currentItem.processAnswer(grade, false);
+                currentItem = queueManager.updateAndNext(currentItem);
+                if(currentItem == null){
+                    showNoItemDialog();
+                }
+                else{
+                    flashcardDisplay.updateView(currentItem, false);
+                    hideButtons();
+                    setTitle("" + currentItem.getId());
+                }
+            }
+        };
+    }
+
+    private void hideButtons(){
+        flashcardDisplay.updateView(currentItem, false);
+        controlButtons.getView().setVisibility(View.INVISIBLE);
+    }
+
+    private void showButtons(){
+        flashcardDisplay.updateView(currentItem, false);
+        controlButtons.getView().setVisibility(View.VISIBLE);
+    }
+
 
     private void composeViews(){
         LinearLayout memoRoot = (LinearLayout)findViewById(R.id.memo_screen_root);
@@ -118,10 +284,92 @@ public class MemoScreen extends Activity{
         LinearLayout flashcardDisplayView = (LinearLayout)flashcardDisplay.getView();
         LinearLayout controlButtonsView = (LinearLayout)controlButtons.getView();
 
+        /* 
+         * -1: Match parent -2: Wrap content
+         * This is necessary or the view will not be 
+         * stetched
+         */
         memoRoot.addView(flashcardDisplayView, -1, -1);
         memoRoot.addView(controlButtonsView, -1, -2);
         flashcardDisplayView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
     }
+
+    private void restartActivity(){
+        Intent myIntent = new Intent(this, MemoScreen.class);
+        myIntent.putExtra("dbname", dbName);
+        myIntent.putExtra("dbpath", dbPath);
+        myIntent.putExtra("active_filter", activeFilter);
+
+        finish();
+        startActivity(myIntent);
+    }
+
+    private void showNoItemDialog(){
+        new AlertDialog.Builder(this)
+            .setTitle(this.getString(R.string.memo_no_item_title))
+            .setMessage(this.getString(R.string.memo_no_item_message))
+            .setNeutralButton(getString(R.string.back_menu_text), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+                    /* Finish the current activity and go back to the last activity.
+                     * It should be the open screen. */
+                    finish();
+                    }
+                })
+            .setNegativeButton(getString(R.string.learn_ahead), new OnClickListener(){
+                public void onClick(DialogInterface arg0, int arg1) {
+                    finish();
+                    Intent myIntent = new Intent();
+                    myIntent.setClass(MemoScreen.this, MemoScreen.class);
+                    myIntent.putExtra("dbname", dbName);
+                    myIntent.putExtra("dbpath", dbPath);
+                    myIntent.putExtra("learn_ahead", true);
+                    startActivity(myIntent);
+                }
+            })
+            .setOnCancelListener(new DialogInterface.OnCancelListener(){
+                public void onCancel(DialogInterface dialog){
+                    finish();
+                    }
+                })
+            .create()
+            .show();
+    }
+
+    private void initTTS(){
+        String audioDir = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_audio_dir);
+        Locale ql = settingManager.getQuestionAudioLocale();
+        Locale al = settingManager.getAnswerAudioLocale();
+        if(settingManager.getQuestionUserAudio()){
+            questionTTS = new AudioFileTTS(audioDir, dbName);
+        }
+        else if(ql != null){
+            if(settingManager.getEnableTTSExtended()){
+                questionTTS = new AnyMemoTTSExtended(this, ql);
+            }
+            else{
+                questionTTS = new AnyMemoTTSPlatform(this, ql);
+            }
+        }
+        else{
+            questionTTS = null;
+        }
+        if(settingManager.getAnswerUserAudio()){
+            answerTTS = new AudioFileTTS(audioDir, dbName);
+        }
+        else if(al != null){
+            if(settingManager.getEnableTTSExtended()){
+                answerTTS = new AnyMemoTTSExtended(this, al);
+            }
+            else{
+                answerTTS = new AnyMemoTTSPlatform(this, al);
+            }
+        }
+        else{
+            answerTTS = null;
+        }
+    }
+
 }
 
 

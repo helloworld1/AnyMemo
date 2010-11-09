@@ -44,6 +44,7 @@ public class AnyMemoTTSPlatform implements AnyMemoTTS, TextToSpeech.OnInitListen
 	public AnyMemoTTSPlatform(Context context, Locale locale){
 		myTTS = new TextToSpeech(context, this);
 		myLocale = locale;
+        Log.v(TAG, "init!" + myLocale.toString());
 	}
 
 	
@@ -53,6 +54,7 @@ public class AnyMemoTTSPlatform implements AnyMemoTTS, TextToSpeech.OnInitListen
 	
 	public int sayText(String s){
 		int status;
+        Log.v(TAG, "say it!");
 		// Replace break with period
 		String processed_str = s.replaceAll("\\<br\\>", ". " );
 		// Remove HTML

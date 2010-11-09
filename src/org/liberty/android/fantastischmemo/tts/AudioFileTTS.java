@@ -25,16 +25,27 @@ import java.util.Locale;
 import java.util.HashMap;
 
 import android.content.Context;
-import com.google.tts.TextToSpeechBeta;
-import com.google.tts.TextToSpeechBeta.Engine;
 import android.util.Log;
 
+public class AudioFileTTS implements AnyMemoTTS{
+    private String audioDir;
+    private String dbName;
+    private SpeakWord speakWord;
+    
 
-public interface AnyMemoTTS{
+    public AudioFileTTS(String audiodir, String dbname){
+        audioDir = audiodir;
+        dbName = dbname;
+        speakWord = new SpeakWord(audiodir, dbname);
+    }
 
-    public void shutdown();
-
-    public int sayText(String s);
+    public int sayText(String text){
+        speakWord.speakWord(text);
+        return 0;
+    }
+    public void shutdown(){
+        speakWord.shutdown();
+    }
 }
 
-	
+

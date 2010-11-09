@@ -259,7 +259,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		
 	}
 
-	public boolean getListItems(int id, int windowSize, List<Item> list, int flag, String filter){
+	public ArrayList<Item> getListItems(int id, int windowSize, int flag, String filter){
         /* id: from which ID
          * list: the return list
          * ret: only ret items
@@ -272,6 +272,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
          */
 
 		HashMap<String, String> hm = new HashMap<String, String>();
+        ArrayList<Item> list = new ArrayList<Item>();
 		Cursor result;
 
 		String query = "SELECT learn_tbl._id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, question, answer, note, category FROM dict_tbl INNER JOIN learn_tbl ON dict_tbl._id=learn_tbl._id WHERE dict_tbl._id >= " + id + " ";
@@ -346,7 +347,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			result = myDatabase.rawQuery(query, null);
 		} catch (Exception e) {
 			Log.e(TAG, "Query list items error", e);
-			return false;
+			return null;
 		}
 		if (result.getCount() > 0) {
 			result.moveToFirst();
@@ -386,18 +387,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if(flag == 4){
 		    int remainingSize = windowSize - list.size();
             if(remainingSize > 0){
-                List<Item> retList = new ArrayList<Item>();
                 /* Get the new items (acq = 0) */
-                getListItems(id, remainingSize, retList, 1, filter);
+                ArrayList<Item> retList = getListItems(id, remainingSize, 1, filter);
                 list.addAll(retList);
             }
         }
-        if(list.size() == 0){
-            return false;
-        }
-        else{
-            return true;
-        }
+        return list;
 	}
 	
 	public Item getItemById(int id, int flag, boolean forward, String filter){
@@ -615,8 +610,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	}
 
     public void shuffleDatabase(){
-        List<Item> itemList = new LinkedList<Item>();
-        getListItems(0, -1, itemList, 5, null);
+        List<Item> itemList = getListItems(0, -1, 5, null);
         int count = 1;
         myDatabase.beginTransaction();
         try{
@@ -653,8 +647,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     public void inverseQA(){
-        List<Item> itemList = new LinkedList<Item>();
-        getListItems(0, -1, itemList, 0, null);
+        List<Item> itemList = getListItems(0, -1, 0, null);
         myDatabase.beginTransaction();
         try{
             /* First inverse QA */
@@ -771,10 +764,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             throw new Exception("Invalid fromId in mergeDatabase");
         }
         DatabaseHelper dbHelper2 = new DatabaseHelper(mContext, dbpath, dbname);
-        final ArrayList<Item> items1 = new ArrayList<Item>();
-        final ArrayList<Item> items2 = new ArrayList<Item>();
-        getListItems(fromId + 1, -1, items1, 0, null); 
-        dbHelper2.getListItems(-1, -1, items2, 0, null); 
+        final ArrayList<Item> items1 = getListItems(fromId + 1, -1, 0, null); 
+        final ArrayList<Item> items2 = getListItems(-1, -1, 0, null); 
         dbHelper2.close();
         /* Merge the items1 and items2 */
         final int totalItems = items1.size() + items2.size();

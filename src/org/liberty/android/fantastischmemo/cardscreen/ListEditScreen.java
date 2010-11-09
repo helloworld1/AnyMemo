@@ -78,8 +78,7 @@ public class ListEditScreen extends Activity implements OnItemClickListener{
             public void run(){
                 /* Load the items into memory to display in the list */
                 DatabaseHelper dbHelper = new DatabaseHelper(ListEditScreen.this, dbPath, dbName);
-                final ArrayList<Item> items = new ArrayList<Item>();
-                dbHelper.getListItems(-1, -1, items, 0, null);
+                final ArrayList<Item> items = dbHelper.getListItems(-1, -1, 0, null);
                 dbHelper.close();
                 mHandler.post(new Runnable(){
                     public void run(){

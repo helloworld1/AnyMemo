@@ -171,6 +171,40 @@ public class SettingManager{
         return SpeechControlMethod.parse(speechCtl);
     }
 
+    public Locale getQuestionAudioLocale(){
+        if(questionLocale.length() == 2){
+            if(questionLocale.equals("US")){
+                return Locale.US;
+            }
+            else if(questionLocale.equals("UK")){
+                return Locale.UK;
+            }
+            else{
+                return new Locale(questionLocale.toLowerCase());
+            }
+        }
+        else{
+            return null;
+        }
+    }
+
+    public Locale getAnswerAudioLocale(){
+        if(answerLocale.length() == 2){
+            if(answerLocale.equals("US")){
+                return Locale.US;
+            }
+            else if(answerLocale.equals("UK")){
+                return Locale.UK;
+            }
+            else{
+                return new Locale(answerLocale.toLowerCase());
+            }
+        }
+        else{
+            return null;
+        }
+    }
+
     public boolean getQuestionUserAudio(){
 		if(questionLocale.equals("User Audio")){
             return true;
@@ -239,6 +273,16 @@ public class SettingManager{
         }
         else{
             throw new IllegalStateException();
+        }
+    }
+
+    public void close(){
+        if(dbHelper != null){
+            try{
+                dbHelper.close();
+            }
+            catch(Exception e){
+            }
         }
     }
 

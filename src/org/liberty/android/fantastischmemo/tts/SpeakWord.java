@@ -124,4 +124,10 @@ public class SpeakWord {
 		return true;
 	}
 
+    public void shutdown(){
+        if(mp != null){
+            mp.release();
+        }
+    }
+
 }

@@ -29,9 +29,6 @@
             android:name=".FileBrowser"
             android:configChanges="orientation|keyboardHidden" />
         <activity 
-            android:name=".cardscreen.MemoScreen"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity 
             android:name=".OptionScreen"
             android:configChanges="orientation|keyboardHidden" />
         <activity 
@@ -46,20 +43,26 @@
         <activity 
             android:name=".Downloader" 
             android:configChanges="orientation|keyboardHidden" />
-        <activity
-            android:name=".ListEditScreen"
+        <activity 
+            android:name=".cardscreen.MemoScreen"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity 
+            android:name=".cardscreen.Filter"
             android:configChanges="orientation|keyboardHidden" />
         <activity
-            android:name=".DownloaderAnyMemo"
+            android:name=".cardscreen.ListEditScreen"
             android:configChanges="orientation|keyboardHidden" />
         <activity
-            android:name=".DownloaderFE"
+            android:name=".cardscreen.CardEditor"
             android:configChanges="orientation|keyboardHidden" />
         <activity
-            android:name=".DownloaderSS"
+            android:name=".downloader..DownloaderAnyMemo"
             android:configChanges="orientation|keyboardHidden" />
         <activity
-            android:name=".CardEditor"
+            android:name=".downloader..DownloaderFE"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity
+            android:name=".downloader..DownloaderSS"
             android:configChanges="orientation|keyboardHidden" />
         <receiver
             android:name=".AlarmReceiver"
