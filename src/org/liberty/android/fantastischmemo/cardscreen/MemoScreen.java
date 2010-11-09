@@ -144,6 +144,9 @@ public class MemoScreen extends AMActivity{
         if(answerTTS != null){
             answerTTS.shutdown();
         }
+        if(queueManager != null){
+            queueManager.close();
+        }
         super.onDestroy();
     }
 
@@ -205,6 +208,7 @@ public class MemoScreen extends AMActivity{
             {
                 if(prevItem != null){
                     currentItem = prevItem.clone();
+                    queueManager.insertIntoQueue(currentItem, 0);
                     prevItem = null;
                     flashcardDisplay.updateView(currentItem, false);
                     hideButtons();
@@ -239,8 +243,30 @@ public class MemoScreen extends AMActivity{
                 }
             }
         };
+        View.OnClickListener speakQuestionListener = new View.OnClickListener(){
+            public void onClick(View v){
+                if(currentItem != null){
+                    questionTTS.sayText(currentItem.getQuestion());
+                }
+            }
+        };
+        View.OnClickListener speakAnswerListener = new View.OnClickListener(){
+            public void onClick(View v){
+                if(currentItem != null){
+                    answerTTS.sayText(currentItem.getAnswer());
+                }
+            }
+        };
         flashcardDisplay.setQuestionLayoutClickListener(showAnswerListener);
         flashcardDisplay.setAnswerLayoutClickListener(showAnswerListener);
+        if(settingManager.getSpeechControlMethod() == SettingManager.SpeechControlMethod.TAP || settingManager.getSpeechControlMethod() == SettingManager.SpeechControlMethod.AUTOTAP){
+            flashcardDisplay.setQuestionTextClickListener(speakQuestionListener);
+            flashcardDisplay.setAnswerLayoutClickListener(speakAnswerListener);
+        }
+        else{
+            flashcardDisplay.setQuestionTextClickListener(showAnswerListener);
+            flashcardDisplay.setAnswerTextClickListener(showAnswerListener);
+        }
         Map<String, Button> hm = controlButtons.getButtons();
         for(int i = 0; i < 6; i++){
             Button b = hm.get(Integer.valueOf(i).toString());

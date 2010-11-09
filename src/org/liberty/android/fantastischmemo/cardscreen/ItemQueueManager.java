@@ -136,9 +136,7 @@ class ItemQueueManager{
         if(item.isScheduled() || item.isNew()){
             learnQueue.add(orngItem);
         }
-        else{
-            dbHelper.addOrReplaceItem(item);
-        }
+        dbHelper.addOrReplaceItem(item);
         /* Fill up the queue to its queue size */
         int maxNewId = getMaxQueuedItemId(true);
         int maxRevId = getMaxQueuedItemId(false);
@@ -174,9 +172,43 @@ class ItemQueueManager{
         }
     }
 
+    /* 
+     * If position is -1, the item is inserted into the back of the queue.
+     */
+    public void insertIntoQueue(Item item, int position){
+        if(item == null){
+            throw new NullPointerException("The Item inserted into queue is null");
+        }
+        if(learnQueue == null){
+            throw new NullPointerException("The learnQueue is null");
+        }
+        if(position >= 0 && position <= learnQueue.size()){
+            learnQueue.add(position, item);
+        }
+        else if(position == -1){
+            learnQueue.add(item);
+        }
+        else{
+            throw new IndexOutOfBoundsException("Illegal position to insert");
+        }
+    }
+
+    public void close(){
+        if(dbHelper != null){
+            dbHelper.close();
+        }
+        /* Release memeory */
+        if(learnQueue != null){
+            for(Item i : learnQueue){
+                i = null;
+            }
+        }
+        learnQueue = null;
+    }
+
     private int getMaxQueuedItemId(boolean isNewItem){
         if(learnQueue == null){
-            throw new IllegalStateException("Learning queue is empty");
+            throw new NullPointerException("The learnQueue is null");
         }
         int maxId = -1;
         int id = -1;
@@ -188,6 +220,7 @@ class ItemQueueManager{
         }
         return maxId;
     }
+
 
 
 }
