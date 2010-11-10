@@ -101,7 +101,6 @@ public class MemoScreen extends AMActivity{
     private AnyMemoTTS answerTTS = null;
     private Item currentItem = null;
     private Item prevItem = null;
-    private ItemQueueManager queueManager;
     private Handler mHandler;
     private final int DIALOG_LOADING_PROGRESS = 100;
     private final int ACTIVITY_FILTER = 10;
@@ -109,6 +108,9 @@ public class MemoScreen extends AMActivity{
     private final int ACTIVITY_CARD_TOOLBOX = 12;
     private final int ACTIVITY_DB_TOOLBOX = 13;
     private final int ACTIVITY_GOTO_PREV = 14;
+    private final int ACTIVITY_SETTINGS = 15;
+
+    QueueManager queueManager;
 
 
     @Override
@@ -126,13 +128,17 @@ public class MemoScreen extends AMActivity{
         flashcardDisplay = new FlashcardDisplay(this, settingManager);
         controlButtons = new AnyMemoGradeButtons(this);
         initTTS();
-        queueManager = new ItemQueueManager(this, dbPath, dbName);
+        queueManager = new LearnQueueManager(this, dbPath, dbName);
         queueManager.setFilter(activeFilter);
 
         composeViews();
         hideButtons();
         registerForContextMenu(flashcardDisplay.getView());
         /* Run the learnQueue init in a separate thread */
+        initQueue();
+    }
+
+    void initQueue(){
         showDialog(DIALOG_LOADING_PROGRESS);
         new Thread(){
             public void run(){
@@ -144,8 +150,8 @@ public class MemoScreen extends AMActivity{
                             showNoItemDialog();
                         }
                         else{
-                            flashcardDisplay.updateView(currentItem, false);
                             setListeners();
+                            updateFlashcardView(false);
                         }
                         removeDialog(DIALOG_LOADING_PROGRESS);
                     }
@@ -153,6 +159,8 @@ public class MemoScreen extends AMActivity{
             }
         }.start();
     }
+
+
 
     @Override
     public void onDestroy(){
@@ -212,7 +220,7 @@ public class MemoScreen extends AMActivity{
                 Intent myIntent = new Intent(this, SettingsScreen.class);
                 myIntent.putExtra("dbname", dbName);
                 myIntent.putExtra("dbpath", dbPath);
-                startActivityForResult(myIntent, 1);
+                startActivityForResult(myIntent, ACTIVITY_SETTINGS);
                 return true;
             }
 
@@ -228,21 +236,7 @@ public class MemoScreen extends AMActivity{
 
             case R.id.menuundo:
             {
-                if(prevItem != null){
-                    currentItem = prevItem.clone();
-                    queueManager.insertIntoQueue(currentItem, 0);
-                    prevItem = null;
-                    flashcardDisplay.updateView(currentItem, false);
-                    hideButtons();
-                }
-                else{
-                    new AlertDialog.Builder(this)
-                        .setTitle(getString(R.string.undo_fail_text))
-                        .setMessage(getString(R.string.undo_fail_message))
-                        .setNeutralButton(R.string.ok_text, null)
-                        .create()
-                        .show();
-                }
+                undoItem();
                 return true;
             }
 
@@ -258,6 +252,29 @@ public class MemoScreen extends AMActivity{
 
         return false;
     }
+
+    /* 
+     * When the user select the undo from the menu
+     * this is what to do
+     */
+    protected void undoItem(){
+        if(prevItem != null){
+            currentItem = prevItem.clone();
+            queueManager.insertIntoQueue(currentItem, 0);
+            prevItem = null;
+            updateFlashcardView(false);
+            hideButtons();
+        }
+        else{
+            new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.undo_fail_text))
+                .setMessage(getString(R.string.undo_fail_message))
+                .setNeutralButton(R.string.ok_text, null)
+                .create()
+                .show();
+        }
+    }
+
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
@@ -315,7 +332,7 @@ public class MemoScreen extends AMActivity{
                 Item item = (Item)extras.getSerializable("item");
                 if(item != null){
                     currentItem = item;
-                    flashcardDisplay.updateView(currentItem, false);
+                    updateFlashcardView(false);
                     queueManager.updateQueueItem(currentItem);
                 }
                 break;
@@ -325,6 +342,13 @@ public class MemoScreen extends AMActivity{
                 restartActivity();
                 break;
             }
+
+            case ACTIVITY_SETTINGS:
+            {
+                restartActivity();
+                break;
+            }
+
         }
     }
 
@@ -348,12 +372,19 @@ public class MemoScreen extends AMActivity{
         }
     }
 
+    private void updateFlashcardView(boolean showAnswer){
+        flashcardDisplay.updateView(currentItem, showAnswer);
+        setActivityTitle();
+        setGradeButtonTitle();
+    }
+
+
     private void setListeners(){
         View.OnClickListener showAnswerListener = new View.OnClickListener(){
             public void onClick(View v){
                 if(currentItem != null){
                     showButtons();
-                    flashcardDisplay.updateView(currentItem, true);
+                    updateFlashcardView(true);
                     controlButtons.getView().setVisibility(View.VISIBLE);
                 }
             }
@@ -392,6 +423,9 @@ public class MemoScreen extends AMActivity{
             flashcardDisplay.setQuestionTextClickListener(showAnswerListener);
             flashcardDisplay.setAnswerTextClickListener(showAnswerListener);
         }
+    }
+
+    void setGradeButtonTitle(){
         Map<String, Button> hm = controlButtons.getButtons();
         for(int i = 0; i < 6; i++){
             Button b = hm.get(Integer.valueOf(i).toString());
@@ -399,6 +433,11 @@ public class MemoScreen extends AMActivity{
             b.setText(Integer.valueOf(i).toString() + " +" + currentItem.processAnswer(i, true));
         }
     }
+
+    void setActivityTitle(){
+        setTitle("" + currentItem.getId());
+    }
+
 
     private View.OnClickListener getGradeButtonListener(final int grade){
         return new View.OnClickListener(){
@@ -410,21 +449,18 @@ public class MemoScreen extends AMActivity{
                     showNoItemDialog();
                 }
                 else{
-                    flashcardDisplay.updateView(currentItem, false);
+                    updateFlashcardView(false);
                     hideButtons();
-                    setTitle("" + currentItem.getId());
                 }
             }
         };
     }
 
     private void hideButtons(){
-        flashcardDisplay.updateView(currentItem, false);
         controlButtons.getView().setVisibility(View.INVISIBLE);
     }
 
     private void showButtons(){
-        flashcardDisplay.updateView(currentItem, false);
         controlButtons.getView().setVisibility(View.VISIBLE);
     }
 

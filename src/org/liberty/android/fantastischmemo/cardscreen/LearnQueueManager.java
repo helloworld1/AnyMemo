@@ -84,7 +84,7 @@ import android.content.res.Configuration;
 import android.view.inputmethod.InputMethodManager;
 import android.database.SQLException;
 
-class ItemQueueManager{
+class LearnQueueManager implements QueueManager{
     private Context mContext;
     private String dbPath;
     private String dbName;
@@ -93,7 +93,7 @@ class ItemQueueManager{
     private int queueSize = 10;
     private ArrayList<Item> learnQueue = null;
 
-    public ItemQueueManager(Context context, String dbpath, String dbname) throws SQLException{
+    public LearnQueueManager(Context context, String dbpath, String dbname) throws SQLException{
         mContext = context;
         dbPath = dbpath;
         dbName = dbname;
