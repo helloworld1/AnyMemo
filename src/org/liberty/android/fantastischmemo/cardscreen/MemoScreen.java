@@ -276,6 +276,7 @@ public class MemoScreen extends AMActivity{
                 myIntent.putExtra("dbpath", this.dbPath);
                 myIntent.putExtra("item", currentItem);
                 startActivityForResult(myIntent, ACTIVITY_EDIT);
+                return true;
             }
             case R.id.menu_context_gotoprev:
             {
@@ -284,6 +285,7 @@ public class MemoScreen extends AMActivity{
                 myIntent.putExtra("dbpath", this.dbPath);
                 myIntent.putExtra("id", currentItem.getId());
                 startActivityForResult(myIntent, ACTIVITY_GOTO_PREV);
+                return true;
             }
 
             default:
@@ -305,6 +307,7 @@ public class MemoScreen extends AMActivity{
                 Bundle extras = data.getExtras();
                 activeFilter = extras.getString("filter");
                 restartActivity();
+                break;
             }
             case ACTIVITY_EDIT:
             {
@@ -315,10 +318,12 @@ public class MemoScreen extends AMActivity{
                     flashcardDisplay.updateView(currentItem, false);
                     queueManager.updateQueueItem(currentItem);
                 }
+                break;
             }
             case ACTIVITY_GOTO_PREV:
             {
                 restartActivity();
+                break;
             }
         }
     }
