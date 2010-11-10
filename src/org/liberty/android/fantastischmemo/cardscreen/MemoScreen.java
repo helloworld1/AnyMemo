@@ -56,6 +56,7 @@ import android.text.Html;
 import android.text.ClipboardManager;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -125,6 +126,7 @@ public class MemoScreen extends AMActivity{
 
         composeViews();
         hideButtons();
+        registerForContextMenu(flashcardDisplay.getView());
         /* Run the learnQueue init in a separate thread */
         showDialog(DIALOG_LOADING_PROGRESS);
         new Thread(){
@@ -253,6 +255,31 @@ public class MemoScreen extends AMActivity{
     }
 
     @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.memoscreen_context_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem menuitem) {
+        switch(menuitem.getItemId()) {
+            case R.id.menu_edit:
+            {
+                return true;
+            }
+            default:
+            {
+                return super.onContextItemSelected(menuitem);
+            }
+        }
+    }
+
+
+
+
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode ==Activity.RESULT_CANCELED){
@@ -311,6 +338,16 @@ public class MemoScreen extends AMActivity{
                 }
             }
         };
+        View.OnLongClickListener openContextMenuListener = new View.OnLongClickListener(){
+            public boolean onLongClick(View v){
+                MemoScreen.this.openContextMenu(flashcardDisplay.getView());
+                Log.v(TAG, "Open Menu!");
+                return true;
+            }
+        };
+        flashcardDisplay.setQuestionLayoutLongClickListener(openContextMenuListener);
+        flashcardDisplay.setAnswerLayoutLongClickListener(openContextMenuListener);
+
         flashcardDisplay.setQuestionLayoutClickListener(showAnswerListener);
         flashcardDisplay.setAnswerLayoutClickListener(showAnswerListener);
         if(settingManager.getSpeechControlMethod() == SettingManager.SpeechControlMethod.TAP || settingManager.getSpeechControlMethod() == SettingManager.SpeechControlMethod.AUTOTAP){
