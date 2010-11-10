@@ -103,6 +103,7 @@ public class MemoScreen extends AMActivity{
     private ItemQueueManager queueManager;
     private Handler mHandler;
     private final int DIALOG_LOADING_PROGRESS = 100;
+    private final int ACTIVITY_FILTER = 10;
 
     @Override
 	public void onCreate(Bundle savedInstanceState){
@@ -124,6 +125,7 @@ public class MemoScreen extends AMActivity{
 
         composeViews();
         hideButtons();
+        /* Run the learnQueue init in a separate thread */
         showDialog(DIALOG_LOADING_PROGRESS);
         new Thread(){
             public void run(){
@@ -239,12 +241,33 @@ public class MemoScreen extends AMActivity{
 
             case R.id.menu_memo_filter:
             {
+                Intent myIntent = new Intent(this, Filter.class);
+                myIntent.putExtra("dbname", dbName);
+                myIntent.putExtra("dbpath", dbPath);
+                startActivityForResult(myIntent, ACTIVITY_FILTER);
                 return true;
             }
         }
 
         return false;
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode ==Activity.RESULT_CANCELED){
+            return;
+        }
+        switch(requestCode){
+            case ACTIVITY_FILTER:{
+                Bundle extras = data.getExtras();
+                activeFilter = extras.getString("filter");
+                restartActivity();
+            }
+        }
+    }
+
+
 
     @Override
     public Dialog onCreateDialog(int id){

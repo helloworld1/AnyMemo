@@ -158,6 +158,16 @@ public class FlashcardDisplay implements TagHandler, ImageGetter{
         answerView.setOnClickListener(l);
     }
 
+    public void setQuestionLayoutLongClickListener(View.OnLongClickListener l){
+        questionLayout.setOnLongClickListener(l);
+        questionView.setOnLongClickListener(l);
+    }
+
+    public void setAnswerLayoutLongClickListener(View.OnLongClickListener l){
+        answerLayout.setOnLongClickListener(l);
+        answerView.setOnLongClickListener(l);
+    }
+
 
 	protected void displayQA(Item item) {
 		/* Display question and answer according to item */
