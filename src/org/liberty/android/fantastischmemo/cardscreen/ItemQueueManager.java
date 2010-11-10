@@ -173,6 +173,26 @@ class ItemQueueManager{
     }
 
     /* 
+     * Replace the item in the queue with the same ID and
+     * return trueif not, it will do nothing and return false
+     */
+    public boolean updateQueueItem(Item item){
+        int foundIndex = -1;
+        for(Item i : learnQueue){
+            if(i.getId() == item.getId()){
+                foundIndex = learnQueue.lastIndexOf(i);
+            }
+        }
+        if(foundIndex == -1){
+            return false;
+        }
+        else{
+            learnQueue.set(foundIndex, item);
+            return true;
+        }
+    }
+
+    /* 
      * If position is -1, the item is inserted into the back of the queue.
      */
     public void insertIntoQueue(Item item, int position){

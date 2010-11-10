@@ -105,6 +105,11 @@ public class MemoScreen extends AMActivity{
     private Handler mHandler;
     private final int DIALOG_LOADING_PROGRESS = 100;
     private final int ACTIVITY_FILTER = 10;
+    private final int ACTIVITY_EDIT = 11;
+    private final int ACTIVITY_CARD_TOOLBOX = 12;
+    private final int ACTIVITY_DB_TOOLBOX = 13;
+    private final int ACTIVITY_GOTO_PREV = 14;
+
 
     @Override
 	public void onCreate(Bundle savedInstanceState){
@@ -264,20 +269,29 @@ public class MemoScreen extends AMActivity{
     @Override
     public boolean onContextItemSelected(MenuItem menuitem) {
         switch(menuitem.getItemId()) {
-            case R.id.menu_edit:
+            case R.id.menu_context_edit:
             {
-                return true;
+                Intent myIntent = new Intent(this, CardEditor.class);
+                myIntent.putExtra("dbname", this.dbName);
+                myIntent.putExtra("dbpath", this.dbPath);
+                myIntent.putExtra("item", currentItem);
+                startActivityForResult(myIntent, ACTIVITY_EDIT);
             }
+            case R.id.menu_context_gotoprev:
+            {
+                Intent myIntent = new Intent(this, CardEditor.class);
+                myIntent.putExtra("dbname", this.dbName);
+                myIntent.putExtra("dbpath", this.dbPath);
+                myIntent.putExtra("id", currentItem.getId());
+                startActivityForResult(myIntent, ACTIVITY_GOTO_PREV);
+            }
+
             default:
             {
                 return super.onContextItemSelected(menuitem);
             }
         }
     }
-
-
-
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -286,9 +300,24 @@ public class MemoScreen extends AMActivity{
             return;
         }
         switch(requestCode){
-            case ACTIVITY_FILTER:{
+            case ACTIVITY_FILTER:
+            {
                 Bundle extras = data.getExtras();
                 activeFilter = extras.getString("filter");
+                restartActivity();
+            }
+            case ACTIVITY_EDIT:
+            {
+                Bundle extras = data.getExtras();
+                Item item = (Item)extras.getSerializable("item");
+                if(item != null){
+                    currentItem = item;
+                    flashcardDisplay.updateView(currentItem, false);
+                    queueManager.updateQueueItem(currentItem);
+                }
+            }
+            case ACTIVITY_GOTO_PREV:
+            {
                 restartActivity();
             }
         }
