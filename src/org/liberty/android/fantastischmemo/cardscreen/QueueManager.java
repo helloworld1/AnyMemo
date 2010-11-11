@@ -28,10 +28,6 @@ import org.liberty.android.fantastischmemo.*;
 interface QueueManager{
     /* before everything */
     public boolean initQueue();
-    /* filter the database */
-    public void setFilter(String filter);
-    /* queue size */
-    public void setQueueSize(int sz);
     /* give the next item according to current one */
     public Item updateAndNext(Item item);
     /* Update the item with the same id */

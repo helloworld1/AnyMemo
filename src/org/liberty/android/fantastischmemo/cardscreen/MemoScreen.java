@@ -91,17 +91,8 @@ import android.net.Uri;
 
 public class MemoScreen extends AMActivity{
     private final static String TAG = "org.liberty.android.fantastischmemo.cardscreen.MemoScreen";
-    private String dbPath = "";
-    private String dbName = "";
-    private String activeFilter = "";
-    private FlashcardDisplay flashcardDisplay;
-    private ControlButtons controlButtons;
-    private SettingManager settingManager;
     private AnyMemoTTS questionTTS = null;
     private AnyMemoTTS answerTTS = null;
-    private Item currentItem = null;
-    private Item prevItem = null;
-    private Handler mHandler;
     private final int DIALOG_LOADING_PROGRESS = 100;
     private final int ACTIVITY_FILTER = 10;
     private final int ACTIVITY_EDIT = 11;
@@ -110,6 +101,15 @@ public class MemoScreen extends AMActivity{
     private final int ACTIVITY_GOTO_PREV = 14;
     private final int ACTIVITY_SETTINGS = 15;
 
+    Handler mHandler;
+    Item currentItem = null;
+    Item prevItem = null;
+    String dbPath = "";
+    String dbName = "";
+    String activeFilter = "";
+    FlashcardDisplay flashcardDisplay;
+    SettingManager settingManager;
+    ControlButtons controlButtons;
     QueueManager queueManager;
 
 
@@ -128,14 +128,22 @@ public class MemoScreen extends AMActivity{
         flashcardDisplay = new FlashcardDisplay(this, settingManager);
         controlButtons = new AnyMemoGradeButtons(this);
         initTTS();
-        queueManager = new LearnQueueManager(this, dbPath, dbName);
-        queueManager.setFilter(activeFilter);
+
 
         composeViews();
         hideButtons();
         registerForContextMenu(flashcardDisplay.getView());
         /* Run the learnQueue init in a separate thread */
+        createQueue();
         initQueue();
+    }
+
+    void createQueue(){
+        queueManager =new LearnQueueManager.Builder(this, dbPath, dbName)
+            .setFilter(activeFilter)
+            .setQueueSize(settingManager.getLearningQueueSize())
+            .setShuffle(settingManager.getShufflingCards())
+            .build();
     }
 
     void initQueue(){
@@ -150,7 +158,7 @@ public class MemoScreen extends AMActivity{
                             showNoItemDialog();
                         }
                         else{
-                            setListeners();
+                            setViewListeners();
                             updateFlashcardView(false);
                         }
                         removeDialog(DIALOG_LOADING_PROGRESS);
@@ -372,14 +380,15 @@ public class MemoScreen extends AMActivity{
         }
     }
 
-    private void updateFlashcardView(boolean showAnswer){
+    void updateFlashcardView(boolean showAnswer){
         flashcardDisplay.updateView(currentItem, showAnswer);
         setActivityTitle();
         setGradeButtonTitle();
+        setGradeButtonListeners();
     }
 
 
-    private void setListeners(){
+    void setViewListeners(){
         View.OnClickListener showAnswerListener = new View.OnClickListener(){
             public void onClick(View v){
                 if(currentItem != null){
@@ -429,8 +438,15 @@ public class MemoScreen extends AMActivity{
         Map<String, Button> hm = controlButtons.getButtons();
         for(int i = 0; i < 6; i++){
             Button b = hm.get(Integer.valueOf(i).toString());
-            b.setOnClickListener(getGradeButtonListener(i));
             b.setText(Integer.valueOf(i).toString() + " +" + currentItem.processAnswer(i, true));
+        }
+    }
+
+    void setGradeButtonListeners(){
+        Map<String, Button> hm = controlButtons.getButtons();
+        for(int i = 0; i < 6; i++){
+            Button b = hm.get(Integer.valueOf(i).toString());
+            b.setOnClickListener(getGradeButtonListener(i));
         }
     }
 
@@ -491,7 +507,7 @@ public class MemoScreen extends AMActivity{
         startActivity(myIntent);
     }
 
-    private void showNoItemDialog(){
+    void showNoItemDialog(){
         new AlertDialog.Builder(this)
             .setTitle(this.getString(R.string.memo_no_item_title))
             .setMessage(this.getString(R.string.memo_no_item_message))
@@ -507,10 +523,9 @@ public class MemoScreen extends AMActivity{
                 public void onClick(DialogInterface arg0, int arg1) {
                     finish();
                     Intent myIntent = new Intent();
-                    myIntent.setClass(MemoScreen.this, MemoScreen.class);
+                    myIntent.setClass(MemoScreen.this, CramMemoScreen.class);
                     myIntent.putExtra("dbname", dbName);
                     myIntent.putExtra("dbpath", dbPath);
-                    myIntent.putExtra("learn_ahead", true);
                     startActivity(myIntent);
                 }
             })

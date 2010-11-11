@@ -85,7 +85,8 @@ import android.content.res.Configuration;
 import android.view.inputmethod.InputMethodManager;
 import android.database.SQLException;
 
-class LearnQueueManager implements QueueManager{
+
+class CramQueueManager implements QueueManager{
     private Context mContext;
     private String dbPath;
     private String dbName;
@@ -94,7 +95,6 @@ class LearnQueueManager implements QueueManager{
     private int queueSize;
     private boolean shuffleCards;
     private ArrayList<Item> learnQueue = null;
-
 
     public static class Builder{
         private Context mContext;
@@ -125,12 +125,12 @@ class LearnQueueManager implements QueueManager{
             return this;
         }
 
-        public LearnQueueManager build(){
-            return new LearnQueueManager(this);
+        public CramQueueManager build(){
+            return new CramQueueManager(this);
         }
     }
 
-    public LearnQueueManager(Builder builder) throws SQLException{
+    public CramQueueManager(Builder builder) throws SQLException{
         mContext = builder.mContext;
         dbPath = builder.dbPath;
         dbName = builder.dbName;
@@ -141,8 +141,17 @@ class LearnQueueManager implements QueueManager{
     }
 
 
+    public void setFilter(String filter){
+        activeFilter = filter;
+    }
+
+    public void setQueueSize(int sz){
+        queueSize = sz;
+    }
+
     public boolean initQueue(){
-        learnQueue = dbHelper.getListItems(1, queueSize, 4, activeFilter);
+        /* fetch the item ahead of time */
+        learnQueue = dbHelper.getListItems(1, queueSize, 3, activeFilter);
         if(learnQueue == null || learnQueue.size() == 0){
             return false;
         }
@@ -150,14 +159,6 @@ class LearnQueueManager implements QueueManager{
             return true;
         }
     }
-
-    /*
-     * update current item and remove it in the queue
-     * if the current item is not learned, this method will put it at the 
-     * end of the queue. If not, this method will pull another new card from
-     * the database
-     * The item parameter is the null, it will return current head of queue
-     */
 
     public Item updateAndNext(Item item){
         if(learnQueue == null || learnQueue.size() == 0){
@@ -179,31 +180,9 @@ class LearnQueueManager implements QueueManager{
         }
         dbHelper.addOrReplaceItem(item);
         /* Fill up the queue to its queue size */
-        int maxNewId = getMaxQueuedItemId(true);
-        int maxRevId = getMaxQueuedItemId(false);
-        boolean fetchRevFlag = true;
-        /* New item in database */
         while(learnQueue.size() < queueSize){
-            if(fetchRevFlag == true){
-                Item newItemFromDb = dbHelper.getItemById(maxRevId + 1, 2, true, activeFilter);
-                if(newItemFromDb == null){
-                    fetchRevFlag = false;
-                }
-                else{
-                    learnQueue.add(newItemFromDb);
-                    maxRevId = newItemFromDb.getId();
-                }
-            }
-            else{
-                Item newItemFromDb = dbHelper.getItemById(maxNewId + 1, 1, true, activeFilter);
-                if(newItemFromDb != null){
-                    learnQueue.add(newItemFromDb);
-                    maxNewId = newItemFromDb.getId();
-                }
-                else{
-                    break;
-                }
-            }
+            Item newItemFromDb = dbHelper.getItemById(0, 3, true, activeFilter);
+            learnQueue.add(newItemFromDb);
         }
         if(learnQueue.size() > 0){
             return learnQueue.get(0);
@@ -266,23 +245,7 @@ class LearnQueueManager implements QueueManager{
         }
         learnQueue = null;
     }
-
-    private int getMaxQueuedItemId(boolean isNewItem){
-        if(learnQueue == null){
-            throw new NullPointerException("The learnQueue is null");
-        }
-        int maxId = -1;
-        int id = -1;
-        for(Item item : learnQueue){
-            id = item.getId();
-            if(id > maxId && (isNewItem ? item.isNew() : !item.isNew())){
-                maxId = id;
-            }
-        }
-        return maxId;
-    }
-
-
-
 }
+
+
 
