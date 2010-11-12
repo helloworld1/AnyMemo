@@ -259,7 +259,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		
 	}
 
-	public ArrayList<Item> getListItems(int id, int windowSize, int flag, String filter){
+	public List<Item> getListItems(int id, int windowSize, int flag, String filter){
         /* id: from which ID
          * list: the return list
          * ret: only ret items
@@ -272,7 +272,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
          */
 
 		HashMap<String, String> hm = new HashMap<String, String>();
-        ArrayList<Item> list = new ArrayList<Item>();
+        List<Item> list = new ArrayList<Item>();
 		Cursor result;
 
 		String query = "SELECT learn_tbl._id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, question, answer, note, category FROM dict_tbl INNER JOIN learn_tbl ON dict_tbl._id=learn_tbl._id WHERE dict_tbl._id >= " + id + " ";
@@ -388,7 +388,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		    int remainingSize = windowSize - list.size();
             if(remainingSize > 0){
                 /* Get the new items (acq = 0) */
-                ArrayList<Item> retList = getListItems(id, remainingSize, 1, filter);
+                List<Item> retList = getListItems(id, remainingSize, 1, filter);
                 list.addAll(retList);
             }
         }
@@ -703,7 +703,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void setRecentFilters(String newFilter){
         /* Store from the newest to the oldest*/
-        ArrayList<String> filterList = getRecentFilters();
+        List<String> filterList = getRecentFilters();
         JSONArray jsonFilters = null;
         String storedFilter;
         if(filterList == null){
@@ -725,10 +725,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         setSettings(hm);
     }
 
-    public ArrayList<String> getRecentFilters(){
+    public List<String> getRecentFilters(){
         HashMap<String, String> hm = getSettings();
         String jsonStr = hm.get("recent_filters_json");
-        ArrayList<String> filterList;
+        List<String> filterList;
         if(jsonStr == null){
             return null;
         }
@@ -764,8 +764,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             throw new Exception("Invalid fromId in mergeDatabase");
         }
         DatabaseHelper dbHelper2 = new DatabaseHelper(mContext, dbpath, dbname);
-        final ArrayList<Item> items1 = getListItems(fromId + 1, -1, 0, null); 
-        final ArrayList<Item> items2 = getListItems(-1, -1, 0, null); 
+        final List<Item> items1 = getListItems(fromId + 1, -1, 0, null); 
+        final List<Item> items2 = getListItems(-1, -1, 0, null); 
         dbHelper2.close();
         /* Merge the items1 and items2 */
         final int totalItems = items1.size() + items2.size();

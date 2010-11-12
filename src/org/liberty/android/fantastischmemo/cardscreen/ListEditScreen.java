@@ -46,7 +46,7 @@ import android.preference.PreferenceManager;
 import android.content.res.Configuration;
 
 
-import java.util.ArrayList;
+import java.util.List;
 
 
 public class ListEditScreen extends Activity implements OnItemClickListener{
@@ -78,7 +78,7 @@ public class ListEditScreen extends Activity implements OnItemClickListener{
             public void run(){
                 /* Load the items into memory to display in the list */
                 DatabaseHelper dbHelper = new DatabaseHelper(ListEditScreen.this, dbPath, dbName);
-                final ArrayList<Item> items = dbHelper.getListItems(-1, -1, 0, null);
+                final List<Item> items = dbHelper.getListItems(-1, -1, 0, null);
                 dbHelper.close();
                 mHandler.post(new Runnable(){
                     public void run(){
@@ -119,11 +119,11 @@ public class ListEditScreen extends Activity implements OnItemClickListener{
     }
 
     private class ItemListAdapter extends ArrayAdapter<Item> implements SectionIndexer{
-        private ArrayList<Item> mItems;
+        private List<Item> mItems;
         /* quick index sections */
         private String[] sections;
 
-        public ItemListAdapter(Context context, int textViewResourceId, ArrayList<Item> items){
+        public ItemListAdapter(Context context, int textViewResourceId, List<Item> items){
             super(context, textViewResourceId, items);
             mItems = items;
             int sectionSize = mItems.size() / 100;

@@ -35,6 +35,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.Date;
+import java.util.List;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -112,7 +113,7 @@ public class SettingManager{
     private boolean copyClipboard = true;
     private String questionTypeface = "";
     private String answerTypeface = "";
-    private ArrayList<String> filters;
+    private List<String> filters;
     private String audioLocation = "";
     private int learningQueueSize = 10;
     private boolean shufflingCards = false;
@@ -121,7 +122,7 @@ public class SettingManager{
     private boolean fullscreenMode = false;
     /* The colors for various elements
      * null means default color */
-    protected ArrayList<Integer> colors = null;
+    protected List<Integer> colors = null;
 
     public SettingManager(Context context){
         mContext = context;
@@ -235,11 +236,11 @@ public class SettingManager{
         return answerTypeface;
     }
 
-    public ArrayList<String> getFilters(){
+    public List<String> getFilters(){
         return filters;
     }
 
-    public ArrayList<Integer> getColors(){
+    public List<Integer> getColors(){
         return colors;
     }
 

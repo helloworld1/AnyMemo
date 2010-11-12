@@ -34,6 +34,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Date;
 import java.util.Collections;
+import java.util.List;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -94,7 +95,7 @@ class CramQueueManager implements QueueManager{
     private String activeFilter;
     private int queueSize;
     private boolean shuffleCards;
-    private ArrayList<Item> learnQueue = null;
+    private List<Item> learnQueue = null;
 
     public static class Builder{
         private Context mContext;

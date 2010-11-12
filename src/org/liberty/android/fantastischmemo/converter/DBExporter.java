@@ -65,7 +65,7 @@ public class DBExporter{
         if(outtxt.checkError()){
             throw new IOException("Can't open: " + fullpath);
         }
-        ArrayList<Item> itemList = new ArrayList<Item>();
+        List<Item> itemList = new ArrayList<Item>();
         itemList = dbHelper.getListItems(1, -1, 0, null);
         if(itemList == null || itemList.size() == 0){
             throw new IOException("Can't retrieve items for database: " + dbPath + "/" + dbName);
@@ -82,7 +82,7 @@ public class DBExporter{
         String fullpath = dbPath + "/" + dbName.replaceAll(".db", ".txt");
 
         CSVWriter writer = new CSVWriter(new FileWriter(fullpath), '\t');
-        ArrayList<Item> itemList = new ArrayList<Item>();
+        List<Item> itemList = new ArrayList<Item>();
         itemList = dbHelper.getListItems(1, -1, 0, null);
         if(itemList == null || itemList.size() == 0){
             throw new IOException("Can't retrieve items for database: " + dbPath + "/" + dbName);
@@ -102,7 +102,7 @@ public class DBExporter{
         String fullpath = dbPath + "/" + dbName.replaceAll(".db", ".csv");
 
         CSVWriter writer = new CSVWriter(new FileWriter(fullpath));
-        ArrayList<Item> itemList = new ArrayList<Item>();
+        List<Item> itemList = new ArrayList<Item>();
         itemList = dbHelper.getListItems(1, -1, 0, null);
         if(itemList == null || itemList.size() == 0){
             throw new IOException("Can't retrieve items for database: " + dbPath + "/" + dbName);
@@ -126,7 +126,7 @@ public class DBExporter{
         if(outxml.checkError()){
             throw new IOException("Can't open: " + fullpath);
         }
-        ArrayList<Item> itemList = new ArrayList<Item>();
+        List<Item> itemList = new ArrayList<Item>();
         itemList = dbHelper.getListItems(1, -1, 0, null);
         if(itemList == null || itemList.size() == 0){
             throw new IOException("Can't retrieve items for database: " + dbPath + "/" + dbName);

@@ -29,6 +29,7 @@ import java.io.FileInputStream;
 import java.net.URL;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -93,7 +94,7 @@ class LearnQueueManager implements QueueManager{
     private String activeFilter;
     private int queueSize;
     private boolean shuffleCards;
-    private ArrayList<Item> learnQueue = null;
+    private List<Item> learnQueue = null;
 
 
     public static class Builder{
@@ -130,7 +131,7 @@ class LearnQueueManager implements QueueManager{
         }
     }
 
-    public LearnQueueManager(Builder builder) throws SQLException{
+    private LearnQueueManager(Builder builder) throws SQLException{
         mContext = builder.mContext;
         dbPath = builder.dbPath;
         dbName = builder.dbName;

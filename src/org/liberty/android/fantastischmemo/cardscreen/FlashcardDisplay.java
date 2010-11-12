@@ -28,7 +28,7 @@ import java.io.InputStream;
 import java.io.FileInputStream;
 import java.net.URL;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
@@ -133,7 +133,7 @@ public class FlashcardDisplay implements TagHandler, ImageGetter{
             return;
         }
         float qaRatio = settingManager.getQARatio();
-        ArrayList<Integer> colors = settingManager.getColors();
+        List<Integer> colors = settingManager.getColors();
         setQARatio(qaRatio);
         setScreenColor(colors);
         displayQA(item);
@@ -263,7 +263,7 @@ public class FlashcardDisplay implements TagHandler, ImageGetter{
 
 
     
-    private void setScreenColor(ArrayList<Integer> colors){
+    private void setScreenColor(List<Integer> colors){
         // Set both text and the background color
         if(colors != null){
             questionView.setTextColor(colors.get(0));

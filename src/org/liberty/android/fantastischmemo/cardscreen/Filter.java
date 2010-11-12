@@ -33,6 +33,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.Date;
+import java.util.List;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -98,7 +99,7 @@ public class Filter extends Activity implements View.OnClickListener{
     private Button cancelButton;
     private String dbPath;
     private String dbName;
-    private ArrayList<String> filterArray;
+    private List<String> filterArray;
 
 
     @Override
