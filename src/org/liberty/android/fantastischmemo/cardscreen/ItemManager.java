@@ -173,6 +173,7 @@ public class ItemManager{
 
     public Item insert(Item newItem, int id){
         if(newItem != null){
+            maxId += 1;
             newItem.setId(id);
             dbHelper.insertItem(newItem, id); 
         }

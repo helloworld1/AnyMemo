@@ -294,6 +294,7 @@ public class MemoScreen extends AMActivity{
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.memoscreen_context_menu, menu);
+        menu.setHeaderTitle(R.string.menu_text);
     }
 
     @Override

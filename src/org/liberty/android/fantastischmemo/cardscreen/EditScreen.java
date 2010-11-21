@@ -49,6 +49,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.ContextMenu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Display;
@@ -91,6 +92,7 @@ public class EditScreen extends AMActivity{
 
     Handler mHandler;
     Item currentItem = null;
+    Item savedItem = null;
     Item prevItem = null;
     String dbPath = "";
     String dbName = "";
@@ -177,6 +179,41 @@ public class EditScreen extends AMActivity{
                 }
                 restartActivity();
                 break;
+            }
+        }
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.editscreen_context_menu, menu);
+        menu.setHeaderTitle(R.string.menu_text);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem menuitem) {
+        switch(menuitem.getItemId()) {
+            case R.id.menu_context_copy:
+            {
+                savedItem = currentItem.clone();
+                return true;
+            }
+            case R.id.menu_context_paste:
+            {
+                if(savedItem != null){
+                    itemManager.insert(savedItem, currentItem.getId());
+                    currentItem = savedItem;
+                    flashcardDisplay.updateView(currentItem);
+                    updateTitle();
+                }
+
+                return true;
+            }
+
+            default:
+            {
+                return super.onContextItemSelected(menuitem);
             }
         }
     }
@@ -317,32 +354,33 @@ public class EditScreen extends AMActivity{
         private static final int SWIPE_MIN_DISTANCE = 120;
         private static final int SWIPE_MAX_OFF_PATH = 250;
         private static final int SWIPE_THRESHOLD_VELOCITY = 200;
+
+        @Override 
+        public boolean onDown(MotionEvent e){
+            /* Trick: Prevent the menu to popup twice */
+            return true;
+        }
         @Override 
         public void onLongPress(MotionEvent e){
-            //MemoScreen.this.openContextMenu(flashcardDisplay.getView());
+            closeContextMenu();
+            EditScreen.this.openContextMenu(flashcardDisplay.getView());
             Log.v(TAG, "Open Menu!");
         }
-        @Override  
-        public boolean onDown(MotionEvent e) {  
-            Log.v(TAG, "onDown");  
-            return true;  
-        } 
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             try {
                 if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
                     return false;
-                // right to left swipe
                 if(e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                    //Toast.makeText(EditScreen.this, "Left Swipe", Toast.LENGTH_SHORT).show();
+                    /* Swipe Right to Left event */
                     gotoPrev();
                 }  else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                    //Toast.makeText(EditScreen.this, "Right Swipe", Toast.LENGTH_SHORT).show();
+                    /* Swipe Left to Right event */
                     gotoNext();
                 }
             } catch (Exception e) {
-                // nothing
+                Log.e(TAG, "Error handling gesture left/right event", e);
             }
             return false;
         }

@@ -174,9 +174,8 @@ public class FlashcardDisplay implements TagHandler, ImageGetter{
     }
 
     public void setScreenOnTouchListener(View.OnTouchListener l){
-        questionLayout.setOnTouchListener(l);
+        flashcardView.setOnTouchListener(l);
         questionView.setOnTouchListener(l);
-        answerLayout.setOnTouchListener(l);
         answerView.setOnTouchListener(l);
     }
 
