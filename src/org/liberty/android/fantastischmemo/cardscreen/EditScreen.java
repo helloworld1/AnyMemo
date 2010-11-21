@@ -151,6 +151,12 @@ public class EditScreen extends AMActivity{
         if(settingManager != null){
             settingManager.close();
         }
+        if(questionTTS != null){
+            questionTTS.shutdown();
+        }
+        if(answerTTS != null){
+            answerTTS.shutdown();
+        }
         super.onDestroy();
     }
 
@@ -307,11 +313,15 @@ public class EditScreen extends AMActivity{
     };
 
 
-
     private GestureDetector.OnGestureListener gestureListener = new GestureDetector.SimpleOnGestureListener(){
         private static final int SWIPE_MIN_DISTANCE = 120;
         private static final int SWIPE_MAX_OFF_PATH = 250;
         private static final int SWIPE_THRESHOLD_VELOCITY = 200;
+        @Override 
+        public void onLongPress(MotionEvent e){
+            //MemoScreen.this.openContextMenu(flashcardDisplay.getView());
+            Log.v(TAG, "Open Menu!");
+        }
         @Override  
         public boolean onDown(MotionEvent e) {  
             Log.v(TAG, "onDown");  
