@@ -124,18 +124,23 @@ public class MemoScreen extends AMActivity{
             dbName = extras.getString("dbname");
             activeFilter = extras.getString("active_filter");
         }
-        settingManager = new SettingManager(this, dbPath, dbName);
-        flashcardDisplay = new FlashcardDisplay(this, settingManager);
-        controlButtons = new AnyMemoGradeButtons(this);
-        initTTS();
+        try{
+            settingManager = new SettingManager(this, dbPath, dbName);
+            flashcardDisplay = new FlashcardDisplay(this, settingManager);
+            controlButtons = new AnyMemoGradeButtons(this);
+            initTTS();
 
 
-        composeViews();
-        hideButtons();
-        registerForContextMenu(flashcardDisplay.getView());
-        /* Run the learnQueue init in a separate thread */
-        createQueue();
-        initQueue();
+            composeViews();
+            hideButtons();
+            registerForContextMenu(flashcardDisplay.getView());
+            /* Run the learnQueue init in a separate thread */
+            createQueue();
+            initQueue();
+        }
+        catch(Exception e){
+            AMGUIUtility.displayException(this, getString(R.string.open_database_error_title), getString(R.string.open_database_error_message), e);
+        }
     }
 
     void createQueue(){

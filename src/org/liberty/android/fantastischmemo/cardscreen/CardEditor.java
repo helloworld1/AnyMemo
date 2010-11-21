@@ -101,6 +101,12 @@ public class CardEditor extends Activity implements View.OnClickListener{
         btnCancel = (Button)findViewById(R.id.edit_dialog_button_cancel);
         btnSave.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
+        if(currentItem == null){
+            currentItem = new Item();
+             /* We set -1 here if it is a new item
+             * this will be changed later when the dbHelper is initialized*/
+            currentItem.setId(-1);
+        }
 
         questionEdit.setText(currentItem.getQuestion());
         answerEdit.setText(currentItem.getAnswer());
@@ -119,6 +125,10 @@ public class CardEditor extends Activity implements View.OnClickListener{
             currentItem.setData(hm);
             try{
                 DatabaseHelper dbHelper = new DatabaseHelper(this, dbPath, dbName);
+                /* Here we check if the item is newly created */
+                if(currentItem.getId() == -1){
+                    currentItem.setId(dbHelper.getNewId());
+                }
                 dbHelper.addOrReplaceItem(currentItem);
                 dbHelper.close();
             }

@@ -148,7 +148,7 @@ public class ItemManager{
         int currentId = currentItem.getId();
 
         if(totalItemNo > 0){
-            nextItem = dbHelper.getItemById(currentId, 0, true, activeFilter);
+            nextItem = dbHelper.getItemById(currentId + 1, 0, true, activeFilter);
             if(nextItem == null){
                 nextItem = dbHelper.getItemById(0, 0, true, activeFilter);
             }

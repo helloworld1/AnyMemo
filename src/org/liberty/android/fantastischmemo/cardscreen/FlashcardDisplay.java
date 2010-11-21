@@ -128,6 +128,11 @@ public class FlashcardDisplay implements TagHandler, ImageGetter{
         return answerView;
     }
 
+    /* Update view with answer shown */
+    public void updateView(Item item){
+        updateView(item, true);
+    }
+
 	public void updateView(Item item, boolean showAnswer) {
         if(item == null){
             return;

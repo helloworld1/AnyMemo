@@ -269,4 +269,5 @@
     <string name="donate_summary">You can donate AnyMemo Project by buying the pro version on Android Market or pledge online at &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;. Thank you for your support.</string>
     <string name="anymemo_pro_link">market://search?q=pname:org.liberty.android.fantastischmemopro</string>
     <string name="goto_prev_screen">Go to Preview/Edit Screen</string>
+    <string name="exception_text">Exception</string>
 </resources>

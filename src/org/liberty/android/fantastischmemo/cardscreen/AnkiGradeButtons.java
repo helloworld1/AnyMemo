@@ -32,7 +32,7 @@ public class AnkiGradeButtons implements ControlButtons{
     private Context mContext;
     private View buttonView;
     private Button grade0, grade1, grade2, grade3, grade4, grade5;
-    private HashMap<String, Button> hm;
+    private Map<String, Button> buttonMap;
     public AnkiGradeButtons(Context context){
         mContext = context;
         LayoutInflater factory = LayoutInflater.from(mContext);
@@ -43,16 +43,16 @@ public class AnkiGradeButtons implements ControlButtons{
         grade3 = (Button)buttonView.findViewById(R.id.grade_btn_anki_3);
         grade4 = (Button)buttonView.findViewById(R.id.grade_btn_anki_4);
         grade5 = (Button)buttonView.findViewById(R.id.grade_btn_anki_5);
-        HashMap<String, Button> hm = new HashMap<String, Button>();
-        hm.put("0", grade0);
-        hm.put("1", grade1);
-        hm.put("2", grade2);
-        hm.put("3", grade3);
-        hm.put("4", grade4);
-        hm.put("5", grade5);
+        buttonMap = new HashMap<String, Button>();
+        buttonMap.put("0", grade0);
+        buttonMap.put("1", grade1);
+        buttonMap.put("2", grade2);
+        buttonMap.put("3", grade3);
+        buttonMap.put("4", grade4);
+        buttonMap.put("5", grade5);
     }
     public Map<String, Button> getButtons(){
-        return hm;
+        return buttonMap;
     }
     public View getView(){
         return buttonView;

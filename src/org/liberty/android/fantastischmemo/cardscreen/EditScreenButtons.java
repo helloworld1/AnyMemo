@@ -28,37 +28,33 @@ import java.util.Map;
 import android.content.Context;
 import android.view.LayoutInflater;
 
-public class AnyMemoGradeButtons implements ControlButtons{
+class EditScreenButtons implements ControlButtons{
     private Context mContext;
     private View buttonView;
-    private Button grade0, grade1, grade2, grade3, grade4, grade5;
+    private Button btnNew, btnEdit, btnPrev, btnNext;
     private Map<String, Button> buttonMap;
-    public AnyMemoGradeButtons(Context context){
+    public EditScreenButtons(Context context){
         mContext = context;
         LayoutInflater factory = LayoutInflater.from(mContext);
-        buttonView = factory.inflate(R.layout.grade_buttons_anymemo, null);
-        grade0 = (Button)buttonView.findViewById(R.id.grade_btn_anymemo_0);
-        grade1 = (Button)buttonView.findViewById(R.id.grade_btn_anymemo_1);
-        grade2 = (Button)buttonView.findViewById(R.id.grade_btn_anymemo_2);
-        grade3 = (Button)buttonView.findViewById(R.id.grade_btn_anymemo_3);
-        grade4 = (Button)buttonView.findViewById(R.id.grade_btn_anymemo_4);
-        grade5 = (Button)buttonView.findViewById(R.id.grade_btn_anymemo_5);
+        buttonView = factory.inflate(R.layout.edit_screen_buttons, null);
+        btnNew = (Button)buttonView.findViewById(R.id.edit_screen_btn_new);
+        btnEdit = (Button)buttonView.findViewById(R.id.edit_screen_btn_edit);
+        btnPrev = (Button)buttonView.findViewById(R.id.edit_screen_btn_prev);
+        btnNext = (Button)buttonView.findViewById(R.id.edit_screen_btn_next);
         buttonMap = new HashMap<String, Button>();
-        buttonMap.put("0", grade0);
-        buttonMap.put("1", grade1);
-        buttonMap.put("2", grade2);
-        buttonMap.put("3", grade3);
-        buttonMap.put("4", grade4);
-        buttonMap.put("5", grade5);
+        buttonMap.put("new", btnNew);
+        buttonMap.put("edit", btnEdit);
+        buttonMap.put("prev", btnPrev);
+        buttonMap.put("next", btnNext);
     }
+
     public Map<String, Button> getButtons(){
         return buttonMap;
+    }
+    public String[] getButtonNames(){
+        return new String[]{"new", "edit", "prev", "next"};
     }
     public View getView(){
         return buttonView;
     }
-    public String[] getButtonNames(){
-        return new String[]{"0", "1", "2", "3", "4", "5"};
-    }
 }
-

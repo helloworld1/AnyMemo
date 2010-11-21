@@ -40,6 +40,7 @@ import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
+import android.os.Environment;
 import android.content.Context;
 import android.preference.PreferenceManager;
 import android.text.Html;
@@ -93,19 +94,186 @@ public class EditScreen extends AMActivity{
     FlashcardDisplay flashcardDisplay;
     SettingManager settingManager;
     ControlButtons controlButtons;
-    QueueManager queueManager;
+    ItemManager itemManager;
+
     @Override
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+		setContentView(R.layout.memo_screen_layout);
         mHandler = new Handler();
         Bundle extras = getIntent().getExtras();
+        int currentId = 1;
         if (extras != null) {
             dbPath = extras.getString("dbpath");
             dbName = extras.getString("dbname");
             activeFilter = extras.getString("active_filter");
+            currentId = extras.getInt("id", 1);
+        }
+        try{
+            settingManager = new SettingManager(this, dbPath, dbName);
+            flashcardDisplay = new FlashcardDisplay(this, settingManager);
+            controlButtons = new EditScreenButtons(this);
+            itemManager = new ItemManager.Builder(this, dbPath, dbName)
+                .setFilter(activeFilter)
+                .build();
+
+            initTTS();
+            composeViews();
+            currentItem = itemManager.getItem(currentId);
+            flashcardDisplay.updateView(currentItem);
+            setButtonListeners();
+            registerForContextMenu(flashcardDisplay.getView());
+            /* Run the learnQueue init in a separate thread */
+        }
+        catch(Exception e){
+            Log.e(TAG, "Error in the onCreate()", e);
+            AMGUIUtility.displayException(this, getString(R.string.open_database_error_title), getString(R.string.open_database_error_message), e);
         }
 
     }
+
+    @Override
+    public void onDestroy(){
+        if(itemManager != null){
+            itemManager.close();
+        }
+        if(settingManager != null){
+            settingManager.close();
+        }
+        super.onDestroy();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode ==Activity.RESULT_CANCELED){
+            return;
+        }
+        switch(requestCode){
+            case ACTIVITY_EDIT:
+            {
+
+                Bundle extras = data.getExtras();
+                Item item = (Item)extras.getSerializable("item");
+                if(item != null){
+                    currentItem = item;
+                }
+                restartActivity();
+                break;
+            }
+        }
+    }
+
+    private void initTTS(){
+        String audioDir = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_audio_dir);
+        Locale ql = settingManager.getQuestionAudioLocale();
+        Locale al = settingManager.getAnswerAudioLocale();
+        if(settingManager.getQuestionUserAudio()){
+            questionTTS = new AudioFileTTS(audioDir, dbName);
+        }
+        else if(ql != null){
+            if(settingManager.getEnableTTSExtended()){
+                questionTTS = new AnyMemoTTSExtended(this, ql);
+            }
+            else{
+                questionTTS = new AnyMemoTTSPlatform(this, ql);
+            }
+        }
+        else{
+            questionTTS = null;
+        }
+        if(settingManager.getAnswerUserAudio()){
+            answerTTS = new AudioFileTTS(audioDir, dbName);
+        }
+        else if(al != null){
+            if(settingManager.getEnableTTSExtended()){
+                answerTTS = new AnyMemoTTSExtended(this, al);
+            }
+            else{
+                answerTTS = new AnyMemoTTSPlatform(this, al);
+            }
+        }
+        else{
+            answerTTS = null;
+        }
+    }
+
+    private void restartActivity(){
+        Intent myIntent = new Intent(this, EditScreen.class);
+        if(currentItem != null){
+            myIntent.putExtra("id", currentItem.getId());
+        }
+        myIntent.putExtra("dbname", dbName);
+        myIntent.putExtra("dbpath", dbPath);
+        myIntent.putExtra("active_filter", activeFilter);
+        finish();
+        startActivity(myIntent);
+    }
+
+
+    private void composeViews(){
+        LinearLayout memoRoot = (LinearLayout)findViewById(R.id.memo_screen_root);
+
+        LinearLayout flashcardDisplayView = (LinearLayout)flashcardDisplay.getView();
+        LinearLayout controlButtonsView = (LinearLayout)controlButtons.getView();
+        /* 
+         * -1: Match parent -2: Wrap content
+         * This is necessary or the view will not be 
+         * stetched
+         */
+        memoRoot.addView(flashcardDisplayView, -1, -1);
+        memoRoot.addView(controlButtonsView, -1, -2);
+        flashcardDisplayView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
+    }
+
+    void setButtonListeners(){
+        Map<String, Button> bm = controlButtons.getButtons();
+        Button newButton = bm.get("new");
+        Button editButton = bm.get("edit");
+        Button prevButton = bm.get("prev");
+        Button nextButton = bm.get("next");
+        newButton.setOnClickListener(newButtonListener);
+        editButton.setOnClickListener(editButtonListener);
+        prevButton.setOnClickListener(prevButtonListener);
+        nextButton.setOnClickListener(nextButtonListener);
+
+    }
+
+    private View.OnClickListener newButtonListener = new View.OnClickListener(){
+        public void onClick(View v){
+            Intent myIntent = new Intent(EditScreen.this, CardEditor.class);
+            myIntent.putExtra("dbpath", dbPath);
+            myIntent.putExtra("dbname", dbName);
+            startActivityForResult(myIntent, ACTIVITY_EDIT);
+        }
+    };
+
+    private View.OnClickListener editButtonListener = new View.OnClickListener(){
+        public void onClick(View v){
+            Intent myIntent = new Intent(EditScreen.this, CardEditor.class);
+            myIntent.putExtra("item", currentItem);
+            myIntent.putExtra("dbpath", dbPath);
+            myIntent.putExtra("dbname", dbName);
+            startActivityForResult(myIntent, ACTIVITY_EDIT);
+        }
+    };
+
+    private View.OnClickListener prevButtonListener = new View.OnClickListener(){
+        public void onClick(View v){
+            currentItem = itemManager.getPreviousItem(currentItem);
+            flashcardDisplay.updateView(currentItem);
+        }
+    };
+
+    private View.OnClickListener nextButtonListener = new View.OnClickListener(){
+        public void onClick(View v){
+            currentItem = itemManager.getNextItem(currentItem);
+            flashcardDisplay.updateView(currentItem);
+        }
+    };
+
+
+
 }
 
 

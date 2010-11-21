@@ -13,6 +13,13 @@
         android:text="@string/add_screen_new"
         android:layout_marginLeft="1dip" />
     <Button 
+        android:id="@+id/edit_screen_btn_edit" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        android:layout_weight="1"
+        android:text="@string/memo_edit_dialog_title"
+        android:layout_marginLeft="1dip" />
+    <Button 
         android:id="@+id/edit_screen_btn_prev" 
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" 
