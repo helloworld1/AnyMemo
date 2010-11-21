@@ -319,13 +319,13 @@ public class EditScreen extends AMActivity{
     }
     
     private void gotoNext(){
-        currentItem = itemManager.getPreviousItem(currentItem);
+        currentItem = itemManager.getNextItem(currentItem);
         flashcardDisplay.updateView(currentItem);
         updateTitle();
     }
 
     private void gotoPrev(){
-        currentItem = itemManager.getNextItem(currentItem);
+        currentItem = itemManager.getPreviousItem(currentItem);
         flashcardDisplay.updateView(currentItem);
         updateTitle();
     }
@@ -374,10 +374,10 @@ public class EditScreen extends AMActivity{
                     return false;
                 if(e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
                     /* Swipe Right to Left event */
-                    gotoPrev();
+                    gotoNext();
                 }  else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
                     /* Swipe Left to Right event */
-                    gotoNext();
+                    gotoPrev();
                 }
             } catch (Exception e) {
                 Log.e(TAG, "Error handling gesture left/right event", e);
