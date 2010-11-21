@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Date;
 
+
 import android.graphics.Color;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -61,6 +62,7 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.EditText;
+import android.widget.Toast;
 import android.util.Log;
 import android.os.SystemClock;
 import android.net.Uri;
@@ -70,6 +72,8 @@ import android.gesture.Gesture;
 import android.gesture.GestureLibraries;
 import android.gesture.GestureLibrary;
 import android.gesture.GestureOverlayView;
+import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.gesture.Prediction;
 import android.gesture.GestureOverlayView.OnGesturePerformedListener;
 
@@ -94,6 +98,7 @@ public class EditScreen extends AMActivity{
     FlashcardDisplay flashcardDisplay;
     SettingManager settingManager;
     ControlButtons controlButtons;
+    private GestureDetector gestureDetector;
     ItemManager itemManager;
 
     @Override
@@ -121,7 +126,13 @@ public class EditScreen extends AMActivity{
             composeViews();
             currentItem = itemManager.getItem(currentId);
             flashcardDisplay.updateView(currentItem);
+            updateTitle();
             setButtonListeners();
+            gestureDetector= new GestureDetector(EditScreen.this, gestureListener);
+            if(gestureDetector == null){
+                Log.e(TAG, "NULL GESTURE DETECTOR");
+            }
+            flashcardDisplay.setScreenOnTouchListener(viewTouchListener);
             registerForContextMenu(flashcardDisplay.getView());
             /* Run the learnQueue init in a separate thread */
         }
@@ -258,21 +269,74 @@ public class EditScreen extends AMActivity{
         }
     };
 
+    private void updateTitle(){
+        if(currentItem != null){
+            setTitle(getString(R.string.memo_current_id) + " " + currentItem.getId());
+        }
+    }
+    
+    private void gotoNext(){
+        currentItem = itemManager.getPreviousItem(currentItem);
+        flashcardDisplay.updateView(currentItem);
+        updateTitle();
+    }
+
+    private void gotoPrev(){
+        currentItem = itemManager.getNextItem(currentItem);
+        flashcardDisplay.updateView(currentItem);
+        updateTitle();
+    }
+
     private View.OnClickListener prevButtonListener = new View.OnClickListener(){
         public void onClick(View v){
-            currentItem = itemManager.getPreviousItem(currentItem);
-            flashcardDisplay.updateView(currentItem);
+            gotoPrev();
         }
     };
 
     private View.OnClickListener nextButtonListener = new View.OnClickListener(){
         public void onClick(View v){
-            currentItem = itemManager.getNextItem(currentItem);
-            flashcardDisplay.updateView(currentItem);
+            gotoNext();
+        }
+    };
+
+    private View.OnTouchListener viewTouchListener = new View.OnTouchListener(){
+        @Override
+        public boolean onTouch(View v, MotionEvent event){
+            return gestureDetector.onTouchEvent(event);
         }
     };
 
 
+
+    private GestureDetector.OnGestureListener gestureListener = new GestureDetector.SimpleOnGestureListener(){
+        private static final int SWIPE_MIN_DISTANCE = 120;
+        private static final int SWIPE_MAX_OFF_PATH = 250;
+        private static final int SWIPE_THRESHOLD_VELOCITY = 200;
+        @Override  
+        public boolean onDown(MotionEvent e) {  
+            Log.v(TAG, "onDown");  
+            return true;  
+        } 
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            try {
+                if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
+                    return false;
+                // right to left swipe
+                if(e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                    //Toast.makeText(EditScreen.this, "Left Swipe", Toast.LENGTH_SHORT).show();
+                    gotoPrev();
+                }  else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                    //Toast.makeText(EditScreen.this, "Right Swipe", Toast.LENGTH_SHORT).show();
+                    gotoNext();
+                }
+            } catch (Exception e) {
+                // nothing
+            }
+            return false;
+        }
+    };
 
 }
 
