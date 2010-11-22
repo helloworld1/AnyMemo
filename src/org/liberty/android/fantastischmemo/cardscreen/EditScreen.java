@@ -184,6 +184,64 @@ public class EditScreen extends AMActivity{
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.edit_screen_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menuspeakquestion:
+            {
+                if(questionTTS != null && currentItem != null){
+                    questionTTS.sayText(currentItem.getQuestion());
+                }
+                return true;
+            }
+
+            case R.id.menuspeakanswer:
+            {
+                if(answerTTS != null && currentItem != null){
+                    answerTTS.sayText(currentItem.getQuestion());
+                }
+                return true;
+            }
+
+            case R.id.editmenu_settings_id:
+            {
+                Intent myIntent = new Intent(this, SettingsScreen.class);
+                myIntent.putExtra("dbname", dbName);
+                myIntent.putExtra("dbpath", dbPath);
+                startActivityForResult(myIntent, ACTIVITY_SETTINGS);
+                return true;
+            }
+
+            case R.id.editmenu_detail_id:
+            {
+                Intent myIntent = new Intent(this, DetailScreen.class);
+                myIntent.putExtra("dbname", this.dbName);
+                myIntent.putExtra("dbpath", this.dbPath);
+                myIntent.putExtra("itemid", currentItem.getId());
+                startActivityForResult(myIntent, 2);
+                return true;
+            }
+
+            case R.id.menu_edit_filter:
+            {
+                Intent myIntent = new Intent(this, Filter.class);
+                myIntent.putExtra("dbname", dbName);
+                myIntent.putExtra("dbpath", dbPath);
+                startActivityForResult(myIntent, ACTIVITY_FILTER);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getMenuInflater();
@@ -322,6 +380,13 @@ public class EditScreen extends AMActivity{
         currentItem = itemManager.getNextItem(currentItem);
         flashcardDisplay.updateView(currentItem);
         updateTitle();
+    }
+
+    private void deleteCurrent(){
+        if(currentItem != null){
+            currentItem = itemManager.deleteItem(currentItem);
+        }
+        restartActivity();
     }
 
     private void gotoPrev(){
