@@ -89,6 +89,7 @@ public class EditScreen extends AMActivity{
     private final int ACTIVITY_DB_TOOLBOX = 13;
     private final int ACTIVITY_GOTO_PREV = 14;
     private final int ACTIVITY_SETTINGS = 15;
+    private final int ACTIVITY_LIST = 16;
 
     Handler mHandler;
     Item currentItem = null;
@@ -113,7 +114,7 @@ public class EditScreen extends AMActivity{
         if (extras != null) {
             dbPath = extras.getString("dbpath");
             dbName = extras.getString("dbname");
-            activeFilter = extras.getString("active_filter");
+            activeFilter = extras.getString("filter");
             currentId = extras.getInt("id", 1);
         }
         try{
@@ -131,9 +132,6 @@ public class EditScreen extends AMActivity{
             updateTitle();
             setButtonListeners();
             gestureDetector= new GestureDetector(EditScreen.this, gestureListener);
-            if(gestureDetector == null){
-                Log.e(TAG, "NULL GESTURE DETECTOR");
-            }
             flashcardDisplay.setScreenOnTouchListener(viewTouchListener);
             registerForContextMenu(flashcardDisplay.getView());
             /* Run the learnQueue init in a separate thread */
@@ -165,9 +163,11 @@ public class EditScreen extends AMActivity{
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
+        Log.v(TAG, "Return activity result");
         if(resultCode ==Activity.RESULT_CANCELED){
             return;
         }
+        Log.v(TAG, "Return activity NOT CANCELLED");
         switch(requestCode){
             case ACTIVITY_EDIT:
             {
@@ -177,6 +177,20 @@ public class EditScreen extends AMActivity{
                 if(item != null){
                     currentItem = item;
                 }
+                restartActivity();
+                break;
+            }
+
+            case ACTIVITY_FILTER:
+            {
+                Bundle extras = data.getExtras();
+                activeFilter = extras.getString("filter");
+                restartActivity();
+                break;
+            }
+
+            case ACTIVITY_SETTINGS:
+            {
                 restartActivity();
                 break;
             }
@@ -225,6 +239,16 @@ public class EditScreen extends AMActivity{
                 myIntent.putExtra("dbpath", this.dbPath);
                 myIntent.putExtra("itemid", currentItem.getId());
                 startActivityForResult(myIntent, 2);
+                return true;
+            }
+            case R.id.editmenu_list_id:
+            {
+                Intent myIntent = new Intent(this, SettingsScreen.class);
+                myIntent.setClass(this, ListEditScreen.class);
+                myIntent.putExtra("dbname", dbName);
+                myIntent.putExtra("dbpath", dbPath);
+                myIntent.putExtra("openid", currentItem.getId());
+                startActivityForResult(myIntent, ACTIVITY_LIST);
                 return true;
             }
 
@@ -317,7 +341,7 @@ public class EditScreen extends AMActivity{
         }
         myIntent.putExtra("dbname", dbName);
         myIntent.putExtra("dbpath", dbPath);
-        myIntent.putExtra("active_filter", activeFilter);
+        myIntent.putExtra("filter", activeFilter);
         finish();
         startActivity(myIntent);
     }

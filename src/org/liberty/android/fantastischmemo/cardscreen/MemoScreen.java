@@ -122,7 +122,7 @@ public class MemoScreen extends AMActivity{
         if (extras != null) {
             dbPath = extras.getString("dbpath");
             dbName = extras.getString("dbname");
-            activeFilter = extras.getString("active_filter");
+            activeFilter = extras.getString("filter");
         }
         try{
             settingManager = new SettingManager(this, dbPath, dbName);
@@ -507,7 +507,7 @@ public class MemoScreen extends AMActivity{
         Intent myIntent = new Intent(this, MemoScreen.class);
         myIntent.putExtra("dbname", dbName);
         myIntent.putExtra("dbpath", dbPath);
-        myIntent.putExtra("active_filter", activeFilter);
+        myIntent.putExtra("filter", activeFilter);
 
         finish();
         startActivity(myIntent);
