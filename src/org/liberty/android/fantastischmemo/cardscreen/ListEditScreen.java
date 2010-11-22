@@ -105,28 +105,19 @@ public class ListEditScreen extends Activity implements OnItemClickListener{
     @Override
 	public void onItemClick(AdapterView<?> parentView, View childView, int position, long id){
         /* Click to go back to EditScreern with specific card cliced */
-        TextView tvi = (TextView)childView.findViewById(R.id.item_id);
-        int itemId = 1;
-        try{
-            itemId = Integer.parseInt(tvi.getText().toString());
-        }
-        catch(NumberFormatException e){
-        }
         Intent resultIntent = new Intent();
-        resultIntent.putExtra("id", itemId);
+        resultIntent.putExtra("item", mAdapter.getItem(position));
         setResult(Activity.RESULT_OK, resultIntent);
         finish();
     }
 
     private class ItemListAdapter extends ArrayAdapter<Item> implements SectionIndexer{
-        private List<Item> mItems;
         /* quick index sections */
         private String[] sections;
 
         public ItemListAdapter(Context context, int textViewResourceId, List<Item> items){
             super(context, textViewResourceId, items);
-            mItems = items;
-            int sectionSize = mItems.size() / 100;
+            int sectionSize = getCount() / 100;
             sections = new String[sectionSize];
             for(int i = 0; i < sectionSize; i++){
                 sections[i] = "" + (i * 100);
@@ -143,11 +134,9 @@ public class ListEditScreen extends Activity implements OnItemClickListener{
             TextView questionView = (TextView)convertView.findViewById(R.id.item_question);
             TextView answerView = (TextView)convertView.findViewById(R.id.item_answer);
 
-            idView.setText("" + mItems.get(position).getId());
-            //questionView.setText(Html.fromHtml(ArabicUtilities.reshape(mItems.get(position).getQuestion())));
-            //answerView.setText(Html.fromHtml(ArabicUtilities.reshape(mItems.get(position).getAnswer())));
-            questionView.setText(mItems.get(position).getQuestion());
-            answerView.setText(mItems.get(position).getAnswer());
+            idView.setText("" + getItem(position).getId());
+            questionView.setText(getItem(position).getQuestion());
+            answerView.setText(getItem(position).getAnswer());
 
             return convertView;
         }

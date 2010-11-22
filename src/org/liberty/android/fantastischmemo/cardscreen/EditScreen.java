@@ -194,6 +194,13 @@ public class EditScreen extends AMActivity{
                 restartActivity();
                 break;
             }
+            case ACTIVITY_LIST:
+            {
+                Bundle extras = data.getExtras();
+                currentItem = (Item)extras.getSerializable("item");
+                restartActivity();
+                break;
+            }
         }
     }
 
