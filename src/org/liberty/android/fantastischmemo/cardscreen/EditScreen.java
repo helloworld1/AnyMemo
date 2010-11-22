@@ -82,6 +82,7 @@ public class EditScreen extends AMActivity{
     private final static String TAG = "org.liberty.android.fantastischmemo.cardscreen.EditScreen";
     private AnyMemoTTS questionTTS = null;
     private AnyMemoTTS answerTTS = null;
+    private boolean searchInflated = false;
     private final int DIALOG_LOADING_PROGRESS = 100;
     private final int ACTIVITY_FILTER = 10;
     private final int ACTIVITY_EDIT = 11;
@@ -267,6 +268,10 @@ public class EditScreen extends AMActivity{
                 startActivityForResult(myIntent, ACTIVITY_FILTER);
                 return true;
             }
+            case R.id.editmenu_search_id:
+            {
+                createSearchOverlay();
+            }
         }
 
         return false;
@@ -426,6 +431,37 @@ public class EditScreen extends AMActivity{
         updateTitle();
     }
 
+    private void createSearchOverlay(){
+        if(searchInflated == false){
+            LinearLayout root = (LinearLayout)findViewById(R.id.memo_screen_root);
+            LayoutInflater.from(this).inflate(R.layout.search_overlay, root);
+            ImageButton close = (ImageButton)findViewById(R.id.search_close_btn);
+            close.setOnClickListener(closeSearchButtonListener);
+            ImageButton prev = (ImageButton)findViewById(R.id.search_previous_btn);
+            prev.setOnClickListener(searchPrevButtonListener);
+            ImageButton next = (ImageButton)findViewById(R.id.search_next_btn);
+            next.setOnClickListener(searchNextButtonListener);
+
+            EditText editEntry = (EditText)findViewById(R.id.search_entry);
+            editEntry.requestFocus();
+            searchInflated = true;
+
+        }
+        else{
+            LinearLayout layout = (LinearLayout)findViewById(R.id.search_root);
+            layout.setVisibility(View.VISIBLE);
+        }
+
+
+    }
+
+    private void dismissSearchOverlay(){
+        if(searchInflated == true){
+            LinearLayout layout = (LinearLayout)findViewById(R.id.search_root);
+            layout.setVisibility(View.GONE);
+        }
+    }
+
     private View.OnClickListener prevButtonListener = new View.OnClickListener(){
         public void onClick(View v){
             gotoPrev();
@@ -435,6 +471,38 @@ public class EditScreen extends AMActivity{
     private View.OnClickListener nextButtonListener = new View.OnClickListener(){
         public void onClick(View v){
             gotoNext();
+        }
+    };
+
+    private View.OnClickListener closeSearchButtonListener = new View.OnClickListener(){
+        public void onClick(View v){
+            dismissSearchOverlay();
+        }
+    };
+
+    private View.OnClickListener searchNextButtonListener = new View.OnClickListener(){
+        public void onClick(View v){
+            EditText editEntry = (EditText)findViewById(R.id.search_entry);
+            String text = editEntry.getText().toString();
+            Item item = itemManager.search(text, true, currentItem);
+            if(item != null){
+                currentItem = item;
+                flashcardDisplay.updateView(currentItem);
+                updateTitle();
+            }
+        }
+    };
+
+    private View.OnClickListener searchPrevButtonListener = new View.OnClickListener(){
+        public void onClick(View v){
+            EditText editEntry = (EditText)findViewById(R.id.search_entry);
+            String text = editEntry.getText().toString();
+            Item item = itemManager.search(text, false, currentItem);
+            if(item != null){
+                currentItem = item;
+                flashcardDisplay.updateView(currentItem);
+                updateTitle();
+            }
         }
     };
 
