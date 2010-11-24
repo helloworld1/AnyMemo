@@ -813,13 +813,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         /* Delete duplicate items */
         myDatabase.execSQL("DELETE FROM dict_tbl WHERE _id NOT IN (SELECT MIN(_id) FROM dict_tbl GROUP BY question)");
         myDatabase.execSQL("DELETE FROM learn_tbl WHERE _id NOT IN (SELECT _id FROM dict_tbl)");
-        /* Reconstruct the ID */
+        maintainID();
+    }
+
+    /* Maintain the ID to be from 1 to n continuously */
+    private void maintainID(){
+        /* Reconstruct the ID by creating a temporary table 
+         * and drop it at last*/
         myDatabase.execSQL("CREATE TABLE IF NOT EXISTS tmp_count (id INTEGER PRIMARY KEY AUTOINCREMENT, _id INTEGER)");
         myDatabase.execSQL("INSERT INTO tmp_count(_id) SELECT _id FROM dict_tbl;");
         myDatabase.execSQL("UPDATE dict_tbl SET _id = (SELECT tmp_count.id FROM tmp_count WHERE tmp_count._id = dict_tbl._id)");
         myDatabase.execSQL("UPDATE learn_tbl SET _id = (SELECT tmp_count.id FROM tmp_count WHERE tmp_count._id = learn_tbl._id);");
         myDatabase.execSQL("DROP TABLE IF EXISTS tmp_count;");
     }
+
+
 
     public boolean checkFilterValidity(String filter){
         if(getItemById(0, 0, true, filter) == null){

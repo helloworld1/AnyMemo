@@ -271,4 +271,8 @@
     <string name="goto_prev_screen">Go to Preview/Edit Screen</string>
     <string name="exception_text">Exception</string>
     <string name="advanced_setting_text">Advanced</string>
+    <string name="db_merger_title">Database Merger</string>
+    <string name="db_merger_explaination">Merge the Source Database into the Target Database</string>
+    <string name="target_db_text">Target Database (Double click to browse)</string>
+    <string name="source_db_text">Source Database (Double click to browse)</string>
 </resources>

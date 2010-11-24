@@ -91,6 +91,7 @@ public class EditScreen extends AMActivity{
     private final int ACTIVITY_GOTO_PREV = 14;
     private final int ACTIVITY_SETTINGS = 15;
     private final int ACTIVITY_LIST = 16;
+    private final int ACTIVITY_MERGE = 17;
 
     Handler mHandler;
     Item currentItem = null;
@@ -206,6 +207,7 @@ public class EditScreen extends AMActivity{
                 restartActivity();
                 break;
             }
+
         }
     }
 
@@ -324,6 +326,15 @@ public class EditScreen extends AMActivity{
             case R.id.menu_context_remove_dup:
             {
                 databaseUtility.removeDuplicates();
+                return true;
+            }
+
+            case R.id.menu_context_merge_db:
+            {
+                Intent myIntent = new Intent(this, DatabaseMerger.class);
+                myIntent.putExtra("dbpath", dbPath);
+                myIntent.putExtra("dbname", dbName);
+                startActivityForResult(myIntent, ACTIVITY_MERGE);
                 return true;
             }
 

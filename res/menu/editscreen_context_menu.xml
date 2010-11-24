@@ -18,6 +18,9 @@
             <item
                 android:id="@+id/menu_context_remove_dup"
                 android:title="@string/remove_dup_text" />
+            <item
+                android:id="@+id/menu_context_merge_db"
+                android:title="@string/merge_db_text" />
         </menu>
     </item>
 </menu>

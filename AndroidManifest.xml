@@ -58,14 +58,17 @@
         <activity 
             android:name=".cardscreen.EditScreen"
             android:configChanges="orientation|keyboardHidden" />
-        <activity
-            android:name=".downloader..DownloaderAnyMemo"
+        <activity 
+            android:name=".cardscreen.DatabaseMerger"
             android:configChanges="orientation|keyboardHidden" />
         <activity
-            android:name=".downloader..DownloaderFE"
+            android:name=".downloader.DownloaderAnyMemo"
             android:configChanges="orientation|keyboardHidden" />
         <activity
-            android:name=".downloader..DownloaderSS"
+            android:name=".downloader.DownloaderFE"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity
+            android:name=".downloader.DownloaderSS"
             android:configChanges="orientation|keyboardHidden" />
         <receiver
             android:name=".AlarmReceiver"
