@@ -3,7 +3,21 @@
     <item 
         android:id="@+id/menu_context_copy"
         android:title="@string/copy_text" />
-    <item
+    <item 
         android:id="@+id/menu_context_paste"
         android:title="@string/paste_text" />
+    <item
+        android:title = "@string/advanced_setting_text" >
+        <menu>
+            <item
+                android:id="@+id/menu_context_wipe"
+                android:title="@string/settings_wipe" />
+            <item
+                android:id="@+id/menu_context_swap"
+                android:title="@string/settings_inverse" />
+            <item
+                android:id="@+id/menu_context_remove_dup"
+                android:title="@string/remove_dup_text" />
+        </menu>
+    </item>
 </menu>

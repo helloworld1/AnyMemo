@@ -48,6 +48,12 @@ import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+
+/*
+ * This class include the most low level database operation
+ * the DatabaseUtility wrap this class to provide more database
+ * global operations
+ */
 public class DatabaseHelper extends SQLiteOpenHelper {
 	private final String dbPath;
 	private final String dbName;
@@ -804,7 +810,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void removeDuplicates(){
-        removeDuplicatesNative();
+        /* Delete duplicate items */
+        myDatabase.execSQL("DELETE FROM dict_tbl WHERE _id NOT IN (SELECT MIN(_id) FROM dict_tbl GROUP BY question)");
+        myDatabase.execSQL("DELETE FROM learn_tbl WHERE _id NOT IN (SELECT _id FROM dict_tbl)");
+        /* Reconstruct the ID */
+        myDatabase.execSQL("CREATE TABLE IF NOT EXISTS tmp_count (id INTEGER PRIMARY KEY AUTOINCREMENT, _id INTEGER)");
+        myDatabase.execSQL("INSERT INTO tmp_count(_id) SELECT _id FROM dict_tbl;");
+        myDatabase.execSQL("UPDATE dict_tbl SET _id = (SELECT tmp_count.id FROM tmp_count WHERE tmp_count._id = dict_tbl._id)");
+        myDatabase.execSQL("UPDATE learn_tbl SET _id = (SELECT tmp_count.id FROM tmp_count WHERE tmp_count._id = learn_tbl._id);");
+        myDatabase.execSQL("DROP TABLE IF EXISTS tmp_count;");
     }
 
     public boolean checkFilterValidity(String filter){
@@ -824,11 +838,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public String getDbPath(){
         return dbPath;
     }
-
-    static{
-        System.loadLibrary("native_db_helper");
-    }
-
-    public native void removeDuplicatesNative();
 
 }

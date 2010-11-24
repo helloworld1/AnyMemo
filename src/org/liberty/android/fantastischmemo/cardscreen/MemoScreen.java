@@ -503,7 +503,8 @@ public class MemoScreen extends AMActivity{
         flashcardDisplayView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
     }
 
-    private void restartActivity(){
+    @Override
+    public void restartActivity(){
         Intent myIntent = new Intent(this, MemoScreen.class);
         myIntent.putExtra("dbname", dbName);
         myIntent.putExtra("dbpath", dbPath);

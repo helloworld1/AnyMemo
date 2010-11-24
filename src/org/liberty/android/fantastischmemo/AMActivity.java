@@ -22,6 +22,7 @@ package org.liberty.android.fantastischmemo;
 
 import android.content.pm.ActivityInfo;
 import android.content.SharedPreferences;
+import android.content.Intent;
 import android.view.WindowManager;
 import android.preference.PreferenceManager;
 import android.app.Activity;
@@ -83,6 +84,11 @@ public abstract class AMActivity extends Activity{
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+    }
+
+    public void restartActivity(){
+        startActivity(new Intent(this, this.getClass()));
+        finish();
     }
 }
 

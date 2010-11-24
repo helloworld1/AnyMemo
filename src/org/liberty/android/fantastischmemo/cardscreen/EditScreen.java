@@ -102,6 +102,7 @@ public class EditScreen extends AMActivity{
     FlashcardDisplay flashcardDisplay;
     SettingManager settingManager;
     ControlButtons controlButtons;
+    DatabaseUtility databaseUtility;
     private GestureDetector gestureDetector;
     ItemManager itemManager;
 
@@ -122,6 +123,9 @@ public class EditScreen extends AMActivity{
             settingManager = new SettingManager(this, dbPath, dbName);
             flashcardDisplay = new FlashcardDisplay(this, settingManager);
             controlButtons = new EditScreenButtons(this);
+
+            /* databaseUtility is for global db operations */
+            databaseUtility =  new DatabaseUtility(this, dbPath, dbName);
             itemManager = new ItemManager.Builder(this, dbPath, dbName)
                 .setFilter(activeFilter)
                 .build();
@@ -135,7 +139,6 @@ public class EditScreen extends AMActivity{
             gestureDetector= new GestureDetector(EditScreen.this, gestureListener);
             flashcardDisplay.setScreenOnTouchListener(viewTouchListener);
             registerForContextMenu(flashcardDisplay.getView());
-            /* Run the learnQueue init in a separate thread */
         }
         catch(Exception e){
             Log.e(TAG, "Error in the onCreate()", e);
@@ -169,6 +172,7 @@ public class EditScreen extends AMActivity{
             return;
         }
         Log.v(TAG, "Return activity NOT CANCELLED");
+        /* Refresh the activity according to activities */
         switch(requestCode){
             case ACTIVITY_EDIT:
             {
@@ -305,6 +309,24 @@ public class EditScreen extends AMActivity{
                 return true;
             }
 
+            case R.id.menu_context_wipe:
+            {
+                databaseUtility.wipeLearningData();
+                return true;
+            }
+
+            case R.id.menu_context_swap:
+            {
+                databaseUtility.swapAllQA();
+                return true;
+            }
+
+            case R.id.menu_context_remove_dup:
+            {
+                databaseUtility.removeDuplicates();
+                return true;
+            }
+
             default:
             {
                 return super.onContextItemSelected(menuitem);
@@ -346,7 +368,8 @@ public class EditScreen extends AMActivity{
         }
     }
 
-    private void restartActivity(){
+    @Override
+    public void restartActivity(){
         Intent myIntent = new Intent(this, EditScreen.class);
         if(currentItem != null){
             myIntent.putExtra("id", currentItem.getId());

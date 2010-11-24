@@ -17,7 +17,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-package org.liberty.android.fantastischmemo.cardscreen;
+package org.liberty.android.fantastischmemo;
 
 import org.liberty.android.fantastischmemo.*;
 import org.liberty.android.fantastischmemo.tts.*;
@@ -116,6 +116,26 @@ public class AMGUIUtility{
             .show();
     }
 
+    public static void doProgressTask(final Context context, final int progressTitleId, final int progressMessageId, final ProgressTask task){
+        final ProgressDialog mProgressDialog = ProgressDialog.show(context, context.getString(progressTitleId), context.getString(progressMessageId), true);
+        final Handler handler = new Handler();
+        new Thread(){
+            public void run(){
+                task.doHeavyTask();
+                handler.post(new Runnable(){
+                    public void run(){
+                        task.doUITask();
+                        mProgressDialog.dismiss();
+                    }
+                });
+            }
+        }.start();
+    }
+
+    public static interface ProgressTask{
+        public void doHeavyTask();
+        public void doUITask();
+    }
 }
 
 
