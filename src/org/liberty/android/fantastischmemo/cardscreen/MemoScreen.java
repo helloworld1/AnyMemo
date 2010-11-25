@@ -79,6 +79,7 @@ import android.widget.ListView;
 import android.widget.ArrayAdapter;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView;
+import android.widget.Toast;
 import android.util.Log;
 import android.os.SystemClock;
 import android.os.Environment;
@@ -453,17 +454,40 @@ public class MemoScreen extends AMActivity{
 
     void setGradeButtonTitle(){
         Map<String, Button> hm = controlButtons.getButtons();
-        for(int i = 0; i < 6; i++){
-            Button b = hm.get(Integer.valueOf(i).toString());
-            b.setText(Integer.valueOf(i).toString() + " +" + currentItem.processAnswer(i, true));
+        if(settingManager.getButtonStyle() == SettingManager.ButtonStyle.MNEMOSYNE){
+            hm.get("0").setText(getString(R.string.memo_btn0_brief_text));
+            hm.get("1").setText(getString(R.string.memo_btn1_brief_text));
+            hm.get("2").setText(getString(R.string.memo_btn2_brief_text));
+            hm.get("3").setText(getString(R.string.memo_btn3_brief_text));
+            hm.get("4").setText(getString(R.string.memo_btn4_brief_text));
+            hm.get("5").setText(getString(R.string.memo_btn5_brief_text));
+        }
+        else if(settingManager.getButtonStyle() == SettingManager.ButtonStyle.ANKI){
+            hm.get("0").setText(getString(R.string.memo_btn0_anki_text) + "\n+" + currentItem.processAnswer(0, true));
+            hm.get("1").setText(getString(R.string.memo_btn1_anki_text) + "\n+" + currentItem.processAnswer(1, true));
+            hm.get("2").setText(getString(R.string.memo_btn2_anki_text) + "\n+" + currentItem.processAnswer(2, true));
+            hm.get("3").setText(getString(R.string.memo_btn3_anki_text) + "\n+" + currentItem.processAnswer(3, true));
+            hm.get("4").setText(getString(R.string.memo_btn4_anki_text) + "\n+" + currentItem.processAnswer(4, true));
+            hm.get("5").setText(getString(R.string.memo_btn5_anki_text) + "\n+" + currentItem.processAnswer(5, true));
+        }
+        else{
+            hm.get("0").setText(getString(R.string.memo_btn0_text) + "\n+" + currentItem.processAnswer(0, true));
+            hm.get("1").setText(getString(R.string.memo_btn1_text) + "\n+" + currentItem.processAnswer(1, true));
+            hm.get("2").setText(getString(R.string.memo_btn2_text) + "\n+" + currentItem.processAnswer(2, true));
+            hm.get("3").setText(getString(R.string.memo_btn3_text) + "\n+" + currentItem.processAnswer(3, true));
+            hm.get("4").setText(getString(R.string.memo_btn4_text) + "\n+" + currentItem.processAnswer(4, true));
+            hm.get("5").setText(getString(R.string.memo_btn5_text) + "\n+" + currentItem.processAnswer(5, true));
+
         }
     }
+    
 
     void setGradeButtonListeners(){
         Map<String, Button> hm = controlButtons.getButtons();
         for(int i = 0; i < 6; i++){
             Button b = hm.get(Integer.valueOf(i).toString());
             b.setOnClickListener(getGradeButtonListener(i));
+            b.setOnLongClickListener(getGradeButtonLongClickListener(i));
         }
     }
 
@@ -485,6 +509,16 @@ public class MemoScreen extends AMActivity{
                     updateFlashcardView(false);
                     hideButtons();
                 }
+            }
+        };
+    }
+
+    private View.OnLongClickListener getGradeButtonLongClickListener(final int grade){
+        return new View.OnLongClickListener(){
+            public boolean onLongClick(View v){
+                String[] helpText = {getString(R.string.memo_btn0_help_text),getString(R.string.memo_btn1_help_text),getString(R.string.memo_btn2_help_text),getString(R.string.memo_btn3_help_text),getString(R.string.memo_btn4_help_text),getString(R.string.memo_btn5_help_text)};
+                Toast.makeText(MemoScreen.this, helpText[grade], Toast.LENGTH_SHORT).show();
+                return true;
             }
         };
     }
