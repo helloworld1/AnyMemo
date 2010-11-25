@@ -114,6 +114,13 @@
     <item>3. Both 1 and 2</item>
 </string-array>
 
+<string-array name="speech_ctl_list_values">
+    <item>MANUAL</item>
+    <item>TAP</item>
+    <item>AUTO</item>
+    <item>AUTOTAP</item>
+</string-array>
+
 <string-array name="button_style_list">
     <item>AnyMemo</item>
     <item>Mnemosyne</item>

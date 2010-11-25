@@ -8,9 +8,9 @@
         <ListPreference
             android:key="speech_ctl"
             android:title="@string/speech_ctl_title" 
-            android:defaultValue="0. Manually"
+            android:defaultValue="TAP"
             android:entries="@array/speech_ctl_list"
-            android:entryValues="@array/speech_ctl_list"
+            android:entryValues="@array/speech_ctl_list_values"
             android:summary="@string/speech_ctl_summary" />
         <ListPreference
             android:key="touch_area"

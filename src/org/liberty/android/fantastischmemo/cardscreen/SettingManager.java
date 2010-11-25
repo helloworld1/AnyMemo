@@ -450,17 +450,17 @@ public class SettingManager{
         AUTOTAP;
 
         public static SpeechControlMethod parse(String a){
-            if(a.startsWith("0")){
+            if(a.equals("MANUAL")){
                 return MANUAL;
             }
-            else if(a.startsWith("1")){
-                return TAP;
-            }
-            else if(a.startsWith("2")){
+            else if(a.equals("AUTO")){
                 return AUTO;
             }
-            else{
+            else if(a.equals("AUTOTAP")){
                 return AUTOTAP;
+            }
+            else{
+                return TAP;
             }
 
         }

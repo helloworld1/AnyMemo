@@ -414,6 +414,8 @@ public class MemoScreen extends AMActivity{
         View.OnClickListener speakAnswerListener = new View.OnClickListener(){
             public void onClick(View v){
                 if(currentItem != null){
+                    updateFlashcardView(true);
+                    showButtons();
                     answerTTS.sayText(currentItem.getAnswer());
                 }
             }
@@ -432,7 +434,7 @@ public class MemoScreen extends AMActivity{
         flashcardDisplay.setAnswerLayoutClickListener(showAnswerListener);
         if(settingManager.getSpeechControlMethod() == SettingManager.SpeechControlMethod.TAP || settingManager.getSpeechControlMethod() == SettingManager.SpeechControlMethod.AUTOTAP){
             flashcardDisplay.setQuestionTextClickListener(speakQuestionListener);
-            flashcardDisplay.setAnswerLayoutClickListener(speakAnswerListener);
+            flashcardDisplay.setAnswerTextClickListener(speakAnswerListener);
         }
         else{
             flashcardDisplay.setQuestionTextClickListener(showAnswerListener);
