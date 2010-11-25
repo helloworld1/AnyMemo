@@ -36,6 +36,8 @@ interface QueueManager{
     public void insertIntoQueue(Item item, int position);
     /* after everything */
     public void close();
+    /* Get statistics info*/
+    public int[] getStatInfo();
 }
 
 

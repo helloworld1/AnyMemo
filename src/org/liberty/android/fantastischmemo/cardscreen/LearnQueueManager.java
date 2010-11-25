@@ -95,6 +95,8 @@ class LearnQueueManager implements QueueManager{
     private int queueSize;
     private boolean shuffleCards;
     private List<Item> learnQueue = null;
+    private int revCardNo;
+    private int newCardNo;
 
 
     public static class Builder{
@@ -139,6 +141,8 @@ class LearnQueueManager implements QueueManager{
         queueSize = builder.queueSize;
         shuffleCards = builder.shuffleCards;
         dbHelper = new DatabaseHelper(mContext, dbPath, dbName);
+        revCardNo = dbHelper.getScheduledCount();
+        newCardNo = dbHelper.getNewCount();
     }
 
 
@@ -164,15 +168,25 @@ class LearnQueueManager implements QueueManager{
         if(learnQueue == null || learnQueue.size() == 0){
             return null;
         }
+        if(item == null){
+            return learnQueue.get(0).clone();
+        }
+
+        if(!item.isScheduled()){
+            if(learnQueue.get(0).isScheduled()){
+                revCardNo -= 1;
+            }
+            if(learnQueue.get(0).isNew()){
+                newCardNo -= 1;
+            }
+        }
+
         /* To shuffle card, the first item must be maintained */
         if(shuffleCards && learnQueue.size() >= 2){
             Item first = learnQueue.get(0);
             learnQueue.remove(0);
             Collections.shuffle(learnQueue);
             learnQueue.add(0, first);
-        }
-        if(item == null){
-            return learnQueue.get(0);
         }
         Item orngItem = learnQueue.remove(0);
         if(item.isScheduled() || item.isNew()){
@@ -207,7 +221,7 @@ class LearnQueueManager implements QueueManager{
             }
         }
         if(learnQueue.size() > 0){
-            return learnQueue.get(0);
+            return learnQueue.get(0).clone();
         }
         else{
             return null;
@@ -255,6 +269,9 @@ class LearnQueueManager implements QueueManager{
         }
     }
 
+    public int[] getStatInfo(){
+        return new int[]{newCardNo, revCardNo};
+    }
     public void close(){
         if(dbHelper != null){
             dbHelper.close();

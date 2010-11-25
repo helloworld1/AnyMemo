@@ -492,7 +492,8 @@ public class MemoScreen extends AMActivity{
     }
 
     void setActivityTitle(){
-        setTitle("" + currentItem.getId());
+        int[] stat = queueManager.getStatInfo();
+        setTitle(getString(R.string.stat_new) + stat[0] + " " + getString(R.string.stat_scheduled) + stat[1] + " " + getString(R.string.memo_current_id) + currentItem.getId());
     }
 
 
