@@ -49,7 +49,7 @@ import android.content.res.Configuration;
 import java.util.List;
 
 
-public class ListEditScreen extends Activity implements OnItemClickListener{
+public class ListEditScreen extends AMActivity implements OnItemClickListener{
     private String dbPath = null;
     private String dbName = null;
     private static String TAG = "org.liberty.android.fantastischmemo.ListEditScreen";
@@ -69,10 +69,6 @@ public class ListEditScreen extends Activity implements OnItemClickListener{
             initPosition = extras.getInt("openid") - 1;
 		}
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        /* set if the orientation change is allowed */
-        if(!settings.getBoolean("allow_orientation", true)){
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
         final ProgressDialog progressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_database), true);
         new Thread(){
             public void run(){
@@ -94,12 +90,6 @@ public class ListEditScreen extends Activity implements OnItemClickListener{
             }
         }.start();
 
-    }
-
-    /* In order to handle orientation change correctly */
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
     }
 
     @Override

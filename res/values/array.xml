@@ -71,36 +71,32 @@
     <item>100%</item>
     <item>0%</item>
 </string-array>
-<string-array name="color_list">
-    <item>Default</item>
-    <item>Black</item>
-    <item>White</item>
-    <item>Red</item>
-    <item>Green</item>
-    <item>Blue</item>
-    <item>Cyan</item>
-    <item>Magenta</item>
-    <item>Yellow</item>
-</string-array>
-<string-array name="memo_edit_dialog_list">
-    <item>Edit current card</item>
-    <item>Go to Preview/Edit Screen</item>
-    <item>Delete current card</item>
-    <item>Skip this card forever</item>
-</string-array>
+
 <string-array name="fb_dialog_list">
-    <item>Delete</item>
-    <item>Clone</item>
-    <item>Rename</item>
+    <item>@string/detail_delete</item>
+    <item>@string/clone_text</item>
+    <item>@string/rename_text</item>
 </string-array>
+
 <string-array name="interface_locale_list">
-    <item>Auto Detect</item>
-    <item>English</item>
-    <item>Simplified Chinese</item>
-    <item>Traditional Chinese</item>
-    <item>Czech</item>
-    <item>Polish</item>
-    <item>Russian</item>
+    <item>@string/locale_auto_detect_text</item>
+    <item>@string/locale_english_text</item>
+    <item>@string/locale_sc_text</item>
+    <item>@string/locale_tc_text</item>
+    <item>@string/locale_czech_text</item>
+    <item>@string/locale_polish_text</item>
+    <item>@string/locale_russian_text</item>
+</string-array>
+
+
+<string-array name="interface_locale_list_values">
+    <item>AUTO</item>
+    <item>EN</item>
+    <item>SC</item>
+    <item>TC</item>
+    <item>CS</item>
+    <item>PL</item>
+    <item>RU</item>
 </string-array>
 
 <string-array name="open_screen_menu_list">

@@ -47,6 +47,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.Button;
 import android.widget.AdapterView;
 import android.widget.TextView;
@@ -60,7 +62,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 
-public class OpenScreen extends Activity implements OnItemClickListener, OnClickListener, OnItemLongClickListener {
+public class OpenScreen extends AMActivity implements OnItemClickListener, OnClickListener{
 
 	private String dbName;
 	private String dbPath;
@@ -90,8 +92,11 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
     private final int ACTIVITY_IMPORT_SUPERMEMO_XML = 10;
 
 
+
 	private List<HashMap<String, String>> recentList;
-    public final static String TAG = "org.liberty.android.fantastischmemo.OpenScreen";
+    private final static String TAG = "org.liberty.android.fantastischmemo.OpenScreen";
+    /* The selected item when opening context menu */
+    private int contextMenuSelectedId = -1;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -103,10 +108,6 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
         openButton.setOnClickListener(this);
         mHandler = new Handler();
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        /* set if the orientation change is allowed */
-        if(!settings.getBoolean("allow_orientation", true)){
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
         dbPath = settings.getString("dbpath", null);
 
 	}
@@ -124,14 +125,6 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
 
     }
 
-    @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id){
-        this.dbPath = recentList.get(position).get("recentdbpath");
-        this.dbName = recentList.get(position).get("recentdbname");
-        showMenuDialog(dbPath, dbName);
-        return true;
-		
-	}
     @Override
 	public void onItemClick(AdapterView<?> parentView, View childView, int position, long id) {
 		
@@ -182,7 +175,8 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
 
             recentListView = (ListView)findViewById(R.id.recent_open_list);
             recentListView.setOnItemClickListener(this);
-            recentListView.setOnItemLongClickListener(this);
+            //recentListView.setOnItemLongClickListener(this);
+            registerForContextMenu(recentListView);
             /* pre loading stat */
             recentItemList = new ArrayList<RecentItem>();
             
@@ -644,96 +638,112 @@ public class OpenScreen extends Activity implements OnItemClickListener, OnClick
 
     }
 
-    protected void showMenuDialog(String dbPath, String dbName){
-        /* Display the menu when long clicking the item */
-        final String path = dbPath;
-        final String name = dbName;
-        new AlertDialog.Builder(this)
-            .setTitle(getString(R.string.menu_text))
-            .setItems(R.array.open_screen_menu_list, new DialogInterface.OnClickListener(){
-                public void onClick(DialogInterface dialog, int which){
-                    if(which == 0){
-                        /* Open database normally*/
-                        Intent myIntent = new Intent();
-                        myIntent.setClass(OpenScreen.this, MemoScreen.class);
-                        myIntent.putExtra("dbname", name);
-                        myIntent.putExtra("dbpath", path);
-                        try{
-                            mRecentOpenList.writeNewList(path, name);
-                        }
-                        catch(InterruptedException e){
-                        }
-                        startActivity(myIntent);
-                    }
-                    if(which == 1){
-                        /* Cram Review */
-                        Intent myIntent = new Intent();
-                        myIntent.setClass(OpenScreen.this, MemoScreen.class);
-                        myIntent.putExtra("dbname", name);
-                        myIntent.putExtra("dbpath", path);
-                        myIntent.putExtra("learn_ahead", true);
-                        try{
-                            mRecentOpenList.writeNewList(path, name);
-                        }
-                        catch(InterruptedException e){
-                        }
-                        startActivity(myIntent);
-                    }
-                    if(which == 2){
-                        /* Preview card */
-                        Intent myIntent = new Intent();
-                        myIntent.setClass(OpenScreen.this, EditScreen.class);
-                        myIntent.putExtra("dbname", name);
-                        myIntent.putExtra("dbpath", path);
-                        myIntent.putExtra("openid", 1);
-                        try{
-                            mRecentOpenList.writeNewList(path, name);
-                        }
-                        catch(InterruptedException e){
-                        }
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.open_screen_context_menu, menu);
+        menu.setHeaderTitle(R.string.menu_text);
 
-
-                        startActivity(myIntent);
-                    }
-                    if(which == 3){
-                        /* Edit database settings*/
-                        Intent myIntent = new Intent();
-                        myIntent.setClass(OpenScreen.this, SettingsScreen.class);
-                        myIntent.putExtra("dbname", name);
-                        myIntent.putExtra("dbpath", path);
-                        try{
-                            mRecentOpenList.writeNewList(path, name);
-                        }
-                        catch(InterruptedException e){
-                        }
-                        startActivity(myIntent);
-                    }
-                    if(which == 4){
-                        /* Delete this database */
-                        new AlertDialog.Builder(OpenScreen.this)
-                            .setTitle(getString(R.string.detail_delete))
-                            .setMessage(getString(R.string.fb_delete_message))
-                            .setPositiveButton(getString(R.string.detail_delete), new DialogInterface.OnClickListener(){
-                                @Override
-                                public void onClick(DialogInterface dialog, int which ){
-                                    File fileToDelete = new File(path + "/" + name);
-                                    fileToDelete.delete();
-                                    finish();
-                                    Intent myIntent = new Intent();
-                                    myIntent.setClass(OpenScreen.this, OpenScreen.class);
-                                    startActivity(myIntent);
-                                    
-                                }
-                            })
-                            .setNegativeButton(getString(R.string.cancel_text), null)
-                            .create()
-                            .show();
-                    }
-                }
-            })
-            .create()
-            .show();
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        Log.v(TAG, "Menu ID: " + info.id);
+        contextMenuSelectedId = (int)info.id;
     }
 
-            
+    @Override
+    public boolean onContextItemSelected(MenuItem menuitem) {
+        if(contextMenuSelectedId == -1 || contextMenuSelectedId >= recentList.size()){
+            return false;
+        }
+        final String selectedPath = recentList.get(contextMenuSelectedId).get("recentdbpath");
+        final String selectedName = recentList.get(contextMenuSelectedId).get("recentdbname");
+        switch(menuitem.getItemId()) {
+            case R.id.context_study:
+            {
+                /* Open database normally*/
+                Intent myIntent = new Intent();
+                myIntent.setClass(OpenScreen.this, MemoScreen.class);
+                myIntent.putExtra("dbname", selectedName);
+                myIntent.putExtra("dbpath", selectedPath);
+                try{
+                    mRecentOpenList.writeNewList(selectedPath, selectedName);
+                }
+                catch(InterruptedException e){
+                }
+                startActivity(myIntent);
+                return true;
+            }
+
+            case R.id.context_cram:
+            {
+                /* Cram Review */
+                Intent myIntent = new Intent();
+                myIntent.setClass(OpenScreen.this, CramMemoScreen.class);
+                myIntent.putExtra("dbname", selectedName);
+                myIntent.putExtra("dbpath", selectedPath);
+                try{
+                    mRecentOpenList.writeNewList(selectedPath, selectedName);
+                }
+                catch(InterruptedException e){
+                }
+                startActivity(myIntent);
+                return true;
+            }
+
+            case R.id.context_edit:
+            {
+                /* Preview card */
+                Intent myIntent = new Intent();
+                myIntent.setClass(OpenScreen.this, EditScreen.class);
+                myIntent.putExtra("dbname", selectedName);
+                myIntent.putExtra("dbpath", selectedPath);
+                myIntent.putExtra("openid", 1);
+                try{
+                    mRecentOpenList.writeNewList(selectedPath, selectedName);
+                }
+                catch(InterruptedException e){
+                }
+                startActivity(myIntent);
+                return true;
+            }
+
+            case R.id.context_settings:
+            {
+                /* Edit database settings*/
+                Intent myIntent = new Intent();
+                myIntent.setClass(OpenScreen.this, SettingsScreen.class);
+                myIntent.putExtra("dbname", selectedName);
+                myIntent.putExtra("dbpath", selectedPath);
+                try{
+                    mRecentOpenList.writeNewList(selectedPath, selectedName);
+                }
+                catch(InterruptedException e){
+                }
+                startActivity(myIntent);
+                return true;
+            }
+
+            case R.id.context_delete:
+            {
+                /* Delete this database */
+                new AlertDialog.Builder(OpenScreen.this)
+                    .setTitle(getString(R.string.detail_delete))
+                    .setMessage(getString(R.string.fb_delete_message))
+                    .setPositiveButton(getString(R.string.detail_delete), new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int which ){
+                            File fileToDelete = new File(selectedPath+ "/" + selectedName);
+                            fileToDelete.delete();
+                            restartActivity();
+                            
+                        }
+                    })
+                    .setNegativeButton(getString(R.string.cancel_text), null)
+                    .create()
+                    .show();
+                return true;
+            }
+        }
+        return false;
+    }
 }

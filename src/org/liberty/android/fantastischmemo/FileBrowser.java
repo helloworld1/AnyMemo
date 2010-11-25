@@ -61,7 +61,7 @@ import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.preference.PreferenceManager;
 
-public class FileBrowser extends Activity implements OnItemClickListener, OnItemLongClickListener{
+public class FileBrowser extends AMActivity implements OnItemClickListener, OnItemLongClickListener{
 	private enum DISPLAYMODE{ABSOLUTE, RELATIVE;}
 	private final DISPLAYMODE displayMode = DISPLAYMODE.RELATIVE;
 	private ArrayList<String> directoryEntries = new ArrayList<String>();
@@ -80,10 +80,6 @@ public class FileBrowser extends Activity implements OnItemClickListener, OnItem
         setContentView(R.layout.file_browser);
 		mContext = this;
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        /* set if the orientation change is allowed */
-        if(!settings.getBoolean("allow_orientation", true)){
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
         if(defaultRoot == null){
             defaultRoot = settings.getString("saved_fb_path", null);
         }
@@ -507,12 +503,5 @@ public class FileBrowser extends Activity implements OnItemClickListener, OnItem
 		in.close();
 		out.close();
 	}
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-    }
-	
-
 }
 

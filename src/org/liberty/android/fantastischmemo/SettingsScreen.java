@@ -60,7 +60,7 @@ import android.preference.PreferenceManager;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 
-public class SettingsScreen extends Activity implements View.OnClickListener, ColorDialog.OnClickListener {
+public class SettingsScreen extends AMActivity implements View.OnClickListener, ColorDialog.OnClickListener {
 	private Spinner questionFontSizeSpinner;
 	private Spinner answerFontSizeSpinner;
 	private Spinner questionAlignSpinner;
@@ -105,11 +105,6 @@ public class SettingsScreen extends Activity implements View.OnClickListener, Co
         mContext = this;
         mHandler = new Handler();
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        /* set if the orientation change is allowed */
-        if(!settings.getBoolean("allow_orientation", true)){
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
-
         
         /* Properly set up all the Views */
         questionFontSizeSpinner = (Spinner)findViewById(R.id.question_font_size_spinner);
@@ -164,8 +159,6 @@ public class SettingsScreen extends Activity implements View.OnClickListener, Co
         ratioAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ratioSpinner.setAdapter(ratioAdapter);
 
-        ArrayAdapter<CharSequence> colorAdapter = ArrayAdapter.createFromResource(this, R.array.color_list, android.R.layout.simple_spinner_item);
-        colorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         colorRow = (TableRow)findViewById(R.id.color_row);
         colorRow.setVisibility(View.GONE);
@@ -470,7 +463,6 @@ public class SettingsScreen extends Activity implements View.OnClickListener, Co
     	String[] localeList = getResources().getStringArray(R.array.locale_list);
     	String[] htmlList = getResources().getStringArray(R.array.html_list);
     	String[] ratioList = getResources().getStringArray(R.array.ratio_list);
-    	String[] colorList = getResources().getStringArray(R.array.color_list);
     	hm.put("question_font_size", fontSizeList[questionFontSizeSpinner.getSelectedItemPosition()]);
     	hm.put("answer_font_size", fontSizeList[answerFontSizeSpinner.getSelectedItemPosition()]);
     	hm.put("question_align", alignList[questionAlignSpinner.getSelectedItemPosition()]);
@@ -731,13 +723,4 @@ public class SettingsScreen extends Activity implements View.OnClickListener, Co
 
         }
     }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-    }
-                
-                
-
-    
 }

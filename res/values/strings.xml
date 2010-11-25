@@ -277,4 +277,14 @@
     <string name="source_db_text">Source Database (Double click to browse)</string>
     <string name="exception_message">Exception occurred during the operation.</string>
     <string name="error_text">Error</string>
+    <string name="clone_text">Clone</string>
+    <string name="rename_text">Rename</string>
+    <string name="locale_auto_detect_text">Auto Detect</string>
+    <string name="locale_english_text">English</string>
+    <string name="locale_sc_text">Simplified Chinese</string>
+    <string name="locale_tc_text">Traditional Chinese</string>
+    <string name="locale_czech_text">Czech</string>
+    <string name="locale_polish_text">Polish</string>
+    <string name="locale_russian_text">Russian</string>
+    <string name="study_text">Study</string>
 </resources>

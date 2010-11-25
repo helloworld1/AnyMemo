@@ -51,25 +51,25 @@ public abstract class AMActivity extends Activity{
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
 
-        String localeSetting = settings.getString("interface_locale", "Auto Detect");
+        String localeSetting = settings.getString("interface_locale", "AUTO");
         Locale locale;
         /* Force to use the a language */
-        if(localeSetting.equals("English")){
+        if(localeSetting.equals("EN")){
             locale = Locale.US;
         }
-        else if(localeSetting.equals("Simplified Chinese")){
+        else if(localeSetting.equals("SC")){
             locale = Locale.SIMPLIFIED_CHINESE;
         }
-        else if(localeSetting.equals("Traditional Chinese")){
+        else if(localeSetting.equals("TC")){
             locale = Locale.TRADITIONAL_CHINESE;
         }
-        else if(localeSetting.equals("Czech")){
+        else if(localeSetting.equals("CS")){
             locale = new Locale("CS");
         }
-        else if(localeSetting.equals("Polish")){
+        else if(localeSetting.equals("PL")){
             locale = new Locale("PL");
         }
-        else if(localeSetting.equals("Russian")){
+        else if(localeSetting.equals("RU")){
             locale = new Locale("RU");
         }
         else{

@@ -53,7 +53,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.Html;
 import android.content.Context;
 
-public class AnyMemo extends Activity implements OnClickListener{
+public class AnyMemo extends AMActivity implements OnClickListener{
 	private String dbName;
 	private String dbPath;
 	private int returnValue;
@@ -67,41 +67,6 @@ public class AnyMemo extends Activity implements OnClickListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        /* set if the orientation change is allowed */
-        if(!settings.getBoolean("allow_orientation", true)){
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
-        Locale locale;
-        /* Handle Locale */
-        String localeSetting = settings.getString("interface_locale", "Auto Detect");
-        Log.v(TAG, "Locale " + localeSetting);
-
-        /* Force to use the a language */
-        if(localeSetting.equals("English")){
-            locale = Locale.US;
-        }
-        else if(localeSetting.equals("Simplified Chinese")){
-            locale = Locale.SIMPLIFIED_CHINESE;
-        }
-        else if(localeSetting.equals("Traditional Chinese")){
-            locale = Locale.TRADITIONAL_CHINESE;
-        }
-        else if(localeSetting.equals("Czech")){
-            locale = new Locale("CS");
-        }
-        else if(localeSetting.equals("Polish")){
-            locale = new Locale("PL");
-        }
-        else if(localeSetting.equals("Russian")){
-            locale = new Locale("RU");
-        }
-        else{
-            locale = Locale.getDefault();
-        }
-        Configuration config = new Configuration();
-        config.locale = locale;
-        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-
         setContentView(R.layout.main);
 
         btnNew = (Button)this.findViewById(R.id.main_open_database_button);
@@ -432,11 +397,6 @@ public class AnyMemo extends Activity implements OnClickListener{
 		in.close();
 		out.close();
 	}
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-    }
 
     private void gotoScreen(String screenName){
         if(screenName == null){
