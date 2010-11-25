@@ -28,7 +28,7 @@
         <ListPreference
             android:key="button_style"
             android:title="@string/button_style_title" 
-            android:defaultValue="AnyMemo"
+            android:defaultValue="ANYMEMO"
             android:entries="@array/button_style_list"
             android:entryValues="@array/button_style_list_values"
             android:summary="@string/button_style_summary" />
@@ -71,9 +71,9 @@
         <ListPreference
             android:key="notification_interval"
             android:title="@string/notification_text"
-            android:defaultValue="24 hr"
+            android:defaultValue="24"
             android:entries="@array/notification_interval_list"
-            android:entryValues="@array/notification_interval_list"
+            android:entryValues="@array/notification_interval_list_values"
             android:summary="@string/notification_summary" />
     </PreferenceCategory>
     <PreferenceCategory

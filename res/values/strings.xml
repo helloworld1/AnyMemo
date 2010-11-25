@@ -300,4 +300,12 @@
     <string name="screen_edit_text">Edit Screen</string>
     <string name="screen_open_text">Open Screen</string>
     <string name="screen_memo_text">Memo Screen</string>
+    <string name="disabled_text">Disabled</string>
+    <string name="notification_1hr_text">1 Hour</string>
+    <string name="notification_6hr_text">6 Hours</string>
+    <string name="notification_12hr_text">12 Hours</string>
+    <string name="notification_24hr_text">One Day</string>
+    <string name="download_source_anymemo">http://anymemo.org (default)</string>
+    <string name="download_source_fe">http://flashcardexchange.com (experimental)</string>
+    <string name="download_source_ss">http://studystack.com (experimental)</string>
 </resources>

@@ -47,21 +47,21 @@ public class SetAlarmReceiver extends BroadcastReceiver{
         /* Set interval from the settings */
 
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-        String s = settings.getString("notification_interval", "24 hr");
+        String s = settings.getString("notification_interval", "24");
         long interval = AlarmManager.INTERVAL_DAY;
-        if(s.equals("Disabled")){
+        if(s.equals("0")){
             return;
         }
-        else if(s.equals("1 hr")){
+        else if(s.equals("1")){
             interval = AlarmManager.INTERVAL_HOUR * 1;
         }
-        else if(s.equals("6 hr")){
+        else if(s.equals("6")){
             interval = AlarmManager.INTERVAL_HOUR * 6;
         }
-        else if(s.equals("12 hr")){
+        else if(s.equals("12")){
             interval = AlarmManager.INTERVAL_HOUR * 12;
         }
-        else if(s.equals("24 hr")){
+        else if(s.equals("24")){
             interval = AlarmManager.INTERVAL_HOUR * 24 - 10;
         }
 
