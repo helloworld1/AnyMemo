@@ -215,7 +215,7 @@
     <string name="merge_db_text">Merge DB</string>
     <string name="merge_success_title">Merge Success</string>
     <string name="merge_fail_title">Merge Failed</string>
-    <string name="merge_success_message">Successfully merge databases:</string>
+    <string name="merge_success_message">Successfully merge databases.</string>
     <string name="merge_fail_message">Fail to merge databases. Error:</string>
     <string name="merging_title">Merging...</string>
     <string name="merging_summary">Merging databases. Please wait.</string>
@@ -275,4 +275,6 @@
     <string name="db_merger_explaination">Merge the Source Database into the Target Database</string>
     <string name="target_db_text">Target Database (Double click to browse)</string>
     <string name="source_db_text">Source Database (Double click to browse)</string>
+    <string name="exception_message">Exception occurred during the operation.</string>
+    <string name="error_text">Error</string>
 </resources>

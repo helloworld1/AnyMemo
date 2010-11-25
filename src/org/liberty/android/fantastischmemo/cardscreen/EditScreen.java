@@ -143,7 +143,7 @@ public class EditScreen extends AMActivity{
         }
         catch(Exception e){
             Log.e(TAG, "Error in the onCreate()", e);
-            AMGUIUtility.displayException(this, getString(R.string.open_database_error_title), getString(R.string.open_database_error_message), e);
+            AMGUIUtility.displayError(this, getString(R.string.open_database_error_title), getString(R.string.open_database_error_message), e);
         }
 
     }
@@ -204,6 +204,11 @@ public class EditScreen extends AMActivity{
             {
                 Bundle extras = data.getExtras();
                 currentItem = (Item)extras.getSerializable("item");
+                restartActivity();
+                break;
+            }
+            case ACTIVITY_MERGE:
+            {
                 restartActivity();
                 break;
             }

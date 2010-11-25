@@ -139,7 +139,7 @@ public class MemoScreen extends AMActivity{
             initQueue();
         }
         catch(Exception e){
-            AMGUIUtility.displayException(this, getString(R.string.open_database_error_title), getString(R.string.open_database_error_message), e);
+            AMGUIUtility.displayError(this, getString(R.string.open_database_error_title), getString(R.string.open_database_error_message), e);
         }
     }
 

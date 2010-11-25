@@ -99,7 +99,7 @@ public class AMGUIUtility{
         /* Shouldn't be invoked */
     }
 
-    public static void displayException(final Activity activity, final String title, final String text, final Exception e){
+    public static void displayError(final Activity activity, final String title, final String text, final Exception e){
         new AlertDialog.Builder(activity)
             .setTitle(title)
             .setMessage(text + "\n" + activity.getString(R.string.exception_text) +": " + e.toString())
@@ -116,18 +116,36 @@ public class AMGUIUtility{
             .show();
     }
 
+    public static void displayException(final Context context, final String title, final String text, final Exception e){
+        new AlertDialog.Builder(context)
+            .setTitle(title)
+            .setMessage(text + "\n" + context.getString(R.string.exception_text) +": " + e.toString())
+            .setPositiveButton(context.getString(R.string.back_menu_text), null)
+            .show();
+    }
+
     public static void doProgressTask(final Context context, final int progressTitleId, final int progressMessageId, final ProgressTask task){
         final ProgressDialog mProgressDialog = ProgressDialog.show(context, context.getString(progressTitleId), context.getString(progressMessageId), true);
         final Handler handler = new Handler();
         new Thread(){
             public void run(){
-                task.doHeavyTask();
-                handler.post(new Runnable(){
-                    public void run(){
-                        task.doUITask();
-                        mProgressDialog.dismiss();
-                    }
-                });
+                try{
+                    task.doHeavyTask();
+                    handler.post(new Runnable(){
+                        public void run(){
+                            task.doUITask();
+                            mProgressDialog.dismiss();
+                        }
+                    });
+                }
+                catch(final Exception e){
+                    handler.post(new Runnable(){
+                        public void run(){
+                            mProgressDialog.dismiss();
+                            displayException(context, context.getString(R.string.exception_text), context.getString(R.string.exception_message), e);
+                        }
+                    });
+                }
             }
         }.start();
     }

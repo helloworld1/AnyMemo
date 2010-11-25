@@ -61,7 +61,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private final Context mContext;
     private static final String TAG = "org.liberty.android.fantastischmemo.DatabaseHelper";
 		
-	public DatabaseHelper(Context context, String path, String name) throws SQLException{
+	public DatabaseHelper(Context context, String path, String name){
 		super(context, name, null, 1);
 		dbPath = path;
 		dbName = name;
@@ -765,13 +765,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         setSettings(hm);
     }
 
-    public void mergeDatabase(String dbpath, String dbname, int fromId) throws Exception{
+    public void mergeDatabase(String dbpath, String dbname, int fromId){
         if(fromId >= getNewId() || fromId < 1){
-            throw new Exception("Invalid fromId in mergeDatabase");
+            throw new IndexOutOfBoundsException("Invalid fromId in mergeDatabase");
         }
         DatabaseHelper dbHelper2 = new DatabaseHelper(mContext, dbpath, dbname);
         final List<Item> items1 = getListItems(fromId + 1, -1, 0, null); 
-        final List<Item> items2 = getListItems(-1, -1, 0, null); 
+        final List<Item> items2 = dbHelper2.getListItems(-1, -1, 0, null); 
         dbHelper2.close();
         /* Merge the items1 and items2 */
         final int totalItems = items1.size() + items2.size();
@@ -793,7 +793,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         items1.addAll(items2);
         insertListItems(items1);
-
     }
 
     public void insertItem(Item item, int id){

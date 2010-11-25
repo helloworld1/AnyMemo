@@ -88,6 +88,7 @@ import android.text.Html.ImageGetter;
 import android.content.res.Configuration;
 import android.view.inputmethod.InputMethodManager;
 import android.net.Uri;
+import android.database.SQLException;
 
 public class DatabaseMerger extends AMActivity implements View.OnClickListener{
     private final static String TAG = "org.liberty.android.fantastischmemo.cardscreen.DatabaseMerger";
@@ -95,6 +96,8 @@ public class DatabaseMerger extends AMActivity implements View.OnClickListener{
     private final int ACTIVITY_FB_SOURCE = 2;
     private EditText targetEdit;
     private EditText sourceEdit;
+    private Button mergeButton;
+    private Button cancelButton;
 
     @Override
 	public void onCreate(Bundle savedInstanceState){
@@ -109,9 +112,13 @@ public class DatabaseMerger extends AMActivity implements View.OnClickListener{
         }
         targetEdit = (EditText)findViewById(R.id.target_db_edit);
         sourceEdit = (EditText)findViewById(R.id.source_db_edit);
+        mergeButton = (Button)findViewById(R.id.merge_button);
+        cancelButton = (Button)findViewById(R.id.cancel_button);
         targetEdit.setOnClickListener(this);
         sourceEdit.setOnClickListener(this);
-        targetEdit.setText(dbPath + "/" + dbName);
+        mergeButton.setOnClickListener(this);
+        cancelButton.setOnClickListener(this);
+        targetEdit.setText(dbPath + dbName);
         
     }
 
@@ -167,6 +174,61 @@ public class DatabaseMerger extends AMActivity implements View.OnClickListener{
             myIntent.putExtra("file_extension", ".db");
             startActivityForResult(myIntent, ACTIVITY_FB_SOURCE);
         }
+
+        if(v == mergeButton){
+            AMGUIUtility.doProgressTask(this, R.string.merging_title, R.string.merging_summary, new AMGUIUtility.ProgressTask(){
+                public void doHeavyTask(){
+                    String[] splittedpath1 = splitDBPath(targetEdit.getText().toString());
+                    String[] splittedpath2 = splitDBPath(sourceEdit.getText().toString());
+                    /* splittedpath1[0] is the dbPath for the source
+                     * and 1 is dbName */
+                    DatabaseHelper dbHelper = new DatabaseHelper(DatabaseMerger.this, splittedpath1[0], splittedpath1[1]);
+                    /* Merge to the back fo source database */
+                    dbHelper.mergeDatabase(splittedpath2[0], splittedpath2[1], dbHelper.getNewId() - 1);
+                    dbHelper.close();
+                }
+
+                public void doUITask(){
+                    new AlertDialog.Builder(DatabaseMerger.this)
+                        .setTitle(R.string.merge_success_title)
+                        .setMessage(R.string.merge_success_message)
+                        .setPositiveButton(R.string.back_menu_text, new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface arg0, int arg1){
+                                Intent resultIntent = new Intent();
+                                setResult(Activity.RESULT_OK, resultIntent);
+                                finish();
+                            }
+                        })
+                        .create()
+                        .show();
+                }
+            });
+
+        }
+        if(v == cancelButton){
+            finish();
+        }
     }
+
+    /* 
+     * Split the path into dbpath and dbname
+     * return value is an array, first element is dbpath
+     * second one is dbname
+     */
+    private String[] splitDBPath(String fullpath){
+        int rightMostSlashIndex = -1;
+        for(int i = 0; i < fullpath.length(); i++){
+            if(fullpath.charAt(i) == '/'){
+                rightMostSlashIndex = i;
+            }
+        }
+        if(rightMostSlashIndex == -1){
+            throw new IllegalArgumentException("Invalid path string: " + fullpath);
+        }
+        String path = fullpath.substring(0, rightMostSlashIndex + 1);
+        String name = fullpath.substring(rightMostSlashIndex + 1, fullpath.length());
+        return new String[]{path, name};
+    }
+
 }
 
