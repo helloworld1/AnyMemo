@@ -151,10 +151,17 @@
 </integer-array>
 
 <string-array name="startup_screen_list">
-    <item>Main Screen</item>
-    <item>Open Screen</item>
-    <item>Memo Screen</item>
-    <item>Edit Screen</item>
+    <item>@string/screen_main_text</item>
+    <item>@string/screen_open_text</item>
+    <item>@string/screen_memo_text</item>
+    <item>@string/screen_edit_text</item>
+</string-array>
+
+<string-array name="startup_screen_list_values">
+    <item>MAIN</item>
+    <item>OPEN</item>
+    <item>MEMO</item>
+    <item>EDIT</item>
 </string-array>
 
 <string-array name="notification_interval_list">

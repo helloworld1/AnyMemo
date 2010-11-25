@@ -296,4 +296,8 @@
     <string name="settings_color_question_bg">Question Background</string>
     <string name="settings_color_answer_bg">Answer Background</string>
     <string name="settings_color_separator">Separator</string>
+    <string name="screen_main_text">Main Screen</string>
+    <string name="screen_edit_text">Edit Screen</string>
+    <string name="screen_open_text">Open Screen</string>
+    <string name="screen_memo_text">Memo Screen</string>
 </resources>

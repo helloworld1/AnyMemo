@@ -64,9 +64,9 @@
         <ListPreference
             android:key="startup_screen"
             android:title="@string/startup_title" 
-            android:defaultValue="Main Screen"
+            android:defaultValue="MAIN"
             android:entries="@array/startup_screen_list"
-            android:entryValues="@array/startup_screen_list"
+            android:entryValues="@array/startup_screen_list_values"
             android:summary="@string/startup_summary" />
         <ListPreference
             android:key="notification_interval"

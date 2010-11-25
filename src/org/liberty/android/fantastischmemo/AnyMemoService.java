@@ -120,7 +120,7 @@ public class AnyMemoService extends Service{
         finally{
             /* Set on click event */
             Intent intent = new Intent(this, AnyMemo.class);
-            intent.putExtra("screen", "Memo Screen");
+            intent.putExtra("screen", "MEMO");
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, WIDGET_REQ, intent, PendingIntent.FLAG_CANCEL_CURRENT);
             updateViews.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);
@@ -135,7 +135,7 @@ public class AnyMemoService extends Service{
                 return;
             }
             Intent myIntent = new Intent(this, AnyMemo.class);
-            myIntent.putExtra("screen", "Memo Screen");
+            myIntent.putExtra("screen", "MEMO");
             myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             NotificationManager notificationManager = (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
             Notification notification = new Notification(R.drawable.icon_notification, getString(R.string.app_name), System.currentTimeMillis());

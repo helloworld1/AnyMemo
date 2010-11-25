@@ -402,12 +402,12 @@ public class AnyMemo extends AMActivity implements OnClickListener{
         if(screenName == null){
             return;
         }
-        else if(screenName.equals("Open Screen")){
+        else if(screenName.equals("OPEN")){
             Intent myIntent = new Intent();
     		myIntent.setClass(this, OpenScreen.class);
     		startActivity(myIntent);
         }
-        else if(screenName.equals("Memo Screen")){
+        else if(screenName.equals("MEMO")){
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
     		Intent myIntent = new Intent();
     		myIntent.setClass(this, MemoScreen.class);
@@ -416,7 +416,7 @@ public class AnyMemo extends AMActivity implements OnClickListener{
     		startActivity(myIntent);
     		returnValue = 0;
         }
-        else if(screenName.equals("Edit Screen")){
+        else if(screenName.equals("EDIT")){
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
     		Intent myIntent = new Intent();
     		myIntent.setClass(this, EditScreen.class);
