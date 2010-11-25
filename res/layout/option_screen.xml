@@ -12,13 +12,6 @@
             android:entries="@array/speech_ctl_list"
             android:entryValues="@array/speech_ctl_list_values"
             android:summary="@string/speech_ctl_summary" />
-        <ListPreference
-            android:key="touch_area"
-            android:title="@string/touch_area_title"
-            android:defaultValue="Whole Screen"
-            android:entries="@array/touch_area_list"
-            android:entryValues="@array/touch_area_list"
-            android:summary="@string/touch_area_summary" />
         <CheckBoxPreference
             android:key="copyclipboard"
             android:title="@string/copyclipboard" 
@@ -37,7 +30,7 @@
             android:title="@string/button_style_title" 
             android:defaultValue="AnyMemo"
             android:entries="@array/button_style_list"
-            android:entryValues="@array/button_style_list"
+            android:entryValues="@array/button_style_list_values"
             android:summary="@string/button_style_summary" />
         <EditTextPreference
             android:key="learning_queue_size"

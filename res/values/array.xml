@@ -99,19 +99,12 @@
     <item>RU</item>
 </string-array>
 
-<string-array name="open_screen_menu_list">
-    <item>Study</item>
-    <item>Cram Review</item>
-    <item>Preview / Edit</item>
-    <item>Edit Database Settings</item>
-    <item>Delete</item>
-</string-array>
 
 <string-array name="speech_ctl_list">
-    <item>0. Manually</item>
-    <item>1. Tap to speak</item>
-    <item>2. Automatic speak</item>
-    <item>3. Both 1 and 2</item>
+    <item>@string/option_manual_speak</item>
+    <item>@string/option_tap_speak</item>
+    <item>@string/option_auto_speak</item>
+    <item>@string/option_autotap_speak</item>
 </string-array>
 
 <string-array name="speech_ctl_list_values">
@@ -127,17 +120,18 @@
     <item>Anki</item>
 </string-array>
 
+<string-array name="button_style_list_values">
+    <item>ANYMEMO</item>
+    <item>MNEMOSYNE</item>
+    <item>ANKI</item>
+</string-array>
+
 <string-array name="color_item_list">
     <item>Question Text</item>
     <item>Answer Text</item>
     <item>Question Background</item>
     <item>Answer Background</item>
     <item>Seperator</item>
-</string-array>
-
-<string-array name="touch_area_list">
-    <item>Whole Screen</item>
-    <item>Answer Text</item>
 </string-array>
 
 <integer-array name="default_color_list">

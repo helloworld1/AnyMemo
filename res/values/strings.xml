@@ -287,4 +287,8 @@
     <string name="locale_polish_text">Polish</string>
     <string name="locale_russian_text">Russian</string>
     <string name="study_text">Study</string>
+    <string name="option_manual_speak">0. Manually</string>
+    <string name="option_tap_speak">1. Tap to speak</string>
+    <string name="option_auto_speak">2. Automatic speak</string>
+    <string name="option_autotap_speak">3. Both 1 and 2</string>
 </resources>

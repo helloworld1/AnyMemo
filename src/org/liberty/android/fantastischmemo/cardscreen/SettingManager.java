@@ -430,10 +430,10 @@ public class SettingManager{
         ANKI;
 
         public static ButtonStyle parse(String a){
-            if(a.equals("Mnemosyne")){
+            if(a.equals("MNEMOSYNE")){
                 return MNEMOSYNE;
             }
-            else if(a.equals("Anki")){
+            else if(a.equals("ANKI")){
                 return ANKI;
             }
             else{

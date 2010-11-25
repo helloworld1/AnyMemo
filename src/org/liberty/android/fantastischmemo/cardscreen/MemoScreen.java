@@ -127,7 +127,16 @@ public class MemoScreen extends AMActivity{
         try{
             settingManager = new SettingManager(this, dbPath, dbName);
             flashcardDisplay = new FlashcardDisplay(this, settingManager);
-            controlButtons = new AnyMemoGradeButtons(this);
+            if(settingManager.getButtonStyle() == SettingManager.ButtonStyle.ANKI){
+            controlButtons = new AnkiGradeButtons(this);
+            }
+            else if(settingManager.getButtonStyle() == SettingManager.ButtonStyle.MNEMOSYNE){
+                controlButtons = new MnemosyneGradeButtons(this);
+            }
+            else{
+                controlButtons = new AnyMemoGradeButtons(this);
+            }
+
             initTTS();
 
 
