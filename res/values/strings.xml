@@ -291,4 +291,9 @@
     <string name="option_tap_speak">1. Tap to speak</string>
     <string name="option_auto_speak">2. Automatic speak</string>
     <string name="option_autotap_speak">3. Both 1 and 2</string>
+    <string name="settings_color_question_text">Question Text</string>
+    <string name="settings_color_answer_text">Answer Text</string>
+    <string name="settings_color_question_bg">Question Background</string>
+    <string name="settings_color_answer_bg">Answer Background</string>
+    <string name="settings_color_separator">Separator</string>
 </resources>

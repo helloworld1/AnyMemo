@@ -127,11 +127,11 @@
 </string-array>
 
 <string-array name="color_item_list">
-    <item>Question Text</item>
-    <item>Answer Text</item>
-    <item>Question Background</item>
-    <item>Answer Background</item>
-    <item>Seperator</item>
+    <item>@string/settings_color_question_text</item>
+    <item>@string/settings_color_answer_text</item>
+    <item>@string/settings_color_question_bg</item>
+    <item>@string/settings_color_answer_bg</item>
+    <item>@string/settings_color_separator</item>
 </string-array>
 
 <integer-array name="default_color_list">
