@@ -103,12 +103,26 @@ public class DatabaseUtility{
             .setTitle(R.string.warning_text)
             .setIcon(R.drawable.alert_dialog_icon)
             .setMessage(R.string.settings_inverse_warning)
-            .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
+            .setPositiveButton(R.string.swap_text, new DialogInterface.OnClickListener(){
         		public void onClick(DialogInterface arg0, int arg1){
                     AMGUIUtility.doProgressTask(mActivity, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask(){
                         public void doHeavyTask(){
                             DatabaseHelper dbHelper = new DatabaseHelper((Context)mActivity, dbPath, dbName);
                             dbHelper.inverseQA();
+                            dbHelper.close();
+                        }
+                        public void doUITask(){
+                            mActivity.restartActivity();
+                        }
+                    });
+                }
+            })
+            .setNeutralButton(R.string.swapdup_text, new DialogInterface.OnClickListener(){
+        		public void onClick(DialogInterface arg0, int arg1){
+                    AMGUIUtility.doProgressTask(mActivity, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask(){
+                        public void doHeavyTask(){
+                            DatabaseHelper dbHelper = new DatabaseHelper((Context)mActivity, dbPath, dbName);
+                            dbHelper.swapDuplicate();
                             dbHelper.close();
                         }
                         public void doUITask(){

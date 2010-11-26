@@ -308,4 +308,6 @@
     <string name="download_source_anymemo">http://anymemo.org (default)</string>
     <string name="download_source_fe">http://flashcardexchange.com (experimental)</string>
     <string name="download_source_ss">http://studystack.com (experimental)</string>
+    <string name="swap_text">Swap</string>
+    <string name="swapdup_text">Swap&amp;Dup</string>
 </resources>

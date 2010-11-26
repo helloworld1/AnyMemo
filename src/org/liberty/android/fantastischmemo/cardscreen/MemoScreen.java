@@ -321,7 +321,7 @@ public class MemoScreen extends AMActivity{
             }
             case R.id.menu_context_gotoprev:
             {
-                Intent myIntent = new Intent(this, CardEditor.class);
+                Intent myIntent = new Intent(this, EditScreen.class);
                 myIntent.putExtra("dbname", this.dbName);
                 myIntent.putExtra("dbpath", this.dbPath);
                 myIntent.putExtra("id", currentItem.getId());

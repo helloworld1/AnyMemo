@@ -683,6 +683,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			myDatabase.endTransaction();
         }
     }
+
+    /* Add all swapped card to the back of database*/
+    public void swapDuplicate(){
+        List<Item> itemList = getListItems(0, -1, 0, null);
+        myDatabase.beginTransaction();
+        try{
+            int newId = getNewId();
+            
+            for(Item item : itemList){
+                /* Insert swapped item to the backQA */
+                item.inverseQA();
+                item.setId(newId++);
+                addOrReplaceItem(item);
+            }
+
+			myDatabase.setTransactionSuccessful();
+        }
+        finally{
+			myDatabase.endTransaction();
+        }
+    }
     public int searchItem(int currentId, String text, boolean forward){
         /* based on currentID, this method can search one item
          * forward or backward
