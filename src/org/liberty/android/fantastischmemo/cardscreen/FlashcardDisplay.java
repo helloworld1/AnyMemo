@@ -97,6 +97,7 @@ public class FlashcardDisplay implements TagHandler, ImageGetter{
     private TextView questionView;
     private TextView answerView;
     private SettingManager settingManager;
+    private boolean answerShown = true;
 
 
     public FlashcardDisplay(Context context){
@@ -137,6 +138,7 @@ public class FlashcardDisplay implements TagHandler, ImageGetter{
         if(item == null){
             return;
         }
+        answerShown = showAnswer;
         float qaRatio = settingManager.getQARatio();
         List<Integer> colors = settingManager.getColors();
         setQARatio(qaRatio);
@@ -177,6 +179,10 @@ public class FlashcardDisplay implements TagHandler, ImageGetter{
         flashcardView.setOnTouchListener(l);
         questionView.setOnTouchListener(l);
         answerView.setOnTouchListener(l);
+    }
+
+    public boolean isAnswerShown(){
+        return answerShown;
     }
 
 

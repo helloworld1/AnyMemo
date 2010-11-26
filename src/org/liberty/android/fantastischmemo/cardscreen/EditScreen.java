@@ -237,7 +237,7 @@ public class EditScreen extends AMActivity{
             case R.id.menuspeakanswer:
             {
                 if(answerTTS != null && currentItem != null){
-                    answerTTS.sayText(currentItem.getQuestion());
+                    answerTTS.sayText(currentItem.getAnswer());
                 }
                 return true;
             }
