@@ -396,8 +396,50 @@ public class MemoScreen extends AMActivity{
         }
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+        if(settingManager.getVolumeKeyShortcut()){
+            if(keyCode == KeyEvent.KEYCODE_VOLUME_UP){
+                return true;
+            }
+            else if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
+                return true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event){
+        /* Short press to scroe the card */
+
+        if(settingManager.getVolumeKeyShortcut()){
+            if(keyCode == KeyEvent.KEYCODE_VOLUME_UP){
+                if(flashcardDisplay.isAnswerShown() == false){
+                    updateFlashcardView(true);
+                }
+                else{
+                    getGradeButtonListener(0).onClick(null);
+                    Toast.makeText(this, getString(R.string.grade_text) + " 0", Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            }
+            if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
+                if(flashcardDisplay.isAnswerShown() == false){
+                    updateFlashcardView(true);
+                }
+                else{
+                    getGradeButtonListener(3).onClick(null);
+                    Toast.makeText(this, getString(R.string.grade_text) + " 3", Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            }
+        }
+        return super.onKeyUp(keyCode, event);
+    }
+
     void updateFlashcardView(boolean showAnswer){
         flashcardDisplay.updateView(currentItem, showAnswer);
+        autoSpeak();
         setActivityTitle();
         setGradeButtonTitle();
         setGradeButtonListeners();
@@ -594,6 +636,20 @@ public class MemoScreen extends AMActivity{
                 })
             .create()
             .show();
+    }
+
+    void autoSpeak(){
+        if(currentItem != null){
+
+            if(settingManager.getSpeechControlMethod() == SettingManager.SpeechControlMethod.AUTOTAP || settingManager.getSpeechControlMethod() == SettingManager.SpeechControlMethod.TAP){
+                if(!flashcardDisplay.isAnswerShown()){
+                    questionTTS.sayText(currentItem.getQuestion());
+                }
+                else{
+                    answerTTS.sayText(currentItem.getAnswer());
+                }
+            }
+        }
     }
 
     private void initTTS(){
