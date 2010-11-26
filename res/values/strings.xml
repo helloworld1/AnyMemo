@@ -93,7 +93,7 @@
     <string name="warning_text">Warning</string>
     <string name="settings_wipe_warning">ALL Learning Progress will be reset upon clicking Save!</string>
     <string name="settings_shuffle_warning">This operation will shuffle all cards and can NOT be undone. Please think before writing changes</string>
-    <string name="settings_inverse_warning">This operation will swap the questions and answers of ALL cards.</string>
+    <string name="settings_inverse_warning">This operation will swap the location of question and answers. Swap&amp;dup will add all swapped card to the back of current database.</string>
     <string name="detail_update">Write Changes</string>
     <string name="detail_back">Back</string>
     <string name="detail_delete">Delete</string>
