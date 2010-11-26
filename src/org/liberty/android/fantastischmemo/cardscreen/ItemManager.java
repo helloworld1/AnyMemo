@@ -197,6 +197,10 @@ public class ItemManager{
         return nextItem;
     }
 
+    public int[] getStatInfo(){
+        return new int[]{totalItemNo};
+    }
+
 
     /*
      * Search the item forward or backward based on criterion

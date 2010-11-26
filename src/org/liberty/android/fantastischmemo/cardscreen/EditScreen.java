@@ -251,6 +251,13 @@ public class EditScreen extends AMActivity{
                 return true;
             }
 
+            case R.id.editmenu_delete_id:
+            {
+                deleteCurrent();
+                return true;
+            }
+
+
             case R.id.editmenu_detail_id:
             {
                 Intent myIntent = new Intent(this, DetailScreen.class);
@@ -447,7 +454,8 @@ public class EditScreen extends AMActivity{
 
     private void updateTitle(){
         if(currentItem != null){
-            setTitle(getString(R.string.memo_current_id) + " " + currentItem.getId());
+            int total = itemManager.getStatInfo()[0];
+            setTitle(getString(R.string.stat_total) + total + " " + getString(R.string.memo_current_id) + " " + currentItem.getId());
         }
     }
     
@@ -459,9 +467,20 @@ public class EditScreen extends AMActivity{
 
     private void deleteCurrent(){
         if(currentItem != null){
-            currentItem = itemManager.deleteItem(currentItem);
+            new AlertDialog.Builder(EditScreen.this)
+                .setTitle(getString(R.string.detail_delete))
+                .setMessage(getString(R.string.delete_warning))
+                .setPositiveButton(getString(R.string.yes_text),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            currentItem = itemManager.deleteItem(currentItem);
+                            restartActivity();
+                        }
+                    })
+                .setNegativeButton(getString(R.string.no_text), null)
+                .create()
+                .show();
         }
-        restartActivity();
     }
 
     private void gotoPrev(){
