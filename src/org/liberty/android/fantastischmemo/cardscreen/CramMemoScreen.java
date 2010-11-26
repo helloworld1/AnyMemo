@@ -45,6 +45,10 @@ public class CramMemoScreen extends MemoScreen{
             b.setText(Integer.valueOf(i).toString());
         }
     }
+
+    @Override
+    void setActivityTitle(){
+    }
 }
 
 
