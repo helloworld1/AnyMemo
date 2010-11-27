@@ -418,6 +418,7 @@ public class MemoScreen extends AMActivity{
                     updateFlashcardView(true);
                 }
                 else{
+                    /* Grade 0 for up key */
                     getGradeButtonListener(0).onClick(null);
                     Toast.makeText(this, getString(R.string.grade_text) + " 0", Toast.LENGTH_SHORT).show();
                 }
@@ -428,6 +429,7 @@ public class MemoScreen extends AMActivity{
                     updateFlashcardView(true);
                 }
                 else{
+                    /* Grade 3 for down key */
                     getGradeButtonListener(3).onClick(null);
                     Toast.makeText(this, getString(R.string.grade_text) + " 3", Toast.LENGTH_SHORT).show();
                 }
@@ -641,7 +643,7 @@ public class MemoScreen extends AMActivity{
     void autoSpeak(){
         if(currentItem != null){
 
-            if(settingManager.getSpeechControlMethod() == SettingManager.SpeechControlMethod.AUTOTAP || settingManager.getSpeechControlMethod() == SettingManager.SpeechControlMethod.TAP){
+            if(settingManager.getSpeechControlMethod() == SettingManager.SpeechControlMethod.AUTOTAP || settingManager.getSpeechControlMethod() == SettingManager.SpeechControlMethod.AUTO){
                 if(!flashcardDisplay.isAnswerShown()){
                     questionTTS.sayText(currentItem.getQuestion());
                 }

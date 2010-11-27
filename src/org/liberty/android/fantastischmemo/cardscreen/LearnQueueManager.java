@@ -172,6 +172,13 @@ class LearnQueueManager implements QueueManager{
             return learnQueue.get(0).clone();
         }
 
+        /* When fail to remember a new card */
+        if(learnQueue.get(0).isNew() && item.isScheduled()){
+            newCardNo -= 1;
+            revCardNo += 1;
+        }
+
+        /* When successfully remember a card */
         if(!item.isScheduled()){
             if(learnQueue.get(0).isScheduled()){
                 revCardNo -= 1;
@@ -189,8 +196,16 @@ class LearnQueueManager implements QueueManager{
             learnQueue.add(0, first);
         }
         Item orngItem = learnQueue.remove(0);
-        if(item.isScheduled() || item.isNew()){
-            learnQueue.add(orngItem);
+        if(item.isScheduled()){
+            /* If the old item is new, the one in the queue
+             * should not remain noew */
+            if(orngItem.isNew()){
+                learnQueue.add(item);
+            }
+            /* We do not repetitively update the original item */
+            else{
+                learnQueue.add(orngItem);
+            }
         }
         dbHelper.addOrReplaceItem(item);
         /* Fill up the queue to its queue size */
@@ -221,6 +236,9 @@ class LearnQueueManager implements QueueManager{
             }
         }
         if(learnQueue.size() > 0){
+            /* Return the clone to resolve the reference problem
+             * i.e. updating the item will also item the one
+             * in the queue */
             return learnQueue.get(0).clone();
         }
         else{
