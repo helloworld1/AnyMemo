@@ -105,8 +105,8 @@
     <string name="add_screen_edit">Сохранить</string>
     <string name="add_screen_gotoid">Идти к ID</string>
     <string name="add_screen_back">Назад</string>
-    <string name="add_screen_next">Следующ</string>
-    <string name="add_screen_previous">Предыдущ</string>
+    <string name="add_screen_next">Вперёд</string>
+    <string name="add_screen_previous">Назад</string>
     <string name="search_text">Поиск</string>
     <string name="goto_id_text">Идти к ID</string>
     <string name="fb_create_db">Создать Новую Базу</string>
@@ -193,7 +193,7 @@
     <string name="portrait_only_title">Только Портрет</string>
     <string name="portrait_only_summary">Полностью отключает изменение ориентации экрана на всех экранах</string>
     <string name="list_mode_text">Списком</string>
-    <string name="merge_db_text">Объединить Базы</string>
+    <string name="merge_db_text">Объединить</string>
     <string name="merge_success_title">Объединено Успешно</string>
     <string name="merge_fail_title">Объединение Не Удалось</string>
     <string name="merge_success_message">Успешно объединены базы:</string>
@@ -248,6 +248,44 @@
     <string name="donate_text">Donate</string>
     <string name="buy_pro_text">Купить Pro</string>
     <string name="donate_summary">Вы можете поддержать проект AnyMemo, купив pro версию в Android Market, или заплатить онлайн на сайте &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt; Спасибо за ваше участие.</string>
-
-
+    <string name="goto_prev_screen">Идти к Экрану Просмотр/Правка</string>
+    <string name="exception_text">Исключение</string>
+    <string name="advanced_setting_text">Продвинутый</string>
+    <string name="db_merger_title">Объединение Баз</string>
+    <string name="db_merger_explaination">Объединить Базу Источник и Базу Цель</string>
+    <string name="target_db_text">База Цель(Двойным щелчком смотреть)</string>
+    <string name="source_db_text">База Источник (Двойным щелчком смотреть)</string>
+    <string name="exception_message">Непредвиденная ошибка случилась при операции.</string>
+    <string name="error_text">Ошибка</string>
+    <string name="clone_text">Клонировать</string>
+    <string name="rename_text">Переименовать</string>
+    <string name="locale_auto_detect_text">Автоопределение</string>
+    <string name="locale_english_text">Английский</string>
+    <string name="locale_sc_text">Упрощённый Китайский</string>
+    <string name="locale_tc_text">Традиционный Китайский</string>
+    <string name="locale_czech_text">Чешский</string>
+    <string name="locale_polish_text">Польский</string>
+    <string name="locale_russian_text">Русский</string>
+    <string name="study_text">Учить</string>
+    <string name="option_manual_speak">0. Вручную</string>
+    <string name="option_tap_speak">1. Нажать для звука</string>
+    <string name="option_auto_speak">2. Авто звук</string>
+    <string name="option_autotap_speak">3. Оба 1 и 2</string>
+    <string name="settings_color_question_text">Текст Вопроса</string>
+    <string name="settings_color_answer_text">Текст Ответа</string>
+    <string name="settings_color_question_bg">Фон Вопроса</string>
+    <string name="settings_color_answer_bg">Фон Ответа</string>
+    <string name="settings_color_separator">Разделитель</string>
+    <string name="screen_main_text">Главный Экран</string>
+    <string name="screen_edit_text">Экран Правка</string>
+    <string name="screen_open_text">Экран Открыть</string>
+    <string name="screen_memo_text">Экран Учёба</string>
+    <string name="disabled_text">Отключено</string>
+    <string name="notification_1hr_text">1 час</string>
+    <string name="notification_6hr_text">6 часов</string>
+    <string name="notification_12hr_text">12 часов</string>
+    <string name="notification_24hr_text">24 часа</string>
+    <string name="download_source_anymemo">http://anymemo.org (по умолчанию)</string>
+    <string name="download_source_fe">http://flashcardexchange.com (экспериментально)</string>
+    <string name="download_source_ss">http://studystack.com (экспериментально)</string>
 </resources>

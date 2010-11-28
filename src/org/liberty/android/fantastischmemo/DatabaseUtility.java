@@ -160,6 +160,29 @@ public class DatabaseUtility{
             .show();
     }
 
+    public void deleteItemFromDb(final Item item){
+        new AlertDialog.Builder(mActivity)
+            .setTitle(R.string.detail_delete)
+            .setMessage(R.string.delete_warning)
+            .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
+                public void onClick(DialogInterface arg0, int arg1) {
+                    AMGUIUtility.doProgressTask(mActivity, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask(){
+                        public void doHeavyTask(){
+                            DatabaseHelper dbHelper = new DatabaseHelper((Context)mActivity, dbPath, dbName);
+                            dbHelper.deleteItem(item);
+                            dbHelper.close();
+                        }
+                        public void doUITask(){
+                            mActivity.restartActivity();
+                        }
+                    });
+                }
+            })
+            .setNegativeButton(R.string.cancel_text, null)
+            .create()
+            .show();
+    }
+
 }
 
     

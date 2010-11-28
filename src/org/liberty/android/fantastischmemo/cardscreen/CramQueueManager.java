@@ -249,6 +249,7 @@ class CramQueueManager implements QueueManager{
     public int[] getStatInfo(){
         throw new AssertionError("Method not implemented");
     }
+
 }
 
 

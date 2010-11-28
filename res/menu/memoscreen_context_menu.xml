@@ -3,6 +3,9 @@
     <item 
         android:id="@+id/menu_context_edit"
         android:title="@string/memo_edit_dialog_title" />
+    <item 
+        android:id="@+id/menu_context_delete"
+        android:title="@string/detail_delete" />
     <item
         android:id="@+id/menu_context_gotoprev"
         android:title="@string/goto_prev_screen" />

@@ -319,6 +319,15 @@ public class MemoScreen extends AMActivity{
                 startActivityForResult(myIntent, ACTIVITY_EDIT);
                 return true;
             }
+            case R.id.menu_context_delete:
+            {
+                if(currentItem != null){
+                    DatabaseUtility du = new DatabaseUtility(this, dbPath, dbName);
+                    du.deleteItemFromDb(currentItem);
+                }
+                return true;
+
+            }
             case R.id.menu_context_gotoprev:
             {
                 Intent myIntent = new Intent(this, EditScreen.class);
