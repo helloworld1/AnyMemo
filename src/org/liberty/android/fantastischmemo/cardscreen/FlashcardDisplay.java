@@ -282,7 +282,7 @@ public class FlashcardDisplay implements TagHandler, ImageGetter{
 
     
     private void setScreenColor(List<Integer> colors){
-        // Set both text and the background color
+        /* Set both text and the background color */
         if(colors != null){
             questionView.setTextColor(colors.get(0));
             answerView.setTextColor(colors.get(1));

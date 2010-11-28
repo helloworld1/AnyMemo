@@ -147,6 +147,7 @@ class LearnQueueManager implements QueueManager{
 
 
     public boolean initQueue(){
+        /* Flag 4 means rev first then acq */
         learnQueue = dbHelper.getListItems(1, queueSize, 4, activeFilter);
         if(learnQueue == null || learnQueue.size() == 0){
             return false;
@@ -163,7 +164,6 @@ class LearnQueueManager implements QueueManager{
      * the database
      * The item parameter is the null, it will return current head of queue
      */
-
     public Item updateAndNext(Item item){
         if(learnQueue == null || learnQueue.size() == 0){
             return null;

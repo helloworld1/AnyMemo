@@ -40,6 +40,8 @@ public class CramMemoScreen extends MemoScreen{
     @Override
     void setGradeButtonTitle(){
         Map<String, Button> hm = controlButtons.getButtons();
+        /* Cram Review has different button titles 
+         * because of the incorrect estimated day caluclation */
         for(int i = 0; i < 6; i++){
             Button b = hm.get(Integer.valueOf(i).toString());
             b.setText(Integer.valueOf(i).toString());
