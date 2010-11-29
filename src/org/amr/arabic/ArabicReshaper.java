@@ -170,6 +170,9 @@ public class ArabicReshaper{
 	private int getGlphyTypeBefore(String wholeTarget,int location){
 		if(location==0)
 			return 2;
+        if(location >= wholeTarget.length()){
+            return 2;
+        }
 		char target = wholeTarget.charAt(location);
 		int foundGlphy = findGlphy(0,35,target);
 		if(foundGlphy==-1){
