@@ -376,6 +376,8 @@ public class DownloaderFE extends DownloaderBase{
         /* Now create the databased from the itemList */
 
         String dbname = di.getTitle() + ".db";
+        /* Replace illegal characters */
+        dbname = dbname.replaceAll("[`~!#@%&*{};:'\"]", "_");
         String dbpath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
         DatabaseHelper.createEmptyDatabase(dbpath, dbname);
         DatabaseHelper dbHelper = new DatabaseHelper(this, dbpath, dbname);
