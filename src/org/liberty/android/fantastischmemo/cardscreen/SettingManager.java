@@ -120,6 +120,8 @@ public class SettingManager{
     private boolean volumeKeyShortcut = false;
     private boolean enableTTSExtended = false;
     private boolean fullscreenMode = false;
+    private int screenHeight = 320;
+    private int screenWidth = 480;
     /* The colors for various elements
      * null means default color */
     protected List<Integer> colors = null;
@@ -296,6 +298,13 @@ public class SettingManager{
         }
     }
 
+    public int getScreenHeight(){
+        return screenHeight;
+    }
+
+    public int getScreenWidth(){
+        return screenWidth;
+    }
 
     private void loadGlobalOptions(){
         speechCtl = settings.getString("speech_ctl", mContext.getResources().getStringArray(R.array.speech_ctl_list)[0]);
@@ -305,6 +314,9 @@ public class SettingManager{
         enableTTSExtended = settings.getBoolean("enable_tts_extended", false);
         volumeKeyShortcut = settings.getBoolean("enable_volume_key", false);
         fullscreenMode = settings.getBoolean("fullscreen_mode", false);
+        screenHeight = settings.getInt("screen_height", 320);
+        screenWidth = settings.getInt("screen_width", 480);
+
         /* Load learning queue size from the preference */
         try{
             String size = settings.getString("learning_queue_size", "10");

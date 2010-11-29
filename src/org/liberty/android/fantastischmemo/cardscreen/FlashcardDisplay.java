@@ -26,6 +26,7 @@ import org.xml.sax.XMLReader;
 
 import java.io.InputStream;
 import java.io.FileInputStream;
+import java.io.File;
 import java.net.URL;
 
 import java.util.List;
@@ -82,6 +83,11 @@ import android.util.Log;
 import android.os.SystemClock;
 import android.os.Environment;
 import android.graphics.Typeface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.Matrix;
+
 import android.text.Html.TagHandler;
 import android.text.Html.ImageGetter;
 import android.content.res.Configuration;
@@ -317,35 +323,38 @@ public class FlashcardDisplay implements TagHandler, ImageGetter{
     @Override
     public Drawable getDrawable(String source){
         Log.v(TAG, "Source: " + source);
-        /* Try the image in /sdcard/anymemo/images/dbname/myimg.png */
         try{
             String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + mContext.getString(R.string.default_image_dir) + "/" + settingManager.getDbName()+ "/" + source;
-            Drawable d = Drawable.createFromStream(new FileInputStream(filePath), source);
-            d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
-            return d;
-        }
-        catch(Exception e){
-        }
+            String filePath2 = Environment.getExternalStorageDirectory().getAbsolutePath() + mContext.getString(R.string.default_image_dir) + "/" + source;
+            Bitmap orngBitmap;
+            /* Try the image in /sdcard/anymemo/images/dbname/myimg.png */
+            if((new File(filePath)).exists()){
+                orngBitmap = BitmapFactory.decodeFile(filePath);
+            }
+            /* Try the image in /sdcard/anymemo/images/myimg.png */
+            else if((new File(filePath2)).exists()){
+                orngBitmap = BitmapFactory.decodeFile(filePath2);
+            }
+            /* Try the image from internet */
+            else{
+                InputStream is = (InputStream)new URL(source).getContent();
+                orngBitmap = BitmapFactory.decodeStream(is);
+            }
 
-        /* Try the image in /sdcard/anymemo/images/myimg.png */
-        try{
-            String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + mContext.getString(R.string.default_image_dir) + "/" + source;
-            Drawable d = Drawable.createFromStream(new FileInputStream(filePath), source);
+            int width = orngBitmap.getWidth();
+            int height = orngBitmap.getHeight();
+            float scaleFactor = ((float)settingManager.getScreenWidth()) / width;
+            Matrix matrix = new Matrix();
+            if(scaleFactor < 1.0f){
+                matrix.postScale(scaleFactor, scaleFactor);
+            }
+            Bitmap resizedBitmap = Bitmap.createBitmap(orngBitmap, 0, 0, width, height, matrix, true);
+            BitmapDrawable d = new BitmapDrawable(resizedBitmap);
             d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
-            return d;
+            return d; 
         }
         catch(Exception e){
-        }
-
-        /* Try the image from internet */
-        try{
-            String url = source;
-            String src_name = source; 
-            Drawable d = Drawable.createFromStream(((InputStream)new URL(url).getContent()), src_name);
-            d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
-            return d;
-        }
-        catch(Exception e){
+            Log.e(TAG, "getDrawable() Image handling error", e);
         }
 
         /* Fallback, display default image */

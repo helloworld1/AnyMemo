@@ -322,6 +322,8 @@ public class MemoScreen extends AMActivity{
             case R.id.menu_context_delete:
             {
                 if(currentItem != null){
+                    /* DatabaseUtility is only one time used so it is created
+                     * locally here */
                     DatabaseUtility du = new DatabaseUtility(this, dbPath, dbName);
                     du.deleteItemFromDb(currentItem);
                 }

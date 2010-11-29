@@ -44,6 +44,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Display;
 import android.widget.Button;
 import android.widget.TextView;
 import android.content.res.Configuration;
@@ -120,11 +121,16 @@ public class AnyMemo extends AMActivity implements OnClickListener{
 				Log.e("Copy file error", e.toString());
 				
 			}
-			
         }
+        /* Detect an update */
         if(!savedVersion.equals(thisVersion)){
         	SharedPreferences.Editor editor = settings.edit();
+            /* save new version number */
             editor.putString("saved_version", thisVersion);
+            /* Save the screen dimension for further use */
+            Display display = getWindowManager().getDefaultDisplay(); 
+            editor.putInt("screen_width", display.getWidth());
+            editor.putInt("screen_height", display.getHeight());
             editor.commit();
 
             View alertView = View.inflate(this, R.layout.link_alert, null);
