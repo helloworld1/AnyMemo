@@ -77,7 +77,7 @@
     <string name="settings_answer_bg_color">Цвет Фона Ответа</string>
     <string name="settings_wipe">Сбросить Весь Прогресс Изучения</string>
     <string name="settings_shuffle">Перемешать карточки</string>
-    <string name="settings_inverse">Поменять местами В и О карточек</string>
+    <string name="settings_inverse">Поменять местами В и О</string>
     <string name="settings_save">Сохранить</string>
     <string name="settings_discard">Отказаться</string>
     <string name="warning_text">Предупреждение</string>
@@ -248,7 +248,7 @@
     <string name="donate_text">Donate</string>
     <string name="buy_pro_text">Купить Pro</string>
     <string name="donate_summary">Вы можете поддержать проект AnyMemo, купив pro версию в Android Market, или заплатить онлайн на сайте &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt; Спасибо за ваше участие.</string>
-    <string name="goto_prev_screen">Идти к Экрану Просмотр/Правка</string>
+    <string name="goto_prev_screen">К Экрану Просмотр/Правка</string>
     <string name="exception_text">Исключение</string>
     <string name="advanced_setting_text">Продвинутый</string>
     <string name="db_merger_title">Объединение Баз</string>
@@ -261,8 +261,8 @@
     <string name="rename_text">Переименовать</string>
     <string name="locale_auto_detect_text">Автоопределение</string>
     <string name="locale_english_text">Английский</string>
-    <string name="locale_sc_text">Упрощённый Китайский</string>
-    <string name="locale_tc_text">Традиционный Китайский</string>
+    <string name="locale_sc_text">Упр. Китайский</string>
+    <string name="locale_tc_text">Трад. Китайский</string>
     <string name="locale_czech_text">Чешский</string>
     <string name="locale_polish_text">Польский</string>
     <string name="locale_russian_text">Русский</string>
@@ -288,4 +288,6 @@
     <string name="download_source_anymemo">http://anymemo.org (по умолчанию)</string>
     <string name="download_source_fe">http://flashcardexchange.com (экспериментально)</string>
     <string name="download_source_ss">http://studystack.com (экспериментально)</string>
+    <string name="swap_text">Обмен</string>
+    <string name="swapdup_text">Обм&amp;Коп</string>
 </resources>

@@ -330,6 +330,12 @@ public class MemoScreen extends AMActivity{
                 return true;
 
             }
+            case R.id.menu_context_skip:
+            {
+                DatabaseUtility du = new DatabaseUtility(this, dbPath, dbName);
+                du.skipItemFromDb(currentItem);
+                return true;
+            }
             case R.id.menu_context_gotoprev:
             {
                 Intent myIntent = new Intent(this, EditScreen.class);
