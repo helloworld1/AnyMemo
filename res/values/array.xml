@@ -86,6 +86,7 @@
     <item>@string/locale_czech_text</item>
     <item>@string/locale_polish_text</item>
     <item>@string/locale_russian_text</item>
+    <item>@string/locale_german_text</item>
 </string-array>
 
 
@@ -97,6 +98,7 @@
     <item>CS</item>
     <item>PL</item>
     <item>RU</item>
+    <item>DE</item>
 </string-array>
 
 
