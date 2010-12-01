@@ -178,7 +178,6 @@ public class EditScreen extends AMActivity{
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
-        Log.v(TAG, "Return activity result");
         if(resultCode ==Activity.RESULT_CANCELED){
             return;
         }

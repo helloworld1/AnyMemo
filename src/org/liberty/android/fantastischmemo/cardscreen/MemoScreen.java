@@ -434,6 +434,7 @@ public class MemoScreen extends AMActivity{
             if(keyCode == KeyEvent.KEYCODE_VOLUME_UP){
                 if(flashcardDisplay.isAnswerShown() == false){
                     updateFlashcardView(true);
+                    showButtons();
                 }
                 else{
                     /* Grade 0 for up key */
