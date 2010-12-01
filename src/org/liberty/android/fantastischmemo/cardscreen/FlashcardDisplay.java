@@ -343,14 +343,19 @@ public class FlashcardDisplay implements TagHandler, ImageGetter{
 
             int width = orngBitmap.getWidth();
             int height = orngBitmap.getHeight();
+            int scaledWidth = width;
+            int scaledHeight = height;
             float scaleFactor = ((float)settingManager.getScreenWidth()) / width;
             Matrix matrix = new Matrix();
             if(scaleFactor < 1.0f){
                 matrix.postScale(scaleFactor, scaleFactor);
+                scaledWidth = (int)(width * scaleFactor);
+                scaledHeight = (int)(height * scaleFactor);
             }
             Bitmap resizedBitmap = Bitmap.createBitmap(orngBitmap, 0, 0, width, height, matrix, true);
             BitmapDrawable d = new BitmapDrawable(resizedBitmap);
-            d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
+            //d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
+            d.setBounds(0, 0, scaledWidth, scaledHeight);
             return d; 
         }
         catch(Exception e){
