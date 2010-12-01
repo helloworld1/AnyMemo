@@ -146,6 +146,14 @@ public class EditScreen extends AMActivity{
             AMGUIUtility.displayError(this, getString(R.string.open_database_error_title), getString(R.string.open_database_error_message), e);
         }
 
+        /* 
+         * Currently always set the result to OK
+         * to assume there are always some changes.
+         * This may be changed in the future to reflect the
+         * real changes
+         */
+        setResult(Activity.RESULT_OK);
+
     }
 
     @Override
@@ -162,8 +170,10 @@ public class EditScreen extends AMActivity{
         if(answerTTS != null){
             answerTTS.shutdown();
         }
+
         super.onDestroy();
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
