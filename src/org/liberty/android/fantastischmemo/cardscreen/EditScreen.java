@@ -181,7 +181,6 @@ public class EditScreen extends AMActivity{
         if(resultCode ==Activity.RESULT_CANCELED){
             return;
         }
-        Log.v(TAG, "Return activity NOT CANCELLED");
         /* Refresh the activity according to activities */
         switch(requestCode){
             case ACTIVITY_EDIT:
@@ -595,7 +594,6 @@ public class EditScreen extends AMActivity{
         public void onLongPress(MotionEvent e){
             closeContextMenu();
             EditScreen.this.openContextMenu(flashcardDisplay.getView());
-            Log.v(TAG, "Open Menu!");
         }
 
         @Override

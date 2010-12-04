@@ -47,31 +47,32 @@ public class SpeakWord {
 		String[] fileType = {".ogg", ".wav", ".mp3"};
 		String candidateFile =  mAudioDir + "/";
         String word = text;
-		// Replace break with period
-		word = word.replaceAll("\\<br\\>", ". " );
-		// Remove HTML
-		word = word.replaceAll("\\<.*?>", "");
-		// Remove () [] 
-		word = word.replaceAll("[\\[\\]\\(\\)]", "");
-		// Remove white spaces
-        word = word.replaceAll("^\\s+", "");
-        word = word.replaceAll("\\s+$", "");
-        if(word.length() < 1){
-            return false;
-        }
-           Log.v(TAG, "Text: " + text);
         /* Find the audio file in tags */
         Pattern p = Pattern.compile("[A-Za-z0-9_-]+\\.(ogg|mp3|wav)");
         Matcher m = p.matcher(text);
         if(m.find()){
            String audioTag = m.group();
-           Log.v(TAG, "Text: " + text);
-           Log.v(TAG, "Audio TAG: " + audioTag);
            audioFile = new File(mAudioDir + "/" + dbName + "/" + audioTag);
            if(!audioFile.exists()){
                audioFile = new File(mAudioDir + "/" + audioTag);
            }
         }
+
+        if(audioFile == null || ! audioFile.exists()){
+            // Replace break with period
+            word = word.replaceAll("\\<br\\>", ". " );
+            // Remove HTML
+            word = word.replaceAll("\\<.*?>", "");
+            // Remove () [] 
+            word = word.replaceAll("[\\[\\]\\(\\)]", "");
+            // Remove white spaces
+            word = word.replaceAll("^\\s+", "");
+            word = word.replaceAll("\\s+$", "");
+            if(word.length() < 1){
+                return false;
+            }
+        }
+
         
 
 		
