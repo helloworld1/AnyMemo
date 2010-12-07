@@ -86,6 +86,10 @@ public final class Item implements Cloneable, Serializable{
         return this.interval;
     }
 
+    public int getGrade(){
+        return grade;
+    }
+
     public long getDatelearnUnix() throws ParseException{
         // Get the datelearn in unix time * 1000
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");

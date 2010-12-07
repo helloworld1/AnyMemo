@@ -197,9 +197,13 @@ class LearnQueueManager implements QueueManager{
         }
         Item orngItem = learnQueue.remove(0);
         if(item.isScheduled()){
-            /* If the old item is new, the one in the queue
-             * should not remain noew */
-            if(orngItem.isNew()){
+            /* 
+             * If the old item is new, the one in the queue
+             * should not remain noew 
+             * Also if the original one is learned but forget this time
+             * we will update the queue
+             */
+            if(orngItem.isNew() || orngItem.getGrade() >= 2){
                 learnQueue.add(item);
             }
             /* We do not repetitively update the original item */
