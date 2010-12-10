@@ -25,8 +25,6 @@ import java.util.Locale;
 import java.util.HashMap;
 
 import android.content.Context;
-import com.google.tts.TextToSpeechBeta;
-import com.google.tts.TextToSpeechBeta.Engine;
 import android.util.Log;
 
 

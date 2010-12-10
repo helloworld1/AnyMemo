@@ -681,12 +681,7 @@ public class MemoScreen extends AMActivity{
             questionTTS = new AudioFileTTS(audioDir, dbName);
         }
         else if(ql != null){
-            if(settingManager.getEnableTTSExtended()){
-                questionTTS = new AnyMemoTTSExtended(this, ql);
-            }
-            else{
-                questionTTS = new AnyMemoTTSPlatform(this, ql);
-            }
+            questionTTS = new AnyMemoTTSPlatform(this, ql);
         }
         else{
             questionTTS = null;
@@ -695,12 +690,7 @@ public class MemoScreen extends AMActivity{
             answerTTS = new AudioFileTTS(audioDir, dbName);
         }
         else if(al != null){
-            if(settingManager.getEnableTTSExtended()){
-                answerTTS = new AnyMemoTTSExtended(this, al);
-            }
-            else{
-                answerTTS = new AnyMemoTTSPlatform(this, al);
-            }
+            answerTTS = new AnyMemoTTSPlatform(this, al);
         }
         else{
             answerTTS = null;

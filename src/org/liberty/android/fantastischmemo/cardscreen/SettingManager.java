@@ -118,7 +118,6 @@ public class SettingManager{
     private int learningQueueSize = 10;
     private boolean shufflingCards = false;
     private boolean volumeKeyShortcut = false;
-    private boolean enableTTSExtended = false;
     private boolean fullscreenMode = false;
     private int screenHeight = 320;
     private int screenWidth = 480;
@@ -262,9 +261,6 @@ public class SettingManager{
         return volumeKeyShortcut;
     }
 
-    public boolean getEnableTTSExtended(){
-        return enableTTSExtended;
-    }
 
     public boolean getFullscreenMode(){
         return fullscreenMode;
@@ -311,7 +307,6 @@ public class SettingManager{
         btnStyle = settings.getString("button_style", mContext.getResources().getStringArray(R.array.button_style_list)[0]);
         copyClipboard = settings.getBoolean("copyclipboard", true);
 
-        enableTTSExtended = settings.getBoolean("enable_tts_extended", false);
         volumeKeyShortcut = settings.getBoolean("enable_volume_key", false);
         fullscreenMode = settings.getBoolean("fullscreen_mode", false);
         screenHeight = settings.getInt("screen_height", 320);

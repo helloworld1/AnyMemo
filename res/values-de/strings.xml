@@ -44,8 +44,8 @@
     <string name="memo_btn1_text">1 vergessen</string>
     <string name="memo_btn2_text">2 knapp</string>
     <string name="memo_btn3_text">3 schwer</string>
-    <string name="memo_btn4_text">4 einfach</string>
-    <string name="memo_btn5_text">5 offenbar</string>
+    <string name="memo_btn4_text">4 leicht</string>
+    <string name="memo_btn5_text">5 zu leicht</string>
     <string name="memo_btn0_help_text">Sie können sich an die Antwort auf diese Frage überhaupt nicht erinnern.</string>
     <string name="memo_btn1_help_text">Sie können sich an die Antwort auf diese Frage überhaupt nicht erinnern.</string>
     <string name="memo_btn2_help_text">Sie haben zu lange überlegt und konnten die Frage kaum beantworten.</string>
@@ -62,8 +62,8 @@
     <string name="memo_btn1_anki_text">Nochmal</string>
     <string name="memo_btn2_anki_text">Gut</string>
     <string name="memo_btn3_anki_text">Gut</string>
-    <string name="memo_btn4_anki_text">Einfach</string>
-    <string name="memo_btn5_anki_text">Offenbar</string>
+    <string name="memo_btn4_anki_text">leicht</string>
+    <string name="memo_btn5_anki_text">zu leicht</string>
     <string name="memo_current_id">ID: </string>
     <string name="memo_edit_dialog_title">Bearbeiten</string>
     <string name="global_settings">Globale Einstellungen</string>

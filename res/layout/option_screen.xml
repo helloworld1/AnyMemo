@@ -79,11 +79,6 @@
     <PreferenceCategory
         android:title="@string/misc_category">
         <CheckBoxPreference
-            android:key="enable_tts_extended"
-            android:title="@string/enable_tts_extended_title" 
-            android:defaultValue="false"
-            android:summary="@string/enable_tts_extended_summary" />
-        <CheckBoxPreference
             android:key="enable_third_party_arabic"
             android:title="@string/enable_third_party_arabic_title" 
             android:defaultValue="true"
