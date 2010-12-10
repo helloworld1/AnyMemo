@@ -28,7 +28,7 @@ import java.util.Map;
 import android.content.Context;
 import android.view.LayoutInflater;
 
-class EditScreenButtons implements ControlButtons{
+class EditScreenButtons extends ControlButtons{
     private Context mContext;
     private View buttonView;
     private Button btnNew, btnEdit, btnPrev, btnNext;
@@ -50,9 +50,6 @@ class EditScreenButtons implements ControlButtons{
 
     public Map<String, Button> getButtons(){
         return buttonMap;
-    }
-    public String[] getButtonNames(){
-        return new String[]{"new", "edit", "prev", "next"};
     }
     public View getView(){
         return buttonView;

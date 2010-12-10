@@ -25,8 +25,21 @@ import android.widget.Button;
 import android.view.View;
 import java.util.Map;
 
-interface ControlButtons{
-    public Map<String, Button> getButtons();
-    public String[] getButtonNames();
-    public View getView();
+abstract class ControlButtons{
+    public abstract Map<String, Button> getButtons();
+    public abstract View getView();
+    public String[] getButtonNames(){
+        Map<String, Button> map = getButtons();
+        String[] res = new String[map.size()];
+        int i = 0;
+        for(String s : map.keySet()){
+            res[i++] = s; 
+        }
+        return res;
+
+    }
+    public void setBackgroundColor(int color){
+        View v = getView();
+        v.setBackgroundColor(color);
+    }
 }

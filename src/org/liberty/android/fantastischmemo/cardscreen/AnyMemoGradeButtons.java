@@ -28,7 +28,7 @@ import java.util.Map;
 import android.content.Context;
 import android.view.LayoutInflater;
 
-public class AnyMemoGradeButtons implements ControlButtons{
+public class AnyMemoGradeButtons extends ControlButtons{
     private Context mContext;
     private View buttonView;
     private Button grade0, grade1, grade2, grade3, grade4, grade5;
@@ -56,9 +56,6 @@ public class AnyMemoGradeButtons implements ControlButtons{
     }
     public View getView(){
         return buttonView;
-    }
-    public String[] getButtonNames(){
-        return new String[]{"0", "1", "2", "3", "4", "5"};
     }
 }
 

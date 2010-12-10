@@ -36,7 +36,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Date;
 
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.app.Activity;
@@ -606,6 +605,10 @@ public class MemoScreen extends AMActivity{
 
         LinearLayout flashcardDisplayView = (LinearLayout)flashcardDisplay.getView();
         LinearLayout controlButtonsView = (LinearLayout)controlButtons.getView();
+        /* This li is make the background of buttons the same as answer */
+        LinearLayout li = new LinearLayout(this);
+        li.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.FILL_PARENT));
+        li.setBackgroundColor(settingManager.getColors().get(3));
 
         /* 
          * -1: Match parent -2: Wrap content
@@ -613,7 +616,9 @@ public class MemoScreen extends AMActivity{
          * stetched
          */
         memoRoot.addView(flashcardDisplayView, -1, -1);
-        memoRoot.addView(controlButtonsView, -1, -2);
+        li.addView(controlButtonsView, -1, -2);
+        memoRoot.addView(li, -1, -2);
+        //memoRoot.addView(controlButtonsView, -1, -2);
         flashcardDisplayView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
     }
 
