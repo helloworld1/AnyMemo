@@ -29,6 +29,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.Date;
+import java.util.List;
 
 
 import android.graphics.Color;
@@ -411,7 +412,10 @@ public class EditScreen extends AMActivity{
         /* This li is make the background of buttons the same as answer */
         LinearLayout li = new LinearLayout(this);
         li.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.FILL_PARENT));
-        li.setBackgroundColor(settingManager.getColors().get(3));
+        List<Integer> colors = settingManager.getColors();
+        if(colors != null){
+            li.setBackgroundColor(settingManager.getColors().get(3));
+        }
         /* 
          * -1: Match parent -2: Wrap content
          * This is necessary or the view will not be 
@@ -458,7 +462,11 @@ public class EditScreen extends AMActivity{
     private void updateTitle(){
         if(currentItem != null){
             int total = itemManager.getStatInfo()[0];
-            setTitle(getString(R.string.stat_total) + total + " " + getString(R.string.memo_current_id) + " " + currentItem.getId());
+            String titleString = getString(R.string.stat_total) + total + " " + getString(R.string.memo_current_id) + " " + currentItem.getId();
+            if(currentItem != null && currentItem.getCategory() != null){
+                titleString += " :: " + currentItem.getCategory();
+            }
+            setTitle(titleString);
         }
     }
     

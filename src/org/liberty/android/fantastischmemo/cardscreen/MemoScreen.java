@@ -35,6 +35,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.Date;
+import java.util.List;
 
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
@@ -560,7 +561,12 @@ public class MemoScreen extends AMActivity{
 
     void setActivityTitle(){
         int[] stat = queueManager.getStatInfo();
-        setTitle(getString(R.string.stat_new) + stat[0] + " " + getString(R.string.stat_scheduled) + stat[1] + " " + getString(R.string.memo_current_id) + currentItem.getId());
+        String titleString = getString(R.string.stat_new) + stat[0] + " " + getString(R.string.stat_scheduled) + stat[1] + " " + getString(R.string.memo_current_id) + currentItem.getId();
+        if(currentItem != null && currentItem.getCategory() != null){
+            titleString += " :: " + currentItem.getCategory();
+        }
+        setTitle(titleString);
+
     }
 
 
@@ -608,7 +614,10 @@ public class MemoScreen extends AMActivity{
         /* This li is make the background of buttons the same as answer */
         LinearLayout li = new LinearLayout(this);
         li.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.FILL_PARENT));
-        li.setBackgroundColor(settingManager.getColors().get(3));
+        List<Integer> colors = settingManager.getColors();
+        if(colors != null){
+            li.setBackgroundColor(settingManager.getColors().get(3));
+        }
 
         /* 
          * -1: Match parent -2: Wrap content
