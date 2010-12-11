@@ -91,7 +91,7 @@
     <string name="detail_delete">Löschen</string>
     <string name="delete_warning">Wollen Sie diese Karteikarte wirklich löschen?</string>
     <string name="skip_text">Überspringen</string>
-    <string name="skip_warning">Dieser Eintrag wird nie abgefragt. Wollen Sie den Eintrag überspringen?</string>
+    <string name="skip_warning">Das Wiedervorlagedatum dieser Karte wird auf unendlichgesetzt. Möchten Sie dies tun?</string>
     <string name="stat_total">Gesamt: </string>
     <string name="stat_scheduled">Rev: </string>
     <string name="stat_new">Neu: </string>
@@ -150,10 +150,9 @@
     <string name="downloader_categories">Kategorien</string>
     <string name="downloader_databases">Datenbanken</string>
     <string name="open_database_error_title">Beim öffnen der Datenbank trat ein Fehler auf</string>
-
     <string name="open_database_error_message">AnyMemo kann die Datenbank nicht öffnen. Dies kann mehrere Gründe haben. Bitte besuchen Sie die FAQ-Rubrik unserer Webseite anymemo.org oder schicken Sie mir den Bug-Report.</string>
     <string name="interface_locale_title">Interface-Sprache</string>
-    <string name="interface_locale_summary">Bestimmt die Menü-Sprache. Erfordert einen Neustart der Anwendung.</string>
+    <string name="interface_locale_summary">Sprache auswählen</string>
     <string name="settings_typeface_question">Benutzerdefinierter Fragen Schriftsatz (TTF)</string>
     <string name="settings_typeface_answer">Benutzerdefinierter Antworten Schriftsatz (TTF)</string>
     <string name="learn_ahead">Jetzt pauken!</string>

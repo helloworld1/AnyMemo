@@ -170,7 +170,7 @@
 
     <string name="open_database_error_message">AnyMemo can not open this database. This is due to various reasons. Please visit our website anymemo.org FAQ section for resolutions or contact me for bug report.</string>
     <string name="interface_locale_title">Interface Language</string>
-    <string name="interface_locale_summary">Choose the language of the user interface. Restarting AnyMemo is needed.</string>
+    <string name="interface_locale_summary">Choose the language of the user interface.</string>
     <string name="settings_typeface_question">User-defined Question Font (TTF)</string>
     <string name="settings_typeface_answer">User-defined Answer Font (TTF)</string>
     <string name="learn_ahead">Cram Review</string>
