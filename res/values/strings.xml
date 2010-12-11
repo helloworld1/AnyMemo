@@ -86,13 +86,13 @@
     <string name="settings_question_bg_color">Question Background Color</string>
     <string name="settings_answer_bg_color">AnswerBackground Color</string>
     <string name="settings_wipe">Wipe All Learning Progress</string>
-    <string name="settings_shuffle">Shuffle cards</string>
+    <string name="settings_shuffle">Shuffle all cards</string>
     <string name="settings_inverse">Swap the QA of all cards</string>
     <string name="settings_save">Save</string>
     <string name="settings_discard">Discard</string>
     <string name="warning_text">Warning</string>
-    <string name="settings_wipe_warning">ALL Learning Progress will be reset upon clicking Save!</string>
-    <string name="settings_shuffle_warning">This operation will shuffle all cards and can NOT be undone. Please think before writing changes</string>
+    <string name="settings_wipe_warning">ALL Learning Progress will be reset!</string>
+    <string name="settings_shuffle_warning">This operation will shuffle all cards and can NOT be undone.</string>
     <string name="settings_inverse_warning">This operation will swap the location of question and answer. Swap&amp;dup will add all swapped cards to the back of current database instead of replacing.</string>
     <string name="detail_update">Write Changes</string>
     <string name="detail_back">Back</string>

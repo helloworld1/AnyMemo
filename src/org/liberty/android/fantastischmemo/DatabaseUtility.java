@@ -52,7 +52,7 @@ import org.json.JSONException;
 
 
 /*
- * This class include the most low level database operation
+ * This class include the most GUI utility for the DatabaseHelper
  * the DatabaseUtility wrap this class to provide more database * global operations
  */
 public class DatabaseUtility{
@@ -78,10 +78,8 @@ public class DatabaseUtility{
             .setMessage(R.string.settings_wipe_warning)
             .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
         		public void onClick(DialogInterface arg0, int arg1){
-                    final DatabaseHelper dbHelper = new DatabaseHelper((Context)mActivity, dbPath, dbName);
                     /* Be careful, the name in dbHelper is different */
-                    AMGUIUtility.doProgressTask(mActivity, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask(){
-                        public void doHeavyTask(){
+                    AMGUIUtility.doProgressTask(mActivity, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask(){ public void doHeavyTask(){
                             DatabaseHelper dbHelper = new DatabaseHelper((Context)mActivity, dbPath, dbName);
                             /* Be careful, the name in dbHelper is different */
                             dbHelper.wipeLearnData();
@@ -207,6 +205,29 @@ public class DatabaseUtility{
             .show();
     }
 
+    public void shuffleDatabase(){
+        new AlertDialog.Builder(mActivity)
+            .setTitle(R.string.warning_text)
+            .setIcon(R.drawable.alert_dialog_icon)
+            .setMessage(R.string.settings_shuffle_warning)
+            .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
+        		public void onClick(DialogInterface arg0, int arg1){
+                    AMGUIUtility.doProgressTask(mActivity, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask(){
+                        public void doHeavyTask(){
+                            DatabaseHelper dbHelper = new DatabaseHelper((Context)mActivity, dbPath, dbName);
+                            dbHelper.shuffleDatabase();
+                            dbHelper.close();
+                        }
+                        public void doUITask(){
+                            mActivity.restartActivity();
+                        }
+                    });
+                }
+            })
+            .setNegativeButton(R.string.cancel_text, null)
+            .create()
+            .show();
+    }
 }
 
     

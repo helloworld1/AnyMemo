@@ -416,7 +416,8 @@ public class SettingManager{
     public static enum HTMLDisplayType{
         BOTH,
         QUESTION,
-        ANSWER;
+        ANSWER,
+        NONE;
 
         public static HTMLDisplayType parse(String a){
             if(a.equals("question")){
@@ -424,6 +425,9 @@ public class SettingManager{
             }
             else if(a.equals("answer")){
                 return ANSWER;
+            }
+            else if(a.equals("none")){
+                return NONE;
             }
             else{
                 return BOTH;

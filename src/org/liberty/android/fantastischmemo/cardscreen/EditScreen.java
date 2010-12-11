@@ -135,6 +135,9 @@ public class EditScreen extends AMActivity{
             initTTS();
             composeViews();
             currentItem = itemManager.getItem(currentId);
+            if(currentItem == null){
+                itemManager.getItem(1);
+            }
             flashcardDisplay.updateView(currentItem);
             updateTitle();
             setButtonListeners();
@@ -282,7 +285,9 @@ public class EditScreen extends AMActivity{
                 myIntent.setClass(this, ListEditScreen.class);
                 myIntent.putExtra("dbname", dbName);
                 myIntent.putExtra("dbpath", dbPath);
-                myIntent.putExtra("openid", currentItem.getId());
+                if(currentItem != null){
+                    myIntent.putExtra("openid", currentItem.getId());
+                }
                 startActivityForResult(myIntent, ACTIVITY_LIST);
                 return true;
             }
@@ -356,6 +361,12 @@ public class EditScreen extends AMActivity{
                 myIntent.putExtra("dbpath", dbPath);
                 myIntent.putExtra("dbname", dbName);
                 startActivityForResult(myIntent, ACTIVITY_MERGE);
+                return true;
+            }
+
+            case R.id.menu_context_shuffle:
+            {
+                databaseUtility.shuffleDatabase();
                 return true;
             }
 
@@ -445,6 +456,13 @@ public class EditScreen extends AMActivity{
             Intent myIntent = new Intent(EditScreen.this, CardEditor.class);
             myIntent.putExtra("dbpath", dbPath);
             myIntent.putExtra("dbname", dbName);
+            Item newItem = new Item();
+            /* New item has id -1 */
+            newItem.setId(-1);
+            if(currentItem != null && currentItem.getCategory() != null){
+                newItem.setCategory(currentItem.getCategory());
+            }
+            myIntent.putExtra("item", newItem);
             startActivityForResult(myIntent, ACTIVITY_EDIT);
         }
     };

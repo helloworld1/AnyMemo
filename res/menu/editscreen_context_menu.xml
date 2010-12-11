@@ -21,6 +21,9 @@
             <item
                 android:id="@+id/menu_context_merge_db"
                 android:title="@string/merge_db_text" />
+            <item
+                android:id="@+id/menu_context_shuffle"
+                android:title="@string/settings_shuffle" />
         </menu>
     </item>
 </menu>

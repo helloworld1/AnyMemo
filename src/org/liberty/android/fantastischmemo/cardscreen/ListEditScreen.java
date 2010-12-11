@@ -66,7 +66,8 @@ public class ListEditScreen extends AMActivity implements OnItemClickListener{
 		if (extras != null) {
             dbPath = extras.getString("dbpath");
             dbName = extras.getString("dbname");
-            initPosition = extras.getInt("openid") - 1;
+            initPosition = extras.getInt("openid", 1) - 1;
+
 		}
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         final ProgressDialog progressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_database), true);

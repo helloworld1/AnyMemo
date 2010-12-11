@@ -236,13 +236,8 @@ public class FlashcardDisplay implements TagHandler, ImageGetter{
         }
 		
 		
-		if(htmlDisplay == SettingManager.HTMLDisplayType.BOTH){
-            /* Use HTML to display */
-
-            questionView.setText(Html.fromHtml(sq, this, this));
-            answerView.setText(Html.fromHtml(sa, this, this));
-		}
-		else if(htmlDisplay == SettingManager.HTMLDisplayType.QUESTION){
+        /* Use HTML to display */
+		if(htmlDisplay == SettingManager.HTMLDisplayType.QUESTION){
             questionView.setText(Html.fromHtml(sq, this, this));
             answerView.setText(sa);
 		}
@@ -250,9 +245,14 @@ public class FlashcardDisplay implements TagHandler, ImageGetter{
             answerView.setText(Html.fromHtml(sa, this, this));
             questionView.setText(sq);
 		}
-		else{
+		else if(htmlDisplay == SettingManager.HTMLDisplayType.NONE){
             questionView.setText(sq);
             answerView.setText(sa);
+		}
+		else{
+            /* Both */
+            questionView.setText(Html.fromHtml(sq, this, this));
+            answerView.setText(Html.fromHtml(sa, this, this));
 		}
 		
         /* Here is tricky to set up the alignment of the text */
