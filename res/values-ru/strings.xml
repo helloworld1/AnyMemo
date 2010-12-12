@@ -142,7 +142,7 @@
     <string name="downloader_download_alert">Загрузка: </string>
     <string name="downloader_download_alert_message">Подробности: </string>
     <string name="about_title">О программе</string>
-    <string name="about_text">Программа для заучивания наизусть информации на карточках и продвинутой системой повторений.&lt;br /&gt;&lt;br /&gt;Авторы: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;Вебсайт: &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Признательность: pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;Переводчики: Ladislav, jim4ever, paw3lk, Александр Гоменюк</string>
+    <string name="about_text">Программа для заучивания наизусть информации на карточках и продвинутой системой повторений.&lt;br /&gt;&lt;br /&gt;Авторы: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;Вебсайт: &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Признательность: pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;Переводчики: Ladislav, jim4ever, paw3lk, Александр Гоменюк, Maksym Grinenko</string>
     <string name="about_version">История Версий</string>
     <string name="what_is_new">Установлена Новая Версия</string>
     <string name="downloader_categories">Разделы</string>
@@ -250,7 +250,7 @@
     <string name="donate_summary">Вы можете поддержать проект AnyMemo, купив pro версию в Android Market, или заплатить онлайн на сайте &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt; Спасибо за ваше участие.</string>
     <string name="goto_prev_screen">К Экрану Просмотр/Правка</string>
     <string name="exception_text">Исключение</string>
-    <string name="advanced_setting_text">Продвинутый</string>
+    <string name="advanced_setting_text">Продвинутый ...</string>
     <string name="db_merger_title">Объединение Баз</string>
     <string name="db_merger_explaination">Объединить Базу Источник и Базу Цель</string>
     <string name="target_db_text">База Цель(Двойным щелчком смотреть)</string>

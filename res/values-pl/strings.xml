@@ -225,11 +225,8 @@
     <string name="swap_qa_text">Zamień pytania z odpowiedziami</string>
     <string name="remove_dup_text">Usuń duplikaty</string>
     <string name="removing_dup_title">Usuwanie duplikatów</string>
-    <string name="removing_dup_warning">Usuwanie duplikatów to
-    czasochłonny proces w zależności od rozmiaru bazy danych. Przerwanie
-    tego procesu spowoduje uszkodzenie bazy!</string>
-    <string name="removing_dup_summary">Usuwanie zduplikowanych kart. To
-    może trochę potrwać w przypadku dużych baz danych.</string>
+    <string name="removing_dup_warning">Usuwanie duplikatów to czasochłonny proces w zależności od rozmiaru bazy danych. Przerwanie tego procesu spowoduje uszkodzenie bazy!</string>
+    <string name="removing_dup_summary">Usuwanie zduplikowanych kart. To może trochę potrwać w przypadku dużych baz danych.</string>
     <string name="startup_title">Ekran startowy</string>
     <string name="startup_summary">Skonfiguruj ekran startowy</string>
     <string name="detail_reset">Skasuj dane postępu nauki</string>
@@ -253,4 +250,48 @@
     <string name="donate_text">Złóż darowiznę</string>
     <string name="buy_pro_text">Kup wersję Pro</string>
     <string name="donate_summary">Możesz złożyć darowiznę twórcom projektu AnyMemo kupując wersję Pro z Marketu Android bądź na stronie anymemo.org. Podziękowania za wsparcie.</string>
+    <string name="goto_prev_screen">Idź do ekranu podglądu/edycji</string>
+    <string name="exception_text">Wyjąek</string>
+    <string name="advanced_setting_text">Zaawansowane</string>
+    <string name="db_merger_title">Scalanie baz danych</string>
+    <string name="db_merger_explaination">Scal źródłową bazę danych z bazą docelową</string>
+    <string name="target_db_text">Baza danych docelowa (dwuklik by przeglądać)</string>
+    <string name="source_db_text">Baza danych źródłowa (dwkulik by przeglądać)</string>
+    <string name="exception_message">Podczas operacji wystąpił wyjątek.</string>
+    <string name="error_text">Błąd</string>
+    <string name="clone_text">Klonuj</string>
+    <string name="rename_text">Zmień nazwę</string>
+    <string name="locale_auto_detect_text">Wykryj automatycznie</string>
+    <string name="locale_english_text">Angielski</string>
+    <string name="locale_sc_text">Chiński uproszczony</string>
+    <string name="locale_tc_text">Chiński tradycyjny</string>
+    <string name="locale_czech_text">Czeski</string>
+    <string name="locale_polish_text">Polski</string>
+    <string name="locale_russian_text">Rosyjski</string>
+    <string name="study_text">Nauka</string>
+    <string name="option_manual_speak">0. Ręcznie</string>
+    <string name="option_tap_speak">1. Tapnij by wymówić</string>
+    <string name="option_auto_speak">2. Automatyczna wymowa</string>
+    <string name="option_autotap_speak">3. 1 i 2</string>
+    <string name="settings_color_question_text">Teksty pytania</string>
+    <string name="settings_color_answer_text">Tekst odpowiedzi</string>
+    <string name="settings_color_question_bg">Tło pytania</string>
+    <string name="settings_color_answer_bg">Tło odpowiedzi</string>
+
+    <string name="settings_color_separator">Separator</string>
+    <string name="screen_main_text">Ekran główny</string>
+    <string name="screen_edit_text">Ekran edycji</string>
+    <string name="screen_open_text">Ekran otwierania</string>
+    <string name="screen_memo_text">Ekran memo</string>
+    <string name="disabled_text">Wyłączone</string>
+    <string name="notification_1hr_text">1 godzina</string>
+    <string name="notification_6hr_text">6 godzin</string>
+    <string name="notification_12hr_text">12 godzin</string>
+    <string name="notification_24hr_text">Dzień</string>
+    <string name="download_source_anymemo">http://anymemo.org (domyślny)</string>
+    <string name="download_source_fe">http://flashcardexchange.com (eksperymentalny)</string>
+    <string name="download_source_ss">http://studystack.com (eksperymentalny)</string>
+    <string name="swap_text">Zamień</string>
+    <string name="swapdup_text">Zamień i zduplikuj</string>
+    <string name="locale_german_text">Niemiecki</string>
 </resources>

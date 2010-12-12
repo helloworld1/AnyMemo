@@ -249,10 +249,9 @@
     <string name="donate_text">Spenden</string>
     <string name="buy_pro_text">Pro Version kaufen</string>
     <string name="donate_summary">Sie können dem AnyMemo Project spenden in dem Sie die Pro Version über Android Marketplace kaufen oder online auf &lt;a href=&quot;http://anymemo.org&quot;&gt;http://anymemo.org&lt;/a&gt;. &lt;br /&gt; Wir danken Ihnen für Ihre Unterstützung.</string>
-    <string name="anymemo_pro_link">market://search?q=pname:org.liberty.android.fantastischmemopro</string>
     <string name="goto_prev_screen">Zu Vorschau-/Bearbeiten-Ansicht wechseln</string>
     <string name="exception_text">Ausnahme</string>
-    <string name="advanced_setting_text">Erweitert</string>
+    <string name="advanced_setting_text">Erweitert ...</string>
     <string name="db_merger_title">Datenbank-Manager</string>
     <string name="db_merger_explaination">Quell-Datenbank in Ziel-Datenbark einführen</string>
     <string name="target_db_text">Ziel-Datenbank (durchsuchen mit Doppelklick)</string>

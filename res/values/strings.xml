@@ -152,7 +152,7 @@
     <string name="downloader_download_alert">Download: </string>
     <string name="downloader_download_alert_message">Details: </string>
     <string name="about_title">About</string>
-    <string name="about_text">Advanced spaced repetition flashcard learning software.&lt;br /&gt;&lt;br /&gt;Authors: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;Website: &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Acknowledge: pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;Translators: Ladislav, jim4ever, paw3lk, Александр Гоменюк</string>
+    <string name="about_text">Advanced spaced repetition flashcard learning software.&lt;br /&gt;&lt;br /&gt;Authors: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;Website: &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Acknowledge: pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;Translators: Ladislav, jim4ever, paw3lk, Александр Гоменюк, Maksym Grinenko</string>
     <string name="about_version">Version History</string>
     <string name="what_is_new">New Version Installed</string>
     <string name="website_main">http://anymemo.org</string>
@@ -270,7 +270,7 @@
     <string name="anymemo_pro_link">market://search?q=pname:org.liberty.android.fantastischmemopro</string>
     <string name="goto_prev_screen">Go to Preview/Edit Screen</string>
     <string name="exception_text">Exception</string>
-    <string name="advanced_setting_text">Advanced</string>
+    <string name="advanced_setting_text">Advanced ...</string>
     <string name="db_merger_title">Database Merger</string>
     <string name="db_merger_explaination">Merge the Source Database into the Target Database</string>
     <string name="target_db_text">Target Database (Double click to browse)</string>

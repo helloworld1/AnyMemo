@@ -311,6 +311,8 @@ public class SettingManager{
         fullscreenMode = settings.getBoolean("fullscreen_mode", false);
         screenHeight = settings.getInt("screen_height", 320);
         screenWidth = settings.getInt("screen_width", 480);
+        enableThirdPartyArabic = settings.getBoolean("enable_third_party_arabic", true);
+
 
         /* Load learning queue size from the preference */
         try{
