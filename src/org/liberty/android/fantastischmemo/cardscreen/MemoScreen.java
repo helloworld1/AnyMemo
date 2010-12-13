@@ -687,10 +687,14 @@ public class MemoScreen extends AMActivity{
 
             if(settingManager.getSpeechControlMethod() == SettingManager.SpeechControlMethod.AUTOTAP || settingManager.getSpeechControlMethod() == SettingManager.SpeechControlMethod.AUTO){
                 if(!flashcardDisplay.isAnswerShown()){
-                    questionTTS.sayText(currentItem.getQuestion());
+                    if(questionTTS != null){
+                        questionTTS.sayText(currentItem.getQuestion());
+                    }
                 }
                 else{
-                    answerTTS.sayText(currentItem.getAnswer());
+                    if(answerTTS != null){
+                        answerTTS.sayText(currentItem.getAnswer());
+                    }
                 }
             }
         }
