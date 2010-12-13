@@ -469,8 +469,10 @@ public class MemoScreen extends AMActivity{
         setGradeButtonTitle();
         setGradeButtonListeners();
         /* Automatic copy the current question to clipboard */
-        ClipboardManager cm = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
-        cm.setText(currentItem.getQuestion());
+        if(settingManager.getCopyClipboard()){
+            ClipboardManager cm = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
+            cm.setText(currentItem.getQuestion());
+        }
     }
 
 
