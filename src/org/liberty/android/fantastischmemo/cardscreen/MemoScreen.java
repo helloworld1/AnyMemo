@@ -459,11 +459,18 @@ public class MemoScreen extends AMActivity{
     }
 
     void updateFlashcardView(boolean showAnswer){
+        if(currentItem == null){
+            Log.e(TAG, "currentItem is null in updateFlashcardView", new NullPointerException("currentItem is null"));
+            return;
+        }
         flashcardDisplay.updateView(currentItem, showAnswer);
         autoSpeak();
         setActivityTitle();
         setGradeButtonTitle();
         setGradeButtonListeners();
+        /* Automatic copy the current question to clipboard */
+        ClipboardManager cm = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
+        cm.setText(currentItem.getQuestion());
     }
 
 
