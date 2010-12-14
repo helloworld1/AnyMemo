@@ -464,6 +464,13 @@ public class MemoScreen extends AMActivity{
             return;
         }
         flashcardDisplay.updateView(currentItem, showAnswer);
+        /* Also update the visibility of buttons */
+        if(showAnswer){
+            showButtons();
+        }
+        else{
+            hideButtons();
+        }
         autoSpeak();
         setActivityTitle();
         setGradeButtonTitle();

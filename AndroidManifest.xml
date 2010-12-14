@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.liberty.android.fantastischmemo"
     android:installLocation="auto"
-    android:versionCode="99"
-    android:versionName="6.999.9">
+    android:versionCode="100"
+    android:versionName="6.999.10">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
