@@ -228,6 +228,49 @@ public class DatabaseUtility{
             .create()
             .show();
     }
+    public void swapSingelItem(final Item item){
+        AMGUIUtility.doProgressTask(mActivity, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask(){
+            public void doHeavyTask(){
+                DatabaseHelper dbHelper = new DatabaseHelper((Context)mActivity, dbPath, dbName);
+                String tmp = item.getQuestion();
+                item.setQuestion(item.getAnswer());
+                item.setAnswer(tmp);
+                dbHelper.addOrReplaceItem(item);
+                dbHelper.close();
+            }
+            public void doUITask(){
+                mActivity.restartActivity();
+            }
+        });
+    }
+
+    public void resetCurrentLearningData(final Item item){
+        new AlertDialog.Builder(mActivity)
+            .setTitle(R.string.detail_reset)
+            .setMessage(R.string.reset_current_warning)
+            .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
+                public void onClick(DialogInterface arg0, int arg1) {
+                    AMGUIUtility.doProgressTask(mActivity, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask(){
+                        public void doHeavyTask(){
+                            DatabaseHelper dbHelper = new DatabaseHelper((Context)mActivity, dbPath, dbName);
+                            Item newItem = new Item();
+                            newItem.setId(item.getId());
+                            newItem.setQuestion(item.getQuestion());
+                            newItem.setAnswer(item.getAnswer());
+                            newItem.setCategory(item.getCategory());
+                            dbHelper.addOrReplaceItem(newItem);
+                            dbHelper.close();
+                        }
+                        public void doUITask(){
+                            mActivity.restartActivity();
+                        }
+                    });
+                }
+            })
+            .setNegativeButton(R.string.cancel_text, null)
+            .create()
+            .show();
+    }
 }
 
     

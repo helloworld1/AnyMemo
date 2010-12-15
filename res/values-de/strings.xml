@@ -292,4 +292,5 @@
     <string name="swap_text">Vertauschen</string>
     <string name="swapdup_text">Duplizieren+Vertauschen</string>
     <string name="locale_german_text">Deutsch</string>
+    <string name="reset_current_warning">Beim Drücken auf &quot;OK&quot; wird der Lernfortschritt der dieser Karteikarte endgültig zurückgesetzt!</string>
 </resources>

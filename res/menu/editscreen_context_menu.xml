@@ -6,6 +6,12 @@
     <item 
         android:id="@+id/menu_context_paste"
         android:title="@string/paste_text" />
+    <item 
+        android:id="@+id/menu_context_swap_current"
+        android:title="@string/swap_qa_text" />
+    <item 
+        android:id="@+id/menu_context_reset_current"
+        android:title="@string/detail_reset" />
     <item
         android:title = "@string/advanced_setting_text" >
         <menu>

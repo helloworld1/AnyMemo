@@ -322,7 +322,14 @@ public class EditScreen extends AMActivity{
         switch(menuitem.getItemId()) {
             case R.id.menu_context_copy:
             {
-                savedItem = currentItem.clone();
+
+                if(currentItem != null){
+                    savedItem = new Item();
+                    savedItem.setId(currentItem.getId());
+                    savedItem.setQuestion(currentItem.getQuestion());
+                    savedItem.setAnswer(currentItem.getAnswer());
+                    savedItem.setCategory(currentItem.getCategory());
+                }
                 return true;
             }
             case R.id.menu_context_paste:
@@ -334,6 +341,21 @@ public class EditScreen extends AMActivity{
                     updateTitle();
                 }
 
+                return true;
+            }
+            case R.id.menu_context_swap_current:
+            {
+                if(currentItem != null){
+                    databaseUtility.swapSingelItem(currentItem);
+                }
+                return true;
+            }
+
+            case R.id.menu_context_reset_current:
+            {
+                if(currentItem != null){
+                    databaseUtility.resetCurrentLearningData(currentItem);
+                }
                 return true;
             }
 
