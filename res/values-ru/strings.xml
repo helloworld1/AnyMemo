@@ -77,13 +77,13 @@
     <string name="settings_answer_bg_color">Цвет Фона Ответа</string>
     <string name="settings_wipe">Сбросить Весь Прогресс Изучения</string>
     <string name="settings_shuffle">Перемешать карточки</string>
-    <string name="settings_inverse">Поменять местами В и О</string>
+    <string name="settings_inverse">Поменять ВО всех карточек</string>
     <string name="settings_save">Сохранить</string>
     <string name="settings_discard">Отказаться</string>
     <string name="warning_text">Предупреждение</string>
     <string name="settings_wipe_warning">ВЕСЬ прогресс изучения будет сброшен при нажатии Сохранить!</string>
-    <string name="settings_shuffle_warning">Эта операция перемешает все карточки и её НЕЛЬЗЯ будет отменить. Подумайте до внесения изменений.</string>
-    <string name="settings_inverse_warning">Эта операция поменяет местами вопросы и ответы ВСЕХ карточек.</string>
+    <string name="settings_shuffle_warning">Эта операция перемешает все карточки и её НЕЛЬЗЯ будет отменить.</string>
+    <string name="settings_inverse_warning">Эта операция поменяет местами вопросы и ответы. Обм&amp;Коп добавит все инвертированные карточки в конец текущей базы вместо замены.</string>
     <string name="detail_update">Внести Измения</string>
     <string name="detail_back">Назад</string>
     <string name="detail_delete">Удалить</string>
@@ -142,7 +142,7 @@
     <string name="downloader_download_alert">Загрузка: </string>
     <string name="downloader_download_alert_message">Подробности: </string>
     <string name="about_title">О программе</string>
-    <string name="about_text">Программа для заучивания наизусть информации на карточках и продвинутой системой повторений.&lt;br /&gt;&lt;br /&gt;Авторы: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;Вебсайт: &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Признательность: pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;Переводчики: Ladislav, jim4ever, paw3lk, Александр Гоменюк, Maksym Grinenko</string>
+    <string name="about_text">Программа для заучивания наизусть информации на карточках и продвинутой системой повторений.<br /><br />Авторы: Haowen Ning, Qi Wang<br /><br />Вебсайт: <a href="http://anymemo.org">http://anymemo.org</a> <br /><br />Признательность: pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler<br /><br />Переводчики: Ladislav, jim4ever, paw3lk, Alexander Gomenyuk, Maksym Grinenko</string>
     <string name="about_version">История Версий</string>
     <string name="what_is_new">Установлена Новая Версия</string>
     <string name="downloader_categories">Разделы</string>
@@ -196,7 +196,7 @@
     <string name="merge_db_text">Объединить</string>
     <string name="merge_success_title">Объединено Успешно</string>
     <string name="merge_fail_title">Объединение Не Удалось</string>
-    <string name="merge_success_message">Успешно объединены базы:</string>
+    <string name="merge_success_message">Базы успешно объединены.</string>
     <string name="merge_fail_message">Не удалось объединить базы. Ошибка:</string>
     <string name="merging_title">Объединение...</string>
     <string name="merging_summary">Объединение баз. Подождите.</string>
