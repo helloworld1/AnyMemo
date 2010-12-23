@@ -502,14 +502,15 @@ public class MemoScreen extends AMActivity{
         };
         View.OnClickListener speakAnswerListener = new View.OnClickListener(){
             public void onClick(View v){
-                if(currentItem != null && answerTTS != null){
-
+                if(currentItem != null){
                     if(!flashcardDisplay.isAnswerShown()){
                         updateFlashcardView(true);
                         showButtons();
                     }
                     else{
-                        answerTTS.sayText(currentItem.getAnswer());
+                        if(answerTTS != null){
+                            answerTTS.sayText(currentItem.getAnswer());
+                        }
                     }
                 }
             }
