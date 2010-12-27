@@ -47,6 +47,8 @@ public final class Item implements Cloneable, Serializable{
 	private String answer;
 	private String note;
     private String category;
+    /* Make it static for performance */
+    private final static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     public final static String TAG = "org.liberty.android.fantastischmemo.Item";
 	
 	public Item(){
@@ -92,7 +94,6 @@ public final class Item implements Cloneable, Serializable{
 
     public long getDatelearnUnix() throws ParseException{
         // Get the datelearn in unix time * 1000
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = formatter.parse(this.date_learn);
         return date.getTime() / 1000;
     }
@@ -268,7 +269,6 @@ public final class Item implements Cloneable, Serializable{
 	private int diffDate(String date1, String date2){
         // The days betwween to date of date1 and date2 in format below.
 		final double MILLSECS_PER_DAY = 86400000.0;
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		Date d1, d2;
 		int difference = 0;
 		try{
@@ -285,7 +285,6 @@ public final class Item implements Cloneable, Serializable{
 
 	public boolean isScheduled(){
 		Date currentDate = new Date();
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		String now = formatter.format(currentDate);
 		int actualInterval = diffDate(now, this.date_learn);
 		int scheduleInterval = this.interval;
@@ -304,7 +303,6 @@ public final class Item implements Cloneable, Serializable{
         // and return the interval
         // if dryRun is false, the return value only show success or not
 		Date currentDate = new Date();
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		String now = formatter.format(currentDate);
 		int actualInterval = diffDate(now, this.date_learn);
 		int scheduleInterval = this.interval;

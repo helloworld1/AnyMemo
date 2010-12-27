@@ -37,6 +37,7 @@ import java.util.Set;
 import java.util.Date;
 import java.util.List;
 
+import android.os.Debug;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.app.Activity;
@@ -120,6 +121,7 @@ public class MemoScreen extends AMActivity{
 		setContentView(R.layout.memo_screen_layout);
         Bundle extras = getIntent().getExtras();
         mHandler = new Handler();
+        //Debug.startMethodTracing("anymemo");
         if (extras != null) {
             dbPath = extras.getString("dbpath");
             dbName = extras.getString("dbname");
@@ -187,6 +189,7 @@ public class MemoScreen extends AMActivity{
 
     @Override
     public void onDestroy(){
+        //Debug.stopMethodTracing();
         if(settingManager != null){
             settingManager.close();
             settingManager = null;
