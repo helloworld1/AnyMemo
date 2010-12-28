@@ -85,6 +85,7 @@ import android.graphics.Typeface;
 import android.content.res.Configuration;
 import android.view.inputmethod.InputMethodManager;
 import android.database.SQLException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 class LearnQueueManager implements QueueManager{
@@ -99,8 +100,7 @@ class LearnQueueManager implements QueueManager{
     private int revCardNo;
     private int newCardNo;
     public static final String TAG = "org.liberty.android.fantastischmemo.cardscreen.LearnQueueManager";
-    /* Simulate a spinlock to indicate if the IO thread is working */
-    private volatile boolean done = true;
+    private volatile AtomicInteger workingCount = new AtomicInteger(0);
 
 
     public static class Builder{
@@ -221,9 +221,11 @@ class LearnQueueManager implements QueueManager{
          * Otherwise use the UI thread to update the queue
          */
         if(learnQueue.size() >= 1){
+            workingCount.incrementAndGet();
             new Thread(){
                 public void run(){
                     updateItemAndFillQueue(item);
+                    workingCount.decrementAndGet();
                 }
             }.start();
         }
@@ -243,15 +245,15 @@ class LearnQueueManager implements QueueManager{
     }
 
     /* Busy wait for the IO thread complete */
-    private void waitDone(){
-        while(done == false){
+    public void flush(){
+        while(workingCount.get() > 0){
+            //Thread.yield();
         }
     }
 
     /* Used in thread to do the heavy job */
     private synchronized void updateItemAndFillQueue(Item item){
         Log.v(TAG, "Thread start");
-        done = false;
         boolean fetchRevFlag = true;
         /* Fill up the queue to its queue size */
         int maxNewId = getMaxQueuedItemId(true);
@@ -279,7 +281,6 @@ class LearnQueueManager implements QueueManager{
                 }
             }
         }
-        done = true;
         Log.v(TAG, "Thread end");
     }
 
@@ -329,7 +330,7 @@ class LearnQueueManager implements QueueManager{
     }
     public void close(){
         /* First busy wait for the IO job done */
-        waitDone();
+        flush();
         if(dbHelper != null){
             dbHelper.close();
         }

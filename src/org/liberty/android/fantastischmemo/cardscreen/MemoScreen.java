@@ -186,6 +186,11 @@ public class MemoScreen extends AMActivity{
     }
 
 
+    @Override
+    public void onPause(){
+        queueManager.flush();
+        super.onPause();
+    }
 
     @Override
     public void onDestroy(){
