@@ -250,6 +250,10 @@ class CramQueueManager implements QueueManager{
         throw new AssertionError("Method not implemented");
     }
 
+    public void flush(){
+        /* Do nothing here */
+    }
+
 }
 
 
