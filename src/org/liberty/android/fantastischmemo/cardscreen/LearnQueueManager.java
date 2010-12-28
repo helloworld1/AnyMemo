@@ -86,6 +86,7 @@ import android.content.res.Configuration;
 import android.view.inputmethod.InputMethodManager;
 import android.database.SQLException;
 
+
 class LearnQueueManager implements QueueManager{
     private Context mContext;
     private String dbPath;
@@ -97,6 +98,9 @@ class LearnQueueManager implements QueueManager{
     private List<Item> learnQueue = null;
     private int revCardNo;
     private int newCardNo;
+    public static final String TAG = "org.liberty.android.fantastischmemo.cardscreen.LearnQueueManager";
+    /* Simulate a spinlock to indicate if the IO thread is working */
+    private volatile boolean done = true;
 
 
     public static class Builder{
@@ -164,7 +168,7 @@ class LearnQueueManager implements QueueManager{
      * the database
      * The item parameter is the null, it will return current head of queue
      */
-    public Item updateAndNext(Item item){
+    public Item updateAndNext(final Item item){
         if(learnQueue == null || learnQueue.size() == 0){
             return null;
         }
@@ -211,12 +215,48 @@ class LearnQueueManager implements QueueManager{
                 learnQueue.add(orngItem);
             }
         }
-        dbHelper.addOrReplaceItem(item);
+
+        /* 
+         * Fill the item in thread if there is more than 1 item 
+         * Otherwise use the UI thread to update the queue
+         */
+        if(learnQueue.size() >= 1){
+            new Thread(){
+                public void run(){
+                    updateItemAndFillQueue(item);
+                }
+            }.start();
+        }
+        else{
+            updateItemAndFillQueue(item);
+        }
+
+        if(learnQueue.size() > 0){
+            /* Return the clone to resolve the reference problem
+             * i.e. updating the item will also item the one
+             * in the queue */
+            return learnQueue.get(0).clone();
+        }
+        else{
+            return null;
+        }
+    }
+
+    /* Busy wait for the IO thread complete */
+    private void waitDone(){
+        while(done == false){
+        }
+    }
+
+    /* Used in thread to do the heavy job */
+    private synchronized void updateItemAndFillQueue(Item item){
+        Log.v(TAG, "Thread start");
+        done = false;
+        boolean fetchRevFlag = true;
         /* Fill up the queue to its queue size */
         int maxNewId = getMaxQueuedItemId(true);
         int maxRevId = getMaxQueuedItemId(false);
-        boolean fetchRevFlag = true;
-        /* New item in database */
+        dbHelper.addOrReplaceItem(item);
         while(learnQueue.size() < queueSize){
             if(fetchRevFlag == true){
                 Item newItemFromDb = dbHelper.getItemById(maxRevId + 1, 2, true, activeFilter);
@@ -239,15 +279,8 @@ class LearnQueueManager implements QueueManager{
                 }
             }
         }
-        if(learnQueue.size() > 0){
-            /* Return the clone to resolve the reference problem
-             * i.e. updating the item will also item the one
-             * in the queue */
-            return learnQueue.get(0).clone();
-        }
-        else{
-            return null;
-        }
+        done = true;
+        Log.v(TAG, "Thread end");
     }
 
     /* 
@@ -295,6 +328,8 @@ class LearnQueueManager implements QueueManager{
         return new int[]{newCardNo, revCardNo};
     }
     public void close(){
+        /* First busy wait for the IO job done */
+        waitDone();
         if(dbHelper != null){
             dbHelper.close();
         }

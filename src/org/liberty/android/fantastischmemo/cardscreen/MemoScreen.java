@@ -190,6 +190,7 @@ public class MemoScreen extends AMActivity{
     @Override
     public void onDestroy(){
         //Debug.stopMethodTracing();
+        Log.v(TAG, "onDestroy now!");
         if(settingManager != null){
             settingManager.close();
             settingManager = null;
@@ -203,6 +204,7 @@ public class MemoScreen extends AMActivity{
         if(queueManager != null){
             queueManager.close();
         }
+        /* Busy wait for the IO thread complete */
         super.onDestroy();
     }
 
