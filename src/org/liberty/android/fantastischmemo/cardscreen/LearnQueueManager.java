@@ -230,6 +230,11 @@ class LearnQueueManager implements QueueManager{
             }.start();
         }
         else{
+            /* 
+             * This is not synchronized so it should wait for other thread
+             * complete 
+             */
+            flush();
             updateItemAndFillQueue(item);
         }
 
