@@ -187,7 +187,7 @@ class LearnQueueManager implements QueueManager{
             if(learnQueue.get(0).isScheduled()){
                 revCardNo -= 1;
             }
-            if(learnQueue.get(0).isNew()){
+            else if(learnQueue.get(0).isNew()){
                 newCardNo -= 1;
             }
         }

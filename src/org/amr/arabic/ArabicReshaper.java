@@ -168,7 +168,7 @@ public class ArabicReshaper{
 	 * @return the integer number indicated the Number of forms the Character has, return 2 otherwise
 	 */
 	private int getGlphyTypeBefore(String wholeTarget,int location){
-		if(location==0)
+		if(location<=0)
 			return 2;
         if(location >= wholeTarget.length()){
             return 2;

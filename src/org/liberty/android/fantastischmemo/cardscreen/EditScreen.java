@@ -504,7 +504,7 @@ public class EditScreen extends AMActivity{
             int total = itemManager.getStatInfo()[0];
             String titleString = getString(R.string.stat_total) + total + " " + getString(R.string.memo_current_id) + " " + currentItem.getId();
             if(currentItem != null && currentItem.getCategory() != null){
-                titleString += " :: " + currentItem.getCategory();
+                titleString += "  " + currentItem.getCategory();
             }
             setTitle(titleString);
         }
