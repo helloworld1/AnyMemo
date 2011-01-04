@@ -220,7 +220,7 @@ class LearnQueueManager implements QueueManager{
          * Fill the item in thread if there is more than 1 item 
          * Otherwise use the UI thread to update the queue
          */
-        if(learnQueue.size() >= 1){
+        if(learnQueue.size() >= 3){
             workingCount.incrementAndGet();
             new Thread(){
                 public void run(){

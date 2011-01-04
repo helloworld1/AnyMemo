@@ -188,7 +188,9 @@ public class MemoScreen extends AMActivity{
 
     @Override
     public void onPause(){
-        queueManager.flush();
+        if(queueManager != null){
+            queueManager.flush();
+        }
         super.onPause();
     }
 
