@@ -319,6 +319,10 @@ class LearnQueueManager implements QueueManager{
         if(learnQueue == null){
             throw new NullPointerException("The learnQueue is null");
         }
+
+        /* First remove the duplicate item with the same id */
+        removeFromQueue(item.getId());
+
         if(position >= 0 && position <= learnQueue.size()){
             learnQueue.add(position, item);
         }
@@ -346,6 +350,15 @@ class LearnQueueManager implements QueueManager{
             }
         }
         learnQueue = null;
+    }
+
+    private void removeFromQueue(int id){
+        for(Item i : learnQueue){
+            if(i.getId() == id){
+                learnQueue.remove(i);
+            }
+        }
+
     }
 
     private int getMaxQueuedItemId(boolean isNewItem){
