@@ -160,7 +160,21 @@ class CramQueueManager implements QueueManager{
             return true;
         }
     }
-
+    public Item getFirstItemFromQueue() {
+    	if(learnQueue == null || learnQueue.size() == 0){
+            return null;
+        }
+    	
+        if(shuffleCards && learnQueue.size() >= 2){
+            Item first = learnQueue.get(0);
+            learnQueue.remove(0);
+            Collections.shuffle(learnQueue);
+            learnQueue.add(0, first);
+        }
+        
+        return learnQueue.get(0);
+    }
+    
     public Item updateAndNext(Item item){
         if(learnQueue == null || learnQueue.size() == 0){
             return null;
@@ -179,12 +193,7 @@ class CramQueueManager implements QueueManager{
         if(item.isScheduled() || item.isNew()){
             learnQueue.add(orngItem);
         }
-        dbHelper.addOrReplaceItem(item);
-        /* Fill up the queue to its queue size */
-        while(learnQueue.size() < queueSize){
-            Item newItemFromDb = dbHelper.getItemById(0, 3, true, activeFilter);
-            learnQueue.add(newItemFromDb);
-        }
+
         if(learnQueue.size() > 0){
             return learnQueue.get(0);
         }
@@ -192,7 +201,23 @@ class CramQueueManager implements QueueManager{
             return null;
         }
     }
+    
+    public void updateInBackground(Item item) {
+		if (!dbHelper.inTransaction()) {
+			dbHelper.beginTransaction();
+	        dbHelper.addOrReplaceItem(item);
+	        dbHelper.endSuccessfullTransaction();
+		} else {
+	        dbHelper.addOrReplaceItem(item);
+		}
 
+        /* Fill up the queue to its queue size */
+        while(learnQueue.size() < queueSize){
+            Item newItemFromDb = dbHelper.getItemById(0, 3, true, activeFilter);
+            learnQueue.add(newItemFromDb);
+        }
+    }
+    
     /* 
      * Replace the item in the queue with the same ID and
      * return trueif not, it will do nothing and return false
@@ -248,10 +273,6 @@ class CramQueueManager implements QueueManager{
     }
     public int[] getStatInfo(){
         throw new AssertionError("Method not implemented");
-    }
-
-    public void flush(){
-        /* Do nothing here */
     }
 
 }

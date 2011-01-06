@@ -32,6 +32,7 @@ import java.util.ListIterator;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.Comparator;
@@ -43,6 +44,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Debug;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -645,12 +647,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return res;
 	}
 	
-	public void addOrReplaceItem(Item item){
+	public void addOrReplaceItem(final Item item){
+		//	Debug.startMethodTracing("addOrReplaceItem(Item item)");
+		// each of this method normally causes flash writes which on my milestone
+		// take 1s each! The tracing doesn't show that because it is delay on the
+		// system side
+		// however when those are invoked in transaction the flash write is done
+		// after commiting/ending transaction
 		this.myDatabase.execSQL("REPLACE INTO dict_tbl(_id, question, answer, note, category) VALUES(?, ?, ?, ?, ?)", new String[]{"" + item.getId(), item.getQuestion(), item.getAnswer(), item.getNote(), item.getCategory()});
 		this.myDatabase.execSQL("REPLACE INTO learn_tbl(date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, _id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", item.getLearningData());
-		
+
+		//	Debug.stopMethodTracing();
 	}
 
+	// expose those 3 method for the learnQueueManager to govern transactions
+	public void beginTransaction() {
+		myDatabase.beginTransaction();
+	}
+	
+	public boolean inTransaction() {
+		return myDatabase.inTransaction();
+	}
+	
+	public void endSuccessfullTransaction() {
+		myDatabase.setTransactionSuccessful();
+		myDatabase.endTransaction();
+	}
 
     public void inverseQA(){
         List<Item> itemList = getListItems(0, -1, 0, null);

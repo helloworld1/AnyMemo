@@ -19,74 +19,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.cardscreen;
 
-import org.liberty.android.fantastischmemo.*;
-
-import org.amr.arabic.ArabicUtilities;
-import org.xml.sax.XMLReader;
-
-import java.io.InputStream;
-import java.io.FileInputStream;
-import java.net.URL;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.Date;
 import java.util.Collections;
+import java.util.List;
 
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.text.Editable;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.SharedPreferences;
-import android.content.DialogInterface.OnClickListener;
-import android.content.DialogInterface.OnDismissListener;
-import android.os.Bundle;
+import org.liberty.android.fantastischmemo.DatabaseHelper;
+import org.liberty.android.fantastischmemo.Item;
+
 import android.content.Context;
-import android.preference.PreferenceManager;
-import android.text.Html;
-import android.text.ClipboardManager;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.Display;
-import android.view.LayoutInflater;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.ViewGroup;
-import android.view.KeyEvent;
-import android.gesture.GestureOverlayView;
-import android.widget.Button;
-import android.os.Handler;
-import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.ArrayAdapter;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView;
-import android.util.Log;
-import android.os.SystemClock;
-import android.os.Environment;
-import android.graphics.Typeface;
-import android.content.res.Configuration;
-import android.view.inputmethod.InputMethodManager;
 import android.database.SQLException;
-import java.util.concurrent.atomic.AtomicInteger;
-
 
 class LearnQueueManager implements QueueManager{
     private Context mContext;
@@ -99,10 +39,8 @@ class LearnQueueManager implements QueueManager{
     private List<Item> learnQueue = null;
     private int revCardNo;
     private int newCardNo;
-    public static final String TAG = "org.liberty.android.fantastischmemo.cardscreen.LearnQueueManager";
-    private volatile AtomicInteger workingCount = new AtomicInteger(0);
 
-
+    
     public static class Builder{
         private Context mContext;
         private String dbPath;
@@ -110,8 +48,9 @@ class LearnQueueManager implements QueueManager{
         private String activeFilter = "";
         private int queueSize = 10;
         private boolean shuffleCards = false;
+        
 
-        public Builder(Context context, String dbpath, String dbname){
+		public Builder(Context context, String dbpath, String dbname){
             mContext = context;
             dbPath = dbpath;
             dbName = dbname;
@@ -131,6 +70,7 @@ class LearnQueueManager implements QueueManager{
             shuffleCards = shuffle;
             return this;
         }
+
 
         public LearnQueueManager build(){
             return new LearnQueueManager(this);
@@ -161,6 +101,15 @@ class LearnQueueManager implements QueueManager{
         }
     }
 
+    // this method is extracted from updateAndNext because it is invoked not by ui thread
+    public Item getFirstItemFromQueue() {
+    	if(learnQueue == null || learnQueue.size() == 0){
+            return null;
+        }
+    	return learnQueue.get(0).clone();
+    }
+    
+
     /*
      * update current item and remove it in the queue
      * if the current item is not learned, this method will put it at the 
@@ -168,14 +117,14 @@ class LearnQueueManager implements QueueManager{
      * the database
      * The item parameter is the null, it will return current head of queue
      */
-    public Item updateAndNext(final Item item){
+    public Item updateAndNext(Item item){
         if(learnQueue == null || learnQueue.size() == 0){
             return null;
         }
-        if(item == null){
-            return learnQueue.get(0).clone();
-        }
+        
+        // assert item never null
 
+        
         /* When fail to remember a new card */
         if(learnQueue.get(0).isNew() && item.isScheduled()){
             newCardNo -= 1;
@@ -215,50 +164,28 @@ class LearnQueueManager implements QueueManager{
                 learnQueue.add(orngItem);
             }
         }
-
-        /* 
-         * Fill the item in thread if there is more than 1 item 
-         * Otherwise use the UI thread to update the queue
-         */
-        if(learnQueue.size() >= 1){
-            workingCount.incrementAndGet();
-            new Thread(){
-                public void run(){
-                    updateItemAndFillQueue(item);
-                    workingCount.decrementAndGet();
-                }
-            }.start();
-        }
-        else{
-            updateItemAndFillQueue(item);
-        }
-
+        
         if(learnQueue.size() > 0){
             /* Return the clone to resolve the reference problem
              * i.e. updating the item will also item the one
              * in the queue */
             return learnQueue.get(0).clone();
         }
-        else{
-            return null;
-        }
+
+        return null;
     }
 
-    /* Busy wait for the IO thread complete */
-    public void flush(){
-        while(workingCount.get() > 0){
-            //Thread.yield();
-        }
-    }
 
-    /* Used in thread to do the heavy job */
-    private synchronized void updateItemAndFillQueue(Item item){
-        Log.v(TAG, "Thread start");
-        boolean fetchRevFlag = true;
+	public void updateInBackground(Item item) {
+		dbHelper.beginTransaction();
+		dbHelper.addOrReplaceItem(item);
+		dbHelper.endSuccessfullTransaction();
+
         /* Fill up the queue to its queue size */
         int maxNewId = getMaxQueuedItemId(true);
         int maxRevId = getMaxQueuedItemId(false);
-        dbHelper.addOrReplaceItem(item);
+        boolean fetchRevFlag = true;
+        /* New item in database */
         while(learnQueue.size() < queueSize){
             if(fetchRevFlag == true){
                 Item newItemFromDb = dbHelper.getItemById(maxRevId + 1, 2, true, activeFilter);
@@ -281,8 +208,7 @@ class LearnQueueManager implements QueueManager{
                 }
             }
         }
-        Log.v(TAG, "Thread end");
-    }
+	}
 
     /* 
      * Replace the item in the queue with the same ID and
@@ -329,10 +255,11 @@ class LearnQueueManager implements QueueManager{
         return new int[]{newCardNo, revCardNo};
     }
     public void close(){
-        /* First busy wait for the IO job done */
-        flush();
         if(dbHelper != null){
+        	//if (dbHelper.inTransaction()) 
+        	//	dbHelper.endSuccessfullTransaction();
             dbHelper.close();
+            
         }
         /* Release memeory */
         if(learnQueue != null){
@@ -341,6 +268,7 @@ class LearnQueueManager implements QueueManager{
             }
         }
         learnQueue = null;
+        
     }
 
     private int getMaxQueuedItemId(boolean isNewItem){

@@ -37,7 +37,6 @@ import java.util.Set;
 import java.util.Date;
 import java.util.List;
 
-import android.os.Debug;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.app.Activity;
@@ -82,6 +81,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView;
 import android.widget.Toast;
 import android.util.Log;
+import android.os.AsyncTask;
+import android.os.Debug;
 import android.os.SystemClock;
 import android.os.Environment;
 import android.graphics.Typeface;
@@ -102,7 +103,9 @@ public class MemoScreen extends AMActivity{
     private final int ACTIVITY_DB_TOOLBOX = 13;
     private final int ACTIVITY_GOTO_PREV = 14;
     private final int ACTIVITY_SETTINGS = 15;
-
+    private AsyncTask<Item, Void, Void> asyncTask;
+    private boolean shouldAsyncTaskClean = false;
+    
     Handler mHandler;
     Item currentItem = null;
     Item prevItem = null;
@@ -121,7 +124,6 @@ public class MemoScreen extends AMActivity{
 		setContentView(R.layout.memo_screen_layout);
         Bundle extras = getIntent().getExtras();
         mHandler = new Handler();
-        //Debug.startMethodTracing("anymemo");
         if (extras != null) {
             dbPath = extras.getString("dbpath");
             dbName = extras.getString("dbname");
@@ -168,7 +170,7 @@ public class MemoScreen extends AMActivity{
         new Thread(){
             public void run(){
                 queueManager.initQueue();
-                currentItem = queueManager.updateAndNext(null);
+                currentItem = queueManager.getFirstItemFromQueue();
                 mHandler.post(new Runnable(){
                     public void run(){
                         if(currentItem == null){
@@ -186,16 +188,9 @@ public class MemoScreen extends AMActivity{
     }
 
 
-    @Override
-    public void onPause(){
-        queueManager.flush();
-        super.onPause();
-    }
 
     @Override
     public void onDestroy(){
-        //Debug.stopMethodTracing();
-        Log.v(TAG, "onDestroy now!");
         if(settingManager != null){
             settingManager.close();
             settingManager = null;
@@ -206,14 +201,26 @@ public class MemoScreen extends AMActivity{
         if(answerTTS != null){
             answerTTS.shutdown();
         }
-        if(queueManager != null){
+        
+        if (asyncTask == null && queueManager != null){
             queueManager.close();
         }
-        /* Busy wait for the IO thread complete */
+        
         super.onDestroy();
     }
 
-    @Override
+    
+
+
+	@Override
+	protected void onPause() {
+		if (isFinishing()) {
+			shouldAsyncTaskClean = true;
+		}
+		super.onPause();
+	}
+
+	@Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.memo_screen_menu, menu);
@@ -600,9 +607,13 @@ public class MemoScreen extends AMActivity{
     private View.OnClickListener getGradeButtonListener(final int grade){
         return new View.OnClickListener(){
             public void onClick(View v){
+            	//Debug.startMethodTracing("my.after.asynctask.opt.trace3");
                 prevItem = currentItem.clone();
                 currentItem.processAnswer(grade, false);
-                currentItem = queueManager.updateAndNext(currentItem);
+                Item nextItem = queueManager.updateAndNext(currentItem);
+                updateInBackground(currentItem);
+                currentItem = nextItem;
+                
                 if(currentItem == null){
                     showNoItemDialog();
                 }
@@ -610,10 +621,66 @@ public class MemoScreen extends AMActivity{
                     updateFlashcardView(false);
                     hideButtons();
                 }
+                //Debug.stopMethodTracing();
             }
+
+            private void updateInBackground(Item item) {
+            	asyncTask = new AsyncTask<Item, Void, Void>() {
+
+            		@Override
+            		protected void onPostExecute(Void result) {
+            			super.onPostExecute(result);
+            			
+            			if (shouldAsyncTaskClean) {
+            				queueManager.close();
+            			} else {
+                			enableButtons();	
+            			}
+            			
+            			asyncTask = null;
+            		}
+
+            		@Override
+            		protected void onPreExecute() {
+            			super.onPreExecute();
+            			// disable buttons so that user cannot press grade button until background job is finished?
+            			disableButtons();
+            		}
+
+            		@Override
+            		protected Void doInBackground(Item... items) {
+            			queueManager.updateInBackground(items[0]);
+            			return null;
+            		}
+
+            	};
+            	
+            	asyncTask.execute(item);
+
+            }
+
+
+            
         };
     }
 
+    
+    private void enableButtons() {
+    	   Map<String, Button> hm = controlButtons.getButtons();
+           for(int i = 0; i < 6; i++){
+               Button b = hm.get(Integer.valueOf(i).toString());
+               b.setVisibility(Button.VISIBLE);
+           }
+    }
+    
+    private void disableButtons() {
+        Map<String, Button> hm = controlButtons.getButtons();
+        for(int i = 0; i < 6; i++){
+            Button b = hm.get(Integer.valueOf(i).toString());
+            b.setVisibility(Button.INVISIBLE);
+        }
+    }
+    
     private View.OnLongClickListener getGradeButtonLongClickListener(final int grade){
         return new View.OnLongClickListener(){
             public boolean onLongClick(View v){
@@ -640,7 +707,7 @@ public class MemoScreen extends AMActivity{
         LinearLayout controlButtonsView = (LinearLayout)controlButtons.getView();
         /* This li is make the background of buttons the same as answer */
         LinearLayout li = new LinearLayout(this);
-        li.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.FILL_PARENT));
+        li.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
         List<Integer> colors = settingManager.getColors();
         if(colors != null){
             li.setBackgroundColor(settingManager.getColors().get(3));

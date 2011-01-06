@@ -21,6 +21,7 @@ package org.liberty.android.fantastischmemo;
 
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -35,6 +36,7 @@ import android.util.Log;
 public final class Item implements Cloneable, Serializable{
 	private int _id;
 	private String date_learn;
+	private Date date_learn_as_date;
 	private int interval;
 	private int grade;
 	private double easiness;
@@ -47,13 +49,15 @@ public final class Item implements Cloneable, Serializable{
 	private String answer;
 	private String note;
     private String category;
-    /* Make it static for performance */
-    private final static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     public final static String TAG = "org.liberty.android.fantastischmemo.Item";
+    // make the formatter final static - created once instead of each time
+    // which caused some delay.
+    private final static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+    private final static CachedCalendar now = new CachedCalendar();
 	
 	public Item(){
 		this._id = 0;
-		this.date_learn = "2010-01-01";
+		setDateLearn("2010-01-01");
 		this.interval = 0;
 		this.grade = 0;
 		this.easiness = 2.5;
@@ -94,7 +98,7 @@ public final class Item implements Cloneable, Serializable{
 
     public long getDatelearnUnix() throws ParseException{
         // Get the datelearn in unix time * 1000
-		Date date = formatter.parse(this.date_learn);
+		Date date = formatter.parse(this.getDateLearn());
         return date.getTime() / 1000;
     }
 
@@ -140,7 +144,8 @@ public final class Item implements Cloneable, Serializable{
     public Item clone(){
         Item itemClone = new Item();
         itemClone._id = this._id;
-        itemClone.date_learn = this.date_learn;
+        itemClone.date_learn = this.getDateLearn();
+        itemClone.date_learn_as_date = this.getDateLearnAsDate();
         itemClone.interval = this.interval;
         itemClone.grade = this.grade;
         itemClone.easiness = this.easiness;
@@ -160,7 +165,7 @@ public final class Item implements Cloneable, Serializable{
 	
 	public String[] getLearningData(){
 		// the string array is in the sequence that is required in the DatabaseHelper.updateItem
-		return new String[]{date_learn, new Integer(interval).toString(), new Integer(grade).toString(), new Double(easiness).toString(), new Integer(acq_reps).toString(), new Integer(ret_reps).toString(), new Integer(lapses).toString(), new Integer(acq_reps_since_lapse).toString(), new Integer(ret_reps_since_lapse).toString(), new Integer(_id).toString()};
+		return new String[]{getDateLearn(), new Integer(interval).toString(), new Integer(grade).toString(), new Double(easiness).toString(), new Integer(acq_reps).toString(), new Integer(ret_reps).toString(), new Integer(lapses).toString(), new Integer(acq_reps_since_lapse).toString(), new Integer(ret_reps_since_lapse).toString(), new Integer(_id).toString()};
 	}
 	
 	public void setData(HashMap<String, String> hm){
@@ -172,7 +177,7 @@ public final class Item implements Cloneable, Serializable{
 				this._id = Integer.parseInt(hm.get("_id")); 
 			}
 			if(((String)me.getKey()) == "date_learn"){
-				this.date_learn = hm.get("date_learn");
+				setDateLearn(hm.get("date_learn"));
 			}
 			if(((String)me.getKey()) == "interval"){
 				this.interval = Integer.parseInt(hm.get("interval")); 
@@ -266,27 +271,15 @@ public final class Item implements Cloneable, Serializable{
 		return interval;
 	}
 	
-	private int diffDate(String date1, String date2){
-        // The days betwween to date of date1 and date2 in format below.
+	// diffDate replaced by this one
+	private int getActualInterval(){
 		final double MILLSECS_PER_DAY = 86400000.0;
-		Date d1, d2;
-		int difference = 0;
-		try{
-			d1 = formatter.parse(date1);
-			d2 = formatter.parse(date2);
-			difference = (int)Math.round((d1.getTime() - d2.getTime()) / MILLSECS_PER_DAY);
-		}
-		catch(Exception e){
-			Log.e("diffDate parse error!", e.toString());
-		}
-		return difference;
+		
+		return (int)Math.round((now.getTimeInMillis() - getDateLearnAsDate().getTime()) / MILLSECS_PER_DAY);
 	}
-
-
+	
 	public boolean isScheduled(){
-		Date currentDate = new Date();
-		String now = formatter.format(currentDate);
-		int actualInterval = diffDate(now, this.date_learn);
+		int actualInterval = getActualInterval();
 		int scheduleInterval = this.interval;
 		//actualInterval = actualInterval == 0 ? actualInterval + 1 : actualInterval;
 		if(scheduleInterval <= actualInterval && this.acq_reps > 0){
@@ -299,12 +292,7 @@ public final class Item implements Cloneable, Serializable{
 	}
 
 	public int processAnswer(int newGrade, boolean dryRun){
-        // dryRun will leave the original one intact
-        // and return the interval
-        // if dryRun is false, the return value only show success or not
-		Date currentDate = new Date();
-		String now = formatter.format(currentDate);
-		int actualInterval = diffDate(now, this.date_learn);
+        int actualInterval = getActualInterval();
 		int scheduleInterval = this.interval;
 		int newInterval = 0;
         Item cloneItem = null;
@@ -403,7 +391,8 @@ public final class Item implements Cloneable, Serializable{
             if(cloneItem != null){
                 this.interval = cloneItem.interval;
                 this._id = cloneItem._id;
-                this.date_learn = cloneItem.date_learn;
+                this.date_learn = cloneItem.getDateLearn();
+                this.date_learn_as_date = cloneItem.getDateLearnAsDate();
                 this.interval = cloneItem.interval;
                 this.grade = cloneItem.grade;
                 this.easiness = cloneItem.easiness;
@@ -422,7 +411,7 @@ public final class Item implements Cloneable, Serializable{
 		    int noise = calculateIntervalNoise(newInterval);
             this.interval = newInterval + noise;
             this.grade = newGrade;
-            this.date_learn = now;
+            setDateLearn(formatter.format(new Date()));
             // 1 means success ,0 means fail
             return returnValue ? 1 : 0;
         }
@@ -442,6 +431,58 @@ public final class Item implements Cloneable, Serializable{
             return false;
         }
     }
+	private String getDateLearn() {
+		return date_learn;
+	}
+	
+	private void setDateLearn(String date_learn) {
+		this.date_learn = date_learn;
+		this.date_learn_as_date = null; // invalidate
+	}
+	
+	private Date getDateLearnAsDate() {
+		if (date_learn_as_date == null) {
+			try{
+				date_learn_as_date = formatter.parse(getDateLearn());
+			}
+			catch(Exception e){
+				Log.e("diffDate parse error!", e.toString());
+				date_learn_as_date = new Date();
+			}
+		}
 
+		return date_learn_as_date;
+	}
+
+	private static class CachedCalendar {
+		private long validTill;
+		private long nowInMiliseconds;
+		
+		public CachedCalendar() {
+			calculate();
+		}
+
+		public long getTimeInMillis() {
+			if (System.currentTimeMillis() > validTill)
+				calculate();
+			
+			return nowInMiliseconds;
+		}
+		
+		private void calculate() {
+			Calendar now = Calendar.getInstance();
+			now.set(Calendar.HOUR_OF_DAY, 23);
+			now.set(Calendar.MINUTE, 59);
+			now.set(Calendar.SECOND, 59);
+			now.set(Calendar.MILLISECOND,999);
+			validTill = now.getTimeInMillis();
+			
+			now.set(Calendar.HOUR_OF_DAY, 0);
+			now.set(Calendar.MINUTE, 0);
+			now.set(Calendar.SECOND, 0);
+			nowInMiliseconds = now.getTimeInMillis();
+		}
+		
+	}
 	
 }
