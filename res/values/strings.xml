@@ -313,4 +313,5 @@
     <string name="locale_german_text">German</string>
     <string name="reset_current_warning">This operation will only reset the learning data of this card. It can not be undone.</string>
     <string name="locale_korean_text">Korean</string>
+    <string name="locale_french_text">French</string>
 </resources>
