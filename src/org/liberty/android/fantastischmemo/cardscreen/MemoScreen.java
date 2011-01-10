@@ -116,6 +116,8 @@ public class MemoScreen extends AMActivity{
     ControlButtons controlButtons;
     QueueManager queueManager;
     boolean buttonDisabled = false;
+    /* Maintain this task for the exiting sync purpose*/
+    BackgroundUpdateTask bgUpdateTask = null;
 
 
     @Override
@@ -196,6 +198,10 @@ public class MemoScreen extends AMActivity{
 
     @Override
     public void onPause(){
+        /* Spin the UI thread to wait for the current task done */
+        if(bgUpdateTask != null){
+            bgUpdateTask.cancel(false);
+        }
         super.onPause();
     }
 
@@ -609,7 +615,8 @@ public class MemoScreen extends AMActivity{
             public void onClick(View v){
                 prevItem = currentItem.clone();
                 currentItem.processAnswer(grade, false);
-                updateInBackground(currentItem.clone());
+                bgUpdateTask = new BackgroundUpdateTask();
+                bgUpdateTask.execute(currentItem.clone());
 
                 //currentItem = queueManager.updateAndNext(currentItem);
                 currentItem = queueManager.getNext(currentItem);
@@ -760,43 +767,44 @@ public class MemoScreen extends AMActivity{
      * Use AsyncTask to update the database and update the statistics
      * information
      */
-    private void updateInBackground(final Item item){
-        AsyncTask<Item, Void, Item> task = new AsyncTask<Item, Void, Item>(){
-            @Override
-            public void onPreExecute(){
-                super.onPreExecute();
-                buttonDisabled = true;
-                setProgressBarIndeterminateVisibility(true);
-            }
+    private class BackgroundUpdateTask extends AsyncTask<Item, Void, Item>{
+        @Override
+        public void onPreExecute(){
+            super.onPreExecute();
+            buttonDisabled = true;
+            setProgressBarIndeterminateVisibility(true);
+        }
 
-            @Override
-            public Item doInBackground(Item... items){
-                Item nextItem = queueManager.updateAndNext(items[0]);
-                return nextItem;
-            }
+        @Override
+        public Item doInBackground(Item... items){
+            Item nextItem = queueManager.updateAndNext(items[0]);
+            return nextItem;
+        }
+        @Override
+        public void onCancelled(){
+            return;
+        }
 
-            @Override
-            public void onPostExecute(Item result){
-                super.onPostExecute(result);
-                buttonDisabled = false;
-                setProgressBarIndeterminateVisibility(false);
-                currentItem = result;
-                if(currentItem == null){
-                    showNoItemDialog();
-                }
-                else{ 
-                    if(!flashcardDisplay.isAnswerShown()){
-                        updateFlashcardView(false);
-                    }
-                    else{
-                        updateFlashcardView(true);
-                        showButtons();
-                    }
-                    setActivityTitle();
-                }
+        @Override
+        public void onPostExecute(Item result){
+            super.onPostExecute(result);
+            buttonDisabled = false;
+            setProgressBarIndeterminateVisibility(false);
+            currentItem = result;
+            if(currentItem == null){
+                showNoItemDialog();
             }
-        };
-        task.execute(item);
+            else{ 
+                if(!flashcardDisplay.isAnswerShown()){
+                    updateFlashcardView(false);
+                }
+                else{
+                    updateFlashcardView(true);
+                    showButtons();
+                }
+                setActivityTitle();
+            }
+        }
     }
 
 }
