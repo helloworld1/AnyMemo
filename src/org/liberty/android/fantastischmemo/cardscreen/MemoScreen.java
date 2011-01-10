@@ -38,6 +38,7 @@ import java.util.Date;
 import java.util.List;
 
 import android.os.Debug;
+import android.os.AsyncTask;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.app.Activity;
@@ -103,6 +104,7 @@ public class MemoScreen extends AMActivity{
     private final int ACTIVITY_GOTO_PREV = 14;
     private final int ACTIVITY_SETTINGS = 15;
 
+
     Handler mHandler;
     Item currentItem = null;
     Item prevItem = null;
@@ -113,12 +115,17 @@ public class MemoScreen extends AMActivity{
     SettingManager settingManager;
     ControlButtons controlButtons;
     QueueManager queueManager;
+    boolean buttonDisabled = false;
 
 
     @Override
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        /* .. so we can display progress on the title bar */
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+
 		setContentView(R.layout.memo_screen_layout);
+
         Bundle extras = getIntent().getExtras();
         mHandler = new Handler();
         //Debug.startMethodTracing("anymemo");
@@ -177,6 +184,7 @@ public class MemoScreen extends AMActivity{
                         else{
                             setViewListeners();
                             updateFlashcardView(false);
+                            setActivityTitle();
                         }
                         removeDialog(DIALOG_LOADING_PROGRESS);
                     }
@@ -188,9 +196,6 @@ public class MemoScreen extends AMActivity{
 
     @Override
     public void onPause(){
-        if(queueManager != null){
-            queueManager.flush();
-        }
         super.onPause();
     }
 
@@ -484,7 +489,7 @@ public class MemoScreen extends AMActivity{
             hideButtons();
         }
         autoSpeak();
-        setActivityTitle();
+        //setActivityTitle();
         setGradeButtonTitle();
         setGradeButtonListeners();
         /* Automatic copy the current question to clipboard */
@@ -604,7 +609,11 @@ public class MemoScreen extends AMActivity{
             public void onClick(View v){
                 prevItem = currentItem.clone();
                 currentItem.processAnswer(grade, false);
-                currentItem = queueManager.updateAndNext(currentItem);
+                updateInBackground(currentItem.clone());
+
+                //currentItem = queueManager.updateAndNext(currentItem);
+                currentItem = queueManager.getNext(currentItem);
+                buttonDisabled = true;
                 if(currentItem == null){
                     showNoItemDialog();
                 }
@@ -631,7 +640,9 @@ public class MemoScreen extends AMActivity{
     }
 
     private void showButtons(){
-        controlButtons.getView().setVisibility(View.VISIBLE);
+        if(!buttonDisabled){
+            controlButtons.getView().setVisibility(View.VISIBLE);
+        }
     }
 
 
@@ -742,6 +753,50 @@ public class MemoScreen extends AMActivity{
         else{
             answerTTS = null;
         }
+    }
+
+
+    /*
+     * Use AsyncTask to update the database and update the statistics
+     * information
+     */
+    private void updateInBackground(final Item item){
+        AsyncTask<Item, Void, Item> task = new AsyncTask<Item, Void, Item>(){
+            @Override
+            public void onPreExecute(){
+                super.onPreExecute();
+                buttonDisabled = true;
+                setProgressBarIndeterminateVisibility(true);
+            }
+
+            @Override
+            public Item doInBackground(Item... items){
+                Item nextItem = queueManager.updateAndNext(items[0]);
+                return nextItem;
+            }
+
+            @Override
+            public void onPostExecute(Item result){
+                super.onPostExecute(result);
+                buttonDisabled = false;
+                setProgressBarIndeterminateVisibility(false);
+                currentItem = result;
+                if(currentItem == null){
+                    showNoItemDialog();
+                }
+                else{ 
+                    if(!flashcardDisplay.isAnswerShown()){
+                        updateFlashcardView(false);
+                    }
+                    else{
+                        updateFlashcardView(true);
+                        showButtons();
+                    }
+                    setActivityTitle();
+                }
+            }
+        };
+        task.execute(item);
     }
 
 }

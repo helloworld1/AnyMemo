@@ -38,8 +38,8 @@ interface QueueManager{
     public void close();
     /* Get statistics info*/
     public int[] getStatInfo();
-    /* Flush the serialized data to the storage */
-    public void flush();
+    /* Get Next card */
+    public Item getNext(Item item);
 }
 
 

@@ -100,7 +100,6 @@ class LearnQueueManager implements QueueManager{
     private int revCardNo;
     private int newCardNo;
     public static final String TAG = "org.liberty.android.fantastischmemo.cardscreen.LearnQueueManager";
-    private volatile AtomicInteger workingCount = new AtomicInteger(0);
 
 
     public static class Builder{
@@ -217,26 +216,9 @@ class LearnQueueManager implements QueueManager{
         }
 
         /* 
-         * Fill the item in thread if there is more than 1 item 
-         * Otherwise use the UI thread to update the queue
+         * Do the heavy part of the job
          */
-        if(learnQueue.size() >= 3){
-            workingCount.incrementAndGet();
-            new Thread(){
-                public void run(){
-                    updateItemAndFillQueue(item);
-                    workingCount.decrementAndGet();
-                }
-            }.start();
-        }
-        else{
-            /* 
-             * This is not synchronized so it should wait for other thread
-             * complete 
-             */
-            flush();
-            updateItemAndFillQueue(item);
-        }
+        updateItemAndFillQueue(item);
 
         if(learnQueue.size() > 0){
             /* Return the clone to resolve the reference problem
@@ -249,15 +231,7 @@ class LearnQueueManager implements QueueManager{
         }
     }
 
-    /* Busy wait for the IO thread complete */
-    public void flush(){
-        while(workingCount.get() > 0){
-            //Thread.yield();
-        }
-    }
-
-    /* Used in thread to do the heavy job */
-    private synchronized void updateItemAndFillQueue(Item item){
+    private void updateItemAndFillQueue(Item item){
         Log.v(TAG, "Thread start");
         boolean fetchRevFlag = true;
         /* Fill up the queue to its queue size */
@@ -287,6 +261,18 @@ class LearnQueueManager implements QueueManager{
             }
         }
         Log.v(TAG, "Thread end");
+    }
+
+    public Item getNext(Item item){
+        if(learnQueue.size() == 0){
+            return null;
+        }
+        else if(learnQueue.size() > 1){
+            return learnQueue.get(1);
+        }
+        else{
+            return item;
+        }
     }
 
     /* 
@@ -339,7 +325,6 @@ class LearnQueueManager implements QueueManager{
     }
     public void close(){
         /* First busy wait for the IO job done */
-        flush();
         if(dbHelper != null){
             dbHelper.close();
         }

@@ -250,8 +250,16 @@ class CramQueueManager implements QueueManager{
         throw new AssertionError("Method not implemented");
     }
 
-    public void flush(){
-        /* Do nothing here */
+    public Item getNext(Item item){
+        if(learnQueue.size() == 0){
+            return null;
+        }
+        else if(learnQueue.size() > 1){
+            return learnQueue.get(1);
+        }
+        else{
+            return item;
+        }
     }
 
 }
