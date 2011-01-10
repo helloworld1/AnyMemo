@@ -49,8 +49,10 @@ public class CramMemoScreen extends MemoScreen{
     }
 
     @Override
-    void setActivityTitle(){
+    String getActivityTitleString(){
+        return getString(R.string.learn_ahead);
     }
+
 }
 
 

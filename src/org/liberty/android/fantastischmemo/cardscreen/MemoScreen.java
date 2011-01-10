@@ -186,7 +186,7 @@ public class MemoScreen extends AMActivity{
                         else{
                             setViewListeners();
                             updateFlashcardView(false);
-                            setActivityTitle();
+                            setTitle(getActivityTitleString());
                         }
                         removeDialog(DIALOG_LOADING_PROGRESS);
                     }
@@ -495,7 +495,6 @@ public class MemoScreen extends AMActivity{
             hideButtons();
         }
         autoSpeak();
-        //setActivityTitle();
         setGradeButtonTitle();
         setGradeButtonListeners();
         /* Automatic copy the current question to clipboard */
@@ -599,13 +598,13 @@ public class MemoScreen extends AMActivity{
         }
     }
 
-    void setActivityTitle(){
+    String getActivityTitleString(){
         int[] stat = queueManager.getStatInfo();
         String titleString = getString(R.string.stat_new) + stat[0] + " " + getString(R.string.stat_scheduled) + stat[1] + " " + getString(R.string.memo_current_id) + currentItem.getId();
         if(currentItem != null && currentItem.getCategory() != null){
             titleString += "  " + currentItem.getCategory();
         }
-        setTitle(titleString);
+        return titleString;
 
     }
 
@@ -768,6 +767,8 @@ public class MemoScreen extends AMActivity{
      * information
      */
     private class BackgroundUpdateTask extends AsyncTask<Item, Void, Item>{
+        private String title;
+
         @Override
         public void onPreExecute(){
             super.onPreExecute();
@@ -778,6 +779,7 @@ public class MemoScreen extends AMActivity{
         @Override
         public Item doInBackground(Item... items){
             Item nextItem = queueManager.updateAndNext(items[0]);
+            title = getActivityTitleString();
             return nextItem;
         }
         @Override
@@ -802,7 +804,7 @@ public class MemoScreen extends AMActivity{
                     updateFlashcardView(true);
                     showButtons();
                 }
-                setActivityTitle();
+                setTitle(title);
             }
         }
     }
