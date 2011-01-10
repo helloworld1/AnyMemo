@@ -165,12 +165,15 @@ class CramQueueManager implements QueueManager{
         if(learnQueue == null || learnQueue.size() == 0){
             return null;
         }
-        /* To shuffle card, the first item must be maintained */
+        /* To shuffle card, the first and second item must be maintained */
         if(shuffleCards && learnQueue.size() >= 2){
             Item first = learnQueue.get(0);
+            Item second = learnQueue.get(1);
+            learnQueue.remove(0);
             learnQueue.remove(0);
             Collections.shuffle(learnQueue);
             learnQueue.add(0, first);
+            learnQueue.add(1, second);
         }
         if(item == null){
             return learnQueue.get(0);

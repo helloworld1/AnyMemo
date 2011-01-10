@@ -261,6 +261,10 @@ class LearnQueueManager implements QueueManager{
         }
     }
 
+    /* 
+     * Get the next item of the parameter item. Literally, it is the 
+     * second item in the queue. 
+     */
     public Item getNext(Item item){
         if(learnQueue.size() == 0){
             return null;
