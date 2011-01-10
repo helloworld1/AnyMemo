@@ -130,7 +130,6 @@ public class MemoScreen extends AMActivity{
 
         Bundle extras = getIntent().getExtras();
         mHandler = new Handler();
-        //Debug.startMethodTracing("anymemo");
         if (extras != null) {
             dbPath = extras.getString("dbpath");
             dbName = extras.getString("dbname");
@@ -207,7 +206,6 @@ public class MemoScreen extends AMActivity{
 
     @Override
     public void onDestroy(){
-        //Debug.stopMethodTracing();
         Log.v(TAG, "onDestroy now!");
         if(settingManager != null){
             settingManager.close();
@@ -617,7 +615,6 @@ public class MemoScreen extends AMActivity{
                 bgUpdateTask = new BackgroundUpdateTask();
                 bgUpdateTask.execute(currentItem.clone());
 
-                //currentItem = queueManager.updateAndNext(currentItem);
                 currentItem = queueManager.getNext(currentItem);
                 buttonDisabled = true;
                 if(currentItem == null){
@@ -673,7 +670,6 @@ public class MemoScreen extends AMActivity{
         memoRoot.addView(flashcardDisplayView, -1, -1);
         li.addView(controlButtonsView, -1, -2);
         memoRoot.addView(li, -1, -2);
-        //memoRoot.addView(controlButtonsView, -1, -2);
         flashcardDisplayView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
     }
 
@@ -738,7 +734,7 @@ public class MemoScreen extends AMActivity{
     }
 
     private void initTTS(){
-        String audioDir = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_audio_dir);
+        String audioDir = settingManager.getAudioLocation();
         Locale ql = settingManager.getQuestionAudioLocale();
         Locale al = settingManager.getAnswerAudioLocale();
         if(settingManager.getQuestionUserAudio()){

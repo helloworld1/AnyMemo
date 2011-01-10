@@ -232,7 +232,6 @@ class LearnQueueManager implements QueueManager{
     }
 
     private void updateItemAndFillQueue(Item item){
-        Log.v(TAG, "Thread start");
         boolean fetchRevFlag = true;
         /* Fill up the queue to its queue size */
         int maxNewId = getMaxQueuedItemId(true);
@@ -260,7 +259,6 @@ class LearnQueueManager implements QueueManager{
                 }
             }
         }
-        Log.v(TAG, "Thread end");
     }
 
     public Item getNext(Item item){
