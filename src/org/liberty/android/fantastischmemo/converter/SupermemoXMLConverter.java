@@ -60,7 +60,7 @@ public class SupermemoXMLConverter extends org.xml.sax.helpers.DefaultHandler{
 	private String filePath;
 	public Locator mLocator;
     private List<Item> itemList;
-    private Item currentItem;
+    private Item.Builder itemBuilder;
     private int count = 1;
 
 	
@@ -91,37 +91,32 @@ public class SupermemoXMLConverter extends org.xml.sax.helpers.DefaultHandler{
 	
 	public void startElement(String namespaceURI, String localName, String qName, Attributes atts) throws SAXException{
         if(localName.equals("SuperMemoElement")){
-            currentItem = new Item();
+            itemBuilder = new Item.Builder();
         }
 		characterBuf = new StringBuffer();
 	}
 	
 	public void endElement(String namespaceURI, String localName, String qName) throws SAXException{
         if(localName.equals("SuperMemoElement")){
-            currentItem.setId(count);
-            itemList.add(currentItem);
+            itemBuilder.setId(count);
+            itemList.add(itemBuilder.build());
+            itemBuilder = null;
             count += 1;
         }
 		if(localName.equals("Question")){
-            currentItem.setQuestion(characterBuf.toString());
+            itemBuilder.setQuestion(characterBuf.toString());
 		}
 		if(localName.equals("Answer")){
-            currentItem.setAnswer(characterBuf.toString());
+            itemBuilder.setAnswer(characterBuf.toString());
 		}
         if(localName.equals("Lapses")){
-            HashMap<String, String> hm = new HashMap<String, String>();
-            hm.put("lapses", characterBuf.toString());
-            currentItem.setData(hm);
+            itemBuilder.setLapses(Integer.parseInt(characterBuf.toString()));
         }
         if(localName.equals("Repetitions")){
-            HashMap<String, String> hm = new HashMap<String, String>();
-            hm.put("acq_reps", characterBuf.toString());
-            currentItem.setData(hm);
+            itemBuilder.setAcqReps(Integer.parseInt(characterBuf.toString()));
         }
         if(localName.equals("Interval")){
-            HashMap<String, String> hm = new HashMap<String, String>();
-            hm.put("interval", characterBuf.toString());
-            currentItem.setData(hm);
+            itemBuilder.setInterval(Integer.parseInt(characterBuf.toString()));
         }
         if(localName.equals("LastRepetition")){
             try{
@@ -129,9 +124,7 @@ public class SupermemoXMLConverter extends org.xml.sax.helpers.DefaultHandler{
                 SimpleDateFormat sf = new SimpleDateFormat("dd.MM.yy");
                 Date date = sf.parse(characterBuf.toString());
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                HashMap<String, String> hm = new HashMap<String, String>();
-                hm.put("date_learn", df.format(date));
-                currentItem.setData(hm);
+                itemBuilder.setDateLearn(df.format(date));
             }
             catch(ParseException e){
                 Log.e(TAG, "Parsing date error: " + characterBuf.toString(), e);

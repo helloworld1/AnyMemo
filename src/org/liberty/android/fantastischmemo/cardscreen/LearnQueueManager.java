@@ -172,7 +172,7 @@ class LearnQueueManager implements QueueManager{
             return null;
         }
         if(item == null){
-            return learnQueue.get(0).clone();
+            return learnQueue.get(0);
         }
 
         /* When fail to remember a new card */
@@ -221,10 +221,7 @@ class LearnQueueManager implements QueueManager{
         updateItemAndFillQueue(item);
 
         if(learnQueue.size() > 0){
-            /* Return the clone to resolve the reference problem
-             * i.e. updating the item will also item the one
-             * in the queue */
-            return learnQueue.get(0).clone();
+            return learnQueue.get(0);
         }
         else{
             return null;

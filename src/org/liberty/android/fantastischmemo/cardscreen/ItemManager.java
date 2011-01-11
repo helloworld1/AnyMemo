@@ -175,19 +175,20 @@ public class ItemManager{
         if(newItem != null){
             maxId += 1;
             totalItemNo += 1;
-            newItem.setId(id);
-            dbHelper.insertItem(newItem, id); 
+            Item ni = new Item.Builder(newItem)
+                .setId(id)
+                .build();
+            dbHelper.insertItem(ni, id); 
+            return ni;
         }
-        return newItem;
+        else{
+            return null;
+        }
     }
     public Item insertBack(Item newItem){
-        if(newItem != null){
-            maxId += 1;
-            totalItemNo += 1;
-            dbHelper.insertItem(newItem, maxId); 
-            newItem.setId(maxId);
-        }
-        return newItem;
+        maxId += 1;
+        totalItemNo += 1;
+        return insert(newItem, maxId);
     }
 
     /* Delete an item and return the next if available */
@@ -211,7 +212,7 @@ public class ItemManager{
      */
     public Item search(String text, boolean forward, Item currentItem){
         boolean processed = false;
-        Item searchItem = null;
+        Item searchItem;
         if(text == null){
             return null;
         }

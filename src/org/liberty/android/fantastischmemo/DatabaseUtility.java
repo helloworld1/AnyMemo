@@ -190,8 +190,12 @@ public class DatabaseUtility{
                     AMGUIUtility.doProgressTask(mActivity, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask(){
                         public void doHeavyTask(){
                             DatabaseHelper dbHelper = new DatabaseHelper((Context)mActivity, dbPath, dbName);
-                            item.skip();
-                            dbHelper.updateItem(item, false);
+                            /* Set interval to a large number so it will never appear */
+                            Item newItem = new Item.Builder(item)
+                                .setInterval(100000)
+                                .setEasiness(1.0)
+                                .build();
+                            dbHelper.addOrReplaceItem(newItem);
                             dbHelper.close();
                         }
                         public void doUITask(){
@@ -232,10 +236,8 @@ public class DatabaseUtility{
         AMGUIUtility.doProgressTask(mActivity, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask(){
             public void doHeavyTask(){
                 DatabaseHelper dbHelper = new DatabaseHelper((Context)mActivity, dbPath, dbName);
-                String tmp = item.getQuestion();
-                item.setQuestion(item.getAnswer());
-                item.setAnswer(tmp);
-                dbHelper.addOrReplaceItem(item);
+                Item newItem = item.inverseQA();
+                dbHelper.addOrReplaceItem(newItem);
                 dbHelper.close();
             }
             public void doUITask(){
@@ -253,11 +255,12 @@ public class DatabaseUtility{
                     AMGUIUtility.doProgressTask(mActivity, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask(){
                         public void doHeavyTask(){
                             DatabaseHelper dbHelper = new DatabaseHelper((Context)mActivity, dbPath, dbName);
-                            Item newItem = new Item();
-                            newItem.setId(item.getId());
-                            newItem.setQuestion(item.getQuestion());
-                            newItem.setAnswer(item.getAnswer());
-                            newItem.setCategory(item.getCategory());
+                            Item newItem = new Item.Builder()
+                                .setId(item.getId())
+                                .setQuestion(item.getQuestion())
+                                .setAnswer(item.getAnswer())
+                                .setCategory(item.getCategory())
+                                .build();
                             dbHelper.addOrReplaceItem(newItem);
                             dbHelper.close();
                         }

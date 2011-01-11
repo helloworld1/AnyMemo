@@ -303,7 +303,7 @@ public class MemoScreen extends AMActivity{
      */
     protected void undoItem(){
         if(prevItem != null){
-            currentItem = prevItem.clone();
+            currentItem = prevItem;
             queueManager.insertIntoQueue(currentItem, 0);
             prevItem = null;
             updateFlashcardView(false);
@@ -610,10 +610,10 @@ public class MemoScreen extends AMActivity{
     private View.OnClickListener getGradeButtonListener(final int grade){
         return new View.OnClickListener(){
             public void onClick(View v){
-                prevItem = currentItem.clone();
+                prevItem = currentItem;
                 currentItem.processAnswer(grade, false);
                 bgUpdateTask = new BackgroundUpdateTask();
-                bgUpdateTask.execute(currentItem.clone());
+                bgUpdateTask.execute(currentItem);
 
                 currentItem = queueManager.getNext(currentItem);
                 buttonDisabled = true;

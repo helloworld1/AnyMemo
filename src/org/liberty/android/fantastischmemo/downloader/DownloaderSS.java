@@ -399,10 +399,11 @@ public class DownloaderSS extends DownloaderBase implements ListView.OnScrollLis
             String question = jsonItemArray.getString(0);
             String answer = jsonItemArray.getString(1);
             if(question != null && !question.equals("")){
-                Item item = new Item();
-                item.setQuestion(question);
-                item.setAnswer(answer);
-                item.setId(i + 1);
+                Item item = new Item.Builder()
+                    .setQuestion(question)
+                    .setAnswer(answer)
+                    .setId(i + 1)
+                    .build();
                 itemList.add(item);
             }
             

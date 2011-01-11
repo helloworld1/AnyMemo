@@ -148,15 +148,14 @@ public class DBExporter{
                 outxml.print("</category>\n");
             }
             // Convert the learning data
-            String[] learnData = item.getLearningData();
-            id = Integer.toString(item.getId());
-            gr = learnData[2];
-            e = learnData[3];
-            ac_rp = learnData[4];
-            rt_rp = learnData[5];
-            lps = learnData[6];
-            ac_rp_l = learnData[7];
-            rt_rp_l = learnData[8];
+            id = "" + item.getId();
+            gr = "" + item.getGrade();
+            e = "" + item.getEasiness();
+            ac_rp = "" + item.getAcqReps();
+            rt_rp = "" + item.getRetReps();
+            lps = "" + item.getLapses();
+            ac_rp_l = "" + item.getAcqRepsSinceLapse();
+            rt_rp_l = "" + item.getRetRepsSinceLapse();;
             if(ac_rp.equals("0")){
                 u = "1";
             }
@@ -167,7 +166,7 @@ public class DBExporter{
             long duration = (item.getDatelearnUnix() - timeOfStart) / SEC_PER_DAY + 1;
 
 
-            Long interval = new Long(learnData[1]);
+            Long interval = new Long(item.getInterval());
             l_rp = Long.toString(duration);
             n_rp = Long.toString(interval + duration);
 

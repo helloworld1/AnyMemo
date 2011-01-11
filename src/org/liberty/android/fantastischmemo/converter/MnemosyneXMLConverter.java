@@ -60,7 +60,7 @@ public class MnemosyneXMLConverter extends org.xml.sax.helpers.DefaultHandler{
     private long timeOfStart = 0L;
 	public Locator mLocator;
     private List<Item> itemList;
-    private Item currentItem;
+    private Item.Builder itemBuilder;
     private int count = 1;
 
 	private StringBuffer characterBuf;
@@ -109,24 +109,23 @@ public class MnemosyneXMLConverter extends org.xml.sax.helpers.DefaultHandler{
 
         }
 		if(localName.equals("item")){
-            currentItem = new Item();
-            currentItem.setId(count);
-            HashMap<String, String> hm = new HashMap<String, String>();
+            itemBuilder = new Item.Builder();
+            itemBuilder.setId(count);
             count += 1;
 			String idAttr = atts.getValue("id");
             String grAttr = atts.getValue("gr");
             if(grAttr != null){
-                hm.put("grade", grAttr);
+                itemBuilder.setGrade(Integer.parseInt(grAttr));
             }
             String eAttr = atts.getValue("e");
             if(eAttr != null){
-                hm.put("easiness", eAttr);
+                itemBuilder.setEasiness(Double.parseDouble(eAttr));
             }
             String acrpAttr = atts.getValue("ac_rp");
             String uAttr = atts.getValue("u");
             String rtrpAttr = atts.getValue("rt_rp");
             if(rtrpAttr != null){
-                hm.put("ret_reps", rtrpAttr);
+                itemBuilder.setRetReps(Integer.parseInt(rtrpAttr));
             }
             if(acrpAttr != null){
                 int acrp = Integer.parseInt(acrpAttr);
@@ -142,19 +141,19 @@ public class MnemosyneXMLConverter extends org.xml.sax.helpers.DefaultHandler{
                     acrp = Integer.valueOf(rtrpAttr) / 2 + 1;
                 }
 
-                hm.put("acq_reps", "" + acrp);
+                itemBuilder.setAcqReps(acrp);
             }
             String lpsAttr = atts.getValue("lps");
             if(lpsAttr != null){
-                hm.put("lapses", lpsAttr);
+                itemBuilder.setLapses(Integer.parseInt(lpsAttr));
             }
             String acqrplAttr = atts.getValue("ac_rp_l");
             if(acqrplAttr != null){
-                hm.put("acq_reps_since_lapse", acqrplAttr);
+                itemBuilder.setAcqRepsSinceLapse(Integer.parseInt(acqrplAttr));
             }
             String rtrplAttr = atts.getValue("rt_rp_l");
             if(rtrplAttr != null){
-                hm.put("ret_reps_since_lapse", rtrplAttr);
+                itemBuilder.setRetRepsSinceLapse(Integer.parseInt(rtrplAttr));
             }
             String lrpAttr = atts.getValue("l_rp");
             if(lrpAttr != null && timeOfStart != 0L){
@@ -162,32 +161,34 @@ public class MnemosyneXMLConverter extends org.xml.sax.helpers.DefaultHandler{
                 Date date = new Date(timeOfStart * 1000L + lrp * MILLSECS_PER_DAY);
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                 String strDate = formatter.format(date);
-                hm.put("date_learn", strDate);
+                itemBuilder.setDateLearn(strDate);
             }
 
             String nrpAttr = atts.getValue("n_rp");
             if(nrpAttr != null && lrpAttr != null){
                 long lrp = Math.round(Double.parseDouble(lrpAttr));
                 long nrp = Math.round(Double.parseDouble(nrpAttr));
-                hm.put("interval", "" + (nrp - lrp));
+                int interval = (int)(nrp - lrp);
+                itemBuilder.setInterval(interval);
             }
-            currentItem.setData(hm);
 		}
 		characterBuf = new StringBuffer();
 	}
 	
 	public void endElement(String namespaceURI, String localName, String qName) throws SAXException{
 		if(localName.equals("item")){
-            itemList.add(currentItem);
+            itemList.add(itemBuilder.build());
+            /* The end of life of itemBuilder */
+            itemBuilder = null;
 		}
 		if(localName.equals("cat")){
-            currentItem.setCategory(characterBuf.toString());
+            itemBuilder.setCategory(characterBuf.toString());
 		}
 		if(localName.equals("Q")|| localName.equals("Question")){
-            currentItem.setQuestion(characterBuf.toString());
+            itemBuilder.setQuestion(characterBuf.toString());
 		}
 		if(localName.equals("A")|| localName.equals("Answer")){
-            currentItem.setAnswer(characterBuf.toString());
+            itemBuilder.setAnswer(characterBuf.toString());
 		}
 		
 	}

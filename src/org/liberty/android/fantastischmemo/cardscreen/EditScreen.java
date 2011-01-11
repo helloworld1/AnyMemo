@@ -324,11 +324,12 @@ public class EditScreen extends AMActivity{
             {
 
                 if(currentItem != null){
-                    savedItem = new Item();
-                    savedItem.setId(currentItem.getId());
-                    savedItem.setQuestion(currentItem.getQuestion());
-                    savedItem.setAnswer(currentItem.getAnswer());
-                    savedItem.setCategory(currentItem.getCategory());
+                    savedItem = new Item.Builder()
+                        .setId(currentItem.getId())
+                        .setQuestion(currentItem.getQuestion())
+                        .setAnswer(currentItem.getAnswer())
+                        .setCategory(currentItem.getCategory())
+                        .build();
                 }
                 return true;
             }
@@ -478,13 +479,13 @@ public class EditScreen extends AMActivity{
             Intent myIntent = new Intent(EditScreen.this, CardEditor.class);
             myIntent.putExtra("dbpath", dbPath);
             myIntent.putExtra("dbname", dbName);
-            Item newItem = new Item();
+            Item.Builder builder = new Item.Builder();
             /* New item has id -1 */
-            newItem.setId(-1);
+            builder.setId(-1);
             if(currentItem != null && currentItem.getCategory() != null){
-                newItem.setCategory(currentItem.getCategory());
+                builder.setCategory(currentItem.getCategory());
             }
-            myIntent.putExtra("item", newItem);
+            myIntent.putExtra("item", builder.build());
             startActivityForResult(myIntent, ACTIVITY_EDIT);
         }
     };

@@ -102,10 +102,11 @@ public class CardEditor extends Activity implements View.OnClickListener{
         btnSave.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
         if(currentItem == null){
-            currentItem = new Item();
+            currentItem = new Item.Builder()
+                .setId(-1)
+                .build();
              /* We set -1 here if it is a new item
              * this will be changed later when the dbHelper is initialized*/
-            currentItem.setId(-1);
         }
 
         questionEdit.setText(currentItem.getQuestion());
@@ -119,15 +120,18 @@ public class CardEditor extends Activity implements View.OnClickListener{
             String aText = answerEdit.getText().toString();
             String cText = categoryEdit.getText().toString();
             HashMap<String, String> hm = new HashMap<String, String>();
-            hm.put("question", qText);
-            hm.put("answer", aText);
-            hm.put("category", cText);
-            currentItem.setData(hm);
+            currentItem = new Item.Builder(currentItem)
+                .setQuestion(qText)
+                .setAnswer(aText)
+                .setCategory(cText)
+                .build();
             try{
                 DatabaseHelper dbHelper = new DatabaseHelper(this, dbPath, dbName);
                 /* Here we check if the item is newly created */
                 if(currentItem.getId() == -1){
-                    currentItem.setId(dbHelper.getNewId());
+                    currentItem = new Item.Builder(currentItem)
+                        .setId(dbHelper.getNewId())
+                        .build();
                 }
                 dbHelper.addOrReplaceItem(currentItem);
                 dbHelper.close();

@@ -123,37 +123,37 @@ public class DetailScreen extends AMActivity implements OnClickListener{
     	answerEntry.setText(currentItem.getAnswer());
     	noteEntry.setText(currentItem.getNote());
         categoryEntry.setText(currentItem.getCategory());
-    	
-    	String[] learnData = currentItem.getLearningData();
-    	dateLearnEntry.setText(learnData[0]);
-    	intervalEntry.setText(learnData[1]);
-    	gradeEntry.setText(learnData[2]);
-    	easinessEntry.setText(learnData[3]);
-    	acqRepsEntry.setText(learnData[4]);
-    	retRepsEntry.setText(learnData[5]);
-    	lapsesEntry.setText(learnData[6]);
-    	acqRepsSinceLapseEntry.setText(learnData[7]);
-    	retRepsSinceLapseEntry.setText(learnData[8]);
+    	dateLearnEntry.setText(currentItem.getDateLearn());
+    	intervalEntry.setText("" + currentItem.getInterval());
+    	gradeEntry.setText("" + currentItem.getGrade());
+    	easinessEntry.setText("" + currentItem.getEasiness());
+    	acqRepsEntry.setText("" + currentItem.getAcqReps());
+    	retRepsEntry.setText("" + currentItem.getRetReps());
+    	lapsesEntry.setText("" + currentItem.getLapses());
+    	acqRepsSinceLapseEntry.setText("" + currentItem.getAcqRepsSinceLapse());
+    	retRepsSinceLapseEntry.setText("" + currentItem.getRetRepsSinceLapse());
     }
     
     private void saveEntries(){
     	HashMap<String, String> hm=  new HashMap<String, String>();
-    	hm.put("_id", idEntry.getText().toString());
-    	hm.put("question", questionEntry.getText().toString());
-    	hm.put("answer", answerEntry.getText().toString());
-    	hm.put("note", noteEntry.getText().toString());
-    	hm.put("category", categoryEntry.getText().toString());
-    	hm.put("date_learn", dateLearnEntry.getText().toString());
-    	hm.put("interval", intervalEntry.getText().toString());
-    	hm.put("grade", gradeEntry.getText().toString());
-    	hm.put("easiness", easinessEntry.getText().toString());
-    	hm.put("acq_reps", acqRepsEntry.getText().toString());
-    	hm.put("ret_reps", retRepsEntry.getText().toString());
-    	hm.put("lapses", lapsesEntry.getText().toString());
-    	hm.put("acq_reps_since_lapse", acqRepsSinceLapseEntry.getText().toString());
-    	hm.put("ret_reps_since_lapse", retRepsSinceLapseEntry.getText().toString());
-    	currentItem.setData(hm);
-    	dbHelper.updateItem(currentItem, true);
+        currentItem = new Item.Builder()
+            .setId(Integer.parseInt(idEntry.getText().toString()))
+            .setQuestion(questionEntry.getText().toString())
+            .setAnswer(answerEntry.getText().toString())
+            .setNote(noteEntry.getText().toString())
+            .setCategory(categoryEntry.getText().toString())
+            .setDateLearn(dateLearnEntry.getText().toString())
+            .setInterval(Integer.parseInt(intervalEntry.getText().toString()))
+            .setGrade(Integer.parseInt(gradeEntry.getText().toString()))
+            .setEasiness(Double.parseDouble(easinessEntry.getText().toString()))
+            .setAcqReps(Integer.parseInt(acqRepsEntry.getText().toString()))
+            .setRetReps(Integer.parseInt(retRepsEntry.getText().toString()))
+            .setLapses(Integer.parseInt(lapsesEntry.getText().toString()))
+            .setAcqRepsSinceLapse(Integer.parseInt(acqRepsSinceLapseEntry.getText().toString()))
+            .setRetRepsSinceLapse(Integer.parseInt(retRepsSinceLapseEntry.getText().toString()))
+            .build();
+
+    	dbHelper.addOrReplaceItem(currentItem);
     }
     
     public void onDestroy(){

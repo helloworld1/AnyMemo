@@ -355,21 +355,28 @@ public class DownloaderFE extends DownloaderBase{
             NodeList childNodes = node.getChildNodes();
 
             int childNodeNumber = childNodes.getLength();
-            Item item = new Item();
-            item.setId(i + 1);
+            int curId = i + 1;
+            String curQuestion = "";
+            String curAnswer = "";
+
             for(int j = 0; j < childNodeNumber; j++){
                 Node childNode = childNodes.item(j);
                 if(childNode.hasChildNodes()){
                     if(childNode.getNodeName().equals("question")){
-                        item.setQuestion(childNode.getFirstChild().getNodeValue());
+                        curQuestion = childNode.getFirstChild().getNodeValue();
                     }
                     else if(childNode.getNodeName().equals("answer")){
-                        item.setAnswer(childNode.getFirstChild().getNodeValue());
+                        curAnswer = childNode.getFirstChild().getNodeValue();
                     }
                 }
             }
-            if(!item.getQuestion().equals("")){
-                itemList.add(item);
+            if(!curQuestion.equals("")){
+                Item newItem = new Item.Builder()
+                    .setId(curId)
+                    .setQuestion(curQuestion)
+                    .setAnswer(curAnswer)
+                    .build();
+                itemList.add(newItem);
             }
         }
         instream.close();

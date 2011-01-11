@@ -65,13 +65,16 @@ public class DBImporter{
                 throw new Exception("Malformed CSV file. Please make sure the CSV's first column is question, second one is answer and the optinal third one is category");
             }
             count++;
-            Item item = new Item();
-            item.setId(count);
-            item.setQuestion(nextLine[0]);
-            item.setAnswer(nextLine[1]);
+            String category = "";
             if(nextLine.length >= 3){
-                item.setCategory(nextLine[2]);
+                category = nextLine[2];
             }
+            Item item = new Item.Builder()
+                .setId(count)
+                .setQuestion(nextLine[0])
+                .setAnswer(nextLine[1])
+                .setCategory(category)
+                .build();
             itemList.add(item);
         }
         DatabaseHelper.createEmptyDatabase(filePath, fileName.replace(".csv", ".db"));
@@ -113,13 +116,17 @@ public class DBImporter{
                 throw new Exception("Malformed TXT file. Please make sure the CSV's first column is question, second one is answer and the optinal third one is category");
             }
             count++;
-            Item item = new Item();
-            item.setId(count);
-            item.setQuestion(nextLine[0]);
-            item.setAnswer(nextLine[1]);
+
+            String category = "";
             if(nextLine.length >= 3){
-                item.setCategory(nextLine[2]);
+                category = nextLine[2];
             }
+            Item item = new Item.Builder()
+                .setId(count)
+                .setQuestion(nextLine[0])
+                .setAnswer(nextLine[1])
+                .setCategory(category)
+                .build();
             itemList.add(item);
         }
         DatabaseHelper.createEmptyDatabase(filePath, fileName.replace(".txt", ".db"));
@@ -139,7 +146,6 @@ public class DBImporter{
         boolean isQ = false;
         StringBuffer qBuf = null;
         StringBuffer aBuf = null;
-        Item item;
         while((line = txtfile.readLine()) != null){
             /* remove BOM */
             Log.v(TAG, "LINE: " + line);
@@ -162,10 +168,11 @@ public class DBImporter{
                     /* Save item when the Q is after A
                      * because it is a new item */
                     if(count != 0){
-                        item = new Item();
-                        item.setQuestion(qBuf.toString());
-                        item.setAnswer(aBuf.toString());
-                        item.setId(count);
+                        Item item = new Item.Builder()
+                            .setQuestion(qBuf.toString())
+                            .setAnswer(aBuf.toString())
+                            .setId(count)
+                            .build();
                         itemList.add(item);
                     }
                     count += 1;
@@ -193,10 +200,11 @@ public class DBImporter{
             }
         }
         /* Last item need to be added manually */
-        item = new Item();
-        item.setQuestion(qBuf.toString());
-        item.setAnswer(aBuf.toString());
-        item.setId(count);
+        Item item = new Item.Builder()
+            .setQuestion(qBuf.toString())
+            .setAnswer(aBuf.toString())
+            .setId(count)
+            .build();
         count += 1;
         itemList.add(item);
 
