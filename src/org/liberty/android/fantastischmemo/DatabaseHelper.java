@@ -358,34 +358,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		if (result.getCount() > 0) {
 			result.moveToFirst();
 			do {
-				hm.put("_id", Integer.toString(result.getInt(result
-						.getColumnIndex("_id"))));
-				hm.put("question", result.getString(result
-						.getColumnIndex("question")));
-				hm.put("answer", result.getString(result
-						.getColumnIndex("answer")));
-				hm.put("note", result.getString(result.getColumnIndex("note")));
-				hm.put("category", result.getString(result.getColumnIndex("category")));
-				hm.put("date_learn", result.getString(result
-						.getColumnIndex("date_learn")));
-				hm.put("interval", Integer.toString(result.getInt(result
-						.getColumnIndex("interval"))));
-				hm.put("grade", Integer.toString(result.getInt(result
-						.getColumnIndex("grade"))));
-				hm.put("easiness", Double.toString(result.getDouble(result
-						.getColumnIndex("easiness"))));
-				hm.put("acq_reps", Integer.toString(result.getInt(result
-						.getColumnIndex("acq_reps"))));
-				hm.put("ret_reps", Integer.toString(result.getInt(result
-						.getColumnIndex("ret_reps"))));
-				hm.put("lapses", Integer.toString(result.getInt(result
-						.getColumnIndex("lapses"))));
-				hm.put("acq_reps_since_lapse",Integer.toString(result.getInt(result
-														.getColumnIndex("acq_reps_since_lapse"))));
-				hm.put("ret_reps_since_lapse", Integer.toString(result.getInt(result
-														.getColumnIndex("ret_reps_since_lapse"))));
-				Item resultItem = new Item();
-				resultItem.setData(hm);
+				Item resultItem = new Item.Builder()
+                    .setId(result.getInt(result.getColumnIndex("_id")))
+				    .setQuestion(result.getString(result.getColumnIndex("question")))
+				    .setAnswer(result.getString(result.getColumnIndex("answer")))
+                    .setNote(result.getString(result.getColumnIndex("note")))
+                    .setCategory(result.getString(result.getColumnIndex("category")))
+				    .setDateLearn(result.getString(result.getColumnIndex("date_learn")))
+                    .setInterval(result.getInt(result.getColumnIndex("interval")))
+                    .setGrade(result.getInt(result.getColumnIndex("grade")))
+                    .setEasiness(result.getDouble(result.getColumnIndex("easiness")))
+                    .setAcqReps(result.getInt(result.getColumnIndex("acq_reps")))
+                    .setRetReps(result.getInt(result.getColumnIndex("ret_reps")))
+                    .setLapses(result.getInt(result.getColumnIndex("lapses")))
+                    .setAcqRepsSinceLapse(result.getInt(result.getColumnIndex("acq_reps_since_lapse")))
+			        .setRetRepsSinceLapse(result.getInt(result.getColumnIndex("ret_reps_since_lapse")))
+                    .build();
 				list.add(resultItem);
 			} while (result.moveToNext());
 		}
@@ -500,48 +488,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		
 		result.moveToFirst();
 		//int resultId =	result.getInt(result.getColumnIndex("_id"));
-		hm.put("_id", Integer.toString(result.getInt(result.getColumnIndex("_id"))));
-		hm.put("question", result.getString(result.getColumnIndex("question")));
-		hm.put("answer", result.getString(result.getColumnIndex("answer")));
-		hm.put("note", result.getString(result.getColumnIndex("note")));
-		hm.put("category", result.getString(result.getColumnIndex("category")));
-		
-		//querySelection = " _id = " + resultId;
-		//result = myDatabase.query(true, "learn_tbl", null, querySelection, null, null, null, null, "1");
-		//if(result.getCount() == 0){
-		//	return null;
-		//}
-		//result.moveToFirst();
-		hm.put("date_learn", result.getString(result.getColumnIndex("date_learn")));
-		hm.put("interval", Integer.toString(result.getInt(result.getColumnIndex("interval"))));
-		hm.put("grade", Integer.toString(result.getInt(result.getColumnIndex("grade"))));
-		hm.put("easiness", Double.toString(result.getDouble(result.getColumnIndex("easiness"))));
-		hm.put("acq_reps", Integer.toString(result.getInt(result.getColumnIndex("acq_reps"))));
-		hm.put("ret_reps", Integer.toString(result.getInt(result.getColumnIndex("ret_reps"))));
-		hm.put("lapses", Integer.toString(result.getInt(result.getColumnIndex("lapses"))));
-		hm.put("acq_reps_since_lapse", Integer.toString(result.getInt(result.getColumnIndex("acq_reps_since_lapse"))));
-		hm.put("ret_reps_since_lapse", Integer.toString(result.getInt(result.getColumnIndex("ret_reps_since_lapse"))));
-		
-		
+        Item resultItem = new Item.Builder()
+            .setId(result.getInt(result.getColumnIndex("_id")))
+            .setQuestion(result.getString(result.getColumnIndex("question")))
+            .setAnswer(result.getString(result.getColumnIndex("answer")))
+            .setNote(result.getString(result.getColumnIndex("note")))
+            .setCategory(result.getString(result.getColumnIndex("category")))
+            .setDateLearn(result.getString(result.getColumnIndex("date_learn")))
+            .setInterval(result.getInt(result.getColumnIndex("interval")))
+            .setGrade(result.getInt(result.getColumnIndex("grade")))
+            .setEasiness(result.getDouble(result.getColumnIndex("easiness")))
+            .setAcqReps(result.getInt(result.getColumnIndex("acq_reps")))
+            .setRetReps(result.getInt(result.getColumnIndex("ret_reps")))
+            .setLapses(result.getInt(result.getColumnIndex("lapses")))
+            .setAcqRepsSinceLapse(result.getInt(result .getColumnIndex("acq_reps_since_lapse")))
+            .setRetRepsSinceLapse(result.getInt(result.getColumnIndex("ret_reps_since_lapse")))
+            .build();
 		result.close();
-		Item resultItem = new Item();
-		resultItem.setData(hm);
 		return resultItem;
-	}
-	
-	public void updateItem(Item item, boolean updateQA){
-		// Only update the learn_tbl
-		try{
-			myDatabase.execSQL("UPDATE learn_tbl SET date_learn = ?, interval = ?, grade = ?, easiness = ?, acq_reps = ?, ret_reps = ?, lapses = ?, acq_reps_since_lapse = ?, ret_reps_since_lapse = ? WHERE _id = ?", item.getLearningData());
-            if(updateQA){
-                myDatabase.execSQL("UPDATE dict_tbl SET question = ?, answer = ?, note = ?, category = ? WHERE _id = ?", new String[]{item.getQuestion(), item.getAnswer(), item.getNote(), item.getCategory(), Integer.toString(item.getId())});
-            }
-		}
-		catch(Exception e){
-			Log.e("Query error in updateItem!", e.toString());
-			
-		}
-		
 	}
 	
 	public int getScheduledCount(){
@@ -621,8 +585,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         myDatabase.beginTransaction();
         try{
             for(Item item : itemList){
-                item.setId(count);
-                updateItem(item, true);
+                Item newItem = new Item.Builder(item)
+                    .setId(count)
+                    .build();
+                addOrReplaceItem(newItem);
                 count += 1;
             }
 			myDatabase.setTransactionSuccessful();
@@ -647,8 +613,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	
 	public void addOrReplaceItem(Item item){
 		this.myDatabase.execSQL("REPLACE INTO dict_tbl(_id, question, answer, note, category) VALUES(?, ?, ?, ?, ?)", new String[]{"" + item.getId(), item.getQuestion(), item.getAnswer(), item.getNote(), item.getCategory()});
-		this.myDatabase.execSQL("REPLACE INTO learn_tbl(date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, _id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", item.getLearningData());
-		
+		this.myDatabase.execSQL("REPLACE INTO learn_tbl(date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, _id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", new String[]{item.getDateLearn(), Integer.toString(item.getInterval()), Integer.toString(item.getGrade()), Double.toString(item.getEasiness()), Integer.toString(item.getAcqReps()), Integer.toString(item.getRetReps()), Integer.toString(item.getLapses()), Integer.toString(item.getAcqRepsSinceLapse()), Integer.toString(item.getRetRepsSinceLapse()), Integer.toString(item.getId())});
 	}
 
 
@@ -658,8 +623,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         try{
             /* First inverse QA */
             for(Item item : itemList){
-                item.inverseQA();
-                updateItem(item, true);
+                Item newItem = item.inverseQA();
+                addOrReplaceItem(newItem);
             }
             /* Then inverse control table */
             HashMap<String, String> hm = getSettings();
@@ -693,9 +658,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             
             for(Item item : itemList){
                 /* Insert swapped item to the backQA */
-                item.inverseQA();
-                item.setId(newId++);
-                addOrReplaceItem(item);
+                Item newItem = new Item.Builder(item)
+                    .setId(newId++)
+                    .build()
+                    .inverseQA();
+                addOrReplaceItem(newItem);
             }
 
 			myDatabase.setTransactionSuccessful();
@@ -804,13 +771,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
          */
         for(int i = 0; i < items1Size; i++){
             Item tmpItem = items1.get(i);
-            tmpItem.setId(tmpItem.getId() + items2Size);
+            tmpItem = new Item.Builder(tmpItem)
+                .setId(tmpItem.getId() + items2Size)
+                .build();
             items1.set(i, tmpItem);
         }
         for(int i = 0; i < items2Size; i++){
             Item tmpItem = items2.get(i);
-            tmpItem.setId(tmpItem.getId() + fromId);
-            items2.set(i, tmpItem);
+            tmpItem = new Item.Builder(tmpItem)
+                .setId(tmpItem.getId() + fromId)
+                .build();
+            items1.set(i, tmpItem);
         }
         items1.addAll(items2);
         insertListItems(items1);
@@ -825,8 +796,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         myDatabase.execSQL("UPDATE learn_tbl SET _id = _id - 99999 WHERE _id > ?", new String[]{"" + id});
         myDatabase.execSQL("UPDATE dict_tbl SET _id = _id + 100000 WHERE _id < 0");
         myDatabase.execSQL("UPDATE learn_tbl SET _id = _id + 100000 WHERE _id < 0");
-        item.setId(id + 1);
-        addOrReplaceItem(item);
+        Item newItem = new Item.Builder(item)
+            .setId(id + 1)
+            .build();
+        addOrReplaceItem(newItem);
     }
 
     public void removeDuplicates(){

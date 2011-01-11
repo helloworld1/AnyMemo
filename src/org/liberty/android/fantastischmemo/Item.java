@@ -54,7 +54,7 @@ public final class Item implements Serializable{
     private final static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     public final static String TAG = "org.liberty.android.fantastischmemo.Item";
 	
-	public class Builder{
+	public static class Builder{
 		private int _id = 0;
 		private String date_learn = "2010-01-01";
 		private int interval = 0;
