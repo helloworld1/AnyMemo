@@ -568,20 +568,20 @@ public class MemoScreen extends AMActivity{
             hm.get("5").setText(getString(R.string.memo_btn5_brief_text));
         }
         else if(settingManager.getButtonStyle() == SettingManager.ButtonStyle.ANKI){
-            hm.get("0").setText(getString(R.string.memo_btn0_anki_text) + "\n+" + currentItem.processAnswer(0, true));
-            hm.get("1").setText(getString(R.string.memo_btn1_anki_text) + "\n+" + currentItem.processAnswer(1, true));
-            hm.get("2").setText(getString(R.string.memo_btn2_anki_text) + "\n+" + currentItem.processAnswer(2, true));
-            hm.get("3").setText(getString(R.string.memo_btn3_anki_text) + "\n+" + currentItem.processAnswer(3, true));
-            hm.get("4").setText(getString(R.string.memo_btn4_anki_text) + "\n+" + currentItem.processAnswer(4, true));
-            hm.get("5").setText(getString(R.string.memo_btn5_anki_text) + "\n+" + currentItem.processAnswer(5, true));
+            hm.get("0").setText(getString(R.string.memo_btn0_anki_text) + "\n+" + currentItem.processAnswer(0, false).getInterval());
+            hm.get("1").setText(getString(R.string.memo_btn1_anki_text) + "\n+" + currentItem.processAnswer(1, false).getInterval());
+            hm.get("2").setText(getString(R.string.memo_btn2_anki_text) + "\n+" + currentItem.processAnswer(2, false).getInterval());
+            hm.get("3").setText(getString(R.string.memo_btn3_anki_text) + "\n+" + currentItem.processAnswer(3, false).getInterval());
+            hm.get("4").setText(getString(R.string.memo_btn4_anki_text) + "\n+" + currentItem.processAnswer(4, false).getInterval());
+            hm.get("5").setText(getString(R.string.memo_btn5_anki_text) + "\n+" + currentItem.processAnswer(5, false).getInterval());
         }
         else{
-            hm.get("0").setText(getString(R.string.memo_btn0_text) + "\n+" + currentItem.processAnswer(0, true));
-            hm.get("1").setText(getString(R.string.memo_btn1_text) + "\n+" + currentItem.processAnswer(1, true));
-            hm.get("2").setText(getString(R.string.memo_btn2_text) + "\n+" + currentItem.processAnswer(2, true));
-            hm.get("3").setText(getString(R.string.memo_btn3_text) + "\n+" + currentItem.processAnswer(3, true));
-            hm.get("4").setText(getString(R.string.memo_btn4_text) + "\n+" + currentItem.processAnswer(4, true));
-            hm.get("5").setText(getString(R.string.memo_btn5_text) + "\n+" + currentItem.processAnswer(5, true));
+            hm.get("0").setText(getString(R.string.memo_btn0_text) + "\n+" + currentItem.processAnswer(0, false).getInterval());
+            hm.get("1").setText(getString(R.string.memo_btn1_text) + "\n+" + currentItem.processAnswer(1, false).getInterval());
+            hm.get("2").setText(getString(R.string.memo_btn2_text) + "\n+" + currentItem.processAnswer(2, false).getInterval());
+            hm.get("3").setText(getString(R.string.memo_btn3_text) + "\n+" + currentItem.processAnswer(3, false).getInterval());
+            hm.get("4").setText(getString(R.string.memo_btn4_text) + "\n+" + currentItem.processAnswer(4, false).getInterval());
+            hm.get("5").setText(getString(R.string.memo_btn5_text) + "\n+" + currentItem.processAnswer(5, false).getInterval());
 
         }
     }
@@ -611,7 +611,7 @@ public class MemoScreen extends AMActivity{
         return new View.OnClickListener(){
             public void onClick(View v){
                 prevItem = currentItem;
-                currentItem.processAnswer(grade, false);
+                currentItem = currentItem.processAnswer(grade, true);
                 bgUpdateTask = new BackgroundUpdateTask();
                 bgUpdateTask.execute(currentItem);
 
