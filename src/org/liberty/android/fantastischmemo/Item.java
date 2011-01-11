@@ -32,64 +32,208 @@ import java.io.Serializable;
 
 import android.util.Log;
 
-public final class Item implements Cloneable, Serializable{
-	private int _id;
-	private String date_learn;
-	private int interval;
-	private int grade;
-	private double easiness;
-	private int acq_reps;
-	private int ret_reps;
-	private int lapses;
-	private int acq_reps_since_lapse;
-	private int ret_reps_since_lapse;
-	private String question;
-	private String answer;
-	private String note;
+/* 
+ * This class representating the card item is immutable
+ */
+public final class Item implements Serializable{
+	private final int _id;
+	private final String date_learn;
+	private final int interval;
+	private final int grade;
+	private final double easiness;
+	private final int acq_reps;
+	private final int ret_reps;
+	private final int lapses;
+	private final int acq_reps_since_lapse;
+	private final int ret_reps_since_lapse;
+	private final String question;
+	private final String answer;
+	private final String note;
     private String category;
     /* Make it static for performance */
     private final static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     public final static String TAG = "org.liberty.android.fantastischmemo.Item";
 	
-	public Item(){
-		this._id = 0;
-		this.date_learn = "2010-01-01";
-		this.interval = 0;
-		this.grade = 0;
-		this.easiness = 2.5;
-		this.acq_reps = 0;
-		this.ret_reps = 0;
-		this.lapses = 0;
-		this.acq_reps_since_lapse = 0;
-		this.ret_reps_since_lapse = 0;
-		this.question = "";
-		this.answer = "";
-		this.note = "";
-		this.category = "";
-	}
-	public String getQuestion(){
-		return this.question;
-	}
+	public class Builder{
+		private int _id = 0;
+		private String date_learn = "2010-01-01";
+		private int interval = 0;
+		private int grade = 0;
+		private double easiness = 2.5;
+		private int acq_reps = 0;
+		private int ret_reps = 0;
+		private int lapses = 0;
+		private int acq_reps_since_lapse = 0;
+		private int ret_reps_since_lapse = 0;
+		private String  question = "";
+		private String  answer = "";
+		private String  note = "";
+		private String  category = "";
 
-    public void setQuestion(String q){
-        this.question = q;
+        public Builder(){}
+        
+        public Builder(Item item){
+            _id = item._id;
+            date_learn = item.date_learn;
+            interval = item.interval;
+            grade = item.grade;
+            easiness = item.easiness;
+            acq_reps = item.acq_reps;
+            ret_reps = item.ret_reps;
+            lapses = item.lapses;
+            acq_reps_since_lapse = item.acq_reps_since_lapse;
+            ret_reps_since_lapse = item.ret_reps_since_lapse;
+            question = item.question;
+            answer = item.answer;
+            note = item.note;
+            category = item.category;
+        }
+
+        public Builder setId(int v){
+            _id = v;
+            return this;
+        }
+
+        public Builder setDateLearn(String v){
+            date_learn = v;
+            return this;
+        }
+
+        public Builder setInterval(int v){
+            interval = v;
+            return this;
+        }
+
+        public Builder setGrade(int v){
+            grade = v;
+            return this;
+        }
+
+        public Builder setEasiness(double v){
+            easiness = v;
+            return this;
+        }
+
+        public Builder setAcqReps(int v){
+            acq_reps = v;
+            return this;
+        }
+
+        public Builder setRetReps(int v){
+            ret_reps = v;
+            return this;
+        }
+
+        public Builder setLapses(int v){
+            lapses = v;
+            return this;
+        }
+
+        public Builder setAcqRepsSinceLapse(int v){
+            acq_reps_since_lapse = v;
+            return this;
+        }
+
+        public Builder setRetRepsSinceLapse(int v){
+            ret_reps_since_lapse = v;
+            return this;
+        }
+
+        public Builder setQuestion(String v){
+            question = v;
+            return this;
+        }
+
+        public Builder setAnswer(String v){
+            answer = v;
+            return this;
+        }
+
+        public Builder setNote(String v){
+            note = v;
+            return this;
+        }
+
+        public Builder setCategory(String v){
+            category = v;
+            return this;
+        }
+        public Item build(){
+            return new Item(this);
+        }
     }
-	
-	public String getAnswer(){
-		return this.answer;
-	}
 
-    public void setAnswer(String a){
-        this.answer = a;
+    private Item(Builder builder){
+        _id = builder._id;
+        date_learn = builder.date_learn;
+        interval = builder.interval;
+        grade = builder.grade;
+        easiness = builder.easiness;
+        acq_reps = builder.acq_reps;
+        ret_reps = builder.ret_reps;
+        lapses = builder.lapses;
+        acq_reps_since_lapse = builder.acq_reps_since_lapse;
+        ret_reps_since_lapse = builder.ret_reps_since_lapse;
+        question = builder.question;
+        answer = builder.answer;
+        note = builder.note;
+        category = builder.category;
     }
 
-    
+    public int getId(){
+        return _id;
+    }
+
+    public String getDateLearn(){
+        return date_learn;
+    }
+
     public int getInterval(){
-        return this.interval;
+        return interval;
+    }
+
+    public double getEasiness(){
+        return easiness;
+    }
+
+    public int getAcqReps(){
+        return acq_reps;
+    }
+
+    public int getRetReps(){
+        return ret_reps;
+    }
+
+    public int getLapses(){
+        return lapses;
+    }
+
+    public int getAcqRepsSinceLapse(){
+        return acq_reps_since_lapse;
+    }
+
+    public int getRetRepsSinceLapse(){
+        return ret_reps_since_lapse;
     }
 
     public int getGrade(){
         return grade;
+    }
+
+    public String getQuestion(){
+        return question;
+    }
+
+    public String getAnswer(){
+        return answer;
+    }
+
+    public String getNote(){
+        return note;
+    }
+
+    public String getCategory(){
+        return category;
     }
 
     public long getDatelearnUnix() throws ParseException{
@@ -98,127 +242,177 @@ public final class Item implements Cloneable, Serializable{
         return date.getTime() / 1000;
     }
 
-
-
-	public String getNote(){
-		return this.note;
-	}
-
-    public void setNote(String n){
-        this.note = n;
-    }
-
-    public String getCategory(){
-        return this.category;
-    }
-
-    public void setCategory(String c){
-        this.category = c;
-    }
-	
-	public int getId(){
-		return this._id;
-	}
-
-    public void setId(int id){
-        this._id = id;
-    }
-
 	public boolean isNew(){
 		return acq_reps == 0 ? true : false;
 	}
 
-    public void skip(){
-        /* This will set a super long interval so it will never appear */
-        interval = 100000;
-        grade = 5;
-        /* I have seen it */
-        acq_reps = 1;
-        easiness = 10.0;
-    }
 
-    public Item clone(){
-        Item itemClone = new Item();
-        itemClone._id = this._id;
-        itemClone.date_learn = this.date_learn;
-        itemClone.interval = this.interval;
-        itemClone.grade = this.grade;
-        itemClone.easiness = this.easiness;
-        itemClone.acq_reps = this.acq_reps;
-        itemClone.ret_reps = this.ret_reps;
-        itemClone.lapses = this.lapses;
-        itemClone.acq_reps_since_lapse = this.acq_reps_since_lapse;
-        itemClone.ret_reps_since_lapse = this.ret_reps_since_lapse;
-        itemClone.question = this.question;
-        itemClone.answer = this.answer;
-        itemClone.note = this.note;
-        itemClone.category = this.category;
 
-        return itemClone;
-
-    }
-	
-	public String[] getLearningData(){
-		// the string array is in the sequence that is required in the DatabaseHelper.updateItem
-		return new String[]{date_learn, new Integer(interval).toString(), new Integer(grade).toString(), new Double(easiness).toString(), new Integer(acq_reps).toString(), new Integer(ret_reps).toString(), new Integer(lapses).toString(), new Integer(acq_reps_since_lapse).toString(), new Integer(ret_reps_since_lapse).toString(), new Integer(_id).toString()};
-	}
-	
-	public void setData(HashMap<String, String> hm){
-		Set<Map.Entry<String, String>> set = hm.entrySet();
-		Iterator<Map.Entry<String, String> > i = set.iterator();
-		while(i.hasNext()){
-			Map.Entry<String, String> me = (Map.Entry<String, String>)i.next();
-			if(((String)me.getKey()) == "_id"){
-				this._id = Integer.parseInt(hm.get("_id")); 
-			}
-			if(((String)me.getKey()) == "date_learn"){
-				this.date_learn = hm.get("date_learn");
-			}
-			if(((String)me.getKey()) == "interval"){
-				this.interval = Integer.parseInt(hm.get("interval")); 
-			}
-			if(((String)me.getKey()) == "grade"){
-				this.grade = Integer.parseInt(hm.get("grade")); 			}
-			if(((String)me.getKey()) == "easiness"){
-				this.easiness = Double.parseDouble(hm.get("easiness"));
-				
-			}
-			if(((String)me.getKey()) == "lapses"){
-				this.lapses = Integer.parseInt(hm.get("lapses")); 
-			}
-			if(((String)me.getKey()) == "acq_reps"){
-				this.acq_reps =Integer.parseInt(hm.get("acq_reps")); 
-			}
-			if(((String)me.getKey()) == "ret_reps"){
-				this.ret_reps = Integer.parseInt(hm.get("ret_reps")); 
-			}
-			if(((String)me.getKey()) == "acq_reps_since_lapse"){
-				this.acq_reps_since_lapse = Integer.parseInt(hm.get("acq_reps_since_lapse")); 
-				
-			}
-			if(((String)me.getKey()) == "ret_reps_since_lapse"){
-				this.ret_reps_since_lapse = Integer.parseInt(hm.get("ret_reps_since_lapse")); 
-			}
-			if(((String)me.getKey()) == "question"){
-				this.question = hm.get("question");
-			}
-			if(((String)me.getKey()) == "answer"){
-				this.answer = hm.get("answer");
-				
-			}
-			if(((String)me.getKey()) == "note"){
-				this.note = (String)hm.get("note");
-				
-			}
-			if(((String)me.getKey()) == "category"){
-				this.category = (String)hm.get("category");
-				
-			}
-			
+	public boolean isScheduled(){
+		Date currentDate = new Date();
+		String now = formatter.format(currentDate);
+		int actualInterval = diffDate(now, this.date_learn);
+		int scheduleInterval = this.interval;
+		//actualInterval = actualInterval == 0 ? actualInterval + 1 : actualInterval;
+		if(scheduleInterval <= actualInterval && this.acq_reps > 0){
+			return true;
 		}
-		
+		else{
+			return false;
+		}
 	}
-	
+
+	public Item processAnswer(int newGrade, boolean includeNoise){
+        // dryRun will leave the original one intact
+        // and return the interval
+        // if dryRun is false, the return value only show success or not
+		Date currentDate = new Date();
+		String now = formatter.format(currentDate);
+		int actualInterval = diffDate(now, this.date_learn);
+		int scheduleInterval = this.interval;
+		int newInterval = 0;
+        int newLapses = lapses;
+        int newAcqReps = acq_reps;
+        int newRetReps = ret_reps;
+        int newAcqRepsSinceLapse = acq_reps_since_lapse;
+        int newRetRepsSinceLapse = ret_reps_since_lapse;
+        double newEasiness = easiness;
+
+		boolean returnValue = false;
+		if(actualInterval == 0){
+			actualInterval = 1;
+		}
+        // new item (unseen = 1 in mnemosyne)
+		if(this.acq_reps == 0){
+			newAcqReps = 1;
+            // 2.5 is 40% difficult.
+            // Taken from Mnemosyne
+            newEasiness = 2.5;
+            newAcqRepsSinceLapse = 1;
+			newInterval = calculateInitialInterval(newGrade);
+			if(newGrade >= 2){
+				returnValue = true;
+			}
+		}
+		else if(this.grade <= 1 && newGrade <= 1){
+			newAcqReps += 1;
+			newAcqRepsSinceLapse += 1;
+			newInterval = 0;
+		}
+		else if(this.grade <= 1 && newGrade >= 2){
+			newAcqReps += 1;
+			newAcqRepsSinceLapse += 1;
+			newInterval = 1;
+			returnValue = true;
+		}
+		else if(this.grade >= 2 && newGrade <= 1){
+			newRetReps += 1;
+			newLapses += 1;
+			newAcqRepsSinceLapse = 0;
+			newRetRepsSinceLapse = 0;
+			returnValue = false;
+		}
+		else if(this.grade >= 2 && newGrade >= 2){
+			newRetReps += 1;
+			newRetRepsSinceLapse += 1;
+			returnValue = true;
+			if(actualInterval >= scheduleInterval){
+				if(newGrade == 2){
+					newEasiness -= 0.16;
+				}
+				if(newGrade == 3){
+					newEasiness -= 0.14;
+				}
+				if(newGrade == 5){
+				    newEasiness += 0.10;
+				}
+				if(this.easiness < 1.3){
+					newEasiness = 1.3;
+				}
+			}
+			newInterval = 0;
+			if(this.ret_reps_since_lapse == 1){
+				newInterval = 6;
+			}
+			else{
+				if(newGrade == 2 || newGrade == 3){
+					if(actualInterval <= scheduleInterval){
+						newInterval = (int)Math.round(actualInterval * this.easiness);
+					}
+					else{
+						newInterval = scheduleInterval;
+					}
+				}
+				if(newGrade == 4){
+					newInterval = (int)Math.round(actualInterval * this.easiness);
+				}
+				if(newGrade == 5){
+					if(actualInterval < scheduleInterval){
+						newInterval = scheduleInterval;
+					}
+					else{
+						newInterval = (int)Math.round(actualInterval * this.easiness);
+					}
+				}
+			}
+			if(newInterval == 0){
+				Log.e("Interval error", "Interval is 0 in wrong place");
+			}
+		}
+        /* 
+         * By default the noise is included. However, 
+         * the estimation of days should not include noise
+         */ 
+        if(includeNoise){
+		    int noise = calculateIntervalNoise(newInterval);
+            newInterval = newInterval + noise;
+        }
+        Item retItem = new Builder(this)
+            .setInterval(newInterval)
+            .setDateLearn(now)
+            .setLapses(newLapses)
+            .setAcqReps(newAcqReps)
+            .setRetReps(newRetReps)
+            .setAcqRepsSinceLapse(newAcqRepsSinceLapse)
+            .setRetRepsSinceLapse(newRetRepsSinceLapse)
+            .setEasiness(newEasiness)
+            .setGrade(newGrade)
+            .build();
+        return retItem;
+	}
+
+
+    public boolean isEmpty(){
+        if(question.equals("") && answer.equals("") && category.equals("")){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public Item inverseQA(){
+        Item newItem = new Builder(this)
+            .setQuestion(this.answer)
+            .setAnswer(this.question)
+            .build();
+        return newItem;
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if(!(o instanceof Item)){
+            return false;
+        }
+        Item oi = (Item)o;
+        if(_id == oi._id && question.equals(oi.question) && answer.equals(oi.answer)){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
 	private int randomNumber(int min, int max){
 		return min + (new Random()).nextInt(max - min + 1);
 	}
@@ -283,165 +477,4 @@ public final class Item implements Cloneable, Serializable{
 	}
 
 
-	public boolean isScheduled(){
-		Date currentDate = new Date();
-		String now = formatter.format(currentDate);
-		int actualInterval = diffDate(now, this.date_learn);
-		int scheduleInterval = this.interval;
-		//actualInterval = actualInterval == 0 ? actualInterval + 1 : actualInterval;
-		if(scheduleInterval <= actualInterval && this.acq_reps > 0){
-			return true;
-		}
-		else{
-			return false;
-		}
-		
-	}
-
-	public int processAnswer(int newGrade, boolean dryRun){
-        // dryRun will leave the original one intact
-        // and return the interval
-        // if dryRun is false, the return value only show success or not
-		Date currentDate = new Date();
-		String now = formatter.format(currentDate);
-		int actualInterval = diffDate(now, this.date_learn);
-		int scheduleInterval = this.interval;
-		int newInterval = 0;
-        Item cloneItem = null;
-        if(dryRun){
-            try{
-                cloneItem = (Item)this.clone();
-            }
-            catch(Exception e){
-                Log.e(TAG, "Error cloning", e);
-                cloneItem = null;
-            }
-        }
-		boolean returnValue = false;
-		if(actualInterval == 0){
-			actualInterval = 1;
-		}
-        // new item (unseen = 1 in mnemosyne)
-		if(this.acq_reps == 0){
-			this.acq_reps = 1;
-            // 2.5 is 40% difficult.
-            // Taken from Mnemosyne
-            this.easiness = 2.5;
-			this.acq_reps_since_lapse = 1;
-			newInterval = calculateInitialInterval(newGrade);
-			if(newGrade >= 2){
-				returnValue = true;
-			}
-		}
-		else if(this.grade <= 1 && newGrade <= 1){
-			this.acq_reps += 1;
-			this.acq_reps_since_lapse += 1;
-			newInterval = 0;
-		}
-		else if(this.grade <= 1 && newGrade >= 2){
-			this.acq_reps += 1;
-			this.acq_reps_since_lapse += 1;
-			newInterval = 1;
-			returnValue = true;
-		}
-		else if(this.grade >= 2 && newGrade <= 1){
-			this.ret_reps += 1;
-			this.lapses += 1;
-			this.acq_reps_since_lapse = 0;
-			this.ret_reps_since_lapse = 0;
-			returnValue = false;
-		}
-		else if(this.grade >= 2 && newGrade >= 2){
-			this.ret_reps += 1;
-			this.ret_reps_since_lapse += 1;
-			returnValue = true;
-			if(actualInterval >= scheduleInterval){
-				if(newGrade == 2){
-					this.easiness -= 0.16;
-				}
-				if(newGrade == 3){
-					this.easiness -= 0.14;
-				}
-				if(newGrade == 5){
-					this.easiness += 0.10;
-				}
-				if(this.easiness < 1.3){
-					this.easiness = 1.3;
-				}
-			}
-			newInterval = 0;
-			if(this.ret_reps_since_lapse == 1){
-				newInterval = 6;
-			}
-			else{
-				if(newGrade == 2 || newGrade == 3){
-					if(actualInterval <= scheduleInterval){
-						newInterval = (int)Math.round(actualInterval * this.easiness);
-					}
-					else{
-						newInterval = scheduleInterval;
-					}
-				}
-				if(newGrade == 4){
-					newInterval = (int)Math.round(actualInterval * this.easiness);
-				}
-				if(newGrade == 5){
-					if(actualInterval < scheduleInterval){
-						newInterval = scheduleInterval;
-					}
-					else{
-						newInterval = (int)Math.round(actualInterval * this.easiness);
-					}
-				}
-			}
-			if(newInterval == 0){
-				Log.e("Interval error", "Interval is 0 in wrong place");
-			}
-		}
-        if(dryRun == true){
-            // dryRun does not include the noise in the return value!!
-            if(cloneItem != null){
-                this.interval = cloneItem.interval;
-                this._id = cloneItem._id;
-                this.date_learn = cloneItem.date_learn;
-                this.interval = cloneItem.interval;
-                this.grade = cloneItem.grade;
-                this.easiness = cloneItem.easiness;
-                this.acq_reps = cloneItem.acq_reps;
-                this.ret_reps = cloneItem.ret_reps;
-                this.lapses = cloneItem.lapses;
-                this.acq_reps_since_lapse = cloneItem.acq_reps_since_lapse;
-                this.ret_reps_since_lapse = cloneItem.ret_reps_since_lapse;
-                this.question = cloneItem.question;
-                this.answer = cloneItem.answer;
-                this.note = cloneItem.note;
-            }
-            return newInterval;
-        }
-        else{
-		    int noise = calculateIntervalNoise(newInterval);
-            this.interval = newInterval + noise;
-            this.grade = newGrade;
-            this.date_learn = now;
-            // 1 means success ,0 means fail
-            return returnValue ? 1 : 0;
-        }
-	}
-
-    public void inverseQA(){
-        String tmp = answer;
-        answer = question;
-        question = tmp;
-    }
-
-    public boolean isEmpty(){
-        if(question.equals("") && answer.equals("") && category.equals("")){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-
-	
 }
