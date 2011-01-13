@@ -278,7 +278,6 @@ public final class Item implements Serializable{
         int newRetRepsSinceLapse = ret_reps_since_lapse;
         double newEasiness = easiness;
 
-		boolean returnValue = false;
 		if(actualInterval == 0){
 			actualInterval = 1;
 		}
@@ -290,9 +289,6 @@ public final class Item implements Serializable{
             newEasiness = 2.5;
             newAcqRepsSinceLapse = 1;
 			newInterval = calculateInitialInterval(newGrade);
-			if(newGrade >= 2){
-				returnValue = true;
-			}
 		}
 		else if(this.grade <= 1 && newGrade <= 1){
 			newAcqReps += 1;
@@ -303,19 +299,16 @@ public final class Item implements Serializable{
 			newAcqReps += 1;
 			newAcqRepsSinceLapse += 1;
 			newInterval = 1;
-			returnValue = true;
 		}
 		else if(this.grade >= 2 && newGrade <= 1){
 			newRetReps += 1;
 			newLapses += 1;
 			newAcqRepsSinceLapse = 0;
 			newRetRepsSinceLapse = 0;
-			returnValue = false;
 		}
 		else if(this.grade >= 2 && newGrade >= 2){
 			newRetReps += 1;
 			newRetRepsSinceLapse += 1;
-			returnValue = true;
 			if(actualInterval >= scheduleInterval){
 				if(newGrade == 2){
 					newEasiness -= 0.16;
@@ -331,27 +324,27 @@ public final class Item implements Serializable{
 				}
 			}
 			newInterval = 0;
-			if(this.ret_reps_since_lapse == 1){
+			if(newRetRepsSinceLapse == 1){
 				newInterval = 6;
 			}
 			else{
 				if(newGrade == 2 || newGrade == 3){
 					if(actualInterval <= scheduleInterval){
-						newInterval = (int)Math.round(actualInterval * this.easiness);
+						newInterval = (int)Math.round(actualInterval * newEasiness);
 					}
 					else{
 						newInterval = scheduleInterval;
 					}
 				}
 				if(newGrade == 4){
-					newInterval = (int)Math.round(actualInterval * this.easiness);
+					newInterval = (int)Math.round(actualInterval * newEasiness);
 				}
 				if(newGrade == 5){
 					if(actualInterval < scheduleInterval){
 						newInterval = scheduleInterval;
 					}
 					else{
-						newInterval = (int)Math.round(actualInterval * this.easiness);
+						newInterval = (int)Math.round(actualInterval * newEasiness);
 					}
 				}
 			}
@@ -376,6 +369,7 @@ public final class Item implements Serializable{
             .setAcqRepsSinceLapse(newAcqRepsSinceLapse)
             .setRetRepsSinceLapse(newRetRepsSinceLapse)
             .setEasiness(newEasiness)
+            .setInterval(newInterval)
             .setGrade(newGrade)
             .build();
         return retItem;
