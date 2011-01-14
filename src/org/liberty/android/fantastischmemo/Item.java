@@ -51,7 +51,7 @@ public final class Item implements Serializable{
 	private final String note;
     private String category;
     /* Make it static for performance */
-    private final static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+    private volatile SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     public final static String TAG = "org.liberty.android.fantastischmemo.Item";
 	
 	public static class Builder{

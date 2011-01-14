@@ -162,12 +162,12 @@ class LearnQueueManager implements QueueManager{
 
     /*
      * update current item and remove it in the queue
-     * if the current item is not learned, this method will put it at the 
+     * if the current item is not learned, this method will put it at the
      * end of the queue. If not, this method will pull another new card from
      * the database
      * The item parameter is the null, it will return current head of queue
      */
-    public Item updateAndNext(final Item item){
+    public Item updateAndNext(Item item){
         if(learnQueue == null || learnQueue.size() == 0){
             return null;
         }
@@ -186,7 +186,7 @@ class LearnQueueManager implements QueueManager{
             if(learnQueue.get(0).isScheduled()){
                 revCardNo -= 1;
             }
-            else if(learnQueue.get(0).isNew()){
+            if(learnQueue.get(0).isNew()){
                 newCardNo -= 1;
             }
         }
@@ -200,9 +200,9 @@ class LearnQueueManager implements QueueManager{
         }
         Item orngItem = learnQueue.remove(0);
         if(item.isScheduled()){
-            /* 
+            /*
              * If the old item is new, the one in the queue
-             * should not remain noew 
+             * should not remain noew
              * Also if the original one is learned but forget this time
              * we will update the queue
              */
@@ -214,26 +214,12 @@ class LearnQueueManager implements QueueManager{
                 learnQueue.add(orngItem);
             }
         }
-
-        /* 
-         * Do the heavy part of the job
-         */
-        updateItemAndFillQueue(item);
-
-        if(learnQueue.size() > 0){
-            return learnQueue.get(0);
-        }
-        else{
-            return null;
-        }
-    }
-
-    private void updateItemAndFillQueue(Item item){
-        boolean fetchRevFlag = true;
+        dbHelper.addOrReplaceItem(item);
         /* Fill up the queue to its queue size */
         int maxNewId = getMaxQueuedItemId(true);
         int maxRevId = getMaxQueuedItemId(false);
-        dbHelper.addOrReplaceItem(item);
+        boolean fetchRevFlag = true;
+        /* New item in database */
         while(learnQueue.size() < queueSize){
             if(fetchRevFlag == true){
                 Item newItemFromDb = dbHelper.getItemById(maxRevId + 1, 2, true, activeFilter);
@@ -255,6 +241,12 @@ class LearnQueueManager implements QueueManager{
                     break;
                 }
             }
+        }
+        if(learnQueue.size() > 0){
+            return learnQueue.get(0);
+        }
+        else{
+            return null;
         }
     }
 
