@@ -115,7 +115,7 @@ public class MemoScreen extends AMActivity{
     SettingManager settingManager;
     ControlButtons controlButtons;
     QueueManager queueManager;
-    boolean buttonDisabled = false;
+    volatile boolean buttonDisabled = false;
     /* Maintain this task for the exiting sync purpose*/
     BackgroundUpdateTask bgUpdateTask = null;
 
@@ -437,7 +437,7 @@ public class MemoScreen extends AMActivity{
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event){
-        if(settingManager.getVolumeKeyShortcut()){
+        if(settingManager.getVolumeKeyShortcut() && buttonDisabled == false){
             if(keyCode == KeyEvent.KEYCODE_VOLUME_UP){
                 return true;
             }
@@ -451,7 +451,7 @@ public class MemoScreen extends AMActivity{
     public boolean onKeyUp(int keyCode, KeyEvent event){
         /* Short press to scroe the card */
 
-        if(settingManager.getVolumeKeyShortcut()){
+        if(settingManager.getVolumeKeyShortcut() && buttonDisabled == false){
             if(keyCode == KeyEvent.KEYCODE_VOLUME_UP){
                 if(flashcardDisplay.isAnswerShown() == false){
                     updateFlashcardView(true);
@@ -493,8 +493,10 @@ public class MemoScreen extends AMActivity{
             hideButtons();
         }
         autoSpeak();
-        setGradeButtonTitle();
-        setGradeButtonListeners();
+        if(!buttonDisabled){
+            setGradeButtonTitle();
+            setGradeButtonListeners();
+        }
         /* Automatic copy the current question to clipboard */
         if(settingManager.getCopyClipboard()){
             ClipboardManager cm = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
@@ -507,9 +509,8 @@ public class MemoScreen extends AMActivity{
         View.OnClickListener showAnswerListener = new View.OnClickListener(){
             public void onClick(View v){
                 if(currentItem != null){
-                    showButtons();
                     updateFlashcardView(true);
-                    controlButtons.getView().setVisibility(View.VISIBLE);
+                    showButtons();
                 }
             }
         };
@@ -616,13 +617,8 @@ public class MemoScreen extends AMActivity{
                 bgUpdateTask.execute(currentItem);
 
                 currentItem = queueManager.getNext(currentItem);
-                buttonDisabled = true;
-                if(currentItem == null){
-                    showNoItemDialog();
-                }
-                else{
+                if(currentItem != null){
                     updateFlashcardView(false);
-                    hideButtons();
                 }
             }
         };
@@ -763,7 +759,6 @@ public class MemoScreen extends AMActivity{
      * information
      */
     private class BackgroundUpdateTask extends AsyncTask<Item, Void, Item>{
-        private String title;
 
         @Override
         public void onPreExecute(){
@@ -775,7 +770,7 @@ public class MemoScreen extends AMActivity{
         @Override
         public Item doInBackground(Item... items){
             Item nextItem = queueManager.updateAndNext(items[0]);
-            title = getActivityTitleString();
+            /* The title is only valid if there are still items in the queue */
             return nextItem;
         }
         @Override
@@ -786,13 +781,13 @@ public class MemoScreen extends AMActivity{
         @Override
         public void onPostExecute(Item result){
             super.onPostExecute(result);
-            buttonDisabled = false;
             setProgressBarIndeterminateVisibility(false);
             currentItem = result;
             if(currentItem == null){
                 showNoItemDialog();
             }
             else{ 
+                buttonDisabled = false;
                 if(!flashcardDisplay.isAnswerShown()){
                     updateFlashcardView(false);
                 }
@@ -800,7 +795,7 @@ public class MemoScreen extends AMActivity{
                     updateFlashcardView(true);
                     showButtons();
                 }
-                setTitle(title);
+                setTitle(getActivityTitleString());
             }
         }
     }

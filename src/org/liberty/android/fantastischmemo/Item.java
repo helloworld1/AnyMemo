@@ -324,7 +324,7 @@ public final class Item implements Serializable{
 				}
 			}
 			newInterval = 0;
-			if(newRetRepsSinceLapse == 1){
+			if(newRetRepsSinceLapse == -1){
 				newInterval = 6;
 			}
 			else{
