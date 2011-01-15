@@ -35,7 +35,7 @@ import android.util.Log;
 /* 
  * This class representating the card item is immutable
  */
-public final class Item implements Serializable{
+public final class Item implements Serializable, Comparable<Item>{
 	private final int _id;
 	private final String date_learn;
 	private final int interval;
@@ -405,6 +405,16 @@ public final class Item implements Serializable{
         else{
             return false;
         }
+    }
+
+    @Override
+    public String toString(){
+        return "ID: " + _id + " Question: " + question + " Answer: " + answer;
+    }
+
+    @Override
+    public int compareTo(Item another){
+        return _id - another._id;
     }
 
 	private int randomNumber(int min, int max){

@@ -254,6 +254,9 @@ class CramQueueManager implements QueueManager{
     }
 
     public Item getNext(Item item){
+        if(item == null && learnQueue.size() > 0){
+            return learnQueue.get(0);
+        }
         if(learnQueue.size() == 0){
             return null;
         }

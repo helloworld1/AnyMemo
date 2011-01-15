@@ -56,7 +56,7 @@
     <string name="memo_btn2_anki_text">Trouvé</string>
     <string name="memo_btn3_anki_text">Trouvé</string>
     <string name="memo_btn4_anki_text">Facile</string>
-    <string name="memo_btn5_anki_text">Très facile</string>
+    <string name="memo_btn5_anki_text">Très fac.</string>
     <string name="memo_current_id">ID: </string>
     <string name="memo_edit_dialog_title">Editer</string>
     <string name="global_settings">Préf. générales</string>
@@ -109,7 +109,7 @@
     <string name="add_screen_gotoid">Aller vers ID</string>
     <string name="add_screen_back">Revenir</string>
     <string name="add_screen_next">Suivant</string>
-    <string name="add_screen_previous">Précédent</string>
+    <string name="add_screen_previous">Préc.</string>
     <string name="search_text">Chercher</string>
     <string name="goto_id_text">Aller vers ID</string>
     <string name="fb_create_db">Créer nouvelle pile</string>

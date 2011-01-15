@@ -616,10 +616,6 @@ public class MemoScreen extends AMActivity{
                 bgUpdateTask = new BackgroundUpdateTask();
                 bgUpdateTask.execute(currentItem);
 
-                currentItem = queueManager.getNext(currentItem);
-                if(currentItem != null){
-                    updateFlashcardView(false);
-                }
             }
         };
     }
@@ -764,6 +760,10 @@ public class MemoScreen extends AMActivity{
         public void onPreExecute(){
             super.onPreExecute();
             buttonDisabled = true;
+            currentItem = queueManager.getNext(currentItem);
+            if(currentItem != null){
+                updateFlashcardView(false);
+            }
             setProgressBarIndeterminateVisibility(true);
         }
 
