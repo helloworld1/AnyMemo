@@ -252,7 +252,7 @@
     <string name="exception_text">遇到异常</string>
     <string name="advanced_setting_text">高级功能 ...</string>
     <string name="db_merger_title">合并数据库</string>
-    <string name="db_merger_explaination">把目标数据库合并到源数据库</string>
+    <string name="db_merger_explaination">把源数据库合并到目标数据库</string>
     <string name="target_db_text">目标数据库(双击可以浏览)</string>
     <string name="source_db_text">源数据库(双击可以浏览)</string>
     <string name="exception_message">操作遇到异常</string>
