@@ -708,7 +708,7 @@ public class MemoScreen extends AMActivity{
     }
 
     void autoSpeak(){
-        if(currentItem != null){
+        if(currentItem != null && !buttonDisabled){
 
             if(settingManager.getSpeechControlMethod() == SettingManager.SpeechControlMethod.AUTOTAP || settingManager.getSpeechControlMethod() == SettingManager.SpeechControlMethod.AUTO){
                 if(!flashcardDisplay.isAnswerShown()){
