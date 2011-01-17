@@ -781,7 +781,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             tmpItem = new Item.Builder(tmpItem)
                 .setId(tmpItem.getId() + fromId)
                 .build();
-            items1.set(i, tmpItem);
+            items2.set(i, tmpItem);
         }
         items1.addAll(items2);
         insertListItems(items1);

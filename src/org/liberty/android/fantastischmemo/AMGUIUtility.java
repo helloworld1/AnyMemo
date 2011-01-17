@@ -95,6 +95,7 @@ import android.database.SQLException;
  * that generate dialogs or etc
  */
 public class AMGUIUtility{
+    private final static String TAG = "org.liberty.android.fantastischmemo.AMGUIUtility";
     private AMGUIUtility(){
         /* Shouldn't be invoked */
     }
@@ -143,6 +144,7 @@ public class AMGUIUtility{
                         public void run(){
                             mProgressDialog.dismiss();
                             displayException(context, context.getString(R.string.exception_text), context.getString(R.string.exception_message), e);
+                            Log.e(TAG, "Error running progress task", e);
                         }
                     });
                 }
