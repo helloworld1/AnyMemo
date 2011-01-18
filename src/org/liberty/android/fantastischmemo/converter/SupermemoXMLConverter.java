@@ -99,6 +99,7 @@ public class SupermemoXMLConverter extends org.xml.sax.helpers.DefaultHandler{
 	public void endElement(String namespaceURI, String localName, String qName) throws SAXException{
         if(localName.equals("SuperMemoElement")){
             itemBuilder.setId(count);
+            itemBuilder.setGrade(2);
             itemList.add(itemBuilder.build());
             itemBuilder = null;
             count += 1;
