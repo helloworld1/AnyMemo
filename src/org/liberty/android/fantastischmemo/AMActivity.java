@@ -81,6 +81,9 @@ public abstract class AMActivity extends Activity{
         else if(localeSetting.equals("FR")){
             locale = new Locale("FR");
         }
+        else if(localeSetting.equals("PT")){
+            locale = new Locale("PT");
+        }
         else{
             locale = Locale.getDefault();
         }
