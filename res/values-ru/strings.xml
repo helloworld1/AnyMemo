@@ -294,4 +294,5 @@
     <string name="reset_current_warning">Эта операция сбросит прогресс изучения только этой карточки. Отменить будет нельзя.</string>
     <string name="locale_korean_text">Корейский</string>
     <string name="locale_french_text">Французский</string>
+    <string name="locale_portuguese_text">Португальский</string>
 </resources>
