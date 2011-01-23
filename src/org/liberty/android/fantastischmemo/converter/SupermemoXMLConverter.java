@@ -62,6 +62,8 @@ public class SupermemoXMLConverter extends org.xml.sax.helpers.DefaultHandler{
     private List<Item> itemList;
     private Item.Builder itemBuilder;
     private int count = 1;
+    SimpleDateFormat supermemoFormat = new SimpleDateFormat("dd.MM.yy");
+    SimpleDateFormat anymemoFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	
 	private StringBuffer characterBuf;
@@ -99,7 +101,6 @@ public class SupermemoXMLConverter extends org.xml.sax.helpers.DefaultHandler{
 	public void endElement(String namespaceURI, String localName, String qName) throws SAXException{
         if(localName.equals("SuperMemoElement")){
             itemBuilder.setId(count);
-            itemBuilder.setGrade(2);
             itemList.add(itemBuilder.build());
             itemBuilder = null;
             count += 1;
@@ -119,13 +120,27 @@ public class SupermemoXMLConverter extends org.xml.sax.helpers.DefaultHandler{
         if(localName.equals("Interval")){
             itemBuilder.setInterval(Integer.parseInt(characterBuf.toString()));
         }
+        if(localName.equals("AFactor")){
+            double g = Double.parseDouble(characterBuf.toString());
+            if(g <= 1.5){
+                itemBuilder.setGrade(1);
+            }
+            else if(g <= 5.5){
+                itemBuilder.setGrade(2);
+            }
+            else{
+                itemBuilder.setGrade(3);
+            }
+        }
+        if(localName.equals("UFactor")){
+            double e = Double.parseDouble(characterBuf.toString());
+            itemBuilder.setEasiness(e);
+        }
         if(localName.equals("LastRepetition")){
             try{
                 /* Convert date format from SM to AM*/
-                SimpleDateFormat sf = new SimpleDateFormat("dd.MM.yy");
-                Date date = sf.parse(characterBuf.toString());
-                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                itemBuilder.setDateLearn(df.format(date));
+                Date date = supermemoFormat.parse(characterBuf.toString());
+                itemBuilder.setDateLearn(anymemoFormat.format(date));
             }
             catch(ParseException e){
                 Log.e(TAG, "Parsing date error: " + characterBuf.toString(), e);
