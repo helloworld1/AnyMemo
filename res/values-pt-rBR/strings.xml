@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     <string name="app_name">AnyMemo</string>
-    <string name="app_full_name">AnyMemo Free</string>
+    <string name="app_full_name">AnyMemo Gratuito</string>
     <string name="ok_text">OK</string>
     <string name="cancel_text">Cancelar</string>
     <string name="yes_text">Sim</string>
@@ -44,18 +44,18 @@
     <string name="memo_btn3_text">3 Difícil</string>
     <string name="memo_btn4_text">4 Fácil</string>
     <string name="memo_btn5_text">5 Muito Fácil</string>
-    <string name="memo_btn0_help_text">You have forgotten this card
-    completely.</string>
-    <string name="memo_btn1_help_text">You have forgotten this card
-    completely.</string>
-    <string name="memo_btn2_help_text">Barely correct answer. The interval is
-    too long.</string>
-    <string name="memo_btn3_help_text">Correct answer but with much effort. The
-    interval was probably too long.</string>
-    <string name="memo_btn4_help_text">Correct answer, with some effort. The
-    interval was probably just right.</string>
-    <string name="memo_btn5_help_text">Correct answer, but without any
-    difficulties. The interval was probably too short.</string>
+    <string name="memo_btn0_help_text">Você esqueceu esta carta
+    completamente.</string>
+    <string name="memo_btn1_help_text">Você esqueceu esta carta
+    completamente.</string>
+    <string name="memo_btn2_help_text">Resposta quase correta. O intervalo foi
+    muito longo.</string>
+    <string name="memo_btn3_help_text">Resposta correta, mas com muito esforço. O
+    intervalo foi longo.</string>
+    <string name="memo_btn4_help_text">Resposta correta com algum esforço. O
+    intervalo foi razoável.</string>
+    <string name="memo_btn5_help_text">Resposta correta sem nenhuma
+    dificuldade. O intervalo foi curto.</string>
     <string name="memo_btn0_brief_text">0</string>
     <string name="memo_btn1_brief_text">1</string>
     <string name="memo_btn2_brief_text">2</string>
@@ -91,13 +91,13 @@
     <string name="settings_answer_bg_color">Cor de Fundo das Respostas</string>
     <string name="settings_wipe">Apagar TODOS dados de aprendizagem</string>
     <string name="settings_shuffle">Embaralhar Todas Cartas</string>
-    <string name="settings_inverse">Swap the QA of all cards</string>
+    <string name="settings_inverse">Trocar as P/R de todas as cartas</string>
     <string name="settings_save">Salvar</string>
     <string name="settings_discard">Descartar</string>
     <string name="warning_text">Aviso</string>
     <string name="settings_wipe_warning">TODOS os dados de aprendizagem serão apagados!</string>
     <string name="settings_shuffle_warning">Esta operação irá embaralhar todas as cartas e não poderá ser desfeita.</string>
-    <string name="settings_inverse_warning">This operation will swap the location of question and answer. Swap&amp;dup will add all swapped cards to the back of current database instead of replacing.</string>
+    <string name="settings_inverse_warning">Esta operação irá trocar o local das perguntas e respostas. Trocar&amp;dup irá adicionar todas as cartas trocadas no fm do Banco de Dados em vez de substituir.</string>
     <string name="detail_update">Salvar Mudanças</string>
     <string name="detail_back">Voltar</string>
     <string name="detail_delete">Apagar</string>
@@ -157,7 +157,7 @@
     <string name="downloader_download_alert">Download: </string>
     <string name="downloader_download_alert_message">Detalhes: </string>
     <string name="about_title">Sobre</string>
-    <string name="about_text">Advanced spaced repetition flashcard learning software.&lt;br /&gt;&lt;br /&gt;Authors: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;Website: &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Acknowledge: Piotr Bazan, pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;Translators: Ladislav, jim4ever, paw3lk, Александр Гоменюк, Maksym Grinenko, Kim hyun-ho, Thomas Tempé, Alex Wirz Vieira</string>
+    <string name="about_text">Advanced spaced repetition flashcard learning software.&lt;br /&gt;&lt;br /&gt;Autores: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;Website: &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Acknowledge: Piotr Bazan, pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;Tradutores: Ladislav, jim4ever, paw3lk, Александр Гоменюк, Maksym Grinenko, Kim hyun-ho, Thomas Tempé, Alex Wirz Vieira</string>
     <string name="about_version">Histórico da Versão</string>
     <string name="what_is_new">Nova Versão Instalada</string>
     <string name="downloader_categories">Categorias</string>
@@ -168,7 +168,7 @@
     <string name="interface_locale_summary">Escolher a Linguagem da Interface.</string>
     <string name="settings_typeface_question">Fonte de pergunta definida pelo usuário (TTF)</string>
     <string name="settings_typeface_answer">Fonte de resposta definida pelo usuário (TTF)</string>
-    <string name="learn_ahead">Cram Review</string>
+    <string name="learn_ahead">Revisão Cram</string>
     <string name="menu_text">Menu</string>
     <string name="filter_text">Filtro</string>
     <string name="filter_failure_title">Filtro falhou</string>
@@ -211,15 +211,15 @@
     <string name="portrait_only_title">Modo Retrato</string>
     <string name="portrait_only_summary">Desabilitar completamente mudanças de orientação de tela</string>
     <string name="list_mode_text">Modo Lista</string>
-    <string name="merge_db_text">Merge DB</string>
-    <string name="merge_success_title">Merge Success</string>
-    <string name="merge_fail_title">Merge Failed</string>
-    <string name="merge_success_message">Successfully merge databases.</string>
-    <string name="merge_fail_message">Fail to merge databases. Error:</string>
-    <string name="merging_title">Merging...</string>
-    <string name="merging_summary">Merging databases. Please wait.</string>
-    <string name="merge_method_title">Merge method</string>
-    <string name="merge_method_message">Where to merge the database?</string>
+    <string name="merge_db_text">Mesclar DB</string>
+    <string name="merge_success_title">Mesclado com Sucesso</string>
+    <string name="merge_fail_title">Mesclagem Falhou</string>
+    <string name="merge_success_message">Mesclagem do DB concluída com sucesso.</string>
+    <string name="merge_fail_message">Falha ao mesclar DB. Erro:</string>
+    <string name="merging_title">Mesclando...</string>
+    <string name="merging_summary">Mesclando Banco de Dados. Por favor, espere.</string>
+    <string name="merge_method_title">Método de Mesclagem</string>
+    <string name="merge_method_message">Onde mesclar os Banco de Dados?</string>
     <string name="merge_method_here">A partir daqui</string>
     <string name="merge_method_end">No final</string>
     <string name="copy_text">Copiar</string>
@@ -239,13 +239,13 @@
     <string name="interface_category">Interface</string>
     <string name="misc_category">Misc</string>
     <string name="shuffling_cards_title">Embaralhar Cartas</string>
-    <string name="shuffling_cards_summary">Shuffle the cards for reviewing. It does not shuffle new cards globally.</string>
-    <string name="swap_qa_text">Swap Q and A</string>
-    <string name="remove_dup_text">Remover duplicates</string>
-    <string name="removing_dup_title">Removendo duplicates</string>
-    <string name="removing_dup_warning">Removing duplicate cards will take a very long time depending on the database size. Interrupting the process will result in a corrupted database!</string>
-    <string name="removing_dup_summary">Removing duplicate cards. It will take a
-    long time for large databases.</string>
+    <string name="shuffling_cards_summary">Embaralhar cartas para revisão. Isto não irá embaralhar novas cartas globalmente.</string>
+    <string name="swap_qa_text">Inverter P/R</string>
+    <string name="remove_dup_text">Remover duplicados</string>
+    <string name="removing_dup_title">Removendo duplicados</string>
+    <string name="removing_dup_warning">Remover cartas duplicadas pode demorar muito tempo dependendo do tamanho do Banco de Dados. Interromper o processo irá corromper o Banco de Dados!</string>
+    <string name="removing_dup_summary">Removendo cartas duplicadas. Isto poderá demorar
+    para grandes Bancos de Dados.</string>
     <string name="startup_title">Tela Inicial</string>
     <string name="startup_summary">Configurar a Tela Inicial.</string>
     <string name="detail_reset">Resetar os dados de aprendizagem</string>
@@ -269,7 +269,7 @@
     <string name="enable_third_party_arabic_summary">Habilitar agawish Better-Arabic-Reshaper engine (alpha quality)</string>
     <string name="donate_text">Doações</string>
     <string name="buy_pro_text">Comprar a versão Pró</string>
-    <string name="donate_summary">You can donate AnyMemo Project by buying the pro version on Android Market or pledge online at &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt; Thank you for your support.</string>
+    <string name="donate_summary">Você pode fazer doações para o Projeto AnyMemo comprando a versão Pró no Mercado Android ou pelo site &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt; Obrigado pela ajuda.</string>
     <string name="anymemo_pro_link">market://search?q=pname:org.liberty.android.fantastischmemopro</string>
     <string name="goto_prev_screen">Ir para a tela de Visualização/Edição</string>
     <string name="exception_text">Exceção</string>
@@ -311,8 +311,8 @@
     <string name="download_source_anymemo">http://anymemo.org (padrão)</string>
     <string name="download_source_fe">http://flashcardexchange.com(experimental)</string>
     <string name="download_source_ss">http://studystack.com(experimental)</string>
-    <string name="swap_text">Swap</string>
-    <string name="swapdup_text">Swap&amp;Dup</string>
+    <string name="swap_text">Trocar</string>
+    <string name="swapdup_text">Trocar&amp;Dup</string>
     <string name="locale_german_text">Alemão</string>
     <string name="reset_current_warning">Esta operação irá resetar apenas os dados desta carta. Esta operação não poderá ser desfeita.</string>
     <string name="locale_korean_text">Coreano</string>
