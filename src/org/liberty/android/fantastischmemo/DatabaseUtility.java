@@ -193,7 +193,8 @@ public class DatabaseUtility{
                             /* Set interval to a large number so it will never appear */
                             Item newItem = new Item.Builder(item)
                                 .setInterval(100000)
-                                .setEasiness(1.0)
+                                .setEasiness(4.0)
+                                .setAcqReps(10)
                                 .build();
                             dbHelper.addOrReplaceItem(newItem);
                             dbHelper.close();
