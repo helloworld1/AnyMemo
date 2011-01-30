@@ -53,9 +53,39 @@
                 android:layout_height="fill_parent"
                 android:inputType="textMultiLine"
                 android:gravity="top"
-                android:minLines="3"
+                android:minLines="1"
                 android:layout_weight="1"
                 android:background="@android:drawable/editbox_background"/>
+            <TextView 
+                android:text="@string/note_text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dip"/>
+            <EditText
+                android:id="@+id/edit_dialog_note_entry"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:inputType="textMultiLine"
+                android:gravity="top"
+                android:minLines="1"
+                android:layout_weight="1"
+                android:background="@android:drawable/editbox_background"/>
+            <RadioGroup
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/add_here_radio"
+                    android:text="@string/add_in_place" />
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/add_back_radio"
+                    android:text="@string/add_back" />
+            </RadioGroup>
+
         </LinearLayout>
     </ScrollView>
     <LinearLayout

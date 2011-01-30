@@ -75,14 +75,16 @@ public class CardEditor extends Activity implements View.OnClickListener{
     private final static String TAG = "org.liberty.android.fantastischmemo.CardEditor";
     private final int ACTIVITY_IMAGE_FILE = 1;
     private final int ACTIVITY_AUDIO_FILE = 2;
-    private Item currentItem;
+    private Item oldItem = null;
     private EditText questionEdit;
     private EditText answerEdit;
     private EditText categoryEdit;
+    private EditText noteEdit;
     private Button btnSave;
     private Button btnCancel;
     private String dbName = null;
     private String dbPath = null;
+    private boolean isEditNew = true;
 
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -90,28 +92,35 @@ public class CardEditor extends Activity implements View.OnClickListener{
         setTitle(R.string.memo_edit_dialog_title);
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
-			currentItem = (Item)extras.getSerializable("item");
+			oldItem = (Item)extras.getSerializable("item");
 			dbName = extras.getString("dbname");
 			dbPath = extras.getString("dbpath");
 		}
         questionEdit = (EditText)findViewById(R.id.edit_dialog_question_entry);
         answerEdit = (EditText)findViewById(R.id.edit_dialog_answer_entry);
         categoryEdit = (EditText)findViewById(R.id.edit_dialog_category_entry);
+        noteEdit = (EditText)findViewById(R.id.edit_dialog_note_entry);
         btnSave = (Button)findViewById(R.id.edit_dialog_button_save);
         btnCancel = (Button)findViewById(R.id.edit_dialog_button_cancel);
         btnSave.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
-        if(currentItem == null){
-            currentItem = new Item.Builder()
-                .setId(-1)
-                .build();
-             /* We set -1 here if it is a new item
-             * this will be changed later when the dbHelper is initialized*/
+        if(oldItem == null){
+            isEditNew = true;
         }
 
-        questionEdit.setText(currentItem.getQuestion());
-        answerEdit.setText(currentItem.getAnswer());
-        categoryEdit.setText(currentItem.getCategory());
+        else{
+            if(oldItem.getId() == -1){
+                isEditNew = true;
+            }
+            else{
+                isEditNew = false;
+            }
+            questionEdit.setText(oldItem.getQuestion());
+            answerEdit.setText(oldItem.getAnswer());
+            categoryEdit.setText(oldItem.getCategory());
+            noteEdit.setText(oldItem.getNote());
+        }
+
     }
     
     public void onClick(View v){
@@ -119,18 +128,27 @@ public class CardEditor extends Activity implements View.OnClickListener{
             String qText = questionEdit.getText().toString();
             String aText = answerEdit.getText().toString();
             String cText = categoryEdit.getText().toString();
+            String nText = noteEdit.getText().toString();
             HashMap<String, String> hm = new HashMap<String, String>();
-            currentItem = new Item.Builder(currentItem)
-                .setQuestion(qText)
-                .setAnswer(aText)
-                .setCategory(cText)
-                .build();
+            Item currentItem = null;
             try{
                 DatabaseHelper dbHelper = new DatabaseHelper(this, dbPath, dbName);
                 /* Here we check if the item is newly created */
-                if(currentItem.getId() == -1){
-                    currentItem = new Item.Builder(currentItem)
+                if(isEditNew){
+                    currentItem = new Item.Builder()
                         .setId(dbHelper.getNewId())
+                        .setQuestion(qText)
+                        .setAnswer(aText)
+                        .setCategory(cText)
+                        .setNote(nText)
+                        .build();
+                }
+                else{
+                    currentItem = new Item.Builder(oldItem)
+                        .setQuestion(qText)
+                        .setAnswer(aText)
+                        .setCategory(cText)
+                        .setNote(nText)
                         .build();
                 }
                 dbHelper.addOrReplaceItem(currentItem);
@@ -146,13 +164,12 @@ public class CardEditor extends Activity implements View.OnClickListener{
             resultIntent.putExtra("item", currentItem);
         	setResult(Activity.RESULT_OK, resultIntent);    			
             finish();
-
         }
         else if(v == btnCancel){
             String qText = questionEdit.getText().toString();
             String aText = answerEdit.getText().toString();
             String cText = categoryEdit.getText().toString();
-            if(!qText.equals(currentItem.getQuestion()) || !aText.equals(currentItem.getAnswer()) || !cText.equals(currentItem.getCategory())){
+            if(!isEditNew && (!qText.equals(oldItem.getQuestion()) || !aText.equals(oldItem.getAnswer()) || !cText.equals(oldItem.getCategory()))){
                 new AlertDialog.Builder(this)
                     .setTitle(R.string.warning_text)
                     .setMessage(R.string.edit_dialog_unsave_warning)
