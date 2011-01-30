@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     <string name="app_name">AnyMemo</string>
     <string name="app_full_name">AnyMemo Gratuito</string>
@@ -16,7 +16,7 @@
     <string name="undo_fail_message">Você pode desfazer apenas 1 carta.</string>
     <string name="open_button_text">Abrir Banco de Dados</string>
     <string name="recent_button_text">Abrir Banco de Dados Recente</string>
-    <string name="recent_databases">Banco de Dados Recente</string>
+    <string name="recent_databases">Bancos de Dados Recentes</string>
     <string name="option_button_text">Opções</string>
     <string name="download_button_text">Download do Banco de Dados</string>
     <string name="about_button_text">Sobre</string>
@@ -38,12 +38,12 @@
     <string name="memo_no_item_message">Não existem cartas para aprender por
     enquanto. Recomendamos voltar. Use a revisão cram para aprender além do
     tempo.</string>
-    <string name="memo_btn0_text">0 Esqueci</string>
+    <string name="memo_btn0_text">0 Alzheimer</string>
     <string name="memo_btn1_text">1 Esqueci</string>
-    <string name="memo_btn2_text">2 Muito Difícil</string>
+    <string name="memo_btn2_text">2 Insano</string>
     <string name="memo_btn3_text">3 Difícil</string>
-    <string name="memo_btn4_text">4 Fácil</string>
-    <string name="memo_btn5_text">5 Muito Fácil</string>
+    <string name="memo_btn4_text">4 Normal</string>
+    <string name="memo_btn5_text">5 Fácil</string>
     <string name="memo_btn0_help_text">Você esqueceu esta carta
     completamente.</string>
     <string name="memo_btn1_help_text">Você esqueceu esta carta
@@ -62,12 +62,12 @@
     <string name="memo_btn3_brief_text">3</string>
     <string name="memo_btn4_brief_text">4</string>
     <string name="memo_btn5_brief_text">5</string>
-    <string name="memo_btn0_anki_text">Novamente</string>
-    <string name="memo_btn1_anki_text">Novamente</string>
+    <string name="memo_btn0_anki_text">De novo</string>
+    <string name="memo_btn1_anki_text">De novo</string>
     <string name="memo_btn2_anki_text">Bom</string>
     <string name="memo_btn3_anki_text">Bom</string>
     <string name="memo_btn4_anki_text">Fácil</string>
-    <string name="memo_btn5_anki_text">Muito Fácil</string>
+    <string name="memo_btn5_anki_text">Fácil</string>
     <string name="memo_current_id">ID: </string>
     <string name="memo_edit_dialog_title">Editar</string>
     <string name="global_settings">Configurações Globais</string>
@@ -105,9 +105,9 @@
     <string name="skip_text">Pular</string>
     <string name="skip_warning">Este ítem nunca mais irá aparecer para aprendizado. Você realmente quer ignorá-lo?</string>
     <string name="stat_total">Total: </string>
-    <string name="stat_scheduled">Rev: </string>
-    <string name="stat_new">Novo: </string>
-    <string name="open_open_new_db">Abrir Banco de Dados existente</string>
+    <string name="stat_scheduled">Agendadas: </string>
+    <string name="stat_new">Novas: </string>
+    <string name="open_open_new_db">Abrir Banco de Dados</string>
     <string name="open_import_xml">Importar de XML</string>
     <string name="clear_all_pref">Resetar Todas Preferencias</string>
     <string name="clear_recent_list">Limpar a Lista Recente</string>
@@ -154,7 +154,7 @@
     <string name="downloader_download_success_message">O Banco de Dados foi armazenado em: </string>
     <string name="downloader_download_fail">O Download Falhou</string>
     <string name="downloader_download_fail_message">Falha ao fazer Download do Banco de dados. Mensagem de Erro:</string>
-    <string name="downloader_download_alert">Download: </string>
+    <string name="downloader_download_alert">Baixar: </string>
     <string name="downloader_download_alert_message">Detalhes: </string>
     <string name="about_title">Sobre</string>
     <string name="about_text">Advanced spaced repetition flashcard learning software.&lt;br /&gt;&lt;br /&gt;Autores: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;Website: &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Acknowledge: Piotr Bazan, pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;Tradutores: Ladislav, jim4ever, paw3lk, Александр Гоменюк, Maksym Grinenko, Kim hyun-ho, Thomas Tempé, Alex Wirz Vieira</string>
@@ -235,7 +235,7 @@
     <string name="learn_queue_size_title">Tamanho da fila de aprendizado</string>
     <string name="learn_queue_size_summary">Control the internal flow of learning. Be careful!</string>
     <string name="actions_category">Ações</string>
-    <string name="learning_category">Learning</string>
+    <string name="learning_category">Aprendizado</string>
     <string name="interface_category">Interface</string>
     <string name="misc_category">Misc</string>
     <string name="shuffling_cards_title">Embaralhar Cartas</string>
@@ -300,9 +300,9 @@
     <string name="settings_color_answer_bg">Answer Background</string>
     <string name="settings_color_separator">Separador</string>
     <string name="screen_main_text">Tela Principal</string>
-    <string name="screen_edit_text">Editar Tela</string>
-    <string name="screen_open_text">Abrir Tela</string>
-    <string name="screen_memo_text">Tela Memo</string>
+    <string name="screen_edit_text">Tela de Edição</string>
+    <string name="screen_open_text">Tela de Abertura</string>
+    <string name="screen_memo_text">Tela de Memorização</string>
     <string name="disabled_text">Desabilitar</string>
     <string name="notification_1hr_text">1 hora</string>
     <string name="notification_6hr_text">6 horas</string>
