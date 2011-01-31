@@ -65,15 +65,20 @@ public class DBImporter{
                 throw new Exception("Malformed CSV file. Please make sure the CSV's first column is question, second one is answer and the optinal third one is category");
             }
             count++;
+            String note = "";
             String category = "";
             if(nextLine.length >= 3){
                 category = nextLine[2];
+            }
+            if(nextLine.length >= 4){
+                note = nextLine[3];
             }
             Item item = new Item.Builder()
                 .setId(count)
                 .setQuestion(nextLine[0])
                 .setAnswer(nextLine[1])
                 .setCategory(category)
+                .setNote(note)
                 .build();
             itemList.add(item);
         }
@@ -118,14 +123,20 @@ public class DBImporter{
             count++;
 
             String category = "";
+            String note = "";
             if(nextLine.length >= 3){
                 category = nextLine[2];
             }
+            if(nextLine.length >= 4){
+                note = nextLine[3];
+            }
+
             Item item = new Item.Builder()
                 .setId(count)
                 .setQuestion(nextLine[0])
                 .setAnswer(nextLine[1])
                 .setCategory(category)
+                .setNote(note)
                 .build();
             itemList.add(item);
         }
