@@ -111,7 +111,9 @@ public class CardEditor extends Activity implements View.OnClickListener{
         btnCancel.setOnClickListener(this);
         if(oldItem == null){
             /* Use default parameters for new item */
-            oldItem = new Item.Builder().build();
+            oldItem = new Item.Builder()
+                .setId(0)
+                .build();
         }
 
         /* Retain the last category when editing new */
@@ -138,13 +140,21 @@ public class CardEditor extends Activity implements View.OnClickListener{
                 DatabaseHelper dbHelper = new DatabaseHelper(this, dbPath, dbName);
                 /* Here we check if the item is newly created */
                 if(isEditNew){
+                    int newId;
+                    if(addBack){
+                        newId = dbHelper.getNewId();
+                    }
+                    else{
+                        newId = oldItem.getId() + 1;
+                    }
                     currentItem = new Item.Builder(oldItem)
-                        .setId(dbHelper.getNewId())
+                        .setId(newId)
                         .setQuestion(qText)
                         .setAnswer(aText)
                         .setCategory(cText)
                         .setNote(nText)
                         .build();
+                    dbHelper.insertItem(currentItem, newId - 1);
                 }
                 else{
                     currentItem = new Item.Builder(oldItem)
@@ -153,8 +163,8 @@ public class CardEditor extends Activity implements View.OnClickListener{
                         .setCategory(cText)
                         .setNote(nText)
                         .build();
+                    dbHelper.addOrReplaceItem(currentItem);
                 }
-                dbHelper.addOrReplaceItem(currentItem);
                 dbHelper.close();
             }
             catch(Exception e){
@@ -319,8 +329,35 @@ public class CardEditor extends Activity implements View.OnClickListener{
             addRadio.setVisibility(View.GONE);
         }
         else{
-            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+            /* 
+             * The radio button is only valid when the user is creating 
+             * new items. If the user is editng, it has no effect at all
+             */
+            addRadio.setVisibility(View.VISIBLE);
+            final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
             addBack = settings.getBoolean("add_back", true);
+            if(addBack){
+                addRadio.check(R.id.add_back_radio);
+            }
+            else{
+                addRadio.check(R.id.add_here_radio);
+            }
+            RadioGroup.OnCheckedChangeListener changeListener = new RadioGroup.OnCheckedChangeListener(){
+                public void onCheckedChanged(RadioGroup group, int checkedId){
+        	        SharedPreferences.Editor editor = settings.edit();
+                    if(checkedId == R.id.add_here_radio){
+                        addBack = false;
+                        editor.putBoolean("add_back", false);
+                        editor.commit();
+                    }
+                    else{
+                        addBack = true;
+                        editor.putBoolean("add_back", true);
+                        editor.commit();
+                    }
+                }
+            };
+            addRadio.setOnCheckedChangeListener(changeListener);
         }
 
 
