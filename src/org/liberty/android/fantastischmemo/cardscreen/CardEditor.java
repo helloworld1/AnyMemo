@@ -65,6 +65,7 @@ import android.widget.ListView;
 import android.widget.ArrayAdapter;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView;
+import android.widget.RadioGroup;
 import android.util.Log;
 import android.os.SystemClock;
 import android.os.Environment;
@@ -80,6 +81,8 @@ public class CardEditor extends Activity implements View.OnClickListener{
     private EditText answerEdit;
     private EditText categoryEdit;
     private EditText noteEdit;
+    private RadioGroup addRadio;
+    private boolean addBack = true;
     private Button btnSave;
     private Button btnCancel;
     private String dbName = null;
@@ -95,6 +98,7 @@ public class CardEditor extends Activity implements View.OnClickListener{
 			oldItem = (Item)extras.getSerializable("item");
 			dbName = extras.getString("dbname");
 			dbPath = extras.getString("dbpath");
+            isEditNew = extras.getBoolean("new", false);
 		}
         questionEdit = (EditText)findViewById(R.id.edit_dialog_question_entry);
         answerEdit = (EditText)findViewById(R.id.edit_dialog_answer_entry);
@@ -102,24 +106,23 @@ public class CardEditor extends Activity implements View.OnClickListener{
         noteEdit = (EditText)findViewById(R.id.edit_dialog_note_entry);
         btnSave = (Button)findViewById(R.id.edit_dialog_button_save);
         btnCancel = (Button)findViewById(R.id.edit_dialog_button_cancel);
+        addRadio = (RadioGroup)findViewById(R.id.add_radio);
         btnSave.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
         if(oldItem == null){
-            isEditNew = true;
+            /* Use default parameters for new item */
+            oldItem = new Item.Builder().build();
         }
 
-        else{
-            if(oldItem.getId() == -1){
-                isEditNew = true;
-            }
-            else{
-                isEditNew = false;
-            }
+        /* Retain the last category when editing new */
+        categoryEdit.setText(oldItem.getCategory());
+        if(!isEditNew){
             questionEdit.setText(oldItem.getQuestion());
             answerEdit.setText(oldItem.getAnswer());
-            categoryEdit.setText(oldItem.getCategory());
             noteEdit.setText(oldItem.getNote());
         }
+        /* Should be called after the private fields are inited */
+        setInitRadioButton();
 
     }
     
@@ -135,7 +138,7 @@ public class CardEditor extends Activity implements View.OnClickListener{
                 DatabaseHelper dbHelper = new DatabaseHelper(this, dbPath, dbName);
                 /* Here we check if the item is newly created */
                 if(isEditNew){
-                    currentItem = new Item.Builder()
+                    currentItem = new Item.Builder(oldItem)
                         .setId(dbHelper.getNewId())
                         .setQuestion(qText)
                         .setAnswer(aText)
@@ -306,11 +309,22 @@ public class CardEditor extends Activity implements View.OnClickListener{
         }
     }
 
-
-
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+    }
+
+    private void setInitRadioButton(){
+        if(!isEditNew){
+            addRadio.setVisibility(View.GONE);
+        }
+        else{
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+            addBack = settings.getBoolean("add_back", true);
+        }
+
+
+
     }
 
 }

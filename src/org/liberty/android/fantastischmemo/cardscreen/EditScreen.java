@@ -479,13 +479,8 @@ public class EditScreen extends AMActivity{
             Intent myIntent = new Intent(EditScreen.this, CardEditor.class);
             myIntent.putExtra("dbpath", dbPath);
             myIntent.putExtra("dbname", dbName);
-            Item.Builder builder = new Item.Builder();
-            /* New item has id -1 */
-            builder.setId(-1);
-            if(currentItem != null && currentItem.getCategory() != null){
-                builder.setCategory(currentItem.getCategory());
-            }
-            myIntent.putExtra("item", builder.build());
+            myIntent.putExtra("item", currentItem);
+            myIntent.putExtra("new", true);
             startActivityForResult(myIntent, ACTIVITY_EDIT);
         }
     };
@@ -496,6 +491,7 @@ public class EditScreen extends AMActivity{
             myIntent.putExtra("item", currentItem);
             myIntent.putExtra("dbpath", dbPath);
             myIntent.putExtra("dbname", dbName);
+            myIntent.putExtra("new", false);
             startActivityForResult(myIntent, ACTIVITY_EDIT);
         }
     };
