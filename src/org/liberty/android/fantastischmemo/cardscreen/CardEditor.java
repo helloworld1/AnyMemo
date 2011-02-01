@@ -25,6 +25,8 @@ import org.liberty.android.fantastischmemo.tts.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import android.text.Editable;
 import android.app.Activity;
@@ -118,6 +120,12 @@ public class CardEditor extends Activity implements View.OnClickListener{
 
         /* Retain the last category when editing new */
         categoryEdit.setText(oldItem.getCategory());
+        /* Prefill the note if it is empty */
+
+        if(isEditNew || oldItem.getNote().equals("")){
+            String dt = SimpleDateFormat.getDateTimeInstance().format(new Date());
+            noteEdit.setText(dt);
+        }
         if(!isEditNew){
             questionEdit.setText(oldItem.getQuestion());
             answerEdit.setText(oldItem.getAnswer());
