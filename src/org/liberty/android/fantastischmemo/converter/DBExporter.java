@@ -87,11 +87,12 @@ public class DBExporter{
         if(itemList == null || itemList.size() == 0){
             throw new IOException("Can't retrieve items for database: " + dbPath + "/" + dbName);
         }
-        String[] entries = new String[3];
+        String[] entries = new String[4];
         for(Item item : itemList){
             entries[0] = item.getQuestion();
             entries[1] = item.getAnswer();
             entries[2] = item.getCategory();
+            entries[3] = item.getNote();
             writer.writeNext(entries);
         }
         writer.close();
@@ -107,11 +108,12 @@ public class DBExporter{
         if(itemList == null || itemList.size() == 0){
             throw new IOException("Can't retrieve items for database: " + dbPath + "/" + dbName);
         }
-        String[] entries = new String[3];
+        String[] entries = new String[4];
         for(Item item : itemList){
             entries[0] = item.getQuestion();
             entries[1] = item.getAnswer();
             entries[2] = item.getCategory();
+            entries[3] = item.getNote();
             writer.writeNext(entries);
         }
         writer.close();
