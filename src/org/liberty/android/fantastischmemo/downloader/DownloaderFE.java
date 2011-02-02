@@ -26,6 +26,8 @@ import java.util.Enumeration;
 import java.util.Comparator;
 import java.util.List;
 import java.util.LinkedList;
+import java.util.HashMap;
+
 import java.net.URLEncoder;
 import java.io.IOException;
 import java.io.InputStream;
@@ -363,10 +365,32 @@ public class DownloaderFE extends DownloaderBase{
                 Node childNode = childNodes.item(j);
                 if(childNode.hasChildNodes()){
                     if(childNode.getNodeName().equals("question")){
-                        curQuestion = childNode.getFirstChild().getNodeValue();
+                        /*
+                         * Iterate through each child so it can handle the mal-formed line break
+                         * in FE.
+                         */
+                        Node n = childNode.getFirstChild();
+                        while(n != null){
+                            if(n.getNodeName().equals("br")){
+                                curQuestion += "<br />";
+                            }
+                            else{
+                                curQuestion += n.getNodeValue();
+                            }
+                            n = n.getNextSibling();
+                        }
                     }
                     else if(childNode.getNodeName().equals("answer")){
-                        curAnswer = childNode.getFirstChild().getNodeValue();
+                        Node n = childNode.getFirstChild();
+                        while(n != null){
+                            if(n.getNodeName().equals("br")){
+                                curAnswer += "<br />";
+                            }
+                            else{
+                                curAnswer += n.getNodeValue();
+                            }
+                            n = n.getNextSibling();
+                        }
                     }
                 }
             }
@@ -389,6 +413,9 @@ public class DownloaderFE extends DownloaderBase{
         DatabaseHelper.createEmptyDatabase(dbpath, dbname);
         DatabaseHelper dbHelper = new DatabaseHelper(this, dbpath, dbname);
         dbHelper.insertListItems(itemList);
+        HashMap hm = new HashMap();
+        hm.put("html_display", "both");
+        dbHelper.setSettings(hm);
         dbHelper.close();
     }
 
