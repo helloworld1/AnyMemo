@@ -191,7 +191,7 @@ public class EditScreen extends AMActivity{
             {
 
                 Bundle extras = data.getExtras();
-                Item item = (Item)extras.getSerializable("item");
+                Item item = extras.getParcelable("item");
                 if(item != null){
                     currentItem = item;
                 }
@@ -215,7 +215,7 @@ public class EditScreen extends AMActivity{
             case ACTIVITY_LIST:
             {
                 Bundle extras = data.getExtras();
-                currentItem = (Item)extras.getSerializable("item");
+                currentItem = extras.getParcelable("item");
                 restartActivity();
                 break;
             }
@@ -477,9 +477,9 @@ public class EditScreen extends AMActivity{
     private View.OnClickListener newButtonListener = new View.OnClickListener(){
         public void onClick(View v){
             Intent myIntent = new Intent(EditScreen.this, CardEditor.class);
+            myIntent.putExtra("item", currentItem); 
             myIntent.putExtra("dbpath", dbPath);
             myIntent.putExtra("dbname", dbName);
-            myIntent.putExtra("item", currentItem);
             myIntent.putExtra("new", true);
             startActivityForResult(myIntent, ACTIVITY_EDIT);
         }

@@ -31,11 +31,13 @@ import java.io.Serializable;
 
 
 import android.util.Log;
+import android.os.Parcelable;
+import android.os.Parcel;
 
 /* 
  * This class representating the card item is immutable
  */
-public final class Item implements Serializable, Comparable<Item>{
+public final class Item implements Parcelable, Comparable<Item>{
 	private final int _id;
 	private final String date_learn;
 	private final int interval;
@@ -49,10 +51,9 @@ public final class Item implements Serializable, Comparable<Item>{
 	private final String question;
 	private final String answer;
 	private final String note;
-    private String category;
-    /* Make it static for performance */
-    private volatile SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-    public final static String TAG = "org.liberty.android.fantastischmemo.Item";
+    private final String category;
+    private final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+    private final static String TAG = "org.liberty.android.fantastischmemo.Item";
 	
 	public static class Builder{
 		private int _id = 0;
@@ -179,6 +180,57 @@ public final class Item implements Serializable, Comparable<Item>{
         note = builder.note;
         category = builder.category;
     }
+    /* Parcelable requirement */
+    @Override
+    public int describeContents(){
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags){
+        out.writeInt(_id);
+        out.writeString(date_learn);
+        out.writeInt(interval);
+        out.writeInt(grade);
+        out.writeDouble(easiness);
+        out.writeInt(acq_reps);
+        out.writeInt(ret_reps);
+        out.writeInt(lapses);
+        out.writeInt(acq_reps_since_lapse);
+        out.writeInt(ret_reps_since_lapse);
+        out.writeString(question);
+        out.writeString(answer);
+        out.writeString(note);
+        out.writeString(category);
+    }
+
+     public static final Parcelable.Creator<Item> CREATOR
+             = new Parcelable.Creator<Item>() {
+         public Item createFromParcel(Parcel in) {
+             return new Item.Builder()
+                 .setId(in.readInt())
+                 .setDateLearn(in.readString())
+                 .setInterval(in.readInt())
+                 .setGrade(in.readInt())
+                 .setEasiness(in.readDouble())
+                 .setAcqReps(in.readInt())
+                 .setRetReps(in.readInt())
+                 .setLapses(in.readInt())
+                 .setAcqRepsSinceLapse(in.readInt())
+                 .setRetRepsSinceLapse(in.readInt())
+                 .setQuestion(in.readString())
+                 .setAnswer(in.readString())
+                 .setNote(in.readString())
+                 .setCategory(in.readString())
+                 .build();
+         }
+
+         public Item[] newArray(int size) {
+             return new Item[size];
+         }
+     };
+
+     /* End of parcelable requirement */
 
     public int getId(){
         return _id;

@@ -97,7 +97,7 @@ public class CardEditor extends Activity implements View.OnClickListener{
         setTitle(R.string.memo_edit_dialog_title);
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
-			oldItem = (Item)extras.getSerializable("item");
+			oldItem = (Item)extras.getParcelable("item");
 			dbName = extras.getString("dbname");
 			dbPath = extras.getString("dbpath");
             isEditNew = extras.getBoolean("new", false);

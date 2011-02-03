@@ -392,7 +392,7 @@ public class MemoScreen extends AMActivity{
             case ACTIVITY_EDIT:
             {
                 Bundle extras = data.getExtras();
-                Item item = (Item)extras.getSerializable("item");
+                Item item = extras.getParcelable("item");
                 if(item != null){
                     currentItem = item;
                     updateFlashcardView(false);
