@@ -155,7 +155,7 @@ public class CardEditor extends Activity implements View.OnClickListener{
                     else{
                         newId = oldItem.getId() + 1;
                     }
-                    currentItem = new Item.Builder(oldItem)
+                    currentItem = new Item.Builder()
                         .setId(newId)
                         .setQuestion(qText)
                         .setAnswer(aText)
