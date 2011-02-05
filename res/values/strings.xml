@@ -314,7 +314,7 @@
     <string name="reset_current_warning">This operation will only reset the learning data of this card. It can not be undone.</string>
     <string name="locale_korean_text">Korean</string>
     <string name="locale_french_text">French</string>
-    <string name="locale_portuguese_text">Portuguese (Brzail)</string>
+    <string name="locale_portuguese_text">Portuguese (Brazil)</string>
     <string name="note_text">Note</string>
     <string name="add_in_place">Add card here</string>
     <string name="add_back">Add card to back</string>
