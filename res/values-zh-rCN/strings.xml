@@ -291,4 +291,11 @@
     <string name="swap_text">交换</string>
     <string name="swapdup_text">交换且复制</string>
     <string name="locale_german_text">德语</string>
+    <string name="reset_current_warning">该操作将重置当前卡片的学习信息</string>
+    <string name="locale_korean_text">韩语</string>
+    <string name="locale_french_text">法语</string>
+    <string name="locale_portuguese_text">葡萄牙语(巴西)</string>
+    <string name="note_text">笔记</string>
+    <string name="add_in_place">添加到当前位置</string>
+    <string name="add_back">添加到最后</string>
 </resources>
