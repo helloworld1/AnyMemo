@@ -92,12 +92,12 @@ public class AnyMemoService extends Service{
             if(revCount == 0){
                 updateViews.setTextViewText(R.id.widget_review_count, getString(R.string.widget_no_review));
                 /* Dark green color */
-                updateViews.setTextColor(R.id.widget_review_count, 0xFF009F00);
+                updateViews.setTextColor(R.id.widget_review_count, 0xFF008100);
             }
             else{
                 updateViews.setTextViewText(R.id.widget_review_count, getString(R.string.stat_scheduled) + " " + dbInfo.getRevCount());
                 if(revCount <= 10){
-                    updateViews.setTextColor(R.id.widget_review_count, 0xFF009F00);
+                    updateViews.setTextColor(R.id.widget_review_count, 0xFF008100);
                 }
                 else if(revCount <= 50){
                     updateViews.setTextColor(R.id.widget_review_count, Color.BLACK);
