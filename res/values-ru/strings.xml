@@ -296,6 +296,6 @@
     <string name="locale_french_text">Французский</string>
     <string name="locale_portuguese_text">Португальский (Бразилия)</string>
     <string name="note_text">Заметка</string>
-    <string name="add_in_place">Добавить карту сюда</string>
-    <string name="add_back">Добавить карту сзади</string>
+    <string name="add_in_place">После текущей</string>
+    <string name="add_back">В конце</string>
 </resources>
