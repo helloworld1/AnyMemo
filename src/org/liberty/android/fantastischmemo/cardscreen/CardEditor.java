@@ -122,7 +122,7 @@ public class CardEditor extends Activity implements View.OnClickListener{
         categoryEdit.setText(oldItem.getCategory());
         /* Prefill the note if it is empty */
 
-        if(isEditNew || oldItem.getNote().equals("")){
+        if(isEditNew){
             String dt = SimpleDateFormat.getDateTimeInstance().format(new Date());
             noteEdit.setText(dt);
         }
