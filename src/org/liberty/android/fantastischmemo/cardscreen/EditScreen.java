@@ -272,11 +272,13 @@ public class EditScreen extends AMActivity{
 
             case R.id.editmenu_detail_id:
             {
-                Intent myIntent = new Intent(this, DetailScreen.class);
-                myIntent.putExtra("dbname", this.dbName);
-                myIntent.putExtra("dbpath", this.dbPath);
-                myIntent.putExtra("itemid", currentItem.getId());
-                startActivityForResult(myIntent, 2);
+                if(currentItem != null){
+                    Intent myIntent = new Intent(this, DetailScreen.class);
+                    myIntent.putExtra("dbname", this.dbName);
+                    myIntent.putExtra("dbpath", this.dbPath);
+                    myIntent.putExtra("itemid", currentItem.getId());
+                    startActivityForResult(myIntent, 2);
+                }
                 return true;
             }
             case R.id.editmenu_list_id:
