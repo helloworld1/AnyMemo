@@ -6,7 +6,7 @@
     <string name="cancel_text">Cancelar</string>
     <string name="yes_text">Sim</string>
     <string name="no_text">Não</string>
-    <string name="back_menu_text">Preto</string>
+    <string name="back_menu_text">Voltar</string>
     <string name="detail_menu_text">Detalhes</string>
     <string name="settings_menu_text">Configurações</string>
     <string name="speak_question_menu_text">Falar a Pergunta</string>
