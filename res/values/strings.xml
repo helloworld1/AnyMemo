@@ -318,4 +318,5 @@
     <string name="note_text">Note</string>
     <string name="add_in_place">Add card here</string>
     <string name="add_back">Add card to back</string>
+    <string name="look_up_text">Look up in ColorDict</string>
 </resources>

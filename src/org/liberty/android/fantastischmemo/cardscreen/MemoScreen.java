@@ -367,6 +367,21 @@ public class MemoScreen extends AMActivity{
                 return true;
             }
 
+            case R.id.menu_context_lookup:
+            {
+                if(currentItem != null){
+                    Intent intent = new Intent("colordict.intent.action.SEARCH");
+                    intent.putExtra("EXTRA_QUERY", currentItem.getQuestion());
+                    intent.putExtra("EXTRA_FULLSCREEN", false);
+                    //intent.putExtra(EXTRA_HEIGHT, 400); //400pixel, if you don't specify, fill_parent"
+                    intent.putExtra("EXTRA_GRAVITY", Gravity.BOTTOM);
+                    //intent.putExtra(EXTRA_MARGIN_LEFT, 100);
+                    startActivity(intent);
+                }
+
+                return true;
+            }
+
             default:
             {
                 return super.onContextItemSelected(menuitem);
