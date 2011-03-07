@@ -339,7 +339,10 @@ public class EditScreen extends AMActivity{
             {
                 if(savedItem != null){
                     itemManager.insert(savedItem, currentItem.getId());
-                    currentItem = savedItem;
+                    /* Set the Id to the current one */
+                    currentItem = new Item.Builder(savedItem)
+                        .setId(currentItem.getId() + 1)
+                        .build();
                     flashcardDisplay.updateView(currentItem);
                     updateTitle();
                 }
