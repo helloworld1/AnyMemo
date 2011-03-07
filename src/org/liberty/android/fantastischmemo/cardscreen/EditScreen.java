@@ -576,12 +576,18 @@ public class EditScreen extends AMActivity{
     private View.OnClickListener prevButtonListener = new View.OnClickListener(){
         public void onClick(View v){
             gotoPrev();
+            if(questionTTS != null){
+                questionTTS.stop();
+            }
         }
     };
 
     private View.OnClickListener nextButtonListener = new View.OnClickListener(){
         public void onClick(View v){
             gotoNext();
+            if(answerTTS != null){
+                answerTTS.stop();
+            }
         }
     };
 

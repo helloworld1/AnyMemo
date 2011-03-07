@@ -615,7 +615,12 @@ public class MemoScreen extends AMActivity{
                 currentItem = currentItem.processAnswer(grade, true);
                 bgUpdateTask = new BackgroundUpdateTask();
                 bgUpdateTask.execute(currentItem);
-
+                if(questionTTS != null){
+                    questionTTS.stop();
+                }
+                if(answerTTS != null){
+                    answerTTS.stop();
+                }
             }
         };
     }

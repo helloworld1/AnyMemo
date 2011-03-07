@@ -43,6 +43,10 @@ public class AudioFileTTS implements AnyMemoTTS{
         speakWord.speakWord(text);
         return 0;
     }
+    public void stop(){
+        speakWord.stop();
+    }
+
     public void shutdown(){
         speakWord.shutdown();
     }

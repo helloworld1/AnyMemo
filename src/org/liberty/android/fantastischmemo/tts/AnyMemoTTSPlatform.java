@@ -51,6 +51,10 @@ public class AnyMemoTTSPlatform implements AnyMemoTTS, TextToSpeech.OnInitListen
 	public void shutdown(){
 			myTTS.shutdown();
 	}
+
+    public void stop(){
+        myTTS.stop();
+    }
 	
 	public int sayText(String s){
 		int status;

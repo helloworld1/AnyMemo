@@ -32,7 +32,7 @@ import android.util.Log;
 
 public class SpeakWord {
 	String mAudioDir;
-	MediaPlayer mp;
+	volatile MediaPlayer mp;
     String dbName;
     private final String TAG = "org.liberty.android.fantastischmemo.SpeakWord";
 		
@@ -104,12 +104,10 @@ public class SpeakWord {
             new Thread(){
                 public void run(){
                     try{
+                        mp.reset();
                         mp.setDataSource(fis.getFD());
                         mp.prepare();
                         mp.start();
-                        while(mp.isPlaying()){
-                        }
-                        mp.reset();
                     }
                     catch(Exception e){
                         Log.e(TAG, "Error loading audio. Maybe it is race condition", e);
@@ -125,9 +123,26 @@ public class SpeakWord {
 		return true;
 	}
 
+    public void stop(){
+        if(mp != null){
+            try{
+                mp.reset();
+            }
+            catch(Exception e){
+                Log.e(TAG, "Error shutting down: ", e);
+            }
+        }
+    }
+
     public void shutdown(){
         if(mp != null){
-            mp.release();
+            try{
+                mp.reset();
+                mp.release();
+            }
+            catch(Exception e){
+                Log.e(TAG, "Error shutting down: ", e);
+            }
         }
     }
 

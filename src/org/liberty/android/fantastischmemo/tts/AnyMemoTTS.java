@@ -30,6 +30,8 @@ import android.util.Log;
 
 public interface AnyMemoTTS{
 
+    public void stop();
+
     public void shutdown();
 
     public int sayText(String s);
