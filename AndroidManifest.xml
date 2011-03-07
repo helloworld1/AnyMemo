@@ -89,6 +89,14 @@
                     android:name="android.appwidget.provider"
                     android:resource="@xml/widget_info" />
         </receiver>
+        <activity
+            android:name=".ShareScreen" >
+            <intent-filter>
+                    <action android:name="android.intent.action.SEND" />
+                    <category android:name="android.intent.category.DEFAULT" />
+                    <data android:mimeType="text/*" />
+            </intent-filter>
+        </activity>
         <service
             android:name=".AnyMemoService" />
 

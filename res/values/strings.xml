@@ -319,4 +319,7 @@
     <string name="add_in_place">Add card here</string>
     <string name="add_back">Add card to back</string>
     <string name="look_up_text">Look up in ColorDict</string>
+    <string name="share_text">Sharing</string>
+    <string name="db_name_text">Database Name</string>
+    <string name="save_prev_text">Save&amp;Prev</string>
 </resources>
