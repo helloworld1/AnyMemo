@@ -171,6 +171,7 @@ public class ItemManager{
         return nextItem;
     }
 
+    /* Insert next to the card# = id */
     public Item insert(Item newItem, int id){
         if(newItem != null){
             maxId += 1;
@@ -186,8 +187,6 @@ public class ItemManager{
         }
     }
     public Item insertBack(Item newItem){
-        maxId += 1;
-        totalItemNo += 1;
         return insert(newItem, maxId);
     }
 
