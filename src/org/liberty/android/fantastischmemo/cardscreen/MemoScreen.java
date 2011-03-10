@@ -21,6 +21,7 @@ package org.liberty.android.fantastischmemo.cardscreen;
 
 import org.liberty.android.fantastischmemo.*;
 import org.liberty.android.fantastischmemo.tts.*;
+import com.example.android.apis.graphics.*;
 
 import org.amr.arabic.ArabicUtilities;
 import org.xml.sax.XMLReader;
@@ -380,6 +381,12 @@ public class MemoScreen extends AMActivity{
                 }
 
                 return true;
+            }
+
+            case R.id.menu_context_paint:
+            {
+                Intent myIntent = new Intent(this, FingerPaint.class);
+                startActivity(myIntent);
             }
 
             default:

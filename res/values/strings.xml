@@ -322,4 +322,5 @@
     <string name="share_text">Sharing</string>
     <string name="db_name_text">Database Name</string>
     <string name="save_prev_text">Save&amp;Prev</string>
+    <string name="paint_text">Paint</string>
 </resources>
