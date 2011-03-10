@@ -16,6 +16,8 @@
 
 package com.example.android.apis.graphics;
 
+
+import org.liberty.android.fantastischmemo.R;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.*;
@@ -24,10 +26,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Display;
+
 
 public class FingerPaint extends GraphicsActivity
         implements ColorPickerDialog.OnColorChangedListener {    
 
+
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +42,7 @@ public class FingerPaint extends GraphicsActivity
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);
-        mPaint.setColor(0x6FFF0000);
+        mPaint.setColor(0xFFFF0000);
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -46,6 +52,8 @@ public class FingerPaint extends GraphicsActivity
                                        0.4f, 6, 3.5f);
 
         mBlur = new BlurMaskFilter(8, BlurMaskFilter.Blur.NORMAL);
+        setTitle(R.string.paint_text);
+
     }
     
     private Paint       mPaint;
@@ -69,8 +77,12 @@ public class FingerPaint extends GraphicsActivity
         public MyView(Context c) {
             super(c);
             
-            mBitmap = Bitmap.createBitmap(320, 480, Bitmap.Config.ARGB_8888);
+            Display display = getWindowManager().getDefaultDisplay(); 
+            int width = display.getWidth();
+            int height = display.getHeight();
+            mBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
             mCanvas = new Canvas(mBitmap);
+
             mPath = new Path();
             mBitmapPaint = new Paint(Paint.DITHER_FLAG);
         }
@@ -82,7 +94,7 @@ public class FingerPaint extends GraphicsActivity
         
         @Override
         protected void onDraw(Canvas canvas) {
-            canvas.drawColor(0xFFAAAAAA);
+            canvas.drawColor(0x6FAAAAAA);
             
             canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
             
