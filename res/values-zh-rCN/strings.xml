@@ -298,4 +298,10 @@
     <string name="note_text">笔记</string>
     <string name="add_in_place">添加到当前位置</string>
     <string name="add_back">添加到最后</string>
+    <string name="look_up_text">用ColorDict查词典</string>
+    <string name="share_text">共享</string>
+    <string name="db_name_text">数据库名字</string>
+    <string name="save_prev_text">保存并预览</string>
+    <string name="paint_text">画笔</string>
+    <string name="error_no_colordict">ColorDict没有安装. 请到电子市场下载ColorDict. 错误报告: </string>
 </resources>

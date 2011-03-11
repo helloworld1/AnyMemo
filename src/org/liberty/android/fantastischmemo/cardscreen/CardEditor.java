@@ -123,8 +123,11 @@ public class CardEditor extends Activity implements View.OnClickListener{
         /* Prefill the note if it is empty */
 
         if(isEditNew){
+            /* Use this one or the one below ?*/
+            noteEdit.setText(oldItem.getNote());
+            /*
             String dt = SimpleDateFormat.getDateTimeInstance().format(new Date());
-            noteEdit.setText(dt);
+            noteEdit.setText(dt); */
         }
         if(!isEditNew){
             questionEdit.setText(oldItem.getQuestion());

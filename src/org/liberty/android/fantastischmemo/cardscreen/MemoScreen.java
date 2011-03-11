@@ -377,7 +377,13 @@ public class MemoScreen extends AMActivity{
                     //intent.putExtra(EXTRA_HEIGHT, 400); //400pixel, if you don't specify, fill_parent"
                     intent.putExtra("EXTRA_GRAVITY", Gravity.BOTTOM);
                     //intent.putExtra(EXTRA_MARGIN_LEFT, 100);
-                    startActivity(intent);
+                    try{
+                        startActivity(intent);
+                    }
+                    catch(Exception e){
+                        Log.e(TAG, "Error opening ColorDict", e);
+                        AMGUIUtility.displayException(this, getString(R.string.error_text), getString(R.string.error_no_colordict), e);
+                    }
                 }
 
                 return true;
