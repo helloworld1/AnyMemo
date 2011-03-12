@@ -192,10 +192,14 @@ public class ItemManager{
 
     /* Delete an item and return the next if available */
     public Item deleteItem(Item item){
-        Item nextItem = getNextItem(item);
         dbHelper.deleteItem(item);
         totalItemNo = dbHelper.getTotalCount();
         maxId = dbHelper.getNewId() - 1;
+        /* 
+         * Only fetch the item of currentId after it is deleted 
+         * so it is the next item
+         */
+        Item nextItem = getItem(item.getId());
         return nextItem;
     }
 
