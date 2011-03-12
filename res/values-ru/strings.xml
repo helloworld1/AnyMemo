@@ -298,4 +298,10 @@
     <string name="note_text">Заметка</string>
     <string name="add_in_place">После текущей</string>
     <string name="add_back">В конце</string>
+    <string name="look_up_text">Искать в ColorDict</string>
+    <string name="share_text">Делиться</string>
+    <string name="db_name_text">Имя Базы</string>
+    <string name="save_prev_text">Сохр&amp;См</string>
+    <string name="paint_text">Рисовать</string>
+    <string name="error_no_colordict">ColorDict не установлен. Установите ColorDict из Android Market.</string>
 </resources>
