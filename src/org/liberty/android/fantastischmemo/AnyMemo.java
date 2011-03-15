@@ -219,7 +219,7 @@ public class AnyMemo extends AMActivity implements OnClickListener{
                                 break;
 
                             case 1:
-                                myIntent.setClass(AnyMemo.this, DownloaderFE.class);
+                                myIntent.setClass(AnyMemo.this, FEOauth.class);
                                 startActivity(myIntent);
                                 break;
                             case 2:
