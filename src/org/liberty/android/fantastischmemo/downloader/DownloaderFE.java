@@ -86,23 +86,34 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /*
  * Download from FlashcardExchange using its web api
  */
 public class DownloaderFE extends DownloaderBase{
+    public static final String INTENT_ACTION_SEARCH_TAG = "am.fe.intent.search_tag";
+    public static final String INTENT_ACTION_SEARCH_USER = "am.fe.intent.search_user";
+    public static final String INTENT_ACTION_SEARCH_PRIVATE= "am.fe.intent.private";
+
     private static final String TAG = "org.liberty.android.fantastischmemo.downloader.DownloaderFE";
-    private static final String FE_API_EMAIL = "http://xml.flashcardexchange.com/android/email/";
-    private static final String FE_API_TAG = "http://xml.flashcardexchange.com/android/tag/";
-    private static final String FE_API_FLASHCARDS = "http://xml.flashcardexchange.com/android/flashcards/";
+    private static final String FE_API_KEY = "anymemo_android";
+    private static final String FE_API_TAG= "http://api.flashcardexchange.com/v1/get_tag?api_key=" + FE_API_KEY+ "&tag=";
+    private static final String FE_API_USER = "http://api.flashcardexchange.com/v1/get_user?api_key=" + FE_API_KEY+ "&dataset=3&user_login=";
+    private static final String FE_API_CARDSET = "http://api.flashcardexchange.com/v1/get_card_set?api_key=" + FE_API_KEY+ "&card_set_id=";
     private DownloadListAdapter dlAdapter;
-    /* 
-     * dlStack caches the previous result so user can press 
-     * back button to go back
-     */
+
     private ListView listView;
     private Handler mHandler;
     private ProgressDialog mProgressDialog;
+    private SharedPreferences settings;
+    private SharedPreferences.Editor editor;
+    private String action;
+    private String searchCriterion = null;
+    private String oauthAccessKey = null;
+    private String oauthAccessSecret = null;
 
     @Override
     protected void initialRetrieve(){
@@ -110,78 +121,50 @@ public class DownloaderFE extends DownloaderBase{
         dlAdapter = new DownloadListAdapter(this, R.layout.filebrowser_item);
         listView = (ListView)findViewById(R.id.file_list);
         listView.setAdapter(dlAdapter);
-        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        final SharedPreferences.Editor editor = settings.edit();
-        String prevInput = settings.getString("prev_fe_input", "");
+        settings = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = settings.edit();
 
         final EditText input = new EditText(this);
-        input.setText(prevInput);
-        new AlertDialog.Builder(this)
-            .setTitle(getString(R.string.fe_search_title))
-            .setMessage(getString(R.string.fe_search_message))
-            .setView(input)
-            .setPositiveButton(getString(R.string.ok_text), new DialogInterface.OnClickListener(){
-            @Override
-            public void onClick(DialogInterface dialog, int which ){
-                final String value = input.getText().toString();
-                editor.putString("prev_fe_input", value);
-                editor.commit();
-                mProgressDialog = ProgressDialog.show(DownloaderFE.this, getString(R.string.loading_please_wait), getString(R.string.loading_connect_net), true, true, new DialogInterface.OnCancelListener(){
-                    @Override
-                    public void onCancel(DialogInterface dialog){
-                        finish();
-                    }
-                });
-                new Thread(){
-                    public void run(){
-                        try{
-                            final List<DownloadItem> dil = retrieveList(value);
-                            mHandler.post(new Runnable(){
-                                public void run(){
-                                    dlAdapter.addList(dil);
-                                    mProgressDialog.dismiss();
-                                }
-                            });
-                        }
-                        catch(final Exception e){
-                            mHandler.post(new Runnable(){
-                                public void run(){
-                                    mProgressDialog.dismiss();
-                                    new AlertDialog.Builder(DownloaderFE.this)
-                                        .setTitle(R.string.downloader_connection_error)
-                                        .setMessage(getString(R.string.downloader_connection_error_message) + e.toString())
-                                        .setPositiveButton(getString(R.string.ok_text), new DialogInterface.OnClickListener(){
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which ){
-                                                finish();
-                                            }
-                                        })
-                                        .create()
-                                        .show();
-                                }
-                            });
-                        }
+        Intent intent = getIntent();
+        action = intent.getAction();
+        if(action.equals(INTENT_ACTION_SEARCH_TAG)){
+        } 
+        else if(action.equals(INTENT_ACTION_SEARCH_USER)){
+        } 
+        else if(action.equals(INTENT_ACTION_SEARCH_PRIVATE)){
+        }
+        else{
+            Log.e(TAG, "Invalid intent to invoke this activity.");
+            finish();
+        }
+        Bundle extras = intent.getExtras();
+        if(extras  == null){
+            Log.e(TAG, "Extras is null.");
+            finish();
+        }
+        else{
+            searchCriterion = extras.getString("search_criterion");
+            oauthAccessKey = extras.getString("oauth_access_key");
+            oauthAccessSecret = extras.getString("oauth_access_secret");
+            if(action.equals(INTENT_ACTION_SEARCH_PRIVATE)){
+                if(oauthAccessKey == null || oauthAccessSecret == null){
+                    Log.e(TAG, "OAuth key and token are not passed.");
+                    finish();
 
-                    }
-                }.start();
-
-                
+                }
             }
-        })
-        .setNegativeButton(getString(R.string.cancel_text), new DialogInterface.OnClickListener(){
-            @Override
-            public void onClick(DialogInterface dialog, int which ){
-                finish();
+        }
+        AMGUIUtility.doProgressTask(this, R.string.loading_please_wait, R.string.loading_connect_net, new AMGUIUtility.ProgressTask(){
+            private List<DownloadItem> dil;
+            public void doHeavyTask() throws Exception{
+                dil = retrieveList();
             }
-        })
-        .setOnCancelListener(new DialogInterface.OnCancelListener(){
-            public void onCancel(DialogInterface dialog){
-                finish();
+            public void doUITask(){
+                dlAdapter.addList(dil);
             }
-        })
-        .create()
-        .show();
+        });
     }
+
     @Override
     protected void openCategory(DownloadItem di){
         /* No category for FlashcardExchange */
@@ -251,173 +234,83 @@ public class DownloaderFE extends DownloaderBase{
             .show();
     }
 
-    private List<DownloadItem> retrieveList(String criterion) throws Exception{
-        HttpClient httpclient = new DefaultHttpClient();
-        String url;
-        if(validateEmail(criterion)){
-            url = FE_API_EMAIL;
+    private List<DownloadItem> retrieveList() throws Exception{
+        List<DownloadItem> diList = new ArrayList<DownloadItem>();
+        String url = "";
+        if(action.equals(INTENT_ACTION_SEARCH_TAG)){
+            url = FE_API_TAG + URLEncoder.encode(searchCriterion);
+        }
+        else if(action.equals(INTENT_ACTION_SEARCH_USER)){
+            url = FE_API_USER + URLEncoder.encode(searchCriterion);
+        }
+        else if(action.equals(INTENT_ACTION_SEARCH_PRIVATE)){
+            url = FE_API_USER + URLEncoder.encode(searchCriterion) + "&private=yes&oauth_token_secret=" + oauthAccessSecret + "&oauth_token=" + oauthAccessKey;
         }
         else{
-            url = FE_API_TAG;
+            throw new IOException("Incorrect criterion used for this call");
         }
-        url += URLEncoder.encode(criterion);
         Log.i(TAG, "Url: " + url);
-        HttpGet httpget = new HttpGet(url);
-        HttpResponse response;
-        response = httpclient.execute(httpget);
-        Log.i(TAG, "Response: " + response.getStatusLine().toString());
-        HttpEntity entity = response.getEntity();
 
-        if(entity == null){
-            throw new Exception("Null entity error");
+        String jsonString = downloadJSONString(url);
+        Log.v(TAG, "JSON String: " + jsonString);
+        JSONObject jsonObject = new JSONObject(jsonString);
+        String status =  jsonObject.getString("response_type");
+        if(!status.equals("ok")){
+            throw new IOException("Status is not OK. Status: " + status);
         }
+        JSONArray jsonArray = jsonObject.getJSONObject("results").getJSONArray("sets");
+        for(int i = 0; i < jsonArray.length(); i++){
+            JSONObject jsonItem = jsonArray.getJSONObject(i);
+            int cardId;
+            if(jsonItem.has("original_card_set_id") && !jsonItem.isNull("original_card_set_id")){
+                cardId = jsonItem.getInt("original_card_set_id");
+            }
+            else{
+                cardId = jsonItem.getInt("card_set_id");
+            }
 
-        InputStream instream = entity.getContent();
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder documentBuilder = factory.newDocumentBuilder();
-        Document doc = documentBuilder.parse(instream);
-        NodeList nodes = doc.getElementsByTagName("cardSet");
-        nodes = doc.getElementsByTagName("error");
-
-        if(nodes.getLength() > 0){
-            throw new Exception("Invalid user name or no such tag to search!");
+            String address = FE_API_CARDSET + cardId;
+            DownloadItem di = new DownloadItem(DownloadItem.TYPE_DATABASE,
+                    jsonItem.getString("title"),
+                    jsonItem.getString("description"),
+                    address);
+            diList.add(di);
         }
-
-        List<DownloadItem> diList = new LinkedList<DownloadItem>();
-        nodes = doc.getElementsByTagName("cardSet");
-            
-
-        int nodeNumber = nodes.getLength();
-        for(int i = 0;i < nodeNumber; i++){
-            Node node = nodes.item(i);
-            if(!node.hasChildNodes()){
-                continue;
-            }
-            NodeList childNodes = node.getChildNodes();
-
-            int childNodeNumber = childNodes.getLength();
-            DownloadItem di = new DownloadItem();
-            for(int j = 0; j < childNodeNumber; j++){
-                Node childNode = childNodes.item(j);
-                if(childNode.hasChildNodes()){
-                    di.setType(DownloadItem.TYPE_DATABASE);
-                    if(childNode.getNodeName().equals("title")){
-                        di.setTitle(childNode.getFirstChild().getNodeValue());
-                    }
-                    else if(childNode.getNodeName().equals("cardSetId")){
-                        di.setAddress(FE_API_FLASHCARDS + childNode.getFirstChild().getNodeValue());
-                    }
-                    else if(childNode.getNodeName().equals("description")){
-                        di.setDescription(childNode.getFirstChild().getNodeValue());
-                    }
-                }
-            }
-            if(!di.getTitle().equals("")){
-                diList.add(di);
-            }
-        }
-        instream.close();
         return diList;
     }
 
     private void downloadDatabase(DownloadItem di) throws Exception{
-        HttpClient httpclient = new DefaultHttpClient();
-        String url = di.getAddress();
-        Log.i(TAG, "Url: " + url);
-        HttpGet httpget = new HttpGet(url);
-        HttpResponse response;
-        response = httpclient.execute(httpget);
-        Log.i(TAG, "Response: " + response.getStatusLine().toString());
-        HttpEntity entity = response.getEntity();
-
-        if(entity == null){
-            throw new Exception("Null entity error");
+        String address = di.getAddress();
+        String dbJsonString = downloadJSONString(address);
+        Log.v(TAG, "Download url: " + address);
+        JSONObject rootObject = new JSONObject(dbJsonString);
+        String status = rootObject.getString("response_type");
+        if(!status.equals("ok")){
+            throw new IOException("Status is not OK. Status: " + status);
         }
-
-        InputStream instream = entity.getContent();
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder documentBuilder = factory.newDocumentBuilder();
-        Document doc = documentBuilder.parse(instream);
-        NodeList nodes = doc.getElementsByTagName("cardSet");
-        nodes = doc.getElementsByTagName("error");
-
-        if(nodes.getLength() > 0){
-            throw new Exception("Invalid ID to retrieve the database!");
+        JSONArray flashcardsArray = rootObject.getJSONObject("results").getJSONArray("flashcards");
+        List<Item> itemList = new ArrayList<Item>();
+        for(int i = 0; i < flashcardsArray.length(); i++){
+            JSONObject jsonItem = flashcardsArray.getJSONObject(i);
+            String question = jsonItem.getString("question");
+            String answer = jsonItem.getString("answer");
+            Item newItem = new Item.Builder()
+                .setQuestion(question)
+                .setAnswer(answer)
+                .setId(i + 1)
+                .build();
+            itemList.add(newItem);
         }
-
-        List<Item> itemList = new LinkedList<Item>();
-        nodes = doc.getElementsByTagName("flashcard");
-
-        int nodeNumber = nodes.getLength();
-        for(int i = 0;i < nodeNumber; i++){
-            Node node = nodes.item(i);
-            if(!node.hasChildNodes()){
-                continue;
-            }
-            NodeList childNodes = node.getChildNodes();
-
-            int childNodeNumber = childNodes.getLength();
-            int curId = i + 1;
-            String curQuestion = "";
-            String curAnswer = "";
-
-            for(int j = 0; j < childNodeNumber; j++){
-                Node childNode = childNodes.item(j);
-                if(childNode.hasChildNodes()){
-                    if(childNode.getNodeName().equals("question")){
-                        /*
-                         * Iterate through each child so it can handle the mal-formed line break
-                         * in FE.
-                         */
-                        Node n = childNode.getFirstChild();
-                        while(n != null){
-                            if(n.getNodeName().equals("br")){
-                                curQuestion += "<br />";
-                            }
-                            else{
-                                curQuestion += n.getNodeValue();
-                            }
-                            n = n.getNextSibling();
-                        }
-                    }
-                    else if(childNode.getNodeName().equals("answer")){
-                        Node n = childNode.getFirstChild();
-                        while(n != null){
-                            if(n.getNodeName().equals("br")){
-                                curAnswer += "<br />";
-                            }
-                            else{
-                                curAnswer += n.getNodeValue();
-                            }
-                            n = n.getNextSibling();
-                        }
-                    }
-                }
-            }
-            if(!curQuestion.equals("")){
-                Item newItem = new Item.Builder()
-                    .setId(curId)
-                    .setQuestion(curQuestion)
-                    .setAnswer(curAnswer)
-                    .build();
-                itemList.add(newItem);
-            }
-        }
-        instream.close();
-        /* Now create the databased from the itemList */
-
-        String dbname = di.getTitle() + ".db";
-        /* Replace illegal characters */
-        dbname = dbname.replaceAll("[`~!#@%&*{}/;:'\"]", "_");
+        
+        /* Make a valid dbname from the title */
+        String dbname = validateDBName(di.getTitle()) + ".db";
         String dbpath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
         DatabaseHelper.createEmptyDatabase(dbpath, dbname);
         DatabaseHelper dbHelper = new DatabaseHelper(this, dbpath, dbname);
         dbHelper.insertListItems(itemList);
-        HashMap hm = new HashMap();
-        hm.put("html_display", "both");
-        dbHelper.setSettings(hm);
         dbHelper.close();
     }
+    
 
     private boolean validateEmail(String testString){
         Pattern p = Pattern.compile("^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Za-z]{2,4}$");

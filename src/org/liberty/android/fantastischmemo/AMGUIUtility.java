@@ -153,7 +153,7 @@ public class AMGUIUtility{
     }
 
     public static interface ProgressTask{
-        public void doHeavyTask();
+        public void doHeavyTask() throws Exception;
         public void doUITask();
     }
 }

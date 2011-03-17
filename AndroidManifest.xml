@@ -101,6 +101,7 @@
             </intent-filter>
         </activity>
         <activity
+            android:launchMode="singleTop"
             android:name=".downloader.FEOauth">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -109,6 +110,8 @@
                 <data android:scheme="anymemo-fe"/>
             </intent-filter>
         </activity>
+        <activity
+            android:name=".downloader.FELauncher" />
         <service
             android:name=".AnyMemoService" />
 

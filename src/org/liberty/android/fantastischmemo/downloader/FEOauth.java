@@ -68,6 +68,7 @@ import android.os.Handler;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.net.Uri;
+import android.webkit.WebView;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -84,7 +85,7 @@ import oauth.signpost.exception.*;
 import oauth.signpost.signature.*;
 
 
-public class FEOauth extends Activity{
+public class FEOauth extends AMActivity{
     private static final String CONSUMER_KEY= "anymemo_android";
     private static final String CONSUMER_SECRET = "nju5M3ezHk";
     private static final String REQUEST_URL= "https://secure.flashcardexchange.com/oauth_request_token";
@@ -93,58 +94,98 @@ public class FEOauth extends Activity{
     private static final String CALLBACK_URL = "anymemo-fe://fe";
     private static OAuthConsumer consumer = new CommonsHttpOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
     private static OAuthProvider provider = new CommonsHttpOAuthProvider(REQUEST_URL, ACCESS_TOKEN_URL, AUTH_URL); 
+    private WebView webview;
+    private boolean receiveKey = false;
 
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+         webview = new WebView(this);
+         setContentView(webview);
+            try{
+                receiveKey = false;
+                String authUrl = provider.retrieveRequestToken(consumer, CALLBACK_URL);
+
+                System.out.println("Request token: " + consumer.getToken());
+                System.out.println("Token secret: " + consumer.getTokenSecret());
+
+
+                //Intent intent = new Intent(Intent.ACTION_VIEW);
+                //intent.setData(Uri.parse(authUrl));
+                //startActivity(intent);
+                webview.loadUrl(authUrl);
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(!receiveKey){
+            //finish();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //Uri uri = this.getIntent().getData();
 
     }
 
     @Override
-        public void onResume() {
-            super.onResume();
-            Uri uri = this.getIntent().getData();
+    protected void onNewIntent (Intent intent) {
+        Uri uri = intent.getData();
+        if (uri != null && uri.toString().startsWith(CALLBACK_URL)) {
+            Log.d("Oauth", uri.toString());
+            String verifier = uri.getQueryParameter(OAuth.OAUTH_VERIFIER);
+            Log.d("Oauth", verifier);
+            try {
 
-            if (uri != null && uri.toString().startsWith(CALLBACK_URL)) {
-                Log.d("OAuthTwitter", uri.toString());
-                String verifier = uri.getQueryParameter(OAuth.OAUTH_VERIFIER);
-                Log.d("OAuthTwitter", verifier);
-                try {
+                provider.retrieveAccessToken(consumer, verifier);
+                String accessKey= consumer.getToken();
+                String accessSecret= consumer.getTokenSecret();
 
-                    provider.retrieveAccessToken(consumer, verifier);
-                    String ACCESS_KEY = consumer.getToken();
-                    String ACCESS_SECRET = consumer.getTokenSecret();
+                Log.d("Oauth", accessKey);
+                Log.d("Oauth", accessSecret);
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("oauth_access_key", accessKey);
+                resultIntent.putExtra("oauth_access_secret", accessSecret);
+                receiveKey = true;
+                setResult(Activity.RESULT_OK, resultIntent);
+                finish();
 
-                    Log.d("OAuthTwitter", ACCESS_KEY);
-                    Log.d("OAuthTwitter", ACCESS_SECRET);
-                    finish();
 
-                } catch (OAuthMessageSignerException e) {
-                    e.printStackTrace();
-                } catch (OAuthNotAuthorizedException e) {
-                    e.printStackTrace();
-                } catch (OAuthExpectationFailedException e) {
-                    e.printStackTrace();
-                } catch (OAuthCommunicationException e) {
-                    e.printStackTrace();
-                }
-            } else{
-
-                try{
-                    String authUrl = provider.retrieveRequestToken(consumer, CALLBACK_URL);
-
-                    System.out.println("Request token: " + consumer.getToken());
-                    System.out.println("Token secret: " + consumer.getTokenSecret());
-
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse(authUrl));
-                    startActivity(intent);
-                    finish();
-                }
-                catch(Exception e){
-                    e.printStackTrace();
-                }
+            } catch (OAuthMessageSignerException e) {
+                e.printStackTrace();
+            } catch (OAuthNotAuthorizedException e) {
+                e.printStackTrace();
+            } catch (OAuthExpectationFailedException e) {
+                e.printStackTrace();
+            } catch (OAuthCommunicationException e) {
+                e.printStackTrace();
             }
+        } else{
+
+            //try{
+            //    receiveKey = false;
+            //    String authUrl = provider.retrieveRequestToken(consumer, CALLBACK_URL);
+
+            //    System.out.println("Request token: " + consumer.getToken());
+            //    System.out.println("Token secret: " + consumer.getTokenSecret());
+
+
+            //    //Intent intent = new Intent(Intent.ACTION_VIEW);
+            //    //intent.setData(Uri.parse(authUrl));
+            //    //startActivity(intent);
+            //    webview.loadUrl(authUrl);
+            //}
+            //catch(Exception e){
+            //    e.printStackTrace();
+            //}
         }
+    }
 
 
 }

@@ -24,6 +24,10 @@ import org.liberty.android.fantastischmemo.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
+import java.io.InputStream;
+import java.io.BufferedReader;
+import java.io.BufferedInputStream;
+import java.io.InputStreamReader;
 
 import android.os.Bundle;
 import android.content.Context;
@@ -54,8 +58,15 @@ import android.view.ViewGroup;
 import android.view.KeyEvent;
 import android.preference.PreferenceManager;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 
-public abstract class DownloaderBase extends Activity implements OnItemClickListener{
+
+public abstract class DownloaderBase extends AMActivity implements OnItemClickListener{
 
     private static final String TAG = "org.liberty.android.fantastischmemo.downloader.DownloaderBase";
 
@@ -96,11 +107,6 @@ public abstract class DownloaderBase extends Activity implements OnItemClickList
         ListView listView = (ListView)findViewById(R.id.file_list);
         listView.setOnItemClickListener(this);
         initialRetrieve();
-    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        /* set if the orientation change is allowed */
-        if(!settings.getBoolean("allow_orientation", true)){
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
     }
 
     @Override
@@ -113,7 +119,6 @@ public abstract class DownloaderBase extends Activity implements OnItemClickList
     
     @Override
 	public void onItemClick(AdapterView<?> parentView, View childView, int position, long id){
-        /* Click to go back to EditScreern with specific card cliced */
         DownloadItem di = getDownloadItem(position);
         if(di == null){
             Log.e(TAG, "NULL Download Item");
@@ -139,6 +144,12 @@ public abstract class DownloaderBase extends Activity implements OnItemClickList
             goBack();
         }
         return false;
+    }
+
+    /* Return a valid dbname from original name */
+    protected String validateDBName(String orngName){
+        String s1 = orngName.replace("/", "_");
+        return s1;
     }
 
     
@@ -267,6 +278,32 @@ public abstract class DownloaderBase extends Activity implements OnItemClickList
             return v;
         }
         
+    }
+
+    protected String downloadJSONString(String url) throws Exception{
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpGet httpget = new HttpGet(url);
+        HttpResponse response;
+        response = httpclient.execute(httpget);
+        Log.i(TAG, "Response: " + response.getStatusLine().toString());
+        HttpEntity entity = response.getEntity();
+
+        if(entity == null){
+            throw new NullPointerException("Null entity error");
+        }
+
+        InputStream instream = entity.getContent();
+        // Now convert stream to string 
+        BufferedReader reader = new BufferedReader(new InputStreamReader(instream));
+        StringBuilder sb = new StringBuilder();
+        String line = null;
+        String result = null;
+        while((line = reader.readLine()) != null){
+            sb.append(line + "\n");
+        }
+        result = sb.toString();
+
+        return result;
     }
 }
 

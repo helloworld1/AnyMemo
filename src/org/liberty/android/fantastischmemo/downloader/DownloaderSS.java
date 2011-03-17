@@ -351,31 +351,6 @@ public class DownloaderSS extends DownloaderBase implements ListView.OnScrollLis
         return diList;
     }
     
-    private String downloadJSONString(String url) throws Exception{
-        HttpClient httpclient = new DefaultHttpClient();
-        HttpGet httpget = new HttpGet(url);
-        HttpResponse response;
-        response = httpclient.execute(httpget);
-        Log.i(TAG, "Response: " + response.getStatusLine().toString());
-        HttpEntity entity = response.getEntity();
-
-        if(entity == null){
-            throw new NullPointerException("Null entity error");
-        }
-
-        InputStream instream = entity.getContent();
-        // Now convert stream to string 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(instream));
-        StringBuilder sb = new StringBuilder();
-        String line = null;
-        String result = null;
-        while((line = reader.readLine()) != null){
-            sb.append(line + "\n");
-        }
-        result = sb.toString();
-
-        return result;
-    }
 
     private void showRootCategories(){
         if(categoryList == null){

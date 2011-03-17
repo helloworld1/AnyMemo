@@ -324,4 +324,10 @@
     <string name="save_prev_text">Save&amp;Prev</string>
     <string name="paint_text">Paint</string>
     <string name="error_no_colordict">ColorDict is not installed. Please download ColorDict from Android Market. Exception: </string>
+    <string name="flashcardexchange_text">FlashcardExchange</string>
+    <string name="search_tag">Search by Tag</string>
+    <string name="search_user">Search by User</string>
+    <string name="private_login">Access Private Cards</string>
+    <string name="upload_db">Upload Database</string>
+
 </resources>
