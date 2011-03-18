@@ -305,7 +305,7 @@ public class DownloaderSS extends DownloaderBase implements ListView.OnScrollLis
 
     private List<DownloadItem> retrieveCategories() throws Exception{
         List<DownloadItem> diList = new LinkedList<DownloadItem>();
-        JSONArray jsonArray = new JSONArray(downloadJSONString(SS_API_GET_CATEGORIES));
+        JSONArray jsonArray = new JSONArray(DownloaderUtils.downloadJSONString(SS_API_GET_CATEGORIES));
         for(int i = 0; i < jsonArray.length(); i++){
             JSONObject jsonItem = jsonArray.getJSONObject(i);
             DownloadItem di = new DownloadItem();
@@ -334,7 +334,7 @@ public class DownloaderSS extends DownloaderBase implements ListView.OnScrollLis
         }
 
 
-        JSONArray jsonArray = new JSONArray(downloadJSONString(url));
+        JSONArray jsonArray = new JSONArray(DownloaderUtils.downloadJSONString(url));
         for(int i = 0; i < jsonArray.length(); i++){
             JSONObject jsonItem = jsonArray.getJSONObject(i);
             DownloadItem di = new DownloadItem();
@@ -365,7 +365,7 @@ public class DownloaderSS extends DownloaderBase implements ListView.OnScrollLis
     
     private void downloadDatabase(DownloadItem di) throws Exception{
         String url = di.getAddress();
-        String jsonString = downloadJSONString(url);
+        String jsonString = DownloaderUtils.downloadJSONString(url);
         JSONObject jsonObject = new JSONObject(jsonString);
         JSONArray jsonDataArray = jsonObject.getJSONArray("data");
         List<Item> itemList = new LinkedList<Item>();

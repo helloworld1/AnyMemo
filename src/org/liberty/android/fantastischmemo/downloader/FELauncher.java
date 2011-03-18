@@ -29,6 +29,7 @@ import android.view.View.OnClickListener;
 import android.preference.PreferenceManager;
 import android.content.Intent;
 import android.util.Log;
+import oauth.signpost.*;
 
 public class FELauncher extends AMActivity implements OnClickListener{
     private Button searchTagButton;
@@ -72,7 +73,7 @@ public class FELauncher extends AMActivity implements OnClickListener{
             startActivityForResult(myIntent, OAUTH_PRIVATE_ACTIVITY);
         }
         if(v == uploadButton){
-            Intent myIntent = new Intent(this, FEOauth.class);
+            Intent myIntent = new Intent(this, FEUpload.class);
             startActivity(myIntent);
         }
 
@@ -86,13 +87,15 @@ public class FELauncher extends AMActivity implements OnClickListener{
                 {
                     Bundle resultExtras = data.getExtras();
                     if(resultExtras != null){
-                        String key = resultExtras.getString("oauth_access_key");
-                        String secret = resultExtras.getString("oauth_access_secret");
+                        String key = resultExtras.getString("oauth_token");
+                        String secret = resultExtras.getString("oauth_token_secret");
+                        OAuthConsumer consumer = (OAuthConsumer)resultExtras.getSerializable("consumer");
                         Intent myIntent = new Intent(this, DownloaderFE.class);
                         myIntent.setAction(DownloaderFE.INTENT_ACTION_SEARCH_PRIVATE);
                         myIntent.putExtra("search_criterion", "liberty@live.com");
-                        myIntent.putExtra("oauth_access_key", key);
-                        myIntent.putExtra("oauth_access_secret", secret);
+                        myIntent.putExtra("oauth_token", key);
+                        myIntent.putExtra("oauth_token_secret", secret);
+                        myIntent.putExtra("oauth_token_secret", consumer);
                         startActivity(myIntent);
                         break;
                     }

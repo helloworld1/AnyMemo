@@ -89,6 +89,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import oauth.signpost.*;
 
 /*
  * Download from FlashcardExchange using its web api
@@ -112,8 +113,9 @@ public class DownloaderFE extends DownloaderBase{
     private SharedPreferences.Editor editor;
     private String action;
     private String searchCriterion = null;
-    private String oauthAccessKey = null;
-    private String oauthAccessSecret = null;
+    private String oauthToken = null;
+    private String oauthTokenSecret = null;
+    private OAuthConsumer oauthConsumer = null;
 
     @Override
     protected void initialRetrieve(){
@@ -144,13 +146,13 @@ public class DownloaderFE extends DownloaderBase{
         }
         else{
             searchCriterion = extras.getString("search_criterion");
-            oauthAccessKey = extras.getString("oauth_access_key");
-            oauthAccessSecret = extras.getString("oauth_access_secret");
+            oauthToken= extras.getString("oauth_token");
+            oauthTokenSecret = extras.getString("oauth_token_secret");
+            oauthConsumer = (OAuthConsumer)extras.getSerializable("oauth_consumer");
             if(action.equals(INTENT_ACTION_SEARCH_PRIVATE)){
-                if(oauthAccessKey == null || oauthAccessSecret == null){
+                if(oauthToken == null || oauthToken == null){
                     Log.e(TAG, "OAuth key and token are not passed.");
                     finish();
-
                 }
             }
         }
@@ -244,14 +246,15 @@ public class DownloaderFE extends DownloaderBase{
             url = FE_API_USER + URLEncoder.encode(searchCriterion);
         }
         else if(action.equals(INTENT_ACTION_SEARCH_PRIVATE)){
-            url = FE_API_USER + URLEncoder.encode(searchCriterion) + "&private=yes&oauth_token_secret=" + oauthAccessSecret + "&oauth_token=" + oauthAccessKey;
+            url = FE_API_USER + URLEncoder.encode(searchCriterion) + "&private=yes&oauth_token_secret=" + oauthTokenSecret+ "&oauth_token=" + oauthToken;
+
         }
         else{
             throw new IOException("Incorrect criterion used for this call");
         }
         Log.i(TAG, "Url: " + url);
 
-        String jsonString = downloadJSONString(url);
+        String jsonString = DownloaderUtils.downloadJSONString(url);
         Log.v(TAG, "JSON String: " + jsonString);
         JSONObject jsonObject = new JSONObject(jsonString);
         String status =  jsonObject.getString("response_type");
@@ -281,7 +284,7 @@ public class DownloaderFE extends DownloaderBase{
 
     private void downloadDatabase(DownloadItem di) throws Exception{
         String address = di.getAddress();
-        String dbJsonString = downloadJSONString(address);
+        String dbJsonString = DownloaderUtils.downloadJSONString(address);
         Log.v(TAG, "Download url: " + address);
         JSONObject rootObject = new JSONObject(dbJsonString);
         String status = rootObject.getString("response_type");
@@ -303,7 +306,7 @@ public class DownloaderFE extends DownloaderBase{
         }
         
         /* Make a valid dbname from the title */
-        String dbname = validateDBName(di.getTitle()) + ".db";
+        String dbname = DownloaderUtils.validateDBName(di.getTitle()) + ".db";
         String dbpath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
         DatabaseHelper.createEmptyDatabase(dbpath, dbname);
         DatabaseHelper dbHelper = new DatabaseHelper(this, dbpath, dbname);
@@ -312,10 +315,5 @@ public class DownloaderFE extends DownloaderBase{
     }
     
 
-    private boolean validateEmail(String testString){
-        Pattern p = Pattern.compile("^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Za-z]{2,4}$");
-        Matcher m = p.matcher(testString);
-        return m.matches();
-    }
 
 }

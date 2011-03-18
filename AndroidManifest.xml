@@ -112,6 +112,8 @@
         </activity>
         <activity
             android:name=".downloader.FELauncher" />
+        <activity
+            android:name=".downloader.FEUpload" />
         <service
             android:name=".AnyMemoService" />
 

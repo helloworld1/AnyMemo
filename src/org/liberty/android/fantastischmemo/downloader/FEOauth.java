@@ -38,6 +38,7 @@ import java.io.BufferedReader;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.UnsupportedEncodingException;
+import java.io.Serializable;
 import java.net.URLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -95,14 +96,12 @@ public class FEOauth extends AMActivity{
     private static OAuthConsumer consumer = new CommonsHttpOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
     private static OAuthProvider provider = new CommonsHttpOAuthProvider(REQUEST_URL, ACCESS_TOKEN_URL, AUTH_URL); 
     private WebView webview;
-    private boolean receiveKey = false;
 
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
          webview = new WebView(this);
          setContentView(webview);
             try{
-                receiveKey = false;
                 String authUrl = provider.retrieveRequestToken(consumer, CALLBACK_URL);
 
                 System.out.println("Request token: " + consumer.getToken());
@@ -120,14 +119,6 @@ public class FEOauth extends AMActivity{
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        if(!receiveKey){
-            //finish();
-        }
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         //Uri uri = this.getIntent().getData();
@@ -140,21 +131,20 @@ public class FEOauth extends AMActivity{
         if (uri != null && uri.toString().startsWith(CALLBACK_URL)) {
             Log.d("Oauth", uri.toString());
             String verifier = uri.getQueryParameter(OAuth.OAUTH_VERIFIER);
-            Log.d("Oauth", verifier);
             try {
 
                 provider.retrieveAccessToken(consumer, verifier);
-                String accessKey= consumer.getToken();
-                String accessSecret= consumer.getTokenSecret();
+                String token = consumer.getToken();
+                String tokenSecret= consumer.getTokenSecret();
 
-                Log.d("Oauth", accessKey);
-                Log.d("Oauth", accessSecret);
+                Log.d("Oauth Verifier ", verifier);
+                Log.d("Oauth Token ", token);
+                Log.d("Oauth Token Secret ", tokenSecret);
                 Intent resultIntent = new Intent();
-                resultIntent.putExtra("oauth_access_key", accessKey);
-                resultIntent.putExtra("oauth_access_secret", accessSecret);
-                receiveKey = true;
+                resultIntent.putExtra("oauth_token", token);
+                resultIntent.putExtra("oauth_token_secret", tokenSecret);
+                resultIntent.putExtra("consumer", consumer);
                 setResult(Activity.RESULT_OK, resultIntent);
-                finish();
 
 
             } catch (OAuthMessageSignerException e) {
@@ -166,6 +156,7 @@ public class FEOauth extends AMActivity{
             } catch (OAuthCommunicationException e) {
                 e.printStackTrace();
             }
+            finish();
         } else{
 
             //try{

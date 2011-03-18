@@ -75,8 +75,14 @@ public class FileBrowser extends AMActivity implements OnItemClickListener, OnIt
 		super.onCreate(savedInstanceState);
 		
 		Bundle extras = getIntent().getExtras();
-		defaultRoot = extras.getString("default_root");
-		fileExtensions = extras.getString("file_extension").split(",");
+        if(extras != null){
+            defaultRoot = extras.getString("default_root");
+            fileExtensions = extras.getString("file_extension").split(",");
+        }
+        else{
+            fileExtensions = new String[]{".db"};
+            defaultRoot = null;
+        }
         setContentView(R.layout.file_browser);
 		mContext = this;
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
