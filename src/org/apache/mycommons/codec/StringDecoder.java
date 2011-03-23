@@ -15,26 +15,26 @@
  * limitations under the License.
  */
 
-package org.apache.commons.codec;
+package org.apache.mycommons.codec;
 
 /**
- * Encodes a String into a String. 
+ * Decodes a String into a String. 
  *
  * @author Apache Software Foundation
- * @version $Id: StringEncoder.java 651573 2008-04-25 11:11:21Z niallp $
+ * @version $Id: StringDecoder.java 634915 2008-03-08 09:30:25Z bayard $
  */
-public interface StringEncoder extends Encoder {
+public interface StringDecoder extends Decoder {
     
     /**
-     * Encodes a String and returns a String.
+     * Decodes a String and returns a String.
      * 
      * @param pString a String to encode
      * 
      * @return the encoded String
      * 
-     * @throws EncoderException thrown if there is
+     * @throws DecoderException thrown if there is
      *  an error conidition during the Encoding process.
      */
-    String encode(String pString) throws EncoderException;
+    String decode(String pString) throws DecoderException;
 }  
 

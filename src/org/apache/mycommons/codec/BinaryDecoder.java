@@ -15,28 +15,28 @@
  * limitations under the License.
  */
 
-package org.apache.commons.codec;
+package org.apache.mycommons.codec;
 
 /**
- * Defines common encoding methods for byte array encoders.
- * 
+ * Defines common decoding methods for byte array decoders.
+ *
  * @author Apache Software Foundation
- * @version $Id: BinaryEncoder.java 651573 2008-04-25 11:11:21Z niallp $
+ * @version $Id: BinaryDecoder.java 651573 2008-04-25 11:11:21Z niallp $
  */
-public interface BinaryEncoder extends Encoder {
-    
+public interface BinaryDecoder extends Decoder {
+
     /**
-     * Encodes a byte array and return the encoded data
-     * as a byte array.
-     * 
-     * @param pArray Data to be encoded
+     * Decodes a byte array and returns the results as a byte array. 
      *
-     * @return A byte array containing the encoded data
+     * @param pArray A byte array which has been encoded with the
+     *      appropriate encoder
      * 
-     * @throws EncoderException thrown if the Encoder
-     *      encounters a failure condition during the
-     *      encoding process.
+     * @return a byte array that contains decoded content
+     * 
+     * @throws DecoderException A decoder exception is thrown
+     *          if a Decoder encounters a failure condition during
+     *          the decode process.
      */
-    byte[] encode(byte[] pArray) throws EncoderException;
+    byte[] decode(byte[] pArray) throws DecoderException;
 }  
 

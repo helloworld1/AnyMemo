@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.apache.commons.codec;
+package org.apache.mycommons.codec;
 
 /**
  * Character encoding names required of every implementation of the Java platform.

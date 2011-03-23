@@ -15,26 +15,28 @@
  * limitations under the License.
  */
 
-package org.apache.commons.codec;
+package org.apache.mycommons.codec;
 
 /**
- * Decodes a String into a String. 
- *
+ * Defines common encoding methods for byte array encoders.
+ * 
  * @author Apache Software Foundation
- * @version $Id: StringDecoder.java 634915 2008-03-08 09:30:25Z bayard $
+ * @version $Id: BinaryEncoder.java 651573 2008-04-25 11:11:21Z niallp $
  */
-public interface StringDecoder extends Decoder {
+public interface BinaryEncoder extends Encoder {
     
     /**
-     * Decodes a String and returns a String.
+     * Encodes a byte array and return the encoded data
+     * as a byte array.
      * 
-     * @param pString a String to encode
+     * @param pArray Data to be encoded
+     *
+     * @return A byte array containing the encoded data
      * 
-     * @return the encoded String
-     * 
-     * @throws DecoderException thrown if there is
-     *  an error conidition during the Encoding process.
+     * @throws EncoderException thrown if the Encoder
+     *      encounters a failure condition during the
+     *      encoding process.
      */
-    String decode(String pString) throws DecoderException;
+    byte[] encode(byte[] pArray) throws EncoderException;
 }  
 

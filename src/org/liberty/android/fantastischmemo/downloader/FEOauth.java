@@ -87,6 +87,7 @@ import oauth.signpost.signature.*;
 
 
 public class FEOauth extends AMActivity{
+    private static final String TAG = "org.liberty.android.fantastischmemo.FEOauth";
     private static final String CONSUMER_KEY= "anymemo_android";
     private static final String CONSUMER_SECRET = "nju5M3ezHk";
     private static final String REQUEST_URL= "https://secure.flashcardexchange.com/oauth_request_token";
@@ -101,21 +102,17 @@ public class FEOauth extends AMActivity{
         super.onCreate(savedInstanceState);
          webview = new WebView(this);
          setContentView(webview);
-            try{
+        AMGUIUtility.doProgressTask(this, R.string.loading_please_wait, R.string.access_authorization_text, new AMGUIUtility.ProgressTask(){
+            private String authUrl;
+            public void doHeavyTask() throws Exception{
                 String authUrl = provider.retrieveRequestToken(consumer, CALLBACK_URL);
-
-                System.out.println("Request token: " + consumer.getToken());
-                System.out.println("Token secret: " + consumer.getTokenSecret());
-
-
-                //Intent intent = new Intent(Intent.ACTION_VIEW);
-                //intent.setData(Uri.parse(authUrl));
-                //startActivity(intent);
+            }
+            public void doUITask(){
+                Log.v(TAG, "Request token: " + consumer.getToken());
+                Log.v(TAG, "Token secret: " + consumer.getTokenSecret());
                 webview.loadUrl(authUrl);
             }
-            catch(Exception e){
-                e.printStackTrace();
-            }
+        });
     }
 
     @Override

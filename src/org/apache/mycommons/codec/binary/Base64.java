@@ -15,14 +15,14 @@
  * limitations under the License.
  */
 
-package org.apache.commons.codec.binary;
+package org.apache.mycommons.codec.binary;
 
 import java.math.BigInteger;
 
-import org.apache.commons.codec.BinaryDecoder;
-import org.apache.commons.codec.BinaryEncoder;
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.EncoderException;
+import org.apache.mycommons.codec.BinaryDecoder;
+import org.apache.mycommons.codec.BinaryEncoder;
+import org.apache.mycommons.codec.DecoderException;
+import org.apache.mycommons.codec.EncoderException;
 
 /**
  * Provides Base64 encoding and decoding as defined by RFC 2045.

@@ -2,7 +2,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     <string name="app_name">AnyMemo</string>
     <string name="app_full_name">AnyMemo Free</string>
-    <string name="app_version">7.3.0</string>
+    <string name="app_version">7.4.0</string>
     <string name="up_one_level">..</string>
     <string name="current_dir">.</string>
     <string name="ok_text">OK</string>
@@ -323,11 +323,13 @@
     <string name="db_name_text">Database Name</string>
     <string name="save_prev_text">Save&amp;Prev</string>
     <string name="paint_text">Paint</string>
-    <string name="error_no_colordict">ColorDict is not installed. Please download ColorDict from Android Market. Exception: </string>
+    <string name="error_no_colordict">ColorDict is not installed. Please download ColorDict from Android Market. Error: </string>
     <string name="flashcardexchange_text">FlashcardExchange</string>
     <string name="search_tag">Search by Tag</string>
     <string name="search_user">Search by User</string>
     <string name="private_login">Access Private Cards</string>
     <string name="upload_db">Upload Database</string>
+    <string name="access_authorization_text">Accessing authorization token. Please wait...</string>
 
 </resources>
+
