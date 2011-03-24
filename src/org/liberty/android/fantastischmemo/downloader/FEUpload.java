@@ -129,17 +129,25 @@ public class FEUpload extends AMActivity{
                 {
                     Bundle resultExtras = data.getExtras();
                     if(resultExtras != null){
-                        String dbPath = resultExtras.getString("org.liberty.android.fantastischmemo.dbPath");
-                        String dbName = resultExtras.getString("org.liberty.android.fantastischmemo.dbName");
+                        final String dbPath = resultExtras.getString("org.liberty.android.fantastischmemo.dbPath");
+                        final String dbName = resultExtras.getString("org.liberty.android.fantastischmemo.dbName");
                         Intent myIntent = new Intent(this, FileBrowser.class);
-                        try{
-                            uploadDB(dbPath, dbName);
-                        }
-                        catch(Exception e){
-                            e.printStackTrace();
-                        }
-                        break;
+                        AMGUIUtility.doProgressTask(this, R.string.loading_please_wait, R.string.upload_wait, new AMGUIUtility.ProgressTask(){
+                            private String authUrl;
+                            public void doHeavyTask() throws Exception{
+                                uploadDB(dbPath, dbName);
+                            }
+                            public void doUITask(){
+                                new AlertDialog.Builder(FEUpload.this)
+                                    .setTitle(R.string.upload_finish)
+                                    .setMessage(dbName + " " + getString(R.string.upload_finish_message))
+                                    .setPositiveButton(R.string.ok_text, AMGUIUtility.getDialogFinishListener(FEUpload.this))
+                                    .create()
+                                    .show();
+                            }
+                        });
                     }
+                    break;
                 }
 
             }
@@ -194,6 +202,7 @@ public class FEUpload extends AMActivity{
         JSONObject rootObject = new JSONObject(jsonString);
         String status = rootObject.getString("response_type");
         if(!status.equals("ok")){
+            Log.v(TAG, jsonString);
             throw new IOException("Adding card is not OK. Status: " + status);
         }
     }

@@ -156,5 +156,13 @@ public class AMGUIUtility{
         public void doHeavyTask() throws Exception;
         public void doUITask();
     }
+
+    public static DialogInterface.OnClickListener getDialogFinishListener(final Activity activity){
+        return new DialogInterface.OnClickListener(){
+            public void onClick(DialogInterface dialog, int which){
+                activity.finish();
+            }
+        };
+    }
 }
 

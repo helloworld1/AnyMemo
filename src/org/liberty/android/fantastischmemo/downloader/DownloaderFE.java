@@ -247,6 +247,7 @@ public class DownloaderFE extends DownloaderBase{
         }
         else if(action.equals(INTENT_ACTION_SEARCH_PRIVATE)){
             url = FE_API_USER + URLEncoder.encode(searchCriterion) + "&private=yes&oauth_token_secret=" + oauthTokenSecret+ "&oauth_token=" + oauthToken;
+            url = oauthConsumer.sign(url);
 
         }
         else{

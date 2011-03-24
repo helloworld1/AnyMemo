@@ -329,6 +329,9 @@
     <string name="search_user">Search by User</string>
     <string name="private_login">Access Private Cards</string>
     <string name="upload_db">Upload Database</string>
+    <string name="upload_wait">Uploading... please wait.</string>
+    <string name="upload_finish">Upload finished</string>
+    <string name="upload_finish_message">has been successfully uploaded.</string>
     <string name="access_authorization_text">Accessing authorization token. Please wait...</string>
     <string name="fe_directory_text">Browser Directories</string>
 </resources>
