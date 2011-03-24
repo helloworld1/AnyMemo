@@ -334,5 +334,8 @@
     <string name="upload_finish_message">has been successfully uploaded.</string>
     <string name="access_authorization_text">Accessing authorization token. Please wait...</string>
     <string name="fe_directory_text">Browser Directories</string>
+    <string name="fe_search_tag_message">Please enter a tag to search, e.g. Spanish, math and etc.</string>
+    <string name="fe_search_user_message">Please enter user email to login, e.g. yourname@example.com.</string>
+    <string name="fe_private_login">Access private data</string>
+    <string name="fe_private_login_message">Please enter the email you have just inputed in the previous screen, e.g. yourname@example.com.</string>
 </resources>
-
