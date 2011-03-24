@@ -48,7 +48,6 @@ import android.os.Bundle;
 import android.content.Context;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -100,12 +99,12 @@ public class FEOauth extends AMActivity{
 
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-         webview = new WebView(this);
-         setContentView(webview);
+        webview = new WebView(FEOauth.this);
+        setContentView(webview);
         AMGUIUtility.doProgressTask(this, R.string.loading_please_wait, R.string.access_authorization_text, new AMGUIUtility.ProgressTask(){
             private String authUrl;
             public void doHeavyTask() throws Exception{
-                String authUrl = provider.retrieveRequestToken(consumer, CALLBACK_URL);
+                authUrl = provider.retrieveRequestToken(consumer, CALLBACK_URL);
             }
             public void doUITask(){
                 Log.v(TAG, "Request token: " + consumer.getToken());

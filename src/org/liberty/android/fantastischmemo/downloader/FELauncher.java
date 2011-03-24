@@ -32,6 +32,7 @@ import android.util.Log;
 import oauth.signpost.*;
 
 public class FELauncher extends AMActivity implements OnClickListener{
+    private Button directoryButton;
     private Button searchTagButton;
     private Button searchUserButton;
     private Button privateButton;
@@ -44,10 +45,12 @@ public class FELauncher extends AMActivity implements OnClickListener{
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fe_launcher);
+        directoryButton = (Button)findViewById(R.id.fe_directory);
         searchTagButton = (Button)findViewById(R.id.fe_search_tag);
         searchUserButton = (Button)findViewById(R.id.fe_search_user);
         privateButton = (Button)findViewById(R.id.fe_private_login);
         uploadButton = (Button)findViewById(R.id.fe_upload);
+        directoryButton.setOnClickListener(this);
         searchTagButton.setOnClickListener(this);
         searchUserButton.setOnClickListener(this);
         privateButton.setOnClickListener(this);
@@ -56,6 +59,10 @@ public class FELauncher extends AMActivity implements OnClickListener{
 
     @Override
     public void onClick(View v){
+        if(v == directoryButton){
+            Intent myIntent = new Intent(this, FEDirectory.class);
+            startActivity(myIntent);
+        }
         if(v == searchTagButton){
             Intent myIntent = new Intent(this, DownloaderFE.class);
             myIntent.setAction(DownloaderFE.INTENT_ACTION_SEARCH_TAG);
@@ -78,6 +85,8 @@ public class FELauncher extends AMActivity implements OnClickListener{
         }
 
     }
+
+    /* Handle the return of Oauth to access private cards */
     public void onActivityResult(int requestCode, int resultCode, Intent data){
     	super.onActivityResult(requestCode, resultCode, data);
         Log.v(TAG, "Result: " + requestCode + " " + resultCode + " " + data);
@@ -95,7 +104,7 @@ public class FELauncher extends AMActivity implements OnClickListener{
                         myIntent.putExtra("search_criterion", "liberty@live.com");
                         myIntent.putExtra("oauth_token", key);
                         myIntent.putExtra("oauth_token_secret", secret);
-                        myIntent.putExtra("oauth_token_secret", consumer);
+                        myIntent.putExtra("oauth_consumer", consumer);
                         startActivity(myIntent);
                         break;
                     }

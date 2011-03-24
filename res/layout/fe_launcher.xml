@@ -16,6 +16,12 @@
         android:layout_height="fill_parent"
         android:layout_weight="1"
         android:orientation="vertical">
+        <Button android:id="@+id/fe_directory"
+            android:layout_width="fill_parent" 
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:text="@string/fe_directory_text" />
         <Button android:id="@+id/fe_search_tag"
             android:layout_width="fill_parent" 
             android:layout_height="fill_parent"

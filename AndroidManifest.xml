@@ -71,7 +71,17 @@
             android:configChanges="orientation|keyboardHidden" />
         <activity
             android:name="com.example.android.apis.graphics.FingerPaint" 
+            android:configChanges="orientation|keyboardHidden"
             android:theme="@style/PaintStyle" />
+        <activity
+            android:name=".downloader.FELauncher"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity
+            android:name=".downloader.FEUpload"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity
+            android:name=".downloader.FEDirectory"
+            android:configChanges="orientation|keyboardHidden" />
         <receiver
             android:name=".AlarmReceiver"
             android:process=":remote" />
@@ -110,10 +120,6 @@
                 <data android:scheme="anymemo-fe"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name=".downloader.FELauncher" />
-        <activity
-            android:name=".downloader.FEUpload" />
         <service
             android:name=".AnyMemoService" />
 
