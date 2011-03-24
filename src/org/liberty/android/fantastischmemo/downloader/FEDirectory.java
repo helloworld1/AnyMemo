@@ -90,6 +90,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/* Show FlashcardExchange's directory */
 public class FEDirectory extends DownloaderBase{
     private DownloadListAdapter dlAdapter;
     private static final String TAG = "org.liberty.android.fantastischmemo.downloader.DownloaderFE";
@@ -150,6 +151,10 @@ public class FEDirectory extends DownloaderBase{
             throw new IOException("Status is not OK. Status: " + status);
         }
         JSONArray directoryArray = jsonObject.getJSONArray("results");
+        /* 
+         * Each result has tags which is an array containing 
+         * tags and a string of tag group title
+         */
         for(int i = 0; i < directoryArray.length(); i++){
             JSONArray tagsArray = directoryArray.getJSONObject(i).getJSONArray("tags");
             for(int j = 0; j < tagsArray.length(); j++){
