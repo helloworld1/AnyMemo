@@ -246,7 +246,8 @@ public class DownloaderFE extends DownloaderBase{
             url = FE_API_USER + URLEncoder.encode(searchCriterion);
         }
         else if(action.equals(INTENT_ACTION_SEARCH_PRIVATE)){
-            url = FE_API_USER + URLEncoder.encode(searchCriterion) + "&private=yes&oauth_token_secret=" + oauthTokenSecret+ "&oauth_token=" + oauthToken;
+            url = FE_API_USER + URLEncoder.encode(searchCriterion) + "&private=true&oauth_token_secret=" + oauthTokenSecret+ "&oauth_token=" + oauthToken;
+            Log.i(TAG, "Before signingUrl: " + url);
             url = oauthConsumer.sign(url);
 
         }
