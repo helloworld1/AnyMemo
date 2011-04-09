@@ -304,4 +304,18 @@
     <string name="save_prev_text">Сохр&amp;См</string>
     <string name="paint_text">Рисовать</string>
     <string name="error_no_colordict">ColorDict не установлен. Установите ColorDict из Android Market.</string>
+    <string name="flashcardexchange_text">FlashcardExchange</string>
+    <string name="search_tag">Поиск по Тегам</string>
+    <string name="search_user">Поиск по Пользователям</string>
+    <string name="private_login">Доступ к Личным Картам</string>
+    <string name="upload_db">Залить Базы (Медленно и Нестабильно)</string>
+    <string name="upload_wait">Заливка... ждите.</string>
+    <string name="upload_finish">Заливка закончена</string>
+    <string name="upload_finish_message">успешно залита.</string>
+    <string name="access_authorization_text">Получение авторизованного доступа. Ждите...</string>
+    <string name="fe_directory_text">Обозреватель Каталогов</string>
+    <string name="fe_search_tag_message">Введите тег поиска, напр. Spanish, math и пр.</string>
+    <string name="fe_search_user_message">Введите email пользователя чтобы залогиниться, напр.  yourname@example.com.</string>
+    <string name="fe_private_login">Доступ к Личным Данным</string>
+    <string name="fe_private_login_message">Введите email, который вы ввели в предыдущем экране, напр. yourname@example.com.</string>
 </resources>
