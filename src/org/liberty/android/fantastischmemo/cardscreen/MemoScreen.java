@@ -138,7 +138,13 @@ public class MemoScreen extends AMActivity{
         }
         try{
             settingManager = new SettingManager(this, dbPath, dbName);
-            flashcardDisplay = new DoubleSidedCardDisplay(this, settingManager);
+            if(settingManager.getCardStyle() == SettingManager.CardStyle.DOUBLE_SIDED){
+                flashcardDisplay = new DoubleSidedCardDisplay(this, settingManager);
+            }
+            else{
+                flashcardDisplay = new SingleSidedCardDisplay(this, settingManager);
+            }
+
             if(settingManager.getButtonStyle() == SettingManager.ButtonStyle.ANKI){
             controlButtons = new AnkiGradeButtons(this);
             }
@@ -537,8 +543,23 @@ public class MemoScreen extends AMActivity{
         View.OnClickListener showAnswerListener = new View.OnClickListener(){
             public void onClick(View v){
                 if(currentItem != null){
-                    updateFlashcardView(true);
-                    showButtons();
+                    /* Double sided card, the click will toggle question and answer */
+                    if(settingManager.getCardStyle() == SettingManager.CardStyle.DOUBLE_SIDED){
+                        if(flashcardDisplay.isAnswerShown()){
+                            updateFlashcardView(false);
+                            hideButtons();
+                        }
+                        else{
+                            updateFlashcardView(true);
+                            showButtons();
+                        }
+
+                    }
+                    else{
+                        /* For single sided card */
+                        updateFlashcardView(true);
+                        showButtons();
+                    }
                 }
             }
         };

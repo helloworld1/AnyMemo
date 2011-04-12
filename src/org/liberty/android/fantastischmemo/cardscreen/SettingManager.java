@@ -491,17 +491,17 @@ public class SettingManager{
     }
 
     public static enum CardStyle{
-        SINGLE,
-        DOUBLE;
+        SINGLE_SIDED,
+        DOUBLE_SIDED;
         public static CardStyle parse(String a){
             if(a.equals("single_sided")){
-                return SINGLE;
+                return SINGLE_SIDED;
             }
             else if(a.equals("double_sided")){
-                return DOUBLE;
+                return DOUBLE_SIDED;
             }
             else{
-                return SINGLE;
+                return SINGLE_SIDED;
             }
         }
     }
