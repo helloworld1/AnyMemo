@@ -138,7 +138,7 @@ public class MemoScreen extends AMActivity{
         }
         try{
             settingManager = new SettingManager(this, dbPath, dbName);
-            flashcardDisplay = new FlashcardDisplay(this, settingManager);
+            flashcardDisplay = new DoubleSidedCardDisplay(this, settingManager);
             if(settingManager.getButtonStyle() == SettingManager.ButtonStyle.ANKI){
             controlButtons = new AnkiGradeButtons(this);
             }
@@ -664,7 +664,8 @@ public class MemoScreen extends AMActivity{
     }
 
     private void hideButtons(){
-        controlButtons.getView().setVisibility(View.INVISIBLE);
+        /* Does it take the place holder space? */
+        controlButtons.getView().setVisibility(View.GONE);
     }
 
     private void showButtons(){

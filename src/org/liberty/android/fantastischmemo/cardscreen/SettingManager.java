@@ -121,6 +121,7 @@ public class SettingManager{
     private boolean fullscreenMode = false;
     private int screenHeight = 320;
     private int screenWidth = 480;
+    private String cardStyle = "single_sided";
     /* The colors for various elements
      * null means default color */
     protected List<Integer> colors = null;
@@ -139,6 +140,10 @@ public class SettingManager{
 
     public boolean getEnableThirdPartyArabic(){
         return enableThirdPartyArabic;
+    }
+
+    public CardStyle getCardStyle(){
+        return CardStyle.parse(cardStyle);
     }
 
     public float getQuestionFontSize(){
@@ -391,6 +396,12 @@ public class SettingManager{
                     audioLocation = loc;
                 }
             }
+            if(me.getKey().toString().equals("card_style")){
+                String s = cardStyle = me.getValue().toString();
+                if(!s.equals("")){
+                    cardStyle = s;
+                }
+            }
 
 		}
         filters = dbHelper.getRecentFilters();
@@ -478,6 +489,23 @@ public class SettingManager{
 
         }
     }
+
+    public static enum CardStyle{
+        SINGLE,
+        DOUBLE;
+        public static CardStyle parse(String a){
+            if(a.equals("single_sided")){
+                return SINGLE;
+            }
+            else if(a.equals("double_sided")){
+                return DOUBLE;
+            }
+            else{
+                return SINGLE;
+            }
+        }
+    }
+
 
 
 }

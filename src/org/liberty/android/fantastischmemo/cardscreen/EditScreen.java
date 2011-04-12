@@ -123,7 +123,7 @@ public class EditScreen extends AMActivity{
         }
         try{
             settingManager = new SettingManager(this, dbPath, dbName);
-            flashcardDisplay = new FlashcardDisplay(this, settingManager);
+            flashcardDisplay = new SingleSidedCardDisplay(this, settingManager);
             controlButtons = new EditScreenButtons(this);
 
             /* databaseUtility is for global db operations */

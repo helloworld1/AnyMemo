@@ -194,4 +194,9 @@
     <item>@string/download_source_ss</item>
 </string-array>
 
+<string-array name="card_style_list">
+    <item>@string/card_style_single</item>
+    <item>@string/card_style_double</item>
+</string-array>
+
 </resources>

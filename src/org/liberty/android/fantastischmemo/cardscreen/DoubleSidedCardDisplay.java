@@ -93,33 +93,34 @@ import android.text.Html.ImageGetter;
 import android.content.res.Configuration;
 import android.view.inputmethod.InputMethodManager;
 
+public class DoubleSidedCardDisplay extends SingleSidedCardDisplay{
+    private final static String TAG = "org.liberty.android.fantastischmemo.cardscreen.SingleSidedCardScreen";
 
-public interface FlashcardDisplay{
+    public DoubleSidedCardDisplay(Context context){
+        super(context, new SettingManager(context));
+    }
 
-    public View getView();
+    public DoubleSidedCardDisplay(Context context, SettingManager manager){
+        super(context, manager);
+    }
 
-    public View getQuestionView();
-    
-    public View getAnswerView();
 
-    public void updateView(Item item);
+	public void updateView(Item item, boolean showAnswer) {
+        super.updateView(item, showAnswer);
+        /* Only show the visible part */
+        if(showAnswer){
+            questionLayout.setVisibility(View.GONE);
+            answerLayout.setVisibility(View.VISIBLE);
+        }
+        else{
+            questionLayout.setVisibility(View.VISIBLE);
+            answerLayout.setVisibility(View.GONE);
+        }
+    }
 
-	public void updateView(Item item, boolean showAnswer);
-
-    public void setQuestionLayoutClickListener(View.OnClickListener l);
-
-    public void setAnswerLayoutClickListener(View.OnClickListener l);
-
-    public void setQuestionTextClickListener(View.OnClickListener l);
-
-    public void setAnswerTextClickListener(View.OnClickListener l);
-
-    public void setQuestionLayoutLongClickListener(View.OnLongClickListener l);
-
-    public void setAnswerLayoutLongClickListener(View.OnLongClickListener l);
-
-    public void setScreenOnTouchListener(View.OnTouchListener l);
-
-    public boolean isAnswerShown();
-
+    void setQARatio(float qRatio){
+        /* Do nothing because we don't need it */
+    }
 }
+
+

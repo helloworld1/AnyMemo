@@ -338,4 +338,7 @@
     <string name="fe_search_user_message">Please enter user email to login, e.g. yourname@example.com.</string>
     <string name="fe_private_login">Access private data</string>
     <string name="fe_private_login_message">Please enter the email you have just inputed in the previous screen, e.g. yourname@example.com.</string>
+    <string name="card_style">Card Style</string>
+    <string name="card_style_double">Double Sided</string>
+    <string name="card_style_single">Single Sided</string>
 </resources>

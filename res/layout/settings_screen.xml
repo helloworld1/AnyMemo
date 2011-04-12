@@ -93,6 +93,20 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dip"
+            android:text="@string/card_style" />
+        <Spinner
+            android:id="@+id/card_style_spinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:drawSelectorOnTop="true"
+            android:prompt="@string/card_style" />
+    </TableRow>
+
+    <TableRow>
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
             android:text="@string/settings_ratio" />
         <Spinner
             android:id="@+id/ratio_spinner"
@@ -101,6 +115,7 @@
             android:drawSelectorOnTop="true"
             android:prompt="@string/settings_ratio" />
     </TableRow>
+
     <TableRow>
         <TextView
             android:layout_width="fill_parent"

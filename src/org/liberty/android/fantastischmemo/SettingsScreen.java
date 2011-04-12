@@ -73,6 +73,7 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
     private Spinner answerTextColorSpinner;
     private Spinner questionBgColorSpinner;
     private Spinner answerBgColorSpinner;
+    private Spinner styleSpinner;
 	private CheckBox wipeCheckbox;
 	private CheckBox shuffleCheckbox;
 	private CheckBox inverseCheckbox;
@@ -149,6 +150,7 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
         questionLocaleSpinner.setOnItemSelectedListener(localeListener);
         answerLocaleSpinner.setOnItemSelectedListener(localeListener);
         
+        
         htmlSpinner = (Spinner)findViewById(R.id.html_spinner);
         ArrayAdapter<CharSequence> htmlAdapter = ArrayAdapter.createFromResource(this, R.array.html_list, android.R.layout.simple_spinner_item);
         htmlAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -158,6 +160,11 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
         ArrayAdapter<CharSequence> ratioAdapter = ArrayAdapter.createFromResource(this, R.array.ratio_list, android.R.layout.simple_spinner_item);
         ratioAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ratioSpinner.setAdapter(ratioAdapter);
+
+        styleSpinner= (Spinner)findViewById(R.id.card_style_spinner);
+        ArrayAdapter<CharSequence> styleAdapter = ArrayAdapter.createFromResource(this, R.array.card_style_list, android.R.layout.simple_spinner_item);
+        styleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        styleSpinner.setAdapter(styleAdapter);
 
 
         colorRow = (TableRow)findViewById(R.id.color_row);
@@ -440,6 +447,18 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
                 }
 
             }
+            else if(me.getKey().toString().equals("card_style")){
+				String res = me.getValue();
+                int index = 0;
+                if(res.equals("single_sided")){
+                    index = 0;
+                }
+                else if(res.equals("double_sided")){
+                    index = 1;
+                }
+				styleSpinner.setSelection(index);
+
+            }
 			
 		}
         
@@ -472,6 +491,16 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
     	hm.put("html_display", htmlList[htmlSpinner.getSelectedItemPosition()]);
     	hm.put("ratio", ratioList[ratioSpinner.getSelectedItemPosition()]);
         hm.put("audio_location", audioLocationEdit.getText().toString());
+
+
+        int stylePos = styleSpinner.getSelectedItemPosition();
+        /* Pos 1 = double, pos 0 = single */
+        if(stylePos == 1){
+            hm.put("card_style", "double_sided");
+        }
+        else{
+            hm.put("card_style", "single_sided");
+        }
         /* Store colors using space separated string */
         String colorString = "";
         if(colorCheckbox.isChecked()){
