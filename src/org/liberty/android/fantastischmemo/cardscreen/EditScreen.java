@@ -123,7 +123,12 @@ public class EditScreen extends AMActivity{
         }
         try{
             settingManager = new SettingManager(this, dbPath, dbName);
-            flashcardDisplay = new SingleSidedCardDisplay(this, settingManager);
+            if(settingManager.getCardStyle() == SettingManager.CardStyle.DOUBLE_SIDED){
+                flashcardDisplay = new DoubleSidedCardDisplay(this, settingManager);
+            }
+            else{
+                flashcardDisplay = new SingleSidedCardDisplay(this, settingManager);
+            }
             controlButtons = new EditScreenButtons(this);
 
             /* databaseUtility is for global db operations */
@@ -138,9 +143,9 @@ public class EditScreen extends AMActivity{
             if(currentItem == null){
                 itemManager.getItem(1);
             }
-            flashcardDisplay.updateView(currentItem);
+            updateCardFrontSide();
             updateTitle();
-            setButtonListeners();
+            setViewListeners();
             gestureDetector= new GestureDetector(EditScreen.this, gestureListener);
             flashcardDisplay.setScreenOnTouchListener(viewTouchListener);
             registerForContextMenu(flashcardDisplay.getView());
@@ -343,7 +348,7 @@ public class EditScreen extends AMActivity{
                     currentItem = new Item.Builder(savedItem)
                         .setId(currentItem.getId() + 1)
                         .build();
-                    flashcardDisplay.updateView(currentItem);
+                    updateCardFrontSide();
                     updateTitle();
                 }
 
@@ -466,16 +471,25 @@ public class EditScreen extends AMActivity{
         flashcardDisplayView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
     }
 
-    void setButtonListeners(){
+    void setViewListeners(){
         Map<String, Button> bm = controlButtons.getButtons();
         Button newButton = bm.get("new");
         Button editButton = bm.get("edit");
         Button prevButton = bm.get("prev");
         Button nextButton = bm.get("next");
+        /* Set button listeners */
         newButton.setOnClickListener(newButtonListener);
         editButton.setOnClickListener(editButtonListener);
         prevButton.setOnClickListener(prevButtonListener);
         nextButton.setOnClickListener(nextButtonListener);
+        /* For double sided card, the view can be toggled */
+        if(settingManager.getCardStyle() == SettingManager.CardStyle.DOUBLE_SIDED){
+            flashcardDisplay.setQuestionLayoutClickListener(toggleCardSideListener);
+            flashcardDisplay.setAnswerLayoutClickListener(toggleCardSideListener);
+            flashcardDisplay.setQuestionTextClickListener(toggleCardSideListener);
+            flashcardDisplay.setAnswerTextClickListener(toggleCardSideListener);
+        }
+
 
     }
 
@@ -514,7 +528,7 @@ public class EditScreen extends AMActivity{
     
     private void gotoNext(){
         currentItem = itemManager.getNextItem(currentItem);
-        flashcardDisplay.updateView(currentItem);
+        updateCardFrontSide();
         updateTitle();
     }
 
@@ -538,8 +552,26 @@ public class EditScreen extends AMActivity{
 
     private void gotoPrev(){
         currentItem = itemManager.getPreviousItem(currentItem);
-        flashcardDisplay.updateView(currentItem);
+        updateCardFrontSide();
         updateTitle();
+    }
+
+    /* 
+     * Show the front side of the current card 
+     * This method is called instead directly update the flashcard
+     * so both single and double sided card will work.
+     */
+    private void updateCardFrontSide(){
+        if(currentItem != null){
+            if(settingManager.getCardStyle() == SettingManager.CardStyle.DOUBLE_SIDED){
+                /* Double sided card, show front */
+                flashcardDisplay.updateView(currentItem, false);
+            }
+            else{
+                /* Single sided, show both answer and questjion. */
+                flashcardDisplay.updateView(currentItem, true);
+            }
+        }
     }
 
     private void createSearchOverlay(){
@@ -604,7 +636,7 @@ public class EditScreen extends AMActivity{
             Item item = itemManager.search(text, true, currentItem);
             if(item != null){
                 currentItem = item;
-                flashcardDisplay.updateView(currentItem);
+                updateCardFrontSide();
                 updateTitle();
             }
         }
@@ -617,7 +649,7 @@ public class EditScreen extends AMActivity{
             Item item = itemManager.search(text, false, currentItem);
             if(item != null){
                 currentItem = item;
-                flashcardDisplay.updateView(currentItem);
+                updateCardFrontSide();
                 updateTitle();
             }
         }
@@ -627,6 +659,22 @@ public class EditScreen extends AMActivity{
         @Override
         public boolean onTouch(View v, MotionEvent event){
             return gestureDetector.onTouchEvent(event);
+        }
+    };
+
+    private View.OnClickListener toggleCardSideListener = new View.OnClickListener(){
+        public void onClick(View v){
+            if(currentItem != null){
+                /* Double sided card, the click will toggle question and answer */
+                if(settingManager.getCardStyle() == SettingManager.CardStyle.DOUBLE_SIDED){
+                    if(flashcardDisplay.isAnswerShown()){
+                        flashcardDisplay.updateView(currentItem, false);
+                    }
+                    else{
+                        flashcardDisplay.updateView(currentItem, true);
+                    }
+                }
+            }
         }
     };
 
