@@ -53,12 +53,14 @@ import android.widget.Toast;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.util.Log;
 import android.net.Uri;
 import android.os.Environment;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import org.liberty.android.fantastischmemo.cardscreen.SettingManager;
 
 public class SettingsScreen extends AMActivity implements View.OnClickListener, ColorDialog.OnClickListener {
 	private Spinner questionFontSizeSpinner;
@@ -79,6 +81,8 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
 	private CheckBox inverseCheckbox;
     private CheckBox qTypefaceCheckbox;
     private CheckBox aTypefaceCheckbox;
+    private CheckBox field1Checkbox;
+    private CheckBox field2Checkbox;
     private EditText qTypefaceEdit;
     private EditText aTypefaceEdit;
     private EditText audioLocationEdit;
@@ -88,6 +92,8 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
     private CheckBox colorCheckbox;
     private Button colorButton;
     private ArrayList<Integer> colors;
+    private long field1Value = SettingManager.CardField.QUESTION;
+    private long field2Value = SettingManager.CardField.ANSWER;
 
 	private Button btnSave;
 	private Button btnDiscard;
@@ -97,6 +103,7 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
     private final int ACTIVITY_TTF_QUESTION = 3;
     private final int ACTIVITY_TTF_ANSWER = 4;
     private final int DIALOG_SAVING_ID = 48;
+    private final static String TAG = "SettingsScreen";
     
 
 	
@@ -209,6 +216,12 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
         aTypefaceCheckbox.setOnClickListener(this);
         colorCheckbox = (CheckBox)findViewById(R.id.checkbox_customize_color);
         colorCheckbox.setOnClickListener(this);
+
+        field1Checkbox = (CheckBox)findViewById(R.id.checkbox_field1);
+        field1Checkbox.setOnClickListener(this);
+        field2Checkbox = (CheckBox)findViewById(R.id.checkbox_field2);
+        field2Checkbox.setOnClickListener(this);
+
         qTypefaceEdit = (EditText)findViewById(R.id.edit_typeface_question);
         aTypefaceEdit = (EditText)findViewById(R.id.edit_typeface_answer);
         audioLocationEdit = (EditText)findViewById(R.id.settings_audio_location);
@@ -459,6 +472,30 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
 				styleSpinner.setSelection(index);
 
             }
+            else if(me.getKey().toString().equals("card_field_1")){
+                String s =  me.getValue().toString();
+                long v = Long.parseLong(s);
+                if(v != SettingManager.CardField.QUESTION){
+                    field1Checkbox.setChecked(true);
+                }
+                else{
+                    field1Checkbox.setChecked(false);
+                }
+                field1Value = v;
+
+            }
+            else if(me.getKey().toString().equals("card_field_2")){
+                String s =  me.getValue().toString();
+                long v = Long.parseLong(s);
+                if(v != SettingManager.CardField.ANSWER){
+                    field2Checkbox.setChecked(true);
+                }
+                else{
+                    field2Checkbox.setChecked(false);
+                }
+                field2Value = v;
+
+            }
 			
 		}
         
@@ -528,6 +565,20 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
         else{
             hm.put("answer_typeface", "");
         }
+
+        if(field1Checkbox.isChecked()){
+            hm.put("card_field_1", Long.toString(field1Value));
+        }
+        else{
+            hm.put("card_field_1", "" + SettingManager.CardField.QUESTION);
+        }
+        if(field2Checkbox.isChecked()){
+            hm.put("card_field_2", Long.toString(field2Value));
+        }
+        else{
+            hm.put("card_field_2", "" + SettingManager.CardField.ANSWER);
+        }
+
     	dbHelper.setSettings(hm);
     	
     }
@@ -638,6 +689,51 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
             }
             else{
                 colorRow.setVisibility(View.GONE);
+            }
+        }
+        if(v == field1Checkbox){
+                
+            if(field1Checkbox.isChecked()){
+                /* 4 field now */
+                final boolean[] fieldSelection = bitfieldToArray(field1Value, 4);
+                final String[] fieldText = getResources().getStringArray(R.array.card_field_list);
+                new AlertDialog.Builder( this )
+                    .setTitle(R.string.settings_field1)
+                    .setMultiChoiceItems(fieldText, fieldSelection,new DialogInterface.OnMultiChoiceClickListener() { 
+                        public void onClick(DialogInterface dialog, int which, boolean isChecked) { 
+                            fieldSelection[which] = isChecked;
+                        } 
+                    }) 
+                    .setPositiveButton(getString(R.string.ok_text), new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int which ){
+                            field1Value = arrayToBitfield(fieldSelection);
+                            
+                        }
+                    })
+                    .show();
+            }
+        }
+        if(v == field2Checkbox){
+            if(field2Checkbox.isChecked()){
+                /* 4 field now */
+                final boolean[] fieldSelection = bitfieldToArray(field2Value, 4);
+                final String[] fieldText = getResources().getStringArray(R.array.card_field_list);
+                new AlertDialog.Builder( this )
+                    .setTitle(R.string.settings_field2)
+                    .setMultiChoiceItems(fieldText, fieldSelection,new DialogInterface.OnMultiChoiceClickListener() { 
+                        public void onClick(DialogInterface dialog, int which, boolean isChecked) { 
+                            fieldSelection[which] = isChecked;
+                        } 
+                    }) 
+                    .setPositiveButton(getString(R.string.ok_text), new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int which ){
+                            field2Value = arrayToBitfield(fieldSelection);
+                            
+                        }
+                    })
+                    .show();
             }
         }
     }
@@ -751,5 +847,30 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
                 return super.onCreateDialog(id);
 
         }
+    }
+
+    public static boolean[] bitfieldToArray(long bits, int n){
+        boolean[] bitsArray = new boolean[n];
+        for(int i = 0; i < n; i++){
+            if((bits & (1 << i)) > 0){
+                bitsArray[i] = true;
+            }
+            else{
+                bitsArray[i] = false;
+            }
+        }
+        return bitsArray;
+    }
+
+    public static long arrayToBitfield(boolean[] bf){
+        long l = 0;
+        int n = bf.length;
+        for(int i = n - 1; i >= 0; i--){
+            l *= 2;
+            if(bf[i]){
+                l += 1;
+            }
+        }
+        return l;
     }
 }

@@ -341,4 +341,6 @@
     <string name="card_style">Card Style</string>
     <string name="card_style_double">Double Sided</string>
     <string name="card_style_single">Single Sided</string>
+    <string name="settings_field1">Customize Card Field1</string>
+    <string name="settings_field2">Customize Card Field2</string>
 </resources>

@@ -223,6 +223,19 @@
         android:layout_height="2dip"
         android:background="#FF909090" />
 
+    <CheckBox android:id="@+id/checkbox_field1"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="@string/settings_field1" />
+
+    <CheckBox android:id="@+id/checkbox_field2"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="@string/settings_field2" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dip"
+        android:background="#FF909090" />
+
     <CheckBox android:id="@+id/checkbox_wipe"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:text="@string/settings_wipe" />

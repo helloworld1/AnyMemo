@@ -126,6 +126,10 @@ public class SettingManager{
      * null means default color */
     protected List<Integer> colors = null;
 
+    /* Use bitwise op */
+    private long cardField1 = CardField.QUESTION;
+    private long cardField2 = CardField.ANSWER;
+
     public SettingManager(Context context){
         mContext = context;
 		settings = PreferenceManager.getDefaultSharedPreferences(context);
@@ -193,6 +197,13 @@ public class SettingManager{
         else{
             return null;
         }
+    }
+
+    public long getCardField1(){
+        return cardField1;
+    }
+    public long getCardField2(){
+        return cardField2;
     }
 
     public Locale getAnswerAudioLocale(){
@@ -402,6 +413,16 @@ public class SettingManager{
                     cardStyle = s;
                 }
             }
+            if(me.getKey().toString().equals("card_field_1")){
+                String s =  me.getValue().toString();
+                long v = Long.parseLong(s);
+                cardField1 = v;
+            }
+            if(me.getKey().toString().equals("card_field_2")){
+                String s =  me.getValue().toString();
+                long v = Long.parseLong(s);
+                cardField1 = v;
+            }
 
 		}
         filters = dbHelper.getRecentFilters();
@@ -507,6 +528,13 @@ public class SettingManager{
     }
 
 
+    /* Use bitfield opertion on this class */
+    public static class CardField{
+        public static final long QUESTION = 1;
+        public static final long ANSWER = 2;
+        public static final long CATEGORY = 4;
+        public static final long NOTE = 8;
+    }
 
 }
 
