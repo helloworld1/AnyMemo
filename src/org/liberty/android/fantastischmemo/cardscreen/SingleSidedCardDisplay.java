@@ -225,14 +225,71 @@ public class SingleSidedCardDisplay implements FlashcardDisplay, TagHandler, Ima
 
         }
 
-        String sq, sa;
-        if(enableThirdPartyArabic){
-            sq = ArabicUtilities.reshape(item.getQuestion());
-            sa = ArabicUtilities.reshape(item.getAnswer());
-        }
+        String sq = "", sa = "";
+        /* new line added to separate fields */
+        String nlq = "\n", nla = "\n";
+
+		if(htmlDisplay == SettingManager.HTMLDisplayType.QUESTION){
+            nlq = "<br />";
+            nla = "\n";
+		}
+		else if(htmlDisplay == SettingManager.HTMLDisplayType.ANSWER){
+            nlq = "\n";
+            nla = "<br />";
+		}
+		else if(htmlDisplay == SettingManager.HTMLDisplayType.NONE){
+            nlq = "\n";
+            nla = "\n";
+		}
         else{
-            sq = item.getQuestion();
-            sa = item.getAnswer();
+            nlq = "<br />";
+            nla = "<br />";
+        }
+
+        /* Show the field that is enabled in settings */
+        long field1 = settingManager.getCardField1();
+        long field2 = settingManager.getCardField2();
+        Log.v(TAG, "Field1: " + field1);
+        Log.v(TAG, "Field2: " + field2);
+        
+        if((field1 & SettingManager.CardField.QUESTION) > 0){
+            sq += nlq + item.getQuestion();
+        }
+        if((field1 & SettingManager.CardField.ANSWER) > 0){
+            sq += nlq + item.getAnswer();
+        }
+        if((field1 & SettingManager.CardField.CATEGORY) > 0){
+            sq += nlq + item.getCategory();
+        }
+        if((field1 & SettingManager.CardField.NOTE) > 0){
+            sq += nlq + item.getNote();
+        }
+
+
+        if((field2 & SettingManager.CardField.QUESTION) > 0){
+            sa += nla + item.getQuestion();
+        }
+        if((field2 & SettingManager.CardField.ANSWER) > 0){
+            sa += nla + item.getAnswer();
+        }
+        if((field2 & SettingManager.CardField.CATEGORY) > 0){
+            sa += nla + item.getCategory();
+        }
+        if((field2 & SettingManager.CardField.NOTE) > 0){
+            sa += nla + item.getNote();
+        }
+
+
+        
+        sq = sq.substring(nlq.length());
+        sa = sa.substring(nla.length());
+
+
+        Log.v(TAG, "2: " + sq);
+        Log.v(TAG, "2: " + sa);
+        if(enableThirdPartyArabic){
+            sq = ArabicUtilities.reshape(sq);
+            sa = ArabicUtilities.reshape(sa);
         }
 		
 		

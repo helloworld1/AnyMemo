@@ -421,7 +421,7 @@ public class SettingManager{
             if(me.getKey().toString().equals("card_field_2")){
                 String s =  me.getValue().toString();
                 long v = Long.parseLong(s);
-                cardField1 = v;
+                cardField2 = v;
             }
 
 		}
