@@ -101,7 +101,7 @@ public class DownloaderUtils{
 
     /* Return a valid dbname from original name */
     public static String validateDBName(String orngName){
-        String s1 = orngName.replace("/", "_");
+        String s1 = orngName.replaceAll("[/:]", "_");
         return s1;
     }
 }
