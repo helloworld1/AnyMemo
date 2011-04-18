@@ -304,4 +304,22 @@
     <string name="save_prev_text">保存并预览</string>
     <string name="paint_text">画笔</string>
     <string name="error_no_colordict">ColorDict没有安装. 请到电子市场下载ColorDict. 错误报告: </string>
+    <string name="search_tag">搜索标签</string>
+    <string name="search_user">用户登陆</string>
+    <string name="private_login">访问私有卡片</string>
+    <string name="upload_db">上传卡片</string>
+    <string name="upload_wait">正在上传请稍候。</string>
+    <string name="upload_finish">上传成功</string>
+    <string name="upload_finish_message">上传成功.</string>
+    <string name="access_authorization_text">获取授权，请稍候...</string>
+    <string name="fe_directory_text">浏览目录</string>
+    <string name="fe_search_tag_message">请输入搜索的标签, 比如. Spanish, math.</string>
+    <string name="fe_search_user_message">请输入用户email来登陆, 比如yourname@example.com.</string>
+    <string name="fe_private_login">访问私有数据</string>
+    <string name="fe_private_login_message">请输入您刚才在网页中写的email, 比如. yourname@example.com.</string>
+    <string name="card_style">卡片样式</string>
+    <string name="card_style_double">双面卡片</string>
+    <string name="card_style_single">单面卡片</string>
+    <string name="settings_field1">配置卡的第一面</string>
+    <string name="settings_field2">配置卡的第二面</string>
 </resources>

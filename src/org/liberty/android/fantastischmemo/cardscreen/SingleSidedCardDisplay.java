@@ -230,20 +230,20 @@ public class SingleSidedCardDisplay implements FlashcardDisplay, TagHandler, Ima
         String nlq = "\n", nla = "\n";
 
 		if(htmlDisplay == SettingManager.HTMLDisplayType.QUESTION){
-            nlq = "<br />";
-            nla = "\n";
+            nlq = "<br /><br />";
+            nla = "\n\n";
 		}
 		else if(htmlDisplay == SettingManager.HTMLDisplayType.ANSWER){
-            nlq = "\n";
-            nla = "<br />";
+            nlq = "\n\n";
+            nla = "<br /><br />";
 		}
 		else if(htmlDisplay == SettingManager.HTMLDisplayType.NONE){
-            nlq = "\n";
-            nla = "\n";
+            nlq = "\n\n";
+            nla = "\n\n";
 		}
         else{
-            nlq = "<br />";
-            nla = "<br />";
+            nlq = "<br /><br />";
+            nla = "<br /><br />";
         }
 
         /* Show the field that is enabled in settings */
