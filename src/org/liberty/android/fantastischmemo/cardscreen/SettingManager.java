@@ -100,14 +100,14 @@ public class SettingManager{
     private boolean enableThirdPartyArabic = true;
 	private double questionFontSize = 23.5;
 	private double answerFontSize = 23.5;
-	private String questionAlign = "center";
-	private String answerAlign = "center";
+    private Alignment questionAlign = Alignment.CENTER;
+    private Alignment answerAlign = Alignment.CENTER;
 	private String questionLocale = "US";
 	private String answerLocale = "US";
-	private String htmlDisplay = "none";
+    private HTMLDisplayType htmlDisplay = HTMLDisplayType.AUTO;
 	private String qaRatio = "50%";
-    private String btnStyle = "";
-    private String speechCtl = "";
+    private ButtonStyle btnStyle = ButtonStyle.ANYMEMO;
+    private SpeechControlMethod speechCtl = SpeechControlMethod.TAP;
 	private boolean questionUserAudio = false;
 	private boolean answerUserAudio = false;
     private boolean copyClipboard = true;
@@ -121,7 +121,7 @@ public class SettingManager{
     private boolean fullscreenMode = false;
     private int screenHeight = 320;
     private int screenWidth = 480;
-    private String cardStyle = "single_sided";
+    private CardStyle cardStyle = CardStyle.SINGLE_SIDED;
     /* The colors for various elements
      * null means default color */
     protected List<Integer> colors = null;
@@ -147,7 +147,7 @@ public class SettingManager{
     }
 
     public CardStyle getCardStyle(){
-        return CardStyle.parse(cardStyle);
+        return cardStyle;
     }
 
     public float getQuestionFontSize(){
@@ -159,14 +159,14 @@ public class SettingManager{
     }
 
     public Alignment getQuestionAlign(){
-        return Alignment.parse(questionAlign);
+        return questionAlign;
     }
     public Alignment getAnswerAlign(){
-        return Alignment.parse(answerAlign);
+        return answerAlign;
     }
 
     public HTMLDisplayType getHtmlDisplay(){
-        return HTMLDisplayType.parse(htmlDisplay);
+        return htmlDisplay;
     }
 
     public float getQARatio(){
@@ -175,11 +175,11 @@ public class SettingManager{
     }
 
     public ButtonStyle getButtonStyle(){
-        return ButtonStyle.parse(btnStyle);
+        return btnStyle;
     }
 
     public SpeechControlMethod getSpeechControlMethod(){
-        return SpeechControlMethod.parse(speechCtl);
+        return speechCtl;
     }
 
     public Locale getQuestionAudioLocale(){
@@ -224,7 +224,7 @@ public class SettingManager{
     }
 
     public boolean getQuestionUserAudio(){
-		if(questionLocale.equals("User Audio")){
+		if(questionLocale.equals("1") || questionLocale.equals("User Audio")){
             return true;
 		}
         else{
@@ -233,7 +233,7 @@ public class SettingManager{
     }
 
     public boolean getAnswerUserAudio(){
-        if(answerLocale.equals("User Audio")){
+        if(answerLocale.equals("1") || answerLocale.equals("User Audio")){
             return true;
 		}
         else{
@@ -319,8 +319,8 @@ public class SettingManager{
     }
 
     private void loadGlobalOptions(){
-        speechCtl = settings.getString("speech_ctl", mContext.getResources().getStringArray(R.array.speech_ctl_list)[0]);
-        btnStyle = settings.getString("button_style", mContext.getResources().getStringArray(R.array.button_style_list)[0]);
+        speechCtl = SpeechControlMethod.parse(settings.getString("speech_ctl", mContext.getResources().getStringArray(R.array.speech_ctl_list)[0]));
+        btnStyle = ButtonStyle.parse(settings.getString("button_style", mContext.getResources().getStringArray(R.array.button_style_list)[0]));
         copyClipboard = settings.getBoolean("copyclipboard", true);
 
         volumeKeyShortcut = settings.getBoolean("enable_volume_key", false);
@@ -364,10 +364,10 @@ public class SettingManager{
 				this.answerFontSize = new Double(me.getValue());
 			}
 			if(me.getKey().equals("question_align")){
-				this.questionAlign = me.getValue();
+				this.questionAlign = Alignment.parse(me.getValue());
 			}
 			if(me.getKey().equals("answer_align")){
-				this.answerAlign = me.getValue();
+				this.answerAlign = Alignment.parse(me.getValue());
 			}
 			if(me.getKey().equals("question_locale")){
 				this.questionLocale = me.getValue();
@@ -376,7 +376,7 @@ public class SettingManager{
 				this.answerLocale = me.getValue();
 			}
 			if(me.getKey().equals("html_display")){
-				this.htmlDisplay = me.getValue();
+				this.htmlDisplay = HTMLDisplayType.parse(me.getValue());
 			}
 			if(me.getKey().equals("ratio")){
 				this.qaRatio = me.getValue();
@@ -408,11 +408,9 @@ public class SettingManager{
                 }
             }
             if(me.getKey().toString().equals("card_style")){
-                String s = cardStyle = me.getValue().toString();
-                if(!s.equals("")){
-                    cardStyle = s;
-                }
+                cardStyle =  CardStyle.parse(me.getValue().toString());
             }
+
             if(me.getKey().toString().equals("card_field_1")){
                 String s =  me.getValue().toString();
                 long v = Long.parseLong(s);
@@ -435,10 +433,10 @@ public class SettingManager{
         CENTER;
 
         public static Alignment parse(String a){
-            if(a.equals("left")){
+            if(a.equals("0") || a.equals("left")){
                 return LEFT;
             }
-            else if(a.equals("right")){
+            else if(a.equals("2") || a.equals("right")){
                 return RIGHT;
             }
             else{
@@ -451,20 +449,24 @@ public class SettingManager{
         BOTH,
         QUESTION,
         ANSWER,
+        AUTO,
         NONE;
 
         public static HTMLDisplayType parse(String a){
-            if(a.equals("question")){
+            if(a.equals("1") || a.equals("question")){
                 return QUESTION;
             }
-            else if(a.equals("answer")){
+            else if(a.equals("2") || a.equals("answer")){
                 return ANSWER;
             }
-            else if(a.equals("none")){
+            else if(a.equals("0") || a.equals("none")){
                 return NONE;
             }
-            else{
+            else if(a.equals("1") || a.equals("both")){
                 return BOTH;
+            }
+            else{
+                return AUTO;
             }
         }
     }
@@ -515,10 +517,10 @@ public class SettingManager{
         SINGLE_SIDED,
         DOUBLE_SIDED;
         public static CardStyle parse(String a){
-            if(a.equals("single_sided")){
+            if(a.equals("0") || a.equals("single_sided")){
                 return SINGLE_SIDED;
             }
-            else if(a.equals("double_sided")){
+            else if(a.equals("1") || a.equals("double_sided")){
                 return DOUBLE_SIDED;
             }
             else{

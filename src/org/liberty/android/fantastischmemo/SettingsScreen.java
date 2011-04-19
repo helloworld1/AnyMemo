@@ -303,96 +303,124 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
 			else if(me.getKey().toString().equals("question_align")){
 				String res = me.getValue();
 				int index;
-				if(res.equals("left")){
-					index = 0;
-				}
-				else if(res.equals("right")){
-					index = 2;
-				}
-				else{
-					index = 1;
-				}
+                /* New config use index instead */
+                if(AMUtil.isInteger(res)){
+                    index = Integer.parseInt(res);
+                }
+                else{
+                    /* Old config, depreciated */
+                    if(res.equals("left")){
+                        index = 0;
+                    }
+                    else if(res.equals("right")){
+                        index = 2;
+                    }
+                    else{
+                        index = 1;
+                    }
+                }
 				questionAlignSpinner.setSelection(index);
 			}
 			else if(me.getKey().toString().equals("answer_align")){
 				String res = me.getValue();
 				int index;
-				if(res.equals("left")){
-					index = 0;
-				}
-				else if(res.equals("right")){
-					index = 2;
-				}
-				else{
-					index = 1;
-				}
+                if(AMUtil.isInteger(res)){
+                    index = Integer.parseInt(res);
+                }
+                else{
+                    if(res.equals("left")){
+                        index = 0;
+                    }
+                    else if(res.equals("right")){
+                        index = 2;
+                    }
+                    else{
+                        index = 1;
+                    }
+                }
 				answerAlignSpinner.setSelection(index);
 			}
 			else if(me.getKey().toString().equals("question_locale")){
 				String res = me.getValue();
-                /* Compatible with old database */
-                if(res.equals("Other")){
-                    res = "Disabled";
+                int index = 0;
+
+                if(AMUtil.isInteger(res)){
+                    index = Integer.parseInt(res);
                 }
-                else if(res.equals("User Audio")){
-                    audioLocationEdit.setVisibility(View.VISIBLE);
+                else{
+                    /* Compatible with old database */
+                    if(res.equals("Other")){
+                        res = "Disabled";
+                    }
+                    else if(res.equals("User Audio")){
+                        audioLocationEdit.setVisibility(View.VISIBLE);
+                    }
+                    String[] localeList = getResources().getStringArray(R.array.locale_list);
+                    boolean found = false;
+                    for(String str : localeList){
+                        if(str.equals(res)){
+                            found = true;
+                            break;
+                        }
+                        index ++;
+                    }
+                    if(found == false){
+                        index = 0;
+                    }
                 }
-				String[] localeList = getResources().getStringArray(R.array.locale_list);
-				int index = 0;
-				boolean found = false;
-				for(String str : localeList){
-					if(str.equals(res)){
-						found = true;
-						break;
-					}
-					index ++;
-				}
-				if(found == false){
-					index = 0;
-				}
 				questionLocaleSpinner.setSelection(index);
 			}
 			else if(me.getKey().toString().equals("answer_locale")){
-                /* Compatible with old database */
 				String res = me.getValue().toString();
-                if(res.equals("Other")){
-                    res = "Disabled";
+                int index = 0;
+                if(AMUtil.isInteger(res)){
+                    index = Integer.parseInt(res);
                 }
-                else if(res.equals("User Audio")){
-                    audioLocationEdit.setVisibility(View.VISIBLE);
-                }
-				String[] localeList = getResources().getStringArray(R.array.locale_list);
-				int index = 0;
-				boolean found = false;
-				for(String str : localeList){
-					if(str.equals(res)){
-						found = true;
-						break;
-					}
-					index ++;
-				}
+                else{
+                    /* Compatible with old database */
+                    if(res.equals("Other")){
+                        res = "Disabled";
+                    }
+                    else if(res.equals("User Audio")){
+                        audioLocationEdit.setVisibility(View.VISIBLE);
+                    }
+                    String[] localeList = getResources().getStringArray(R.array.locale_list);
+                    boolean found = false;
+                    for(String str : localeList){
+                        if(str.equals(res)){
+                            found = true;
+                            break;
+                        }
+                        index ++;
+                    }
 
-				if(found == false){
-					index = 0;
-				}
+                    if(found == false){
+                        index = 0;
+                    }
+                }
 				answerLocaleSpinner.setSelection(index);
 			}
 			
 			else if(me.getKey().toString().equals("html_display")){
 				String res = me.getValue();
-				String[] htmlList = getResources().getStringArray(R.array.html_list);
-				int index = 0;
-				boolean found = false;
-				for(String str : htmlList){
-					if(str.equals(res)){
-						found = true;
-						break;
-					}
-					index++;
-				}
-				if(found == false){
-					index = 0;
-				}
+                int index = 0;
+                if(AMUtil.isInteger(res)){
+                    index = Integer.parseInt(res);
+                }
+                else{
+                    String[] htmlList = getResources().getStringArray(R.array.html_list);
+                    boolean found = false;
+                    for(String str : htmlList){
+                        if(str.equals(res)){
+                            found = true;
+                            break;
+                        }
+                        index++;
+                    }
+                    if(found == false){
+                        index = 0;
+                    }
+                }
 				htmlSpinner.setSelection(index);
 			}
 			else if(me.getKey().toString().equals("ratio")){
@@ -463,11 +491,16 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
             else if(me.getKey().toString().equals("card_style")){
 				String res = me.getValue();
                 int index = 0;
-                if(res.equals("single_sided")){
-                    index = 0;
+                if(AMUtil.isInteger(res)){
+                    index = Integer.parseInt(res);
                 }
-                else if(res.equals("double_sided")){
-                    index = 1;
+                else{
+                    if(res.equals("single_sided")){
+                        index = 0;
+                    }
+                    else if(res.equals("double_sided")){
+                        index = 1;
+                    }
                 }
 				styleSpinner.setSelection(index);
 
@@ -521,23 +554,15 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
     	String[] ratioList = getResources().getStringArray(R.array.ratio_list);
     	hm.put("question_font_size", fontSizeList[questionFontSizeSpinner.getSelectedItemPosition()]);
     	hm.put("answer_font_size", fontSizeList[answerFontSizeSpinner.getSelectedItemPosition()]);
-    	hm.put("question_align", alignList[questionAlignSpinner.getSelectedItemPosition()]);
-    	hm.put("answer_align", alignList[answerAlignSpinner.getSelectedItemPosition()]);
-    	hm.put("question_locale", localeList[questionLocaleSpinner.getSelectedItemPosition()]);
-    	hm.put("answer_locale", localeList[answerLocaleSpinner.getSelectedItemPosition()]);
-    	hm.put("html_display", htmlList[htmlSpinner.getSelectedItemPosition()]);
+    	hm.put("question_align", "" + questionAlignSpinner.getSelectedItemPosition());
+    	hm.put("answer_align", "" + answerAlignSpinner.getSelectedItemPosition());
+    	hm.put("question_locale", "" + questionLocaleSpinner.getSelectedItemPosition());
+    	hm.put("answer_locale", "" + answerLocaleSpinner.getSelectedItemPosition());
+    	hm.put("html_display", "" + htmlSpinner.getSelectedItemPosition());
     	hm.put("ratio", ratioList[ratioSpinner.getSelectedItemPosition()]);
         hm.put("audio_location", audioLocationEdit.getText().toString());
+        hm.put("card_style", "" +  styleSpinner.getSelectedItemPosition());
 
-
-        int stylePos = styleSpinner.getSelectedItemPosition();
-        /* Pos 1 = double, pos 0 = single */
-        if(stylePos == 1){
-            hm.put("card_style", "double_sided");
-        }
-        else{
-            hm.put("card_style", "single_sided");
-        }
         /* Store colors using space separated string */
         String colorString = "";
         if(colorCheckbox.isChecked()){
