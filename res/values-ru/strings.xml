@@ -318,4 +318,9 @@
     <string name="fe_search_user_message">Введите email пользователя чтобы залогиниться, напр.  yourname@example.com.</string>
     <string name="fe_private_login">Доступ к Личным Данным</string>
     <string name="fe_private_login_message">Введите email, который вы ввели в предыдущем экране, напр. yourname@example.com.</string>
+    <string name="card_style">Стиль Карточек</string>
+    <string name="card_style_double">Двухсторонний</string>
+    <string name="card_style_single">Односторонний</string>
+    <string name="settings_field1">Настроить 1 Поле Карточки</string>
+    <string name="settings_field2">Настроить 2 Поле Карточки</string>
 </resources>
