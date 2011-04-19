@@ -453,10 +453,10 @@ public class SettingManager{
         NONE;
 
         public static HTMLDisplayType parse(String a){
-            if(a.equals("1") || a.equals("question")){
+            if(a.equals("2") || a.equals("question")){
                 return QUESTION;
             }
-            else if(a.equals("2") || a.equals("answer")){
+            else if(a.equals("3") || a.equals("answer")){
                 return ANSWER;
             }
             else if(a.equals("0") || a.equals("none")){

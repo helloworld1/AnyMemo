@@ -548,16 +548,19 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
     private void updateSettings(){
     	HashMap<String, String> hm = new HashMap<String, String>();
     	String[] fontSizeList = getResources().getStringArray(R.array.font_size_list);
-    	String[] alignList = getResources().getStringArray(R.array.align_list);
     	String[] localeList = getResources().getStringArray(R.array.locale_list);
-    	String[] htmlList = getResources().getStringArray(R.array.html_list);
     	String[] ratioList = getResources().getStringArray(R.array.ratio_list);
     	hm.put("question_font_size", fontSizeList[questionFontSizeSpinner.getSelectedItemPosition()]);
     	hm.put("answer_font_size", fontSizeList[answerFontSizeSpinner.getSelectedItemPosition()]);
     	hm.put("question_align", "" + questionAlignSpinner.getSelectedItemPosition());
     	hm.put("answer_align", "" + answerAlignSpinner.getSelectedItemPosition());
-    	hm.put("question_locale", "" + questionLocaleSpinner.getSelectedItemPosition());
-    	hm.put("answer_locale", "" + answerLocaleSpinner.getSelectedItemPosition());
+        int qlPos = questionLocaleSpinner.getSelectedItemPosition();
+        int alPos = answerLocaleSpinner.getSelectedItemPosition();
+
+        /* 0 --  disabled, 1 -- User audio */
+    	hm.put("question_locale", qlPos <= 1 ? "" + qlPos : localeList[qlPos] );
+    	hm.put("answer_locale", alPos <= 1 ? "" + alPos : localeList[qlPos] );
+
     	hm.put("html_display", "" + htmlSpinner.getSelectedItemPosition());
     	hm.put("ratio", ratioList[ratioSpinner.getSelectedItemPosition()]);
         hm.put("audio_location", audioLocationEdit.getText().toString());

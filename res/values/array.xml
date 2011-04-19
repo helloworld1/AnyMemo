@@ -17,14 +17,14 @@
 </string-array>
 
 <string-array name="align_list">
-	<item>left</item>
-	<item>center</item>
-	<item>right</item>
+    <item>@string/left_text</item>
+    <item>@string/center_text</item>
+    <item>@string/right_text</item>
 </string-array>
 
 <string-array name="locale_list">
-	<item>Disabled</item>
-	<item>User Audio</item>
+    <item>@string/disabled_text</item>
+    <item>@string/user_audio_text</item>
 	<item>US</item>
 	<item>UK</item>
 	<item>FR</item>
@@ -62,10 +62,11 @@
 	<item>ZH</item>
 </string-array>
 <string-array name="html_list">
-	<item>none</item>
-	<item>both</item>
-	<item>question</item>
-	<item>answer</item>
+    <item>@string/none_text</item>
+    <item>@string/both_text</item>
+    <item>@string/add_screen_question</item>
+    <item>@string/add_screen_answer</item>
+    <item>@string/auto_text</item>
 </string-array>
 <string-array name="ratio_list">
 	<item>50%</item>
