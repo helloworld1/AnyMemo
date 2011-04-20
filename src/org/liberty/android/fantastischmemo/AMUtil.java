@@ -29,4 +29,9 @@ public class AMUtil{
             return false;
         }
     }
+
+    public static boolean isHTML(String s){
+        return s.contains("<") && s.contains(">");
+    }
+
 }

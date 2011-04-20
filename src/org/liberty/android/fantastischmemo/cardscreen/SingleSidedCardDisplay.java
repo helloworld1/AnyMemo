@@ -241,10 +241,22 @@ public class SingleSidedCardDisplay implements FlashcardDisplay, TagHandler, Ima
             nlq = "\n\n";
             nla = "\n\n";
 		}
-        else{
+		else if(htmlDisplay == SettingManager.HTMLDisplayType.BOTH){
             nlq = "<br /><br />";
             nla = "<br /><br />";
         }
+        else{
+            if(item.containsHTML()){
+                nlq = "<br /><br />";
+                nla = "<br /><br />";
+            }
+            else{
+                nlq = "\n\n";
+                nla = "\n\n";
+            }
+        }
+
+
 
         /* Show the field that is enabled in settings */
         long field1 = settingManager.getCardField1();
@@ -306,11 +318,23 @@ public class SingleSidedCardDisplay implements FlashcardDisplay, TagHandler, Ima
             questionView.setText(sq);
             answerView.setText(sa);
 		}
-		else{
+		else if(htmlDisplay == SettingManager.HTMLDisplayType.BOTH){
             /* Both */
             questionView.setText(Html.fromHtml(sq, this, this));
             answerView.setText(Html.fromHtml(sa, this, this));
 		}
+        else{
+            /* Auto */
+            if(item.containsHTML()){
+                questionView.setText(Html.fromHtml(sq, this, this));
+                answerView.setText(Html.fromHtml(sa, this, this));
+            }
+            else{
+                questionView.setText(sq);
+                answerView.setText(sa);
+            }
+
+        }
 		
         /* Here is tricky to set up the alignment of the text */
 		if(questionAlign == SettingManager.Alignment.CENTER){

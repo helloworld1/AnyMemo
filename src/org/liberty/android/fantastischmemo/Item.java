@@ -437,6 +437,10 @@ public final class Item implements Parcelable, Comparable<Item>{
         }
     }
 
+    public boolean containsHTML(){
+        return AMUtil.isHTML(question) || AMUtil.isHTML(answer);
+    }
+
     public Item inverseQA(){
         Item newItem = new Builder(this)
             .setQuestion(this.answer)
