@@ -11,7 +11,7 @@
         android:icon="@drawable/icon" 
         android:label="@string/app_name" >
         <activity 
-            android:name=".AnyMemo"
+            android:name=".MainTabs"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name" >
             <intent-filter>
@@ -81,6 +81,9 @@
             android:configChanges="orientation|keyboardHidden" />
         <activity
             android:name=".downloader.FEDirectory"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity
+            android:name=".EditScreenTab"
             android:configChanges="orientation|keyboardHidden" />
         <receiver
             android:name=".AlarmReceiver"

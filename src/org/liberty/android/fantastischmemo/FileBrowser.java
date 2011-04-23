@@ -222,19 +222,7 @@ public class FileBrowser extends AMActivity implements OnItemClickListener, OnIt
 						this.browseTo(clickedFile);
 					}
 					else if(clickedFile.isFile()){
-                        /* Save the current path */
-                        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-
-                        SharedPreferences.Editor editor = settings.edit();
-                        editor.putString("saved_fb_path", clickedFile.getParent());
-                        editor.commit();
-						Intent resultIntent = new Intent();
-		
-						resultIntent.putExtra("org.liberty.android.fantastischmemo.dbName", clickedFile.getName());
-						resultIntent.putExtra("org.liberty.android.fantastischmemo.dbPath", clickedFile.getParent());
-
-						this.setResult(Activity.RESULT_OK, resultIntent);
-						finish();
+                        fileClickAction(clickedFile.getName(),  clickedFile.getParent());
 						
 					}
 				}
@@ -245,9 +233,26 @@ public class FileBrowser extends AMActivity implements OnItemClickListener, OnIt
 				}
 			}
 		}
+
 		
 		
 	}
+
+    protected void fileClickAction(String name, String path){
+        /* Save the current path */
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("saved_fb_path", path);
+        editor.commit();
+        Intent resultIntent = new Intent();
+
+        resultIntent.putExtra("org.liberty.android.fantastischmemo.dbName", name);
+        resultIntent.putExtra("org.liberty.android.fantastischmemo.dbPath", path);
+
+        this.setResult(Activity.RESULT_OK, resultIntent);
+        finish();
+    }
 
     @Override
     public boolean onItemLongClick(AdapterView<?>  parent, View  view, int position, long id){

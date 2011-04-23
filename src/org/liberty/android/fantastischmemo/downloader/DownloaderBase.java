@@ -266,7 +266,7 @@ public abstract class DownloaderBase extends AMActivity implements OnItemClickLi
                     iv.setImageResource(R.drawable.back);
                 }
                 else{
-                    iv.setImageResource(R.drawable.database24);
+                    iv.setImageResource(R.drawable.database);
                 }
                 tv.setText(item.getTitle());
             }
