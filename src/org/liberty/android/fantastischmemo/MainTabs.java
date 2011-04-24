@@ -76,31 +76,36 @@ public class MainTabs extends TabActivity{
         Intent intent;
 
         intent = new Intent().setClass(this, RecentList.class);
-        spec = tabHost.newTabSpec("recent").setIndicator("Recent",
-                res.getDrawable(R.drawable.text))
+        spec = tabHost.newTabSpec("recent").setIndicator(
+                getString(R.string.recent_tab_text),
+                res.getDrawable(R.drawable.recent))
             .setContent(intent);
         tabHost.addTab(spec);
 
-        intent = new Intent().setClass(this, FileBrowser.class);
-        spec = tabHost.newTabSpec("open").setIndicator("Open",
+        intent = new Intent().setClass(this, OpenScreenTab.class);
+        spec = tabHost.newTabSpec("open").setIndicator(
+                getString(R.string.open_tab_text),
                 res.getDrawable(R.drawable.open))
             .setContent(intent);
         tabHost.addTab(spec);
 
         intent = new Intent().setClass(this, EditScreenTab.class);
-        spec = tabHost.newTabSpec("edit").setIndicator("Edit",
+        spec = tabHost.newTabSpec("edit").setIndicator(
+                getString(R.string.edit_tab_text),
                 res.getDrawable(R.drawable.edit))
             .setContent(intent);
         tabHost.addTab(spec);
 
         intent = new Intent().setClass(this, FileBrowser.class);
-        spec = tabHost.newTabSpec("edit").setIndicator("Download",
+        spec = tabHost.newTabSpec("edit").setIndicator(
+                getString(R.string.download_tab_text),
                 res.getDrawable(R.drawable.download))
             .setContent(intent);
         tabHost.addTab(spec);
 
         intent = new Intent().setClass(this, FileBrowser.class);
-        spec = tabHost.newTabSpec("misc").setIndicator("Misc",
+        spec = tabHost.newTabSpec("misc").setIndicator(
+                getString(R.string.misc_tab_text),
                 res.getDrawable(R.drawable.misc))
             .setContent(intent);
         tabHost.addTab(spec);
@@ -262,7 +267,7 @@ public class MainTabs extends TabActivity{
 	}
 
     public void restartActivity(){
-        Intent myIntent = new Intent(this, AnyMemo.class);
+        Intent myIntent = new Intent(this, MainTabs.class);
         finish();
         startActivity(myIntent);
     }

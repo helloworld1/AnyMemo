@@ -350,4 +350,9 @@
     <string name="left_text">Left</string>
     <string name="center_text">Center</string>
     <string name="right_text">Right</string>
+    <string name="recent_tab_text">Recent</string>
+    <string name="open_tab_text">Open</string>
+    <string name="edit_tab_text">Edit</string>
+    <string name="download_tab_text">Download</string>
+    <string name="misc_tab_text">Misc</string>
 </resources>
