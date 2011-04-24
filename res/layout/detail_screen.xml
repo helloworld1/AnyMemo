@@ -3,157 +3,179 @@
     android:scrollbars="vertical"
     android:layout_height="fill_parent"
     android:layout_width="fill_parent"> 
-<TableLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content"
-  android:scrollbars="vertical"
-  android:clipChildren="true"
-  android:stretchColumns="2">
-  <TableRow>
-  <TextView android:text="_id"
-  			android:padding="3dip"/>
-  <EditText
-        android:id="@+id/entry__id"
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@android:drawable/editbox_background"/>
-  </TableRow>
-  <TableRow>
-  <TextView android:text="question"
+        android:orientation="vertical">
+
+        <TextView 
+            android:text="_id"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="3dip"/>
+        <EditText
+            android:id="@+id/entry__id"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/editbox_background"/>
+        <TextView 
+            android:text="question"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
   			android:padding="3dip"/>
-  <EditText
-        android:id="@+id/entry_question"
-        android:layout_height="wrap_content"
-        android:layout_width="0dip"
-        android:inputType="textMultiLine"
-        android:background="@android:drawable/editbox_background"/>
-  </TableRow>
-  <TableRow>
-  <TextView android:text="answer"
+        <EditText
+            android:id="@+id/entry_question"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:inputType="textMultiLine"
+            android:background="@android:drawable/editbox_background"/>
+        <TextView 
+            android:text="answer"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:padding="3dip"/>
+        <EditText
+            android:id="@+id/entry_answer"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:inputType="textMultiLine"
+            android:background="@android:drawable/editbox_background"/>
+        <TextView 
+            android:text="note"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
   			android:padding="3dip"/>
-  <EditText
-        android:id="@+id/entry_answer"
-        android:layout_height="wrap_content"
-        android:layout_width="0dip"
-        android:inputType="textMultiLine"
-        android:background="@android:drawable/editbox_background"/>
-  </TableRow>
-  <TableRow>
-  <TextView android:text="note"
+        <EditText
+            android:id="@+id/entry_note"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:inputType="textMultiLine"
+            android:background="@android:drawable/editbox_background"/>
+        <TextView 
+            android:text="category"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
   			android:padding="3dip"/>
-  <EditText
-        android:id="@+id/entry_note"
-        android:layout_height="wrap_content"
-        android:layout_width="0dip"
-        android:inputType="textMultiLine"
-        android:background="@android:drawable/editbox_background"/>
-  </TableRow>
-  <TableRow>
-  <TextView android:text="category"
+        <EditText
+            android:id="@+id/entry_category"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:inputType="textMultiLine"
+            android:background="@android:drawable/editbox_background"/>
+        <TextView 
+            android:text="date_learn"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
   			android:padding="3dip"/>
-  <EditText
-        android:id="@+id/entry_category"
-        android:layout_height="wrap_content"
-        android:layout_width="0dip"
-        android:inputType="textMultiLine"
-        android:background="@android:drawable/editbox_background"/>
-  </TableRow>
-  <TableRow>
-  <TextView android:text="date_learn"
+        <EditText
+            android:id="@+id/entry_date_learn"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:background="@android:drawable/editbox_background"/>
+        <TextView 
+            android:text="interval"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:padding="3dip"/>
+        <EditText
+            android:id="@+id/entry_interval"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/editbox_background"/>
+        <TextView 
+            android:text="grade"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="3dip"/>
+        <EditText
+            android:id="@+id/entry_grade"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/editbox_background"/>
+        <TextView 
+            android:text="easiness"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="3dip"/>
+        <EditText
+            android:id="@+id/entry_easiness"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/editbox_background"/>
+        <TextView 
+            android:text="acq_reps"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
   			android:padding="3dip"/>
-  <EditText
-        android:id="@+id/entry_date_learn"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:drawable/editbox_background"/>
-  </TableRow>
-  <TableRow>
-  <TextView android:text="interval"
+        <EditText
+            android:id="@+id/entry_acq_reps"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/editbox_background"/>
+        <TextView 
+            android:text="ret_reps"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
   			android:padding="3dip"/>
-  <EditText
-        android:id="@+id/entry_interval"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:drawable/editbox_background"/>
-  </TableRow>
-  <TableRow>
-  <TextView android:text="grade"
+        <EditText
+            android:id="@+id/entry_ret_reps"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/editbox_background"/>
+        <TextView 
+            android:text="lapses"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
   			android:padding="3dip"/>
-  <EditText
-        android:id="@+id/entry_grade"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:drawable/editbox_background"/>
-  </TableRow>
-  <TableRow>
-  <TextView android:text="easiness"
+        <EditText
+            android:id="@+id/entry_lapses"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/editbox_background"/>
+        <TextView 
+            android:text="acq_reps_since_lapse"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
   			android:padding="3dip"/>
-  <EditText
-        android:id="@+id/entry_easiness"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:drawable/editbox_background"/>
-  </TableRow>
-  <TableRow>
-  <TextView android:text="acq_reps"
+        <EditText
+            android:id="@+id/entry_acq_reps_since_lapse"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/editbox_background"/>
+        <TextView 
+            android:text="ret_reps_since_lapse"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
   			android:padding="3dip"/>
-  <EditText
-        android:id="@+id/entry_acq_reps"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:drawable/editbox_background"/>
-  </TableRow>
-  <TableRow>
-  <TextView android:text="ret_reps"
-  			android:padding="3dip"/>
-  <EditText
-        android:id="@+id/entry_ret_reps"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:drawable/editbox_background"/>
-  </TableRow>
-  <TableRow>
-  <TextView android:text="lapses"
-  			android:padding="3dip"/>
-  <EditText
-        android:id="@+id/entry_lapses"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:drawable/editbox_background"/>
-  </TableRow>
-  <TableRow>
-  <TextView android:text="acq_reps_since_lapse"
-  			android:padding="3dip"/>
-  <EditText
-        android:id="@+id/entry_acq_reps_since_lapse"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:drawable/editbox_background"/>
-  </TableRow>
-  <TableRow>
-  <TextView android:text="ret_reps_since_lapse"
-  			android:padding="3dip"/>
-  <EditText
-        android:id="@+id/entry_ret_reps_since_lapse"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:drawable/editbox_background"/>
-  </TableRow>
-  <TableRow>
-			<Button android:id="@+id/but_detail_update" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:layout_marginLeft="0dip" 
-				android:layout_marginRight="50dip" android:text="@string/detail_update" android:layout_weight="1"/>
-  </TableRow>
-  <TableRow>
-			<Button android:id="@+id/but_detail_reset" android:layout_width="fill_parent"
-				android:layout_height="wrap_content" android:layout_marginLeft="0dip"
-				android:layout_marginRight="50dip" android:text="@string/detail_reset" android:layout_weight="1"/>
-  </TableRow>
-  <TableRow>
-  			<Button android:id="@+id/but_detail_back" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:layout_marginLeft="0dip"
-				android:layout_marginRight="50dip" android:text="@string/detail_back" android:layout_weight="1"/>
-  </TableRow>
-</TableLayout>
+        <EditText
+            android:id="@+id/entry_ret_reps_since_lapse"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/editbox_background"/>
+        <Button 
+            android:id="@+id/but_detail_update" 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" 
+            android:layout_marginLeft="0dip" 
+            android:layout_marginRight="50dip" 
+            android:text="@string/detail_update" 
+            android:layout_weight="1"/>
+        <Button 
+            android:id="@+id/but_detail_reset" 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" 
+            android:layout_marginLeft="0dip"
+            android:layout_marginRight="50dip" 
+            android:text="@string/detail_reset" 
+            android:layout_weight="1"/>
+        <Button 
+            android:id="@+id/but_detail_back" 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" 
+            android:layout_marginLeft="0dip"
+            android:layout_marginRight="50dip" 
+            android:text="@string/detail_back" 
+            android:layout_weight="1"/>
+    </LinearLayout>
 </ScrollView>
