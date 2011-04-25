@@ -125,8 +125,8 @@ public class AMGUIUtility{
             .show();
     }
 
-    public static void doProgressTask(final Context context, final int progressTitleId, final int progressMessageId, final ProgressTask task){
-        final ProgressDialog mProgressDialog = ProgressDialog.show(context, context.getString(progressTitleId), context.getString(progressMessageId), true);
+    public static void doProgressTask(final Context context, final String progressTitle, final String progressMessage, final ProgressTask task){
+        final ProgressDialog mProgressDialog = ProgressDialog.show(context, progressTitle, progressMessage, true);
         final Handler handler = new Handler();
         new Thread(){
             public void run(){
@@ -150,6 +150,12 @@ public class AMGUIUtility{
                 }
             }
         }.start();
+    }
+
+    public static void doProgressTask(final Context context, final int progressTitleId, final int progressMessageId, final ProgressTask task){
+        String progressTitle = context.getString(progressTitleId);
+        String progressMessage= context.getString(progressMessageId);
+        doProgressTask(context, progressTitle, progressMessage, task);
     }
 
     public static interface ProgressTask{

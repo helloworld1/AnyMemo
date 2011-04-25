@@ -41,112 +41,14 @@ import au.com.bytecode.opencsv.CSVReader;
 
 import android.content.Context;
 
-public class DBImporter{
-
-    private String filePath;
-    private String fileName;
+public class QATxtImporter implements AbstractConverter{
     private Context mContext;
-    private final static String TAG = "org.liberty.android.fantastischmemo.DBImporter";
 
-    public DBImporter(Context context, String path, String name){
-        filePath = path;
-        fileName = name;
+    public QATxtImporter(Context context){
         mContext = context;
     }
 
-    public void ImportCSV() throws Exception{
-        String fullname = filePath + "/" + fileName;
-        CSVReader reader = new CSVReader(new FileReader(fullname));
-        String[] nextLine;
-        int count = 0;
-        LinkedList<Item> itemList = new LinkedList<Item>();
-        while((nextLine = reader.readNext()) != null){
-            if(nextLine.length < 2){
-                throw new Exception("Malformed CSV file. Please make sure the CSV's first column is question, second one is answer and the optinal third one is category");
-            }
-            count++;
-            String note = "";
-            String category = "";
-            if(nextLine.length >= 3){
-                category = nextLine[2];
-            }
-            if(nextLine.length >= 4){
-                note = nextLine[3];
-            }
-            Item item = new Item.Builder()
-                .setId(count)
-                .setQuestion(nextLine[0])
-                .setAnswer(nextLine[1])
-                .setCategory(category)
-                .setNote(note)
-                .build();
-            itemList.add(item);
-        }
-        DatabaseHelper.createEmptyDatabase(filePath, fileName.replace(".csv", ".db"));
-        DatabaseHelper dbHelper =  new DatabaseHelper(mContext, filePath, fileName.replace(".csv", ".db"));
-        dbHelper.insertListItems(itemList);
-        dbHelper.close();
-    }
-
-    public void ImportMnemosyneXML() throws Exception{
-        MnemosyneXMLConverter conv = new MnemosyneXMLConverter(filePath, fileName);
-        DatabaseHelper.createEmptyDatabase(filePath, fileName.replace(".xml", ".db"));
-        DatabaseHelper dbHelper =  new DatabaseHelper(mContext, filePath, fileName.replace(".xml", ".db"));
-        dbHelper.insertListItems(conv.outputList());
-        HashMap<String, String>hm = new HashMap<String, String>();
-        hm.put("html_display", "both");
-        dbHelper.setSettings(hm);
-        dbHelper.close();
-    }
-
-    public void ImportSupermemoXML() throws Exception{
-        SupermemoXMLConverter conv = new SupermemoXMLConverter(filePath, fileName);
-        DatabaseHelper.createEmptyDatabase(filePath, fileName.replace(".xml", ".db"));
-        DatabaseHelper dbHelper =  new DatabaseHelper(mContext, filePath, fileName.replace(".xml", ".db"));
-        dbHelper.insertListItems(conv.outputList());
-        HashMap<String, String>hm = new HashMap<String, String>();
-        hm.put("html_display", "both");
-        dbHelper.setSettings(hm);
-        dbHelper.close();
-    }
-
-    public void ImportTabTXT() throws Exception{
-        String fullname = filePath + "/" + fileName;
-        CSVReader reader = new CSVReader(new FileReader(fullname), '\t');
-        String[] nextLine;
-        int count = 0;
-        LinkedList<Item> itemList = new LinkedList<Item>();
-        while((nextLine = reader.readNext()) != null){
-            if(nextLine.length < 2){
-                throw new Exception("Malformed TXT file. Please make sure the CSV's first column is question, second one is answer and the optinal third one is category");
-            }
-            count++;
-
-            String category = "";
-            String note = "";
-            if(nextLine.length >= 3){
-                category = nextLine[2];
-            }
-            if(nextLine.length >= 4){
-                note = nextLine[3];
-            }
-
-            Item item = new Item.Builder()
-                .setId(count)
-                .setQuestion(nextLine[0])
-                .setAnswer(nextLine[1])
-                .setCategory(category)
-                .setNote(note)
-                .build();
-            itemList.add(item);
-        }
-        DatabaseHelper.createEmptyDatabase(filePath, fileName.replace(".txt", ".db"));
-        DatabaseHelper dbHelper =  new DatabaseHelper(mContext, filePath, fileName.replace(".txt", ".db"));
-        dbHelper.insertListItems(itemList);
-        dbHelper.close();
-    }
-
-    public void ImportQATXT() throws Exception{
+    public void convert(String filePath, String fileName) throws Exception{
         String fullpath = filePath + "/" + fileName;
         DatabaseHelper.createEmptyDatabase(filePath, fileName.replace(".txt", ".db"));
         DatabaseHelper dbHelper =  new DatabaseHelper(mContext, filePath, fileName.replace(".txt", ".db"));
@@ -159,7 +61,6 @@ public class DBImporter{
         StringBuffer aBuf = null;
         while((line = txtfile.readLine()) != null){
             /* remove BOM */
-            Log.v(TAG, "LINE: " + line);
             line = line.replace("\uFEFF", "");
 
             String head = "";
@@ -229,6 +130,4 @@ public class DBImporter{
         dbHelper.close();
     }
 }
-
-
 

@@ -50,15 +50,11 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 import android.util.Log;
+import android.content.Context;
 
-public class SupermemoXMLConverter extends org.xml.sax.helpers.DefaultHandler{
-	private URL mXMLUrl;
-	private SAXParserFactory spf;
-	private SAXParser sp;
-	private XMLReader xr;
-	private String fileName;
-	private String filePath;
+public class SupermemoXMLImporter extends org.xml.sax.helpers.DefaultHandler implements AbstractConverter{
 	public Locator mLocator;
+    private Context mContext;
     private List<Item> itemList;
     private Item.Builder itemBuilder;
     private int count = 1;
@@ -71,25 +67,30 @@ public class SupermemoXMLConverter extends org.xml.sax.helpers.DefaultHandler{
 
 	
 	
-	public SupermemoXMLConverter(String filePath, String fileName) throws MalformedURLException, SAXException, ParserConfigurationException, IOException{
-		this.filePath = filePath;
-		this.fileName = fileName;
-		mXMLUrl = new URL("file:///" + filePath + "/" + fileName);
+    public SupermemoXMLImporter(Context context){
+        mContext = context;
+    }
+
+    @Override
+    public void convert(String filePath, String fileName) throws Exception{
+		URL mXMLUrl = new URL("file:///" + filePath + "/" + fileName);
 		itemList = new LinkedList<Item>();
 
-		spf = SAXParserFactory.newInstance();
-		sp = spf.newSAXParser();
-		xr = sp.getXMLReader();
+		SAXParserFactory spf = SAXParserFactory.newInstance();
+		SAXParser sp = spf.newSAXParser();
+		XMLReader xr = sp.getXMLReader();
 		xr.setContentHandler(this);
-		
 		xr.parse(new InputSource(mXMLUrl.openStream()));
-		
-		
-	}
-	
-	public List<Item> outputList() {
-        return itemList;
-	}
+
+        DatabaseHelper.createEmptyDatabase(filePath, fileName.replace(".xml", ".db"));
+        DatabaseHelper dbHelper =  new DatabaseHelper(mContext, filePath, fileName.replace(".xml", ".db"));
+        dbHelper.insertListItems(itemList);
+        HashMap<String, String>hm = new HashMap<String, String>();
+        /* Set HTML to Auto */
+        hm.put("html_display", "4");
+        dbHelper.setSettings(hm);
+        dbHelper.close();
+    }
 	
 	public void startElement(String namespaceURI, String localName, String qName, Attributes atts) throws SAXException{
         if(localName.equals("SuperMemoElement")){

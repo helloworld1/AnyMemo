@@ -54,6 +54,31 @@
                 android:focusable="false"
                 android:layout_gravity="center" />
         </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:id="@+id/import_items"
+            android:visibility="gone"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:id="@+id/import_mnemosyne"
+                style="@style/list_button"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="fill_parent" 
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" 
+                    android:text="@string/import_mnemosyne_xml_text"
+                    android:textSize="20dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:layout_gravity="center" />
+            </LinearLayout>
+        </LinearLayout>
+    
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"

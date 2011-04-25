@@ -184,7 +184,6 @@ public class AnyMemo extends AMActivity implements OnClickListener{
     public void onClick(View v){
     	if(v == btnNew){
     		Intent myIntent = new Intent();
-    		myIntent.setClass(this, OpenScreen.class);
     		startActivity(myIntent);
             
     	}
@@ -410,7 +409,6 @@ public class AnyMemo extends AMActivity implements OnClickListener{
         }
         else if(screenName.equals("OPEN")){
             Intent myIntent = new Intent();
-    		myIntent.setClass(this, OpenScreen.class);
     		startActivity(myIntent);
         }
         else if(screenName.equals("MEMO")){

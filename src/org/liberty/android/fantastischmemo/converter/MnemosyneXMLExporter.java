@@ -31,99 +31,18 @@ import java.util.LinkedList;
 import java.util.ArrayList;
 import au.com.bytecode.opencsv.CSVWriter;
 
+import java.io.IOException;
 
-public class DBExporter{
-    private DatabaseHelper dbHelper;
-    private String dbPath;
-    private String dbName;
+public class MnemosyneXMLExporter implements AbstractConverter{
     private Context mContext;
-    private final static String TAG = "org.liberty.android.fantastischmemo.DBExporter";
-    private final int SEC_PER_DAY = 24 * 60 * 60;
 
-
-    public DBExporter(){}
-
-    public DBExporter(Context context, String path, String name) throws Exception{
-        dbPath = path;
-        dbName = name;
+    public MnemosyneXMLExporter(Context context){
         mContext = context;
-        loadDatabase();
     }
 
-    public void loadDatabase() throws Exception{
-        try{
-            dbHelper = new DatabaseHelper(mContext, dbPath, dbName);
-        }
-        catch(Exception e){
-            throw e;
-        }
-    }
-
-    public void writeQATXT() throws Exception{
-        String fullpath = dbPath + "/" + dbName.replaceAll(".db", ".txt");
-        PrintWriter outtxt = new PrintWriter(new BufferedWriter(new FileWriter(fullpath)));
-        if(outtxt.checkError()){
-            throw new IOException("Can't open: " + fullpath);
-        }
-        List<Item> itemList = new ArrayList<Item>();
-        itemList = dbHelper.getListItems(1, -1, 0, null);
-        if(itemList == null || itemList.size() == 0){
-            throw new IOException("Can't retrieve items for database: " + dbPath + "/" + dbName);
-        }
-        for(Item item : itemList){
-            outtxt.print("Q: " + item.getQuestion() + "\n");
-            outtxt.print("A: " + item.getAnswer() + "\n\n");
-        }
-        outtxt.close();
-        dbHelper.close();
-    }
-
-    public void writeTabTXT() throws Exception{
-        String fullpath = dbPath + "/" + dbName.replaceAll(".db", ".txt");
-
-        CSVWriter writer = new CSVWriter(new FileWriter(fullpath), '\t');
-        List<Item> itemList = new ArrayList<Item>();
-        itemList = dbHelper.getListItems(1, -1, 0, null);
-        if(itemList == null || itemList.size() == 0){
-            throw new IOException("Can't retrieve items for database: " + dbPath + "/" + dbName);
-        }
-        String[] entries = new String[4];
-        for(Item item : itemList){
-            entries[0] = item.getQuestion();
-            entries[1] = item.getAnswer();
-            entries[2] = item.getCategory();
-            entries[3] = item.getNote();
-            writer.writeNext(entries);
-        }
-        writer.close();
-        dbHelper.close();
-    }
-
-    public void writeCSV() throws Exception{
-        String fullpath = dbPath + "/" + dbName.replaceAll(".db", ".csv");
-
-        CSVWriter writer = new CSVWriter(new FileWriter(fullpath));
-        List<Item> itemList = new ArrayList<Item>();
-        itemList = dbHelper.getListItems(1, -1, 0, null);
-        if(itemList == null || itemList.size() == 0){
-            throw new IOException("Can't retrieve items for database: " + dbPath + "/" + dbName);
-        }
-        String[] entries = new String[4];
-        for(Item item : itemList){
-            entries[0] = item.getQuestion();
-            entries[1] = item.getAnswer();
-            entries[2] = item.getCategory();
-            entries[3] = item.getNote();
-            writer.writeNext(entries);
-        }
-        writer.close();
-        dbHelper.close();
-    }
-
-
-
-    public void writeXML() throws Exception{
+    public void convert(String dbPath, String dbName) throws Exception{
         String fullpath = dbPath + "/" + dbName.replaceAll(".db", ".xml");
+        DatabaseHelper dbHelper = new DatabaseHelper(mContext, dbPath, dbName);
         PrintWriter outxml = new PrintWriter(new BufferedWriter(new FileWriter(fullpath)));
         if(outxml.checkError()){
             throw new IOException("Can't open: " + fullpath);
@@ -165,7 +84,7 @@ public class DBExporter{
                 u = "0";
             }
             // Add 1 here to avoid rounding problem
-            long duration = (item.getDatelearnUnix() - timeOfStart) / SEC_PER_DAY + 1;
+            long duration = (item.getDatelearnUnix() - timeOfStart) / 86400 + 1;
 
 
             Long interval = new Long(item.getInterval());
@@ -223,17 +142,7 @@ public class DBExporter{
         outxml.close();
         dbHelper.close();
     }
-
-
-
-
-
-
-                
-                
-
 }
-
 
 
 

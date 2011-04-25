@@ -240,6 +240,15 @@ public class MainTabs extends TabActivity{
         getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
     }
 
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        Intent myIntent = new Intent(this, AnyMemoService.class);
+        myIntent.putExtra("request_code", AnyMemoService.CANCEL_NOTIFICATION | AnyMemoService.UPDATE_WIDGET);
+        startService(myIntent);
+        //SetAlarmReceiver.setWidgetUpdateAlarm(this);
+    }
+
 	private void copyFile(String source) throws IOException{
 		String rootPath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
 		File newDir = new File(rootPath);

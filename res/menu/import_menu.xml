@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/openmenu_import_mnemosyne_xml"
+        android:title="@string/import_mnemosyne_xml_text" />
+    <item
+        android:id="@+id/openmenu_import_supermemo_xml"
+        android:title="@string/import_supermemo_xml_text" />
+    <item
+        android:id="@+id/openmenu_import_csv"
+        android:title="@string/import_csv" />
+    <item
+        android:id="@+id/openmenu_import_tab_txt"
+        android:title="@string/import_tab_txt" />
+    <item
+        android:id="@+id/openmenu_import_qa_txt"
+        android:title="@string/import_qa_txt" />
+</menu>
