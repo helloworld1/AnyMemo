@@ -32,35 +32,22 @@ import android.util.Log;
  * This class is invoked when the user share the card from other
  * apps like ColorDict 
  */
-public class DownloaderTab extends AMActivity implements View.OnClickListener{
-    private static final String TAG = "org.liberty.android.fantastischmemo.DownloaderTab";
-    private View amButton;
-    private View feButton;
-    private View ssButton;
+public class MiscTab extends AMActivity implements View.OnClickListener{
+    private static final String TAG = "org.liberty.android.fantastischmemo.MiscTab";
+    private View optionButton;
     private final int ACTIVITY_FB = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.downloader_tab);
-        amButton = findViewById(R.id.source_anymemo);
-        feButton = findViewById(R.id.source_fe);
-        ssButton = findViewById(R.id.source_ss);
-        amButton.setOnClickListener(this);
-        feButton.setOnClickListener(this);
-        ssButton.setOnClickListener(this);
+        setContentView(R.layout.misc_tab);
+        optionButton = findViewById(R.id.misc_options);
+        optionButton.setOnClickListener(this);
     }
     @Override
     public void onClick(View v){
-        if(v == amButton){
-            startActivity(new Intent(this, DownloaderAnyMemo.class));
-        }
-        if(v == feButton){
-            startActivity(new Intent(this, FELauncher.class));
-        }
-        if(v == ssButton){
-            startActivity(new Intent(this, DownloaderSS.class));
-
+        if(v == optionButton){
+            startActivity(new Intent(this, OptionScreen.class));
         }
     }
 

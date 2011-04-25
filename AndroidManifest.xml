@@ -94,6 +94,9 @@
         <activity
             android:name=".RecentList"
             android:configChanges="orientation|keyboardHidden" />
+        <activity
+            android:name=".MiscTab"
+            android:configChanges="orientation|keyboardHidden" />
         <receiver
             android:name=".AlarmReceiver"
             android:process=":remote" />
