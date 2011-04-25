@@ -356,4 +356,5 @@
     <string name="download_tab_text">Download</string>
     <string name="misc_tab_text">Misc</string>
     <string name="convert_wait">Converting,Please wait...</string>
+    <string name="convert_success">Successfully converted and saved to</string>
 </resources>

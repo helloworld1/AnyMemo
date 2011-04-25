@@ -31,8 +31,6 @@ import org.liberty.android.fantastischmemo.*;
 public class ConvertScreen extends FileBrowser{
     AbstractConverter converter = null;
     private final String TAG = "org.liberty.android.fantastischmemo.ConvertScreen";
-    private final String successTitle= "";
-    private final String successText = "";
 
     @Override
     public void fileClickAction(final String name, final String path){
@@ -40,8 +38,8 @@ public class ConvertScreen extends FileBrowser{
         if(extras == null){
             finish();
         }
-        final String successTitle = extras.getString("success_title");
-        final String successText = extras.getString("success_text");
+        final String successTitle = getString(R.string.success);
+        final String successText = getString(R.string.convert_success) + " " + path;
         try{
             Class<AbstractConverter> ac = (Class<AbstractConverter>)extras.getSerializable("converter");
             Constructor<AbstractConverter> acc = ac.getConstructor(Context.class);
