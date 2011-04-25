@@ -96,7 +96,7 @@ public class MainTabs extends TabActivity{
             .setContent(intent);
         tabHost.addTab(spec);
 
-        intent = new Intent().setClass(this, FileBrowser.class);
+        intent = new Intent().setClass(this, DownloaderTab.class);
         spec = tabHost.newTabSpec("edit").setIndicator(
                 getString(R.string.download_tab_text),
                 res.getDrawable(R.drawable.download))

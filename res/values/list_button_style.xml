@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="list_button" parent="android:style/Widget.Button">
+        <item name="android:textSize">21sp</item>
+        <item name="android:layout_margin">0dip</item>
+        <item name="android:background">@android:drawable/menuitem_background</item>
+        <item name="android:textColor">#FFBEBEBE</item>
+        <item name="android:padding">10dip</item>
+        <item name="android:gravity">left|center_horizontal</item>
+    </style>
+</resources>

@@ -89,6 +89,9 @@
             android:name=".OpenScreenTab"
             android:configChanges="orientation|keyboardHidden" />
         <activity
+            android:name=".DownloaderTab"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity
             android:name=".RecentList"
             android:configChanges="orientation|keyboardHidden" />
         <receiver

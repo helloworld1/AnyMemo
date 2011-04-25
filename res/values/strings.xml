@@ -305,9 +305,9 @@
     <string name="notification_6hr_text">6 Hours</string>
     <string name="notification_12hr_text">12 Hours</string>
     <string name="notification_24hr_text">One Day</string>
-    <string name="download_source_anymemo">http://anymemo.org (default)</string>
-    <string name="download_source_fe">http://flashcardexchange.com (experimental)</string>
-    <string name="download_source_ss">http://studystack.com (experimental)</string>
+    <string name="download_source_anymemo">anymemo.org\n(default)</string>
+    <string name="download_source_fe">FlashcardExchange\n(experimental)</string>
+    <string name="download_source_ss">studystack.com\n(experimental)</string>
     <string name="swap_text">Swap</string>
     <string name="swapdup_text">Swap&amp;Dup</string>
     <string name="locale_german_text">German</string>
