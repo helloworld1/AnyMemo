@@ -175,6 +175,7 @@ public class RecentList extends AMActivity implements OnItemClickListener{
 	    switch (item.getItemId()) {
 	    case R.id.openmenu_clear:
             RecentListUtil.clearRecentList(this);
+            onResume();
 			return true;
 
 	    }
@@ -296,7 +297,8 @@ public class RecentList extends AMActivity implements OnItemClickListener{
                             File fileToDelete = new File(selectedPath+ "/" + selectedName);
                             fileToDelete.delete();
                             RecentListUtil.deleteFromRecentList(RecentList.this, selectedPath, selectedName);
-                            restartActivity();
+                            /* Refresh the list */
+                            onResume();
                             
                         }
                     })

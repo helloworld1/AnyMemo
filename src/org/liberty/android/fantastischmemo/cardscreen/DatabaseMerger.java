@@ -162,7 +162,6 @@ public class DatabaseMerger extends AMActivity implements View.OnClickListener{
         if(v == targetEdit){
             Intent myIntent = new Intent();
             myIntent.setClass(this, FileBrowser.class);
-            myIntent.putExtra("default_root", Environment.getExternalStorageDirectory().getAbsolutePath());
             myIntent.putExtra("file_extension", ".db");
             startActivityForResult(myIntent, ACTIVITY_FB_TARGET);
         }
@@ -170,7 +169,6 @@ public class DatabaseMerger extends AMActivity implements View.OnClickListener{
         if(v == sourceEdit){
             Intent myIntent = new Intent();
             myIntent.setClass(this, FileBrowser.class);
-            myIntent.putExtra("default_root", Environment.getExternalStorageDirectory().getAbsolutePath());
             myIntent.putExtra("file_extension", ".db");
             startActivityForResult(myIntent, ACTIVITY_FB_SOURCE);
         }

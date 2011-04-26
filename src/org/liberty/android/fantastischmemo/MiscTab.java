@@ -105,6 +105,7 @@ public class MiscTab extends AMActivity implements View.OnClickListener{
 
         donateButton = findViewById(R.id.misc_donate);
         donateButton.setOnClickListener(this);
+        donateButton.setVisibility(View.VISIBLE);
         helpButton = findViewById(R.id.misc_help);
         helpButton.setOnClickListener(this);
         aboutButton = findViewById(R.id.misc_about);

@@ -119,7 +119,7 @@ public class AnyMemoService extends Service{
         }
         finally{
             /* Set on click event */
-            Intent intent = new Intent(this, AnyMemo.class);
+            Intent intent = new Intent(this, MainTabs.class);
             intent.putExtra("screen", "MEMO");
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, WIDGET_REQ, intent, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -134,7 +134,7 @@ public class AnyMemoService extends Service{
             if(dbInfo.getRevCount() < 10){
                 return;
             }
-            Intent myIntent = new Intent(this, AnyMemo.class);
+            Intent myIntent = new Intent(this, MainTabs.class);
             myIntent.putExtra("screen", "MEMO");
             myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             NotificationManager notificationManager = (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
