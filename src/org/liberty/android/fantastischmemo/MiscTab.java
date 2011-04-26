@@ -20,10 +20,25 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo;
 
 import org.liberty.android.fantastischmemo.converter.*;
+import org.liberty.android.fantastischmemo.cardscreen.*;
 
+import android.app.AlertDialog;
+
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+
+import android.net.Uri;
 import android.os.Bundle;
+
+import android.preference.PreferenceManager;
+
+import android.text.Html;
+
+import android.text.method.LinkMovementMethod;
 import android.view.View;
+
+import android.widget.TextView;
 
 /* 
  * This class is invoked when the user share the card from other
@@ -45,6 +60,12 @@ public class MiscTab extends AMActivity implements View.OnClickListener{
     private View exportCSVButton;
     private View exportTabButton;
     private View exportQAButton;
+
+    private View mergeButton;
+    private View resetButton;
+    private View donateButton;
+    private View helpButton;
+    private View aboutButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,6 +97,18 @@ public class MiscTab extends AMActivity implements View.OnClickListener{
         exportTabButton.setOnClickListener(this);
         exportQAButton = findViewById(R.id.export_qa);
         exportQAButton.setOnClickListener(this);
+
+        mergeButton = findViewById(R.id.misc_merge);
+        mergeButton.setOnClickListener(this);
+        resetButton = findViewById(R.id.misc_reset);
+        resetButton.setOnClickListener(this);
+
+        donateButton = findViewById(R.id.misc_donate);
+        donateButton.setOnClickListener(this);
+        helpButton = findViewById(R.id.misc_help);
+        helpButton.setOnClickListener(this);
+        aboutButton = findViewById(R.id.misc_about);
+        aboutButton.setOnClickListener(this);
     }
 
     @Override
@@ -155,6 +188,76 @@ public class MiscTab extends AMActivity implements View.OnClickListener{
             myIntent.putExtra("file_extension", ".db");
             myIntent.putExtra("converter", QATxtExporter.class);
             startActivity(myIntent);
+        }
+        if(v == mergeButton){
+            Intent myIntent = new Intent(this, DatabaseMerger.class);
+            startActivity(myIntent);
+        }
+        if(v == resetButton){
+            new AlertDialog.Builder(this)
+                .setTitle(R.string.clear_all_pref)
+                .setMessage(R.string.reset_all_pref_warning)
+                .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1){
+                        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(MiscTab.this);
+                        SharedPreferences.Editor editor = settings.edit();
+                        editor.clear();
+                        editor.commit();
+                        finish();
+                    }
+                })
+                .setNegativeButton(R.string.cancel_text, null)
+                .show();
+        }
+        if(v == donateButton){
+            View alertView = View.inflate(this, R.layout.link_alert, null);
+            TextView textView = (TextView)alertView.findViewById(R.id.link_alert_message);
+            textView.setText(Html.fromHtml(getString(R.string.donate_summary)));
+            textView.setMovementMethod(LinkMovementMethod.getInstance());
+            new AlertDialog.Builder(this)
+                .setView(alertView)
+                .setTitle(R.string.donate_text)
+                .setPositiveButton(getString(R.string.buy_pro_text), new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1){
+                        Intent myIntent = new Intent();
+                        myIntent.setAction(Intent.ACTION_VIEW);
+                        myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
+                        myIntent.setData(Uri.parse(getString(R.string.anymemo_pro_link)));
+                        startActivity(myIntent);
+                    }
+                })
+                .setNegativeButton(getString(R.string.cancel_text), null)
+                .show();
+        }
+        if(v == helpButton){
+            Intent myIntent = new Intent();
+            myIntent.setAction(Intent.ACTION_VIEW);
+            myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
+            myIntent.setData(Uri.parse(getString(R.string.website_help_main)));
+            startActivity(myIntent);
+        }
+        if(v == aboutButton){
+            View alertView = View.inflate(this, R.layout.link_alert, null);
+            TextView textView = (TextView)alertView.findViewById(R.id.link_alert_message);
+            textView.setText(Html.fromHtml(getString(R.string.about_text)));
+            textView.setMovementMethod(LinkMovementMethod.getInstance());
+            new AlertDialog.Builder(this)
+                .setView(alertView)
+                .setTitle(getString(R.string.about_title) + " " + getString(R.string.app_full_name) + " " + getString(R.string.app_version))
+                .setPositiveButton(getString(R.string.ok_text), null)
+                .setNegativeButton(getString(R.string.about_version), new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1){
+                        Intent myIntent = new Intent();
+                        myIntent.setAction(Intent.ACTION_VIEW);
+                        myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
+                        myIntent.setData(Uri.parse(getString(R.string.website_version)));
+                        startActivity(myIntent);
+                    }
+                })
+                .show();
         }
 
     }

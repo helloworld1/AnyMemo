@@ -27,12 +27,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 
 import android.os.Environment;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -41,7 +39,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
-import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.ViewGroup;
@@ -52,13 +49,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.ImageView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.util.Log;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.content.res.Configuration;
 import android.preference.PreferenceManager;
 
 public class FileBrowser extends AMActivity implements OnItemClickListener, OnItemLongClickListener{
@@ -90,20 +84,23 @@ public class FileBrowser extends AMActivity implements OnItemClickListener, OnIt
             defaultRoot = settings.getString("saved_fb_path", null);
         }
 		
-		browseToRoot();
-	}
-	
-	private void browseToRoot(){
 		if(defaultRoot == null || defaultRoot.equals("")){
 			File sdPath = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir));
 			sdPath.mkdir();
 			
-			browseTo(sdPath);
+			currentDirectory = sdPath;
 		}
 		else{
-			browseTo(new File(defaultRoot + "/"));
+			currentDirectory = new File(defaultRoot + "/");
 		}
 	}
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        browseTo(currentDirectory);
+    }
+	
 	
 	
 	private void browseTo(final File aDirectory){
@@ -111,18 +108,6 @@ public class FileBrowser extends AMActivity implements OnItemClickListener, OnIt
 			this.setTitle(aDirectory.getPath());
 			this.currentDirectory = aDirectory;
 			fill(aDirectory.listFiles());
-		}
-		else{
-			OnClickListener okButtonListener = new OnClickListener(){
-				public void onClick(DialogInterface arg0, int arg1){
-					openFile(aDirectory);
-				}
-			};
-			OnClickListener cancelButtonListener = new OnClickListener(){
-				public void onClick(DialogInterface arg0, int arg1){
-					//
-				}
-			};
 		}
 	}
 	
@@ -158,6 +143,7 @@ public class FileBrowser extends AMActivity implements OnItemClickListener, OnIt
         fbListView = (ListView)findViewById(R.id.file_list);
 		FileBrowserAdapter directoryList = new FileBrowserAdapter(this, R.layout.filebrowser_item, directoryEntries);
 		directoryList.sort(new Comparator<String>() {
+            @Override
 			public int compare(String s1, String s2){
 				if(s1.equals("..")){
 					return -1;
@@ -175,21 +161,13 @@ public class FileBrowser extends AMActivity implements OnItemClickListener, OnIt
 					return (s1.toLowerCase()).compareTo(s2.toLowerCase());
 				}
 			}
-			public boolean equals(String s1, String s2){
-				return s1.equals(s2);
-			}
+
 		});
 	    fbListView.setAdapter(directoryList);
         fbListView.setOnItemClickListener(this);
         fbListView.setOnItemLongClickListener(this);
 	}
 	
-	private void openFile(File aDirectory){
-		Intent myIntent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse("file://" + aDirectory));
-		this.startActivity(myIntent);
-		
-		
-	}
 	
 	private void upOneLevel(){
 		if(this.currentDirectory.getParent() != null){

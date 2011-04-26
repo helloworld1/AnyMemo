@@ -357,4 +357,5 @@
     <string name="misc_tab_text">Misc</string>
     <string name="convert_wait">Converting,Please wait...</string>
     <string name="convert_success">Successfully converted and saved to</string>
+    <string name="reset_all_pref_warning">This operation will restore all global settings to default. You learning progress will NOT be deleted. </string>
 </resources>
