@@ -55,14 +55,15 @@
                 android:layout_gravity="center" />
         </LinearLayout>
 
+        <!-- Group For All import-->
         <LinearLayout
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_width="fill_parent"
             android:id="@+id/import_items"
             android:visibility="gone"
             android:layout_height="wrap_content">
             <LinearLayout
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_width="fill_parent"
                 android:id="@+id/import_mnemosyne"
                 style="@style/list_button"
@@ -77,8 +78,71 @@
                     android:focusable="false"
                     android:layout_gravity="center" />
             </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:id="@+id/import_supermemo"
+                style="@style/list_button"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="fill_parent" 
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" 
+                    android:text="@string/import_supermemo_xml_text"
+                    android:textSize="20dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:layout_gravity="center" />
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:id="@+id/import_csv"
+                style="@style/list_button"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="fill_parent" 
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" 
+                    android:text="@string/import_csv"
+                    android:textSize="20dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:layout_gravity="center" />
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:id="@+id/import_tab"
+                style="@style/list_button"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="fill_parent" 
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" 
+                    android:text="@string/import_tab_txt"
+                    android:textSize="20dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:layout_gravity="center" />
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:id="@+id/import_qa"
+                style="@style/list_button"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="fill_parent" 
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" 
+                    android:text="@string/import_qa_txt"
+                    android:textSize="20dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:layout_gravity="center" />
+            </LinearLayout>
         </LinearLayout>
-    
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
@@ -102,6 +166,80 @@
                 android:focusable="false"
                 android:layout_gravity="center" />
         </LinearLayout>
+
+        <!-- Group For All export -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:id="@+id/export_items"
+            android:visibility="gone"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:id="@+id/export_mnemosyne"
+                style="@style/list_button"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="fill_parent" 
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" 
+                    android:text="@string/export_xml"
+                    android:textSize="20dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:layout_gravity="center" />
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:id="@+id/export_csv"
+                style="@style/list_button"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="fill_parent" 
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" 
+                    android:text="@string/export_csv"
+                    android:textSize="20dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:layout_gravity="center" />
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:id="@+id/export_tab"
+                style="@style/list_button"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="fill_parent" 
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" 
+                    android:text="@string/export_tab_txt"
+                    android:textSize="20dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:layout_gravity="center" />
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:id="@+id/export_qa"
+                style="@style/list_button"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="fill_parent" 
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" 
+                    android:text="@string/export_qa_txt"
+                    android:textSize="20dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:layout_gravity="center" />
+            </LinearLayout>
+        </LinearLayout>
+    
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"

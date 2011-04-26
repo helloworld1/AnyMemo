@@ -28,6 +28,10 @@ import android.content.Context;
 import java.lang.reflect.Constructor;
 import org.liberty.android.fantastischmemo.*;
 
+/* 
+ * This class requires the strategies passed using intent extras with
+ * the key "converter" 
+ */
 public class ConvertScreen extends FileBrowser{
     AbstractConverter converter = null;
     private final String TAG = "org.liberty.android.fantastischmemo.ConvertScreen";
