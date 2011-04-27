@@ -27,7 +27,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -40,7 +39,6 @@ import android.os.Handler;
 import android.os.Environment;
 import android.content.Context;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -55,11 +53,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.util.Log;
 import android.net.Uri;
-import android.os.Environment;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import org.liberty.android.fantastischmemo.cardscreen.SettingManager;
 
 public class SettingsScreen extends AMActivity implements View.OnClickListener, ColorDialog.OnClickListener {
@@ -71,10 +66,6 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
 	private Spinner answerLocaleSpinner;
 	private Spinner htmlSpinner;
 	private Spinner ratioSpinner;
-    private Spinner questionTextColorSpinner;
-    private Spinner answerTextColorSpinner;
-    private Spinner questionBgColorSpinner;
-    private Spinner answerBgColorSpinner;
     private Spinner styleSpinner;
 	private CheckBox wipeCheckbox;
 	private CheckBox shuffleCheckbox;
@@ -418,7 +409,8 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
                         index++;
                     }
                     if(found == false){
-                        index = 0;
+                        /* Default to AUTO */
+                        index = 4;
                     }
                 }
 				htmlSpinner.setSelection(index);
