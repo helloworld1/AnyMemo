@@ -62,13 +62,6 @@
             android:defaultValue="true"
             android:summary="@string/allow_orientation_summary" />
         <ListPreference
-            android:key="startup_screen"
-            android:title="@string/startup_title" 
-            android:defaultValue="MAIN"
-            android:entries="@array/startup_screen_list"
-            android:entryValues="@array/startup_screen_list_values"
-            android:summary="@string/startup_summary" />
-        <ListPreference
             android:key="notification_interval"
             android:title="@string/notification_text"
             android:defaultValue="24"

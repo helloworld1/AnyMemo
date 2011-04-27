@@ -3,7 +3,7 @@
     package="org.liberty.android.fantastischmemo"
     android:installLocation="auto"
     android:versionCode="119"
-    android:versionName="7.999.1">
+    android:versionName="7.999.2">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 

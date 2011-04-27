@@ -19,9 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo;
 
-import org.liberty.android.fantastischmemo.downloader.*;
-import org.liberty.android.fantastischmemo.cardscreen.*;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -29,7 +26,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Locale;
 
-import android.app.Activity;
 import android.app.TabActivity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -41,20 +37,13 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.Display;
-import android.widget.Button;
 import android.widget.TextView;
 import android.content.pm.ActivityInfo;
 import android.text.method.LinkMovementMethod;
 import android.text.Html;
-import android.content.Context;
 import android.widget.TabHost;
-import android.view.WindowManager;
 import android.content.res.Configuration;
 import android.view.Window;
 import android.view.WindowManager;
@@ -65,10 +54,10 @@ public class MainTabs extends TabActivity{
     SharedPreferences.Editor editor;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_tabs);
     	settings = PreferenceManager.getDefaultSharedPreferences(this);
         editor = settings.edit();
         init();
+        setContentView(R.layout.main_tabs);
 
         Resources res = getResources();
         TabHost tabHost = getTabHost();

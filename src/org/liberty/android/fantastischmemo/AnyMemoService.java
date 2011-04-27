@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo;
 
 
+import org.liberty.android.fantastischmemo.cardscreen.MemoScreen;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.os.Bundle;
@@ -119,8 +120,9 @@ public class AnyMemoService extends Service{
         }
         finally{
             /* Set on click event */
-            Intent intent = new Intent(this, MainTabs.class);
-            intent.putExtra("screen", "MEMO");
+            Intent intent = new Intent(this, MemoScreen.class);
+            intent.putExtra("dbname", RecentListUtil.getRecentDBName(this));
+            intent.putExtra("dbpath", RecentListUtil.getRecentDBPath(this));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, WIDGET_REQ, intent, PendingIntent.FLAG_CANCEL_CURRENT);
             updateViews.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);

@@ -753,38 +753,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         setSettings(hm);
     }
 
-    public void mergeDatabase(String dbpath, String dbname, int fromId){
-        if(fromId >= getNewId() || fromId < 1){
-            throw new IndexOutOfBoundsException("Invalid fromId in mergeDatabase");
-        }
+    public void mergeDatabase(String dbpath, String dbname){
+        int fromId = getNewId() - 1;
+
         DatabaseHelper dbHelper2 = new DatabaseHelper(mContext, dbpath, dbname);
-        final List<Item> items1 = getListItems(fromId + 1, -1, 0, null); 
         final List<Item> items2 = dbHelper2.getListItems(-1, -1, 0, null); 
+
         dbHelper2.close();
-        /* Merge the items1 and items2 */
-        final int totalItems = items1.size() + items2.size();
-        final int items1Size = items1.size();
-        final int items2Size = items2.size();
-        /* Modify the IDs of the item1
-         * so it will be like:
-         * 1 -- cur, cur + item2Size --- totalItems
-         */
-        for(int i = 0; i < items1Size; i++){
-            Item tmpItem = items1.get(i);
-            tmpItem = new Item.Builder(tmpItem)
-                .setId(tmpItem.getId() + items2Size)
-                .build();
-            items1.set(i, tmpItem);
-        }
-        for(int i = 0; i < items2Size; i++){
+
+
+        for(int i = 0; i < items2.size(); i++){
             Item tmpItem = items2.get(i);
             tmpItem = new Item.Builder(tmpItem)
                 .setId(tmpItem.getId() + fromId)
                 .build();
             items2.set(i, tmpItem);
         }
-        items1.addAll(items2);
-        insertListItems(items1);
+        insertListItems(items2);
     }
 
     public void insertItem(Item item, int id){

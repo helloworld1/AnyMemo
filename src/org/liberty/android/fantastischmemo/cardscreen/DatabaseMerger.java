@@ -182,7 +182,7 @@ public class DatabaseMerger extends AMActivity implements View.OnClickListener{
                      * and 1 is dbName */
                     DatabaseHelper dbHelper = new DatabaseHelper(DatabaseMerger.this, splittedpath1[0], splittedpath1[1]);
                     /* Merge to the back fo source database */
-                    dbHelper.mergeDatabase(splittedpath2[0], splittedpath2[1], dbHelper.getNewId() - 1);
+                    dbHelper.mergeDatabase(splittedpath2[0], splittedpath2[1]);
                     dbHelper.close();
                 }
 
