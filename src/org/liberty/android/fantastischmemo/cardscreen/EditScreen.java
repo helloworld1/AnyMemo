@@ -146,8 +146,11 @@ public class EditScreen extends AMActivity{
             updateCardFrontSide();
             updateTitle();
             setViewListeners();
-            gestureDetector= new GestureDetector(EditScreen.this, gestureListener);
-            flashcardDisplay.setScreenOnTouchListener(viewTouchListener);
+            /* Double sided card can't use the flip gesture*/
+            if(settingManager.getCardStyle() != SettingManager.CardStyle.DOUBLE_SIDED){
+                gestureDetector= new GestureDetector(EditScreen.this, gestureListener);
+                flashcardDisplay.setScreenOnTouchListener(viewTouchListener);
+            }
             registerForContextMenu(flashcardDisplay.getView());
         }
         catch(Exception e){
