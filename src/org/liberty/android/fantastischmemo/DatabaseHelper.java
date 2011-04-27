@@ -27,21 +27,17 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
-import java.util.Comparator;
-import java.util.Collections;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
@@ -65,7 +61,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		super(context, name, null, 1);
 		dbPath = path;
 		dbName = name;
-        File dbfile = new File(dbPath + "/" + dbName);
 		mContext = context;
         /* So if the database does not exist, it will create a new one */
         openDatabase();

@@ -4,45 +4,4 @@
     <item android:id="@+id/openmenu_clear"
         android:icon="@android:drawable/ic_menu_delete"
         android:title="@string/clear_recent_list"/>
-    
-    <item
-        android:title = "@string/import_text"
-        android:icon = "@drawable/import_icon" >
-        <menu>
-            <item
-                android:id="@+id/openmenu_import_mnemosyne_xml"
-                android:title="@string/import_mnemosyne_xml_text" />
-            <item
-                android:id="@+id/openmenu_import_supermemo_xml"
-                android:title="@string/import_supermemo_xml_text" />
-            <item
-                android:id="@+id/openmenu_import_csv"
-                android:title="@string/import_csv" />
-            <item
-                android:id="@+id/openmenu_import_tab_txt"
-                android:title="@string/import_tab_txt" />
-            <item
-                android:id="@+id/openmenu_import_qa_txt"
-                android:title="@string/import_qa_txt" />
-        </menu>
-    </item>
-
-    <item
-        android:title = "@string/export_text"
-        android:icon = "@drawable/export_icon" >
-        <menu>
-            <item android:id="@+id/openmenu_export_xml"
-                android:title="@string/export_xml"/>
-            <item android:id="@+id/openmenu_export_qa_txt"
-                android:title="@string/export_qa_txt"/>
-            <item android:id="@+id/openmenu_export_tab_txt"
-                android:title="@string/export_tab_txt"/>
-            <item android:id="@+id/openmenu_export_csv"
-                android:title="@string/export_csv"/>
-        </menu>
-    </item>
-
-
-  	
-  
 </menu>
