@@ -116,40 +116,55 @@ public class RecentList extends AMActivity implements OnItemClickListener{
             public void run(){
                 String[] allPath = RecentListUtil.getAllRecentDBPath(RecentList.this);
                 String[] allName = RecentListUtil.getAllRecentDBName(RecentList.this);
-                /* Clear first */
-                mHandler.post(new Runnable(){
-                    public void run(){
-                        recentListAdapter.clear();
-                    }
-                });
+                final List<RecentItem> ril = new ArrayList<RecentItem>();
                 /* Quick list */
-                for(int i = 0; i < allPath.length; i++){
-                    if(allPath[i] == null || allName == null){
-                        continue;
+                int index = 0;
+                try{
+                    for(int i = 0; i < allPath.length; i++){
+                        if(allPath[i] == null || allName == null){
+                            continue;
+                        }
+                        try{
+                            final RecentItem ri = new RecentItem();
+                            DatabaseHelper dbHelper = new DatabaseHelper(RecentList.this, allPath[i], allName[i]);
+                            ri.dbInfo = getString(R.string.loading_database);
+                            dbHelper.close();
+                            ri.index = index++;
+                            ril.add(ri);
+                            ri.dbPath = allPath[i];
+                            ri.dbName = allName[i];
+                            /* In order to add interrupted exception */
+                            Thread.sleep(5);
+                        }
+                        catch(SQLException e){
+                            RecentListUtil.deleteFromRecentList(RecentList.this, allPath[i], allName[i]);
+                            Log.e(TAG, "Error db: " + allPath[i] + " " + allName[i], e);
+                        }
                     }
-                    try{
-                        final RecentItem ri = new RecentItem();
-                        DatabaseHelper dbHelper = new DatabaseHelper(RecentList.this, allPath[i], allName[i]);
+                    mHandler.post(new Runnable(){
+                        public void run(){
+                            recentListAdapter.clear();
+                            for(RecentItem ri : ril)
+                        recentListAdapter.insert(ri, ri.index);
+                        }
+                    });
+                    /* This will update the detailed statistic info */
+                    for(final RecentItem ri : ril){
+                        DatabaseHelper dbHelper = new DatabaseHelper(RecentList.this, ri.dbPath, ri.dbName);
                         ri.dbInfo = getString(R.string.stat_total) + dbHelper.getTotalCount() + " " + getString(R.string.stat_new) + dbHelper.getNewCount() + " " + getString(R.string.stat_scheduled)+ dbHelper.getScheduledCount();
-                        dbHelper.close();
-                        ri.dbPath = allPath[i];
-                        ri.dbName = allName[i];
-                        //ri.dbInfo = getString(R.string.loading_database);
-                        mHandler.post(new Runnable(){
-                            public void run(){
-                                recentListAdapter.add(ri);
-                            }
-                        });
-                        /* In order to add interrupted exception */
-                        Thread.sleep(50);
+                        ril.set(ri.index, ri);
+                        Thread.sleep(5);
                     }
-                    catch(InterruptedException e){
-                        Log.e(TAG, "Interrupted", e);
-                    }
-                    catch(SQLException e){
-                        RecentListUtil.deleteFromRecentList(RecentList.this, allPath[i], allName[i]);
-                        Log.e(TAG, "Error db: " + allPath[i] + " " + allName[i], e);
-                    }
+                    mHandler.post(new Runnable(){
+                        public void run(){
+                            recentListAdapter.clear();
+                            for(RecentItem ri : ril)
+                        recentListAdapter.insert(ri, ri.index);
+                        }
+                    });
+                }
+                catch(InterruptedException e){
+                    Log.e(TAG, "Interrupted", e);
                 }
             }
         };
@@ -189,6 +204,7 @@ public class RecentList extends AMActivity implements OnItemClickListener{
         public String dbName;
         public String dbPath;
         public String dbInfo;
+        public int index;
     }
 
     private class RecentListAdapter extends ArrayAdapter<RecentItem>{

@@ -32,7 +32,7 @@
     <string name="memo_no_item_message">Нет объектов для изучения. Рекомендуем вернуться назад. Нажмите Зубрёжка чтобы учить карточки наперёд.</string>
     <string name="memo_btn0_text">0 Забыто</string>
     <string name="memo_btn1_text">1 Забыто</string>
-    <string name="memo_btn2_text">2 ОчТяжело</string>
+    <string name="memo_btn2_text">2 ОчТяжел</string>
     <string name="memo_btn3_text">3 Тяжело</string>
     <string name="memo_btn4_text">4 Легко</string>
     <string name="memo_btn5_text">5 ОчЛегко</string>
@@ -285,9 +285,9 @@
     <string name="notification_6hr_text">6 часов</string>
     <string name="notification_12hr_text">12 часов</string>
     <string name="notification_24hr_text">24 часа</string>
-    <string name="download_source_anymemo">http://anymemo.org (по умолчанию)</string>
-    <string name="download_source_fe">http://flashcardexchange.com (экспериментально)</string>
-    <string name="download_source_ss">http://studystack.com (экспериментально)</string>
+    <string name="download_source_anymemo">anymemo.org\n(по умолчанию)</string>
+    <string name="download_source_fe">FlashcardExchange.com\n(экспериментально)</string>
+    <string name="download_source_ss">studystack.com\n(экспериментально)</string>
     <string name="swap_text">Обмен</string>
     <string name="swapdup_text">Обм&amp;Коп</string>
     <string name="locale_german_text">Немецкий</string>
@@ -323,4 +323,19 @@
     <string name="card_style_single">Односторонний</string>
     <string name="settings_field1">Настроить 1 Поле Карточки</string>
     <string name="settings_field2">Настроить 2 Поле Карточки</string>
+    <string name="none_text">Нет</string>
+    <string name="both_text">Оба</string>
+    <string name="auto_text">Авто</string>
+    <string name="user_audio_text">Аудио Пользователя</string>
+    <string name="left_text">По Левому Краю</string>
+    <string name="center_text">По Центру</string>
+    <string name="right_text">По Правому Краю</string>
+    <string name="recent_tab_text">Недавние</string>
+    <string name="open_tab_text">Открыть</string>
+    <string name="edit_tab_text">Править</string>
+    <string name="download_tab_text">Загрузить</string>
+    <string name="misc_tab_text">Разное</string>
+    <string name="convert_wait">Конвертирование, Ждите...</string>
+    <string name="convert_success">Успешно конвертировано и сохранено в</string>
+    <string name="reset_all_pref_warning">Эта операция восстановит все общие настройки по умолчанию. Вашпрогресс изученя НЕ будет удалён.</string>
 </resources>
