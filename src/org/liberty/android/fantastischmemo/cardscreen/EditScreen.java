@@ -487,14 +487,25 @@ public class EditScreen extends AMActivity{
         nextButton.setOnClickListener(nextButtonListener);
         /* For double sided card, the view can be toggled */
         if(settingManager.getCardStyle() == SettingManager.CardStyle.DOUBLE_SIDED){
+
             flashcardDisplay.setQuestionLayoutClickListener(toggleCardSideListener);
             flashcardDisplay.setAnswerLayoutClickListener(toggleCardSideListener);
             flashcardDisplay.setQuestionTextClickListener(toggleCardSideListener);
             flashcardDisplay.setAnswerTextClickListener(toggleCardSideListener);
+            flashcardDisplay.setQuestionLayoutLongClickListener(popupContextMenuListener);
+            flashcardDisplay.setAnswerLayoutLongClickListener(popupContextMenuListener);
         }
 
 
     }
+
+    private View.OnLongClickListener popupContextMenuListener = new View.OnLongClickListener(){
+        public boolean onLongClick(View v){
+            closeContextMenu();
+            EditScreen.this.openContextMenu(flashcardDisplay.getView());
+            return true;
+        }
+    };
 
     private View.OnClickListener newButtonListener = new View.OnClickListener(){
         public void onClick(View v){
