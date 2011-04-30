@@ -55,6 +55,7 @@ import android.content.Context;
 import android.preference.PreferenceManager;
 import android.text.Html;
 import android.text.ClipboardManager;
+import android.text.SpannableStringBuilder;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -201,7 +202,7 @@ public class SingleSidedCardDisplay implements FlashcardDisplay, TagHandler, Ima
         boolean enableThirdPartyArabic = settingManager.getEnableThirdPartyArabic();
         SettingManager.Alignment questionAlign = settingManager.getQuestionAlign();
         SettingManager.Alignment answerAlign = settingManager.getAnswerAlign();
-        SettingManager.HTMLDisplayType htmlDisplay = settingManager.getHtmlDisplay();
+        long htmlDisplay = settingManager.getHtmlDisplay();
 
         /* Set the typeface of question an d answer */
         if(questionTypeface != null && !questionTypeface.equals("")){
@@ -225,116 +226,72 @@ public class SingleSidedCardDisplay implements FlashcardDisplay, TagHandler, Ima
 
         }
 
-        String sq = "", sa = "";
-        /* new line added to separate fields */
-        String nlq = "\n", nla = "\n";
+        String itemQuestion = item.getQuestion();
+        String itemAnswer = item.getAnswer();
+        String itemCategory = item.getCategory();
+        String itemNote = item.getNote();
 
-		if(htmlDisplay == SettingManager.HTMLDisplayType.QUESTION){
-            nlq = "<br /><br />";
-            nla = "\n\n";
-		}
-		else if(htmlDisplay == SettingManager.HTMLDisplayType.ANSWER){
-            nlq = "\n\n";
-            nla = "<br /><br />";
-		}
-		else if(htmlDisplay == SettingManager.HTMLDisplayType.NONE){
-            nlq = "\n\n";
-            nla = "\n\n";
-		}
-		else if(htmlDisplay == SettingManager.HTMLDisplayType.BOTH){
-            nlq = "<br /><br />";
-            nla = "<br /><br />";
+        if(enableThirdPartyArabic){
+            itemQuestion = ArabicUtilities.reshape(itemQuestion);
+            itemAnswer = ArabicUtilities.reshape(itemAnswer);
+            itemCategory = ArabicUtilities.reshape(itemCategory);
+            itemNote = ArabicUtilities.reshape(itemNote);
         }
-        else{
-            if(item.containsHTML()){
-                nlq = "<br /><br />";
-                nla = "<br /><br />";
-            }
-            else{
-                nlq = "\n\n";
-                nla = "\n\n";
-            }
-        }
+        String[] fields = {itemQuestion, itemAnswer, itemCategory, itemNote};
 
-
-
+        SpannableStringBuilder sq = new SpannableStringBuilder();
+        SpannableStringBuilder sa = new SpannableStringBuilder();
         /* Show the field that is enabled in settings */
         long field1 = settingManager.getCardField1();
         long field2 = settingManager.getCardField2();
         Log.v(TAG, "Field1: " + field1);
         Log.v(TAG, "Field2: " + field2);
-        
-        if((field1 & SettingManager.CardField.QUESTION) > 0){
-            sq += nlq + item.getQuestion();
-        }
-        if((field1 & SettingManager.CardField.ANSWER) > 0){
-            sq += nlq + item.getAnswer();
-        }
-        if((field1 & SettingManager.CardField.CATEGORY) > 0){
-            sq += nlq + item.getCategory();
-        }
-        if((field1 & SettingManager.CardField.NOTE) > 0){
-            sq += nlq + item.getNote();
-        }
+        Log.v(TAG, "html: " + htmlDisplay);
 
-
-        if((field2 & SettingManager.CardField.QUESTION) > 0){
-            sa += nla + item.getQuestion();
-        }
-        if((field2 & SettingManager.CardField.ANSWER) > 0){
-            sa += nla + item.getAnswer();
-        }
-        if((field2 & SettingManager.CardField.CATEGORY) > 0){
-            sa += nla + item.getCategory();
-        }
-        if((field2 & SettingManager.CardField.NOTE) > 0){
-            sa += nla + item.getNote();
-        }
-
-
-        
-        sq = sq.substring(nlq.length());
-        sa = sa.substring(nla.length());
-
-
-        Log.v(TAG, "2: " + sq);
-        Log.v(TAG, "2: " + sa);
-        if(enableThirdPartyArabic){
-            sq = ArabicUtilities.reshape(sq);
-            sa = ArabicUtilities.reshape(sa);
-        }
-		
-		
-        /* Use HTML to display */
-		if(htmlDisplay == SettingManager.HTMLDisplayType.QUESTION){
-            questionView.setText(Html.fromHtml(sq, this, this));
-            answerView.setText(sa);
-		}
-		else if(htmlDisplay == SettingManager.HTMLDisplayType.ANSWER){
-            answerView.setText(Html.fromHtml(sa, this, this));
-            questionView.setText(sq);
-		}
-		else if(htmlDisplay == SettingManager.HTMLDisplayType.NONE){
-            questionView.setText(sq);
-            answerView.setText(sa);
-		}
-		else if(htmlDisplay == SettingManager.HTMLDisplayType.BOTH){
-            /* Both */
-            questionView.setText(Html.fromHtml(sq, this, this));
-            answerView.setText(Html.fromHtml(sa, this, this));
-		}
-        else{
-            /* Auto */
-            if(item.containsHTML()){
-                questionView.setText(Html.fromHtml(sq, this, this));
-                answerView.setText(Html.fromHtml(sa, this, this));
-            }
-            else{
-                questionView.setText(sq);
-                answerView.setText(sa);
+        /* Iterate all fields */
+        for(int i = 0; i < 4; i++){
+            /* Question field */
+            if((field1 & (1 << i)) > 0){
+                /* Automatic check HTML */
+                if(AMUtil.isHTML(fields[i]) && (htmlDisplay & (1 << i)) > 0){
+                    if(sq.length() != 0){
+                        sq.append(Html.fromHtml("<br /><br />"));
+                    }
+                    sq.append(Html.fromHtml(fields[i], this, this));
+                }
+                else{
+                    if(sq.length() != 0){
+                        sq.append("\n\n");
+                    }
+                    sq.append(fields[i]);
+                }
             }
 
+            /* Answer field */
+            if((field2 & (1 << i)) > 0){
+                /* Automatic check HTML */
+                if(AMUtil.isHTML(fields[i]) && (htmlDisplay & (1 << i)) > 0){
+                    if(sa.length() != 0){
+                        sa.append(Html.fromHtml("<br /><br />"));
+                    }
+                    sa.append(Html.fromHtml(fields[i], this, this));
+                }
+                else{
+                    if(sa.length() != 0){
+                        sa.append("\n\n");
+                    }
+                    sa.append(fields[i]);
+                }
+            }
         }
+
+
+
+        questionView.setText(sq);
+        answerView.setText(sa);
+
+		
+		
 		
         /* Here is tricky to set up the alignment of the text */
 		if(questionAlign == SettingManager.Alignment.CENTER){

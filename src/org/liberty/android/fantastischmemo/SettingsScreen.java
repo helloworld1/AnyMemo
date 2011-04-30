@@ -64,7 +64,6 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
 	private Spinner answerAlignSpinner;
 	private Spinner questionLocaleSpinner;
 	private Spinner answerLocaleSpinner;
-	private Spinner htmlSpinner;
 	private Spinner ratioSpinner;
     private Spinner styleSpinner;
 	private CheckBox wipeCheckbox;
@@ -74,6 +73,7 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
     private CheckBox aTypefaceCheckbox;
     private CheckBox field1Checkbox;
     private CheckBox field2Checkbox;
+    private CheckBox htmlCheckbox;
     private EditText qTypefaceEdit;
     private EditText aTypefaceEdit;
     private EditText audioLocationEdit;
@@ -83,6 +83,7 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
     private CheckBox colorCheckbox;
     private Button colorButton;
     private ArrayList<Integer> colors;
+    private long htmlValue = SettingManager.CardField.QUESTION | SettingManager.CardField.ANSWER | SettingManager.CardField.NOTE;
     private long field1Value = SettingManager.CardField.QUESTION;
     private long field2Value = SettingManager.CardField.ANSWER;
 
@@ -149,10 +150,6 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
         answerLocaleSpinner.setOnItemSelectedListener(localeListener);
         
         
-        htmlSpinner = (Spinner)findViewById(R.id.html_spinner);
-        ArrayAdapter<CharSequence> htmlAdapter = ArrayAdapter.createFromResource(this, R.array.html_list, android.R.layout.simple_spinner_item);
-        htmlAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        htmlSpinner.setAdapter(htmlAdapter);
         
         ratioSpinner = (Spinner)findViewById(R.id.ratio_spinner);
         ArrayAdapter<CharSequence> ratioAdapter = ArrayAdapter.createFromResource(this, R.array.ratio_list, android.R.layout.simple_spinner_item);
@@ -208,6 +205,10 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
         colorCheckbox = (CheckBox)findViewById(R.id.checkbox_customize_color);
         colorCheckbox.setOnClickListener(this);
 
+        htmlCheckbox = (CheckBox)findViewById(R.id.display_html);
+        /* Default is enabled */
+        htmlCheckbox.setChecked(true);
+        htmlCheckbox.setOnClickListener(this);
         field1Checkbox = (CheckBox)findViewById(R.id.checkbox_field1);
         field1Checkbox.setOnClickListener(this);
         field2Checkbox = (CheckBox)findViewById(R.id.checkbox_field2);
@@ -392,29 +393,6 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
 				answerLocaleSpinner.setSelection(index);
 			}
 			
-			else if(me.getKey().toString().equals("html_display")){
-				String res = me.getValue();
-                int index = 0;
-                if(AMUtil.isInteger(res)){
-                    index = Integer.parseInt(res);
-                }
-                else{
-                    String[] htmlList = getResources().getStringArray(R.array.html_list);
-                    boolean found = false;
-                    for(String str : htmlList){
-                        if(str.equals(res)){
-                            found = true;
-                            break;
-                        }
-                        index++;
-                    }
-                    if(found == false){
-                        /* Default to AUTO */
-                        index = 4;
-                    }
-                }
-				htmlSpinner.setSelection(index);
-			}
 			else if(me.getKey().toString().equals("ratio")){
 				String res = me.getValue();
 				String[] ratioList = getResources().getStringArray(R.array.ratio_list);
@@ -497,6 +475,22 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
 				styleSpinner.setSelection(index);
 
             }
+			else if(me.getKey().toString().equals("html_display")){
+                String s =  me.getValue().toString();
+                if(AMUtil.isInteger(s)){
+                    long v = Long.parseLong(s);
+                    if(v != 0){
+                        htmlCheckbox.setChecked(true);
+                    }
+                    else{
+                        htmlCheckbox.setChecked(false);
+                    }
+                    htmlValue = v;
+                }
+                else if(htmlValue != 0){
+                    htmlCheckbox.setChecked(true);
+                }
+			}
             else if(me.getKey().toString().equals("card_field_1")){
                 String s =  me.getValue().toString();
                 long v = Long.parseLong(s);
@@ -553,7 +547,6 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
     	hm.put("question_locale", qlPos <= 1 ? "" + qlPos : localeList[qlPos] );
     	hm.put("answer_locale", alPos <= 1 ? "" + alPos : localeList[alPos] );
 
-    	hm.put("html_display", "" + htmlSpinner.getSelectedItemPosition());
     	hm.put("ratio", ratioList[ratioSpinner.getSelectedItemPosition()]);
         hm.put("audio_location", audioLocationEdit.getText().toString());
         hm.put("card_style", "" +  styleSpinner.getSelectedItemPosition());
@@ -586,6 +579,12 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
             hm.put("answer_typeface", "");
         }
 
+        if(htmlCheckbox.isChecked()){
+            hm.put("html_display", Long.toString(htmlValue));
+        }
+        else{
+            hm.put("html_display", "" + 0);
+        }
         if(field1Checkbox.isChecked()){
             hm.put("card_field_1", Long.toString(field1Value));
         }
@@ -711,6 +710,35 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
                 colorRow.setVisibility(View.GONE);
             }
         }
+        if(v == htmlCheckbox){
+                
+            if(htmlCheckbox.isChecked()){
+                /* 4 field now */
+                final boolean[] fieldSelection = bitfieldToArray(htmlValue, 4);
+                final String[] fieldText = getResources().getStringArray(R.array.card_field_list);
+                new AlertDialog.Builder( this )
+                    .setTitle(R.string.settings_field1)
+                    .setMultiChoiceItems(fieldText, fieldSelection,new DialogInterface.OnMultiChoiceClickListener() { 
+                        public void onClick(DialogInterface dialog, int which, boolean isChecked) { 
+                            fieldSelection[which] = isChecked;
+                        } 
+                    }) 
+                    .setPositiveButton(getString(R.string.ok_text), new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int which ){
+                            htmlValue = arrayToBitfield(fieldSelection);
+                            if(htmlValue == 0){
+                                htmlCheckbox.setChecked(false);
+                            }
+                            
+                        }
+                    })
+                    .show();
+            }
+            else{
+                htmlValue = 0;
+            }
+        }
         if(v == field1Checkbox){
                 
             if(field1Checkbox.isChecked()){
@@ -728,10 +756,16 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
                         @Override
                         public void onClick(DialogInterface dialog, int which ){
                             field1Value = arrayToBitfield(fieldSelection);
+                            if(field1Value == SettingManager.CardField.QUESTION){
+                                field1Checkbox.setChecked(false);
+                            }
                             
                         }
                     })
                     .show();
+            }
+            else{
+                field1Value = SettingManager.CardField.QUESTION;
             }
         }
         if(v == field2Checkbox){
@@ -750,10 +784,16 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
                         @Override
                         public void onClick(DialogInterface dialog, int which ){
                             field2Value = arrayToBitfield(fieldSelection);
+                            if(field2Value == SettingManager.CardField.ANSWER){
+                                field2Checkbox.setChecked(false);
+                            }
                             
                         }
                     })
                     .show();
+            }
+            else{
+                field1Value = SettingManager.CardField.ANSWER;
             }
         }
     }

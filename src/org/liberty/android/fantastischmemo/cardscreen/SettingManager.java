@@ -50,7 +50,7 @@ public class SettingManager{
     private Alignment answerAlign = Alignment.CENTER;
 	private String questionLocale = "US";
 	private String answerLocale = "US";
-    private HTMLDisplayType htmlDisplay = HTMLDisplayType.AUTO;
+    private long htmlDisplay = CardField.QUESTION | CardField.ANSWER | CardField.NOTE;
 	private String qaRatio = "50%";
     private ButtonStyle btnStyle = ButtonStyle.ANYMEMO;
     private SpeechControlMethod speechCtl = SpeechControlMethod.TAP;
@@ -78,6 +78,7 @@ public class SettingManager{
         mContext = context;
 		settings = PreferenceManager.getDefaultSharedPreferences(context);
         loadGlobalOptions();
+
     }
 
     public SettingManager(Context context, String dbPath, String dbName) throws SQLException{
@@ -109,7 +110,7 @@ public class SettingManager{
         return answerAlign;
     }
 
-    public HTMLDisplayType getHtmlDisplay(){
+    public long getHtmlDisplay(){
         return htmlDisplay;
     }
 
@@ -144,10 +145,10 @@ public class SettingManager{
     }
 
     public long getCardField1(){
-        return cardField1;
+        return cardField1 == 0 ? CardField.QUESTION : cardField1;
     }
     public long getCardField2(){
-        return cardField2;
+        return cardField2 == 0 ? CardField.ANSWER : cardField2;
     }
 
     public Locale getAnswerAudioLocale(){
@@ -320,7 +321,9 @@ public class SettingManager{
 				this.answerLocale = me.getValue();
 			}
 			if(me.getKey().equals("html_display")){
-				this.htmlDisplay = HTMLDisplayType.parse(me.getValue());
+                if(AMUtil.isInteger(me.getValue())){
+                    htmlDisplay = Long.parseLong(me.getValue());
+                }
 			}
 			if(me.getKey().equals("ratio")){
 				this.qaRatio = me.getValue();
@@ -385,32 +388,6 @@ public class SettingManager{
             }
             else{
                 return CENTER;
-            }
-        }
-    }
-
-    public static enum HTMLDisplayType{
-        BOTH,
-        QUESTION,
-        ANSWER,
-        AUTO,
-        NONE;
-
-        public static HTMLDisplayType parse(String a){
-            if(a.equals("2") || a.equals("question")){
-                return QUESTION;
-            }
-            else if(a.equals("3") || a.equals("answer")){
-                return ANSWER;
-            }
-            else if(a.equals("0") || a.equals("none")){
-                return NONE;
-            }
-            else if(a.equals("1") || a.equals("both")){
-                return BOTH;
-            }
-            else{
-                return AUTO;
             }
         }
     }
