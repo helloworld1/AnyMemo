@@ -551,7 +551,7 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
 
         /* 0 --  disabled, 1 -- User audio */
     	hm.put("question_locale", qlPos <= 1 ? "" + qlPos : localeList[qlPos] );
-    	hm.put("answer_locale", alPos <= 1 ? "" + alPos : localeList[qlPos] );
+    	hm.put("answer_locale", alPos <= 1 ? "" + alPos : localeList[alPos] );
 
     	hm.put("html_display", "" + htmlSpinner.getSelectedItemPosition());
     	hm.put("ratio", ratioList[ratioSpinner.getSelectedItemPosition()]);
