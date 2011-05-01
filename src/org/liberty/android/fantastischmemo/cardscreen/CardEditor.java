@@ -20,56 +20,25 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.cardscreen;
 
 import org.liberty.android.fantastischmemo.*;
-import org.liberty.android.fantastischmemo.tts.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
-import android.text.Editable;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.SharedPreferences;
-import android.content.DialogInterface.OnClickListener;
-import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
-import android.content.Context;
 import android.preference.PreferenceManager;
-import android.text.Html;
-import android.text.ClipboardManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.Display;
-import android.view.LayoutInflater;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.ViewGroup;
-import android.view.KeyEvent;
-import android.gesture.GestureOverlayView;
 import android.widget.Button;
-import android.os.Handler;
-import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.ArrayAdapter;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView;
 import android.widget.RadioGroup;
 import android.util.Log;
-import android.os.SystemClock;
 import android.os.Environment;
 import android.content.res.Configuration;
 
@@ -230,12 +199,12 @@ public class CardEditor extends Activity implements View.OnClickListener{
         View focusView = getCurrentFocus();
 	    switch (item.getItemId()) {
             case R.id.editor_menu_br:
-                if(focusView == questionEdit || focusView ==answerEdit || focusView == categoryEdit){
+                if(focusView == questionEdit || focusView ==answerEdit || focusView == categoryEdit || focusView == noteEdit){
                     addTextToView((EditText)focusView, "<br />");
                 }
                 return true;
             case R.id.editor_menu_image:
-                if(focusView == questionEdit || focusView ==answerEdit || focusView == categoryEdit){
+                if(focusView == questionEdit || focusView ==answerEdit || focusView == categoryEdit || focusView == noteEdit){
                     Intent myIntent = new Intent(this, FileBrowser.class);
                     myIntent.putExtra("file_extension", ".png,.jpg,.tif,.bmp");
                     startActivityForResult(myIntent, ACTIVITY_IMAGE_FILE);
@@ -243,7 +212,7 @@ public class CardEditor extends Activity implements View.OnClickListener{
                 return true;
 
             case R.id.editor_menu_audio:
-                if(focusView == questionEdit || focusView ==answerEdit || focusView == categoryEdit){
+                if(focusView == questionEdit || focusView ==answerEdit || focusView == categoryEdit || focusView == noteEdit){
                     Intent myIntent = new Intent(this, FileBrowser.class);
                     myIntent.putExtra("file_extension", ".ogg,.mp3,.wav");
                     startActivityForResult(myIntent, ACTIVITY_AUDIO_FILE);
@@ -282,7 +251,7 @@ public class CardEditor extends Activity implements View.OnClickListener{
     	    case ACTIVITY_IMAGE_FILE:
                 if(resultCode == Activity.RESULT_OK){
                     View focusView = getCurrentFocus();
-                    if(focusView == questionEdit || focusView ==answerEdit || focusView == categoryEdit){
+                    if(focusView == questionEdit || focusView ==answerEdit || focusView == categoryEdit || focusView == noteEdit){
                         name = data.getStringExtra("org.liberty.android.fantastischmemo.dbName");
                         path = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
                         addTextToView((EditText)focusView, "<img src=\"" + name + "\" />");
@@ -306,7 +275,7 @@ public class CardEditor extends Activity implements View.OnClickListener{
     	    case ACTIVITY_AUDIO_FILE:
                 if(resultCode == Activity.RESULT_OK){
                     View focusView = getCurrentFocus();
-                    if(focusView == questionEdit || focusView ==answerEdit || focusView == categoryEdit){
+                    if(focusView == questionEdit || focusView ==answerEdit || focusView == categoryEdit || focusView == noteEdit){
                         name = data.getStringExtra("org.liberty.android.fantastischmemo.dbName");
                         path = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
                         addTextToView((EditText)focusView, "<audio src=\"" + name + "\" />");

@@ -19,6 +19,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class AMUtil{
     public static boolean isInteger(String s){
         try{
@@ -31,7 +34,9 @@ public class AMUtil{
     }
 
     public static boolean isHTML(String s){
-        return s.contains("<") && s.contains(">");
+        Pattern htmlPattern = Pattern.compile("<[a-zA-Z]+[0-9]*(\\s[a-zA-Z]+[0-9]*=.*)*\\s*/??>");
+        Matcher m = htmlPattern.matcher(s);
+        return m.find();
     }
 
 }

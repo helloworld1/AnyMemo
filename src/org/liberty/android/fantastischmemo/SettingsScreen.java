@@ -717,7 +717,7 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
                 final boolean[] fieldSelection = bitfieldToArray(htmlValue, 4);
                 final String[] fieldText = getResources().getStringArray(R.array.card_field_list);
                 new AlertDialog.Builder( this )
-                    .setTitle(R.string.settings_field1)
+                    .setTitle(R.string.settings_html_display)
                     .setMultiChoiceItems(fieldText, fieldSelection,new DialogInterface.OnMultiChoiceClickListener() { 
                         public void onClick(DialogInterface dialog, int which, boolean isChecked) { 
                             fieldSelection[which] = isChecked;
