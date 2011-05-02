@@ -274,7 +274,13 @@ public class DownloaderFE extends DownloaderBase{
                 cardId = jsonItem.getInt("card_set_id");
             }
 
+
             String address = FE_API_CARDSET + cardId;
+            if(action.equals(INTENT_ACTION_SEARCH_PRIVATE)){
+                address = address + "&private=true&oauth_token_secret=" + oauthTokenSecret+ "&oauth_token=" + oauthToken;
+                address = oauthConsumer.sign(address);
+
+            }
             DownloadItem di = new DownloadItem(DownloadItem.TYPE_DATABASE,
                     jsonItem.getString("title"),
                     jsonItem.getString("description"),
@@ -291,6 +297,7 @@ public class DownloaderFE extends DownloaderBase{
         JSONObject rootObject = new JSONObject(dbJsonString);
         String status = rootObject.getString("response_type");
         if(!status.equals("ok")){
+            Log.e(TAG, "Content: " + dbJsonString);
             throw new IOException("Status is not OK. Status: " + status);
         }
         JSONArray flashcardsArray = rootObject.getJSONObject("results").getJSONArray("flashcards");

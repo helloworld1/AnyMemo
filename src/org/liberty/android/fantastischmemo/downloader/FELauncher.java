@@ -170,7 +170,7 @@ public class FELauncher extends AMActivity implements OnClickListener{
                     editor.commit();
                     Intent myIntent = new Intent(FELauncher.this, DownloaderFE.class);
                     myIntent.setAction(DownloaderFE.INTENT_ACTION_SEARCH_PRIVATE);
-                    myIntent.putExtra("search_criterion", "liberty@live.com");
+                    myIntent.putExtra("search_criterion", searchText);
                     myIntent.putExtra("oauth_token", key);
                     myIntent.putExtra("oauth_token_secret", secret);
                     myIntent.putExtra("oauth_consumer", consumer);
