@@ -362,19 +362,22 @@ public class SingleSidedCardDisplay implements FlashcardDisplay, TagHandler, Ima
     public Drawable getDrawable(String source){
         Log.v(TAG, "Source: " + source);
         try{
-            String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + mContext.getString(R.string.default_image_dir) + "/" + settingManager.getDbName()+ "/" + source;
-            String filePath2 = Environment.getExternalStorageDirectory().getAbsolutePath() + mContext.getString(R.string.default_image_dir) + "/" + source;
-            Bitmap orngBitmap;
-            /* Try the image in /sdcard/anymemo/images/dbname/myimg.png */
-            if((new File(filePath)).exists()){
-                orngBitmap = BitmapFactory.decodeFile(filePath);
-            }
-            /* Try the image in /sdcard/anymemo/images/myimg.png */
-            else if((new File(filePath2)).exists()){
-                orngBitmap = BitmapFactory.decodeFile(filePath2);
+            String[] paths = {
+                /* Relative path */
+                "" + settingManager.getDbPath() + "/" + source,
+                /* Try the image in /sdcard/anymemo/images/dbname/myimg.png */
+                Environment.getExternalStorageDirectory().getAbsolutePath() + mContext.getString(R.string.default_image_dir) + "/" + settingManager.getDbName()+ "/" + source,
+                /* Try the image in /sdcard/anymemo/images/myimg.png */
+                Environment.getExternalStorageDirectory().getAbsolutePath() + mContext.getString(R.string.default_image_dir) + "/" + source};
+            Bitmap orngBitmap = null;
+            for(String path : paths){
+                if(new File(path).exists()){
+                    orngBitmap = BitmapFactory.decodeFile(path);
+                    break;
+                }
             }
             /* Try the image from internet */
-            else{
+            if(orngBitmap == null){
                 InputStream is = (InputStream)new URL(source).getContent();
                 orngBitmap = BitmapFactory.decodeStream(is);
             }
