@@ -57,7 +57,6 @@ public class AnyMemoTTSPlatform implements AnyMemoTTS, TextToSpeech.OnInitListen
     }
 	
 	public int sayText(String s){
-		int status;
         Log.v(TAG, "say it!");
 		// Replace break with period
 		String processed_str = s.replaceAll("\\<br\\>", ". " );
@@ -69,8 +68,13 @@ public class AnyMemoTTSPlatform implements AnyMemoTTS, TextToSpeech.OnInitListen
 		processed_str = processed_str.replaceAll("\\[.*?\\]", "");
 		processed_str = processed_str.replaceAll("&.*?;", "");
 
-        myTTS.setLanguage(myLocale);
-        myTTS.speak(processed_str, 0, null);
+        if(!myTTS.isSpeaking()){
+            myTTS.setLanguage(myLocale);
+            myTTS.speak(processed_str, 0, null);
+        }
+        else{
+            stop();
+        }
 		
 		return 0;
 	}

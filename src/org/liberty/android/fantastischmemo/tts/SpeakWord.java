@@ -104,11 +104,18 @@ public class SpeakWord {
             new Thread(){
                 public void run(){
                     try{
-                        mp.reset();
-                        mp.setDataSource(fis.getFD());
-                        mp.prepare();
-                        mp.start();
+                        if(!mp.isPlaying()){
+                            mp.reset();
+                            mp.setDataSource(fis.getFD());
+                            mp.prepare();
+                            mp.start();
+                        }
+                        else{
+                            stop();
+                        }
+                        
                     }
+
                     catch(Exception e){
                         Log.e(TAG, "Error loading audio. Maybe it is race condition", e);
                     }
