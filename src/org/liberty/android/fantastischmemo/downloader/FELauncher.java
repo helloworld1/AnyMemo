@@ -20,20 +20,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.downloader;
 
 import org.liberty.android.fantastischmemo.*;
-import android.app.Activity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.content.SharedPreferences;
 import android.view.View.OnClickListener;
 import android.preference.PreferenceManager;
 import android.content.Intent;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.app.AlertDialog;
-import android.util.Log;
-import oauth.signpost.*;
 
 public class FELauncher extends AMActivity implements OnClickListener{
     private Button directoryButton;
@@ -126,6 +125,29 @@ public class FELauncher extends AMActivity implements OnClickListener{
         }
 
     }
+
+    @Override
+	public boolean onCreateOptionsMenu(Menu menu){
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.fe_menu, menu);
+		return true;
+	}
+	
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	    case R.id.fe_logout:
+            editor.putString("saved_username", "");
+            editor.putString("saved_oauth_token", "");
+            editor.putString("saved_oauth_token_secret", "");
+            editor.commit();
+            restartActivity();
+			return true;
+
+	    }
+
+	    return false;
+	}
+
 
     private void showNotAuthDialog(){
         new AlertDialog.Builder(this)

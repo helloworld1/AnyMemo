@@ -359,6 +359,7 @@
     <string name="convert_success">Successfully converted and saved to</string>
     <string name="reset_all_pref_warning">This operation will restore all global settings to default. You learning progress will NOT be deleted. </string>
     <string name="fe_login_text">Login</string>
+    <string name="fe_logout_text">Logout</string>
     <string name="fe_logged_in_text">Logged in</string>
     <string name="fe_not_login">Login needed</string>
     <string name="fe_not_login_message">Please press login button to log in first</string>
