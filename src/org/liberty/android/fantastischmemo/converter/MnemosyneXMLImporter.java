@@ -73,8 +73,10 @@ public class MnemosyneXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
 		URL mXMLUrl = new URL("file:///" + filePath + "/" + fileName);
 		itemList = new LinkedList<Item>();
 
+        System.setProperty("org.xml.sax.driver","org.xmlpull.v1.sax2.Driver"); 
 		SAXParserFactory spf = SAXParserFactory.newInstance();
 		SAXParser sp = spf.newSAXParser();
+
 		XMLReader xr = sp.getXMLReader();
 		xr.setContentHandler(this);
 		xr.parse(new InputSource(mXMLUrl.openStream()));
@@ -82,10 +84,6 @@ public class MnemosyneXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
         DatabaseHelper.createEmptyDatabase(filePath, fileName.replace(".xml", ".db"));
         DatabaseHelper dbHelper =  new DatabaseHelper(mContext, filePath, fileName.replace(".xml", ".db"));
         dbHelper.insertListItems(itemList);
-        HashMap<String, String>hm = new HashMap<String, String>();
-        /* Set HTML to Auto */
-        hm.put("html_display", "4");
-        dbHelper.setSettings(hm);
         dbHelper.close();
     }
 	
