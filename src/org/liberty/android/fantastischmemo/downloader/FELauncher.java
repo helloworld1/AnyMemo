@@ -39,11 +39,10 @@ public class FELauncher extends AMActivity implements OnClickListener{
     private Button directoryButton;
     private Button searchTagButton;
     private Button searchUserButton;
+    private Button loginButton;
     private Button privateButton;
     private Button uploadButton;
     private static final String TAG = "org.liberty.android.fantastischmemo.downloader.FELauncher";
-    private static final int OAUTH_PRIVATE_ACTIVITY = 1;
-    private static final int OAUTH_UPLOAD_ACTIVITY = 2;
     private SharedPreferences settings;
     private SharedPreferences.Editor editor;
 
@@ -54,15 +53,28 @@ public class FELauncher extends AMActivity implements OnClickListener{
         directoryButton = (Button)findViewById(R.id.fe_directory);
         searchTagButton = (Button)findViewById(R.id.fe_search_tag);
         searchUserButton = (Button)findViewById(R.id.fe_search_user);
+        loginButton = (Button)findViewById(R.id.fe_login);
         privateButton = (Button)findViewById(R.id.fe_private_login);
         uploadButton = (Button)findViewById(R.id.fe_upload);
         directoryButton.setOnClickListener(this);
         searchTagButton.setOnClickListener(this);
         searchUserButton.setOnClickListener(this);
+        loginButton.setOnClickListener(this);
         privateButton.setOnClickListener(this);
         uploadButton.setOnClickListener(this);
         settings = PreferenceManager.getDefaultSharedPreferences(this);
         editor = settings.edit();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        String searchText = settings.getString("saved_username", "");
+        String key = settings.getString("saved_oauth_token", "");
+        String secret = settings.getString("saved_oauth_token_secret", "");
+        if(!searchText.equals("") && !key.equals("") && !secret.equals("")){
+            loginButton.setText(getString(R.string.fe_logged_in_text) + ": " + searchText);
+        }
     }
 
     @Override
@@ -77,37 +89,52 @@ public class FELauncher extends AMActivity implements OnClickListener{
         if(v == searchUserButton){
             showSearchUserDialog();
         }
-        if(v == privateButton){
+        if(v == loginButton){
             Intent myIntent = new Intent(this, FEOauth.class);
-            startActivityForResult(myIntent, OAUTH_PRIVATE_ACTIVITY);
-        }
-        if(v == uploadButton){
-            Intent myIntent = new Intent(this, FEUpload.class);
             startActivity(myIntent);
         }
-
-    }
-
-    /* Handle the return of Oauth to access private cards */
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
-    	super.onActivityResult(requestCode, resultCode, data);
-        Log.v(TAG, "Result: " + requestCode + " " + resultCode + " " + data);
-        if(resultCode == Activity.RESULT_OK){
-            switch(requestCode){
-                case OAUTH_PRIVATE_ACTIVITY:
-                {
-                    Bundle resultExtras = data.getExtras();
-                    if(resultExtras != null){
-                        String key = resultExtras.getString("oauth_token");
-                        String secret = resultExtras.getString("oauth_token_secret");
-                        OAuthConsumer consumer = (OAuthConsumer)resultExtras.getSerializable("consumer");
-                        showPrivateSearchUserDialog(key, secret, consumer);
-                        break;
-                    }
-                }
+        if(v == privateButton){
+            String searchText = settings.getString("saved_username", "");
+            String key = settings.getString("saved_oauth_token", "");
+            String secret = settings.getString("saved_oauth_token_secret", "");
+            if(!searchText.equals("") && !key.equals("") && !secret.equals("")){
+                Intent myIntent = new Intent(FELauncher.this, DownloaderFE.class);
+                myIntent.setAction(DownloaderFE.INTENT_ACTION_SEARCH_PRIVATE);
+                myIntent.putExtra("search_criterion", searchText);
+                myIntent.putExtra("oauth_token", key);
+                myIntent.putExtra("oauth_token_secret", secret);
+                startActivity(myIntent);
+            }
+            else{
+                showNotAuthDialog();
             }
         }
+        if(v == uploadButton){
+            String searchText = settings.getString("saved_username", "");
+            String key = settings.getString("saved_oauth_token", "");
+            String secret = settings.getString("saved_oauth_token_secret", "");
+            if(!searchText.equals("") && !key.equals("") && !secret.equals("")){
+                Intent myIntent = new Intent(FELauncher.this, FEUpload.class);
+                myIntent.putExtra("search_criterion", searchText);
+                myIntent.putExtra("oauth_token", key);
+                myIntent.putExtra("oauth_token_secret", secret);
+                startActivity(myIntent);
+            }
+            else{
+                showNotAuthDialog();
+            }
+        }
+
     }
+
+    private void showNotAuthDialog(){
+        new AlertDialog.Builder(this)
+            .setTitle(R.string.fe_not_login)
+            .setMessage(R.string.fe_not_login_message)
+            .setPositiveButton(R.string.ok_text, null)
+            .show();
+    }
+
 
     private void showSearchTagDialog(){
         final EditText et = new EditText(this);
@@ -154,35 +181,6 @@ public class FELauncher extends AMActivity implements OnClickListener{
             .create()
             .show();
     }
-
-    /* Oauth information should be passed to this method */
-    private void showPrivateSearchUserDialog(final String key, final String secret, final OAuthConsumer consumer){
-        final EditText et = new EditText(this);
-        et.setText(settings.getString("fe_saved_user", ""));
-        new AlertDialog.Builder(this)
-            .setTitle(R.string.search_tag)
-            .setMessage(R.string.fe_private_login_message)
-            .setView(et)
-            .setPositiveButton(R.string.search_text, new DialogInterface.OnClickListener(){
-                public void onClick(DialogInterface dialog, int which){
-                    String searchText = et.getText().toString();
-                    editor.putString("fe_saved_user", searchText);
-                    editor.commit();
-                    Intent myIntent = new Intent(FELauncher.this, DownloaderFE.class);
-                    myIntent.setAction(DownloaderFE.INTENT_ACTION_SEARCH_PRIVATE);
-                    myIntent.putExtra("search_criterion", searchText);
-                    myIntent.putExtra("oauth_token", key);
-                    myIntent.putExtra("oauth_token_secret", secret);
-                    myIntent.putExtra("oauth_consumer", consumer);
-                    startActivity(myIntent);
-                }
-            })
-            .setNegativeButton(R.string.cancel_text, null)
-            .create()
-            .show();
-    }
-
-
 
 }
 

@@ -43,6 +43,11 @@ import java.net.URLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import org.liberty.android.fantastischmemo.downloader.FELauncher;
+import org.liberty.android.fantastischmemo.downloader.FELauncher;
+
+import android.content.SharedPreferences;
+
 
 import android.os.Bundle;
 import android.content.Context;
@@ -52,9 +57,12 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+
+import android.preference.PreferenceManager;
 import android.widget.ArrayAdapter;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.util.Log;
@@ -84,11 +92,10 @@ import oauth.signpost.commonshttp.*;
 import oauth.signpost.exception.*;
 import oauth.signpost.signature.*;
 
-
 public class FEOauth extends AMActivity{
     private static final String TAG = "org.liberty.android.fantastischmemo.FEOauth";
-    private static final String CONSUMER_KEY= "anymemo_android";
-    private static final String CONSUMER_SECRET = "nju5M3ezHk";
+    public static final String CONSUMER_KEY= "anymemo_android";
+    public static final String CONSUMER_SECRET = "nju5M3ezHk";
     private static final String REQUEST_URL= "https://secure.flashcardexchange.com/oauth_request_token";
     private static final String AUTH_URL= "https://secure.flashcardexchange.com/oauth_login";
     private static final String ACCESS_TOKEN_URL = "https://secure.flashcardexchange.com/oauth_access_token";
@@ -96,11 +103,15 @@ public class FEOauth extends AMActivity{
     private static OAuthConsumer consumer = new CommonsHttpOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
     private static OAuthProvider provider = new CommonsHttpOAuthProvider(REQUEST_URL, ACCESS_TOKEN_URL, AUTH_URL); 
     private WebView webview;
+    private SharedPreferences settings;
+    private SharedPreferences.Editor editor;
 
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         webview = new WebView(FEOauth.this);
         setContentView(webview);
+        settings = PreferenceManager.getDefaultSharedPreferences(this);
+        editor = settings.edit();
         AMGUIUtility.doProgressTask(this, R.string.loading_please_wait, R.string.access_authorization_text, new AMGUIUtility.ProgressTask(){
             private String authUrl;
             public void doHeavyTask() throws Exception{
@@ -136,11 +147,28 @@ public class FEOauth extends AMActivity{
                 Log.d("Oauth Verifier ", verifier);
                 Log.d("Oauth Token ", token);
                 Log.d("Oauth Token Secret ", tokenSecret);
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra("oauth_token", token);
-                resultIntent.putExtra("oauth_token_secret", tokenSecret);
-                resultIntent.putExtra("consumer", consumer);
-                setResult(Activity.RESULT_OK, resultIntent);
+
+                editor.putString("saved_oauth_token", token);
+                editor.putString("saved_oauth_token_secret", tokenSecret);
+                editor.commit();
+
+                /* Ask user to input the username */
+                final EditText et = new EditText(this);
+                new AlertDialog.Builder(this)
+                    .setTitle(R.string.fe_private_login)
+                    .setMessage(R.string.fe_private_login_message)
+                    .setView(et)
+                    .setPositiveButton(R.string.search_text, new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface dialog, int which){
+                            String searchText = et.getText().toString();
+                            editor.putString("saved_username", searchText);
+                            editor.commit();
+                            finish();
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel_text, null)
+                    .create()
+                    .show();
 
 
             } catch (OAuthMessageSignerException e) {
@@ -152,7 +180,6 @@ public class FEOauth extends AMActivity{
             } catch (OAuthCommunicationException e) {
                 e.printStackTrace();
             }
-            finish();
         } else{
 
             //try{

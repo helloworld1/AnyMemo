@@ -91,6 +91,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import oauth.signpost.*;
 
+import oauth.signpost.basic.DefaultOAuthConsumer;
+
 /*
  * Download from FlashcardExchange using its web api
  */
@@ -148,11 +150,15 @@ public class DownloaderFE extends DownloaderBase{
             searchCriterion = extras.getString("search_criterion");
             oauthToken= extras.getString("oauth_token");
             oauthTokenSecret = extras.getString("oauth_token_secret");
-            oauthConsumer = (OAuthConsumer)extras.getSerializable("oauth_consumer");
             if(action.equals(INTENT_ACTION_SEARCH_PRIVATE)){
                 if(oauthToken == null || oauthToken == null){
                     Log.e(TAG, "OAuth key and token are not passed.");
                     finish();
+                }
+                else{
+
+                    oauthConsumer = new DefaultOAuthConsumer(FEOauth.CONSUMER_KEY, FEOauth.CONSUMER_SECRET);
+                    oauthConsumer.setTokenWithSecret(oauthToken, oauthTokenSecret);
                 }
             }
         }
