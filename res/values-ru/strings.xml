@@ -337,5 +337,10 @@
     <string name="misc_tab_text">Разное</string>
     <string name="convert_wait">Конвертирование, Ждите...</string>
     <string name="convert_success">Успешно конвертировано и сохранено в</string>
-    <string name="reset_all_pref_warning">Эта операция восстановит все общие настройки по умолчанию. Вашпрогресс изучения НЕ будет удалён.</string>
+    <string name="reset_all_pref_warning">Эта операция восстановит все общие настройки по умолчанию. Ваш прогресс изучения НЕ будет удалён.</string>
+    <string name="fe_login_text">Вход</string>
+    <string name="fe_logout_text">Выход</string>
+    <string name="fe_logged_in_text">Вход выполнен</string>
+    <string name="fe_not_login">Нужен Логин</string>
+    <string name="fe_not_login_message">Сначала нажмите кнопку Вход чтобы залогиниться</string>
 </resources>
