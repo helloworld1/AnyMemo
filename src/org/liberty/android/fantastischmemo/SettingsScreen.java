@@ -519,7 +519,7 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
                 field2Value = v;
 
             }
-            else if(me.getKey().toString().equals("card_field_2")){
+            else if(me.getKey().toString().equals("linebreak_conversion")){
                 String s =  me.getValue().toString();
                 int v = Integer.parseInt(s);
                 if(v == 0){
