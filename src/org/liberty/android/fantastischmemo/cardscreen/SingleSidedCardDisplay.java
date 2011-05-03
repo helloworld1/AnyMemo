@@ -257,7 +257,13 @@ public class SingleSidedCardDisplay implements FlashcardDisplay, TagHandler, Ima
                     if(sq.length() != 0){
                         sq.append(Html.fromHtml("<br /><br />", this, this));
                     }
-                    sq.append(Html.fromHtml(fields[i], this, this));
+                    if(settingManager.getLinebreakConversion() == true){
+                        String s = fields[i].replace("\n", "<br />");
+                        sq.append(Html.fromHtml(s, this, this));
+                    }
+                    else{
+                        sq.append(Html.fromHtml(fields[i], this, this));
+                    }
                 }
                 else{
                     if(sq.length() != 0){

@@ -61,6 +61,7 @@ public class SettingManager{
     private String audioLocation = "";
     private int learningQueueSize = 10;
     private boolean shufflingCards = false;
+    private int linebreakConversion = 0;
     private boolean volumeKeyShortcut = false;
     private boolean fullscreenMode = false;
     private int screenHeight = 320;
@@ -222,6 +223,10 @@ public class SettingManager{
         return volumeKeyShortcut;
     }
 
+    public boolean getLinebreakConversion(){
+        return linebreakConversion == 0 ? false : true;
+    }
+
 
     public boolean getFullscreenMode(){
         return fullscreenMode;
@@ -323,6 +328,11 @@ public class SettingManager{
 			if(me.getKey().equals("html_display")){
                 if(AMUtil.isInteger(me.getValue())){
                     htmlDisplay = Long.parseLong(me.getValue());
+                }
+			}
+			if(me.getKey().equals("linebreak_conversion")){
+                if(AMUtil.isInteger(me.getValue())){
+                    linebreakConversion = Integer.parseInt(me.getValue());
                 }
 			}
 			if(me.getKey().equals("ratio")){

@@ -213,7 +213,9 @@
     <CheckBox android:id="@+id/display_html"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:text="@string/settings_html_display" />
-
+    <CheckBox android:id="@+id/linebreak_conversion"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="@string/linebreak_conversion" />
     <CheckBox android:id="@+id/checkbox_field1"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:text="@string/settings_field1" />

@@ -74,6 +74,7 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
     private CheckBox field1Checkbox;
     private CheckBox field2Checkbox;
     private CheckBox htmlCheckbox;
+    private CheckBox linebreakCheckbox;
     private EditText qTypefaceEdit;
     private EditText aTypefaceEdit;
     private EditText audioLocationEdit;
@@ -213,6 +214,9 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
         field1Checkbox.setOnClickListener(this);
         field2Checkbox = (CheckBox)findViewById(R.id.checkbox_field2);
         field2Checkbox.setOnClickListener(this);
+
+        linebreakCheckbox = (CheckBox)findViewById(R.id.linebreak_conversion);
+        linebreakCheckbox.setChecked(false);
 
         qTypefaceEdit = (EditText)findViewById(R.id.edit_typeface_question);
         aTypefaceEdit = (EditText)findViewById(R.id.edit_typeface_answer);
@@ -515,6 +519,17 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
                 field2Value = v;
 
             }
+            else if(me.getKey().toString().equals("card_field_2")){
+                String s =  me.getValue().toString();
+                int v = Integer.parseInt(s);
+                if(v == 0){
+                    linebreakCheckbox.setChecked(false);
+                }
+                else{
+                    linebreakCheckbox.setChecked(true);
+                }
+
+            }
 			
 		}
         
@@ -596,6 +611,12 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
         }
         else{
             hm.put("card_field_2", "" + SettingManager.CardField.ANSWER);
+        }
+        if(linebreakCheckbox.isChecked()){
+            hm.put("linebreak_conversion", "1");
+        }
+        else{
+            hm.put("linebreak_conversion", "0");
         }
 
     	dbHelper.setSettings(hm);
