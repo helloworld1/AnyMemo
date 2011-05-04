@@ -96,6 +96,7 @@
     <item>@string/locale_korean_text</item>
     <item>@string/locale_french_text</item>
     <item>@string/locale_portuguese_text</item>
+    <item>@string/locale_japanese_text</item>
 </string-array>
 
 
@@ -111,6 +112,7 @@
     <item>KO</item>
     <item>FR</item>
     <item>PT</item>
+    <item>JA</item>
 </string-array>
 
 
