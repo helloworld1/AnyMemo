@@ -74,7 +74,7 @@ public class ShareScreen extends Activity implements View.OnClickListener{
             String text = extras.getString(Intent.EXTRA_TEXT);
             questionView.setText(subject);
             answerView.setText(text);
-    		dbnameView.setText(settings.getString("recentdbpath0", "") + settings.getString("recentdbname0", ""));
+    		dbnameView.setText(settings.getString("recentdbpath0", "") + "/" + settings.getString("recentdbname0", ""));
         } else {
             finish();
         }

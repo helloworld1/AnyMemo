@@ -30,12 +30,12 @@
     <string name="memo_show_answer">\?\n解答表示</string>
     <string name="memo_no_item_title">アイテムがありません</string>
     <string name="memo_no_item_message">アイテムがありません。 戻るまたは、詰め込み復習を押してください。</string>
-    <string name="memo_btn0_text">0 忘れた</string>
-    <string name="memo_btn1_text">1 忘れた</string>
-    <string name="memo_btn2_text">2 非常に難しい</string>
-    <string name="memo_btn3_text">3 難しい</string>
+    <string name="memo_btn0_text">0 不正解</string>
+    <string name="memo_btn1_text">1 不正解</string>
+    <string name="memo_btn2_text">2　難しい</string>
+    <string name="memo_btn3_text">3 普通</string>
     <string name="memo_btn4_text">4 簡単</string>
-    <string name="memo_btn5_text">5 非常に簡単</string>
+    <string name="memo_btn5_text">5 超簡単</string>
     <string name="memo_btn0_help_text">このカードについて完璧に忘れています。</string>
     <string name="memo_btn1_help_text">このカードについて完璧に忘れています。</string>
     <string name="memo_btn2_help_text">ぎりぎり正解</string>
@@ -53,7 +53,7 @@
     <string name="memo_btn2_anki_text">グッド</string>
     <string name="memo_btn3_anki_text">グッド</string>
     <string name="memo_btn4_anki_text">簡単</string>
-    <string name="memo_btn5_anki_text">非常に簡単</string>
+    <string name="memo_btn5_anki_text">非常簡単</string>
     <string name="memo_current_id">ID: </string>
     <string name="memo_edit_dialog_title">編集</string>
     <string name="global_settings">全般設定</string>
@@ -90,9 +90,9 @@
     <string name="delete_warning">カードを削除します。</string>
     <string name="skip_text">スキップ</string>
     <string name="skip_warning">今後このカードは表示されません。スキップしますか？</string>
-    <string name="stat_total">合計l: </string>
-    <string name="stat_scheduled">Rev: </string>
-    <string name="stat_new">New: </string>
+    <string name="stat_total">合計　</string>
+    <string name="stat_scheduled">復習</string>
+    <string name="stat_new">新規</string>
     <string name="open_open_new_db">既存のデータベースを開く</string>
     <string name="open_import_xml">XMLのインポート</string>
     <string name="clear_all_pref">全ての設定をリセット</string>
@@ -344,4 +344,6 @@
     <string name="fe_logged_in_text">ログインしました。</string>
     <string name="fe_not_login">ログインしてください。</string>
     <string name="fe_not_login_message">ログインボタンを押してログインしてください。</string>
+    <string name="linebreak_conversion">改行をHTML形式に自動変換</string>
+    <string name="locale_japanese_text">日本語</string> 
 </resources>
