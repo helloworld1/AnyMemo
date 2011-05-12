@@ -322,4 +322,26 @@
     <string name="card_style_single">单面卡片</string>
     <string name="settings_field1">配置卡的第一面</string>
     <string name="settings_field2">配置卡的第二面</string>
+    <string name="none_text">无</string>
+    <string name="both_text">都</string>
+    <string name="auto_text">自动</string>
+    <string name="user_audio_text">自定义语音</string>
+    <string name="left_text">左</string>
+    <string name="center_text">中</string>
+    <string name="right_text">右</string>
+    <string name="recent_tab_text">最近</string>
+    <string name="open_tab_text">打开</string>
+    <string name="edit_tab_text">编辑</string>
+    <string name="download_tab_text">下载</string>
+    <string name="misc_tab_text">其它</string>
+    <string name="convert_wait">转换中，请稍候...</string>
+    <string name="convert_success">成功转换并保存到</string>
+    <string name="reset_all_pref_warning">该功能将恢复初始的全局设置.您的学习进度不会丢失. </string>
+    <string name="fe_login_text">登陆</string>
+    <string name="fe_logout_text">注销</string>
+    <string name="fe_logged_in_text">已登陆</string>
+    <string name="fe_not_login">需要登陆</string>
+    <string name="fe_not_login_message">请按登陆按钮来登陆</string>
+    <string name="linebreak_conversion">HTML换行符转换</string>
+    <string name="locale_japanese_text">日语</string>
 </resources>

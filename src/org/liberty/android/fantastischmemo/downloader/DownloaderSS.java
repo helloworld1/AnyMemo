@@ -389,7 +389,7 @@ public class DownloaderSS extends DownloaderBase implements ListView.OnScrollLis
         DatabaseHelper dbHelper = new DatabaseHelper(this, dbpath, dbname);
         dbHelper.insertListItems(itemList);
         dbHelper.close();
-
+        RecentListUtil.addToRecentList(this, dbpath, dbname);
     }
 }
 

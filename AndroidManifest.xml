@@ -13,7 +13,7 @@
         <activity 
             android:name=".MainTabs"
             android:configChanges="orientation|keyboardHidden"
-            android:label="@string/app_name" >
+            android:label="@string/app_full_name" >
             <intent-filter>
                 <action 
                     android:name="android.intent.action.MAIN" />
