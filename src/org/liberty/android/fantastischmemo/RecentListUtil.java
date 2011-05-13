@@ -72,7 +72,7 @@ public class RecentListUtil{
     }
     public static String getRecentDBPath(Context context){
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-        return settings.getString("recentdbpath0", null);
+        return trimPath(settings.getString("recentdbpath0", null));
     }
     public static String[] getAllRecentDBName(Context context){
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
@@ -86,7 +86,7 @@ public class RecentListUtil{
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         String[] ret = new String[RECENT_LENGTH];
         for(int i = 0; i < RECENT_LENGTH; i++){
-            ret[i] = settings.getString("recentdbpath" + i, null);
+            ret[i] = trimPath(settings.getString("recentdbpath" + i, null));
         }
         return ret;
     }
@@ -101,6 +101,7 @@ public class RecentListUtil{
     }
 
     public static void deleteFromRecentList(Context context, String dbpath, String dbname){
+        dbpath = trimPath(dbpath);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = settings.edit();
         String[] allNames = getAllRecentDBName(context);
@@ -120,6 +121,7 @@ public class RecentListUtil{
     }
 
     public static void addToRecentList(Context context, String dbpath, String dbname){
+        dbpath = trimPath(dbpath);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = settings.edit();
         deleteFromRecentList(context, dbpath, dbname);
@@ -133,6 +135,17 @@ public class RecentListUtil{
         editor.putString("recentdbname" + 0, dbname);
         editor.putString("recentdbpath" + 0, dbpath);
         editor.commit();
+    }
+
+    private static String trimPath(String path){
+        if(path == null || path.length() <= 1){
+            return path;
+        }
+        /* trim all / at the end of the path */
+        while(path.endsWith("/")){
+            path = path.substring(0, path.length() - 1);
+        }
+        return path;
     }
 }
 

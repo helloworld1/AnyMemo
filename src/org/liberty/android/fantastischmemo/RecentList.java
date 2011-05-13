@@ -134,13 +134,14 @@ public class RecentList extends AMActivity implements OnItemClickListener{
                         DatabaseHelper dbHelper = new DatabaseHelper(RecentList.this, ri.dbPath, ri.dbName);
                         ri.dbInfo = getString(R.string.stat_total) + dbHelper.getTotalCount() + " " + getString(R.string.stat_new) + dbHelper.getNewCount() + " " + getString(R.string.stat_scheduled)+ dbHelper.getScheduledCount();
                         ril.set(ri.index, ri);
+                        dbHelper.close();
                         Thread.sleep(5);
                     }
                     mHandler.post(new Runnable(){
                         public void run(){
                             recentListAdapter.clear();
                             for(RecentItem ri : ril)
-                        recentListAdapter.insert(ri, ri.index);
+                                recentListAdapter.insert(ri, ri.index);
                         }
                     });
                 }
