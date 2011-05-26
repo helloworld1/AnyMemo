@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:background="@android:drawable/editbox_background"/>
         <TextView 
-            android:text="Recent list"
+            android:text="@string/recent_tab_text"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
         <ListView
