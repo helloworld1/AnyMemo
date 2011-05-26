@@ -343,4 +343,7 @@
     <string name="fe_logged_in_text">Вход выполнен</string>
     <string name="fe_not_login">Нужен Логин</string>
     <string name="fe_not_login_message">Сначала нажмите кнопку Вход чтобы залогиниться</string>
+    <string name="linebreak_conversion">Привести разрывы строк к HTML</string>
+    <string name="locale_japanese_text">Японский</string>
+    <string name="locale_spanish_text">Испанский</string>
 </resources>
