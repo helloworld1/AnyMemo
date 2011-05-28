@@ -52,12 +52,12 @@
     <string name="memo_btn3_brief_text">3</string>
     <string name="memo_btn4_brief_text">4</string>
     <string name="memo_btn5_brief_text">5</string>
-    <string name="memo_btn0_anki_text">De Nuevo</string>
-    <string name="memo_btn1_anki_text">De Nuevo</string>
+    <string name="memo_btn0_anki_text">Otra Vez</string>
+    <string name="memo_btn1_anki_text">Otra Vez</string>
     <string name="memo_btn2_anki_text">Bien</string>
     <string name="memo_btn3_anki_text">Bien</string>
     <string name="memo_btn4_anki_text">Fácil</string>
-    <string name="memo_btn5_anki_text">Muy Fácil</string>
+    <string name="memo_btn5_anki_text">M. Fácil</string>
     <string name="memo_current_id">ID: </string>
     <string name="memo_edit_dialog_title">Editar</string>
     <string name="global_settings">Opciones globales</string>
