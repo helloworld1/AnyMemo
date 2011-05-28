@@ -63,7 +63,7 @@
     <string name="memo_btn2_anki_text">Good</string>
     <string name="memo_btn3_anki_text">Good</string>
     <string name="memo_btn4_anki_text">Easy</string>
-    <string name="memo_btn5_anki_text">Very easy</string>
+    <string name="memo_btn5_anki_text">VeryEasy</string>
     <string name="memo_current_id">ID: </string>
     <string name="memo_edit_dialog_title">Edit</string>
     <string name="global_settings">Global settings</string>
