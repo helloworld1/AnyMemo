@@ -93,6 +93,7 @@ public class EditScreen extends AMActivity{
     private final int ACTIVITY_SETTINGS = 15;
     private final int ACTIVITY_LIST = 16;
     private final int ACTIVITY_MERGE = 17;
+    private final int ACTIVITY_DETAIL = 18;
 
     Handler mHandler;
     Item currentItem = null;
@@ -232,6 +233,10 @@ public class EditScreen extends AMActivity{
                 restartActivity();
                 break;
             }
+            case ACTIVITY_DETAIL:
+            {
+                restartActivity();
+            }
 
         }
     }
@@ -285,7 +290,7 @@ public class EditScreen extends AMActivity{
                     myIntent.putExtra("dbname", this.dbName);
                     myIntent.putExtra("dbpath", this.dbPath);
                     myIntent.putExtra("itemid", currentItem.getId());
-                    startActivityForResult(myIntent, 2);
+                    startActivityForResult(myIntent, ACTIVITY_DETAIL);
                 }
                 return true;
             }

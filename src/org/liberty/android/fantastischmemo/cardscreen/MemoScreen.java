@@ -62,6 +62,7 @@ public class MemoScreen extends AMActivity{
     private final int ACTIVITY_EDIT = 11;
     private final int ACTIVITY_GOTO_PREV = 14;
     private final int ACTIVITY_SETTINGS = 15;
+    private final int ACTIVITY_DETAIL = 16;
 
 
     Handler mHandler;
@@ -239,7 +240,7 @@ public class MemoScreen extends AMActivity{
                 myIntent.putExtra("dbname", this.dbName);
                 myIntent.putExtra("dbpath", this.dbPath);
                 myIntent.putExtra("itemid", currentItem.getId());
-                startActivityForResult(myIntent, 2);
+                startActivityForResult(myIntent, ACTIVITY_DETAIL);
                 return true;
             }
 
@@ -399,6 +400,12 @@ public class MemoScreen extends AMActivity{
             }
 
             case ACTIVITY_SETTINGS:
+            {
+                restartActivity();
+                break;
+            }
+
+            case ACTIVITY_DETAIL:
             {
                 restartActivity();
                 break;
