@@ -54,8 +54,8 @@
     <string name="memo_btn5_brief_text">5</string>
     <string name="memo_btn0_anki_text">Otra Vez</string>
     <string name="memo_btn1_anki_text">Otra Vez</string>
-    <string name="memo_btn2_anki_text">Bien</string>
-    <string name="memo_btn3_anki_text">Bien</string>
+    <string name="memo_btn2_anki_text">Bueno</string>
+    <string name="memo_btn3_anki_text">Bueno</string>
     <string name="memo_btn4_anki_text">Fácil</string>
     <string name="memo_btn5_anki_text">M. Fácil</string>
     <string name="memo_current_id">ID: </string>
@@ -252,7 +252,7 @@
     <string name="buy_pro_text">Comprar versión pro</string>
     <string name="donate_summary">Puede donar al projecto por comprar la versión pro en Android Market o donar online a &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt; Le agredecemos su apoyo.</string>
     <string name="anymemo_pro_link">market://search?q=pname:org.liberty.android.fantastischmemopro</string>
-    <string name="goto_prev_screen">Ir a la pantalla de prevenir/editar</string>
+    <string name="goto_prev_screen">Previsualizar y editar</string>
     <string name="exception_text">Excepción</string>
     <string name="advanced_setting_text">Avanzado...</string>
     <string name="db_merger_title">Fusionar BD</string>
@@ -278,7 +278,7 @@
     <string name="settings_color_question_text">Texto de la P.</string>
     <string name="settings_color_answer_text">Texto de la R.</string>
     <string name="settings_color_question_bg">Fondo de la P.</string>
-    <string name="settings_color_answer_bg">Fondo de la F.</string>
+    <string name="settings_color_answer_bg">Fondo de la R.</string>
     <string name="settings_color_separator">Seperador</string>
     <string name="screen_main_text">Pantalla principal</string>
     <string name="screen_edit_text">Pantalla de editar</string>
