@@ -91,6 +91,8 @@ public class DownloaderAnyMemo extends DownloaderBase{
     private ProgressDialog mProgressDialog;
     private int mDownloadProgress;
     private Handler mHandler;
+    private final static String WEBSITE_JSON = "http://anymemo.org/pages/json.php";
+    private final static String WEBSITE_DOWNLOAD= "http://anymemo.org/pages/download.php?wordlistname=DatabasesTable&filename=";
 
     @Override
     protected void initialRetrieve(){
@@ -394,7 +396,7 @@ public class DownloaderAnyMemo extends DownloaderBase{
     private ArrayList<DownloadItem> obtainCategories() throws Exception{
         ArrayList<DownloadItem> categoryList = new ArrayList<DownloadItem>();
         HttpClient httpclient = new DefaultHttpClient();
-        String url = getString(R.string.website_json);
+        String url = WEBSITE_JSON;
         url += "?action=getcategory";
         HttpGet httpget = new HttpGet(url);
         HttpResponse response;
@@ -422,7 +424,7 @@ public class DownloaderAnyMemo extends DownloaderBase{
                 DownloadItem di = new DownloadItem();
                 di.setType(DownloadItem.TYPE_CATEGORY);
                 di.setTitle(dbcategory);
-                di.setAddress(getString(R.string.website_json) + "?action=getdb&category=" + URLEncoder.encode(dbcategory));
+                di.setAddress(WEBSITE_JSON + "?action=getdb&category=" + URLEncoder.encode(dbcategory));
                 categoryList.add(di);
             }
 
@@ -471,7 +473,7 @@ public class DownloaderAnyMemo extends DownloaderBase{
                 di.setType(DownloadItem.TYPE_DATABASE);
                 di.setTitle(dbname);
                 di.setDescription(dbnote);
-                di.setAddress(getString(R.string.website_download_head) + URLEncoder.encode(filename));
+                di.setAddress(WEBSITE_DOWNLOAD + URLEncoder.encode(filename));
                 di.setExtras("filename", filename);
                 databaseList.add(di);
             }

@@ -97,6 +97,7 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
     private final int ACTIVITY_TTF_ANSWER = 4;
     private final int DIALOG_SAVING_ID = 48;
     private final static String TAG = "SettingsScreen";
+    private final static String WEBSITE_HELP_SETTINGS="http://anymemo.org/wiki/index.php?title=Card_styles";
     
 
 	
@@ -878,7 +879,7 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
             Intent myIntent = new Intent();
             myIntent.setAction(Intent.ACTION_VIEW);
             myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
-            myIntent.setData(Uri.parse(getString(R.string.website_help_settings)));
+            myIntent.setData(Uri.parse(WEBSITE_HELP_SETTINGS));
             startActivity(myIntent);
 	        return true;
 

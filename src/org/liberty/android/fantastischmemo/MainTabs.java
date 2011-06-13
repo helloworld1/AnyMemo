@@ -50,6 +50,7 @@ import android.view.WindowManager;
 
 
 public class MainTabs extends TabActivity{
+    private final String WEBSITE_VERSION="http://anymemo.org/index.php?page=version";
     SharedPreferences settings;
     SharedPreferences.Editor editor;
     public void onCreate(Bundle savedInstanceState) {
@@ -169,7 +170,7 @@ public class MainTabs extends TabActivity{
                         Intent myIntent = new Intent();
                         myIntent.setAction(Intent.ACTION_VIEW);
                         myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
-                        myIntent.setData(Uri.parse(getString(R.string.website_version)));
+                        myIntent.setData(Uri.parse(WEBSITE_VERSION));
                         startActivity(myIntent);
                     }
                 })

@@ -63,6 +63,7 @@ public class MemoScreen extends AMActivity{
     private final int ACTIVITY_GOTO_PREV = 14;
     private final int ACTIVITY_SETTINGS = 15;
     private final int ACTIVITY_DETAIL = 16;
+    private final static String WEBSITE_HELP_MEMO="http://anymemo.org/wiki/index.php?title=Learning_screen";
 
 
     Handler mHandler;
@@ -205,7 +206,7 @@ public class MemoScreen extends AMActivity{
                 Intent myIntent = new Intent();
                 myIntent.setAction(Intent.ACTION_VIEW);
                 myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
-                myIntent.setData(Uri.parse(getString(R.string.website_help_memo)));
+                myIntent.setData(Uri.parse(WEBSITE_HELP_MEMO));
                 startActivity(myIntent);
                 return true;
             }

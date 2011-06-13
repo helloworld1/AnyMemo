@@ -46,6 +46,7 @@ import android.widget.TextView;
  */
 public class MiscTab extends AMActivity implements View.OnClickListener{
     private static final String TAG = "org.liberty.android.fantastischmemo.MiscTab";
+    private static final String WEBSITE_VERSION="http://anymemo.org/index.php?page=version";
     private View optionButton;
     private View importButton;
     private View exportButton;
@@ -235,7 +236,7 @@ public class MiscTab extends AMActivity implements View.OnClickListener{
             Intent myIntent = new Intent();
             myIntent.setAction(Intent.ACTION_VIEW);
             myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
-            myIntent.setData(Uri.parse(getString(R.string.website_help_main)));
+            myIntent.setData(Uri.parse(WEBSITE_VERSION));
             startActivity(myIntent);
         }
         if(v == aboutButton){
@@ -253,7 +254,7 @@ public class MiscTab extends AMActivity implements View.OnClickListener{
                         Intent myIntent = new Intent();
                         myIntent.setAction(Intent.ACTION_VIEW);
                         myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
-                        myIntent.setData(Uri.parse(getString(R.string.website_version)));
+                        myIntent.setData(Uri.parse(WEBSITE_VERSION));
                         startActivity(myIntent);
                     }
                 })

@@ -104,21 +104,21 @@ public class MnemosyneXMLExporter implements AbstractConverter{
             if(category == null){
                 category = "";
             }
-            question = question.replaceAll("<", "&lt;");
-            question = question.replaceAll(">", "&gt;");
-            question = question.replaceAll("&", "&amp;");
-            question = question.replaceAll("'", "&apos;");
-            question = question.replaceAll("\"", "&quot;");
-            answer = answer.replaceAll("<", "&lt;");
-            answer = answer.replaceAll(">", "&gt;");
-            answer = answer.replaceAll("&", "&amp;");
-            answer = answer.replaceAll("'", "&apos;");
-            answer = answer.replaceAll("\"", "&quot;");
-            category = category.replaceAll("<", "&lt;");
-            category = category.replaceAll(">", "&gt;");
-            category = category.replaceAll("&", "&amp;");
-            category = category.replaceAll("'", "&apos;");
-            category = category.replaceAll("\"", "&quot;");
+            //question = question.replaceAll("<", "&lt;");
+            //question = question.replaceAll(">", "&gt;");
+            //question = question.replaceAll("&", "&amp;");
+            //question = question.replaceAll("'", "&apos;");
+            //question = question.replaceAll("\"", "&quot;");
+            //answer = answer.replaceAll("<", "&lt;");
+            //answer = answer.replaceAll(">", "&gt;");
+            //answer = answer.replaceAll("&", "&amp;");
+            //answer = answer.replaceAll("'", "&apos;");
+            //answer = answer.replaceAll("\"", "&quot;");
+            //category = category.replaceAll("<", "&lt;");
+            //category = category.replaceAll(">", "&gt;");
+            //category = category.replaceAll("&", "&amp;");
+            //category = category.replaceAll("'", "&apos;");
+            //category = category.replaceAll("\"", "&quot;");
 
 
             outxml.print("<item id=\"" + id + "\" u=\"" + u +"\" gr=\"" + gr +"\" e=\"" + e + "\" ac_rp=\"" + ac_rp + "\" rt_rp=\"" + rt_rp + "\" lps=\"" + lps + "\" ac_rp_l=\"" + ac_rp_l + "\" rt_rp_l=\"" + rt_rp_l + "\" l_rp=\"" + l_rp + "\" n_rp=\"" + n_rp + "\">\n");

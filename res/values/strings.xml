@@ -155,15 +155,6 @@
     <string name="about_text">Advanced spaced repetition flashcard learning software.&lt;br /&gt;&lt;br /&gt;Authors: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;Website: &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Acknowledge: Piotr Bazan, pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;Translators: Ladislav, jim4ever, paw3lk, Александр Гоменюк, Maksym Grinenko, Kim hyun-ho, Thomas Tempé, Alex Wirz Vieira, Neil Barry</string>
     <string name="about_version">Version history</string>
     <string name="what_is_new">New version installed</string>
-    <string name="website_main">http://anymemo.org</string>
-    <string name="website_json">http://anymemo.org/pages/json.php</string>
-    <string name="website_download_head">http://anymemo.org/pages/download.php?wordlistname=DatabasesTable&amp;filename=</string>
-    <string name="website_help_main">http://anymemo.org/index.php?page=guide</string>
-    <string name="website_version">http://anymemo.org/index.php?page=version</string>
-    <string name="website_help_memo">http://anymemo.org/index.php?page=guide2#sec22</string>
-    <string name="website_help_settings">http://anymemo.org/index.php?page=guide5#sec5</string>
-    <string name="website_help_edit">http://anymemo.org/index.php?page=guide3#sec3</string>
-    <string name="website_help_error_open">http://anymemo.org/index.php?page=faq#25</string>
     <string name="downloader_categories">Categories</string>
     <string name="downloader_databases">Databases</string>
     <string name="open_database_error_title">Error opening database</string>
