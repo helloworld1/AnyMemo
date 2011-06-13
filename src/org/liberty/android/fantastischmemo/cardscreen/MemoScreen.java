@@ -652,7 +652,13 @@ public class MemoScreen extends AMActivity{
 
     private void hideButtons(){
         /* Does it take the place holder space? */
-        controlButtons.getView().setVisibility(View.GONE);
+        if(settingManager.getCardStyle() == SettingManager.CardStyle.DOUBLE_SIDED){
+            controlButtons.getView().setVisibility(View.GONE);
+        }
+        else{
+            controlButtons.getView().setVisibility(View.INVISIBLE);
+        }
+
     }
 
     private void showButtons(){
