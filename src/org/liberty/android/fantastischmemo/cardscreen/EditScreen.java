@@ -94,6 +94,7 @@ public class EditScreen extends AMActivity{
     private final int ACTIVITY_LIST = 16;
     private final int ACTIVITY_MERGE = 17;
     private final int ACTIVITY_DETAIL = 18;
+    private final static String WEBSITE_HELP_EDIT = "http://anymemo.org/wiki/index.php?title=Editing_screen";
 
     Handler mHandler;
     Item currentItem = null;
@@ -318,6 +319,16 @@ public class EditScreen extends AMActivity{
             case R.id.editmenu_search_id:
             {
                 createSearchOverlay();
+            }
+
+            case R.id.editmenu_help:
+            {
+                Intent myIntent = new Intent();
+                myIntent.setAction(Intent.ACTION_VIEW);
+                myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
+                myIntent.setData(Uri.parse(WEBSITE_HELP_EDIT));
+                startActivity(myIntent);
+                return true;
             }
         }
 
