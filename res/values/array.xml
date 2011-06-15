@@ -60,6 +60,7 @@
 	<item>TR</item>
 	<item>VI</item>
 	<item>ZH</item>
+	<item>AR</item>
 </string-array>
 <string-array name="html_list">
     <item>@string/none_text</item>

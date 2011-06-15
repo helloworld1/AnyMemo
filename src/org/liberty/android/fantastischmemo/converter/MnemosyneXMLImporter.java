@@ -131,7 +131,8 @@ public class MnemosyneXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
                 int acrp = Integer.parseInt(acrpAttr);
                 if(uAttr != null){
                     if(Integer.parseInt(uAttr) == 1){
-                        acrp = 0;
+                        /* Commented out for testing */
+                        // acrp = 0;
                     }
                 }
                 if(Integer.valueOf(rtrpAttr) != 0 && acrp == 0){
