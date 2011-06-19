@@ -67,6 +67,7 @@ public class SettingManager{
     private int screenHeight = 320;
     private int screenWidth = 480;
     private CardStyle cardStyle = CardStyle.SINGLE_SIDED;
+    private DictApp dictApp = DictApp.COLORDICT;
     /* The colors for various elements
      * null means default color */
     protected List<Integer> colors = null;
@@ -268,6 +269,12 @@ public class SettingManager{
         return screenWidth;
     }
 
+    public DictApp getDictApp(){
+        return dictApp;
+    }
+    
+
+
     private void loadGlobalOptions(){
         speechCtl = SpeechControlMethod.parse(settings.getString("speech_ctl", mContext.getResources().getStringArray(R.array.speech_ctl_list)[0]));
         btnStyle = ButtonStyle.parse(settings.getString("button_style", mContext.getResources().getStringArray(R.array.button_style_list)[0]));
@@ -278,6 +285,7 @@ public class SettingManager{
         screenHeight = settings.getInt("screen_height", 320);
         screenWidth = settings.getInt("screen_width", 480);
         enableThirdPartyArabic = settings.getBoolean("enable_third_party_arabic", true);
+        dictApp = DictApp.parse(settings.getString("dict_app", mContext.getResources().getStringArray(R.array.dict_list_values)[0]));
 
 
         /* Load learning queue size from the preference */
@@ -456,6 +464,20 @@ public class SettingManager{
             }
             else{
                 return SINGLE_SIDED;
+            }
+        }
+    }
+
+    public static enum DictApp{
+        COLORDICT,
+        FORA;
+        public static DictApp parse(String a){
+            System.out.println("Parse string: "+ a);
+            if(a.equals("FORA")){
+                return FORA;
+            }
+            else{
+                return COLORDICT;
             }
         }
     }

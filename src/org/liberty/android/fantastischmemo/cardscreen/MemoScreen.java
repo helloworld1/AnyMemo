@@ -336,7 +336,12 @@ public class MemoScreen extends AMActivity{
 
             case R.id.menu_context_lookup:
             {
-                if(currentItem != null){
+                if(currentItem == null){
+                    return false;
+                }
+
+                if(settingManager.getDictApp() == SettingManager.DictApp.COLORDICT){
+                    System.out.println("Get COLORDICT");
                     Intent intent = new Intent("colordict.intent.action.SEARCH");
                     intent.putExtra("EXTRA_QUERY", currentItem.getQuestion());
                     intent.putExtra("EXTRA_FULLSCREEN", false);
@@ -348,11 +353,24 @@ public class MemoScreen extends AMActivity{
                     }
                     catch(Exception e){
                         Log.e(TAG, "Error opening ColorDict", e);
-                        AMGUIUtility.displayException(this, getString(R.string.error_text), getString(R.string.error_no_colordict), e);
+                        AMGUIUtility.displayException(this, getString(R.string.error_text), getString(R.string.dict_colordict) + " " + getString(R.string.error_no_dict), e);
+                    }
+                }
+                if(settingManager.getDictApp() == SettingManager.DictApp.FORA){
+                    System.out.println("Get FORA");
+                    Intent intent = new Intent("com.ngc.fora.action.LOOKUP");
+                    intent.putExtra("HEADWORD", currentItem.getQuestion());
+                    try{
+                        startActivity(intent);
+                    }
+                    catch(Exception e){
+                        Log.e(TAG, "Error opening Fora", e);
+                        AMGUIUtility.displayException(this, getString(R.string.error_text), getString(R.string.dict_fora) + " " + getString(R.string.error_no_dict), e);
                     }
                 }
 
                 return true;
+
             }
 
             case R.id.menu_context_paint:

@@ -309,12 +309,12 @@
     <string name="note_text">Note</string>
     <string name="add_in_place">Add card here</string>
     <string name="add_back">Add card to back</string>
-    <string name="look_up_text">Look up in ColorDict</string>
+    <string name="look_up_text">Look up in a dictionary</string>
     <string name="share_text">Sharing</string>
     <string name="db_name_text">Database name</string>
     <string name="save_prev_text">Save&amp;prev</string>
     <string name="paint_text">Paint</string>
-    <string name="error_no_colordict">ColorDict is not installed. Please download ColorDict from Android Market. Error: </string>
+    <string name="error_no_colordict">ColorDict not installed. Please download ColorDict from Android Market. Error: </string>
     <string name="flashcardexchange_text">FlashcardExchange</string>
     <string name="search_tag">Search by tag</string>
     <string name="search_user">Search by user</string>
@@ -357,4 +357,9 @@
     <string name="linebreak_conversion">HTML linebreak conversion</string>
     <string name="locale_japanese_text">Japanese</string>
     <string name="locale_spanish_text">Spanish</string>
+    <string name="dict_app">Dictionary Application</string>
+    <string name="dict_app_summary">Change the dictionary application that can be looked up directly when learning.</string>
+    <string name="dict_colordict">ColorDict</string>
+    <string name="dict_fora">Fora Dictionary</string>
+    <string name="error_no_dict">is not installed. Please download ColorDict from Android Market or set another dictionary app in Options. Error: </string>
 </resources>

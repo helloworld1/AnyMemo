@@ -42,6 +42,13 @@
             android:title="@string/shuffling_cards_title" 
             android:defaultValue="false"
             android:summary="@string/shuffling_cards_summary" />
+        <ListPreference
+            android:key="dict_app"
+            android:title="@string/dict_app" 
+            android:defaultValue="COLORDICT"
+            android:entries="@array/dict_list"
+            android:entryValues="@array/dict_list_values"
+            android:summary="@string/dict_app_summary" />
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/interface_category">
