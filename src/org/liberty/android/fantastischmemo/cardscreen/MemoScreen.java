@@ -187,7 +187,10 @@ public class MemoScreen extends AMActivity{
         if(queueManager != null){
             queueManager.close();
         }
-        /* Busy wait for the IO thread complete */
+        /* Update the widget because MemoScreen can be accessed though widget*/
+        Intent myIntent = new Intent(this, AnyMemoService.class);
+        myIntent.putExtra("request_code", AnyMemoService.CANCEL_NOTIFICATION | AnyMemoService.UPDATE_WIDGET);
+        startService(myIntent);
         super.onDestroy();
     }
 
