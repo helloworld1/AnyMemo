@@ -357,7 +357,7 @@
     <string name="linebreak_conversion">HTML linebreak conversion</string>
     <string name="locale_japanese_text">Japanese</string>
     <string name="locale_spanish_text">Spanish</string>
-    <string name="dict_app">Dictionary Application</string>
+    <string name="dict_app">Dictionary application</string>
     <string name="dict_app_summary">Change the dictionary application that can be looked up directly when learning.</string>
     <string name="dict_colordict">ColorDict</string>
     <string name="dict_fora">Fora Dictionary</string>

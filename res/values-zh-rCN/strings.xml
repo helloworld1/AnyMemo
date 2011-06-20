@@ -344,4 +344,10 @@
     <string name="fe_not_login_message">请按登陆按钮来登陆</string>
     <string name="linebreak_conversion">HTML换行符转换</string>
     <string name="locale_japanese_text">日语</string>
+    <string name="locale_spanish_text">西班牙语</string>
+    <string name="dict_app">字典程序</string>
+    <string name="dict_app_summary">更改查字典的程序。</string>
+    <string name="dict_colordict">ColorDict</string>
+    <string name="dict_fora">Fora Dictionary</string>
+    <string name="error_no_dict">没有正确安装使用。请确定到电子市场安装。另外可以到选项更改其他字典软件。错误：</string>
 </resources>

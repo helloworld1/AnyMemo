@@ -344,4 +344,10 @@
     <string name="fe_not_login_message">請按登陸按鈕來登陸</string>
     <string name="linebreak_conversion">HTML換行符轉換</string>
     <string name="locale_japanese_text">日語</string>
+    <string name="locale_spanish_text">西班牙語</string>
+    <string name="dict_app">字典程序</string>
+    <string name="dict_app_summary">更改查字典的程序。</string>
+    <string name="dict_colordict">ColorDict</string>
+    <string name="dict_fora">Fora Dictionary</string>
+    <string name="error_no_dict">沒有正確安裝使用。請確定到電子市場安裝。另外可以到選項更改其他字典軟件。錯誤：</string>
 </resources>
