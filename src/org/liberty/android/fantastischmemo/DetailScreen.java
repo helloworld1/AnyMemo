@@ -183,11 +183,10 @@ public class DetailScreen extends AMActivity implements OnClickListener{
             retRepsSinceLapseEntry.setText("0");
     	}
     	if(v == updateButton){
-    		AlertDialog alertDialog = new AlertDialog.Builder(this)
-			.create();
-			alertDialog.setTitle("Warning");
-			alertDialog.setMessage("Do you really want to update this item?");
-			alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
+    		new AlertDialog.Builder(this)
+                .setTitle(R.string.warning_text)
+                .setMessage(R.string.item_update_warning)
+                .setPositiveButton(R.string.ok_text,
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface arg0, int arg1) {
 							saveEntries();
@@ -196,13 +195,9 @@ public class DetailScreen extends AMActivity implements OnClickListener{
 							
 							finish();
 						}
-					});
-			alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface arg0, int arg1) {
-						}
-					});
-			alertDialog.show();
+					})
+                .setNegativeButton(R.string.cancel_text, null)
+                .show();
     		
     	}
     	

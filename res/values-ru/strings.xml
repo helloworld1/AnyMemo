@@ -298,7 +298,6 @@
     <string name="note_text">Заметка</string>
     <string name="add_in_place">После текущей</string>
     <string name="add_back">В конце</string>
-    <string name="look_up_text">Искать в ColorDict</string>
     <string name="share_text">Делиться</string>
     <string name="db_name_text">Имя Базы</string>
     <string name="save_prev_text">Сохр&amp;См</string>
@@ -346,4 +345,10 @@
     <string name="linebreak_conversion">Привести разрывы строк к HTML</string>
     <string name="locale_japanese_text">Японский</string>
     <string name="locale_spanish_text">Испанский</string>
+    <string name="dict_app">Словарь</string>
+    <string name="dict_app_summary">Изменить словарь поиска при изучении.</string>
+    <string name="dict_colordict">ColorDict</string>
+    <string name="dict_fora">Fora Dictionary</string>
+    <string name="error_no_dict">не установлен. Установите ColorDict из Android Market или укажите другой словарь в Опциях. Ошибка: </string>
+    <string name="look_up_text">Искать в словаре</string>
 </resources>

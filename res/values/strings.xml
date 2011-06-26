@@ -362,4 +362,5 @@
     <string name="dict_colordict">ColorDict</string>
     <string name="dict_fora">Fora Dictionary</string>
     <string name="error_no_dict">is not installed. Please download ColorDict from Android Market or set another dictionary app in Options. Error: </string>
+    <string name="item_update_warning">Do you really want to update this item?</string>
 </resources>

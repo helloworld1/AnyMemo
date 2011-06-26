@@ -191,7 +191,7 @@
     <string name="touch_area_summary">Toque donde quiere destapar la pregunta.</string>
     <string name="settings_audio_location_title">Directorio de audio</string>
     <string name="tts_tip_user_audio">Para usar audio en tarjetas, se debe poner los archivos de audio en el directorio a continuación.</string>
-    <string name="tts_tip_extender">Descargue el motor eSpeak para Android 2,2 o superior y selecciónelo.</string>
+    <string name="tts_tip_extender">escargue el motor eSpeak para Android 2,2 o superior y selecciónelo.</string>
     <string name="what_is_new_message">Para ver la guía gráfica de las características nuevas, pulse el botón \'Historia de versión\'. O visite el sitio web oficial: &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt;&lt;br /&gt;</string>
     <string name="portrait_only_title">Orientación vertical</string>
     <string name="portrait_only_summary">Desactivar la orientación automática para todo el programa.</string>
@@ -355,4 +355,5 @@
     <string name="dict_colordict">ColorDict</string>
     <string name="dict_fora">Fora Dictionary</string>
     <string name="error_no_dict">no es instalado. Por favor, descargue ColorDict de Android Market o seleccione otro diccionario en Opciones. Error: </string>
+    <string name="item_update_warning">¿Seguro que quiere actualizar esta tarjeta?</string>
 </resources>
