@@ -350,5 +350,5 @@
     <string name="dict_colordict">ColorDict</string>
     <string name="dict_fora">Fora Dictionary</string>
     <string name="error_no_dict">не установлен. Установите ColorDict из Android Market или укажите другой словарь в Опциях. Ошибка: </string>
-
+    <string name="item_update_warning">Вы действительно хотите это обновить?</string>
 </resources>
