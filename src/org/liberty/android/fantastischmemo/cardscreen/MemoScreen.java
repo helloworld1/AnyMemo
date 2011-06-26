@@ -592,6 +592,7 @@ public class MemoScreen extends AMActivity{
             flashcardDisplay.setQuestionTextClickListener(showAnswerListener);
             flashcardDisplay.setAnswerTextClickListener(showAnswerListener);
         }
+        controlButtons.getView().setOnClickListener(showAnswerListener);
     }
 
     void setGradeButtonTitle(){
