@@ -298,7 +298,7 @@
     <string name="note_text">筆記</string>
     <string name="add_in_place">添加到當前位置</string>
     <string name="add_back">添加到最後</string>
-    <string name="look_up_text">用ColorDict查詞典</string>
+    <string name="look_up_text">查詞典</string>
     <string name="share_text">共享</string>
     <string name="db_name_text">數據庫名字</string>
     <string name="save_prev_text">保存並預覽</string>
