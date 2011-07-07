@@ -319,6 +319,7 @@ public class EditScreen extends AMActivity{
             case R.id.editmenu_search_id:
             {
                 createSearchOverlay();
+                return true;
             }
 
             case R.id.editmenu_help:
