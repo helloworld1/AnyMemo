@@ -65,6 +65,9 @@ public class MemoScreen extends AMActivity{
     private final int ACTIVITY_DETAIL = 16;
     private final static String WEBSITE_HELP_MEMO="http://anymemo.org/wiki/index.php?title=Learning_screen";
 
+    /* This is useful to determine which view is click or long clicked */
+    private View activeView = null;
+
 
     Handler mHandler;
     Item currentItem = null;
@@ -342,11 +345,18 @@ public class MemoScreen extends AMActivity{
                 if(currentItem == null){
                     return false;
                 }
+                /* default word to lookup is question */
+                String lookupWord = currentItem.getQuestion();
+
+                if(flashcardDisplay.getAnswerView() == activeView){
+                    lookupWord = currentItem.getAnswer();
+                }
+                    
 
                 if(settingManager.getDictApp() == SettingManager.DictApp.COLORDICT){
                     System.out.println("Get COLORDICT");
                     Intent intent = new Intent("colordict.intent.action.SEARCH");
-                    intent.putExtra("EXTRA_QUERY", currentItem.getQuestion());
+                    intent.putExtra("EXTRA_QUERY", lookupWord);
                     intent.putExtra("EXTRA_FULLSCREEN", false);
                     //intent.putExtra(EXTRA_HEIGHT, 400); //400pixel, if you don't specify, fill_parent"
                     intent.putExtra("EXTRA_GRAVITY", Gravity.BOTTOM);
@@ -362,7 +372,7 @@ public class MemoScreen extends AMActivity{
                 if(settingManager.getDictApp() == SettingManager.DictApp.FORA){
                     System.out.println("Get FORA");
                     Intent intent = new Intent("com.ngc.fora.action.LOOKUP");
-                    intent.putExtra("HEADWORD", currentItem.getQuestion());
+                    intent.putExtra("HEADWORD", lookupWord);
                     try{
                         startActivity(intent);
                     }
@@ -575,6 +585,8 @@ public class MemoScreen extends AMActivity{
         View.OnLongClickListener openContextMenuListener = new View.OnLongClickListener(){
             public boolean onLongClick(View v){
                 MemoScreen.this.openContextMenu(flashcardDisplay.getView());
+                /* To determine which view is long clicked */
+                activeView = v;
                 Log.v(TAG, "Open Menu!");
                 return true;
             }
