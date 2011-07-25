@@ -54,8 +54,8 @@ public class DownloaderQuizlet extends DownloaderBase{
 
     private static final String TAG = "org.liberty.android.fantastischmemo.downloader.DownloaderQuizlet";
     private static final String QUIZLET_API_KEY = "7bmBY5S2VgPbNpd8";
-    private static final String QUIZLET_API_TAG = "http://api.quizlet.com/1.0/sets?dev_key=" + QUIZLET_API_KEY+ "&q=";
-    private static final String QUIZLET_API_USER = "http://api.quizlet.com/1.0/sets?dev_key=" + QUIZLET_API_KEY+ "&q=creator:";
+    private static final String QUIZLET_API_TAG = "http://api.quizlet.com/1.0/sets?dev_key=" + QUIZLET_API_KEY+ "&per_page=50&q=";
+    private static final String QUIZLET_API_USER = "http://api.quizlet.com/1.0/sets?dev_key=" + QUIZLET_API_KEY+ "&per_page=50&q=creator:";
     private static final String QUIZLET_API_GET = "http://api.quizlet.com/1.0/sets?dev_key=" + QUIZLET_API_KEY+ "&extended=on&q=ids:";
     private DownloadListAdapter dlAdapter;
 
