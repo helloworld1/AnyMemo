@@ -19,14 +19,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo;
 
-import org.liberty.android.fantastischmemo.cardscreen.*;
 import org.liberty.android.fantastischmemo.downloader.*;
-import android.app.*;
 import android.os.Bundle;
 import android.view.*;
-import android.widget.*;
 import android.content.*;
-import android.util.Log;
 
 /* 
  * This class is invoked when the user share the card from other
@@ -37,6 +33,7 @@ public class DownloaderTab extends AMActivity implements View.OnClickListener{
     private View amButton;
     private View feButton;
     private View ssButton;
+    private View quizletButton;
     private final int ACTIVITY_FB = 1;
 
     @Override
@@ -46,9 +43,11 @@ public class DownloaderTab extends AMActivity implements View.OnClickListener{
         amButton = findViewById(R.id.source_anymemo);
         feButton = findViewById(R.id.source_fe);
         ssButton = findViewById(R.id.source_ss);
+        quizletButton = findViewById(R.id.source_quizlet);
         amButton.setOnClickListener(this);
         feButton.setOnClickListener(this);
         ssButton.setOnClickListener(this);
+        quizletButton.setOnClickListener(this);
     }
     @Override
     public void onClick(View v){
@@ -60,7 +59,9 @@ public class DownloaderTab extends AMActivity implements View.OnClickListener{
         }
         if(v == ssButton){
             startActivity(new Intent(this, DownloaderSS.class));
-
+        }
+        if(v == quizletButton){
+            startActivity(new Intent(this, QuizletLauncher.class));
         }
     }
 

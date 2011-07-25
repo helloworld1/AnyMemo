@@ -83,6 +83,12 @@
             android:name=".downloader.FEDirectory"
             android:configChanges="orientation|keyboardHidden" />
         <activity
+            android:name=".downloader.QuizletLauncher"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity
+            android:name=".downloader.DownloaderQuizlet"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity
             android:name=".EditScreenTab"
             android:configChanges="orientation|keyboardHidden" />
         <activity
