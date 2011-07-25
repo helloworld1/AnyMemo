@@ -102,7 +102,7 @@ public class QuizletLauncher extends AMActivity implements OnClickListener{
                     editor.putString("quizlet_saved_user", searchText);
                     editor.commit();
                     Intent myIntent = new Intent(QuizletLauncher.this, DownloaderQuizlet.class);
-                    myIntent.setAction(DownloaderFE.INTENT_ACTION_SEARCH_USER);
+                    myIntent.setAction(DownloaderQuizlet.INTENT_ACTION_SEARCH_USER);
                     myIntent.putExtra("search_criterion", searchText);
                     startActivity(myIntent);
                 }
