@@ -350,4 +350,11 @@
     <string name="dict_colordict">ColorDict</string>
     <string name="dict_fora">Fora Dictionary</string>
     <string name="error_no_dict">沒有正確安裝使用。請確定到電子市場安裝。另外可以到選項更改其他字典軟件。錯誤：</string>
+    <string name="item_update_warning">確定要更新這個條目?</string>
+    <string name="quizlet_text">Quizlet.com</string>
+    <string name="quizlet_search_tag">用關鍵字搜索卡片</string>
+    <string name="quizlet_search_user">通過用戶名搜索</string>
+    <string name="download_source_quizlet">Quizlet.com\n(實驗)</string>
+    <string name="quizlet_search_tag_message">請輸入關鍵字</string>
+    <string name="quizlet_search_user_message">請輸入用戶名</string>
 </resources>
