@@ -33,6 +33,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.util.Log;
@@ -48,14 +49,15 @@ import org.json.JSONObject;
 /*
  * Download from FlashcardExchange using its web api
  */
-public class DownloaderQuizlet extends DownloaderBase{
+public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScrollListener{
     public static final String INTENT_ACTION_SEARCH_TAG = "am.quizlet.intent.search_tag";
     public static final String INTENT_ACTION_SEARCH_USER = "am.quizlet.intent.search_user";
 
     private static final String TAG = "org.liberty.android.fantastischmemo.downloader.DownloaderQuizlet";
+    private static final int PAGE_SIZE = 50;
     private static final String QUIZLET_API_KEY = "7bmBY5S2VgPbNpd8";
-    private static final String QUIZLET_API_TAG = "http://api.quizlet.com/1.0/sets?dev_key=" + QUIZLET_API_KEY+ "&per_page=50&q=";
-    private static final String QUIZLET_API_USER = "http://api.quizlet.com/1.0/sets?dev_key=" + QUIZLET_API_KEY+ "&per_page=50&q=creator:";
+    private static final String QUIZLET_API_TAG = "http://api.quizlet.com/1.0/sets?dev_key=" + QUIZLET_API_KEY+ "&per_page=" + PAGE_SIZE + "&q=";
+    private static final String QUIZLET_API_USER = "http://api.quizlet.com/1.0/sets?dev_key=" + QUIZLET_API_KEY+ "&per_page=" + PAGE_SIZE + "&q=creator:";
     private static final String QUIZLET_API_GET = "http://api.quizlet.com/1.0/sets?dev_key=" + QUIZLET_API_KEY+ "&extended=on&q=ids:";
     private DownloadListAdapter dlAdapter;
 
@@ -64,6 +66,9 @@ public class DownloaderQuizlet extends DownloaderBase{
     private ProgressDialog mProgressDialog;
     private String action;
     private String searchCriterion = null;
+    private int currentPage = 1;
+    /* This will change after first retriving list */
+    private int totalPages = 1;
 
     @Override
     protected void initialRetrieve(){
@@ -71,6 +76,7 @@ public class DownloaderQuizlet extends DownloaderBase{
         dlAdapter = new DownloadListAdapter(this, R.layout.filebrowser_item);
         listView = (ListView)findViewById(R.id.file_list);
         listView.setAdapter(dlAdapter);
+        listView.setOnScrollListener(this);
 
         Intent intent = getIntent();
         action = intent.getAction();
@@ -183,6 +189,7 @@ public class DownloaderQuizlet extends DownloaderBase{
             throw new IOException("Incorrect criterion used for this call");
         }
         Log.i(TAG, "Url: " + url);
+        url += "&page=" + currentPage;
 
         String jsonString = DownloaderUtils.downloadJSONString(url);
         Log.v(TAG, "JSON String: " + jsonString);
@@ -191,6 +198,7 @@ public class DownloaderQuizlet extends DownloaderBase{
         if(!status.equals("ok")){
             throw new IOException("Status is not OK. Status: " + status);
         }
+        totalPages = jsonObject.getInt("total_pages");
         JSONArray jsonArray = jsonObject.getJSONArray("sets");
         for(int i = 0; i < jsonArray.length(); i++){
             JSONObject jsonItem = jsonArray.getJSONObject(i);
@@ -240,5 +248,28 @@ public class DownloaderQuizlet extends DownloaderBase{
         dbHelper.insertListItems(itemList);
         dbHelper.close();
         RecentListUtil.addToRecentList(this, dbpath, dbname);
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount){
+        if(totalItemCount <= 0 ){
+            return;
+        }
+        if(totalItemCount >= PAGE_SIZE
+                && (firstVisibleItem + visibleItemCount == totalItemCount)
+                && (currentPage < totalPages)){
+                try{
+                    currentPage += 1;
+                    List<DownloadItem> nextPageItems = retrieveList();
+                    dlAdapter.addList(nextPageItems);
+                }
+                catch(Exception e){
+                    Log.e(TAG, "Error to scroll", e);
+                }
+        }
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
     }
 }
