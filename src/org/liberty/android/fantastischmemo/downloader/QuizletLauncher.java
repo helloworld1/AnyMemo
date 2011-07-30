@@ -93,7 +93,7 @@ public class QuizletLauncher extends AMActivity implements OnClickListener{
         final EditText et = new EditText(this);
         et.setText(settings.getString("quizlet_saved_user", ""));
         new AlertDialog.Builder(this)
-            .setTitle(R.string.search_tag)
+            .setTitle(R.string.search_user)
             .setMessage(R.string.quizlet_search_user_message)
             .setView(et)
             .setPositiveButton(R.string.search_text, new DialogInterface.OnClickListener(){
