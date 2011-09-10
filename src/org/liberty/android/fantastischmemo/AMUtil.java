@@ -34,9 +34,11 @@ public class AMUtil{
     }
 
     public static boolean isHTML(String s){
-        Pattern htmlPattern = Pattern.compile("<[a-zA-Z]+[0-9]*(\\s[a-zA-Z]+[0-9]*=.*)*\\s*/??>");
-        Matcher m = htmlPattern.matcher(s);
-        return m.find();
+        Pattern htmlPattern1 = Pattern.compile("<[a-zA-Z]+[0-9]*(\\s[a-zA-Z]+[0-9]*=.*)*\\s*/??>");
+        Pattern htmlPattern2 = Pattern.compile("&#?[a-z0-9]+;");
+        Matcher m1 = htmlPattern1.matcher(s);
+        Matcher m2 = htmlPattern2.matcher(s);
+        return m1.find() || m2.find();
     }
 
 }
