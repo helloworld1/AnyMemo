@@ -27,6 +27,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+import java.util.Arrays;
 
 import android.os.Environment;
 import android.app.Activity;
@@ -47,6 +51,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.SectionIndexer;
 import android.widget.TextView;
 import android.widget.ImageView;
 import android.widget.EditText;
@@ -142,27 +147,6 @@ public class FileBrowser extends AMActivity implements OnItemClickListener, OnIt
 
         fbListView = (ListView)findViewById(R.id.file_list);
 		FileBrowserAdapter directoryList = new FileBrowserAdapter(this, R.layout.filebrowser_item, directoryEntries);
-		directoryList.sort(new Comparator<String>() {
-            @Override
-			public int compare(String s1, String s2){
-				if(s1.equals("..")){
-					return -1;
-				}
-				else if(s2.equals("..")){
-					return 1;
-				}
-				else if(s1.endsWith("/") && !s2.endsWith("/")){
-					return -1;
-				}
-				else if(s2.endsWith("/") && !s1.endsWith("/")){
-					return 1;
-				}
-				else{
-					return (s1.toLowerCase()).compareTo(s2.toLowerCase());
-				}
-			}
-
-		});
 	    fbListView.setAdapter(directoryList);
         fbListView.setOnItemClickListener(this);
         fbListView.setOnItemLongClickListener(this);
@@ -426,12 +410,55 @@ public class FileBrowser extends AMActivity implements OnItemClickListener, OnIt
 	    return false;
 	}
 
-    private class FileBrowserAdapter extends ArrayAdapter<String>{
-        private ArrayList<String> mItems;
+    private class FileBrowserAdapter extends ArrayAdapter<String> implements SectionIndexer{
+        /* quick index sections */
+        private String[] sections;
+
+        HashMap<String, Integer> alphaIndexer = new HashMap<String, Integer>();
 
         public FileBrowserAdapter(Context context, int textViewResourceId, ArrayList<String> items){
             super(context, textViewResourceId, items);
-            mItems = items;
+            sort(new Comparator<String>() {
+                @Override
+                public int compare(String s1, String s2){
+                    if(s1.equals("..")){
+                        return -1;
+                    }
+                    else if(s2.equals("..")){
+                        return 1;
+                    }
+                    else if(s1.endsWith("/") && !s2.endsWith("/")){
+                        return -1;
+                    }
+                    else if(s2.endsWith("/") && !s1.endsWith("/")){
+                        return 1;
+                    }
+                    else{
+                        return (s1.toLowerCase()).compareTo(s2.toLowerCase());
+                    }
+                }
+            });
+            List<String> sectionList = new ArrayList<String>();
+            String cur = "";
+            for(int i = 0; i < getCount(); i++) {
+                String item = getItem(i);
+                if (item.length() >= 2) {
+                    String index;
+                    if(item.endsWith("/")) {
+                        index = item.substring(0, 2).toLowerCase() + item.substring(item.length() - 1);
+                    }
+                    else {
+                        index = item.substring(0, 2).toLowerCase();
+                    }
+                    if (index != null && !index.equals(cur)){
+                        alphaIndexer.put(index, i);
+                        sectionList.add(index);
+                        cur = index;
+                    }
+                }
+            }
+            sections = new String[sectionList.size()];
+            sectionList.toArray(sections);
         }
 
         @Override
@@ -441,7 +468,7 @@ public class FileBrowser extends AMActivity implements OnItemClickListener, OnIt
                 LayoutInflater li = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 v = li.inflate(R.layout.filebrowser_item, null);
             }
-            String name = mItems.get(position);
+            String name = getItem(position);
             if(name != null){
                 TextView tv = (TextView)v.findViewById(R.id.file_name);
                 ImageView iv = (ImageView)v.findViewById(R.id.file_icon);
@@ -473,6 +500,25 @@ public class FileBrowser extends AMActivity implements OnItemClickListener, OnIt
                 tv.setText(name);
             }
             return v;
+        }
+
+        /* Display the quick index when the user is scrolling */
+        
+        @Override
+        public int getPositionForSection(int section){
+            String letters = sections[section];
+            return alphaIndexer.get(letters);
+        }
+
+        @Override
+        public int getSectionForPosition(int position){
+            /* Not used */
+            return 0;
+        }
+
+        @Override
+        public Object[] getSections(){
+            return sections;
         }
     }
 
