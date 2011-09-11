@@ -106,6 +106,9 @@
         <activity
             android:name=".converter.ConvertScreen"
             android:configChanges="orientation|keyboardHidden" />
+        <activity
+            android:name=".downloader.DropboxLauncher"
+            android:configChanges="orientation|keyboardHidden" />
         <receiver
             android:name=".AlarmReceiver"
             android:process=":remote" />

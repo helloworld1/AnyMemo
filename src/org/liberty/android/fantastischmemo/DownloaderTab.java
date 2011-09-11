@@ -34,7 +34,7 @@ public class DownloaderTab extends AMActivity implements View.OnClickListener{
     private View feButton;
     private View ssButton;
     private View quizletButton;
-    private final int ACTIVITY_FB = 1;
+    private View dropboxButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,10 +44,12 @@ public class DownloaderTab extends AMActivity implements View.OnClickListener{
         feButton = findViewById(R.id.source_fe);
         ssButton = findViewById(R.id.source_ss);
         quizletButton = findViewById(R.id.source_quizlet);
+        dropboxButton = findViewById(R.id.source_dropbox);
         amButton.setOnClickListener(this);
         feButton.setOnClickListener(this);
         ssButton.setOnClickListener(this);
         quizletButton.setOnClickListener(this);
+        dropboxButton.setOnClickListener(this);
     }
     @Override
     public void onClick(View v){
@@ -62,6 +64,9 @@ public class DownloaderTab extends AMActivity implements View.OnClickListener{
         }
         if(v == quizletButton){
             startActivity(new Intent(this, QuizletLauncher.class));
+        }
+        if(v == dropboxButton){
+            startActivity(new Intent(this, DropboxLauncher.class));
         }
     }
 
