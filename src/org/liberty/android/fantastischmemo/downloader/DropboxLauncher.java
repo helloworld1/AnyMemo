@@ -59,6 +59,11 @@ public class DropboxLauncher extends AMActivity implements OnClickListener{
         uploadButton.setOnClickListener(this);
         settings = PreferenceManager.getDefaultSharedPreferences(this);
         editor = settings.edit();
+        /* Retrieve saved login information */
+        String dropboxUsername = settings.getString("dropbox_username", null);
+        if (dropboxUsername != null) {
+            loginButton.setText(getString(R.string.fe_logged_in_text) + ": " + dropboxUsername);
+        }
     }
 
     @Override
@@ -91,6 +96,19 @@ public class DropboxLauncher extends AMActivity implements OnClickListener{
             .setView(loginDialog)
             .setPositiveButton(R.string.fe_login_text, new DialogInterface.OnClickListener(){
                 public void onClick(DialogInterface dialog, int which){
+                    try {
+                        String[] r = DropboxUtils.retrieveToken(username.getText().toString(), password.getText().toString());
+                        editor.putString("dropbox_username", username.getText().toString());
+                        editor.putString("dropbox_token", r[0]);
+                        editor.putString("dropbox_secret", r[1]);
+                        editor.commit();
+                        /* Properly display the login status in the button. */
+                        restartActivity();
+                    }
+                    catch(Exception e) {
+                        AMGUIUtility.displayException(DropboxLauncher.this, getString(R.string.error_text), "", e);
+                    }
+
                 }
             })
             .setNegativeButton(R.string.cancel_text, null)
