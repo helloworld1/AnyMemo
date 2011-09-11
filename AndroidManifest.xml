@@ -109,6 +109,9 @@
         <activity
             android:name=".downloader.DropboxLauncher"
             android:configChanges="orientation|keyboardHidden" />
+        <activity
+            android:name=".downloader.DownloaderDropbox"
+            android:configChanges="orientation|keyboardHidden" />
         <receiver
             android:name=".AlarmReceiver"
             android:process=":remote" />

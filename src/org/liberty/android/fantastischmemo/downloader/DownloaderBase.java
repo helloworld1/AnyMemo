@@ -23,47 +23,21 @@ import org.liberty.android.fantastischmemo.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.HashMap;
-import java.io.InputStream;
-import java.io.BufferedReader;
-import java.io.BufferedInputStream;
-import java.io.InputStreamReader;
 
 import android.os.Bundle;
 import android.content.Context;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.Configuration;
-import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView;
 import android.widget.TextView;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ImageView;
 import android.util.Log;
-import android.os.Environment;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.KeyEvent;
-import android.preference.PreferenceManager;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 
 public abstract class DownloaderBase extends AMActivity implements OnItemClickListener{
@@ -153,76 +127,6 @@ public abstract class DownloaderBase extends AMActivity implements OnItemClickLi
      * that could be categories, databases and other
      * special things
      */
-    protected class DownloadItem{
-        public static final int TYPE_CATEGORY = 1;
-        public static final int TYPE_DATABASE = 2;
-        public static final int TYPE_UP= 3;
-        private int type;
-        private String title = "";
-        private String description = "";
-        private String address = "";
-        private HashMap<String, String> extras;
-
-        public DownloadItem(){
-            extras = new HashMap<String, String>();
-        }
-
-        public DownloadItem(int type, String title, String description, String address){
-            this.type = type;
-            this.title = title;
-            this.description = description;
-            this.address = address;
-            extras = new HashMap<String, String>();
-        }
-
-        public DownloadItem clone(){
-            DownloadItem newItem = new DownloadItem(this.type, this.title, this.description, this.address);
-            newItem.extras = (HashMap<String, String>)this.extras.clone();
-            return newItem;
-        }
-
-        public void setType(int type){
-            this.type = type;
-        }
-
-        public void setTitle(String title){
-            this.title = title;
-        }
-
-        public void setDescription(String description){
-            this.description = description;
-        }
-
-        public void setAddress(String address){
-            this.address = address;
-        }
-
-        public void setExtras(String key, String item){
-            this.extras.put(key, item);
-        }
-
-        public int getType(){
-            return type;
-        }
-
-        public String getTitle(){
-            return title;
-        }
-
-        public String getDescription(){
-            return description;
-        }
-
-        public String getAddress(){
-            return address;
-        }
-
-        public String getExtras(String key){
-            return this.extras.get(key);
-        }
-
-
-    }
     protected class DownloadListAdapter extends ArrayAdapter<DownloadItem>{
 
         public DownloadListAdapter(Context context, int textViewResourceId){

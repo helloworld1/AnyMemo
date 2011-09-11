@@ -77,6 +77,13 @@ public class DropboxLauncher extends AMActivity implements OnClickListener{
             showLoginDialog();
         }
         if(v == downloadButton){
+            String token = settings.getString("dropbox_token", null);
+            String secret = settings.getString("dropbox_secret", null);
+            Intent myIntent = new Intent(this, DownloaderDropbox.class);
+            myIntent.putExtra("dropbox_token", token);
+            myIntent.putExtra("dropbox_secret", secret);
+            myIntent.putExtra("initial_path", "/");
+            startActivity(myIntent);
         }
         if(v == uploadButton){
         }
