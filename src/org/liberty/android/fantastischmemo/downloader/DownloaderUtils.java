@@ -19,6 +19,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+
+import java.net.URL;
+import java.net.URLConnection;
+
 import org.liberty.android.fantastischmemo.*;
 
 import java.util.ArrayList;
@@ -93,6 +101,33 @@ public class DownloaderUtils{
 
         return result;
     }
+
+    public static void downloadFile(String url, String savedPath) throws IOException{
+        File outFile = new File(savedPath);
+        OutputStream out;
+        if(outFile.exists()){
+            /* Save a copy of the original instead of throwing an error */
+            AMUtil.copyFile(savedPath, savedPath.replace(".db", ".clone.db"));
+            outFile.delete();
+        }
+        outFile.createNewFile();
+        out  =new FileOutputStream(outFile);
+
+        URL myURL = new URL(url);
+        Log.v(TAG, "URL IS: " + myURL);
+        URLConnection ucon = myURL.openConnection();
+        byte[] buf = new byte[8192];
+
+        InputStream is = ucon.getInputStream();
+        BufferedInputStream bis = new BufferedInputStream(is, 8192);
+        int len = 0;
+        while((len = bis.read(buf)) != -1){
+            out.write(buf, 0, len);
+        }
+        out.close();
+        is.close();
+    }
+
     public static boolean validateEmail(String testString){
         Pattern p = Pattern.compile("^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Za-z]{2,4}$");
         Matcher m = p.matcher(testString);

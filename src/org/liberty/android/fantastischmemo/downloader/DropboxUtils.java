@@ -28,9 +28,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import org.liberty.android.fantastischmemo.R;
+
+import android.os.Environment;
+
 import oauth.signpost.OAuthConsumer;
 
 import oauth.signpost.basic.DefaultOAuthConsumer;
+
+import oauth.signpost.exception.OAuthExpectationFailedException;
+import oauth.signpost.exception.OAuthMessageSignerException;
 
 public class DropboxUtils{
     public static final String TAG = "org.liberty.android.fantastischmemo.downloader.DownloaderUtils";
@@ -39,6 +46,7 @@ public class DropboxUtils{
     private static final String TOKEN_URL = "https://api.dropbox.com/0/token"
         + "?oauth_consumer_key=" + API_KEY;
     private static final String METADATA_URL = "https://api.dropbox.com/0/metadata/dropbox";
+    private static final String FILE_URL = "https://api-content.dropbox.com/0/files/dropbox";
 
     /*
      * Return value: The index 0 is the token, index 1 is the secret
@@ -65,17 +73,8 @@ public class DropboxUtils{
         return new String[]{token, secret};
     }
 
-    public static List<DownloadItem> listFiles(String oauthToken, String oauthTokenSecret, String path) throws Exception{
-        OAuthConsumer oauthConsumer = new DefaultOAuthConsumer(API_KEY, API_SECRET);
-        oauthConsumer.setTokenWithSecret(oauthToken, oauthTokenSecret);
-        /* Make the suitable URL for dropbox API */
-        path = URLEncoder.encode(path);
-        path = path.replace("%2F", "/");
-        path = path.replace("+", "%20");
-        //path = path.replace(" ", "%20");
-        String url = METADATA_URL + path;
-        System.out.println("TEH URL:" + url);
-        url = oauthConsumer.sign(url);
+    public static List<DownloadItem> listFiles(String oauthToken, String oauthSecret, String path) throws Exception{
+        String url = signPathUrl(oauthToken, oauthSecret, METADATA_URL, path);
         String jsonString = DownloaderUtils.downloadJSONString(url);
         System.out.println("Get cards String: " + jsonString);
         String error = null;
@@ -111,4 +110,27 @@ public class DropboxUtils{
         }
         return diList;
     }
+
+    /*
+     * savePath should be like /mnt/sdcard/anymemo/
+     */
+    public static void downloadFile(String oauthToken, String oauthSecret, DownloadItem di, String savePath) throws Exception {
+        String url = signPathUrl(oauthToken, oauthSecret, FILE_URL, di.getAddress());
+
+        DownloaderUtils.downloadFile(url, savePath + di.getTitle());
+    }
+
+    private static String signPathUrl(String oauthToken, String oauthSecret, 
+            String apiUrl, String path) throws Exception {
+        OAuthConsumer oauthConsumer = new DefaultOAuthConsumer(API_KEY, API_SECRET);
+        oauthConsumer.setTokenWithSecret(oauthToken, oauthSecret);
+        /* Make the suitable URL for dropbox API */
+        path = URLEncoder.encode(path);
+        path = path.replace("%2F", "/");
+        path = path.replace("+", "%20");
+        String url = apiUrl + path;
+        url = oauthConsumer.sign(url);
+        return url;
+    }
+
 }

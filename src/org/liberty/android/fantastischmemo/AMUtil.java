@@ -19,10 +19,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class AMUtil{
+public class AMUtil {
     public static boolean isInteger(String s){
         try{
             Integer.parseInt(s);
@@ -40,5 +47,22 @@ public class AMUtil{
         Matcher m2 = htmlPattern2.matcher(s);
         return m1.find() || m2.find();
     }
+
+	public static void copyFile(String source, String dest) throws IOException{
+        File sourceFile = new File(source);
+        File destFile = new File(dest);
+		
+        destFile.createNewFile();
+		InputStream in = new FileInputStream(sourceFile);
+		OutputStream out = new FileOutputStream(destFile);
+		
+		byte[] buf = new byte[1024];
+		int len;
+		while ((len = in.read(buf)) > 0) {
+			out.write(buf, 0, len);
+		}
+		in.close();
+		out.close();
+	}
 
 }
