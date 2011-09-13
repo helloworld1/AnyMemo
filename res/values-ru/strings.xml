@@ -357,4 +357,12 @@
     <string name="download_source_quizlet">Quizlet.com\n(экспериментально)</string>
     <string name="quizlet_search_tag_message">Введите имя набора карт для поиска.</string>
     <string name="quizlet_search_user_message">Введите имя пользователя для поиска.</string>
+    <string name="dropbox_text">Dropbox.com</string>
+    <string name="dropbox_login_text">Войти, используя аккаунт Dropbox</string>
+    <string name="dropbox_download_text">Загрузить из Dropbox</string>
+    <string name="dropbox_upload_text">Залить в Dropbox</string>
+    <string name="user_name_text">Имя пользователя:</string>
+    <string name="password_text">Пароль:</string>
+    <string name="download_source_dropbox">Dropbox.com\n(экспериментально)</string>
+    <string name="dropbox_login_message">Введите имя пользователя Dropbox (обычно email) и пароль.</string>
 </resources>

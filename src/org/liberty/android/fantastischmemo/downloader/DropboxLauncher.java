@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader;
 
+import java.io.File;
+
 import org.liberty.android.fantastischmemo.*;
 
 import org.liberty.android.fantastischmemo.downloader.QuizletLauncher;
@@ -86,6 +88,14 @@ public class DropboxLauncher extends AMActivity implements OnClickListener{
             startActivity(myIntent);
         }
         if(v == uploadButton){
+            String token = settings.getString("dropbox_token", null);
+            String secret = settings.getString("dropbox_secret", null);
+            try { 
+            DropboxUtils.uploadFile(token, secret, new File("/mnt/sdcard/anymemo/ttt.xml"), "/ttt.xml");
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

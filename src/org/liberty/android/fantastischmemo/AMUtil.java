@@ -65,4 +65,9 @@ public class AMUtil {
 		out.close();
 	}
 
+    /* Get the file name from the path name */
+    public static String getFilenameFromPath(String path) {
+        String[] splitted = path.split("/");
+        return splitted[splitted.length - 1];
+    }
 }

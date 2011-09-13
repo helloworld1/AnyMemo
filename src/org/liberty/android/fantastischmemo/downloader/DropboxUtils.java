@@ -19,15 +19,45 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+
+import org.apache.http.client.HttpClient;
+
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+
+import org.apache.http.client.methods.HttpPost;
+
+import org.apache.http.entity.mime.HttpMultipartMode;
+
+import org.apache.http.entity.mime.content.FileBody;
+
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import org.apache.http.message.BasicNameValuePair;
+
+import org.apache.http.protocol.HTTP;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import org.liberty.android.fantastischmemo.AMUtil;
 import org.liberty.android.fantastischmemo.R;
 
 import android.os.Environment;
@@ -36,8 +66,11 @@ import oauth.signpost.OAuthConsumer;
 
 import oauth.signpost.basic.DefaultOAuthConsumer;
 
+import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
+
 import oauth.signpost.exception.OAuthExpectationFailedException;
 import oauth.signpost.exception.OAuthMessageSignerException;
+import org.apache.http.entity.mime.MultipartEntity;
 
 public class DropboxUtils{
     public static final String TAG = "org.liberty.android.fantastischmemo.downloader.DownloaderUtils";
@@ -120,6 +153,34 @@ public class DropboxUtils{
         DownloaderUtils.downloadFile(url, savePath + di.getTitle());
     }
 
+    public static void uploadFile(String oauthToken, String oauthSecret, File file, String remotePath) throws Exception {
+        OAuthConsumer oauthConsumer = new CommonsHttpOAuthConsumer(API_KEY, API_SECRET);
+        oauthConsumer.setTokenWithSecret(oauthToken, oauthSecret);
+        HttpClient client = new DefaultHttpClient();
+        String url = FILE_URL + "/";
+            HttpPost req = new HttpPost(url);
+            // this has to be done this way because of how oauth signs params
+            // first we add a "fake" param of file=path of *uploaded* file
+            // THEN we sign that.
+            List nvps = new ArrayList();
+            nvps.add(new BasicNameValuePair("file", file.getName()));
+            req.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
+            oauthConsumer.sign(req);
+
+            // now we can add the real file multipart and we're good
+            MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+            FileBody bin = new FileBody(file);
+            entity.addPart("file", bin);
+            // this resets it to the new entity with the real file
+            req.setEntity(entity);
+
+            HttpResponse resp = client.execute(req);
+            
+            //System.out.println("RESP: " + resp.getEntity().consumeContent());
+        System.out.println("Resp: " + readResponse(resp));
+
+    }
+
     private static String signPathUrl(String oauthToken, String oauthSecret, 
             String apiUrl, String path) throws Exception {
         OAuthConsumer oauthConsumer = new DefaultOAuthConsumer(API_KEY, API_SECRET);
@@ -131,6 +192,26 @@ public class DropboxUtils{
         String url = apiUrl + path;
         url = oauthConsumer.sign(url);
         return url;
+    }
+    /**
+     * Used internally to simplify reading a response in buffered lines.
+     */
+    static public String readResponse(HttpResponse response) throws IOException {
+        HttpEntity ent = response.getEntity();
+        if (ent != null) {
+            BufferedReader in = new BufferedReader(new InputStreamReader(ent.getContent()), 8192);
+            String inputLine = null;
+            String result = "";
+    
+            while((inputLine = in.readLine()) != null) {
+                result += inputLine;
+            }
+    
+            response.getEntity().consumeContent();
+            return result;
+        } else {
+            return "";
+        }
     }
 
 }
