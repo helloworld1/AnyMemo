@@ -28,6 +28,7 @@ import org.liberty.android.fantastischmemo.downloader.QuizletLauncher;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -94,6 +95,8 @@ public class DropboxLauncher extends AMActivity implements OnClickListener{
             myIntent.putExtra("dropbox_token", token);
             myIntent.putExtra("dropbox_secret", secret);
             myIntent.putExtra("remote_path", "/");
+            myIntent.putExtra("default_root", "" + Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir) + "/");
+
             startActivity(myIntent);
 
         }

@@ -19,22 +19,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.net.URLEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 
 import org.apache.http.client.HttpClient;
@@ -57,19 +48,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import org.liberty.android.fantastischmemo.AMUtil;
-import org.liberty.android.fantastischmemo.R;
-
-import android.os.Environment;
-
 import oauth.signpost.OAuthConsumer;
 
 import oauth.signpost.basic.DefaultOAuthConsumer;
 
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 
-import oauth.signpost.exception.OAuthExpectationFailedException;
-import oauth.signpost.exception.OAuthMessageSignerException;
 import org.apache.http.entity.mime.MultipartEntity;
 
 public class DropboxUtils{

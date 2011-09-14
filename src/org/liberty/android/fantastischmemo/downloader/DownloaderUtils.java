@@ -29,47 +29,16 @@ import java.net.URLConnection;
 
 import org.liberty.android.fantastischmemo.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.HashMap;
 import java.io.InputStream;
 import java.io.BufferedReader;
 import java.io.BufferedInputStream;
 import java.io.InputStreamReader;
 import java.util.regex.*;
 
-import android.os.Bundle;
-import android.content.Context;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
-import android.widget.ArrayAdapter;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView;
-import android.widget.TextView;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.ImageView;
 import android.util.Log;
-import android.os.Environment;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.KeyEvent;
-import android.preference.PreferenceManager;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
