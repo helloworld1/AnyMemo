@@ -139,4 +139,25 @@ public class DownloaderUtils{
         String s1 = orngName.replaceAll("[/:]", "_");
         return s1;
     }
+
+    /*
+     * Read the HTTPResponse, return the string content
+     */
+    public static String readResponse(HttpResponse response) throws IOException {
+        HttpEntity ent = response.getEntity();
+        if (ent != null) {
+            BufferedReader in = new BufferedReader(new InputStreamReader(ent.getContent()), 8192);
+            String inputLine = null;
+            String result = "";
+    
+            while((inputLine = in.readLine()) != null) {
+                result += inputLine;
+            }
+    
+            response.getEntity().consumeContent();
+            return result;
+        } else {
+            return "";
+        }
+    }
 }

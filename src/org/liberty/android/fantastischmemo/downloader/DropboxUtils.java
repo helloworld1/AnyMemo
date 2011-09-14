@@ -153,16 +153,17 @@ public class DropboxUtils{
         DownloaderUtils.downloadFile(url, savePath + di.getTitle());
     }
 
-    public static void uploadFile(String oauthToken, String oauthSecret, File file, String remotePath) throws Exception {
+    public static void uploadFile(String oauthToken, String oauthSecret, String fileName, String remotePath) throws Exception {
         OAuthConsumer oauthConsumer = new CommonsHttpOAuthConsumer(API_KEY, API_SECRET);
         oauthConsumer.setTokenWithSecret(oauthToken, oauthSecret);
+        File file = new File(fileName);
         HttpClient client = new DefaultHttpClient();
-        String url = FILE_URL + "/";
+        String url = FILE_URL + remotePath;
             HttpPost req = new HttpPost(url);
             // this has to be done this way because of how oauth signs params
             // first we add a "fake" param of file=path of *uploaded* file
             // THEN we sign that.
-            List nvps = new ArrayList();
+            List<BasicNameValuePair> nvps = new ArrayList<BasicNameValuePair>();
             nvps.add(new BasicNameValuePair("file", file.getName()));
             req.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
             oauthConsumer.sign(req);
@@ -176,9 +177,10 @@ public class DropboxUtils{
 
             HttpResponse resp = client.execute(req);
             
-            //System.out.println("RESP: " + resp.getEntity().consumeContent());
-        System.out.println("Resp: " + readResponse(resp));
-
+            String responseString = DownloaderUtils.readResponse(resp);
+            if (!responseString.contains("winner")) {
+                throw new Exception(responseString);
+            }
     }
 
     private static String signPathUrl(String oauthToken, String oauthSecret, 
@@ -192,26 +194,6 @@ public class DropboxUtils{
         String url = apiUrl + path;
         url = oauthConsumer.sign(url);
         return url;
-    }
-    /**
-     * Used internally to simplify reading a response in buffered lines.
-     */
-    static public String readResponse(HttpResponse response) throws IOException {
-        HttpEntity ent = response.getEntity();
-        if (ent != null) {
-            BufferedReader in = new BufferedReader(new InputStreamReader(ent.getContent()), 8192);
-            String inputLine = null;
-            String result = "";
-    
-            while((inputLine = in.readLine()) != null) {
-                result += inputLine;
-            }
-    
-            response.getEntity().consumeContent();
-            return result;
-        } else {
-            return "";
-        }
     }
 
 }

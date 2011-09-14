@@ -76,7 +76,13 @@ public class FileBrowser extends AMActivity implements OnItemClickListener, OnIt
 		Bundle extras = getIntent().getExtras();
         if(extras != null){
             defaultRoot = extras.getString("default_root");
-            fileExtensions = extras.getString("file_extension").split(",");
+            String ext =  extras.getString("file_extension");
+            if (ext != null) {
+                fileExtensions = ext.split(",");
+            }
+            else {
+                fileExtensions = new String[]{".db"};
+            }
         }
         else{
             fileExtensions = new String[]{".db"};
@@ -88,7 +94,7 @@ public class FileBrowser extends AMActivity implements OnItemClickListener, OnIt
         if(defaultRoot == null){
             defaultRoot = settings.getString("saved_fb_path", null);
         }
-		
+
 		if(defaultRoot == null || defaultRoot.equals("")){
 			File sdPath = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir));
 			sdPath.mkdir();

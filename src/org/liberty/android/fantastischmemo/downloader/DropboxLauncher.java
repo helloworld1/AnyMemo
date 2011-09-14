@@ -90,12 +90,12 @@ public class DropboxLauncher extends AMActivity implements OnClickListener{
         if(v == uploadButton){
             String token = settings.getString("dropbox_token", null);
             String secret = settings.getString("dropbox_secret", null);
-            try { 
-            DropboxUtils.uploadFile(token, secret, new File("/mnt/sdcard/anymemo/ttt.xml"), "/ttt.xml");
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
+            Intent myIntent = new Intent(this, DropboxUploader.class);
+            myIntent.putExtra("dropbox_token", token);
+            myIntent.putExtra("dropbox_secret", secret);
+            myIntent.putExtra("remote_path", "/");
+            startActivity(myIntent);
+
         }
     }
 
