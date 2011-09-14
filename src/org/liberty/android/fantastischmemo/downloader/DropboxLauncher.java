@@ -30,6 +30,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -64,7 +67,7 @@ public class DropboxLauncher extends AMActivity implements OnClickListener{
         editor = settings.edit();
         /* Retrieve saved login information */
         String dropboxUsername = settings.getString("dropbox_username", null);
-        if (dropboxUsername != null) {
+        if (dropboxUsername != null && !dropboxUsername.equals("")) {
             loginButton.setText(getString(R.string.fe_logged_in_text) + ": " + dropboxUsername);
         }
     }
@@ -135,5 +138,24 @@ public class DropboxLauncher extends AMActivity implements OnClickListener{
             .create()
             .show();
     }
+    @Override
+	public boolean onCreateOptionsMenu(Menu menu){
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.dropbox_menu, menu);
+		return true;
+	}
+	
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	    case R.id.logout:
+            editor.putString("dropbox_username", "");
+            editor.putString("dropbox_token", "");
+            editor.putString("dropbox_secret", "");
+            editor.commit();
+            restartActivity();
+			return true;
+	    }
+	    return false;
+	}
 }
 
