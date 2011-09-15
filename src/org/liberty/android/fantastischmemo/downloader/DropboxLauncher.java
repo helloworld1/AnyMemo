@@ -97,7 +97,7 @@ public class DropboxLauncher extends AMActivity implements OnClickListener{
             Intent myIntent = new Intent(this, DropboxUploader.class);
             myIntent.putExtra("dropbox_token", token);
             myIntent.putExtra("dropbox_secret", secret);
-            myIntent.putExtra("remote_path", "/");
+            myIntent.putExtra("remote_path", "/AnyMemo");
             myIntent.putExtra("default_root", "" + Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir) + "/");
 
             startActivity(myIntent);

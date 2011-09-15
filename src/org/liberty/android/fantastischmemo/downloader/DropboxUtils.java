@@ -48,6 +48,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 import oauth.signpost.OAuthConsumer;
 
 import oauth.signpost.basic.DefaultOAuthConsumer;
@@ -57,13 +59,14 @@ import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import org.apache.http.entity.mime.MultipartEntity;
 
 public class DropboxUtils{
-    public static final String TAG = "org.liberty.android.fantastischmemo.downloader.DownloaderUtils";
+    private static final String TAG = "org.liberty.android.fantastischmemo.downloader.DropboxUtils";
     private static final String API_KEY = "q2rclqr44ux8pe7";
     private static final String API_SECRET = "bmgikjefor073dh";
     private static final String TOKEN_URL = "https://api.dropbox.com/0/token"
         + "?oauth_consumer_key=" + API_KEY;
     private static final String METADATA_URL = "https://api.dropbox.com/0/metadata/dropbox";
     private static final String FILE_URL = "https://api-content.dropbox.com/0/files/dropbox";
+    private static final String CREATE_FOLDER_URL = "https://api.dropbox.com/0/fileops/create_folder";
 
     /*
      * Return value: The index 0 is the token, index 1 is the secret
@@ -179,6 +182,7 @@ public class DropboxUtils{
         url = oauthConsumer.sign(url);
         return url;
     }
+
 
 
 }
