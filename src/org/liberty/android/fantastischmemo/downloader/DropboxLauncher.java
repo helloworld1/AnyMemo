@@ -83,8 +83,12 @@ public class DropboxLauncher extends AMActivity implements OnClickListener{
             showLoginDialog();
         }
         if(v == downloadButton){
-            String token = settings.getString("dropbox_token", null);
-            String secret = settings.getString("dropbox_secret", null);
+            String token = settings.getString("dropbox_token", "");
+            String secret = settings.getString("dropbox_secret", "");
+            if (token.equals("") || secret.equals("")){
+                showNotAuthDialog();
+                return;
+            }
             Intent myIntent = new Intent(this, DownloaderDropbox.class);
             myIntent.putExtra("dropbox_token", token);
             myIntent.putExtra("dropbox_secret", secret);
@@ -92,8 +96,12 @@ public class DropboxLauncher extends AMActivity implements OnClickListener{
             startActivity(myIntent);
         }
         if(v == uploadButton){
-            String token = settings.getString("dropbox_token", null);
-            String secret = settings.getString("dropbox_secret", null);
+            String token = settings.getString("dropbox_token", "");
+            String secret = settings.getString("dropbox_secret", "");
+            if (token.equals("") || secret.equals("")){
+                showNotAuthDialog();
+                return;
+            }
             Intent myIntent = new Intent(this, DropboxUploader.class);
             myIntent.putExtra("dropbox_token", token);
             myIntent.putExtra("dropbox_secret", secret);
@@ -157,5 +165,13 @@ public class DropboxLauncher extends AMActivity implements OnClickListener{
 	    }
 	    return false;
 	}
+
+    private void showNotAuthDialog(){
+        new AlertDialog.Builder(this)
+            .setTitle(R.string.fe_not_login)
+            .setMessage(R.string.fe_not_login_message)
+            .setPositiveButton(R.string.ok_text, null)
+            .show();
+    }
 }
 

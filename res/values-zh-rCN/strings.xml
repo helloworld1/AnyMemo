@@ -357,4 +357,13 @@
     <string name="download_source_quizlet">Quizlet.com\n(实验)</string>
     <string name="quizlet_search_tag_message">请输入关键字</string>
     <string name="quizlet_search_user_message">请输入用户名</string>
+    <string name="dropbox_text">Dropbox.com</string>
+    <string name="dropbox_login_text">登陆到Dropbox</string>
+    <string name="dropbox_download_text">从Dropbox下载</string>
+    <string name="dropbox_upload_text">上传到Dropbox</string>
+    <string name="user_name_text">用户名:</string>
+    <string name="password_text">密码:</string>
+    <string name="download_source_dropbox">Dropbox.com\n(实验)</string>
+    <string name="dropbox_login_message">请输入Dropbox用户名（一般是email地址）和密码.</string>
+    <string name="import_supermemo_2008_xml_text">导入SuperMemo 2008 XML</string>
 </resources>

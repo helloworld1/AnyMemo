@@ -365,4 +365,5 @@
     <string name="password_text">Пароль:</string>
     <string name="download_source_dropbox">Dropbox.com\n(экспериментально)</string>
     <string name="dropbox_login_message">Введите имя пользователя Dropbox (обычно email) и пароль.</string>
+    <string name="import_supermemo_2008_xml_text">Импорт SuperMemo 2008 XML</string>
 </resources>
