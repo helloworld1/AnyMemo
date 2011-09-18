@@ -76,7 +76,7 @@ public class DownloaderUtils{
         OutputStream out;
         if(outFile.exists()){
             /* Save a copy of the original instead of throwing an error */
-            AMUtil.copyFile(savedPath, savedPath.replace(".db", ".clone.db"));
+            AMUtil.copyFile(savedPath, savedPath.replace(".db", ".old.db"));
             outFile.delete();
         }
         outFile.createNewFile();
