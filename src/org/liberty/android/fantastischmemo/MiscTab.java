@@ -57,6 +57,7 @@ public class MiscTab extends AMActivity implements View.OnClickListener{
     private View importCSVButton;
     private View importTabButton;
     private View importQAButton;
+    private View importSupermemo2008Button;
     private View exportMnemosyneButton;
     private View exportCSVButton;
     private View exportTabButton;
@@ -90,6 +91,8 @@ public class MiscTab extends AMActivity implements View.OnClickListener{
         importTabButton.setOnClickListener(this);
         importQAButton = findViewById(R.id.import_qa);
         importQAButton.setOnClickListener(this);
+        importSupermemo2008Button = findViewById(R.id.import_supermemo_2008);
+        importSupermemo2008Button.setOnClickListener(this);
         exportMnemosyneButton = findViewById(R.id.export_mnemosyne);
         exportMnemosyneButton.setOnClickListener(this);
         exportCSVButton = findViewById(R.id.export_csv);
@@ -164,6 +167,12 @@ public class MiscTab extends AMActivity implements View.OnClickListener{
             Intent myIntent = new Intent(this, ConvertScreen.class);
             myIntent.putExtra("file_extension", ".txt");
             myIntent.putExtra("converter", QATxtImporter.class);
+            startActivity(myIntent);
+        }
+        if(v == importSupermemo2008Button) {
+            Intent myIntent = new Intent(this, ConvertScreen.class);
+            myIntent.putExtra("file_extension", ".xml");
+            myIntent.putExtra("converter", Supermemo2008XMLImporter.class);
             startActivity(myIntent);
         }
         if(v == exportMnemosyneButton){
