@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="/home/liberty/mp/android/AnyMemo/libs/httpmime-4.1.2.jar"/>
 	<classpathentry kind="lib" path="libs/ormlite-android-4.29.jar"/>
 	<classpathentry kind="lib" path="libs/ormlite-core-4.29.jar"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

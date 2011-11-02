@@ -24,7 +24,18 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import java.sql.SQLException;
 import java.util.Locale;
+
+import org.liberty.android.fantastischmemo.dao.CardDao;
+
+import org.liberty.android.fantastischmemo.domain.Card;
+
+import com.j256.ormlite.android.AndroidConnectionSource;
+
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.DaoManager;
 
 import android.app.TabActivity;
 import android.app.AlertDialog;
@@ -47,7 +58,6 @@ import android.widget.TabHost;
 import android.content.res.Configuration;
 import android.view.Window;
 import android.view.WindowManager;
-
 
 public class MainTabs extends TabActivity{
     private final String WEBSITE_VERSION="http://anymemo.org/index.php?page=version";
@@ -99,6 +109,28 @@ public class MainTabs extends TabActivity{
                 res.getDrawable(R.drawable.misc))
             .setContent(intent);
         tabHost.addTab(spec);
+
+        try {
+            AnyMemoDBOpenHelper helper = new AnyMemoDBOpenHelper(this, "/sdcard/daotest.db");
+            Dao<Card, Integer> cardDao = helper.getCardDao();
+            Card nc = new Card();
+            nc.setId(1);
+            nc.setQuestion("Test question");
+            nc.setAnswer("Test Answer");
+            cardDao.createOrUpdate(nc);
+            nc = new Card();
+            nc.setQuestion("new card");
+            nc.setAnswer("new answer");
+            nc.setNote("New note");
+            nc.setCreationDate(new java.util.Date());
+            cardDao.create(nc);
+
+            helper.close();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+
 
     }
 

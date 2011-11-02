@@ -2,16 +2,20 @@ package org.liberty.android.fantastischmemo.domain;
 
 import java.util.Date;
 
-import org.liberty.android.fantastischmemo.dao.CardDao;
+import org.liberty.android.fantastischmemo.dao.CardDaoImpl;
 
 import com.j256.ormlite.field.DatabaseField;
 
 import com.j256.ormlite.table.DatabaseTable;
 
-@DatabaseTable(tableName = "cards", daoClass = CardDao.class)
+@DatabaseTable(tableName = "cards", daoClass = CardDaoImpl.class)
 public class Card {
-    @DatabaseField(id = true)
+    @DatabaseField(generatedId = true)
     private Integer id;
+
+    /* The actual card ordinal in a deck */
+    @DatabaseField(index = true)
+    private Integer ordinal;
 
     @DatabaseField(defaultValue = "", width = 8192)
     private String question;
@@ -37,6 +41,15 @@ public class Card {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getOrdinal() {
+        return ordinal;
+    }
+
+
+    public void setOrdinal(Integer ordinal) {
+        this.ordinal = ordinal;
     }
 
     public String getQuestion() {
@@ -78,10 +91,4 @@ public class Card {
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
     }
-
-
-
-
-
-
 }
