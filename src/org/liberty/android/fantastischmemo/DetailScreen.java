@@ -32,8 +32,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 
 public class DetailScreen extends AMActivity implements OnClickListener{
 	

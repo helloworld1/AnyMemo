@@ -51,7 +51,6 @@ import android.widget.Toast;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.util.Log;
 import android.net.Uri;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;

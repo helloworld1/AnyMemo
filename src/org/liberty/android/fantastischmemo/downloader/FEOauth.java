@@ -21,76 +21,23 @@ package org.liberty.android.fantastischmemo.downloader;
 
 import org.liberty.android.fantastischmemo.*;
 
-import java.util.ArrayList;
-import java.util.Stack;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipEntry;
-import java.util.Enumeration;
-import java.util.Comparator;
-import java.net.URLEncoder;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.File;
-import java.io.OutputStream;
-import java.io.FileOutputStream;
-import java.io.BufferedReader;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.UnsupportedEncodingException;
-import java.io.Serializable;
-import java.net.URLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-
-import org.liberty.android.fantastischmemo.downloader.FELauncher;
-import org.liberty.android.fantastischmemo.downloader.FELauncher;
-
 import android.content.SharedPreferences;
 
 
 import android.os.Bundle;
-import android.content.Context;
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 
 import android.preference.PreferenceManager;
-import android.widget.ArrayAdapter;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.util.Log;
-import android.os.Environment;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.os.Handler;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.net.Uri;
 import android.webkit.WebView;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import oauth.signpost.*;
 import oauth.signpost.commonshttp.*;
 import oauth.signpost.exception.*;
-import oauth.signpost.signature.*;
 
 public class FEOauth extends AMActivity{
     private static final String TAG = "org.liberty.android.fantastischmemo.FEOauth";

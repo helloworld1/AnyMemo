@@ -29,7 +29,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.content.res.Configuration;
 import android.view.Window;
-import android.view.WindowManager;
 import java.util.Locale;
 
 

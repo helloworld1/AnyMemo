@@ -22,16 +22,11 @@ package org.liberty.android.fantastischmemo.converter;
 import org.liberty.android.fantastischmemo.*;
 
 import android.content.Context;
-import java.io.BufferedWriter;
-import java.io.PrintWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
-import java.util.LinkedList;
 import java.util.ArrayList;
 import au.com.bytecode.opencsv.CSVWriter;
-
-import java.io.IOException;
 
 public class TabTxtExporter implements AbstractConverter{
     private Context mContext;

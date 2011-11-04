@@ -21,24 +21,13 @@ package org.liberty.android.fantastischmemo.converter;
 
 import org.liberty.android.fantastischmemo.*;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Date;
-import java.util.TimeZone;
-import java.util.Calendar;
-import java.util.HashMap;
 import java.text.SimpleDateFormat;
 
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 

@@ -22,62 +22,33 @@ package org.liberty.android.fantastischmemo.cardscreen;
 import org.liberty.android.fantastischmemo.*;
 import org.liberty.android.fantastischmemo.tts.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
-import java.util.Date;
 import java.util.List;
 
 
-import android.graphics.Color;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.DialogInterface.OnClickListener;
-import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
 import android.os.Environment;
-import android.content.Context;
-import android.preference.PreferenceManager;
-import android.text.Html;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.ContextMenu;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Display;
-import android.view.WindowManager;
 import android.view.LayoutInflater;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.os.Handler;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.EditText;
-import android.widget.Toast;
 import android.util.Log;
-import android.os.SystemClock;
 import android.net.Uri;
-import android.database.SQLException;
-
-import android.gesture.Gesture;
-import android.gesture.GestureLibraries;
-import android.gesture.GestureLibrary;
-import android.gesture.GestureOverlayView;
 import android.view.GestureDetector;
-import android.view.GestureDetector.SimpleOnGestureListener;
-import android.gesture.Prediction;
-import android.gesture.GestureOverlayView.OnGesturePerformedListener;
 
 public class EditScreen extends AMActivity{
     private final static String TAG = "org.liberty.android.fantastischmemo.cardscreen.EditScreen";

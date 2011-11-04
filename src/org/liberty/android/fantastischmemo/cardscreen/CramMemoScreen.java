@@ -20,11 +20,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.cardscreen;
 
 import org.liberty.android.fantastischmemo.*;
-import org.liberty.android.fantastischmemo.tts.*;
-
 import java.util.Map;
 import android.widget.Button;
-import android.util.Log;
 
 public class CramMemoScreen extends MemoScreen{
     private static final String TAG = "org.liberty.android.fantastischmemo.CramMemoScreen";

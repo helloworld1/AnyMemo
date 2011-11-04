@@ -37,46 +37,26 @@ import java.io.FileOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
-
-
-import android.os.Bundle;
-import android.content.Context;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.widget.ArrayAdapter;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.util.Log;
 import android.os.Environment;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.os.Handler;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class DownloaderAnyMemo extends DownloaderBase{

@@ -28,15 +28,9 @@ import java.io.OutputStream;
 import java.sql.SQLException;
 import java.util.Locale;
 
-import org.liberty.android.fantastischmemo.dao.CardDao;
-
 import org.liberty.android.fantastischmemo.domain.Card;
 
-import com.j256.ormlite.android.AndroidConnectionSource;
-
 import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.dao.DaoManager;
-
 import android.app.TabActivity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;

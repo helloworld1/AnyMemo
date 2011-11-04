@@ -22,14 +22,8 @@ package org.liberty.android.fantastischmemo;
 
 import android.content.Intent;
 import android.content.Context;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
-import android.util.Log;
-import android.widget.RemoteViews;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
-import android.net.Uri;
-import java.util.Date;
 
 
 public class AnyMemoWidgetProvider extends AppWidgetProvider{

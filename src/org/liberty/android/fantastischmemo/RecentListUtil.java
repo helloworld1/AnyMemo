@@ -19,48 +19,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo;
 
-import org.liberty.android.fantastischmemo.cardscreen.*;
-import org.liberty.android.fantastischmemo.converter.*;
-
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.ListIterator;
-import java.util.List;
-import java.util.Map;
-import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.io.File;
-
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.database.SQLException;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.widget.Button;
-import android.widget.AdapterView;
-import android.widget.TextView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
-import android.view.View.OnClickListener;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.pm.ActivityInfo;
 
 /* This class handles the operations on recent list */
 public class RecentListUtil{

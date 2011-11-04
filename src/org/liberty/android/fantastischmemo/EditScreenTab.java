@@ -20,11 +20,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo;
 
-import android.os.Bundle;
-import android.app.Activity;
 import android.content.Intent;
 import org.liberty.android.fantastischmemo.cardscreen.*;
-import org.liberty.android.fantastischmemo.downloader.*;
 
 public class EditScreenTab extends FileBrowser{
 

@@ -29,9 +29,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
-import java.util.Arrays;
-
 import android.os.Environment;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -42,8 +39,6 @@ import android.widget.ArrayAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.DialogInterface.OnClickListener;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;

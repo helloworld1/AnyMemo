@@ -21,24 +21,10 @@ package org.liberty.android.fantastischmemo.converter;
 
 import org.liberty.android.fantastischmemo.*;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.net.MalformedURLException;
-import android.database.SQLException;
-import java.net.URL;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Date;
-import java.util.TimeZone;
-import java.util.Calendar;
 import java.util.HashMap;
-import android.util.Log;
-import java.text.SimpleDateFormat;
-import au.com.bytecode.opencsv.CSVReader;
-
 import android.content.Context;
 
 public class QATxtImporter implements AbstractConverter{

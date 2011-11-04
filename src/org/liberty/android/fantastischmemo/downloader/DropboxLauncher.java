@@ -19,12 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader;
 
-import java.io.File;
-
 import org.liberty.android.fantastischmemo.*;
-
-import org.liberty.android.fantastischmemo.downloader.QuizletLauncher;
-import org.liberty.android.fantastischmemo.downloader.QuizletLauncher;
 
 import android.content.Context;
 import android.os.Bundle;

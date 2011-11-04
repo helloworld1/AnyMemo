@@ -19,36 +19,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.File;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.ListIterator;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-import java.util.Comparator;
-import java.util.Collections;
-
 import android.content.Context;
-import android.content.Intent;
 import android.content.DialogInterface;
 import android.database.SQLException;
-import android.util.Log;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.os.Handler;
-
-
-import org.json.JSONArray;
-import org.json.JSONException;
 
 
 /*

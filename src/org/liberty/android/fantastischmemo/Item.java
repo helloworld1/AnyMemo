@@ -22,14 +22,7 @@ package org.liberty.android.fantastischmemo;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Random;
-import java.util.Set;
-import java.io.Serializable;
-
-
 import android.util.Log;
 import android.os.Parcelable;
 import android.os.Parcel;
