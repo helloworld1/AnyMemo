@@ -1,6 +1,8 @@
 package org.liberty.android.fantastischmemo;
 
 import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.domain.Deck;
+import org.liberty.android.fantastischmemo.domain.Setting;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 
@@ -29,6 +31,10 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
     private static final int CURRENT_VERSION = 2;
 
     private Dao<Card, Integer> cardDao = null;
+    
+    private Dao<Deck, Integer> deckDao = null;
+
+    private Dao<Setting, Integer> settingDao = null;
 
 
     public AnyMemoDBOpenHelper(Context context, String dbpath) {
@@ -69,7 +75,19 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
         return cardDao;
     }
 
+    public Dao<Deck, Integer> getDeckDao() throws SQLException {
+        if (deckDao == null) {
+            deckDao = getDao(Deck.class);
+        }
+        return deckDao;
+    }
 
+    public Dao<Setting, Integer> getSettingDao() throws SQLException {
+        if (settingDao == null) {
+            settingDao = getDao(Setting.class);
+        }
+        return settingDao;
+    }
 }
 
 

@@ -29,6 +29,8 @@ import java.sql.SQLException;
 import java.util.Locale;
 
 import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.domain.Deck;
+import org.liberty.android.fantastischmemo.domain.Setting;
 
 import com.j256.ormlite.dao.Dao;
 import android.app.TabActivity;
@@ -107,6 +109,8 @@ public class MainTabs extends TabActivity{
         try {
             AnyMemoDBOpenHelper helper = new AnyMemoDBOpenHelper(this, "/sdcard/daotest.db");
             Dao<Card, Integer> cardDao = helper.getCardDao();
+            Dao<Deck, Integer> deckDao = helper.getDeckDao();
+            Dao<Setting, Integer> settingDao = helper.getSettingDao();
             Card nc = new Card();
             nc.setId(1);
             nc.setQuestion("Test question");
