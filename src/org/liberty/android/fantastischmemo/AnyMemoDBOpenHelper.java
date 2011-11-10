@@ -1,6 +1,7 @@
 package org.liberty.android.fantastischmemo;
 
 import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.Deck;
 import org.liberty.android.fantastischmemo.domain.Filter;
 import org.liberty.android.fantastischmemo.domain.Setting;
@@ -39,6 +40,8 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
 
     private Dao<Filter, Integer> filterDao = null;
 
+    private Dao<Category, Integer> categoryDao = null;
+
     public AnyMemoDBOpenHelper(Context context, String dbpath) {
         super(context, dbpath, null, CURRENT_VERSION);
     }
@@ -58,8 +61,17 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
 	}
 
     public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
+        Log.v(TAG, "Now we are creating a new database!");
+
         try {
             TableUtils.createTable(connectionSource, Card.class);
+            TableUtils.createTable(connectionSource, Deck.class);
+            TableUtils.createTable(connectionSource, Setting.class);
+            TableUtils.createTable(connectionSource, Filter.class);
+            TableUtils.createTable(connectionSource, Category.class);
+            if (database.getVersion() == 0) {
+                //onUpgrade(database, connectionSource, 0, CURRENT_VERSION);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Database creation error: " + e.toString());
@@ -67,6 +79,18 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
     }
 
     public void onUpgrade(SQLiteDatabase database, ConnectionSource connectionSource, int oldVersion, int newVersion) {
+        // Database before AnyMemo 9.0
+        Log.v(TAG, "Old version" + oldVersion + " new version: " + newVersion);
+        if (oldVersion < 2) {
+            try {
+                getCardDao();
+                cardDao.queryRaw("insert into cards (ordinal, question, answer) select _id as ordinal, question, answer from dict_tbl");
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new RuntimeException("Database creation error: " + e.toString());
+            }
+        }
+
 
     }
 
@@ -96,6 +120,13 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
             filterDao = getDao(Filter.class);
         }
         return filterDao;
+    }
+
+    public Dao<Category, Integer> getCategoryDao() throws SQLException {
+        if (categoryDao == null) {
+            categoryDao = getDao(Category.class);
+        }
+        return categoryDao;
     }
 }
 

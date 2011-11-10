@@ -29,7 +29,9 @@ import java.sql.SQLException;
 import java.util.Locale;
 
 import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.Deck;
+import org.liberty.android.fantastischmemo.domain.Filter;
 import org.liberty.android.fantastischmemo.domain.Setting;
 
 import com.j256.ormlite.dao.Dao;
@@ -111,16 +113,35 @@ public class MainTabs extends TabActivity{
             Dao<Card, Integer> cardDao = helper.getCardDao();
             Dao<Deck, Integer> deckDao = helper.getDeckDao();
             Dao<Setting, Integer> settingDao = helper.getSettingDao();
+            Dao<Filter, Integer> filterDao = helper.getFilterDao();
+            Dao<Category, Integer> categoryDao = helper.getCategoryDao();
             Card nc = new Card();
             nc.setId(1);
             nc.setQuestion("Test question");
             nc.setAnswer("Test Answer");
+            Category cc = new Category();
+            cc.setId(154);
+            cc.set
+            cc.setName("New category");
+            nc.setCategory(cc);
+            categoryDao.create(cc);
             cardDao.createOrUpdate(nc);
             nc = new Card();
             nc.setQuestion("new card");
             nc.setAnswer("new answer");
             nc.setNote("New note");
             nc.setCreationDate(new java.util.Date());
+            Deck de = new Deck();
+            de.setDescription("Hello");
+            de.setName("my");
+            deckDao.create(de);
+            Setting se = new Setting();
+            se.setName("My set");
+            settingDao.create(se);
+            Filter fe = new Filter();
+            fe.setName("my filter");
+            fe.setExpression("Whatever");
+            filterDao.create(fe);
             cardDao.create(nc);
 
             helper.close();

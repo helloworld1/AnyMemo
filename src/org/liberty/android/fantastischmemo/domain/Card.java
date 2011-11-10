@@ -26,14 +26,20 @@ public class Card {
     @DatabaseField(defaultValue = "", width = 8192)
     private String note;
 
+    @DatabaseField(foreign = true, index = true)
+    private Category category;
+
+    @DatabaseField
+    private Integer cardType;
+
     @DatabaseField
     private Date creationDate;
 
     @DatabaseField(version = true)
     private Date updateDate;
 
-
     public Card() {}
+
 
     public Integer getId() {
         return id;
@@ -46,7 +52,6 @@ public class Card {
     public Integer getOrdinal() {
         return ordinal;
     }
-
 
     public void setOrdinal(Integer ordinal) {
         this.ordinal = ordinal;
@@ -86,6 +91,22 @@ public class Card {
 
     public Date getUpdateDate() {
         return updateDate;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public Integer getCardType() {
+        return cardType;
+    }
+
+    public void setCardType(Integer cardType) {
+        this.cardType = cardType;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public void setUpdateDate(Date updateDate) {
