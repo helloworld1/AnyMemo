@@ -4,6 +4,7 @@ import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.Deck;
 import org.liberty.android.fantastischmemo.domain.Filter;
+import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.domain.Setting;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
@@ -17,6 +18,8 @@ import com.j256.ormlite.table.TableUtils;
 import android.content.Context;
 
 import java.sql.SQLException;
+
+import android.database.Cursor;
 
 import android.database.sqlite.SQLiteDatabase;
 
@@ -42,6 +45,8 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
 
     private Dao<Category, Integer> categoryDao = null;
 
+    private Dao<LearningData, Integer> learningDataDao = null;
+
     public AnyMemoDBOpenHelper(Context context, String dbpath) {
         super(context, dbpath, null, CURRENT_VERSION);
     }
@@ -62,6 +67,7 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
 
     public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
         Log.v(TAG, "Now we are creating a new database!");
+        Log.i(TAG, "Newly created db version: " + database.getVersion()); 
 
         try {
             TableUtils.createTable(connectionSource, Card.class);
@@ -69,8 +75,10 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, Setting.class);
             TableUtils.createTable(connectionSource, Filter.class);
             TableUtils.createTable(connectionSource, Category.class);
+            TableUtils.createTable(connectionSource, LearningData.class);
+
             if (database.getVersion() == 0) {
-                //onUpgrade(database, connectionSource, 0, CURRENT_VERSION);
+                convertOldDatabase(database);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -78,20 +86,19 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
         }
     }
 
-    public void onUpgrade(SQLiteDatabase database, ConnectionSource connectionSource, int oldVersion, int newVersion) {
-        // Database before AnyMemo 9.0
-        Log.v(TAG, "Old version" + oldVersion + " new version: " + newVersion);
-        if (oldVersion < 2) {
-            try {
-                getCardDao();
-                cardDao.queryRaw("insert into cards (ordinal, question, answer) select _id as ordinal, question, answer from dict_tbl");
-            } catch (SQLException e) {
-                e.printStackTrace();
-                throw new RuntimeException("Database creation error: " + e.toString());
-            }
+    /* Convert database from AnyMemo < 9.0 */
+    private void convertOldDatabase(SQLiteDatabase database) {
+        Cursor res = database.rawQuery("select name from sqlite_master where type = 'table' and name = 'dict_tbl'", null);
+        boolean isOldDatabase = res.getCount() > 0;
+        res.close();
+        // This is old database
+        if (isOldDatabase) {
+            database.execSQL("insert into cards (ordinal, question, answer) select _id as ordinal, question, answer from dict_tbl");
         }
+    }
 
-
+    public void onUpgrade(SQLiteDatabase database, ConnectionSource connectionSource, int oldVersion, int newVersion) {
+        Log.v(TAG, "Old version" + oldVersion + " new version: " + newVersion);
     }
 
     public Dao<Card, Integer> getCardDao() throws SQLException {
@@ -127,6 +134,13 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
             categoryDao = getDao(Category.class);
         }
         return categoryDao;
+    }
+
+    public Dao<LearningData, Integer> getLearningDataDao() throws SQLException {
+        if (learningDataDao == null) {
+            learningDataDao = getDao(LearningData.class);
+        }
+        return learningDataDao;
     }
 }
 

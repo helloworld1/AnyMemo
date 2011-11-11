@@ -8,8 +8,10 @@ import com.j256.ormlite.dao.BaseDaoImpl;
 
 import com.j256.ormlite.support.ConnectionSource;
 
+import com.j256.ormlite.table.DatabaseTableConfig;
+
 public class SettingDaoImpl extends BaseDaoImpl<Setting, Integer> {
-    public SettingDaoImpl(ConnectionSource connectionSource)
+    public SettingDaoImpl(ConnectionSource connectionSource, DatabaseTableConfig<Setting> tableConfig)
         throws SQLException {
         super(connectionSource, Setting.class);
     }

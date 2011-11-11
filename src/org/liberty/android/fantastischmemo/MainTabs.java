@@ -26,12 +26,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.Locale;
 
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.Deck;
 import org.liberty.android.fantastischmemo.domain.Filter;
+import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.domain.Setting;
 
 import com.j256.ormlite.dao.Dao;
@@ -110,21 +112,26 @@ public class MainTabs extends TabActivity{
 
         try {
             AnyMemoDBOpenHelper helper = new AnyMemoDBOpenHelper(this, "/sdcard/daotest.db");
-            Dao<Card, Integer> cardDao = helper.getCardDao();
             Dao<Deck, Integer> deckDao = helper.getDeckDao();
+            Dao<Card, Integer> cardDao = helper.getCardDao();
             Dao<Setting, Integer> settingDao = helper.getSettingDao();
             Dao<Filter, Integer> filterDao = helper.getFilterDao();
             Dao<Category, Integer> categoryDao = helper.getCategoryDao();
+            Dao<LearningData, Integer> learningDataDao = helper.getLearningDataDao();
             Card nc = new Card();
             nc.setId(1);
             nc.setQuestion("Test question");
             nc.setAnswer("Test Answer");
             Category cc = new Category();
             cc.setId(154);
-            cc.set
             cc.setName("New category");
+            LearningData ld = new LearningData();
+            ld.setLapses(100);
+            ld.setNextLearnDate(new Date());
             nc.setCategory(cc);
+            nc.setLearningData(ld);
             categoryDao.create(cc);
+            learningDataDao.create(ld);
             cardDao.createOrUpdate(nc);
             nc = new Card();
             nc.setQuestion("new card");

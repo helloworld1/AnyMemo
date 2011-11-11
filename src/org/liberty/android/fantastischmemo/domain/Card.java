@@ -29,6 +29,9 @@ public class Card {
     @DatabaseField(foreign = true, index = true)
     private Category category;
 
+    @DatabaseField(foreign = true)
+    private LearningData learningData;
+
     @DatabaseField
     private Integer cardType;
 
@@ -112,4 +115,14 @@ public class Card {
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
     }
+
+
+	public LearningData getLearningData() {
+		return learningData;
+	}
+
+
+	public void setLearningData(LearningData learningData) {
+		this.learningData = learningData;
+	}
 }
