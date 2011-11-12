@@ -11,10 +11,9 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.DatabaseTableConfig;
 
 public class CardDaoImpl extends BaseDaoImpl<Card, Integer> {
-    public CardDaoImpl(ConnectionSource connectionSource, DatabaseTableConfig<Card> tableConfig)
-
+    public CardDaoImpl(ConnectionSource connectionSource, DatabaseTableConfig<Card> config)
         throws SQLException {
-        super(connectionSource, Card.class);
+        super(connectionSource, config);
     }
 
 }

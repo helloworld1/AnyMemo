@@ -93,7 +93,32 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
         res.close();
         // This is old database
         if (isOldDatabase) {
-            database.execSQL("insert into cards (ordinal, question, answer) select _id as ordinal, question, answer from dict_tbl");
+            // copy all cards
+            database.execSQL("insert into cards (ordinal, question, answer)" +
+                    " select _id as ordinal, question, answer from dict_tbl");
+
+            // copy learning data
+            database.execSQL("update cards set learningData_id = ("
+                    + " select _id as learningData_id"
+                    + " from learn_tbl where learn_tbl._id = cards.id)");
+            database.execSQL("insert into learning_data (acqReps, acqRepsSinceLapse, easiness,"
+                    + " grade, lapses, lastLearnDate, nextLearnDate, retReps, "
+                    + " retRepsSinceLapse)"
+                    + " select acq_reps as acqReps , acq_reps_since_lapse as acqRepsSinceLapse,"
+                    + " easiness, grade, lapses,"
+                    + " date_learn || ' 00:00:00.000000' as lastLearnDate,"
+                    + " datetime(julianday(date_learn) + interval) || '.000000' as nextLearnDate,"
+                    + " ret_reps as retReps, ret_reps_since_lapse as retRepsSinceLapse"
+                    + " from learn_tbl");
+
+            // copy categories
+            database.execSQL("insert into categories (name)"
+                    + " select category as name from dict_tbl"
+                    + " group by category");
+            database.execSQL("update cards set category_id = ("
+                + " select id as category_id from categories as cat"
+                + " join dict_tbl as dic on dic.category = cat.name"
+                + " where cards.id = dic._id)");
         }
     }
 
