@@ -97,6 +97,21 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
             database.execSQL("insert into cards (ordinal, question, answer)" +
                     " select _id as ordinal, question, answer from dict_tbl");
 
+
+            // Make sure the count matches in old database;
+            int count_dict = 0, count_learn = 0;
+            Cursor result = database.rawQuery("SELECT _id FROM dict_tbl", null);
+            count_dict = result.getCount();
+            result.close();
+            result = database.rawQuery("SELECT _id FROM learn_tbl", null);
+            count_learn = result.getCount();
+            result.close();
+            if(count_learn != count_dict){
+                database.execSQL("DELETE FROM learn_tbl");
+                database.execSQL("INSERT INTO learn_tbl(_id) SELECT _id FROM dict_tbl");
+                database.execSQL("UPDATE learn_tbl SET date_learn = '2010-01-01', interval = 0, grade = 0, easiness = 2.5, acq_reps = 0, ret_reps  = 0, lapses = 0, acq_reps_since_lapse = 0, ret_reps_since_lapse = 0");
+            }
+
             // copy learning data
             database.execSQL("update cards set learningData_id = ("
                     + " select _id as learningData_id"
