@@ -27,6 +27,7 @@ import java.io.OutputStream;
 
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import org.liberty.android.fantastischmemo.domain.Card;
@@ -58,6 +59,7 @@ import android.widget.TabHost;
 import android.content.res.Configuration;
 import android.view.Window;
 import android.view.WindowManager;
+import org.liberty.android.fantastischmemo.queue.*;
 
 public class MainTabs extends TabActivity{
     private final String WEBSITE_VERSION="http://anymemo.org/index.php?page=version";
@@ -118,19 +120,13 @@ public class MainTabs extends TabActivity{
             Dao<Filter, Integer> filterDao = helper.getFilterDao();
             Dao<Category, Integer> categoryDao = helper.getCategoryDao();
             Dao<LearningData, Integer> learningDataDao = helper.getLearningDataDao();
-            Card c = cardDao.queryForId(1);
-            categoryDao.refresh(c.getCategory());
-            learningDataDao.refresh(c.getLearningData());
-            Log.i("Card: question", c.getQuestion());
-            Log.i("Card: answer", c.getAnswer());
-            Log.i("Card: category", c.getCategory().getName());
-            //LearningData ld = learningDataDao.queryForId(1);
-            LearningData ld = c.getLearningData();
-            if (ld == null){
-                Log.e("no!", "LEARNING DATA IS NULLLLLLLLLLLLLLLLLLL");
-            }
-            Log.i("Card: date_learn", ld.getEasiness().toString());
-            Log.i("Card: neat learn", ld.getNextLearnDate().toString());
+            LearnQueueManager manager = new LearnQueueManager(10, 50);
+            manager.setLearningDataDao(learningDataDao);
+            manager.setCardDao(cardDao);
+            List<Card> lc = manager.getCardForReview();
+            for(Card card : lc) {
+               System.out.println("Card id" + card.getId());
+            } 
             
             //Card nc = new Card();
             //nc.setId(1);
