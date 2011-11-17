@@ -125,4 +125,14 @@ public class Card {
 	public void setLearningData(LearningData learningData) {
 		this.learningData = learningData;
 	}
+
+    @Override
+    public boolean equals(Object c) {
+        Card card2 = (Card)c;
+        return this.getId().equals(card2.getId());
+    }
+
+    @Override
+    public int compareTo(Card card2) {
+    }
 }
