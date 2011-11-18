@@ -23,6 +23,7 @@ package org.liberty.android.fantastischmemo.queue;
 import java.sql.SQLException;
 
 import java.util.Calendar;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,6 +36,9 @@ import org.liberty.android.fantastischmemo.domain.LearningData;
 import com.j256.ormlite.dao.Dao;
 
 import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.Where;
+
+import android.util.Log;
 
 public class LearnQueueManager implements QueueManager {
     private Dao<Card, Integer> cardDao;
@@ -43,7 +47,7 @@ public class LearnQueueManager implements QueueManager {
 
     private List<Category> filterCategories;
 
-    private List<Card> learnQueue;
+    private Deque<Card> learnQueue;
     private List<Card> newCache;
     private List<Card> reviewCache;
     private Set<Card> dirtyCache;
@@ -52,12 +56,17 @@ public class LearnQueueManager implements QueueManager {
 
     private int cacheSize;
 
+    private int maxNewCacheOrdinal = 0;
+
+    private int maxReviewCacheOrdinal = 0; 
+
     public LearnQueueManager(int learnQueueSize, int cacheSize) {
         learnQueue = new LinkedList<Card>();
         newCache = new LinkedList<Card>();
         reviewCache = new LinkedList<Card>();
         dirtyCache = new HashSet<Card>();
-        refill();
+        this.learnQueueSize = learnQueueSize;
+        this.cacheSize = cacheSize;
     }
 
 	public Dao<Card, Integer> getCardDao() {
@@ -83,8 +92,11 @@ public class LearnQueueManager implements QueueManager {
 
 	@Override
 	public Card dequeue() {
+        refill();
         if (!learnQueue.isEmpty()) {
-            return learnQueue.get(0);
+
+            Card c = learnQueue.removeFirst();
+            return c;
         } else {
             return null;
         }
@@ -113,24 +125,29 @@ public class LearnQueueManager implements QueueManager {
 	}
 
     private void refill() {
-        if (newCache.size() <= learnQueueSize) {
-            newCache.addAll(getCardForReview(cacheSize - newCache.size()));
+        if (newCache.size() == 0) {
+            List<Card> cs = getNewCards(cacheSize - newCache.size());
+            if (cs.size() > 0) {
+                maxNewCacheOrdinal = cs.get(cs.size() - 1).getOrdinal();
+                newCache.addAll(cs);
+            }
         }
 
-        if (reviewCache.size() <= learnQueueSize) {
-            reviewCache.addAll(getCardForReview(cacheSize - reviewCache.size()));
-        }
-        if (learnQueue.size() < learnQueueSize) {
-            while (!reviewCache.isEmpty()) {
-                learnQueue.add(reviewCache.get(0));
-                reviewCache.remove(0);
+        if (reviewCache.size() == 0) {
+            List<Card> cs = getCardForReview(cacheSize - reviewCache.size());
+            if (cs.size() > 0) {
+                maxReviewCacheOrdinal = cs.get(cs.size() - 1).getOrdinal();
+                reviewCache.addAll(cs);
             }
         }
-        if (learnQueue.size() < learnQueueSize) {
-            while (!newCache.isEmpty()) {
-                learnQueue.add(newCache.get(0));
-                newCache.remove(0);
-            }
+
+        while (learnQueue.size() < learnQueueSize && !reviewCache.isEmpty()) {
+            learnQueue.addLast(reviewCache.get(0));
+            reviewCache.remove(0);
+        }
+        while (learnQueue.size() < learnQueueSize && !newCache.isEmpty()) {
+            learnQueue.addLast(newCache.get(0));
+            newCache.remove(0);
         }
     }
 
@@ -147,29 +164,49 @@ public class LearnQueueManager implements QueueManager {
         }
 	}
 
+    //TODO: change to private
     public List<Card> getCardForReview(int limit) {
         try {
             QueryBuilder<LearningData, Integer> learnQb = learningDataDao.queryBuilder();
             learnQb.selectColumns("id");
             learnQb.where().le("nextLearnDate", Calendar.getInstance().getTime())
                 .and().gt("acqReps", "0");
-            learnQb.limit((long)limit);
             QueryBuilder<Card, Integer> cardQb = cardDao.queryBuilder();
-            return cardQb.where().in("learningData_id", learnQb).query();
+            Where<Card, Integer> where = cardQb.where().in("learningData_id", learnQb)
+                .and().gt("ordinal", "" + maxReviewCacheOrdinal);
+
+            cardQb.setWhere(where);
+            cardQb.orderBy("ordinal", true);
+            cardQb.limit((long)limit);
+            List<Card> cs = cardQb.query();
+            for (Card c : cs) {
+                learningDataDao.refresh(c.getLearningData());
+            }
+            return cs;
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
 
-    public List<Card> getNewCard(int limit) {
+    //TODO: change to private
+    public List<Card> getNewCards(int limit) {
         try {
             QueryBuilder<LearningData, Integer> learnQb = learningDataDao.queryBuilder();
             learnQb.selectColumns("id");
             learnQb.where().eq("acqReps", "0");
-            learnQb.limit((long)limit);
             QueryBuilder<Card, Integer> cardQb = cardDao.queryBuilder();
-            return cardQb.where().in("learningData_id", learnQb).query();
+            Where<Card, Integer> where = cardQb.where().in("learningData_id", learnQb)
+                .and().gt("ordinal", "" + maxNewCacheOrdinal);
+
+            cardQb.setWhere(where);
+            cardQb.orderBy("ordinal", true);
+            cardQb.limit((long)limit);
+            List<Card> cs = cardQb.query();
+            for (Card c : cs) {
+                learningDataDao.refresh(c.getLearningData());
+            }
+            return cs;
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException(e);

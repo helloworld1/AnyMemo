@@ -113,17 +113,20 @@ public class MainTabs extends TabActivity{
         tabHost.addTab(spec);
 
         try {
-            AnyMemoDBOpenHelper helper = new AnyMemoDBOpenHelper(this, "/sdcard/french-body-parts.db");
+            AnyMemoDBOpenHelper helper =
+                AnyMemoDBOpenHelperManager.getHelper(this, "/sdcard/french-body-parts.db");
             Dao<Deck, Integer> deckDao = helper.getDeckDao();
             Dao<Card, Integer> cardDao = helper.getCardDao();
             Dao<Setting, Integer> settingDao = helper.getSettingDao();
             Dao<Filter, Integer> filterDao = helper.getFilterDao();
             Dao<Category, Integer> categoryDao = helper.getCategoryDao();
             Dao<LearningData, Integer> learningDataDao = helper.getLearningDataDao();
+            if (learningDataDao == null)
+               System.out.println("NUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU");
             LearnQueueManager manager = new LearnQueueManager(10, 50);
             manager.setLearningDataDao(learningDataDao);
             manager.setCardDao(cardDao);
-            List<Card> lc = manager.getCardForReview();
+            List<Card> lc = manager.getCardForReview(10);
             for(Card card : lc) {
                System.out.println("Card id" + card.getId());
             } 
@@ -160,8 +163,17 @@ public class MainTabs extends TabActivity{
             //fe.setExpression("Whatever");
             //filterDao.create(fe);
             //cardDao.create(nc);
+            System.out.println("This is the first");
+            while (true) {
+                Card c = manager.dequeue();
+                if (c == null) {
+                    System.out.println("This is the end");
+                    break;
+                }
+                System.out.println(c.getId());
+            }
+            AnyMemoDBOpenHelperManager.releaseHelper("/sdcard/french-body-parts.db");
 
-            helper.close();
         }
         catch (SQLException e) {
             e.printStackTrace();

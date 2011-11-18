@@ -3,7 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-	<classpathentry exported="true" kind="lib" path="/opt/android-sdk-linux_86/platforms/android-10/android.jar"/>
 	<classpathentry kind="lib" path="/home/liberty/mp/android/AnyMemo/libs/apache-mime4j-core-0.7.jar"/>
 	<classpathentry kind="lib" path="/home/liberty/mp/android/AnyMemo/libs/httpclient-4.1.2.jar"/>
 	<classpathentry kind="lib" path="/home/liberty/mp/android/AnyMemo/libs/httpcore-4.1.2.jar"/>
