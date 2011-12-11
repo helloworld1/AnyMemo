@@ -1,5 +1,12 @@
 package org.liberty.android.fantastischmemo;
 
+import org.liberty.android.fantastischmemo.dao.CardDao;
+import org.liberty.android.fantastischmemo.dao.CategoryDao;
+import org.liberty.android.fantastischmemo.dao.DeckDao;
+import org.liberty.android.fantastischmemo.dao.FilterDao;
+import org.liberty.android.fantastischmemo.dao.LearningDataDao;
+import org.liberty.android.fantastischmemo.dao.SettingDao;
+
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.Deck;
@@ -8,8 +15,6 @@ import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.domain.Setting;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
-
-import com.j256.ormlite.dao.Dao;
 
 import com.j256.ormlite.support.ConnectionSource;
 
@@ -35,17 +40,17 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
 
     private static final int CURRENT_VERSION = 2;
 
-    private Dao<Card, Integer> cardDao = null;
+    private CardDao cardDao = null;
     
-    private Dao<Deck, Integer> deckDao = null;
+    private DeckDao deckDao = null;
 
-    private Dao<Setting, Integer> settingDao = null;
+    private SettingDao settingDao = null;
 
-    private Dao<Filter, Integer> filterDao = null;
+    private FilterDao filterDao = null;
 
-    private Dao<Category, Integer> categoryDao = null;
+    private CategoryDao categoryDao = null;
 
-    private Dao<LearningData, Integer> learningDataDao = null;
+    private LearningDataDao learningDataDao = null;
 
     public AnyMemoDBOpenHelper(Context context, String dbpath) {
         super(context, dbpath, null, CURRENT_VERSION);
@@ -141,42 +146,42 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
         Log.v(TAG, "Old version" + oldVersion + " new version: " + newVersion);
     }
 
-    public Dao<Card, Integer> getCardDao() throws SQLException {
+    public CardDao getCardDao() throws SQLException {
         if (cardDao == null) {
             cardDao = getDao(Card.class);
         }
         return cardDao;
     }
 
-    public Dao<Deck, Integer> getDeckDao() throws SQLException {
+    public DeckDao getDeckDao() throws SQLException {
         if (deckDao == null) {
             deckDao = getDao(Deck.class);
         }
         return deckDao;
     }
 
-    public Dao<Setting, Integer> getSettingDao() throws SQLException {
+    public SettingDao getSettingDao() throws SQLException {
         if (settingDao == null) {
             settingDao = getDao(Setting.class);
         }
         return settingDao;
     }
 
-    public Dao<Filter, Integer> getFilterDao() throws SQLException {
+    public FilterDao getFilterDao() throws SQLException {
         if (filterDao == null) {
             filterDao = getDao(Filter.class);
         }
         return filterDao;
     }
 
-    public Dao<Category, Integer> getCategoryDao() throws SQLException {
+    public CategoryDao getCategoryDao() throws SQLException {
         if (categoryDao == null) {
             categoryDao = getDao(Category.class);
         }
         return categoryDao;
     }
 
-    public Dao<LearningData, Integer> getLearningDataDao() throws SQLException {
+    public LearningDataDao getLearningDataDao() throws SQLException {
         if (learningDataDao == null) {
             learningDataDao = getDao(LearningData.class);
         }

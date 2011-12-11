@@ -30,6 +30,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import org.liberty.android.fantastischmemo.dao.CardDao;
+import org.liberty.android.fantastischmemo.dao.CategoryDao;
+import org.liberty.android.fantastischmemo.dao.DeckDao;
+import org.liberty.android.fantastischmemo.dao.FilterDao;
+import org.liberty.android.fantastischmemo.dao.LearningDataDao;
+import org.liberty.android.fantastischmemo.dao.SettingDao;
+
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.Deck;
@@ -115,12 +122,12 @@ public class MainTabs extends TabActivity{
         try {
             AnyMemoDBOpenHelper helper =
                 AnyMemoDBOpenHelperManager.getHelper(this, "/sdcard/french-body-parts.db");
-            Dao<Deck, Integer> deckDao = helper.getDeckDao();
-            Dao<Card, Integer> cardDao = helper.getCardDao();
-            Dao<Setting, Integer> settingDao = helper.getSettingDao();
-            Dao<Filter, Integer> filterDao = helper.getFilterDao();
-            Dao<Category, Integer> categoryDao = helper.getCategoryDao();
-            Dao<LearningData, Integer> learningDataDao = helper.getLearningDataDao();
+            CardDao cardDao = helper.getCardDao();
+            DeckDao deckDao = helper.getDeckDao();
+            SettingDao settingDao = helper.getSettingDao();
+            FilterDao filterDao = helper.getFilterDao();
+            CategoryDao categoryDao = helper.getCategoryDao();
+            LearningDataDao learningDataDao = helper.getLearningDataDao();
             if (learningDataDao == null)
                System.out.println("NUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU");
             LearnQueueManager manager = new LearnQueueManager(10, 50);
@@ -130,6 +137,9 @@ public class MainTabs extends TabActivity{
             for(Card card : lc) {
                System.out.println("Card id" + card.getId());
             } 
+            System.out.println("# of total cards" + learningDataDao.getTotalCount());
+            System.out.println("# of new cards" + learningDataDao.getNewCardCount());
+            System.out.println("# of scheduled cards" + learningDataDao.getScheduledCardCount());
             
             //Card nc = new Card();
             //nc.setId(1);
