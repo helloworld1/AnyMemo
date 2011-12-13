@@ -4,12 +4,17 @@ import java.util.Date;
 
 import org.liberty.android.fantastischmemo.dao.LearningDataDaoImpl;
 
+import org.liberty.android.fantastischmemo.domain.LearningData;
+
 import com.j256.ormlite.field.DatabaseField;
 
 import com.j256.ormlite.table.DatabaseTable;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 @DatabaseTable(tableName = "learning_data", daoClass = LearningDataDaoImpl.class)
-public class LearningData {
+public class LearningData implements Parcelable {
     @DatabaseField(generatedId = true)
     private Integer id;
 
@@ -132,5 +137,51 @@ public class LearningData {
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
 	}
+
+
+    @Override
+    public void writeToParcel(Parcel out, int flags){
+        out.writeInt(id);
+        out.writeSerializable(lastLearnDate);
+        out.writeSerializable(nextLearnDate);
+        out.writeInt(grade);
+        out.writeFloat(easiness);
+        out.writeInt(acqReps);
+        out.writeInt(retReps);
+        out.writeInt(lapses);
+        out.writeInt(acqRepsSinceLapse);
+        out.writeInt(retRepsSinceLapse);
+        out.writeSerializable(updateDate);
+    }
+
+     public static final Parcelable.Creator<LearningData> CREATOR
+             = new Parcelable.Creator<LearningData>() {
+         public LearningData createFromParcel(Parcel in) {
+             LearningData ld = new LearningData();
+             ld.setId(in.readInt());
+             ld.setLastLearnDate((Date)in.readSerializable());
+             ld.setNextLearnDate((Date)in.readSerializable());
+             ld.setGrade(in.readInt());
+             ld.setEasiness(in.readFloat());
+             ld.setAcqReps(in.readInt());
+             ld.setRetReps(in.readInt());
+             ld.setLapses(in.readInt());
+             ld.setAcqRepsSinceLapse(in.readInt());
+             ld.setRetRepsSinceLapse(in.readInt());
+             ld.setUpdateDate((Date)in.readSerializable());
+             return ld;
+
+         }
+
+         public LearningData[] newArray(int size) {
+             return new LearningData[size];
+         }
+     };
+
+     @Override
+     public int describeContents() {
+         return 0;
+     }
+
 
 }

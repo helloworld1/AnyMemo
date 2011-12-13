@@ -8,8 +8,11 @@ import com.j256.ormlite.field.DatabaseField;
 
 import com.j256.ormlite.table.DatabaseTable;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 @DatabaseTable(tableName = "cards", daoClass = CardDaoImpl.class)
-public class Card {
+public class Card implements Parcelable {
     @DatabaseField(generatedId = true)
     private Integer id;
 
@@ -32,7 +35,7 @@ public class Card {
     @DatabaseField(foreign = true)
     private LearningData learningData;
 
-    @DatabaseField
+    @DatabaseField(defaultValue = "0")
     private Integer cardType;
 
     @DatabaseField
@@ -131,4 +134,49 @@ public class Card {
         Card card2 = (Card)c;
         return this.getId().equals(card2.getId());
     }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags){
+        out.writeInt(id);
+        out.writeInt(ordinal);
+        out.writeString(question);
+        out.writeString(answer);
+        out.writeString(note);
+        out.writeParcelable(category, 0);
+        out.writeInt(cardType);
+        out.writeSerializable(creationDate);
+        out.writeSerializable(updateDate);
+    }
+
+     public static final Parcelable.Creator<Card> CREATOR
+             = new Parcelable.Creator<Card>() {
+         public Card createFromParcel(Parcel in) {
+             Card c = new Card();
+             c.setId(in.readInt());
+             c.setQuestion(in.readString());
+             c.setAnswer(in.readString());
+             c.setNote(in.readString());
+             Category cat = in.readParcelable(null);
+             c.setCategory(cat);
+             c.setCardType(in.readInt());
+             c.setCreationDate((Date)in.readSerializable());
+             c.setUpdateDate((Date)in.readSerializable());
+             return c;
+         }
+
+         public Card[] newArray(int size) {
+             return new Card[size];
+         }
+     };
+
+     public Card clone() {
+         Parcel out = Parcel.obtain();
+         writeToParcel(out, 0);
+         return CREATOR.createFromParcel(out);
+     }
+
+     @Override
+     public int describeContents() {
+         return 0;
+     }
 }

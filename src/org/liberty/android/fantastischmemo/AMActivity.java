@@ -23,6 +23,8 @@ package org.liberty.android.fantastischmemo;
 import android.content.pm.ActivityInfo;
 import android.content.SharedPreferences;
 import android.content.Intent;
+
+import android.support.v4.app.FragmentActivity;
 import android.view.WindowManager;
 import android.preference.PreferenceManager;
 import android.app.Activity;
@@ -31,13 +33,12 @@ import android.content.res.Configuration;
 import android.view.Window;
 import java.util.Locale;
 
-
 /*
  * This class is the base class for all screen type
  * class in AnyMemo
  * It contains basic configuration of the Activity
  */
-public abstract class AMActivity extends Activity{
+public abstract class AMActivity extends FragmentActivity{
     @Override
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);

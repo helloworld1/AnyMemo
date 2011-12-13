@@ -140,6 +140,8 @@ public class MainTabs extends TabActivity{
             System.out.println("# of total cards" + learningDataDao.getTotalCount());
             System.out.println("# of new cards" + learningDataDao.getNewCardCount());
             System.out.println("# of scheduled cards" + learningDataDao.getScheduledCardCount());
+            Card cx = lc.get(0);
+            Card cx2 = cx.clone();
             
             //Card nc = new Card();
             //nc.setId(1);

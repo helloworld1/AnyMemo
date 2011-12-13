@@ -8,8 +8,11 @@ import com.j256.ormlite.field.DatabaseField;
 
 import com.j256.ormlite.table.DatabaseTable;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 @DatabaseTable(tableName = "categories", daoClass = CategoryDaoImpl.class)
-public class Category {
+public class Category implements Parcelable {
     @DatabaseField(generatedId = true)
     private Integer id;
 
@@ -44,4 +47,31 @@ public class Category {
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
     }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags){
+        out.writeInt(id);
+        out.writeString(name);
+        out.writeSerializable(updateDate);
+    }
+
+     public static final Parcelable.Creator<Category> CREATOR
+             = new Parcelable.Creator<Category>() {
+         public Category createFromParcel(Parcel in) {
+             Category c = new Category();
+             c.setId(in.readInt());
+             c.setName(in.readString());
+             c.setUpdateDate((Date)in.readSerializable());
+             return c;
+         }
+
+         public Category[] newArray(int size) {
+             return new Category[size];
+         }
+     };
+
+     @Override
+     public int describeContents() {
+         return 0;
+     }
 }
