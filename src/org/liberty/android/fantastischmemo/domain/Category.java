@@ -24,6 +24,9 @@ public class Category implements Parcelable {
 
     public Category() {}
 
+    public Category(Parcel in) {
+    }
+
     public Integer getId() {
         return id;
     }

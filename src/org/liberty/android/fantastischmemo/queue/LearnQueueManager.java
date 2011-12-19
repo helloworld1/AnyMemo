@@ -29,21 +29,20 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.liberty.android.fantastischmemo.dao.CardDao;
+import org.liberty.android.fantastischmemo.dao.LearningDataDao;
+
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 
-import com.j256.ormlite.dao.Dao;
-
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
 
-import android.util.Log;
-
 public class LearnQueueManager implements QueueManager {
-    private Dao<Card, Integer> cardDao;
+    private CardDao cardDao;
 
-    private Dao<LearningData, Integer> learningDataDao;
+    private LearningDataDao learningDataDao;
 
     private List<Category> filterCategories;
 
@@ -69,16 +68,16 @@ public class LearnQueueManager implements QueueManager {
         this.cacheSize = cacheSize;
     }
 
-	public Dao<Card, Integer> getCardDao() {
+	public CardDao getCardDao() {
 		return cardDao;
 	}
-	public void setCardDao(Dao<Card, Integer> cardDao) {
+	public void setCardDao(CardDao cardDao) {
 		this.cardDao = cardDao;
 	}
-	public Dao<LearningData, Integer> getLearningDataDao() {
+	public LearningDataDao getLearningDataDao() {
 		return learningDataDao;
 	}
-	public void setLearningDataDao(Dao<LearningData, Integer> learningDataDao) {
+	public void setLearningDataDao(LearningDataDao learningDataDao) {
 		this.learningDataDao = learningDataDao;
 	}
 

@@ -44,6 +44,8 @@ import org.liberty.android.fantastischmemo.domain.Filter;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.domain.Setting;
 
+import org.liberty.android.fantastischmemo.scheduler.DefaultScheduler;
+
 import com.j256.ormlite.dao.Dao;
 import android.app.TabActivity;
 import android.app.AlertDialog;
@@ -54,6 +56,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Parcel;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -118,79 +121,6 @@ public class MainTabs extends TabActivity{
                 res.getDrawable(R.drawable.misc))
             .setContent(intent);
         tabHost.addTab(spec);
-
-        try {
-            AnyMemoDBOpenHelper helper =
-                AnyMemoDBOpenHelperManager.getHelper(this, "/sdcard/french-body-parts.db");
-            CardDao cardDao = helper.getCardDao();
-            DeckDao deckDao = helper.getDeckDao();
-            SettingDao settingDao = helper.getSettingDao();
-            FilterDao filterDao = helper.getFilterDao();
-            CategoryDao categoryDao = helper.getCategoryDao();
-            LearningDataDao learningDataDao = helper.getLearningDataDao();
-            if (learningDataDao == null)
-               System.out.println("NUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU");
-            LearnQueueManager manager = new LearnQueueManager(10, 50);
-            manager.setLearningDataDao(learningDataDao);
-            manager.setCardDao(cardDao);
-            List<Card> lc = manager.getCardForReview(10);
-            for(Card card : lc) {
-               System.out.println("Card id" + card.getId());
-            } 
-            System.out.println("# of total cards" + learningDataDao.getTotalCount());
-            System.out.println("# of new cards" + learningDataDao.getNewCardCount());
-            System.out.println("# of scheduled cards" + learningDataDao.getScheduledCardCount());
-            Card cx = lc.get(0);
-            Card cx2 = cx.clone();
-            
-            //Card nc = new Card();
-            //nc.setId(1);
-            //nc.setQuestion("Test question");
-            //nc.setAnswer("Test Answer");
-            //Category cc = new Category();
-            //cc.setId(154);
-            //cc.setName("New category");
-            //LearningData ld = new LearningData();
-            //ld.setLapses(100);
-            //ld.setNextLearnDate(new Date());
-            //nc.setCategory(cc);
-            //nc.setLearningData(ld);
-            //categoryDao.create(cc);
-            //learningDataDao.create(ld);
-            //cardDao.createOrUpdate(nc);
-            //nc = new Card();
-            //nc.setQuestion("new card");
-            //nc.setAnswer("new answer");
-            //nc.setNote("New note");
-            //nc.setCreationDate(new java.util.Date());
-            //Deck de = new Deck();
-            //de.setDescription("Hello");
-            //de.setName("my");
-            //deckDao.create(de);
-            //Setting se = new Setting();
-            //se.setName("My set");
-            //settingDao.create(se);
-            //Filter fe = new Filter();
-            //fe.setName("my filter");
-            //fe.setExpression("Whatever");
-            //filterDao.create(fe);
-            //cardDao.create(nc);
-            System.out.println("This is the first");
-            while (true) {
-                Card c = manager.dequeue();
-                if (c == null) {
-                    System.out.println("This is the end");
-                    break;
-                }
-                System.out.println(c.getId());
-            }
-            AnyMemoDBOpenHelperManager.releaseHelper("/sdcard/french-body-parts.db");
-
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-
 
     }
 

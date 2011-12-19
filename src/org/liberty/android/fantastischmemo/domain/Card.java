@@ -143,37 +143,35 @@ public class Card implements Parcelable {
         out.writeString(answer);
         out.writeString(note);
         out.writeParcelable(category, 0);
+        out.writeParcelable(learningData, 0);
         out.writeInt(cardType);
         out.writeSerializable(creationDate);
         out.writeSerializable(updateDate);
     }
 
-     public static final Parcelable.Creator<Card> CREATOR
-             = new Parcelable.Creator<Card>() {
-         public Card createFromParcel(Parcel in) {
-             Card c = new Card();
-             c.setId(in.readInt());
-             c.setQuestion(in.readString());
-             c.setAnswer(in.readString());
-             c.setNote(in.readString());
-             Category cat = in.readParcelable(null);
-             c.setCategory(cat);
-             c.setCardType(in.readInt());
-             c.setCreationDate((Date)in.readSerializable());
-             c.setUpdateDate((Date)in.readSerializable());
-             return c;
-         }
+    public static final Parcelable.Creator<Card> CREATOR
+        = new Parcelable.Creator<Card>() {
+            public Card createFromParcel(Parcel in) {
+                Card c = new Card();
+                c.setId(in.readInt());
+                c.setOrdinal(in.readInt());
+                c.setQuestion(in.readString());
+                c.setAnswer(in.readString());
+                c.setNote(in.readString());
+                Category cat = in.readParcelable(null);
+                c.setCategory(cat);
+                LearningData ld = in.readParcelable(null);
+                c.setLearningData(ld);
+                c.setCardType(in.readInt());
+                c.setCreationDate((Date)in.readSerializable());
+                c.setUpdateDate((Date)in.readSerializable());
+                return c;
+            }
 
-         public Card[] newArray(int size) {
-             return new Card[size];
-         }
-     };
-
-     public Card clone() {
-         Parcel out = Parcel.obtain();
-         writeToParcel(out, 0);
-         return CREATOR.createFromParcel(out);
-     }
+            public Card[] newArray(int size) {
+                return new Card[size];
+            }
+        };
 
      @Override
      public int describeContents() {
