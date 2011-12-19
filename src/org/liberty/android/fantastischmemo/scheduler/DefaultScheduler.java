@@ -115,18 +115,6 @@ public class DefaultScheduler {
 			if(newInterval == 0){
 				Log.e("Interval error", "Interval is 0 in wrong place");
 			}
-            LearningData newData = new LearningData();
-            newData.setId(oldData.getId());
-            newData.setAcqReps(newAcqReps);
-            newData.setAcqRepsSinceLapse(newAcqRepsSinceLapse);
-            newData.setEasiness(newEasiness);
-            newData.setGrade(newGrade);
-            newData.setLapses(newLapses);
-            newData.setLastLearnDate(currentDate);
-            newData.setNextLearnDate(afterDays(currentDate, newInterval));
-            newData.setRetReps(newRetReps);
-            newData.setRetRepsSinceLapse(newRetRepsSinceLapse);
-            return newData;
 		}
         /* 
          * By default the noise is included. However, 
@@ -135,7 +123,18 @@ public class DefaultScheduler {
         if(includeNoise){
             newInterval = newInterval + calculateIntervalNoise(newInterval);
         }
-        return null;
+        LearningData newData = new LearningData();
+        newData.setId(oldData.getId());
+        newData.setAcqReps(newAcqReps);
+        newData.setAcqRepsSinceLapse(newAcqRepsSinceLapse);
+        newData.setEasiness(newEasiness);
+        newData.setGrade(newGrade);
+        newData.setLapses(newLapses);
+        newData.setLastLearnDate(currentDate);
+        newData.setNextLearnDate(afterDays(currentDate, newInterval));
+        newData.setRetReps(newRetReps);
+        newData.setRetRepsSinceLapse(newRetRepsSinceLapse);
+        return newData;
 	}
 
     /*

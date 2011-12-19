@@ -19,6 +19,7 @@ import org.liberty.android.fantastischmemo.dao.SettingDao;
 
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
+import org.liberty.android.fantastischmemo.domain.LearningData;
 
 import org.liberty.android.fantastischmemo.queue.LearnQueueManager;
 
@@ -74,26 +75,12 @@ public class DBTest extends ActivityInstrumentationTestCase2<MainTabs> {
             
             DefaultScheduler scheduler = new DefaultScheduler();
             int[] s = {0,1,2,3,4,5};
+            for (int grade : s) {
+                System.out.println("Original LD:  " + cx.getLearningData().toString());
+                LearningData af = scheduler.schedule(cx.getLearningData(), grade, true);
+                System.out.println("Grade: " + grade + af.toString());
+            }
 
-            //Card cx2 = cx.clone();
-            Category ccc = new Category();
-            ccc.setId(10);
-            ccc.setName("My category");
-            ccc.setUpdateDate(new Date());
-
-            Item iii = new Item.Builder()
-                .setId(100)
-                .setQuestion("hello")
-                .build();
-
-            Parcel out = Parcel.obtain();
-            iii.writeToParcel(out, 0);
-            Item iii2 = Item.CREATOR.createFromParcel(out);
-
-            
-            System.out.println("iii" + iii.getQuestion());
-            System.out.println("iii2" + iii2.getQuestion());
-            
             //Card nc = new Card();
             //nc.setId(1);
             //nc.setQuestion("Test question");

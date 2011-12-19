@@ -183,5 +183,14 @@ public class LearningData implements Parcelable {
          return 0;
      }
 
-
+	@Override
+	public String toString() {
+		return "LearningData [id=" + id + ", lastLearnDate=" + lastLearnDate
+				+ ", nextLearnDate=" + nextLearnDate + ", grade=" + grade
+				+ ", easiness=" + easiness + ", acqReps=" + acqReps
+				+ ", retReps=" + retReps + ", lapses=" + lapses
+				+ ", acqRepsSinceLapse=" + acqRepsSinceLapse
+				+ ", retRepsSinceLapse=" + retRepsSinceLapse + ", updateDate="
+				+ updateDate + "]";
+	}
 }
