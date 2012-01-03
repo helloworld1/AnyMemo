@@ -11,84 +11,136 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "settings", daoClass = SettingDaoImpl.class)
 public class Setting {
     @DatabaseField(generatedId = true)
-    private Integer id;
+    private Integer id = 1;
 
     @DatabaseField(defaultValue = "default", width = 8192)
-    private String name;
+    private String name = "default";
 
     @DatabaseField(defaultValue = "default description.", width = 8192)
-    private String description;
+    private String description = "default description.";
 
     @DatabaseField(defaultValue = "24")
-    private Integer questionFontSize;
+    private Integer questionFontSize = 24;
 
     @DatabaseField(defaultValue = "24")
-    private Integer answerFontSize;
+    private Integer answerFontSize = 24;
 
-    /* 1 = left, 2 = center, 3 = right */
-    @DatabaseField(defaultValue = "2")
-    private Integer questionTextAlign;
+    @DatabaseField(defaultValue = "CENTER")
+    private Align questionTextAlign = Align.CENTER;
 
-    /* 1 = single sided, 2 = double sided. */
-    @DatabaseField(defaultValue = "1")
-    private Integer cardStyle;
+    @DatabaseField(defaultValue = "CENTER")
+    private Align answerTextAlign = Align.CENTER;
+
+    @DatabaseField(defaultValue = "SINGLE_SIDED")
+    private CardStyle cardStyle = CardStyle.SINGLE_SIDED;
 
     @DatabaseField(defaultValue = "50")
-    private Integer qaRatio;
-
-
-    @DatabaseField(defaultValue = "US")
-    private String questionAudio;
+    private Integer qaRatio = 50;
 
     @DatabaseField(defaultValue = "US")
-    private String answerAudio; 
+    private String questionAudio = "US";
+
+    @DatabaseField(defaultValue = "US")
+    private String answerAudio = "US";
     
     @DatabaseField(defaultValue = "0xFFBEBEBE")
-    private String questionTextColor;
+    private Integer questionTextColor = 0xFFBEBEBE;
 
     @DatabaseField(defaultValue = "0xFFBEBEBE")
-    private String answerTextColor;
+    private Integer answerTextColor = 0xFFBEBEBE;
 
     @DatabaseField(defaultValue = "0xFF000000")
-    private String questionBackgroundColor;
+    private Integer questionBackgroundColor = 0xFF000000;
 
     @DatabaseField(defaultValue = "0xFF000000")
-    private String answerBackgroundColor;
+    private Integer answerBackgroundColor = 0xFF000000;
 
     @DatabaseField(defaultValue = "0xFF909090")
-    private String separatorColor;
+    private Integer separatorColor = 0xFF909090;
 
-
-    /* 1 = question, 2 = answer, 3 = both */
-    @DatabaseField(defaultValue = "3")
-    private Integer displayInHTML;
+    /* 1 = question, 2 = answer, 4 = note */
+    @DatabaseField(defaultValue = "7")
+    private Long displayInHTML = 7L;
 
     @DatabaseField(defaultValue = "false")
-    private Boolean htmlLineBreakConversion;
+    private Boolean htmlLineBreakConversion = false;
 
     /* 1 = question, 2 = answer, 4 = note */
     @DatabaseField(defaultValue = "1")
-    private Integer questionField;
+    private Long questionField = CardField.QUESTION;
 
     /* 1 = question, 2 = answer, 4 = note */
     @DatabaseField(defaultValue = "2")
-    private Integer answerField;
+    private Long answerField = CardField.ANSWER;
 
     /* Empty = no font*/
     @DatabaseField(defaultValue = "")
-    private String questionFont;
+    private String questionFont = "";
 
     /* Empty = no font*/
     @DatabaseField(defaultValue = "")
-    private String answerFont;
+    private String answerFont = "";
+
+    /* Empty = no font*/
+    @DatabaseField(defaultValue = "FORA")
+    private DictApp dictApp = DictApp.FORA;
+
+    @DatabaseField(defaultValue = "NONE")
+    private ShuffleType shuffleType = ShuffleType.NONE;
+
+    @DatabaseField(defaultValue = "TAP")
+    private SpeakingType speakingType = SpeakingType.TAP;
+
+    @DatabaseField(defaultValue = "")
+    private String questionAudioLocation;
+
+    @DatabaseField(defaultValue = "")
+    private String answerAudioLocation;
 
     @DatabaseField
-    private Date creationDate;
+    private Date creationDate = new Date();
 
     @DatabaseField(version = true)
-    private Date updateDate;
+    private Date updateDate = new Date();
 
     public Setting() {}
+
+    public static enum Align {
+        LEFT,
+        RIGHT,
+        CENTER
+    }
+
+    public static enum CardStyle {
+        SINGLE_SIDED,
+        DOUBLE_SIDED
+    }
+
+    /* Use bitfield opertion on this class */
+    public static class CardField {
+        public static final long QUESTION = 1;
+        public static final long ANSWER = 2;
+        public static final long NOTE = 4;
+        public static final long CATEGORY = 8;
+    }
+
+    public static enum DictApp {
+        COLORDICT,
+        FORA
+    }
+
+    public static enum ShuffleType {
+        NONE,
+        LOCAL
+    }
+
+    public static enum SpeakingType {
+        MANUAL,
+        TAP,
+        AUTO,
+        AUTOTAP
+        
+    }
 
 	public Integer getId() {
 		return id;
@@ -130,19 +182,27 @@ public class Setting {
 		this.answerFontSize = answerFontSize;
 	}
 
-	public Integer getQuestionTextAlign() {
+	public Align getQuestionTextAlign() {
 		return questionTextAlign;
 	}
 
-	public void setQuestionTextAlign(Integer questionTextAlign) {
+	public void setQuestionTextAlign(Align questionTextAlign) {
 		this.questionTextAlign = questionTextAlign;
 	}
 
-	public Integer getCardStyle() {
+	public Align getAnswerTextAlign() {
+		return answerTextAlign;
+	}
+
+	public void setAnswerTextAlign(Align answerTextAlign) {
+		this.answerTextAlign = answerTextAlign;
+	}
+
+	public CardStyle getCardStyle() {
 		return cardStyle;
 	}
 
-	public void setCardStyle(Integer cardStyle) {
+	public void setCardStyle(CardStyle cardStyle) {
 		this.cardStyle = cardStyle;
 	}
 
@@ -170,51 +230,51 @@ public class Setting {
 		this.answerAudio = answerAudio;
 	}
 
-	public String getQuestionTextColor() {
+	public Integer getQuestionTextColor() {
 		return questionTextColor;
 	}
 
-	public void setQuestionTextColor(String questionTextColor) {
+	public void setQuestionTextColor(Integer questionTextColor) {
 		this.questionTextColor = questionTextColor;
 	}
 
-	public String getAnswerTextColor() {
+	public Integer getAnswerTextColor() {
 		return answerTextColor;
 	}
 
-	public void setAnswerTextColor(String answerTextColor) {
+	public void setAnswerTextColor(Integer answerTextColor) {
 		this.answerTextColor = answerTextColor;
 	}
 
-	public String getQuestionBackgroundColor() {
+	public Integer getQuestionBackgroundColor() {
 		return questionBackgroundColor;
 	}
 
-	public void setQuestionBackgroundColor(String questionBackgroundColor) {
+	public void setQuestionBackgroundColor(Integer questionBackgroundColor) {
 		this.questionBackgroundColor = questionBackgroundColor;
 	}
 
-	public String getAnswerBackgroundColor() {
+	public Integer getAnswerBackgroundColor() {
 		return answerBackgroundColor;
 	}
 
-	public void setAnswerBackgroundColor(String answerBackgroundColor) {
+	public void setAnswerBackgroundColor(Integer answerBackgroundColor) {
 		this.answerBackgroundColor = answerBackgroundColor;
 	}
 
-	public String getSeparatorColor() {
+	public Integer getSeparatorColor() {
 		return separatorColor;
 	}
 
-	public void setSeparatorColor(String separatorColor) {
+	public void setSeparatorColor(Integer separatorColor) {
 		this.separatorColor = separatorColor;
 	}
 
-	public Integer getDisplayInHTML() {
+	public Long getDisplayInHTML() {
 		return displayInHTML;
 	}
 
-	public void setDisplayInHTML(Integer displayInHTML) {
+	public void setDisplayInHTML(Long displayInHTML) {
 		this.displayInHTML = displayInHTML;
 	}
 
@@ -226,19 +286,19 @@ public class Setting {
 		this.htmlLineBreakConversion = htmlLineBreakConversion;
 	}
 
-	public Integer getQuestionField() {
+	public Long getQuestionField() {
 		return questionField;
 	}
 
-	public void setQuestionField(Integer questionField) {
+	public void setQuestionField(Long questionField) {
 		this.questionField = questionField;
 	}
 
-	public Integer getAnswerField() {
+	public Long getAnswerField() {
 		return answerField;
 	}
 
-	public void setAnswerField(Integer answerField) {
+	public void setAnswerField(Long answerField) {
 		this.answerField = answerField;
 	}
 
@@ -258,6 +318,30 @@ public class Setting {
 		this.answerFont = answerFont;
 	}
 
+	public DictApp getDictApp() {
+		return dictApp;
+	}
+
+	public void setDictApp(DictApp dictApp) {
+		this.dictApp = dictApp;
+	}
+
+	public ShuffleType getShuffleType() {
+		return shuffleType;
+	}
+
+	public void setShuffleType(ShuffleType shuffleType) {
+		this.shuffleType = shuffleType;
+	}
+
+	public SpeakingType getSpeakingType() {
+		return speakingType;
+	}
+
+	public void setSpeakingType(SpeakingType speakingType) {
+		this.speakingType = speakingType;
+	}
+
 	public Date getCreationDate() {
 		return creationDate;
 	}
@@ -273,5 +357,20 @@ public class Setting {
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
 	}
-    
+
+	public String getQuestionAudioLocation() {
+		return questionAudioLocation;
+	}
+
+	public void setQuestionAudioLocation(String questionAudioLocation) {
+		this.questionAudioLocation = questionAudioLocation;
+	}
+
+	public String getAnswerAudioLocation() {
+		return answerAudioLocation;
+	}
+
+	public void setAnswerAudioLocation(String answerAudioLocation) {
+		this.answerAudioLocation = answerAudioLocation;
+	}
 }

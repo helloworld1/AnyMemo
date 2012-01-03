@@ -12,7 +12,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 @DatabaseTable(tableName = "cards", daoClass = CardDaoImpl.class)
-public class Card implements Parcelable {
+public class Card implements Parcelable, Cloneable {
     @DatabaseField(generatedId = true)
     private Integer id;
 

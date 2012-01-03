@@ -17,18 +17,27 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
+package org.liberty.android.fantastischmemo.ui;
 
-package org.liberty.android.fantastischmemo.queue;
+import android.widget.Button;
+import android.view.View;
+import java.util.Map;
 
-import org.liberty.android.fantastischmemo.domain.Card;
+abstract class ControlButtons{
+    public abstract Map<String, Button> getButtons();
+    public abstract View getView();
+    public String[] getButtonNames(){
+        Map<String, Button> map = getButtons();
+        String[] res = new String[map.size()];
+        int i = 0;
+        for(String s : map.keySet()){
+            res[i++] = s; 
+        }
+        return res;
 
-/*
- * This interface will be used to fetch the card to learn
- */
-public interface QueueManager {
-    void refill();
-    void refresh();
-    void update(Card card);
-    Card dequeue();
-    void remove(Card card);
+    }
+    public void setBackgroundColor(int color){
+        View v = getView();
+        v.setBackgroundColor(color);
+    }
 }
