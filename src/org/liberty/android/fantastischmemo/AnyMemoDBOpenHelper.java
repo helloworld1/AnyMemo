@@ -82,6 +82,8 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, Category.class);
             TableUtils.createTable(connectionSource, LearningData.class);
 
+            getSettingDao().create(new Setting());
+
             if (database.getVersion() == 0) {
                 convertOldDatabase(database);
             }

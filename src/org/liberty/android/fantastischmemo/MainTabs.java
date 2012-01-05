@@ -46,6 +46,8 @@ import org.liberty.android.fantastischmemo.domain.Setting;
 
 import org.liberty.android.fantastischmemo.scheduler.DefaultScheduler;
 
+import org.liberty.android.fantastischmemo.ui.MemoScreen;
+
 import com.j256.ormlite.dao.Dao;
 import android.app.TabActivity;
 import android.app.AlertDialog;
@@ -77,52 +79,58 @@ public class MainTabs extends TabActivity{
     SharedPreferences.Editor editor;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    	settings = PreferenceManager.getDefaultSharedPreferences(this);
-        editor = settings.edit();
-        init();
-        setContentView(R.layout.main_tabs);
+    	//settings = PreferenceManager.getDefaultSharedPreferences(this);
+        //editor = settings.edit();
+        //init();
+        //setContentView(R.layout.main_tabs);
 
-        Resources res = getResources();
-        TabHost tabHost = getTabHost();
-        TabHost.TabSpec spec;
-        Intent intent;
+        //Resources res = getResources();
+        //TabHost tabHost = getTabHost();
+        //TabHost.TabSpec spec;
+        //Intent intent;
 
-        intent = new Intent().setClass(this, RecentList.class);
-        spec = tabHost.newTabSpec("recent").setIndicator(
-                getString(R.string.recent_tab_text),
-                res.getDrawable(R.drawable.recent))
-            .setContent(intent);
-        tabHost.addTab(spec);
+        //intent = new Intent().setClass(this, RecentList.class);
+        //spec = tabHost.newTabSpec("recent").setIndicator(
+        //        getString(R.string.recent_tab_text),
+        //        res.getDrawable(R.drawable.recent))
+        //    .setContent(intent);
+        //tabHost.addTab(spec);
 
-        intent = new Intent().setClass(this, OpenScreenTab.class);
-        spec = tabHost.newTabSpec("open").setIndicator(
-                getString(R.string.open_tab_text),
-                res.getDrawable(R.drawable.open))
-            .setContent(intent);
-        tabHost.addTab(spec);
+        //intent = new Intent().setClass(this, OpenScreenTab.class);
+        //spec = tabHost.newTabSpec("open").setIndicator(
+        //        getString(R.string.open_tab_text),
+        //        res.getDrawable(R.drawable.open))
+        //    .setContent(intent);
+        //tabHost.addTab(spec);
 
-        intent = new Intent().setClass(this, EditScreenTab.class);
-        spec = tabHost.newTabSpec("edit").setIndicator(
-                getString(R.string.edit_tab_text),
-                res.getDrawable(R.drawable.edit))
-            .setContent(intent);
-        tabHost.addTab(spec);
+        //intent = new Intent().setClass(this, EditScreenTab.class);
+        //spec = tabHost.newTabSpec("edit").setIndicator(
+        //        getString(R.string.edit_tab_text),
+        //        res.getDrawable(R.drawable.edit))
+        //    .setContent(intent);
+        //tabHost.addTab(spec);
 
-        intent = new Intent().setClass(this, DownloaderTab.class);
-        spec = tabHost.newTabSpec("download").setIndicator(
-                getString(R.string.download_tab_text),
-                res.getDrawable(R.drawable.download))
-            .setContent(intent);
-        tabHost.addTab(spec);
+        //intent = new Intent().setClass(this, DownloaderTab.class);
+        //spec = tabHost.newTabSpec("download").setIndicator(
+        //        getString(R.string.download_tab_text),
+        //        res.getDrawable(R.drawable.download))
+        //    .setContent(intent);
+        //tabHost.addTab(spec);
 
-        intent = new Intent().setClass(this, MiscTab.class);
-        spec = tabHost.newTabSpec("misc").setIndicator(
-                getString(R.string.misc_tab_text),
-                res.getDrawable(R.drawable.misc))
-            .setContent(intent);
-        tabHost.addTab(spec);
+        //intent = new Intent().setClass(this, MiscTab.class);
+        //spec = tabHost.newTabSpec("misc").setIndicator(
+        //        getString(R.string.misc_tab_text),
+        //        res.getDrawable(R.drawable.misc))
+        //    .setContent(intent);
+        //tabHost.addTab(spec);
 
+        /////////////////////
+        Intent myIntent = new Intent(this, MemoScreen.class);
+        myIntent.putExtra("dbpath", "/sdcard/french-body-parts.db");
+        myIntent.putExtra("category", "");
+        startActivity(myIntent);
     }
+
 
     private void init(){
         String dbName = settings.getString("dbname", null);

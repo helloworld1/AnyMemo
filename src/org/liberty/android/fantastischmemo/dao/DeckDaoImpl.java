@@ -15,6 +15,10 @@ public class DeckDaoImpl extends BaseDaoImpl<Deck, Integer> implements DeckDao {
         throws SQLException {
         super(connectionSource, Deck.class);
     }
+    public DeckDaoImpl(ConnectionSource connectionSource, Class<Deck> clazz)
+        throws SQLException {
+        super(connectionSource, clazz);
+    }
 
 }
 

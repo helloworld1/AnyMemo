@@ -18,7 +18,11 @@ import com.j256.ormlite.table.DatabaseTableConfig;
 public class FilterDaoImpl extends BaseDaoImpl<Filter, Integer> implements FilterDao {
     public FilterDaoImpl(ConnectionSource connectionSource,  DatabaseTableConfig<Filter> tableConfig)
         throws SQLException {
-        super(connectionSource, Filter.class);
+        super(connectionSource, tableConfig);
+    }
+    public FilterDaoImpl(ConnectionSource connectionSource,  Class<Filter> clazz)
+        throws SQLException {
+        super(connectionSource, clazz);
     }
 
     public Filter getActiveFilter() {

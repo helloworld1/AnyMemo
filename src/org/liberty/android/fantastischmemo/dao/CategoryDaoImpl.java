@@ -16,5 +16,10 @@ public class CategoryDaoImpl extends BaseDaoImpl<Category, Integer> implements C
         super(connectionSource, Category.class);
     }
 
+    public CategoryDaoImpl(ConnectionSource connectionSource, Class<Category> clazz)
+        throws SQLException {
+        super(connectionSource, clazz);
+    }
+
 }
 

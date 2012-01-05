@@ -40,9 +40,6 @@
             android:name=".Downloader" 
             android:configChanges="orientation|keyboardHidden" />
         <activity 
-            android:name=".cardscreen.MemoScreen"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity 
             android:name=".cardscreen.CramMemoScreen"
             android:configChanges="orientation|keyboardHidden" />
         <activity 
@@ -114,6 +111,9 @@
             android:configChanges="orientation|keyboardHidden" />
         <activity
             android:name=".downloader.DropboxUploader"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity 
+            android:name=".ui.MemoScreen"
             android:configChanges="orientation|keyboardHidden" />
         <receiver
             android:name=".AlarmReceiver"

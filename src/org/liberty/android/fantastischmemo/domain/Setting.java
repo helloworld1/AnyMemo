@@ -43,19 +43,21 @@ public class Setting {
     @DatabaseField(defaultValue = "US")
     private String answerAudio = "US";
     
-    @DatabaseField(defaultValue = "0xFFBEBEBE")
+    // 0xFFBEBEBE
+    @DatabaseField(defaultValue = "-4276546")
     private Integer questionTextColor = 0xFFBEBEBE;
 
-    @DatabaseField(defaultValue = "0xFFBEBEBE")
+    @DatabaseField(defaultValue = "-4276546")
     private Integer answerTextColor = 0xFFBEBEBE;
 
-    @DatabaseField(defaultValue = "0xFF000000")
+    //0xFF0000000
+    @DatabaseField(defaultValue = "-16777216")
     private Integer questionBackgroundColor = 0xFF000000;
 
-    @DatabaseField(defaultValue = "0xFF000000")
+    @DatabaseField(defaultValue = "-16777216")
     private Integer answerBackgroundColor = 0xFF000000;
 
-    @DatabaseField(defaultValue = "0xFF909090")
+    @DatabaseField(defaultValue = "-7303024")
     private Integer separatorColor = 0xFF909090;
 
     /* 1 = question, 2 = answer, 4 = note */
@@ -92,10 +94,10 @@ public class Setting {
     private SpeakingType speakingType = SpeakingType.TAP;
 
     @DatabaseField(defaultValue = "")
-    private String questionAudioLocation;
+    private String questionAudioLocation = "";
 
     @DatabaseField(defaultValue = "")
-    private String answerAudioLocation;
+    private String answerAudioLocation = "";
 
     @DatabaseField
     private Date creationDate = new Date();

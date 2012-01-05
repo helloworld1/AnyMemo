@@ -1,5 +1,7 @@
 package org.liberty.android.fantastischmemo;
 
+import java.sql.SQLException;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,11 +27,15 @@ public class AnyMemoDBOpenHelperManager {
             refCounts.put(dbpath, refCounts.get(dbpath) + 1);
             return helpers.get(dbpath);
         } else {
-            AnyMemoDBOpenHelper helper = new AnyMemoDBOpenHelper(context, dbpath);
-            Log.i(TAG, "Call get AnyMemoDBOpenHelper for first time."); 
-            helpers.put(dbpath, helper);
-            refCounts.put(dbpath, 1);
-            return helper;
+            try {
+                Log.i(TAG, "Call get AnyMemoDBOpenHelper for first time."); 
+                AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelper.getHelper(context, dbpath);
+                helpers.put(dbpath, helper);
+                refCounts.put(dbpath, 1);
+                return helper;
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

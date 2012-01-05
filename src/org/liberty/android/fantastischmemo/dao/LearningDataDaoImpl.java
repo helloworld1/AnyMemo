@@ -21,6 +21,10 @@ public class LearningDataDaoImpl extends BaseDaoImpl<LearningData, Integer>
         throws SQLException {
         super(connectionSource, LearningData.class);
     }
+    public LearningDataDaoImpl(ConnectionSource connectionSource, Class<LearningData> clazz)
+        throws SQLException {
+        super(connectionSource, clazz);
+    }
 
     public long getTotalCount() {
         QueryBuilder<LearningData, Integer> qb = queryBuilder();

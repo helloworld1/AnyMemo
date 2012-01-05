@@ -66,7 +66,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
-import android.content.ClipboardManager;
+import android.text.ClipboardManager;
 
 import android.os.Environment;
 import android.view.Gravity;
@@ -85,7 +85,7 @@ import android.widget.Toast;
 import android.util.Log;
 import android.net.Uri;
 
-public class MemoScreen extends AMActivity{
+public class MemoScreen extends AMActivity {
     private final static String TAG = "org.liberty.android.fantastischmemo.ui.MemoScreen";
     private AnyMemoTTS questionTTS = null;
     private AnyMemoTTS answerTTS = null;
@@ -137,7 +137,6 @@ public class MemoScreen extends AMActivity{
                 learningDataDao,
                 10,
                 50) ;
-        queueManager.refill();
     }
 
     @Override
@@ -297,11 +296,12 @@ public class MemoScreen extends AMActivity{
             }
             case R.id.menu_context_gotoprev:
             {
-                Intent myIntent = new Intent(this, EditScreen.class);
-                myIntent.putExtra("dbname", this.dbName);
-                myIntent.putExtra("dbpath", this.dbPath);
-                myIntent.putExtra("id", currentCard.getId());
-                startActivityForResult(myIntent, ACTIVITY_GOTO_PREV);
+                // TODO: Edit screen
+                //Intent myIntent = new Intent(this, EditScreen.class);
+                //myIntent.putExtra("dbname", this.dbName);
+                //myIntent.putExtra("dbpath", this.dbPath);
+                //myIntent.putExtra("id", currentCard.getId());
+                //startActivityForResult(myIntent, ACTIVITY_GOTO_PREV);
                 return true;
             }
 
@@ -718,10 +718,11 @@ public class MemoScreen extends AMActivity{
                 public void onClick(DialogInterface arg0, int arg1) {
                     finish();
                     Intent myIntent = new Intent();
-                    myIntent.setClass(MemoScreen.this, CramMemoScreen.class);
-                    myIntent.putExtra("dbname", dbName);
-                    myIntent.putExtra("dbpath", dbPath);
-                    startActivity(myIntent);
+                    // TODO: Cram
+                    //myIntent.setClass(MemoScreen.this, CramMemoScreen.class);
+                    //myIntent.putExtra("dbname", dbName);
+                    //myIntent.putExtra("dbpath", dbPath);
+                    //startActivity(myIntent);
                 }
             })
             .setOnCancelListener(new DialogInterface.OnCancelListener(){
@@ -845,17 +846,17 @@ public class MemoScreen extends AMActivity{
                 controlButtons = new AnyMemoGradeButtons(MemoScreen.this);
             }
 
+            currentCard = result;
+            
             initTTS();
             composeViews();
+            setViewListeners();
             hideButtons();
             registerForContextMenu(flashcardDisplay.getView());
             removeDialog(DIALOG_LOADING_PROGRESS);
+            updateFlashcardView(false);
         }
     }
-
-
-
-
 
     /*
      * Use AsyncTask to update the database and update the statistics

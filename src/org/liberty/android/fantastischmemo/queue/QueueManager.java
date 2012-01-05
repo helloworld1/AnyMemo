@@ -26,7 +26,6 @@ import org.liberty.android.fantastischmemo.domain.Card;
  * This interface will be used to fetch the card to learn
  */
 public interface QueueManager {
-    void refill();
     void refresh();
     void update(Card card);
     Card dequeue();

@@ -8,11 +8,8 @@ import com.j256.ormlite.field.DatabaseField;
 
 import com.j256.ormlite.table.DatabaseTable;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 @DatabaseTable(tableName = "cards", daoClass = CardDaoImpl.class)
-public class Card implements Parcelable, Cloneable {
+public class Card {
     @DatabaseField(generatedId = true)
     private Integer id;
 
@@ -134,47 +131,4 @@ public class Card implements Parcelable, Cloneable {
         Card card2 = (Card)c;
         return this.getId().equals(card2.getId());
     }
-
-    @Override
-    public void writeToParcel(Parcel out, int flags){
-        out.writeInt(id);
-        out.writeInt(ordinal);
-        out.writeString(question);
-        out.writeString(answer);
-        out.writeString(note);
-        out.writeParcelable(category, 0);
-        out.writeParcelable(learningData, 0);
-        out.writeInt(cardType);
-        out.writeSerializable(creationDate);
-        out.writeSerializable(updateDate);
-    }
-
-    public static final Parcelable.Creator<Card> CREATOR
-        = new Parcelable.Creator<Card>() {
-            public Card createFromParcel(Parcel in) {
-                Card c = new Card();
-                c.setId(in.readInt());
-                c.setOrdinal(in.readInt());
-                c.setQuestion(in.readString());
-                c.setAnswer(in.readString());
-                c.setNote(in.readString());
-                Category cat = in.readParcelable(null);
-                c.setCategory(cat);
-                LearningData ld = in.readParcelable(null);
-                c.setLearningData(ld);
-                c.setCardType(in.readInt());
-                c.setCreationDate((Date)in.readSerializable());
-                c.setUpdateDate((Date)in.readSerializable());
-                return c;
-            }
-
-            public Card[] newArray(int size) {
-                return new Card[size];
-            }
-        };
-
-     @Override
-     public int describeContents() {
-         return 0;
-     }
 }
