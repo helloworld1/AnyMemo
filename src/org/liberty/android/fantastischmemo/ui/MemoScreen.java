@@ -142,6 +142,7 @@ public class MemoScreen extends AMActivity {
     @Override
     public void onPause(){
         super.onPause();
+        queueManager.refresh();
     }
 
     @Override
