@@ -39,6 +39,8 @@ import org.liberty.android.fantastischmemo.domain.LearningData;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
 
+import android.util.Log;
+
 public class LearnQueueManager implements QueueManager {
     private CardDao cardDao;
 
@@ -58,6 +60,8 @@ public class LearnQueueManager implements QueueManager {
     private int maxNewCacheOrdinal = 0;
 
     private int maxReviewCacheOrdinal = 0; 
+
+    private final String TAG = getClass().getSimpleName();
 
     public LearnQueueManager(int learnQueueSize, int cacheSize) {
         learnQueue = new LinkedList<Card>();
@@ -95,6 +99,7 @@ public class LearnQueueManager implements QueueManager {
         if (!learnQueue.isEmpty()) {
 
             Card c = learnQueue.removeFirst();
+            Log.i(TAG, "Dequeue card: " + c.getId());
             return c;
         } else {
             return null;
@@ -109,12 +114,13 @@ public class LearnQueueManager implements QueueManager {
 	}
 
 	@Override
-	public void refresh() {
+	public void flush() {
         // Update the queue
         for (Card card : dirtyCache) {
             try {
-                cardDao.update(card);
+                Log.i(TAG, "Flushing: " + card.getLearningData());
                 learningDataDao.update(card.getLearningData());
+                cardDao.update(card);
             } catch (SQLException e) {
                 e.printStackTrace();
                 throw new RuntimeException(e);

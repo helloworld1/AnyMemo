@@ -29,10 +29,98 @@ import android.util.Log;
 public class DefaultScheduler {
     final double MILLSECS_PER_DAY = 86400000.0;
 
+
+    public double getInterval(LearningData oldData, int newGrade) {
+		Date currentDate = new Date();
+		double actualInterval = diffDate(oldData.getLastLearnDate(), currentDate);
+		double scheduleInterval = diffDate(oldData.getLastLearnDate(), oldData.getNextLearnDate());
+		double newInterval = 0.0;
+        int oldGrade = oldData.getGrade();
+        double oldEasiness = oldData.getEasiness();
+        int newLapses = oldData.getLapses();
+        int newAcqReps = oldData.getAcqReps();
+        int newRetReps = oldData.getRetReps();
+        int newAcqRepsSinceLapse = oldData.getAcqRepsSinceLapse();
+        int newRetRepsSinceLapse = oldData.getRetRepsSinceLapse();
+        float newEasiness = oldData.getEasiness();
+
+		if(actualInterval == 0){
+			actualInterval = 1;
+		}
+        // new item (unseen = 1 in mnemosyne)
+		if(newAcqReps == 0) {
+			newAcqReps = 1;
+            // 2.5 is 40% difficult.
+            // Taken from Mnemosyne
+            newEasiness = 2.5f;
+            newAcqRepsSinceLapse = 1;
+			newInterval = calculateInitialInterval(newGrade);
+		} else if(oldGrade <= 1 && newGrade <= 1){
+			newAcqReps += 1;
+			newAcqRepsSinceLapse += 1;
+			newInterval = 0;
+		} else if(oldGrade <= 1 && newGrade >= 2){
+			newAcqReps += 1;
+			newAcqRepsSinceLapse += 1;
+			newInterval = 1;
+		} else if(oldGrade >= 2 && newGrade <= 1){
+			newRetReps += 1;
+			newLapses += 1;
+			newAcqRepsSinceLapse = 0;
+			newRetRepsSinceLapse = 0;
+		} else if(oldGrade >= 2 && newGrade >= 2){
+			newRetReps += 1;
+			newRetRepsSinceLapse += 1;
+			if(actualInterval >= scheduleInterval){
+				if(newGrade == 2){
+					newEasiness -= 0.16;
+				}
+				if(newGrade == 3){
+					newEasiness -= 0.14;
+				}
+				if(newGrade == 5){
+				    newEasiness += 0.10;
+				}
+				if(oldEasiness < 1.3){
+					newEasiness = 1.3f;
+				}
+			}
+			newInterval = 0;
+			if(newRetRepsSinceLapse == -1){
+				newInterval = 6;
+			}
+			else{
+				if(newGrade == 2 || newGrade == 3){
+					if(actualInterval <= scheduleInterval){
+						newInterval = (int)Math.round(actualInterval * newEasiness);
+					}
+					else{
+						newInterval = scheduleInterval;
+					}
+				}
+				if(newGrade == 4){
+					newInterval = (int)Math.round(actualInterval * newEasiness);
+				}
+				if(newGrade == 5){
+					if(actualInterval < scheduleInterval){
+						newInterval = scheduleInterval;
+					}
+					else{
+						newInterval = (int)Math.round(actualInterval * newEasiness);
+					}
+				}
+			}
+			if(newInterval == 0){
+				Log.e("Interval error", "Interval is 0 in wrong place");
+			}
+		}
+        return newInterval;
+    }
+
     /*
      * Return the interval of the after schedule the new card
      */
-	public LearningData schedule(LearningData oldData, int newGrade, boolean includeNoise) {
+	public void schedule(LearningData oldData, int newGrade, boolean includeNoise) {
 		Date currentDate = new Date();
 		double actualInterval = diffDate(oldData.getLastLearnDate(), currentDate);
 		double scheduleInterval = diffDate(oldData.getLastLearnDate(), oldData.getNextLearnDate());
@@ -123,18 +211,15 @@ public class DefaultScheduler {
         if(includeNoise){
             newInterval = newInterval + calculateIntervalNoise(newInterval);
         }
-        LearningData newData = new LearningData();
-        newData.setId(oldData.getId());
-        newData.setAcqReps(newAcqReps);
-        newData.setAcqRepsSinceLapse(newAcqRepsSinceLapse);
-        newData.setEasiness(newEasiness);
-        newData.setGrade(newGrade);
-        newData.setLapses(newLapses);
-        newData.setLastLearnDate(currentDate);
-        newData.setNextLearnDate(afterDays(currentDate, newInterval));
-        newData.setRetReps(newRetReps);
-        newData.setRetRepsSinceLapse(newRetRepsSinceLapse);
-        return newData;
+        oldData.setAcqReps(newAcqReps);
+        oldData.setAcqRepsSinceLapse(newAcqRepsSinceLapse);
+        oldData.setEasiness(newEasiness);
+        oldData.setGrade(newGrade);
+        oldData.setLapses(newLapses);
+        oldData.setLastLearnDate(currentDate);
+        oldData.setNextLearnDate(afterDays(currentDate, newInterval));
+        oldData.setRetReps(newRetReps);
+        oldData.setRetRepsSinceLapse(newRetRepsSinceLapse);
 	}
 
     /*

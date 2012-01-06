@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
+import java.util.concurrent.ExecutionException;
+
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMGUIUtility;
 import org.liberty.android.fantastischmemo.AMUtil;
@@ -122,6 +124,7 @@ public class MemoScreen extends AMActivity {
     GradeTask gradeTask = null;
     InitTask initTask = null;
     DefaultScheduler scheduler = null;
+    FlushDatabaseTask flushDatabaseTask = null;
 
 
     @Override
@@ -142,7 +145,17 @@ public class MemoScreen extends AMActivity {
     @Override
     public void onPause(){
         super.onPause();
-        queueManager.refresh();
+        if (flushDatabaseTask == null || flushDatabaseTask.getStatus() == AsyncTask.Status.FINISHED) {
+            flushDatabaseTask = new FlushDatabaseTask();
+            flushDatabaseTask.execute((Void)null);
+        }
+        try {
+            flushDatabaseTask.get();
+        } catch (InterruptedException e) {
+            Log.v(TAG, "Interrupted in onPause for flushDatabaseTask.");
+        } catch (ExecutionException e){
+            Log.e(TAG, "Execution error in onPause for flushDatabaseTask.", e);
+        }
     }
 
     @Override
@@ -155,10 +168,11 @@ public class MemoScreen extends AMActivity {
         if(answerTTS != null){
             answerTTS.shutdown();
         }
+        // TODO: Need another way to update widgets
         /* Update the widget because MemoScreen can be accessed though widget*/
-        Intent myIntent = new Intent(this, AnyMemoService.class);
-        myIntent.putExtra("request_code", AnyMemoService.CANCEL_NOTIFICATION | AnyMemoService.UPDATE_WIDGET);
-        startService(myIntent);
+        //Intent myIntent = new Intent(this, AnyMemoService.class);
+        //myIntent.putExtra("request_code", AnyMemoService.CANCEL_NOTIFICATION | AnyMemoService.UPDATE_WIDGET);
+        //startService(myIntent);
         super.onDestroy();
     }
 
@@ -626,8 +640,9 @@ public class MemoScreen extends AMActivity {
             public void onClick(View v){
                 // TODO: Undo need to rework.
                 prevCard = currentCard;
-                LearningData newLd = scheduler.schedule(currentCard.getLearningData(), grade, true);
-                currentCard.setLearningData(newLd);
+                LearningData ld = currentCard.getLearningData();
+                scheduler.schedule(ld, grade, true);
+                currentCard.setLearningData(ld);
                 gradeTask = new GradeTask();
                 gradeTask.execute(currentCard);
                 if(questionTTS != null){
@@ -784,12 +799,6 @@ public class MemoScreen extends AMActivity {
     }
 
     private class InitTask extends AsyncTask<Void, Void, Card> {
-        /**
-		 * Constructs a new instance.
-		 */
-		public InitTask()
-		{
-		}
 
 		@Override
         public void onPreExecute() {
@@ -903,6 +912,32 @@ public class MemoScreen extends AMActivity {
                 }
                 setTitle(getActivityTitleString());
             }
+        }
+    }
+
+    private class FlushDatabaseTask extends AsyncTask<Void, Void, Void>{
+
+        @Override
+        public void onPreExecute(){
+            super.onPreExecute();
+            showDialog(DIALOG_LOADING_PROGRESS);
+        }
+
+        @Override
+        public Void doInBackground(Void... nothing){
+            queueManager.flush();
+            return null;
+        }
+
+        @Override
+        public void onCancelled(){
+            return;
+        }
+
+        @Override
+        public void onPostExecute(Void result){
+            super.onPostExecute(result);
+            removeDialog(DIALOG_LOADING_PROGRESS);
         }
     }
 

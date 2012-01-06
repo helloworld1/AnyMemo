@@ -42,9 +42,10 @@ public class AnyMemoDBOpenHelperManager {
     public static void releaseHelper(String dbpath) {
         Integer count = refCounts.get(dbpath);
         Log.i(TAG, "Release AnyMemoDBOpenHelper: " + dbpath); 
-        if (count > 0) {
+        if (count > 1) {
             refCounts.put(dbpath, count - 1);
         } else {
+            Log.i(TAG, "Close AnyMemoDBOpenHelper since there are 0 connections: " + dbpath); 
             AnyMemoDBOpenHelper helper = helpers.get(dbpath); 
             helper.close();
             helpers.remove(dbpath);

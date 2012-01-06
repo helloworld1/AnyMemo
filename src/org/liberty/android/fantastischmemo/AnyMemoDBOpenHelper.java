@@ -133,6 +133,7 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
                 + " ret_reps as retReps, ret_reps_since_lapse as retRepsSinceLapse"
                 + " from learn_tbl");
 
+
             // copy categories
             database.execSQL("insert into categories (name)"
                 + " select category as name from dict_tbl"
@@ -141,6 +142,12 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
                 + " select id as category_id from categories as cat"
                 + " join dict_tbl as dic on dic.category = cat.name"
                 + " where cards.id = dic._id)");
+
+            database.execSQL("update cards set updateDate='2010-01-01 00:00:00.000000'," + 
+                    "creationDate='2010-01-01 00:00:00.000000'");
+            database.execSQL("update categories set updateDate='2010-01-01 00:00:00.000000'"); 
+            database.execSQL("update learning_data set updateDate='2010-01-01 00:00:00.000000'"); 
+
             // Set unused fields
             database.execSQL("update cards"
                 + " set cardType = 0");
