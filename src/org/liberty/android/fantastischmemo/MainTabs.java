@@ -73,7 +73,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import org.liberty.android.fantastischmemo.queue.*;
 
-public class MainTabs extends TabActivity{
+public class MainTabs extends AMActivity{
     private final String WEBSITE_VERSION="http://anymemo.org/index.php?page=version";
     SharedPreferences settings;
     SharedPreferences.Editor editor;

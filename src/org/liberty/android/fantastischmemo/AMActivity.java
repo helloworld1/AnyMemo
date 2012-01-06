@@ -104,6 +104,18 @@ public abstract class AMActivity extends FragmentActivity{
         super.onConfigurationChanged(newConfig);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        System.out.println("Resume in AMActivity!");
+        AMGUIUtility.doProgressTask(this, R.string.ok_text, R.string.ok_text, new AMGUIUtility.ProgressTask() {
+            public void doHeavyTask() {
+                AnyMemoDBOpenHelperManager.waitAllTasks();
+            }
+            public void doUITask() {}
+        });
+    }
+
     public void restartActivity(){
         startActivity(new Intent(this, this.getClass()));
         finish();

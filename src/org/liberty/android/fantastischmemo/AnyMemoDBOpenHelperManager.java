@@ -3,7 +3,14 @@ package org.liberty.android.fantastischmemo;
 import java.sql.SQLException;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import android.content.Context;
 
@@ -17,6 +24,10 @@ public class AnyMemoDBOpenHelperManager {
         = new HashMap<String, AnyMemoDBOpenHelper>();
     private static Map<String, Integer> refCounts
         = new HashMap<String, Integer>();
+
+    private static Map<String, Set<Future<?>>> dbTasks = new HashMap<String, Set<Future<?>>>();
+
+    private static ExecutorService executor = Executors.newSingleThreadExecutor();
 
     private static String TAG = "AnyMemoDBOpenHelperManager";
 
@@ -50,6 +61,44 @@ public class AnyMemoDBOpenHelperManager {
             helper.close();
             helpers.remove(dbpath);
             refCounts.remove(dbpath);
+        }
+    }
+
+    public static void submitDBTask(String dbpath, Runnable task) {
+        Set<Future<?>> futures;
+        if (!dbTasks.containsKey(dbpath)) {
+            futures = new HashSet<Future<?>>();
+            dbTasks.put(dbpath, futures);
+        } else {
+            futures = dbTasks.get(dbpath);
+        }
+
+        Future<?> f = executor.submit(task);
+        refCounts.put(dbpath, refCounts.get(dbpath) + 1);
+        futures.add(f);
+    }
+
+    public static void waitTask(String dbpath) {
+        Set<Future<?>> futures = dbTasks.get(dbpath);
+        if (futures == null) {
+            return;
+        }
+
+        for (Future<?> f : futures) {
+            try {
+                f.get();
+                releaseHelper(dbpath);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void waitAllTasks() {
+        for (String path : dbTasks.keySet()) {
+            waitTask(path);
         }
     }
 

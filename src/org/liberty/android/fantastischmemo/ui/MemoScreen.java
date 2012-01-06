@@ -27,6 +27,7 @@ import org.liberty.android.fantastischmemo.AMUtil;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.AnyMemoService;
+import org.liberty.android.fantastischmemo.AnyMemoThreadManager;
 import org.liberty.android.fantastischmemo.DetailScreen;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.SettingsScreen;
@@ -124,7 +125,6 @@ public class MemoScreen extends AMActivity {
     GradeTask gradeTask = null;
     InitTask initTask = null;
     DefaultScheduler scheduler = null;
-    FlushDatabaseTask flushDatabaseTask = null;
 
 
     @Override
@@ -145,17 +145,7 @@ public class MemoScreen extends AMActivity {
     @Override
     public void onPause(){
         super.onPause();
-        if (flushDatabaseTask == null || flushDatabaseTask.getStatus() == AsyncTask.Status.FINISHED) {
-            flushDatabaseTask = new FlushDatabaseTask();
-            flushDatabaseTask.execute((Void)null);
-        }
-        try {
-            flushDatabaseTask.get();
-        } catch (InterruptedException e) {
-            Log.v(TAG, "Interrupted in onPause for flushDatabaseTask.");
-        } catch (ExecutionException e){
-            Log.e(TAG, "Execution error in onPause for flushDatabaseTask.", e);
-        }
+        AnyMemoDBOpenHelperManager.submitDBTask(dbPath, flushDatabaseTask);
     }
 
     @Override
@@ -915,31 +905,12 @@ public class MemoScreen extends AMActivity {
         }
     }
 
-    private class FlushDatabaseTask extends AsyncTask<Void, Void, Void>{
-
-        @Override
-        public void onPreExecute(){
-            super.onPreExecute();
-            showDialog(DIALOG_LOADING_PROGRESS);
-        }
-
-        @Override
-        public Void doInBackground(Void... nothing){
+    Runnable flushDatabaseTask = new Runnable() {
+        public void run() {
+            System.out.println("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
             queueManager.flush();
-            return null;
         }
-
-        @Override
-        public void onCancelled(){
-            return;
-        }
-
-        @Override
-        public void onPostExecute(Void result){
-            super.onPostExecute(result);
-            removeDialog(DIALOG_LOADING_PROGRESS);
-        }
-    }
+    };
 
 }
 
