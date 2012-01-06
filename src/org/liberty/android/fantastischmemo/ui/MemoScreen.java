@@ -19,15 +19,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import java.util.concurrent.ExecutionException;
-
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMGUIUtility;
 import org.liberty.android.fantastischmemo.AMUtil;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.AnyMemoService;
-import org.liberty.android.fantastischmemo.AnyMemoThreadManager;
 import org.liberty.android.fantastischmemo.DetailScreen;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.SettingsScreen;
@@ -762,6 +759,7 @@ public class MemoScreen extends AMActivity {
         String defaultLocation =
             Environment.getExternalStorageDirectory().getAbsolutePath()
             + getString(R.string.default_audio_dir);
+        // TODO: This couldn't be null but be wary
         String qa = setting.getQuestionAudio();
         String aa = setting.getAnswerAudio();
 
@@ -868,6 +866,7 @@ public class MemoScreen extends AMActivity {
         public void onPreExecute(){
             super.onPreExecute();
             setProgressBarIndeterminateVisibility(true);
+            hideButtons();
         }
 
         @Override
@@ -907,7 +906,6 @@ public class MemoScreen extends AMActivity {
 
     Runnable flushDatabaseTask = new Runnable() {
         public void run() {
-            System.out.println("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
             queueManager.flush();
         }
     };

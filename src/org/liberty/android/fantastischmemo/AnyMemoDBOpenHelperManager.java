@@ -2,8 +2,10 @@ package org.liberty.android.fantastischmemo;
 
 import java.sql.SQLException;
 
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -22,27 +24,25 @@ import android.util.Log;
 public class AnyMemoDBOpenHelperManager {
     private static Map<String, AnyMemoDBOpenHelper> helpers
         = new HashMap<String, AnyMemoDBOpenHelper>();
-    private static Map<String, Integer> refCounts
-        = new HashMap<String, Integer>();
-
-    private static Map<String, Set<Future<?>>> dbTasks = new HashMap<String, Set<Future<?>>>();
+    private static Map<String, DBConnection> dbConnections = new HashMap<String, DBConnection>(); 
 
     private static ExecutorService executor = Executors.newSingleThreadExecutor();
 
     private static String TAG = "AnyMemoDBOpenHelperManager";
 
-    public static AnyMemoDBOpenHelper getHelper(Context context, String dbpath) {
+    // TODO: Remove all synchronized and use java.concurrent's map
+    public static synchronized AnyMemoDBOpenHelper getHelper(Context context, String dbpath) {
         if (helpers.containsKey(dbpath)) {
-            // Increase the reference count
-            Log.i(TAG, "Call get AnyMemoDBOpenHelper with ref" + refCounts.get(dbpath)); 
-            refCounts.put(dbpath, refCounts.get(dbpath) + 1);
+            DBConnection conn = dbConnections.get(dbpath);
+            conn.acquireConnection();
             return helpers.get(dbpath);
         } else {
             try {
                 Log.i(TAG, "Call get AnyMemoDBOpenHelper for first time."); 
                 AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelper.getHelper(context, dbpath);
+                DBConnection conn = new DBConnection(dbpath);
+                dbConnections.put(dbpath, conn);
                 helpers.put(dbpath, helper);
-                refCounts.put(dbpath, 1);
                 return helper;
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -50,57 +50,116 @@ public class AnyMemoDBOpenHelperManager {
         }
     }
 
-    public static void releaseHelper(String dbpath) {
-        Integer count = refCounts.get(dbpath);
+    public static synchronized void releaseHelper(String dbpath) {
         Log.i(TAG, "Release AnyMemoDBOpenHelper: " + dbpath); 
-        if (count > 1) {
-            refCounts.put(dbpath, count - 1);
-        } else {
-            Log.i(TAG, "Close AnyMemoDBOpenHelper since there are 0 connections: " + dbpath); 
+        DBConnection conn = dbConnections.get(dbpath);
+        if (conn == null) {
+            throw new RuntimeException("release an non-existing db helper");
+        }
+
+        if (conn.getDbState().contains(DBState.ACTIVE_CONNECTION)) {
+            conn.releaseConnection();
+        }
+
+        if (conn.getDbState().isEmpty()) {
+            Log.i(TAG, "All connection released. Close helper. DB: " + dbpath); 
             AnyMemoDBOpenHelper helper = helpers.get(dbpath); 
             helper.close();
             helpers.remove(dbpath);
-            refCounts.remove(dbpath);
+        } else if (conn.getDbState().contains(DBState.TASK_RUNNING)) {
+            Log.i(TAG, "There are still task running when releasing helper. Will be released when the task is done"); 
+        } 
+    }
+
+    public static synchronized Future<?> submitDBTask(String dbpath, Runnable task) {
+        DBConnection conn = dbConnections.get(dbpath);
+        return conn.submitDBTask(task);
+    }
+
+    public static synchronized void waitTask(String dbpath, Future<?> f) {
+        DBConnection conn = dbConnections.get(dbpath);
+        conn.waitTask(f);
+        if (conn.getDbState().isEmpty()) {
+            releaseHelper(dbpath);
         }
     }
 
-    public static void submitDBTask(String dbpath, Runnable task) {
-        Set<Future<?>> futures;
-        if (!dbTasks.containsKey(dbpath)) {
-            futures = new HashSet<Future<?>>();
-            dbTasks.put(dbpath, futures);
-        } else {
-            futures = dbTasks.get(dbpath);
-        }
-
-        Future<?> f = executor.submit(task);
-        refCounts.put(dbpath, refCounts.get(dbpath) + 1);
-        futures.add(f);
+    public static synchronized void waitAllTasks(String dbpath) {
+        DBConnection conn = dbConnections.get(dbpath);
+        conn.waitAllTasks();
     }
 
-    public static void waitTask(String dbpath) {
-        Set<Future<?>> futures = dbTasks.get(dbpath);
-        if (futures == null) {
-            return;
+    public static synchronized void waitAllTasks() {
+        for (String path : dbConnections.keySet()) {
+            waitAllTasks(path);
+        }
+    }
+
+    private static class DBConnection {
+        private Integer connections;
+        private Set<Future<?>> tasks;
+        private EnumSet<DBState> dbState;
+
+        public DBConnection(String dbpath) {
+            tasks = new HashSet<Future<?>>();
+            dbState = EnumSet.noneOf(DBState.class);
         }
 
-        for (Future<?> f : futures) {
+        public void acquireConnection() {
+            connections += 1;
+            dbState.add(DBState.ACTIVE_CONNECTION);
+        }
+
+        public void releaseConnection() {
+            if (connections > 0) {
+                connections -= 1;
+            } else {
+                Log.e("DBConnection", "Try to release non active connection");
+            }
+            if (!tasks.isEmpty()) {
+                dbState.remove(DBState.TASK_RUNNING);
+            } 
+            if (connections == 0) {
+                dbState.remove(DBState.ACTIVE_CONNECTION);
+            }
+        }
+
+        public synchronized Future<?> submitDBTask(Runnable task) {
+            Future<?> f = executor.submit(task);
+            tasks.add(f);
+            dbState.add(DBState.TASK_RUNNING);
+            return f;
+        }
+
+        public synchronized void waitTask(Future<?> f) {
             try {
                 f.get();
-                releaseHelper(dbpath);
+                tasks.remove(f);
+                if (tasks.isEmpty()) {
+                    dbState.remove(DBState.TASK_RUNNING);
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
         }
-    }
 
-    public static void waitAllTasks() {
-        for (String path : dbTasks.keySet()) {
-            waitTask(path);
+        public synchronized void waitAllTasks() {
+            Iterator<Future<?>> fi = tasks.iterator();
+            while (fi.hasNext()) {
+                waitTask(fi.next());
+            }
+        }
+        
+        public EnumSet<DBState> getDbState() {
+            return dbState;
         }
     }
 
-}
+    private static enum DBState {
+        ACTIVE_CONNECTION,
+        TASK_RUNNING
+    }
 
+}

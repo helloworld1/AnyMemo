@@ -62,7 +62,7 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
 			helper = new AnyMemoDBOpenHelper(context, dbpath);
 		} else if (!dbpath.equals(dbPath)) {
             Log.e("AnyMemoDBOpenHelper.getHelper",
-                    "Open two database at the same. Please close the previous connection");
+                    "Open two database at the same. Old: " + dbPath + " New: " + dbpath);
             throw new SQLException("Open two database at the same. Please close the previous connection");
         } else {
             Log.i("AnyMemoDBOpenHelper.getHelper", "Reuse database helper");
@@ -70,6 +70,7 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
 		return helper;
 	}
 
+    @Override
     public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
         Log.v(TAG, "Now we are creating a new database!");
         Log.i(TAG, "Newly created db version: " + database.getVersion()); 
@@ -154,8 +155,15 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
         }
     }
 
+    @Override
     public void onUpgrade(SQLiteDatabase database, ConnectionSource connectionSource, int oldVersion, int newVersion) {
         Log.v(TAG, "Old version" + oldVersion + " new version: " + newVersion);
+    }
+
+    @Override
+    public void close() {
+        super.close();
+        helper = null;
     }
 
     public CardDao getCardDao() throws SQLException {

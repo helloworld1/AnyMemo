@@ -126,6 +126,7 @@ public class LearnQueueManager implements QueueManager {
                 throw new RuntimeException(e);
             }
         }
+        dirtyCache.clear();
 		
 	}
 
