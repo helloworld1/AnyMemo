@@ -126,7 +126,8 @@ public class MainTabs extends AMActivity{
 
         /////////////////////
         Intent myIntent = new Intent(this, MemoScreen.class);
-        myIntent.putExtra("dbpath", "/sdcard/french-body-parts.db");
+        //myIntent.putExtra("dbpath", "/sdcard/french-body-parts.db");
+        myIntent.putExtra("dbpath", "/sdcard/gre01.db");
         myIntent.putExtra("category", "");
         startActivity(myIntent);
     }

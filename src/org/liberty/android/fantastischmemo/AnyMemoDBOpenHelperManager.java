@@ -9,6 +9,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -22,9 +24,8 @@ import android.util.Log;
  * Keep the reference count of each AnyMemoDBOpenHelper.
  */
 public class AnyMemoDBOpenHelperManager {
-    private static Map<String, AnyMemoDBOpenHelper> helpers
-        = new HashMap<String, AnyMemoDBOpenHelper>();
-    private static Map<String, DBConnection> dbConnections = new HashMap<String, DBConnection>(); 
+    private static Map<String, AnyMemoDBOpenHelper> helpers = new ConcurrentHashMap<String, AnyMemoDBOpenHelper>();
+    private static Map<String, DBConnection> dbConnections = new ConcurrentHashMap<String, DBConnection>(); 
 
     private static ExecutorService executor = Executors.newSingleThreadExecutor();
 
@@ -105,12 +106,12 @@ public class AnyMemoDBOpenHelperManager {
             dbState = EnumSet.noneOf(DBState.class);
         }
 
-        public void acquireConnection() {
+        public synchronized void acquireConnection() {
             connections += 1;
             dbState.add(DBState.ACTIVE_CONNECTION);
         }
 
-        public void releaseConnection() {
+        public synchronized void releaseConnection() {
             if (connections > 0) {
                 connections -= 1;
             } else {
@@ -148,7 +149,21 @@ public class AnyMemoDBOpenHelperManager {
         public synchronized void waitAllTasks() {
             Iterator<Future<?>> fi = tasks.iterator();
             while (fi.hasNext()) {
-                waitTask(fi.next());
+                Future<?> f = fi.next();
+                try {
+                    f.get();
+                    fi.remove();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (tasks.isEmpty()) {
+                dbState.remove(DBState.TASK_RUNNING);
+            } else {
+                throw new AssertionError("The tasks shoul be empty!");
             }
         }
         

@@ -94,7 +94,7 @@ public class LearnQueueManager implements QueueManager {
 	}
 
 	@Override
-	public Card dequeue() {
+	public synchronized Card dequeue() {
         refill();
         if (!learnQueue.isEmpty()) {
 
@@ -106,7 +106,7 @@ public class LearnQueueManager implements QueueManager {
         }
 	}
 	@Override
-	public void remove(Card card) {
+	public synchronized void remove(Card card) {
         learnQueue.remove(card);
         dirtyCache.remove(card);
         reviewCache.remove(card);
@@ -114,7 +114,7 @@ public class LearnQueueManager implements QueueManager {
 	}
 
 	@Override
-	public void flush() {
+	public synchronized void flush() {
         // Update the queue
         for (Card card : dirtyCache) {
             try {
@@ -130,7 +130,7 @@ public class LearnQueueManager implements QueueManager {
 		
 	}
 
-    private void refill() {
+    private synchronized void refill() {
         if (newCache.size() == 0) {
             List<Card> cs = getNewCards(cacheSize - newCache.size());
             if (cs.size() > 0) {
@@ -158,7 +158,7 @@ public class LearnQueueManager implements QueueManager {
     }
 
 	@Override
-	public void update(Card card) {
+	public synchronized void update(Card card) {
         // TODO: Should use an scheduling manager to determine it
         if (card.getLearningData().getGrade() >= 2) {
             learnQueue.remove(card);
