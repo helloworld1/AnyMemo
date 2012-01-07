@@ -29,6 +29,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import java.util.concurrent.Callable;
+
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 
@@ -116,17 +118,24 @@ public class LearnQueueManager implements QueueManager {
 	@Override
 	public synchronized void flush() {
         // Update the queue
-        for (Card card : dirtyCache) {
-            try {
-                Log.i(TAG, "Flushing: " + card.getLearningData());
-                learningDataDao.update(card.getLearningData());
-                cardDao.update(card);
-            } catch (SQLException e) {
-                e.printStackTrace();
-                throw new RuntimeException(e);
-            }
+        
+        try {
+        learningDataDao.callBatchTasks (
+                new Callable<Void>() {
+                    public Void call() throws Exception {
+                        for (Card card : dirtyCache) {
+                            Log.i(TAG, "Flushing: " + card.getLearningData());
+                            learningDataDao.update(card.getLearningData());
+                            cardDao.update(card);
+                        }
+                        dirtyCache.clear();
+                        return null;
+                    }
+                });
+        } catch (Exception e) {
+            Log.e(TAG, "Queue flushing get exception!");
+            e.printStackTrace();
         }
-        dirtyCache.clear();
 		
 	}
 
