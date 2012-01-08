@@ -115,6 +115,9 @@
         <activity 
             android:name=".ui.MemoScreen"
             android:configChanges="orientation|keyboardHidden" />
+        <activity 
+            android:name=".ui.EditScreen"
+            android:configChanges="orientation|keyboardHidden" />
         <receiver
             android:name=".AlarmReceiver"
             android:process=":remote" />

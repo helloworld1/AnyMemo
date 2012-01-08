@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.List;
 
 import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMGUIUtility;
 import org.liberty.android.fantastischmemo.AMUtil;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
@@ -63,6 +64,7 @@ import org.liberty.android.fantastischmemo.ui.MemoScreen;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -102,7 +104,6 @@ public class EditScreen extends AMActivity {
     private final int ACTIVITY_DETAIL = 18;
     private final static String WEBSITE_HELP_EDIT = "http://anymemo.org/wiki/index.php?title=Editing_screen";
 
-    Handler mHandler;
     Card currentCard = null;
     Integer currentCardId = null;
     Integer savedCardId = null;
@@ -114,9 +115,9 @@ public class EditScreen extends AMActivity {
     LearningDataDao learningDataDao;
     CategoryDao categoryDao;
     FlashcardDisplay flashcardDisplay;
-    SettingManager settingManager;
     ControlButtons controlButtons;
     Setting setting;
+    InitTask initTask;
     Option option;
     
     private GestureDetector gestureDetector;
@@ -124,8 +125,8 @@ public class EditScreen extends AMActivity {
     @Override
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-		setContentView(R.layout.memo_screen_layout);
-        mHandler = new Handler();
+        initTask = new InitTask();
+        initTask.execute((Void)null);
 
         /* 
          * Currently always set the result to OK
@@ -443,10 +444,8 @@ public class EditScreen extends AMActivity {
         /* This li is make the background of buttons the same as answer */
         LinearLayout li = new LinearLayout(this);
         li.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.FILL_PARENT));
-        List<Integer> colors = settingManager.getColors();
-        if(colors != null){
-            li.setBackgroundColor(settingManager.getColors().get(3));
-        }
+        li.setBackgroundColor(setting.getAnswerBackgroundColor());
+
         /* 
          * -1: Match parent -2: Wrap content
          * This is necessary or the view will not be 
@@ -470,7 +469,7 @@ public class EditScreen extends AMActivity {
         prevButton.setOnClickListener(prevButtonListener);
         nextButton.setOnClickListener(nextButtonListener);
         /* For double sided card, the view can be toggled */
-        if(settingManager.getCardStyle() == SettingManager.CardStyle.DOUBLE_SIDED){
+        if(setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED){
 
             flashcardDisplay.setQuestionLayoutClickListener(toggleCardSideListener);
             flashcardDisplay.setAnswerLayoutClickListener(toggleCardSideListener);
@@ -726,6 +725,7 @@ public class EditScreen extends AMActivity {
     };
 
     private class InitTask extends AsyncTask<Void, Void, Void> {
+        private ProgressDialog progressDialog;
 
 		@Override
         public void onPreExecute() {
@@ -735,32 +735,22 @@ public class EditScreen extends AMActivity {
 
             Bundle extras = getIntent().getExtras();
             int currentId = 1;
-            mHandler = new Handler();
             if (extras != null) {
                 dbPath = extras.getString("dbpath");
                 activeCategory = extras.getString("category");
                 currentCardId = extras.getInt("id", 1);
             }
-            option = new Option(EditScreen.this);
 
             // Strip leading path!
             dbName = AMUtil.getFilenameFromPath(dbPath);
-            showDialog(DIALOG_LOADING_PROGRESS);
+            progressDialog = new ProgressDialog(EditScreen.this);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setTitle(getString(R.string.loading_please_wait));
+            progressDialog.setMessage(getString(R.string.loading_database));
+            progressDialog.setCancelable(false);
+            progressDialog.show();
 
 
-            try{
-                setting = settingDao.queryForId(1);
-                if(setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED){
-                    flashcardDisplay = new DoubleSidedCardDisplay(EditScreen.this, dbPath, setting, option);
-                }
-                else{
-                    flashcardDisplay = new SingleSidedCardDisplay(EditScreen.this, dbPath, setting, option);
-                }
-                controlButtons = new EditScreenButtons(EditScreen.this);
-
-                /* databaseUtility is for global db operations */
-            } catch (SQLException e) {
-            }
         }
 
         @Override
@@ -773,15 +763,38 @@ public class EditScreen extends AMActivity {
                 learningDataDao = helper.getLearningDataDao();
                 settingDao = helper.getSettingDao();
                 setting = settingDao.queryForId(1);
+                option = new Option(EditScreen.this);
                 /* Run the learnQueue init in a separate thread */
-                return null;
-            } catch (Exception e) {
-                return null;
+                currentCard = cardDao.queryForId(currentCardId);
+                // TODO: Query for first ordinal
+                if (currentCard == null) {
+                    currentCard = cardDao.queryFirstOrdinal();
+                }
+
+            } catch (SQLException e) {
+                Log.e(TAG, "Error creating daos", e);
+                throw new RuntimeException("Dao creation error");
             }
+            return null;
         }
 
         @Override
         public void onPostExecute(Void result){
+            // It means empty set
+            if (currentCard == null) {
+                // TOD: should create a new card
+            } else {
+                //assert currentCard != null : "Current card is null";
+                if(setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED){
+                    flashcardDisplay = new DoubleSidedCardDisplay(EditScreen.this, dbPath, setting, option);
+                }
+                else{
+                    flashcardDisplay = new SingleSidedCardDisplay(EditScreen.this, dbPath, setting, option);
+                }
+                controlButtons = new EditScreenButtons(EditScreen.this);
+
+                /* databaseUtility is for global db operations */
+                progressDialog.dismiss();
                 initTTS();
                 composeViews();
                 //currentCard = .getItem(currentId);
@@ -792,14 +805,14 @@ public class EditScreen extends AMActivity {
                 updateTitle();
                 setViewListeners();
                 /* Double sided card can't use the flip gesture*/
-                if(settingManager.getCardStyle() != SettingManager.CardStyle.DOUBLE_SIDED){
+                if(setting.getCardStyle() != Setting.CardStyle.DOUBLE_SIDED){
                     gestureDetector= new GestureDetector(EditScreen.this, gestureListener);
                     flashcardDisplay.setScreenOnTouchListener(viewTouchListener);
                 }
                 registerForContextMenu(flashcardDisplay.getView());
+            }
         }
     }
-
 }
 
 

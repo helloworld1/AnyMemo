@@ -46,6 +46,7 @@ import org.liberty.android.fantastischmemo.domain.Setting;
 
 import org.liberty.android.fantastischmemo.scheduler.DefaultScheduler;
 
+import org.liberty.android.fantastischmemo.ui.EditScreen;
 import org.liberty.android.fantastischmemo.ui.MemoScreen;
 
 import com.j256.ormlite.dao.Dao;
@@ -125,7 +126,7 @@ public class MainTabs extends AMActivity{
         //tabHost.addTab(spec);
 
         /////////////////////
-        Intent myIntent = new Intent(this, MemoScreen.class);
+        Intent myIntent = new Intent(this, EditScreen.class);
         //myIntent.putExtra("dbpath", "/sdcard/french-body-parts.db");
         myIntent.putExtra("dbpath", "/sdcard/gre01.db");
         myIntent.putExtra("category", "");
