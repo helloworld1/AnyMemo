@@ -529,12 +529,10 @@ public class EditScreen extends AMActivity {
     }
     
     private void gotoNext(){
-        // TODO: How to go to next
-        /*
-        currentItem = itemManager.getNextItem(currentItem);
+        currentCard = cardDao.queryNextCard(currentCard);
+        assert currentCard != null : "Next card is null";
         updateCardFrontSide();
         updateTitle();
-        */
     }
 
     private void deleteCurrent(){
@@ -560,6 +558,9 @@ public class EditScreen extends AMActivity {
         // TODO: How to go to prev card
         //currentItem = itemManager.getPreviousItem(currentItem);
         //updateCardFrontSide();
+        currentCard = cardDao.queryPrevCard(currentCard);
+        assert currentCard != null : "Prev card is null";
+        updateCardFrontSide();
         updateTitle();
     }
 
@@ -784,7 +785,6 @@ public class EditScreen extends AMActivity {
             if (currentCard == null) {
                 // TOD: should create a new card
             } else {
-                //assert currentCard != null : "Current card is null";
                 if(setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED){
                     flashcardDisplay = new DoubleSidedCardDisplay(EditScreen.this, dbPath, setting, option);
                 }
