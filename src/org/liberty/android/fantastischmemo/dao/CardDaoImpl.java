@@ -87,5 +87,15 @@ public class CardDaoImpl extends BaseDaoImpl<Card, Integer> implements CardDao {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public int delete(Card c) {
+        try {
+            return super.delete(c);
+        }
+        catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
 

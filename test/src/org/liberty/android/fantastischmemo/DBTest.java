@@ -3,6 +3,7 @@ package org.liberty.android.fantastischmemo;
 import java.sql.SQLException;
 
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.List;
 
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
@@ -20,6 +21,7 @@ import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
+import org.liberty.android.fantastischmemo.domain.Setting;
 
 import org.liberty.android.fantastischmemo.queue.LearnQueueManager;
 
@@ -60,6 +62,19 @@ public class DBTest extends ActivityInstrumentationTestCase2<MiscTab> {
             assertNotNull("deckDao should not null!", deckDao);
             assertNotNull("learningDataDao should not null!", learningDataDao);
 
+            // Test Settings
+            Setting setting = settingDao.queryForId(1);
+            EnumSet<Setting.CardField> es = setting.getQuestionFieldEnum();
+            assertNotNull("Get enum shou not be null es");
+            assertTrue(es.contains(Setting.CardField.QUESTION));
+            es.add(Setting.CardField.ANSWER);
+            setting.setQuestionFieldEnum(es);
+            settingDao.update(setting);
+            setting = settingDao.queryForId(1);
+            es = setting.getQuestionFieldEnum();
+            assertTrue(es.contains(Setting.CardField.ANSWER));
+
+            // Test learning queue
             LearnQueueManager manager = new LearnQueueManager(10, 50);
             manager.setLearningDataDao(learningDataDao);
             manager.setCardDao(cardDao);

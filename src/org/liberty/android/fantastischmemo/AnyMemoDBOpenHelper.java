@@ -102,8 +102,8 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
         // This is old database
         if (isOldDatabase) {
             // copy all cards
-            database.execSQL("insert into cards (ordinal, question, answer)" +
-                    " select _id as ordinal, question, answer from dict_tbl");
+            database.execSQL("insert into cards (ordinal, question, answer, note)" +
+                    " select _id as ordinal, question, answer, note from dict_tbl");
 
 
             // Make sure the count matches in old database;

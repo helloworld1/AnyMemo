@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
+import java.util.EnumSet;
+
 import org.amr.arabic.ArabicUtilities;
 
 import org.liberty.android.fantastischmemo.AMUtil;
@@ -173,7 +175,7 @@ public class SingleSidedCardDisplay implements FlashcardDisplay, TagHandler, Ima
         boolean enableThirdPartyArabic = option.getEnableArabicEngine();
         Setting.Align questionAlign = setting.getQuestionTextAlign();
         Setting.Align answerAlign = setting.getAnswerTextAlign();
-        long htmlDisplay = setting.getDisplayInHTML();
+        EnumSet<Setting.CardField> htmlDisplay = setting.getDisplayInHTMLEnum();
 
         /* Set the typeface of question an d answer */
         if(questionTypeface != null && !questionTypeface.equals("")){
@@ -208,74 +210,61 @@ public class SingleSidedCardDisplay implements FlashcardDisplay, TagHandler, Ima
             itemCategory = ArabicUtilities.reshape(itemCategory);
             itemNote = ArabicUtilities.reshape(itemNote);
         }
-        String[] fields = {itemQuestion, itemAnswer, itemCategory, itemNote};
 
+        // For question field (field1)
         SpannableStringBuilder sq = new SpannableStringBuilder();
+
+        // For answer field  (field2)
         SpannableStringBuilder sa = new SpannableStringBuilder();
         /* Show the field that is enabled in settings */
-        long field1 = setting.getQuestionField();
-        long field2 = setting.getAnswerField();
+        EnumSet<Setting.CardField> field1 = setting.getQuestionFieldEnum();
+        EnumSet<Setting.CardField> field2 = setting.getAnswerFieldEnum();
         Log.v(TAG, "Field1: " + field1);
         Log.v(TAG, "Field2: " + field2);
         Log.v(TAG, "html: " + htmlDisplay);
 
         /* Iterate all fields */
-        for(int i = 0; i < 4; i++){
-            /* Question field */
-            if((field1 & (1 << i)) > 0){
-                /* Automatic check HTML */
-                if(AMUtil.isHTML(fields[i]) && (htmlDisplay & (1 << i)) > 0){
-                    if(sq.length() != 0){
-                        sq.append(Html.fromHtml("<br /><br />", this, this));
-                    }
-                    if(setting.getHtmlLineBreakConversion() == true){
-                        String s = fields[i].replace("\n", "<br />");
-                        sq.append(Html.fromHtml(s, this, this));
-                    }
-                    else{
-                        sq.append(Html.fromHtml(fields[i], this, this));
-                    }
+        for (Setting.CardField cf : Setting.CardField.values()) {
+            String str = "";
+            if (cf == Setting.CardField.QUESTION) {
+                str = card.getQuestion();
+            } else if (cf == Setting.CardField.ANSWER) {
+                str = card.getAnswer();
+            } else if (cf == Setting.CardField.NOTE) {
+                str = card.getNote();
+            } else {
+                throw new AssertionError("This is a bug! New CardField enum has been added but the display field haven't been nupdated");
+            }
+            SpannableStringBuilder buffer = new SpannableStringBuilder();
+
+            /* Automatic check HTML */
+            if(AMUtil.isHTML(str) && (htmlDisplay.contains(cf))) {
+                if(sq.length() != 0){
+                    buffer.append(Html.fromHtml("<br /><br />", this, this));
                 }
-                else{
-                    if(sq.length() != 0){
-                        sq.append("\n\n");
-                    }
-                    sq.append(fields[i]);
+                if(setting.getHtmlLineBreakConversion() == true) {
+                    String s = str.replace("\n", "<br />");
+                    buffer.append(Html.fromHtml(s, this, this));
+                } else{
+                    buffer.append(Html.fromHtml(str, this, this));
                 }
+            } else{
+                if(sq.length() != 0){
+                    buffer.append("\n\n");
+                }
+                buffer.append(str);
+            }
+            if (field1.contains(cf)) {
+                sq.append(buffer);
+            }
+            if (field2.contains(cf)) {
+                sa.append(buffer);
             }
 
-            /* Answer field */
-            if((field2 & (1 << i)) > 0){
-                /* Automatic check HTML */
-                if(AMUtil.isHTML(fields[i]) && (htmlDisplay & (1 << i)) > 0){
-                    if(sa.length() != 0){
-                        sa.append(Html.fromHtml("<br /><br />", this, this));
-                    }
-                    if(setting.getHtmlLineBreakConversion() == true){
-                        String s = fields[i].replace("\n", "<br />");
-                        sa.append(Html.fromHtml(s, this, this));
-                    }
-                    else{
-                        sa.append(Html.fromHtml(fields[i], this, this));
-                    }
-                }
-                else{
-                    if(sa.length() != 0){
-                        sa.append("\n\n");
-                    }
-                    sa.append(fields[i]);
-                }
-            }
         }
-
-
-
         questionView.setText(sq);
         answerView.setText(sa);
 
-		
-		
-		
         /* Here is tricky to set up the alignment of the text */
 		if(questionAlign == Setting.Align.CENTER){
 			questionView.setGravity(Gravity.CENTER);

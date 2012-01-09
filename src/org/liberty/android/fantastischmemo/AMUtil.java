@@ -26,6 +26,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import java.util.EnumSet;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -69,5 +71,29 @@ public class AMUtil {
     public static String getFilenameFromPath(String path) {
         String[] splitted = path.split("/");
         return splitted[splitted.length - 1];
+    }
+
+    /* Get the EnumSet from a string in format "A,B,C" */
+    public static <E extends Enum<E>> EnumSet<E> getEnumSetFromString(Class<E> enumType, String enumString) {
+        EnumSet<E> es = EnumSet.noneOf(enumType);
+
+        String[] split = enumString.split(",");
+        for (String s : split) {
+            es.add(Enum.valueOf(enumType, s));
+
+        }
+        return es;
+    }
+
+    /* Get the String a string in format "A,B,C" from EnumSet */
+    public static <E extends Enum<E>> String getStringFromEnumSet(EnumSet<E> e) {
+        String res = "";
+        for (E cf : e) {
+            res = res + cf.toString() + ",";
+        }
+        if (res.length() != 0) {
+            res = res.substring(0, res.length() - 1);
+        }
+        return res;
     }
 }

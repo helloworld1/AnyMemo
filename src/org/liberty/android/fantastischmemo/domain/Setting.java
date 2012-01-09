@@ -1,6 +1,9 @@
 package org.liberty.android.fantastischmemo.domain;
 
 import java.util.Date;
+import java.util.EnumSet;
+
+import org.liberty.android.fantastischmemo.AMUtil;
 
 import org.liberty.android.fantastischmemo.dao.SettingDaoImpl;
 
@@ -61,19 +64,19 @@ public class Setting {
     private Integer separatorColor = 0xFF909090;
 
     /* 1 = question, 2 = answer, 4 = note */
-    @DatabaseField(defaultValue = "7")
-    private Long displayInHTML = 7L;
+    @DatabaseField(defaultValue = "QUESTION,ANSWER,NOTE")
+    private String displayInHTML = "QUESTION,ANSWER,NOTE";
 
     @DatabaseField(defaultValue = "false")
     private Boolean htmlLineBreakConversion = false;
 
     /* 1 = question, 2 = answer, 4 = note */
-    @DatabaseField(defaultValue = "1")
-    private Long questionField = CardField.QUESTION;
+    @DatabaseField(defaultValue = "QUESTION")
+    private String questionField = CardField.QUESTION.toString();
 
     /* 1 = question, 2 = answer, 4 = note */
-    @DatabaseField(defaultValue = "2")
-    private Long answerField = CardField.ANSWER;
+    @DatabaseField(defaultValue = "ANSWER")
+    private String answerField = CardField.ANSWER.toString();
 
     /* Empty = no font*/
     @DatabaseField(defaultValue = "")
@@ -118,12 +121,10 @@ public class Setting {
         DOUBLE_SIDED
     }
 
-    /* Use bitfield opertion on this class */
-    public static class CardField {
-        public static final long QUESTION = 1;
-        public static final long ANSWER = 2;
-        public static final long NOTE = 4;
-        public static final long CATEGORY = 8;
+    public static enum CardField {
+        QUESTION,
+        ANSWER,
+        NOTE
     }
 
     public static enum DictApp {
@@ -272,12 +273,20 @@ public class Setting {
 		this.separatorColor = separatorColor;
 	}
 
-	public Long getDisplayInHTML() {
+	public String getDisplayInHTML() {
 		return displayInHTML;
 	}
 
-	public void setDisplayInHTML(Long displayInHTML) {
+	public void setDisplayInHTML(String displayInHTML) {
 		this.displayInHTML = displayInHTML;
+	}
+
+	public EnumSet<CardField> getDisplayInHTMLEnum() {
+		return AMUtil.getEnumSetFromString(CardField.class, displayInHTML);
+	}
+
+	public void setDisplayInHTMLEnum(EnumSet<CardField> displayInHTMLEnum) {
+        displayInHTML = AMUtil.getStringFromEnumSet(displayInHTMLEnum);
 	}
 
 	public Boolean getHtmlLineBreakConversion() {
@@ -288,20 +297,36 @@ public class Setting {
 		this.htmlLineBreakConversion = htmlLineBreakConversion;
 	}
 
-	public Long getQuestionField() {
+	public String getQuestionField() {
 		return questionField;
 	}
 
-	public void setQuestionField(Long questionField) {
+	public void setQuestionField(String questionField) {
 		this.questionField = questionField;
 	}
 
-	public Long getAnswerField() {
+	public EnumSet<CardField> getQuestionFieldEnum() {
+		return AMUtil.getEnumSetFromString(CardField.class, questionField);
+	}
+
+	public void setQuestionFieldEnum(EnumSet<CardField> questionFieldEnum) {
+        questionField = AMUtil.getStringFromEnumSet(questionFieldEnum);
+	}
+
+	public String getAnswerField() {
 		return answerField;
 	}
 
-	public void setAnswerField(Long answerField) {
+	public void setAnswerField(String answerField) {
 		this.answerField = answerField;
+	}
+
+	public EnumSet<CardField> getAnswerFieldEnum() {
+		return AMUtil.getEnumSetFromString(CardField.class, answerField);
+	}
+
+	public void setAnswerEnum(EnumSet<CardField> answerFieldEnum) {
+        answerField = AMUtil.getStringFromEnumSet(answerFieldEnum);
 	}
 
 	public String getQuestionFont() {

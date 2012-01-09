@@ -140,6 +140,7 @@ public class EditScreen extends AMActivity {
 
     @Override
     public void onDestroy(){
+        AnyMemoDBOpenHelperManager.releaseHelper(dbPath);
         if(questionTTS != null){
             questionTTS.shutdown();
         }
@@ -783,7 +784,7 @@ public class EditScreen extends AMActivity {
         public void onPostExecute(Void result){
             // It means empty set
             if (currentCard == null) {
-                // TOD: should create a new card
+                // TODO: should create a new card
             } else {
                 if(setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED){
                     flashcardDisplay = new DoubleSidedCardDisplay(EditScreen.this, dbPath, setting, option);

@@ -19,22 +19,44 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import org.liberty.android.fantastischmemo.*;
+import java.sql.SQLException;
 
 import java.util.HashMap;
 import java.io.File;
 
+import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.AMUtil;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.DatabaseHelper;
+import org.liberty.android.fantastischmemo.FileBrowser;
+import org.liberty.android.fantastischmemo.Item;
+import org.liberty.android.fantastischmemo.R;
+
+import org.liberty.android.fantastischmemo.dao.CardDao;
+import org.liberty.android.fantastischmemo.dao.CategoryDao;
+import org.liberty.android.fantastischmemo.dao.LearningDataDao;
+
+import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.domain.Option;
+
+import org.liberty.android.fantastischmemo.ui.EditScreen;
+import org.liberty.android.fantastischmemo.ui.EditScreen;
+
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
@@ -42,69 +64,33 @@ import android.util.Log;
 import android.os.Environment;
 import android.content.res.Configuration;
 
-
-public class CardEditor extends Activity implements View.OnClickListener{
-    private final static String TAG = "org.liberty.android.fantastischmemo.CardEditor";
+public class CardEditor extends AMActivity implements View.OnClickListener{
     private final int ACTIVITY_IMAGE_FILE = 1;
     private final int ACTIVITY_AUDIO_FILE = 2;
-    private Item oldItem = null;
+    private Card currentCard = null;
+    private Integer currentCardId;
     private EditText questionEdit;
     private EditText answerEdit;
     private EditText categoryEdit;
     private EditText noteEdit;
     private RadioGroup addRadio;
     private boolean addBack = true;
+    private boolean isEditNew = false;
     private Button btnSave;
     private Button btnCancel;
     private String dbName = null;
     private String dbPath = null;
-    private boolean isEditNew = true;
+    private CardDao cardDao;
+    private LearningDataDao learningDataDao;
+    private CategoryDao categoryDao;
+
+    private String originalQuestion;
+    private String originalAnswer;
+
 
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 		setContentView(R.layout.edit_dialog);
-        setTitle(R.string.memo_edit_dialog_title);
-		Bundle extras = getIntent().getExtras();
-		if (extras != null) {
-			oldItem = (Item)extras.getParcelable("item");
-			dbName = extras.getString("dbname");
-			dbPath = extras.getString("dbpath");
-            isEditNew = extras.getBoolean("new", false);
-		}
-        questionEdit = (EditText)findViewById(R.id.edit_dialog_question_entry);
-        answerEdit = (EditText)findViewById(R.id.edit_dialog_answer_entry);
-        categoryEdit = (EditText)findViewById(R.id.edit_dialog_category_entry);
-        noteEdit = (EditText)findViewById(R.id.edit_dialog_note_entry);
-        btnSave = (Button)findViewById(R.id.edit_dialog_button_save);
-        btnCancel = (Button)findViewById(R.id.edit_dialog_button_cancel);
-        addRadio = (RadioGroup)findViewById(R.id.add_radio);
-        btnSave.setOnClickListener(this);
-        btnCancel.setOnClickListener(this);
-        if(oldItem == null){
-            /* Use default parameters for new item */
-            oldItem = new Item.Builder()
-                .setId(0)
-                .build();
-        }
-
-        /* Retain the last category when editing new */
-        categoryEdit.setText(oldItem.getCategory());
-        /* Prefill the note if it is empty */
-
-        if(isEditNew){
-            /* Use this one or the one below ?*/
-            noteEdit.setText(oldItem.getNote());
-            /*
-            String dt = SimpleDateFormat.getDateTimeInstance().format(new Date());
-            noteEdit.setText(dt); */
-        }
-        if(!isEditNew){
-            questionEdit.setText(oldItem.getQuestion());
-            answerEdit.setText(oldItem.getAnswer());
-            noteEdit.setText(oldItem.getNote());
-        }
-        /* Should be called after the private fields are inited */
-        setInitRadioButton();
 
     }
     
@@ -114,55 +100,15 @@ public class CardEditor extends Activity implements View.OnClickListener{
             String aText = answerEdit.getText().toString();
             String cText = categoryEdit.getText().toString();
             String nText = noteEdit.getText().toString();
-            HashMap<String, String> hm = new HashMap<String, String>();
-            Item currentItem = null;
-            try{
-                DatabaseHelper dbHelper = new DatabaseHelper(this, dbPath, dbName);
-                /* Here we check if the item is newly created */
-                if(isEditNew){
-                    int newId;
-                    if(addBack){
-                        newId = dbHelper.getNewId();
-                    }
-                    else{
-                        newId = oldItem.getId() + 1;
-                    }
-                    currentItem = new Item.Builder()
-                        .setId(newId)
-                        .setQuestion(qText)
-                        .setAnswer(aText)
-                        .setCategory(cText)
-                        .setNote(nText)
-                        .build();
-                    dbHelper.insertItem(currentItem, newId - 1);
-                }
-                else{
-                    currentItem = new Item.Builder(oldItem)
-                        .setQuestion(qText)
-                        .setAnswer(aText)
-                        .setCategory(cText)
-                        .setNote(nText)
-                        .build();
-                    dbHelper.addOrReplaceItem(currentItem);
-                }
-                dbHelper.close();
-            }
-            catch(Exception e){
-                Log.e(TAG, "Error opending database when editing", e);
-                Intent resultIntent = new Intent();
-                setResult(Activity.RESULT_CANCELED, resultIntent);    			
-                finish();
-            }
             Intent resultIntent = new Intent();
-            resultIntent.putExtra("item", currentItem);
+            resultIntent.putExtra("id", currentCard.getId());
         	setResult(Activity.RESULT_OK, resultIntent);    			
             finish();
         }
         else if(v == btnCancel){
             String qText = questionEdit.getText().toString();
             String aText = answerEdit.getText().toString();
-            String cText = categoryEdit.getText().toString();
-            if(!isEditNew && (!qText.equals(oldItem.getQuestion()) || !aText.equals(oldItem.getAnswer()) || !cText.equals(oldItem.getCategory()))){
+            if (!isEditNew && (!qText.equals(originalQuestion) || !aText.equals(originalAnswer))) {
                 new AlertDialog.Builder(this)
                     .setTitle(R.string.warning_text)
                     .setMessage(R.string.edit_dialog_unsave_warning)
@@ -344,4 +290,82 @@ public class CardEditor extends Activity implements View.OnClickListener{
 
     }
 
+    private class InitTask extends AsyncTask<Void, Void, Void> {
+        private ProgressDialog progressDialog;
+
+		@Override
+        public void onPreExecute() {
+        setTitle(R.string.memo_edit_dialog_title);
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			currentCardId = extras.getInt("id");
+			dbPath = extras.getString("dbpath");
+			isEditNew = extras.getBoolean("is_edit_new");
+			addBack = extras.getBoolean("add_back");
+		}
+
+        progressDialog = new ProgressDialog(CardEditor.this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setTitle(getString(R.string.loading_please_wait));
+        progressDialog.setMessage(getString(R.string.loading_database));
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+
+        }
+
+        @Override
+            public Void doInBackground(Void... params) {
+                try {
+                    AnyMemoDBOpenHelper helper =
+                        AnyMemoDBOpenHelperManager.getHelper(CardEditor.this, dbPath);
+
+                    cardDao = helper.getCardDao();
+                    learningDataDao = helper.getLearningDataDao();
+                    categoryDao = helper.getCategoryDao();
+                    /* Run the learnQueue init in a separate thread */
+                    currentCard = cardDao.queryForId(currentCardId);
+                    assert currentCard != null : "Try to edit null card!";
+                    categoryDao.refresh(currentCard.getCategory());
+
+                } catch (SQLException e) {
+                    Log.e(TAG, "Error creating daos", e);
+                    throw new RuntimeException("Dao creation error");
+                }
+                return null;
+            }
+
+        @Override
+        public void onPostExecute(Void result){
+            // It means empty set
+            questionEdit = (EditText)findViewById(R.id.edit_dialog_question_entry);
+            answerEdit = (EditText)findViewById(R.id.edit_dialog_answer_entry);
+            categoryEdit = (EditText)findViewById(R.id.edit_dialog_category_entry);
+            noteEdit = (EditText)findViewById(R.id.edit_dialog_note_entry);
+            btnSave = (Button)findViewById(R.id.edit_dialog_button_save);
+            btnCancel = (Button)findViewById(R.id.edit_dialog_button_cancel);
+            addRadio = (RadioGroup)findViewById(R.id.add_radio);
+            btnSave.setOnClickListener(CardEditor.this);
+            btnCancel.setOnClickListener(CardEditor.this);
+
+            /* Retain the last category when editing new */
+            categoryEdit.setText(currentCard.getCategory().getName());
+            /* Prefill the note if it is empty */
+
+            if(isEditNew){
+                /* Use this one or the one below ?*/
+                noteEdit.setText(currentCard.getNote());
+                /*
+                   String dt = SimpleDateFormat.getDateTimeInstance().format(new Date());
+                   noteEdit.setText(dt); */
+            }
+            if(!isEditNew){
+                questionEdit.setText(currentCard.getQuestion());
+                answerEdit.setText(currentCard.getAnswer());
+                noteEdit.setText(currentCard.getNote());
+            }
+            /* Should be called after the private fields are inited */
+            setInitRadioButton();
+        }
+    }
 }
