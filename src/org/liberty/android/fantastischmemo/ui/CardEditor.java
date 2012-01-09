@@ -83,6 +83,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
     private CardDao cardDao;
     private LearningDataDao learningDataDao;
     private CategoryDao categoryDao;
+    private InitTask initTask;
 
     private String originalQuestion;
     private String originalAnswer;
@@ -91,7 +92,8 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 		setContentView(R.layout.edit_dialog);
-
+        initTask = new InitTask();
+        initTask.execute((Void)null);
     }
     
     public void onClick(View v){
@@ -285,9 +287,6 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
             };
             addRadio.setOnCheckedChangeListener(changeListener);
         }
-
-
-
     }
 
     private class InitTask extends AsyncTask<Void, Void, Void> {
@@ -301,7 +300,6 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
 			currentCardId = extras.getInt("id");
 			dbPath = extras.getString("dbpath");
 			isEditNew = extras.getBoolean("is_edit_new");
-			addBack = extras.getBoolean("add_back");
 		}
 
         progressDialog = new ProgressDialog(CardEditor.this);
