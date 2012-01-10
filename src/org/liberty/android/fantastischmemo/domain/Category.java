@@ -14,7 +14,7 @@ public class Category {
     private Integer id;
 
     @DatabaseField(defaultValue = "", width = 8192)
-    private String name;
+    private String name = "";
 
     @DatabaseField(version = true)
     private Date updateDate;

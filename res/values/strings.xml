@@ -378,4 +378,5 @@
     <string name="download_source_dropbox">Dropbox.com\n(experimental)</string>
     <string name="dropbox_login_message">Please enter your dropbox user name (Mostly email address) and password.</string>
     <string name="import_supermemo_2008_xml_text">Import SuperMemo 2008 XML</string>
+    <string name="uncategorized_text">Uncategorized</string>
 </resources>

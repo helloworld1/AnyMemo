@@ -84,6 +84,7 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, LearningData.class);
 
             getSettingDao().create(new Setting());
+            getCategoryDao().create(new Category());
 
             if (database.getVersion() == 0) {
                 convertOldDatabase(database);
@@ -137,7 +138,7 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
 
             // copy categories
             database.execSQL("insert into categories (name)"
-                + " select category as name from dict_tbl"
+                + " select category as name from dict_tbl where category != ''"
                 + " group by category");
             database.execSQL("update cards set category_id = ("
                 + " select id as category_id from categories as cat"

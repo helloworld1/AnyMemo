@@ -73,7 +73,8 @@ public class CardEditor extends Activity implements View.OnClickListener{
 		}
         questionEdit = (EditText)findViewById(R.id.edit_dialog_question_entry);
         answerEdit = (EditText)findViewById(R.id.edit_dialog_answer_entry);
-        categoryEdit = (EditText)findViewById(R.id.edit_dialog_category_entry);
+        //categoryEdit = (EditText)findViewById(R.id.edit_dialog_category_entry);
+        categoryEdit = null;
         noteEdit = (EditText)findViewById(R.id.edit_dialog_note_entry);
         btnSave = (Button)findViewById(R.id.edit_dialog_button_save);
         btnCancel = (Button)findViewById(R.id.edit_dialog_button_cancel);

@@ -113,6 +113,9 @@
             android:name=".downloader.DropboxUploader"
             android:configChanges="orientation|keyboardHidden" />
         <activity 
+            android:name=".ui.CardEditor"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity 
             android:name=".ui.MemoScreen"
             android:configChanges="orientation|keyboardHidden" />
         <activity 

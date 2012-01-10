@@ -52,6 +52,9 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -67,11 +70,11 @@ import android.content.res.Configuration;
 public class CardEditor extends AMActivity implements View.OnClickListener{
     private final int ACTIVITY_IMAGE_FILE = 1;
     private final int ACTIVITY_AUDIO_FILE = 2;
-    private Card currentCard = null;
+    Card currentCard = null;
     private Integer currentCardId;
     private EditText questionEdit;
     private EditText answerEdit;
-    private EditText categoryEdit;
+    private Button categoryButton;
     private EditText noteEdit;
     private RadioGroup addRadio;
     private boolean addBack = true;
@@ -79,35 +82,44 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
     private Button btnSave;
     private Button btnCancel;
     private String dbName = null;
-    private String dbPath = null;
+    String dbPath = null;
     private CardDao cardDao;
     private LearningDataDao learningDataDao;
-    private CategoryDao categoryDao;
+    CategoryDao categoryDao;
     private InitTask initTask;
 
     private String originalQuestion;
     private String originalAnswer;
 
 
+    @Override
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.edit_dialog);
         initTask = new InitTask();
         initTask.execute((Void)null);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        AnyMemoDBOpenHelperManager.releaseHelper(dbPath);
+    }
+        
     
     public void onClick(View v){
         if(v == btnSave){
             String qText = questionEdit.getText().toString();
             String aText = answerEdit.getText().toString();
-            String cText = categoryEdit.getText().toString();
             String nText = noteEdit.getText().toString();
             Intent resultIntent = new Intent();
             resultIntent.putExtra("id", currentCard.getId());
         	setResult(Activity.RESULT_OK, resultIntent);    			
             finish();
-        }
-        else if(v == btnCancel){
+        } 
+        
+        if(v == btnCancel){
             String qText = questionEdit.getText().toString();
             String aText = answerEdit.getText().toString();
             if (!isEditNew && (!qText.equals(originalQuestion) || !aText.equals(originalAnswer))) {
@@ -134,6 +146,11 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
 
             }
         }
+
+        if (v == categoryButton) {
+            DialogFragment df = new CategoryEditorFragment();
+            df.show(getSupportFragmentManager(), "CategoryEditDialog");
+        }
     }
 
         
@@ -147,12 +164,12 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
         View focusView = getCurrentFocus();
 	    switch (item.getItemId()) {
             case R.id.editor_menu_br:
-                if(focusView == questionEdit || focusView ==answerEdit || focusView == categoryEdit || focusView == noteEdit){
+                if(focusView == questionEdit || focusView ==answerEdit || focusView == noteEdit){
                     addTextToView((EditText)focusView, "<br />");
                 }
                 return true;
             case R.id.editor_menu_image:
-                if(focusView == questionEdit || focusView ==answerEdit || focusView == categoryEdit || focusView == noteEdit){
+                if(focusView == questionEdit || focusView ==answerEdit || focusView == noteEdit){
                     Intent myIntent = new Intent(this, FileBrowser.class);
                     myIntent.putExtra("file_extension", ".png,.jpg,.tif,.bmp");
                     startActivityForResult(myIntent, ACTIVITY_IMAGE_FILE);
@@ -160,7 +177,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
                 return true;
 
             case R.id.editor_menu_audio:
-                if(focusView == questionEdit || focusView ==answerEdit || focusView == categoryEdit || focusView == noteEdit){
+                if(focusView == questionEdit || focusView ==answerEdit || focusView == noteEdit){
                     Intent myIntent = new Intent(this, FileBrowser.class);
                     myIntent.putExtra("file_extension", ".ogg,.mp3,.wav");
                     startActivityForResult(myIntent, ACTIVITY_AUDIO_FILE);
@@ -199,7 +216,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
     	    case ACTIVITY_IMAGE_FILE:
                 if(resultCode == Activity.RESULT_OK){
                     View focusView = getCurrentFocus();
-                    if(focusView == questionEdit || focusView ==answerEdit || focusView == categoryEdit || focusView == noteEdit){
+                    if(focusView == questionEdit || focusView ==answerEdit || focusView == noteEdit){
                         name = data.getStringExtra("org.liberty.android.fantastischmemo.dbName");
                         path = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
                         addTextToView((EditText)focusView, "<img src=\"" + name + "\" />");
@@ -223,7 +240,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
     	    case ACTIVITY_AUDIO_FILE:
                 if(resultCode == Activity.RESULT_OK){
                     View focusView = getCurrentFocus();
-                    if(focusView == questionEdit || focusView ==answerEdit || focusView == categoryEdit || focusView == noteEdit){
+                    if(focusView == questionEdit || focusView ==answerEdit || focusView == noteEdit){
                         name = data.getStringExtra("org.liberty.android.fantastischmemo.dbName");
                         path = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
                         addTextToView((EditText)focusView, "<audio src=\"" + name + "\" />");
@@ -338,16 +355,17 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
             // It means empty set
             questionEdit = (EditText)findViewById(R.id.edit_dialog_question_entry);
             answerEdit = (EditText)findViewById(R.id.edit_dialog_answer_entry);
-            categoryEdit = (EditText)findViewById(R.id.edit_dialog_category_entry);
+            categoryButton = (Button)findViewById(R.id.edit_dialog_category_button);
             noteEdit = (EditText)findViewById(R.id.edit_dialog_note_entry);
             btnSave = (Button)findViewById(R.id.edit_dialog_button_save);
             btnCancel = (Button)findViewById(R.id.edit_dialog_button_cancel);
             addRadio = (RadioGroup)findViewById(R.id.add_radio);
             btnSave.setOnClickListener(CardEditor.this);
             btnCancel.setOnClickListener(CardEditor.this);
+            categoryButton.setOnClickListener(CardEditor.this);
 
             /* Retain the last category when editing new */
-            categoryEdit.setText(currentCard.getCategory().getName());
+            categoryButton.setText(currentCard.getCategory().getName());
             /* Prefill the note if it is empty */
 
             if(isEditNew){
@@ -364,6 +382,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
             }
             /* Should be called after the private fields are inited */
             setInitRadioButton();
+            progressDialog.dismiss();
         }
     }
 }
