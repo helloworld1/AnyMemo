@@ -21,11 +21,12 @@ import org.liberty.android.fantastischmemo.scheduler.DefaultScheduler;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-public class DBTest extends ActivityInstrumentationTestCase2<InstrumentationActivity> {
+public class ExistingDbTest extends ActivityInstrumentationTestCase2<InstrumentationActivity> {
     private InstrumentationActivity mActivity;  // the activity under test
+
     AnyMemoDBOpenHelper helper;
 
-    public DBTest() {
+    public ExistingDbTest() {
         super("org.liberty.android.fantastischmemo", InstrumentationActivity.class);
     }
     @Override
@@ -70,6 +71,43 @@ public class DBTest extends ActivityInstrumentationTestCase2<InstrumentationActi
         nc = cardDao.queryForId(nc.getId());
         categoryDao.refresh(nc.getCategory());
         assertEquals("", nc.getCategory().getName());
+    }
+
+    public void testDeleteCardMaintainOrdinal() throws Exception {
+        CardDao cardDao = helper.getCardDao();
+        Card c13 = cardDao.queryForId(13);
+        Card c14 = cardDao.queryForId(14);
+        Card c15 = cardDao.queryForId(15);
+        assertEquals(13, (int)c13.getOrdinal());
+        assertEquals(14, (int)c14.getOrdinal());
+        assertEquals(15, (int)c15.getOrdinal());
+        cardDao.delete(c14);
+        c13 = cardDao.queryForId(13);
+        c15 = cardDao.queryForId(15);
+        assertEquals(13, (int)c13.getOrdinal());
+        assertEquals(14, (int)c15.getOrdinal());
+    }
+
+    public void testCreateCardMaintainOrdinal() throws Exception {
+        CardDao cardDao = helper.getCardDao();
+        // Create card has null ordinal, append to the end
+        Card nc = new Card();
+        assertNull(nc.getOrdinal());
+        cardDao.create(nc);
+        assertEquals(29, (int)nc.getOrdinal());
+
+        // Create card with an ordinal
+        nc = new Card();
+        nc.setOrdinal(14);
+        cardDao.create(nc);
+
+        Card c13 = cardDao.queryForId(13);
+        Card c14 = cardDao.queryForId(14);
+        Card c15 = cardDao.queryForId(15);
+        assertEquals(13, (int)c13.getOrdinal());
+        assertEquals(14, (int)nc.getOrdinal());
+        assertEquals(15, (int)c14.getOrdinal());
+        assertEquals(16, (int)c15.getOrdinal());
     }
 
     public void testSettingCardField() throws Exception {

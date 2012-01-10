@@ -8,6 +8,7 @@ import com.j256.ormlite.dao.BaseDaoImpl;
 
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.UpdateBuilder;
 
 import com.j256.ormlite.support.ConnectionSource;
 
@@ -91,9 +92,43 @@ public class CardDaoImpl extends BaseDaoImpl<Card, Integer> implements CardDao {
     @Override
     public int delete(Card c) {
         try {
-            return super.delete(c);
+            Integer cardOrdinal = c.getOrdinal();
+            int res = super.delete(c);
+            // If we delete a card every larger ordinal should -1.
+            UpdateBuilder<Card, Integer> updateBuilder = updateBuilder();
+            updateBuilder.updateColumnExpression("ordinal", "ordinal - 1");
+            updateBuilder.where().gt("ordinal", cardOrdinal).prepare();
+            update(updateBuilder.prepare());
+            return res;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        catch (SQLException e) {
+    }
+
+    @Override
+    public int create(Card c) {
+        try {
+            Integer cardOrdinal = c.getOrdinal();
+            // Null ordinal means we need to put the max oridinal + 1 here
+            if (cardOrdinal == null) {
+                Card last = queryLastOrdinal();
+                // If it is a new db the last oridinal will be null.
+                if (last == null) {
+                    cardOrdinal = 1;
+                } else {
+                    cardOrdinal = last.getOrdinal() + 1;
+                }
+                c.setOrdinal(cardOrdinal);
+            } else {
+                //  We are adding the card at the middle. Should update other card's ordinal.
+                UpdateBuilder<Card, Integer> updateBuilder = updateBuilder();
+                updateBuilder.updateColumnExpression("ordinal", "ordinal + 1");
+                updateBuilder.where().ge("ordinal", cardOrdinal).prepare();
+                update(updateBuilder.prepare());
+            }
+            int res = super.create(c);
+            return res;
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
