@@ -144,6 +144,9 @@ public class CardDaoImpl extends BaseDaoImpl<Card, Integer> implements CardDao {
         }
     }
 
+    /*
+     * Remove the duplicate card with the same question.
+     */
     public void removeDuplicates() {
         try {
             executeRaw("DELETE FROM cards WHERE id NOT IN (SELECT MIN(id) FROM cards GROUP BY question)");

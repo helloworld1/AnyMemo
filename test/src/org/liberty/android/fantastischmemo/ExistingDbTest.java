@@ -138,6 +138,9 @@ public class ExistingDbTest extends ActivityInstrumentationTestCase2<Instrumenta
         assertEquals(originalSize + 1, cardDao.countOf());
         cards = cardDao.queryForEq("question", "whatever");
         assertEquals(1, cards.size());
+        Card cc = cardDao.queryLastOrdinal();
+        assertEquals(29, (int)cc.getOrdinal());
+
     }
 
 
