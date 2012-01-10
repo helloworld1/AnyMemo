@@ -45,6 +45,5 @@ public class CategoryDaoImpl extends BaseDaoImpl<Category, Integer> implements C
         }
 
     }
-
 }
 

@@ -365,7 +365,12 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
             categoryButton.setOnClickListener(CardEditor.this);
 
             /* Retain the last category when editing new */
-            categoryButton.setText(currentCard.getCategory().getName());
+            String categoryName = currentCard.getCategory().getName();
+            if (categoryName.equals("")) {
+                categoryButton.setText(R.string.uncategorized_text);
+            } else {
+                categoryButton.setText(categoryName);
+            }
             /* Prefill the note if it is empty */
 
             if(isEditNew){
