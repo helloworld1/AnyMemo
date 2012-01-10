@@ -90,6 +90,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
 
     private String originalQuestion;
     private String originalAnswer;
+    private String originalNote;
 
 
     @Override
@@ -122,7 +123,8 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
         if(v == btnCancel){
             String qText = questionEdit.getText().toString();
             String aText = answerEdit.getText().toString();
-            if (!isEditNew && (!qText.equals(originalQuestion) || !aText.equals(originalAnswer))) {
+            String nText = noteEdit.getText().toString();
+            if (!isEditNew && (!qText.equals(originalQuestion) || !aText.equals(originalAnswer) || !nText.equals(originalNote))) {
                 new AlertDialog.Builder(this)
                     .setTitle(R.string.warning_text)
                     .setMessage(R.string.edit_dialog_unsave_warning)
@@ -381,9 +383,12 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
                    noteEdit.setText(dt); */
             }
             if(!isEditNew){
-                questionEdit.setText(currentCard.getQuestion());
-                answerEdit.setText(currentCard.getAnswer());
-                noteEdit.setText(currentCard.getNote());
+                originalQuestion = currentCard.getQuestion();
+                originalAnswer = currentCard.getAnswer();
+                originalNote = currentCard.getNote();
+                questionEdit.setText(originalQuestion);
+                answerEdit.setText(originalAnswer);
+                noteEdit.setText(originalNote);
             }
             /* Should be called after the private fields are inited */
             setInitRadioButton();
