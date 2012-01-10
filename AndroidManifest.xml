@@ -22,6 +22,9 @@
             </intent-filter>
         </activity>
         <activity 
+            android:name=".InstrumentationActivity"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity 
             android:name=".OpenScreen"
             android:configChanges="orientation|keyboardHidden" />
         <activity 
