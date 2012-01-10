@@ -340,7 +340,6 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
                     cardDao = helper.getCardDao();
                     learningDataDao = helper.getLearningDataDao();
                     categoryDao = helper.getCategoryDao();
-                    /* Run the learnQueue init in a separate thread */
                     currentCard = cardDao.queryForId(currentCardId);
                     assert currentCard != null : "Try to edit null card!";
                     categoryDao.refresh(currentCard.getCategory());
@@ -378,9 +377,6 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
             if(isEditNew){
                 /* Use this one or the one below ?*/
                 noteEdit.setText(currentCard.getNote());
-                /*
-                   String dt = SimpleDateFormat.getDateTimeInstance().format(new Date());
-                   noteEdit.setText(dt); */
             }
             if(!isEditNew){
                 originalQuestion = currentCard.getQuestion();

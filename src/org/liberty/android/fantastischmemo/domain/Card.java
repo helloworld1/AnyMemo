@@ -26,6 +26,7 @@ public class Card {
     @DatabaseField(defaultValue = "", width = 8192)
     private String note;
 
+    /* Category = 1 should be uncategorized */
     @DatabaseField(foreign = true, index = true)
     private Category category;
 

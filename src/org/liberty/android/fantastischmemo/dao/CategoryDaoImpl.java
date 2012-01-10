@@ -43,7 +43,16 @@ public class CategoryDaoImpl extends BaseDaoImpl<Category, Integer> implements C
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
 
+    public void removeCategory(Category c) {
+        try {
+            Integer id = c.getId();
+            this.delete(c);
+            updateRaw("update cards set category_id = 1 where category_id = ?", id.toString());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
 

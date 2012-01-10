@@ -42,7 +42,7 @@ public class DBTest extends ActivityInstrumentationTestCase2<InstrumentationActi
         mActivity.finish();
     }
 
-    public void testCategories() throws Exception {
+    public void testAddCategories() throws Exception {
         CategoryDao categoryDao = helper.getCategoryDao();
         List<Category> categories = categoryDao.queryForAll();
         int initSize = categories.size();
@@ -54,6 +54,22 @@ public class DBTest extends ActivityInstrumentationTestCase2<InstrumentationActi
         Category c2 = categoryDao.createOrReturn("c1");
         assertEquals(c2.getName(), "c1");
         assertEquals(categories.size(), initSize + 1);
+    }
+
+    public void testRemoveCategories() throws Exception {
+        CardDao cardDao = helper.getCardDao();
+        CategoryDao categoryDao = helper.getCategoryDao();
+        Category c1 = categoryDao.createOrReturn("c1");
+        categoryDao.create(c1);
+        Card nc = new Card();
+        nc.setCategory(c1);
+        cardDao.create(nc);
+        categoryDao.refresh(nc.getCategory());
+        assertEquals("c1", nc.getCategory().getName());
+        categoryDao.removeCategory(c1);
+        nc = cardDao.queryForId(nc.getId());
+        categoryDao.refresh(nc.getCategory());
+        assertEquals("", nc.getCategory().getName());
     }
 
     public void testSettingCardField() throws Exception {

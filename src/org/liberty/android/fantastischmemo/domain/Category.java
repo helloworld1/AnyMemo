@@ -11,7 +11,7 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "categories", daoClass = CategoryDaoImpl.class)
 public class Category {
     @DatabaseField(generatedId = true)
-    private Integer id;
+    private Integer id = 1;
 
     @DatabaseField(defaultValue = "", width = 8192)
     private String name = "";
