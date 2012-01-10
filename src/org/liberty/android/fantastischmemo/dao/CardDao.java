@@ -9,4 +9,6 @@ public interface CardDao extends Dao<Card, Integer> {
     Card queryLastOrdinal();
     Card queryNextCard(final Card c);
     Card queryPrevCard(final Card c);
+    void swapQA(Card c);
+    void removeDuplicates();
 }

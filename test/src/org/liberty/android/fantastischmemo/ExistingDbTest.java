@@ -110,6 +110,37 @@ public class ExistingDbTest extends ActivityInstrumentationTestCase2<Instrumenta
         assertEquals(16, (int)c15.getOrdinal());
     }
 
+    public void testSwapQA() throws Exception {
+        CardDao cardDao = helper.getCardDao();
+        Card c14 = cardDao.queryForId(14);
+        String question = c14.getQuestion();
+        String answer = c14.getAnswer();
+        cardDao.swapQA(c14);
+        c14 = cardDao.queryForId(14);
+        assertEquals(answer, c14.getQuestion());
+        assertEquals(question, c14.getAnswer());
+    }
+
+    public void testRemoveDuplicates() throws Exception {
+        CardDao cardDao = helper.getCardDao();
+        long originalSize = cardDao.countOf();
+        Card nc = new Card();
+        nc.setQuestion("whatever");
+        nc.setAnswer("and whatever");
+        cardDao.create(nc);
+        cardDao.create(nc);
+        cardDao.create(nc);
+        cardDao.create(nc);
+        List<Card> cards = cardDao.queryForEq("question", "whatever");
+        assertEquals(4, cards.size());
+        assertEquals(originalSize + 4, cardDao.countOf());
+        cardDao.removeDuplicates();
+        assertEquals(originalSize + 1, cardDao.countOf());
+        cards = cardDao.queryForEq("question", "whatever");
+        assertEquals(1, cards.size());
+    }
+
+
     public void testSettingCardField() throws Exception {
         SettingDao settingDao = helper.getSettingDao();
         Setting setting = settingDao.queryForId(1);

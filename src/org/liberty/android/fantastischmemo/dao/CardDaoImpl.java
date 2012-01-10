@@ -132,5 +132,34 @@ public class CardDaoImpl extends BaseDaoImpl<Card, Integer> implements CardDao {
             throw new RuntimeException(e);
         }
     }
+
+    public void swapQA(Card c) {
+        String answer = c.getAnswer();
+        c.setAnswer(c.getQuestion());
+        c.setQuestion(answer);
+        try {
+            update(c);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void removeDuplicates() {
+        try {
+            executeRaw("DELETE FROM cards WHERE id NOT IN (SELECT MIN(id) FROM cards GROUP BY question)");
+            executeRaw("DELETE FROM learning_data WHERE id NOT IN (SELECT learningData_id FROM cards)");
+            maintainOrdinal();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void maintainOrdinal() throws SQLException {
+        executeRaw("CREATE TABLE IF NOT EXISTS tmp_count (id INTEGER PRIMARY KEY AUTOINCREMENT, ordinal INTEGER)");
+        executeRaw("INSERT INTO tmp_count(ordinal) SELECT ordinal FROM cards;");
+        executeRaw("UPDATE cards SET ordinal = (SELECT tmp_count.id FROM tmp_count WHERE tmp_count.ordinal = cards.ordinal)");
+        executeRaw("DROP TABLE IF EXISTS tmp_count;");
+    }
+
 }
 
