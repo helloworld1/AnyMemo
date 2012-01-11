@@ -58,7 +58,7 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
 
 	public static synchronized AnyMemoDBOpenHelper getHelper(Context context, String dbpath)
         throws SQLException {
-		if (helper == null || dbpath.equals(AnyMemoDBOpenHelper.dbPath) ) {
+		if (helper == null || !dbpath.equals(AnyMemoDBOpenHelper.dbPath) ) {
 			helper = new AnyMemoDBOpenHelper(context, dbpath);
         } else {
             Log.i("AnyMemoDBOpenHelper.getHelper", "Reuse database helper");

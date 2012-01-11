@@ -33,12 +33,15 @@ public class DatabaseUtils {
                         c.setCategory(uncategorized);
                         learningDataDaoDest.create(emptyLearningData);
                         c.setLearningData(emptyLearningData);
+                        c.setOrdinal(null);
                         cardDaoDest.create(c);
                     }
                     return null;
                 }
             });
+        System.out.println("DatabaseUtils release destPath");
         AnyMemoDBOpenHelperManager.releaseHelper(destPath);
+        System.out.println("DatabaseUtils release srcPath");
         AnyMemoDBOpenHelperManager.releaseHelper(srcPath);
     }
 }

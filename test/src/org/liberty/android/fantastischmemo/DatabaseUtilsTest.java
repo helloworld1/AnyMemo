@@ -1,5 +1,7 @@
 package org.liberty.android.fantastischmemo;
 
+import java.io.File;
+
 import java.util.List;
 
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
@@ -15,6 +17,8 @@ public class DatabaseUtilsTest extends ActivityInstrumentationTestCase2<Instrume
     private InstrumentationActivity mActivity;  // the activity under test
 
     AnyMemoDBOpenHelper helper;
+
+    String dbPath = "/sdcard/french-body-parts.db";
     public DatabaseUtilsTest() {
         super("org.liberty.android.fantastischmemo", InstrumentationActivity.class);
     }
@@ -23,27 +27,40 @@ public class DatabaseUtilsTest extends ActivityInstrumentationTestCase2<Instrume
     protected void setUp() throws Exception {
         super.setUp();
         mActivity = this.getActivity();
-        AMUtil.copyFile("/sdcard/anymemo/french-body-parts.db", "/sdcard/french-body-parts.db");
-        helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, "/sdcard/french-body-parts.db");
+        AMUtil.copyFile("/sdcard/anymemo/french-body-parts.db", dbPath);
+        helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, dbPath);
     }
 
     @Override
     protected void tearDown() throws Exception {
-        AnyMemoDBOpenHelperManager.releaseHelper("/sdcard/french-body-parts.db");
+        AnyMemoDBOpenHelperManager.releaseHelper(dbPath);
         mActivity.finish();
     }
 
     public void testMergeDatabase() throws Exception {
-        String path2 = "/sdcard/tesetdb2.db";
+        // Create testing DB to merge
+        String path2 = "/sdcard/testdb2.db";
+        new File(path2).delete();
         AnyMemoDBOpenHelper helper2 = AnyMemoDBOpenHelperManager.getHelper(mActivity, path2);
         CardDao cd2 = helper2.getCardDao();
         cd2.create(new Card() {{setQuestion("c1");}});
         cd2.create(new Card() {{setQuestion("c2");}});
         cd2.create(new Card() {{setQuestion("c3");}});
-        DatabaseUtils.mergeDatabases(mActivity, "/sdcard/french-body-parts.db", path2);
+
+        DatabaseUtils.mergeDatabases(mActivity, dbPath, path2);
         CardDao cd = helper.getCardDao();
         List<Card> all = cd.queryForAll();
         assertEquals(31, all.size());
-    }
+        List<Card> cs = cd.queryForEq("question", "c1");
+        Card c = cs.get(0);
+        assertEquals(29, (int)c.getOrdinal());
+        c = cd.queryLastOrdinal();
+        assertEquals("c3", c.getQuestion());
+        assertEquals(31, (int)c.getOrdinal());
+        assertEquals("", c.getCategory().getName());
+        assertNotNull(c.getLearningData());
 
+        AnyMemoDBOpenHelperManager.releaseHelper(path2);
+        new File(path2).delete();
+    }
 }

@@ -34,6 +34,7 @@ public class AnyMemoDBOpenHelperManager {
     // TODO: Remove all synchronized and use java.concurrent's map
     public static synchronized AnyMemoDBOpenHelper getHelper(Context context, String dbpath) {
         if (helpers.containsKey(dbpath)) {
+            Log.i(TAG, "Call get AnyMemoDBOpenHelper again, return existing helper."); 
             DBConnection conn = dbConnections.get(dbpath);
             conn.acquireConnection();
             return helpers.get(dbpath);
@@ -42,6 +43,7 @@ public class AnyMemoDBOpenHelperManager {
                 Log.i(TAG, "Call get AnyMemoDBOpenHelper for first time."); 
                 AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelper.getHelper(context, dbpath);
                 DBConnection conn = new DBConnection(dbpath);
+                conn.acquireConnection();
                 dbConnections.put(dbpath, conn);
                 helpers.put(dbpath, helper);
                 return helper;
@@ -53,6 +55,9 @@ public class AnyMemoDBOpenHelperManager {
 
     public static synchronized void releaseHelper(String dbpath) {
         Log.i(TAG, "Release AnyMemoDBOpenHelper: " + dbpath); 
+        if (!helpers.containsKey(dbpath)) {
+            throw new RuntimeException("Release an already been released helper!");
+        }
         DBConnection conn = dbConnections.get(dbpath);
         if (conn == null) {
             throw new RuntimeException("release an non-existing db helper");
@@ -99,7 +104,7 @@ public class AnyMemoDBOpenHelperManager {
     private static class DBConnection {
         private int connections = 0;
         private Set<Future<?>> tasks;
-        private EnumSet<DBState> dbState;
+        private EnumSet<DBState> dbState = EnumSet.noneOf(DBState.class);
 
         public DBConnection(String dbpath) {
             tasks = new HashSet<Future<?>>();
@@ -107,17 +112,17 @@ public class AnyMemoDBOpenHelperManager {
         }
 
         public synchronized void acquireConnection() {
-            connections += 1;
+            connections++ ;
             dbState.add(DBState.ACTIVE_CONNECTION);
         }
 
         public synchronized void releaseConnection() {
             if (connections > 0) {
-                connections -= 1;
+                connections--;
             } else {
                 Log.e("DBConnection", "Try to release non active connection");
             }
-            if (!tasks.isEmpty()) {
+            if (tasks.isEmpty()) {
                 dbState.remove(DBState.TASK_RUNNING);
             } 
             if (connections == 0) {
