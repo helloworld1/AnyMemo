@@ -58,12 +58,8 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
 
 	public static synchronized AnyMemoDBOpenHelper getHelper(Context context, String dbpath)
         throws SQLException {
-		if (helper == null) {
+		if (helper == null || dbpath.equals(AnyMemoDBOpenHelper.dbPath) ) {
 			helper = new AnyMemoDBOpenHelper(context, dbpath);
-		} else if (!dbpath.equals(dbPath)) {
-            Log.e("AnyMemoDBOpenHelper.getHelper",
-                    "Open two database at the same. Old: " + dbPath + " New: " + dbpath);
-            throw new SQLException("Open two database at the same. Please close the previous connection");
         } else {
             Log.i("AnyMemoDBOpenHelper.getHelper", "Reuse database helper");
         }

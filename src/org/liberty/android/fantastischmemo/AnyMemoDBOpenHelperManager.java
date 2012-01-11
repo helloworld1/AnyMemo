@@ -97,7 +97,7 @@ public class AnyMemoDBOpenHelperManager {
     }
 
     private static class DBConnection {
-        private Integer connections;
+        private int connections = 0;
         private Set<Future<?>> tasks;
         private EnumSet<DBState> dbState;
 
