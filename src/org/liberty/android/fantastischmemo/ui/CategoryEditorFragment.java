@@ -84,7 +84,6 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
         okButton = (Button)v.findViewById(R.id.button_ok);
         editButton = (Button)v.findViewById(R.id.button_edit);
         deleteButton = (Button)v.findViewById(R.id.button_delete);
-        enableListeners();
 
         return v;
     }
@@ -106,7 +105,7 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
     /*
      * This task will mainly populate the categoryList
      */
-    private class InitTask extends AsyncTask<Void, Void, Void> {
+    private class InitTask extends AsyncTask<Void, Void, Integer> {
 
 		@Override
         public void onPreExecute() {
@@ -118,19 +117,32 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
         }
 
         @Override
-        public Void doInBackground(Void... params) {
+        public Integer doInBackground(Void... params) {
             try {
                 categories = categoryDao.queryForAll();
             } catch (SQLException e) {
                 Log.e(TAG, "Error creating daos", e);
                 throw new RuntimeException("Dao creation error");
             }
-            return null;
+            int categorySize = categories.size();
+            assert categorySize > 0 : "There should be at least an empty category. Ensured in AnyMemoDBOpenHelper.";
+            assert currentCard.getCategory() != null : "The card has null category, this should be avoided";
+            Integer position = null;
+            for (int i = 0; i < categorySize; i++) {
+                if (categories.get(i).getName().equals(currentCard.getCategory().getName())) {
+                    position = i;
+                    break;
+                }
+            }
+            assert position != null : "The card has no category. This shouldn't happen.";
+            return position;
         }
 
         @Override
-        public void onPostExecute(Void result){
+        public void onPostExecute(Integer pos){
             categoryAdapter.addAll(categories);
+            categoryList.setItemChecked(pos, true);
+            enableListeners();
             mActivity.setProgressBarIndeterminateVisibility(false);
         }
     }
