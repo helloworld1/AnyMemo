@@ -142,6 +142,7 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
         public void onPostExecute(Integer pos){
             categoryAdapter.addAll(categories);
             categoryList.setItemChecked(pos, true);
+            categoryEdit.setText(categoryAdapter.getItem(pos).getName());
             enableListeners();
             mActivity.setProgressBarIndeterminateVisibility(false);
         }
