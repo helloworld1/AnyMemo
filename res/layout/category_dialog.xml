@@ -11,6 +11,10 @@
         android:layout_width="fill_parent"
         android:layout_weight="1"
         android:orientation="vertical">
+        <TextView 
+            android:text="@string/category_dialog_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
         <EditText
             android:id="@+id/category_dialog_edit"
             android:layout_width="fill_parent"

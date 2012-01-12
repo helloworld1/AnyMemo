@@ -4,8 +4,6 @@ import java.sql.SQLException;
 
 import java.util.List;
 
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
@@ -15,12 +13,8 @@ import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 
 import org.liberty.android.fantastischmemo.ui.CardEditor;
-import org.liberty.android.fantastischmemo.ui.CardEditor;
-import org.liberty.android.fantastischmemo.ui.CardEditor;
-import org.liberty.android.fantastischmemo.ui.CardEditor;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 
 import android.content.Context;
 
@@ -35,13 +29,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.AdapterView;
+
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.RadioGroup;
-import android.widget.TextView;
 
 public class CategoryEditorFragment extends DialogFragment implements View.OnClickListener {
 
@@ -57,6 +52,7 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
     private Button newButton;
     private Button deleteButton;
     private Button editButton;
+    private EditText categoryEdit;
 
 
     @Override
@@ -78,12 +74,14 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
         View v = inflater.inflate(R.layout.category_dialog, container, false);
         categoryList = (ListView)v.findViewById(R.id.category_list);
         categoryList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        categoryList.setOnItemClickListener(listItemClickListener);
         InitTask initTask = new InitTask();
         initTask.execute((Void)null);
         newButton = (Button)v.findViewById(R.id.button_new);
         okButton = (Button)v.findViewById(R.id.button_ok);
         editButton = (Button)v.findViewById(R.id.button_edit);
         deleteButton = (Button)v.findViewById(R.id.button_delete);
+        categoryEdit = (EditText)v.findViewById(R.id.category_dialog_edit);
 
         return v;
     }
@@ -97,6 +95,8 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
         if (v == newButton) {
         }
         if (v == editButton) {
+            EditCategoryTask task = new EditCategoryTask();
+            task.execute((Void)null);
         }
         if (v == deleteButton) {
         }
@@ -192,6 +192,66 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
         }
     }
 
+
+    /*
+     * This task will edit the category in the list
+     */
+    private class EditCategoryTask extends AsyncTask<Void, Category, Void> {
+        private Category selectedCategory;
+        private String editText;
+
+		@Override
+        public void onPreExecute() {
+            disableListeners();
+            mActivity.setProgressBarIndeterminateVisibility(true);
+            editText = categoryEdit.getText().toString();
+            int position = categoryList.getCheckedItemPosition();
+            if (position == AdapterView.INVALID_POSITION || "".equals(editText)) {
+                cancel(true);
+                return;
+            }
+            selectedCategory = categoryAdapter.getItem(position);
+            // Should deduplicate before editing the category
+            // Point to the correct category if necessary.
+            int categorySize = categories.size();
+            for (int i = 0; i < categorySize; i++) {
+                if (categories.get(i).getName().equals(editText)) {
+                    position = i;
+                    categoryList.setItemChecked(position, true);
+                    cancel(true);
+                    return;
+                }
+            }
+        }
+
+        @Override
+        public Void doInBackground(Void... params) {
+            assert selectedCategory != null : "Null category is selected. This shouldn't happen";
+            assert editText != null : "Category's EditText shouldn't get null";
+            try {
+                selectedCategory.setName(editText);
+                currentCard.setCategory(selectedCategory);
+                categoryDao.update(selectedCategory);
+            } catch (SQLException e) {
+                Log.e(TAG, "Error updating the category", e);
+                throw new RuntimeException("Error updating the category");
+            }
+            return null;
+        }
+
+        @Override
+        public void onCancelled(){
+            enableListeners();
+        }
+
+        @Override
+        public void onPostExecute(Void result){
+            categoryAdapter.notifyDataSetChanged();
+            mActivity.setProgressBarIndeterminateVisibility(false);
+            enableListeners();
+        }
+    }
+
     protected class CategoryAdapter extends ArrayAdapter<Category>{
 
         public CategoryAdapter(Context context, int textViewResourceId){
@@ -221,6 +281,14 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
             return v;
         }
     }
+
+    private OnItemClickListener listItemClickListener = new OnItemClickListener() {
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Category c = categoryAdapter.getItem(position);
+            assert c != null : "Select a null category. This shouldn't happen";
+            categoryEdit.setText(c.getName());
+        }
+    };
 
     private void enableListeners() {
         okButton.setOnClickListener(this);

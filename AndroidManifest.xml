@@ -11,7 +11,7 @@
         android:icon="@drawable/icon" 
         android:label="@string/app_name" >
         <activity 
-            android:name=".MainTabs"
+            android:name=".ui.AnyMemo"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_full_name" >
             <intent-filter>
@@ -20,6 +20,11 @@
                 <category 
                     android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity 
+            android:name=".MainTabs"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/app_full_name" >
         </activity>
         <activity 
             android:name=".InstrumentationActivity"

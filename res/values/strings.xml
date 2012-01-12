@@ -380,4 +380,5 @@
     <string name="import_supermemo_2008_xml_text">Import SuperMemo 2008 XML</string>
     <string name="uncategorized_text">Uncategorized</string>
     <string name="edit_text">Edit</string>
+    <string name="category_dialog_title">Please select a category or enter a new one</string>
 </resources>
