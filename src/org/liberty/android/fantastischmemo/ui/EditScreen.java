@@ -815,5 +815,3 @@ public class EditScreen extends AMActivity {
         }
     }
 }
-
-

@@ -83,8 +83,8 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
     private Button btnCancel;
     private String dbName = null;
     String dbPath = null;
-    private CardDao cardDao;
     private LearningDataDao learningDataDao;
+    CardDao cardDao;
     CategoryDao categoryDao;
     private InitTask initTask;
 
@@ -313,22 +313,20 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
 
 		@Override
         public void onPreExecute() {
-        setTitle(R.string.memo_edit_dialog_title);
-		Bundle extras = getIntent().getExtras();
-		if (extras != null) {
-			currentCardId = extras.getInt("id");
-			dbPath = extras.getString("dbpath");
-			isEditNew = extras.getBoolean("is_edit_new");
-		}
+            setTitle(R.string.memo_edit_dialog_title);
+            Bundle extras = getIntent().getExtras();
+            if (extras != null) {
+                currentCardId = extras.getInt("id");
+                dbPath = extras.getString("dbpath");
+                isEditNew = extras.getBoolean("is_edit_new");
+            }
 
-        progressDialog = new ProgressDialog(CardEditor.this);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setTitle(getString(R.string.loading_please_wait));
-        progressDialog.setMessage(getString(R.string.loading_database));
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-
-
+            progressDialog = new ProgressDialog(CardEditor.this);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setTitle(getString(R.string.loading_please_wait));
+            progressDialog.setMessage(getString(R.string.loading_database));
+            progressDialog.setCancelable(false);
+            progressDialog.show();
         }
 
         @Override
@@ -365,30 +363,36 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
             btnCancel.setOnClickListener(CardEditor.this);
             categoryButton.setOnClickListener(CardEditor.this);
 
-            /* Retain the last category when editing new */
-            String categoryName = currentCard.getCategory().getName();
-            if (categoryName.equals("")) {
-                categoryButton.setText(R.string.uncategorized_text);
-            } else {
-                categoryButton.setText(categoryName);
-            }
-            /* Prefill the note if it is empty */
+            updateViews();
 
-            if(isEditNew){
-                /* Use this one or the one below ?*/
-                noteEdit.setText(currentCard.getNote());
-            }
-            if(!isEditNew){
-                originalQuestion = currentCard.getQuestion();
-                originalAnswer = currentCard.getAnswer();
-                originalNote = currentCard.getNote();
-                questionEdit.setText(originalQuestion);
-                answerEdit.setText(originalAnswer);
-                noteEdit.setText(originalNote);
-            }
             /* Should be called after the private fields are inited */
             setInitRadioButton();
             progressDialog.dismiss();
         }
     }
+
+    void updateViews() {
+        /* Retain the last category when editing new */
+        String categoryName = currentCard.getCategory().getName();
+        if (categoryName.equals("")) {
+            categoryButton.setText(R.string.uncategorized_text);
+        } else {
+            categoryButton.setText(categoryName);
+        }
+        /* Prefill the note if it is empty */
+
+        if(isEditNew){
+            /* Use this one or the one below ?*/
+            noteEdit.setText(currentCard.getNote());
+        }
+        if(!isEditNew){
+            originalQuestion = currentCard.getQuestion();
+            originalAnswer = currentCard.getAnswer();
+            originalNote = currentCard.getNote();
+            questionEdit.setText(originalQuestion);
+            answerEdit.setText(originalAnswer);
+            noteEdit.setText(originalNote);
+        }
+    }
+
 }

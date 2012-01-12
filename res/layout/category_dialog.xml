@@ -36,24 +36,32 @@
             android:layout_height="wrap_content" 
             android:layout_weight="1"
             android:text="@string/ok_text"
-            android:layout_marginLeft="10dip"
-            android:layout_marginRight="10dip" />
+            android:layout_marginLeft="2dip"
+            android:layout_marginRight="2dip" />
         <Button 
             android:id="@+id/button_new" 
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" 
             android:text="@string/add_screen_new"
             android:layout_weight="1"
-            android:layout_marginLeft="10dip"
-            android:layout_marginRight="10dip" />
+            android:layout_marginLeft="2dip"
+            android:layout_marginRight="2dip" />
+        <Button 
+            android:id="@+id/button_edit" 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" 
+            android:layout_weight="1"
+            android:text="@string/edit_text"
+            android:layout_marginLeft="2dip"
+            android:layout_marginRight="2dip" />
         <Button 
             android:id="@+id/button_delete" 
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" 
             android:layout_weight="1"
             android:text="@string/detail_delete"
-            android:layout_marginLeft="10dip"
-            android:layout_marginRight="10dip" />
+            android:layout_marginLeft="2dip"
+            android:layout_marginRight="2dip" />
     </LinearLayout>
 </LinearLayout>
 
