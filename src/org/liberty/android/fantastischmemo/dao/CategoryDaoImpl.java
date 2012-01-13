@@ -50,7 +50,7 @@ public class CategoryDaoImpl extends BaseDaoImpl<Category, Integer> implements C
             Integer id = c.getId();
             this.delete(c);
             updateRaw("update cards set category_id = 1 where category_id = ?", id.toString());
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }

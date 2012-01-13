@@ -100,6 +100,8 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
             task.execute((Void)null);
         }
         if (v == deleteButton) {
+            DeleteCategoryTask task = new DeleteCategoryTask();
+            task.execute((Void)null);
         }
     }
 
@@ -258,9 +260,6 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
         }
     }
 
-    /*
-     * This task will edit the category in the list
-     */
     private class NewCategoryTask extends AsyncTask<Void, Void, Category> {
         private String editText;
 
@@ -312,6 +311,44 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
             int lastPos = categoryAdapter.getCount() - 1;
             categoryList.setItemChecked(lastPos, true);
             categoryList.setSelection(lastPos);
+            mActivity.setProgressBarIndeterminateVisibility(false);
+            enableListeners();
+        }
+    }
+
+    private class DeleteCategoryTask extends AsyncTask<Void, Void, Void> {
+        private Category selectedCategory;
+
+		@Override
+        public void onPreExecute() {
+            int position = categoryList.getCheckedItemPosition();
+            if (position == AdapterView.INVALID_POSITION) {
+                cancel(true);
+                return;
+            }
+            selectedCategory = categoryAdapter.getItem(position);
+            assert selectedCategory != null : "Null category selected!";
+        }
+
+        @Override
+        public Void doInBackground(Void... params) {
+            categoryDao.removeCategory(selectedCategory);
+            return null;
+        }
+
+        @Override
+        public void onCancelled(){
+            enableListeners();
+        }
+
+        @Override
+        public void onPostExecute(Void result){
+            categoryAdapter.notifyDataSetChanged();
+            
+            // Move to first category (Uncategorized)
+            categoryList.setItemChecked(0, true);
+            categoryList.setSelection(0);
+            categoryEdit.setText("");
             mActivity.setProgressBarIndeterminateVisibility(false);
             enableListeners();
         }
