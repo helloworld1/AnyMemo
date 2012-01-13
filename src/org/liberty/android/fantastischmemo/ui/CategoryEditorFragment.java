@@ -31,7 +31,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckedTextView;
@@ -93,6 +92,8 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
             saveCardTask.execute((Void)null);
         }
         if (v == newButton) {
+            NewCategoryTask task = new NewCategoryTask();
+            task.execute((Void)null);
         }
         if (v == editButton) {
             EditCategoryTask task = new EditCategoryTask();
@@ -142,6 +143,9 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
         public void onPostExecute(Integer pos){
             categoryAdapter.addAll(categories);
             categoryList.setItemChecked(pos, true);
+            // This is needed to scroll to checked position
+            categoryList.setSelection(pos);
+
             categoryEdit.setText(categoryAdapter.getItem(pos).getName());
             enableListeners();
             mActivity.setProgressBarIndeterminateVisibility(false);
@@ -219,6 +223,7 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
                 if (categories.get(i).getName().equals(editText)) {
                     position = i;
                     categoryList.setItemChecked(position, true);
+                    categoryList.setSelection(position);
                     cancel(true);
                     return;
                 }
@@ -248,6 +253,65 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
         @Override
         public void onPostExecute(Void result){
             categoryAdapter.notifyDataSetChanged();
+            mActivity.setProgressBarIndeterminateVisibility(false);
+            enableListeners();
+        }
+    }
+
+    /*
+     * This task will edit the category in the list
+     */
+    private class NewCategoryTask extends AsyncTask<Void, Void, Category> {
+        private String editText;
+
+		@Override
+        public void onPreExecute() {
+            disableListeners();
+            mActivity.setProgressBarIndeterminateVisibility(true);
+            editText = categoryEdit.getText().toString();
+            if ("".equals(editText)) {
+                cancel(true);
+                return;
+            }
+            int categorySize = categories.size();
+            for (int i = 0; i < categorySize; i++) {
+                if (categories.get(i).getName().equals(editText)) {
+                    categoryList.setItemChecked(i, true);
+                    categoryList.setSelection(i);
+                    cancel(true);
+                    return;
+                }
+            }
+            assert editText != null : "Category's EditText shouldn't get null";
+        }
+
+        @Override
+        public Category doInBackground(Void... params) {
+            try {
+                Category c = new Category();
+                c.setName(editText);
+                categoryDao.create(c);
+                return c;
+            } catch (SQLException e) {
+                Log.e(TAG, "Error updating the category", e);
+                throw new RuntimeException("Error updating the category");
+            }
+        }
+
+        @Override
+        public void onCancelled(){
+            enableListeners();
+        }
+
+        @Override
+        public void onPostExecute(Category result){
+            categoryAdapter.add(result);
+            categoryAdapter.notifyDataSetChanged();
+            
+            // Select and scroll to newly created category
+            int lastPos = categoryAdapter.getCount() - 1;
+            categoryList.setItemChecked(lastPos, true);
+            categoryList.setSelection(lastPos);
             mActivity.setProgressBarIndeterminateVisibility(false);
             enableListeners();
         }
