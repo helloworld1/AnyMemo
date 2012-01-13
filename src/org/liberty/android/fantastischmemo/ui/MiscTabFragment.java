@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2010 Haowen Ning
+Copyright (C) 2012 Haowen Ning
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -57,11 +57,7 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
-/* 
- * This class is invoked when the user share the card from other
- * apps like ColorDict 
- */
-public class MiscTabFragment extends Fragment implements View.OnClickListener{
+public class MiscTabFragment extends Fragment implements View.OnClickListener {
     private static final String WEBSITE_VERSION="http://anymemo.org/index.php?page=version";
     private Activity mActivity;
     private View optionButton;

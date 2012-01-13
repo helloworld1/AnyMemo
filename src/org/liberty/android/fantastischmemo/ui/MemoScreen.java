@@ -480,7 +480,7 @@ public class MemoScreen extends AMActivity {
 
     void updateFlashcardView(boolean showAnswer){
         if(currentCard == null){
-            Log.e(TAG, "current card is null in updateFlashcardView", new NullPointerException("currentItem is null"));
+            Log.e(TAG, "current card is null in updateFlashcardView");
             return;
         }
         flashcardDisplay.updateView(currentCard, showAnswer);
@@ -894,6 +894,7 @@ public class MemoScreen extends AMActivity {
             else{ 
                 if(!flashcardDisplay.isAnswerShown()){
                     updateFlashcardView(false);
+                    hideButtons();
                 }
                 else{
                     updateFlashcardView(true);
