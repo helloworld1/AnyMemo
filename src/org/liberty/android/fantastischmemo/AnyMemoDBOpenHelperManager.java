@@ -33,6 +33,7 @@ public class AnyMemoDBOpenHelperManager {
 
     // TODO: Remove all synchronized and use java.concurrent's map
     public static synchronized AnyMemoDBOpenHelper getHelper(Context context, String dbpath) {
+        assert dbpath != null : "dbpath should not be null";
         if (helpers.containsKey(dbpath)) {
             Log.i(TAG, "Call get AnyMemoDBOpenHelper again, return existing helper."); 
             DBConnection conn = dbConnections.get(dbpath);

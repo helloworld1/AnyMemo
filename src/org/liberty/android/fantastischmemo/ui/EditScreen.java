@@ -23,23 +23,17 @@ import java.sql.SQLException;
 
 import java.util.Locale;
 import java.util.Map;
-import java.util.List;
 
 import org.liberty.android.fantastischmemo.AMActivity;
-import org.liberty.android.fantastischmemo.AMActivity;
-import org.liberty.android.fantastischmemo.AMGUIUtility;
 import org.liberty.android.fantastischmemo.AMUtil;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.DatabaseUtility;
 import org.liberty.android.fantastischmemo.DetailScreen;
 import org.liberty.android.fantastischmemo.Item;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.SettingsScreen;
 
-import org.liberty.android.fantastischmemo.cardscreen.ItemManager;
 import org.liberty.android.fantastischmemo.cardscreen.ListEditScreen;
-import org.liberty.android.fantastischmemo.cardscreen.SettingManager;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
@@ -50,17 +44,9 @@ import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 
-import org.liberty.android.fantastischmemo.scheduler.DefaultScheduler;
-
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTSPlatform;
 import org.liberty.android.fantastischmemo.tts.AudioFileTTS;
-
-import org.liberty.android.fantastischmemo.ui.MemoScreen;
-import org.liberty.android.fantastischmemo.ui.MemoScreen;
-import org.liberty.android.fantastischmemo.ui.MemoScreen;
-import org.liberty.android.fantastischmemo.ui.MemoScreen;
-
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -80,7 +66,6 @@ import android.view.LayoutInflater;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.os.Handler;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.EditText;
@@ -103,6 +88,10 @@ public class EditScreen extends AMActivity {
     private final int ACTIVITY_MERGE = 17;
     private final int ACTIVITY_DETAIL = 18;
     private final static String WEBSITE_HELP_EDIT = "http://anymemo.org/wiki/index.php?title=Editing_screen";
+
+    public static String EXTRA_DBPATH = "dbpath";
+    public static String EXTRA_CARD_ID = "id";
+    public static String EXTRA_CATEGORY = "category";
 
     Card currentCard = null;
     Integer currentCardId = null;
@@ -154,20 +143,16 @@ public class EditScreen extends AMActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
+        System.out.println("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode ==Activity.RESULT_CANCELED){
+        if(resultCode == Activity.RESULT_CANCELED){
             return;
         }
         /* Refresh the activity according to activities */
         switch(requestCode){
             case ACTIVITY_EDIT:
             {
-                // TODO: Edit!
-                Bundle extras = data.getExtras();
-                Item item = extras.getParcelable("item");
-                if(item != null){
-                    //currentItem = item;
-                }
+                // TODO: Jump to edit card.
                 restartActivity();
                 break;
             }
@@ -427,11 +412,10 @@ public class EditScreen extends AMActivity {
     @Override
     public void restartActivity(){
         Intent myIntent = new Intent(this, EditScreen.class);
-        if(currentCard != null){
-            myIntent.putExtra("id", currentCard.getId());
-        }
-        myIntent.putExtra("dbpath", dbPath);
-        myIntent.putExtra("category", activeCategory);
+        assert currentCard != null : "Null card is used when restarting activity";
+        myIntent.putExtra(EXTRA_CARD_ID, currentCard.getId());
+        myIntent.putExtra(EXTRA_DBPATH, dbPath);
+        myIntent.putExtra(EXTRA_CATEGORY, activeCategory);
         finish();
         startActivity(myIntent);
     }
@@ -494,23 +478,20 @@ public class EditScreen extends AMActivity {
     private View.OnClickListener newButtonListener = new View.OnClickListener(){
         public void onClick(View v){
             Intent myIntent = new Intent(EditScreen.this, CardEditor.class);
-            // TODO: How to create new card?
-            //myIntent.putExtra("item", currentItem); 
-            myIntent.putExtra("dbpath", dbPath);
-            myIntent.putExtra("dbname", dbName);
-            myIntent.putExtra("new", true);
+            myIntent.putExtra(CardEditor.EXTRA_DBPATH, dbPath);
+            myIntent.putExtra(CardEditor.EXTRA_CARD_ID, currentCardId);
+            myIntent.putExtra(CardEditor.EXTRA_IS_EDIT_NEW, true);
+            //startActivityForResult(myIntent, ACTIVITY_EDIT);
             startActivityForResult(myIntent, ACTIVITY_EDIT);
         }
     };
 
     private View.OnClickListener editButtonListener = new View.OnClickListener(){
         public void onClick(View v){
-            // TODO: How to edit new cards
             Intent myIntent = new Intent(EditScreen.this, CardEditor.class);
-            // myIntent.putExtra("item", currentItem);
-            myIntent.putExtra("dbpath", dbPath);
-            myIntent.putExtra("dbname", dbName);
-            myIntent.putExtra("new", false);
+            myIntent.putExtra(CardEditor.EXTRA_DBPATH, dbPath);
+            myIntent.putExtra(CardEditor.EXTRA_CARD_ID, currentCardId);
+            myIntent.putExtra(CardEditor.EXTRA_IS_EDIT_NEW, false);
             startActivityForResult(myIntent, ACTIVITY_EDIT);
         }
     };

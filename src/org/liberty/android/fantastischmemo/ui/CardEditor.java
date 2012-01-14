@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2010 Haowen Ning
+Copyright (C) 2012 Haowen Ning
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -21,27 +21,18 @@ package org.liberty.android.fantastischmemo.ui;
 
 import java.sql.SQLException;
 
-import java.util.HashMap;
 import java.io.File;
 
 import org.liberty.android.fantastischmemo.AMActivity;
-import org.liberty.android.fantastischmemo.AMUtil;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.DatabaseHelper;
 import org.liberty.android.fantastischmemo.FileBrowser;
-import org.liberty.android.fantastischmemo.Item;
 import org.liberty.android.fantastischmemo.R;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
-import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 
 import org.liberty.android.fantastischmemo.domain.Card;
-import org.liberty.android.fantastischmemo.domain.Option;
-
-import org.liberty.android.fantastischmemo.ui.EditScreen;
-import org.liberty.android.fantastischmemo.ui.EditScreen;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -54,7 +45,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -83,14 +73,18 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
     private Button btnCancel;
     private String dbName = null;
     String dbPath = null;
-    private LearningDataDao learningDataDao;
     CardDao cardDao;
     CategoryDao categoryDao;
     private InitTask initTask;
+    private AnyMemoDBOpenHelper helper;
 
     private String originalQuestion;
     private String originalAnswer;
     private String originalNote;
+    public static String EXTRA_DBPATH = "dbpath";
+    public static String EXTRA_CARD_ID = "id";
+    public static String EXTRA_IS_EDIT_NEW = "is_edit_new";
+
 
 
     @Override
@@ -98,6 +92,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.edit_dialog);
+        System.out.println("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         initTask = new InitTask();
         initTask.execute((Void)null);
     }
@@ -114,10 +109,11 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
             String qText = questionEdit.getText().toString();
             String aText = answerEdit.getText().toString();
             String nText = noteEdit.getText().toString();
-            Intent resultIntent = new Intent();
-            resultIntent.putExtra("id", currentCard.getId());
-        	setResult(Activity.RESULT_OK, resultIntent);    			
-            finish();
+            currentCard.setQuestion(qText);
+            currentCard.setAnswer(aText);
+            currentCard.setNote(nText);
+            SaveCardTask task = new SaveCardTask();
+            task.execute((Void)null);
         } 
         
         if(v == btnCancel){
@@ -212,7 +208,6 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
 
     public void onActivityResult(int requestCode, int resultCode, Intent data){
     	super.onActivityResult(requestCode, resultCode, data);
-        String fontFilename = null;
         String name, path;
     	switch(requestCode){
     	    case ACTIVITY_IMAGE_FILE:
@@ -308,6 +303,30 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
         }
     }
 
+    void updateViews() {
+        /* Retain the last category when editing new */
+        String categoryName = currentCard.getCategory().getName();
+        if (categoryName.equals("")) {
+            categoryButton.setText(R.string.uncategorized_text);
+        } else {
+            categoryButton.setText(categoryName);
+        }
+        /* Prefill the note if it is empty */
+
+        if(isEditNew){
+            /* Use this one or the one below ?*/
+            noteEdit.setText(currentCard.getNote());
+        }
+        if(!isEditNew){
+            originalQuestion = currentCard.getQuestion();
+            originalAnswer = currentCard.getAnswer();
+            originalNote = currentCard.getNote();
+            questionEdit.setText(originalQuestion);
+            answerEdit.setText(originalAnswer);
+            noteEdit.setText(originalNote);
+        }
+    }
+
     private class InitTask extends AsyncTask<Void, Void, Void> {
         private ProgressDialog progressDialog;
 
@@ -316,9 +335,9 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
             setTitle(R.string.memo_edit_dialog_title);
             Bundle extras = getIntent().getExtras();
             if (extras != null) {
-                currentCardId = extras.getInt("id");
-                dbPath = extras.getString("dbpath");
-                isEditNew = extras.getBoolean("is_edit_new");
+                currentCardId = extras.getInt(EXTRA_CARD_ID);
+                dbPath = extras.getString(EXTRA_DBPATH);
+                isEditNew = extras.getBoolean(EXTRA_IS_EDIT_NEW);
             }
 
             progressDialog = new ProgressDialog(CardEditor.this);
@@ -327,27 +346,27 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
             progressDialog.setMessage(getString(R.string.loading_database));
             progressDialog.setCancelable(false);
             progressDialog.show();
+            assert dbPath != null : "dbPath shouldn't be null";
         }
 
         @Override
-            public Void doInBackground(Void... params) {
-                try {
-                    AnyMemoDBOpenHelper helper =
-                        AnyMemoDBOpenHelperManager.getHelper(CardEditor.this, dbPath);
+        public Void doInBackground(Void... params) {
+            try {
+                helper =
+                    AnyMemoDBOpenHelperManager.getHelper(CardEditor.this, dbPath);
 
-                    cardDao = helper.getCardDao();
-                    learningDataDao = helper.getLearningDataDao();
-                    categoryDao = helper.getCategoryDao();
-                    currentCard = cardDao.queryForId(currentCardId);
-                    assert currentCard != null : "Try to edit null card!";
-                    categoryDao.refresh(currentCard.getCategory());
+                cardDao = helper.getCardDao();
+                categoryDao = helper.getCategoryDao();
+                currentCard = cardDao.queryForId(currentCardId);
+                assert currentCard != null : "Try to edit null card!";
+                categoryDao.refresh(currentCard.getCategory());
 
-                } catch (SQLException e) {
-                    Log.e(TAG, "Error creating daos", e);
-                    throw new RuntimeException("Dao creation error");
-                }
-                return null;
+            } catch (SQLException e) {
+                Log.e(TAG, "Error creating daos", e);
+                throw new RuntimeException("Dao creation error");
             }
+            return null;
+        }
 
         @Override
         public void onPostExecute(Void result){
@@ -371,27 +390,38 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
         }
     }
 
-    void updateViews() {
-        /* Retain the last category when editing new */
-        String categoryName = currentCard.getCategory().getName();
-        if (categoryName.equals("")) {
-            categoryButton.setText(R.string.uncategorized_text);
-        } else {
-            categoryButton.setText(categoryName);
-        }
-        /* Prefill the note if it is empty */
 
-        if(isEditNew){
-            /* Use this one or the one below ?*/
-            noteEdit.setText(currentCard.getNote());
+    private class SaveCardTask extends AsyncTask<Void, Void, Void> {
+        private ProgressDialog progressDialog;
+		@Override
+        public void onPreExecute() {
+            progressDialog = new ProgressDialog(CardEditor.this);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setTitle(getString(R.string.loading_please_wait));
+            progressDialog.setMessage(getString(R.string.loading_database));
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+            assert currentCard != null : "Current card shouldn't be null";
         }
-        if(!isEditNew){
-            originalQuestion = currentCard.getQuestion();
-            originalAnswer = currentCard.getAnswer();
-            originalNote = currentCard.getNote();
-            questionEdit.setText(originalQuestion);
-            answerEdit.setText(originalAnswer);
-            noteEdit.setText(originalNote);
+
+        @Override
+        public Void doInBackground(Void... params) {
+            try {
+                cardDao.update(currentCard);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
+            return null;
+        }
+
+        @Override
+        public void onPostExecute(Void result){
+            progressDialog.dismiss();
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("id", currentCard.getId());
+        	setResult(Activity.RESULT_OK, resultIntent);    			
+            finish();
         }
     }
 

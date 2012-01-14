@@ -60,13 +60,18 @@ public class AnyMemo extends AMActivity {
         b.putString("default_root", "/sdcard/");
         mTabManager.addTab(mTabHost.newTabSpec("open").setIndicator(getString(R.string.open_tab_text),  res.getDrawable(R.drawable.open)),
                 OpenTabFragment.class, b);
+        mTabManager.addTab(mTabHost.newTabSpec("edit").setIndicator(getString(R.string.edit_tab_text),  res.getDrawable(R.drawable.edit)),
+                EditTabFragment.class, b);
+        mTabManager.addTab(mTabHost.newTabSpec("downloader").setIndicator(getString(R.string.download_tab_text),  res.getDrawable(R.drawable.download)),
+                DownloadTabFragment.class, b);
 
         mTabManager.addTab(mTabHost.newTabSpec("misc").setIndicator(getString(R.string.misc_tab_text),  res.getDrawable(R.drawable.misc)),
                 MiscTabFragment.class, null);
 
         if (savedInstanceState != null) {
-            mTabHost.setCurrentTabByTag(savedInstanceState.getString("misc"));
+            mTabHost.setCurrentTabByTag(savedInstanceState.getString("open"));
         }
+
         //Intent myIntent = new Intent(this, CardEditor.class);
         //myIntent.putExtra("dbpath", "/sdcard/french-body-parts.db");
         //myIntent.putExtra("dbpath", "/sdcard/gre01.db");

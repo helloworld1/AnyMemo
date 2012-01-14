@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMGUIUtility;
 import org.liberty.android.fantastischmemo.AMUtil;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
@@ -96,6 +97,7 @@ public class MemoScreen extends AMActivity {
     private final int ACTIVITY_SETTINGS = 15;
     private final int ACTIVITY_DETAIL = 16;
     private final static String WEBSITE_HELP_MEMO="http://anymemo.org/wiki/index.php?title=Learning_screen";
+    private WaitDbTask waitDbTask;
 
     /* This is useful to determine which view is click or long clicked */
     private View activeView = null;
@@ -137,6 +139,19 @@ public class MemoScreen extends AMActivity {
                 learningDataDao,
                 10,
                 50) ;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Only if the initTask has been finished and no waitDbTask is waiting.
+        if ((initTask != null && AsyncTask.Status.FINISHED.equals(initTask.getStatus()))
+                && (waitDbTask == null || !AsyncTask.Status.RUNNING.equals(waitDbTask.getStatus()))) {
+            waitDbTask = new WaitDbTask();
+            waitDbTask.execute((Void)null);
+        } else {
+            Log.i(TAG, "There is another task running. Do not run tasks");
+        }
     }
 
     @Override
@@ -272,8 +287,9 @@ public class MemoScreen extends AMActivity {
             case R.id.menu_context_edit:
             {
                 Intent myIntent = new Intent(this, CardEditor.class);
-                myIntent.putExtra("dbpath", this.dbPath);
-                myIntent.putExtra("cardid", currentCard.getId());
+                myIntent.putExtra(CardEditor.EXTRA_DBPATH, this.dbPath);
+                myIntent.putExtra(CardEditor.EXTRA_CARD_ID, currentCard.getId());
+                myIntent.putExtra(CardEditor.EXTRA_IS_EDIT_NEW, false);
                 startActivityForResult(myIntent, ACTIVITY_EDIT);
                 return true;
             }
@@ -444,6 +460,12 @@ public class MemoScreen extends AMActivity {
                 return true;
             }
         }
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            Log.v(TAG, "back button pressed");
+            WaitDbTaskFinish task = new WaitDbTaskFinish();
+            task.execute((Void)null);
+        }
+
         return super.onKeyDown(keyCode, event);
     }
     @Override
@@ -895,6 +917,54 @@ public class MemoScreen extends AMActivity {
                 updateFlashcardView(false);
             }
             setTitle(getActivityTitleString());
+        }
+    }
+
+    /*
+     * Use AsyncTask to make sure there is no running task for a db 
+     */
+    private class WaitDbTask extends AsyncTask<Void, Void, Void>{
+        private ProgressDialog progressDialog;
+
+        @Override
+        public void onPreExecute(){
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(MemoScreen.this);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setTitle(getString(R.string.loading_please_wait));
+            progressDialog.setMessage(getString(R.string.loading_database));
+            progressDialog.setCancelable(true);
+            progressDialog.show();
+        }
+
+        @Override
+        public Void doInBackground(Void... nothing){
+            AnyMemoDBOpenHelperManager.waitAllTasks();
+            return null;
+        }
+
+        @Override
+        public void onCancelled(){
+            return;
+        }
+
+        @Override
+        public void onPostExecute(Void result){
+            super.onPostExecute(result);
+            if (!isCancelled()) {
+                progressDialog.dismiss();
+            }
+        }
+    }
+
+    /*
+     * Like the wait db task but finish the current activity
+     */
+    private class WaitDbTaskFinish extends WaitDbTask {
+        @Override
+        public void onPostExecute(Void result){
+            super.onPostExecute(result);
+            finish();
         }
     }
 

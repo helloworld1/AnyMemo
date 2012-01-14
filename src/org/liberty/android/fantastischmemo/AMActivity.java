@@ -20,20 +20,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo;
 
-import android.app.ProgressDialog;
-
 import android.content.pm.ActivityInfo;
 import android.content.SharedPreferences;
 import android.content.Intent;
 
-import android.os.AsyncTask;
 
 import android.support.v4.app.FragmentActivity;
 
-import android.util.Log;
 import android.view.WindowManager;
 import android.preference.PreferenceManager;
-import android.app.Activity;
 import android.os.Bundle;
 import android.content.res.Configuration;
 import android.view.Window;
@@ -45,7 +40,6 @@ import java.util.Locale;
  * It contains basic configuration of the Activity
  */
 public abstract class AMActivity extends FragmentActivity{
-    private WaitDbTask waitDbTask;
     protected String TAG = getClass().getSimpleName();
 
     @Override
@@ -113,65 +107,10 @@ public abstract class AMActivity extends FragmentActivity{
         super.onConfigurationChanged(newConfig);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (waitDbTask == null || !AsyncTask.Status.RUNNING.equals(waitDbTask.getStatus())) {
-            waitDbTask = new WaitDbTask();
-            waitDbTask.execute((Void)null);
-        } else {
-            Log.i(TAG, "There is another task running. Do not run tasks");
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (waitDbTask != null) {
-            waitDbTask.cancel(true);
-        }
-    }
-
     public void restartActivity(){
         startActivity(new Intent(this, this.getClass()));
         finish();
     }
 
-    /*
-     * Use AsyncTask to make sure there is no running task for a db 
-     */
-    private class WaitDbTask extends AsyncTask<Void, Void, Void>{
-        private ProgressDialog progressDialog;
-
-        @Override
-        public void onPreExecute(){
-            super.onPreExecute();
-            progressDialog = new ProgressDialog(AMActivity.this);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setTitle(getString(R.string.loading_please_wait));
-            progressDialog.setMessage(getString(R.string.loading_database));
-            progressDialog.setCancelable(true);
-            progressDialog.show();
-        }
-
-        @Override
-        public Void doInBackground(Void... nothing){
-            AnyMemoDBOpenHelperManager.waitAllTasks();
-            return null;
-        }
-
-        @Override
-        public void onCancelled(){
-            return;
-        }
-
-        @Override
-        public void onPostExecute(Void result){
-            super.onPostExecute(result);
-            if (!isCancelled()) {
-                progressDialog.dismiss();
-            }
-        }
-    }
 }
 

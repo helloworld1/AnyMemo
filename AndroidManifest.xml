@@ -48,18 +48,6 @@
             android:name=".Downloader" 
             android:configChanges="orientation|keyboardHidden" />
         <activity 
-            android:name=".cardscreen.CramMemoScreen"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity 
-            android:name=".cardscreen.Filter"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity
-            android:name=".cardscreen.ListEditScreen"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity
-            android:name=".cardscreen.CardEditor"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity 
             android:name=".cardscreen.EditScreen"
             android:configChanges="orientation|keyboardHidden" />
         <activity 
@@ -92,21 +80,6 @@
             android:configChanges="orientation|keyboardHidden" />
         <activity
             android:name=".downloader.DownloaderQuizlet"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity
-            android:name=".EditScreenTab"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity
-            android:name=".OpenScreenTab"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity
-            android:name=".DownloaderTab"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity
-            android:name=".RecentList"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity
-            android:name=".MiscTab"
             android:configChanges="orientation|keyboardHidden" />
         <activity
             android:name=".converter.ConvertScreen"
