@@ -892,16 +892,9 @@ public class MemoScreen extends AMActivity {
                 showNoItemDialog();
             }
             else{ 
-                if(!flashcardDisplay.isAnswerShown()){
-                    updateFlashcardView(false);
-                    hideButtons();
-                }
-                else{
-                    updateFlashcardView(true);
-                    showButtons();
-                }
-                setTitle(getActivityTitleString());
+                updateFlashcardView(false);
             }
+            setTitle(getActivityTitleString());
         }
     }
 
