@@ -86,7 +86,7 @@
     <string name="settings_inverse_warning">Эта операция поменяет местами вопросы и ответы. Обм&amp;Коп добавит все инвертированные карточки в конец текущей базы вместо замены.</string>
     <string name="detail_update">Внести измения</string>
     <string name="detail_back">Назад</string>
-    <string name="detail_delete">Удалить</string>
+    <string name="detail_delete">Удал.</string>
     <string name="delete_warning">Вы действительно хотите удалить эту карточку?</string>
     <string name="skip_text">Пропустить</string>
     <string name="skip_warning">Этот объект больше не появится для изучения. Вы хотите пропустить его навсегда?</string>
@@ -145,7 +145,7 @@
     <string name="about_text">Программа для заучивания наизусть информации на карточках и продвинутой системой повторений.&lt;br /&gt;&lt;br /&gt;Авторы: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;Вебсайт: &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Признательность: pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;Переводчики: Ladislav, jim4ever, paw3lk, Alexander Gomenyuk, Maksym Grinenko</string>
     <string name="about_version">История версий</string>
     <string name="what_is_new">Установлена новая версия</string>
-    <string name="downloader_categories">Разделы</string>
+    <string name="downloader_categories">Категории</string>
     <string name="downloader_databases">Базы</string>
     <string name="open_database_error_title">Ошибка при открытии базы</string>
     <string name="open_database_error_message">AnyMemo не может открыть эту базу. Этому могут быть разные причины. Посетите раздел FAQ нашего вебсайта anymemo.org для решения вопроса или информирования нас об ошибках в программе.</string>
@@ -182,7 +182,7 @@
 	<string name="color_v">значение</string>
     <string name="fullscreen_title">Полноэкранный режим</string>
     <string name="fullscreen_summary">Показывать карточки в полноэкранном режиме.</string>
-    <string name="edit_dialog_category">Раздел</string>
+    <string name="edit_dialog_category">Категория</string>
     <string name="touch_area_title">Зона касания</string>
     <string name="touch_area_summary">Где касаться, чтобы открыть открыть ответ.</string>
     <string name="settings_audio_location_title">Установка расположения аудио пользователя</string>
@@ -366,4 +366,7 @@
     <string name="download_source_dropbox">Dropbox.com\n(экспериментально)</string>
     <string name="dropbox_login_message">Введите имя пользователя Dropbox (обычно email) и пароль.</string>
     <string name="import_supermemo_2008_xml_text">Импорт SuperMemo 2008 XML</string>
+    <string name="uncategorized_text">Нет категории</string>
+    <string name="edit_text">Правка</string>
+    <string name="category_dialog_title">Выберите категорию или введите новую</string>
 </resources>

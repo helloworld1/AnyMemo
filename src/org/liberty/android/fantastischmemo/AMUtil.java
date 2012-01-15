@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import java.util.Date;
 import java.util.EnumSet;
 
 import java.util.regex.Matcher;
@@ -95,5 +96,10 @@ public class AMUtil {
             res = res.substring(0, res.length() - 1);
         }
         return res;
+    }
+
+    /* Get the interval in days between two date */
+    public float diffDate(Date d1, Date d2) {
+        return 0.0f;
     }
 }

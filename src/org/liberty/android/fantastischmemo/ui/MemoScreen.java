@@ -87,7 +87,9 @@ import android.util.Log;
 import android.net.Uri;
 
 public class MemoScreen extends AMActivity {
-    private final static String TAG = "org.liberty.android.fantastischmemo.ui.MemoScreen";
+    public static String EXTRA_DBPATH = "dbpath";
+    public static String EXTRA_CATEGORY = "category";
+
     private AnyMemoTTS questionTTS = null;
     private AnyMemoTTS answerTTS = null;
     private final int DIALOG_LOADING_PROGRESS = 100;
@@ -819,8 +821,8 @@ public class MemoScreen extends AMActivity {
             Bundle extras = getIntent().getExtras();
             mHandler = new Handler();
             if (extras != null) {
-                dbPath = extras.getString("dbpath");
-                activeCategory = extras.getString("category");
+                dbPath = extras.getString(EXTRA_DBPATH);
+                activeCategory = extras.getString(EXTRA_CATEGORY);
             }
             option = new Option(MemoScreen.this);
 

@@ -23,8 +23,7 @@
         </activity>
         <activity 
             android:name=".MainTabs"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/app_full_name" >
+            android:configChanges="orientation|keyboardHidden" >
         </activity>
         <activity 
             android:name=".InstrumentationActivity"
