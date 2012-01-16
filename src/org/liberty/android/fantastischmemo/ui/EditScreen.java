@@ -88,6 +88,7 @@ public class EditScreen extends AMActivity {
     private final int ACTIVITY_MERGE = 17;
     private final int ACTIVITY_DETAIL = 18;
     private final static String WEBSITE_HELP_EDIT = "http://anymemo.org/wiki/index.php?title=Editing_screen";
+    private long totalCardCount = 0;
 
     public static String EXTRA_DBPATH = "dbpath";
     public static String EXTRA_CARD_ID = "id";
@@ -496,17 +497,12 @@ public class EditScreen extends AMActivity {
     };
 
     private void updateTitle(){
-        // TODO: How to update
-        /*
-        if(currentItem != null){
-            int total = itemManager.getStatInfo()[0];
-            String titleString = getString(R.string.stat_total) + total + " " + getString(R.string.memo_current_id) + " " + currentItem.getId();
-            if(currentItem != null && currentItem.getCategory() != null){
-                titleString += "  " + currentItem.getCategory();
-            }
-            setTitle(titleString);
-        }
-        */
+        assert currentCard != null : "Shouldn't update title if card is null";
+        StringBuilder sb = new StringBuilder();
+        sb.append(getString(R.string.total_text) + ": " + totalCardCount + " ");
+        sb.append(getString(R.string.id_text) + ": " + currentCard.getId() + " ");
+        sb.append(getString(R.string.ordinal_text_short) + ": " + currentCard.getOrdinal() + " ");
+        setTitle(sb.toString());
     }
     
     private void gotoNext(){
@@ -752,6 +748,8 @@ public class EditScreen extends AMActivity {
                 if (currentCard == null) {
                     currentCard = cardDao.queryFirstOrdinal();
                 }
+
+                totalCardCount = cardDao.countOf();
 
             } catch (SQLException e) {
                 Log.e(TAG, "Error creating daos", e);

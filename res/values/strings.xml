@@ -381,7 +381,7 @@
     <string name="uncategorized_text">Uncategorized</string>
     <string name="edit_text">Edit</string>
     <string name="category_dialog_title">Please select a category or enter a new one</string>
-    <string name="current_card_ordinal_short">Ord</string>
+    <string name="ordinal_text_short">Ord</string>
     <string name="total_text">Total</string>
     <string name="review_short_text">Rev</string>
     <string name="new_text">New</string>
