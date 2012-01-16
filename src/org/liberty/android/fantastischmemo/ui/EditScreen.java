@@ -752,6 +752,7 @@ public class EditScreen extends AMActivity {
                 setting = settingDao.queryForId(1);
                 option = new Option(EditScreen.this);
                 currentCard = cardDao.queryForId(currentCardId);
+                categoryDao.refresh(currentCard.getCategory());
                 if (currentCard == null) {
                     currentCard = cardDao.queryFirstOrdinal();
                 }
