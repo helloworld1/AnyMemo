@@ -114,7 +114,7 @@ public class DefaultScheduler {
 				Log.e("Interval error", "Interval is 0 in wrong place");
 			}
 		}
-        return newInterval;
+        return truncateNumber(newInterval);
     }
 
     /*
@@ -284,6 +284,10 @@ public class DefaultScheduler {
     private Date afterDays(Date date, double days) {
         long time = date.getTime() + Math.round(days * MILLSECS_PER_DAY);
         return new Date(time);
+    }
+
+    private double truncateNumber(double f) {
+        return Math.round(f * 10) / 10;
     }
 
 }

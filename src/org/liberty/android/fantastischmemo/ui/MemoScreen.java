@@ -604,30 +604,27 @@ public class MemoScreen extends AMActivity {
 
     void setGradeButtonTitle(){
         Map<String, Button> hm = controlButtons.getButtons();
-        if(option.getButtonStyle() == Option.ButtonStyle.MNEMOSYNE){
+        if(option.getButtonStyle() == Option.ButtonStyle.MNEMOSYNE) {
             hm.get("0").setText(getString(R.string.memo_btn0_brief_text));
             hm.get("1").setText(getString(R.string.memo_btn1_brief_text));
             hm.get("2").setText(getString(R.string.memo_btn2_brief_text));
             hm.get("3").setText(getString(R.string.memo_btn3_brief_text));
             hm.get("4").setText(getString(R.string.memo_btn4_brief_text));
             hm.get("5").setText(getString(R.string.memo_btn5_brief_text));
-        } else if(option.getButtonStyle() == Option.ButtonStyle.ANKI){
-            // TODO: Add estimate to grades
-            hm.get("0").setText(getString(R.string.memo_btn0_anki_text) + "\n+" + "");
-            hm.get("1").setText(getString(R.string.memo_btn0_anki_text) + "\n+" + "");
-            hm.get("2").setText(getString(R.string.memo_btn0_anki_text) + "\n+" + "");
-            hm.get("3").setText(getString(R.string.memo_btn0_anki_text) + "\n+" + "");
-            hm.get("4").setText(getString(R.string.memo_btn0_anki_text) + "\n+" + "");
-            hm.get("5").setText(getString(R.string.memo_btn0_anki_text) + "\n+" + "");
-        }
-        else{
-            hm.get("0").setText(getString(R.string.memo_btn0_text) + "\n+" + "");
-            hm.get("1").setText(getString(R.string.memo_btn1_text) + "\n+" + "");
-            hm.get("2").setText(getString(R.string.memo_btn2_text) + "\n+" + "");
-            hm.get("3").setText(getString(R.string.memo_btn3_text) + "\n+" + "");
-            hm.get("4").setText(getString(R.string.memo_btn4_text) + "\n+" + "");
-            hm.get("5").setText(getString(R.string.memo_btn5_text) + "\n+" + "");
-
+        } else if(option.getButtonStyle() == Option.ButtonStyle.ANKI) {
+            hm.get("0").setText(getString(R.string.memo_btn0_anki_text) + "\n+" + scheduler.getInterval(currentCard.getLearningData(), 0));
+            hm.get("1").setText(getString(R.string.memo_btn1_anki_text) + "\n+" + scheduler.getInterval(currentCard.getLearningData(), 1));
+            hm.get("2").setText(getString(R.string.memo_btn2_anki_text) + "\n+" + scheduler.getInterval(currentCard.getLearningData(), 2));
+            hm.get("3").setText(getString(R.string.memo_btn3_anki_text) + "\n+" + scheduler.getInterval(currentCard.getLearningData(), 3));
+            hm.get("4").setText(getString(R.string.memo_btn4_anki_text) + "\n+" + scheduler.getInterval(currentCard.getLearningData(), 4));
+            hm.get("5").setText(getString(R.string.memo_btn5_anki_text) + "\n+" + scheduler.getInterval(currentCard.getLearningData(), 5));
+        } else {
+            hm.get("0").setText(getString(R.string.memo_btn0_text) + "\n+" + scheduler.getInterval(currentCard.getLearningData(), 0));
+            hm.get("1").setText(getString(R.string.memo_btn1_text) + "\n+" + scheduler.getInterval(currentCard.getLearningData(), 1));
+            hm.get("2").setText(getString(R.string.memo_btn2_text) + "\n+" + scheduler.getInterval(currentCard.getLearningData(), 2));
+            hm.get("3").setText(getString(R.string.memo_btn3_text) + "\n+" + scheduler.getInterval(currentCard.getLearningData(), 3));
+            hm.get("4").setText(getString(R.string.memo_btn4_text) + "\n+" + scheduler.getInterval(currentCard.getLearningData(), 4));
+            hm.get("5").setText(getString(R.string.memo_btn5_text) + "\n+" + scheduler.getInterval(currentCard.getLearningData(), 5));
         }
     }
     
