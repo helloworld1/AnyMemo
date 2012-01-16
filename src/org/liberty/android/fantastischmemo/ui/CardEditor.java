@@ -92,7 +92,6 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.edit_dialog);
-        System.out.println("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         initTask = new InitTask();
         initTask.execute((Void)null);
     }
@@ -407,7 +406,14 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
         @Override
         public Void doInBackground(Void... params) {
             try {
-                cardDao.update(currentCard);
+                if (isEditNew) {
+                    Card lastCard = cardDao.queryLastOrdinal();
+                    int lastOrd = lastCard.getOrdinal();
+                    currentCard.setOrdinal(lastOrd + 1);
+                    cardDao.create(currentCard);
+                } else {
+                    cardDao.update(currentCard);
+                }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

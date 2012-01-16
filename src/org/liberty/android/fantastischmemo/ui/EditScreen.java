@@ -95,7 +95,6 @@ public class EditScreen extends AMActivity {
     public static String EXTRA_CATEGORY = "category";
 
     Card currentCard = null;
-    Integer currentCardId = null;
     Integer savedCardId = null;
     String dbPath = "";
     String dbName = "";
@@ -161,7 +160,7 @@ public class EditScreen extends AMActivity {
             {
                 // TODO: filter
                 Bundle extras = data.getExtras();
-                activeCategory = extras.getString("category");
+                activeCategory = extras.getString(EXTRA_CATEGORY);
                 restartActivity();
                 break;
             }
@@ -479,7 +478,7 @@ public class EditScreen extends AMActivity {
         public void onClick(View v){
             Intent myIntent = new Intent(EditScreen.this, CardEditor.class);
             myIntent.putExtra(CardEditor.EXTRA_DBPATH, dbPath);
-            myIntent.putExtra(CardEditor.EXTRA_CARD_ID, currentCardId);
+            myIntent.putExtra(CardEditor.EXTRA_CARD_ID, currentCard.getId());
             myIntent.putExtra(CardEditor.EXTRA_IS_EDIT_NEW, true);
             //startActivityForResult(myIntent, ACTIVITY_EDIT);
             startActivityForResult(myIntent, ACTIVITY_EDIT);
@@ -490,7 +489,7 @@ public class EditScreen extends AMActivity {
         public void onClick(View v){
             Intent myIntent = new Intent(EditScreen.this, CardEditor.class);
             myIntent.putExtra(CardEditor.EXTRA_DBPATH, dbPath);
-            myIntent.putExtra(CardEditor.EXTRA_CARD_ID, currentCardId);
+            myIntent.putExtra(CardEditor.EXTRA_CARD_ID, currentCard.getId());
             myIntent.putExtra(CardEditor.EXTRA_IS_EDIT_NEW, false);
             startActivityForResult(myIntent, ACTIVITY_EDIT);
         }
@@ -502,11 +501,17 @@ public class EditScreen extends AMActivity {
         sb.append(getString(R.string.total_text) + ": " + totalCardCount + " ");
         sb.append(getString(R.string.id_text) + ": " + currentCard.getId() + " ");
         sb.append(getString(R.string.ordinal_text_short) + ": " + currentCard.getOrdinal() + " ");
+        sb.append(currentCard.getCategory().getName());
         setTitle(sb.toString());
     }
     
     private void gotoNext(){
         currentCard = cardDao.queryNextCard(currentCard);
+        try {
+            categoryDao.refresh(currentCard.getCategory());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         assert currentCard != null : "Next card is null";
         updateCardFrontSide();
         updateTitle();
@@ -532,10 +537,12 @@ public class EditScreen extends AMActivity {
     }
 
     private void gotoPrev(){
-        // TODO: How to go to prev card
-        //currentItem = itemManager.getPreviousItem(currentItem);
-        //updateCardFrontSide();
         currentCard = cardDao.queryPrevCard(currentCard);
+        try {
+            categoryDao.refresh(currentCard.getCategory());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         assert currentCard != null : "Prev card is null";
         updateCardFrontSide();
         updateTitle();
@@ -704,6 +711,7 @@ public class EditScreen extends AMActivity {
 
     private class InitTask extends AsyncTask<Void, Void, Void> {
         private ProgressDialog progressDialog;
+        private int currentCardId;
 
 		@Override
         public void onPreExecute() {
@@ -739,12 +747,11 @@ public class EditScreen extends AMActivity {
                 
                 cardDao = helper.getCardDao();
                 learningDataDao = helper.getLearningDataDao();
+                categoryDao = helper.getCategoryDao();
                 settingDao = helper.getSettingDao();
                 setting = settingDao.queryForId(1);
                 option = new Option(EditScreen.this);
-                /* Run the learnQueue init in a separate thread */
                 currentCard = cardDao.queryForId(currentCardId);
-                // TODO: Query for first ordinal
                 if (currentCard == null) {
                     currentCard = cardDao.queryFirstOrdinal();
                 }
