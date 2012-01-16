@@ -126,6 +126,8 @@ public class MemoScreen extends AMActivity {
     GradeTask gradeTask = null;
     InitTask initTask = null;
     DefaultScheduler scheduler = null;
+    private long schedluledCardCount = 0;
+    private long newCardCount = 0;
 
 
     @Override
@@ -639,10 +641,13 @@ public class MemoScreen extends AMActivity {
         }
     }
 
-    // TODO: add stat
     String getActivityTitleString(){
-        return "hello";
-
+        StringBuilder sb = new StringBuilder();
+        sb.append(getString(R.string.new_text) + ": " + newCardCount + " ");
+        sb.append(getString(R.string.review_short_text) + ": " + schedluledCardCount + " ");
+        sb.append(getString(R.string.id_text) + ": " + currentCard.getId() + " ");
+        sb.append(currentCard.getCategory().getName());
+        return sb.toString();
     }
 
 
@@ -650,12 +655,8 @@ public class MemoScreen extends AMActivity {
         return new View.OnClickListener(){
             public void onClick(View v){
                 // TODO: Undo need to rework.
-                prevCard = currentCard;
-                LearningData ld = currentCard.getLearningData();
-                scheduler.schedule(ld, grade, true);
-                currentCard.setLearningData(ld);
                 gradeTask = new GradeTask();
-                gradeTask.execute(currentCard);
+                gradeTask.execute(grade);
                 if(questionTTS != null){
                     questionTTS.stop();
                 }
@@ -779,6 +780,11 @@ public class MemoScreen extends AMActivity {
         }
     }
 
+    void refreshStatInfo() {
+       newCardCount = learningDataDao.getNewCardCount();
+       schedluledCardCount = learningDataDao.getScheduledCardCount();
+    }
+
     private void initTTS(){
         String defaultLocation =
             Environment.getExternalStorageDirectory().getAbsolutePath()
@@ -875,6 +881,9 @@ public class MemoScreen extends AMActivity {
             setViewListeners();
             hideButtons();
             registerForContextMenu(flashcardDisplay.getView());
+
+            refreshStatInfo();
+            setTitle(getActivityTitleString());
             removeDialog(DIALOG_LOADING_PROGRESS);
             updateFlashcardView(false);
         }
@@ -884,26 +893,34 @@ public class MemoScreen extends AMActivity {
      * Use AsyncTask to update the database and update the statistics
      * information
      */
-    private class GradeTask extends AsyncTask<Card, Void, Card>{
+    private class GradeTask extends AsyncTask<Integer, Void, Card>{
+        private boolean isNewCard = false;
 
         @Override
-        public void onPreExecute(){
+        public void onPreExecute() {
             super.onPreExecute();
             setProgressBarIndeterminateVisibility(true);
             hideButtons();
         }
 
         @Override
-        public Card doInBackground(Card... cards){
-            for (Card card : cards) {
-                queueManager.update(card);
+        public Card doInBackground(Integer... grades) {
+            assert grades.length == 1 : "Grade more than 1 time";
+            int grade = grades[0];
+            prevCard = currentCard;
+            LearningData ld = currentCard.getLearningData();
+            if (ld.getAcqReps() == 0) {
+                isNewCard = true;
             }
+            scheduler.schedule(ld, grade, true);
+            currentCard.setLearningData(ld);
+            queueManager.update(currentCard);
             Card nextCard = queueManager.dequeue();
             return nextCard;
         }
 
         @Override
-        public void onCancelled(){
+        public void onCancelled() {
             return;
         }
 
@@ -914,10 +931,22 @@ public class MemoScreen extends AMActivity {
             currentCard = result;
             if(currentCard == null){
                 showNoItemDialog();
+                return;
             }
-            else{ 
-                updateFlashcardView(false);
+
+            if (isNewCard) {
+                newCardCount -= 1;
+                // TODO: need more generic abstraction
+                if (prevCard.getLearningData().getGrade() < 2) {
+                    schedluledCardCount += 1;
+                }
+            } else {
+                if (prevCard.getLearningData().getGrade() >= 2) {
+                    schedluledCardCount -= 1;
+                }
             }
+            updateFlashcardView(false);
+
             setTitle(getActivityTitleString());
         }
     }

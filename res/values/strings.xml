@@ -64,8 +64,8 @@
     <string name="memo_btn3_anki_text">Good</string>
     <string name="memo_btn4_anki_text">Easy</string>
     <string name="memo_btn5_anki_text">VeryEasy</string>
-    <string name="memo_current_id">ID: </string>
     <string name="memo_edit_dialog_title">Edit</string>
+    <string name="memo_current_id">ID: </string>
     <string name="global_settings">Global settings</string>
     <string name="settings_question_font_size">Question font size</string>
     <string name="settings_question_font_size_prompt">Font size</string>
@@ -108,10 +108,10 @@
     <string name="clear_all_pref">Reset all preferences</string>
     <string name="clear_recent_list">Clear recent list</string>
     <string name="export_xml">Export Mnemosyne XML</string>
-    <string name="add_screen_id">ID</string>
     <string name="add_screen_question">Question</string>
-    <string name="add_screen_answer">Answer</string>
     <string name="add_screen_new">New</string>
+    <string name="add_screen_id">ID</string>
+    <string name="add_screen_answer">Answer</string>
     <string name="add_screen_edit">Save</string>
     <string name="add_screen_gotoid">Go to ID</string>
     <string name="add_screen_back">Back</string>
@@ -381,4 +381,9 @@
     <string name="uncategorized_text">Uncategorized</string>
     <string name="edit_text">Edit</string>
     <string name="category_dialog_title">Please select a category or enter a new one</string>
+    <string name="current_card_ordinal_short">Ord</string>
+    <string name="total_text">Total</string>
+    <string name="review_short_text">Rev</string>
+    <string name="new_text">New</string>
+    <string name="id_text">ID</string>
 </resources>
