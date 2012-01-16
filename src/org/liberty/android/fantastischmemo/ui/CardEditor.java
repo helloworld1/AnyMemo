@@ -31,8 +31,11 @@ import org.liberty.android.fantastischmemo.R;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
+import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 
 import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.domain.Category;
+import org.liberty.android.fantastischmemo.domain.LearningData;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -75,6 +78,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
     String dbPath = null;
     CardDao cardDao;
     CategoryDao categoryDao;
+    LearningDataDao learningDataDao;
     private InitTask initTask;
     private AnyMemoDBOpenHelper helper;
 
@@ -105,12 +109,6 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
     
     public void onClick(View v){
         if(v == btnSave){
-            String qText = questionEdit.getText().toString();
-            String aText = answerEdit.getText().toString();
-            String nText = noteEdit.getText().toString();
-            currentCard.setQuestion(qText);
-            currentCard.setAnswer(aText);
-            currentCard.setNote(nText);
             SaveCardTask task = new SaveCardTask();
             task.execute((Void)null);
         } 
@@ -356,7 +354,29 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
 
                 cardDao = helper.getCardDao();
                 categoryDao = helper.getCategoryDao();
-                currentCard = cardDao.queryForId(currentCardId);
+                learningDataDao = helper.getLearningDataDao();
+
+                Card prevCard = cardDao.queryForId(currentCardId);
+
+                if (isEditNew) {
+                    currentCard = new Card();
+                    // Search for "Uncategorized".
+                    Category c = categoryDao.queryForId(1);
+                    currentCard.setCategory(c);
+                    //TODO: Shouldn't use addback in InitTask
+                    if (addBack || prevCard == null) {
+                        Card lastCard = cardDao.queryLastOrdinal();
+                        int lastOrd = lastCard.getOrdinal();
+                        currentCard.setOrdinal(lastOrd + 1);
+                    } else {
+                        currentCard.setOrdinal(prevCard.getOrdinal());
+                    }
+                    LearningData ld = new LearningData();
+                    learningDataDao.create(ld);
+                    currentCard.setLearningData(ld);
+                } else {
+                    currentCard = prevCard;
+                }
                 assert currentCard != null : "Try to edit null card!";
                 categoryDao.refresh(currentCard.getCategory());
 
@@ -400,6 +420,14 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
             progressDialog.setMessage(getString(R.string.loading_database));
             progressDialog.setCancelable(false);
             progressDialog.show();
+
+            String qText = questionEdit.getText().toString();
+            String aText = answerEdit.getText().toString();
+            String nText = noteEdit.getText().toString();
+            currentCard.setQuestion(qText);
+            currentCard.setAnswer(aText);
+            currentCard.setNote(nText);
+            
             assert currentCard != null : "Current card shouldn't be null";
         }
 
@@ -407,9 +435,6 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
         public Void doInBackground(Void... params) {
             try {
                 if (isEditNew) {
-                    Card lastCard = cardDao.queryLastOrdinal();
-                    int lastOrd = lastCard.getOrdinal();
-                    currentCard.setOrdinal(lastOrd + 1);
                     cardDao.create(currentCard);
                 } else {
                     cardDao.update(currentCard);
