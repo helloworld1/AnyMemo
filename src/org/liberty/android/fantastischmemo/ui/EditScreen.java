@@ -525,9 +525,8 @@ public class EditScreen extends AMActivity {
                 .setPositiveButton(getString(R.string.yes_text),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface arg0, int arg1) {
-                            //TODO: How to delete
-                            //currentItem = itemManager.deleteItem(currentItem);
-                            restartActivity();
+                            DeleteCardTask task = new DeleteCardTask();
+                            task.execute((Void)null);
                         }
                     })
                 .setNegativeButton(getString(R.string.no_text), null)
@@ -712,6 +711,7 @@ public class EditScreen extends AMActivity {
     private class InitTask extends AsyncTask<Void, Void, Void> {
         private ProgressDialog progressDialog;
         private int currentCardId;
+        private static final int NO_CARD_ID = -1;
 
 		@Override
         public void onPreExecute() {
@@ -720,11 +720,10 @@ public class EditScreen extends AMActivity {
             setContentView(R.layout.memo_screen_layout);
 
             Bundle extras = getIntent().getExtras();
-            int currentId = 1;
             if (extras != null) {
                 dbPath = extras.getString("dbpath");
                 activeCategory = extras.getString("category");
-                currentCardId = extras.getInt("id", 1);
+                currentCardId = extras.getInt("id", NO_CARD_ID);
             }
 
             // Strip leading path!
@@ -751,11 +750,19 @@ public class EditScreen extends AMActivity {
                 settingDao = helper.getSettingDao();
                 setting = settingDao.queryForId(1);
                 option = new Option(EditScreen.this);
-                currentCard = cardDao.queryForId(currentCardId);
-                categoryDao.refresh(currentCard.getCategory());
+                if (currentCardId != NO_CARD_ID) {
+                    currentCard = cardDao.queryForId(currentCardId);
+                }
+
                 if (currentCard == null) {
                     currentCard = cardDao.queryFirstOrdinal();
                 }
+
+                // This means empty deck.
+                if (currentCard == null) {
+                    return null;
+                }
+                categoryDao.refresh(currentCard.getCategory());
 
                 totalCardCount = cardDao.countOf();
 
@@ -798,6 +805,35 @@ public class EditScreen extends AMActivity {
                 }
                 registerForContextMenu(flashcardDisplay.getView());
             }
+        }
+    }
+
+    private class DeleteCardTask extends AsyncTask<Void, Void, Void> {
+        private ProgressDialog progressDialog;
+		@Override
+        public void onPreExecute() {
+            progressDialog = new ProgressDialog(EditScreen.this);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setTitle(getString(R.string.loading_please_wait));
+            progressDialog.setMessage(getString(R.string.loading_database));
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+        @Override
+        public Void doInBackground(Void... params) {
+            try {
+                Card delCard = currentCard;
+                currentCard = cardDao.queryNextCard(currentCard);
+                cardDao.delete(currentCard);
+                currentCard = delCard;
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return null;
+        }
+        @Override
+        public void onPostExecute(Void result){
+            restartActivity();
         }
     }
 }
