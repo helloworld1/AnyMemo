@@ -64,6 +64,8 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
     private final int ACTIVITY_IMAGE_FILE = 1;
     private final int ACTIVITY_AUDIO_FILE = 2;
     Card currentCard = null;
+    Card prevCard = null;
+    private Integer prevOrdinal = null;
     private Integer currentCardId;
     private EditText questionEdit;
     private EditText answerEdit;
@@ -363,13 +365,9 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
                     // Search for "Uncategorized".
                     Category c = categoryDao.queryForId(1);
                     currentCard.setCategory(c);
-                    //TODO: Shouldn't use addback in InitTask
-                    if (addBack || prevCard == null) {
-                        Card lastCard = cardDao.queryLastOrdinal();
-                        int lastOrd = lastCard.getOrdinal();
-                        currentCard.setOrdinal(lastOrd + 1);
-                    } else {
-                        currentCard.setOrdinal(prevCard.getOrdinal());
+                    // Save the ordinal to be used when saving.
+                    if (prevCard != null) {
+                        prevOrdinal = prevCard.getOrdinal();
                     }
                     LearningData ld = new LearningData();
                     learningDataDao.create(ld);
@@ -434,6 +432,13 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
         @Override
         public Void doInBackground(Void... params) {
             try {
+                if (prevOrdinal != null && !addBack) {
+                    currentCard.setOrdinal(prevOrdinal);
+                } else {
+                    Card lastCard = cardDao.queryLastOrdinal();
+                    int lastOrd = lastCard.getOrdinal();
+                    currentCard.setOrdinal(lastOrd + 1);
+                }
                 if (isEditNew) {
                     cardDao.create(currentCard);
                 } else {
