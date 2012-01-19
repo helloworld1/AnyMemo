@@ -139,7 +139,7 @@ public class ShareScreen extends Activity implements View.OnClickListener{
                 String dbPath = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
                 if(dbName != null && dbPath != null){
                     String fullname = dbPath + "/" + dbName;
-                    RecentListUtil.addToRecentList(this, dbPath, dbName);
+                    RecentListUtil.addToRecentList(this, dbPath);
                     dbnameView.setText(fullname);
                 }
                 break;

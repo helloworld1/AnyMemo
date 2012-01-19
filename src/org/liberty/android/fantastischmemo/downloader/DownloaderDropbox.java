@@ -189,7 +189,7 @@ public class DownloaderDropbox extends DownloaderBase {
         DatabaseHelper dbHelper = new DatabaseHelper(this, dbpath, dbname);
         dbHelper.insertListItems(itemList);
         dbHelper.close();
-        RecentListUtil.addToRecentList(this, dbpath, dbname);
+        RecentListUtil.addToRecentList(this, dbpath + dbname);
     }
 
 }

@@ -58,6 +58,8 @@ public class AnyMemo extends AMActivity {
 
         Bundle b = new Bundle();
         b.putString("default_root", "/sdcard/");
+        mTabManager.addTab(mTabHost.newTabSpec("recent").setIndicator(getString(R.string.recent_tab_text),  res.getDrawable(R.drawable.recent)),
+                RecentListFragment.class, b);
         mTabManager.addTab(mTabHost.newTabSpec("open").setIndicator(getString(R.string.open_tab_text),  res.getDrawable(R.drawable.open)),
                 OpenTabFragment.class, b);
         mTabManager.addTab(mTabHost.newTabSpec("edit").setIndicator(getString(R.string.edit_tab_text),  res.getDrawable(R.drawable.edit)),
@@ -69,7 +71,7 @@ public class AnyMemo extends AMActivity {
                 MiscTabFragment.class, null);
 
         if (savedInstanceState != null) {
-            mTabHost.setCurrentTabByTag(savedInstanceState.getString("open"));
+            mTabHost.setCurrentTabByTag(savedInstanceState.getString("recent"));
         }
 
         //Intent myIntent = new Intent(this, CardEditor.class);

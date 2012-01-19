@@ -118,7 +118,6 @@ public class AnyMemoService extends Service{
         finally{
             /* Set on click event */
             Intent intent = new Intent(this, MemoScreen.class);
-            intent.putExtra("dbname", RecentListUtil.getRecentDBName(this));
             intent.putExtra("dbpath", RecentListUtil.getRecentDBPath(this));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, WIDGET_REQ, intent, PendingIntent.FLAG_CANCEL_CURRENT);

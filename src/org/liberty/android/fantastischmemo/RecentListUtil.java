@@ -24,25 +24,14 @@ import android.preference.PreferenceManager;
 import android.content.Context;
 
 /* This class handles the operations on recent list */
-public class RecentListUtil{
+public class RecentListUtil {
     private static final int RECENT_LENGTH = 7;
 
-    public static String getRecentDBName(Context context){
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-        return settings.getString("recentdbname0", null);
-    }
     public static String getRecentDBPath(Context context){
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         return trimPath(settings.getString("recentdbpath0", null));
     }
-    public static String[] getAllRecentDBName(Context context){
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-        String[] ret = new String[RECENT_LENGTH];
-        for(int i = 0; i < RECENT_LENGTH; i++){
-            ret[i] = settings.getString("recentdbname" + i, null);
-        }
-        return ret;
-    }
+
     public static String[] getAllRecentDBPath(Context context){
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         String[] ret = new String[RECENT_LENGTH];
@@ -55,25 +44,22 @@ public class RecentListUtil{
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = settings.edit();
         for(int i = 0; i < RECENT_LENGTH; i++){
-            editor.putString("recentdbname" + i, null);
             editor.putString("recentdbpath" + i, null);
         }
         editor.commit();
     }
 
-    public static void deleteFromRecentList(Context context, String dbpath, String dbname){
+    public static void deleteFromRecentList(Context context, String dbpath){
         dbpath = trimPath(dbpath);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = settings.edit();
-        String[] allNames = getAllRecentDBName(context);
         String[] allPaths = getAllRecentDBPath(context);
         clearRecentList(context);
         for(int i = 0, counter = 0; i < RECENT_LENGTH; i++){
-            if(allNames[i] == null || allPaths[i] == null || (allNames[i].equals(dbname) &&  allPaths[i].equals(dbpath))){
+            if(allPaths[i] == null || allPaths[i].equals(dbpath)){
                 continue;
             }
             else{
-                editor.putString("recentdbname" + counter, allNames[i]);
                 editor.putString("recentdbpath" + counter, allPaths[i]);
                 counter++;
             }
@@ -81,19 +67,16 @@ public class RecentListUtil{
         editor.commit();
     }
 
-    public static void addToRecentList(Context context, String dbpath, String dbname){
+    public static void addToRecentList(Context context, String dbpath){
         dbpath = trimPath(dbpath);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = settings.edit();
-        deleteFromRecentList(context, dbpath, dbname);
-        String[] allNames = getAllRecentDBName(context);
+        deleteFromRecentList(context, dbpath);
         String[] allPaths = getAllRecentDBPath(context);
         for(int i = RECENT_LENGTH - 1; i >= 1; i--){
             System.out.println("Index: " + i);
-            editor.putString("recentdbname" + i, allNames[i - 1]);
             editor.putString("recentdbpath" + i, allPaths[i - 1]);
         }
-        editor.putString("recentdbname" + 0, dbname);
         editor.putString("recentdbpath" + 0, dbpath);
         editor.commit();
     }
