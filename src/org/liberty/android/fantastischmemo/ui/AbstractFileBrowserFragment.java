@@ -114,6 +114,9 @@ public abstract class AbstractFileBrowserFragment extends Fragment implements On
 		else{
 			currentDirectory = new File(defaultRoot + "/");
 		}
+
+        // Should use this to enable menu
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -370,6 +373,7 @@ public abstract class AbstractFileBrowserFragment extends Fragment implements On
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+        super.onCreateOptionsMenu(menu, inflater);
 		inflater.inflate(R.menu.file_browser_menu, menu);
 	}
 	

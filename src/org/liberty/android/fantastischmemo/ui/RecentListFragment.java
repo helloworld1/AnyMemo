@@ -80,6 +80,7 @@ public class RecentListFragment extends Fragment implements OnItemClickListener{
         mActivity = activity;
         settings = PreferenceManager.getDefaultSharedPreferences(mActivity);
         editor = settings.edit();
+        setHasOptionsMenu(true);
     }
 
 	@Override
@@ -181,6 +182,7 @@ public class RecentListFragment extends Fragment implements OnItemClickListener{
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+        super.onCreateOptionsMenu(menu, inflater);
 		inflater.inflate(R.menu.open_screen_menu, menu);
 	}
 	
