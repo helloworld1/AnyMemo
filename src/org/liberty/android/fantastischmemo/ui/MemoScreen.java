@@ -164,6 +164,7 @@ public class MemoScreen extends AMActivity {
 
     @Override
     public void onDestroy(){
+        super.onDestroy();
         Log.v(TAG, "onDestroy now!");
         AnyMemoDBOpenHelperManager.releaseHelper(dbPath);
         if(questionTTS != null){
@@ -177,7 +178,6 @@ public class MemoScreen extends AMActivity {
         //Intent myIntent = new Intent(this, AnyMemoService.class);
         //myIntent.putExtra("request_code", AnyMemoService.CANCEL_NOTIFICATION | AnyMemoService.UPDATE_WIDGET);
         //startService(myIntent);
-        super.onDestroy();
     }
 
     @Override
@@ -466,6 +466,7 @@ public class MemoScreen extends AMActivity {
             Log.v(TAG, "back button pressed");
             WaitDbTaskFinish task = new WaitDbTaskFinish();
             task.execute((Void)null);
+            return true;
         }
 
         return super.onKeyDown(keyCode, event);
