@@ -111,6 +111,7 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
         questionFontSizeSpinner = (Spinner)findViewById(R.id.question_font_size_spinner);
         ArrayAdapter<CharSequence> fontSizeAdapter = ArrayAdapter.createFromResource(this, R.array.font_size_list, android.R.layout.simple_spinner_item);
         fontSizeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        
         questionFontSizeSpinner.setAdapter(fontSizeAdapter);
         answerFontSizeSpinner = (Spinner)findViewById(R.id.answer_font_size_spinner);
         answerFontSizeSpinner.setAdapter(fontSizeAdapter);

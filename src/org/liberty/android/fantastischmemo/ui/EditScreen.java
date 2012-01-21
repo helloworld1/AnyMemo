@@ -31,7 +31,7 @@ import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.DetailScreen;
 import org.liberty.android.fantastischmemo.Item;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.SettingsScreen;
+import org.liberty.android.fantastischmemo.ui.SettingsScreen;
 
 import org.liberty.android.fantastischmemo.cardscreen.ListEditScreen;
 
@@ -222,7 +222,7 @@ public class EditScreen extends AMActivity {
             {
                 // TODO: Edit this
                 Intent myIntent = new Intent(this, SettingsScreen.class);
-                myIntent.putExtra("dbpath", dbPath);
+                myIntent.putExtra(SettingsScreen.EXTRA_DBPATH, dbPath);
                 startActivityForResult(myIntent, ACTIVITY_SETTINGS);
                 return true;
             }

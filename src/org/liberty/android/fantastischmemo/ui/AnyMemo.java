@@ -57,7 +57,7 @@ public class AnyMemo extends AMActivity {
         mTabManager = new TabManager(this, mTabHost, android.R.id.tabcontent);
 
         Bundle b = new Bundle();
-        b.putString("default_root", "/sdcard/");
+        b.putString("default_root", "/sdcard/anymemo");
         mTabManager.addTab(mTabHost.newTabSpec("open").setIndicator(getString(R.string.open_tab_text),  res.getDrawable(R.drawable.open)),
                 OpenTabFragment.class, b);
         mTabManager.addTab(mTabHost.newTabSpec("edit").setIndicator(getString(R.string.edit_tab_text),  res.getDrawable(R.drawable.edit)),

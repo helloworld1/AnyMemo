@@ -39,9 +39,6 @@
             android:name=".OptionScreen"
             android:configChanges="orientation|keyboardHidden" />
         <activity 
-            android:name=".SettingsScreen"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity 
             android:name=".DetailScreen"
             android:configChanges="orientation|keyboardHidden" />
         <activity 
@@ -102,6 +99,9 @@
         <activity 
             android:name=".ui.EditScreen"
             android:configChanges="orientation|keyboardHidden" />
+        <activity 
+            android:name=".ui.SettingsScreen"
+            android:configChanges="orientation|keyboardHidden" />        
         <receiver
             android:name=".AlarmReceiver"
             android:process=":remote" />
