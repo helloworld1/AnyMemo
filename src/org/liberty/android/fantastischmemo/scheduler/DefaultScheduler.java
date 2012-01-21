@@ -28,9 +28,12 @@ import android.util.Log;
 
 public class DefaultScheduler {
     final double MILLSECS_PER_DAY = 86400000.0;
+    public final static String TAG = "DefaultScheduler";
 
 
     public double getInterval(LearningData oldData, int newGrade) {
+        Log.i(TAG, "LD: " + oldData);
+        Log.i(TAG, "Grade: " + newGrade);
 		Date currentDate = new Date();
 		double actualInterval = diffDate(oldData.getLastLearnDate(), currentDate);
 		double scheduleInterval = diffDate(oldData.getLastLearnDate(), oldData.getNextLearnDate());
@@ -44,8 +47,8 @@ public class DefaultScheduler {
         int newRetRepsSinceLapse = oldData.getRetRepsSinceLapse();
         float newEasiness = oldData.getEasiness();
 
-		if(actualInterval == 0){
-			actualInterval = 1;
+		if(actualInterval <= 0.9){
+			actualInterval = 0.9;
 		}
         // new item (unseen = 1 in mnemosyne)
 		if(newAcqReps == 0) {
@@ -88,30 +91,29 @@ public class DefaultScheduler {
 			newInterval = 0;
 			if(newRetRepsSinceLapse == -1){
 				newInterval = 6;
-			}
-			else{
-				if(newGrade == 2 || newGrade == 3){
-					if(actualInterval <= scheduleInterval){
-						newInterval = (int)Math.round(actualInterval * newEasiness);
-					}
-					else{
+			} else {
+				if(newGrade == 2 || newGrade == 3) {
+					if(actualInterval <= scheduleInterval) {
+						newInterval = actualInterval * newEasiness;
+					} else {
 						newInterval = scheduleInterval;
 					}
 				}
-				if(newGrade == 4){
-					newInterval = (int)Math.round(actualInterval * newEasiness);
+
+				if(newGrade == 4) {
+					newInterval = actualInterval * newEasiness;
 				}
-				if(newGrade == 5){
+
+				if(newGrade == 5) {
 					if(actualInterval < scheduleInterval){
 						newInterval = scheduleInterval;
-					}
-					else{
-						newInterval = (int)Math.round(actualInterval * newEasiness);
+					} else{
+						newInterval = actualInterval * newEasiness;
 					}
 				}
 			}
 			if(newInterval == 0){
-				Log.e("Interval error", "Interval is 0 in wrong place");
+				Log.e(TAG, "Interval is 0 in wrong place");
 			}
 		}
         return truncateNumber(newInterval);
@@ -134,8 +136,8 @@ public class DefaultScheduler {
         int newRetRepsSinceLapse = oldData.getRetRepsSinceLapse();
         float newEasiness = oldData.getEasiness();
 
-		if(actualInterval == 0){
-			actualInterval = 1;
+		if(actualInterval <= 0.9){
+			actualInterval = 0.9;
 		}
         // new item (unseen = 1 in mnemosyne)
 		if(newAcqReps == 0) {
@@ -182,26 +184,26 @@ public class DefaultScheduler {
 			else{
 				if(newGrade == 2 || newGrade == 3){
 					if(actualInterval <= scheduleInterval){
-						newInterval = (int)Math.round(actualInterval * newEasiness);
+						newInterval = actualInterval * newEasiness;
 					}
 					else{
 						newInterval = scheduleInterval;
 					}
 				}
 				if(newGrade == 4){
-					newInterval = (int)Math.round(actualInterval * newEasiness);
+					newInterval = actualInterval * newEasiness;
 				}
 				if(newGrade == 5){
 					if(actualInterval < scheduleInterval){
 						newInterval = scheduleInterval;
 					}
 					else{
-						newInterval = (int)Math.round(actualInterval * newEasiness);
+						newInterval = actualInterval * newEasiness;
 					}
 				}
 			}
 			if(newInterval == 0){
-				Log.e("Interval error", "Interval is 0 in wrong place");
+				Log.e(TAG, "Interval is 0 in wrong place");
 			}
 		}
         /* 
@@ -274,7 +276,7 @@ public class DefaultScheduler {
 	private double diffDate(Date date1, Date date2){
         double date1s = date1.getTime();
         double date2s = date2.getTime();
-        return (date2s - date1s) / MILLSECS_PER_DAY; 
+        return ((double)(date2s - date1s)) / MILLSECS_PER_DAY; 
 	}
 
 	private double randomNumber(double min, double max){
@@ -287,7 +289,7 @@ public class DefaultScheduler {
     }
 
     private double truncateNumber(double f) {
-        return Math.round(f * 10) / 10;
+        return ((double)Math.round(f * 10)) / 10;
     }
 
 }

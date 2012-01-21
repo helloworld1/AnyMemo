@@ -20,12 +20,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import org.liberty.android.fantastischmemo.AMActivity;
-import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMGUIUtility;
 import org.liberty.android.fantastischmemo.AMUtil;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.AnyMemoService;
+import org.liberty.android.fantastischmemo.AnyMemoExecutor;
 import org.liberty.android.fantastischmemo.DetailScreen;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.SettingsScreen;
@@ -89,7 +88,6 @@ import android.net.Uri;
 public class MemoScreen extends AMActivity {
     public static String EXTRA_DBPATH = "dbpath";
     public static String EXTRA_CATEGORY = "category";
-
     private AnyMemoTTS questionTTS = null;
     private AnyMemoTTS answerTTS = null;
     private final int DIALOG_LOADING_PROGRESS = 100;
@@ -161,7 +159,7 @@ public class MemoScreen extends AMActivity {
     @Override
     public void onPause(){
         super.onPause();
-        AnyMemoDBOpenHelperManager.submitDBTask(dbPath, flushDatabaseTask);
+        AnyMemoExecutor.submit(flushDatabaseTask);
     }
 
     @Override
@@ -602,7 +600,7 @@ public class MemoScreen extends AMActivity {
         memoRoot.setOnClickListener(showAnswerListener);
     }
 
-    void setGradeButtonTitle(){
+    void setGradeButtonTitle() {
         Map<String, Button> hm = controlButtons.getButtons();
         if(option.getButtonStyle() == Option.ButtonStyle.MNEMOSYNE) {
             hm.get("0").setText(getString(R.string.memo_btn0_brief_text));
@@ -627,7 +625,6 @@ public class MemoScreen extends AMActivity {
             hm.get("5").setText(getString(R.string.memo_btn5_text) + "\n+" + scheduler.getInterval(currentCard.getLearningData(), 5));
         }
     }
-    
 
     void setGradeButtonListeners(){
         Map<String, Button> hm = controlButtons.getButtons();
@@ -967,7 +964,7 @@ public class MemoScreen extends AMActivity {
 
         @Override
         public Void doInBackground(Void... nothing){
-            AnyMemoDBOpenHelperManager.waitAllTasks();
+            AnyMemoExecutor.waitAllTasks();
             return null;
         }
 
@@ -1003,5 +1000,3 @@ public class MemoScreen extends AMActivity {
     };
 
 }
-
-

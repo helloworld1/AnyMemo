@@ -4,6 +4,9 @@ import java.sql.SQLException;
 
 import java.util.List;
 
+import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
@@ -38,11 +41,14 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 public class CategoryEditorFragment extends DialogFragment implements View.OnClickListener {
-
-    private CardEditor mActivity;
+    public static String EXTRA_DBPATH = "dbpath";
+    public static String EXTRA_CARD_ID = "id";
+    private AMActivity mActivity;
+    private String dbPath;
     private CategoryDao categoryDao;
     private CardDao cardDao;
     private Card currentCard;
+    private Integer currentCardId;
     private List<Category> categories;
     private static final String TAG = "CategoryEditorFragment";
     private CategoryAdapter categoryAdapter;
@@ -57,14 +63,14 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mActivity = (CardEditor)activity;
-        categoryDao = mActivity.categoryDao;
-        cardDao = mActivity.cardDao;
-        currentCard = mActivity.currentCard;
+        mActivity = (AMActivity)activity;
     }
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        Bundle args = this.getArguments();
+        currentCardId = args.getInt(EXTRA_CARD_ID);
+        dbPath = args.getString(EXTRA_DBPATH);
     }
 
     @Override
@@ -83,6 +89,12 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
         categoryEdit = (EditText)v.findViewById(R.id.category_dialog_edit);
 
         return v;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        AnyMemoDBOpenHelperManager.releaseHelper(dbPath);
     }
 
 
@@ -122,6 +134,12 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
         @Override
         public Integer doInBackground(Void... params) {
             try {
+                AnyMemoDBOpenHelper helper =
+                    AnyMemoDBOpenHelperManager.getHelper(mActivity, dbPath);
+
+                categoryDao = helper.getCategoryDao();
+                cardDao = helper.getCardDao();
+                currentCard = cardDao.queryForId(currentCardId);;
                 categories = categoryDao.queryForAll();
             } catch (SQLException e) {
                 Log.e(TAG, "Error creating daos", e);
@@ -194,11 +212,10 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
         @Override
         public void onPostExecute(Void result){
             mActivity.setProgressBarIndeterminateVisibility(false);
-            mActivity.updateViews();
-            CategoryEditorFragment.this.dismiss();
+            mActivity.restartActivity();
+            //CategoryEditorFragment.this.dismiss();
         }
     }
-
 
     /*
      * This task will edit the category in the list

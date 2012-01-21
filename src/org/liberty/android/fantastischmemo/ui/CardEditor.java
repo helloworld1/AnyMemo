@@ -146,6 +146,10 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
 
         if (v == categoryButton) {
             DialogFragment df = new CategoryEditorFragment();
+            Bundle b = new Bundle();
+            b.putString(CategoryEditorFragment.EXTRA_DBPATH, dbPath);
+            b.putInt(CategoryEditorFragment.EXTRA_CARD_ID, currentCardId);
+            df.setArguments(b);
             df.show(getSupportFragmentManager(), "CategoryEditDialog");
         }
     }
