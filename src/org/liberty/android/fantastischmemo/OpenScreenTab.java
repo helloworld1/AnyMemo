@@ -29,9 +29,8 @@ public class OpenScreenTab extends FileBrowser{
     public void fileClickAction(String name, String path){
         Intent myIntent = new Intent();
         myIntent.setClass(this, MemoScreen.class);
-        myIntent.putExtra("dbname", name);
         myIntent.putExtra("dbpath", path);
-        RecentListUtil.addToRecentList(this, path, name);
+        RecentListUtil.addToRecentList(this, path);
         startActivity(myIntent);
     }
 }

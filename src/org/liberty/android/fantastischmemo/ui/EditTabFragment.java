@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
+import org.liberty.android.fantastischmemo.RecentListUtil;
+
 import android.app.Activity;
 
 import android.content.Intent;
@@ -35,7 +37,9 @@ public class EditTabFragment extends AbstractFileBrowserFragment {
     protected void fileClickAction(String name, String path) {
         Intent myIntent = new Intent(mActivity, EditScreen.class);
         //myIntent.putExtra("dbpath", "/sdcard/french-body-parts.db");
-        myIntent.putExtra("dbpath", path + "/" + name);
+        String fullpath = path + "/" + name;
+        RecentListUtil.addToRecentList(mActivity, fullpath);
+        myIntent.putExtra("dbpath", fullpath);
         myIntent.putExtra("id", 1);
         startActivity(myIntent);
 

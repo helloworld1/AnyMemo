@@ -14,6 +14,11 @@ import org.liberty.android.fantastischmemo.domain.LearningData;
 
 import android.content.Context;
 
+import android.database.Cursor;
+
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
+
 public class DatabaseUtils {
     public static void mergeDatabases(Context context, String destPath, String srcPath) throws Exception {
         AnyMemoDBOpenHelper destHelper = AnyMemoDBOpenHelperManager.getHelper(context, destPath);
@@ -43,5 +48,22 @@ public class DatabaseUtils {
         AnyMemoDBOpenHelperManager.releaseHelper(destPath);
         System.out.println("DatabaseUtils release srcPath");
         AnyMemoDBOpenHelperManager.releaseHelper(srcPath);
+    }
+
+    /*
+     * Check if the database is in the correct format
+     */
+    public static boolean checkDatabase(String dbPath) {
+        try {
+            SQLiteDatabase db = SQLiteDatabase.openDatabase(dbPath, null, SQLiteDatabase.OPEN_READONLY);
+            // Only check the existance of cards table
+            Cursor res = db.rawQuery("select name from sqlite_master where type = 'table' and name = 'cards'", null);
+            boolean isValidDb = res.getCount() > 0;
+            res.close();
+            db.close();
+            return isValidDb;
+        } catch (SQLiteException e) {
+            return false;
+        }
     }
 }

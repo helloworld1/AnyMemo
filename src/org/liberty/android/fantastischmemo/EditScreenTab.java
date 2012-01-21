@@ -32,7 +32,7 @@ public class EditScreenTab extends FileBrowser{
         myIntent.putExtra("dbname", name);
         myIntent.putExtra("dbpath", path);
         myIntent.putExtra("openid", 1);
-        RecentListUtil.addToRecentList(this, path, name);
+        RecentListUtil.addToRecentList(this, path);
         startActivity(myIntent);
     }
 }

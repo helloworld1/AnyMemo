@@ -247,7 +247,7 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
         DatabaseHelper dbHelper = new DatabaseHelper(this, dbpath, dbname);
         dbHelper.insertListItems(itemList);
         dbHelper.close();
-        RecentListUtil.addToRecentList(this, dbpath, dbname);
+        RecentListUtil.addToRecentList(this, dbpath);
     }
 
     @Override

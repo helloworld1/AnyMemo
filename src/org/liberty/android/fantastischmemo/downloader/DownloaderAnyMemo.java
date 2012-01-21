@@ -347,7 +347,7 @@ public class DownloaderAnyMemo extends DownloaderBase{
                     DatabaseHelper dh = new DatabaseHelper(DownloaderAnyMemo.this, sdpath, filename);
                     dh.close();
                     /* Add downloaded item to file list */
-                    RecentListUtil.addToRecentList(this, sdpath, filename);
+                    RecentListUtil.addToRecentList(this, sdpath + filename);
                 }
             }
             catch(Exception e){

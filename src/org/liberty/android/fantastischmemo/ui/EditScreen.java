@@ -88,13 +88,13 @@ public class EditScreen extends AMActivity {
     private final int ACTIVITY_MERGE = 17;
     private final int ACTIVITY_DETAIL = 18;
     private final static String WEBSITE_HELP_EDIT = "http://anymemo.org/wiki/index.php?title=Editing_screen";
+    private long totalCardCount = 0;
 
     public static String EXTRA_DBPATH = "dbpath";
     public static String EXTRA_CARD_ID = "id";
     public static String EXTRA_CATEGORY = "category";
 
     Card currentCard = null;
-    Integer currentCardId = null;
     Integer savedCardId = null;
     String dbPath = "";
     String dbName = "";
@@ -143,7 +143,6 @@ public class EditScreen extends AMActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
-        System.out.println("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == Activity.RESULT_CANCELED){
             return;
@@ -161,7 +160,7 @@ public class EditScreen extends AMActivity {
             {
                 // TODO: filter
                 Bundle extras = data.getExtras();
-                activeCategory = extras.getString("category");
+                activeCategory = extras.getString(EXTRA_CATEGORY);
                 restartActivity();
                 break;
             }
@@ -479,7 +478,7 @@ public class EditScreen extends AMActivity {
         public void onClick(View v){
             Intent myIntent = new Intent(EditScreen.this, CardEditor.class);
             myIntent.putExtra(CardEditor.EXTRA_DBPATH, dbPath);
-            myIntent.putExtra(CardEditor.EXTRA_CARD_ID, currentCardId);
+            myIntent.putExtra(CardEditor.EXTRA_CARD_ID, currentCard.getId());
             myIntent.putExtra(CardEditor.EXTRA_IS_EDIT_NEW, true);
             //startActivityForResult(myIntent, ACTIVITY_EDIT);
             startActivityForResult(myIntent, ACTIVITY_EDIT);
@@ -490,28 +489,29 @@ public class EditScreen extends AMActivity {
         public void onClick(View v){
             Intent myIntent = new Intent(EditScreen.this, CardEditor.class);
             myIntent.putExtra(CardEditor.EXTRA_DBPATH, dbPath);
-            myIntent.putExtra(CardEditor.EXTRA_CARD_ID, currentCardId);
+            myIntent.putExtra(CardEditor.EXTRA_CARD_ID, currentCard.getId());
             myIntent.putExtra(CardEditor.EXTRA_IS_EDIT_NEW, false);
             startActivityForResult(myIntent, ACTIVITY_EDIT);
         }
     };
 
     private void updateTitle(){
-        // TODO: How to update
-        /*
-        if(currentItem != null){
-            int total = itemManager.getStatInfo()[0];
-            String titleString = getString(R.string.stat_total) + total + " " + getString(R.string.memo_current_id) + " " + currentItem.getId();
-            if(currentItem != null && currentItem.getCategory() != null){
-                titleString += "  " + currentItem.getCategory();
-            }
-            setTitle(titleString);
-        }
-        */
+        assert currentCard != null : "Shouldn't update title if card is null";
+        StringBuilder sb = new StringBuilder();
+        sb.append(getString(R.string.total_text) + ": " + totalCardCount + " ");
+        sb.append(getString(R.string.id_text) + ": " + currentCard.getId() + " ");
+        sb.append(getString(R.string.ordinal_text_short) + ": " + currentCard.getOrdinal() + " ");
+        sb.append(currentCard.getCategory().getName());
+        setTitle(sb.toString());
     }
     
     private void gotoNext(){
         currentCard = cardDao.queryNextCard(currentCard);
+        try {
+            categoryDao.refresh(currentCard.getCategory());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         assert currentCard != null : "Next card is null";
         updateCardFrontSide();
         updateTitle();
@@ -525,9 +525,8 @@ public class EditScreen extends AMActivity {
                 .setPositiveButton(getString(R.string.yes_text),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface arg0, int arg1) {
-                            //TODO: How to delete
-                            //currentItem = itemManager.deleteItem(currentItem);
-                            restartActivity();
+                            DeleteCardTask task = new DeleteCardTask();
+                            task.execute((Void)null);
                         }
                     })
                 .setNegativeButton(getString(R.string.no_text), null)
@@ -537,10 +536,12 @@ public class EditScreen extends AMActivity {
     }
 
     private void gotoPrev(){
-        // TODO: How to go to prev card
-        //currentItem = itemManager.getPreviousItem(currentItem);
-        //updateCardFrontSide();
         currentCard = cardDao.queryPrevCard(currentCard);
+        try {
+            categoryDao.refresh(currentCard.getCategory());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         assert currentCard != null : "Prev card is null";
         updateCardFrontSide();
         updateTitle();
@@ -709,6 +710,8 @@ public class EditScreen extends AMActivity {
 
     private class InitTask extends AsyncTask<Void, Void, Void> {
         private ProgressDialog progressDialog;
+        private int currentCardId;
+        private static final int NO_CARD_ID = -1;
 
 		@Override
         public void onPreExecute() {
@@ -717,11 +720,10 @@ public class EditScreen extends AMActivity {
             setContentView(R.layout.memo_screen_layout);
 
             Bundle extras = getIntent().getExtras();
-            int currentId = 1;
             if (extras != null) {
                 dbPath = extras.getString("dbpath");
                 activeCategory = extras.getString("category");
-                currentCardId = extras.getInt("id", 1);
+                currentCardId = extras.getInt("id", NO_CARD_ID);
             }
 
             // Strip leading path!
@@ -744,15 +746,25 @@ public class EditScreen extends AMActivity {
                 
                 cardDao = helper.getCardDao();
                 learningDataDao = helper.getLearningDataDao();
+                categoryDao = helper.getCategoryDao();
                 settingDao = helper.getSettingDao();
                 setting = settingDao.queryForId(1);
                 option = new Option(EditScreen.this);
-                /* Run the learnQueue init in a separate thread */
-                currentCard = cardDao.queryForId(currentCardId);
-                // TODO: Query for first ordinal
+                if (currentCardId != NO_CARD_ID) {
+                    currentCard = cardDao.queryForId(currentCardId);
+                }
+
                 if (currentCard == null) {
                     currentCard = cardDao.queryFirstOrdinal();
                 }
+
+                // This means empty deck.
+                if (currentCard == null) {
+                    return null;
+                }
+                categoryDao.refresh(currentCard.getCategory());
+
+                totalCardCount = cardDao.countOf();
 
             } catch (SQLException e) {
                 Log.e(TAG, "Error creating daos", e);
@@ -793,6 +805,35 @@ public class EditScreen extends AMActivity {
                 }
                 registerForContextMenu(flashcardDisplay.getView());
             }
+        }
+    }
+
+    private class DeleteCardTask extends AsyncTask<Void, Void, Void> {
+        private ProgressDialog progressDialog;
+		@Override
+        public void onPreExecute() {
+            progressDialog = new ProgressDialog(EditScreen.this);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setTitle(getString(R.string.loading_please_wait));
+            progressDialog.setMessage(getString(R.string.loading_database));
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+        @Override
+        public Void doInBackground(Void... params) {
+            try {
+                Card delCard = currentCard;
+                currentCard = cardDao.queryNextCard(currentCard);
+                cardDao.delete(currentCard);
+                currentCard = delCard;
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return null;
+        }
+        @Override
+        public void onPostExecute(Void result){
+            restartActivity();
         }
     }
 }

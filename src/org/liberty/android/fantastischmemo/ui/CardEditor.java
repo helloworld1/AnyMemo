@@ -31,8 +31,11 @@ import org.liberty.android.fantastischmemo.R;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
+import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 
 import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.domain.Category;
+import org.liberty.android.fantastischmemo.domain.LearningData;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -61,6 +64,8 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
     private final int ACTIVITY_IMAGE_FILE = 1;
     private final int ACTIVITY_AUDIO_FILE = 2;
     Card currentCard = null;
+    Card prevCard = null;
+    private Integer prevOrdinal = null;
     private Integer currentCardId;
     private EditText questionEdit;
     private EditText answerEdit;
@@ -75,6 +80,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
     String dbPath = null;
     CardDao cardDao;
     CategoryDao categoryDao;
+    LearningDataDao learningDataDao;
     private InitTask initTask;
     private AnyMemoDBOpenHelper helper;
 
@@ -92,7 +98,6 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.edit_dialog);
-        System.out.println("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         initTask = new InitTask();
         initTask.execute((Void)null);
     }
@@ -106,12 +111,6 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
     
     public void onClick(View v){
         if(v == btnSave){
-            String qText = questionEdit.getText().toString();
-            String aText = answerEdit.getText().toString();
-            String nText = noteEdit.getText().toString();
-            currentCard.setQuestion(qText);
-            currentCard.setAnswer(aText);
-            currentCard.setNote(nText);
             SaveCardTask task = new SaveCardTask();
             task.execute((Void)null);
         } 
@@ -147,6 +146,10 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
 
         if (v == categoryButton) {
             DialogFragment df = new CategoryEditorFragment();
+            Bundle b = new Bundle();
+            b.putString(CategoryEditorFragment.EXTRA_DBPATH, dbPath);
+            b.putInt(CategoryEditorFragment.EXTRA_CARD_ID, currentCardId);
+            df.setArguments(b);
             df.show(getSupportFragmentManager(), "CategoryEditDialog");
         }
     }
@@ -357,7 +360,25 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
 
                 cardDao = helper.getCardDao();
                 categoryDao = helper.getCategoryDao();
-                currentCard = cardDao.queryForId(currentCardId);
+                learningDataDao = helper.getLearningDataDao();
+
+                Card prevCard = cardDao.queryForId(currentCardId);
+
+                if (isEditNew) {
+                    currentCard = new Card();
+                    // Search for "Uncategorized".
+                    Category c = categoryDao.queryForId(1);
+                    currentCard.setCategory(c);
+                    // Save the ordinal to be used when saving.
+                    if (prevCard != null) {
+                        prevOrdinal = prevCard.getOrdinal();
+                    }
+                    LearningData ld = new LearningData();
+                    learningDataDao.create(ld);
+                    currentCard.setLearningData(ld);
+                } else {
+                    currentCard = prevCard;
+                }
                 assert currentCard != null : "Try to edit null card!";
                 categoryDao.refresh(currentCard.getCategory());
 
@@ -401,13 +422,32 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
             progressDialog.setMessage(getString(R.string.loading_database));
             progressDialog.setCancelable(false);
             progressDialog.show();
+
+            String qText = questionEdit.getText().toString();
+            String aText = answerEdit.getText().toString();
+            String nText = noteEdit.getText().toString();
+            currentCard.setQuestion(qText);
+            currentCard.setAnswer(aText);
+            currentCard.setNote(nText);
+            
             assert currentCard != null : "Current card shouldn't be null";
         }
 
         @Override
         public Void doInBackground(Void... params) {
             try {
-                cardDao.update(currentCard);
+                if (prevOrdinal != null && !addBack) {
+                    currentCard.setOrdinal(prevOrdinal);
+                } else {
+                    Card lastCard = cardDao.queryLastOrdinal();
+                    int lastOrd = lastCard.getOrdinal();
+                    currentCard.setOrdinal(lastOrd + 1);
+                }
+                if (isEditNew) {
+                    cardDao.create(currentCard);
+                } else {
+                    cardDao.update(currentCard);
+                }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
