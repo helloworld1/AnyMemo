@@ -123,6 +123,19 @@ public class CardOperationTest extends AbstractExistingDBTest {
         assertEquals(2, (int)c2.getId());
     }
 
+    public void testQueryPrevCardWithCategory() throws Exception {
+        setupThreeCategories();
+        CardDao cardDao = helper.getCardDao();
+        CategoryDao categoryDao = helper.getCategoryDao();
+        List<Category> cts = categoryDao.queryForEq("name", "My category");
+        Category ct = cts.get(0);
+        Card c5 = cardDao.queryForId(5);
+        Card c2 = cardDao.queryPrevCard(c5, ct);
+        assertEquals(2, (int)c2.getId());
+        Card c8 = cardDao.queryPrevCard(c2, ct);
+        assertEquals(8, (int)c8.getId());
+    }
+
     /*
      * Card with "My Category" in ID 2, 5, 8
      */
