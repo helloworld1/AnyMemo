@@ -213,7 +213,6 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
         public void onPostExecute(Void result){
             mActivity.setProgressBarIndeterminateVisibility(false);
             mActivity.restartActivity();
-            //CategoryEditorFragment.this.dismiss();
         }
     }
 

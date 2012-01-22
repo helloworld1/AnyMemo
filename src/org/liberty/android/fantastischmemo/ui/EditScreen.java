@@ -412,6 +412,7 @@ public class EditScreen extends AMActivity {
     public void restartActivity(){
         Intent myIntent = new Intent(this, EditScreen.class);
         assert currentCard != null : "Null card is used when restarting activity";
+        assert dbPath != null : "Use null dbPath to restartAcitivity";
         myIntent.putExtra(EXTRA_CARD_ID, currentCard.getId());
         myIntent.putExtra(EXTRA_DBPATH, dbPath);
         myIntent.putExtra(EXTRA_CATEGORY, activeCategory);

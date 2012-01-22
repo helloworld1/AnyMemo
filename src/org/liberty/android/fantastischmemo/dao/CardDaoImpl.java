@@ -32,7 +32,7 @@ public class CardDaoImpl extends BaseDaoImpl<Card, Integer> implements CardDao {
     public Card queryFirstOrdinal() {
         try {
             QueryBuilder<Card, Integer> qb = queryBuilder();
-            PreparedQuery<Card> pq = qb.where().eq("ordinal", "1").prepare();
+            PreparedQuery<Card> pq = qb.limit(1L).orderBy("ordinal", true).prepare();
             return queryForFirst(pq);
         } catch (SQLException e) {
             throw new RuntimeException(e);

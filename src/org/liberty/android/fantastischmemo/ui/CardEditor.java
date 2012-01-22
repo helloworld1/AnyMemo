@@ -107,6 +107,17 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
         super.onDestroy();
         AnyMemoDBOpenHelperManager.releaseHelper(dbPath);
     }
+
+    @Override
+    public void restartActivity() {
+        assert currentCard != null : "Null card is used when restarting activity";
+        assert dbPath != null : "Use null dbPath to restartAcitivity";
+        Intent myIntent = new Intent(this, CardEditor.class);
+        myIntent.putExtra(EXTRA_CARD_ID, currentCard.getId());
+        myIntent.putExtra(EXTRA_DBPATH, dbPath);
+        finish();
+        startActivity(myIntent);
+    }
         
     
     public void onClick(View v){
