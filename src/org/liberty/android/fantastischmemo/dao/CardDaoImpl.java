@@ -68,6 +68,20 @@ public class CardDaoImpl extends BaseDaoImpl<Card, Integer> implements CardDao {
     }
 
     /*
+     * Get the first card in ordinal.
+     */
+    public Card queryLastOrdinal(Category c) {
+        try {
+            QueryBuilder<Card, Integer> qb = queryBuilder();
+            qb.limit(1L).orderBy("ordinal", false);
+            PreparedQuery<Card> pq = qb.where().eq("category_id", c.getId()).prepare();
+            return queryForFirst(pq);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /*
      * Query cylic next card in ordinal.
      */
     public Card queryNextCard(final Card c) {
@@ -79,6 +93,24 @@ public class CardDaoImpl extends BaseDaoImpl<Card, Integer> implements CardDao {
             Card nc = queryForFirst(pq);
             if (nc == null) {
                 nc = queryFirstOrdinal();
+            }
+            return nc;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Card queryNextCard(final Card c, final Category ct) {
+        try {
+            QueryBuilder<Card, Integer> qb = queryBuilder();
+            qb.limit(1L).orderBy("ordinal", true);
+            PreparedQuery<Card> pq = qb.where()
+                .eq("category_id", ct.getId())
+                .and().gt("ordinal", c.getOrdinal())
+                .prepare();
+            Card nc = queryForFirst(pq);
+            if (nc == null) {
+                nc = queryFirstOrdinal(ct);
             }
             return nc;
         } catch (SQLException e) {
@@ -103,6 +135,13 @@ public class CardDaoImpl extends BaseDaoImpl<Card, Integer> implements CardDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /*
+     * Query cylic previous card in ordinal for a category.
+     */
+    public Card queryPrevCard(final Card c, final Category ct) {
+        return null;
     }
 
     @Override

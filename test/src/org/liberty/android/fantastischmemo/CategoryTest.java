@@ -1,7 +1,5 @@
 package org.liberty.android.fantastischmemo;
 
-import java.sql.SQLException;
-
 import java.util.List;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
@@ -18,16 +16,6 @@ public class CategoryTest extends AbstractExistingDBTest {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-    }
-
-    public void testSearchFirstOrdinalWithcategoryIfExists() throws Exception {
-        setupTwoCategories();
-        CardDao cardDao = helper.getCardDao();
-        CategoryDao categoryDao = helper.getCategoryDao();
-        List<Category> cts = categoryDao.queryForEq("name", "My category");
-        Category ct = cts.get(0);
-        Card c = cardDao.queryFirstOrdinal(ct);
-        assertEquals(2, (int)c.getId());
     }
 
     public void testAddCategories() throws Exception {
@@ -58,19 +46,5 @@ public class CategoryTest extends AbstractExistingDBTest {
         nc = cardDao.queryForId(nc.getId());
         categoryDao.refresh(nc.getCategory());
         assertEquals("", nc.getCategory().getName());
-    }
-
-    private void setupTwoCategories() throws SQLException {
-        CardDao cardDao = helper.getCardDao();
-        CategoryDao categoryDao = helper.getCategoryDao();
-        Card c =cardDao.queryForId(2);
-        Category ct = new Category();
-        ct.setName("My category");
-        categoryDao.create(ct);
-        c.setCategory(ct);
-        cardDao.update(c);
-        c = cardDao.queryForId(5);
-        c.setCategory(ct);
-        cardDao.update(c);
     }
 }

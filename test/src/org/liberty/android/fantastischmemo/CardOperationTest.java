@@ -87,7 +87,60 @@ public class CardOperationTest extends AbstractExistingDBTest {
         assertEquals(1, cards.size());
         Card cc = cardDao.queryLastOrdinal();
         assertEquals(29, (int)cc.getOrdinal());
+    }
 
+    public void testSearchFirstOrdinalWithcategoryIfExists() throws Exception {
+        setupThreeCategories();
+        CardDao cardDao = helper.getCardDao();
+        CategoryDao categoryDao = helper.getCategoryDao();
+        List<Category> cts = categoryDao.queryForEq("name", "My category");
+        Category ct = cts.get(0);
+        Card c = cardDao.queryFirstOrdinal(ct);
+        assertEquals(2, (int)c.getId());
+    }
+    
+    public void testSearchLastOrdinalWithcategoryIfExists() throws Exception {
+        setupThreeCategories();
+        CardDao cardDao = helper.getCardDao();
+        CategoryDao categoryDao = helper.getCategoryDao();
+        List<Category> cts = categoryDao.queryForEq("name", "My category");
+        Category ct = cts.get(0);
+        Card c = cardDao.queryLastOrdinal(ct);
+        assertEquals(8, (int)c.getId());
+    }
+
+    public void testQueryNextCardWithCategory() throws Exception {
+        setupThreeCategories();
+        CardDao cardDao = helper.getCardDao();
+        CategoryDao categoryDao = helper.getCategoryDao();
+        List<Category> cts = categoryDao.queryForEq("name", "My category");
+        Category ct = cts.get(0);
+        Card c2 = cardDao.queryForId(2);
+        Card c5 = cardDao.queryNextCard(c2, ct);
+        assertEquals(5, (int)c5.getId());
+        Card c8 = cardDao.queryForId(8);
+        c2 = cardDao.queryNextCard(c8, ct);
+        assertEquals(2, (int)c2.getId());
+    }
+
+    /*
+     * Card with "My Category" in ID 2, 5, 8
+     */
+    private void setupThreeCategories() throws SQLException {
+        CardDao cardDao = helper.getCardDao();
+        CategoryDao categoryDao = helper.getCategoryDao();
+        Card c =cardDao.queryForId(2);
+        Category ct = new Category();
+        ct.setName("My category");
+        categoryDao.create(ct);
+        c.setCategory(ct);
+        cardDao.update(c);
+        c = cardDao.queryForId(5);
+        c.setCategory(ct);
+        cardDao.update(c);
+        c = cardDao.queryForId(8);
+        c.setCategory(ct);
+        cardDao.update(c);
     }
 }
 
