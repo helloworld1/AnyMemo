@@ -101,6 +101,9 @@ public class CardDaoImpl extends BaseDaoImpl<Card, Integer> implements CardDao {
     }
 
     public Card queryNextCard(final Card c, final Category ct) {
+        if (ct == null) {
+            return queryNextCard(c);
+        }
         try {
             QueryBuilder<Card, Integer> qb = queryBuilder();
             qb.limit(1L).orderBy("ordinal", true);
@@ -141,6 +144,9 @@ public class CardDaoImpl extends BaseDaoImpl<Card, Integer> implements CardDao {
      * Query cylic previous card in ordinal for a category.
      */
     public Card queryPrevCard(final Card c, final Category ct) {
+        if (ct == null) {
+            return queryPrevCard(c);
+        }
         try {
             QueryBuilder<Card, Integer> qb = queryBuilder();
             qb.limit(1L).orderBy("ordinal", false);

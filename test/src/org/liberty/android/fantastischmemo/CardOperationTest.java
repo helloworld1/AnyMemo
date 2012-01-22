@@ -109,6 +109,27 @@ public class CardOperationTest extends AbstractExistingDBTest {
         assertEquals(8, (int)c.getId());
     }
 
+
+    public void testQueryNextCardWithoutCategory() throws Exception {
+        setupThreeCategories();
+        CardDao cardDao = helper.getCardDao();
+        Card c27 = cardDao.queryForId(27);
+        Card c28 = cardDao.queryNextCard(c27, null);
+        assertEquals(28, (int)c28.getOrdinal());
+        Card c1 = cardDao.queryNextCard(c28, null);
+        assertEquals(1, (int)c1.getOrdinal());
+    }
+
+    public void testQueryPrevCardWithoutCategory() throws Exception {
+        setupThreeCategories();
+        CardDao cardDao = helper.getCardDao();
+        Card c2 = cardDao.queryForId(2);
+        Card c1 = cardDao.queryPrevCard(c2, null);
+        assertEquals(1, (int)c1.getOrdinal());
+        Card c28 = cardDao.queryPrevCard(c1, null);
+        assertEquals(28, (int)c28.getOrdinal());
+    }
+
     public void testQueryNextCardWithCategory() throws Exception {
         setupThreeCategories();
         CardDao cardDao = helper.getCardDao();
