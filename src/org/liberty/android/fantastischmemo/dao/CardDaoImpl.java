@@ -3,6 +3,7 @@ package org.liberty.android.fantastischmemo.dao;
 import java.sql.SQLException;
 
 import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.domain.Category;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
 
@@ -19,6 +20,7 @@ public class CardDaoImpl extends BaseDaoImpl<Card, Integer> implements CardDao {
         throws SQLException {
         super(connectionSource, config);
     }
+
     public CardDaoImpl(ConnectionSource connectionSource, Class<Card> clazz)
         throws SQLException {
         super(connectionSource, clazz);
@@ -37,6 +39,20 @@ public class CardDaoImpl extends BaseDaoImpl<Card, Integer> implements CardDao {
         }
     }
 
+    /*
+     * Get the first card in ordinal.
+     */
+    public Card queryFirstOrdinal(Category c) {
+        try {
+            QueryBuilder<Card, Integer> qb = queryBuilder();
+            qb.limit(1L).orderBy("ordinal", true);
+            PreparedQuery<Card> pq = qb.where().eq("category_id", c.getId()).prepare();
+            return queryForFirst(pq);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
     /*
      * Get the last card in ordinal.
      */
