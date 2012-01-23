@@ -43,6 +43,9 @@ public class CardDaoImpl extends BaseDaoImpl<Card, Integer> implements CardDao {
      * Get the first card in ordinal.
      */
     public Card queryFirstOrdinal(Category c) {
+        if (c == null) {
+            return queryFirstOrdinal();
+        }
         try {
             QueryBuilder<Card, Integer> qb = queryBuilder();
             qb.limit(1L).orderBy("ordinal", true);
@@ -71,6 +74,9 @@ public class CardDaoImpl extends BaseDaoImpl<Card, Integer> implements CardDao {
      * Get the first card in ordinal.
      */
     public Card queryLastOrdinal(Category c) {
+        if (c == null) {
+            return queryLastOrdinal();
+        }
         try {
             QueryBuilder<Card, Integer> qb = queryBuilder();
             qb.limit(1L).orderBy("ordinal", false);
@@ -101,16 +107,20 @@ public class CardDaoImpl extends BaseDaoImpl<Card, Integer> implements CardDao {
     }
 
     public Card queryNextCard(final Card c, final Category ct) {
-        if (ct == null) {
-            return queryNextCard(c);
-        }
         try {
             QueryBuilder<Card, Integer> qb = queryBuilder();
             qb.limit(1L).orderBy("ordinal", true);
-            PreparedQuery<Card> pq = qb.where()
-                .eq("category_id", ct.getId())
-                .and().gt("ordinal", c.getOrdinal())
-                .prepare();
+            PreparedQuery<Card> pq; 
+            if (ct != null ) {
+                pq = qb.where()
+                    .eq("category_id", ct.getId())
+                    .and().gt("ordinal", c.getOrdinal())
+                    .prepare();
+            } else {
+                pq = qb.where()
+                    .gt("ordinal", c.getOrdinal())
+                    .prepare();
+            }
             Card nc = queryForFirst(pq);
             if (nc == null) {
                 nc = queryFirstOrdinal(ct);
@@ -144,16 +154,21 @@ public class CardDaoImpl extends BaseDaoImpl<Card, Integer> implements CardDao {
      * Query cylic previous card in ordinal for a category.
      */
     public Card queryPrevCard(final Card c, final Category ct) {
-        if (ct == null) {
-            return queryPrevCard(c);
-        }
         try {
             QueryBuilder<Card, Integer> qb = queryBuilder();
             qb.limit(1L).orderBy("ordinal", false);
-            PreparedQuery<Card> pq = qb.where()
-                .eq("category_id", ct.getId())
-                .and().lt("ordinal", c.getOrdinal())
-                .prepare();
+            PreparedQuery<Card> pq;
+            if (ct != null) {
+                pq = qb.where()
+                    .eq("category_id", ct.getId())
+                    .and().lt("ordinal", c.getOrdinal())
+                    .prepare();
+            } else {
+                pq = qb.where()
+                    .lt("ordinal", c.getOrdinal())
+                    .prepare();
+            }
+
             Card nc = queryForFirst(pq);
             if (nc == null) {
                 nc = queryLastOrdinal(ct);

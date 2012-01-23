@@ -212,7 +212,8 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
         @Override
         public void onPostExecute(Void result){
             mActivity.setProgressBarIndeterminateVisibility(false);
-            mActivity.restartActivity();
+            ((CategoryEditorResultListener)mActivity).onReceiveCategory(selectedCategory);
+            dismiss();
         }
     }
 
@@ -420,5 +421,9 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
         deleteButton.setOnClickListener(null);
         newButton.setOnClickListener(null);
         editButton.setOnClickListener(null);
+    }
+
+    public static interface CategoryEditorResultListener {
+        void onReceiveCategory(Category c);
     }
 }

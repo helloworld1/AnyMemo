@@ -24,8 +24,8 @@
     <item android:id="@+id/editmenu_detail_id"
   		  android:icon="@android:drawable/ic_menu_edit"
           android:title="@string/detail_menu_text" />
-    <item android:id="@+id/menu_edit_filter"
-          android:title="@string/filter_text"
+    <item android:id="@+id/menu_edit_categories"
+          android:title="@string/downloader_categories"
   		  android:icon="@android:drawable/ic_menu_search" />
     <item android:id="@+id/editmenu_help"
   		  android:icon="@android:drawable/ic_menu_help"  

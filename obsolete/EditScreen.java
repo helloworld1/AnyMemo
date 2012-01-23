@@ -20,530 +20,560 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.cardscreen;
 
 import org.liberty.android.fantastischmemo.*;
+import org.liberty.android.fantastischmemo.tts.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
-import java.util.Date;
+import java.util.List;
 
-import android.graphics.Color;
+
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.DialogInterface.OnClickListener;
-import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
-import android.content.Context;
-import android.preference.PreferenceManager;
-import android.text.Html;
-import android.view.Gravity;
+import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.ContextMenu;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Display;
-import android.view.WindowManager;
 import android.view.LayoutInflater;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.os.Handler;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.EditText;
 import android.util.Log;
-import android.os.SystemClock;
 import android.net.Uri;
+import android.view.GestureDetector;
 
-import android.gesture.Gesture;
-import android.gesture.GestureLibraries;
-import android.gesture.GestureLibrary;
-import android.gesture.GestureOverlayView;
-import android.gesture.Prediction;
-import android.gesture.GestureOverlayView.OnGesturePerformedListener;
-
-
-public class EditScreen extends MemoScreenBase implements OnGesturePerformedListener, View.OnClickListener{
-
-    private int currentId = -1;
-    private int totalItem = -1;
-    private int maxId = -1;
-    private Context mContext;
-    private GestureLibrary mLibrary;
-    private Button newButton;
-    private Button nextButton;
-    private Button prevButton;
-    private Item copyItem = null;
+public class EditScreen extends AMActivity{
+    private final static String TAG = "org.liberty.android.fantastischmemo.cardscreen.EditScreen";
+    private AnyMemoTTS questionTTS = null;
+    private AnyMemoTTS answerTTS = null;
     private boolean searchInflated = false;
-    private final int ACTIVITY_MERGE = 10;
-    private final int ACTIVITY_LIST = 100;
-    
+    private final int DIALOG_LOADING_PROGRESS = 100;
+    private final int ACTIVITY_FILTER = 10;
+    private final int ACTIVITY_EDIT = 11;
+    private final int ACTIVITY_CARD_TOOLBOX = 12;
+    private final int ACTIVITY_DB_TOOLBOX = 13;
+    private final int ACTIVITY_GOTO_PREV = 14;
+    private final int ACTIVITY_SETTINGS = 15;
+    private final int ACTIVITY_LIST = 16;
+    private final int ACTIVITY_MERGE = 17;
+    private final int ACTIVITY_DETAIL = 18;
+    private final static String WEBSITE_HELP_EDIT = "http://anymemo.org/wiki/index.php?title=Editing_screen";
 
-    private static final String TAG = "org.liberty.android.fantastischmemo.EditScreen";
+    Handler mHandler;
+    Item currentItem = null;
+    Item savedItem = null;
+    Item prevItem = null;
+    String dbPath = "";
+    String dbName = "";
+    String activeFilter = "";
+    FlashcardDisplay flashcardDisplay;
+    SettingManager settingManager;
+    ControlButtons controlButtons;
+    DatabaseUtility databaseUtility;
+    private GestureDetector gestureDetector;
+    ItemManager itemManager;
 
     @Override
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-		setContentView(R.layout.memo_screen_gesture);
-		Bundle extras = getIntent().getExtras();
-		if(extras != null) {
-            if(currentId < 0){
-                currentId = extras.getInt("openid", 1);
+		setContentView(R.layout.memo_screen_layout);
+        mHandler = new Handler();
+        Bundle extras = getIntent().getExtras();
+        int currentId = 1;
+        if (extras != null) {
+            dbPath = extras.getString("dbpath");
+            dbName = extras.getString("dbname");
+            activeFilter = extras.getString("filter");
+            currentId = extras.getInt("id", 1);
+        }
+        try{
+            settingManager = new SettingManager(this, dbPath, dbName);
+            if(settingManager.getCardStyle() == SettingManager.CardStyle.DOUBLE_SIDED){
+                flashcardDisplay = new DoubleSidedCardDisplay(this, settingManager);
+            }
+            else{
+                flashcardDisplay = new SingleSidedCardDisplay(this, settingManager);
+            }
+            controlButtons = new EditScreenButtons(this);
+
+            /* databaseUtility is for global db operations */
+            databaseUtility =  new DatabaseUtility(this, dbPath, dbName);
+            itemManager = new ItemManager.Builder(this, dbPath, dbName)
+                .setFilter(activeFilter)
+                .build();
+
+            initTTS();
+            composeViews();
+            currentItem = itemManager.getItem(currentId);
+            if(currentItem == null){
+                itemManager.getItem(1);
+            }
+            updateCardFrontSide();
+            updateTitle();
+            setViewListeners();
+            /* Double sided card can't use the flip gesture*/
+            if(settingManager.getCardStyle() != SettingManager.CardStyle.DOUBLE_SIDED){
+                gestureDetector= new GestureDetector(EditScreen.this, gestureListener);
+                flashcardDisplay.setScreenOnTouchListener(viewTouchListener);
+            }
+            registerForContextMenu(flashcardDisplay.getView());
+        }
+        catch(Exception e){
+            Log.e(TAG, "Error in the onCreate()", e);
+            AMGUIUtility.displayError(this, getString(R.string.open_database_error_title), getString(R.string.open_database_error_message), e);
+        }
+
+        /* 
+         * Currently always set the result to OK
+         * to assume there are always some changes.
+         * This may be changed in the future to reflect the
+         * real changes
+         */
+        setResult(Activity.RESULT_OK);
+
+    }
+
+    @Override
+    public void onDestroy(){
+        if(itemManager != null){
+            itemManager.close();
+        }
+        if(settingManager != null){
+            settingManager.close();
+        }
+        if(questionTTS != null){
+            questionTTS.shutdown();
+        }
+        if(answerTTS != null){
+            answerTTS.shutdown();
+        }
+
+        super.onDestroy();
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode ==Activity.RESULT_CANCELED){
+            return;
+        }
+        /* Refresh the activity according to activities */
+        switch(requestCode){
+            case ACTIVITY_EDIT:
+            {
+
+                Bundle extras = data.getExtras();
+                Item item = extras.getParcelable("item");
+                if(item != null){
+                    currentItem = item;
+                }
+                restartActivity();
+                break;
+            }
+
+            case ACTIVITY_FILTER:
+            {
+                Bundle extras = data.getExtras();
+                activeFilter = extras.getString("filter");
+                restartActivity();
+                break;
+            }
+
+            case ACTIVITY_SETTINGS:
+            {
+                restartActivity();
+                break;
+            }
+            case ACTIVITY_LIST:
+            {
+                Bundle extras = data.getExtras();
+                currentItem = extras.getParcelable("item");
+                restartActivity();
+                break;
+            }
+            case ACTIVITY_MERGE:
+            {
+                restartActivity();
+                break;
+            }
+            case ACTIVITY_DETAIL:
+            {
+                restartActivity();
+            }
+
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.edit_screen_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menuspeakquestion:
+            {
+                if(questionTTS != null && currentItem != null){
+                    questionTTS.sayText(currentItem.getQuestion());
+                }
+                return true;
+            }
+
+            case R.id.menuspeakanswer:
+            {
+                if(answerTTS != null && currentItem != null){
+                    answerTTS.sayText(currentItem.getAnswer());
+                }
+                return true;
+            }
+
+            case R.id.editmenu_settings_id:
+            {
+                Intent myIntent = new Intent(this, SettingsScreen.class);
+                myIntent.putExtra("dbname", dbName);
+                myIntent.putExtra("dbpath", dbPath);
+                startActivityForResult(myIntent, ACTIVITY_SETTINGS);
+                return true;
+            }
+
+            case R.id.editmenu_delete_id:
+            {
+                deleteCurrent();
+                return true;
+            }
+
+
+            case R.id.editmenu_detail_id:
+            {
+                if(currentItem != null){
+                    Intent myIntent = new Intent(this, DetailScreen.class);
+                    myIntent.putExtra("dbname", this.dbName);
+                    myIntent.putExtra("dbpath", this.dbPath);
+                    myIntent.putExtra("itemid", currentItem.getId());
+                    startActivityForResult(myIntent, ACTIVITY_DETAIL);
+                }
+                return true;
+            }
+            case R.id.editmenu_list_id:
+            {
+                Intent myIntent = new Intent(this, SettingsScreen.class);
+                myIntent.setClass(this, ListEditScreen.class);
+                myIntent.putExtra("dbname", dbName);
+                myIntent.putExtra("dbpath", dbPath);
+                if(currentItem != null){
+                    myIntent.putExtra("openid", currentItem.getId());
+                }
+                startActivityForResult(myIntent, ACTIVITY_LIST);
+                return true;
+            }
+
+            case R.id.menu_edit_filter:
+            {
+                Intent myIntent = new Intent(this, Filter.class);
+                myIntent.putExtra("dbname", dbName);
+                myIntent.putExtra("dbpath", dbPath);
+                startActivityForResult(myIntent, ACTIVITY_FILTER);
+                return true;
+            }
+            case R.id.editmenu_search_id:
+            {
+                createSearchOverlay();
+                return true;
+            }
+
+            case R.id.editmenu_help:
+            {
+                Intent myIntent = new Intent();
+                myIntent.setAction(Intent.ACTION_VIEW);
+                myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
+                myIntent.setData(Uri.parse(WEBSITE_HELP_EDIT));
+                startActivity(myIntent);
+                return true;
             }
         }
-		
-        mContext = this;
 
-        mHandler = new Handler();
-        /* Initiate the gesture */
-        mLibrary = GestureLibraries.fromRawResource(this, R.raw.gestures);
-        if (!mLibrary.load()) {
-            finish();
+        return false;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.editscreen_context_menu, menu);
+        menu.setHeaderTitle(R.string.menu_text);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem menuitem) {
+        switch(menuitem.getItemId()) {
+            case R.id.menu_context_copy:
+            {
+
+                if(currentItem != null){
+                    savedItem = new Item.Builder()
+                        .setId(currentItem.getId())
+                        .setQuestion(currentItem.getQuestion())
+                        .setAnswer(currentItem.getAnswer())
+                        .setCategory(currentItem.getCategory())
+                        .build();
+                }
+                return true;
+            }
+            case R.id.menu_context_paste:
+            {
+                if(savedItem != null){
+                    itemManager.insert(savedItem, currentItem.getId());
+                    /* Set the Id to the current one */
+                    currentItem = new Item.Builder(savedItem)
+                        .setId(currentItem.getId() + 1)
+                        .build();
+                    updateCardFrontSide();
+                    updateTitle();
+                }
+
+                return true;
+            }
+            case R.id.menu_context_swap_current:
+            {
+                if(currentItem != null){
+                    databaseUtility.swapSingelItem(currentItem);
+                }
+                return true;
+            }
+
+            case R.id.menu_context_reset_current:
+            {
+                if(currentItem != null){
+                    databaseUtility.resetCurrentLearningData(currentItem);
+                }
+                return true;
+            }
+
+            case R.id.menu_context_wipe:
+            {
+                databaseUtility.wipeLearningData();
+                return true;
+            }
+
+            case R.id.menu_context_swap:
+            {
+                databaseUtility.swapAllQA();
+                return true;
+            }
+
+            case R.id.menu_context_remove_dup:
+            {
+                databaseUtility.removeDuplicates();
+                return true;
+            }
+
+            case R.id.menu_context_merge_db:
+            {
+                Intent myIntent = new Intent(this, DatabaseMerger.class);
+                myIntent.putExtra("dbpath", dbPath);
+                myIntent.putExtra("dbname", dbName);
+                startActivityForResult(myIntent, ACTIVITY_MERGE);
+                return true;
+            }
+
+            case R.id.menu_context_shuffle:
+            {
+                databaseUtility.shuffleDatabase();
+                return true;
+            }
+
+            default:
+            {
+                return super.onContextItemSelected(menuitem);
+            }
         }
-        GestureOverlayView gestures = (GestureOverlayView) findViewById(R.id.gesture_overlay);
-        gestures.addOnGesturePerformedListener(this);
-        createButtons();
-        buttonBinding();
-        if(prepare() == false){
-            new AlertDialog.Builder(mContext)
-                .setTitle(getString(R.string.open_database_error_title))
-                .setMessage(getString(R.string.open_database_error_message))
-                .setPositiveButton(getString(R.string.back_menu_text), new OnClickListener() {
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        finish();
-                    }
-                })
-                .setNegativeButton(getString(R.string.help_button_text), new OnClickListener() {
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        Intent myIntent = new Intent();
-                        myIntent.setAction(Intent.ACTION_VIEW);
-                        myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
-                        myIntent.setData(Uri.parse(getString(R.string.website_help_error_open)));
-                        startActivity(myIntent);
-                        finish();
+    }
 
-                    }
-                })
+    private void initTTS(){
+        String audioDir = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_audio_dir);
+        Locale ql = settingManager.getQuestionAudioLocale();
+        Locale al = settingManager.getAnswerAudioLocale();
+        if(settingManager.getQuestionUserAudio()){
+            questionTTS = new AudioFileTTS(audioDir, dbName);
+        }
+        else if(ql != null){
+            questionTTS = new AnyMemoTTSPlatform(this, ql);
+        }
+        else{
+            questionTTS = null;
+        }
+        if(settingManager.getAnswerUserAudio()){
+            answerTTS = new AudioFileTTS(audioDir, dbName);
+        }
+        else if(al != null){
+            answerTTS = new AnyMemoTTSPlatform(this, al);
+        }
+        else{
+            answerTTS = null;
+        }
+    }
+
+    @Override
+    public void restartActivity(){
+        Intent myIntent = new Intent(this, EditScreen.class);
+        if(currentItem != null){
+            myIntent.putExtra("id", currentItem.getId());
+        }
+        myIntent.putExtra("dbname", dbName);
+        myIntent.putExtra("dbpath", dbPath);
+        myIntent.putExtra("filter", activeFilter);
+        finish();
+        startActivity(myIntent);
+    }
+
+
+    private void composeViews(){
+        LinearLayout memoRoot = (LinearLayout)findViewById(R.id.memo_screen_root);
+
+        LinearLayout flashcardDisplayView = (LinearLayout)flashcardDisplay.getView();
+        LinearLayout controlButtonsView = (LinearLayout)controlButtons.getView();
+        /* This li is make the background of buttons the same as answer */
+        LinearLayout li = new LinearLayout(this);
+        li.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.FILL_PARENT));
+        List<Integer> colors = settingManager.getColors();
+        if(colors != null){
+            li.setBackgroundColor(settingManager.getColors().get(3));
+        }
+        /* 
+         * -1: Match parent -2: Wrap content
+         * This is necessary or the view will not be 
+         * stetched
+         */
+        memoRoot.addView(flashcardDisplayView, -1, -1);
+        li.addView(controlButtonsView, -1, -2);
+        memoRoot.addView(li, -1, -2);
+        flashcardDisplayView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
+    }
+
+    void setViewListeners(){
+        Map<String, Button> bm = controlButtons.getButtons();
+        Button newButton = bm.get("new");
+        Button editButton = bm.get("edit");
+        Button prevButton = bm.get("prev");
+        Button nextButton = bm.get("next");
+        /* Set button listeners */
+        newButton.setOnClickListener(newButtonListener);
+        editButton.setOnClickListener(editButtonListener);
+        prevButton.setOnClickListener(prevButtonListener);
+        nextButton.setOnClickListener(nextButtonListener);
+        /* For double sided card, the view can be toggled */
+        if(settingManager.getCardStyle() == SettingManager.CardStyle.DOUBLE_SIDED){
+
+            flashcardDisplay.setQuestionLayoutClickListener(toggleCardSideListener);
+            flashcardDisplay.setAnswerLayoutClickListener(toggleCardSideListener);
+            flashcardDisplay.setQuestionTextClickListener(toggleCardSideListener);
+            flashcardDisplay.setAnswerTextClickListener(toggleCardSideListener);
+            flashcardDisplay.setQuestionLayoutLongClickListener(popupContextMenuListener);
+            flashcardDisplay.setAnswerLayoutLongClickListener(popupContextMenuListener);
+        }
+
+
+    }
+
+    private View.OnLongClickListener popupContextMenuListener = new View.OnLongClickListener(){
+        public boolean onLongClick(View v){
+            closeContextMenu();
+            EditScreen.this.openContextMenu(flashcardDisplay.getView());
+            return true;
+        }
+    };
+
+    private View.OnClickListener newButtonListener = new View.OnClickListener(){
+        public void onClick(View v){
+            Intent myIntent = new Intent(EditScreen.this, CardEditor.class);
+            myIntent.putExtra("item", currentItem); 
+            myIntent.putExtra("dbpath", dbPath);
+            myIntent.putExtra("dbname", dbName);
+            myIntent.putExtra("new", true);
+            startActivityForResult(myIntent, ACTIVITY_EDIT);
+        }
+    };
+
+    private View.OnClickListener editButtonListener = new View.OnClickListener(){
+        public void onClick(View v){
+            Intent myIntent = new Intent(EditScreen.this, CardEditor.class);
+            myIntent.putExtra("item", currentItem);
+            myIntent.putExtra("dbpath", dbPath);
+            myIntent.putExtra("dbname", dbName);
+            myIntent.putExtra("new", false);
+            startActivityForResult(myIntent, ACTIVITY_EDIT);
+        }
+    };
+
+    private void updateTitle(){
+        if(currentItem != null){
+            int total = itemManager.getStatInfo()[0];
+            String titleString = getString(R.string.stat_total) + total + " " + getString(R.string.memo_current_id) + " " + currentItem.getId();
+            if(currentItem != null && currentItem.getCategory() != null){
+                titleString += "  " + currentItem.getCategory();
+            }
+            setTitle(titleString);
+        }
+    }
+    
+    private void gotoNext(){
+        currentItem = itemManager.getNextItem(currentItem);
+        updateCardFrontSide();
+        updateTitle();
+    }
+
+    private void deleteCurrent(){
+        if(currentItem != null){
+            new AlertDialog.Builder(EditScreen.this)
+                .setTitle(getString(R.string.detail_delete))
+                .setMessage(getString(R.string.delete_warning))
+                .setPositiveButton(getString(R.string.yes_text),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            currentItem = itemManager.deleteItem(currentItem);
+                            restartActivity();
+                        }
+                    })
+                .setNegativeButton(getString(R.string.no_text), null)
                 .create()
                 .show();
         }
     }
 
-    @Override
-	public void onDestroy(){
-        super.onDestroy();
-        try{
-            dbHelper.close();
-        }
-        catch(Exception e){
-        }
+    private void gotoPrev(){
+        currentItem = itemManager.getPreviousItem(currentItem);
+        updateCardFrontSide();
+        updateTitle();
     }
 
-    @Override 
-    public void onSaveInstanceState(Bundle outState) 
-    {
-        
-        outState.putInt("id", currentId);
-        super.onSaveInstanceState(outState); 
-    }
-
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) 
-    {
-        super.onRestoreInstanceState(savedInstanceState);
-        currentId = savedInstanceState.getInt("id", 1);
-        prepare();
-    }
-
-    @Override
-    public void onClick(View v){
-        if(v == newButton){
-            createNewItem();
-        }
-        else if(v == nextButton){
-            getNextItem();
-        }
-        else if(v == prevButton){
-            getPreviousItem();
-        }
-        else if(v == (ImageButton)findViewById(R.id.search_close_btn)){
-            dismissSearchOverlay();
-        }
-        else if(v == (ImageButton)findViewById(R.id.search_next_btn)){
-            doSearch(true);
-        }
-        else if(v == (ImageButton)findViewById(R.id.search_previous_btn)){
-            doSearch(false);
-        }
-
-    }
-
-    @Override
-    protected boolean prepare(){
-        if(dbHelper == null){
-            try{
-                dbHelper = new DatabaseHelper(mContext, dbPath, dbName);
-            }
-            catch(Exception e){
-                Log.e(TAG, "Error" + e.toString(), e);
-                return false;
-            }
-
-        }
-		loadSettings();
-        maxId = dbHelper.getNewId() - 1;
-        totalItem = dbHelper.getTotalCount();
-        if(totalItem <= 0){
-            /* Ask user to create a new card when the db is empty */
-            createNewItem();
-        
-        }
-        else{
-            if(currentId < 1){
-                currentId = 1;
-            }
-            else if(currentId > maxId){
-                currentId = maxId;
-            }
-
-            currentItem = dbHelper.getItemById(currentId, 0, true, activeFilter);
-            /* Re-fetch the id in case that the item with id 1 is 
-             * deleted.
-             */
-            if(currentItem == null){
-                currentItem = dbHelper.getItemById(currentId, 0, true, null);
-            }
-            if(currentItem != null){
-                currentId = currentItem.getId();
-                updateMemoScreen();
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public  boolean onCreateOptionsMenu(Menu menu){
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.edit_screen_menu, menu);
-		return true;
-    }
-
-    @Override
-	public boolean onOptionsItemSelected(MenuItem item){
-        Intent myIntent = new Intent();
-	    switch (item.getItemId()) {
-            case R.id.editmenu_help:
-                myIntent.setAction(Intent.ACTION_VIEW);
-                myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
-                myIntent.setData(Uri.parse(getString(R.string.website_help_edit)));
-                startActivity(myIntent);
-                return true;
-
-            case R.id.editmenu_search_id:
-                createSearchOverlay();
-                return true;
-
-	        case R.id.editmenu_edit_id:
-                doEdit(currentItem);
-                return true;
-
-            case R.id.editmenu_delete_id:
-                doDelete();
-                return true;
-
-            case R.id.editmenu_detail_id:
-                myIntent.setClass(this, DetailScreen.class);
-                myIntent.putExtra("dbname", dbName);
-                myIntent.putExtra("dbpath", dbPath);
-                myIntent.putExtra("itemid", currentItem.getId());
-                startActivityForResult(myIntent, 2);
-                return true;
-
-            case R.id.editmenu_settings_id:
-                myIntent.setClass(this, SettingsScreen.class);
-                myIntent.putExtra("dbname", dbName);
-                myIntent.putExtra("dbpath", dbPath);
-                startActivityForResult(myIntent, 1);
-                //finish();
-                return true;
-
-            case R.id.menu_edit_filter:
-                doFilter();
-                return true;
-
-            case R.id.editmenu_list_id:
-    			myIntent.setClass(this, ListEditScreen.class);
-    			myIntent.putExtra("dbname", dbName);
-    			myIntent.putExtra("dbpath", dbPath);
-    			myIntent.putExtra("openid", currentItem.getId());
-    			startActivityForResult(myIntent, ACTIVITY_LIST);
-                return true;
-
-            case R.id.editmenu_merge_id:
-                myIntent.setClass(this, FileBrowser.class);
-                myIntent.putExtra("default_root", dbPath);
-                myIntent.putExtra("file_extension", ".db");
-                startActivityForResult(myIntent, ACTIVITY_MERGE);
-
-                return true;
-            
-            case R.id.editmenu_copy_id:
-                doCopy();
-                return true;
-
-            case R.id.editmenu_paste_id:
-                doPaste();
-                return true;
-
-            case R.id.editmenu_swap_qa_id:
-                currentItem.inverseQA();
-                dbHelper.addOrReplaceItem(currentItem);
-                restartActivity();
-                return true;
-
-            case R.id.editmenu_remove_dup_id:
-                final ProgressDialog progressDialog = ProgressDialog.show(this, getString(R.string.removing_dup_title), getString(R.string.removing_dup_summary), true);
-                progressDialog.dismiss();
-                final Thread removingThread = new Thread(){
-                    public void run(){
-                        mHandler.post(new Runnable(){
-                            public void run(){
-                                progressDialog.show();
-                            }
-                        });
-                        dbHelper.removeDuplicates();
-                        mHandler.post(new Runnable(){
-                            public void run(){
-                                progressDialog.dismiss();
-                                restartActivity();
-                            }
-                        });
-                    }
-                };
-                new AlertDialog.Builder(this)
-                    .setTitle(R.string.remove_dup_text)
-                    .setMessage(R.string.removing_dup_warning)
-                    .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
-                        public void onClick(DialogInterface arg0, int arg1) {
-                            removingThread.start();
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel_text, null)
-                    .create()
-                    .show();
-
-                return true;
-                
-        }
-        return false;
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, final Intent data){
-    	super.onActivityResult(requestCode, resultCode, data);
-        final int request = requestCode;
-        if(resultCode == Activity.RESULT_OK){
-    		if(requestCode == ACTIVITY_MERGE){
-                new AlertDialog.Builder(this)
-                    .setTitle(R.string.merge_method_title)
-                    .setMessage(R.string.merge_method_message)
-                    .setPositiveButton(R.string.merge_method_here, new DialogInterface.OnClickListener(){
-                        @Override
-                        public void onClick(DialogInterface arg0, int arg1) {
-                            doMerge(data);
-                        }
-                    })
-                    .setNeutralButton(R.string.merge_method_end, new DialogInterface.OnClickListener(){
-                        @Override
-                        public void onClick(DialogInterface arg0, int arg1) {
-                            /* set the current item to the last one */
-                            currentItem = dbHelper.getItemById(maxId, 0, true, activeFilter);
-                            currentId = currentItem.getId();
-                            doMerge(data);
-                        }
-                    })
-                    .create()
-                    .show();
-                returnValue = 0;
-            }
-            if(requestCode == ACTIVITY_LIST){
-                currentId = data.getIntExtra("id", 1);
-
-                /* In case the id for the current item is null
-                 * which is unlikely to happen */
-                Item savedCurrent = currentItem.clone();
-                currentItem = dbHelper.getItemById(currentId, 0, true, activeFilter);
-
-                if(currentItem == null){
-                    currentItem = savedCurrent;
-                }
-                /* Go to specific card id returned by activity */
-
-                restartActivity();
-            }
-        }
-    }
-
-    @Override
-    protected void createButtons(){
-        /* Inflate buttons from XML */
-        LinearLayout root = (LinearLayout)findViewById(R.id.layout_buttons);
-        LayoutInflater.from(this).inflate(R.layout.edit_screen_buttons, root);
-
-        newButton = (Button)findViewById(R.id.edit_screen_btn_new);
-        prevButton = (Button)findViewById(R.id.edit_screen_btn_prev);
-        nextButton = (Button)findViewById(R.id.edit_screen_btn_next);
-    }
-
-    @Override
-	protected void buttonBinding(){
-        newButton.setOnClickListener(this);
-        nextButton.setOnClickListener(this);
-        prevButton.setOnClickListener(this);
-    }
-
-    @Override
-    protected void restartActivity(){
-        //loadSettings();
-        //updateMemoScreen();
-        Intent myIntent = new Intent(this, EditScreen.class);
-        myIntent.putExtra("dbname", dbName);
-        myIntent.putExtra("dbpath", dbPath);
+    /* 
+     * Show the front side of the current card 
+     * This method is called instead directly update the flashcard
+     * so both single and double sided card will work.
+     */
+    private void updateCardFrontSide(){
         if(currentItem != null){
-            myIntent.putExtra("openid", currentItem.getId());
-        }
-        else{
-            myIntent.putExtra("openid", currentId);
-        }
-
-        myIntent.putExtra("active_filter", activeFilter);
-        finish();
-        startActivity(myIntent);
-    }
-
-    @Override 
-    protected void refreshAfterEditItem(){
-        int max = dbHelper.getNewId() - 1;
-        if(max != maxId){
-            currentId = max;
-            prepare();
-        }
-        else if(max == 0){
-            /* If user cancel editing,
-             * it will exit the activity.
-             */
-            finish();
-        }
-        else{
-            if(currentItem.isEmpty()){
-                prepare();
+            if(settingManager.getCardStyle() == SettingManager.CardStyle.DOUBLE_SIDED){
+                /* Double sided card, show front */
+                flashcardDisplay.updateView(currentItem, false);
             }
             else{
-                updateMemoScreen();
+                /* Single sided, show both answer and questjion. */
+                flashcardDisplay.updateView(currentItem, true);
             }
         }
-    }
-
-    @Override
-    protected void refreshAfterDeleteItem(){
-        updateMemoScreen();
-        prepare();
-    }
-
-    @Override
-	protected void displayQA(Item item) {
-        super.displayQA(item);
-        setTitle(getString(R.string.stat_total) + totalItem + " / " + this.getString(R.string.memo_current_id) + currentId + " / " + currentItem.getCategory());
-    }
-
-    @Override
-    public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture){
-        ArrayList<Prediction> predictions = mLibrary.recognize(gesture);
-
-        // We want at least one prediction
-        if (predictions.size() > 0) {
-            Prediction prediction = predictions.get(0);
-            // We want at least some confidence in the result
-            if (prediction.score > 1.0) {
-                // Show the spell
-                Log.v(TAG, "Gesture: " + prediction.name);
-                if(prediction.name.equals("swipe-right")){
-                    getPreviousItem();
-
-                }
-                else if(prediction.name.equals("swipe-left")){
-                    getNextItem();
-                }
-                else if(prediction.name.equals("o") || prediction.name.equals("o2")){
-                    doEdit(currentItem);
-                }
-                else if(prediction.name.equals("cross")){
-                    doDelete();
-                }
-
-            }
-        }
-    }
-
-    private void getNextItem(){
-        if(totalItem > 0){
-            currentId += 1;
-            currentItem = dbHelper.getItemById(currentId, 0, true, activeFilter);
-            if(currentItem == null){
-                currentItem = dbHelper.getItemById(0, 0, true, activeFilter);
-            }
-        }
-        if(currentItem != null){
-            currentId = currentItem.getId();
-            updateMemoScreen();
-        }
-        else{
-            showFilterFailureDialog();
-        }
-        
-    }
-
-    private void getPreviousItem(){
-        if(totalItem > 0){
-            currentId -= 1;
-            currentItem = dbHelper.getItemById(currentId, 0, false, activeFilter);
-            if(currentItem == null){
-                currentItem = dbHelper.getItemById(maxId, 0, false, activeFilter);
-            }
-        }
-
-
-        if(currentItem != null){
-            currentId = currentItem.getId();
-            updateMemoScreen();
-        }
-        else{
-            showFilterFailureDialog();
-        }
-    }
-    
-    private void createNewItem(){
-        /* Reuse the doEdit to get the edit dialog
-         * and display the edit dialog
-         */
-        Item newItem = new Item();
-        newItem.setId(dbHelper.getNewId());
-        if(currentItem != null){
-            newItem.setCategory(currentItem.getCategory());
-        }
-        /* the tricky here is that the currentId is not modified.
-         * it is only modified the success edit.
-         * If not the prepare() will restore the oritinal item 
-         */
-        doEdit(newItem);
     }
 
     private void createSearchOverlay(){
@@ -551,11 +581,11 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
             LinearLayout root = (LinearLayout)findViewById(R.id.memo_screen_root);
             LayoutInflater.from(this).inflate(R.layout.search_overlay, root);
             ImageButton close = (ImageButton)findViewById(R.id.search_close_btn);
-            close.setOnClickListener(this);
+            close.setOnClickListener(closeSearchButtonListener);
             ImageButton prev = (ImageButton)findViewById(R.id.search_previous_btn);
-            prev.setOnClickListener(this);
+            prev.setOnClickListener(searchPrevButtonListener);
             ImageButton next = (ImageButton)findViewById(R.id.search_next_btn);
-            next.setOnClickListener(this);
+            next.setOnClickListener(searchNextButtonListener);
 
             EditText editEntry = (EditText)findViewById(R.id.search_entry);
             editEntry.requestFocus();
@@ -577,111 +607,115 @@ public class EditScreen extends MemoScreenBase implements OnGesturePerformedList
         }
     }
 
-    private void doSearch(boolean forward){
-        EditText et = (EditText)findViewById(R.id.search_entry);
-        String text = et.getText().toString();
-        boolean processed = false;
-        Item searchItem = null;
-        if(text == null){
-            return;
+    private View.OnClickListener prevButtonListener = new View.OnClickListener(){
+        public void onClick(View v){
+            gotoPrev();
+            if(questionTTS != null){
+                questionTTS.stop();
+            }
         }
-        else if(text.equals("")){
-            return;
+    };
+
+    private View.OnClickListener nextButtonListener = new View.OnClickListener(){
+        public void onClick(View v){
+            gotoNext();
+            if(answerTTS != null){
+                answerTTS.stop();
+            }
         }
-        if(text.charAt(0) == '#'){
-            String num = text.substring(1);
-            int intNum = 0;
-            try{
-                intNum = Integer.parseInt(num);
-                if(intNum > 0 && intNum <= maxId){
-                    searchItem = dbHelper.getItemById(intNum, 0, true, activeFilter);
-                    if(searchItem != null){
-                        currentId = intNum;
-                        currentItem = searchItem;
-                        prepare();
-                        processed = true;
-                        return;
+    };
+
+    private View.OnClickListener closeSearchButtonListener = new View.OnClickListener(){
+        public void onClick(View v){
+            dismissSearchOverlay();
+        }
+    };
+
+    private View.OnClickListener searchNextButtonListener = new View.OnClickListener(){
+        public void onClick(View v){
+            EditText editEntry = (EditText)findViewById(R.id.search_entry);
+            String text = editEntry.getText().toString();
+            Item item = itemManager.search(text, true, currentItem);
+            if(item != null){
+                currentItem = item;
+                updateCardFrontSide();
+                updateTitle();
+            }
+        }
+    };
+
+    private View.OnClickListener searchPrevButtonListener = new View.OnClickListener(){
+        public void onClick(View v){
+            EditText editEntry = (EditText)findViewById(R.id.search_entry);
+            String text = editEntry.getText().toString();
+            Item item = itemManager.search(text, false, currentItem);
+            if(item != null){
+                currentItem = item;
+                updateCardFrontSide();
+                updateTitle();
+            }
+        }
+    };
+
+    private View.OnTouchListener viewTouchListener = new View.OnTouchListener(){
+        @Override
+        public boolean onTouch(View v, MotionEvent event){
+            return gestureDetector.onTouchEvent(event);
+        }
+    };
+
+    private View.OnClickListener toggleCardSideListener = new View.OnClickListener(){
+        public void onClick(View v){
+            if(currentItem != null){
+                /* Double sided card, the click will toggle question and answer */
+                if(settingManager.getCardStyle() == SettingManager.CardStyle.DOUBLE_SIDED){
+                    if(flashcardDisplay.isAnswerShown()){
+                        flashcardDisplay.updateView(currentItem, false);
+                    }
+                    else{
+                        flashcardDisplay.updateView(currentItem, true);
                     }
                 }
-
-            }
-            catch(NumberFormatException e){
             }
         }
-        if(processed == false && !text.equals("")){
-            text = text.replace('*', '%');
-            text = text.replace('?', '_');
-            int resId = dbHelper.searchItem(currentItem.getId(), text, forward);
-            if(resId > 0){
-                searchItem = dbHelper.getItemById(resId, 0, forward, activeFilter);
-                if(searchItem != null){
-                    currentItem = searchItem;
-                    currentId = searchItem.getId();
-                    prepare();
-                }
-            }
+    };
+
+
+    private GestureDetector.OnGestureListener gestureListener = new GestureDetector.SimpleOnGestureListener(){
+        private static final int SWIPE_MIN_DISTANCE = 120;
+        private static final int SWIPE_MAX_OFF_PATH = 250;
+        private static final int SWIPE_THRESHOLD_VELOCITY = 200;
+
+        @Override 
+        public boolean onDown(MotionEvent e){
+            /* Trick: Prevent the menu to popup twice */
+            return true;
         }
-    }
-
-    private void doMerge(final Intent data){
-        final ProgressDialog progressDialog = ProgressDialog.show(this, getString(R.string.merging_title), getString(R.string.merging_summary), true);
-        new Thread(){
-            @Override
-            public void run(){
-                final String name = data.getStringExtra("org.liberty.android.fantastischmemo.dbName");
-                final String path = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
-                try{
-                    dbHelper.mergeDatabase(path, name, currentId);
-                }
-                catch(final Exception e){
-                    mHandler.post(new Runnable(){
-                        @Override
-                        public void run(){
-                            progressDialog.dismiss();
-                            new AlertDialog.Builder(mContext)
-                                .setTitle(R.string.merge_fail_title)
-                                .setMessage(getString(R.string.merge_fail_message) + " " + e.toString())
-                                .setPositiveButton(R.string.ok_text, null)
-                                .create()
-                                .show();
-
-                        }
-                    });
-                }
-                mHandler.post(new Runnable(){
-                    @Override
-                    public void run(){
-                        progressDialog.dismiss();
-                        new AlertDialog.Builder(EditScreen.this)
-                            .setTitle(R.string.merge_success_title)
-                            .setMessage(getString(R.string.merge_success_message) + " " + dbName + ", " + name)
-                            .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
-                                @Override
-                                public void onClick(DialogInterface arg0, int arg1) {
-                                    restartActivity();
-
-                                }
-                            })
-                            .create()
-                            .show();
-
-                    }
-                });
-            }
-        }.start();
-    }
-
-    private void doCopy(){
-        copyItem = currentItem;
-    }
-
-    private void doPaste(){
-        if(copyItem != null){
-            dbHelper.insertItem(copyItem, currentId);
-            currentId += 1;
-            prepare();
+        @Override 
+        public void onLongPress(MotionEvent e){
+            closeContextMenu();
+            EditScreen.this.openContextMenu(flashcardDisplay.getView());
         }
-    }
 
-        
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            try {
+                if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
+                    return false;
+                if(e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                    /* Swipe Right to Left event */
+                    gotoNext();
+                }  else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                    /* Swipe Left to Right event */
+                    gotoPrev();
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Error handling gesture left/right event", e);
+            }
+            return false;
+        }
+    };
+
 }
+
+

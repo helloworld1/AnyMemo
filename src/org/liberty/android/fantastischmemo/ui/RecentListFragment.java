@@ -281,8 +281,7 @@ public class RecentListFragment extends Fragment implements OnItemClickListener{
                 /* Preview card */
                 Intent myIntent = new Intent();
                 myIntent.setClass(mActivity, EditScreen.class);
-                myIntent.putExtra("dbpath", selectedPath);
-                myIntent.putExtra("id", 1);
+                myIntent.putExtra(EditScreen.EXTRA_DBPATH, selectedPath);
                 startActivity(myIntent);
                 RecentListUtil.addToRecentList(mActivity, selectedPath);
                 return true;
