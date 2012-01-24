@@ -282,7 +282,8 @@ public class CardEditor extends AMActivity implements View.OnClickListener, Cate
 
     @Override
     public void onReceiveCategory(Category c) {
-        restartActivity();
+        currentCard.setCategory(c);
+        updateViews();
     }
 
     private void setInitRadioButton(){

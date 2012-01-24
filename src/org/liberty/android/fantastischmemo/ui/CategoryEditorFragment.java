@@ -100,8 +100,16 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
 
     public void onClick(View v) {
         if (v == okButton) {
-            SaveCardTask saveCardTask = new SaveCardTask();
-            saveCardTask.execute((Void)null);
+            mActivity.setProgressBarIndeterminateVisibility(true);
+            int position = categoryList.getCheckedItemPosition();
+            Category selectedCategory;
+            if (position == AdapterView.INVALID_POSITION) {
+                selectedCategory = null;
+            } else {
+                selectedCategory = categoryAdapter.getItem(position);
+            }
+            ((CategoryEditorResultListener)mActivity).onReceiveCategory(selectedCategory);
+            dismiss();
         }
         if (v == newButton) {
             NewCategoryTask task = new NewCategoryTask();
@@ -172,50 +180,6 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
         }
     }
 
-
-    /*
-     * This task will save the card and exit the dialog
-     */
-    private class SaveCardTask extends AsyncTask<Void, Category, Void> {
-        private Category selectedCategory;
-
-		@Override
-        public void onPreExecute() {
-            disableListeners();
-            mActivity.setProgressBarIndeterminateVisibility(true);
-            int position = categoryList.getCheckedItemPosition();
-            if (position == AdapterView.INVALID_POSITION) {
-                cancel(true);
-                return;
-            }
-            selectedCategory = categoryAdapter.getItem(position);
-        }
-
-        @Override
-        public Void doInBackground(Void... params) {
-            assert selectedCategory != null : "Null category is selected. This shouldn't happen";
-            try {
-                currentCard.setCategory(selectedCategory);
-                cardDao.update(currentCard);
-            } catch (SQLException e) {
-                Log.e(TAG, "Error updating the category of current card", e);
-                throw new RuntimeException("Error updating the category of current card");
-            }
-            return null;
-        }
-
-        @Override
-        public void onCancelled(){
-            CategoryEditorFragment.this.dismiss();
-        }
-
-        @Override
-        public void onPostExecute(Void result){
-            mActivity.setProgressBarIndeterminateVisibility(false);
-            ((CategoryEditorResultListener)mActivity).onReceiveCategory(selectedCategory);
-            dismiss();
-        }
-    }
 
     /*
      * This task will edit the category in the list
