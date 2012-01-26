@@ -9,13 +9,9 @@ import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
 
-import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 
-import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
-
-import org.liberty.android.fantastischmemo.ui.CardEditor;
 
 import android.app.Activity;
 
@@ -42,13 +38,11 @@ import android.widget.ListView;
 
 public class CategoryEditorFragment extends DialogFragment implements View.OnClickListener {
     public static String EXTRA_DBPATH = "dbpath";
-    public static String EXTRA_CARD_ID = "id";
+    public static String EXTRA_CATEGORY_ID = "id";
     private AMActivity mActivity;
     private String dbPath;
     private CategoryDao categoryDao;
-    private CardDao cardDao;
-    private Card currentCard;
-    private Integer currentCardId;
+    private int currentCategoryId;
     private List<Category> categories;
     private static final String TAG = "CategoryEditorFragment";
     private CategoryAdapter categoryAdapter;
@@ -69,8 +63,8 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         Bundle args = this.getArguments();
-        currentCardId = args.getInt(EXTRA_CARD_ID);
         dbPath = args.getString(EXTRA_DBPATH);
+        currentCategoryId = args.getInt(EXTRA_CATEGORY_ID, 1);
     }
 
     @Override
@@ -141,27 +135,29 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
 
         @Override
         public Integer doInBackground(Void... params) {
+            Category currentCategory;
             try {
                 AnyMemoDBOpenHelper helper =
                     AnyMemoDBOpenHelperManager.getHelper(mActivity, dbPath);
 
                 categoryDao = helper.getCategoryDao();
-                cardDao = helper.getCardDao();
-                currentCard = cardDao.queryForId(currentCardId);;
                 categories = categoryDao.queryForAll();
+                currentCategory = categoryDao.queryForId(currentCategoryId);
             } catch (SQLException e) {
                 Log.e(TAG, "Error creating daos", e);
                 throw new RuntimeException("Dao creation error");
             }
             int categorySize = categories.size();
-            assert categorySize > 0 : "There should be at least an empty category. Ensured in AnyMemoDBOpenHelper.";
-            assert currentCard.getCategory() != null : "The card has null category, this should be avoided";
             Integer position = null;
-            for (int i = 0; i < categorySize; i++) {
-                if (categories.get(i).getName().equals(currentCard.getCategory().getName())) {
-                    position = i;
-                    break;
+            if (currentCategory != null) {
+                for (int i = 0; i < categorySize; i++) {
+                    if (categories.get(i).getName().equals(currentCategory.getName())) {
+                        position = i;
+                        break;
+                    }
                 }
+            } else {
+                position = 0;
             }
             assert position != null : "The card has no category. This shouldn't happen.";
             return position;
@@ -219,7 +215,6 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
             assert editText != null : "Category's EditText shouldn't get null";
             try {
                 selectedCategory.setName(editText);
-                currentCard.setCategory(selectedCategory);
                 categoryDao.update(selectedCategory);
             } catch (SQLException e) {
                 Log.e(TAG, "Error updating the category", e);

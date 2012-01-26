@@ -102,7 +102,7 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
     Integer savedCardId = null;
     String dbPath = "";
     String dbName = "";
-    int activeCategoryId = 0;
+    int activeCategoryId = -1;
     SettingDao settingDao;
     CardDao cardDao;
     LearningDataDao learningDataDao;
@@ -422,10 +422,11 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
     @Override
     public void restartActivity(){
         Intent myIntent = new Intent(this, EditScreen.class);
-        assert currentCard != null : "Null card is used when restarting activity";
         assert dbPath != null : "Use null dbPath to restartAcitivity";
-        myIntent.putExtra(EXTRA_CARD_ID, currentCard.getId());
         myIntent.putExtra(EXTRA_DBPATH, dbPath);
+        if (currentCard != null) {
+            myIntent.putExtra(EXTRA_CARD_ID, currentCard.getId());
+        }
         myIntent.putExtra(EXTRA_CATEGORY, activeCategoryId);
         finish();
         startActivity(myIntent);
@@ -488,45 +489,52 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
 
     private View.OnClickListener newButtonListener = new View.OnClickListener(){
         public void onClick(View v){
-            Intent myIntent = new Intent(EditScreen.this, CardEditor.class);
-            myIntent.putExtra(CardEditor.EXTRA_DBPATH, dbPath);
-            myIntent.putExtra(CardEditor.EXTRA_CARD_ID, currentCard.getId());
-            myIntent.putExtra(CardEditor.EXTRA_IS_EDIT_NEW, true);
-            //startActivityForResult(myIntent, ACTIVITY_EDIT);
-            startActivityForResult(myIntent, ACTIVITY_EDIT);
+                Intent myIntent = new Intent(EditScreen.this, CardEditor.class);
+                myIntent.putExtra(CardEditor.EXTRA_DBPATH, dbPath);
+                if (currentCard != null) {
+                    myIntent.putExtra(CardEditor.EXTRA_CARD_ID, currentCard.getId());
+                }
+                myIntent.putExtra(CardEditor.EXTRA_IS_EDIT_NEW, true);
+                //startActivityForResult(myIntent, ACTIVITY_EDIT);
+                startActivityForResult(myIntent, ACTIVITY_EDIT);
         }
     };
 
     private View.OnClickListener editButtonListener = new View.OnClickListener(){
         public void onClick(View v){
-            Intent myIntent = new Intent(EditScreen.this, CardEditor.class);
-            myIntent.putExtra(CardEditor.EXTRA_DBPATH, dbPath);
-            myIntent.putExtra(CardEditor.EXTRA_CARD_ID, currentCard.getId());
-            myIntent.putExtra(CardEditor.EXTRA_IS_EDIT_NEW, false);
-            startActivityForResult(myIntent, ACTIVITY_EDIT);
+            if (currentCard != null) {
+                Intent myIntent = new Intent(EditScreen.this, CardEditor.class);
+                myIntent.putExtra(CardEditor.EXTRA_DBPATH, dbPath);
+                myIntent.putExtra(CardEditor.EXTRA_CARD_ID, currentCard.getId());
+                myIntent.putExtra(CardEditor.EXTRA_IS_EDIT_NEW, false);
+                startActivityForResult(myIntent, ACTIVITY_EDIT);
+            }
         }
     };
 
     private void updateTitle(){
-        assert currentCard != null : "Shouldn't update title if card is null";
-        StringBuilder sb = new StringBuilder();
-        sb.append(getString(R.string.total_text) + ": " + totalCardCount + " ");
-        sb.append(getString(R.string.id_text) + ": " + currentCard.getId() + " ");
-        sb.append(getString(R.string.ordinal_text_short) + ": " + currentCard.getOrdinal() + " ");
-        sb.append(currentCard.getCategory().getName());
-        setTitle(sb.toString());
+        if (currentCard != null) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(getString(R.string.total_text) + ": " + totalCardCount + " ");
+            sb.append(getString(R.string.id_text) + ": " + currentCard.getId() + " ");
+            sb.append(getString(R.string.ordinal_text_short) + ": " + currentCard.getOrdinal() + " ");
+            sb.append(currentCard.getCategory().getName());
+            setTitle(sb.toString());
+        }
     }
     
     private void gotoNext(){
-        currentCard = cardDao.queryNextCard(currentCard,currentCategory);
-        try {
-            categoryDao.refresh(currentCard.getCategory());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        if (currentCard != null) {
+            currentCard = cardDao.queryNextCard(currentCard,currentCategory);
+            try {
+                categoryDao.refresh(currentCard.getCategory());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            assert currentCard != null : "Next card is null";
+            updateCardFrontSide();
+            updateTitle();
         }
-        assert currentCard != null : "Next card is null";
-        updateCardFrontSide();
-        updateTitle();
     }
 
     private void deleteCurrent(){
@@ -548,15 +556,17 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
     }
 
     private void gotoPrev(){
-        currentCard = cardDao.queryPrevCard(currentCard, currentCategory);
-        try {
-            categoryDao.refresh(currentCard.getCategory());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        if (currentCard != null) {
+            currentCard = cardDao.queryPrevCard(currentCard, currentCategory);
+            try {
+                categoryDao.refresh(currentCard.getCategory());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            assert currentCard != null : "Prev card is null";
+            updateCardFrontSide();
+            updateTitle();
         }
-        assert currentCard != null : "Prev card is null";
-        updateCardFrontSide();
-        updateTitle();
     }
 
     /* 
@@ -605,7 +615,13 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
         DialogFragment df = new CategoryEditorFragment();
         Bundle b = new Bundle();
         b.putString(CategoryEditorFragment.EXTRA_DBPATH, dbPath);
-        b.putInt(CategoryEditorFragment.EXTRA_CARD_ID, currentCard.getId());
+        if (currentCategory == null) {
+            b.putInt(CategoryEditorFragment.EXTRA_CATEGORY_ID, currentCard.getCategory().getId());
+        } else {
+            // If we use the category filer, we can just use the currentCategory
+            // This will handle the new card situation.
+            b.putInt(CategoryEditorFragment.EXTRA_CATEGORY_ID, currentCategory.getId());
+        }
         df.setArguments(b);
         df.show(getSupportFragmentManager(), "CategoryEditDialog");
         getSupportFragmentManager().findFragmentByTag("CategoryEditDialog");
@@ -784,7 +800,6 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
                 // If None of category and card is is set, first ordinal is queried
                 // Note curretnCategory should be null.
                 if (currentCard == null) {
-                    assert currentCategory == null : "Logic error, current category should be null here";
                     currentCard = cardDao.queryFirstOrdinal(currentCategory);
                 }
 
@@ -806,36 +821,30 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
 
         @Override
         public void onPostExecute(Void result){
-            // It means empty set
-            if (currentCard == null) {
-                // TODO: should create a new card
-            } else {
-                if(setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED){
-                    flashcardDisplay = new DoubleSidedCardDisplay(EditScreen.this, dbPath, setting, option);
-                }
-                else{
-                    flashcardDisplay = new SingleSidedCardDisplay(EditScreen.this, dbPath, setting, option);
-                }
-                controlButtons = new EditScreenButtons(EditScreen.this);
+            if(setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED){
+                flashcardDisplay = new DoubleSidedCardDisplay(EditScreen.this, dbPath, setting, option);
+            }
+            else{
+                flashcardDisplay = new SingleSidedCardDisplay(EditScreen.this, dbPath, setting, option);
+            }
+            controlButtons = new EditScreenButtons(EditScreen.this);
 
-                /* databaseUtility is for global db operations */
-                progressDialog.dismiss();
-                initTTS();
-                composeViews();
-                //currentCard = .getItem(currentId);
-                if(currentCard == null){
-                    // TODO: how to get current card?
-                }
+            /* databaseUtility is for global db operations */
+            progressDialog.dismiss();
+            initTTS();
+            composeViews();
+            //currentCard = .getItem(currentId);
+            setViewListeners();
+            if(currentCard != null){
                 updateCardFrontSide();
                 updateTitle();
-                setViewListeners();
-                /* Double sided card can't use the flip gesture*/
-                if(setting.getCardStyle() != Setting.CardStyle.DOUBLE_SIDED){
-                    gestureDetector= new GestureDetector(EditScreen.this, gestureListener);
-                    flashcardDisplay.setScreenOnTouchListener(viewTouchListener);
-                }
-                registerForContextMenu(flashcardDisplay.getView());
             }
+            /* Double sided card can't use the flip gesture*/
+            if(setting.getCardStyle() != Setting.CardStyle.DOUBLE_SIDED){
+                gestureDetector= new GestureDetector(EditScreen.this, gestureListener);
+                flashcardDisplay.setScreenOnTouchListener(viewTouchListener);
+            }
+            registerForContextMenu(flashcardDisplay.getView());
         }
     }
 
