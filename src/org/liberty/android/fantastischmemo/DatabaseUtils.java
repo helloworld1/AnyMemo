@@ -1,5 +1,7 @@
 package org.liberty.android.fantastischmemo;
 
+import java.io.File;
+
 import java.util.List;
 
 import java.util.concurrent.Callable;
@@ -53,16 +55,16 @@ public class DatabaseUtils {
     /*
      * Check if the database is in the correct format
      */
-    public static boolean checkDatabase(String dbPath) {
+    public static boolean checkDatabase(Context context, String dbPath) {
+        if (!(new File(dbPath)).exists()) {
+            return false;
+        }
         try {
-            SQLiteDatabase db = SQLiteDatabase.openDatabase(dbPath, null, SQLiteDatabase.OPEN_READONLY);
-            // Only check the existance of cards table
-            Cursor res = db.rawQuery("select name from sqlite_master where type = 'table' and name = 'cards'", null);
-            boolean isValidDb = res.getCount() > 0;
-            res.close();
-            db.close();
-            return isValidDb;
+            AnyMemoDBOpenHelperManager.getHelper(context, dbPath);
+            AnyMemoDBOpenHelperManager.releaseHelper(dbPath);
+            return true;
         } catch (SQLiteException e) {
+            e.printStackTrace();
             return false;
         }
     }

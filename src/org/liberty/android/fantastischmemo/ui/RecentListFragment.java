@@ -124,7 +124,7 @@ public class RecentListFragment extends Fragment implements OnItemClickListener{
                             continue;
                         }
                         final RecentItem ri = new RecentItem();
-                        if (!DatabaseUtils.checkDatabase(allPath[i])) {
+                        if (!DatabaseUtils.checkDatabase(mActivity, allPath[i])) {
                             RecentListUtil.deleteFromRecentList(mActivity, allPath[i]);
                             continue;
                         }
