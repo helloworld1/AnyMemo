@@ -42,6 +42,7 @@ import org.liberty.android.fantastischmemo.dao.SettingDao;
 
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
+import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 
@@ -268,7 +269,6 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
 
             case R.id.menu_edit_categories:
             {
-                // TODO: Need rework for category
                 showCategoriesDialog();
                 return true;
             }
@@ -306,24 +306,27 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
             case R.id.menu_context_copy:
             {
 
-                if(currentCard != null){
+                if (currentCard != null){
                     savedCardId = currentCard.getId();
                 }
                 return true;
             }
             case R.id.menu_context_paste:
             {
-                // TODO: Need paste
-                //if(savedItem != null){
-                //    itemManager.insert(savedItem, currentItem.getId());
-                //    /* Set the Id to the current one */
-                //    currentItem = new Item.Builder(savedItem)
-                //        .setId(currentItem.getId() + 1)
-                //        .build();
-                //    updateCardFrontSide();
-                //    updateTitle();
-                //}
-
+                if (savedCardId != null && currentCard != null) {
+                    try {
+                        Card savedCard = cardDao.queryForId(savedCardId);
+                        LearningData ld = new LearningData();
+                        learningDataDao.create(ld);
+                        savedCard.setLearningData(ld);
+                        savedCard.setOrdinal(currentCard.getOrdinal());
+                        cardDao.create(savedCard);
+                        restartActivity();
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                
                 return true;
             }
             case R.id.menu_context_swap_current:
