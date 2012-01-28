@@ -48,7 +48,7 @@ public class LearnQueueManager implements QueueManager {
 
     private LearningDataDao learningDataDao;
 
-    private List<Category> filterCategories;
+    private Category filterCategory;
 
     private Deque<Card> learnQueue;
     private List<Card> newCache;
@@ -87,12 +87,12 @@ public class LearnQueueManager implements QueueManager {
 		this.learningDataDao = learningDataDao;
 	}
 
-	public List<Category> getFilterCategories() {
-		return filterCategories;
+	public Category getFilterCategory() {
+		return filterCategory;
 	}
 
-	public void setFilterCategories(List<Category> filterCategories) {
-		this.filterCategories = filterCategories;
+	public void setFilterCategory(Category filterCategory) {
+		this.filterCategory = filterCategory;
 	}
 
 	@Override
@@ -179,8 +179,7 @@ public class LearnQueueManager implements QueueManager {
         }
 	}
 
-    //TODO: change to private
-    public List<Card> getCardForReview(int limit) {
+    private List<Card> getCardForReview(int limit) {
         try {
             QueryBuilder<LearningData, Integer> learnQb = learningDataDao.queryBuilder();
             learnQb.selectColumns("id");
@@ -189,6 +188,9 @@ public class LearnQueueManager implements QueueManager {
             QueryBuilder<Card, Integer> cardQb = cardDao.queryBuilder();
             Where<Card, Integer> where = cardQb.where().in("learningData_id", learnQb)
                 .and().gt("ordinal", "" + maxReviewCacheOrdinal);
+            if (filterCategory != null) {
+                where.and().eq("category_id", filterCategory.getId());
+            }
 
             cardQb.setWhere(where);
             cardQb.orderBy("ordinal", true);
@@ -204,8 +206,7 @@ public class LearnQueueManager implements QueueManager {
         }
     }
 
-    //TODO: change to private
-    public List<Card> getNewCards(int limit) {
+    private List<Card> getNewCards(int limit) {
         try {
             QueryBuilder<LearningData, Integer> learnQb = learningDataDao.queryBuilder();
             learnQb.selectColumns("id");
@@ -213,6 +214,9 @@ public class LearnQueueManager implements QueueManager {
             QueryBuilder<Card, Integer> cardQb = cardDao.queryBuilder();
             Where<Card, Integer> where = cardQb.where().in("learningData_id", learnQb)
                 .and().gt("ordinal", "" + maxNewCacheOrdinal);
+            if (filterCategory != null) {
+                where.and().eq("category_id", filterCategory.getId());
+            }
 
             cardQb.setWhere(where);
             cardQb.orderBy("ordinal", true);

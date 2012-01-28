@@ -35,6 +35,7 @@ import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.dao.SettingDao;
 
 import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.Filter;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.domain.Option;
@@ -87,7 +88,7 @@ import android.net.Uri;
 
 public class MemoScreen extends AMActivity {
     public static String EXTRA_DBPATH = "dbpath";
-    public static String EXTRA_CATEGORY = "category";
+    public static String EXTRA_CATEGORY_ID = "category_id";
     private AnyMemoTTS questionTTS = null;
     private AnyMemoTTS answerTTS = null;
     private final int DIALOG_LOADING_PROGRESS = 100;
@@ -107,7 +108,8 @@ public class MemoScreen extends AMActivity {
     Card prevCard = null;
     String dbPath = "";
     String dbName = "";
-    String activeCategory = "";
+    Integer filterCategoryId = null; 
+    Category filterCategory;
     FlashcardDisplay flashcardDisplay;
 
     SettingDao settingDao;
@@ -135,12 +137,13 @@ public class MemoScreen extends AMActivity {
         initTask.execute((Void)null);
     }
 
-    void createQueue(){
+    void createQueue() {
         queueManager = QueueManagerFactory.buildLearnQueueManager(
                 cardDao,
                 learningDataDao,
                 10,
-                50) ;
+                50,
+                filterCategory);
     }
 
     @Override
@@ -395,7 +398,7 @@ public class MemoScreen extends AMActivity {
             case ACTIVITY_FILTER:
             {
                 Bundle extras = data.getExtras();
-                activeCategory = extras.getString("filter");
+                filterCategoryId = extras.getInt(EXTRA_CATEGORY_ID);
                 restartActivity();
                 break;
             }
@@ -503,8 +506,8 @@ public class MemoScreen extends AMActivity {
         return super.onKeyUp(keyCode, event);
     }
 
-    void updateFlashcardView(boolean showAnswer){
-        if(currentCard == null){
+    void updateFlashcardView(boolean showAnswer) {
+        if(currentCard == null) {
             Log.e(TAG, "current card is null in updateFlashcardView");
             return;
         }
@@ -717,9 +720,8 @@ public class MemoScreen extends AMActivity {
     @Override
     public void restartActivity(){
         Intent myIntent = new Intent(this, MemoScreen.class);
-        myIntent.putExtra("dbname", dbName);
-        myIntent.putExtra("dbpath", dbPath);
-        myIntent.putExtra("category", activeCategory);
+        myIntent.putExtra(EXTRA_DBPATH, dbPath);
+        myIntent.putExtra(EXTRA_CATEGORY_ID, filterCategoryId);
 
         finish();
         startActivity(myIntent);
@@ -823,7 +825,7 @@ public class MemoScreen extends AMActivity {
             mHandler = new Handler();
             if (extras != null) {
                 dbPath = extras.getString(EXTRA_DBPATH);
-                activeCategory = extras.getString(EXTRA_CATEGORY);
+                filterCategoryId = extras.getInt(EXTRA_CATEGORY_ID);
             }
             option = new Option(MemoScreen.this);
 
@@ -843,6 +845,9 @@ public class MemoScreen extends AMActivity {
                 learningDataDao = helper.getLearningDataDao();
                 settingDao = helper.getSettingDao();
                 setting = settingDao.queryForId(1);
+                if (filterCategory != null) {
+                    filterCategory = categoryDao.queryForId(filterCategoryId);
+                }
                 /* Run the learnQueue init in a separate thread */
                 createQueue();
                 return queueManager.dequeue();
