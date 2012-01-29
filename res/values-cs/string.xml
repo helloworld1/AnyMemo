@@ -88,7 +88,7 @@
     <string name="settings_inverse_warning">Tato operace prohodí otázky a odpovědi VŠECH karet.</string>
     <string name="detail_update">Zapsat změny</string>
     <string name="detail_back">Zpět</string>
-    <string name="detail_delete">Smazat</string>
+    <string name="delete_text">Smazat</string>
     <string name="delete_warning">Skutečně chcete smazat tuto kartu?</string>
     <string name="skip_text">Přeskočit</string>
     <string name="skip_warning">Tato položka se již nikdy neobjeví při učení. Chcete ji přeskočit?</string>

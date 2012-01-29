@@ -89,7 +89,7 @@
     <string name="settings_inverse_warning">Cette opération inversera la question et la réponse de chaque carte de la pile.</string>
     <string name="detail_update">Enregistrer les modifications</string>
     <string name="detail_back">Retour</string>
-    <string name="detail_delete">Supprimer</string>
+    <string name="delete_text">Supprimer</string>
     <string name="delete_warning">Voulez-vous vraiment supprimer cette carte?</string>
     <string name="skip_text">Passer</string>
     <string name="skip_warning">Cette carte ne vous sera plus jamais présentée. Voulez-vous la passer?</string>

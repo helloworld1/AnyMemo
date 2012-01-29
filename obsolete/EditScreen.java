@@ -537,7 +537,7 @@ public class EditScreen extends AMActivity{
     private void deleteCurrent(){
         if(currentItem != null){
             new AlertDialog.Builder(EditScreen.this)
-                .setTitle(getString(R.string.detail_delete))
+                .setTitle(getString(R.string.delete_text))
                 .setMessage(getString(R.string.delete_warning))
                 .setPositiveButton(getString(R.string.yes_text),
                     new DialogInterface.OnClickListener() {

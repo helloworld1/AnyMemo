@@ -90,7 +90,7 @@
     <string name="settings_inverse_warning">Esta operación cambiará las preguntas por respuestas. Cambiar&amp;Dup agregarán las tarjetas duplicadas al fondo de la baraja.</string>
     <string name="detail_update">Guardar cambios</string>
     <string name="detail_back">Retrasar</string>
-    <string name="detail_delete">Borrar</string>
+    <string name="delete_text">Borrar</string>
     <string name="delete_warning">¿Seguro que quiere borrar esta tarjeta?</string>
     <string name="skip_text">Omitir</string>
     <string name="skip_warning">Esta tarjeta jamás aparecerá. ¿Seguro que quiere omitirla?</string>

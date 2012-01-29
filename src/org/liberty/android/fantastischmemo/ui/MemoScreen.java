@@ -67,6 +67,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
+
+import android.support.v4.app.DialogFragment;
 import android.text.ClipboardManager;
 
 import android.os.Environment;
@@ -86,7 +88,7 @@ import android.widget.Toast;
 import android.util.Log;
 import android.net.Uri;
 
-public class MemoScreen extends AMActivity {
+public class MemoScreen extends AMActivity implements CategoryEditorFragment.CategoryEditorResultListener {
     public static String EXTRA_DBPATH = "dbpath";
     public static String EXTRA_CATEGORY_ID = "category_id";
     private AnyMemoTTS questionTTS = null;
@@ -108,7 +110,7 @@ public class MemoScreen extends AMActivity {
     Card prevCard = null;
     String dbPath = "";
     String dbName = "";
-    Integer filterCategoryId = null; 
+    int filterCategoryId = -1; 
     Category filterCategory;
     FlashcardDisplay flashcardDisplay;
 
@@ -176,6 +178,7 @@ public class MemoScreen extends AMActivity {
         if(answerTTS != null){
             answerTTS.shutdown();
         }
+
         // TODO: Need another way to update widgets
         /* Update the widget because MemoScreen can be accessed though widget*/
         //Intent myIntent = new Intent(this, AnyMemoService.class);
@@ -243,12 +246,9 @@ public class MemoScreen extends AMActivity {
                 return true;
             }
 
-            case R.id.menu_memo_filter:
+            case R.id.menu_memo_category:
             {
-                Intent myIntent = new Intent(this, Filter.class);
-                myIntent.putExtra("dbname", dbName);
-                myIntent.putExtra("dbpath", dbPath);
-                startActivityForResult(myIntent, ACTIVITY_FILTER);
+                showCategoriesDialog();
                 return true;
             }
         }
@@ -339,7 +339,6 @@ public class MemoScreen extends AMActivity {
                 if(flashcardDisplay.getAnswerView() == activeView){
                     lookupWord = currentCard.getAnswer();
                 }
-                    
 
                 if(setting.getDictApp() == Setting.DictApp.COLORDICT){
                     System.out.println("Get COLORDICT");
@@ -813,6 +812,29 @@ public class MemoScreen extends AMActivity {
         }
     }
 
+    @Override
+    public void onReceiveCategory(Category c) {
+        assert c != null : "Receive null category";
+        filterCategoryId = c.getId();
+        restartActivity();
+    }
+
+    private void showCategoriesDialog() {
+        DialogFragment df = new CategoryEditorFragment();
+        Bundle b = new Bundle();
+        b.putString(CategoryEditorFragment.EXTRA_DBPATH, dbPath);
+        if (filterCategory == null) {
+            b.putInt(CategoryEditorFragment.EXTRA_CATEGORY_ID, currentCard.getCategory().getId());
+        } else {
+            // If we use the category filer, we can just use the currentCategory
+            // This will handle the new card situation.
+            b.putInt(CategoryEditorFragment.EXTRA_CATEGORY_ID, filterCategory.getId());
+        }
+        df.setArguments(b);
+        df.show(getSupportFragmentManager(), "CategoryEditDialog");
+        getSupportFragmentManager().findFragmentByTag("CategoryEditDialog");
+    }
+
     private class InitTask extends AsyncTask<Void, Void, Card> {
 
 		@Override
@@ -825,7 +847,7 @@ public class MemoScreen extends AMActivity {
             mHandler = new Handler();
             if (extras != null) {
                 dbPath = extras.getString(EXTRA_DBPATH);
-                filterCategoryId = extras.getInt(EXTRA_CATEGORY_ID);
+                filterCategoryId = extras.getInt(EXTRA_CATEGORY_ID, -1);
             }
             option = new Option(MemoScreen.this);
 
@@ -844,14 +866,17 @@ public class MemoScreen extends AMActivity {
                 cardDao = helper.getCardDao();
                 learningDataDao = helper.getLearningDataDao();
                 settingDao = helper.getSettingDao();
+                categoryDao = helper.getCategoryDao();
                 setting = settingDao.queryForId(1);
-                if (filterCategory != null) {
+                if (filterCategoryId != -1) {
                     filterCategory = categoryDao.queryForId(filterCategoryId);
+                    assert filterCategory != null : "Query filter id: " + filterCategoryId +". Get null";
                 }
                 /* Run the learnQueue init in a separate thread */
                 createQueue();
                 return queueManager.dequeue();
             } catch (Exception e) {
+                Log.e(TAG, "Excepting doing in bacground", e);
                 return null;
             }
         }
@@ -863,6 +888,7 @@ public class MemoScreen extends AMActivity {
 
         @Override
         public void onPostExecute(Card result){
+            assert result != null : "Init get null card";
             flashcardDisplay = new SingleSidedCardDisplay(MemoScreen.this, dbName, setting, option);
             if (option.getButtonStyle() == Option.ButtonStyle.ANKI) {
                 controlButtons = new AnkiGradeButtons(MemoScreen.this);

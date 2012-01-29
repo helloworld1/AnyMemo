@@ -86,7 +86,6 @@
     <string name="settings_inverse_warning">Эта операция поменяет местами вопросы и ответы. Обм&amp;Коп добавит все инвертированные карточки в конец текущей базы вместо замены.</string>
     <string name="detail_update">Внести измения</string>
     <string name="detail_back">Назад</string>
-    <string name="detail_delete">Удал.</string>
     <string name="delete_warning">Вы действительно хотите удалить эту карточку?</string>
     <string name="skip_text">Пропустить</string>
     <string name="skip_warning">Этот объект больше не появится для изучения. Вы хотите пропустить его навсегда?</string>
@@ -369,4 +368,6 @@
     <string name="uncategorized_text">Нет категории</string>
     <string name="edit_text">Правка</string>
     <string name="category_dialog_title">Выберите категорию или введите новую</string>
+    <string name="delete_text">Удалить</string> 
+    <string name="delete_text_short">Удал.</string> 
 </resources>

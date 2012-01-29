@@ -212,10 +212,13 @@ public class LearnQueueManager implements QueueManager {
             learnQb.selectColumns("id");
             learnQb.where().eq("acqReps", "0");
             QueryBuilder<Card, Integer> cardQb = cardDao.queryBuilder();
-            Where<Card, Integer> where = cardQb.where().in("learningData_id", learnQb)
-                .and().gt("ordinal", "" + maxNewCacheOrdinal);
+            Where<Card, Integer> where;
             if (filterCategory != null) {
-                where.and().eq("category_id", filterCategory.getId());
+                where = cardQb.where().in("learningData_id", learnQb)
+                    .and().gt("ordinal", "" + maxNewCacheOrdinal).and().eq("category_id", filterCategory.getId());
+            } else {
+                where = cardQb.where().in("learningData_id", learnQb)
+                    .and().gt("ordinal", "" + maxNewCacheOrdinal);
             }
 
             cardQb.setWhere(where);

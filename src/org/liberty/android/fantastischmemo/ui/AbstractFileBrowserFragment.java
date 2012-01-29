@@ -280,9 +280,9 @@ public abstract class AbstractFileBrowserFragment extends Fragment implements On
                                     if(which == 0){
                                         /* Delete */
                                         new AlertDialog.Builder(mActivity)
-                                            .setTitle(getString(R.string.detail_delete))
+                                            .setTitle(getString(R.string.delete_text))
                                             .setMessage(getString(R.string.fb_delete_message))
-                                            .setPositiveButton(getString(R.string.detail_delete), new DialogInterface.OnClickListener(){
+                                            .setPositiveButton(getString(R.string.delete_text), new DialogInterface.OnClickListener(){
                                                 @Override
                                                 public void onClick(DialogInterface dialog, int which ){
                                                     clickedFile.delete();

@@ -15,8 +15,8 @@
     <item android:id="@+id/menuspeakanswer"
   		  android:icon="@drawable/speak_a_48"
           android:title="@string/speak_answer_menu_text" />
-    <item android:id="@+id/menu_memo_filter"
-          android:title="@string/filter_text"
+    <item android:id="@+id/menu_memo_category"
+          android:title="@string/filter_category_text"
   		  android:icon="@android:drawable/ic_menu_search" />
     <item android:id="@+id/menu_memo_help"
   		  android:icon="@android:drawable/ic_menu_help"  

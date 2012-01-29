@@ -12,6 +12,8 @@ import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 
 import org.liberty.android.fantastischmemo.queue.LearnQueueManager;
+import org.liberty.android.fantastischmemo.queue.QueueManager;
+import org.liberty.android.fantastischmemo.queue.QueueManagerFactory;
 
 import org.liberty.android.fantastischmemo.scheduler.DefaultScheduler;
 
@@ -25,28 +27,24 @@ public class QueuingTest extends AbstractExistingDBTest {
         super.setUp();
     }
 
-    public void testQueuing() throws Exception {
+    public void testGetNewCardQueuingWithCategory() throws Exception {
         CardDao cardDao = helper.getCardDao();
         LearningDataDao learningDataDao = helper.getLearningDataDao();
+        Card c10 = cardDao.queryForId(10);
+        Category cat = new Category();
+        cat.setName("tt");
+        c10.setCategory(cat);
+        cardDao.update(c10);
+        QueueManager queueManager = QueueManagerFactory.buildLearnQueueManager(cardDao, learningDataDao, 10, 50, cat);
+        Card cqueue = queueManager.dequeue();
+        assertEquals(10, (int)cqueue.getId());
+    }
 
-        // Test learning queue
-        LearnQueueManager manager = new LearnQueueManager(10, 50);
-        manager.setLearningDataDao(learningDataDao);
-        manager.setCardDao(cardDao);
-        List<Card> lc = manager.getCardForReview(10);
-        assertEquals(learningDataDao.getScheduledCardCount(), lc.size());
-        assertEquals(28, learningDataDao.getTotalCount());
-        assertEquals(28, learningDataDao.getNewCardCount());
-
-        DefaultScheduler scheduler = new DefaultScheduler();
-        int[] s = {0,1,2,3,4,5};
-        System.out.println("This is the first");
-        while (true) {
-            Card c = manager.dequeue();
-            if (c == null) {
-                System.out.println("This is the end");
-                break;
-            }
-        }
+    public void testGetNewCardQueuingWithoutCategory() throws Exception {
+        CardDao cardDao = helper.getCardDao();
+        LearningDataDao learningDataDao = helper.getLearningDataDao();
+        QueueManager queueManager = QueueManagerFactory.buildLearnQueueManager(cardDao, learningDataDao, 10, 50, null);
+        Card cqueue = queueManager.dequeue();
+        assertEquals(1, (int)cqueue.getId());
     }
 }

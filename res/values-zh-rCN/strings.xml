@@ -86,7 +86,7 @@
     <string name="settings_inverse_warning">此操作将交换问题答案顺序。</string>
     <string name="detail_update">写入修改</string>
     <string name="detail_back">后退</string>
-    <string name="detail_delete">删除</string>
+    <string name="delete_text">删除</string>
     <string name="delete_warning">确定删除此卡片?</string>
     <string name="skip_text">跳过</string>
     <string name="skip_warning">此项目将不会出现在学习进度中，确定？</string>

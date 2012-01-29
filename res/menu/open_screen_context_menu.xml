@@ -15,5 +15,5 @@
         android:title="@string/settings_menu_text"/>
     <item 
         android:id="@+id/context_delete"
-        android:title="@string/detail_delete"/>
+        android:title="@string/delete_text"/>
 </menu>
