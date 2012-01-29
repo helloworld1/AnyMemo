@@ -20,9 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo.queue;
 
-import java.sql.SQLException;
-
-import java.util.Calendar;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -36,10 +33,6 @@ import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
-import org.liberty.android.fantastischmemo.domain.LearningData;
-
-import com.j256.ormlite.stmt.QueryBuilder;
-import com.j256.ormlite.stmt.Where;
 
 import android.util.Log;
 
@@ -141,7 +134,7 @@ public class LearnQueueManager implements QueueManager {
 
     private synchronized void refill() {
         if (newCache.size() == 0) {
-            List<Card> cs = getNewCards(cacheSize - newCache.size());
+            List<Card> cs = cardDao.getNewCards(filterCategory, maxNewCacheOrdinal, cacheSize - newCache.size());
             if (cs.size() > 0) {
                 maxNewCacheOrdinal = cs.get(cs.size() - 1).getOrdinal();
                 newCache.addAll(cs);
@@ -149,7 +142,7 @@ public class LearnQueueManager implements QueueManager {
         }
 
         if (reviewCache.size() == 0) {
-            List<Card> cs = getCardForReview(cacheSize - reviewCache.size());
+            List<Card> cs = cardDao.getCardForReview(filterCategory, maxReviewCacheOrdinal, cacheSize - reviewCache.size());
             if (cs.size() > 0) {
                 maxReviewCacheOrdinal = cs.get(cs.size() - 1).getOrdinal();
                 reviewCache.addAll(cs);
@@ -178,62 +171,5 @@ public class LearnQueueManager implements QueueManager {
             learnQueue.add(card);
         }
 	}
-
-    private List<Card> getCardForReview(int limit) {
-        try {
-            QueryBuilder<LearningData, Integer> learnQb = learningDataDao.queryBuilder();
-            learnQb.selectColumns("id");
-            learnQb.where().le("nextLearnDate", Calendar.getInstance().getTime())
-                .and().gt("acqReps", "0");
-            QueryBuilder<Card, Integer> cardQb = cardDao.queryBuilder();
-            Where<Card, Integer> where = cardQb.where().in("learningData_id", learnQb)
-                .and().gt("ordinal", "" + maxReviewCacheOrdinal);
-            if (filterCategory != null) {
-                where.and().eq("category_id", filterCategory.getId());
-            }
-
-            cardQb.setWhere(where);
-            cardQb.orderBy("ordinal", true);
-            cardQb.limit((long)limit);
-            List<Card> cs = cardQb.query();
-            for (Card c : cs) {
-                learningDataDao.refresh(c.getLearningData());
-            }
-            return cs;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-    }
-
-    private List<Card> getNewCards(int limit) {
-        try {
-            QueryBuilder<LearningData, Integer> learnQb = learningDataDao.queryBuilder();
-            learnQb.selectColumns("id");
-            learnQb.where().eq("acqReps", "0");
-            QueryBuilder<Card, Integer> cardQb = cardDao.queryBuilder();
-            Where<Card, Integer> where;
-            if (filterCategory != null) {
-                where = cardQb.where().in("learningData_id", learnQb)
-                    .and().gt("ordinal", "" + maxNewCacheOrdinal).and().eq("category_id", filterCategory.getId());
-            } else {
-                where = cardQb.where().in("learningData_id", learnQb)
-                    .and().gt("ordinal", "" + maxNewCacheOrdinal);
-            }
-
-            cardQb.setWhere(where);
-            cardQb.orderBy("ordinal", true);
-            cardQb.limit((long)limit);
-            List<Card> cs = cardQb.query();
-            for (Card c : cs) {
-                learningDataDao.refresh(c.getLearningData());
-            }
-            return cs;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-    }
-
 }
 

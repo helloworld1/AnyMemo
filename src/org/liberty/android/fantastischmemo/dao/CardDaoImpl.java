@@ -2,20 +2,25 @@ package org.liberty.android.fantastischmemo.dao;
 
 import java.sql.SQLException;
 
+import java.util.Calendar;
+import java.util.List;
+
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
+import org.liberty.android.fantastischmemo.domain.LearningData;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
 
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.UpdateBuilder;
+import com.j256.ormlite.stmt.Where;
 
 import com.j256.ormlite.support.ConnectionSource;
 
 import com.j256.ormlite.table.DatabaseTableConfig;
 
-public class CardDaoImpl extends BaseDaoImpl<Card, Integer> implements CardDao {
+public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements CardDao {
     public CardDaoImpl(ConnectionSource connectionSource, DatabaseTableConfig<Card> config)
         throws SQLException {
         super(connectionSource, config);
@@ -230,6 +235,64 @@ public class CardDaoImpl extends BaseDaoImpl<Card, Integer> implements CardDao {
         try {
             update(c);
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<Card> getCardForReview(Category filterCategory, int maxReviewCacheOrdinal, int limit) {
+        try {
+            LearningDataDao learningDataDao = getHelper().getLearningDataDao();
+            QueryBuilder<LearningData, Integer> learnQb = learningDataDao.queryBuilder();
+            learnQb.selectColumns("id");
+            learnQb.where().le("nextLearnDate", Calendar.getInstance().getTime())
+                .and().gt("acqReps", "0");
+            QueryBuilder<Card, Integer> cardQb = this.queryBuilder();
+            Where<Card, Integer> where = cardQb.where().in("learningData_id", learnQb)
+                .and().gt("ordinal", "" + maxReviewCacheOrdinal);
+            if (filterCategory != null) {
+                where.and().eq("category_id", filterCategory.getId());
+            }
+
+            cardQb.setWhere(where);
+            cardQb.orderBy("ordinal", true);
+            cardQb.limit((long)limit);
+            List<Card> cs = cardQb.query();
+            for (Card c : cs) {
+                learningDataDao.refresh(c.getLearningData());
+            }
+            return cs;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<Card> getNewCards(Category filterCategory, int maxNewCacheOrdinal, int limit) {
+        try {
+            LearningDataDao learningDataDao = getHelper().getLearningDataDao();
+            QueryBuilder<LearningData, Integer> learnQb = learningDataDao.queryBuilder();
+            learnQb.selectColumns("id");
+            learnQb.where().eq("acqReps", "0");
+            QueryBuilder<Card, Integer> cardQb = this.queryBuilder();
+            Where<Card, Integer> where;
+            if (filterCategory != null) {
+                where = cardQb.where().in("learningData_id", learnQb)
+                    .and().gt("ordinal", "" + maxNewCacheOrdinal).and().eq("category_id", filterCategory.getId());
+            } else {
+                where = cardQb.where().in("learningData_id", learnQb)
+                    .and().gt("ordinal", "" + maxNewCacheOrdinal);
+            }
+
+            cardQb.setWhere(where);
+            cardQb.orderBy("ordinal", true);
+            cardQb.limit((long)limit);
+            List<Card> cs = cardQb.query();
+            for (Card c : cs) {
+                learningDataDao.refresh(c.getLearningData());
+            }
+            return cs;
+        } catch (SQLException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }

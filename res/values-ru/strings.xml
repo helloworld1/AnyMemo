@@ -368,6 +368,12 @@
     <string name="uncategorized_text">Нет категории</string>
     <string name="edit_text">Правка</string>
     <string name="category_dialog_title">Выберите категорию или введите новую</string>
+    <string name="ordinal_text_short">Пор</string>
+    <string name="total_text">Всего</string>
+    <string name="review_short_text">Повт</string>
+    <string name="new_text">Нов</string>
+    <string name="id_text">ID</string>
+    <string name="filter_category_text">Фильтр категорий</string>
     <string name="delete_text">Удалить</string> 
     <string name="delete_text_short">Удал.</string> 
 </resources>
