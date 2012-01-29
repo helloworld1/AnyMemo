@@ -151,8 +151,8 @@ public class RecentListFragment extends Fragment implements OnItemClickListener{
                             ri.dbInfo = getString(R.string.stat_total) + dao.getTotalCount() + " " + getString(R.string.stat_new) + dao.getNewCardCount() + " " + getString(R.string.stat_scheduled)+ dao.getScheduledCardCount();
                             ril.set(ri.index, ri);
                             AnyMemoDBOpenHelperManager.releaseHelper(ri.dbPath);
-                        } catch (SQLException e) {
-                            Log.e(TAG, "Database error in recent list", e);
+                        } catch (Exception e) {
+                            Log.e(TAG, "Recent list throws exception (Usually can be safely ignored)", e);
                         }
                         Thread.sleep(5);
                     }

@@ -387,5 +387,5 @@
     <string name="id_text">ID</string>
     <string name="filter_category_text">Filter category</string>
     <string name="delete_text">Delete</string>
-    <string name="delete_text_short">Del</string>
+    <string name="delete_text_short">Del.</string>
 </resources>
