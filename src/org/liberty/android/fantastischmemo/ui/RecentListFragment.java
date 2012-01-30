@@ -32,6 +32,7 @@ import org.liberty.android.fantastischmemo.DatabaseUtils;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.RecentListUtil;
 
+import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 
 import android.app.Activity;
@@ -147,8 +148,8 @@ public class RecentListFragment extends Fragment implements OnItemClickListener{
                     for(final RecentItem ri : ril){
                         try {
                             AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, ri.dbPath);
-                            LearningDataDao dao = helper.getLearningDataDao();
-                            ri.dbInfo = getString(R.string.stat_total) + dao.getTotalCount() + " " + getString(R.string.stat_new) + dao.getNewCardCount() + " " + getString(R.string.stat_scheduled)+ dao.getScheduledCardCount();
+                            CardDao dao = helper.getCardDao();
+                            ri.dbInfo = getString(R.string.stat_total) + dao.getTotalCount(null) + " " + getString(R.string.stat_new) + dao.getNewCardCount(null) + " " + getString(R.string.stat_scheduled)+ dao.getScheduledCardCount(null);
                             ril.set(ri.index, ri);
                             AnyMemoDBOpenHelperManager.releaseHelper(ri.dbPath);
                         } catch (Exception e) {

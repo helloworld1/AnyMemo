@@ -777,8 +777,8 @@ public class MemoScreen extends AMActivity implements CategoryEditorFragment.Cat
     }
 
     void refreshStatInfo() {
-       newCardCount = learningDataDao.getNewCardCount();
-       schedluledCardCount = learningDataDao.getScheduledCardCount();
+       newCardCount = cardDao.getNewCardCount(filterCategory);
+       schedluledCardCount = cardDao.getScheduledCardCount(filterCategory);
     }
 
     private void initTTS(){
@@ -888,6 +888,10 @@ public class MemoScreen extends AMActivity implements CategoryEditorFragment.Cat
 
         @Override
         public void onPostExecute(Card result){
+            if (result == null) {
+                showNoItemDialog();
+                return;
+            }
             assert result != null : "Init get null card";
             flashcardDisplay = new SingleSidedCardDisplay(MemoScreen.this, dbName, setting, option);
             if (option.getButtonStyle() == Option.ButtonStyle.ANKI) {

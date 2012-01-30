@@ -5,8 +5,6 @@ import java.util.List;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 
-import com.j256.ormlite.dao.Dao;
-
 public interface CardDao extends HelperDao<Card, Integer> {
     Card queryFirstOrdinal();
     Card queryFirstOrdinal(Category c);
@@ -20,4 +18,8 @@ public interface CardDao extends HelperDao<Card, Integer> {
     void removeDuplicates();
     List<Card> getCardForReview(Category filterCategory, int maxReviewCacheOrdinal, int limit);
     List<Card> getNewCards(Category filterCategory, int maxNewCacheOrdinal, int limit);
+
+    long getTotalCount(Category filterCategory);
+    long getNewCardCount(Category filterCategory);
+    long getScheduledCardCount(Category filterCategory);
 }

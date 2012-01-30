@@ -310,6 +310,73 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
         }
     }
 
+    public long getTotalCount(Category filterCategory) {
+        QueryBuilder<Card, Integer> qb = queryBuilder();
+        qb.setCountOf(true);
+        qb.selectColumns("id");
+        try {
+            PreparedQuery<Card> pq = qb.prepare();
+            Where<Card, Integer> where = qb.where();
+            if (filterCategory != null) {
+                where.eq("category_id", filterCategory.getId());
+                qb.setWhere(where);
+            }
+            return countOf(pq);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    public long getNewCardCount(Category filterCategory) {
+        try {
+            LearningDataDao learningDataDao = getHelper().getLearningDataDao();
+            QueryBuilder<Card, Integer> cardQb = queryBuilder();
+            QueryBuilder<LearningData, Integer> learnQb = learningDataDao.queryBuilder();
+            cardQb.setCountOf(true);
+            cardQb.selectColumns("id");
+            learnQb.selectColumns("id");
+
+            learnQb.where().eq("acqReps", "0");
+
+            Where<Card, Integer> where = cardQb.where().in("learningData_id", learnQb);
+            if (filterCategory != null) {
+                where.and().eq("category_id", filterCategory.getId());
+            }
+            cardQb.setWhere(where);
+
+            return countOf(cardQb.prepare());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    public long getScheduledCardCount(Category filterCategory) {
+        try {
+            LearningDataDao learningDataDao = getHelper().getLearningDataDao();
+            QueryBuilder<Card, Integer> cardQb = queryBuilder();
+            QueryBuilder<LearningData, Integer> learnQb = learningDataDao.queryBuilder();
+            cardQb.setCountOf(true);
+            cardQb.selectColumns("id");
+            learnQb.selectColumns("id");
+
+            learnQb.where().le("nextLearnDate", Calendar.getInstance().getTime())
+                .and().gt("acqReps", "0").prepare();
+
+            Where<Card, Integer> where = cardQb.where().in("learningData_id", learnQb);
+            if (filterCategory != null) {
+                where.and().eq("category_id", filterCategory.getId());
+            }
+            cardQb.setWhere(where);
+
+            return countOf(cardQb.prepare());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
     private void maintainOrdinal() throws SQLException {
         executeRaw("CREATE TABLE IF NOT EXISTS tmp_count (id INTEGER PRIMARY KEY AUTOINCREMENT, ordinal INTEGER)");
         executeRaw("INSERT INTO tmp_count(ordinal) SELECT ordinal FROM cards;");
