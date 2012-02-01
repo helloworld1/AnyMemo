@@ -375,5 +375,5 @@
     <string name="id_text">ID</string>
     <string name="filter_category_text">Фильтр категорий</string>
     <string name="delete_text">Удалить</string> 
-    <string name="delete_text_short">Удал.</string> 
+    <string name="delete_text_short">Удал</string> 
 </resources>
