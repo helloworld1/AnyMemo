@@ -22,13 +22,9 @@ package org.liberty.android.fantastischmemo.ui;
 import java.util.HashMap;
 
 import org.liberty.android.fantastischmemo.AMActivity;
-import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.R;
 
-import org.liberty.android.fantastischmemo.ui.CardEditor;
-
 import android.content.Context;
-import android.content.Intent;
 
 import android.content.res.Resources;
 import android.os.Bundle;

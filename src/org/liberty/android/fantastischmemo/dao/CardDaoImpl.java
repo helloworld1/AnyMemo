@@ -228,6 +228,20 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
         }
     }
 
+    /*
+     * Override the queryForAll so the return list is ordered by ordinal
+     * instead of ID.
+     */
+    @Override
+    public List<Card> queryForAll() {
+        try {
+            QueryBuilder<Card, Integer> cardQb = this.queryBuilder();
+            return cardQb.orderBy("ordinal", true).query();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void swapQA(Card c) {
         String answer = c.getAnswer();
         c.setAnswer(c.getQuestion());

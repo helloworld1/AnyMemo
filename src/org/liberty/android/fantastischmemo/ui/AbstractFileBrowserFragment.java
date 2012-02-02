@@ -36,7 +36,7 @@ import android.os.Environment;
 import android.app.Activity;
 import android.app.AlertDialog;
 
-import android.support.v4.app.Fragment;
+import android.support.v4.app.DialogFragment;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -59,7 +59,7 @@ import android.util.Log;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-public abstract class AbstractFileBrowserFragment extends Fragment implements OnItemClickListener, OnItemLongClickListener{
+public abstract class AbstractFileBrowserFragment extends DialogFragment implements OnItemClickListener, OnItemLongClickListener{
 	private enum DISPLAYMODE{ABSOLUTE, RELATIVE;}
 	private final DISPLAYMODE displayMode = DISPLAYMODE.RELATIVE;
 	private ArrayList<String> directoryEntries = new ArrayList<String>();

@@ -74,6 +74,10 @@ public class AMUtil {
         return splitted[splitted.length - 1];
     }
 
+    public static String getDirectoryFromPath(String path) {
+        return new File(path).getParent();
+    }
+
     /* Get the EnumSet from a string in format "A,B,C" */
     public static <E extends Enum<E>> EnumSet<E> getEnumSetFromString(Class<E> enumType, String enumString) {
         EnumSet<E> es = EnumSet.noneOf(enumType);

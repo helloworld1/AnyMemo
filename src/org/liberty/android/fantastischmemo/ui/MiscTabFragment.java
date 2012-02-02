@@ -46,7 +46,9 @@ import android.os.Bundle;
 
 import android.preference.PreferenceManager;
 
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 
 import android.text.Html;
 
@@ -202,10 +204,11 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
             startActivity(myIntent);
         }
         if(v == exportCSVButton){
-            Intent myIntent = new Intent(mActivity, ConvertScreen.class);
-            myIntent.putExtra("file_extension", ".db");
-            myIntent.putExtra("converter", CSVExporter.class);
-            startActivity(myIntent);
+            DialogFragment df = new ConverterFragment(new CSVExporter(mActivity), ".csv");
+            Bundle b = new Bundle();
+            b.putString("file_extension", ".db");
+            df.setArguments(b);
+            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "CategoryEditDialog");
         }
         if(v == exportTabButton){
             Intent myIntent = new Intent(mActivity, ConvertScreen.class);
