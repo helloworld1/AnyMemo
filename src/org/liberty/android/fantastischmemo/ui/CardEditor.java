@@ -154,7 +154,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
         }
     }
 
-        
+    @Override    
 	public boolean onCreateOptionsMenu(Menu menu){
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.card_editor_menu, menu);

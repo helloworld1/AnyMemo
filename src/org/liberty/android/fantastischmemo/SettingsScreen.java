@@ -108,27 +108,33 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         
         /* Properly set up all the Views */
-        questionFontSizeSpinner = (Spinner)findViewById(R.id.question_font_size_spinner);
         ArrayAdapter<CharSequence> fontSizeAdapter = ArrayAdapter.createFromResource(this, R.array.font_size_list, android.R.layout.simple_spinner_item);
         fontSizeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        
+
+    	questionFontSizeSpinner = (Spinner)findViewById(R.id.question_font_size_spinner);        
         questionFontSizeSpinner.setAdapter(fontSizeAdapter);
+        
         answerFontSizeSpinner = (Spinner)findViewById(R.id.answer_font_size_spinner);
         answerFontSizeSpinner.setAdapter(fontSizeAdapter);
         
-        questionAlignSpinner = (Spinner)findViewById(R.id.question_align_spinner);
         ArrayAdapter<CharSequence> alignAdapter = ArrayAdapter.createFromResource(this, R.array.align_list, android.R.layout.simple_spinner_item);
-        alignAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        alignAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);    
+
+        questionAlignSpinner = (Spinner)findViewById(R.id.question_align_spinner);
         questionAlignSpinner.setAdapter(alignAdapter);
+        
         answerAlignSpinner = (Spinner)findViewById(R.id.answer_align_spinner);
         answerAlignSpinner.setAdapter(alignAdapter);
         
-        questionLocaleSpinner = (Spinner)findViewById(R.id.question_locale_spinner);
         ArrayAdapter<CharSequence> localeAdapter = ArrayAdapter.createFromResource(this, R.array.locale_list, android.R.layout.simple_spinner_item);
         localeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        questionLocaleSpinner = (Spinner)findViewById(R.id.question_locale_spinner);
         questionLocaleSpinner.setAdapter(localeAdapter);
+        
         answerLocaleSpinner = (Spinner)findViewById(R.id.answer_locale_spinner);
         answerLocaleSpinner.setAdapter(localeAdapter);
+        
         AdapterView.OnItemSelectedListener localeListener = new AdapterView.OnItemSelectedListener(){
             public void onItemSelected(AdapterView adapterView, View view, int position, long id){
                 /* This is the position os "User Audio" */
