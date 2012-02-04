@@ -152,11 +152,10 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
             }
         }
 
-        if(v == exportButton){
-            if(exportItems.getVisibility() == View.GONE){
+        if(v == exportButton) {
+            if (exportItems.getVisibility() == View.GONE) {
                 exportItems.setVisibility(View.VISIBLE);
-            }
-            else{
+            } else {
                 exportItems.setVisibility(View.GONE);
             }
         }
@@ -173,7 +172,7 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
             myIntent.putExtra("converter", SupermemoXMLImporter.class);
             startActivity(myIntent);
         }
-        if(v == importCSVButton){
+        if(v == importCSVButton) {
             DialogFragment df = new ConverterFragment(new CSVImporter(mActivity), ".db");
             Bundle b = new Bundle();
             b.putString("file_extension", ".csv");
@@ -199,17 +198,18 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
             startActivity(myIntent);
         }
         if(v == exportMnemosyneButton){
-            Intent myIntent = new Intent(mActivity, ConvertScreen.class);
-            myIntent.putExtra("file_extension", ".db");
-            myIntent.putExtra("converter", MnemosyneXMLExporter.class);
-            startActivity(myIntent);
+            DialogFragment df = new ConverterFragment(new MnemosyneXMLExporter(mActivity), ".xml");
+            Bundle b = new Bundle();
+            b.putString("file_extension", ".db");
+            df.setArguments(b);
+            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ExportMnemosyne");
         }
         if(v == exportCSVButton){
             DialogFragment df = new ConverterFragment(new CSVExporter(mActivity), ".csv");
             Bundle b = new Bundle();
             b.putString("file_extension", ".db");
             df.setArguments(b);
-            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "CategoryEditDialog");
+            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ExportCSV");
         }
         if(v == exportTabButton){
             Intent myIntent = new Intent(mActivity, ConvertScreen.class);
