@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.converter;
 
+import java.io.File;
+
 import java.util.concurrent.Callable;
 
 import org.liberty.android.fantastischmemo.*;
@@ -42,6 +44,7 @@ public class CSVExporter implements AbstractConverter {
     }
 
     public void convert(String src, String dest) throws Exception{
+        new File(dest).delete();
 
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, src);
         final CardDao cardDao = helper.getCardDao();
@@ -59,6 +62,7 @@ public class CSVExporter implements AbstractConverter {
                 return null;
             }
         });
+        AnyMemoDBOpenHelperManager.releaseHelper(src);
         if(cardList.size() == 0){
             throw new IOException("Can't retrieve cards for database: " + src);
         }

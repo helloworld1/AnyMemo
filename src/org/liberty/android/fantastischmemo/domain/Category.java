@@ -45,4 +45,13 @@ public class Category {
         this.updateDate = updateDate;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        Category cc = (Category)o;
+        if (cc == null) {
+            return false;
+        }
+        return this.getName().equals(cc.getName());
+    }
+
 }

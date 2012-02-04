@@ -40,11 +40,11 @@ public class AnyMemoDBOpenHelperManager {
 
     public static synchronized void releaseHelper(String dbpath) {
         Log.i(TAG, "Release AnyMemoDBOpenHelper: " + dbpath); 
-        refCounts.put(dbpath, refCounts.get(dbpath) - 1);
 
         if (!helpers.containsKey(dbpath)) {
-            throw new RuntimeException("Release an already been released helper!");
+            throw new RuntimeException("Release a wrong db path or release an already been released helper!");
         }
+        refCounts.put(dbpath, refCounts.get(dbpath) - 1);
 
         if (refCounts.get(dbpath) == 0) {
             AnyMemoDBOpenHelper helper = helpers.get(dbpath); 

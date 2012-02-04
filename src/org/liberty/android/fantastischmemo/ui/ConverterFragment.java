@@ -19,26 +19,24 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import org.liberty.android.fantastischmemo.AnyMemoExecutor;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.RecentListUtil;
 
 import org.liberty.android.fantastischmemo.converter.AbstractConverter;
-
-import org.liberty.android.fantastischmemo.ui.MemoScreen;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 
-import android.content.Intent;
-
 import android.os.AsyncTask;
+
+import android.util.Log;
 
 public class ConverterFragment extends AbstractFileBrowserFragment {
     private Activity mActivity;
     private AbstractConverter mConverter;
     private String destExtension;
+
+    private final static String TAG = "ConverterFragment";
 
     public ConverterFragment(AbstractConverter converter, String destExtension) {
         mConverter = converter;
@@ -90,6 +88,7 @@ public class ConverterFragment extends AbstractFileBrowserFragment {
                 dest = paths[1];
                 mConverter.convert(src, dest);
             } catch (Exception e) {
+                Log.e(TAG, "Error converting", e);
                 return e.toString();
             }
             return null;

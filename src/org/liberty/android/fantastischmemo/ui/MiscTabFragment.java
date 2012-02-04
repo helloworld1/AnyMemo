@@ -174,10 +174,11 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
             startActivity(myIntent);
         }
         if(v == importCSVButton){
-            Intent myIntent = new Intent(mActivity, ConvertScreen.class);
-            myIntent.putExtra("file_extension", ".csv");
-            myIntent.putExtra("converter", CSVImporter.class);
-            startActivity(myIntent);
+            DialogFragment df = new ConverterFragment(new CSVImporter(mActivity), ".db");
+            Bundle b = new Bundle();
+            b.putString("file_extension", ".csv");
+            df.setArguments(b);
+            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportCSV");
         }
         if(v == importTabButton){
             Intent myIntent = new Intent(mActivity, ConvertScreen.class);
