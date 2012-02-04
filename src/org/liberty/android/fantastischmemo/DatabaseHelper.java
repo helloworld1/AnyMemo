@@ -261,6 +261,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	}
 
 	public List<Item> getListItems(int id, int windowSize, int flag, String filter){
+        return getListItems(id, windowSize, flag, filter, null);
+	}
+
+	public List<Item> getListItems(int id, int windowSize, int flag, String filter, String orderBy){
         /* id: from which ID
          * list: the return list
          * ret: only ret items
@@ -286,6 +290,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         else if (flag == 3){
 		    query = "SELECT learn_tbl._id, date_learn, interval, grade, easiness, acq_reps, ret_reps, lapses, acq_reps_since_lapse, ret_reps_since_lapse, question, answer, note, category FROM dict_tbl INNER JOIN learn_tbl ON dict_tbl._id=learn_tbl._id WHERE round((julianday(date('now', 'localtime')) - julianday(date_learn))) - interval < 0 AND acq_reps > 0 ";
         }
+		
         if(filter != null){
             if(Pattern.matches("#\\d+-\\d+", filter)){
                 Pattern p = Pattern.compile("\\d+");
@@ -338,7 +343,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         if(flag == 3 || flag == 5){
-            query += "ORDER BY RANDOM() ";
+        	if(null == orderBy){
+                query += "ORDER BY RANDOM() ";
+        	} else {
+        		query += "ORDER BY " + orderBy;
+        	}
         }
         if(windowSize >= 0){
             query += "LIMIT " + windowSize;
@@ -383,6 +392,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return list;
 	}
+
+	
 	
 	public Item getItemById(int id, int flag, boolean forward, String filter){
 		// These function are related to read db operation

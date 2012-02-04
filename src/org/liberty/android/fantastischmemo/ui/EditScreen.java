@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
+
 import java.sql.SQLException;
 
 import java.util.Locale;
@@ -33,7 +34,7 @@ import org.liberty.android.fantastischmemo.Item;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.SettingsScreen;
 
-import org.liberty.android.fantastischmemo.cardscreen.ListEditScreen;
+import org.liberty.android.fantastischmemo.ui.ListEditScreen;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
@@ -185,7 +186,6 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
             {
                 // TODO should use card id
                 Bundle extras = data.getExtras();
-                currentCard = extras.getParcelable("item");
                 restartActivity();
                 break;
             }
@@ -259,7 +259,7 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
                 // List edit mode
                 Intent myIntent = new Intent(this, SettingsScreen.class);
                 myIntent.setClass(this, ListEditScreen.class);
-                myIntent.putExtra("dbpath", dbPath);
+                myIntent.putExtra(EditScreen.EXTRA_DBPATH, dbPath);
                 if(currentCard != null){
                     myIntent.putExtra("openid", currentCard.getId());
                 }

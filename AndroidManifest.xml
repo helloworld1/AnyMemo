@@ -101,6 +101,9 @@
         <activity 
             android:name=".ui.EditScreen"
             android:configChanges="orientation|keyboardHidden" />
+        <activity 
+            android:name=".ui.ListEditScreen"
+            android:configChanges="orientation|keyboardHidden" />
         <receiver
             android:name=".AlarmReceiver"
             android:process=":remote" />

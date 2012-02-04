@@ -26,9 +26,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.content.Intent;
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -38,12 +40,16 @@ import android.widget.AdapterView;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
 public class ListEditScreen extends AMActivity implements OnItemClickListener{
-    private String dbPath = null;
-    private String dbName = null;
+    private String dbPath = "/mnt/sdcard/anymemo"; //testing db
+    private String dbName = "5000_Collegiate_Words_SAT_Volcabulary.db"; //testing db 
     private static String TAG = "org.liberty.android.fantastischmemo.ListEditScreen";
     private ItemListAdapter mAdapter;
     private Handler mHandler;
@@ -53,22 +59,28 @@ public class ListEditScreen extends AMActivity implements OnItemClickListener{
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.list_edit_screen);
+		Log.v(TAG,"xinxin_test\n");
 		Bundle extras = getIntent().getExtras();
-        mHandler = new Handler();
+//		Log.i(TAG, "xinxin: "+ Arrays.toString(extras.keySet().toArray())+ "\n\n");
+		mHandler = new Handler();
 		if (extras != null) {
-            dbPath = extras.getString("dbpath");
-            dbName = extras.getString("dbname");
+//            dbPath = extras.getString("dbpath");
+//            dbName = extras.getString("dbname");
             initPosition = extras.getInt("openid", 1) - 1;
 
 		}
-    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+		
+//    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         final ProgressDialog progressDialog = ProgressDialog.show(this, getString(R.string.loading_please_wait), getString(R.string.loading_database), true);
+        
+        /* Load the items into memory to display in the list */
+        DatabaseHelper dbHelper = new DatabaseHelper(ListEditScreen.this, dbPath, dbName);
+        final List<Item> items = dbHelper.getListItems(-1, -1, 0, null);
+        dbHelper.close();
         new Thread(){
             public void run(){
-                /* Load the items into memory to display in the list */
-                DatabaseHelper dbHelper = new DatabaseHelper(ListEditScreen.this, dbPath, dbName);
-                final List<Item> items = dbHelper.getListItems(-1, -1, 0, null);
-                dbHelper.close();
+                
+        
                 mHandler.post(new Runnable(){
                     public void run(){
                         mAdapter = new ItemListAdapter(ListEditScreen.this, R.layout.list_edit_screen_item, items);
@@ -82,6 +94,105 @@ public class ListEditScreen extends AMActivity implements OnItemClickListener{
                 });
             }
         }.start();
+
+        
+        final Button button_col1= (Button)findViewById(R.id.button_col1);
+        button_col1.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Log.d(TAG, "xinxin testing button_col1\n\n");
+				new Thread(){
+		            public void run(){
+		            	Collections.sort(items, new Comparator<Item>(){
+							@Override
+							public int compare(Item a, Item b) {
+								return a.getId() - b.getId();
+							}
+						});
+		                mHandler.post(new Runnable(){
+		                    public void run(){
+		                        mAdapter = new ItemListAdapter(ListEditScreen.this, R.layout.list_edit_screen_item, items);
+		                        ListView listView = (ListView)findViewById(R.id.item_list);
+		                        listView.setAdapter(mAdapter);
+		                        listView.setSelection(initPosition);
+		                        listView.setOnItemClickListener(ListEditScreen.this);
+		                        progressDialog.dismiss();
+		                        
+		                    }
+		                });
+		            }
+		        }.start();
+
+				
+			}
+		});
+
+        final Button button_col2= (Button)findViewById(R.id.button_col2);
+        button_col2.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Log.d(TAG, "xinxin testing button_col2\n\n");
+				new Thread(){
+		            public void run(){
+		            	Collections.sort(items, new Comparator<Item>(){
+							@Override
+							public int compare(Item a, Item b) {
+								return a.getQuestion().compareTo(b.getQuestion());
+							}
+						});
+
+		                mHandler.post(new Runnable(){
+		                    public void run(){
+		                        mAdapter = new ItemListAdapter(ListEditScreen.this, R.layout.list_edit_screen_item, items);
+		                        ListView listView = (ListView)findViewById(R.id.item_list);
+		                        listView.setAdapter(mAdapter);
+		                        listView.setSelection(initPosition);
+		                        listView.setOnItemClickListener(ListEditScreen.this);
+		                        progressDialog.dismiss();
+		                        
+		                    }
+		                });
+		            }
+		        }.start();
+
+				
+			}
+		});
+
+
+        final Button button_col3= (Button)findViewById(R.id.button_col3);
+        button_col3.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Log.d(TAG, "xinxin testing button_col3\n\n");
+				new Thread(){
+		            public void run(){
+		            	Collections.sort(items, new Comparator<Item>(){
+							@Override
+							public int compare(Item a, Item b) {
+								return a.getAnswer().compareTo(b.getAnswer());
+							}
+						});
+		                mHandler.post(new Runnable(){
+		                    public void run(){
+		                        mAdapter = new ItemListAdapter(ListEditScreen.this, R.layout.list_edit_screen_item, items);
+		                        ListView listView = (ListView)findViewById(R.id.item_list);
+		                        listView.setAdapter(mAdapter);
+		                        listView.setSelection(initPosition);
+		                        listView.setOnItemClickListener(ListEditScreen.this);
+		                        progressDialog.dismiss();
+		                        
+		                    }
+		                });
+		            }
+		        }.start();
+
+				
+			}
+		});
 
     }
 
