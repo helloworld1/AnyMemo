@@ -90,24 +90,7 @@ public class CSVImporter implements AbstractConverter{
             }
 
 
-            cardDao.callBatchTasks(new Callable<Void>() {
-                // Use the map to get rid of duplicate category creation
-                final Map<String, Category> categoryMap = new HashMap<String, Category>();
-                public Void call() throws Exception {
-                    for (Card card : cardList) {
-                        String currentCategoryName = card.getCategory().getName();
-                        if (categoryMap.containsKey(currentCategoryName)) {
-                            card.setCategory(categoryMap.get(currentCategoryName));
-                        } else {
-                            categoryDao.create(card.getCategory());
-                            categoryMap.put(currentCategoryName, card.getCategory());
-                        }
-                        learningDataDao.create(card.getLearningData());
-                        cardDao.create(card);
-                    }
-                    return null;
-                }
-            });
+            cardDao.createCards(cardList);
         } finally {
             AnyMemoDBOpenHelperManager.releaseHelper(dest);
         }

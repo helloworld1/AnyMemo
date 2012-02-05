@@ -1,9 +1,16 @@
 package org.liberty.android.fantastischmemo.dao;
 
+import java.lang.Exception;
+
+import java.sql.SQLException;
 import java.sql.SQLException;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import java.util.concurrent.Callable;
 
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
@@ -387,6 +394,33 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
             return countOf(cardQb.prepare());
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void createCards(final List<Card> cardList) {
+        try {
+            final LearningDataDao learningDataDao = getHelper().getLearningDataDao();
+            final CategoryDao categoryDao = getHelper().getCategoryDao();
+            callBatchTasks(new Callable<Void>() {
+                // Use the map to get rid of duplicate category creation
+                final Map<String, Category> categoryMap = new HashMap<String, Category>();
+                public Void call() throws Exception {
+                    for (Card card : cardList) {
+                        String currentCategoryName = card.getCategory().getName();
+                        if (categoryMap.containsKey(currentCategoryName)) {
+                            card.setCategory(categoryMap.get(currentCategoryName));
+                        } else {
+                            categoryDao.create(card.getCategory());
+                            categoryMap.put(currentCategoryName, card.getCategory());
+                        }
+                        learningDataDao.create(card.getLearningData());
+                        create(card);
+                    }
+                    return null;
+                }
+            });
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

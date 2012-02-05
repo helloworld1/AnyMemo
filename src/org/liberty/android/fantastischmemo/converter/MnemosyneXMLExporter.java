@@ -106,8 +106,8 @@ public class MnemosyneXMLExporter implements AbstractConverter {
                 }
                 // Add 1 here to avoid rounding problem
 
-                l_rp = Long.toString(ld.getLastLearnDate().getTime() / 86400000);
-                n_rp = Long.toString(ld.getNextLearnDate().getTime() / 86400000 + 1);
+                l_rp = Long.toString((ld.getLastLearnDate().getTime() / 1000 - timeOfStart) / 86400);
+                n_rp = Long.toString((ld.getNextLearnDate().getTime() / 1000 - timeOfStart) / 86400 + 1);
 
                 // Replace the illegal symbols from the question and answer
                 question = card.getQuestion();

@@ -484,7 +484,4 @@ public class CardEditor extends AMActivity implements View.OnClickListener, Cate
             finish();
         }
     }
-
-
-
 }

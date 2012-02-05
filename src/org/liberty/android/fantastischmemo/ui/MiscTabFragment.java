@@ -161,10 +161,11 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
         }
 
         if(v == importMnemosyneButton){
-            Intent myIntent = new Intent(mActivity, ConvertScreen.class);
-            myIntent.putExtra("file_extension", ".xml");
-            myIntent.putExtra("converter", MnemosyneXMLImporter.class);
-            startActivity(myIntent);
+            DialogFragment df = new ConverterFragment(new MnemosyneXMLImporter(mActivity), ".db");
+            Bundle b = new Bundle();
+            b.putString("file_extension", ".xml");
+            df.setArguments(b);
+            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportMnemosyne");
         }
         if(v == importSupermemoButton){
             Intent myIntent = new Intent(mActivity, ConvertScreen.class);
