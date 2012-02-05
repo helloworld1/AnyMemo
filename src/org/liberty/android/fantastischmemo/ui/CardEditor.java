@@ -109,8 +109,8 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
     }
         
     
-    public void onClick(View v){
-        if(v == btnSave){
+    public void onClick(View v) {
+        if(v == btnSave) {
             SaveCardTask task = new SaveCardTask();
             task.execute((Void)null);
         } 

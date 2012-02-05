@@ -21,37 +21,28 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.cardscreen.SettingManager;
 import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.domain.Setting;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TableRow;
 
 //private Spinner answerFontSizeSpinner;
 //private Spinner questionAlignSpinner;
@@ -87,13 +78,19 @@ import android.widget.TableRow;
 //private long field2Value = SettingManager.CardField.ANSWER;
 
 public class SettingsScreen extends AMActivity implements OnClickListener {
-
+    private final static int LAYOUT_SPINNER_DROPDOWN_ITEM = android.R.layout.simple_spinner_dropdown_item;
+    private final static int LAYOUT_SPINNER_ITEM = android.R.layout.simple_spinner_item;
+    
     public static final String EXTRA_DBPATH = "dbpath";
     private String dbPath;
     private SettingDao settingDao;
     private Setting setting;
-    
+
+    // Widgets
     private Spinner questionFontSizeSpinner;
+    private Spinner answerFontSizeSpinner;
+    private Spinner questionAlignSpinner;
+    private Spinner answerAlignSpinner;
 
     private Button saveButton;
     private Button discardButton;
@@ -102,7 +99,7 @@ public class SettingsScreen extends AMActivity implements OnClickListener {
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         InitTask initTask = new InitTask();
-        initTask.execute((Void) null);      
+        initTask.execute((Void) null);
     }
 
     @Override
@@ -110,9 +107,9 @@ public class SettingsScreen extends AMActivity implements OnClickListener {
         super.onDestroy();
         AnyMemoDBOpenHelperManager.releaseHelper(dbPath);
     }
-    
-    @Override    
-    public boolean onCreateOptionsMenu(Menu menu){
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.settings_menu, menu);
         return true;
@@ -122,78 +119,60 @@ public class SettingsScreen extends AMActivity implements OnClickListener {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
     }
-    
+
+    // ============================================================================
+    // Override method of onClickListener
     public void onClick(View v) {
         if (v == saveButton) {
             SaveButtonTask task = new SaveButtonTask();
-            task.execute((Void)null);
-        } 
-        
-//        if (v == discardButton) {
-//            String qText = questionEdit.getText().toString();
-//            String aText = answerEdit.getText().toString();
-//            String nText = noteEdit.getText().toString();
-//            if (!isEditNew && (!qText.equals(originalQuestion) || !aText.equals(originalAnswer) || !nText.equals(originalNote))) {
-//                new AlertDialog.Builder(this)
-//                    .setTitle(R.string.warning_text)
-//                    .setMessage(R.string.edit_dialog_unsave_warning)
-//                    .setPositiveButton(R.string.yes_text, new DialogInterface.OnClickListener(){
-//                        public void onClick(DialogInterface  d, int which){
-//                            Intent resultIntent = new Intent();
-//                            setResult(Activity.RESULT_CANCELED, resultIntent);              
-//                            finish();
-//
-//                        }
-//                    }) 
-//                    .setNegativeButton(R.string.no_text, null)
-//                    .create()
-//                    .show();
-//            }
-//            else{
-//                Intent resultIntent = new Intent();
-//                setResult(Activity.RESULT_CANCELED, resultIntent);              
-//                finish();
-//
-//            }
-//        }
-//
-//        if (v == colorButton) {
-//            DialogFragment df = new CategoryEditorFragment();
-//            Bundle b = new Bundle();
-//            b.putString(CategoryEditorFragment.EXTRA_DBPATH, dbPath);
-//            b.putInt(CategoryEditorFragment.EXTRA_CARD_ID, currentCardId);
-//            df.setArguments(b);
-//            df.show(getSupportFragmentManager(), "CategoryEditDialog");
-//        }
-    }    
+            task.execute((Void) null);
+        }
+
+        if (v == discardButton) {
+            Intent resultIntent = new Intent();
+            setResult(Activity.RESULT_CANCELED, resultIntent);
+            finish();
+        }
+        //
+        // if (v == colorButton) {
+        // DialogFragment df = new CategoryEditorFragment();
+        // Bundle b = new Bundle();
+        // b.putString(CategoryEditorFragment.EXTRA_DBPATH, dbPath);
+        // b.putInt(CategoryEditorFragment.EXTRA_CARD_ID, currentCardId);
+        // df.setArguments(b);
+        // df.show(getSupportFragmentManager(), "CategoryEditDialog");
+        // }
+    }
 
     private void updateViews() {
-//        /* Retain the last category when editing new */
-//        String categoryName = currentCard.getCategory().getName();
-//        if (categoryName.equals("")) {
-//            categoryButton.setText(R.string.uncategorized_text);
-//        } else {
-//            categoryButton.setText(categoryName);
-//        }
-//        /* Prefill the note if it is empty */
-//
-//        if(isEditNew){
-//            /* Use this one or the one below ?*/
-//            noteEdit.setText(currentCard.getNote());
-//        }
-//        if(!isEditNew){
-//            originalQuestion = currentCard.getQuestion();
-//            originalAnswer = currentCard.getAnswer();
-//            originalNote = currentCard.getNote();
-//            questionEdit.setText(originalQuestion);
-//            answerEdit.setText(originalAnswer);
-//            noteEdit.setText(originalNote);
-//        }
-        ArrayAdapter<CharSequence> adapter = (ArrayAdapter<CharSequence>) questionFontSizeSpinner.getAdapter();
+        // /* Retain the last category when editing new */
+        // String categoryName = currentCard.getCategory().getName();
+        // if (categoryName.equals("")) {
+        // categoryButton.setText(R.string.uncategorized_text);
+        // } else {
+        // categoryButton.setText(categoryName);
+        // }
+        // /* Prefill the note if it is empty */
+        //
+        // if(isEditNew){
+        // /* Use this one or the one below ?*/
+        // noteEdit.setText(currentCard.getNote());
+        // }
+        // if(!isEditNew){
+        // originalQuestion = currentCard.getQuestion();
+        // originalAnswer = currentCard.getAnswer();
+        // originalNote = currentCard.getNote();
+        // questionEdit.setText(originalQuestion);
+        // answerEdit.setText(originalAnswer);
+        // noteEdit.setText(originalNote);
+        // }
+//        ArrayAdapter<CharSequence> adapter = (ArrayAdapter<CharSequence>) questionFontSizeSpinner.getAdapter();
+//        questionFontSizeSpinner.setSelection(adapter.getPosition(setting.getQuestionFontSize().toString()));
         
-        questionFontSizeSpinner.setSelection(adapter.getPosition(setting.getQuestionFontSize().toString()));
+        setSpinner(questionFontSizeSpinner, setting.getQuestionFontSize().toString());
+        setSpinner(answerFontSizeSpinner, setting.getAnswerFontSize().toString());        
     }
-    
+
     // ============================================================================
     /*
      * Load settings from database
@@ -219,7 +198,8 @@ public class SettingsScreen extends AMActivity implements OnClickListener {
             progressDialog.show();
             assert dbPath != null : "dbPath shouldn't be null";
 
-//            linebreakCheckbox = (CheckBox) findViewById(R.id.linebreak_conversion);
+            // linebreakCheckbox = (CheckBox)
+            // findViewById(R.id.linebreak_conversion);
         }
 
         @Override
@@ -228,7 +208,8 @@ public class SettingsScreen extends AMActivity implements OnClickListener {
                 AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(SettingsScreen.this, dbPath);
 
                 settingDao = helper.getSettingDao();
-                setting = settingDao.queryForId(1);                
+                setting = settingDao.queryForId(1);
+
                 /* Run the learnQueue init in a separate thread */
                 return null;
             } catch (Exception e) {
@@ -243,19 +224,25 @@ public class SettingsScreen extends AMActivity implements OnClickListener {
 
         @Override
         public void onPostExecute(Void result) {
-//            linebreakCheckbox.setChecked(setting.getHtmlLineBreakConversion());
-
-            questionFontSizeSpinner = (Spinner) findViewById(R.id.question_font_size_spinner);
-            ArrayAdapter<CharSequence> fontSizeAdapter 
-                = ArrayAdapter.createFromResdource(this, 
-                                                  R.array.font_size_list,
-                                                  android.R.layout.simple_spinner_item);
-            fontSizeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);            
-            questionFontSizeSpinner.setAdapter(fontSizeAdapter);
-                        
-            updateViews();
+            // linebreakCheckbox.setChecked(setting.getHtmlLineBreakConversion());
             
-            progressDialog.dismiss();            
+            questionFontSizeSpinner = getSpinner(R.id.question_font_size_spinner,
+                                                 R.array.font_size_list);
+            answerFontSizeSpinner = getSpinner(R.id.answer_font_size_spinner,
+                                               R.array.font_size_list);            
+            questionAlignSpinner = getSpinner(R.id.question_align_spinner,
+                                              R.array.align_list);
+            answerAlignSpinner = getSpinner(R.id.question_align_spinner,
+                                            R.array.align_list);
+
+            saveButton = (Button) findViewById(R.id.settting_save);
+            saveButton.setOnClickListener(SettingsScreen.this);
+            discardButton = (Button) findViewById(R.id.setting_discard);
+            discardButton.setOnClickListener(SettingsScreen.this);
+
+            updateViews();
+
+            progressDialog.dismiss();
         }
     }
 
@@ -271,6 +258,11 @@ public class SettingsScreen extends AMActivity implements OnClickListener {
             progressDialog.setMessage(getString(R.string.loading_database));
             progressDialog.setCancelable(false);
             progressDialog.show();
+
+            setting.setQuestionFontSize(Integer.parseInt(getSpinnerSelectedItem(questionFontSizeSpinner)));
+            setting.setAnswerFontSize(Integer.parseInt(getSpinnerSelectedItem(answerFontSizeSpinner)));
+            setting.setQuestionTextAlign(Enum.valueOf(Setting.Align.class, getSpinnerSelectedItem(questionAlignSpinner)));
+            setting.setAnswerTextAlign(Enum.valueOf(Setting.Align.class, getSpinnerSelectedItem(answerAlignSpinner)));            
         }
 
         @Override
@@ -280,16 +272,38 @@ public class SettingsScreen extends AMActivity implements OnClickListener {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-
             return null;
         }
 
         @Override
         public void onPostExecute(Void result) {
             progressDialog.dismiss();
+            Intent resultIntent = new Intent();
+            setResult(Activity.RESULT_OK, resultIntent);
             finish();
         }
     }
+    
+    // ==============================================================    
+    private void setSpinner(final Spinner spinner, 
+                            final CharSequence value) {
+        ArrayAdapter<CharSequence> adapter = (ArrayAdapter<CharSequence>) spinner.getAdapter();
+        spinner.setSelection(adapter.getPosition(value));
+    }
+    
+    private String getSpinnerSelectedItem(final Spinner spinner) {
+        ArrayAdapter<CharSequence> adapter = (ArrayAdapter<CharSequence>) spinner.getAdapter();
+        CharSequence csValue = adapter.getItem(spinner.getSelectedItemPosition());
+        return csValue.toString();
+    }
+    
+    private Spinner getSpinner(final int spinnerId,
+                               final int textArrayResId) {
+        Spinner spinner = (Spinner) findViewById(spinnerId);
+        ArrayAdapter<CharSequence> adapter 
+            = ArrayAdapter.createFromResource(SettingsScreen.this, textArrayResId, LAYOUT_SPINNER_ITEM);
+        adapter.setDropDownViewResource(LAYOUT_SPINNER_DROPDOWN_ITEM);
+        spinner.setAdapter(adapter);
+        return spinner;        
+    }
 }
-
-

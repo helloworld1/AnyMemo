@@ -154,6 +154,7 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
                 audioLocationLayout.setVisibility(View.GONE);
             }
         };
+
         questionLocaleSpinner.setOnItemSelectedListener(localeListener);
         answerLocaleSpinner.setOnItemSelectedListener(localeListener);
         
@@ -172,6 +173,7 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
 
         colorRow = (TableRow)findViewById(R.id.color_row);
         colorRow.setVisibility(View.GONE);
+
         colorSpinner = (Spinner)findViewById(R.id.color_item_spinner);
         ArrayAdapter<CharSequence> colorItemAdapter = ArrayAdapter.createFromResource(this, R.array.color_item_list, android.R.layout.simple_spinner_item);
         colorItemAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -248,7 +250,7 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
 			dbPath = extras.getString("dbpath");
 			dbName = extras.getString("dbname");
 		}
-        try{
+        try {
             dbHelper = new DatabaseHelper(this, dbPath, dbName);
         }
         catch(Exception e){
