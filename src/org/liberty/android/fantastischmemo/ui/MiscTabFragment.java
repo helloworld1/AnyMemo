@@ -219,10 +219,11 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
             startActivity(myIntent);
         }
         if(v == exportQAButton){
-            Intent myIntent = new Intent(mActivity, ConvertScreen.class);
-            myIntent.putExtra("file_extension", ".db");
-            myIntent.putExtra("converter", QATxtExporter.class);
-            startActivity(myIntent);
+            DialogFragment df = new ConverterFragment(new QATxtExporter(mActivity), ".txt");
+            Bundle b = new Bundle();
+            b.putString("file_extension", ".db");
+            df.setArguments(b);
+            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ExportQA");
         }
         if(v == mergeButton){
             Intent myIntent = new Intent(mActivity, DatabaseMerger.class);
