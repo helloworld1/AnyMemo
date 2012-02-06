@@ -187,10 +187,11 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
             startActivity(myIntent);
         }
         if(v == importQAButton){
-            Intent myIntent = new Intent(mActivity, ConvertScreen.class);
-            myIntent.putExtra("file_extension", ".txt");
-            myIntent.putExtra("converter", QATxtImporter.class);
-            startActivity(myIntent);
+            DialogFragment df = new ConverterFragment(new QATxtImporter(mActivity), ".db");
+            Bundle b = new Bundle();
+            b.putString("file_extension", ".txt");
+            df.setArguments(b);
+            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportCSV");
         }
         if(v == importSupermemo2008Button) {
             Intent myIntent = new Intent(mActivity, ConvertScreen.class);

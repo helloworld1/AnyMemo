@@ -21,11 +21,7 @@ package org.liberty.android.fantastischmemo.converter;
 
 import java.io.File;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import java.util.concurrent.Callable;
 
 import org.liberty.android.fantastischmemo.*;
 
@@ -33,8 +29,6 @@ import java.io.FileReader;
 import java.util.LinkedList;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
-import org.liberty.android.fantastischmemo.dao.CategoryDao;
-import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
@@ -55,8 +49,6 @@ public class CSVImporter implements AbstractConverter{
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, dest);
         try {
             final CardDao cardDao = helper.getCardDao();
-            final CategoryDao categoryDao = helper.getCategoryDao();
-            final LearningDataDao learningDataDao = helper.getLearningDataDao();
 
             CSVReader reader = new CSVReader(new FileReader(src));
             String[] nextLine;

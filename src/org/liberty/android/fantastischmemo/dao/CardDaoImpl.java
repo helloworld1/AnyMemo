@@ -398,6 +398,9 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
         }
     }
 
+    /*
+     * Note the category and learningData field must be populated
+     */
     public void createCards(final List<Card> cardList) {
         try {
             final LearningDataDao learningDataDao = getHelper().getLearningDataDao();
@@ -407,6 +410,8 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
                 final Map<String, Category> categoryMap = new HashMap<String, Category>();
                 public Void call() throws Exception {
                     for (Card card : cardList) {
+                        assert card.getCategory() != null : "Card's category must be populated";
+                        assert card.getLearningData() != null : "Card's learningData must be populated";
                         String currentCategoryName = card.getCategory().getName();
                         if (categoryMap.containsKey(currentCategoryName)) {
                             card.setCategory(categoryMap.get(currentCategoryName));
