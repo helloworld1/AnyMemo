@@ -39,8 +39,16 @@ import au.com.bytecode.opencsv.CSVWriter;
 public class CSVExporter implements AbstractConverter {
     private Context mContext;
 
+    /* Null is for default separator "," */
+    private Character separator = null;
+
     public CSVExporter(Context context){
         mContext = context;
+    }
+
+    public CSVExporter(Context context, char separator) {
+        mContext = context;
+        this.separator = separator;
     }
 
     public void convert(String src, String dest) throws Exception{
@@ -50,7 +58,12 @@ public class CSVExporter implements AbstractConverter {
         final CardDao cardDao = helper.getCardDao();
         final CategoryDao categoryDao = helper.getCategoryDao();
 
-        CSVWriter writer = new CSVWriter(new FileWriter(dest));
+        CSVWriter writer;
+        if (separator == null) {
+            writer = new CSVWriter(new FileWriter(dest));
+        } else {
+            writer = new CSVWriter(new FileWriter(dest), separator);
+        }
         final List<Card> cardList = cardDao.queryForAll();
 
         // Populate all category field in a transaction.

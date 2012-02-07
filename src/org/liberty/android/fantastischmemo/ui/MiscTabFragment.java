@@ -31,8 +31,6 @@ import org.liberty.android.fantastischmemo.converter.QATxtExporter;
 import org.liberty.android.fantastischmemo.converter.QATxtImporter;
 import org.liberty.android.fantastischmemo.converter.Supermemo2008XMLImporter;
 import org.liberty.android.fantastischmemo.converter.SupermemoXMLImporter;
-import org.liberty.android.fantastischmemo.converter.TabTxtExporter;
-import org.liberty.android.fantastischmemo.converter.TabTxtImporter;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -181,10 +179,11 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportCSV");
         }
         if(v == importTabButton){
-            Intent myIntent = new Intent(mActivity, ConvertScreen.class);
-            myIntent.putExtra("file_extension", ".txt");
-            myIntent.putExtra("converter", TabTxtImporter.class);
-            startActivity(myIntent);
+            DialogFragment df = new ConverterFragment(new CSVImporter(mActivity, '\t'), ".db");
+            Bundle b = new Bundle();
+            b.putString("file_extension", ".txt");
+            df.setArguments(b);
+            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportTabTxt");
         }
         if(v == importQAButton){
             DialogFragment df = new ConverterFragment(new QATxtImporter(mActivity), ".db");
@@ -214,10 +213,11 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ExportCSV");
         }
         if(v == exportTabButton){
-            Intent myIntent = new Intent(mActivity, ConvertScreen.class);
-            myIntent.putExtra("file_extension", ".db");
-            myIntent.putExtra("converter", TabTxtExporter.class);
-            startActivity(myIntent);
+            DialogFragment df = new ConverterFragment(new CSVExporter(mActivity, '\t'), ".txt");
+            Bundle b = new Bundle();
+            b.putString("file_extension", ".db");
+            df.setArguments(b);
+            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ExportTabTxt");
         }
         if(v == exportQAButton){
             DialogFragment df = new ConverterFragment(new QATxtExporter(mActivity), ".txt");

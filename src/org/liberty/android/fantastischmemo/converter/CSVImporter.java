@@ -37,20 +37,34 @@ import au.com.bytecode.opencsv.CSVReader;
 
 import android.content.Context;
 
-public class CSVImporter implements AbstractConverter{
+public class CSVImporter implements AbstractConverter {
     private Context mContext;
+    
+    /* Null is for default separator "," */
+    private Character separator = null;
 
-    public CSVImporter(Context context){
+    public CSVImporter(Context context) {
         mContext = context;
     }
 
-    public void convert(String src, String dest) throws Exception{
+    public CSVImporter(Context context, char separator) {
+        mContext = context;
+        this.separator = separator;
+    }
+
+    public void convert(String src, String dest) throws Exception {
         new File(dest).delete();
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, dest);
         try {
             final CardDao cardDao = helper.getCardDao();
 
-            CSVReader reader = new CSVReader(new FileReader(src));
+            CSVReader reader;
+            if (separator == null) {
+                reader = new CSVReader(new FileReader(src));
+            } else {
+                reader = new CSVReader(new FileReader(src), separator);
+            }
+
             String[] nextLine;
             int count = 0;
             final List<Card> cardList = new LinkedList<Card>();
@@ -80,7 +94,6 @@ public class CSVImporter implements AbstractConverter{
                 card.setNote(note);
                 cardList.add(card);
             }
-
 
             cardDao.createCards(cardList);
         } finally {
