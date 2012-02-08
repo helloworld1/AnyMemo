@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.converter;
 
+import java.io.File;
+
 import org.liberty.android.fantastischmemo.*;
 
 import java.net.URL;
@@ -29,6 +31,12 @@ import java.text.SimpleDateFormat;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+
+import org.liberty.android.fantastischmemo.dao.CardDao;
+
+import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.domain.Category;
+import org.liberty.android.fantastischmemo.domain.LearningData;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -41,15 +49,14 @@ import android.content.Context;
 public class Supermemo2008XMLImporter extends org.xml.sax.helpers.DefaultHandler implements AbstractConverter{
 	public Locator mLocator;
     private Context mContext;
-    private List<Item> itemList;
-    private Item.Builder itemBuilder;
+    private List<Card> cardList;
+    private Card card;
     private int count = 1;
     SimpleDateFormat supermemoFormat = new SimpleDateFormat("dd.MM.yy");
     SimpleDateFormat anymemoFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	
 	private StringBuffer characterBuf;
-    private final String TAG = "org.liberty.android.fantastischmemo.Supermemo2008XMLConverter";
 
 	
 	
@@ -58,9 +65,11 @@ public class Supermemo2008XMLImporter extends org.xml.sax.helpers.DefaultHandler
     }
 
     @Override
-    public void convert(String filePath, String fileName) throws Exception{
-		URL mXMLUrl = new URL("file:///" + filePath + "/" + fileName);
-		itemList = new LinkedList<Item>();
+    public void convert(String src, String dest) throws Exception{
+        new File(dest).delete();
+
+		URL mXMLUrl = new URL("file:///" + src);
+		cardList = new LinkedList<Card>();
         characterBuf = new StringBuffer();
 
         System.setProperty("org.xml.sax.driver","org.xmlpull.v1.sax2.Driver"); 
@@ -71,16 +80,21 @@ public class Supermemo2008XMLImporter extends org.xml.sax.helpers.DefaultHandler
 		xr.setContentHandler(this);
 		xr.parse(new InputSource(mXMLUrl.openStream()));
 
-        DatabaseHelper.createEmptyDatabase(filePath, fileName.replace(".xml", ".db"));
-        DatabaseHelper dbHelper =  new DatabaseHelper(mContext, filePath, fileName.replace(".xml", ".db"));
-        dbHelper.insertListItems(itemList);
-        dbHelper.close();
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, dest);
+        try {
+            CardDao cardDao = helper.getCardDao();
+            cardDao.createCards(cardList);
+        } finally {
+            AnyMemoDBOpenHelperManager.releaseHelper(dest);
+        }
     }
 	
 	public void startElement(String namespaceURI, String localName, String qName, Attributes atts) throws SAXException{
         if(localName.equals("Question")){
             characterBuf = new StringBuffer();
-            itemBuilder = new Item.Builder();
+            card = new Card();
+            card.setLearningData(new LearningData());
+            card.setCategory(new Category());
         }
         if(localName.equals("Answer")){
             characterBuf = new StringBuffer();
@@ -89,14 +103,14 @@ public class Supermemo2008XMLImporter extends org.xml.sax.helpers.DefaultHandler
 	
 	public void endElement(String namespaceURI, String localName, String qName) throws SAXException{
 		if(localName.equals("Question")){
-            itemBuilder.setQuestion(characterBuf.toString());
+            card.setQuestion(characterBuf.toString());
             System.out.println("New item Question: " + characterBuf.toString());
 		}
 		if(localName.equals("Answer")){
-            itemBuilder.setAnswer(characterBuf.toString());
-            itemBuilder.setId(count);
+            card.setAnswer(characterBuf.toString());
+            card.setOrdinal(count);
             count++;
-            itemList.add(itemBuilder.build());
+            cardList.add(card);
             System.out.println("New item Answer: " + characterBuf.toString());
 		}
 	}
@@ -110,13 +124,8 @@ public class Supermemo2008XMLImporter extends org.xml.sax.helpers.DefaultHandler
 	}
 	
 	public void startDocument() throws SAXException{
-		
 	}
 	
 	public void endDocument() throws SAXException{
-		
-		
 	}
-	
-
 }

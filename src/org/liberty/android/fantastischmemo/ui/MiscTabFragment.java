@@ -193,10 +193,11 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportCSV");
         }
         if(v == importSupermemo2008Button) {
-            Intent myIntent = new Intent(mActivity, ConvertScreen.class);
-            myIntent.putExtra("file_extension", ".xml");
-            myIntent.putExtra("converter", Supermemo2008XMLImporter.class);
-            startActivity(myIntent);
+            DialogFragment df = new ConverterFragment(new Supermemo2008XMLImporter(mActivity), ".db");
+            Bundle b = new Bundle();
+            b.putString("file_extension", ".xml");
+            df.setArguments(b);
+            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportSuperMemo2008");
         }
         if(v == exportMnemosyneButton){
             DialogFragment df = new ConverterFragment(new MnemosyneXMLExporter(mActivity), ".xml");
