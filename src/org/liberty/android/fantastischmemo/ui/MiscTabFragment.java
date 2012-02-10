@@ -24,7 +24,6 @@ import org.liberty.android.fantastischmemo.R;
 
 import org.liberty.android.fantastischmemo.converter.CSVExporter;
 import org.liberty.android.fantastischmemo.converter.CSVImporter;
-import org.liberty.android.fantastischmemo.converter.ConvertScreen;
 import org.liberty.android.fantastischmemo.converter.MnemosyneXMLExporter;
 import org.liberty.android.fantastischmemo.converter.MnemosyneXMLImporter;
 import org.liberty.android.fantastischmemo.converter.QATxtExporter;
@@ -166,10 +165,11 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportMnemosyne");
         }
         if(v == importSupermemoButton){
-            Intent myIntent = new Intent(mActivity, ConvertScreen.class);
-            myIntent.putExtra("file_extension", ".xml");
-            myIntent.putExtra("converter", SupermemoXMLImporter.class);
-            startActivity(myIntent);
+            DialogFragment df = new ConverterFragment(new SupermemoXMLImporter(mActivity), ".db");
+            Bundle b = new Bundle();
+            b.putString("file_extension", ".xml");
+            df.setArguments(b);
+            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportSuperMemo2008");
         }
         if(v == importCSVButton) {
             DialogFragment df = new ConverterFragment(new CSVImporter(mActivity), ".db");

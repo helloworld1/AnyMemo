@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.converter;
 
+import org.apache.mycommons.lang3.time.DateUtils;
+
 import org.liberty.android.fantastischmemo.*;
 
 import java.net.URL;
@@ -32,6 +34,12 @@ import java.text.ParseException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.liberty.android.fantastischmemo.dao.CardDao;
+
+import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.domain.Category;
+import org.liberty.android.fantastischmemo.domain.LearningData;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
@@ -44,9 +52,11 @@ import android.content.Context;
 public class SupermemoXMLImporter extends org.xml.sax.helpers.DefaultHandler implements AbstractConverter{
 	public Locator mLocator;
     private Context mContext;
-    private List<Item> itemList;
-    private Item.Builder itemBuilder;
+    private List<Card> cardList;
+    private Card card;
+    private LearningData ld;
     private int count = 1;
+    private int interval;
     SimpleDateFormat supermemoFormat = new SimpleDateFormat("dd.MM.yy");
     SimpleDateFormat anymemoFormat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -61,9 +71,9 @@ public class SupermemoXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
     }
 
     @Override
-    public void convert(String filePath, String fileName) throws Exception{
-		URL mXMLUrl = new URL("file:///" + filePath + "/" + fileName);
-		itemList = new LinkedList<Item>();
+    public void convert(String src, String dest) throws Exception{
+		URL mXMLUrl = new URL("file:///" + src);
+		cardList = new LinkedList<Card>();
 
         System.setProperty("org.xml.sax.driver","org.xmlpull.v1.sax2.Driver"); 
 
@@ -73,62 +83,76 @@ public class SupermemoXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
 		xr.setContentHandler(this);
 		xr.parse(new InputSource(mXMLUrl.openStream()));
 
-        DatabaseHelper.createEmptyDatabase(filePath, fileName.replace(".xml", ".db"));
-        DatabaseHelper dbHelper =  new DatabaseHelper(mContext, filePath, fileName.replace(".xml", ".db"));
-        dbHelper.insertListItems(itemList);
-        dbHelper.close();
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, dest);
+        try {
+            CardDao cardDao = helper.getCardDao();
+            cardDao.createCards(cardList);
+        } finally {
+            AnyMemoDBOpenHelperManager.releaseHelper(dest);
+        }
     }
 	
 	public void startElement(String namespaceURI, String localName, String qName, Attributes atts) throws SAXException{
         if(localName.equals("SuperMemoElement")){
-            itemBuilder = new Item.Builder();
+            card = new Card();
+            card.setCategory(new Category());
+            ld = new LearningData();
+            card.setLearningData(ld);
+
+            // Set a default interval, in case of malformed the xml file
+            interval = 1;
+
         }
 		characterBuf = new StringBuffer();
 	}
 	
 	public void endElement(String namespaceURI, String localName, String qName) throws SAXException{
         if(localName.equals("SuperMemoElement")){
-            itemBuilder.setId(count);
-            itemList.add(itemBuilder.build());
-            itemBuilder = null;
+            card.setOrdinal(count);
+            // Calculate the next learning date from interval
+            ld.setNextLearnDate(DateUtils.addDays(ld.getLastLearnDate(), interval));
+
+            cardList.add(card);
+            card = null;
+            ld = null;
             count += 1;
         }
 		if(localName.equals("Question")){
-            itemBuilder.setQuestion(characterBuf.toString());
+            card.setQuestion(characterBuf.toString());
 		}
 		if(localName.equals("Answer")){
-            itemBuilder.setAnswer(characterBuf.toString());
+            card.setAnswer(characterBuf.toString());
 		}
         if(localName.equals("Lapses")){
-            itemBuilder.setLapses(Integer.parseInt(characterBuf.toString()));
+            ld.setLapses(Integer.parseInt(characterBuf.toString()));
         }
         if(localName.equals("Repetitions")){
-            itemBuilder.setAcqReps(Integer.parseInt(characterBuf.toString()));
+            ld.setAcqReps(Integer.parseInt(characterBuf.toString()));
         }
         if(localName.equals("Interval")){
-            itemBuilder.setInterval(Integer.parseInt(characterBuf.toString()));
+            interval = Integer.parseInt(characterBuf.toString());
         }
         if(localName.equals("AFactor")){
             double g = Double.parseDouble(characterBuf.toString());
             if(g <= 1.5){
-                itemBuilder.setGrade(1);
+                ld.setGrade(1);
             }
             else if(g <= 5.5){
-                itemBuilder.setGrade(2);
+                ld.setGrade(2);
             }
             else{
-                itemBuilder.setGrade(3);
+                ld.setGrade(3);
             }
         }
         if(localName.equals("UFactor")){
-            double e = Double.parseDouble(characterBuf.toString());
-            itemBuilder.setEasiness(e);
+            float e = Float.parseFloat(characterBuf.toString());
+            ld.setEasiness(e);
         }
         if(localName.equals("LastRepetition")){
             try{
                 /* Convert date format from SM to AM*/
                 Date date = supermemoFormat.parse(characterBuf.toString());
-                itemBuilder.setDateLearn(anymemoFormat.format(date));
+                ld.setLastLearnDate(date);
             }
             catch(ParseException e){
                 Log.e(TAG, "Parsing date error: " + characterBuf.toString(), e);

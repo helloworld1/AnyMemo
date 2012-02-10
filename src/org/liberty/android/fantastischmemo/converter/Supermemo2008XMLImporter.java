@@ -26,7 +26,6 @@ import org.liberty.android.fantastischmemo.*;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
-import java.text.SimpleDateFormat;
 
 
 import javax.xml.parsers.SAXParser;
@@ -52,13 +51,8 @@ public class Supermemo2008XMLImporter extends org.xml.sax.helpers.DefaultHandler
     private List<Card> cardList;
     private Card card;
     private int count = 1;
-    SimpleDateFormat supermemoFormat = new SimpleDateFormat("dd.MM.yy");
-    SimpleDateFormat anymemoFormat = new SimpleDateFormat("yyyy-MM-dd");
-
 	
 	private StringBuffer characterBuf;
-
-	
 	
     public Supermemo2008XMLImporter(Context context){
         mContext = context;

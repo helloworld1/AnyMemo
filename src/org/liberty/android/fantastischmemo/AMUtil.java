@@ -102,9 +102,4 @@ public class AMUtil {
         }
         return res;
     }
-
-    /* Get the interval in days between two date */
-    public float diffDate(Date d1, Date d2) {
-        return 0.0f;
-    }
 }
