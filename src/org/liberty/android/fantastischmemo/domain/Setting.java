@@ -112,8 +112,8 @@ public class Setting {
 
     public static enum Align {
         LEFT,
-        RIGHT,
-        CENTER
+        CENTER,
+        RIGHT
     }
 
     public static enum CardStyle {

@@ -21,6 +21,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
 
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
@@ -44,13 +46,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
-//private Spinner answerFontSizeSpinner;
-//private Spinner questionAlignSpinner;
-//private Spinner answerAlignSpinner;
-//private Spinner questionLocaleSpinner;
-//private Spinner answerLocaleSpinner;
-//private Spinner ratioSpinner;
-//private Spinner styleSpinner;
 //
 //private CheckBox wipeCheckbox;
 //private CheckBox shuffleCheckbox;
@@ -59,7 +54,7 @@ import android.widget.Spinner;
 //private CheckBox aTypefaceCheckbox;
 //private CheckBox field1Checkbox;
 //private CheckBox field2Checkbox;
-//private CheckBox htmlCheckbox;
+
 //private CheckBox linebreakCheckbox;
 //
 //private EditText qTypefaceEdit;
@@ -80,18 +75,24 @@ import android.widget.Spinner;
 public class SettingsScreen extends AMActivity implements OnClickListener {
     private final static int LAYOUT_SPINNER_DROPDOWN_ITEM = android.R.layout.simple_spinner_dropdown_item;
     private final static int LAYOUT_SPINNER_ITEM = android.R.layout.simple_spinner_item;
-    
+
     public static final String EXTRA_DBPATH = "dbpath";
     private String dbPath;
     private SettingDao settingDao;
     private Setting setting;
 
     // Widgets
-    private Spinner questionFontSizeSpinner;
-    private Spinner answerFontSizeSpinner;
-    private Spinner questionAlignSpinner;
-    private Spinner answerAlignSpinner;
+    private AMIntSpinner questionFontSizeSpinner;
+    private AMIntSpinner answerFontSizeSpinner;
+    private AMEnumSpinner<Setting.Align> questionAlignSpinner;
+    private AMEnumSpinner<Setting.Align> answerAlignSpinner;
+    // private AMEnumSpinner<Setting.CardStyle> questionStyleSpinner;
+    // private AMEnumSpinner<Setting.CardStyle> answerLocaleSpinner;
+    private AMPercentageSpinner qaRatioSpinner;
+    private AMEnumSpinner<Setting.CardStyle> styleSpinner;
 
+
+    
     private Button saveButton;
     private Button discardButton;
 
@@ -166,11 +167,16 @@ public class SettingsScreen extends AMActivity implements OnClickListener {
         // answerEdit.setText(originalAnswer);
         // noteEdit.setText(originalNote);
         // }
-//        ArrayAdapter<CharSequence> adapter = (ArrayAdapter<CharSequence>) questionFontSizeSpinner.getAdapter();
-//        questionFontSizeSpinner.setSelection(adapter.getPosition(setting.getQuestionFontSize().toString()));
-        
-        setSpinner(questionFontSizeSpinner, setting.getQuestionFontSize().toString());
-        setSpinner(answerFontSizeSpinner, setting.getAnswerFontSize().toString());        
+        // ArrayAdapter<CharSequence> adapter = (ArrayAdapter<CharSequence>)
+        // questionFontSizeSpinner.getAdapter();
+        // questionFontSizeSpinner.setSelection(adapter.getPosition(setting.getQuestionFontSize().toString()));
+
+        questionFontSizeSpinner.setSelectedItem(setting.getQuestionFontSize());
+        answerFontSizeSpinner.setSelectedItem(setting.getAnswerFontSize());
+        questionAlignSpinner.setSelectedItem(setting.getQuestionTextAlign());
+        answerAlignSpinner.setSelectedItem(setting.getAnswerTextAlign());
+        qaRatioSpinner.setSelectedItem(setting.getQaRatio());
+        styleSpinner.setSelectedItem(setting.getCardStyle());
     }
 
     // ============================================================================
@@ -225,15 +231,21 @@ public class SettingsScreen extends AMActivity implements OnClickListener {
         @Override
         public void onPostExecute(Void result) {
             // linebreakCheckbox.setChecked(setting.getHtmlLineBreakConversion());
-            
-            questionFontSizeSpinner = getSpinner(R.id.question_font_size_spinner,
-                                                 R.array.font_size_list);
-            answerFontSizeSpinner = getSpinner(R.id.answer_font_size_spinner,
-                                               R.array.font_size_list);            
-            questionAlignSpinner = getSpinner(R.id.question_align_spinner,
-                                              R.array.align_list);
-            answerAlignSpinner = getSpinner(R.id.question_align_spinner,
-                                            R.array.align_list);
+
+            questionFontSizeSpinner = new AMIntSpinner(getSpinner(R.id.question_font_size_spinner,
+                    R.array.font_size_list));
+            answerFontSizeSpinner = new AMIntSpinner(getSpinner(R.id.answer_font_size_spinner, R.array.font_size_list));
+            questionAlignSpinner = new AMEnumSpinner<Setting.Align>(getSpinner(R.id.question_align_spinner,
+                    R.array.align_list), Setting.Align.values());
+            answerAlignSpinner = new AMEnumSpinner<Setting.Align>(getSpinner(R.id.answer_align_spinner,
+                    R.array.align_list), Setting.Align.values());
+            // questionLocaleSpinner = getSpinner(R.id.question_locale_spinner,
+            // R.array.locale_list);
+            // answerLocaleSpinner = getSpinner(R.id.answer_locale_spinner,
+            // R.array.locale_list);
+            qaRatioSpinner = new AMPercentageSpinner(getSpinner(R.id.ratio_spinner, R.array.ratio_list));
+            styleSpinner = new AMEnumSpinner<Setting.CardStyle>(getSpinner(R.id.card_style_spinner,
+                    R.array.card_style_list), Setting.CardStyle.values());
 
             saveButton = (Button) findViewById(R.id.settting_save);
             saveButton.setOnClickListener(SettingsScreen.this);
@@ -247,6 +259,9 @@ public class SettingsScreen extends AMActivity implements OnClickListener {
     }
 
     // ==============================================================
+    /*
+     * Save settings back to database
+     */
     private class SaveButtonTask extends AsyncTask<Void, Void, Void> {
         private ProgressDialog progressDialog;
 
@@ -259,10 +274,20 @@ public class SettingsScreen extends AMActivity implements OnClickListener {
             progressDialog.setCancelable(false);
             progressDialog.show();
 
-            setting.setQuestionFontSize(Integer.parseInt(getSpinnerSelectedItem(questionFontSizeSpinner)));
-            setting.setAnswerFontSize(Integer.parseInt(getSpinnerSelectedItem(answerFontSizeSpinner)));
-            setting.setQuestionTextAlign(Enum.valueOf(Setting.Align.class, getSpinnerSelectedItem(questionAlignSpinner)));
-            setting.setAnswerTextAlign(Enum.valueOf(Setting.Align.class, getSpinnerSelectedItem(answerAlignSpinner)));            
+            // setting.setQuestionFontSize(Integer.parseInt(getSelectedItem(questionFontSizeSpinner)));
+            setting.setQuestionFontSize(questionFontSizeSpinner.getSelectedItem());
+            setting.setAnswerFontSize(answerFontSizeSpinner.getSelectedItem());
+            setting.setQuestionTextAlign(questionAlignSpinner.getSelectedItem());
+            setting.setAnswerTextAlign(answerAlignSpinner.getSelectedItem());
+            setting.setQaRatio(qaRatioSpinner.getSelectedItem());
+            setting.setCardStyle(styleSpinner.getSelectedItem());
+            // setting.setAnswerFontSize(Integer.parseInt(getSelectedItem(answerFontSizeSpinner)));
+            // setting.setQuestionTextAlign(Setting.Align.values()[questionAlignSpinner.getSelectedItemPosition()]);
+            // setting.setAnswerTextAlign(Setting.Align.values()[questionAlignSpinner.getSelectedItemPosition()]);
+            // String ratioString = getSelectedItem(ratioSpinner);
+            // setting.setQaRatio(Integer.parseInt(ratioString.substring(0,
+            // ratioString.length()-1)));
+            // setting.setCardStyle(Setting.CardStyle.values()[styleSpinner.getSelectedItemPosition()]);
         }
 
         @Override
@@ -283,27 +308,109 @@ public class SettingsScreen extends AMActivity implements OnClickListener {
             finish();
         }
     }
-    
-    // ==============================================================    
-    private void setSpinner(final Spinner spinner, 
-                            final CharSequence value) {
-        ArrayAdapter<CharSequence> adapter = (ArrayAdapter<CharSequence>) spinner.getAdapter();
-        spinner.setSelection(adapter.getPosition(value));
-    }
-    
-    private String getSpinnerSelectedItem(final Spinner spinner) {
-        ArrayAdapter<CharSequence> adapter = (ArrayAdapter<CharSequence>) spinner.getAdapter();
-        CharSequence csValue = adapter.getItem(spinner.getSelectedItemPosition());
-        return csValue.toString();
-    }
-    
-    private Spinner getSpinner(final int spinnerId,
-                               final int textArrayResId) {
+
+    // ==============================================================
+    // private void setSelectedItem(final Spinner spinner,
+    // final CharSequence value) {
+    // ArrayAdapter<CharSequence> adapter = (ArrayAdapter<CharSequence>)
+    // spinner.getAdapter();
+    // spinner.setSelection(adapter.getPosition(value));
+    // }
+    //
+    // private <T> getSelectedItem(final Spinner spinner, final T t) {
+    // ArrayAdapter<CharSequence> adapter = (ArrayAdapter<CharSequence>)
+    // spinner.getAdapter();
+    // CharSequence csValue =
+    // adapter.getItem(spinner.getSelectedItemPosition());
+    // return csValue.toString();
+    // }
+
+    private Spinner getSpinner(final int spinnerId, final int textArrayResId) {
         Spinner spinner = (Spinner) findViewById(spinnerId);
-        ArrayAdapter<CharSequence> adapter 
-            = ArrayAdapter.createFromResource(SettingsScreen.this, textArrayResId, LAYOUT_SPINNER_ITEM);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(SettingsScreen.this, textArrayResId,
+                LAYOUT_SPINNER_ITEM);
         adapter.setDropDownViewResource(LAYOUT_SPINNER_DROPDOWN_ITEM);
         spinner.setAdapter(adapter);
-        return spinner;        
+        return spinner;
+    }
+}
+
+abstract class AMSpinner<T> {
+    protected Spinner mSpinner;
+
+    public AMSpinner(Spinner spinner) {
+        mSpinner = spinner;
+    }
+
+    abstract public void setSelectedItem(final T value);
+
+    abstract public T getSelectedItem();
+}
+
+class AMIntSpinner extends AMSpinner<Integer> {
+    public AMIntSpinner(Spinner spinner) {
+        super(spinner);
+    }
+
+    @Override
+    public void setSelectedItem(final Integer value) {
+        ArrayAdapter<CharSequence> adapter = (ArrayAdapter<CharSequence>) mSpinner.getAdapter();
+        mSpinner.setSelection(adapter.getPosition(String.valueOf(value)));
+    }
+
+    @Override
+    public Integer getSelectedItem() {
+        ArrayAdapter<CharSequence> adapter = (ArrayAdapter<CharSequence>) mSpinner.getAdapter();
+        String strValue = adapter.getItem(mSpinner.getSelectedItemPosition()).toString();
+        return Integer.valueOf(strValue);
+    }
+}
+
+class AMPercentageSpinner extends AMSpinner<Integer> {
+    public AMPercentageSpinner(Spinner spinner) {
+        super(spinner);
+    }
+
+    @Override
+    public void setSelectedItem(final Integer value) {
+        ArrayAdapter<CharSequence> adapter = (ArrayAdapter<CharSequence>) mSpinner.getAdapter();
+        mSpinner.setSelection(adapter.getPosition(String.valueOf(value) + '%'));
+    }
+
+    @Override
+    public Integer getSelectedItem() {
+        ArrayAdapter<CharSequence> adapter = (ArrayAdapter<CharSequence>) mSpinner.getAdapter();
+        String strValue = adapter.getItem(mSpinner.getSelectedItemPosition()).toString();
+        return Integer.valueOf(strValue.substring(0, strValue.length() - 1));
+    }
+}
+
+/**
+ * The valid values are given in the Enum T
+ * 
+ * @author sean
+ * 
+ * @param <T>
+ */
+class AMEnumSpinner<T extends Enum<T>> extends AMSpinner<T> {
+    List<T> validValues;
+
+    public AMEnumSpinner(Spinner spinner, T[] validValues) {
+        super(spinner);
+        this.validValues = Arrays.asList(validValues);
+    }
+
+    public void setSelectedItem(final T value) {
+        for (int position = 0; position < validValues.size(); position++) {
+            if (value == validValues.get(position)) {
+                mSpinner.setSelection(position);
+                return;
+            }
+        }
+        assert (false);
+    }
+
+    public T getSelectedItem() {
+        return validValues.get(mSpinner.getSelectedItemPosition());
     }
 }
