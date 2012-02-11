@@ -344,10 +344,19 @@ public class DownloaderAnyMemo extends DownloaderBase{
                 if(!filename.toLowerCase().endsWith(".ttf")){
                     /* Check if the db is correct */
                     filename = filename.replace(".zip", ".db");
-                    DatabaseHelper dh = new DatabaseHelper(DownloaderAnyMemo.this, sdpath, filename);
-                    dh.close();
+                    String fullpath = sdpath + filename;
+                    try {
+                        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(DownloaderAnyMemo.this, fullpath);
+                        long count = helper.getCardDao().getTotalCount(null);
+                        if (count <= 0L) {
+                            throw new RuntimeException("Downloaded empty db.");
+                        }
+                    } finally {
+                        AnyMemoDBOpenHelperManager.releaseHelper(fullpath);
+                    }
+
                     /* Add downloaded item to file list */
-                    RecentListUtil.addToRecentList(this, sdpath + filename);
+                    RecentListUtil.addToRecentList(this, fullpath);
                 }
             }
             catch(Exception e){
