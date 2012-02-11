@@ -32,6 +32,8 @@ import java.util.EnumSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.mycommons.io.FilenameUtils;
+
 public class AMUtil {
     public static boolean isInteger(String s){
         try{
@@ -68,6 +70,16 @@ public class AMUtil {
 		in.close();
 		out.close();
 	}
+
+    public static void deleteFileWithBackup(String filepath) throws IOException {
+        if (!new File(filepath).exists()) {
+            return;
+        }
+        String ext = FilenameUtils.getExtension(filepath);
+        String nameWtihoutExt = FilenameUtils.removeExtension(filepath);
+        String backFileName = nameWtihoutExt + ".backup." + ext;
+        copyFile(filepath, backFileName);
+    }
 
     /* Get the file name from the path name */
     public static String getFilenameFromPath(String path) {
