@@ -18,7 +18,7 @@ public class LearningData {
     @DatabaseField(defaultValue = "2010-01-01 00:00:00.000000")
     private Date lastLearnDate;
 
-    @DatabaseField
+    @DatabaseField(defaultValue = "2010-01-01 00:00:00.000000")
     private Date nextLearnDate;
 
     @DatabaseField

@@ -43,6 +43,4 @@ public class OptionScreen extends PreferenceActivity{
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
     }
-        
-
 }

@@ -42,6 +42,5 @@ public class OpenTabFragment extends AbstractFileBrowserFragment {
         RecentListUtil.addToRecentList(mActivity, fullpath);
         myIntent.putExtra("dbpath", path + "/" + name);
         startActivity(myIntent);
-
     }
 }
