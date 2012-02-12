@@ -12,25 +12,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
-            android:text="@string/sort_by" />
+            android:text="@string/sort_by_text" />
         
         <Button android:id="@+id/button_col1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/sort_by_id_text" />
+            android:text="@string/id_text" />
         
         <Button android:id="@+id/button_col2"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/sort_by_question_text" />
+            android:text="@string/question_text" />
         
         <Button android:id="@+id/button_col3"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/sort_by_answer_text" />
+            android:text="@string/answer_text" />
     </LinearLayout>
     <ListView
         android:id="@+id/item_list"

@@ -388,8 +388,7 @@
     <string name="filter_category_text">Filter category</string>
     <string name="delete_text">Delete</string>
     <string name="delete_text_short">Del</string>
-    <string name="sort_by_id_text">id</string>
-    <string name="sort_by_question_text">question</string>
-    <string name="sort_by_answer_text">answer</string>
-    <string name="sort_by">Sort by</string>
+    <string name="sort_by_text">Sort by</string>
+    <string name="question_text">Question</string>
+    <string name="answer_text">Answer</string>
 </resources>
