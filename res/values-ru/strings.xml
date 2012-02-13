@@ -376,4 +376,7 @@
     <string name="filter_category_text">Фильтр категорий</string>
     <string name="delete_text">Удалить</string> 
     <string name="delete_text_short">Удал</string> 
+    <string name="sort_by_text">Сорт по</string>
+    <string name="question_text">Вопрос</string>
+    <string name="answer_text">Ответ</string>
 </resources>
