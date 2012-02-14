@@ -24,6 +24,13 @@ import org.liberty.android.fantastischmemo.*;
 import java.util.Stack;
 import java.util.List;
 import java.util.LinkedList;
+
+import org.liberty.android.fantastischmemo.dao.CardDao;
+
+import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.domain.Category;
+import org.liberty.android.fantastischmemo.domain.LearningData;
+
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -53,7 +60,6 @@ public class DownloaderSS extends DownloaderBase implements ListView.OnScrollLis
     private Stack<String> categoryIdStack;
     private ListView listView;
     private ProgressDialog mProgressDialog;
-    private int mDownloadProgress;
     private Handler mHandler;
     private List<DownloadItem> categoryList = null;
 
@@ -326,28 +332,37 @@ public class DownloaderSS extends DownloaderBase implements ListView.OnScrollLis
         String jsonString = DownloaderUtils.downloadJSONString(url);
         JSONObject jsonObject = new JSONObject(jsonString);
         JSONArray jsonDataArray = jsonObject.getJSONArray("data");
-        List<Item> itemList = new LinkedList<Item>();
+        List<Card> cardList = new LinkedList<Card>();
         for(int i = 0; i < jsonDataArray.length(); i++){
             JSONArray jsonItemArray = jsonDataArray.getJSONArray(i);
             String question = jsonItemArray.getString(0);
             String answer = jsonItemArray.getString(1);
             if(question != null && !question.equals("")){
-                Item item = new Item.Builder()
-                    .setQuestion(question)
-                    .setAnswer(answer)
-                    .setId(i + 1)
-                    .build();
-                itemList.add(item);
+                Card card = new Card();
+                card.setQuestion(question);
+                card.setAnswer(answer);
+                card.setOrdinal(i + 1);
+                card.setCategory(new Category());
+                card.setLearningData(new LearningData());
+                cardList.add(card);
             }
             
         }
         String dbname = di.getTitle() + ".db";
         String dbpath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
-        DatabaseHelper.createEmptyDatabase(dbpath, dbname);
-        DatabaseHelper dbHelper = new DatabaseHelper(this, dbpath, dbname);
-        dbHelper.insertListItems(itemList);
-        dbHelper.close();
-        RecentListUtil.addToRecentList(this, dbpath);
+        String fullpath = dbpath + dbname;
+        try {
+            AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(DownloaderSS.this, fullpath);
+            CardDao cardDao = helper.getCardDao();
+            cardDao.createCards(cardList);
+            long count = helper.getCardDao().getTotalCount(null);
+            if (count <= 0L) {
+                throw new RuntimeException("Downloaded empty db.");
+            }
+        } finally {
+            AnyMemoDBOpenHelperManager.releaseHelper(fullpath);
+        }
+        RecentListUtil.addToRecentList(this, fullpath);
     }
 }
 
