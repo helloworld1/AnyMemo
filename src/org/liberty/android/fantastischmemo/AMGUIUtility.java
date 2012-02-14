@@ -23,7 +23,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 
@@ -55,17 +54,23 @@ public class AMGUIUtility{
             .show();
     }
 
-    public static void displayException(final Context context, final String title, final String text, final Exception e){
+    public static void displayException(final Activity activity, final String title, final String text, final Exception e){
         Log.e(TAG, "displayException", e);
-        new AlertDialog.Builder(context)
+        new AlertDialog.Builder(activity)
             .setTitle(title)
-            .setMessage(text + "\n" + context.getString(R.string.exception_text) +": " + e.toString())
-            .setPositiveButton(context.getString(R.string.back_menu_text), null)
+            .setMessage(text + "\n" + activity.getString(R.string.exception_text) + ": " + e.toString())
+           // .setPositiveButton(activity.getString(R.string.back_menu_text), null)
+            .setNeutralButton(R.string.back_menu_text, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    activity.finish();
+                }
+            })
             .show();
     }
 
-    public static void doProgressTask(final Context context, final String progressTitle, final String progressMessage, final ProgressTask task){
-        final ProgressDialog mProgressDialog = ProgressDialog.show(context, progressTitle, progressMessage, true);
+    public static void doProgressTask(final Activity activity, final String progressTitle, final String progressMessage, final ProgressTask task){
+        final ProgressDialog mProgressDialog = ProgressDialog.show(activity, progressTitle, progressMessage, true);
         final Handler handler = new Handler();
         new Thread(){
             public void run(){
@@ -82,7 +87,7 @@ public class AMGUIUtility{
                     handler.post(new Runnable(){
                         public void run(){
                             mProgressDialog.dismiss();
-                            displayException(context, context.getString(R.string.exception_text), context.getString(R.string.exception_message), e);
+                            displayException(activity, activity.getString(R.string.exception_text), activity.getString(R.string.exception_message), e);
                             Log.e(TAG, "Error running progress task", e);
                         }
                     });
@@ -91,10 +96,10 @@ public class AMGUIUtility{
         }.start();
     }
 
-    public static void doProgressTask(final Context context, final int progressTitleId, final int progressMessageId, final ProgressTask task){
-        String progressTitle = context.getString(progressTitleId);
-        String progressMessage= context.getString(progressMessageId);
-        doProgressTask(context, progressTitle, progressMessage, task);
+    public static void doProgressTask(final Activity activity, final int progressTitleId, final int progressMessageId, final ProgressTask task){
+        String progressTitle = activity.getString(progressTitleId);
+        String progressMessage= activity.getString(progressMessageId);
+        doProgressTask(activity, progressTitle, progressMessage, task);
     }
 
     public static interface ProgressTask{
