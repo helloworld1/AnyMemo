@@ -108,33 +108,27 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         
         /* Properly set up all the Views */
+        questionFontSizeSpinner = (Spinner)findViewById(R.id.question_font_size_spinner);
         ArrayAdapter<CharSequence> fontSizeAdapter = ArrayAdapter.createFromResource(this, R.array.font_size_list, android.R.layout.simple_spinner_item);
         fontSizeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-    	questionFontSizeSpinner = (Spinner)findViewById(R.id.question_font_size_spinner);        
-        questionFontSizeSpinner.setAdapter(fontSizeAdapter);
         
+        questionFontSizeSpinner.setAdapter(fontSizeAdapter);
         answerFontSizeSpinner = (Spinner)findViewById(R.id.answer_font_size_spinner);
         answerFontSizeSpinner.setAdapter(fontSizeAdapter);
         
-        ArrayAdapter<CharSequence> alignAdapter = ArrayAdapter.createFromResource(this, R.array.align_list, android.R.layout.simple_spinner_item);
-        alignAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);    
-
         questionAlignSpinner = (Spinner)findViewById(R.id.question_align_spinner);
+        ArrayAdapter<CharSequence> alignAdapter = ArrayAdapter.createFromResource(this, R.array.align_list, android.R.layout.simple_spinner_item);
+        alignAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         questionAlignSpinner.setAdapter(alignAdapter);
-        
         answerAlignSpinner = (Spinner)findViewById(R.id.answer_align_spinner);
         answerAlignSpinner.setAdapter(alignAdapter);
         
+        questionLocaleSpinner = (Spinner)findViewById(R.id.question_locale_spinner);
         ArrayAdapter<CharSequence> localeAdapter = ArrayAdapter.createFromResource(this, R.array.locale_list, android.R.layout.simple_spinner_item);
         localeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        questionLocaleSpinner = (Spinner)findViewById(R.id.question_locale_spinner);
         questionLocaleSpinner.setAdapter(localeAdapter);
-        
         answerLocaleSpinner = (Spinner)findViewById(R.id.answer_locale_spinner);
         answerLocaleSpinner.setAdapter(localeAdapter);
-        
         AdapterView.OnItemSelectedListener localeListener = new AdapterView.OnItemSelectedListener(){
             public void onItemSelected(AdapterView adapterView, View view, int position, long id){
                 /* This is the position os "User Audio" */
@@ -154,7 +148,6 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
                 audioLocationLayout.setVisibility(View.GONE);
             }
         };
-
         questionLocaleSpinner.setOnItemSelectedListener(localeListener);
         answerLocaleSpinner.setOnItemSelectedListener(localeListener);
         
@@ -173,7 +166,6 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
 
         colorRow = (TableRow)findViewById(R.id.color_row);
         colorRow.setVisibility(View.GONE);
-
         colorSpinner = (Spinner)findViewById(R.id.color_item_spinner);
         ArrayAdapter<CharSequence> colorItemAdapter = ArrayAdapter.createFromResource(this, R.array.color_item_list, android.R.layout.simple_spinner_item);
         colorItemAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -250,7 +242,7 @@ public class SettingsScreen extends AMActivity implements View.OnClickListener, 
 			dbPath = extras.getString("dbpath");
 			dbName = extras.getString("dbname");
 		}
-        try {
+        try{
             dbHelper = new DatabaseHelper(this, dbPath, dbName);
         }
         catch(Exception e){
