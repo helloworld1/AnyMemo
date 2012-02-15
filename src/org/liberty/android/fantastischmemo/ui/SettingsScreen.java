@@ -44,11 +44,13 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -112,6 +114,8 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
     private Button saveButton;
     private Button discardButton;
 
+    private final static String WEBSITE_HELP_SETTINGS="http://anymemo.org/wiki/index.php?title=Card_styles";
+    
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -135,6 +139,32 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+    }
+    
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.settingsmenu_save:
+            SaveButtonTask task = new SaveButtonTask();
+            task.execute((Void) null);
+            return true;
+
+        case R.id.settingsmenu_discard:
+            Intent resultIntent = new Intent();
+            setResult(Activity.RESULT_CANCELED, resultIntent);
+            finish();
+            return true;
+
+        case R.id.settingsmenu_help:
+            Intent myIntent = new Intent();
+            myIntent.setAction(Intent.ACTION_VIEW);
+            myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
+            myIntent.setData(Uri.parse(WEBSITE_HELP_SETTINGS));
+            startActivity(myIntent);
+            return true;
+
+        }
+        return false;
     }
 
     // ============================================================================
