@@ -32,6 +32,7 @@ import org.liberty.android.fantastischmemo.DatabaseUtils;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.RecentListUtil;
 
+import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 
 import android.app.Activity;
@@ -124,7 +125,7 @@ public class RecentListFragment extends Fragment implements OnItemClickListener{
                             continue;
                         }
                         final RecentItem ri = new RecentItem();
-                        if (!DatabaseUtils.checkDatabase(allPath[i])) {
+                        if (!DatabaseUtils.checkDatabase(mActivity, allPath[i])) {
                             RecentListUtil.deleteFromRecentList(mActivity, allPath[i]);
                             continue;
                         }
@@ -147,12 +148,12 @@ public class RecentListFragment extends Fragment implements OnItemClickListener{
                     for(final RecentItem ri : ril){
                         try {
                             AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, ri.dbPath);
-                            LearningDataDao dao = helper.getLearningDataDao();
-                            ri.dbInfo = getString(R.string.stat_total) + dao.getTotalCount() + " " + getString(R.string.stat_new) + dao.getNewCardCount() + " " + getString(R.string.stat_scheduled)+ dao.getScheduledCardCount();
+                            CardDao dao = helper.getCardDao();
+                            ri.dbInfo = getString(R.string.stat_total) + dao.getTotalCount(null) + " " + getString(R.string.stat_new) + dao.getNewCardCount(null) + " " + getString(R.string.stat_scheduled)+ dao.getScheduledCardCount(null);
                             ril.set(ri.index, ri);
                             AnyMemoDBOpenHelperManager.releaseHelper(ri.dbPath);
-                        } catch (SQLException e) {
-                            Log.e(TAG, "Database error in recent list", e);
+                        } catch (Exception e) {
+                            Log.e(TAG, "Recent list throws exception (Usually can be safely ignored)", e);
                         }
                         Thread.sleep(5);
                     }
@@ -281,8 +282,7 @@ public class RecentListFragment extends Fragment implements OnItemClickListener{
                 /* Preview card */
                 Intent myIntent = new Intent();
                 myIntent.setClass(mActivity, EditScreen.class);
-                myIntent.putExtra("dbpath", selectedPath);
-                myIntent.putExtra("id", 1);
+                myIntent.putExtra(EditScreen.EXTRA_DBPATH, selectedPath);
                 startActivity(myIntent);
                 RecentListUtil.addToRecentList(mActivity, selectedPath);
                 return true;
@@ -305,9 +305,9 @@ public class RecentListFragment extends Fragment implements OnItemClickListener{
             {
                 /* Delete this database */
                 new AlertDialog.Builder(mActivity)
-                    .setTitle(getString(R.string.detail_delete))
+                    .setTitle(getString(R.string.delete_text))
                     .setMessage(getString(R.string.fb_delete_message))
-                    .setPositiveButton(getString(R.string.detail_delete), new DialogInterface.OnClickListener(){
+                    .setPositiveButton(getString(R.string.delete_text), new DialogInterface.OnClickListener(){
                         @Override
                         public void onClick(DialogInterface dialog, int which ){
                             File fileToDelete = new File(selectedPath);

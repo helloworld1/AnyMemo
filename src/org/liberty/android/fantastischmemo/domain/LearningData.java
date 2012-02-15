@@ -18,29 +18,29 @@ public class LearningData {
     @DatabaseField(defaultValue = "2010-01-01 00:00:00.000000")
     private Date lastLearnDate;
 
-    @DatabaseField
+    @DatabaseField(defaultValue = "2010-01-01 00:00:00.000000")
     private Date nextLearnDate;
 
     @DatabaseField
-    private Integer grade;
+    private Integer grade = 3;
 
     @DatabaseField(defaultValue = "2.5")
-    private Float easiness;
+    private Float easiness = 0.0f;
 
     @DatabaseField
-    private Integer acqReps;
+    private Integer acqReps = 0;
 
     @DatabaseField
-    private Integer retReps;
+    private Integer retReps = 0;
 
     @DatabaseField
-    private Integer lapses;
+    private Integer lapses = 0;
 
     @DatabaseField
-    private Integer acqRepsSinceLapse;
+    private Integer acqRepsSinceLapse = 0;
 
     @DatabaseField
-    private Integer retRepsSinceLapse;
+    private Integer retRepsSinceLapse = 0;
 
     @DatabaseField(version = true)
     private Date updateDate;

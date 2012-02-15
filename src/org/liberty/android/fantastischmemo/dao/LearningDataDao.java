@@ -6,9 +6,4 @@ import com.j256.ormlite.dao.Dao;
 
 public interface LearningDataDao extends Dao<LearningData, Integer> {
 
-    public long getTotalCount();
-
-    public long getNewCardCount();
-
-    public long getScheduledCardCount();
 }

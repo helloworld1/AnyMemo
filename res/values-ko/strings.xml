@@ -88,7 +88,7 @@
     <string name="settings_inverse_warning">문제와 정답을 교환합니다. 교환&amp;복사는 마지막에 바뀐 카드를 추가합니다.</string>
     <string name="detail_update">변경 저장</string>
     <string name="detail_back">이전</string>
-    <string name="detail_delete">삭제</string>
+    <string name="delete_text">삭제</string>
     <string name="delete_warning">정말 삭제하시겠습니까?</string>
     <string name="skip_text">학습제외</string>
     <string name="skip_warning">이 카드를 다시는 학습하지 않습니다. 제외할까요?</string>

@@ -166,6 +166,7 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
     public CardDao getCardDao() throws SQLException {
         if (cardDao == null) {
             cardDao = getDao(Card.class);
+            cardDao.setHelper(this);
         }
         return cardDao;
     }

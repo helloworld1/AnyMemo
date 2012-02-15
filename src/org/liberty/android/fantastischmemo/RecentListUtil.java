@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo;
 
+import org.apache.mycommons.io.FilenameUtils;
+
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.content.Context;
@@ -82,14 +84,7 @@ public class RecentListUtil {
     }
 
     private static String trimPath(String path){
-        if(path == null || path.length() <= 1){
-            return path;
-        }
-        /* trim all / at the end of the path */
-        while(path.endsWith("/")){
-            path = path.substring(0, path.length() - 1);
-        }
-        return path;
+        return FilenameUtils.normalize(path);
     }
 }
 

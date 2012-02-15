@@ -86,7 +86,7 @@
     <string name="settings_inverse_warning">Q&amp;Aが入れ替わります。入れ替わったカードは現在のセットの最後尾に付け足されオリジナルカードは残ります。</string>
     <string name="detail_update">更新</string>
     <string name="detail_back">戻る</string>
-    <string name="detail_delete">削除</string>
+    <string name="delete_text">削除</string>
     <string name="delete_warning">カードを削除します。</string>
     <string name="skip_text">スキップ</string>
     <string name="skip_warning">今後このカードは表示されません。スキップしますか？</string>

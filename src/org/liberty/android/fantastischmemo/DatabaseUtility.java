@@ -136,7 +136,7 @@ public class DatabaseUtility{
 
     public void deleteItemFromDb(final Item item){
         new AlertDialog.Builder(mActivity)
-            .setTitle(R.string.detail_delete)
+            .setTitle(R.string.delete_text)
             .setMessage(R.string.delete_warning)
             .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
                 public void onClick(DialogInterface arg0, int arg1) {

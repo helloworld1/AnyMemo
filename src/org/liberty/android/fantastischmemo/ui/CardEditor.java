@@ -60,7 +60,7 @@ import android.util.Log;
 import android.os.Environment;
 import android.content.res.Configuration;
 
-public class CardEditor extends AMActivity implements View.OnClickListener{
+public class CardEditor extends AMActivity implements View.OnClickListener, CategoryEditorFragment.CategoryEditorResultListener{
     private final int ACTIVITY_IMAGE_FILE = 1;
     private final int ACTIVITY_AUDIO_FILE = 2;
     Card currentCard = null;
@@ -107,6 +107,17 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
         super.onDestroy();
         AnyMemoDBOpenHelperManager.releaseHelper(dbPath);
     }
+
+    @Override
+    public void restartActivity() {
+        assert currentCard != null : "Null card is used when restarting activity";
+        assert dbPath != null : "Use null dbPath to restartAcitivity";
+        Intent myIntent = new Intent(this, CardEditor.class);
+        myIntent.putExtra(EXTRA_CARD_ID, currentCard.getId());
+        myIntent.putExtra(EXTRA_DBPATH, dbPath);
+        finish();
+        startActivity(myIntent);
+    }
         
     
     public void onClick(View v) {
@@ -148,7 +159,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
             DialogFragment df = new CategoryEditorFragment();
             Bundle b = new Bundle();
             b.putString(CategoryEditorFragment.EXTRA_DBPATH, dbPath);
-            b.putInt(CategoryEditorFragment.EXTRA_CARD_ID, currentCardId);
+            b.putInt(CategoryEditorFragment.EXTRA_CATEGORY_ID, currentCard.getCategory().getId());
             df.setArguments(b);
             df.show(getSupportFragmentManager(), "CategoryEditDialog");
         }
@@ -269,9 +280,16 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
         super.onConfigurationChanged(newConfig);
     }
 
+    @Override
+    public void onReceiveCategory(Category c) {
+        currentCard.setCategory(c);
+        updateViews();
+    }
+
     private void setInitRadioButton(){
         if(!isEditNew){
             addRadio.setVisibility(View.GONE);
+            addBack = false;
         }
         else{
             /* 
@@ -280,6 +298,8 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
              */
             addRadio.setVisibility(View.VISIBLE);
             final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+            // Only for new card we need to add back.
+            // For existing cards, we just edit the current card.
             addBack = settings.getBoolean("add_back", true);
             if(addBack){
                 addRadio.check(R.id.add_back_radio);
@@ -364,15 +384,15 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
 
                 Card prevCard = cardDao.queryForId(currentCardId);
 
+                if (prevCard != null) {
+                    prevOrdinal = prevCard.getOrdinal();
+                }
                 if (isEditNew) {
                     currentCard = new Card();
                     // Search for "Uncategorized".
                     Category c = categoryDao.queryForId(1);
                     currentCard.setCategory(c);
                     // Save the ordinal to be used when saving.
-                    if (prevCard != null) {
-                        prevOrdinal = prevCard.getOrdinal();
-                    }
                     LearningData ld = new LearningData();
                     learningDataDao.create(ld);
                     currentCard.setLearningData(ld);
@@ -464,5 +484,4 @@ public class CardEditor extends AMActivity implements View.OnClickListener{
             finish();
         }
     }
-
 }

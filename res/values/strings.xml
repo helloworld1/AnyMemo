@@ -96,7 +96,6 @@
     <string name="settings_inverse_warning">This operation will swap the location of question and answer. Swap&amp;dup will add all swapped cards to the back of current database instead of replacing.</string>
     <string name="detail_update">Write changes</string>
     <string name="detail_back">Back</string>
-    <string name="detail_delete">Delete</string>
     <string name="delete_warning">Do you really want to delete this card?</string>
     <string name="skip_text">Skip</string>
     <string name="skip_warning">This item will never appear for learning. Do you want to skip it?</string>
@@ -386,4 +385,10 @@
     <string name="review_short_text">Rev</string>
     <string name="new_text">New</string>
     <string name="id_text">ID</string>
+    <string name="filter_category_text">Filter category</string>
+    <string name="delete_text">Delete</string>
+    <string name="delete_text_short">Del</string>
+    <string name="sort_by_text">Sort by</string>
+    <string name="question_text">Question</string>
+    <string name="answer_text">Answer</string>
 </resources>

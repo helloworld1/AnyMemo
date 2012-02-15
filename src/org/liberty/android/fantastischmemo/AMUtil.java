@@ -32,6 +32,8 @@ import java.util.EnumSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.mycommons.io.FilenameUtils;
+
 public class AMUtil {
     public static boolean isInteger(String s){
         try{
@@ -44,6 +46,7 @@ public class AMUtil {
     }
 
     public static boolean isHTML(String s){
+        assert s != null : "Verify Null string";
         Pattern htmlPattern1 = Pattern.compile("<[a-zA-Z]+[0-9]*(\\s[a-zA-Z]+[0-9]*=.*)*\\s*/??>");
         Pattern htmlPattern2 = Pattern.compile("&#?[a-z0-9]+;");
         Matcher m1 = htmlPattern1.matcher(s);
@@ -68,10 +71,24 @@ public class AMUtil {
 		out.close();
 	}
 
+    public static void deleteFileWithBackup(String filepath) throws IOException {
+        if (!new File(filepath).exists()) {
+            return;
+        }
+        String ext = FilenameUtils.getExtension(filepath);
+        String nameWtihoutExt = FilenameUtils.removeExtension(filepath);
+        String backFileName = nameWtihoutExt + ".backup." + ext;
+        copyFile(filepath, backFileName);
+    }
+
     /* Get the file name from the path name */
     public static String getFilenameFromPath(String path) {
         String[] splitted = path.split("/");
         return splitted[splitted.length - 1];
+    }
+
+    public static String getDirectoryFromPath(String path) {
+        return new File(path).getParent();
     }
 
     /* Get the EnumSet from a string in format "A,B,C" */
@@ -97,10 +114,5 @@ public class AMUtil {
             res = res.substring(0, res.length() - 1);
         }
         return res;
-    }
-
-    /* Get the interval in days between two date */
-    public float diffDate(Date d1, Date d2) {
-        return 0.0f;
     }
 }

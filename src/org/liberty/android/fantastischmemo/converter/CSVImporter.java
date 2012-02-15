@@ -19,53 +19,86 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.converter;
 
+import java.io.File;
+
+import java.util.List;
+
 import org.liberty.android.fantastischmemo.*;
 
 import java.io.FileReader;
 import java.util.LinkedList;
+
+import org.liberty.android.fantastischmemo.dao.CardDao;
+
+import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.domain.Category;
+import org.liberty.android.fantastischmemo.domain.LearningData;
 import au.com.bytecode.opencsv.CSVReader;
 
 import android.content.Context;
 
-public class CSVImporter implements AbstractConverter{
+public class CSVImporter implements AbstractConverter {
     private Context mContext;
+    
+    /* Null is for default separator "," */
+    private Character separator = null;
 
-    public CSVImporter(Context context){
+    public CSVImporter(Context context) {
         mContext = context;
     }
 
-    public void convert(String filePath, String fileName) throws Exception{
-        String fullname = filePath + "/" + fileName;
-        CSVReader reader = new CSVReader(new FileReader(fullname));
-        String[] nextLine;
-        int count = 0;
-        LinkedList<Item> itemList = new LinkedList<Item>();
-        while((nextLine = reader.readNext()) != null){
-            if(nextLine.length < 2){
-                throw new Exception("Malformed CSV file. Please make sure the CSV's first column is question, second one is answer and the optinal third one is category");
+    public CSVImporter(Context context, char separator) {
+        mContext = context;
+        this.separator = separator;
+    }
+
+    public void convert(String src, String dest) throws Exception {
+        new File(dest).delete();
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, dest);
+        try {
+            final CardDao cardDao = helper.getCardDao();
+
+            CSVReader reader;
+            if (separator == null) {
+                reader = new CSVReader(new FileReader(src));
+            } else {
+                reader = new CSVReader(new FileReader(src), separator);
             }
-            count++;
-            String note = "";
-            String category = "";
-            if(nextLine.length >= 3){
-                category = nextLine[2];
+
+            String[] nextLine;
+            int count = 0;
+            final List<Card> cardList = new LinkedList<Card>();
+            while((nextLine = reader.readNext()) != null) {
+                if(nextLine.length < 2){
+                    throw new Exception("Malformed CSV file. Please make sure the CSV's first column is question, second one is answer and the optinal third one is category");
+                }
+                count++;
+                String note = "";
+                String category = "";
+                if(nextLine.length >= 3){
+                    category = nextLine[2];
+                }
+                if(nextLine.length >= 4){
+                    note = nextLine[3];
+                }
+                Card card = new Card();
+                Category cat = new Category();
+                LearningData ld = new LearningData();
+                cat.setName(category);
+
+                card.setOrdinal(count);
+                card.setCategory(cat);
+                card.setLearningData(ld);
+                card.setQuestion(nextLine[0]);
+                card.setAnswer(nextLine[1]);
+                card.setNote(note);
+                cardList.add(card);
             }
-            if(nextLine.length >= 4){
-                note = nextLine[3];
-            }
-            Item item = new Item.Builder()
-                .setId(count)
-                .setQuestion(nextLine[0])
-                .setAnswer(nextLine[1])
-                .setCategory(category)
-                .setNote(note)
-                .build();
-            itemList.add(item);
+
+            cardDao.createCards(cardList);
+        } finally {
+            AnyMemoDBOpenHelperManager.releaseHelper(dest);
         }
-        DatabaseHelper.createEmptyDatabase(filePath, fileName.replace(".csv", ".db"));
-        DatabaseHelper dbHelper =  new DatabaseHelper(mContext, filePath, fileName.replace(".csv", ".db"));
-        dbHelper.insertListItems(itemList);
-        dbHelper.close();
     }
 }
 

@@ -88,7 +88,7 @@
     <string name="settings_inverse_warning">Dieser Vorgang wird die Positionen der Fragen und Antworten vertauschen. Mit &quot;Duplizieren+Vertauschen&quot; ersetzen die vertauschten Karteikarten nicht das Original, sondern werden als Kopien dem Ende des Stapels hinzugefügt.</string>
     <string name="detail_update">Änderungen speichern</string>
     <string name="detail_back">Zurück</string>
-    <string name="detail_delete">Löschen</string>
+    <string name="delete_text">Löschen</string>
     <string name="delete_warning">Wollen Sie diese Karteikarte wirklich löschen?</string>
     <string name="skip_text">Überspringen</string>
     <string name="skip_warning">Das Wiedervorlagedatum dieser Karte wird auf unendlichgesetzt. Möchten Sie dies tun?</string>

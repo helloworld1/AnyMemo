@@ -19,46 +19,74 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.converter;
 
+import java.io.File;
+
+import java.util.concurrent.Callable;
+
 import org.liberty.android.fantastischmemo.*;
+
+import org.liberty.android.fantastischmemo.dao.CardDao;
+import org.liberty.android.fantastischmemo.dao.CategoryDao;
+
+import org.liberty.android.fantastischmemo.domain.Card;
 
 import android.content.Context;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
-import java.util.ArrayList;
 import au.com.bytecode.opencsv.CSVWriter;
 
-public class CSVExporter implements AbstractConverter{
+public class CSVExporter implements AbstractConverter {
     private Context mContext;
+
+    /* Null is for default separator "," */
+    private Character separator = null;
 
     public CSVExporter(Context context){
         mContext = context;
     }
 
-    public void convert(String dbPath, String dbName) throws Exception{
-        String fullpath = dbPath + "/" + dbName.replaceAll(".db", ".csv");
+    public CSVExporter(Context context, char separator) {
+        mContext = context;
+        this.separator = separator;
+    }
 
-        DatabaseHelper dbHelper = new DatabaseHelper(mContext, dbPath, dbName);
+    public void convert(String src, String dest) throws Exception{
+        new File(dest).delete();
 
-        CSVWriter writer = new CSVWriter(new FileWriter(fullpath));
-        List<Item> itemList = new ArrayList<Item>();
-        itemList = dbHelper.getListItems(1, -1, 0, null);
-        if(itemList == null || itemList.size() == 0){
-            throw new IOException("Can't retrieve items for database: " + dbPath + "/" + dbName);
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, src);
+        final CardDao cardDao = helper.getCardDao();
+        final CategoryDao categoryDao = helper.getCategoryDao();
+
+        CSVWriter writer;
+        if (separator == null) {
+            writer = new CSVWriter(new FileWriter(dest));
+        } else {
+            writer = new CSVWriter(new FileWriter(dest), separator);
+        }
+        final List<Card> cardList = cardDao.queryForAll();
+
+        // Populate all category field in a transaction.
+        categoryDao.callBatchTasks(new Callable<Void>() {
+            public Void call() throws Exception {
+                for (Card c: cardList) {
+                    categoryDao.refresh(c.getCategory());
+                }
+                return null;
+            }
+        });
+        AnyMemoDBOpenHelperManager.releaseHelper(src);
+        if(cardList.size() == 0){
+            throw new IOException("Can't retrieve cards for database: " + src);
         }
         String[] entries = new String[4];
-        for(Item item : itemList){
-            entries[0] = item.getQuestion();
-            entries[1] = item.getAnswer();
-            entries[2] = item.getCategory();
-            entries[3] = item.getNote();
+        for(Card card: cardList){
+            entries[0] = card.getQuestion();
+            entries[1] = card.getAnswer();
+            entries[2] = card.getCategory().getName();
+            entries[3] = card.getNote();
             writer.writeNext(entries);
         }
         writer.close();
-        dbHelper.close();
     }
 }
-
-
-
-

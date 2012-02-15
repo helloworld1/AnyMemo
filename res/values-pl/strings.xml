@@ -88,7 +88,7 @@
     <string name="settings_inverse_warning">Ta operacja zamieni pytania z odpowiedziami na WSZYSTKICH kartach.</string>
     <string name="detail_update">Zapisz zmiany</string>
     <string name="detail_back">Wstecz</string>
-    <string name="detail_delete">Usuń</string>
+    <string name="delete_text">Usuń</string>
     <string name="delete_warning">Czy na pewno chcesz usunąć tę kartę?</string>
     <string name="skip_text">Pomiń</string>
     <string name="skip_warning">Ta karta nigdy się nie pojawi do nauki. Czy na pewno chcesz ją pominąć?</string>

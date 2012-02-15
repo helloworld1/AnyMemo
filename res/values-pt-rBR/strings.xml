@@ -100,7 +100,7 @@
     <string name="settings_inverse_warning">Esta operação irá trocar o local das perguntas e respostas. Trocar&amp;dup irá adicionar todas as cartas trocadas no fm do Banco de Dados em vez de substituir.</string>
     <string name="detail_update">Salvar Mudanças</string>
     <string name="detail_back">Voltar</string>
-    <string name="detail_delete">Apagar</string>
+    <string name="delete_text">Apagar</string>
     <string name="delete_warning">Você realmente quer apagar estas cartas?</string>
     <string name="skip_text">Pular</string>
     <string name="skip_warning">Este ítem nunca mais irá aparecer para aprendizado. Você realmente quer ignorá-lo?</string>

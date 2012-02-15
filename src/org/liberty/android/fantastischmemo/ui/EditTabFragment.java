@@ -40,7 +40,6 @@ public class EditTabFragment extends AbstractFileBrowserFragment {
         String fullpath = path + "/" + name;
         RecentListUtil.addToRecentList(mActivity, fullpath);
         myIntent.putExtra("dbpath", fullpath);
-        myIntent.putExtra("id", 1);
         startActivity(myIntent);
 
     }

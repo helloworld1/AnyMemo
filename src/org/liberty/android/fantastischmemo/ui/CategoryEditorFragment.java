@@ -9,13 +9,9 @@ import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
 
-import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 
-import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
-
-import org.liberty.android.fantastischmemo.ui.CardEditor;
 
 import android.app.Activity;
 
@@ -42,13 +38,11 @@ import android.widget.ListView;
 
 public class CategoryEditorFragment extends DialogFragment implements View.OnClickListener {
     public static String EXTRA_DBPATH = "dbpath";
-    public static String EXTRA_CARD_ID = "id";
+    public static String EXTRA_CATEGORY_ID = "id";
     private AMActivity mActivity;
     private String dbPath;
     private CategoryDao categoryDao;
-    private CardDao cardDao;
-    private Card currentCard;
-    private Integer currentCardId;
+    private int currentCategoryId;
     private List<Category> categories;
     private static final String TAG = "CategoryEditorFragment";
     private CategoryAdapter categoryAdapter;
@@ -69,8 +63,8 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         Bundle args = this.getArguments();
-        currentCardId = args.getInt(EXTRA_CARD_ID);
         dbPath = args.getString(EXTRA_DBPATH);
+        currentCategoryId = args.getInt(EXTRA_CATEGORY_ID, 1);
     }
 
     @Override
@@ -100,8 +94,16 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
 
     public void onClick(View v) {
         if (v == okButton) {
-            SaveCardTask saveCardTask = new SaveCardTask();
-            saveCardTask.execute((Void)null);
+            mActivity.setProgressBarIndeterminateVisibility(true);
+            int position = categoryList.getCheckedItemPosition();
+            Category selectedCategory;
+            if (position == AdapterView.INVALID_POSITION) {
+                selectedCategory = null;
+            } else {
+                selectedCategory = categoryAdapter.getItem(position);
+            }
+            ((CategoryEditorResultListener)mActivity).onReceiveCategory(selectedCategory);
+            dismiss();
         }
         if (v == newButton) {
             NewCategoryTask task = new NewCategoryTask();
@@ -133,27 +135,29 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
 
         @Override
         public Integer doInBackground(Void... params) {
+            Category currentCategory;
             try {
                 AnyMemoDBOpenHelper helper =
                     AnyMemoDBOpenHelperManager.getHelper(mActivity, dbPath);
 
                 categoryDao = helper.getCategoryDao();
-                cardDao = helper.getCardDao();
-                currentCard = cardDao.queryForId(currentCardId);;
                 categories = categoryDao.queryForAll();
+                currentCategory = categoryDao.queryForId(currentCategoryId);
             } catch (SQLException e) {
                 Log.e(TAG, "Error creating daos", e);
                 throw new RuntimeException("Dao creation error");
             }
             int categorySize = categories.size();
-            assert categorySize > 0 : "There should be at least an empty category. Ensured in AnyMemoDBOpenHelper.";
-            assert currentCard.getCategory() != null : "The card has null category, this should be avoided";
             Integer position = null;
-            for (int i = 0; i < categorySize; i++) {
-                if (categories.get(i).getName().equals(currentCard.getCategory().getName())) {
-                    position = i;
-                    break;
+            if (currentCategory != null) {
+                for (int i = 0; i < categorySize; i++) {
+                    if (categories.get(i).getName().equals(currentCategory.getName())) {
+                        position = i;
+                        break;
+                    }
                 }
+            } else {
+                position = 0;
             }
             assert position != null : "The card has no category. This shouldn't happen.";
             return position;
@@ -172,50 +176,6 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
         }
     }
 
-
-    /*
-     * This task will save the card and exit the dialog
-     */
-    private class SaveCardTask extends AsyncTask<Void, Category, Void> {
-        private Category selectedCategory;
-
-		@Override
-        public void onPreExecute() {
-            disableListeners();
-            mActivity.setProgressBarIndeterminateVisibility(true);
-            int position = categoryList.getCheckedItemPosition();
-            if (position == AdapterView.INVALID_POSITION) {
-                cancel(true);
-                return;
-            }
-            selectedCategory = categoryAdapter.getItem(position);
-        }
-
-        @Override
-        public Void doInBackground(Void... params) {
-            assert selectedCategory != null : "Null category is selected. This shouldn't happen";
-            try {
-                currentCard.setCategory(selectedCategory);
-                cardDao.update(currentCard);
-            } catch (SQLException e) {
-                Log.e(TAG, "Error updating the category of current card", e);
-                throw new RuntimeException("Error updating the category of current card");
-            }
-            return null;
-        }
-
-        @Override
-        public void onCancelled(){
-            CategoryEditorFragment.this.dismiss();
-        }
-
-        @Override
-        public void onPostExecute(Void result){
-            mActivity.setProgressBarIndeterminateVisibility(false);
-            mActivity.restartActivity();
-            //CategoryEditorFragment.this.dismiss();
-        }
-    }
 
     /*
      * This task will edit the category in the list
@@ -255,7 +215,6 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
             assert editText != null : "Category's EditText shouldn't get null";
             try {
                 selectedCategory.setName(editText);
-                currentCard.setCategory(selectedCategory);
                 categoryDao.update(selectedCategory);
             } catch (SQLException e) {
                 Log.e(TAG, "Error updating the category", e);
@@ -421,5 +380,9 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
         deleteButton.setOnClickListener(null);
         newButton.setOnClickListener(null);
         editButton.setOnClickListener(null);
+    }
+
+    public static interface CategoryEditorResultListener {
+        void onReceiveCategory(Category c);
     }
 }

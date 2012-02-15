@@ -21,7 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo;
 
 
-import org.liberty.android.fantastischmemo.cardscreen.MemoScreen;
+import org.liberty.android.fantastischmemo.ui.MemoScreen;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.os.Bundle;
@@ -37,7 +37,6 @@ import android.app.NotificationManager;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.graphics.Color;
-
 
 public class AnyMemoService extends Service{
     public static int UPDATE_WIDGET = 1;

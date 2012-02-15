@@ -7,7 +7,7 @@
     <item 
         android:id="@+id/editmenu_delete_id"
         android:icon="@android:drawable/ic_menu_delete"  
-        android:title="@string/detail_delete" />
+        android:title="@string/delete_text" />
     <item 
         android:id="@+id/editmenu_list_id"
         android:icon="@android:drawable/ic_menu_view"  
@@ -24,8 +24,8 @@
     <item android:id="@+id/editmenu_detail_id"
   		  android:icon="@android:drawable/ic_menu_edit"
           android:title="@string/detail_menu_text" />
-    <item android:id="@+id/menu_edit_filter"
-          android:title="@string/filter_text"
+    <item android:id="@+id/menu_edit_categories"
+          android:title="@string/filter_category_text"
   		  android:icon="@android:drawable/ic_menu_search" />
     <item android:id="@+id/editmenu_help"
   		  android:icon="@android:drawable/ic_menu_help"  

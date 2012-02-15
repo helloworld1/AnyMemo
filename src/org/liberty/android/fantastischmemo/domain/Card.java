@@ -18,13 +18,13 @@ public class Card {
     private Integer ordinal;
 
     @DatabaseField(defaultValue = "", width = 8192)
-    private String question;
+    private String question = "";
 
     @DatabaseField(defaultValue = "", width = 8192)
-    private String answer;
+    private String answer = "";
 
     @DatabaseField(defaultValue = "", width = 8192)
-    private String note;
+    private String note = "";
 
     /* Category = 1 should be uncategorized */
     @DatabaseField(foreign = true, index = true)
@@ -34,7 +34,7 @@ public class Card {
     private LearningData learningData;
 
     @DatabaseField(defaultValue = "0")
-    private Integer cardType;
+    private Integer cardType = 0;
 
     @DatabaseField
     private Date creationDate;

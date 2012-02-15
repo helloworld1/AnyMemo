@@ -24,15 +24,12 @@ import org.liberty.android.fantastischmemo.R;
 
 import org.liberty.android.fantastischmemo.converter.CSVExporter;
 import org.liberty.android.fantastischmemo.converter.CSVImporter;
-import org.liberty.android.fantastischmemo.converter.ConvertScreen;
 import org.liberty.android.fantastischmemo.converter.MnemosyneXMLExporter;
 import org.liberty.android.fantastischmemo.converter.MnemosyneXMLImporter;
 import org.liberty.android.fantastischmemo.converter.QATxtExporter;
 import org.liberty.android.fantastischmemo.converter.QATxtImporter;
 import org.liberty.android.fantastischmemo.converter.Supermemo2008XMLImporter;
 import org.liberty.android.fantastischmemo.converter.SupermemoXMLImporter;
-import org.liberty.android.fantastischmemo.converter.TabTxtExporter;
-import org.liberty.android.fantastischmemo.converter.TabTxtImporter;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -46,7 +43,9 @@ import android.os.Bundle;
 
 import android.preference.PreferenceManager;
 
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 
 import android.text.Html;
 
@@ -150,74 +149,83 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
             }
         }
 
-        if(v == exportButton){
-            if(exportItems.getVisibility() == View.GONE){
+        if(v == exportButton) {
+            if (exportItems.getVisibility() == View.GONE) {
                 exportItems.setVisibility(View.VISIBLE);
-            }
-            else{
+            } else {
                 exportItems.setVisibility(View.GONE);
             }
         }
 
         if(v == importMnemosyneButton){
-            Intent myIntent = new Intent(mActivity, ConvertScreen.class);
-            myIntent.putExtra("file_extension", ".xml");
-            myIntent.putExtra("converter", MnemosyneXMLImporter.class);
-            startActivity(myIntent);
+            DialogFragment df = new ConverterFragment(new MnemosyneXMLImporter(mActivity), ".db");
+            Bundle b = new Bundle();
+            b.putString("file_extension", ".xml");
+            df.setArguments(b);
+            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportMnemosyne");
         }
         if(v == importSupermemoButton){
-            Intent myIntent = new Intent(mActivity, ConvertScreen.class);
-            myIntent.putExtra("file_extension", ".xml");
-            myIntent.putExtra("converter", SupermemoXMLImporter.class);
-            startActivity(myIntent);
+            DialogFragment df = new ConverterFragment(new SupermemoXMLImporter(mActivity), ".db");
+            Bundle b = new Bundle();
+            b.putString("file_extension", ".xml");
+            df.setArguments(b);
+            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportSuperMemo2008");
         }
-        if(v == importCSVButton){
-            Intent myIntent = new Intent(mActivity, ConvertScreen.class);
-            myIntent.putExtra("file_extension", ".csv");
-            myIntent.putExtra("converter", CSVImporter.class);
-            startActivity(myIntent);
+        if(v == importCSVButton) {
+            DialogFragment df = new ConverterFragment(new CSVImporter(mActivity), ".db");
+            Bundle b = new Bundle();
+            b.putString("file_extension", ".csv");
+            df.setArguments(b);
+            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportCSV");
         }
         if(v == importTabButton){
-            Intent myIntent = new Intent(mActivity, ConvertScreen.class);
-            myIntent.putExtra("file_extension", ".txt");
-            myIntent.putExtra("converter", TabTxtImporter.class);
-            startActivity(myIntent);
+            DialogFragment df = new ConverterFragment(new CSVImporter(mActivity, '\t'), ".db");
+            Bundle b = new Bundle();
+            b.putString("file_extension", ".txt");
+            df.setArguments(b);
+            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportTabTxt");
         }
         if(v == importQAButton){
-            Intent myIntent = new Intent(mActivity, ConvertScreen.class);
-            myIntent.putExtra("file_extension", ".txt");
-            myIntent.putExtra("converter", QATxtImporter.class);
-            startActivity(myIntent);
+            DialogFragment df = new ConverterFragment(new QATxtImporter(mActivity), ".db");
+            Bundle b = new Bundle();
+            b.putString("file_extension", ".txt");
+            df.setArguments(b);
+            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportCSV");
         }
         if(v == importSupermemo2008Button) {
-            Intent myIntent = new Intent(mActivity, ConvertScreen.class);
-            myIntent.putExtra("file_extension", ".xml");
-            myIntent.putExtra("converter", Supermemo2008XMLImporter.class);
-            startActivity(myIntent);
+            DialogFragment df = new ConverterFragment(new Supermemo2008XMLImporter(mActivity), ".db");
+            Bundle b = new Bundle();
+            b.putString("file_extension", ".xml");
+            df.setArguments(b);
+            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportSuperMemo2008");
         }
         if(v == exportMnemosyneButton){
-            Intent myIntent = new Intent(mActivity, ConvertScreen.class);
-            myIntent.putExtra("file_extension", ".db");
-            myIntent.putExtra("converter", MnemosyneXMLExporter.class);
-            startActivity(myIntent);
+            DialogFragment df = new ConverterFragment(new MnemosyneXMLExporter(mActivity), ".xml");
+            Bundle b = new Bundle();
+            b.putString("file_extension", ".db");
+            df.setArguments(b);
+            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ExportMnemosyne");
         }
         if(v == exportCSVButton){
-            Intent myIntent = new Intent(mActivity, ConvertScreen.class);
-            myIntent.putExtra("file_extension", ".db");
-            myIntent.putExtra("converter", CSVExporter.class);
-            startActivity(myIntent);
+            DialogFragment df = new ConverterFragment(new CSVExporter(mActivity), ".csv");
+            Bundle b = new Bundle();
+            b.putString("file_extension", ".db");
+            df.setArguments(b);
+            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ExportCSV");
         }
         if(v == exportTabButton){
-            Intent myIntent = new Intent(mActivity, ConvertScreen.class);
-            myIntent.putExtra("file_extension", ".db");
-            myIntent.putExtra("converter", TabTxtExporter.class);
-            startActivity(myIntent);
+            DialogFragment df = new ConverterFragment(new CSVExporter(mActivity, '\t'), ".txt");
+            Bundle b = new Bundle();
+            b.putString("file_extension", ".db");
+            df.setArguments(b);
+            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ExportTabTxt");
         }
         if(v == exportQAButton){
-            Intent myIntent = new Intent(mActivity, ConvertScreen.class);
-            myIntent.putExtra("file_extension", ".db");
-            myIntent.putExtra("converter", QATxtExporter.class);
-            startActivity(myIntent);
+            DialogFragment df = new ConverterFragment(new QATxtExporter(mActivity), ".txt");
+            Bundle b = new Bundle();
+            b.putString("file_extension", ".db");
+            df.setArguments(b);
+            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ExportQA");
         }
         if(v == mergeButton){
             Intent myIntent = new Intent(mActivity, DatabaseMerger.class);
