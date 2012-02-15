@@ -21,10 +21,8 @@ package org.liberty.android.fantastischmemo.downloader;
 
 import org.liberty.android.fantastischmemo.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import java.io.IOException;
 import android.os.Bundle;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -38,9 +36,6 @@ import android.view.View;
 import android.os.Handler;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 /*
  * Download from Dropbox using its web api
@@ -156,40 +151,6 @@ public class DownloaderDropbox extends DownloaderBase {
             })
             .setNegativeButton(getString(R.string.no_text), null)
             .show();
-    }
-
-    private void downloadDatabase(DownloadItem di) throws Exception{
-        String address = di.getAddress();
-        String dbJsonString = DownloaderUtils.downloadJSONString(address);
-        Log.v(TAG, "Download url: " + address);
-        JSONObject rootObject = new JSONObject(dbJsonString);
-        String status = rootObject.getString("response_type");
-        if(!status.equals("ok")){
-            Log.e(TAG, "Content: " + dbJsonString);
-            throw new IOException("Status is not OK. Status: " + status);
-        }
-        JSONArray flashcardsArray = rootObject.getJSONArray("sets").getJSONObject(0).getJSONArray("terms");
-        List<Item> itemList = new ArrayList<Item>();
-        for(int i = 0; i < flashcardsArray.length(); i++){
-            JSONArray jsonItem = flashcardsArray.getJSONArray(i);
-            String question = jsonItem.getString(0);
-            String answer = jsonItem.getString(1);
-            Item newItem = new Item.Builder()
-                .setQuestion(question)
-                .setAnswer(answer)
-                .setId(i + 1)
-                .build();
-            itemList.add(newItem);
-        }
-        
-        /* Make a valid dbname from the title */
-        String dbname = DownloaderUtils.validateDBName(di.getTitle()) + ".db";
-        String dbpath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
-        DatabaseHelper.createEmptyDatabase(dbpath, dbname);
-        DatabaseHelper dbHelper = new DatabaseHelper(this, dbpath, dbname);
-        dbHelper.insertListItems(itemList);
-        dbHelper.close();
-        RecentListUtil.addToRecentList(this, dbpath + dbname);
     }
 
 }
