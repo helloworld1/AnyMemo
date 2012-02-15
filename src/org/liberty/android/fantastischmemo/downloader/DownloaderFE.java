@@ -19,14 +19,23 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader;
 
-import org.liberty.android.fantastischmemo.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import java.io.IOException;
 import java.net.URLEncoder;
 
+import org.liberty.android.fantastischmemo.AMGUIUtility;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.RecentListUtil;
+
+import org.liberty.android.fantastischmemo.dao.CardDao;
+
+import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.domain.Category;
+import org.liberty.android.fantastischmemo.domain.LearningData;
 
 import android.os.Bundle;
 import android.app.AlertDialog;
@@ -265,26 +274,35 @@ public class DownloaderFE extends DownloaderBase{
             throw new IOException("Status is not OK. Status: " + status);
         }
         JSONArray flashcardsArray = rootObject.getJSONObject("results").getJSONArray("flashcards");
-        List<Item> itemList = new ArrayList<Item>();
+        List<Card> cardList = new ArrayList<Card>();
         for(int i = 0; i < flashcardsArray.length(); i++){
             JSONObject jsonItem = flashcardsArray.getJSONObject(i);
             String question = jsonItem.getString("question");
             String answer = jsonItem.getString("answer");
-            Item newItem = new Item.Builder()
-                .setQuestion(question)
-                .setAnswer(answer)
-                .setId(i + 1)
-                .build();
-            itemList.add(newItem);
+            Card card = new Card();
+            card.setQuestion(question);
+            card.setAnswer(answer);
+            card.setOrdinal(i + 1);
+            card.setCategory(new Category());
+            card.setLearningData(new LearningData());
+            cardList.add(card);
         }
         
         /* Make a valid dbname from the title */
         String dbname = DownloaderUtils.validateDBName(di.getTitle()) + ".db";
         String dbpath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
-        DatabaseHelper.createEmptyDatabase(dbpath, dbname);
-        DatabaseHelper dbHelper = new DatabaseHelper(this, dbpath, dbname);
-        dbHelper.insertListItems(itemList);
-        dbHelper.close();
-        RecentListUtil.addToRecentList(this, dbpath + dbname);
+        String fullpath = dbpath + dbname;
+        try {
+            AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(DownloaderFE.this, fullpath);
+            CardDao cardDao = helper.getCardDao();
+            cardDao.createCards(cardList);
+            long count = helper.getCardDao().getTotalCount(null);
+            if (count <= 0L) {
+                throw new RuntimeException("Downloaded empty db.");
+            }
+        } finally {
+            AnyMemoDBOpenHelperManager.releaseHelper(fullpath);
+        }
+        RecentListUtil.addToRecentList(this, fullpath);
     }
 }
