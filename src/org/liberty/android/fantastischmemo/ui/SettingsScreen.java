@@ -33,10 +33,10 @@ import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.domain.Setting.CardField;
-import org.liberty.android.fantastischmemo.widgets.AMEnumSpinner;
-import org.liberty.android.fantastischmemo.widgets.AMIntSpinner;
-import org.liberty.android.fantastischmemo.widgets.AMPercentageSpinner;
-import org.liberty.android.fantastischmemo.widgets.AMStrSpinner;
+import org.liberty.android.fantastischmemo.ui.widgets.AMEnumSpinner;
+import org.liberty.android.fantastischmemo.ui.widgets.AMIntSpinner;
+import org.liberty.android.fantastischmemo.ui.widgets.AMPercentageSpinner;
+import org.liberty.android.fantastischmemo.ui.widgets.AMStrSpinner;
 
 import android.app.Activity;
 import android.app.AlertDialog;

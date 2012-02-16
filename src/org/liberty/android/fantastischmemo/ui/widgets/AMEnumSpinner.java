@@ -1,4 +1,4 @@
-package org.liberty.android.fantastischmemo.widgets;
+package org.liberty.android.fantastischmemo.ui.widgets;
 
 import java.util.Arrays;
 import java.util.List;
