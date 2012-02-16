@@ -27,7 +27,7 @@ import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.AnyMemoExecutor;
 import org.liberty.android.fantastischmemo.DetailScreen;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.SettingsScreen;
+import org.liberty.android.fantastischmemo.ui.SettingsScreen;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
@@ -224,8 +224,7 @@ public class MemoScreen extends AMActivity implements CategoryEditorFragment.Cat
             case R.id.menusettings:
             {
                 Intent myIntent = new Intent(this, SettingsScreen.class);
-                myIntent.putExtra("dbname", dbName);
-                myIntent.putExtra("dbpath", dbPath);
+                myIntent.putExtra(SettingsScreen.EXTRA_DBPATH, dbPath);
                 startActivityForResult(myIntent, ACTIVITY_SETTINGS);
                 return true;
             }

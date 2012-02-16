@@ -213,7 +213,6 @@
 <string-array name="card_field_list">
     <item>@string/add_screen_question</item>
     <item>@string/add_screen_answer</item>
-    <item>@string/edit_dialog_category</item>
     <item>@string/note_text</item>
 </string-array>
 

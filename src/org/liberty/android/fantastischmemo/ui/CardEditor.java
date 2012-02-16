@@ -120,8 +120,8 @@ public class CardEditor extends AMActivity implements View.OnClickListener, Cate
     }
         
     
-    public void onClick(View v){
-        if(v == btnSave){
+    public void onClick(View v) {
+        if(v == btnSave) {
             SaveCardTask task = new SaveCardTask();
             task.execute((Void)null);
         } 
@@ -165,7 +165,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener, Cate
         }
     }
 
-        
+    @Override    
 	public boolean onCreateOptionsMenu(Menu menu){
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.card_editor_menu, menu);

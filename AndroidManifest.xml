@@ -38,9 +38,6 @@
             android:name=".OptionScreen"
             android:configChanges="orientation|keyboardHidden" />
         <activity 
-            android:name=".SettingsScreen"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity 
             android:name=".DetailScreen"
             android:configChanges="orientation|keyboardHidden" />
         <activity 
@@ -102,6 +99,9 @@
             android:name=".ui.EditScreen"
             android:configChanges="orientation|keyboardHidden" />
         <activity 
+            android:name=".ui.SettingsScreen"
+            android:configChanges="orientation|keyboardHidden" />        
+	<activity
             android:name=".ui.ListEditScreen"
             android:configChanges="orientation|keyboardHidden" />
         <receiver

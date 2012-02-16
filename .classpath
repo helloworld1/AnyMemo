@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="gen"/>
+        <classpathentry kind="src" path="src" />
+	<classpathentry kind="src" path="gen" />
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="lib" path="libs/apache-mime4j-core-0.7.jar"/>
 	<classpathentry kind="lib" path="libs/httpclient-4.1.2.jar"/>

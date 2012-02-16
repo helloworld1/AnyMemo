@@ -95,10 +95,11 @@ public class AMUtil {
     public static <E extends Enum<E>> EnumSet<E> getEnumSetFromString(Class<E> enumType, String enumString) {
         EnumSet<E> es = EnumSet.noneOf(enumType);
 
-        String[] split = enumString.split(",");
-        for (String s : split) {
-            es.add(Enum.valueOf(enumType, s));
-
+        if(null!=enumString && !(enumString.isEmpty())) {
+            String[] split = enumString.split(",");
+            for (String s : split) {
+                es.add(Enum.valueOf(enumType, s));
+            }
         }
         return es;
     }
