@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2012 Haowen Ning
+Copyright (C) 2012 Haowen Ning, Xinyu Zhang
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -23,13 +23,13 @@ package org.liberty.android.fantastischmemo.ui;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 
 import org.color.ColorDialog;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.domain.Setting.CardField;
@@ -59,7 +59,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TableRow;
@@ -92,7 +91,7 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
     private TableRow colorRow;
     private AMStrSpinner colorSpinner;
     private Button colorButton;
-    private ArrayList<Integer> colors;
+    private List<Integer> colors;
     // ------------------------------------------
     private CheckBox qTypefaceCheckbox;
     private CheckBox aTypefaceCheckbox;
@@ -397,7 +396,7 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             answerLocaleSpinner = new AMStrSpinner(getSpinner(R.id.answer_locale_spinner, R.array.locale_list));
             
             AdapterView.OnItemSelectedListener localeListener = new AdapterView.OnItemSelectedListener(){
-                public void onItemSelected(AdapterView adapterView, View view, int position, long id){
+                public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id){
                     /* This is the position os "User Audio" */
                     if(position == 1){
                         audioLocationLayout.setVisibility(View.VISIBLE);
@@ -411,7 +410,7 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
                         audioLocationLayout.setVisibility(View.GONE);
                     }
                 }
-                public void onNothingSelected(AdapterView adapterView){
+                public void onNothingSelected(AdapterView<?> adapterView){
                     audioLocationLayout.setVisibility(View.GONE);
                 }
             };
@@ -435,11 +434,11 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             colors.add(setting.getAnswerBackgroundColor());
             colors.add(setting.getSeparatorColor());
             colorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
-                public void onItemSelected(AdapterView adapterView, View view, int position, long id){
+                public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id){
                     colorButton.setTextColor(colors.get(position));
 
                 }
-                public void onNothingSelected(AdapterView adapterView){
+                public void onNothingSelected(AdapterView<?> adapterView){
                 }
             });
             
