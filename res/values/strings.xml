@@ -391,4 +391,7 @@
     <string name="sort_by_text">Sort by</string>
     <string name="question_text">Question</string>
     <string name="answer_text">Answer</string>
+    <string name="exit_text">Exit</string>
+    <string name="sdcard_not_available_warning_title">SD card not available</string>
+    <string name="sdcard_not_available_warning_message">Please insert SD card and run again!</string>
 </resources>

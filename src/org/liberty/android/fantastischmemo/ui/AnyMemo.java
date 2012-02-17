@@ -19,27 +19,56 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+
 import java.util.HashMap;
+
+import org.apache.mycommons.io.FileUtils;
 
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.SetAlarmReceiver;
+
+import android.app.AlertDialog;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 
 import android.content.res.Resources;
+
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+
+import android.preference.PreferenceManager;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 
+import android.text.Html;
+
+import android.text.method.LinkMovementMethod;
+
+import android.util.Log;
+
+import android.view.Display;
 import android.view.View;
 
 import android.widget.TabHost;
+import android.widget.TextView;
 
 public class AnyMemo extends AMActivity {
-    TabHost mTabHost;
-    TabManager mTabManager;
+    private final static String WEBSITE_VERSION="http://anymemo.org/index.php?page=version";
+    private final static String SAMPLE_DB_NAME = "french-body-parts.db";
+    private TabHost mTabHost;
+    private TabManager mTabManager;
+    private SharedPreferences settings;
+    private SharedPreferences.Editor editor;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,15 +95,97 @@ public class AnyMemo extends AMActivity {
         mTabManager.addTab(mTabHost.newTabSpec("misc").setIndicator(getString(R.string.misc_tab_text),  res.getDrawable(R.drawable.misc)),
                 MiscTabFragment.class, null);
 
+        // This is the default tab.
         if (savedInstanceState != null) {
             mTabHost.setCurrentTabByTag(savedInstanceState.getString("recent"));
         }
+        
+        settings = PreferenceManager.getDefaultSharedPreferences(this);
+        editor = settings.edit();
 
-        //Intent myIntent = new Intent(this, CardEditor.class);
-        //myIntent.putExtra("dbpath", "/sdcard/french-body-parts.db");
-        //myIntent.putExtra("dbpath", "/sdcard/gre01.db");
-        //myIntent.putExtra("id", 1);
-        //startActivity(myIntent);
+        prepareStoreage();
+        prepareFirstTimeRun();
+        //prepareNotification();
+    }
+
+    private void prepareStoreage() {
+        File sdPath = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir));
+        sdPath.mkdir();
+        if(!sdPath.canRead()){
+            DialogInterface.OnClickListener exitButtonListener = new DialogInterface.OnClickListener(){
+                public void onClick(DialogInterface arg0, int arg1){
+                    finish();
+                }
+            };
+            new AlertDialog.Builder(this)
+                .setTitle(R.string.sdcard_not_available_warning_title)
+                .setMessage(R.string.sdcard_not_available_warning_message)
+                .setNeutralButton(R.string.exit_text, exitButtonListener)
+                .create()
+                .show();
+        }
+    }
+    private void prepareFirstTimeRun() {
+        File sdPath = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir));
+        //Check the version, if it is updated from an older version it will show a dialog
+        String savedVersion = settings.getString("saved_version", "");
+        String thisVersion = getResources().getString(R.string.app_version);
+
+
+        boolean firstTime = settings.getBoolean("first_time", true);
+        /* First time installation! It will install the sample db
+         * to /sdcard/AnyMemo
+         */
+        if(firstTime == true){
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("first_time", false);
+            editor.putString("recentdbpath0", Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir) + SAMPLE_DB_NAME);
+            editor.commit();
+            try {
+                InputStream in = getResources().getAssets().open(SAMPLE_DB_NAME);
+                FileUtils.copyInputStreamToFile(in, new File(sdPath + "/" + SAMPLE_DB_NAME));
+            }
+            catch(IOException e){
+                Log.e("Copy file error", e.toString());
+
+            }
+        }
+        /* Detect an update */
+        if(!savedVersion.equals(thisVersion)){
+            SharedPreferences.Editor editor = settings.edit();
+            /* save new version number */
+            editor.putString("saved_version", thisVersion);
+            /* Save the screen dimension for further use */
+            Display display = getWindowManager().getDefaultDisplay();
+            editor.putInt("screen_width", display.getWidth());
+            editor.putInt("screen_height", display.getHeight());
+            editor.commit();
+
+            View alertView = View.inflate(this, R.layout.link_alert, null);
+            TextView textView = (TextView)alertView.findViewById(R.id.link_alert_message);
+            textView.setText(Html.fromHtml(getString(R.string.what_is_new_message)));
+            textView.setMovementMethod(LinkMovementMethod.getInstance());
+            new AlertDialog.Builder(this)
+                .setView(alertView)
+                .setTitle(getString(R.string.what_is_new))
+                .setPositiveButton(getString(R.string.ok_text), null)
+                .setNegativeButton(getString(R.string.about_version), new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1){
+                        Intent myIntent = new Intent();
+                        myIntent.setAction(Intent.ACTION_VIEW);
+                        myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
+                        myIntent.setData(Uri.parse(WEBSITE_VERSION));
+                        startActivity(myIntent);
+                    }
+                })
+            .show();
+        }
+    }
+
+    private void prepareNotification() {
+        SetAlarmReceiver.cancelNotificationAlarm(this);
+        SetAlarmReceiver.setNotificationAlarm(this);
     }
 
     @Override
@@ -82,6 +193,8 @@ public class AnyMemo extends AMActivity {
         super.onSaveInstanceState(outState);
         outState.putString("tab", mTabHost.getCurrentTabTag());
     }
+
+
 
     public static class TabManager implements TabHost.OnTabChangeListener {
         private final FragmentActivity mActivity;
