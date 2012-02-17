@@ -34,9 +34,9 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 
 import org.apache.http.client.methods.HttpPost;
 
-import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.myhttp.entity.mime.HttpMultipartMode;
 
-import org.apache.http.entity.mime.content.FileBody;
+import org.apache.myhttp.entity.mime.content.FileBody;
 
 import org.apache.http.impl.client.DefaultHttpClient;
 
@@ -54,7 +54,7 @@ import oauth.signpost.basic.DefaultOAuthConsumer;
 
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 
-import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.myhttp.entity.mime.MultipartEntity;
 
 public class DropboxUtils{
     private static final String TAG = "org.liberty.android.fantastischmemo.downloader.DropboxUtils";
