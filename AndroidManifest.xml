@@ -126,7 +126,7 @@
                     android:resource="@xml/widget_info" />
         </receiver>
         <activity
-            android:name=".ShareScreen" >
+            android:name=".ui.ShareScreen" >
             <intent-filter>
                     <action android:name="android.intent.action.SEND" />
                     <category android:name="android.intent.category.DEFAULT" />

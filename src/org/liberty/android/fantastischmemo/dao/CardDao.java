@@ -30,4 +30,7 @@ public interface CardDao extends HelperDao<Card, Integer> {
 
     /* Create a list of cards. Also create the related LearningData and Category */
     void createCards(final List<Card> cardList);
+
+    /* Create one. Also create the related LearningData and Category */
+    void createCard(final Card card);
 }

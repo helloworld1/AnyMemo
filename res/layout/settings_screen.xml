@@ -231,18 +231,17 @@
         android:layout_height="2dip"
         android:background="#FF909090" />
 
-    <CheckBox android:id="@+id/checkbox_wipe"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:text="@string/settings_wipe" />
-
-    <CheckBox android:id="@+id/checkbox_shuffle"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:text="@string/settings_shuffle" />
-
-    <CheckBox android:id="@+id/checkbox_inverse"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:text="@string/settings_inverse" />
     
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/help_advanced_operations" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dip"
+        android:background="#FF909090" />
+            
 	<LinearLayout android:orientation="horizontal"
 		android:layout_width="fill_parent" android:layout_height="wrap_content">
 		<Button android:id="@+id/settting_save" android:layout_width="wrap_content"

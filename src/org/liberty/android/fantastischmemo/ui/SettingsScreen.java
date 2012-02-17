@@ -106,10 +106,6 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
     private EnumSet<CardField> questionFields;
     private EnumSet<CardField> answerFields;
     // ------------------------------------------
-    private CheckBox wipeCheckbox;
-    private CheckBox shuffleCheckbox;
-    private CheckBox inverseCheckbox;
-    // ------------------------------------------
     private Button saveButton;
     private Button discardButton;
 
@@ -248,40 +244,6 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             if (answerFields.size() == 0) {
                 field2Checkbox.setChecked(false);
             }            
-        }
-        
-        if(v == wipeCheckbox){
-            if(wipeCheckbox.isChecked()){
-                new AlertDialog.Builder(this)
-                    .setTitle(getString(R.string.warning_text))
-                    .setIcon(R.drawable.alert_dialog_icon)
-                    .setMessage(getString(R.string.settings_wipe_warning))
-                    .setPositiveButton(getString(R.string.ok_text), null)
-                    .create()
-                    .show();
-            }
-        }
-        if(v == shuffleCheckbox){
-            if(shuffleCheckbox.isChecked()){
-                new AlertDialog.Builder(this)
-                    .setTitle(getString(R.string.warning_text))
-                    .setIcon(R.drawable.alert_dialog_icon)
-                    .setMessage(getString(R.string.settings_shuffle_warning))
-                    .setPositiveButton(getString(R.string.ok_text), null)
-                    .create()
-                    .show();
-            }
-        }
-        if(v == inverseCheckbox){
-            if(inverseCheckbox.isChecked()){
-                new AlertDialog.Builder(this)
-                    .setTitle(getString(R.string.warning_text))
-                    .setIcon(R.drawable.alert_dialog_icon)
-                    .setMessage(getString(R.string.settings_inverse_warning))
-                    .setPositiveButton(getString(R.string.ok_text), null)
-                    .create()
-                    .show();
-            }
         }
     }
 
@@ -465,15 +427,6 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             field2Checkbox.setOnClickListener(SettingsScreen.this);
             answerFields = setting.getAnswerFieldEnum();
             // --------------------------------------------------
-            wipeCheckbox = (CheckBox)findViewById(R.id.checkbox_wipe);
-            wipeCheckbox.setOnClickListener(SettingsScreen.this);
-
-            shuffleCheckbox = (CheckBox)findViewById(R.id.checkbox_shuffle);
-            shuffleCheckbox.setOnClickListener(SettingsScreen.this);
-
-            inverseCheckbox = (CheckBox)findViewById(R.id.checkbox_inverse);
-            inverseCheckbox.setOnClickListener(SettingsScreen.this);
-            // --------------------------------------------------
             saveButton = (Button) findViewById(R.id.settting_save);
             saveButton.setOnClickListener(SettingsScreen.this);
             discardButton = (Button) findViewById(R.id.setting_discard);
@@ -531,10 +484,6 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
         linebreakCheckbox.setChecked(setting.getHtmlLineBreakConversion());
         field1Checkbox.setChecked(!(questionFields.size() == 1 && questionFields.contains(CardField.QUESTION)));
         field2Checkbox.setChecked(!(answerFields.size() == 1 && answerFields.contains(CardField.ANSWER)));
-        // -----------------------------------------------
-        wipeCheckbox.setChecked(false);
-        shuffleCheckbox.setChecked(false);
-        inverseCheckbox.setChecked(false);
     }
 
     // ==============================================================
@@ -560,8 +509,21 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             setting.setAnswerTextAlign(answerAlignSpinner.getSelectedItem());
             setting.setCardStyle(styleSpinner.getSelectedItem());
             setting.setQaRatio(qaRatioSpinner.getSelectedItem());
-            setting.setQuestionAudio(questionLocaleSpinner.getSelectedItem());
-            setting.setAnswerAudio(answerLocaleSpinner.getSelectedItem());
+
+
+            // The posision = 0 means disabled.
+            if (questionLocaleSpinner.getSelectedItemPosition() != 0) {
+                setting.setQuestionAudio(questionLocaleSpinner.getSelectedItem());
+            } else {
+                setting.setQuestionAudio("");
+            }
+
+            if (answerLocaleSpinner.getSelectedItemPosition() != 0) {
+                setting.setAnswerAudio(answerLocaleSpinner.getSelectedItem());
+            } else {
+                setting.setAnswerAudio("");
+            }
+
             //-------------------------------------------
             setting.setQuestionTextColor(colors.get(0));
             setting.setAnswerTextColor(colors.get(1));
@@ -582,17 +544,6 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
         public Void doInBackground(Void... params) {
             try {
                 settingDao.update(setting);
-                AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(SettingsScreen.this, dbPath);
-                // ------------------------------------------
-                if (wipeCheckbox.isChecked()) {
-//                    helper.wipeLearnData();
-                }
-                if (shuffleCheckbox.isChecked()) {
-//                    dbHelper.shuffleDatabase();
-                }
-                if (inverseCheckbox.isChecked()) {
-//                    dbHelper.inverseQA();
-                }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

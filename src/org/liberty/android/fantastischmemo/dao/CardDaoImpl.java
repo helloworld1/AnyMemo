@@ -3,7 +3,6 @@ package org.liberty.android.fantastischmemo.dao;
 import java.lang.Exception;
 
 import java.sql.SQLException;
-import java.sql.SQLException;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -15,8 +14,6 @@ import java.util.concurrent.Callable;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
-
-import com.j256.ormlite.dao.BaseDaoImpl;
 
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
@@ -422,6 +419,37 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
                         learningDataDao.create(card.getLearningData());
                         create(card);
                     }
+                    return null;
+                }
+            });
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /*
+     * This method will also create the corresponding learning data and cateogry
+     * Note the category and learningData field must be populated
+     */
+    public void createCard(final Card card) {
+        try {
+            final LearningDataDao learningDataDao = getHelper().getLearningDataDao();
+            final CategoryDao categoryDao = getHelper().getCategoryDao();
+            callBatchTasks(new Callable<Void>() {
+                // Use the map to get rid of duplicate category creation
+                final Map<String, Category> categoryMap = new HashMap<String, Category>();
+                public Void call() throws Exception {
+                    assert card.getCategory() != null : "Card's category must be populated";
+                    assert card.getLearningData() != null : "Card's learningData must be populated";
+                    String currentCategoryName = card.getCategory().getName();
+                    if (categoryMap.containsKey(currentCategoryName)) {
+                        card.setCategory(categoryMap.get(currentCategoryName));
+                    } else {
+                        categoryDao.create(card.getCategory());
+                        categoryMap.put(currentCategoryName, card.getCategory());
+                    }
+                    learningDataDao.create(card.getLearningData());
+                    create(card);
                     return null;
                 }
             });

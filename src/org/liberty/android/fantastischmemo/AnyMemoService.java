@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo;
 
+import org.liberty.android.fantastischmemo.dao.CardDao;
 
 import org.liberty.android.fantastischmemo.ui.MemoScreen;
 import android.app.PendingIntent;
@@ -162,19 +163,23 @@ public class AnyMemoService extends Service{
     private class DatabaseInfo{
         private String dbName;
         private String dbPath;
-        private int revCount;
-        private int newCount;
+        private int revCount = 0;
+        private int newCount = 0;
 
         public DatabaseInfo(Context context) throws Exception{
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
             /* Feed the data from the most recent database */
-            dbName = settings.getString("recentdbname0", "");
             dbPath = settings.getString("recentdbpath0", "");
+            dbName = AMUtil.getFilenameFromPath(dbPath);
 
-            DatabaseHelper dbHelper = new DatabaseHelper(context, dbPath, dbName);
-            revCount = dbHelper.getScheduledCount();
-            newCount = dbHelper.getNewCount();
-            dbHelper.close();
+            AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(AnyMemoService.this, dbPath);
+            try {
+                final CardDao cardDao = helper.getCardDao();
+                revCount = (int)cardDao.getScheduledCardCount(null); 
+                newCount = (int)cardDao.getNewCardCount(null);
+            } finally {
+                AnyMemoDBOpenHelperManager.releaseHelper(dbPath);
+            }
         }
 
         public DatabaseInfo(String dbname, String dbpath){

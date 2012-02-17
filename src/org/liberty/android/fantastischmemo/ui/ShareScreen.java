@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2010 Haowen Ning
+Copyright (C) 2012 Haowen Ning
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -17,31 +17,46 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-package org.liberty.android.fantastischmemo;
+package org.liberty.android.fantastischmemo.ui;
 
-import org.liberty.android.fantastischmemo.cardscreen.*;
+import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.AMGUIUtility;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.FileBrowser;
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.RecentListUtil;
+
+import org.liberty.android.fantastischmemo.dao.CardDao;
+
+import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.domain.Category;
+import org.liberty.android.fantastischmemo.domain.LearningData;
 
 import org.liberty.android.fantastischmemo.ui.EditScreen;
-import android.app.*;
+
+import android.app.Activity;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
+
 import android.os.Bundle;
-import android.view.*;
-import android.widget.*;
-import android.content.*;
 import android.util.Log;
 import android.preference.PreferenceManager;
 
-import java.io.File;
+import android.view.View;
+
+import android.widget.Button;
+import android.widget.TextView;
 
 /* 
  * This class is invoked when the user share the card from other
  * apps like ColorDict 
  */
-public class ShareScreen extends Activity implements View.OnClickListener{
-    private static final String TAG = "org.liberty.android.fantastischmemo.ShareReceiver";
+public class ShareScreen extends AMActivity implements View.OnClickListener{
     private TextView dbnameView;
     private TextView questionView;
     private TextView answerView;
-    private TextView categoryView;
     private TextView noteView;
     private Button saveButton;
     private Button savePrevButton;
@@ -56,10 +71,8 @@ public class ShareScreen extends Activity implements View.OnClickListener{
         dbnameView = (TextView)findViewById(R.id.share_db_name_entry);
         questionView = (TextView)findViewById(R.id.share_question_entry);
         answerView = (TextView)findViewById(R.id.share_answer_entry);
-        categoryView = (TextView)findViewById(R.id.share_category_entry);
         noteView = (TextView)findViewById(R.id.share_note_entry);
         noteView.setText("");
-        categoryView.setText("");
         saveButton = (Button)findViewById(R.id.share_button_save);
         savePrevButton = (Button)findViewById(R.id.share_button_saveprev);
         cancelButton = (Button)findViewById(R.id.share_button_cancel);
@@ -76,7 +89,8 @@ public class ShareScreen extends Activity implements View.OnClickListener{
             String text = extras.getString(Intent.EXTRA_TEXT);
             questionView.setText(subject);
             answerView.setText(text);
-    		dbnameView.setText(settings.getString("recentdbpath0", "") + "/" + settings.getString("recentdbname0", ""));
+            String dbPath = settings.getString("recentdbpath0", "");
+    		dbnameView.setText(dbPath);
         } else {
             finish();
         }
@@ -84,33 +98,32 @@ public class ShareScreen extends Activity implements View.OnClickListener{
     @Override
     public void onClick(View v){
         try{
-            File dbFile = new File(dbnameView.getText().toString());
-            String dbpath = dbFile.getParent();
-            String dbname = dbFile.getName();
+            String dbpath = dbnameView.getText().toString();
             Log.v(TAG, dbpath);
-            Log.v(TAG, dbname);
 
             if(v == saveButton || v == savePrevButton){
-                ItemManager im = new ItemManager.Builder(this, dbpath, dbname)
-                    .build();
-                Item currentItem = new Item.Builder()
-                    .setQuestion(questionView.getText().toString())
-                    .setAnswer(answerView.getText().toString())
-                    .setCategory(categoryView.getText().toString())
-                    .setNote(noteView.getText().toString())
-                    .build();
-                im.insertBack(currentItem);
+                AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(this, dbpath); 
+                CardDao cardDao = helper.getCardDao();
+                try {
+                    Card card = new Card();
+                    card.setQuestion(questionView.getText().toString());
+                    card.setAnswer(answerView.getText().toString());
+                    card.setNote(noteView.getText().toString());
+                    card.setCategory(new Category());
+                    card.setLearningData(new LearningData());
+                    cardDao.createCard(card);
 
-                if(v == savePrevButton){
-                    Intent myIntent = new Intent(this, EditScreen.class);
-                    /* This should be the newly created id */
-                    myIntent.putExtra("id", im.getStatInfo()[0]);
-                    myIntent.putExtra("dbname", dbname);
-                    myIntent.putExtra("dbpath", dbpath);
-                    startActivity(myIntent);
+                    if(v == savePrevButton){
+                        Intent myIntent = new Intent(this, EditScreen.class);
+                        /* This should be the newly created id */
+                        myIntent.putExtra("id", card.getId());
+                        myIntent.putExtra(EditScreen.EXTRA_DBPATH, dbpath);
+                        startActivity(myIntent);
+                    }
+                    finish();
+                } finally {
+                    AnyMemoDBOpenHelperManager.releaseHelper(dbpath);
                 }
-                im.close();
-                finish();
             }
             else if(v == cancelButton){
                 finish();

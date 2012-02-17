@@ -55,20 +55,6 @@
                 android:layout_weight="1"
                 android:background="@android:drawable/editbox_background"/>
             <TextView 
-                android:text="@string/edit_dialog_category"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:padding="3dip"/>
-            <EditText
-                android:id="@+id/share_category_entry"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:inputType="textMultiLine"
-                android:gravity="top"
-                android:minLines="1"
-                android:layout_weight="1"
-                android:background="@android:drawable/editbox_background"/>
-            <TextView 
                 android:text="@string/note_text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
