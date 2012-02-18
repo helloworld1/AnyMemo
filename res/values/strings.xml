@@ -394,8 +394,8 @@
     <string name="exit_text">Exit</string>
     <string name="sdcard_not_available_warning_title">SD card not available</string>
     <string name="sdcard_not_available_warning_message">Please insert SD card and run again!</string>
-    <string name="crash_report_checkbox_title">Report crash to the authors</string>
-    <string name="crash_report_enabled">Crash report will automatically send to the author.</string>
-    <string name="crash_report_disabled">Crash will never send to the author.</string>
-    <string name="help_advanced_operations">More database operations like swapping Q/A, shuffling card, remvoing duplicates are available in card edit screen when you long press the card.</string>
+    <string name="crash_report_checkbox_title">Report crash to the author</string>
+    <string name="crash_report_enabled">Crash reports will automatically send to the author.</string>
+    <string name="crash_report_disabled">Crash reports will never send to the author.</string>
+    <string name="help_advanced_operations">More database operations like swapping Q/A, shuffling card, remvoing duplicates are available in preview/edit screen when you long press the card.</string>
 </resources>
