@@ -33,10 +33,10 @@
             android:name=".OpenScreen"
             android:configChanges="orientation|keyboardHidden" />
         <activity 
-            android:name=".FileBrowser"
+            android:name=".ui.FileBrowserActivity"
             android:configChanges="orientation|keyboardHidden" />
         <activity 
-            android:name=".OptionScreen"
+            android:name=".ui.OptionScreen"
             android:configChanges="orientation|keyboardHidden" />
         <activity 
             android:name=".DetailScreen"
@@ -77,9 +77,6 @@
             android:configChanges="orientation|keyboardHidden" />
         <activity
             android:name=".downloader.DownloaderQuizlet"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity
-            android:name=".converter.ConvertScreen"
             android:configChanges="orientation|keyboardHidden" />
         <activity
             android:name=".downloader.DropboxLauncher"

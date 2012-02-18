@@ -25,7 +25,6 @@ import org.liberty.android.fantastischmemo.AMUtil;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.AnyMemoExecutor;
-import org.liberty.android.fantastischmemo.DetailScreen;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.ui.SettingsScreen;
 
@@ -36,7 +35,6 @@ import org.liberty.android.fantastischmemo.dao.SettingDao;
 
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
-import org.liberty.android.fantastischmemo.domain.Filter;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
@@ -231,11 +229,11 @@ public class MemoScreen extends AMActivity implements CategoryEditorFragment.Cat
 
             case R.id.menudetail:
             {
-                Intent myIntent = new Intent(this, DetailScreen.class);
-                myIntent.putExtra("dbname", this.dbName);
-                myIntent.putExtra("dbpath", this.dbPath);
-                myIntent.putExtra("itemid", currentCard.getId());
-                startActivityForResult(myIntent, ACTIVITY_DETAIL);
+                //Intent myIntent = new Intent(this, DetailScreen.class);
+                //myIntent.putExtra("dbname", this.dbName);
+                //myIntent.putExtra("dbpath", this.dbPath);
+                //myIntent.putExtra("itemid", currentCard.getId());
+                //startActivityForResult(myIntent, ACTIVITY_DETAIL);
                 return true;
             }
 

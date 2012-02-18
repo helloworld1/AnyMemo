@@ -22,6 +22,7 @@ package org.liberty.android.fantastischmemo;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
 
+import org.liberty.android.fantastischmemo.ui.AnyMemo;
 import org.liberty.android.fantastischmemo.ui.MemoScreen;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -132,8 +133,7 @@ public class AnyMemoService extends Service{
             if(dbInfo.getRevCount() < 10){
                 return;
             }
-            Intent myIntent = new Intent(this, MainTabs.class);
-            myIntent.putExtra("screen", "MEMO");
+            Intent myIntent = new Intent(this, AnyMemo.class);
             myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             NotificationManager notificationManager = (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
             Notification notification = new Notification(R.drawable.icon_notification, getString(R.string.app_name), System.currentTimeMillis());

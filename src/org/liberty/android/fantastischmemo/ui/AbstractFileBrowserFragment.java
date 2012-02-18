@@ -30,7 +30,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
-import org.liberty.android.fantastischmemo.DatabaseHelper;
+import org.apache.mycommons.io.FileUtils;
+
 import org.liberty.android.fantastischmemo.R;
 import android.os.Environment;
 import android.app.Activity;
@@ -60,6 +61,10 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 public abstract class AbstractFileBrowserFragment extends DialogFragment implements OnItemClickListener, OnItemLongClickListener{
+    private final static String EMPTY_DB_NAME = "empty.db";
+    public final static String EXTRA_DEFAULT_ROOT = "default_root";
+    public final static String EXTRA_FILE_EXTENSIONS = "file_extension";
+
 	private enum DISPLAYMODE{ABSOLUTE, RELATIVE;}
 	private final DISPLAYMODE displayMode = DISPLAYMODE.RELATIVE;
 	private ArrayList<String> directoryEntries = new ArrayList<String>();
@@ -68,12 +73,12 @@ public abstract class AbstractFileBrowserFragment extends DialogFragment impleme
 	private String[] fileExtensions;
     private Activity mActivity;
     private ListView fbListView;
-    private final static String TAG = "org.liberty.android.fantastischmemo.FileBrowser";
+    private final static String TAG = "AbstractFileBrowserFragment";
     SharedPreferences settings;
     SharedPreferences.Editor editor;
 
     /* When click a file, what should happen */
-    protected abstract void fileClickAction(String name, String path);
+    protected abstract void fileClickAction(File file);
 
     @Override
     public void onAttach(Activity activity) {
@@ -227,7 +232,7 @@ public abstract class AbstractFileBrowserFragment extends DialogFragment impleme
                         /* Save the current path */
                         editor.putString("saved_fb_path", clickedFile.getParent());
                         editor.commit();
-                        fileClickAction(clickedFile.getName(),  clickedFile.getParent());
+                        fileClickAction(clickedFile);
 						
 					}
 				}
@@ -394,11 +399,13 @@ public abstract class AbstractFileBrowserFragment extends DialogFragment impleme
                         if(!value.endsWith(".db")){
                             value += ".db";
                         }
-                        try{
-                            /* create an empty database */
-                            DatabaseHelper.createEmptyDatabase(currentDirectory.getAbsolutePath(), value);
+                        try {
+                            //
+                            InputStream in = getResources().getAssets().open(EMPTY_DB_NAME);
+                            FileUtils.copyInputStreamToFile(in, new File(value));
                         }
-                        catch(Exception e){
+                        catch(IOException e){
+                            Log.e(TAG, "Fail to create file", e);
                         }
                         browseTo(currentDirectory);
                         

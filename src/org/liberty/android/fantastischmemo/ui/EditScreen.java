@@ -29,8 +29,6 @@ import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMUtil;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.DetailScreen;
-import org.liberty.android.fantastischmemo.Item;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.ui.SettingsScreen;
 
@@ -247,10 +245,10 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
             case R.id.editmenu_detail_id:
             {
                 if(currentCard != null){
-                    Intent myIntent = new Intent(this, DetailScreen.class);
-                    myIntent.putExtra("dbpath", this.dbPath);
-                    myIntent.putExtra("itemid", currentCard.getId());
-                    startActivityForResult(myIntent, ACTIVITY_DETAIL);
+                    //Intent myIntent = new Intent(this, DetailScreen.class);
+                    //myIntent.putExtra("dbpath", this.dbPath);
+                    //myIntent.putExtra("itemid", currentCard.getId());
+                    //startActivityForResult(myIntent, ACTIVITY_DETAIL);
                 }
                 return true;
             }

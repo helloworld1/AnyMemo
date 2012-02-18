@@ -68,7 +68,6 @@ public class AnyMemo extends AMActivity {
     private TabHost mTabHost;
     private TabManager mTabManager;
     private SharedPreferences settings;
-    private SharedPreferences.Editor editor;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,7 +81,8 @@ public class AnyMemo extends AMActivity {
         mTabManager = new TabManager(this, mTabHost, android.R.id.tabcontent);
 
         Bundle b = new Bundle();
-        b.putString("default_root", "/sdcard/");
+        String sdPath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
+        b.putString("default_root", sdPath);
         mTabManager.addTab(mTabHost.newTabSpec("recent").setIndicator(getString(R.string.recent_tab_text),  res.getDrawable(R.drawable.recent)),
                 RecentListFragment.class, b);
         mTabManager.addTab(mTabHost.newTabSpec("open").setIndicator(getString(R.string.open_tab_text),  res.getDrawable(R.drawable.open)),
@@ -101,11 +101,10 @@ public class AnyMemo extends AMActivity {
         }
         
         settings = PreferenceManager.getDefaultSharedPreferences(this);
-        editor = settings.edit();
 
         prepareStoreage();
         prepareFirstTimeRun();
-        //prepareNotification();
+        prepareNotification();
     }
 
     private void prepareStoreage() {

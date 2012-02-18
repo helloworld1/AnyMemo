@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
+import java.io.File;
+
 import org.liberty.android.fantastischmemo.RecentListUtil;
 
 import android.app.Activity;
@@ -34,13 +36,12 @@ public class OpenTabFragment extends AbstractFileBrowserFragment {
         mActivity = activity;
     }
 
-    protected void fileClickAction(String name, String path) {
-        Intent myIntent = new Intent(mActivity, MemoScreen.class);
-        //myIntent.putExtra("dbpath", "/sdcard/french-body-parts.db");
-        String fullpath = path + "/" + name;
+    protected void fileClickAction(File file) {
+        String fullpath = file.getAbsolutePath();
         System.out.println("Path: " + fullpath);
         RecentListUtil.addToRecentList(mActivity, fullpath);
-        myIntent.putExtra("dbpath", path + "/" + name);
+        Intent myIntent = new Intent(mActivity, MemoScreen.class);
+        myIntent.putExtra(MemoScreen.EXTRA_DBPATH, fullpath);
         startActivity(myIntent);
     }
 }

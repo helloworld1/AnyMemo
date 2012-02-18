@@ -23,7 +23,6 @@ import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMGUIUtility;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.FileBrowser;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.RecentListUtil;
 
@@ -129,8 +128,8 @@ public class ShareScreen extends AMActivity implements View.OnClickListener{
                 finish();
             }
             else if(v == dbnameView){
-                Intent myIntent = new Intent(this, FileBrowser.class);
-                myIntent.putExtra("file_extension", ".db");
+                Intent myIntent = new Intent(this, FileBrowserActivity.class);
+                myIntent.putExtra(FileBrowserActivity.EXTRA_FILE_EXTENSIONS, ".db");
                 startActivityForResult(myIntent, ACTIVITY_FB);
             }
         }
@@ -150,16 +149,11 @@ public class ShareScreen extends AMActivity implements View.OnClickListener{
         switch(requestCode){
             case ACTIVITY_FB:
             {
-                String dbName = data.getStringExtra("org.liberty.android.fantastischmemo.dbName");
-                String dbPath = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
-                if(dbName != null && dbPath != null){
-                    String fullname = dbPath + "/" + dbName;
-                    RecentListUtil.addToRecentList(this, dbPath);
-                    dbnameView.setText(fullname);
-                }
-                break;
+                String fullpath = data.getStringExtra(FileBrowserActivity.EXTRA_RESULT_PATH);
+                RecentListUtil.addToRecentList(this, fullpath);
+                dbnameView.setText(fullpath);
             }
-
+            break;
         }
     }
 }

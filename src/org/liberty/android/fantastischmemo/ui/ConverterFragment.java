@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
+import java.io.File;
+
 import org.liberty.android.fantastischmemo.R;
 
 import org.liberty.android.fantastischmemo.converter.AbstractConverter;
@@ -49,8 +51,8 @@ public class ConverterFragment extends AbstractFileBrowserFragment {
         mActivity = activity;
     }
 
-    protected void fileClickAction(String name, String path) {
-        String fullpath = path + "/" + name;
+    protected void fileClickAction(File file) {
+        String fullpath = file.getAbsolutePath();
         ConvertTask task = new ConvertTask();
         task.execute(fullpath, fullpath + destExtension);
 

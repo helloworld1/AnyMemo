@@ -20,22 +20,28 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo.converter;
 
+import java.io.File;
+
+import org.liberty.android.fantastischmemo.AMGUIUtility;
+import org.liberty.android.fantastischmemo.R;
+
+import org.liberty.android.fantastischmemo.ui.FileBrowserActivity;
+
 import android.os.Bundle;
 import android.app.AlertDialog;
 import android.content.Context;
 import java.lang.reflect.Constructor;
-import org.liberty.android.fantastischmemo.*;
 
 /* 
  * This class requires the strategies passed using intent extras with
  * the key "converter" 
  */
-public class ConvertScreen extends FileBrowser{
+public class ConvertScreen extends FileBrowserActivity {
     AbstractConverter converter = null;
     private final String TAG = "org.liberty.android.fantastischmemo.ConvertScreen";
 
     @Override
-    public void fileClickAction(final String name, final String path){
+    public void fileClickAction(File file){
 		Bundle extras = getIntent().getExtras();
         if(extras == null){
             finish();

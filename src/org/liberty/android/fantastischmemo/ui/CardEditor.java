@@ -23,10 +23,11 @@ import java.sql.SQLException;
 
 import java.io.File;
 
+import org.apache.mycommons.io.FileUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.AMUtil;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.FileBrowser;
 import org.liberty.android.fantastischmemo.R;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
@@ -182,16 +183,16 @@ public class CardEditor extends AMActivity implements View.OnClickListener, Cate
                 return true;
             case R.id.editor_menu_image:
                 if(focusView == questionEdit || focusView ==answerEdit || focusView == noteEdit){
-                    Intent myIntent = new Intent(this, FileBrowser.class);
-                    myIntent.putExtra("file_extension", ".png,.jpg,.tif,.bmp");
+                    Intent myIntent = new Intent(this, FileBrowserActivity.class);
+                    myIntent.putExtra(FileBrowserActivity.EXTRA_FILE_EXTENSIONS, ".png,.jpg,.tif,.bmp");
                     startActivityForResult(myIntent, ACTIVITY_IMAGE_FILE);
                 }
                 return true;
 
             case R.id.editor_menu_audio:
                 if(focusView == questionEdit || focusView ==answerEdit || focusView == noteEdit){
-                    Intent myIntent = new Intent(this, FileBrowser.class);
-                    myIntent.putExtra("file_extension", ".ogg,.mp3,.wav");
+                    Intent myIntent = new Intent(this, FileBrowserActivity.class);
+                    myIntent.putExtra(FileBrowserActivity.EXTRA_FILE_EXTENSIONS, ".ogg,.mp3,.wav");
                     startActivityForResult(myIntent, ACTIVITY_AUDIO_FILE);
                 }
                 return true;
@@ -228,8 +229,8 @@ public class CardEditor extends AMActivity implements View.OnClickListener, Cate
                 if(resultCode == Activity.RESULT_OK){
                     View focusView = getCurrentFocus();
                     if(focusView == questionEdit || focusView ==answerEdit || focusView == noteEdit){
-                        name = data.getStringExtra("org.liberty.android.fantastischmemo.dbName");
-                        path = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
+                        path = data.getStringExtra(FileBrowserActivity.EXTRA_RESULT_PATH);
+                        name = AMUtil.getFilenameFromPath(path);
                         addTextToView((EditText)focusView, "<img src=\"" + name + "\" />");
                         /* Copy the image to correct location */
                         String imageRoot = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_image_dir) + "/";
@@ -239,7 +240,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener, Cate
                         try{
                             String target = imagePath + name;
                             if(!(new File(target)).exists()){
-                                FileBrowser.copyFile(path + "/" + name, target);
+                                FileUtils.copyFile(new File(path + "/" + name), new File(target));
                             }
                         }
                         catch(Exception e){
@@ -252,8 +253,8 @@ public class CardEditor extends AMActivity implements View.OnClickListener, Cate
                 if(resultCode == Activity.RESULT_OK){
                     View focusView = getCurrentFocus();
                     if(focusView == questionEdit || focusView ==answerEdit || focusView == noteEdit){
-                        name = data.getStringExtra("org.liberty.android.fantastischmemo.dbName");
-                        path = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
+                        path = data.getStringExtra(FileBrowserActivity.EXTRA_RESULT_PATH);
+                        name = AMUtil.getFilenameFromPath(path);
                         addTextToView((EditText)focusView, "<audio src=\"" + name + "\" />");
                         /* Copy the image to correct location */
                         String audioRoot = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_audio_dir) + "/";
@@ -263,7 +264,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener, Cate
                         try{
                             String target = audioPath + name;
                             if(!(new File(target)).exists()){
-                                FileBrowser.copyFile(path + "/" + name, audioPath + name);
+                                FileUtils.copyFile(new File(path + "/" + name), new File(audioPath + name));
                             }
                         }
                         catch(Exception e){

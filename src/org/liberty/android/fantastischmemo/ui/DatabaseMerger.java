@@ -74,23 +74,15 @@ public class DatabaseMerger extends AMActivity implements View.OnClickListener{
         switch(requestCode){
             case ACTIVITY_FB_TARGET:
             {
-                String dbName = data.getStringExtra("org.liberty.android.fantastischmemo.dbName");
-                String dbPath = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
-                if(dbName != null && dbPath != null){
-                    String fullname = dbPath + "/" + dbName;
-                    targetEdit.setText(fullname);
-                }
+                String dbPath = data.getStringExtra(FileBrowserActivity.EXTRA_RESULT_PATH);
+                targetEdit.setText(dbPath);
                 break;
             }
 
             case ACTIVITY_FB_SOURCE:
             {
-                String dbName = data.getStringExtra("org.liberty.android.fantastischmemo.dbName");
-                String dbPath = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
-                if(dbName != null && dbPath != null){
-                    String fullname = dbPath + "/" + dbName;
-                    sourceEdit.setText(fullname);
-                }
+                String dbPath = data.getStringExtra(FileBrowserActivity.EXTRA_RESULT_PATH);
+                sourceEdit.setText(dbPath);
                 break;
             }
                 
@@ -101,15 +93,15 @@ public class DatabaseMerger extends AMActivity implements View.OnClickListener{
     public void onClick(View v){
         if(v == targetEdit){
             Intent myIntent = new Intent();
-            myIntent.setClass(this, FileBrowser.class);
-            myIntent.putExtra("file_extension", ".db");
+            myIntent.setClass(this, FileBrowserActivity.class);
+            myIntent.putExtra(FileBrowserActivity.EXTRA_FILE_EXTENSIONS, ".db");
             startActivityForResult(myIntent, ACTIVITY_FB_TARGET);
         }
 
         if(v == sourceEdit){
             Intent myIntent = new Intent();
-            myIntent.setClass(this, FileBrowser.class);
-            myIntent.putExtra("file_extension", ".db");
+            myIntent.setClass(this, FileBrowserActivity.class);
+            myIntent.putExtra(FileBrowserActivity.EXTRA_FILE_EXTENSIONS, ".db");
             startActivityForResult(myIntent, ACTIVITY_FB_SOURCE);
         }
 
@@ -120,10 +112,11 @@ public class DatabaseMerger extends AMActivity implements View.OnClickListener{
                     String[] splittedpath2 = splitDBPath(sourceEdit.getText().toString());
                     /* splittedpath1[0] is the dbPath for the source
                      * and 1 is dbName */
-                    DatabaseHelper dbHelper = new DatabaseHelper(DatabaseMerger.this, splittedpath1[0], splittedpath1[1]);
-                    /* Merge to the back fo source database */
-                    dbHelper.mergeDatabase(splittedpath2[0], splittedpath2[1]);
-                    dbHelper.close();
+                    // TODO: Merge
+                    //DatabaseHelper dbHelper = new DatabaseHelper(DatabaseMerger.this, splittedpath1[0], splittedpath1[1]);
+                    ///* Merge to the back fo source database */
+                    //dbHelper.mergeDatabase(splittedpath2[0], splittedpath2[1]);
+                    //dbHelper.close();
                 }
 
                 public void doUITask(){
