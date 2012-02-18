@@ -397,5 +397,5 @@
     <string name="crash_report_checkbox_title">Report crash to the author</string>
     <string name="crash_report_enabled">Crash reports will automatically send to the author.</string>
     <string name="crash_report_disabled">Crash reports will never send to the author.</string>
-    <string name="help_advanced_operations">More database operations like swapping Q/A, shuffling card, remvoing duplicates are available in preview/edit screen when you long press the card.</string>
+    <string name="help_advanced_operations">More database operations like swapping Q/A, shuffling card, removing duplicates are available in preview/edit screen when you long press the card.</string>
 </resources>
