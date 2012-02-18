@@ -22,10 +22,10 @@ package org.liberty.android.fantastischmemo.downloader;
 
 import java.io.File;
 
-import org.liberty.android.fantastischmemo.AMGUIUtility;
 import org.liberty.android.fantastischmemo.R;
 
 import org.liberty.android.fantastischmemo.ui.FileBrowserActivity;
+import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 
 import android.app.AlertDialog;
 
