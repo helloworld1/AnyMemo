@@ -30,6 +30,7 @@ import org.apache.mycommons.io.FileUtils;
 import org.apache.mycommons.io.IOUtils;
 
 import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.AnyMemoService;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.SetAlarmReceiver;
 
@@ -201,6 +202,15 @@ public class AnyMemo extends AMActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("tab", mTabHost.getCurrentTabTag());
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // Update the widget and cancel the notification.
+        Intent myIntent = new Intent(this, AnyMemoService.class);
+        myIntent.putExtra("request_code", AnyMemoService.CANCEL_NOTIFICATION | AnyMemoService.UPDATE_WIDGET);
+        startService(myIntent);
     }
 
 
