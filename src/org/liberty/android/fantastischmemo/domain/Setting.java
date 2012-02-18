@@ -3,9 +3,9 @@ package org.liberty.android.fantastischmemo.domain;
 import java.util.Date;
 import java.util.EnumSet;
 
-import org.liberty.android.fantastischmemo.AMUtil;
 
 import org.liberty.android.fantastischmemo.dao.SettingDaoImpl;
+import org.liberty.android.fantastischmemo.utils.AMUtil;
 
 import com.j256.ormlite.field.DatabaseField;
 

@@ -25,7 +25,6 @@ import java.io.File;
 
 import org.apache.mycommons.io.FileUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
-import org.liberty.android.fantastischmemo.AMUtil;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
@@ -37,6 +36,7 @@ import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
+import org.liberty.android.fantastischmemo.utils.AMUtil;
 
 import android.app.Activity;
 import android.app.AlertDialog;

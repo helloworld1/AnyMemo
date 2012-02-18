@@ -23,12 +23,12 @@ import java.util.EnumSet;
 
 import org.amr.arabic.ArabicUtilities;
 
-import org.liberty.android.fantastischmemo.AMUtil;
 import org.liberty.android.fantastischmemo.R;
 
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
+import org.liberty.android.fantastischmemo.utils.AMUtil;
 import org.xml.sax.XMLReader;
 
 import java.io.InputStream;

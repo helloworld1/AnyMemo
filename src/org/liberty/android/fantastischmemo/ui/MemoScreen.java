@@ -21,12 +21,12 @@ package org.liberty.android.fantastischmemo.ui;
 
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMGUIUtility;
-import org.liberty.android.fantastischmemo.AMUtil;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.AnyMemoExecutor;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.ui.SettingsScreen;
+import org.liberty.android.fantastischmemo.utils.AMUtil;
+import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;

@@ -21,7 +21,7 @@ package org.liberty.android.fantastischmemo.ui;
 
 import java.io.File;
 
-import org.liberty.android.fantastischmemo.RecentListUtil;
+import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 import android.app.Activity;
 

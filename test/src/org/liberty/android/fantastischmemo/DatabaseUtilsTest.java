@@ -10,6 +10,8 @@ import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 
 import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.utils.AMUtil;
+import org.liberty.android.fantastischmemo.utils.DatabaseUtils;
 
 import android.test.ActivityInstrumentationTestCase2;
 

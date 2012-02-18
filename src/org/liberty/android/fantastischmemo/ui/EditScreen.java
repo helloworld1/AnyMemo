@@ -26,13 +26,13 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.liberty.android.fantastischmemo.AMActivity;
-import org.liberty.android.fantastischmemo.AMUtil;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.ui.SettingsScreen;
 
 import org.liberty.android.fantastischmemo.ui.ListEditScreen;
+import org.liberty.android.fantastischmemo.utils.AMUtil;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;

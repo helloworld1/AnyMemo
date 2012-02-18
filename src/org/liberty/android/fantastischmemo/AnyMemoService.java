@@ -24,6 +24,9 @@ import org.liberty.android.fantastischmemo.dao.CardDao;
 
 import org.liberty.android.fantastischmemo.ui.AnyMemo;
 import org.liberty.android.fantastischmemo.ui.MemoScreen;
+import org.liberty.android.fantastischmemo.utils.AMUtil;
+import org.liberty.android.fantastischmemo.utils.RecentListUtil;
+
 import android.app.PendingIntent;
 import android.app.Service;
 import android.os.Bundle;

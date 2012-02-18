@@ -29,6 +29,7 @@ import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.LearningData;
+import org.liberty.android.fantastischmemo.utils.AMUtil;
 
 import android.content.Context;
 import java.io.BufferedWriter;

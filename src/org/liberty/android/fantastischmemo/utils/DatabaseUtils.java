@@ -1,4 +1,4 @@
-package org.liberty.android.fantastischmemo;
+package org.liberty.android.fantastischmemo.utils;
 
 import java.io.File;
 
@@ -6,6 +6,8 @@ import java.util.List;
 
 import java.util.concurrent.Callable;
 
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;

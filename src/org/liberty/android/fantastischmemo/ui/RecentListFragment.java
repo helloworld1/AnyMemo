@@ -25,15 +25,15 @@ import java.util.List;
 import java.util.ArrayList;
 import java.io.File;
 
-import org.liberty.android.fantastischmemo.AMUtil;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.DatabaseUtils;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.RecentListUtil;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
+import org.liberty.android.fantastischmemo.utils.AMUtil;
+import org.liberty.android.fantastischmemo.utils.DatabaseUtils;
+import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 import android.app.Activity;
 import android.app.AlertDialog;

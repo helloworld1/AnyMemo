@@ -2,6 +2,7 @@ package org.liberty.android.fantastischmemo;
 
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.utils.AMUtil;
 
 
 import android.test.ActivityInstrumentationTestCase2;
