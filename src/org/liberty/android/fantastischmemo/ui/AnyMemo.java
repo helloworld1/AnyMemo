@@ -20,12 +20,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import java.util.HashMap;
 
 import org.apache.mycommons.io.FileUtils;
+import org.apache.mycommons.io.IOUtils;
 
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.R;
@@ -65,6 +67,7 @@ import android.widget.TextView;
 public class AnyMemo extends AMActivity {
     private final static String WEBSITE_VERSION="http://anymemo.org/index.php?page=version";
     private final static String SAMPLE_DB_NAME = "french-body-parts.db";
+    private final static String EMPTY_DB_NAME = "empty.db";
     private TabHost mTabHost;
     private TabManager mTabManager;
     private SharedPreferences settings;
@@ -143,9 +146,16 @@ public class AnyMemo extends AMActivity {
             try {
                 InputStream in = getResources().getAssets().open(SAMPLE_DB_NAME);
                 FileUtils.copyInputStreamToFile(in, new File(sdPath + "/" + SAMPLE_DB_NAME));
+
+                InputStream in2 = getResources().getAssets().open(EMPTY_DB_NAME);
+                FileOutputStream fos = openFileOutput(EMPTY_DB_NAME, Context.MODE_PRIVATE);
+                IOUtils.copy(in2, fos);
+                in.close();
+                in2.close();
+                fos.close();
             }
             catch(IOException e){
-                Log.e("Copy file error", e.toString());
+                Log.e(TAG, "Copy file error", e);
 
             }
         }

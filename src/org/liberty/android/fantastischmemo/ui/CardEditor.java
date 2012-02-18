@@ -461,8 +461,14 @@ public class CardEditor extends AMActivity implements View.OnClickListener, Cate
                     currentCard.setOrdinal(prevOrdinal);
                 } else {
                     Card lastCard = cardDao.queryLastOrdinal();
-                    int lastOrd = lastCard.getOrdinal();
-                    currentCard.setOrdinal(lastOrd + 1);
+                    // last card = null means this is the first card to add
+                    // We should set ordinal to 1.
+                    if (lastCard == null) {
+                        currentCard.setOrdinal(1);
+                    } else {
+                        int lastOrd = lastCard.getOrdinal();
+                        currentCard.setOrdinal(lastOrd + 1);
+                    }
                 }
                 if (isEditNew) {
                     cardDao.create(currentCard);
