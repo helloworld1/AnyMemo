@@ -402,9 +402,7 @@ public abstract class AbstractFileBrowserFragment extends DialogFragment impleme
                             value += ".db";
                         }
                         try {
-                            FileInputStream fis = mActivity.openFileInput(AMEnv.EMPTY_DB_NAME);
-                            FileUtils.copyInputStreamToFile(fis, new File(currentDirectory.getAbsolutePath() + "/" + value));
-                            fis.close();
+                            FileUtils.copyFile(mActivity.getDatabasePath(AMEnv.EMPTY_DB_NAME), new File(currentDirectory.getAbsolutePath() + "/" + value));
                         }
                         catch(IOException e){
                             Log.e(TAG, "Fail to create file", e);

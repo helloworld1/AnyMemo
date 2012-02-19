@@ -20,14 +20,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import java.util.HashMap;
 
 import org.apache.mycommons.io.FileUtils;
-import org.apache.mycommons.io.IOUtils;
 
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AnyMemoService;
@@ -46,7 +44,6 @@ import android.content.res.Resources;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 
 import android.preference.PreferenceManager;
 
@@ -133,7 +130,6 @@ public class AnyMemo extends AMActivity {
         String savedVersion = settings.getString("saved_version", "");
         String thisVersion = getResources().getString(R.string.app_version);
 
-
         boolean firstTime = settings.getBoolean("first_time", true);
         /* First time installation! It will install the sample db
          * to /sdcard/AnyMemo
@@ -148,11 +144,9 @@ public class AnyMemo extends AMActivity {
                 FileUtils.copyInputStreamToFile(in, new File(sdPath + "/" + AMEnv.DEFAULT_DB_NAME));
 
                 InputStream in2 = getResources().getAssets().open(AMEnv.EMPTY_DB_NAME);
-                FileOutputStream fos = openFileOutput(AMEnv.EMPTY_DB_NAME, Context.MODE_PRIVATE);
-                IOUtils.copy(in2, fos);
+                FileUtils.copyInputStreamToFile(in2, getDatabasePath(AMEnv.EMPTY_DB_NAME));
                 in.close();
                 in2.close();
-                fos.close();
             }
             catch(IOException e){
                 Log.e(TAG, "Copy file error", e);

@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
+import org.liberty.android.fantastischmemo.AMEnv;
+
 import org.liberty.android.fantastischmemo.ui.OptionScreen;
 import org.liberty.android.fantastischmemo.R;
 
@@ -75,6 +77,7 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
     private View exportTabButton;
     private View exportQAButton;
 
+    private View defaultSettingsButton;
     private View mergeButton;
     private View resetButton;
     private View donateButton;
@@ -120,6 +123,8 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
         exportQAButton = v.findViewById(R.id.export_qa);
         exportQAButton.setOnClickListener(this);
 
+        defaultSettingsButton = v.findViewById(R.id.misc_default_settings);
+        defaultSettingsButton.setOnClickListener(this);
         mergeButton = v.findViewById(R.id.misc_merge);
         mergeButton.setOnClickListener(this);
         resetButton = v.findViewById(R.id.misc_reset);
@@ -226,6 +231,12 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
             b.putString("file_extension", ".db");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ExportQA");
+        }
+
+        if (v == defaultSettingsButton) {
+            Intent intent = new Intent(mActivity, SettingsScreen.class);
+            intent.putExtra(SettingsScreen.EXTRA_DBPATH, AMEnv.EMPTY_DB_NAME);
+            startActivity(intent);
         }
         if(v == mergeButton){
             Intent myIntent = new Intent(mActivity, DatabaseMerger.class);
