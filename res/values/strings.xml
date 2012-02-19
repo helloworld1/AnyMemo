@@ -3,8 +3,6 @@
     <string name="app_name">AnyMemo</string>
     <string name="app_full_name">AnyMemo Free</string>
     <string name="app_version">8.999.0</string>
-    <string name="up_one_level">..</string>
-    <string name="current_dir">.</string>
     <string name="ok_text">OK</string>
     <string name="cancel_text">Cancel</string>
     <string name="yes_text">Yes</string>
@@ -26,11 +24,6 @@
     <string name="help_button_text">Help</string>
     <string name="exit_button_text">Exit program</string>
     <string name="edit_button_text">Preview/edit database</string>
-    <string name="default_dir">/anymemo/</string>
-    <string name="default_audio_dir">/anymemo/voice</string>
-    <string name="default_image_dir">/anymemo/images</string>
-
-    <string name="default_db_name">french-body-parts.db</string>
     <string name="autoaudio">Automatic speak</string>
     <string name="autoaudio_summary">The question and answer will be read automatically.</string>
     <string name="btnonerow">Compact grade button</string>
@@ -398,4 +391,5 @@
     <string name="crash_report_enabled">Crash reports will automatically send to the author.</string>
     <string name="crash_report_disabled">Crash reports will never send to the author.</string>
     <string name="help_advanced_operations">More database operations like swapping Q/A, shuffling card, removing duplicates are available in preview/edit screen when you long press the card.</string>
+    <string name="load_default_text">Load default</string>
 </resources>

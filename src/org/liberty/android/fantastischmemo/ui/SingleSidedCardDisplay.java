@@ -23,6 +23,7 @@ import java.util.EnumSet;
 
 import org.amr.arabic.ArabicUtilities;
 
+import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.R;
 
 import org.liberty.android.fantastischmemo.domain.Card;
@@ -49,7 +50,6 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.util.Log;
-import android.os.Environment;
 import android.graphics.Typeface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -71,7 +71,7 @@ public class SingleSidedCardDisplay implements FlashcardDisplay, TagHandler, Ima
     Setting setting;
     Option option;
     boolean answerShown = true;
-    String dbName;
+    String dbPath;
     int screenWidth;
     int screenHeight;
 
@@ -79,11 +79,11 @@ public class SingleSidedCardDisplay implements FlashcardDisplay, TagHandler, Ima
         throw new UnsupportedOperationException();
     }
 
-    public SingleSidedCardDisplay(Context context, String dbName, Setting setting, Option option) {
+    public SingleSidedCardDisplay(Context context, String dbPath, Setting setting, Option option) {
         mContext = context;
         this.setting = setting;
         this.option = option;
-        this.dbName = dbName;
+        this.dbPath = dbPath;
         LayoutInflater factory = LayoutInflater.from(mContext);
         flashcardView= factory.inflate(R.layout.flashcard_screen, null);
         questionLayout = (LinearLayout)flashcardView.findViewById(R.id.layout_question);
@@ -331,16 +331,18 @@ public class SingleSidedCardDisplay implements FlashcardDisplay, TagHandler, Ima
     @Override
     public Drawable getDrawable(String source){
         Log.v(TAG, "Source: " + source);
+        String dbName = AMUtil.getFilenameFromPath(dbPath);
         try{
             String[] paths = {
                 /* Relative path */
                 "" + dbName + "/" + source,
                 /* Try the image in /sdcard/anymemo/images/dbname/myimg.png */
-                Environment.getExternalStorageDirectory().getAbsolutePath() + mContext.getString(R.string.default_image_dir) + "/" + dbName + "/" + source,
+                AMEnv.DEFAULT_IMAGE_PATH + dbName + "/" + source,
                 /* Try the image in /sdcard/anymemo/images/myimg.png */
-                Environment.getExternalStorageDirectory().getAbsolutePath() + mContext.getString(R.string.default_image_dir) + "/" + source};
+                AMEnv.DEFAULT_IMAGE_PATH + source};
             Bitmap orngBitmap = null;
             for(String path : paths){
+                Log.v(TAG, "Try path: " + path);
                 if(new File(path).exists()){
                     orngBitmap = BitmapFactory.decodeFile(path);
                     break;

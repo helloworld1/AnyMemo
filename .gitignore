@@ -1,6 +1,6 @@
 .DS_Store
 *.sw*
-*.properties
+local.properties
 build.xml
 gen/
 bin/

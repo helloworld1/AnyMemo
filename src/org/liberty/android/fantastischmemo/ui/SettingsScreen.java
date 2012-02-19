@@ -27,6 +27,7 @@ import java.util.List;
 
 import org.color.ColorDialog;
 import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
@@ -380,8 +381,7 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             answerLocaleSpinner.setOnItemSelectedListener(localeListener);
             audioLocationLayout = (LinearLayout) findViewById(R.id.settings_audio_location_view);
             audioLocationEdit = (EditText) findViewById(R.id.settings_audio_location);
-            audioLocationEdit.setText(Environment.getExternalStorageDirectory().getAbsolutePath()
-                    + getString(R.string.default_audio_dir));
+            audioLocationEdit.setText(AMEnv.DEFAULT_AUDIO_PATH);
             // ---------------------------------------------------
             colorCheckbox = (CheckBox) findViewById(R.id.checkbox_customize_color);
             colorCheckbox.setOnClickListener(SettingsScreen.this);

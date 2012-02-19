@@ -22,7 +22,6 @@
     <string name="exit_button_text">끝내기</string>
     <string name="edit_button_text">학습장 미리보기/편집</string>
 
-    <string name="default_db_name">french-body-parts.db</string>
     <string name="autoaudio">음성 자동재생</string>
     <string name="autoaudio_summary">문제와 정답을 자동으로 읽어줍니다</string>
     <string name="btnonerow">간략한 버튼 보기</string>

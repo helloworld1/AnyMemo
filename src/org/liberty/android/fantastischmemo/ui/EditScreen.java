@@ -26,6 +26,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
@@ -390,9 +391,7 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
     }
 
     private void initTTS(){
-        String defaultLocation =
-            Environment.getExternalStorageDirectory().getAbsolutePath()
-            + getString(R.string.default_audio_dir);
+        String defaultLocation = AMEnv.DEFAULT_AUDIO_PATH;
         // TODO: This couldn't be null but be wary
         String qa = setting.getQuestionAudio();
         String aa = setting.getAnswerAudio();

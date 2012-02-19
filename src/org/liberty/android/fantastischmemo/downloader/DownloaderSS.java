@@ -203,7 +203,7 @@ public class DownloaderSS extends DownloaderBase implements ListView.OnScrollLis
                                 mHandler.post(new Runnable(){
                                     public void run(){
                                         mProgressDialog.dismiss();
-                                        String dbpath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
+                                        String dbpath = AMEnv.DEFAULT_ROOT_PATH;
                                         new AlertDialog.Builder(DownloaderSS.this)
                                             .setTitle(R.string.downloader_download_success)
                                             .setMessage(getString(R.string.downloader_download_success_message) + dbpath + di.getTitle() + ".db")
@@ -350,7 +350,7 @@ public class DownloaderSS extends DownloaderBase implements ListView.OnScrollLis
             
         }
         String dbname = di.getTitle() + ".db";
-        String dbpath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
+        String dbpath = AMEnv.DEFAULT_ROOT_PATH;
         String fullpath = dbpath + dbname;
         try {
             AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(DownloaderSS.this, fullpath);

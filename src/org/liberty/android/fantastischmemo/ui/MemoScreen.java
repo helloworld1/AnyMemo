@@ -20,8 +20,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.AnyMemoService;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.ui.SettingsScreen;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
@@ -177,11 +179,10 @@ public class MemoScreen extends AMActivity implements CategoryEditorFragment.Cat
             answerTTS.shutdown();
         }
 
-        // TODO: Need another way to update widgets
         /* Update the widget because MemoScreen can be accessed though widget*/
-        //Intent myIntent = new Intent(this, AnyMemoService.class);
-        //myIntent.putExtra("request_code", AnyMemoService.CANCEL_NOTIFICATION | AnyMemoService.UPDATE_WIDGET);
-        //startService(myIntent);
+        Intent myIntent = new Intent(this, AnyMemoService.class);
+        myIntent.putExtra("request_code", AnyMemoService.CANCEL_NOTIFICATION | AnyMemoService.UPDATE_WIDGET);
+        startService(myIntent);
     }
 
     @Override
@@ -779,9 +780,7 @@ public class MemoScreen extends AMActivity implements CategoryEditorFragment.Cat
     }
 
     private void initTTS(){
-        String defaultLocation =
-            Environment.getExternalStorageDirectory().getAbsolutePath()
-            + getString(R.string.default_audio_dir);
+        String defaultLocation = AMEnv.DEFAULT_AUDIO_PATH;
         // TODO: This couldn't be null but be wary
         String qa = setting.getQuestionAudio();
         String aa = setting.getAnswerAudio();

@@ -195,7 +195,7 @@ public class DownloaderAnyMemo extends DownloaderBase{
                     try{
                         downloadDatabase(di);
                         filename = filename.replace(".zip", ".db");
-                        String sdpath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
+                        String sdpath = AMEnv.DEFAULT_ROOT_PATH;
                         final File dbFile = new File(sdpath + filename);
                         mHandler.post(new Runnable(){
                             public void run(){
@@ -247,7 +247,7 @@ public class DownloaderAnyMemo extends DownloaderBase{
         throw new Exception("Could not get filename");
         }
 
-        String sdpath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
+        String sdpath = AMEnv.DEFAULT_ROOT_PATH;
         File outFile = new File(sdpath + filename);
         mHandler.post(new Runnable(){
             public void run(){

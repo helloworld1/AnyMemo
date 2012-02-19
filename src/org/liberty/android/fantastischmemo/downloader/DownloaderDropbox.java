@@ -116,12 +116,12 @@ public class DownloaderDropbox extends DownloaderBase {
                     new Thread(){
                         public void run(){
                             try{
-                                String sdpath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir) + "/";
+                                String sdpath = AMEnv.DEFAULT_ROOT_PATH;
                                 DropboxUtils.downloadFile(dropboxToken, dropboxSecret, di, sdpath);
                                 mHandler.post(new Runnable(){
                                     public void run(){
                                         mProgressDialog.dismiss();
-                                        String dbpath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir); 
+                                        String dbpath = AMEnv.DEFAULT_ROOT_PATH; 
                                         new AlertDialog.Builder(DownloaderDropbox.this)
                                             .setTitle(R.string.downloader_download_success)
                                             .setMessage(getString(R.string.downloader_download_success_message) + dbpath + di.getTitle() + ".db")

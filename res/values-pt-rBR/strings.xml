@@ -23,7 +23,6 @@
     <string name="help_button_text">Ajuda</string>
     <string name="exit_button_text">Sair</string>
     <string name="edit_button_text">Visualizar/Editar Banco de Dados</string>
-    <string name="default_db_name">french-body-parts.db</string>
     <string name="autoaudio">Fala Automática</string>
     <string name="autoaudio_summary">A pergunta e a resposta serão lidas
     automaticamente</string>

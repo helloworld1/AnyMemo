@@ -32,6 +32,7 @@ import java.util.List;
 
 import org.apache.mycommons.io.FileUtils;
 
+import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.R;
 import android.os.Environment;
 import android.app.Activity;
@@ -61,7 +62,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 public abstract class AbstractFileBrowserFragment extends DialogFragment implements OnItemClickListener, OnItemLongClickListener{
-    private final static String EMPTY_DB_NAME = "empty.db";
     public final static String EXTRA_DEFAULT_ROOT = "default_root";
     public final static String EXTRA_FILE_EXTENSIONS = "file_extension";
 
@@ -74,6 +74,8 @@ public abstract class AbstractFileBrowserFragment extends DialogFragment impleme
     private Activity mActivity;
     private ListView fbListView;
     private final static String TAG = "AbstractFileBrowserFragment";
+    private final static String UP_ONE_LEVEL_DIR = "..";
+    private final static String CURRENT_DIR = ".";
     SharedPreferences settings;
     SharedPreferences.Editor editor;
 
@@ -111,7 +113,7 @@ public abstract class AbstractFileBrowserFragment extends DialogFragment impleme
         }
 
 		if(defaultRoot == null || defaultRoot.equals("")){
-			File sdPath = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir));
+			File sdPath = new File(AMEnv.DEFAULT_ROOT_PATH);
 			sdPath.mkdir();
 			
 			currentDirectory = sdPath;
@@ -135,7 +137,7 @@ public abstract class AbstractFileBrowserFragment extends DialogFragment impleme
         }
 
 		if(defaultRoot == null || defaultRoot.equals("")){
-			File sdPath = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir));
+			File sdPath = new File(AMEnv.DEFAULT_ROOT_PATH);
 			sdPath.mkdir();
 			
 			currentDirectory = sdPath;
@@ -166,7 +168,7 @@ public abstract class AbstractFileBrowserFragment extends DialogFragment impleme
 		this.directoryEntries.clear();
 		
 		if(this.currentDirectory.getParent() != null){
-			this.directoryEntries.add(getString(R.string.up_one_level));
+			this.directoryEntries.add(UP_ONE_LEVEL_DIR);
 		}
 		switch(this.displayMode){
 		case ABSOLUTE:
@@ -207,10 +209,10 @@ public abstract class AbstractFileBrowserFragment extends DialogFragment impleme
     @Override
 	public void onItemClick(AdapterView<?> parentView, View childView, int position, long id){
 		String selectedFileString = this.directoryEntries.get(position);
-		if(selectedFileString.equals(getString(R.string.current_dir))){
+		if(selectedFileString.equals(CURRENT_DIR)){
 			this.browseTo(this.currentDirectory);
 		}
-		else if(selectedFileString.equals(getString(R.string.up_one_level))){
+		else if(selectedFileString.equals(UP_ONE_LEVEL_DIR)) {
 			this.upOneLevel();
 		}
 		else{
@@ -252,10 +254,10 @@ public abstract class AbstractFileBrowserFragment extends DialogFragment impleme
     @Override
     public boolean onItemLongClick(AdapterView<?>  parent, View  view, int position, long id){
 		String selectedFileString = this.directoryEntries.get(position);
-		if(selectedFileString.equals(getString(R.string.current_dir))){
+		if(selectedFileString.equals(CURRENT_DIR)){
             /* Do nothing */
 		}
-		else if(selectedFileString.equals(getString(R.string.up_one_level))){
+		else if(selectedFileString.equals(UP_ONE_LEVEL_DIR)){
             /* Do nithing */
 		}
 		else{
@@ -400,7 +402,7 @@ public abstract class AbstractFileBrowserFragment extends DialogFragment impleme
                             value += ".db";
                         }
                         try {
-                            FileInputStream fis = mActivity.openFileInput(EMPTY_DB_NAME);
+                            FileInputStream fis = mActivity.openFileInput(AMEnv.EMPTY_DB_NAME);
                             FileUtils.copyInputStreamToFile(fis, new File(currentDirectory.getAbsolutePath() + "/" + value));
                             fis.close();
                         }

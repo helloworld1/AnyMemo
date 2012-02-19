@@ -25,6 +25,7 @@ import java.util.List;
 import java.io.IOException;
 import java.net.URLEncoder;
 
+import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
@@ -176,7 +177,7 @@ public class DownloaderFE extends DownloaderBase{
                                 mHandler.post(new Runnable(){
                                     public void run(){
                                         mProgressDialog.dismiss();
-                                        String dbpath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
+                                        String dbpath = AMEnv.DEFAULT_ROOT_PATH;
                                         new AlertDialog.Builder(DownloaderFE.this)
                                             .setTitle(R.string.downloader_download_success)
                                             .setMessage(getString(R.string.downloader_download_success_message) + dbpath + di.getTitle() + ".db")
@@ -279,6 +280,7 @@ public class DownloaderFE extends DownloaderBase{
             JSONObject jsonItem = flashcardsArray.getJSONObject(i);
             String question = jsonItem.getString("question");
             String answer = jsonItem.getString("answer");
+
             Card card = new Card();
             card.setQuestion(question);
             card.setAnswer(answer);
@@ -290,7 +292,7 @@ public class DownloaderFE extends DownloaderBase{
         
         /* Make a valid dbname from the title */
         String dbname = DownloaderUtils.validateDBName(di.getTitle()) + ".db";
-        String dbpath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
+        String dbpath = AMEnv.DEFAULT_ROOT_PATH;
         String fullpath = dbpath + dbname;
         try {
             AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(DownloaderFE.this, fullpath);

@@ -21,8 +21,6 @@
     <string name="help_button_text">Nápověda</string>
     <string name="exit_button_text">Ukončit program</string>
     <string name="edit_button_text">Náhled/Úprava databáze</string>
-
-    <string name="default_db_name">french-body-parts.db</string>
     <string name="autoaudio">Automatické mluvení</string>
     <string name="autoaudio_summary">Otázka a odpověď bude čtena automaticky</string>
     <string name="btnonerow">Kompaktní tlačítka hodnocení</string>

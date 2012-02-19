@@ -2,28 +2,42 @@ package org.liberty.android.fantastischmemo.utils;
 
 import java.io.File;
 
+import java.sql.SQLException;
+
 import java.util.List;
 
 import java.util.concurrent.Callable;
 
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
+import org.liberty.android.fantastischmemo.dao.SettingDao;
 
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
+import org.liberty.android.fantastischmemo.domain.Setting;
 
 import android.content.Context;
 
-import android.database.Cursor;
-
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
-
 public class DatabaseUtils {
+
+    public static Setting readDefaultSetting(Context context) {
+        try {
+            AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(context, AMEnv.EMPTY_DB_NAME);
+            SettingDao settingDao = helper.getSettingDao(); 
+            return settingDao.queryForId(1);
+        } catch (SQLException e) {
+            throw new RuntimeException("Could not read setting from default db", e);
+        } finally {
+            AnyMemoDBOpenHelperManager.releaseHelper(AMEnv.EMPTY_DB_NAME);
+        }
+
+    }
+
     public static void mergeDatabases(Context context, String destPath, String srcPath) throws Exception {
         AnyMemoDBOpenHelper destHelper = AnyMemoDBOpenHelperManager.getHelper(context, destPath);
         AnyMemoDBOpenHelper srcHelper = AnyMemoDBOpenHelperManager.getHelper(context, srcPath);
@@ -62,12 +76,14 @@ public class DatabaseUtils {
             return false;
         }
         try {
-            AnyMemoDBOpenHelperManager.getHelper(context, dbPath);
-            AnyMemoDBOpenHelperManager.releaseHelper(dbPath);
+            AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(context, dbPath);
+            helper.getCardDao(); 
             return true;
-        } catch (SQLiteException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        } finally {
+            AnyMemoDBOpenHelperManager.releaseHelper(dbPath);
         }
     }
 }

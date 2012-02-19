@@ -25,6 +25,7 @@ import java.io.File;
 
 import org.apache.mycommons.io.FileUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
@@ -233,7 +234,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener, Cate
                         name = AMUtil.getFilenameFromPath(path);
                         addTextToView((EditText)focusView, "<img src=\"" + name + "\" />");
                         /* Copy the image to correct location */
-                        String imageRoot = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_image_dir) + "/";
+                        String imageRoot = AMEnv.DEFAULT_IMAGE_PATH;
                         String imagePath = imageRoot + dbName + "/";
                         new File(imageRoot).mkdir();
                         new File(imagePath).mkdir();
@@ -257,7 +258,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener, Cate
                         name = AMUtil.getFilenameFromPath(path);
                         addTextToView((EditText)focusView, "<audio src=\"" + name + "\" />");
                         /* Copy the image to correct location */
-                        String audioRoot = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_audio_dir) + "/";
+                        String audioRoot = AMEnv.DEFAULT_AUDIO_PATH;
                         String audioPath = audioRoot + dbName + "/";
                         new File(audioRoot).mkdir();
                         new File(audioPath).mkdir();

@@ -31,6 +31,7 @@ import org.apache.mycommons.io.IOUtils;
 
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AnyMemoService;
+import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.SetAlarmReceiver;
 
@@ -67,8 +68,6 @@ import android.widget.TextView;
 
 public class AnyMemo extends AMActivity {
     private final static String WEBSITE_VERSION="http://anymemo.org/index.php?page=version";
-    private final static String SAMPLE_DB_NAME = "french-body-parts.db";
-    private final static String EMPTY_DB_NAME = "empty.db";
     private TabHost mTabHost;
     private TabManager mTabManager;
     private SharedPreferences settings;
@@ -85,7 +84,7 @@ public class AnyMemo extends AMActivity {
         mTabManager = new TabManager(this, mTabHost, android.R.id.tabcontent);
 
         Bundle b = new Bundle();
-        String sdPath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
+        String sdPath = AMEnv.DEFAULT_ROOT_PATH;
         b.putString("default_root", sdPath);
         mTabManager.addTab(mTabHost.newTabSpec("recent").setIndicator(getString(R.string.recent_tab_text),  res.getDrawable(R.drawable.recent)),
                 RecentListFragment.class, b);
@@ -112,7 +111,7 @@ public class AnyMemo extends AMActivity {
     }
 
     private void prepareStoreage() {
-        File sdPath = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir));
+        File sdPath = new File(AMEnv.DEFAULT_ROOT_PATH);
         sdPath.mkdir();
         if(!sdPath.canRead()){
             DialogInterface.OnClickListener exitButtonListener = new DialogInterface.OnClickListener(){
@@ -129,7 +128,7 @@ public class AnyMemo extends AMActivity {
         }
     }
     private void prepareFirstTimeRun() {
-        File sdPath = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir));
+        File sdPath = new File(AMEnv.DEFAULT_ROOT_PATH);
         //Check the version, if it is updated from an older version it will show a dialog
         String savedVersion = settings.getString("saved_version", "");
         String thisVersion = getResources().getString(R.string.app_version);
@@ -142,14 +141,14 @@ public class AnyMemo extends AMActivity {
         if(firstTime == true){
             SharedPreferences.Editor editor = settings.edit();
             editor.putBoolean("first_time", false);
-            editor.putString("recentdbpath0", Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir) + SAMPLE_DB_NAME);
+            editor.putString("recentdbpath0", AMEnv.DEFAULT_ROOT_PATH + AMEnv.DEFAULT_DB_NAME);
             editor.commit();
             try {
-                InputStream in = getResources().getAssets().open(SAMPLE_DB_NAME);
-                FileUtils.copyInputStreamToFile(in, new File(sdPath + "/" + SAMPLE_DB_NAME));
+                InputStream in = getResources().getAssets().open(AMEnv.DEFAULT_DB_NAME);
+                FileUtils.copyInputStreamToFile(in, new File(sdPath + "/" + AMEnv.DEFAULT_DB_NAME));
 
-                InputStream in2 = getResources().getAssets().open(EMPTY_DB_NAME);
-                FileOutputStream fos = openFileOutput(EMPTY_DB_NAME, Context.MODE_PRIVATE);
+                InputStream in2 = getResources().getAssets().open(AMEnv.EMPTY_DB_NAME);
+                FileOutputStream fos = openFileOutput(AMEnv.EMPTY_DB_NAME, Context.MODE_PRIVATE);
                 IOUtils.copy(in2, fos);
                 in.close();
                 in2.close();

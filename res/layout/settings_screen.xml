@@ -249,6 +249,13 @@
 			android:text="@string/settings_save" />
 
 		<Button
+		    android:id="@+id/load_default"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_marginLeft="3dip"
+		    android:text="@string/load_default_text" />
+
+		<Button
 		    android:id="@+id/setting_discard"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"

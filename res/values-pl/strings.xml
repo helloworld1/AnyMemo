@@ -22,7 +22,6 @@
     <string name="exit_button_text">Zamknij program</string>
     <string name="edit_button_text">Przejrzyj/Edytuj bazę danych</string>
 
-    <string name="default_db_name">french-body-parts.db</string>
     <string name="autoaudio">Automatycznie wypowiadanie</string>
     <string name="autoaudio_summary">Pytanie i odpowiedź będą wypowiadane automatycznie</string>
     <string name="btnonerow">Kompaktowe przyciski ocen</string>
