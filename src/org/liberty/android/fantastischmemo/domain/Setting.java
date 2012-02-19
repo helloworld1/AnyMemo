@@ -415,4 +415,28 @@ public class Setting {
 	           (answerBackgroundColor.equals(DEFAULT_ANSWER_BACKGROUND_COLOR)) &&
 	           (separatorColor.equals(DEFAULT_SEPARATOR_COLOR));
 	}
+
+	@Override
+	public String toString() {
+		return "Setting [id=" + id + ", name=" + name + ", description="
+				+ description + ", questionFontSize=" + questionFontSize
+				+ ", answerFontSize=" + answerFontSize + ", questionTextAlign="
+				+ questionTextAlign + ", answerTextAlign=" + answerTextAlign
+				+ ", cardStyle=" + cardStyle + ", qaRatio=" + qaRatio
+				+ ", questionAudio=" + questionAudio + ", answerAudio="
+				+ answerAudio + ", questionTextColor=" + questionTextColor
+				+ ", answerTextColor=" + answerTextColor
+				+ ", questionBackgroundColor=" + questionBackgroundColor
+				+ ", answerBackgroundColor=" + answerBackgroundColor
+				+ ", separatorColor=" + separatorColor + ", displayInHTML="
+				+ displayInHTML + ", htmlLineBreakConversion="
+				+ htmlLineBreakConversion + ", questionField=" + questionField
+				+ ", answerField=" + answerField + ", questionFont="
+				+ questionFont + ", answerFont=" + answerFont + ", dictApp="
+				+ dictApp + ", shuffleType=" + shuffleType + ", speakingType="
+				+ speakingType + ", questionAudioLocation="
+				+ questionAudioLocation + ", answerAudioLocation="
+				+ answerAudioLocation + ", creationDate=" + creationDate
+				+ ", updateDate=" + updateDate + "]";
+	}
 }

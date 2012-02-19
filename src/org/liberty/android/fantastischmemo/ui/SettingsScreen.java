@@ -39,6 +39,8 @@ import org.liberty.android.fantastischmemo.ui.widgets.AMIntSpinner;
 import org.liberty.android.fantastischmemo.ui.widgets.AMPercentageSpinner;
 import org.liberty.android.fantastischmemo.ui.widgets.AMStrSpinner;
 
+import org.liberty.android.fantastischmemo.utils.DatabaseUtils;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -109,6 +111,7 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
     // ------------------------------------------
     private Button saveButton;
     private Button discardButton;
+    private Button loadDefaultButton;
 
     private final static String WEBSITE_HELP_SETTINGS="http://anymemo.org/wiki/index.php?title=Card_styles";
     
@@ -175,6 +178,23 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             Intent resultIntent = new Intent();
             setResult(Activity.RESULT_CANCELED, resultIntent);
             finish();
+        }
+
+        if (v == loadDefaultButton) {
+            new AlertDialog.Builder(this)
+                .setTitle(R.string.load_default_text)
+                .setMessage(R.string.load_default_warning_text)
+                .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        LoadDefaultTask task = new LoadDefaultTask();
+                        task.execute((Void)null);
+                        // Need to refresh the activity that invoke this activity.
+                        Intent resultIntent = new Intent();
+                        setResult(Activity.RESULT_OK, resultIntent);
+                    }
+                })
+                .setNegativeButton(R.string.cancel_text, null)
+                .show();
         }
         
         if (v == colorCheckbox) {
@@ -327,6 +347,7 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
         public Void doInBackground(Void... params) {
             try {
                 AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(SettingsScreen.this, dbPath);
+
                 settingDao = helper.getSettingDao();
                 setting = settingDao.queryForId(1);
                 /* Run the learnQueue init in a separate thread */
@@ -429,8 +450,12 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             // --------------------------------------------------
             saveButton = (Button) findViewById(R.id.settting_save);
             saveButton.setOnClickListener(SettingsScreen.this);
+
             discardButton = (Button) findViewById(R.id.setting_discard);
             discardButton.setOnClickListener(SettingsScreen.this);
+
+            loadDefaultButton = (Button) findViewById(R.id.load_default);
+            loadDefaultButton.setOnClickListener(SettingsScreen.this);
                     
             updateViews();
 
@@ -556,6 +581,40 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             Intent resultIntent = new Intent();
             setResult(Activity.RESULT_OK, resultIntent);
             finish();
+        }
+    }
+
+    private class LoadDefaultTask extends AsyncTask<Void, Void, Void> {
+        private ProgressDialog progressDialog;
+
+        @Override
+        public void onPreExecute() {
+            progressDialog = new ProgressDialog(SettingsScreen.this);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setTitle(getString(R.string.loading_please_wait));
+            progressDialog.setMessage(getString(R.string.loading_database));
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        public Void doInBackground(Void... params) {
+            try {
+                Setting defaultSetting = DatabaseUtils.readDefaultSetting(SettingsScreen.this);
+                settingDao.replaceSetting(defaultSetting);
+                System.err.println("Default setting: " + defaultSetting);
+                setting = settingDao.queryForId(1);
+                System.err.println("new setting: " + setting);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return null;
+        }
+
+        @Override
+        public void onPostExecute(Void result) {
+            progressDialog.dismiss();
+            updateViews();
         }
     }
 

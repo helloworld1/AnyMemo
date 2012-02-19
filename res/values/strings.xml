@@ -392,4 +392,5 @@
     <string name="crash_report_disabled">Crash reports will never send to the author.</string>
     <string name="help_advanced_operations">More database operations like swapping Q/A, shuffling card, removing duplicates are available in preview/edit screen when you long press the card.</string>
     <string name="load_default_text">Load default</string>
+    <string name="load_default_warning_text">This will load the default settings you set in "Default settings" and you will lose the current settings.</string>
 </resources>

@@ -19,6 +19,15 @@ public class SettingDaoImpl extends BaseDaoImpl<Setting, Integer> implements Set
         throws SQLException {
         super(connectionSource, clazz);
     }
+    public void replaceSetting(Setting settings) {
+        try {
+            deleteById(1);
+            create(settings);
+            updateId(settings, 1);
+        } catch (SQLException e) { 
+            throw new RuntimeException("Error replacing settings", e);
+        }
+    }
 
 }
 

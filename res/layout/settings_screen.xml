@@ -242,26 +242,33 @@
         android:layout_height="2dip"
         android:background="#FF909090" />
             
-	<LinearLayout android:orientation="horizontal"
-		android:layout_width="fill_parent" android:layout_height="wrap_content">
-		<Button android:id="@+id/settting_save" android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:layout_marginLeft="3dip"
+    <LinearLayout 
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/settting_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="3dip"
 			android:text="@string/settings_save" />
 
 		<Button
 		    android:id="@+id/load_default"
-		    android:layout_width="wrap_content"
+            android:layout_width="match_parent"
 		    android:layout_height="wrap_content"
+            android:layout_weight="1"
 		    android:layout_marginLeft="3dip"
 		    android:text="@string/load_default_text" />
 
 		<Button
 		    android:id="@+id/setting_discard"
-		    android:layout_width="wrap_content"
+            android:layout_width="match_parent"
 		    android:layout_height="wrap_content"
+            android:layout_weight="1"
 		    android:layout_marginLeft="3dip"
 		    android:text="@string/settings_discard" />
-
 	</LinearLayout> 
 </LinearLayout>
 </ScrollView>
