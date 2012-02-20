@@ -25,6 +25,8 @@ import java.util.List;
 import java.io.IOException;
 import java.net.URLEncoder;
 
+import org.apache.mycommons.lang3.StringUtils;
+
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
@@ -36,6 +38,7 @@ import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
+import org.liberty.android.fantastischmemo.utils.AMUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 import android.os.Bundle;
@@ -265,6 +268,10 @@ public class DownloaderFE extends DownloaderBase{
     }
 
     private void downloadDatabase(DownloadItem di) throws Exception{
+        /* Make a valid dbname from the title */
+        String dbname = DownloaderUtils.validateDBName(di.getTitle()) + ".db";
+        String imagePath = AMEnv.DEFAULT_IMAGE_PATH + dbname + "/";
+
         String address = di.getAddress();
         String dbJsonString = DownloaderUtils.downloadJSONString(address);
         Log.v(TAG, "Download url: " + address);
@@ -277,9 +284,25 @@ public class DownloaderFE extends DownloaderBase{
         JSONArray flashcardsArray = rootObject.getJSONObject("results").getJSONArray("flashcards");
         List<Card> cardList = new ArrayList<Card>();
         for(int i = 0; i < flashcardsArray.length(); i++){
+            // First get card
             JSONObject jsonItem = flashcardsArray.getJSONObject(i);
             String question = jsonItem.getString("question");
             String answer = jsonItem.getString("answer");
+
+            // Download image file if there is
+            String questionImageUrl = jsonItem.getString("question_image_url");
+            if (StringUtils.isNotEmpty(questionImageUrl)) {
+                String downloadFilename = AMUtil.getFilenameFromPath(questionImageUrl);
+                DownloaderUtils.downloadFile(questionImageUrl, imagePath + downloadFilename); 
+                question = question + "<br /><img src=\"" + downloadFilename + "\" />";
+            }
+            // Download image file if there is
+            String answerImageUrl = jsonItem.getString("answer_image_url");
+            if (StringUtils.isNotEmpty(answerImageUrl)) {
+                String downloadFilename = AMUtil.getFilenameFromPath(answerImageUrl);
+                DownloaderUtils.downloadFile(answerImageUrl, imagePath + downloadFilename); 
+                answer = answer + "<br /><img src=\"" + downloadFilename + "\" />";
+            }
 
             Card card = new Card();
             card.setQuestion(question);
@@ -290,8 +313,6 @@ public class DownloaderFE extends DownloaderBase{
             cardList.add(card);
         }
         
-        /* Make a valid dbname from the title */
-        String dbname = DownloaderUtils.validateDBName(di.getTitle()) + ".db";
         String dbpath = AMEnv.DEFAULT_ROOT_PATH;
         String fullpath = dbpath + dbname;
         try {
