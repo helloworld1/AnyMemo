@@ -37,6 +37,9 @@ import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
+
+import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment;
+import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
 import org.liberty.android.fantastischmemo.utils.AMUtil;
 
 import android.app.Activity;
@@ -49,7 +52,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
-import android.support.v4.app.DialogFragment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -59,7 +61,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.util.Log;
-import android.os.Environment;
 import android.content.res.Configuration;
 
 public class CardEditor extends AMActivity implements View.OnClickListener, CategoryEditorFragment.CategoryEditorResultListener{
@@ -89,8 +90,10 @@ public class CardEditor extends AMActivity implements View.OnClickListener, Cate
     private String originalQuestion;
     private String originalAnswer;
     private String originalNote;
+
     public static String EXTRA_DBPATH = "dbpath";
     public static String EXTRA_CARD_ID = "id";
+    public static String EXTRA_RESULT_CARD_ID= "result_card_id";
     public static String EXTRA_IS_EDIT_NEW = "is_edit_new";
 
 
@@ -158,7 +161,8 @@ public class CardEditor extends AMActivity implements View.OnClickListener, Cate
         }
 
         if (v == categoryButton) {
-            DialogFragment df = new CategoryEditorFragment();
+            CategoryEditorFragment df = new CategoryEditorFragment();
+            df.setResultListener(categoryResultListener);
             Bundle b = new Bundle();
             b.putString(CategoryEditorFragment.EXTRA_DBPATH, dbPath);
             b.putInt(CategoryEditorFragment.EXTRA_CATEGORY_ID, currentCard.getCategory().getId());
@@ -487,9 +491,18 @@ public class CardEditor extends AMActivity implements View.OnClickListener, Cate
         public void onPostExecute(Void result){
             progressDialog.dismiss();
             Intent resultIntent = new Intent();
-            resultIntent.putExtra("id", currentCard.getId());
+            resultIntent.putExtra(EXTRA_RESULT_CARD_ID, currentCard.getId());
         	setResult(Activity.RESULT_OK, resultIntent);    			
             finish();
         }
     }
+
+    // When a category is selected in category fragment.
+    private CategoryEditorResultListener categoryResultListener = 
+        new CategoryEditorResultListener() {
+            public void onReceiveCategory(Category c) {
+                currentCard.setCategory(c);
+                updateViews();
+            }
+        };
 }

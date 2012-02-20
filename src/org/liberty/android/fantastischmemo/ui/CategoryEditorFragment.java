@@ -52,6 +52,7 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
     private Button deleteButton;
     private Button editButton;
     private EditText categoryEdit;
+    private CategoryEditorResultListener resultListener;
 
 
     @Override
@@ -65,6 +66,10 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
         Bundle args = this.getArguments();
         dbPath = args.getString(EXTRA_DBPATH);
         currentCategoryId = args.getInt(EXTRA_CATEGORY_ID, 1);
+    }
+
+    public void setResultListener(CategoryEditorResultListener resultListener) {
+        this.resultListener = resultListener;
     }
 
     @Override
@@ -102,7 +107,9 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
             } else {
                 selectedCategory = categoryAdapter.getItem(position);
             }
-            ((CategoryEditorResultListener)mActivity).onReceiveCategory(selectedCategory);
+            if (resultListener != null) {
+                resultListener.onReceiveCategory(selectedCategory);
+            }
             dismiss();
         }
         if (v == newButton) {

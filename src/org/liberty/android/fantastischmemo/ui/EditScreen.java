@@ -57,9 +57,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 
-import android.support.v4.app.DialogFragment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -77,7 +75,9 @@ import android.util.Log;
 import android.net.Uri;
 import android.view.GestureDetector;
 
-public class EditScreen extends AMActivity implements CategoryEditorFragment.CategoryEditorResultListener {
+import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
+
+public class EditScreen extends AMActivity {
     private AnyMemoTTS questionTTS = null;
     private AnyMemoTTS answerTTS = null;
     private boolean searchInflated = false;
@@ -146,13 +146,6 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
     }
 
     @Override
-    public void onReceiveCategory(Category c) {
-        activeCategoryId = c.getId();
-        restartActivity();
-    }
-
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == Activity.RESULT_CANCELED){
@@ -162,7 +155,13 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
         switch(requestCode){
             case ACTIVITY_EDIT:
             {
-                // TODO: Jump to edit card.
+                Bundle extras = data.getExtras();
+                int cardId = extras.getInt(CardEditor.EXTRA_RESULT_CARD_ID, currentCard.getId());
+                try {
+                    currentCard = cardDao.queryForId(cardId);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
                 restartActivity();
                 break;
             }
@@ -229,7 +228,6 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
 
             case R.id.editmenu_settings_id:
             {
-                // TODO: Edit this
                 Intent myIntent = new Intent(this, SettingsScreen.class);
                 myIntent.putExtra(SettingsScreen.EXTRA_DBPATH, dbPath);
                 startActivityForResult(myIntent, ACTIVITY_SETTINGS);
@@ -612,7 +610,8 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
     }
 
     private void showCategoriesDialog() {
-        DialogFragment df = new CategoryEditorFragment();
+        CategoryEditorFragment df = new CategoryEditorFragment();
+        df.setResultListener(categoryResultListener);
         Bundle b = new Bundle();
         b.putString(CategoryEditorFragment.EXTRA_DBPATH, dbPath);
         if (currentCategory == null) {
@@ -876,4 +875,13 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
             restartActivity();
         }
     }
+
+    // When a category is selected in category fragment.
+    private CategoryEditorResultListener categoryResultListener = 
+        new CategoryEditorResultListener() {
+            public void onReceiveCategory(Category c) {
+                activeCategoryId = c.getId();
+                restartActivity();
+            }
+        };
 }

@@ -68,10 +68,8 @@ import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 
-import android.support.v4.app.DialogFragment;
 import android.text.ClipboardManager;
 
-import android.os.Environment;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.ContextMenu;
@@ -88,7 +86,9 @@ import android.widget.Toast;
 import android.util.Log;
 import android.net.Uri;
 
-public class MemoScreen extends AMActivity implements CategoryEditorFragment.CategoryEditorResultListener {
+import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
+
+public class MemoScreen extends AMActivity {
     public static String EXTRA_DBPATH = "dbpath";
     public static String EXTRA_CATEGORY_ID = "category_id";
     private AnyMemoTTS questionTTS = null;
@@ -808,15 +808,9 @@ public class MemoScreen extends AMActivity implements CategoryEditorFragment.Cat
         }
     }
 
-    @Override
-    public void onReceiveCategory(Category c) {
-        assert c != null : "Receive null category";
-        filterCategoryId = c.getId();
-        restartActivity();
-    }
-
     private void showCategoriesDialog() {
-        DialogFragment df = new CategoryEditorFragment();
+        CategoryEditorFragment df = new CategoryEditorFragment();
+        df.setResultListener(categoryResultListener);
         Bundle b = new Bundle();
         b.putString(CategoryEditorFragment.EXTRA_DBPATH, dbPath);
         if (filterCategory == null) {
@@ -1025,10 +1019,21 @@ public class MemoScreen extends AMActivity implements CategoryEditorFragment.Cat
         }
     }
 
+
     Runnable flushDatabaseTask = new Runnable() {
         public void run() {
             queueManager.flush();
         }
     };
+
+    // When a category is selected in category fragment.
+    private CategoryEditorResultListener categoryResultListener = 
+        new CategoryEditorResultListener() {
+            public void onReceiveCategory(Category c) {
+                assert c != null : "Receive null category";
+                filterCategoryId = c.getId();
+                restartActivity();
+            }
+        };
 
 }
