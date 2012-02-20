@@ -317,12 +317,10 @@ public class MemoScreen extends AMActivity {
             }
             case R.id.menu_context_gotoprev:
             {
-                // TODO: Edit screen
-                //Intent myIntent = new Intent(this, EditScreen.class);
-                //myIntent.putExtra("dbname", this.dbName);
-                //myIntent.putExtra("dbpath", this.dbPath);
-                //myIntent.putExtra("id", currentCard.getId());
-                //startActivityForResult(myIntent, ACTIVITY_GOTO_PREV);
+                Intent myIntent = new Intent();
+                myIntent.setClass(this, EditScreen.class);
+                myIntent.putExtra(EditScreen.EXTRA_DBPATH, dbPath);
+                startActivity(myIntent);
                 return true;
             }
 
@@ -338,7 +336,7 @@ public class MemoScreen extends AMActivity {
                     lookupWord = currentCard.getAnswer();
                 }
 
-                if(setting.getDictApp() == Setting.DictApp.COLORDICT){
+                if(option.getDictApp() == Option.DictApp.COLORDICT){
                     System.out.println("Get COLORDICT");
                     Intent intent = new Intent("colordict.intent.action.SEARCH");
                     intent.putExtra("EXTRA_QUERY", lookupWord);
@@ -354,7 +352,7 @@ public class MemoScreen extends AMActivity {
                         AMGUIUtility.displayException(this, getString(R.string.error_text), getString(R.string.dict_colordict) + " " + getString(R.string.error_no_dict), e);
                     }
                 }
-                if(setting.getDictApp() == Setting.DictApp.FORA){
+                if(option.getDictApp() == Option.DictApp.FORA){
                     System.out.println("Get FORA");
                     Intent intent = new Intent("com.ngc.fora.action.LOOKUP");
                     intent.putExtra("HEADWORD", lookupWord);
@@ -589,7 +587,7 @@ public class MemoScreen extends AMActivity {
 
         flashcardDisplay.setQuestionLayoutClickListener(showAnswerListener);
         flashcardDisplay.setAnswerLayoutClickListener(showAnswerListener);
-        if(setting.getSpeakingType() == Setting.SpeakingType.TAP || setting.getSpeakingType() == Setting.SpeakingType.AUTOTAP){
+        if(option.getSpeakingType() == Option.SpeakingType.TAP || option.getSpeakingType() == Option.SpeakingType.AUTOTAP){
             flashcardDisplay.setQuestionTextClickListener(speakQuestionListener);
             flashcardDisplay.setAnswerTextClickListener(speakAnswerListener);
         }
@@ -759,7 +757,7 @@ public class MemoScreen extends AMActivity {
     void autoSpeak(){
         if (currentCard != null) {
 
-            if(setting.getSpeakingType() == Setting.SpeakingType.AUTOTAP || setting.getSpeakingType() == Setting.SpeakingType.AUTO){
+            if(option.getSpeakingType() == Option.SpeakingType.AUTOTAP || option.getSpeakingType() == Option.SpeakingType.AUTO){
                 if(!flashcardDisplay.isAnswerShown()){
                     if(questionTTS != null){
                         questionTTS.sayText(currentCard.getQuestion());

@@ -93,16 +93,6 @@ public class Setting {
     @DatabaseField(defaultValue = "")
     private String answerFont = "";
 
-    /* Empty = no font*/
-    @DatabaseField(defaultValue = "FORA")
-    private DictApp dictApp = DictApp.FORA;
-
-    @DatabaseField(defaultValue = "NONE")
-    private ShuffleType shuffleType = ShuffleType.NONE;
-
-    @DatabaseField(defaultValue = "TAP")
-    private SpeakingType speakingType = SpeakingType.TAP;
-
     @DatabaseField(defaultValue = "")
     private String questionAudioLocation = "";
 
@@ -134,23 +124,6 @@ public class Setting {
         NOTE
     }
 
-    public static enum DictApp {
-        COLORDICT,
-        FORA
-    }
-
-    public static enum ShuffleType {
-        NONE,
-        LOCAL
-    }
-
-    public static enum SpeakingType {
-        MANUAL,
-        TAP,
-        AUTO,
-        AUTOTAP
-        
-    }
 
 	public Integer getId() {
 		return id;
@@ -352,29 +325,6 @@ public class Setting {
 		this.answerFont = answerFont;
 	}
 
-	public DictApp getDictApp() {
-		return dictApp;
-	}
-
-	public void setDictApp(DictApp dictApp) {
-		this.dictApp = dictApp;
-	}
-
-	public ShuffleType getShuffleType() {
-		return shuffleType;
-	}
-
-	public void setShuffleType(ShuffleType shuffleType) {
-		this.shuffleType = shuffleType;
-	}
-
-	public SpeakingType getSpeakingType() {
-		return speakingType;
-	}
-
-	public void setSpeakingType(SpeakingType speakingType) {
-		this.speakingType = speakingType;
-	}
 
 	public Date getCreationDate() {
 		return creationDate;
@@ -414,29 +364,5 @@ public class Setting {
 	           (questionBackgroundColor.equals(DEFAULT_QUESTION_BACKGROUND_COLOR)) &&
 	           (answerBackgroundColor.equals(DEFAULT_ANSWER_BACKGROUND_COLOR)) &&
 	           (separatorColor.equals(DEFAULT_SEPARATOR_COLOR));
-	}
-
-	@Override
-	public String toString() {
-		return "Setting [id=" + id + ", name=" + name + ", description="
-				+ description + ", questionFontSize=" + questionFontSize
-				+ ", answerFontSize=" + answerFontSize + ", questionTextAlign="
-				+ questionTextAlign + ", answerTextAlign=" + answerTextAlign
-				+ ", cardStyle=" + cardStyle + ", qaRatio=" + qaRatio
-				+ ", questionAudio=" + questionAudio + ", answerAudio="
-				+ answerAudio + ", questionTextColor=" + questionTextColor
-				+ ", answerTextColor=" + answerTextColor
-				+ ", questionBackgroundColor=" + questionBackgroundColor
-				+ ", answerBackgroundColor=" + answerBackgroundColor
-				+ ", separatorColor=" + separatorColor + ", displayInHTML="
-				+ displayInHTML + ", htmlLineBreakConversion="
-				+ htmlLineBreakConversion + ", questionField=" + questionField
-				+ ", answerField=" + answerField + ", questionFont="
-				+ questionFont + ", answerFont=" + answerFont + ", dictApp="
-				+ dictApp + ", shuffleType=" + shuffleType + ", speakingType="
-				+ speakingType + ", questionAudioLocation="
-				+ questionAudioLocation + ", answerAudioLocation="
-				+ answerAudioLocation + ", creationDate=" + creationDate
-				+ ", updateDate=" + updateDate + "]";
 	}
 }
