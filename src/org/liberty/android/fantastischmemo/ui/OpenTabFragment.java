@@ -27,21 +27,24 @@ import android.app.Activity;
 
 import android.content.Intent;
 
-public class OpenTabFragment extends AbstractFileBrowserFragment {
+public class OpenTabFragment extends FileBrowserFragment {
     Activity mActivity;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = activity;
+        setOnFileClickListener(fileClickListener);
     }
 
-    protected void fileClickAction(File file) {
-        String fullpath = file.getAbsolutePath();
-        System.out.println("Path: " + fullpath);
-        RecentListUtil.addToRecentList(mActivity, fullpath);
-        Intent myIntent = new Intent(mActivity, MemoScreen.class);
-        myIntent.putExtra(MemoScreen.EXTRA_DBPATH, fullpath);
-        startActivity(myIntent);
-    }
+    private FileBrowserFragment.OnFileClickListener fileClickListener
+        = new FileBrowserFragment.OnFileClickListener() {
+            public void onClick(File file) {
+                String fullpath = file.getAbsolutePath();
+                RecentListUtil.addToRecentList(mActivity, fullpath);
+                Intent myIntent = new Intent(mActivity, MemoScreen.class);
+                myIntent.putExtra(MemoScreen.EXTRA_DBPATH, fullpath);
+                startActivity(myIntent);
+            }
+        };
 }

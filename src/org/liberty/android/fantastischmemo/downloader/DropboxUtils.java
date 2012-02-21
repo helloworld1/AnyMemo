@@ -73,7 +73,6 @@ public class DropboxUtils{
         String url = TOKEN_URL + "&email=" + URLEncoder.encode(username)
             + "&password=" + URLEncoder.encode(password);
         String jsonString = DownloaderUtils.downloadJSONString(url);
-        System.out.println("String: " + jsonString);
         JSONObject jsonObject = new JSONObject(jsonString); 
         String error = null;
         try {
@@ -94,7 +93,6 @@ public class DropboxUtils{
     public static List<DownloadItem> listFiles(String oauthToken, String oauthSecret, String path) throws Exception{
         String url = signPathUrl(oauthToken, oauthSecret, METADATA_URL, path);
         String jsonString = DownloaderUtils.downloadJSONString(url);
-        System.out.println("Get cards String: " + jsonString);
         String error = null;
         JSONObject jsonObject = new JSONObject(jsonString); 
         try {

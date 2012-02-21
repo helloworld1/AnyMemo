@@ -602,9 +602,7 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             try {
                 Setting defaultSetting = DatabaseUtils.readDefaultSetting(SettingsScreen.this);
                 settingDao.replaceSetting(defaultSetting);
-                System.err.println("Default setting: " + defaultSetting);
                 setting = settingDao.queryForId(1);
-                System.err.println("new setting: " + setting);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

@@ -337,7 +337,6 @@ public class MemoScreen extends AMActivity {
                 }
 
                 if(option.getDictApp() == Option.DictApp.COLORDICT){
-                    System.out.println("Get COLORDICT");
                     Intent intent = new Intent("colordict.intent.action.SEARCH");
                     intent.putExtra("EXTRA_QUERY", lookupWord);
                     intent.putExtra("EXTRA_FULLSCREEN", false);
@@ -353,7 +352,6 @@ public class MemoScreen extends AMActivity {
                     }
                 }
                 if(option.getDictApp() == Option.DictApp.FORA){
-                    System.out.println("Get FORA");
                     Intent intent = new Intent("com.ngc.fora.action.LOOKUP");
                     intent.putExtra("HEADWORD", lookupWord);
                     try{

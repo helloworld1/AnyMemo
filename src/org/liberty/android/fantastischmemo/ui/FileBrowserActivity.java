@@ -23,7 +23,8 @@ import java.io.File;
 
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.utils.RecentListUtil;
+
+import org.liberty.android.fantastischmemo.ui.FileBrowserFragment;
 
 import android.app.Activity;
 
@@ -31,7 +32,6 @@ import android.content.Intent;
 
 import android.os.Bundle;
 
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
 public class FileBrowserActivity extends AMActivity {
@@ -48,41 +48,32 @@ public class FileBrowserActivity extends AMActivity {
         String defaultPath = extras.getString(EXTRA_DEFAULT_ROOT);
         String fileExtensions = extras.getString(EXTRA_FILE_EXTENSIONS);
 
-        Fragment fragment = new FileBrowserFragment();
+        FileBrowserFragment fragment = new FileBrowserFragment();
         Bundle b = new Bundle();
-        b.putString(AbstractFileBrowserFragment.EXTRA_DEFAULT_ROOT, defaultPath);
-        b.putString(AbstractFileBrowserFragment.EXTRA_FILE_EXTENSIONS, fileExtensions);
+        b.putString(FileBrowserFragment.EXTRA_DEFAULT_ROOT, defaultPath);
+        b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, fileExtensions);
 
         fragment.setArguments(b);
+        fragment.setOnFileClickListener(fileClickListener);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.root, fragment);
         transaction.commit();
     }
-    
+
     protected void fileClickAction(File file) {
         String fullpath = file.getAbsolutePath();
-        RecentListUtil.addToRecentList(this, fullpath);
-        Intent myIntent = new Intent(this, MemoScreen.class);
-        myIntent.putExtra(MemoScreen.EXTRA_DBPATH, fullpath);
-        startActivity(myIntent);
-
         Intent resultIntent = new Intent();
-
         resultIntent.putExtra(EXTRA_RESULT_PATH, fullpath);
-
         setResult(Activity.RESULT_OK, resultIntent);
         finish();
     }
-
-    /*
-     * Embed a the actual fragment for file browser here.
-     */
-    private class FileBrowserFragment extends AbstractFileBrowserFragment {
-
-        protected void fileClickAction(File file) {
-            FileBrowserActivity.this.fileClickAction(file);
+    
+    private FileBrowserFragment.OnFileClickListener fileClickListener
+        = new FileBrowserFragment.OnFileClickListener() {
+        public void onClick(File file) {
+            fileClickAction(file);
         }
-    }
+    };
 }
 

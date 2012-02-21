@@ -24,6 +24,7 @@ import java.net.URLEncoder;
 import java.io.IOException;
 
 import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
@@ -67,6 +68,8 @@ public class FEUpload extends AMActivity{
             consumer = new DefaultOAuthConsumer(FEOauth.CONSUMER_KEY, FEOauth.CONSUMER_SECRET);
             consumer.setTokenWithSecret(oauthToken, oauthTokenSecret);
             Intent myIntent = new Intent(this, FileBrowserActivity.class);
+            myIntent.putExtra(FileBrowserActivity.EXTRA_DEFAULT_ROOT, AMEnv.DEFAULT_ROOT_PATH);
+            myIntent.putExtra(FileBrowserActivity.EXTRA_FILE_EXTENSIONS, ".db");
             startActivityForResult(myIntent, FILE_BROWSER);
         }
     }
@@ -81,16 +84,15 @@ public class FEUpload extends AMActivity{
                     Bundle resultExtras = data.getExtras();
                     if(resultExtras != null){
                         final String dbPath = resultExtras.getString(FileBrowserActivity.EXTRA_RESULT_PATH);
-                        final String dbName = AMUtil.getFilenameFromPath(dbPath);
                         AMGUIUtility.doProgressTask(this, R.string.loading_please_wait, R.string.upload_wait, new AMGUIUtility.ProgressTask(){
                             private String authUrl;
                             public void doHeavyTask() throws Exception{
-                                uploadDB(dbPath, dbName);
+                                uploadDB(dbPath);
                             }
                             public void doUITask(){
                                 new AlertDialog.Builder(FEUpload.this)
                                     .setTitle(R.string.upload_finish)
-                                    .setMessage(dbName + " " + getString(R.string.upload_finish_message))
+                                    .setMessage(dbPath + " " + getString(R.string.upload_finish_message))
                                     .setPositiveButton(R.string.ok_text, AMGUIUtility.getDialogFinishListener(FEUpload.this))
                                     .create()
                                     .show();
@@ -104,10 +106,10 @@ public class FEUpload extends AMActivity{
         }
     }
 
-    private void uploadDB(String dbpath, String dbname) throws Exception{
-        int cardId = addCardSet(dbname, "Import from AnyMemo");
-        String fullpath  = dbpath + "/" + dbname;
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(this, fullpath);
+    private void uploadDB(String dbPath) throws Exception{
+        final String dbName = AMUtil.getFilenameFromPath(dbPath);
+        int cardId = addCardSet(dbName, "Import from AnyMemo");
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(this, dbPath);
         CardDao cardDao = helper.getCardDao();
         List<Card> cards = cardDao.queryForAll();
 

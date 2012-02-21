@@ -20,10 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import java.io.File;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -34,7 +30,6 @@ import org.apache.mycommons.io.FileUtils;
 
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.R;
-import android.os.Environment;
 import android.app.Activity;
 import android.app.AlertDialog;
 
@@ -61,7 +56,7 @@ import android.util.Log;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-public abstract class AbstractFileBrowserFragment extends DialogFragment implements OnItemClickListener, OnItemLongClickListener{
+public class FileBrowserFragment extends DialogFragment implements OnItemClickListener, OnItemLongClickListener {
     public final static String EXTRA_DEFAULT_ROOT = "default_root";
     public final static String EXTRA_FILE_EXTENSIONS = "file_extension";
 
@@ -73,14 +68,19 @@ public abstract class AbstractFileBrowserFragment extends DialogFragment impleme
 	private String[] fileExtensions;
     private Activity mActivity;
     private ListView fbListView;
+
+    /* Used when the file is clicked. */
+    private OnFileClickListener onFileClickListener;
+
     private final static String TAG = "AbstractFileBrowserFragment";
     private final static String UP_ONE_LEVEL_DIR = "..";
     private final static String CURRENT_DIR = ".";
-    SharedPreferences settings;
-    SharedPreferences.Editor editor;
+    private SharedPreferences settings;
+    private SharedPreferences.Editor editor;
 
-    /* When click a file, what should happen */
-    protected abstract void fileClickAction(File file);
+    public void setOnFileClickListener(OnFileClickListener listener) {
+        this.onFileClickListener = listener;
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -234,8 +234,9 @@ public abstract class AbstractFileBrowserFragment extends DialogFragment impleme
                         /* Save the current path */
                         editor.putString("saved_fb_path", clickedFile.getParent());
                         editor.commit();
-                        fileClickAction(clickedFile);
-						
+                        if (onFileClickListener != null) {
+                            onFileClickListener.onClick(clickedFile);
+                        }
 					}
 				}
 		
@@ -308,7 +309,7 @@ public abstract class AbstractFileBrowserFragment extends DialogFragment impleme
                                         String srcDir = clickedFile.getAbsolutePath();
                                         String destDir = srcDir.replaceAll(".db", ".clone.db");
                                         try{
-                                            copyFile(srcDir, destDir);
+                                            FileUtils.copyFile(new File(srcDir), new File(destDir));
                                         }
                                         catch(IOException e){
                                             new AlertDialog.Builder(mActivity)
@@ -335,8 +336,7 @@ public abstract class AbstractFileBrowserFragment extends DialogFragment impleme
                                                 String value = input.getText().toString();
                                                 if(!value.equals(clickedFile.getAbsolutePath())){
                                                     try{
-                                                        copyFile(clickedFile.getAbsolutePath(), value);
-                                                        clickedFile.delete();
+                                                        FileUtils.moveFile(clickedFile, new File(value));
                                                     }
                                                     catch(IOException e){
                                                         new AlertDialog.Builder(mActivity)
@@ -555,21 +555,8 @@ public abstract class AbstractFileBrowserFragment extends DialogFragment impleme
         }
     }
 
-	public static void copyFile(String source, String dest) throws IOException{
-        File sourceFile = new File(source);
-        File destFile = new File(dest);
-		
-        destFile.createNewFile();
-		InputStream in = new FileInputStream(sourceFile);
-		OutputStream out = new FileOutputStream(destFile);
-		
-		byte[] buf = new byte[1024];
-		int len;
-		while ((len = in.read(buf)) > 0) {
-			out.write(buf, 0, len);
-		}
-		in.close();
-		out.close();
-	}
+    public static interface OnFileClickListener {
+        void onClick(File file);
+    }
 }
 

@@ -76,7 +76,6 @@ public class RecentListUtil {
         deleteFromRecentList(context, dbpath);
         String[] allPaths = getAllRecentDBPath(context);
         for(int i = RECENT_LENGTH - 1; i >= 1; i--){
-            System.out.println("Index: " + i);
             editor.putString("recentdbpath" + i, allPaths[i - 1]);
         }
         editor.putString("recentdbpath" + 0, dbpath);
