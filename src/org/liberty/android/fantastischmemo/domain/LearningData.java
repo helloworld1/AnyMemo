@@ -6,6 +6,8 @@ import org.liberty.android.fantastischmemo.dao.LearningDataDaoImpl;
 
 import org.liberty.android.fantastischmemo.domain.LearningData;
 
+import org.liberty.android.fantastischmemo.utils.AMUtil;
+
 import com.j256.ormlite.field.DatabaseField;
 
 import com.j256.ormlite.table.DatabaseTable;
@@ -134,6 +136,22 @@ public class LearningData {
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
 	}
+
+    public void cloneFromLearningData(LearningData ld) {
+        setAcqReps(ld.getAcqReps());
+        setAcqRepsSinceLapse(ld.getAcqRepsSinceLapse());
+        setEasiness(ld.getEasiness());
+        setGrade(ld.getGrade());
+        setLapses(ld.getLapses());
+        setLastLearnDate(ld.getLastLearnDate());
+        setNextLearnDate(ld.getNextLearnDate());
+        setRetReps(ld.getRetReps());
+        setRetRepsSinceLapse(ld.getRetRepsSinceLapse());
+    }
+
+    public double getInterval() {
+        return AMUtil.diffDate(getLastLearnDate(), getNextLearnDate());
+    }
 
 	@Override
 	public String toString() {

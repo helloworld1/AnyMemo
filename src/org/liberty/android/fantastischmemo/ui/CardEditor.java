@@ -63,7 +63,7 @@ import android.widget.RadioGroup;
 import android.util.Log;
 import android.content.res.Configuration;
 
-public class CardEditor extends AMActivity implements View.OnClickListener, CategoryEditorFragment.CategoryEditorResultListener{
+public class CardEditor extends AMActivity implements View.OnClickListener {
     private final int ACTIVITY_IMAGE_FILE = 1;
     private final int ACTIVITY_AUDIO_FILE = 2;
     Card currentCard = null;
@@ -284,12 +284,6 @@ public class CardEditor extends AMActivity implements View.OnClickListener, Cate
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-    }
-
-    @Override
-    public void onReceiveCategory(Category c) {
-        currentCard.setCategory(c);
-        updateViews();
     }
 
     private void setInitRadioButton(){

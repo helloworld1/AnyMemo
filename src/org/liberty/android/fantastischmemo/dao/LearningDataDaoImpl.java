@@ -22,5 +22,15 @@ public class LearningDataDaoImpl extends BaseDaoImpl<LearningData, Integer>
         throws SQLException {
         super(connectionSource, clazz);
     }
-}
 
+    public void updateLearningData(LearningData ld) {
+        try {
+            int id = ld.getId();
+            deleteById(id);
+            create(ld);
+            updateId(ld, id);
+        } catch (SQLException e) { 
+            throw new RuntimeException("Error replacing settings", e);
+        }
+    }
+}

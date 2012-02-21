@@ -18,4 +18,14 @@ public class QueueManagerFactory {
         return manager;
    }
 
+   public static QueueManager buildCramQueueManager(
+           CardDao cardDao,
+           int learnQueueSize,
+           Category filterCategory) {
+
+       CramQueueManager manager = new CramQueueManager(learnQueueSize);
+       manager.setCardDao(cardDao);
+       return manager;
+   }
+
 }

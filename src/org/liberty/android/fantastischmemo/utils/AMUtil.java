@@ -34,6 +34,10 @@ import java.util.regex.Pattern;
 
 import org.apache.mycommons.io.FilenameUtils;
 
+import org.apache.mycommons.lang3.StringUtils;
+
+import org.apache.mycommons.lang3.time.DateUtils;
+
 public class AMUtil {
     public static boolean isInteger(String s){
         try{
@@ -95,7 +99,7 @@ public class AMUtil {
     public static <E extends Enum<E>> EnumSet<E> getEnumSetFromString(Class<E> enumType, String enumString) {
         EnumSet<E> es = EnumSet.noneOf(enumType);
 
-        if(null!=enumString && !(enumString.isEmpty())) {
+        if (StringUtils.isNotEmpty(enumString)) {
             String[] split = enumString.split(",");
             for (String s : split) {
                 es.add(Enum.valueOf(enumType, s));
@@ -115,4 +119,11 @@ public class AMUtil {
         }
         return res;
     }
+
+    /* Difference in days between date1 and date2*/
+	public static double diffDate(Date date1, Date date2){
+        double date1s = date1.getTime();
+        double date2s = date2.getTime();
+        return ((double)(date2s - date1s)) / DateUtils.MILLIS_PER_DAY; 
+	}
 }

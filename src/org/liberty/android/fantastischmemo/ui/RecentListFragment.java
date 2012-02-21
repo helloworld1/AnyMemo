@@ -258,7 +258,7 @@ public class RecentListFragment extends Fragment implements OnItemClickListener{
                 /* Open database normally*/
                 Intent myIntent = new Intent();
                 myIntent.setClass(mActivity, MemoScreen.class);
-                myIntent.putExtra("dbpath", selectedPath);
+                myIntent.putExtra(MemoScreen.EXTRA_DBPATH, selectedPath);
                 startActivity(myIntent);
                 RecentListUtil.addToRecentList(mActivity, selectedPath);
                 return true;
@@ -267,12 +267,11 @@ public class RecentListFragment extends Fragment implements OnItemClickListener{
             case R.id.context_cram:
             {
                 /* Cram Review */
-                // TODO: Cram
-                //Intent myIntent = new Intent();
-                //myIntent.setClass(this, CramMemoScreen.class);
-                //myIntent.putExtra("dbname", selectedName);
-                //myIntent.putExtra("dbpath", selectedPath);
-                //startActivity(myIntent);
+                Intent myIntent = new Intent();
+                myIntent.setClass(mActivity, MemoScreen.class);
+                myIntent.putExtra(MemoScreen.EXTRA_DBPATH, selectedPath);
+                myIntent.putExtra(MemoScreen.EXTRA_CRAM, true);
+                startActivity(myIntent);
                 RecentListUtil.addToRecentList(mActivity, selectedPath);
                 return true;
             }

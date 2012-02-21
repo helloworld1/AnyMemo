@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
+import org.apache.mycommons.lang3.StringUtils;
+
 import org.color.ColorDialog;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
@@ -516,7 +518,7 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
         }
         colorButton.setTextColor(colors.get(colorSpinner.getSelectedItemPosition()));
         // -----------------------------------------------
-        qTypefaceCheckbox.setChecked(!setting.getQuestionFont().isEmpty());
+        qTypefaceCheckbox.setChecked(StringUtils.isNotEmpty(setting.getQuestionFont()));
         if (qTypefaceCheckbox.isChecked()) {
             qTypefaceEdit.setVisibility(View.VISIBLE);
             qTypefaceEdit.setText(setting.getQuestionFont());
@@ -524,7 +526,7 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             qTypefaceEdit.setVisibility(View.GONE);
         }
         
-        aTypefaceCheckbox.setChecked(!setting.getAnswerFont().isEmpty());
+        aTypefaceCheckbox.setChecked(StringUtils.isNotEmpty(setting.getAnswerFont()));
         if (aTypefaceCheckbox.isChecked()) {
             aTypefaceEdit.setVisibility(View.VISIBLE);
             aTypefaceEdit.setText(setting.getAnswerFont());

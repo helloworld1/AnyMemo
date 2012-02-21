@@ -33,4 +33,7 @@ public interface CardDao extends HelperDao<Card, Integer> {
 
     /* Create one. Also create the related LearningData and Category */
     void createCard(final Card card);
+
+    /* Randomly get cards that is not new */
+    List<Card> getRandomReviewedCards(Category filterCategory, int limit);
 }

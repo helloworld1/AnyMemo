@@ -15,10 +15,12 @@ public class SettingDaoImpl extends BaseDaoImpl<Setting, Integer> implements Set
         throws SQLException {
         super(connectionSource, config);
     }
+
     public SettingDaoImpl(ConnectionSource connectionSource, Class<Setting> clazz)
         throws SQLException {
         super(connectionSource, clazz);
     }
+
     public void replaceSetting(Setting settings) {
         try {
             deleteById(1);
