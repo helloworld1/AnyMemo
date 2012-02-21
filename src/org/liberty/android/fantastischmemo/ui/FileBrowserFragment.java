@@ -59,6 +59,7 @@ import android.preference.PreferenceManager;
 public class FileBrowserFragment extends DialogFragment implements OnItemClickListener, OnItemLongClickListener {
     public final static String EXTRA_DEFAULT_ROOT = "default_root";
     public final static String EXTRA_FILE_EXTENSIONS = "file_extension";
+    public final static String EXTRA_DISMISS_ON_SELECT = "dismiss_on_select";
 
 	private enum DISPLAYMODE{ABSOLUTE, RELATIVE;}
 	private final DISPLAYMODE displayMode = DISPLAYMODE.RELATIVE;
@@ -68,6 +69,7 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
 	private String[] fileExtensions;
     private Activity mActivity;
     private ListView fbListView;
+    private boolean dismissOnSelect = false;
 
     /* Used when the file is clicked. */
     private OnFileClickListener onFileClickListener;
@@ -96,7 +98,11 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
         super.onCreate(bundle);
         Bundle args = this.getArguments();
         if(args != null) {
-            defaultRoot = args.getString("default_root"); String ext =  args.getString("file_extension");
+            defaultRoot = args.getString(EXTRA_DEFAULT_ROOT);
+            String ext =  args.getString(EXTRA_FILE_EXTENSIONS);
+            // Default do not dismiss the dialog
+            dismissOnSelect = args.getBoolean(EXTRA_DISMISS_ON_SELECT, false);
+
             if (ext != null) {
                 fileExtensions = ext.split(",");
             }
@@ -236,6 +242,10 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
                         editor.commit();
                         if (onFileClickListener != null) {
                             onFileClickListener.onClick(clickedFile);
+                            // dismiss on demand
+                            if (dismissOnSelect) {
+                                dismiss();
+                            }
                         }
 					}
 				}

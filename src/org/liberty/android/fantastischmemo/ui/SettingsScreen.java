@@ -20,6 +20,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo.ui;
 
+import java.io.File;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -50,7 +52,6 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -266,7 +267,29 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
                 field2Checkbox.setChecked(false);
             }            
         }
+        if (v == qTypefaceEdit) {
+            FileBrowserFragment df = new FileBrowserFragment();
+            Bundle b = new Bundle();
+            b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".ttf");
+            b.putString(FileBrowserFragment.EXTRA_DEFAULT_ROOT, AMEnv.DEFAULT_ROOT_PATH);
+            b.putBoolean(FileBrowserFragment.EXTRA_DISMISS_ON_SELECT, true);
+            df.setArguments(b);
+            df.setOnFileClickListener(qTypefaceEditFbListener);
+            df.show(getSupportFragmentManager(), "qTypefaceEditFB");
+        }
+
+        if (v == aTypefaceEdit) {
+            FileBrowserFragment df = new FileBrowserFragment();
+            Bundle b = new Bundle();
+            b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".ttf");
+            b.putString(FileBrowserFragment.EXTRA_DEFAULT_ROOT, AMEnv.DEFAULT_ROOT_PATH);
+            b.putBoolean(FileBrowserFragment.EXTRA_DISMISS_ON_SELECT, true);
+            df.setArguments(b);
+            df.setOnFileClickListener(aTypefaceEditFbListener);
+            df.show(getSupportFragmentManager(), "aTypefaceEditFB");
+        }
     }
+
 
     @Override
     public void onClick(View view, int color){
@@ -430,8 +453,12 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             qTypefaceCheckbox.setOnClickListener(SettingsScreen.this);
             aTypefaceCheckbox = (CheckBox) findViewById(R.id.checkbox_typeface_answer);
             aTypefaceCheckbox.setOnClickListener(SettingsScreen.this);
+
             qTypefaceEdit = (EditText) findViewById(R.id.edit_typeface_question);
+            qTypefaceEdit.setOnClickListener(SettingsScreen.this);
+
             aTypefaceEdit = (EditText) findViewById(R.id.edit_typeface_answer);
+            aTypefaceEdit.setOnClickListener(SettingsScreen.this);
             //---------------------------------------------------
             displayInHTMLCheckbox = (CheckBox) findViewById(R.id.display_html);
             displayInHTMLCheckbox.setOnClickListener(SettingsScreen.this);
@@ -615,6 +642,20 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             updateViews();
         }
     }
+
+    private FileBrowserFragment.OnFileClickListener qTypefaceEditFbListener
+        = new FileBrowserFragment.OnFileClickListener() {
+            public void onClick(File file) {
+                qTypefaceEdit.setText(file.getAbsolutePath());
+            }
+        };
+
+    private FileBrowserFragment.OnFileClickListener aTypefaceEditFbListener
+        = new FileBrowserFragment.OnFileClickListener() {
+            public void onClick(File file) {
+                aTypefaceEdit.setText(file.getAbsolutePath());
+            }
+        };
 
     private Spinner getSpinner(final int spinnerId, final int textArrayResId) {
         Spinner spinner = (Spinner) findViewById(spinnerId);
