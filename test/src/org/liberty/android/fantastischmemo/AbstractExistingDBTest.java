@@ -28,7 +28,10 @@ public class AbstractExistingDBTest extends ActivityInstrumentationTestCase2<Ins
         mActivity = this.getActivity();
         Context testContext = getInstrumentation().getContext();
         InputStream in = testContext.getResources().getAssets().open(AMEnv.DEFAULT_DB_NAME);
-        FileUtils.copyInputStreamToFile(in, new File("/sdcard/french-body-parts.db"));
+        File outFile = new File("/sdcard/french-body-parts.db");
+        outFile.delete();
+
+        FileUtils.copyInputStreamToFile(in, outFile);
         in.close();
         helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, "/sdcard/french-body-parts.db");
     }
