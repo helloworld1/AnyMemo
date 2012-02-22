@@ -151,7 +151,7 @@ public class EditScreen extends AMActivity {
             case ACTIVITY_EDIT:
             {
                 Bundle extras = data.getExtras();
-                int cardId = extras.getInt(CardEditor.EXTRA_RESULT_CARD_ID, currentCard.getId());
+                int cardId = extras.getInt(CardEditor.EXTRA_RESULT_CARD_ID, 1);
                 try {
                     currentCard = cardDao.queryForId(cardId);
                 } catch (SQLException e) {
@@ -338,15 +338,31 @@ public class EditScreen extends AMActivity {
 
             case R.id.menu_context_swap:
             {
-                // TODO: swap
-                //databaseUtility.swapAllQA();
+                AMGUIUtility.doConfirmProgressTask(this, R.string.swap_qa_text, R.string.settings_inverse_warning, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask() {
+                    @Override
+                    public void doHeavyTask() {
+                        cardDao.swapAllQA();
+                    }
+                    @Override
+                    public void doUITask() {
+                        restartActivity();
+                    }
+                });
                 return true;
             }
 
             case R.id.menu_context_remove_dup:
             {
-                // TODO: dedup
-                //databaseUtility.removeDuplicates();
+                AMGUIUtility.doConfirmProgressTask(this, R.string.remove_dup_text, R.string.remove_dup_message, R.string.removing_dup_title, R.string.removing_dup_warning, new AMGUIUtility.ProgressTask() {
+                    @Override
+                    public void doHeavyTask() {
+                        cardDao.removeDuplicates();
+                    }
+                    @Override
+                    public void doUITask() {
+                        restartActivity();
+                    }
+                });
                 return true;
             }
 
@@ -361,8 +377,16 @@ public class EditScreen extends AMActivity {
 
             case R.id.menu_context_shuffle:
             {
-                // TODO: Shuffle
-                //databaseUtility.shuffleDatabase();
+                AMGUIUtility.doConfirmProgressTask(this, R.string.settings_shuffle, R.string.settings_shuffle_warning, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask() {
+                    @Override
+                    public void doHeavyTask() {
+                        cardDao.shuffleOrdinals();
+                    }
+                    @Override
+                    public void doUITask() {
+                        restartActivity();
+                    }
+                });
                 return true;
             }
 

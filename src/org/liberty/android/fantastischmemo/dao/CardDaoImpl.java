@@ -5,6 +5,7 @@ import java.lang.Exception;
 import java.sql.SQLException;
 
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -497,6 +498,26 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
             });
         } catch (Exception e) {
             throw new RuntimeException("Error swapping QA of all cards.", e);
+        }
+    }
+    
+    public void shuffleOrdinals() {
+        final List<Card> cards = queryForAll();
+        Collections.shuffle(cards);
+        try {
+            callBatchTasks(new Callable<Void>() {
+                public Void call() throws Exception {
+                    int counter = 0;
+                    for (Card c : CardDaoImpl.this) {
+                        c.setOrdinal(cards.get(counter).getOrdinal());
+                        update(c);
+                        counter++;
+                    }
+                    return null;
+                }
+            });
+        } catch (Exception e) {
+            throw new RuntimeException("Error shuffling cards.", e);
         }
     }
 
