@@ -16,7 +16,10 @@ public interface CardDao extends HelperDao<Card, Integer> {
     Card queryNextCard(final Card c, final Category ct);
     Card queryPrevCard(final Card c);
     Card queryPrevCard(final Card c, final Category ct);
+
+    /* Swap the Question and answer */
     void swapQA(Card c);
+    void swapAllQA();
 
     /* Remove the cards with the same question */
     void removeDuplicates();

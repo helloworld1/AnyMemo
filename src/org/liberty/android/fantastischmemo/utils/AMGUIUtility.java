@@ -105,6 +105,25 @@ public class AMGUIUtility{
         doProgressTask(activity, progressTitle, progressMessage, task);
     }
 
+    public static void doConfirmProgressTask(final Activity activity,
+            final int confirmTitleId,
+            final int confirmMessageId,
+            final int progressTitleId,
+            final int progressMessageId,
+            final ProgressTask task) {
+        new AlertDialog.Builder(activity)
+            .setTitle(confirmTitleId)
+            .setMessage(confirmMessageId)
+            .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface arg0, int arg1){
+                    doProgressTask(activity, progressTitleId, progressMessageId, task);
+                }
+            })
+            .setNegativeButton(R.string.cancel_text, null)
+            .show();
+
+    }
+
     public static interface ProgressTask{
         public void doHeavyTask() throws Exception;
         public void doUITask();

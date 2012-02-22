@@ -485,6 +485,21 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
         }
     }
 
+    public void swapAllQA() {
+        try {
+            callBatchTasks(new Callable<Void>() {
+                public Void call() throws Exception {
+                    for (Card c : CardDaoImpl.this) {
+                        swapQA(c);
+                    }
+                    return null;
+                }
+            });
+        } catch (Exception e) {
+            throw new RuntimeException("Error swapping QA of all cards.", e);
+        }
+    }
+
     private void maintainOrdinal() throws SQLException {
         executeRaw("CREATE TABLE IF NOT EXISTS tmp_count (id INTEGER PRIMARY KEY AUTOINCREMENT, ordinal INTEGER)");
         executeRaw("INSERT INTO tmp_count(ordinal) SELECT ordinal FROM cards;");

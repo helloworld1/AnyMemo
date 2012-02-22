@@ -19,7 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-
 import java.sql.SQLException;
 
 import java.util.Locale;
@@ -33,6 +32,7 @@ import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.ui.SettingsScreen;
 
 import org.liberty.android.fantastischmemo.ui.ListEditScreen;
+import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 import org.liberty.android.fantastischmemo.utils.AMUtil;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
@@ -81,12 +81,7 @@ public class EditScreen extends AMActivity {
     private AnyMemoTTS questionTTS = null;
     private AnyMemoTTS answerTTS = null;
     private boolean searchInflated = false;
-    private final int DIALOG_LOADING_PROGRESS = 100;
-    private final int ACTIVITY_FILTER = 10;
     private final int ACTIVITY_EDIT = 11;
-    private final int ACTIVITY_CARD_TOOLBOX = 12;
-    private final int ACTIVITY_DB_TOOLBOX = 13;
-    private final int ACTIVITY_GOTO_PREV = 14;
     private final int ACTIVITY_SETTINGS = 15;
     private final int ACTIVITY_LIST = 16;
     private final int ACTIVITY_MERGE = 17;
@@ -98,21 +93,21 @@ public class EditScreen extends AMActivity {
     public static String EXTRA_CARD_ID = "id";
     public static String EXTRA_CATEGORY = "category";
 
-    Card currentCard = null;
-    Category currentCategory = null;
-    Integer savedCardId = null;
-    String dbPath = "";
-    String dbName = "";
-    int activeCategoryId = -1;
-    SettingDao settingDao;
-    CardDao cardDao;
-    LearningDataDao learningDataDao;
-    CategoryDao categoryDao;
-    FlashcardDisplay flashcardDisplay;
-    ControlButtons controlButtons;
-    Setting setting;
-    InitTask initTask;
-    Option option;
+    private Card currentCard = null;
+    private Category currentCategory = null;
+    private Integer savedCardId = null;
+    private String dbPath = "";
+    private String dbName = "";
+    private int activeCategoryId = -1;
+    private SettingDao settingDao;
+    private CardDao cardDao;
+    private LearningDataDao learningDataDao;
+    private CategoryDao categoryDao;
+    private FlashcardDisplay flashcardDisplay;
+    private ControlButtons controlButtons;
+    private Setting setting;
+    private InitTask initTask;
+    private Option option;
     
     private GestureDetector gestureDetector;
 
@@ -166,15 +161,6 @@ public class EditScreen extends AMActivity {
                 break;
             }
 
-            case ACTIVITY_FILTER:
-            {
-                // TODO: filter
-                Bundle extras = data.getExtras();
-                activeCategoryId = extras.getInt(EXTRA_CATEGORY);
-                restartActivity();
-                break;
-            }
-
             case ACTIVITY_SETTINGS:
             {
                 restartActivity();
@@ -182,8 +168,6 @@ public class EditScreen extends AMActivity {
             }
             case ACTIVITY_LIST:
             {
-                // TODO should use card id
-                Bundle extras = data.getExtras();
                 restartActivity();
                 break;
             }
@@ -328,26 +312,27 @@ public class EditScreen extends AMActivity {
             }
             case R.id.menu_context_swap_current:
             {
-                // TODO: swap
-                //if(currentItem != null){
-                //    databaseUtility.swapSingelItem(currentItem);
-                //}
+                cardDao.swapQA(currentCard);
+                restartActivity();
                 return true;
             }
 
             case R.id.menu_context_reset_current:
             {
-                // TODO: Reset
-                //if(currentItem != null){
-                //    databaseUtility.resetCurrentLearningData(currentItem);
-                //}
+                learningDataDao.resetLearningData(currentCard.getLearningData());
                 return true;
             }
 
             case R.id.menu_context_wipe:
             {
-                // TODO: wipe 
-                //databaseUtility.wipeLearningData();
+                AMGUIUtility.doConfirmProgressTask(this, R.string.settings_wipe, R.string.settings_wipe_warning, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask() {
+                    @Override
+                    public void doHeavyTask() {
+                        learningDataDao.resetAllLearningData();
+                    }
+                    @Override
+                    public void doUITask() {/* Do nothing */}
+                });
                 return true;
             }
 
@@ -526,6 +511,7 @@ public class EditScreen extends AMActivity {
             currentCard = cardDao.queryNextCard(currentCard,currentCategory);
             try {
                 categoryDao.refresh(currentCard.getCategory());
+                learningDataDao.refresh(currentCard.getLearningData());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -558,6 +544,7 @@ public class EditScreen extends AMActivity {
             currentCard = cardDao.queryPrevCard(currentCard, currentCategory);
             try {
                 categoryDao.refresh(currentCard.getCategory());
+                learningDataDao.refresh(currentCard.getLearningData());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -808,6 +795,7 @@ public class EditScreen extends AMActivity {
                 }
 
                 categoryDao.refresh(currentCard.getCategory());
+                learningDataDao.refresh(currentCard.getLearningData());
 
                 totalCardCount = cardDao.countOf();
 
