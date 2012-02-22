@@ -42,4 +42,10 @@ public interface CardDao extends HelperDao<Card, Integer> {
 
     /* Shuffle the ordinal */
     void shuffleOrdinals();
+
+    /* Searching question/answer/note after ordinal */
+    Card searchNextCard(String criteria, int ordinal);
+
+    /* Searching question/answer/note before ordinal */
+    Card searchPrevCard(String criteria, int ordinal);
 }

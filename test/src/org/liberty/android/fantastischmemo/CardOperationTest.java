@@ -243,6 +243,36 @@ public class CardOperationTest extends AbstractExistingDBTest {
         assertEquals(0L, cardDao.getScheduledCardCount(ct));
     }
 
+    public void testSearchNextCard() throws Exception {
+        CardDao cardDao = helper.getCardDao();
+        Card c = cardDao.searchNextCard("mouth", 1);
+        assertEquals(8, (int)c.getId());
+
+        c = cardDao.searchNextCard("%oreille%", 10);
+        assertEquals(11, (int)c.getId());
+
+        c = cardDao.searchNextCard("whatever", 3);
+        assertNull(c);
+
+        c = cardDao.searchNextCard("mouth", 8);
+        assertNull(c);
+    }
+
+    public void testSearchPrevCard() throws Exception {
+        CardDao cardDao = helper.getCardDao();
+        Card c = cardDao.searchPrevCard("mouth", 10);
+        assertEquals(8, (int)c.getId());
+
+        c = cardDao.searchPrevCard("%oreille%", 28);
+        assertEquals(11, (int)c.getId());
+
+        c = cardDao.searchPrevCard("whatever", 27);
+        assertNull(c);
+
+        c = cardDao.searchPrevCard("mouth", 8);
+        assertNull(c);
+    }
+
     /*
      * Card with "My Category" in ID 2, 5, 8
      */

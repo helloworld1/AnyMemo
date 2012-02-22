@@ -521,6 +521,38 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
         }
     }
 
+    @SuppressWarnings("unchecked")
+    public Card searchNextCard(String criteria, int ordinal) {
+        QueryBuilder<Card, Integer> qb = queryBuilder();
+        try {
+            Where<Card, Integer> where = qb.where();
+            where.gt("ordinal", ordinal)
+                .and().or(where.like("question", criteria), where.like("answer", criteria), where.like("note", criteria));
+            qb.setWhere(where);
+            PreparedQuery<Card> pq = qb.prepare();
+            Card nc = queryForFirst(pq);
+            return nc;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public Card searchPrevCard(String criteria, int ordinal) {
+        QueryBuilder<Card, Integer> qb = queryBuilder();
+        try {
+            Where<Card, Integer> where = qb.where();
+            where.lt("ordinal", ordinal)
+                .and().or(where.like("question", criteria), where.like("answer", criteria), where.like("note", criteria));
+            qb.setWhere(where);
+            PreparedQuery<Card> pq = qb.prepare();
+            Card nc = queryForFirst(pq);
+            return nc;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private void maintainOrdinal() throws SQLException {
         executeRaw("CREATE TABLE IF NOT EXISTS tmp_count (id INTEGER PRIMARY KEY AUTOINCREMENT, ordinal INTEGER)");
         executeRaw("INSERT INTO tmp_count(ordinal) SELECT ordinal FROM cards;");
