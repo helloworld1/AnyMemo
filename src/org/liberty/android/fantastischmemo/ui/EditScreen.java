@@ -368,9 +368,8 @@ public class EditScreen extends AMActivity {
 
             case R.id.menu_context_merge_db:
             {
-                // TODO: Merge
                 Intent myIntent = new Intent(this, DatabaseMerger.class);
-                myIntent.putExtra("dbpath", dbPath);
+                myIntent.putExtra(DatabaseMerger.EXTRA_SRC_PATH, dbPath);
                 startActivityForResult(myIntent, ACTIVITY_MERGE);
                 return true;
             }

@@ -29,27 +29,6 @@
         <activity 
             android:name=".InstrumentationActivity"
             android:configChanges="orientation|keyboardHidden" />
-        <activity 
-            android:name=".OpenScreen"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity 
-            android:name=".ui.FileBrowserActivity"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity 
-            android:name=".ui.OptionScreen"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity 
-            android:name=".DetailScreen"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity 
-            android:name=".Downloader" 
-            android:configChanges="orientation|keyboardHidden" />
-        <activity 
-            android:name=".cardscreen.EditScreen"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity 
-            android:name=".cardscreen.DatabaseMerger"
-            android:configChanges="orientation|keyboardHidden" />
         <activity
             android:name=".downloader.DownloaderAnyMemo"
             android:configChanges="orientation|keyboardHidden" />
@@ -99,8 +78,17 @@
         <activity 
             android:name=".ui.SettingsScreen"
             android:configChanges="orientation|keyboardHidden" />        
-	<activity
+        <activity
             android:name=".ui.ListEditScreen"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity 
+            android:name=".ui.FileBrowserActivity"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity 
+            android:name=".ui.OptionScreen"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity 
+            android:name=".ui.DatabaseMerger"
             android:configChanges="orientation|keyboardHidden" />
         <receiver
             android:name=".AlarmReceiver"
