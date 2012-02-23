@@ -19,31 +19,28 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import java.sql.SQLException;
-
 import java.util.List;
 import java.util.ArrayList;
-import java.io.File;
 
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
-import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.utils.AMUtil;
 import org.liberty.android.fantastischmemo.utils.DatabaseUtils;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -51,16 +48,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.view.ContextMenu;
 import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.content.Context;
-import android.content.DialogInterface;
 
-public class RecentListFragment extends Fragment implements OnItemClickListener{
+public class RecentListFragment extends Fragment {
 
     private ListView recentListView;
     private RecentListAdapter recentListAdapter;
@@ -71,8 +65,7 @@ public class RecentListFragment extends Fragment implements OnItemClickListener{
     SharedPreferences.Editor editor;
 
     private final static String TAG = "org.liberty.android.fantastischmemo.OpenScreen";
-    /* The selected item when opening context menu */
-    private int contextMenuSelectedId = -1;
+
     private Activity mActivity;
 
     @Override
@@ -90,25 +83,15 @@ public class RecentListFragment extends Fragment implements OnItemClickListener{
         View v = inflater.inflate(R.layout.recent_list, container, false);
         mHandler = new Handler();
         recentListView = (ListView)v.findViewById(R.id.recent_open_list);
-        recentListView.setOnItemClickListener(this);
-        registerForContextMenu(recentListView);
+        recentListView.setOnItemClickListener(listItemClickListener);
+        recentListView.setOnItemLongClickListener(listItemLongClickListener);
         /* pre loading stat */
         recentListAdapter = new RecentListAdapter(mActivity, R.layout.open_screen_recent_item);
         recentListView.setAdapter(recentListAdapter);
         return v;
 	}
 
-    @Override
-	public void onItemClick(AdapterView<?> parentView, View childView, int position, long id) {
-		
-        Intent myIntent = new Intent();
-        myIntent.setClass(mActivity, MemoScreen.class);
-        String dbPath = recentListAdapter.getItem(position).dbPath;
-        myIntent.putExtra(MemoScreen.EXTRA_DBPATH, dbPath);
-        RecentListUtil.addToRecentList(mActivity, dbPath);
-        startActivity(myIntent);
-		
-	}
+
 	
     @Override
     public void onResume(){
@@ -188,7 +171,6 @@ public class RecentListFragment extends Fragment implements OnItemClickListener{
 	}
 	
 	public boolean onOptionsItemSelected(MenuItem item) {
-        Intent myIntent;
 	    switch (item.getItemId()) {
 	    case R.id.openmenu_clear:
             RecentListUtil.clearRecentList(mActivity);
@@ -200,6 +182,30 @@ public class RecentListFragment extends Fragment implements OnItemClickListener{
 	    return false;
 	}
 
+    private AdapterView.OnItemClickListener listItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parentView, View childView, int position, long id) {
+            Intent myIntent = new Intent();
+            myIntent.setClass(mActivity, MemoScreen.class);
+            String dbPath = recentListAdapter.getItem(position).dbPath;
+            myIntent.putExtra(MemoScreen.EXTRA_DBPATH, dbPath);
+            RecentListUtil.addToRecentList(mActivity, dbPath);
+            startActivity(myIntent);
+        }
+    };
+
+    private AdapterView.OnItemLongClickListener listItemLongClickListener = new AdapterView.OnItemLongClickListener() {
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parentView, View childView, int position, long id) {
+            String dbPath = recentListAdapter.getItem(position).dbPath;
+            DialogFragment df = new OpenActionsFragment();
+            Bundle b = new Bundle();
+            b.putString(OpenActionsFragment.EXTRA_DBPATH, dbPath);
+            df.setArguments(b);
+            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "OpenActions");
+            return true;
+        }
+    };
     
     /* Aux class to store data */
     private class RecentItem {
@@ -234,106 +240,4 @@ public class RecentListFragment extends Fragment implements OnItemClickListener{
     }
 
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater = mActivity.getMenuInflater();
-        inflater.inflate(R.menu.open_screen_context_menu, menu);
-        menu.setHeaderTitle(R.string.menu_text);
-
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        Log.v(TAG, "Menu ID: " + info.id);
-        contextMenuSelectedId = (int)info.id;
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem menuitem) {
-        if(contextMenuSelectedId == -1 || contextMenuSelectedId >= recentListAdapter.getCount()){
-            return false;
-        }
-        final String selectedPath = recentListAdapter.getItem(contextMenuSelectedId).dbPath;
-        switch(menuitem.getItemId()) {
-            case R.id.context_study:
-            {
-                /* Open database normally*/
-                Intent myIntent = new Intent();
-                myIntent.setClass(mActivity, MemoScreen.class);
-                myIntent.putExtra(MemoScreen.EXTRA_DBPATH, selectedPath);
-                startActivity(myIntent);
-                RecentListUtil.addToRecentList(mActivity, selectedPath);
-                return true;
-            }
-
-            case R.id.context_cram:
-            {
-                /* Cram Review */
-                Intent myIntent = new Intent();
-                myIntent.setClass(mActivity, MemoScreen.class);
-                myIntent.putExtra(MemoScreen.EXTRA_DBPATH, selectedPath);
-                myIntent.putExtra(MemoScreen.EXTRA_CRAM, true);
-                startActivity(myIntent);
-                RecentListUtil.addToRecentList(mActivity, selectedPath);
-                return true;
-            }
-
-            case R.id.context_list:
-            {
-                /* List edit screen */
-                Intent myIntent = new Intent();
-                myIntent.setClass(mActivity, ListEditScreen.class);
-                myIntent.putExtra(MemoScreen.EXTRA_DBPATH, selectedPath);
-                startActivity(myIntent);
-                RecentListUtil.addToRecentList(mActivity, selectedPath);
-                return true;
-            }
-
-            case R.id.context_edit:
-            {
-                /* Preview card */
-                Intent myIntent = new Intent();
-                myIntent.setClass(mActivity, EditScreen.class);
-                myIntent.putExtra(EditScreen.EXTRA_DBPATH, selectedPath);
-                startActivity(myIntent);
-                RecentListUtil.addToRecentList(mActivity, selectedPath);
-                return true;
-            }
-
-            case R.id.context_settings:
-            {
-                /* Edit database settings*/
-                // TODO: Settings
-                //Intent myIntent = new Intent();
-                //myIntent.setClass(this, SettingsScreen.class);
-                //myIntent.putExtra("dbname", selectedName);
-                //myIntent.putExtra("dbpath", selectedPath);
-                //startActivity(myIntent);
-                RecentListUtil.addToRecentList(mActivity, selectedPath);
-                return true;
-            }
-
-            case R.id.context_delete:
-            {
-                /* Delete this database */
-                new AlertDialog.Builder(mActivity)
-                    .setTitle(getString(R.string.delete_text))
-                    .setMessage(getString(R.string.fb_delete_message))
-                    .setPositiveButton(getString(R.string.delete_text), new DialogInterface.OnClickListener(){
-                        @Override
-                        public void onClick(DialogInterface dialog, int which ){
-                            File fileToDelete = new File(selectedPath);
-                            fileToDelete.delete();
-                            RecentListUtil.deleteFromRecentList(mActivity, selectedPath);
-                            /* Refresh the list */
-                            onResume();
-                            
-                        }
-                    })
-                    .setNegativeButton(getString(R.string.cancel_text), null)
-                    .create()
-                    .show();
-                return true;
-            }
-        }
-        return false;
-    }
 }
