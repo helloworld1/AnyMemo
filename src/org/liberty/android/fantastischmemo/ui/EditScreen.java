@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2010 Haowen Ning
+Copyright (C) 2012 Haowen Ning
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -718,8 +718,7 @@ public class EditScreen extends AMActivity {
                 if(setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED){
                     if(flashcardDisplay.isAnswerShown()){
                         flashcardDisplay.updateView(currentCard, false);
-                    }
-                    else{
+                    } else{
                         flashcardDisplay.updateView(currentCard, true);
                     }
                 }

@@ -276,6 +276,17 @@ public class RecentListFragment extends Fragment implements OnItemClickListener{
                 return true;
             }
 
+            case R.id.context_list:
+            {
+                /* List edit screen */
+                Intent myIntent = new Intent();
+                myIntent.setClass(mActivity, ListEditScreen.class);
+                myIntent.putExtra(MemoScreen.EXTRA_DBPATH, selectedPath);
+                startActivity(myIntent);
+                RecentListUtil.addToRecentList(mActivity, selectedPath);
+                return true;
+            }
+
             case R.id.context_edit:
             {
                 /* Preview card */
