@@ -1008,7 +1008,7 @@ public class MemoScreen extends AMActivity {
             progressDialog = new ProgressDialog(MemoScreen.this);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.setTitle(getString(R.string.loading_please_wait));
-            progressDialog.setMessage(getString(R.string.loading_database));
+            progressDialog.setMessage(getString(R.string.loading_save));
             progressDialog.setCancelable(true);
             progressDialog.show();
         }
