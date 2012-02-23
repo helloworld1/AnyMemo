@@ -24,6 +24,8 @@ import java.sql.SQLException;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.mycommons.lang3.math.NumberUtils;
+
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
@@ -103,8 +105,13 @@ public class EditScreen extends AMActivity {
     private CardDao cardDao;
     private LearningDataDao learningDataDao;
     private CategoryDao categoryDao;
+
     private FlashcardDisplay flashcardDisplay;
     private ControlButtons controlButtons;
+    private View searchNextButton;
+    private View searchPrevButton;
+
+
     private Setting setting;
     private InitTask initTask;
     private Option option;
@@ -601,10 +608,10 @@ public class EditScreen extends AMActivity {
             LayoutInflater.from(this).inflate(R.layout.search_overlay, root);
             ImageButton close = (ImageButton)findViewById(R.id.search_close_btn);
             close.setOnClickListener(closeSearchButtonListener);
-            ImageButton prev = (ImageButton)findViewById(R.id.search_previous_btn);
-            prev.setOnClickListener(searchPrevButtonListener);
-            ImageButton next = (ImageButton)findViewById(R.id.search_next_btn);
-            next.setOnClickListener(searchNextButtonListener);
+            searchPrevButton = findViewById(R.id.search_previous_btn);
+            searchPrevButton.setOnClickListener(searchButtonListener);
+            searchNextButton = findViewById(R.id.search_next_btn);
+            searchNextButton.setOnClickListener(searchButtonListener);
 
             EditText editEntry = (EditText)findViewById(R.id.search_entry);
             editEntry.requestFocus();
@@ -667,32 +674,33 @@ public class EditScreen extends AMActivity {
         }
     };
 
-    private View.OnClickListener searchNextButtonListener = new View.OnClickListener(){
+    private View.OnClickListener searchButtonListener = new View.OnClickListener(){
         public void onClick(View v){
 
-            // TODO: How to search next?
             EditText editEntry = (EditText)findViewById(R.id.search_entry);
             String text = editEntry.getText().toString();
-            //Item item = itemManager.search(text, true, currentItem);
-            //if(item != null){
-            //    currentItem = item;
-            //    updateCardFrontSide();
-            //    updateTitle();
-            //}
-        }
-    };
+            // Search #123 for id 123
+            if (text.startsWith("#")) {
+                SearchCardTask task = new SearchCardTask();
+                task.execute(SearchMethod.ID.toString(), text.substring(1));
+                return;
+            }
 
-    private View.OnClickListener searchPrevButtonListener = new View.OnClickListener(){
-        public void onClick(View v){
-            EditText editEntry = (EditText)findViewById(R.id.search_entry);
-            String text = editEntry.getText().toString();
-            // TODO: How to search
-            //Item item = itemManager.search(text, false, currentItem);
-            //if(item != null){
-            //    currentItem = item;
-            //    updateCardFrontSide();
-            //    updateTitle();
-            //}
+            // Search normal text
+            if (!text.contains("*")) {
+                text = "*" + text + "*";
+            }
+            // Convert to SQL wildcard
+            text = text.replace("*", "%");
+            text = text.replace("?", "_");
+            SearchCardTask task = new SearchCardTask();
+            if (v == searchNextButton) {
+                task.execute(SearchMethod.TEXT_FORWARD.toString(), text);
+            }
+
+            if (v == searchPrevButton) {
+                task.execute(SearchMethod.TEXT_BACKWARD.toString(), text);
+            }
         }
     };
 
@@ -885,6 +893,69 @@ public class EditScreen extends AMActivity {
         public void onPostExecute(Void result){
             restartActivity();
         }
+    }
+
+    /*
+     * params[2] = {Search Method, Search criteria}
+     * Search Method should be in SearchMethod enum.
+     */
+    private class SearchCardTask extends AsyncTask<String, Void, Card> {
+
+        private ProgressDialog progressDialog;
+
+		@Override
+        public void onPreExecute() {
+            progressDialog = new ProgressDialog(EditScreen.this);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setTitle(getString(R.string.loading_please_wait));
+            progressDialog.setMessage(getString(R.string.loading_database));
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        public Card doInBackground(String... params) {
+            SearchMethod method = SearchMethod.valueOf(params[0]);
+            assert method != null : "Pass null params to SearchCardTask";
+            String criteria = params[1];
+            assert criteria != null : "Pass null criteria to SearchCardTask";
+
+            Card foundCard = null;
+            try {
+                if (method == SearchMethod.ID && NumberUtils.isDigits(criteria)) {
+                    foundCard = cardDao.queryForId(Integer.valueOf(criteria));
+                }
+
+                if (method == SearchMethod.TEXT_FORWARD) {
+                    foundCard = cardDao.searchNextCard(criteria, currentCard.getOrdinal());
+                }
+
+                if (method == SearchMethod.TEXT_BACKWARD) {
+                    foundCard = cardDao.searchPrevCard(criteria, currentCard.getOrdinal());
+                }
+
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return foundCard;
+        }
+
+        @Override
+        public void onPostExecute(Card result){
+            progressDialog.dismiss();
+            if (result == null) {
+                return;
+            }
+            currentCard = result;
+            updateCardFrontSide();
+            updateTitle();
+        }
+    }
+
+    private static enum SearchMethod {
+        TEXT_FORWARD,
+        TEXT_BACKWARD,
+        ID
     }
 
     // When a category is selected in category fragment.
