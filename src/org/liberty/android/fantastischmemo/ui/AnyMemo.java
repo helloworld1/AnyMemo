@@ -87,8 +87,8 @@ public class AnyMemo extends AMActivity {
                 RecentListFragment.class, b);
         mTabManager.addTab(mTabHost.newTabSpec("open").setIndicator(getString(R.string.open_tab_text),  res.getDrawable(R.drawable.open)),
                 OpenTabFragment.class, b);
-        mTabManager.addTab(mTabHost.newTabSpec("edit").setIndicator(getString(R.string.edit_tab_text),  res.getDrawable(R.drawable.edit)),
-                EditTabFragment.class, b);
+        //mTabManager.addTab(mTabHost.newTabSpec("edit").setIndicator(getString(R.string.edit_tab_text),  res.getDrawable(R.drawable.edit)),
+        //        EditTabFragment.class, b);
         mTabManager.addTab(mTabHost.newTabSpec("downloader").setIndicator(getString(R.string.download_tab_text),  res.getDrawable(R.drawable.download)),
                 DownloadTabFragment.class, b);
 

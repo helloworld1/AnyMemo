@@ -19,33 +19,42 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import java.io.File;
+import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.R;
 
 import android.app.Activity;
 
 import android.os.Bundle;
 
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
 
-public class OpenTabFragment extends FileBrowserFragment {
-    Activity mActivity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+public class OpenActionsFragment extends DialogFragment {
+    public static String EXTRA_DBPATH = "dbpath";
+    private AMActivity mActivity;
+    private String dbPath;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mActivity = activity;
-        setOnFileClickListener(fileClickListener);
+        mActivity = (AMActivity)activity;
+    }
+    @Override
+    public void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+        Bundle args = this.getArguments();
+        dbPath = args.getString(EXTRA_DBPATH);
+        setStyle(DialogFragment.STYLE_NO_TITLE, 0);
     }
 
-    private FileBrowserFragment.OnFileClickListener fileClickListener
-        = new FileBrowserFragment.OnFileClickListener() {
-            public void onClick(File file) {
-                DialogFragment df = new OpenActionsFragment();
-                Bundle b = new Bundle();
-                b.putString(OpenActionsFragment.EXTRA_DBPATH, file.getAbsolutePath());
-                df.setArguments(b);
-                df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "OpenActions");
-            }
-        };
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.open_actions_layout, container, false);
+        return v;
+    }
 }
+

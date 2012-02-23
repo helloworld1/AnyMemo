@@ -23,7 +23,7 @@
     <string name="about_button_text">About</string>
     <string name="help_button_text">Help</string>
     <string name="exit_button_text">Exit program</string>
-    <string name="edit_button_text">Preview/edit database</string>
+    <string name="edit_button_text">Preview/edit</string>
     <string name="autoaudio">Automatic speak</string>
     <string name="autoaudio_summary">The question and answer will be read automatically.</string>
     <string name="btnonerow">Compact grade button</string>
