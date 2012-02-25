@@ -76,6 +76,9 @@
             android:name=".ui.EditScreen"
             android:configChanges="orientation|keyboardHidden" />
         <activity 
+            android:name=".ui.DetailScreen"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity 
             android:name=".ui.SettingsScreen"
             android:configChanges="orientation|keyboardHidden" />        
         <activity

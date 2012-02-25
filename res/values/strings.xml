@@ -378,6 +378,8 @@
     <string name="review_short_text">Rev</string>
     <string name="new_text">New</string>
     <string name="id_text">ID</string>
+    <string name="entry_last_learn_date">last_learn_date</string>
+    <string name="entry_next_learn_date">next_learn_date</string>
     <string name="filter_category_text">Filter category</string>
     <string name="delete_text">Delete</string>
     <string name="delete_text_short">Del</string>
