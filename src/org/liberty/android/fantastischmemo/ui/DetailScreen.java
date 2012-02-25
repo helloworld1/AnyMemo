@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2010 Haowen Ning, Xiaoyu Shi
+Copyright (C) 2012 Haowen Ning, Xiaoyu Shi
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -22,9 +22,7 @@ import org.liberty.android.fantastischmemo.dao.*;
 import org.liberty.android.fantastischmemo.domain.*;
 import org.liberty.android.fantastischmemo.*;
 
-import java.util.HashMap;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.Calendar;
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -43,8 +41,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class DetailScreen extends AMActivity implements OnClickListener{
@@ -82,7 +78,6 @@ public class DetailScreen extends AMActivity implements OnClickListener{
 	
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
 
         setContentView(R.layout.detail_screen);	
 
