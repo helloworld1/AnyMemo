@@ -14,19 +14,19 @@
             android:layout_weight="0"
             android:text="@string/sort_by_text" />
         
-        <Button android:id="@+id/button_col1"
+        <Button android:id="@+id/by_id"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/id_text" />
         
-        <Button android:id="@+id/button_col2"
+        <Button android:id="@+id/by_question"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/question_text" />
         
-        <Button android:id="@+id/button_col3"
+        <Button android:id="@+id/by_answer"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
