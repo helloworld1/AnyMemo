@@ -19,28 +19,33 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import org.liberty.android.fantastischmemo.RecentListUtil;
+import java.io.File;
 
 import android.app.Activity;
 
-import android.content.Intent;
+import android.os.Bundle;
 
-public class OpenTabFragment extends AbstractFileBrowserFragment {
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
+
+public class OpenTabFragment extends FileBrowserFragment {
     Activity mActivity;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = activity;
+        setOnFileClickListener(fileClickListener);
     }
 
-    protected void fileClickAction(String name, String path) {
-        Intent myIntent = new Intent(mActivity, MemoScreen.class);
-        //myIntent.putExtra("dbpath", "/sdcard/french-body-parts.db");
-        String fullpath = path + "/" + name;
-        System.out.println("Path: " + fullpath);
-        RecentListUtil.addToRecentList(mActivity, fullpath);
-        myIntent.putExtra("dbpath", path + "/" + name);
-        startActivity(myIntent);
-    }
+    private FileBrowserFragment.OnFileClickListener fileClickListener
+        = new FileBrowserFragment.OnFileClickListener() {
+            public void onClick(File file) {
+                DialogFragment df = new OpenActionsFragment();
+                Bundle b = new Bundle();
+                b.putString(OpenActionsFragment.EXTRA_DBPATH, file.getAbsolutePath());
+                df.setArguments(b);
+                df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "OpenActions");
+            }
+        };
 }

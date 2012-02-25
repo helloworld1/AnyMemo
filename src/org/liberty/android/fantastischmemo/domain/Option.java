@@ -51,6 +51,22 @@ public class Option {
         editor.commit();
     }
 
+	public DictApp getDictApp() {
+        return DictApp.parse(settings.getString("dict_app", "FORA"));
+	}
+
+	public ShuffleType getShuffleType() {
+        if (settings.getBoolean("shuffling_cards", false)) {
+            return ShuffleType.LOCAL;
+        } else {
+            return ShuffleType.NONE;
+        }
+	}
+
+	public SpeakingType getSpeakingType() {
+        return SpeakingType.parse(settings.getString("speech_ctl", "TAP"));
+	}
+
     public static enum ButtonStyle {
         ANYMEMO,
         MNEMOSYNE,
@@ -66,8 +82,44 @@ public class Option {
             else{
                 return ANYMEMO;
             }
-
         }
+    }
+
+    public static enum DictApp {
+        COLORDICT,
+        FORA;
+        public static DictApp parse(String a){
+            if(a.equals("COLORDICT")){
+                return COLORDICT;
+            } else{
+                return FORA;
+            }
+        }
+    }
+
+    public static enum ShuffleType {
+        NONE,
+        LOCAL
+    }
+
+    public static enum SpeakingType {
+        MANUAL,
+        TAP,
+        AUTO,
+        AUTOTAP;
+
+        public static SpeakingType parse(String a){
+            if(a.equals("MANUAL")){
+                return MANUAL;
+            } else if(a.equals("AUTO")){
+                return AUTO;
+            } else if(a.equals("AUTOTAP")){
+                return AUTOTAP;
+            } else{
+                return TAP;
+            }
+        }
+        
     }
 
 }

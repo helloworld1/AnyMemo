@@ -22,7 +22,6 @@
     <string name="exit_button_text">Programm verlassen</string>
     <string name="edit_button_text">Datenbankvorschau/Bearbeiten</string>
 
-    <string name="default_db_name">french-body-parts.db</string>
     <string name="autoaudio">Immer vorlesen</string>
     <string name="autoaudio_summary">Die Fragen und Antworten werden immer vorgelesen</string>
     <string name="btnonerow">Kompakte Bewertungsauswahl </string>

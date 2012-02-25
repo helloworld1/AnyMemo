@@ -1,7 +1,14 @@
 package org.liberty.android.fantastischmemo;
 
+import java.io.File;
+import java.io.InputStream;
+
+import org.apache.mycommons.io.FileUtils;
+
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+
+import android.content.Context;
 
 
 import android.test.ActivityInstrumentationTestCase2;
@@ -19,7 +26,13 @@ public class AbstractExistingDBTest extends ActivityInstrumentationTestCase2<Ins
     protected void setUp() throws Exception {
         super.setUp();
         mActivity = this.getActivity();
-        AMUtil.copyFile("/sdcard/anymemo/french-body-parts.db", "/sdcard/french-body-parts.db");
+        Context testContext = getInstrumentation().getContext();
+        InputStream in = testContext.getResources().getAssets().open(AMEnv.DEFAULT_DB_NAME);
+        File outFile = new File("/sdcard/french-body-parts.db");
+        outFile.delete();
+
+        FileUtils.copyInputStreamToFile(in, outFile);
+        in.close();
         helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, "/sdcard/french-body-parts.db");
     }
 

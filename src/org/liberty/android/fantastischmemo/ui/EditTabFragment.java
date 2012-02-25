@@ -12,35 +12,37 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import org.liberty.android.fantastischmemo.RecentListUtil;
+import java.io.File;
+
+import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 import android.app.Activity;
 
 import android.content.Intent;
 
-public class EditTabFragment extends AbstractFileBrowserFragment {
+public class EditTabFragment extends FileBrowserFragment {
     Activity mActivity;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = activity;
+        setOnFileClickListener(fileClickListener);
     }
 
-    protected void fileClickAction(String name, String path) {
-        Intent myIntent = new Intent(mActivity, EditScreen.class);
-        //myIntent.putExtra("dbpath", "/sdcard/french-body-parts.db");
-        String fullpath = path + "/" + name;
-        RecentListUtil.addToRecentList(mActivity, fullpath);
-        myIntent.putExtra("dbpath", fullpath);
-        startActivity(myIntent);
-
-    }
+    private FileBrowserFragment.OnFileClickListener fileClickListener
+        = new FileBrowserFragment.OnFileClickListener() {
+            public void onClick(File file) {
+                String fullpath = file.getAbsolutePath();
+                RecentListUtil.addToRecentList(mActivity, fullpath);
+                Intent myIntent = new Intent(mActivity, EditScreen.class);
+                myIntent.putExtra(EditScreen.EXTRA_DBPATH, fullpath);
+                startActivity(myIntent);
+            }
+        };
 }

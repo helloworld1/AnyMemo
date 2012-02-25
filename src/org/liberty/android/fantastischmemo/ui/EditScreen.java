@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2010 Haowen Ning
+Copyright (C) 2012 Haowen Ning
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -19,22 +19,23 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-
 import java.sql.SQLException;
 
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.mycommons.lang3.math.NumberUtils;
+
 import org.liberty.android.fantastischmemo.AMActivity;
-import org.liberty.android.fantastischmemo.AMUtil;
+import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.DetailScreen;
-import org.liberty.android.fantastischmemo.Item;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.SettingsScreen;
+import org.liberty.android.fantastischmemo.ui.SettingsScreen;
 
 import org.liberty.android.fantastischmemo.ui.ListEditScreen;
+import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
+import org.liberty.android.fantastischmemo.utils.AMUtil;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
@@ -58,9 +59,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 
-import android.support.v4.app.DialogFragment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -78,16 +77,13 @@ import android.util.Log;
 import android.net.Uri;
 import android.view.GestureDetector;
 
-public class EditScreen extends AMActivity implements CategoryEditorFragment.CategoryEditorResultListener {
+import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
+
+public class EditScreen extends AMActivity {
     private AnyMemoTTS questionTTS = null;
     private AnyMemoTTS answerTTS = null;
     private boolean searchInflated = false;
-    private final int DIALOG_LOADING_PROGRESS = 100;
-    private final int ACTIVITY_FILTER = 10;
     private final int ACTIVITY_EDIT = 11;
-    private final int ACTIVITY_CARD_TOOLBOX = 12;
-    private final int ACTIVITY_DB_TOOLBOX = 13;
-    private final int ACTIVITY_GOTO_PREV = 14;
     private final int ACTIVITY_SETTINGS = 15;
     private final int ACTIVITY_LIST = 16;
     private final int ACTIVITY_MERGE = 17;
@@ -99,21 +95,26 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
     public static String EXTRA_CARD_ID = "id";
     public static String EXTRA_CATEGORY = "category";
 
-    Card currentCard = null;
-    Category currentCategory = null;
-    Integer savedCardId = null;
-    String dbPath = "";
-    String dbName = "";
-    int activeCategoryId = -1;
-    SettingDao settingDao;
-    CardDao cardDao;
-    LearningDataDao learningDataDao;
-    CategoryDao categoryDao;
-    FlashcardDisplay flashcardDisplay;
-    ControlButtons controlButtons;
-    Setting setting;
-    InitTask initTask;
-    Option option;
+    private Card currentCard = null;
+    private Category currentCategory = null;
+    private Integer savedCardId = null;
+    private String dbPath = "";
+    private String dbName = "";
+    private int activeCategoryId = -1;
+    private SettingDao settingDao;
+    private CardDao cardDao;
+    private LearningDataDao learningDataDao;
+    private CategoryDao categoryDao;
+
+    private FlashcardDisplay flashcardDisplay;
+    private ControlButtons controlButtons;
+    private View searchNextButton;
+    private View searchPrevButton;
+
+
+    private Setting setting;
+    private InitTask initTask;
+    private Option option;
     
     private GestureDetector gestureDetector;
 
@@ -147,13 +148,6 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
     }
 
     @Override
-    public void onReceiveCategory(Category c) {
-        activeCategoryId = c.getId();
-        restartActivity();
-    }
-
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == Activity.RESULT_CANCELED){
@@ -163,16 +157,13 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
         switch(requestCode){
             case ACTIVITY_EDIT:
             {
-                // TODO: Jump to edit card.
-                restartActivity();
-                break;
-            }
-
-            case ACTIVITY_FILTER:
-            {
-                // TODO: filter
                 Bundle extras = data.getExtras();
-                activeCategoryId = extras.getInt(EXTRA_CATEGORY);
+                int cardId = extras.getInt(CardEditor.EXTRA_RESULT_CARD_ID, 1);
+                try {
+                    currentCard = cardDao.queryForId(cardId);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
                 restartActivity();
                 break;
             }
@@ -184,8 +175,6 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
             }
             case ACTIVITY_LIST:
             {
-                // TODO should use card id
-                Bundle extras = data.getExtras();
                 restartActivity();
                 break;
             }
@@ -230,9 +219,8 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
 
             case R.id.editmenu_settings_id:
             {
-                // TODO: Edit this
                 Intent myIntent = new Intent(this, SettingsScreen.class);
-                myIntent.putExtra("dbpath", dbPath);
+                myIntent.putExtra(SettingsScreen.EXTRA_DBPATH, dbPath);
                 startActivityForResult(myIntent, ACTIVITY_SETTINGS);
                 return true;
             }
@@ -247,10 +235,10 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
             case R.id.editmenu_detail_id:
             {
                 if(currentCard != null){
-                    Intent myIntent = new Intent(this, DetailScreen.class);
-                    myIntent.putExtra("dbpath", this.dbPath);
-                    myIntent.putExtra("itemid", currentCard.getId());
-                    startActivityForResult(myIntent, ACTIVITY_DETAIL);
+                    //Intent myIntent = new Intent(this, DetailScreen.class);
+                    //myIntent.putExtra("dbpath", this.dbPath);
+                    //myIntent.putExtra("itemid", currentCard.getId());
+                    //startActivityForResult(myIntent, ACTIVITY_DETAIL);
                 }
                 return true;
             }
@@ -331,56 +319,80 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
             }
             case R.id.menu_context_swap_current:
             {
-                // TODO: swap
-                //if(currentItem != null){
-                //    databaseUtility.swapSingelItem(currentItem);
-                //}
+                cardDao.swapQA(currentCard);
+                restartActivity();
                 return true;
             }
 
             case R.id.menu_context_reset_current:
             {
-                // TODO: Reset
-                //if(currentItem != null){
-                //    databaseUtility.resetCurrentLearningData(currentItem);
-                //}
+                learningDataDao.resetLearningData(currentCard.getLearningData());
                 return true;
             }
 
             case R.id.menu_context_wipe:
             {
-                // TODO: wipe 
-                //databaseUtility.wipeLearningData();
+                AMGUIUtility.doConfirmProgressTask(this, R.string.settings_wipe, R.string.settings_wipe_warning, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask() {
+                    @Override
+                    public void doHeavyTask() {
+                        learningDataDao.resetAllLearningData();
+                    }
+                    @Override
+                    public void doUITask() {/* Do nothing */}
+                });
                 return true;
             }
 
             case R.id.menu_context_swap:
             {
-                // TODO: swap
-                //databaseUtility.swapAllQA();
+                AMGUIUtility.doConfirmProgressTask(this, R.string.swap_qa_text, R.string.settings_inverse_warning, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask() {
+                    @Override
+                    public void doHeavyTask() {
+                        cardDao.swapAllQA();
+                    }
+                    @Override
+                    public void doUITask() {
+                        restartActivity();
+                    }
+                });
                 return true;
             }
 
             case R.id.menu_context_remove_dup:
             {
-                // TODO: dedup
-                //databaseUtility.removeDuplicates();
+                AMGUIUtility.doConfirmProgressTask(this, R.string.remove_dup_text, R.string.remove_dup_message, R.string.removing_dup_title, R.string.removing_dup_warning, new AMGUIUtility.ProgressTask() {
+                    @Override
+                    public void doHeavyTask() {
+                        cardDao.removeDuplicates();
+                    }
+                    @Override
+                    public void doUITask() {
+                        restartActivity();
+                    }
+                });
                 return true;
             }
 
             case R.id.menu_context_merge_db:
             {
-                // TODO: Merge
                 Intent myIntent = new Intent(this, DatabaseMerger.class);
-                myIntent.putExtra("dbpath", dbPath);
+                myIntent.putExtra(DatabaseMerger.EXTRA_SRC_PATH, dbPath);
                 startActivityForResult(myIntent, ACTIVITY_MERGE);
                 return true;
             }
 
             case R.id.menu_context_shuffle:
             {
-                // TODO: Shuffle
-                //databaseUtility.shuffleDatabase();
+                AMGUIUtility.doConfirmProgressTask(this, R.string.settings_shuffle, R.string.settings_shuffle_warning, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask() {
+                    @Override
+                    public void doHeavyTask() {
+                        cardDao.shuffleOrdinals();
+                    }
+                    @Override
+                    public void doUITask() {
+                        restartActivity();
+                    }
+                });
                 return true;
             }
 
@@ -392,9 +404,7 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
     }
 
     private void initTTS(){
-        String defaultLocation =
-            Environment.getExternalStorageDirectory().getAbsolutePath()
-            + getString(R.string.default_audio_dir);
+        String defaultLocation = AMEnv.DEFAULT_AUDIO_PATH;
         // TODO: This couldn't be null but be wary
         String qa = setting.getQuestionAudio();
         String aa = setting.getAnswerAudio();
@@ -531,6 +541,7 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
             currentCard = cardDao.queryNextCard(currentCard,currentCategory);
             try {
                 categoryDao.refresh(currentCard.getCategory());
+                learningDataDao.refresh(currentCard.getLearningData());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -563,6 +574,7 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
             currentCard = cardDao.queryPrevCard(currentCard, currentCategory);
             try {
                 categoryDao.refresh(currentCard.getCategory());
+                learningDataDao.refresh(currentCard.getLearningData());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -596,10 +608,10 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
             LayoutInflater.from(this).inflate(R.layout.search_overlay, root);
             ImageButton close = (ImageButton)findViewById(R.id.search_close_btn);
             close.setOnClickListener(closeSearchButtonListener);
-            ImageButton prev = (ImageButton)findViewById(R.id.search_previous_btn);
-            prev.setOnClickListener(searchPrevButtonListener);
-            ImageButton next = (ImageButton)findViewById(R.id.search_next_btn);
-            next.setOnClickListener(searchNextButtonListener);
+            searchPrevButton = findViewById(R.id.search_previous_btn);
+            searchPrevButton.setOnClickListener(searchButtonListener);
+            searchNextButton = findViewById(R.id.search_next_btn);
+            searchNextButton.setOnClickListener(searchButtonListener);
 
             EditText editEntry = (EditText)findViewById(R.id.search_entry);
             editEntry.requestFocus();
@@ -615,7 +627,8 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
     }
 
     private void showCategoriesDialog() {
-        DialogFragment df = new CategoryEditorFragment();
+        CategoryEditorFragment df = new CategoryEditorFragment();
+        df.setResultListener(categoryResultListener);
         Bundle b = new Bundle();
         b.putString(CategoryEditorFragment.EXTRA_DBPATH, dbPath);
         if (currentCategory == null) {
@@ -661,32 +674,33 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
         }
     };
 
-    private View.OnClickListener searchNextButtonListener = new View.OnClickListener(){
+    private View.OnClickListener searchButtonListener = new View.OnClickListener(){
         public void onClick(View v){
 
-            // TODO: How to search next?
             EditText editEntry = (EditText)findViewById(R.id.search_entry);
             String text = editEntry.getText().toString();
-            //Item item = itemManager.search(text, true, currentItem);
-            //if(item != null){
-            //    currentItem = item;
-            //    updateCardFrontSide();
-            //    updateTitle();
-            //}
-        }
-    };
+            // Search #123 for id 123
+            if (text.startsWith("#")) {
+                SearchCardTask task = new SearchCardTask();
+                task.execute(SearchMethod.ID.toString(), text.substring(1));
+                return;
+            }
 
-    private View.OnClickListener searchPrevButtonListener = new View.OnClickListener(){
-        public void onClick(View v){
-            EditText editEntry = (EditText)findViewById(R.id.search_entry);
-            String text = editEntry.getText().toString();
-            // TODO: How to search
-            //Item item = itemManager.search(text, false, currentItem);
-            //if(item != null){
-            //    currentItem = item;
-            //    updateCardFrontSide();
-            //    updateTitle();
-            //}
+            // Search normal text
+            if (!text.contains("*")) {
+                text = "*" + text + "*";
+            }
+            // Convert to SQL wildcard
+            text = text.replace("*", "%");
+            text = text.replace("?", "_");
+            SearchCardTask task = new SearchCardTask();
+            if (v == searchNextButton) {
+                task.execute(SearchMethod.TEXT_FORWARD.toString(), text);
+            }
+
+            if (v == searchPrevButton) {
+                task.execute(SearchMethod.TEXT_BACKWARD.toString(), text);
+            }
         }
     };
 
@@ -704,8 +718,7 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
                 if(setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED){
                     if(flashcardDisplay.isAnswerShown()){
                         flashcardDisplay.updateView(currentCard, false);
-                    }
-                    else{
+                    } else{
                         flashcardDisplay.updateView(currentCard, true);
                     }
                 }
@@ -812,6 +825,7 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
                 }
 
                 categoryDao.refresh(currentCard.getCategory());
+                learningDataDao.refresh(currentCard.getLearningData());
 
                 totalCardCount = cardDao.countOf();
 
@@ -879,4 +893,76 @@ public class EditScreen extends AMActivity implements CategoryEditorFragment.Cat
             restartActivity();
         }
     }
+
+    /*
+     * params[2] = {Search Method, Search criteria}
+     * Search Method should be in SearchMethod enum.
+     */
+    private class SearchCardTask extends AsyncTask<String, Void, Card> {
+
+        private ProgressDialog progressDialog;
+
+		@Override
+        public void onPreExecute() {
+            progressDialog = new ProgressDialog(EditScreen.this);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setTitle(getString(R.string.loading_please_wait));
+            progressDialog.setMessage(getString(R.string.loading_database));
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        public Card doInBackground(String... params) {
+            SearchMethod method = SearchMethod.valueOf(params[0]);
+            assert method != null : "Pass null params to SearchCardTask";
+            String criteria = params[1];
+            assert criteria != null : "Pass null criteria to SearchCardTask";
+
+            Card foundCard = null;
+            try {
+                if (method == SearchMethod.ID && NumberUtils.isDigits(criteria)) {
+                    foundCard = cardDao.queryForId(Integer.valueOf(criteria));
+                }
+
+                if (method == SearchMethod.TEXT_FORWARD) {
+                    foundCard = cardDao.searchNextCard(criteria, currentCard.getOrdinal());
+                }
+
+                if (method == SearchMethod.TEXT_BACKWARD) {
+                    foundCard = cardDao.searchPrevCard(criteria, currentCard.getOrdinal());
+                }
+
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            return foundCard;
+        }
+
+        @Override
+        public void onPostExecute(Card result){
+            progressDialog.dismiss();
+            if (result == null) {
+                return;
+            }
+            currentCard = result;
+            updateCardFrontSide();
+            updateTitle();
+        }
+    }
+
+    private static enum SearchMethod {
+        TEXT_FORWARD,
+        TEXT_BACKWARD,
+        ID
+    }
+
+    // When a category is selected in category fragment.
+    private CategoryEditorResultListener categoryResultListener = 
+        new CategoryEditorResultListener() {
+            public void onReceiveCategory(Category c) {
+                activeCategoryId = c.getId();
+                restartActivity();
+            }
+        };
 }

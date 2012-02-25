@@ -3,8 +3,6 @@
     <string name="app_name">AnyMemo</string>
     <string name="app_full_name">AnyMemo Free</string>
     <string name="app_version">8.999.0</string>
-    <string name="up_one_level">..</string>
-    <string name="current_dir">.</string>
     <string name="ok_text">OK</string>
     <string name="cancel_text">Cancel</string>
     <string name="yes_text">Yes</string>
@@ -25,12 +23,7 @@
     <string name="about_button_text">About</string>
     <string name="help_button_text">Help</string>
     <string name="exit_button_text">Exit program</string>
-    <string name="edit_button_text">Preview/edit database</string>
-    <string name="default_dir">/anymemo/</string>
-    <string name="default_audio_dir">/anymemo/voice</string>
-    <string name="default_image_dir">/anymemo/images</string>
-
-    <string name="default_db_name">french-body-parts.db</string>
+    <string name="edit_button_text">Preview/edit</string>
     <string name="autoaudio">Automatic speak</string>
     <string name="autoaudio_summary">The question and answer will be read automatically.</string>
     <string name="btnonerow">Compact grade button</string>
@@ -201,7 +194,7 @@
     <string name="what_is_new_message">See graphical guide of new features, please click version history button. or visit official website:&lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt;&lt;br /&gt;</string>
     <string name="portrait_only_title">Portrait only</string>
     <string name="portrait_only_summary">Completely disable screen orientation changes in all screens</string>
-    <string name="list_mode_text">List mode</string>
+    <string name="list_mode_text">Card list</string>
     <string name="merge_db_text">Merge DB</string>
     <string name="merge_success_title">Merge success</string>
     <string name="merge_fail_title">Merge failed</string>
@@ -391,4 +384,15 @@
     <string name="sort_by_text">Sort by</string>
     <string name="question_text">Question</string>
     <string name="answer_text">Answer</string>
+    <string name="exit_text">Exit</string>
+    <string name="sdcard_not_available_warning_title">SD card not available</string>
+    <string name="sdcard_not_available_warning_message">Please insert SD card and run again!</string>
+    <string name="crash_report_checkbox_title">Report crash to the author</string>
+    <string name="crash_report_enabled">Crash reports will automatically send to the author.</string>
+    <string name="crash_report_disabled">Crash reports will never send to the author.</string>
+    <string name="help_advanced_operations">More database operations like swapping Q/A, shuffling card, removing duplicates are available in preview/edit screen when you long press the card.</string>
+    <string name="load_default_text">Load default</string>
+    <string name="load_default_warning_text">This will load the default settings you set in "Default settings" and you will lose the current settings.</string>
+    <string name="default_settings_text">DB default settings</string>
+    <string name="remove_dup_message">Remove cards with duplicate questions.</string>
 </resources>

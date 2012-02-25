@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2011 Haowen Ning
+Copyright (C) 2012 Haowen Ning
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -20,7 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo.queue;
 
-import java.util.Deque;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,7 +42,7 @@ public class LearnQueueManager implements QueueManager {
 
     private Category filterCategory;
 
-    private Deque<Card> learnQueue;
+    private List<Card> learnQueue;
     private List<Card> newCache;
     private List<Card> reviewCache;
     private Set<Card> dirtyCache;
@@ -93,7 +92,8 @@ public class LearnQueueManager implements QueueManager {
         refill();
         if (!learnQueue.isEmpty()) {
 
-            Card c = learnQueue.removeFirst();
+            Card c = learnQueue.get(0);
+            learnQueue.remove(0);
             Log.i(TAG, "Dequeue card: " + c.getId());
             return c;
         } else {
@@ -150,11 +150,11 @@ public class LearnQueueManager implements QueueManager {
         }
 
         while (learnQueue.size() < learnQueueSize && !reviewCache.isEmpty()) {
-            learnQueue.addLast(reviewCache.get(0));
+            learnQueue.add(reviewCache.get(0));
             reviewCache.remove(0);
         }
         while (learnQueue.size() < learnQueueSize && !newCache.isEmpty()) {
-            learnQueue.addLast(newCache.get(0));
+            learnQueue.add(newCache.get(0));
             newCache.remove(0);
         }
     }

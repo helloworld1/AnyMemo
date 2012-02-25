@@ -3,9 +3,9 @@ package org.liberty.android.fantastischmemo.dao;
 import java.lang.Exception;
 
 import java.sql.SQLException;
-import java.sql.SQLException;
 
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,8 +15,6 @@ import java.util.concurrent.Callable;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
-
-import com.j256.ormlite.dao.BaseDaoImpl;
 
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
@@ -426,6 +424,131 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
                 }
             });
         } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /*
+     * This method will also create the corresponding learning data and cateogry
+     * Note the category and learningData field must be populated
+     */
+    public void createCard(final Card card) {
+        try {
+            final LearningDataDao learningDataDao = getHelper().getLearningDataDao();
+            final CategoryDao categoryDao = getHelper().getCategoryDao();
+            callBatchTasks(new Callable<Void>() {
+                // Use the map to get rid of duplicate category creation
+                final Map<String, Category> categoryMap = new HashMap<String, Category>();
+                public Void call() throws Exception {
+                    assert card.getCategory() != null : "Card's category must be populated";
+                    assert card.getLearningData() != null : "Card's learningData must be populated";
+                    String currentCategoryName = card.getCategory().getName();
+                    if (categoryMap.containsKey(currentCategoryName)) {
+                        card.setCategory(categoryMap.get(currentCategoryName));
+                    } else {
+                        categoryDao.create(card.getCategory());
+                        categoryMap.put(currentCategoryName, card.getCategory());
+                    }
+                    learningDataDao.create(card.getLearningData());
+                    create(card);
+                    return null;
+                }
+            });
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<Card> getRandomReviewedCards(Category filterCategory, int limit) {
+        try {
+            LearningDataDao learningDataDao = getHelper().getLearningDataDao();
+            QueryBuilder<LearningData, Integer> learnQb = learningDataDao.queryBuilder();
+            learnQb.selectColumns("id");
+            learnQb.where().gt("acqReps", "0");
+            QueryBuilder<Card, Integer> cardQb = this.queryBuilder();
+            Where<Card, Integer> where = cardQb.where().in("learningData_id", learnQb);
+            if (filterCategory != null) {
+                where.and().eq("category_id", filterCategory.getId());
+            }
+
+            cardQb.setWhere(where);
+            // Return random ordered cards
+            cardQb.orderByRaw("random()");
+            cardQb.limit((long)limit);
+            List<Card> cs = cardQb.query();
+            for (Card c : cs) {
+                learningDataDao.refresh(c.getLearningData());
+            }
+            return cs;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void swapAllQA() {
+        try {
+            callBatchTasks(new Callable<Void>() {
+                public Void call() throws Exception {
+                    for (Card c : CardDaoImpl.this) {
+                        swapQA(c);
+                    }
+                    return null;
+                }
+            });
+        } catch (Exception e) {
+            throw new RuntimeException("Error swapping QA of all cards.", e);
+        }
+    }
+    
+    public void shuffleOrdinals() {
+        final List<Card> cards = queryForAll();
+        Collections.shuffle(cards);
+        try {
+            callBatchTasks(new Callable<Void>() {
+                public Void call() throws Exception {
+                    int counter = 0;
+                    for (Card c : CardDaoImpl.this) {
+                        c.setOrdinal(cards.get(counter).getOrdinal());
+                        update(c);
+                        counter++;
+                    }
+                    return null;
+                }
+            });
+        } catch (Exception e) {
+            throw new RuntimeException("Error shuffling cards.", e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public Card searchNextCard(String criteria, int ordinal) {
+        QueryBuilder<Card, Integer> qb = queryBuilder();
+        try {
+            Where<Card, Integer> where = qb.where();
+            where.gt("ordinal", ordinal)
+                .and().or(where.like("question", criteria), where.like("answer", criteria), where.like("note", criteria));
+            qb.setWhere(where);
+            PreparedQuery<Card> pq = qb.prepare();
+            Card nc = queryForFirst(pq);
+            return nc;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public Card searchPrevCard(String criteria, int ordinal) {
+        QueryBuilder<Card, Integer> qb = queryBuilder();
+        try {
+            Where<Card, Integer> where = qb.where();
+            where.lt("ordinal", ordinal)
+                .and().or(where.like("question", criteria), where.like("answer", criteria), where.like("note", criteria));
+            qb.setWhere(where);
+            PreparedQuery<Card> pq = qb.prepare();
+            Card nc = queryForFirst(pq);
+            return nc;
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }

@@ -2,14 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.liberty.android.fantastischmemo"
     android:installLocation="auto"
-    android:versionCode="135"
+    android:versionCode="137"
     android:versionName="@string/app_version">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application 
         android:icon="@drawable/icon" 
-        android:label="@string/app_name" >
+        android:label="@string/app_name"
+        android:name="AMApplication" >
         <activity 
             android:name=".ui.AnyMemo"
             android:configChanges="orientation|keyboardHidden"
@@ -27,30 +28,6 @@
         </activity>
         <activity 
             android:name=".InstrumentationActivity"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity 
-            android:name=".OpenScreen"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity 
-            android:name=".FileBrowser"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity 
-            android:name=".OptionScreen"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity 
-            android:name=".SettingsScreen"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity 
-            android:name=".DetailScreen"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity 
-            android:name=".Downloader" 
-            android:configChanges="orientation|keyboardHidden" />
-        <activity 
-            android:name=".cardscreen.EditScreen"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity 
-            android:name=".cardscreen.DatabaseMerger"
             android:configChanges="orientation|keyboardHidden" />
         <activity
             android:name=".downloader.DownloaderAnyMemo"
@@ -81,9 +58,6 @@
             android:name=".downloader.DownloaderQuizlet"
             android:configChanges="orientation|keyboardHidden" />
         <activity
-            android:name=".converter.ConvertScreen"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity
             android:name=".downloader.DropboxLauncher"
             android:configChanges="orientation|keyboardHidden" />
         <activity
@@ -102,7 +76,19 @@
             android:name=".ui.EditScreen"
             android:configChanges="orientation|keyboardHidden" />
         <activity 
+            android:name=".ui.SettingsScreen"
+            android:configChanges="orientation|keyboardHidden" />        
+        <activity
             android:name=".ui.ListEditScreen"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity 
+            android:name=".ui.FileBrowserActivity"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity 
+            android:name=".ui.OptionScreen"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity 
+            android:name=".ui.DatabaseMerger"
             android:configChanges="orientation|keyboardHidden" />
         <receiver
             android:name=".AlarmReceiver"
@@ -125,7 +111,7 @@
                     android:resource="@xml/widget_info" />
         </receiver>
         <activity
-            android:name=".ShareScreen" >
+            android:name=".ui.ShareScreen" >
             <intent-filter>
                     <action android:name="android.intent.action.SEND" />
                     <category android:name="android.intent.category.DEFAULT" />

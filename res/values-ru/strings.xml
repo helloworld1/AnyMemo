@@ -376,4 +376,14 @@
     <string name="filter_category_text">Фильтр категорий</string>
     <string name="delete_text">Удалить</string> 
     <string name="delete_text_short">Удал</string> 
+    <string name="sort_by_text">Сорт по</string>
+    <string name="question_text">Вопрос</string>
+    <string name="answer_text">Ответ</string>
+    <string name="exit_text">Выход</string>
+    <string name="sdcard_not_available_warning_title">SD карта недоступна</string>
+    <string name="sdcard_not_available_warning_message">Вставьте SD карту и запустите снова!</string>
+    <string name="crash_report_checkbox_title">Отправлять отчёты об ошибках</string>
+    <string name="crash_report_enabled">Отчёты об ошибках автоматически отправлять автору.</string>
+    <string name="crash_report_disabled">Отчеты об ошибках не посылать.</string>
+    <string name="help_advanced_operations">Большинство операций с базами (такие как обмен местами В и О, перемешивание карточек, удаление дубликатов) доступны из экрана Просмотр/Правка по длинному нажатию на карту.</string>
 </resources>

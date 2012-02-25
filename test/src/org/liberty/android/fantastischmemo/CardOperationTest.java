@@ -2,6 +2,7 @@ package org.liberty.android.fantastischmemo;
 
 import java.sql.SQLException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
@@ -9,6 +10,7 @@ import org.liberty.android.fantastischmemo.dao.CategoryDao;
 
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
+import org.liberty.android.fantastischmemo.domain.LearningData;
 
 public class CardOperationTest extends AbstractExistingDBTest {
     public CardOperationTest() {
@@ -155,6 +157,120 @@ public class CardOperationTest extends AbstractExistingDBTest {
         assertEquals(2, (int)c2.getId());
         Card c8 = cardDao.queryPrevCard(c2, ct);
         assertEquals(8, (int)c8.getId());
+    }
+
+    public void testShuffleOrdinals() throws Exception {
+        CardDao cardDao = helper.getCardDao();
+        cardDao.shuffleOrdinals();
+        assertEquals(28, cardDao.countOf());
+    }
+
+    public void testSwapAllQA() throws Exception {
+        CardDao cardDao = helper.getCardDao();
+        // Randomly sample 2 cards
+        Card c8 = cardDao.queryForId(8);
+        Card c18 = cardDao.queryForId(18);
+        String question8 = c8.getQuestion();
+        String answer8= c8.getAnswer();
+        String question18 = c18.getQuestion();
+        String answer18= c18.getAnswer();
+
+        cardDao.swapAllQA();
+        c8 = cardDao.queryForId(8);
+        c18 = cardDao.queryForId(18);
+        assertEquals(answer8, c8.getQuestion());
+        assertEquals(question8, c8.getAnswer());
+        assertEquals(answer18, c18.getQuestion());
+        assertEquals(question18, c18.getAnswer());
+    }
+
+    public void testGetRandomReviewedCards() throws Exception {
+        CardDao cardDao = helper.getCardDao();
+        List<Card> cards = cardDao.getRandomReviewedCards(null, 10);
+        assertEquals(0, cards.size());
+    }
+
+    public void testCreateCard() throws Exception {
+        CardDao cardDao = helper.getCardDao();
+        Card c = new Card();
+        c.setCategory(new Category());
+        c.setLearningData(new LearningData());
+        cardDao.createCard(c);
+        // Should create a new card
+        assertEquals(29, cardDao.countOf());
+    }
+
+    public void testCreateCards() throws Exception {
+        CardDao cardDao = helper.getCardDao();
+        Card c = new Card();
+        c.setOrdinal(29);
+        c.setCategory(new Category());
+        c.setLearningData(new LearningData());
+
+        Card c2 = new Card();
+        c2.setOrdinal(30);
+        c2.setCategory(new Category());
+        c2.setLearningData(new LearningData());
+
+        List<Card> cards = new ArrayList<Card>();
+        cards.add(c);
+        cards.add(c2);
+
+        cardDao.createCards(cards);
+        // Should create two new card
+        assertEquals(30, cardDao.countOf());
+    }
+
+    public void testGetNewCardCount() throws Exception {
+        CardDao cardDao = helper.getCardDao();
+        assertEquals(28L, cardDao.getNewCardCount(null));
+
+        setupThreeCategories();
+        CategoryDao categoryDao = helper.getCategoryDao();
+        List<Category> cts = categoryDao.queryForEq("name", "My category");
+        Category ct = cts.get(0);
+        assertEquals(3L, cardDao.getNewCardCount(ct));
+    }
+
+    public void testGetScheduledCardCount() throws Exception {
+        CardDao cardDao = helper.getCardDao();
+        assertEquals(0L, cardDao.getScheduledCardCount(null));
+
+        setupThreeCategories();
+        CategoryDao categoryDao = helper.getCategoryDao();
+        List<Category> cts = categoryDao.queryForEq("name", "My category");
+        Category ct = cts.get(0);
+        assertEquals(0L, cardDao.getScheduledCardCount(ct));
+    }
+
+    public void testSearchNextCard() throws Exception {
+        CardDao cardDao = helper.getCardDao();
+        Card c = cardDao.searchNextCard("mouth", 1);
+        assertEquals(8, (int)c.getId());
+
+        c = cardDao.searchNextCard("%oreille%", 10);
+        assertEquals(11, (int)c.getId());
+
+        c = cardDao.searchNextCard("whatever", 3);
+        assertNull(c);
+
+        c = cardDao.searchNextCard("mouth", 8);
+        assertNull(c);
+    }
+
+    public void testSearchPrevCard() throws Exception {
+        CardDao cardDao = helper.getCardDao();
+        Card c = cardDao.searchPrevCard("mouth", 10);
+        assertEquals(8, (int)c.getId());
+
+        c = cardDao.searchPrevCard("%oreille%", 28);
+        assertEquals(11, (int)c.getId());
+
+        c = cardDao.searchPrevCard("whatever", 27);
+        assertNull(c);
+
+        c = cardDao.searchPrevCard("mouth", 8);
+        assertNull(c);
     }
 
     /*

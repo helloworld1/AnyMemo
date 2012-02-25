@@ -34,9 +34,9 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 
 import org.apache.http.client.methods.HttpPost;
 
-import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.myhttp.entity.mime.HttpMultipartMode;
 
-import org.apache.http.entity.mime.content.FileBody;
+import org.apache.myhttp.entity.mime.content.FileBody;
 
 import org.apache.http.impl.client.DefaultHttpClient;
 
@@ -54,7 +54,7 @@ import oauth.signpost.basic.DefaultOAuthConsumer;
 
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 
-import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.myhttp.entity.mime.MultipartEntity;
 
 public class DropboxUtils{
     private static final String TAG = "org.liberty.android.fantastischmemo.downloader.DropboxUtils";
@@ -73,7 +73,6 @@ public class DropboxUtils{
         String url = TOKEN_URL + "&email=" + URLEncoder.encode(username)
             + "&password=" + URLEncoder.encode(password);
         String jsonString = DownloaderUtils.downloadJSONString(url);
-        System.out.println("String: " + jsonString);
         JSONObject jsonObject = new JSONObject(jsonString); 
         String error = null;
         try {
@@ -94,7 +93,6 @@ public class DropboxUtils{
     public static List<DownloadItem> listFiles(String oauthToken, String oauthSecret, String path) throws Exception{
         String url = signPathUrl(oauthToken, oauthSecret, METADATA_URL, path);
         String jsonString = DownloaderUtils.downloadJSONString(url);
-        System.out.println("Get cards String: " + jsonString);
         String error = null;
         JSONObject jsonObject = new JSONObject(jsonString); 
         try {

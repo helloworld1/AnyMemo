@@ -10,24 +10,24 @@ import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 
 import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.domain.Setting;
+import org.liberty.android.fantastischmemo.utils.DatabaseUtils;
 
-import android.test.ActivityInstrumentationTestCase2;
 
-public class DatabaseUtilsTest extends ActivityInstrumentationTestCase2<InstrumentationActivity> {
+public class DatabaseUtilsTest extends AbstractExistingDBTest {
     private InstrumentationActivity mActivity;  // the activity under test
 
     AnyMemoDBOpenHelper helper;
 
     String dbPath = "/sdcard/french-body-parts.db";
     public DatabaseUtilsTest() {
-        super("org.liberty.android.fantastischmemo", InstrumentationActivity.class);
+        super();
     }
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
         mActivity = this.getActivity();
-        AMUtil.copyFile("/sdcard/anymemo/french-body-parts.db", dbPath);
         helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, dbPath);
     }
 
@@ -35,6 +35,11 @@ public class DatabaseUtilsTest extends ActivityInstrumentationTestCase2<Instrume
     protected void tearDown() throws Exception {
         AnyMemoDBOpenHelperManager.releaseHelper(dbPath);
         mActivity.finish();
+    }
+
+    public void testGetDefaultSetting() throws Exception {
+        Setting setting = DatabaseUtils.readDefaultSetting(mActivity);
+        assertNotNull(setting);
     }
 
     public void testMergeDatabase() throws Exception {

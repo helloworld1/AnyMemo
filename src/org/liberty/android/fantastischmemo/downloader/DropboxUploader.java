@@ -20,15 +20,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo.downloader;
 
-import org.liberty.android.fantastischmemo.AMGUIUtility;
-import org.liberty.android.fantastischmemo.FileBrowser;
+import java.io.File;
+
 import org.liberty.android.fantastischmemo.R;
+
+import org.liberty.android.fantastischmemo.ui.FileBrowserActivity;
+import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 
 import android.app.AlertDialog;
 
 import android.os.Bundle;
 
-public class DropboxUploader extends FileBrowser{
+public class DropboxUploader extends FileBrowserActivity {
     private String oauthToken;
     private String oauthSecret;
     private String remotePath = "/";
@@ -45,11 +48,9 @@ public class DropboxUploader extends FileBrowser{
         }
     }
 
-
-
     @Override
-    public void fileClickAction(String name, String path){
-        final String uploadFileName = path + "/" + name;
+    public void fileClickAction(File file){
+        final String uploadFileName = file.getAbsolutePath();
         AMGUIUtility.doProgressTask(this, R.string.loading_please_wait, R.string.upload_wait, new AMGUIUtility.ProgressTask(){
             public void doHeavyTask() throws Exception{
                 DropboxUtils.uploadFile(oauthToken, oauthSecret, uploadFileName, remotePath);

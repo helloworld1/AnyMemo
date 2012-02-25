@@ -27,7 +27,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
-import org.liberty.android.fantastischmemo.*;
+import org.liberty.android.fantastischmemo.utils.AMUtil;
 
 import java.io.InputStream;
 import java.io.BufferedReader;
@@ -74,11 +74,14 @@ public class DownloaderUtils{
     public static void downloadFile(String url, String savedPath) throws IOException{
         File outFile = new File(savedPath);
         OutputStream out;
-        if(outFile.exists()){
-            /* Save a copy of the original instead of throwing an error */
-            AMUtil.copyFile(savedPath, savedPath.replace(".db", ".old.db"));
-            outFile.delete();
-        }
+
+        // Delete and backup if the file exists
+        AMUtil.deleteFileWithBackup(savedPath);
+        
+        // Create the dir if necessary
+        File parentDir = outFile.getParentFile();
+        parentDir.mkdirs();
+
         outFile.createNewFile();
         out  =new FileOutputStream(outFile);
 

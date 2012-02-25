@@ -24,19 +24,21 @@ import java.util.Random;
 
 import org.liberty.android.fantastischmemo.domain.LearningData;
 
+import org.liberty.android.fantastischmemo.utils.AMUtil;
+
 import android.util.Log;
 
 public class DefaultScheduler {
     final double MILLSECS_PER_DAY = 86400000.0;
     public final static String TAG = "DefaultScheduler";
 
-
-    public double getInterval(LearningData oldData, int newGrade) {
-        Log.i(TAG, "LD: " + oldData);
-        Log.i(TAG, "Grade: " + newGrade);
+    /*
+     * Return the interval of the after schedule the new card
+     */
+	public LearningData schedule(LearningData oldData, int newGrade, boolean includeNoise) {
 		Date currentDate = new Date();
-		double actualInterval = diffDate(oldData.getLastLearnDate(), currentDate);
-		double scheduleInterval = diffDate(oldData.getLastLearnDate(), oldData.getNextLearnDate());
+		double actualInterval = AMUtil.diffDate(oldData.getLastLearnDate(), currentDate);
+		double scheduleInterval = oldData.getInterval();
 		double newInterval = 0.0;
         int oldGrade = oldData.getGrade();
         double oldEasiness = oldData.getEasiness();
@@ -92,113 +94,13 @@ public class DefaultScheduler {
 			if(newRetRepsSinceLapse == -1){
 				newInterval = 6;
 			} else {
-				if(newGrade == 2 || newGrade == 3) {
-					if(actualInterval <= scheduleInterval) {
-						newInterval = actualInterval * newEasiness;
-					} else {
-						newInterval = scheduleInterval;
-					}
-				}
-
-				if(newGrade == 4) {
-					newInterval = actualInterval * newEasiness;
-				}
-
-				if(newGrade == 5) {
-					if(actualInterval < scheduleInterval){
-						newInterval = scheduleInterval;
-					} else{
-						newInterval = actualInterval * newEasiness;
-					}
-				}
-			}
-			if(newInterval == 0){
-				Log.e(TAG, "Interval is 0 in wrong place");
-			}
-		}
-        return truncateNumber(newInterval);
-    }
-
-    /*
-     * Return the interval of the after schedule the new card
-     */
-	public void schedule(LearningData oldData, int newGrade, boolean includeNoise) {
-		Date currentDate = new Date();
-		double actualInterval = diffDate(oldData.getLastLearnDate(), currentDate);
-		double scheduleInterval = diffDate(oldData.getLastLearnDate(), oldData.getNextLearnDate());
-		double newInterval = 0.0;
-        int oldGrade = oldData.getGrade();
-        double oldEasiness = oldData.getEasiness();
-        int newLapses = oldData.getLapses();
-        int newAcqReps = oldData.getAcqReps();
-        int newRetReps = oldData.getRetReps();
-        int newAcqRepsSinceLapse = oldData.getAcqRepsSinceLapse();
-        int newRetRepsSinceLapse = oldData.getRetRepsSinceLapse();
-        float newEasiness = oldData.getEasiness();
-
-		if(actualInterval <= 0.9){
-			actualInterval = 0.9;
-		}
-        // new item (unseen = 1 in mnemosyne)
-		if(newAcqReps == 0) {
-			newAcqReps = 1;
-            // 2.5 is 40% difficult.
-            // Taken from Mnemosyne
-            newEasiness = 2.5f;
-            newAcqRepsSinceLapse = 1;
-			newInterval = calculateInitialInterval(newGrade);
-		} else if(oldGrade <= 1 && newGrade <= 1){
-			newAcqReps += 1;
-			newAcqRepsSinceLapse += 1;
-			newInterval = 0;
-		} else if(oldGrade <= 1 && newGrade >= 2){
-			newAcqReps += 1;
-			newAcqRepsSinceLapse += 1;
-			newInterval = 1;
-		} else if(oldGrade >= 2 && newGrade <= 1){
-			newRetReps += 1;
-			newLapses += 1;
-			newAcqRepsSinceLapse = 0;
-			newRetRepsSinceLapse = 0;
-		} else if(oldGrade >= 2 && newGrade >= 2){
-			newRetReps += 1;
-			newRetRepsSinceLapse += 1;
-			if(actualInterval >= scheduleInterval){
-				if(newGrade == 2){
-					newEasiness -= 0.16;
-				}
-				if(newGrade == 3){
-					newEasiness -= 0.14;
-				}
-				if(newGrade == 5){
-				    newEasiness += 0.10;
-				}
-				if(oldEasiness < 1.3){
-					newEasiness = 1.3f;
-				}
-			}
-			newInterval = 0;
-			if(newRetRepsSinceLapse == -1){
-				newInterval = 6;
-			}
-			else{
-				if(newGrade == 2 || newGrade == 3){
+				if(newGrade >= 2){
 					if(actualInterval <= scheduleInterval){
 						newInterval = actualInterval * newEasiness;
-					}
-					else{
-						newInterval = scheduleInterval;
-					}
-				}
-				if(newGrade == 4){
-					newInterval = actualInterval * newEasiness;
-				}
-				if(newGrade == 5){
-					if(actualInterval < scheduleInterval){
-						newInterval = scheduleInterval;
-					}
-					else{
-						newInterval = actualInterval * newEasiness;
+                        // Fix the cram review scheduling problem by using the larger of scheduled interval
+                        newInterval = actualInterval * newEasiness < scheduleInterval ? actualInterval * newEasiness : scheduleInterval;
+					} else {
+						newInterval = scheduleInterval * newEasiness;
 					}
 				}
 			}
@@ -213,15 +115,18 @@ public class DefaultScheduler {
         if(includeNoise){
             newInterval = newInterval + calculateIntervalNoise(newInterval);
         }
-        oldData.setAcqReps(newAcqReps);
-        oldData.setAcqRepsSinceLapse(newAcqRepsSinceLapse);
-        oldData.setEasiness(newEasiness);
-        oldData.setGrade(newGrade);
-        oldData.setLapses(newLapses);
-        oldData.setLastLearnDate(currentDate);
-        oldData.setNextLearnDate(afterDays(currentDate, newInterval));
-        oldData.setRetReps(newRetReps);
-        oldData.setRetRepsSinceLapse(newRetRepsSinceLapse);
+
+        LearningData newData = new LearningData();
+        newData.setAcqReps(newAcqReps);
+        newData.setAcqRepsSinceLapse(newAcqRepsSinceLapse);
+        newData.setEasiness(newEasiness);
+        newData.setGrade(newGrade);
+        newData.setLapses(newLapses);
+        newData.setLastLearnDate(currentDate);
+        newData.setNextLearnDate(afterDays(currentDate, newInterval));
+        newData.setRetReps(newRetReps);
+        newData.setRetRepsSinceLapse(newRetRepsSinceLapse);
+        return newData;
 	}
 
     /*
@@ -270,14 +175,6 @@ public class DefaultScheduler {
 		}
 		return interval;
 	}
-	
-
-    /* Difference in days between date1 and date2*/
-	private double diffDate(Date date1, Date date2){
-        double date1s = date1.getTime();
-        double date2s = date2.getTime();
-        return ((double)(date2s - date1s)) / MILLSECS_PER_DAY; 
-	}
 
 	private double randomNumber(double min, double max){
 		return min + (new Random()).nextGaussian() * (max - min);
@@ -287,9 +184,4 @@ public class DefaultScheduler {
         long time = date.getTime() + Math.round(days * MILLSECS_PER_DAY);
         return new Date(time);
     }
-
-    private double truncateNumber(double f) {
-        return ((double)Math.round(f * 10)) / 10;
-    }
-
 }

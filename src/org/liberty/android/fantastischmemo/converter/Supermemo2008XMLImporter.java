@@ -98,14 +98,12 @@ public class Supermemo2008XMLImporter extends org.xml.sax.helpers.DefaultHandler
 	public void endElement(String namespaceURI, String localName, String qName) throws SAXException{
 		if(localName.equals("Question")){
             card.setQuestion(characterBuf.toString());
-            System.out.println("New item Question: " + characterBuf.toString());
 		}
 		if(localName.equals("Answer")){
             card.setAnswer(characterBuf.toString());
             card.setOrdinal(count);
             count++;
             cardList.add(card);
-            System.out.println("New item Answer: " + characterBuf.toString());
 		}
 	}
 	

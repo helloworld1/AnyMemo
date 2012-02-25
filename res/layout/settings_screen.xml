@@ -6,7 +6,7 @@
 <LinearLayout
     android:layout_height="fill_parent"
     android:layout_width="fill_parent"
-    android:orientation="vertical" > 
+    android:orientation="vertical" >
 
 <TableLayout
 	android:layout_height="fill_parent"
@@ -29,6 +29,21 @@
             android:prompt="@string/settings_question_font_size_prompt"
             />
     </TableRow>
+
+        
+    <TableRow>
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dip"
+                android:text="@string/settings_question_align" />
+        <Spinner
+            android:id="@+id/question_align_spinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:drawSelectorOnTop="true"
+            android:prompt="@string/settings_question_align_prompt" />
+    </TableRow>
     <TableRow>
         <TextView
             android:layout_width="fill_parent"
@@ -44,22 +59,7 @@
             android:drawSelectorOnTop="true"
             android:prompt="@string/settings_answer_font_size_prompt"
             />
-        </TableRow>
-        
-    <TableRow>
-        <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dip"
-                android:text="@string/settings_question_align" />
-        <Spinner
-            android:id="@+id/question_align_spinner"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:drawSelectorOnTop="true"
-            android:prompt="@string/settings_question_align_prompt" />
-    </TableRow>
-    
+    </TableRow>    
     <TableRow>
         <TextView
             android:layout_width="fill_parent"
@@ -213,6 +213,8 @@
     <CheckBox android:id="@+id/display_html"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:text="@string/settings_html_display" />
+
+
     <CheckBox android:id="@+id/linebreak_conversion"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:text="@string/linebreak_conversion" />
@@ -229,26 +231,44 @@
         android:layout_height="2dip"
         android:background="#FF909090" />
 
-    <CheckBox android:id="@+id/checkbox_wipe"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:text="@string/settings_wipe" />
-
-    <CheckBox android:id="@+id/checkbox_shuffle"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:text="@string/settings_shuffle" />
-
-    <CheckBox android:id="@+id/checkbox_inverse"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:text="@string/settings_inverse" />
     
-	<LinearLayout android:orientation="horizontal"
-		android:layout_width="fill_parent" android:layout_height="wrap_content">
-		<Button android:id="@+id/settting_save" android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:layout_marginLeft="3dip"
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/help_advanced_operations" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dip"
+        android:background="#FF909090" />
+            
+    <LinearLayout 
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/settting_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="3dip"
 			android:text="@string/settings_save" />
-		<Button android:id="@+id/setting_discard" android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:layout_marginLeft="3dip"
-			android:text="@string/settings_discard" />
+
+		<Button
+		    android:id="@+id/load_default"
+            android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+            android:layout_weight="1"
+		    android:layout_marginLeft="3dip"
+		    android:text="@string/load_default_text" />
+
+		<Button
+		    android:id="@+id/setting_discard"
+            android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+            android:layout_weight="1"
+		    android:layout_marginLeft="3dip"
+		    android:text="@string/settings_discard" />
 	</LinearLayout> 
 </LinearLayout>
 </ScrollView>

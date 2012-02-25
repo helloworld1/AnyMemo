@@ -19,11 +19,24 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader;
 
-import org.liberty.android.fantastischmemo.*;
-
 import java.util.List;
 import java.net.URLEncoder;
 import java.io.IOException;
+
+import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.AMEnv;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.R;
+
+import org.liberty.android.fantastischmemo.dao.CardDao;
+
+import org.liberty.android.fantastischmemo.domain.Card;
+
+import org.liberty.android.fantastischmemo.ui.FileBrowserActivity;
+import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
+import org.liberty.android.fantastischmemo.utils.AMUtil;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -31,7 +44,8 @@ import android.content.Intent;
 import android.util.Log;
 import org.json.JSONObject;
 
-import oauth.signpost.*;
+import oauth.signpost.OAuthConsumer;
+
 
 import oauth.signpost.basic.DefaultOAuthConsumer;
 
@@ -53,7 +67,9 @@ public class FEUpload extends AMActivity{
             oauthTokenSecret = extras.getString("oauth_token_secret");
             consumer = new DefaultOAuthConsumer(FEOauth.CONSUMER_KEY, FEOauth.CONSUMER_SECRET);
             consumer.setTokenWithSecret(oauthToken, oauthTokenSecret);
-            Intent myIntent = new Intent(this, FileBrowser.class);
+            Intent myIntent = new Intent(this, FileBrowserActivity.class);
+            myIntent.putExtra(FileBrowserActivity.EXTRA_DEFAULT_ROOT, AMEnv.DEFAULT_ROOT_PATH);
+            myIntent.putExtra(FileBrowserActivity.EXTRA_FILE_EXTENSIONS, ".db");
             startActivityForResult(myIntent, FILE_BROWSER);
         }
     }
@@ -67,18 +83,16 @@ public class FEUpload extends AMActivity{
                 {
                     Bundle resultExtras = data.getExtras();
                     if(resultExtras != null){
-                        final String dbPath = resultExtras.getString("org.liberty.android.fantastischmemo.dbPath");
-                        final String dbName = resultExtras.getString("org.liberty.android.fantastischmemo.dbName");
-                        Intent myIntent = new Intent(this, FileBrowser.class);
+                        final String dbPath = resultExtras.getString(FileBrowserActivity.EXTRA_RESULT_PATH);
                         AMGUIUtility.doProgressTask(this, R.string.loading_please_wait, R.string.upload_wait, new AMGUIUtility.ProgressTask(){
                             private String authUrl;
                             public void doHeavyTask() throws Exception{
-                                uploadDB(dbPath, dbName);
+                                uploadDB(dbPath);
                             }
                             public void doUITask(){
                                 new AlertDialog.Builder(FEUpload.this)
                                     .setTitle(R.string.upload_finish)
-                                    .setMessage(dbName + " " + getString(R.string.upload_finish_message))
+                                    .setMessage(dbPath + " " + getString(R.string.upload_finish_message))
                                     .setPositiveButton(R.string.ok_text, AMGUIUtility.getDialogFinishListener(FEUpload.this))
                                     .create()
                                     .show();
@@ -92,23 +106,18 @@ public class FEUpload extends AMActivity{
         }
     }
 
-    private void uploadDB(String dbpath, String dbname) throws Exception{
-        int cardId = addCardSet(dbname, "Import from AnyMemo");
-        DatabaseHelper dbHelper = new DatabaseHelper(this, dbpath, dbname);
-        /* Get all items */
-        List<Item> li = dbHelper.getListItems(1, -1, 0, "");
-        dbHelper.close();
-        while(!li.isEmpty()){
-            Item item = li.remove(0);
-            String question = item.getQuestion();
-            String answer = item.getAnswer();
-            if(question.equals("")){
-                question = "(Empty)";
-            }
-            if(answer.equals("")){
-                answer = "(Empty)";
-            }
+    private void uploadDB(String dbPath) throws Exception{
+        final String dbName = AMUtil.getFilenameFromPath(dbPath);
+        int cardId = addCardSet(dbName, "Import from AnyMemo");
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(this, dbPath);
+        CardDao cardDao = helper.getCardDao();
+        List<Card> cards = cardDao.queryForAll();
+
+        for (Card card : cards) {
+            String question = card.getQuestion();
+            String answer = card.getAnswer();
             addCard(cardId, question, answer);
+
         }
     }
 

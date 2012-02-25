@@ -19,14 +19,27 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader;
 
-import org.liberty.android.fantastischmemo.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import java.io.IOException;
 import java.net.URLEncoder;
 
+import org.apache.mycommons.lang3.StringUtils;
+
+import org.liberty.android.fantastischmemo.AMEnv;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.R;
+
+import org.liberty.android.fantastischmemo.dao.CardDao;
+
+import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.domain.Category;
+import org.liberty.android.fantastischmemo.domain.LearningData;
+import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
+import org.liberty.android.fantastischmemo.utils.AMUtil;
+import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 import android.os.Bundle;
 import android.app.AlertDialog;
@@ -167,7 +180,7 @@ public class DownloaderFE extends DownloaderBase{
                                 mHandler.post(new Runnable(){
                                     public void run(){
                                         mProgressDialog.dismiss();
-                                        String dbpath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
+                                        String dbpath = AMEnv.DEFAULT_ROOT_PATH;
                                         new AlertDialog.Builder(DownloaderFE.this)
                                             .setTitle(R.string.downloader_download_success)
                                             .setMessage(getString(R.string.downloader_download_success_message) + dbpath + di.getTitle() + ".db")
@@ -255,6 +268,10 @@ public class DownloaderFE extends DownloaderBase{
     }
 
     private void downloadDatabase(DownloadItem di) throws Exception{
+        /* Make a valid dbname from the title */
+        String dbname = DownloaderUtils.validateDBName(di.getTitle()) + ".db";
+        String imagePath = AMEnv.DEFAULT_IMAGE_PATH + dbname + "/";
+
         String address = di.getAddress();
         String dbJsonString = DownloaderUtils.downloadJSONString(address);
         Log.v(TAG, "Download url: " + address);
@@ -265,26 +282,50 @@ public class DownloaderFE extends DownloaderBase{
             throw new IOException("Status is not OK. Status: " + status);
         }
         JSONArray flashcardsArray = rootObject.getJSONObject("results").getJSONArray("flashcards");
-        List<Item> itemList = new ArrayList<Item>();
+        List<Card> cardList = new ArrayList<Card>();
         for(int i = 0; i < flashcardsArray.length(); i++){
+            // First get card
             JSONObject jsonItem = flashcardsArray.getJSONObject(i);
             String question = jsonItem.getString("question");
             String answer = jsonItem.getString("answer");
-            Item newItem = new Item.Builder()
-                .setQuestion(question)
-                .setAnswer(answer)
-                .setId(i + 1)
-                .build();
-            itemList.add(newItem);
+
+            // Download image file if there is
+            String questionImageUrl = jsonItem.getString("question_image_url");
+            if (StringUtils.isNotEmpty(questionImageUrl)) {
+                String downloadFilename = AMUtil.getFilenameFromPath(questionImageUrl);
+                DownloaderUtils.downloadFile(questionImageUrl, imagePath + downloadFilename); 
+                question = question + "<br /><img src=\"" + downloadFilename + "\" />";
+            }
+            // Download image file if there is
+            String answerImageUrl = jsonItem.getString("answer_image_url");
+            if (StringUtils.isNotEmpty(answerImageUrl)) {
+                String downloadFilename = AMUtil.getFilenameFromPath(answerImageUrl);
+                DownloaderUtils.downloadFile(answerImageUrl, imagePath + downloadFilename); 
+                answer = answer + "<br /><img src=\"" + downloadFilename + "\" />";
+            }
+
+            Card card = new Card();
+            card.setQuestion(question);
+            card.setAnswer(answer);
+            card.setOrdinal(i + 1);
+            card.setCategory(new Category());
+            card.setLearningData(new LearningData());
+            cardList.add(card);
         }
         
-        /* Make a valid dbname from the title */
-        String dbname = DownloaderUtils.validateDBName(di.getTitle()) + ".db";
-        String dbpath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
-        DatabaseHelper.createEmptyDatabase(dbpath, dbname);
-        DatabaseHelper dbHelper = new DatabaseHelper(this, dbpath, dbname);
-        dbHelper.insertListItems(itemList);
-        dbHelper.close();
-        RecentListUtil.addToRecentList(this, dbpath + dbname);
+        String dbpath = AMEnv.DEFAULT_ROOT_PATH;
+        String fullpath = dbpath + dbname;
+        try {
+            AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(DownloaderFE.this, fullpath);
+            CardDao cardDao = helper.getCardDao();
+            cardDao.createCards(cardList);
+            long count = helper.getCardDao().getTotalCount(null);
+            if (count <= 0L) {
+                throw new RuntimeException("Downloaded empty db.");
+            }
+        } finally {
+            AnyMemoDBOpenHelperManager.releaseHelper(fullpath);
+        }
+        RecentListUtil.addToRecentList(this, fullpath);
     }
 }

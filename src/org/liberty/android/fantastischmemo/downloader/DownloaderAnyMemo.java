@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.downloader;
 
 import org.liberty.android.fantastischmemo.*;
+import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -194,7 +195,7 @@ public class DownloaderAnyMemo extends DownloaderBase{
                     try{
                         downloadDatabase(di);
                         filename = filename.replace(".zip", ".db");
-                        String sdpath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
+                        String sdpath = AMEnv.DEFAULT_ROOT_PATH;
                         final File dbFile = new File(sdpath + filename);
                         mHandler.post(new Runnable(){
                             public void run(){
@@ -246,7 +247,7 @@ public class DownloaderAnyMemo extends DownloaderBase{
         throw new Exception("Could not get filename");
         }
 
-        String sdpath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
+        String sdpath = AMEnv.DEFAULT_ROOT_PATH;
         File outFile = new File(sdpath + filename);
         mHandler.post(new Runnable(){
             public void run(){

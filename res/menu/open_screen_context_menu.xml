@@ -5,6 +5,9 @@
         android:id="@+id/context_study"
         android:title="@string/study_text"/>
     <item 
+        android:id="@+id/context_list"
+        android:title="@string/list_mode_text"/>
+    <item 
         android:id="@+id/context_cram"
         android:title="@string/learn_ahead"/>
     <item 

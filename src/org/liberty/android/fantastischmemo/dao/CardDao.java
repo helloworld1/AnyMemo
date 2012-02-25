@@ -16,7 +16,10 @@ public interface CardDao extends HelperDao<Card, Integer> {
     Card queryNextCard(final Card c, final Category ct);
     Card queryPrevCard(final Card c);
     Card queryPrevCard(final Card c, final Category ct);
+
+    /* Swap the Question and answer */
     void swapQA(Card c);
+    void swapAllQA();
 
     /* Remove the cards with the same question */
     void removeDuplicates();
@@ -30,4 +33,19 @@ public interface CardDao extends HelperDao<Card, Integer> {
 
     /* Create a list of cards. Also create the related LearningData and Category */
     void createCards(final List<Card> cardList);
+
+    /* Create one. Also create the related LearningData and Category */
+    void createCard(final Card card);
+
+    /* Randomly get cards that is not new */
+    List<Card> getRandomReviewedCards(Category filterCategory, int limit);
+
+    /* Shuffle the ordinal */
+    void shuffleOrdinals();
+
+    /* Searching question/answer/note after ordinal */
+    Card searchNextCard(String criteria, int ordinal);
+
+    /* Searching question/answer/note before ordinal */
+    Card searchPrevCard(String criteria, int ordinal);
 }

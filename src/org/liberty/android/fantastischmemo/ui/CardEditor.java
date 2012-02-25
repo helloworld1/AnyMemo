@@ -23,10 +23,11 @@ import java.sql.SQLException;
 
 import java.io.File;
 
+import org.apache.mycommons.io.FileUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.FileBrowser;
 import org.liberty.android.fantastischmemo.R;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
@@ -36,6 +37,10 @@ import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
+
+import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment;
+import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
+import org.liberty.android.fantastischmemo.utils.AMUtil;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -47,7 +52,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
-import android.support.v4.app.DialogFragment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -57,10 +61,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.util.Log;
-import android.os.Environment;
 import android.content.res.Configuration;
 
-public class CardEditor extends AMActivity implements View.OnClickListener, CategoryEditorFragment.CategoryEditorResultListener{
+public class CardEditor extends AMActivity implements View.OnClickListener {
     private final int ACTIVITY_IMAGE_FILE = 1;
     private final int ACTIVITY_AUDIO_FILE = 2;
     Card currentCard = null;
@@ -87,8 +90,10 @@ public class CardEditor extends AMActivity implements View.OnClickListener, Cate
     private String originalQuestion;
     private String originalAnswer;
     private String originalNote;
+
     public static String EXTRA_DBPATH = "dbpath";
     public static String EXTRA_CARD_ID = "id";
+    public static String EXTRA_RESULT_CARD_ID= "result_card_id";
     public static String EXTRA_IS_EDIT_NEW = "is_edit_new";
 
 
@@ -120,8 +125,8 @@ public class CardEditor extends AMActivity implements View.OnClickListener, Cate
     }
         
     
-    public void onClick(View v){
-        if(v == btnSave){
+    public void onClick(View v) {
+        if(v == btnSave) {
             SaveCardTask task = new SaveCardTask();
             task.execute((Void)null);
         } 
@@ -156,7 +161,8 @@ public class CardEditor extends AMActivity implements View.OnClickListener, Cate
         }
 
         if (v == categoryButton) {
-            DialogFragment df = new CategoryEditorFragment();
+            CategoryEditorFragment df = new CategoryEditorFragment();
+            df.setResultListener(categoryResultListener);
             Bundle b = new Bundle();
             b.putString(CategoryEditorFragment.EXTRA_DBPATH, dbPath);
             b.putInt(CategoryEditorFragment.EXTRA_CATEGORY_ID, currentCard.getCategory().getId());
@@ -165,7 +171,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener, Cate
         }
     }
 
-        
+    @Override    
 	public boolean onCreateOptionsMenu(Menu menu){
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.card_editor_menu, menu);
@@ -182,16 +188,16 @@ public class CardEditor extends AMActivity implements View.OnClickListener, Cate
                 return true;
             case R.id.editor_menu_image:
                 if(focusView == questionEdit || focusView ==answerEdit || focusView == noteEdit){
-                    Intent myIntent = new Intent(this, FileBrowser.class);
-                    myIntent.putExtra("file_extension", ".png,.jpg,.tif,.bmp");
+                    Intent myIntent = new Intent(this, FileBrowserActivity.class);
+                    myIntent.putExtra(FileBrowserActivity.EXTRA_FILE_EXTENSIONS, ".png,.jpg,.tif,.bmp");
                     startActivityForResult(myIntent, ACTIVITY_IMAGE_FILE);
                 }
                 return true;
 
             case R.id.editor_menu_audio:
                 if(focusView == questionEdit || focusView ==answerEdit || focusView == noteEdit){
-                    Intent myIntent = new Intent(this, FileBrowser.class);
-                    myIntent.putExtra("file_extension", ".ogg,.mp3,.wav");
+                    Intent myIntent = new Intent(this, FileBrowserActivity.class);
+                    myIntent.putExtra(FileBrowserActivity.EXTRA_FILE_EXTENSIONS, ".ogg,.mp3,.wav");
                     startActivityForResult(myIntent, ACTIVITY_AUDIO_FILE);
                 }
                 return true;
@@ -228,18 +234,18 @@ public class CardEditor extends AMActivity implements View.OnClickListener, Cate
                 if(resultCode == Activity.RESULT_OK){
                     View focusView = getCurrentFocus();
                     if(focusView == questionEdit || focusView ==answerEdit || focusView == noteEdit){
-                        name = data.getStringExtra("org.liberty.android.fantastischmemo.dbName");
-                        path = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
+                        path = data.getStringExtra(FileBrowserActivity.EXTRA_RESULT_PATH);
+                        name = AMUtil.getFilenameFromPath(path);
                         addTextToView((EditText)focusView, "<img src=\"" + name + "\" />");
                         /* Copy the image to correct location */
-                        String imageRoot = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_image_dir) + "/";
+                        String imageRoot = AMEnv.DEFAULT_IMAGE_PATH;
                         String imagePath = imageRoot + dbName + "/";
                         new File(imageRoot).mkdir();
                         new File(imagePath).mkdir();
                         try{
                             String target = imagePath + name;
                             if(!(new File(target)).exists()){
-                                FileBrowser.copyFile(path + "/" + name, target);
+                                FileUtils.copyFile(new File(path + "/" + name), new File(target));
                             }
                         }
                         catch(Exception e){
@@ -252,18 +258,18 @@ public class CardEditor extends AMActivity implements View.OnClickListener, Cate
                 if(resultCode == Activity.RESULT_OK){
                     View focusView = getCurrentFocus();
                     if(focusView == questionEdit || focusView ==answerEdit || focusView == noteEdit){
-                        name = data.getStringExtra("org.liberty.android.fantastischmemo.dbName");
-                        path = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
+                        path = data.getStringExtra(FileBrowserActivity.EXTRA_RESULT_PATH);
+                        name = AMUtil.getFilenameFromPath(path);
                         addTextToView((EditText)focusView, "<audio src=\"" + name + "\" />");
                         /* Copy the image to correct location */
-                        String audioRoot = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_audio_dir) + "/";
+                        String audioRoot = AMEnv.DEFAULT_AUDIO_PATH;
                         String audioPath = audioRoot + dbName + "/";
                         new File(audioRoot).mkdir();
                         new File(audioPath).mkdir();
                         try{
                             String target = audioPath + name;
                             if(!(new File(target)).exists()){
-                                FileBrowser.copyFile(path + "/" + name, audioPath + name);
+                                FileUtils.copyFile(new File(path + "/" + name), new File(audioPath + name));
                             }
                         }
                         catch(Exception e){
@@ -278,12 +284,6 @@ public class CardEditor extends AMActivity implements View.OnClickListener, Cate
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-    }
-
-    @Override
-    public void onReceiveCategory(Category c) {
-        currentCard.setCategory(c);
-        updateViews();
     }
 
     private void setInitRadioButton(){
@@ -460,8 +460,14 @@ public class CardEditor extends AMActivity implements View.OnClickListener, Cate
                     currentCard.setOrdinal(prevOrdinal);
                 } else {
                     Card lastCard = cardDao.queryLastOrdinal();
-                    int lastOrd = lastCard.getOrdinal();
-                    currentCard.setOrdinal(lastOrd + 1);
+                    // last card = null means this is the first card to add
+                    // We should set ordinal to 1.
+                    if (lastCard == null) {
+                        currentCard.setOrdinal(1);
+                    } else {
+                        int lastOrd = lastCard.getOrdinal();
+                        currentCard.setOrdinal(lastOrd + 1);
+                    }
                 }
                 if (isEditNew) {
                     cardDao.create(currentCard);
@@ -479,9 +485,18 @@ public class CardEditor extends AMActivity implements View.OnClickListener, Cate
         public void onPostExecute(Void result){
             progressDialog.dismiss();
             Intent resultIntent = new Intent();
-            resultIntent.putExtra("id", currentCard.getId());
+            resultIntent.putExtra(EXTRA_RESULT_CARD_ID, currentCard.getId());
         	setResult(Activity.RESULT_OK, resultIntent);    			
             finish();
         }
     }
+
+    // When a category is selected in category fragment.
+    private CategoryEditorResultListener categoryResultListener = 
+        new CategoryEditorResultListener() {
+            public void onReceiveCategory(Category c) {
+                currentCard.setCategory(c);
+                updateViews();
+            }
+        };
 }

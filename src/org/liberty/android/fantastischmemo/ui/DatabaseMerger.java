@@ -20,6 +20,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import org.liberty.android.fantastischmemo.*;
+import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
+import org.liberty.android.fantastischmemo.utils.DatabaseUtils;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -31,7 +34,9 @@ import android.widget.EditText;
 import android.util.Log;
 
 public class DatabaseMerger extends AMActivity implements View.OnClickListener{
+    public static final String EXTRA_SRC_PATH = "src_path";
     private final static String TAG = "org.liberty.android.fantastischmemo.ui.DatabaseMerger";
+
     private final int ACTIVITY_FB_TARGET = 1;
     private final int ACTIVITY_FB_SOURCE = 2;
     private EditText targetEdit;
@@ -45,10 +50,8 @@ public class DatabaseMerger extends AMActivity implements View.OnClickListener{
 		setContentView(R.layout.merge_layout);
         Bundle extras = getIntent().getExtras();
         String dbPath = "";
-        String dbName = "";
         if (extras != null) {
-            dbPath = extras.getString("dbpath");
-            dbName = extras.getString("dbname");
+            dbPath = extras.getString(EXTRA_SRC_PATH);
         }
         targetEdit = (EditText)findViewById(R.id.target_db_edit);
         sourceEdit = (EditText)findViewById(R.id.source_db_edit);
@@ -58,8 +61,7 @@ public class DatabaseMerger extends AMActivity implements View.OnClickListener{
         sourceEdit.setOnClickListener(this);
         mergeButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
-        targetEdit.setText(dbPath + dbName);
-        
+        targetEdit.setText(dbPath);
     }
 
     @Override
@@ -74,23 +76,15 @@ public class DatabaseMerger extends AMActivity implements View.OnClickListener{
         switch(requestCode){
             case ACTIVITY_FB_TARGET:
             {
-                String dbName = data.getStringExtra("org.liberty.android.fantastischmemo.dbName");
-                String dbPath = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
-                if(dbName != null && dbPath != null){
-                    String fullname = dbPath + "/" + dbName;
-                    targetEdit.setText(fullname);
-                }
+                String dbPath = data.getStringExtra(FileBrowserActivity.EXTRA_RESULT_PATH);
+                targetEdit.setText(dbPath);
                 break;
             }
 
             case ACTIVITY_FB_SOURCE:
             {
-                String dbName = data.getStringExtra("org.liberty.android.fantastischmemo.dbName");
-                String dbPath = data.getStringExtra("org.liberty.android.fantastischmemo.dbPath");
-                if(dbName != null && dbPath != null){
-                    String fullname = dbPath + "/" + dbName;
-                    sourceEdit.setText(fullname);
-                }
+                String dbPath = data.getStringExtra(FileBrowserActivity.EXTRA_RESULT_PATH);
+                sourceEdit.setText(dbPath);
                 break;
             }
                 
@@ -101,29 +95,24 @@ public class DatabaseMerger extends AMActivity implements View.OnClickListener{
     public void onClick(View v){
         if(v == targetEdit){
             Intent myIntent = new Intent();
-            myIntent.setClass(this, FileBrowser.class);
-            myIntent.putExtra("file_extension", ".db");
+            myIntent.setClass(this, FileBrowserActivity.class);
+            myIntent.putExtra(FileBrowserActivity.EXTRA_FILE_EXTENSIONS, ".db");
             startActivityForResult(myIntent, ACTIVITY_FB_TARGET);
         }
 
         if(v == sourceEdit){
             Intent myIntent = new Intent();
-            myIntent.setClass(this, FileBrowser.class);
-            myIntent.putExtra("file_extension", ".db");
+            myIntent.setClass(this, FileBrowserActivity.class);
+            myIntent.putExtra(FileBrowserActivity.EXTRA_FILE_EXTENSIONS, ".db");
             startActivityForResult(myIntent, ACTIVITY_FB_SOURCE);
         }
 
         if(v == mergeButton){
             AMGUIUtility.doProgressTask(this, R.string.merging_title, R.string.merging_summary, new AMGUIUtility.ProgressTask(){
-                public void doHeavyTask(){
-                    String[] splittedpath1 = splitDBPath(targetEdit.getText().toString());
-                    String[] splittedpath2 = splitDBPath(sourceEdit.getText().toString());
-                    /* splittedpath1[0] is the dbPath for the source
-                     * and 1 is dbName */
-                    DatabaseHelper dbHelper = new DatabaseHelper(DatabaseMerger.this, splittedpath1[0], splittedpath1[1]);
-                    /* Merge to the back fo source database */
-                    dbHelper.mergeDatabase(splittedpath2[0], splittedpath2[1]);
-                    dbHelper.close();
+                public void doHeavyTask() throws Exception {
+                    String targetPath = targetEdit.getText().toString();
+                    String sourcePath = sourceEdit.getText().toString();
+                    DatabaseUtils.mergeDatabases(DatabaseMerger.this, targetPath, sourcePath);
                 }
 
                 public void doUITask(){
@@ -147,26 +136,5 @@ public class DatabaseMerger extends AMActivity implements View.OnClickListener{
             finish();
         }
     }
-
-    /* 
-     * Split the path into dbpath and dbname
-     * return value is an array, first element is dbpath
-     * second one is dbname
-     */
-    private String[] splitDBPath(String fullpath){
-        int rightMostSlashIndex = -1;
-        for(int i = 0; i < fullpath.length(); i++){
-            if(fullpath.charAt(i) == '/'){
-                rightMostSlashIndex = i;
-            }
-        }
-        if(rightMostSlashIndex == -1){
-            throw new IllegalArgumentException("Invalid path string: " + fullpath);
-        }
-        String path = fullpath.substring(0, rightMostSlashIndex + 1);
-        String name = fullpath.substring(rightMostSlashIndex + 1, fullpath.length());
-        return new String[]{path, name};
-    }
-
 }
 

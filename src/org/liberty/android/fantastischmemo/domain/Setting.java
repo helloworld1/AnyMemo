@@ -3,9 +3,9 @@ package org.liberty.android.fantastischmemo.domain;
 import java.util.Date;
 import java.util.EnumSet;
 
-import org.liberty.android.fantastischmemo.AMUtil;
 
 import org.liberty.android.fantastischmemo.dao.SettingDaoImpl;
+import org.liberty.android.fantastischmemo.utils.AMUtil;
 
 import com.j256.ormlite.field.DatabaseField;
 
@@ -13,6 +13,13 @@ import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "settings", daoClass = SettingDaoImpl.class)
 public class Setting {
+    public static final String AUDIO_USER_DEFINED = "User Audio";
+    
+    public static final Integer DEFAULT_QUESTION_TEXT_COLOR = 0xFFBEBEBE;
+    public static final Integer DEFAULT_ANSWER_TEXT_COLOR = 0xFFBEBEBE;
+    public static final Integer DEFAULT_QUESTION_BACKGROUND_COLOR = 0xFF000000;
+    public static final Integer DEFAULT_ANSWER_BACKGROUND_COLOR = 0xFF000000;
+    public static final Integer DEFAULT_SEPARATOR_COLOR = 0xFF909090;
     @DatabaseField(generatedId = true)
     private Integer id = 1;
 
@@ -48,20 +55,20 @@ public class Setting {
     
     // 0xFFBEBEBE
     @DatabaseField(defaultValue = "-4276546")
-    private Integer questionTextColor = 0xFFBEBEBE;
+    private Integer questionTextColor = DEFAULT_QUESTION_TEXT_COLOR;
 
     @DatabaseField(defaultValue = "-4276546")
-    private Integer answerTextColor = 0xFFBEBEBE;
+    private Integer answerTextColor = DEFAULT_ANSWER_TEXT_COLOR;
 
     //0xFF0000000
     @DatabaseField(defaultValue = "-16777216")
-    private Integer questionBackgroundColor = 0xFF000000;
+    private Integer questionBackgroundColor = DEFAULT_QUESTION_BACKGROUND_COLOR;
 
     @DatabaseField(defaultValue = "-16777216")
-    private Integer answerBackgroundColor = 0xFF000000;
+    private Integer answerBackgroundColor = DEFAULT_ANSWER_BACKGROUND_COLOR;
 
     @DatabaseField(defaultValue = "-7303024")
-    private Integer separatorColor = 0xFF909090;
+    private Integer separatorColor = DEFAULT_SEPARATOR_COLOR;
 
     /* 1 = question, 2 = answer, 4 = note */
     @DatabaseField(defaultValue = "QUESTION,ANSWER,NOTE")
@@ -86,16 +93,6 @@ public class Setting {
     @DatabaseField(defaultValue = "")
     private String answerFont = "";
 
-    /* Empty = no font*/
-    @DatabaseField(defaultValue = "FORA")
-    private DictApp dictApp = DictApp.FORA;
-
-    @DatabaseField(defaultValue = "NONE")
-    private ShuffleType shuffleType = ShuffleType.NONE;
-
-    @DatabaseField(defaultValue = "TAP")
-    private SpeakingType speakingType = SpeakingType.TAP;
-
     @DatabaseField(defaultValue = "")
     private String questionAudioLocation = "";
 
@@ -112,8 +109,8 @@ public class Setting {
 
     public static enum Align {
         LEFT,
-        RIGHT,
-        CENTER
+        CENTER,
+        RIGHT
     }
 
     public static enum CardStyle {
@@ -127,23 +124,6 @@ public class Setting {
         NOTE
     }
 
-    public static enum DictApp {
-        COLORDICT,
-        FORA
-    }
-
-    public static enum ShuffleType {
-        NONE,
-        LOCAL
-    }
-
-    public static enum SpeakingType {
-        MANUAL,
-        TAP,
-        AUTO,
-        AUTOTAP
-        
-    }
 
 	public Integer getId() {
 		return id;
@@ -345,29 +325,6 @@ public class Setting {
 		this.answerFont = answerFont;
 	}
 
-	public DictApp getDictApp() {
-		return dictApp;
-	}
-
-	public void setDictApp(DictApp dictApp) {
-		this.dictApp = dictApp;
-	}
-
-	public ShuffleType getShuffleType() {
-		return shuffleType;
-	}
-
-	public void setShuffleType(ShuffleType shuffleType) {
-		this.shuffleType = shuffleType;
-	}
-
-	public SpeakingType getSpeakingType() {
-		return speakingType;
-	}
-
-	public void setSpeakingType(SpeakingType speakingType) {
-		this.speakingType = speakingType;
-	}
 
 	public Date getCreationDate() {
 		return creationDate;
@@ -399,5 +356,13 @@ public class Setting {
 
 	public void setAnswerAudioLocation(String answerAudioLocation) {
 		this.answerAudioLocation = answerAudioLocation;
+	}
+	
+	public boolean isDefaultColor() {
+	    return (questionTextColor.equals(DEFAULT_QUESTION_TEXT_COLOR)) && 
+	           (answerTextColor.equals(DEFAULT_ANSWER_TEXT_COLOR)) && 
+	           (questionBackgroundColor.equals(DEFAULT_QUESTION_BACKGROUND_COLOR)) &&
+	           (answerBackgroundColor.equals(DEFAULT_ANSWER_BACKGROUND_COLOR)) &&
+	           (separatorColor.equals(DEFAULT_SEPARATOR_COLOR));
 	}
 }

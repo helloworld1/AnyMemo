@@ -34,6 +34,9 @@ import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
+import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
+import org.liberty.android.fantastischmemo.utils.AMUtil;
+import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 
 import android.os.Bundle;
@@ -151,7 +154,7 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
                                 mHandler.post(new Runnable(){
                                     public void run(){
                                         mProgressDialog.dismiss();
-                                        String dbpath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
+                                        String dbpath = AMEnv.DEFAULT_ROOT_PATH;
                                         new AlertDialog.Builder(DownloaderQuizlet.this)
                                             .setTitle(R.string.downloader_download_success)
                                             .setMessage(getString(R.string.downloader_download_success_message) + dbpath + di.getTitle() + ".db")
@@ -250,7 +253,7 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
         
         /* Make a valid dbname from the title */
         String dbname = DownloaderUtils.validateDBName(di.getTitle()) + ".db";
-        String dbpath = Environment.getExternalStorageDirectory().getAbsolutePath() + getString(R.string.default_dir);
+        String dbpath = AMEnv.DEFAULT_ROOT_PATH;
         String fullpath = dbpath + dbname;
         AMUtil.deleteFileWithBackup(fullpath);
         try {

@@ -45,7 +45,7 @@
         <ListPreference
             android:key="dict_app"
             android:title="@string/dict_app" 
-            android:defaultValue="COLORDICT"
+            android:defaultValue="FORA"
             android:entries="@array/dict_list"
             android:entryValues="@array/dict_list_values"
             android:summary="@string/dict_app_summary" />
@@ -83,5 +83,10 @@
             android:title="@string/enable_third_party_arabic_title" 
             android:defaultValue="true"
             android:summary="@string/enable_third_party_arabic_summary" />
+        <CheckBoxPreference android:key="acra.enable"
+                android:title="@string/crash_report_checkbox_title"
+                android:summaryOn="@string/crash_report_enabled"
+                android:summaryOff="@string/crash_report_disabled"
+                android:defaultValue="true"/>
     </PreferenceCategory>
 </PreferenceScreen> 

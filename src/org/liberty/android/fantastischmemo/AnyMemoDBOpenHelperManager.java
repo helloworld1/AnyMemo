@@ -6,6 +6,8 @@ import java.util.Map;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.mycommons.io.FilenameUtils;
+
 import android.content.Context;
 
 import android.util.Log;
@@ -21,6 +23,7 @@ public class AnyMemoDBOpenHelperManager {
 
     public static synchronized AnyMemoDBOpenHelper getHelper(Context context, String dbpath) {
         assert dbpath != null : "dbpath should not be null";
+        dbpath = FilenameUtils.normalize(dbpath);
         if (!helpers.containsKey(dbpath)) {
             Log.i(TAG, "Call get AnyMemoDBOpenHelper for first time."); 
             try {
@@ -40,6 +43,8 @@ public class AnyMemoDBOpenHelperManager {
 
     public static synchronized void releaseHelper(String dbpath) {
         Log.i(TAG, "Release AnyMemoDBOpenHelper: " + dbpath); 
+
+        dbpath = FilenameUtils.normalize(dbpath);
 
         if (!helpers.containsKey(dbpath)) {
             throw new RuntimeException("Release a wrong db path or release an already been released helper!");
