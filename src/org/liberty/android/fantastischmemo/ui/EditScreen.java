@@ -236,10 +236,10 @@ public class EditScreen extends AMActivity {
             case R.id.editmenu_detail_id:
             {
                 if(currentCard != null){
-                    //Intent myIntent = new Intent(this, DetailScreen.class);
-                    //myIntent.putExtra("dbpath", this.dbPath);
-                    //myIntent.putExtra("itemid", currentCard.getId());
-                    //startActivityForResult(myIntent, ACTIVITY_DETAIL);
+                    Intent myIntent = new Intent(this, DetailScreen.class);
+                    myIntent.putExtra(DetailScreen.EXTRA_DBPATH, this.dbPath);
+                    myIntent.putExtra(DetailScreen.EXTRA_CARD_ID, currentCard.getId());
+                    startActivityForResult(myIntent, ACTIVITY_DETAIL);
                 }
                 return true;
             }

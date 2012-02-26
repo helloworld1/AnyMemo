@@ -81,8 +81,8 @@ public class AnyMemo extends AMActivity {
         mTabManager = new TabManager(this, mTabHost, android.R.id.tabcontent);
 
         Bundle b = new Bundle();
-        String sdPath = AMEnv.DEFAULT_ROOT_PATH;
-        b.putString("default_root", sdPath);
+        //String sdPath = AMEnv.DEFAULT_ROOT_PATH;
+       // b.putString("default_root", sdPath);
         mTabManager.addTab(mTabHost.newTabSpec("recent").setIndicator(getString(R.string.recent_tab_text),  res.getDrawable(R.drawable.recent)),
                 RecentListFragment.class, b);
         mTabManager.addTab(mTabHost.newTabSpec("open").setIndicator(getString(R.string.open_tab_text),  res.getDrawable(R.drawable.open)),
