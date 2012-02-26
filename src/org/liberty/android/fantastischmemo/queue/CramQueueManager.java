@@ -22,7 +22,6 @@ package org.liberty.android.fantastischmemo.queue;
 
 import java.sql.SQLException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
@@ -35,9 +34,10 @@ public class CramQueueManager implements QueueManager {
     private List<Card> learnQueue; 
     private final int learnQueueSize;
 
-    public CramQueueManager(int learnQueueSize) {
-        learnQueue = new ArrayList<Card>(learnQueueSize);
-        this.learnQueueSize = learnQueueSize;
+
+    private CramQueueManager(Builder builder) {
+        this.cardDao = builder.cardDao;
+        this.learnQueueSize = builder.learnQueueSize;
     }
 
 	public void setCardDao(CardDao cardDao) {
@@ -80,6 +80,30 @@ public class CramQueueManager implements QueueManager {
 	@Override
 	public synchronized void flush() {
         // Do nothing
+    }
+
+    public static class Builder {
+
+        private CardDao cardDao;
+
+        private int learnQueueSize;
+
+		public Builder setCardDao(CardDao cardDao) {
+			this.cardDao = cardDao;
+            return this;
+		}
+
+		public Builder setLearnQueueSize(int learnQueueSize) {
+			this.learnQueueSize = learnQueueSize;
+            return this;
+		}
+
+        public QueueManager build() {
+            if (cardDao == null) {
+                throw new AssertionError("cardDao must set");
+            }
+            return new CramQueueManager(this);
+        }
     }
 
     private void refill() {

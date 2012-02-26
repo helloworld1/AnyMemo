@@ -24,6 +24,10 @@ import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.AnyMemoService;
+
+import org.liberty.android.fantastischmemo.queue.CramQueueManager;
+import org.liberty.android.fantastischmemo.queue.LearnQueueManager;
+import org.liberty.android.fantastischmemo.ui.DetailScreen;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.ui.SettingsScreen;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
@@ -47,8 +51,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import java.sql.SQLException;
-
-import org.liberty.android.fantastischmemo.queue.QueueManagerFactory;
 
 import org.liberty.android.fantastischmemo.scheduler.DefaultScheduler;
 
@@ -163,17 +165,23 @@ public class MemoScreen extends AMActivity {
 
     private void createQueue() {
         if (!isCram) {
-            queueManager = QueueManagerFactory.buildLearnQueueManager(
-                    cardDao,
-                    learningDataDao,
-                    10,
-                    50,
-                    filterCategory);
+             LearnQueueManager.Builder builder = new LearnQueueManager.Builder()
+                .setCardDao(cardDao)
+                .setLearningDataDao(learningDataDao)
+                .setLearnQueueSize(10)
+                .setCacheSize(50)
+                .setFilterCategory(filterCategory);
+             if (option.getShuffleType() == Option.ShuffleType.LOCAL) {
+                 builder.setShuffle(true);
+             } else {
+                 builder.setShuffle(false);
+             }
+             queueManager = builder.build();
         } else {
-            queueManager = QueueManagerFactory.buildCramQueueManager(
-                    cardDao,
-                    10,
-                    filterCategory);
+            queueManager = new CramQueueManager.Builder()
+                .setCardDao(cardDao)
+                .setLearnQueueSize(10)
+                .build();
         }
     }
 
@@ -259,11 +267,10 @@ public class MemoScreen extends AMActivity {
 
             case R.id.menudetail:
             {
-                //Intent myIntent = new Intent(this, DetailScreen.class);
-                //myIntent.putExtra("dbname", this.dbName);
-                //myIntent.putExtra("dbpath", this.dbPath);
-                //myIntent.putExtra("itemid", currentCard.getId());
-                //startActivityForResult(myIntent, ACTIVITY_DETAIL);
+                Intent myIntent = new Intent(this, DetailScreen.class);
+                myIntent.putExtra(DetailScreen.EXTRA_DBPATH, this.dbPath);
+                myIntent.putExtra(DetailScreen.EXTRA_CARD_ID, currentCard.getId());
+                startActivityForResult(myIntent, ACTIVITY_DETAIL);
                 return true;
             }
 

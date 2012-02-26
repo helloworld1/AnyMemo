@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo.queue;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -54,38 +55,23 @@ public class LearnQueueManager implements QueueManager {
     private int maxNewCacheOrdinal = 0;
 
     private int maxReviewCacheOrdinal = 0; 
+    
+    private boolean shuffle;
 
     private final String TAG = getClass().getSimpleName();
 
-    public LearnQueueManager(int learnQueueSize, int cacheSize) {
+    private LearnQueueManager(Builder builder) {
+        this.cardDao = builder.cardDao;
+        this.learningDataDao = builder.learningDataDao;
+        this.filterCategory = builder.filterCategory;
+        this.learnQueueSize = builder.learnQueueSize;
+        this.cacheSize = builder.cacheSize;
+        this.shuffle = builder.shuffle;
         learnQueue = new LinkedList<Card>();
         newCache = new LinkedList<Card>();
         reviewCache = new LinkedList<Card>();
         dirtyCache = new HashSet<Card>();
-        this.learnQueueSize = learnQueueSize;
-        this.cacheSize = cacheSize;
     }
-
-	public CardDao getCardDao() {
-		return cardDao;
-	}
-	public void setCardDao(CardDao cardDao) {
-		this.cardDao = cardDao;
-	}
-	public LearningDataDao getLearningDataDao() {
-		return learningDataDao;
-	}
-	public void setLearningDataDao(LearningDataDao learningDataDao) {
-		this.learningDataDao = learningDataDao;
-	}
-
-	public Category getFilterCategory() {
-		return filterCategory;
-	}
-
-	public void setFilterCategory(Category filterCategory) {
-		this.filterCategory = filterCategory;
-	}
 
 	@Override
 	public synchronized Card dequeue() {
@@ -157,6 +143,12 @@ public class LearnQueueManager implements QueueManager {
             learnQueue.add(newCache.get(0));
             newCache.remove(0);
         }
+        // Shuffle all teh caches
+        if (shuffle) {
+            Collections.shuffle(newCache);
+            Collections.shuffle(reviewCache);
+            Collections.shuffle(learnQueue);
+        }
     }
 
 	@Override
@@ -169,7 +161,59 @@ public class LearnQueueManager implements QueueManager {
             // Add to the back of the queue
             learnQueue.remove(card);
             learnQueue.add(card);
+
+            // Only update once if one fail to lear
+            if (!dirtyCache.contains(card)) {
+                dirtyCache.add(card);
+            }
         }
 	}
+
+    public static class Builder {
+
+        private CardDao cardDao;
+
+        private LearningDataDao learningDataDao;
+
+        private Category filterCategory;
+
+        private int learnQueueSize = 10;
+
+        private int cacheSize = 50;
+
+        private boolean shuffle = false;
+
+		public Builder setCardDao(CardDao cardDao) {
+			this.cardDao = cardDao;
+            return this;
+		}
+		public Builder setLearningDataDao(LearningDataDao learningDataDao) {
+			this.learningDataDao = learningDataDao;
+            return this;
+		}
+		public Builder setFilterCategory(Category filterCategory) {
+			this.filterCategory = filterCategory;
+            return this;
+		}
+		public Builder setLearnQueueSize(int learnQueueSize) {
+			this.learnQueueSize = learnQueueSize;
+            return this;
+		}
+		public Builder setCacheSize(int cacheSize) {
+			this.cacheSize = cacheSize;
+            return this;
+		}
+        public Builder setShuffle(boolean shuffle) {
+            this.shuffle = shuffle;
+            return this;
+        }
+
+        public QueueManager build() {
+            if (cardDao == null || learningDataDao == null) {
+                throw new AssertionError("cardDao and learningDataDao must set");
+            }
+            return new LearnQueueManager(this);
+        }
+    }
 }
 

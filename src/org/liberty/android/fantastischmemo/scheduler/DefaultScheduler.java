@@ -26,8 +26,6 @@ import org.liberty.android.fantastischmemo.domain.LearningData;
 
 import org.liberty.android.fantastischmemo.utils.AMUtil;
 
-import android.util.Log;
-
 public class DefaultScheduler {
     final double MILLSECS_PER_DAY = 86400000.0;
     public final static String TAG = "DefaultScheduler";
@@ -60,7 +58,9 @@ public class DefaultScheduler {
             newEasiness = 2.5f;
             newAcqRepsSinceLapse = 1;
 			newInterval = calculateInitialInterval(newGrade);
-		} else if(oldGrade <= 1 && newGrade <= 1){
+		} 
+
+        else if(oldGrade <= 1 && newGrade <= 1){
 			newAcqReps += 1;
 			newAcqRepsSinceLapse += 1;
 			newInterval = 0;
@@ -89,23 +89,18 @@ public class DefaultScheduler {
 				if(oldEasiness < 1.3){
 					newEasiness = 1.3f;
 				}
-			}
-			newInterval = 0;
-			if(newRetRepsSinceLapse == -1){
-				newInterval = 6;
-			} else {
-				if(newGrade >= 2){
-					if(actualInterval <= scheduleInterval){
-						newInterval = actualInterval * newEasiness;
+                newInterval = 0;
+                if(newRetRepsSinceLapse == -1){
+                    newInterval = 6;
+                } else {
+                    if(actualInterval <= scheduleInterval){
+                        newInterval = actualInterval * newEasiness;
                         // Fix the cram review scheduling problem by using the larger of scheduled interval
                         newInterval = actualInterval * newEasiness < scheduleInterval ? actualInterval * newEasiness : scheduleInterval;
-					} else {
-						newInterval = scheduleInterval * newEasiness;
-					}
-				}
-			}
-			if(newInterval == 0){
-				Log.e(TAG, "Interval is 0 in wrong place");
+                    } else {
+                        newInterval = scheduleInterval * newEasiness;
+                    }
+                }
 			}
 		}
         /* 
@@ -126,6 +121,8 @@ public class DefaultScheduler {
         newData.setNextLearnDate(afterDays(currentDate, newInterval));
         newData.setRetReps(newRetReps);
         newData.setRetRepsSinceLapse(newRetRepsSinceLapse);
+        System.out.println("Old data:" + oldData);
+        System.out.println("New data:" + newData);
         return newData;
 	}
 
