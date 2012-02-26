@@ -26,8 +26,6 @@ import org.liberty.android.fantastischmemo.domain.LearningData;
 
 import org.liberty.android.fantastischmemo.utils.AMUtil;
 
-import android.util.Log;
-
 public class DefaultScheduler {
     final double MILLSECS_PER_DAY = 86400000.0;
     public final static String TAG = "DefaultScheduler";

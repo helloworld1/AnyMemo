@@ -165,13 +165,18 @@ public class MemoScreen extends AMActivity {
 
     private void createQueue() {
         if (!isCram) {
-            queueManager = new LearnQueueManager.Builder()
+             LearnQueueManager.Builder builder = new LearnQueueManager.Builder()
                 .setCardDao(cardDao)
                 .setLearningDataDao(learningDataDao)
                 .setLearnQueueSize(10)
                 .setCacheSize(50)
-                .setFilterCategory(filterCategory)
-                .build();
+                .setFilterCategory(filterCategory);
+             if (option.getShuffleType() == Option.ShuffleType.LOCAL) {
+                 builder.setShuffle(true);
+             } else {
+                 builder.setShuffle(false);
+             }
+             queueManager = builder.build();
         } else {
             queueManager = new CramQueueManager.Builder()
                 .setCardDao(cardDao)
