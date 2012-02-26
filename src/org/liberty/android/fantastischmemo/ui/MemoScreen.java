@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
+import java.util.Date;
+
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
@@ -337,6 +339,7 @@ public class MemoScreen extends AMActivity {
                 if(currentCard != null){
                     try {
                         cardDao.delete(currentCard);
+                        restartActivity();
                     } catch (SQLException e) {
                         Log.e(TAG, "Delete card error", e);
                     }
@@ -347,7 +350,16 @@ public class MemoScreen extends AMActivity {
             }
             case R.id.menu_context_skip:
             {
-                // TODO: SKIP
+                    try {
+
+                        LearningData ld = currentCard.getLearningData();
+                        ld.setNextLearnDate(new Date(Long.MAX_VALUE));
+                        ld.setAcqReps(1);
+                        learningDataDao.update(ld);
+                        restartActivity();
+                    } catch (SQLException e) {
+                        Log.e(TAG, "Delete card error", e);
+                    }
                 return true;
             }
             case R.id.menu_context_gotoprev:
