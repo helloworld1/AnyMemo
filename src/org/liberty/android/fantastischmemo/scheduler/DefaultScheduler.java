@@ -22,12 +22,16 @@ package org.liberty.android.fantastischmemo.scheduler;
 import java.util.Date;
 import java.util.Random;
 
+import org.apache.mycommons.lang3.time.DateUtils;
+
 import org.liberty.android.fantastischmemo.domain.LearningData;
 
 import org.liberty.android.fantastischmemo.utils.AMUtil;
 
+import android.util.Log;
+
 public class DefaultScheduler {
-    final double MILLSECS_PER_DAY = 86400000.0;
+    final double MIN_INTERVAL = 0.9;
     public final static String TAG = "DefaultScheduler";
 
     /*
@@ -47,7 +51,7 @@ public class DefaultScheduler {
         int newRetRepsSinceLapse = oldData.getRetRepsSinceLapse();
         float newEasiness = oldData.getEasiness();
 
-		if(actualInterval <= 0.9){
+		if(actualInterval <= MIN_INTERVAL){
 			actualInterval = 0.9;
 		}
         // new item (unseen = 1 in mnemosyne)
@@ -73,6 +77,7 @@ public class DefaultScheduler {
 			newLapses += 1;
 			newAcqRepsSinceLapse = 0;
 			newRetRepsSinceLapse = 0;
+			newInterval = 0;
 		} else if(oldGrade >= 2 && newGrade >= 2){
 			newRetReps += 1;
 			newRetRepsSinceLapse += 1;
@@ -101,6 +106,11 @@ public class DefaultScheduler {
                         newInterval = scheduleInterval * newEasiness;
                     }
                 }
+                if (newInterval <= MIN_INTERVAL) {
+                    Log.w(TAG, "Interval " + newInterval + " is less than " + MIN_INTERVAL + 
+                            " for old data: " + oldData);
+                    newInterval = MIN_INTERVAL;
+                } 
 			}
 		}
         /* 
@@ -121,8 +131,6 @@ public class DefaultScheduler {
         newData.setNextLearnDate(afterDays(currentDate, newInterval));
         newData.setRetReps(newRetReps);
         newData.setRetRepsSinceLapse(newRetRepsSinceLapse);
-        System.out.println("Old data:" + oldData);
-        System.out.println("New data:" + newData);
         return newData;
 	}
 
@@ -178,7 +186,7 @@ public class DefaultScheduler {
 	}
 
     private Date afterDays(Date date, double days) {
-        long time = date.getTime() + Math.round(days * MILLSECS_PER_DAY);
+        long time = date.getTime() + Math.round(days * DateUtils.MILLIS_PER_DAY);
         return new Date(time);
     }
 }
