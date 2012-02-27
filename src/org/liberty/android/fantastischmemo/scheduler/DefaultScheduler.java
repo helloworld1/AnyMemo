@@ -99,7 +99,7 @@ public class DefaultScheduler {
                 if(actualInterval <= scheduleInterval){
                     newInterval = actualInterval * newEasiness;
                     // Fix the cram review scheduling problem by using the larger of scheduled interval
-                    newInterval = actualInterval * newEasiness < scheduleInterval ? actualInterval * newEasiness : scheduleInterval;
+                    newInterval = actualInterval * newEasiness > scheduleInterval ? actualInterval * newEasiness : scheduleInterval;
                 } else {
                     newInterval = scheduleInterval * newEasiness;
                 }

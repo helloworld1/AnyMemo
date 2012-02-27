@@ -22,6 +22,7 @@ package org.liberty.android.fantastischmemo.queue;
 
 import java.sql.SQLException;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
@@ -38,6 +39,7 @@ public class CramQueueManager implements QueueManager {
     private CramQueueManager(Builder builder) {
         this.cardDao = builder.cardDao;
         this.learnQueueSize = builder.learnQueueSize;
+        learnQueue = new LinkedList<Card>();
     }
 
 	public void setCardDao(CardDao cardDao) {
