@@ -28,6 +28,8 @@ import java.util.List;
 
 import org.apache.mycommons.io.FileUtils;
 
+import org.apache.mycommons.lang3.StringUtils;
+
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.R;
 import android.app.Activity;
@@ -118,7 +120,7 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
             defaultRoot = settings.getString("saved_fb_path", null);
         }
 
-		if(defaultRoot == null || defaultRoot.equals("")){
+		if(StringUtils.isEmpty(defaultRoot)){
 			File sdPath = new File(AMEnv.DEFAULT_ROOT_PATH);
 			sdPath.mkdir();
 			
@@ -127,6 +129,7 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
 		else{
 			currentDirectory = new File(defaultRoot + "/");
 		}
+        System.err.println("defaultRoot: " + defaultRoot);
 
         // Should use this to enable menu
         setHasOptionsMenu(true);
@@ -138,19 +141,19 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
 		
         View v = inflater.inflate(R.layout.file_browser, container, false);
         fbListView = (ListView)v.findViewById(R.id.file_list);
-        if(defaultRoot == null){
-            defaultRoot = settings.getString("saved_fb_path", null);
-        }
+        //if(defaultRoot == null){
+        //    defaultRoot = settings.getString("saved_fb_path", null);
+        //}
 
-		if(defaultRoot == null || defaultRoot.equals("")){
-			File sdPath = new File(AMEnv.DEFAULT_ROOT_PATH);
-			sdPath.mkdir();
-			
-			currentDirectory = sdPath;
-		}
-		else{
-			currentDirectory = new File(defaultRoot + "/");
-		}
+		//if(defaultRoot == null || defaultRoot.equals("")){
+		//	File sdPath = new File(AMEnv.DEFAULT_ROOT_PATH);
+		//	sdPath.mkdir();
+		//	
+		//	currentDirectory = sdPath;
+		//}
+		//else{
+		//	currentDirectory = new File(defaultRoot + "/");
+		//}
         return v;
 	}
 
