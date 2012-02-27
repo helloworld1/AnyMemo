@@ -100,17 +100,17 @@ public class LearnQueueManager implements QueueManager {
         
         try {
         learningDataDao.callBatchTasks (
-                new Callable<Void>() {
-                    public Void call() throws Exception {
-                        for (Card card : dirtyCache) {
-                            Log.i(TAG, "Flushing: " + card.getLearningData());
-                            learningDataDao.update(card.getLearningData());
-                            cardDao.update(card);
-                        }
-                        dirtyCache.clear();
-                        return null;
+            new Callable<Void>() {
+                public Void call() throws Exception {
+                    for (Card card : dirtyCache) {
+                        Log.i(TAG, "Flushing: " + card.getLearningData());
+                        learningDataDao.update(card.getLearningData());
+                        cardDao.update(card);
                     }
-                });
+                    dirtyCache.clear();
+                    return null;
+                }
+            });
         } catch (Exception e) {
             Log.e(TAG, "Queue flushing get exception!");
             e.printStackTrace();
@@ -153,20 +153,12 @@ public class LearnQueueManager implements QueueManager {
 
 	@Override
 	public synchronized void update(Card card) {
-        // TODO: Should use an scheduling manager to determine it
-        if (card.getLearningData().getGrade() >= 2) {
-            learnQueue.remove(card);
-            dirtyCache.add(card);
-        } else {
+        learnQueue.remove(card);
+        if (card.getLearningData().getGrade() < 2) {
             // Add to the back of the queue
-            learnQueue.remove(card);
             learnQueue.add(card);
-
-            // Only update once if one fail to lear
-            if (!dirtyCache.contains(card)) {
-                dirtyCache.add(card);
-            }
         }
+        dirtyCache.add(card);
 	}
 
     public static class Builder {

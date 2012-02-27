@@ -38,6 +38,7 @@ public class DefaultScheduler {
      * Return the interval of the after schedule the new card
      */
 	public LearningData schedule(LearningData oldData, int newGrade, boolean includeNoise) {
+        Log.i(TAG, "Old data: " + oldData);
 		Date currentDate = new Date();
 		double actualInterval = AMUtil.diffDate(oldData.getLastLearnDate(), currentDate);
 		double scheduleInterval = oldData.getInterval();
@@ -95,17 +96,14 @@ public class DefaultScheduler {
 					newEasiness = 1.3f;
 				}
                 newInterval = 0;
-                if(newRetRepsSinceLapse == -1){
-                    newInterval = 6;
+                if(actualInterval <= scheduleInterval){
+                    newInterval = actualInterval * newEasiness;
+                    // Fix the cram review scheduling problem by using the larger of scheduled interval
+                    newInterval = actualInterval * newEasiness < scheduleInterval ? actualInterval * newEasiness : scheduleInterval;
                 } else {
-                    if(actualInterval <= scheduleInterval){
-                        newInterval = actualInterval * newEasiness;
-                        // Fix the cram review scheduling problem by using the larger of scheduled interval
-                        newInterval = actualInterval * newEasiness < scheduleInterval ? actualInterval * newEasiness : scheduleInterval;
-                    } else {
-                        newInterval = scheduleInterval * newEasiness;
-                    }
+                    newInterval = scheduleInterval * newEasiness;
                 }
+
                 if (newInterval <= MIN_INTERVAL) {
                     Log.w(TAG, "Interval " + newInterval + " is less than " + MIN_INTERVAL + 
                             " for old data: " + oldData);
@@ -122,6 +120,7 @@ public class DefaultScheduler {
         }
 
         LearningData newData = new LearningData();
+        newData.setId(oldData.getId());
         newData.setAcqReps(newAcqReps);
         newData.setAcqRepsSinceLapse(newAcqRepsSinceLapse);
         newData.setEasiness(newEasiness);
@@ -131,6 +130,7 @@ public class DefaultScheduler {
         newData.setNextLearnDate(afterDays(currentDate, newInterval));
         newData.setRetReps(newRetReps);
         newData.setRetRepsSinceLapse(newRetRepsSinceLapse);
+        Log.i(TAG, "New data: " + newData);
         return newData;
 	}
 
@@ -139,20 +139,17 @@ public class DefaultScheduler {
      */
 	private double calculateIntervalNoise(double interval){
         // Noise value based on Mnymosyne
-		double noise;
-		if(interval < 0.999999){
-			noise = 0.0;
-		}
-		else if(interval >= 0.999999){
+		double noise = 0.0;
+
+		if(interval <= MIN_INTERVAL){
+            noise = 0.0;
+        } else if(interval <= 1.99999){
 			noise = randomNumber(0.0, 1.0);
-		}
-		else if(interval <= 10.0){
+		} else if(interval <= 10.0){
 			noise = randomNumber(-1.0, 1.0);
-		}
-		else if(interval <= 60.0){
+		} else if(interval <= 60.0){
 			noise = randomNumber(-3.0, 3.0);
-		}
-		else{
+		} else {
 			noise = randomNumber(-0.05 * interval, 0.05 * interval);
 		}
 		return noise;
@@ -182,7 +179,7 @@ public class DefaultScheduler {
 	}
 
 	private double randomNumber(double min, double max){
-		return min + (new Random()).nextGaussian() * (max - min);
+		return min + (new Random()).nextDouble() * (max - min);
 	}
 
     private Date afterDays(Date date, double days) {
