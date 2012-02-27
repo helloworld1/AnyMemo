@@ -20,7 +20,7 @@
     <string name="about_button_text">О программе</string>
     <string name="help_button_text">Помощь</string>
     <string name="exit_button_text">Выйти из программы</string>
-    <string name="edit_button_text">Просмотр/правка базы</string>
+    <string name="edit_button_text">Просмотр/правка</string>
     <string name="autoaudio">Озвучивать автоматически</string>
     <string name="autoaudio_summary">Вопрос и ответ будут прочитаны автоматически</string>
     <string name="btnonerow">Компактные Кнопки оценок </string>
@@ -190,7 +190,7 @@
     <string name="what_is_new_message">Чтобы посмотреть илюстрированный обзор новых возможностей программы, нажмите кнопку История версий. Или посетите официальный вебсайт: &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt;&lt;br /&gt;</string>
     <string name="portrait_only_title">Только портрет</string>
     <string name="portrait_only_summary">Полностью отключает изменение ориентации экрана на всех экранах</string>
-    <string name="list_mode_text">Списком</string>
+    <string name="list_mode_text">Список карточек</string>
     <string name="merge_db_text">Объединить</string>
     <string name="merge_success_title">Объединено успешно</string>
     <string name="merge_fail_title">Объединение не удалось</string>
@@ -264,7 +264,7 @@
     <string name="locale_czech_text">Чешский</string>
     <string name="locale_polish_text">Польский</string>
     <string name="locale_russian_text">Русский</string>
-    <string name="study_text">Учить</string>
+    <string name="study_text">Изучение</string>
     <string name="option_manual_speak">0. Вручную</string>
     <string name="option_tap_speak">1. Нажать для звука</string>
     <string name="option_auto_speak">2. Авто звук</string>
@@ -386,4 +386,10 @@
     <string name="crash_report_enabled">Отчёты об ошибках автоматически отправлять автору.</string>
     <string name="crash_report_disabled">Отчеты об ошибках не посылать.</string>
     <string name="help_advanced_operations">Большинство операций с базами (такие как обмен местами В и О, перемешивание карточек, удаление дубликатов) доступны из экрана Просмотр/Правка по длинному нажатию на карту.</string>
+    <string name="entry_last_learn_date">дата_посл_учёбы</string>
+    <string name="entry_next_learn_date">дата_след_учёбы</string>
+    <string name="load_default_text">Загрузить по умолчанию</string>
+    <string name="load_default_warning_text">Будут загружены настройки, установленные вами в настройкахбаз по умолчанию, текущие настройки не будут сохранены.</string>
+    <string name="default_settings_text">Настройки баз по умолчанию</string>
+    <string name="remove_dup_message">Удалить карты с повторяющимися вопросами.</string>
 </resources>
