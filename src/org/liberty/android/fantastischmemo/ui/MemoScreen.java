@@ -336,30 +336,50 @@ public class MemoScreen extends AMActivity {
             }
             case R.id.menu_context_delete:
             {
-                if(currentCard != null){
-                    try {
-                        cardDao.delete(currentCard);
-                        restartActivity();
-                    } catch (SQLException e) {
-                        Log.e(TAG, "Delete card error", e);
-                    }
+                new AlertDialog.Builder(this)
+                    .setTitle(R.string.delete_text)
+                    .setMessage(R.string.delete_warning)
+                    .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            if(currentCard != null){
+                                try {
+                                    cardDao.delete(currentCard);
+                                    restartActivity();
+                                } catch (SQLException e) {
+                                    Log.e(TAG, "Delete card error", e);
+                                }
+                            }
+                        }
+                    })
+                .setNegativeButton(R.string.cancel_text, null)
+                .show();
 
-                }
                 return true;
 
             }
             case R.id.menu_context_skip:
             {
-                    try {
+                new AlertDialog.Builder(this)
+                    .setTitle(R.string.skip_text)
+                    .setMessage(R.string.skip_warning)
+                    .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            if(currentCard != null) {
+                                try {
 
-                        LearningData ld = currentCard.getLearningData();
-                        ld.setNextLearnDate(new Date(Long.MAX_VALUE));
-                        ld.setAcqReps(1);
-                        learningDataDao.update(ld);
-                        restartActivity();
-                    } catch (SQLException e) {
-                        Log.e(TAG, "Delete card error", e);
-                    }
+                                    LearningData ld = currentCard.getLearningData();
+                                    ld.setNextLearnDate(new Date(Long.MAX_VALUE));
+                                    ld.setAcqReps(1);
+                                    learningDataDao.update(ld);
+                                    restartActivity();
+                                } catch (SQLException e) {
+                                    Log.e(TAG, "Delete card error", e);
+                                }
+                            }
+                        }
+                    })
+                .setNegativeButton(R.string.cancel_text, null)
+                .show();
                 return true;
             }
             case R.id.menu_context_gotoprev:

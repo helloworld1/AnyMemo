@@ -141,19 +141,6 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
 		
         View v = inflater.inflate(R.layout.file_browser, container, false);
         fbListView = (ListView)v.findViewById(R.id.file_list);
-        //if(defaultRoot == null){
-        //    defaultRoot = settings.getString("saved_fb_path", null);
-        //}
-
-		//if(defaultRoot == null || defaultRoot.equals("")){
-		//	File sdPath = new File(AMEnv.DEFAULT_ROOT_PATH);
-		//	sdPath.mkdir();
-		//	
-		//	currentDirectory = sdPath;
-		//}
-		//else{
-		//	currentDirectory = new File(defaultRoot + "/");
-		//}
         return v;
 	}
 
