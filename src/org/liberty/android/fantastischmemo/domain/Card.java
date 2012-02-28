@@ -62,27 +62,50 @@ public class Card {
     }
 
     public String getQuestion() {
+        if (question == null) {
+            return "";
+        }
+
         return question;
     }
 
     public void setQuestion(String question) {
-        this.question = question;
+        if (question == null) {
+            this.question = "";
+        } else{
+            this.question = question;
+        }
     }
 
     public String getAnswer() {
+        if (answer == null ) {
+            return "";
+        }
         return answer;
     }
 
     public void setAnswer(String answer) {
-        this.answer = answer;
+        if (answer == null) {
+            this.answer = "";
+        } else {
+            this.answer = answer;
+        }
     }
 
     public String getNote() {
-        return note;
+        if (note == null) {
+            return "";
+        } else {
+            return note;
+        }
     }
 
     public void setNote(String note) {
-        this.note = note;
+        if (note == null) {
+            this.note = "";
+        } else {
+            this.note = note;
+        }
     }
 
     public Date getCreationDate() {
@@ -117,11 +140,9 @@ public class Card {
         this.updateDate = updateDate;
     }
 
-
 	public LearningData getLearningData() {
 		return learningData;
 	}
-
 
 	public void setLearningData(LearningData learningData) {
 		this.learningData = learningData;

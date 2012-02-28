@@ -366,7 +366,6 @@ public class MemoScreen extends AMActivity {
                         public void onClick(DialogInterface arg0, int arg1) {
                             if(currentCard != null) {
                                 try {
-
                                     LearningData ld = currentCard.getLearningData();
                                     ld.setNextLearnDate(new Date(Long.MAX_VALUE));
                                     ld.setAcqReps(1);
