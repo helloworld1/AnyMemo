@@ -121,7 +121,7 @@ public class QATxtImporter implements AbstractConverter{
             txtfile.close();
             cardDao.createCards(cardList);
         } finally {
-            AnyMemoDBOpenHelperManager.releaseHelper(dest);
+            AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }
     }
 }

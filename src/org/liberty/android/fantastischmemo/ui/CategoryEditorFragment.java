@@ -53,6 +53,7 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
     private Button editButton;
     private EditText categoryEdit;
     private CategoryEditorResultListener resultListener;
+    private AnyMemoDBOpenHelper dbOpenHelper;
 
 
     @Override
@@ -93,7 +94,7 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
     @Override
     public void onDestroy() {
         super.onDestroy();
-        AnyMemoDBOpenHelperManager.releaseHelper(dbPath);
+        AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
     }
 
 
@@ -144,10 +145,8 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
         public Integer doInBackground(Void... params) {
             Category currentCategory;
             try {
-                AnyMemoDBOpenHelper helper =
-                    AnyMemoDBOpenHelperManager.getHelper(mActivity, dbPath);
-
-                categoryDao = helper.getCategoryDao();
+                dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(mActivity, dbPath);
+                categoryDao = dbOpenHelper.getCategoryDao();
                 categories = categoryDao.queryForAll();
                 currentCategory = categoryDao.queryForId(currentCategoryId);
             } catch (SQLException e) {

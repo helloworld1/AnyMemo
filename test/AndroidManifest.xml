@@ -4,11 +4,15 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <uses-sdk android:minSdkVersion="4" />
+    <uses-sdk android:minSdkVersion="8" />
 
     <instrumentation
-        android:name="android.test.InstrumentationTestRunner"
+        android:name=".CardOperationTest"
         android:targetPackage="org.liberty.android.fantastischmemo" />
+
+    <instrumentation
+        android:name=".ui.AnyMemoTest"
+        android:targetPackage="org.liberty.android.fantastischmemo.ui" />
 
     <application
         android:icon="@drawable/ic_launcher"

@@ -1,4 +1,4 @@
-package org.liberty.android.fantastischmemo;
+package org.liberty.android.fantastischmemo.test;
 
 import java.sql.SQLException;
 

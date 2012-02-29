@@ -116,6 +116,8 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
     private Button discardButton;
     private Button loadDefaultButton;
 
+    private AnyMemoDBOpenHelper dbOpenHelper;
+
     private final static String WEBSITE_HELP_SETTINGS="http://anymemo.org/wiki/index.php?title=Card_styles";
     
     @Override
@@ -128,7 +130,7 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
     @Override
     public void onDestroy() {
         super.onDestroy();
-        AnyMemoDBOpenHelperManager.releaseHelper(dbPath);
+        AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
     }
 
     @Override
@@ -371,9 +373,9 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
         @Override
         public Void doInBackground(Void... params) {
             try {
-                AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(SettingsScreen.this, dbPath);
+                dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(SettingsScreen.this, dbPath);
 
-                settingDao = helper.getSettingDao();
+                settingDao = dbOpenHelper.getSettingDao();
                 setting = settingDao.queryForId(1);
                 /* Run the learnQueue init in a separate thread */
                 return null;

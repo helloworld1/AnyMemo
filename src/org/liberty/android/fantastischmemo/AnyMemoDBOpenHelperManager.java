@@ -1,7 +1,5 @@
 package org.liberty.android.fantastischmemo;
 
-import java.sql.SQLException;
-
 import java.util.Map;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,19 +19,16 @@ public class AnyMemoDBOpenHelperManager {
 
     private static String TAG = "AnyMemoDBOpenHelperManager";
 
+    /* Get a db open helper and return a cached one if it was called before for the same db */
     public static synchronized AnyMemoDBOpenHelper getHelper(Context context, String dbpath) {
         assert dbpath != null : "dbpath should not be null";
         dbpath = FilenameUtils.normalize(dbpath);
         if (!helpers.containsKey(dbpath)) {
             Log.i(TAG, "Call get AnyMemoDBOpenHelper for first time."); 
-            try {
-                AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelper.getHelper(context, dbpath);
-                helpers.put(dbpath, helper);
-                refCounts.put(dbpath, 1);
-                return helpers.get(dbpath);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            AnyMemoDBOpenHelper helper = new AnyMemoDBOpenHelper(context, dbpath);
+            helpers.put(dbpath, helper);
+            refCounts.put(dbpath, 1);
+            return helpers.get(dbpath);
         } else {
             Log.i(TAG, "Call get AnyMemoDBOpenHelper again, return existing helper."); 
             refCounts.put(dbpath, refCounts.get(dbpath) + 1);
@@ -41,10 +36,10 @@ public class AnyMemoDBOpenHelperManager {
         }
     }
 
-    public static synchronized void releaseHelper(String dbpath) {
+    /* Release a db open helper if there is no open connection to it */
+    public static synchronized void releaseHelper(AnyMemoDBOpenHelper helper) {
+        String dbpath = FilenameUtils.normalize(helper.getDbPath());
         Log.i(TAG, "Release AnyMemoDBOpenHelper: " + dbpath); 
-
-        dbpath = FilenameUtils.normalize(dbpath);
 
         if (!helpers.containsKey(dbpath)) {
             throw new RuntimeException("Release a wrong db path or release an already been released helper!");
@@ -52,7 +47,6 @@ public class AnyMemoDBOpenHelperManager {
         refCounts.put(dbpath, refCounts.get(dbpath) - 1);
 
         if (refCounts.get(dbpath) == 0) {
-            AnyMemoDBOpenHelper helper = helpers.get(dbpath); 
             helper.close();
             helpers.remove(dbpath);
             Log.i(TAG, "All connection released. Close helper. DB: " + dbpath); 

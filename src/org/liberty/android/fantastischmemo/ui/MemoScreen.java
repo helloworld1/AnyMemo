@@ -160,7 +160,6 @@ public class MemoScreen extends AMActivity {
             filterCategoryId = extras.getInt(EXTRA_CATEGORY_ID, -1);
             isCram = extras.getBoolean(EXTRA_CRAM, false);
         }
-        dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(MemoScreen.this, dbPath);
         initTask = new InitTask();
         initTask.execute((Void)null);
     }
@@ -210,7 +209,7 @@ public class MemoScreen extends AMActivity {
     public void onDestroy(){
         super.onDestroy();
         Log.v(TAG, "onDestroy now!");
-        AnyMemoDBOpenHelperManager.releaseHelper(dbPath);
+        AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
         if(questionTTS != null){
             questionTTS.shutdown();
         }
@@ -463,14 +462,7 @@ public class MemoScreen extends AMActivity {
             }
             case ACTIVITY_EDIT:
             {
-                // TODO: Need new way
-                //Bundle extras = data.getExtras();
-                //Item item = extras.getParcelable("item");
-                //if(item != null){
-                //    currentItem = item;
-                //    updateFlashcardView(false);
-                //    queueManager.updateQueueItem(currentItem);
-                //}
+                restartActivity();
                 break;
             }
             case ACTIVITY_GOTO_PREV:
@@ -526,7 +518,7 @@ public class MemoScreen extends AMActivity {
         }
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
             Log.v(TAG, "back button pressed");
-            WaitDbTaskFinish task = new WaitDbTaskFinish();
+            FinishTask task = new FinishTask();
             task.execute((Void)null);
             return true;
         }
@@ -913,6 +905,7 @@ public class MemoScreen extends AMActivity {
         public Card doInBackground(Void... params) {
             try {
                 
+                dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(MemoScreen.this, dbPath);
                 cardDao = dbOpenHelper.getCardDao();
                 learningDataDao = dbOpenHelper.getLearningDataDao();
                 settingDao = dbOpenHelper.getSettingDao();
@@ -1074,10 +1067,13 @@ public class MemoScreen extends AMActivity {
     /*
      * Like the wait db task but finish the current activity
      */
-    private class WaitDbTaskFinish extends WaitDbTask {
+    private class FinishTask extends WaitDbTask {
         @Override
         public void onPostExecute(Void result){
             super.onPostExecute(result);
+            
+            // Release the database before finished
+            dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(MemoScreen.this, dbPath);
             finish();
         }
     }

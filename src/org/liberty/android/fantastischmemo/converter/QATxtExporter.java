@@ -59,7 +59,7 @@ public class QATxtExporter implements AbstractConverter {
             }
             outtxt.close();
         } finally {
-            AnyMemoDBOpenHelperManager.releaseHelper(src);
+            AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }
     }
 }

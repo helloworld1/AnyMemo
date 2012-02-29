@@ -48,7 +48,6 @@ import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.util.Log;
-import android.os.Environment;
 import android.view.View;
 import android.os.Handler;
 import android.text.Html;
@@ -256,8 +255,8 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
         String dbpath = AMEnv.DEFAULT_ROOT_PATH;
         String fullpath = dbpath + dbname;
         AMUtil.deleteFileWithBackup(fullpath);
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(DownloaderQuizlet.this, fullpath);
         try {
-            AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(DownloaderQuizlet.this, fullpath);
             CardDao cardDao = helper.getCardDao();
             cardDao.createCards(cardList);
             long count = helper.getCardDao().getTotalCount(null);
@@ -265,7 +264,7 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
                 throw new RuntimeException("Downloaded empty db.");
             }
         } finally {
-            AnyMemoDBOpenHelperManager.releaseHelper(fullpath);
+            AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }
         RecentListUtil.addToRecentList(this, fullpath);
     }

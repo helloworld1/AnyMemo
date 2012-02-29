@@ -79,7 +79,7 @@ public class Supermemo2008XMLImporter extends org.xml.sax.helpers.DefaultHandler
             CardDao cardDao = helper.getCardDao();
             cardDao.createCards(cardList);
         } finally {
-            AnyMemoDBOpenHelperManager.releaseHelper(dest);
+            AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }
     }
 	

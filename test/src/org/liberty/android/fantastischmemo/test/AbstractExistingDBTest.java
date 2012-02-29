@@ -1,12 +1,14 @@
-package org.liberty.android.fantastischmemo;
+package org.liberty.android.fantastischmemo.test;
 
 import java.io.File;
 import java.io.InputStream;
 
 import org.apache.mycommons.io.FileUtils;
 
+import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.InstrumentationActivity;
 
 import android.content.Context;
 
@@ -38,7 +40,7 @@ public class AbstractExistingDBTest extends ActivityInstrumentationTestCase2<Ins
 
     @Override
     protected void tearDown() throws Exception {
-        AnyMemoDBOpenHelperManager.releaseHelper("/sdcard/french-body-parts.db");
+        AnyMemoDBOpenHelperManager.releaseHelper(helper);
         mActivity.finish();
     }
 }

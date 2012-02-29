@@ -1,4 +1,4 @@
-package org.liberty.android.fantastischmemo;
+package org.liberty.android.fantastischmemo.test;
 
 import java.io.File;
 
@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.InstrumentationActivity;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
@@ -42,7 +43,7 @@ public class NewDbTest extends ActivityInstrumentationTestCase2<InstrumentationA
 
     @Override
     protected void tearDown() throws Exception {
-        AnyMemoDBOpenHelperManager.releaseHelper(dbPath);
+        AnyMemoDBOpenHelperManager.releaseHelper(helper);
         File newdbFile = new File(dbPath);
         newdbFile.delete();
         mActivity.finish();

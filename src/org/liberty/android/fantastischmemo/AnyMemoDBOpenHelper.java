@@ -34,11 +34,9 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
 
     private final String TAG = getClass().getSimpleName();
 
-    private static String dbPath = null;
+    private final String dbPath;
 
-	private static AnyMemoDBOpenHelper helper = null;
-
-    private static final int CURRENT_VERSION = 2;
+    private static final int CURRENT_VERSION = 2; 
 
     private CardDao cardDao = null;
     
@@ -51,20 +49,6 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
     private CategoryDao categoryDao = null;
 
     private LearningDataDao learningDataDao = null;
-
-    public AnyMemoDBOpenHelper(Context context, String dbpath) {
-        super(context, dbpath, null, CURRENT_VERSION);
-    }
-
-	public static synchronized AnyMemoDBOpenHelper getHelper(Context context, String dbpath)
-        throws SQLException {
-		if (helper == null || !dbpath.equals(AnyMemoDBOpenHelper.dbPath) ) {
-			helper = new AnyMemoDBOpenHelper(context, dbpath);
-        } else {
-            Log.i("AnyMemoDBOpenHelper.getHelper", "Reuse database helper");
-        }
-		return helper;
-	}
 
     @Override
     public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
@@ -160,7 +144,6 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void close() {
         super.close();
-        helper = null;
     }
 
     public CardDao getCardDao() throws SQLException {
@@ -205,6 +188,16 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
         }
         return learningDataDao;
     }
+
+    /* Package private constructor used in Manager. */
+    AnyMemoDBOpenHelper(Context context, String dbpath) {
+        super(context, dbpath, null, CURRENT_VERSION);
+        this.dbPath = dbpath;
+    }
+
+    /* Package private getDbPath used in Manager. */
+    String getDbPath() {
+        return dbPath;
+    }
+
 }
-
-

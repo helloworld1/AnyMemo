@@ -181,7 +181,7 @@ public class AnyMemoService extends Service{
                 revCount = (int)cardDao.getScheduledCardCount(null); 
                 newCount = (int)cardDao.getNewCardCount(null);
             } finally {
-                AnyMemoDBOpenHelperManager.releaseHelper(dbPath);
+                AnyMemoDBOpenHelperManager.releaseHelper(helper);
             }
         }
 

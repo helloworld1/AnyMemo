@@ -352,8 +352,8 @@ public class DownloaderSS extends DownloaderBase implements ListView.OnScrollLis
         String dbname = di.getTitle() + ".db";
         String dbpath = AMEnv.DEFAULT_ROOT_PATH;
         String fullpath = dbpath + dbname;
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(DownloaderSS.this, fullpath);
         try {
-            AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(DownloaderSS.this, fullpath);
             CardDao cardDao = helper.getCardDao();
             cardDao.createCards(cardList);
             long count = helper.getCardDao().getTotalCount(null);
@@ -361,7 +361,7 @@ public class DownloaderSS extends DownloaderBase implements ListView.OnScrollLis
                 throw new RuntimeException("Downloaded empty db.");
             }
         } finally {
-            AnyMemoDBOpenHelperManager.releaseHelper(fullpath);
+            AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }
         RecentListUtil.addToRecentList(this, fullpath);
     }

@@ -82,7 +82,7 @@ public class MnemosyneXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
             CardDao cardDao = helper.getCardDao();
             cardDao.createCards(cardList);
         } finally {
-            AnyMemoDBOpenHelperManager.releaseHelper(dest);
+            AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }
     }
 

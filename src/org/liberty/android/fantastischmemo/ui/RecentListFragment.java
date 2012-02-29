@@ -134,7 +134,7 @@ public class RecentListFragment extends Fragment {
                             CardDao dao = helper.getCardDao();
                             ri.dbInfo = getString(R.string.stat_total) + dao.getTotalCount(null) + " " + getString(R.string.stat_new) + dao.getNewCardCount(null) + " " + getString(R.string.stat_scheduled)+ dao.getScheduledCardCount(null);
                             ril.set(ri.index, ri);
-                            AnyMemoDBOpenHelperManager.releaseHelper(ri.dbPath);
+                            AnyMemoDBOpenHelperManager.releaseHelper(helper);
                         } catch (Exception e) {
                             Log.e(TAG, "Recent list throws exception (Usually can be safely ignored)", e);
                         }

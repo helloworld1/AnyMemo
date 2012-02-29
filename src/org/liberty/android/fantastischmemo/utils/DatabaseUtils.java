@@ -26,14 +26,14 @@ import android.content.Context;
 public class DatabaseUtils {
 
     public static Setting readDefaultSetting(Context context) {
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(context, AMEnv.EMPTY_DB_NAME);
         try {
-            AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(context, AMEnv.EMPTY_DB_NAME);
             SettingDao settingDao = helper.getSettingDao(); 
             return settingDao.queryForId(1);
         } catch (SQLException e) {
             throw new RuntimeException("Could not read setting from default db", e);
         } finally {
-            AnyMemoDBOpenHelperManager.releaseHelper(AMEnv.EMPTY_DB_NAME);
+            AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }
 
     }
@@ -63,9 +63,9 @@ public class DatabaseUtils {
                 }
             });
         System.out.println("DatabaseUtils release destPath");
-        AnyMemoDBOpenHelperManager.releaseHelper(destPath);
+        AnyMemoDBOpenHelperManager.releaseHelper(destHelper);
         System.out.println("DatabaseUtils release srcPath");
-        AnyMemoDBOpenHelperManager.releaseHelper(srcPath);
+        AnyMemoDBOpenHelperManager.releaseHelper(srcHelper);
     }
 
     /*
@@ -75,15 +75,15 @@ public class DatabaseUtils {
         if (!(new File(dbPath)).exists()) {
             return false;
         }
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(context, dbPath);
         try {
-            AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(context, dbPath);
             helper.getCardDao(); 
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         } finally {
-            AnyMemoDBOpenHelperManager.releaseHelper(dbPath);
+            AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }
     }
 }

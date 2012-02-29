@@ -121,7 +121,7 @@ public class ShareScreen extends AMActivity implements View.OnClickListener{
                     }
                     finish();
                 } finally {
-                    AnyMemoDBOpenHelperManager.releaseHelper(dbpath);
+                    AnyMemoDBOpenHelperManager.releaseHelper(helper);
                 }
             }
             else if(v == cancelButton){

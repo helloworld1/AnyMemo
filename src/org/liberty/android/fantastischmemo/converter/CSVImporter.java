@@ -97,7 +97,7 @@ public class CSVImporter implements AbstractConverter {
 
             cardDao.createCards(cardList);
         } finally {
-            AnyMemoDBOpenHelperManager.releaseHelper(dest);
+            AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }
     }
 }

@@ -119,6 +119,8 @@ public class EditScreen extends AMActivity {
     
     private GestureDetector gestureDetector;
 
+    private AnyMemoDBOpenHelper dbOpenHelper;
+
     @Override
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -136,8 +138,13 @@ public class EditScreen extends AMActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
+        super.onBackPressed();
+    }
+
+    @Override
     public void onDestroy(){
-        AnyMemoDBOpenHelperManager.releaseHelper(dbPath);
         if(questionTTS != null){
             questionTTS.shutdown();
         }
@@ -796,13 +803,12 @@ public class EditScreen extends AMActivity {
         @Override
         public Void doInBackground(Void... params) {
             try {
-                AnyMemoDBOpenHelper helper =
-                    AnyMemoDBOpenHelperManager.getHelper(EditScreen.this, dbPath);
+                dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(EditScreen.this, dbPath);
                 
-                cardDao = helper.getCardDao();
-                learningDataDao = helper.getLearningDataDao();
-                categoryDao = helper.getCategoryDao();
-                settingDao = helper.getSettingDao();
+                cardDao = dbOpenHelper.getCardDao();
+                learningDataDao = dbOpenHelper.getLearningDataDao();
+                categoryDao = dbOpenHelper.getCategoryDao();
+                settingDao = dbOpenHelper.getSettingDao();
                 setting = settingDao.queryForId(1);
                 option = new Option(EditScreen.this);
                 

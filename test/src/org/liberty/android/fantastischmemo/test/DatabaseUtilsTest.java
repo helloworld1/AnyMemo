@@ -1,4 +1,4 @@
-package org.liberty.android.fantastischmemo;
+package org.liberty.android.fantastischmemo.test;
 
 import java.io.File;
 
@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.InstrumentationActivity;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
 
@@ -29,12 +30,6 @@ public class DatabaseUtilsTest extends AbstractExistingDBTest {
         super.setUp();
         mActivity = this.getActivity();
         helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, dbPath);
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        AnyMemoDBOpenHelperManager.releaseHelper(dbPath);
-        mActivity.finish();
     }
 
     public void testGetDefaultSetting() throws Exception {
@@ -65,7 +60,7 @@ public class DatabaseUtilsTest extends AbstractExistingDBTest {
         assertEquals("", c.getCategory().getName());
         assertNotNull(c.getLearningData());
 
-        AnyMemoDBOpenHelperManager.releaseHelper(path2);
+        AnyMemoDBOpenHelperManager.releaseHelper(helper2);
         new File(path2).delete();
     }
 }

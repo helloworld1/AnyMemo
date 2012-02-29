@@ -315,8 +315,8 @@ public class DownloaderFE extends DownloaderBase{
         
         String dbpath = AMEnv.DEFAULT_ROOT_PATH;
         String fullpath = dbpath + dbname;
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(DownloaderFE.this, fullpath);
         try {
-            AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(DownloaderFE.this, fullpath);
             CardDao cardDao = helper.getCardDao();
             cardDao.createCards(cardList);
             long count = helper.getCardDao().getTotalCount(null);
@@ -324,7 +324,7 @@ public class DownloaderFE extends DownloaderBase{
                 throw new RuntimeException("Downloaded empty db.");
             }
         } finally {
-            AnyMemoDBOpenHelperManager.releaseHelper(fullpath);
+            AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }
         RecentListUtil.addToRecentList(this, fullpath);
     }

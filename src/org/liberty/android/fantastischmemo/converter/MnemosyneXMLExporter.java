@@ -159,7 +159,7 @@ public class MnemosyneXMLExporter implements AbstractConverter {
             outxml.print("</mnemosyne>");
             outxml.close();
         } finally {
-            AnyMemoDBOpenHelperManager.releaseHelper(src);
+            AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }
     }
 }

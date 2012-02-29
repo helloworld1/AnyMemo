@@ -346,14 +346,14 @@ public class DownloaderAnyMemo extends DownloaderBase{
                     /* Check if the db is correct */
                     filename = filename.replace(".zip", ".db");
                     String fullpath = sdpath + filename;
+                    AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(DownloaderAnyMemo.this, fullpath);
                     try {
-                        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(DownloaderAnyMemo.this, fullpath);
                         long count = helper.getCardDao().getTotalCount(null);
                         if (count <= 0L) {
                             throw new RuntimeException("Downloaded empty db.");
                         }
                     } finally {
-                        AnyMemoDBOpenHelperManager.releaseHelper(fullpath);
+                        AnyMemoDBOpenHelperManager.releaseHelper(helper);
                     }
 
                     /* Add downloaded item to file list */

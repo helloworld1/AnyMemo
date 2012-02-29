@@ -75,7 +75,7 @@ public class CSVExporter implements AbstractConverter {
                 return null;
             }
         });
-        AnyMemoDBOpenHelperManager.releaseHelper(src);
+        AnyMemoDBOpenHelperManager.releaseHelper(helper);
         if(cardList.size() == 0){
             throw new IOException("Can't retrieve cards for database: " + src);
         }

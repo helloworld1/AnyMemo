@@ -148,7 +148,7 @@ public class DetailScreen extends AMActivity implements OnClickListener{
     }
     
     public void onDestroy(){
-        AnyMemoDBOpenHelperManager.releaseHelper(dbPath);
+        AnyMemoDBOpenHelperManager.releaseHelper(helper);
     	super.onDestroy();
     	Intent resultIntent = new Intent();
     	setResult(Activity.RESULT_CANCELED, resultIntent);

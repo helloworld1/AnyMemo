@@ -110,7 +110,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        AnyMemoDBOpenHelperManager.releaseHelper(dbPath);
+        AnyMemoDBOpenHelperManager.releaseHelper(helper);
     }
 
     @Override
