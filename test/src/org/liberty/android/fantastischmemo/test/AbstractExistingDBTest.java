@@ -15,13 +15,13 @@ import android.content.Context;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-public class AbstractExistingDBTest extends ActivityInstrumentationTestCase2<InstrumentationActivity> {
-    protected InstrumentationActivity mActivity;  // the activity under test
+public class AbstractExistingDBTest<T extends InstrumentationActivity> extends ActivityInstrumentationTestCase2<T> {
+    protected T mActivity;  // the activity under test
 
     protected AnyMemoDBOpenHelper helper;
 
-    public AbstractExistingDBTest() {
-        super("org.liberty.android.fantastischmemo", InstrumentationActivity.class);
+    public AbstractExistingDBTest(String pkg, Class<T> clazz) {
+        super(pkg, clazz);
     }
 
     @Override

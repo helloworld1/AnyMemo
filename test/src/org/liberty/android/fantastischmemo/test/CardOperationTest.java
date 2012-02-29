@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.liberty.android.fantastischmemo.InstrumentationActivity;
+
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 
@@ -12,9 +14,10 @@ import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 
-public class CardOperationTest extends AbstractExistingDBTest {
+public class CardOperationTest extends AbstractExistingDBTest<InstrumentationActivity> {
+
     public CardOperationTest() {
-        super();
+        super("org.liberty.android.fantastischmemo", InstrumentationActivity.class);
     }
 
     @Override

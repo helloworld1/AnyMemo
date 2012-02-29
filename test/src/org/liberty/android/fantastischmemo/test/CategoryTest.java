@@ -2,15 +2,18 @@ package org.liberty.android.fantastischmemo.test;
 
 import java.util.List;
 
+import org.liberty.android.fantastischmemo.InstrumentationActivity;
+
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 
-public class CategoryTest extends AbstractExistingDBTest {
+public class CategoryTest extends AbstractExistingDBTest<InstrumentationActivity> {
+
     public CategoryTest() {
-        super();
+        super("org.liberty.android.fantastischmemo", InstrumentationActivity.class);
     }
 
     @Override

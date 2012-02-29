@@ -15,14 +15,15 @@ import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.utils.DatabaseUtils;
 
 
-public class DatabaseUtilsTest extends AbstractExistingDBTest {
+public class DatabaseUtilsTest extends AbstractExistingDBTest<InstrumentationActivity> {
     private InstrumentationActivity mActivity;  // the activity under test
 
     AnyMemoDBOpenHelper helper;
 
     String dbPath = "/sdcard/french-body-parts.db";
+
     public DatabaseUtilsTest() {
-        super();
+        super("org.liberty.android.fantastischmemo", InstrumentationActivity.class);
     }
 
     @Override
