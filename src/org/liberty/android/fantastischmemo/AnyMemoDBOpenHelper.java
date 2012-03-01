@@ -146,7 +146,7 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
         super.close();
     }
 
-    public CardDao getCardDao() throws SQLException {
+    public synchronized CardDao getCardDao() throws SQLException {
         if (cardDao == null) {
             cardDao = getDao(Card.class);
             cardDao.setHelper(this);
@@ -154,35 +154,35 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
         return cardDao;
     }
 
-    public DeckDao getDeckDao() throws SQLException {
+    public synchronized DeckDao getDeckDao() throws SQLException {
         if (deckDao == null) {
             deckDao = getDao(Deck.class);
         }
         return deckDao;
     }
 
-    public SettingDao getSettingDao() throws SQLException {
+    public synchronized SettingDao getSettingDao() throws SQLException {
         if (settingDao == null) {
             settingDao = getDao(Setting.class);
         }
         return settingDao;
     }
 
-    public FilterDao getFilterDao() throws SQLException {
+    public synchronized FilterDao getFilterDao() throws SQLException {
         if (filterDao == null) {
             filterDao = getDao(Filter.class);
         }
         return filterDao;
     }
 
-    public CategoryDao getCategoryDao() throws SQLException {
+    public synchronized CategoryDao getCategoryDao() throws SQLException {
         if (categoryDao == null) {
             categoryDao = getDao(Category.class);
         }
         return categoryDao;
     }
 
-    public LearningDataDao getLearningDataDao() throws SQLException {
+    public synchronized LearningDataDao getLearningDataDao() throws SQLException {
         if (learningDataDao == null) {
             learningDataDao = getDao(LearningData.class);
         }
