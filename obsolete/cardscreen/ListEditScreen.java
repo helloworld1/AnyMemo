@@ -96,7 +96,7 @@ public class ListEditScreen extends AMActivity implements OnItemClickListener{
         }.start();
 
         
-        final Button button_col1= (Button)findViewById(R.id.button_col1);
+        final Button button_col1= (Button)findViewById(R.id.by_id);
         button_col1.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -128,7 +128,7 @@ public class ListEditScreen extends AMActivity implements OnItemClickListener{
 			}
 		});
 
-        final Button button_col2= (Button)findViewById(R.id.button_col2);
+        final Button button_col2= (Button)findViewById(R.id.by_question);
         button_col2.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -162,7 +162,7 @@ public class ListEditScreen extends AMActivity implements OnItemClickListener{
 		});
 
 
-        final Button button_col3= (Button)findViewById(R.id.button_col3);
+        final Button button_col3= (Button)findViewById(R.id.by_answer);
         button_col3.setOnClickListener(new View.OnClickListener() {
 			
 			@Override

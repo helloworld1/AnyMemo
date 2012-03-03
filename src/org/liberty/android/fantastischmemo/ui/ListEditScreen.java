@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2010 Haowen Ning
+Copyright (C) 2010 Haowen Ning, Xinxin Wang
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -26,14 +26,15 @@ import org.liberty.android.fantastischmemo.domain.Card;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.content.Intent;
 import android.content.Context;
-import android.util.Log;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -48,38 +49,27 @@ import java.util.List;
 
 public class ListEditScreen extends AMActivity implements OnItemClickListener {
 	private String dbPath;
+	@SuppressWarnings("unused")
 	private static String TAG = "org.liberty.android.fantastischmemo.ListEditScreen";
 	private CardListAdapter mAdapter;
 	
 	/* Initial position in the list */
-	private int initPosition = 1;
+	private int initPosition = 0;
 	private List<Card> cards;
 
 	public static String EXTRA_DBPATH = "dbpath";
-	public static String EXTRA_CARD_ID = "id";
-
+	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.list_edit_screen);
-		Log.v(TAG, "xinxin_test\n");
 		
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			dbPath = extras.getString(ListEditScreen.EXTRA_DBPATH);
 		}
 
-		Log.i(TAG, "dbPath: " + dbPath + ", initPosition: " + initPosition);
 		InitTask initTask = new InitTask();
 		initTask.execute((Void) null);
-
-		final Button byID = (Button) findViewById(R.id.button_col1);
-		byID.setOnClickListener(sortButtonOnClickListener);
-		
-		final Button byQuestion = (Button) findViewById(R.id.button_col2);
-		byQuestion.setOnClickListener(sortButtonOnClickListener);
-
-		final Button byAnswer = (Button) findViewById(R.id.button_col3);
-		byAnswer.setOnClickListener(sortButtonOnClickListener);
 		
 	}
 
@@ -94,21 +84,23 @@ public class ListEditScreen extends AMActivity implements OnItemClickListener {
 		finish();
 	}
 
+	
 	private class CardListAdapter extends ArrayAdapter<Card> implements
 			SectionIndexer {
 		/* quick index sections */
 		private String[] sections;
-
+		
 		public CardListAdapter(Context context, int textViewResourceId,
 				List<Card> cards) {
 			super(context, textViewResourceId, cards);
+			
 			int sectionSize = getCount() / 100;
 			sections = new String[sectionSize];
 			for (int i = 0; i < sectionSize; i++) {
-				sections[i] = "" + (i * 100);
+				sections[i] = String.valueOf(i*100);
 			}
 		}
-
+		
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if (convertView == null) {
@@ -136,7 +128,7 @@ public class ListEditScreen extends AMActivity implements OnItemClickListener {
 
 		@Override
 		public int getSectionForPosition(int position) {
-			return position / 100;
+			return 1;
 		}
 
 		@Override
@@ -145,30 +137,43 @@ public class ListEditScreen extends AMActivity implements OnItemClickListener {
 		}
 	}
 
-	private View.OnClickListener sortButtonOnClickListener = new View.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-
-			switch (v.getId()) {
-
-			case R.id.button_col1:
-				Log.v(TAG, "sort by id");
-				new SortListTask().execute("id");
-				break;
-			case R.id.button_col2:
-				Log.v(TAG, "sort by question");
-				new SortListTask().execute("question");
-				break;
-			case R.id.button_col3:
-				Log.v(TAG, "sort by answer");
-				new SortListTask().execute("answer");
-				break;
-			}
-			
-
-		}
-	};
-
+	
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.list_edit_screen_sort_menu, menu);
+        menu.setHeaderTitle(R.string.sort_by_text);
+        
+    }
+	
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.list_edit_screen_menu, menu);
+        return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.by_id:
+            	new SortListTask().execute("id");
+                return true;
+            case R.id.by_question:
+            	new SortListTask().execute("question");
+                return true;
+            case R.id.by_answer:
+            	new SortListTask().execute("answer");
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+	
+    
+    /*
+     * Async task that sort the list based on user input
+     * */
 	private class SortListTask extends AsyncTask<String, Void, String> {
 		private ProgressDialog progressDialog;
 
@@ -184,20 +189,30 @@ public class ListEditScreen extends AMActivity implements OnItemClickListener {
 
 
 		public void onPostExecute(final String sortBy) {
-			mAdapter.sort(new Comparator<Card>(){
-				
-				@Override
-				public int compare(Card c1, Card c2) {
-					final String sb = sortBy;
-					if(sb.equals("id")){
-						return c1.getId() - c2.getId();
-					} else if (sb.equals("question")){
-						return c1.getQuestion().compareTo(c2.getQuestion());
-					} else {
-						return c1.getAnswer().compareTo(c2.getAnswer());
-					}
-				};
-		    });
+			if(sortBy.equals("id")){
+				mAdapter.sort(new Comparator<Card>(){
+					@Override
+					public int compare(Card c1, Card c2) {
+							return c1.getId() - c2.getId();
+					};
+			    });			
+			}
+			else if(sortBy.equals("question")){
+				mAdapter.sort(new Comparator<Card>(){
+					@Override
+					public int compare(Card c1, Card c2) {
+							return c1.getQuestion().compareTo(c2.getQuestion());
+					};
+			    });			
+			} else {
+				mAdapter.sort(new Comparator<Card>(){
+					@Override
+					public int compare(Card c1, Card c2) {
+							return c1.getAnswer().compareTo(c2.getAnswer());
+					};
+			    });
+			}
+			
 			progressDialog.dismiss();
 		}
 
@@ -239,13 +254,15 @@ public class ListEditScreen extends AMActivity implements OnItemClickListener {
 
 		@Override
 		public void onPostExecute(Void result) {
-			mAdapter = new CardListAdapter(ListEditScreen.this, initPosition,
-					cards);
+			mAdapter = new CardListAdapter(ListEditScreen.this, initPosition, cards);
+					
 			ListView listView = (ListView) findViewById(R.id.item_list);
 			listView.setAdapter(mAdapter);
 			listView.setSelection(initPosition);
 			listView.setOnItemClickListener(ListEditScreen.this);
 			progressDialog.dismiss();
+			
+				
 		}
 
 	}
