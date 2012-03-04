@@ -388,7 +388,7 @@
     <string name="help_advanced_operations">Большинство операций с базами (такие как обмен местами В и О, перемешивание карточек, удаление дубликатов) доступны из экрана Просмотр/Правка по длинному нажатию на карту.</string>
     <string name="entry_last_learn_date">дата_посл_учёбы</string>
     <string name="entry_next_learn_date">дата_след_учёбы</string>
-    <string name="load_default_text">Загрузить по умолч</string>
+    <string name="load_default_text">Загр умолч</string>
     <string name="load_default_warning_text">Будут загружены настройки, установленные вами в настройках баз по умолчанию, текущие настройки не будут сохранены.</string>
     <string name="default_settings_text">Настройки баз по умолчанию</string>
     <string name="remove_dup_message">Удалить карты с повторяющимися вопросами.</string>
