@@ -38,7 +38,6 @@ public class DefaultScheduler {
      * Return the interval of the after schedule the new card
      */
 	public LearningData schedule(LearningData oldData, int newGrade, boolean includeNoise) {
-        Log.i(TAG, "Old data: " + oldData);
 		Date currentDate = new Date();
 		double actualInterval = AMUtil.diffDate(oldData.getLastLearnDate(), currentDate);
 		double scheduleInterval = oldData.getInterval();
@@ -130,7 +129,6 @@ public class DefaultScheduler {
         newData.setNextLearnDate(afterDays(currentDate, newInterval));
         newData.setRetReps(newRetReps);
         newData.setRetRepsSinceLapse(newRetRepsSinceLapse);
-        Log.i(TAG, "New data: " + newData);
         return newData;
 	}
 

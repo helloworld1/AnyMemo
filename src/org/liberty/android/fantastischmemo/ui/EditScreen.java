@@ -138,13 +138,8 @@ public class EditScreen extends AMActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
-        super.onBackPressed();
-    }
-
-    @Override
     public void onDestroy(){
+        AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
         if(questionTTS != null){
             questionTTS.shutdown();
         }

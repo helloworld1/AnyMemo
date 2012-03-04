@@ -770,12 +770,9 @@ public class MemoScreen extends AMActivity {
 
     @Override
     public void restartActivity(){
-        Intent myIntent = new Intent(this, MemoScreen.class);
-        myIntent.putExtra(EXTRA_DBPATH, dbPath);
-        myIntent.putExtra(EXTRA_CATEGORY_ID, filterCategoryId);
 
-        finish();
-        startActivity(myIntent);
+        RestartTask task = new RestartTask();
+        task.execute((Void)null);
     }
 
     private void showNoItemDialog(){
@@ -1072,9 +1069,21 @@ public class MemoScreen extends AMActivity {
         public void onPostExecute(Void result){
             super.onPostExecute(result);
             
-            // Release the database before finished
-            dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(MemoScreen.this, dbPath);
             finish();
+        }
+    }
+
+    /* When restarting an activity, we have to flush db first. */
+    private class RestartTask extends WaitDbTask {
+        @Override
+        public void onPostExecute(Void result){
+            super.onPostExecute(result);
+            
+            finish();
+            Intent myIntent = new Intent(MemoScreen.this, MemoScreen.class);
+            myIntent.putExtra(EXTRA_DBPATH, dbPath);
+            myIntent.putExtra(EXTRA_CATEGORY_ID, filterCategoryId);
+            startActivity(myIntent);
         }
     }
 
