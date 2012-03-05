@@ -883,8 +883,7 @@ public class EditScreen extends AMActivity {
             try {
                 Card delCard = currentCard;
                 currentCard = cardDao.queryNextCard(currentCard, currentCategory);
-                cardDao.delete(currentCard);
-                currentCard = delCard;
+                cardDao.delete(delCard);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
