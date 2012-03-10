@@ -235,7 +235,9 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
 
         if (v == defaultSettingsButton) {
             Intent intent = new Intent(mActivity, SettingsScreen.class);
-            intent.putExtra(SettingsScreen.EXTRA_DBPATH, AMEnv.EMPTY_DB_NAME);
+
+            String emptyDbPath = mActivity.getApplicationContext().getFilesDir().getAbsolutePath() + "/" + AMEnv.EMPTY_DB_NAME;
+            intent.putExtra(SettingsScreen.EXTRA_DBPATH, emptyDbPath);
             startActivity(intent);
         }
         if(v == mergeButton){

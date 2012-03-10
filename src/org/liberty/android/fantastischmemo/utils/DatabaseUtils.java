@@ -26,7 +26,8 @@ import android.content.Context;
 public class DatabaseUtils {
 
     public static Setting readDefaultSetting(Context context) {
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(context, AMEnv.EMPTY_DB_NAME);
+        String emptyDbPath = context.getApplicationContext().getFilesDir().getAbsolutePath() + "/" + AMEnv.EMPTY_DB_NAME;
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(context, emptyDbPath);
         try {
             SettingDao settingDao = helper.getSettingDao(); 
             return settingDao.queryForId(1);

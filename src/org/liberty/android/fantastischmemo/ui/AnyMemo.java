@@ -144,7 +144,8 @@ public class AnyMemo extends AMActivity {
                 FileUtils.copyInputStreamToFile(in, new File(sdPath + "/" + AMEnv.DEFAULT_DB_NAME));
 
                 InputStream in2 = getResources().getAssets().open(AMEnv.EMPTY_DB_NAME);
-                FileUtils.copyInputStreamToFile(in2, getDatabasePath(AMEnv.EMPTY_DB_NAME));
+                String emptyDbPath = getApplicationContext().getFilesDir().getAbsolutePath() + "/" + AMEnv.EMPTY_DB_NAME;
+                FileUtils.copyInputStreamToFile(in2, new File(emptyDbPath));
                 in.close();
                 in2.close();
             }
