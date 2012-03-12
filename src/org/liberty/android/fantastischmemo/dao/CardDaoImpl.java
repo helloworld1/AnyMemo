@@ -258,6 +258,7 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
         }
     }
 
+
     public List<Card> getCardForReview(Category filterCategory, int maxReviewCacheOrdinal, int limit) {
         try {
             LearningDataDao learningDataDao = getHelper().getLearningDataDao();
@@ -493,6 +494,33 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
                     for (Card c : CardDaoImpl.this) {
                         swapQA(c);
                     }
+                    return null;
+                }
+            });
+        } catch (Exception e) {
+            throw new RuntimeException("Error swapping QA of all cards.", e);
+        }
+    }
+
+    public void swapAllQADup() {
+        try {
+
+            callBatchTasks(new Callable<Void>() {
+                public Void call() throws Exception {
+                    final CategoryDao categoryDao = getHelper().getCategoryDao();
+                    final List<Card> cards = queryForAll();
+
+                    int size = cards.size();
+                    for (int i = 0; i < size; i++) {
+                        Card c = cards.get(i);
+                        categoryDao.refresh(c.getCategory());
+                        String q = c.getQuestion();
+                        c.setQuestion(c.getAnswer());
+                        c.setAnswer(q);
+                        c.setOrdinal(size + i + 1);
+                        c.setLearningData(new LearningData());
+                    }
+                    createCards(cards);
                     return null;
                 }
             });

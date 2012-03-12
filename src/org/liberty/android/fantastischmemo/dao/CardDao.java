@@ -21,6 +21,9 @@ public interface CardDao extends HelperDao<Card, Integer> {
     void swapQA(Card c);
     void swapAllQA();
 
+    /* Swap QA and append them to the end of the db. */
+    void swapAllQADup();
+
     /* Remove the cards with the same question */
     void removeDuplicates();
 

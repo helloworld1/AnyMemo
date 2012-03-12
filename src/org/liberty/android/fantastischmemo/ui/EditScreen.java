@@ -348,16 +348,38 @@ public class EditScreen extends AMActivity {
 
             case R.id.menu_context_swap:
             {
-                AMGUIUtility.doConfirmProgressTask(this, R.string.swap_qa_text, R.string.settings_inverse_warning, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask() {
-                    @Override
-                    public void doHeavyTask() {
-                        cardDao.swapAllQA();
-                    }
-                    @Override
-                    public void doUITask() {
-                        restartActivity();
-                    }
-                });
+        new AlertDialog.Builder(this)
+            .setTitle(R.string.warning_text)
+            .setIcon(R.drawable.alert_dialog_icon)
+            .setMessage(R.string.settings_inverse_warning)
+            .setPositiveButton(R.string.swap_text, new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface arg0, int arg1){
+                    AMGUIUtility.doProgressTask(EditScreen.this, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask(){
+                        public void doHeavyTask(){
+                            cardDao.swapAllQA();
+                        }
+                        public void doUITask(){
+                            restartActivity();
+                        }
+                    });
+                }
+            })
+            .setNeutralButton(R.string.swapdup_text, new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface arg0, int arg1){
+                            AMGUIUtility.doProgressTask(EditScreen.this, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask(){
+                        public void doHeavyTask(){
+                            cardDao.swapAllQADup();
+                        }
+                        public void doUITask(){
+                            restartActivity();
+                        }
+                    });
+                }
+            })
+            .setNegativeButton(R.string.cancel_text, null)
+            .create()
+            .show();
+
                 return true;
             }
 
