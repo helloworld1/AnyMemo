@@ -3,10 +3,9 @@
     <item android:id="@+id/sort" android:title="@string/sort_by_text">
     <!--  sort menu  -->
     <menu>
-        <item android:id="@+id/by_id" android:title="by_id"/>
-        <item android:id="@+id/by_question" android:title="by_question"/>
-        <item android:id="@+id/by_answer" android:title="by_answer"/>
-        
+        <item android:id="@+id/by_ord" android:title="@string/ordinal_text"/>
+        <item android:id="@+id/by_question" android:title="@string/question_text"/>
+        <item android:id="@+id/by_answer" android:title="@string/answer_text"/>
     </menu>
 	</item>
 </menu>

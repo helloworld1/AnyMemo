@@ -60,7 +60,6 @@ import java.util.List;
 public class ListEditScreen extends AMActivity implements OnItemClickListener {
 	private String dbPath;
 
-	@SuppressWarnings("unused")
 	private static String TAG = ListEditScreen.class.getCanonicalName();
 
 	private CardListAdapter mAdapter;
@@ -132,7 +131,7 @@ public class ListEditScreen extends AMActivity implements OnItemClickListener {
 			TextView answerView = (TextView) convertView
 					.findViewById(R.id.item_answer);
 
-			idView.setText("" + getItem(position).getId());
+			idView.setText("" + getItem(position).getOrdinal());
 			questionView.setText(getItem(position).getQuestion());
 			answerView.setText(getItem(position).getAnswer());
 
@@ -175,8 +174,8 @@ public class ListEditScreen extends AMActivity implements OnItemClickListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.by_id:
-            	new SortListTask().execute("id");
+            case R.id.by_ord:
+            	new SortListTask().execute("ord");
                 return true;
             case R.id.by_question:
             	new SortListTask().execute("question");
@@ -208,11 +207,11 @@ public class ListEditScreen extends AMActivity implements OnItemClickListener {
 
 
 		public void onPostExecute(final String sortBy) {
-			if(sortBy.equals("id")){
+			if(sortBy.equals("ord")){
 				mAdapter.sort(new Comparator<Card>(){
 					@Override
 					public int compare(Card c1, Card c2) {
-							return c1.getId() - c2.getId();
+							return c1.getOrdinal() - c2.getOrdinal();
 					};
 			    });			
 			}
@@ -305,9 +304,7 @@ public class ListEditScreen extends AMActivity implements OnItemClickListener {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
-
-        //super.onActivityResult(requestCode, resultCode, data);
-
+        // Refresh activity when the data has been changed.
         if (resultCode == Activity.RESULT_CANCELED) {
             return;
         } else {
