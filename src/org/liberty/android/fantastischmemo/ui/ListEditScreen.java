@@ -27,6 +27,7 @@ import org.liberty.android.fantastischmemo.R;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.domain.Option;
 
 import android.app.Activity;
 
@@ -65,9 +66,13 @@ public class ListEditScreen extends AMActivity implements OnItemClickListener {
 	private CardListAdapter mAdapter;
 
     private AnyMemoDBOpenHelper dbOpenHelper;
+    
+    private Option option;
+
+	private ListView listView;
 	
 	/* Initial position in the list */
-	private int initPosition = 0;
+
 	private List<Card> cards;
 
 	public static String EXTRA_DBPATH = "dbpath";
@@ -76,6 +81,8 @@ public class ListEditScreen extends AMActivity implements OnItemClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.list_edit_screen);
 		
+        option = new Option(this); 
+
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			dbPath = extras.getString(ListEditScreen.EXTRA_DBPATH);
@@ -103,9 +110,8 @@ public class ListEditScreen extends AMActivity implements OnItemClickListener {
 		/* quick index sections */
 		private String[] sections;
 		
-		public CardListAdapter(Context context, int textViewResourceId,
-				List<Card> cards) {
-			super(context, textViewResourceId, cards);
+		public CardListAdapter(Context context, List<Card> cards) {
+			super(context, 0, cards);
 			
 			int sectionSize = getCount() / 100;
 			sections = new String[sectionSize];
@@ -267,9 +273,10 @@ public class ListEditScreen extends AMActivity implements OnItemClickListener {
 
 		@Override
 		public void onPostExecute(Void result) {
-			mAdapter = new CardListAdapter(ListEditScreen.this, initPosition, cards);
+            int initPosition = option.getSavedId(TAG, dbPath, 1);
+			mAdapter = new CardListAdapter(ListEditScreen.this, cards);
 					
-			ListView listView = (ListView) findViewById(R.id.item_list);
+			listView = (ListView) findViewById(R.id.item_list);
 			listView.setAdapter(mAdapter);
 			listView.setSelection(initPosition);
 			listView.setOnItemClickListener(ListEditScreen.this);
@@ -282,6 +289,7 @@ public class ListEditScreen extends AMActivity implements OnItemClickListener {
 
     @Override
     public void onDestroy() {
+        option.setSavedId(TAG, dbPath, listView.getFirstVisiblePosition());
         AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
         super.onDestroy();
     }
