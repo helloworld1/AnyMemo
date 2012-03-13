@@ -402,9 +402,9 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
                             value += ".db";
                         }
                         try {
-                            FileUtils.copyFile(mActivity.getDatabasePath(AMEnv.EMPTY_DB_NAME), new File(currentDirectory.getAbsolutePath() + "/" + value));
-                        }
-                        catch(IOException e){
+                            String emptyDbPath = mActivity.getApplicationContext().getFilesDir().getAbsolutePath() + "/" + AMEnv.EMPTY_DB_NAME;
+                            FileUtils.copyFile(new File(emptyDbPath), new File(currentDirectory.getAbsolutePath() + "/" + value));
+                        } catch(IOException e){
                             Log.e(TAG, "Fail to create file", e);
                         }
                         browseTo(currentDirectory);
