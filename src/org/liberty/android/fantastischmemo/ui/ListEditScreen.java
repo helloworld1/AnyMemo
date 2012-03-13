@@ -273,7 +273,7 @@ public class ListEditScreen extends AMActivity implements OnItemClickListener {
 
 		@Override
 		public void onPostExecute(Void result) {
-            int initPosition = option.getSavedId(TAG, dbPath, 1);
+            int initPosition = option.getSavedId(TAG, dbPath, 0);
 			mAdapter = new CardListAdapter(ListEditScreen.this, cards);
 					
 			listView = (ListView) findViewById(R.id.item_list);
