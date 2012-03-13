@@ -102,7 +102,7 @@ public class RecentListFragment extends Fragment {
                 final List<RecentItem> ril = new ArrayList<RecentItem>();
                 /* Quick list */
                 int index = 0;
-                try{
+                try {
                     for(int i = 0; i < allPath.length; i++){
                         if(allPath[i] == null){
                             continue;
@@ -147,9 +147,10 @@ public class RecentListFragment extends Fragment {
                                 recentListAdapter.insert(ri, ri.index);
                         }
                     });
-                }
-                catch(InterruptedException e){
+                } catch(InterruptedException e){
                     Log.e(TAG, "Interrupted", e);
+                } catch(Exception e) {
+                    Log.e(TAG, "Exception Maybe caused by race condition. Ignored.", e);
                 }
             }
         };
