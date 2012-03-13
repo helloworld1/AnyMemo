@@ -376,7 +376,7 @@
     <string name="filter_category_text">Фильтр категорий</string>
     <string name="delete_text">Удалить</string> 
     <string name="delete_text_short">Удал</string> 
-    <string name="sort_by_text">Сорт по</string>
+    <string name="sort_by_text">Сортировка по</string>
     <string name="question_text">Вопрос</string>
     <string name="answer_text">Ответ</string>
     <string name="exit_text">Выход</string>
@@ -392,4 +392,5 @@
     <string name="load_default_warning_text">Будут загружены настройки, установленные вами в настройках баз по умолчанию, текущие настройки не будут сохранены.</string>
     <string name="default_settings_text">Настройки баз по умолчанию</string>
     <string name="remove_dup_message">Удалить карты с повторяющимися вопросами.</string>
+    <string name="ordinal_text">Порядок</string>
 </resources>
