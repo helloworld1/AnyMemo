@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2010 Haowen Ning, Xinxin Wang
+Copyright (C) 2012 Haowen Ning, Xinxin Wang
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -16,18 +16,27 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
- */
+*/
+
 package org.liberty.android.fantastischmemo.ui;
 
-import org.liberty.android.fantastischmemo.*;
+import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.R;
+
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 
 import android.app.Activity;
+
+import android.content.Intent;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.content.Intent;
 import android.content.Context;
+
+import android.support.v4.app.DialogFragment;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -49,9 +58,13 @@ import java.util.List;
 
 public class ListEditScreen extends AMActivity implements OnItemClickListener {
 	private String dbPath;
+
 	@SuppressWarnings("unused")
-	private static String TAG = "org.liberty.android.fantastischmemo.ListEditScreen";
+	private static String TAG = ListEditScreen.class.getCanonicalName();
+
 	private CardListAdapter mAdapter;
+
+    private AnyMemoDBOpenHelper dbOpenHelper;
 	
 	/* Initial position in the list */
 	private int initPosition = 0;
@@ -76,12 +89,12 @@ public class ListEditScreen extends AMActivity implements OnItemClickListener {
 	@Override
 	public void onItemClick(AdapterView<?> parentView, View childView,
 			int position, long id) {
-		/* Click to go back to EditScreern with specific card cliced */
-		Intent resultIntent = new Intent();
-		resultIntent.putExtra(ListEditScreen.EXTRA_DBPATH,
-				mAdapter.getItem(position).getId());
-		setResult(Activity.RESULT_OK, resultIntent);
-		finish();
+        DialogFragment df = new ListEditActionsFragment();
+        Bundle b = new Bundle();
+        b.putString(ListEditActionsFragment.EXTRA_DBPATH, dbPath);
+        b.putInt(ListEditActionsFragment.EXTRA_CARD_ID, mAdapter.getItem(position).getId());
+        df.setArguments(b);
+        df.show(getSupportFragmentManager(), "ListEditActions");
 	}
 
 	
@@ -173,7 +186,7 @@ public class ListEditScreen extends AMActivity implements OnItemClickListener {
     
     /*
      * Async task that sort the list based on user input
-     * */
+     */
 	private class SortListTask extends AsyncTask<String, Void, String> {
 		private ProgressDialog progressDialog;
 
@@ -239,11 +252,11 @@ public class ListEditScreen extends AMActivity implements OnItemClickListener {
 
 		@Override
 		protected Void doInBackground(Void... params) {
-			AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(
+			dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(
 					ListEditScreen.this, dbPath);
 
 			try {
-				CardDao cardDao = helper.getCardDao();
+				CardDao cardDao = dbOpenHelper.getCardDao();
 				cards = cardDao.queryForAll();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -266,4 +279,32 @@ public class ListEditScreen extends AMActivity implements OnItemClickListener {
 		}
 
 	}
+
+    @Override
+    public void onDestroy() {
+        AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
+        super.onDestroy();
+    }
+
+    @Override
+    public void restartActivity() {
+        Intent myIntent = new Intent(this, ListEditScreen.class);
+        assert dbPath != null : "Use null dbPath to restartAcitivity";
+        myIntent.putExtra(EXTRA_DBPATH, dbPath);
+        finish();
+        startActivity(myIntent);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+
+        //super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_CANCELED) {
+            return;
+        } else {
+            restartActivity();
+        }
+    }
+
 }
