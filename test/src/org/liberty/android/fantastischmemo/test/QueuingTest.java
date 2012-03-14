@@ -55,4 +55,19 @@ public class QueuingTest extends AbstractExistingDBTest<InstrumentationActivity>
         Card cqueue = queueManager.dequeue();
         assertEquals(1, (int)cqueue.getId());
     }
+
+    public void testQueuingPosition() throws Exception {
+        CardDao cardDao = helper.getCardDao();
+        LearningDataDao learningDataDao = helper.getLearningDataDao();
+        QueueManager queueManager = new LearnQueueManager.Builder()
+            .setCardDao(cardDao)
+            .setLearningDataDao(learningDataDao)
+            .setLearnQueueSize(10)
+            .setFilterCategory(null)
+            .setCacheSize(50)
+            .build();
+        queueManager.position(5);
+        Card cqueue = queueManager.dequeue();
+        assertEquals(5, (int)cqueue.getId());
+    }
 }
