@@ -94,6 +94,7 @@ import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEdi
 public class MemoScreen extends AMActivity {
     public static String EXTRA_DBPATH = "dbpath";
     public static String EXTRA_CATEGORY_ID = "category_id";
+    public static String EXTRA_START_CARD_ID = "start_card_id";
     public static String EXTRA_CRAM = "cram";
 
     private AnyMemoTTS questionTTS = null;
@@ -115,11 +116,13 @@ public class MemoScreen extends AMActivity {
     /* State objects */
     private Card currentCard = null;
     private Card prevCard = null;
+    private LearningData prevLearningData = null;
     private String dbPath = "";
     private String dbName = "";
     private int filterCategoryId = -1; 
     private Category filterCategory;
     private boolean isCram = false;
+    private int startCardId = -1;
 
     /* DAOs */
     private SettingDao settingDao;
@@ -159,6 +162,7 @@ public class MemoScreen extends AMActivity {
             dbPath = extras.getString(EXTRA_DBPATH);
             filterCategoryId = extras.getInt(EXTRA_CATEGORY_ID, -1);
             isCram = extras.getBoolean(EXTRA_CRAM, false);
+            startCardId = extras.getInt(EXTRA_START_CARD_ID, -1);
         }
         initTask = new InitTask();
         initTask.execute((Void)null);
@@ -296,11 +300,10 @@ public class MemoScreen extends AMActivity {
      * this is what to do
      */
     private void undoCard(){
-        if(prevCard != null){
+        if(prevLearningData != null){
             currentCard = prevCard;
-            prevCard = null;
-            updateFlashcardView(false);
-            hideButtons();
+            learningDataDao.updateLearningData(prevLearningData);
+            restartActivity();
         }
         else{
             new AlertDialog.Builder(this)
@@ -914,6 +917,9 @@ public class MemoScreen extends AMActivity {
                 }
                 /* Run the learnQueue init in a separate thread */
                 createQueue();
+                if (startCardId != -1) {
+                    queueManager.position(startCardId);
+                }
                 return queueManager.dequeue();
             } catch (Exception e) {
                 Log.e(TAG, "Excepting doing in bacground", e);
@@ -977,11 +983,21 @@ public class MemoScreen extends AMActivity {
         public Card doInBackground(Integer... grades) {
             assert grades.length == 1 : "Grade more than 1 time";
             int grade = grades[0];
-            prevCard = currentCard;
             LearningData ld = currentCard.getLearningData();
             if (ld.getAcqReps() == 0) {
                 isNewCard = true;
             }
+
+            // This was saved to determine the stat info
+            // and the card id for undo
+            prevCard = currentCard;
+
+            // Save previous learning for Undo
+            // This part is ugly due to muutablity of ORMLite
+            prevLearningData = new LearningData();
+            prevLearningData.setId(ld.getId());
+            prevLearningData.cloneFromLearningData(ld);
+
             LearningData newLd = scheduler.schedule(ld, grade, true);
 
             // Need to clone the data due to ORMLite restriction on "update()" method.
@@ -1083,6 +1099,9 @@ public class MemoScreen extends AMActivity {
             Intent myIntent = new Intent(MemoScreen.this, MemoScreen.class);
             myIntent.putExtra(EXTRA_DBPATH, dbPath);
             myIntent.putExtra(EXTRA_CATEGORY_ID, filterCategoryId);
+            if (currentCard != null ) {
+                myIntent.putExtra(EXTRA_START_CARD_ID, currentCard.getId());
+            }
             startActivity(myIntent);
         }
     }

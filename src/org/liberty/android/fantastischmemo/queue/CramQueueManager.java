@@ -84,6 +84,11 @@ public class CramQueueManager implements QueueManager {
         // Do nothing
     }
 
+    @Override
+    public void position(int cardId) {
+        // Do not support positioning.
+    }
+
     public static class Builder {
 
         private CardDao cardDao;
@@ -107,6 +112,7 @@ public class CramQueueManager implements QueueManager {
             return new CramQueueManager(this);
         }
     }
+
 
     private void refill() {
         int limit = learnQueueSize - learnQueue.size();

@@ -20,8 +20,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo.queue;
 
+import java.sql.SQLException;
+
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -161,6 +164,48 @@ public class LearnQueueManager implements QueueManager {
         dirtyCache.add(card);
 	}
 
+    @Override
+    public void position(int cardId) {
+        Iterator<Card> learnIterator= learnQueue.iterator();
+        Iterator<Card> reviewCacheIterator = reviewCache.iterator();
+        Iterator<Card> newCacheIterator = newCache.iterator();
+
+        int learnQueueRotateDistance = 0;
+        while (learnIterator.hasNext()) {
+            Card c =learnIterator.next();
+            if (c.getId() == cardId) {
+                int index = learnQueue.indexOf(c);
+                learnQueueRotateDistance = -index;
+                Log.i(TAG, "Rotate index: " + index);
+            }
+        }
+        Collections.rotate(learnQueue, learnQueueRotateDistance);
+
+        while (reviewCacheIterator.hasNext()) {
+            Card c =reviewCacheIterator.next();
+            if (c.getId() == cardId) {
+                reviewCacheIterator.remove();
+            }
+        }
+
+        while (newCacheIterator.hasNext()) {
+            Card c = newCacheIterator.next();
+            if (c.getId() == cardId) {
+                newCacheIterator.remove();
+            }
+        }
+
+        Card headCard = null;
+        try {
+            headCard = cardDao.queryForId(cardId);
+            learningDataDao.refresh(headCard.getLearningData());
+        } catch (SQLException e) {
+            throw new RuntimeException("Position a wrong card", e);
+        }
+
+        learnQueue.add(0, headCard);
+    }
+
     public static class Builder {
 
         private CardDao cardDao;
@@ -204,7 +249,9 @@ public class LearnQueueManager implements QueueManager {
             if (cardDao == null || learningDataDao == null) {
                 throw new AssertionError("cardDao and learningDataDao must set");
             }
-            return new LearnQueueManager(this);
+            LearnQueueManager qm = new LearnQueueManager(this);
+            qm.refill();
+            return qm;
         }
     }
 }
