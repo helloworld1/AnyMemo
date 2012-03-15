@@ -108,7 +108,7 @@ public class MemoScreenActivityStudyTest extends ActivityInstrumentationTestCase
             if (i == 0 || i == 2) {
                 solo.clickOnText(solo.getString(R.string.memo_btn1_text));
             } else {
-                // Succes 8 other 
+                // Success 8 other 
                 solo.clickOnText(solo.getString(R.string.memo_btn4_text));
             }
         }
@@ -136,7 +136,7 @@ public class MemoScreenActivityStudyTest extends ActivityInstrumentationTestCase
             CardDao cardDao = helper.getCardDao();
             // 2 card failed
             assertEquals(1, cardDao.getScheduledCardCount(null));
-            // 28 - 10 = 23
+            // 28 - 11 = 17
             assertEquals(17, cardDao.getNewCardCount(null));
         } finally {
             AnyMemoDBOpenHelperManager.releaseHelper(helper);
