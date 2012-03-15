@@ -99,6 +99,50 @@ public class MemoScreenActivityStudyTest extends ActivityInstrumentationTestCase
         }
     }
 
+    // Test forget 1st card and 3rd and learn 9 new card
+    // the 1st and 3rd card should reappear.
+    public void testFailedCardRepeat() throws Exception {
+        for (int i = 0; i < 10; i++) {
+            solo.clickOnText("Show answer");
+            // Fail 1st and 3rd
+            if (i == 0 || i == 2) {
+                solo.clickOnText(solo.getString(R.string.memo_btn1_text));
+            } else {
+                // Succes 8 other 
+                solo.clickOnText(solo.getString(R.string.memo_btn4_text));
+            }
+        }
+        // 1st
+        assertTrue(solo.searchText("head"));
+        solo.clickOnText("Show answer");
+        solo.clickOnText(solo.getString(R.string.memo_btn4_text));
+        
+        // 11th card, new
+        assertTrue(solo.searchText("ear"));
+        solo.clickOnText("Show answer");
+        solo.clickOnText(solo.getString(R.string.memo_btn4_text));
+
+        // 3rd
+        assertTrue(solo.searchText("face"));
+        solo.clickOnText("Show answer");
+        solo.clickOnText(solo.getString(R.string.memo_btn0_text));
+
+        solo.goBack();
+        solo.sleep(5000);
+
+        // asssert db state
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
+        try {
+            CardDao cardDao = helper.getCardDao();
+            // 2 card failed
+            assertEquals(1, cardDao.getScheduledCardCount(null));
+            // 28 - 10 = 23
+            assertEquals(17, cardDao.getNewCardCount(null));
+        } finally {
+            AnyMemoDBOpenHelperManager.releaseHelper(helper);
+        }
+    }
+
     public void tearDown() throws Exception {
         try {
             solo.finishOpenedActivities();
