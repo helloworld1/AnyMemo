@@ -20,6 +20,8 @@ import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
 public class UITestHelper {
+    public static final String SAMPLE_DB_PATH = "/sdcard/anymemo/french-body-parts.db";
+    public static final String SAMPLE_DB_NAME= "french-body-parts.db";
 
     Context mTestContext;
     Activity mActivity;
@@ -30,7 +32,6 @@ public class UITestHelper {
 
     /* Set up the french-body-parts database */
     public void setUpFBPDatabase() {
-        final String SAMPLE_DB_PATH = "/sdcard/anymemo/french-body-parts.db";
         try {
             InputStream in = mTestContext.getResources().getAssets().open(AMEnv.DEFAULT_DB_NAME);
             File outFile = new File(SAMPLE_DB_PATH);

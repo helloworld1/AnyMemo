@@ -87,6 +87,6 @@
                 android:title="@string/crash_report_checkbox_title"
                 android:summaryOn="@string/crash_report_enabled"
                 android:summaryOff="@string/crash_report_disabled"
-                android:defaultValue="true"/>
+                android:defaultValue="false"/>
     </PreferenceCategory>
 </PreferenceScreen> 

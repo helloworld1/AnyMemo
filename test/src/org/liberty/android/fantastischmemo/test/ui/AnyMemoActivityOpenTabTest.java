@@ -32,10 +32,11 @@ public class AnyMemoActivityOpenTabTest extends ActivityInstrumentationTestCase2
         uiTestHelper.clearPreferences();
         uiTestHelper.setUpFBPDatabase();
 
-        // GO to Open tab
         if (solo.searchText("New version")) {
             solo.clickOnText(solo.getString(R.string.ok_text));
         }
+
+        // GO to Open tab
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
                 tabHost.requestFocus();
@@ -56,48 +57,63 @@ public class AnyMemoActivityOpenTabTest extends ActivityInstrumentationTestCase2
     }
 
     public void testActionListStudy() {
-        solo.clickOnText("french-body-parts.db");
+        solo.clickOnText(UITestHelper.SAMPLE_DB_NAME);
         solo.clickOnText(solo.getString(R.string.study_text));
         solo.waitForActivity("MemoScreen");
         solo.sleep(3000);
     }
 
     public void testActionListPrevEdit() {
-        solo.clickOnText("french-body-parts.db");
+        solo.clickOnText(UITestHelper.SAMPLE_DB_NAME);
         solo.clickOnText(solo.getString(R.string.edit_button_text));
         solo.waitForActivity("EditScreen");
         solo.sleep(3000);
     }
 
     public void testActionListCardList() {
-        solo.clickOnText("french-body-parts.db");
+        solo.clickOnText(UITestHelper.SAMPLE_DB_NAME);
         solo.clickOnText(solo.getString(R.string.list_mode_text));
         solo.waitForActivity("ListEditScreen");
         solo.sleep(3000);
     }
 
     public void testActionListCram() {
-        solo.clickOnText("french-body-parts.db");
+        solo.clickOnText(UITestHelper.SAMPLE_DB_NAME);
         solo.clickOnText(solo.getString(R.string.learn_ahead));
         solo.waitForActivity("MemoScreen");
         solo.sleep(3000);
     }
 
     public void testActionListSettings() {
-        solo.clickOnText("french-body-parts.db");
+        solo.clickOnText(UITestHelper.SAMPLE_DB_NAME);
         solo.clickOnText(solo.getString(R.string.settings_menu_text));
         solo.waitForActivity("SettingsScreen");
     }
 
     public void testActionListDelete() {
-        solo.clickOnText("french-body-parts.db");
+        solo.clickOnText(UITestHelper.SAMPLE_DB_NAME);
         solo.clickOnText(solo.getString(R.string.delete_text));
         solo.clickOnButton(solo.getString(R.string.cancel_text));
-        assertTrue(solo.searchText("french-body-parts.db"));
-        solo.clickOnText("french-body-parts.db");
+        assertTrue(solo.searchText(UITestHelper.SAMPLE_DB_NAME));
+        solo.clickOnText(UITestHelper.SAMPLE_DB_NAME);
         solo.clickOnText(solo.getString(R.string.delete_text));
         solo.clickOnButton(solo.getString(R.string.delete_text));
-        assertFalse(solo.searchText("french-body-parts.db"));
+        assertFalse(solo.searchText(UITestHelper.SAMPLE_DB_NAME));
+    }
+
+    public void testCreateNewDb() {
+        solo.sendKey(Solo.MENU);
+        solo.clickOnText(solo.getString(R.string.fb_create_db));
+        // index 0 if only one available.
+        solo.enterText(0, "123testdb");
+        solo.clickOnText(solo.getString(R.string.ok_text));
+        assertTrue(solo.searchText("123testdb.db"));
+
+        // delete the db
+        solo.clickOnText("123testdb.db");
+        solo.clickOnText(solo.getString(R.string.delete_text));
+        solo.clickOnButton(solo.getString(R.string.delete_text));
+        assertFalse(solo.searchText("123testdb.db"));
     }
 
 
