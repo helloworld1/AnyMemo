@@ -1,4 +1,4 @@
-package org.liberty.android.fantastischmemo.test;
+package org.liberty.android.fantastischmemo.test.queue;
 
 import org.liberty.android.fantastischmemo.InstrumentationActivity;
 
@@ -10,6 +10,7 @@ import org.liberty.android.fantastischmemo.domain.Category;
 
 import org.liberty.android.fantastischmemo.queue.LearnQueueManager;
 import org.liberty.android.fantastischmemo.queue.QueueManager;
+import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
 
 public class QueuingTest extends AbstractExistingDBTest<InstrumentationActivity> {
 

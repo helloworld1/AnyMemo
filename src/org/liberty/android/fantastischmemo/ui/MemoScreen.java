@@ -346,6 +346,8 @@ public class MemoScreen extends AMActivity {
                             if(currentCard != null){
                                 try {
                                     cardDao.delete(currentCard);
+                                    // Do not restart this card
+                                    currentCard = null;
                                     restartActivity();
                                 } catch (SQLException e) {
                                     Log.e(TAG, "Delete card error", e);
@@ -372,6 +374,8 @@ public class MemoScreen extends AMActivity {
                                     ld.setNextLearnDate(new Date(Long.MAX_VALUE));
                                     ld.setAcqReps(1);
                                     learningDataDao.update(ld);
+                                    // Do not restart this card
+                                    currentCard = null;
                                     restartActivity();
                                 } catch (SQLException e) {
                                     Log.e(TAG, "Delete card error", e);

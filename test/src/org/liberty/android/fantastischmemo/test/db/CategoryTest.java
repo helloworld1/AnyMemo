@@ -1,4 +1,4 @@
-package org.liberty.android.fantastischmemo.test;
+package org.liberty.android.fantastischmemo.test.db;
 
 import java.util.List;
 
@@ -9,6 +9,7 @@ import org.liberty.android.fantastischmemo.dao.CategoryDao;
 
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
+import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
 
 public class CategoryTest extends AbstractExistingDBTest<InstrumentationActivity> {
 

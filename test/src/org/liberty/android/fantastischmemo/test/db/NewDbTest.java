@@ -1,4 +1,4 @@
-package org.liberty.android.fantastischmemo.test;
+package org.liberty.android.fantastischmemo.test.db;
 
 import java.io.File;
 

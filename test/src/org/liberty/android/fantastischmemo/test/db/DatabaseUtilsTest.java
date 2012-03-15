@@ -1,4 +1,4 @@
-package org.liberty.android.fantastischmemo.test;
+package org.liberty.android.fantastischmemo.test.db;
 
 import java.io.File;
 
@@ -12,6 +12,7 @@ import org.liberty.android.fantastischmemo.dao.CardDao;
 
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Setting;
+import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
 import org.liberty.android.fantastischmemo.utils.DatabaseUtils;
 
 
@@ -20,7 +21,7 @@ public class DatabaseUtilsTest extends AbstractExistingDBTest<InstrumentationAct
 
     AnyMemoDBOpenHelper helper;
 
-    String dbPath = "/sdcard/french-body-parts.db";
+    String dbPath = "/sdcard/anymemo/french-body-parts.db";
 
     public DatabaseUtilsTest() {
         super("org.liberty.android.fantastischmemo", InstrumentationActivity.class);
