@@ -239,9 +239,6 @@ public class SingleSidedCardDisplay implements FlashcardDisplay, TagHandler, Ima
 
             /* Automatic check HTML */
             if(AMUtil.isHTML(str) && (htmlDisplay.contains(cf))) {
-                if(sq.length() != 0){
-                    buffer.append(Html.fromHtml("<br /><br />", this, this));
-                }
                 if(setting.getHtmlLineBreakConversion() == true) {
                     String s = str.replace("\n", "<br />");
                     buffer.append(Html.fromHtml(s, this, this));
@@ -249,15 +246,21 @@ public class SingleSidedCardDisplay implements FlashcardDisplay, TagHandler, Ima
                     buffer.append(Html.fromHtml(str, this, this));
                 }
             } else{
-                if(sq.length() != 0){
+                if(buffer.length() != 0){
                     buffer.append("\n\n");
                 }
                 buffer.append(str);
             }
             if (field1.contains(cf)) {
+                if(sq.length() != 0){
+                    sq.append(Html.fromHtml("<br /><br />", this, this));
+                }
                 sq.append(buffer);
             }
             if (field2.contains(cf)) {
+                if(sa.length() != 0){
+                    sa.append(Html.fromHtml("<br /><br />", this, this));
+                }
                 sa.append(buffer);
             }
 
