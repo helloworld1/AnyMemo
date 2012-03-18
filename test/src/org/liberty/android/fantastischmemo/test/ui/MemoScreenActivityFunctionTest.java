@@ -5,6 +5,7 @@ import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
+import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 
 import org.liberty.android.fantastischmemo.ui.AnyMemo;
 
@@ -94,6 +95,27 @@ public class MemoScreenActivityFunctionTest extends ActivityInstrumentationTestC
         } finally {
             AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }
+    }
+
+    public void testDeleteCard() throws Exception {
+        solo.clickLongOnText("head");
+        solo.clickOnText(solo.getString(R.string.delete_text));
+        solo.clickOnText(solo.getString(R.string.ok_text));
+        solo.sleep(3000);
+        solo.goBack();
+        solo.sleep(3000);
+        // asssert db state
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
+        try {
+            CardDao cardDao = helper.getCardDao();
+            LearningDataDao learningDataDao = helper.getLearningDataDao();
+            // 28 - 1 = 27
+            assertEquals(27L, cardDao.countOf());
+            assertEquals(27L, learningDataDao.countOf());
+        } finally {
+            AnyMemoDBOpenHelperManager.releaseHelper(helper);
+        }
+
     }
 
     public void tearDown() throws Exception {

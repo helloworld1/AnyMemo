@@ -192,6 +192,11 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
     @Override
     public int delete(Card c) {
         try {
+            // First cascade delete the learning data
+            LearningDataDao learningDataDao = getHelper().getLearningDataDao();
+            learningDataDao.refresh(c.getLearningData());
+            learningDataDao.delete(c.getLearningData());
+
             Integer cardOrdinal = c.getOrdinal();
             int res = super.delete(c);
             // If we delete a card every larger ordinal should -1.
