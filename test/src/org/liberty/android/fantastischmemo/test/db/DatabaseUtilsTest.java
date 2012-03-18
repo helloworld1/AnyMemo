@@ -21,7 +21,7 @@ public class DatabaseUtilsTest extends AbstractExistingDBTest<InstrumentationAct
 
     AnyMemoDBOpenHelper helper;
 
-    String dbPath = "/sdcard/anymemo/french-body-parts.db";
+    String dbPath = "/sdcard/french-body-parts.db";
 
     public DatabaseUtilsTest() {
         super("org.liberty.android.fantastischmemo", InstrumentationActivity.class);

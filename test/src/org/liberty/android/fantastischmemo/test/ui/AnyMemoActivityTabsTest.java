@@ -13,7 +13,7 @@ public class AnyMemoActivityTabsTest extends ActivityInstrumentationTestCase2<An
     protected AnyMemo mActivity;
 
     public AnyMemoActivityTabsTest() {
-        super("org.liberty.android.fantastischmemo.ui", AnyMemo.class);
+        super("org.liberty.android.fantastischmemo", AnyMemo.class);
     }
 
     private TabHost tabHost;

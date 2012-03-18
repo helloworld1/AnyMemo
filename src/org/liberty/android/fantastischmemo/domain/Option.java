@@ -76,6 +76,16 @@ public class Option {
         editor.commit();
     }
 
+    public int getQueueSize() {
+        String size = settings.getString("learning_queue_size", "10");
+        int tmpSize = Integer.parseInt(size);
+        if(tmpSize > 0){
+            return tmpSize;
+        } else {
+            return 10;
+        }
+    }
+
     public static enum ButtonStyle {
         ANYMEMO,
         MNEMOSYNE,

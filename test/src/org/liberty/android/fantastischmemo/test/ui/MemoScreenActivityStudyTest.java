@@ -21,14 +21,14 @@ public class MemoScreenActivityStudyTest extends ActivityInstrumentationTestCase
     protected AnyMemo mActivity;
 
     public MemoScreenActivityStudyTest () {
-        super("org.liberty.android.fantastischmemo.ui", AnyMemo.class);
+        super("org.liberty.android.fantastischmemo", AnyMemo.class);
     }
 
     private Solo solo;
 
     private TabHost tabHost;
 
-    public void setUp() throws Exception{
+    public void setUp() throws Exception {
         mActivity = this.getActivity();
         tabHost = (TabHost)mActivity.findViewById(android.R.id.tabhost);
         solo = new Solo(getInstrumentation(), mActivity);
@@ -84,6 +84,7 @@ public class MemoScreenActivityStudyTest extends ActivityInstrumentationTestCase
         assertTrue(solo.searchText("yeux"));
         solo.clickOnText(solo.getString(R.string.memo_btn3_text));
         solo.goBack();
+        solo.goBack();
         solo.sleep(5000);
 
         // asssert db state
@@ -127,6 +128,7 @@ public class MemoScreenActivityStudyTest extends ActivityInstrumentationTestCase
         solo.clickOnText("Show answer");
         solo.clickOnText(solo.getString(R.string.memo_btn0_text));
 
+        solo.goBack();
         solo.goBack();
         solo.sleep(5000);
 

@@ -21,7 +21,7 @@ public class MemoScreenActivityFunctionTest extends ActivityInstrumentationTestC
     protected AnyMemo mActivity;
 
     public MemoScreenActivityFunctionTest () {
-        super("org.liberty.android.fantastischmemo.ui", AnyMemo.class);
+        super("org.liberty.android.fantastischmemo", AnyMemo.class);
     }
 
     private Solo solo;
@@ -79,6 +79,7 @@ public class MemoScreenActivityFunctionTest extends ActivityInstrumentationTestC
         solo.clickOnText("Show answer");
         solo.clickOnText(solo.getString(R.string.memo_btn0_text));
 
+        solo.goBack();
         solo.goBack();
         solo.sleep(5000);
 

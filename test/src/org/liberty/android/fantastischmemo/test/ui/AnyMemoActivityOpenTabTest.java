@@ -17,7 +17,7 @@ public class AnyMemoActivityOpenTabTest extends ActivityInstrumentationTestCase2
     protected AnyMemo mActivity;
 
     public AnyMemoActivityOpenTabTest() {
-        super("org.liberty.android.fantastischmemo.ui", AnyMemo.class);
+        super("org.liberty.android.fantastischmemo", AnyMemo.class);
     }
 
     private Solo solo;
@@ -47,13 +47,8 @@ public class AnyMemoActivityOpenTabTest extends ActivityInstrumentationTestCase2
 
     public void testOpenTabPrevDir() {
         assertTrue(solo.searchText(".."));
-        solo.sendKey(Solo.DOWN);
-        solo.sendKey(Solo.ENTER);
-        assertTrue(solo.searchText(".android_secure"));
-        solo.sendKey(Solo.ENTER);
-        solo.sendKey(Solo.ENTER);
-        // Should be root now
-        assertTrue(solo.searchText("data"));
+        // Should see anymemo directory in thel list
+        assertTrue(solo.searchText("anymemo"));
     }
 
     public void testActionListStudy() {
@@ -88,6 +83,7 @@ public class AnyMemoActivityOpenTabTest extends ActivityInstrumentationTestCase2
         solo.clickOnText(UITestHelper.SAMPLE_DB_NAME);
         solo.clickOnText(solo.getString(R.string.settings_menu_text));
         solo.waitForActivity("SettingsScreen");
+        solo.sleep(3000);
     }
 
     public void testActionListDelete() {
