@@ -21,6 +21,8 @@ package org.liberty.android.fantastischmemo.ui;
 
 import java.util.Date;
 
+import org.apache.mycommons.lang3.StringUtils;
+
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
@@ -839,29 +841,22 @@ public class MemoScreen extends AMActivity {
 
     private void initTTS(){
         String defaultLocation = AMEnv.DEFAULT_AUDIO_PATH;
-        // TODO: This couldn't be null but be wary
         String qa = setting.getQuestionAudio();
         String aa = setting.getAnswerAudio();
 
-        // TODO: Pay attention to null pointer
-        if(!setting.getQuestionAudioLocation().equals("")){
+        if (StringUtils.isNotEmpty(setting.getQuestionAudioLocation())) {
             questionTTS = new AudioFileTTS(defaultLocation, dbName);
-        }
-        else if(qa != null && !qa.equals("")){
+        } else if (StringUtils.isNotEmpty(qa)){
             questionTTS = new AnyMemoTTSPlatform(this, new Locale(qa));
-        }
-        else{
+        } else{
             questionTTS = null;
         }
 
-        // TODO: Pay attention to null pointer
-        if(!setting.getAnswerAudioLocation().equals("")){
+        if (StringUtils.isNotEmpty(setting.getAnswerAudioLocation())) {
             answerTTS = new AudioFileTTS(defaultLocation, dbName);
-        }
-        else if(qa != null && !qa.equals("")){
+        } else if (StringUtils.isNotEmpty(aa)){
             answerTTS = new AnyMemoTTSPlatform(this, new Locale(aa));
-        }
-        else{
+        } else{
             answerTTS = null;
         }
     }

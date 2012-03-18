@@ -269,7 +269,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
                         try{
                             String target = audioPath + name;
                             if(!(new File(target)).exists()){
-                                FileUtils.copyFile(new File(path + "/" + name), new File(audioPath + name));
+                                FileUtils.copyFile(new File(path), new File(audioPath + name));
                             }
                         }
                         catch(Exception e){

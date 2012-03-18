@@ -567,17 +567,23 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             setting.setQaRatio(qaRatioSpinner.getSelectedItem());
 
 
-            // The posision = 0 means disabled.
-            if (questionLocaleSpinner.getSelectedItemPosition() != 0) {
-                setting.setQuestionAudio(questionLocaleSpinner.getSelectedItem());
-            } else {
+            // The posision = 0 means disabled. 1 means auto audio
+            if (questionLocaleSpinner.getSelectedItemPosition() == 0) {
                 setting.setQuestionAudio("");
+            } else if (questionLocaleSpinner.getSelectedItemPosition() == 1) {
+                setting.setQuestionAudioLocation(audioLocationEdit.getText().toString());
+            } else {
+                setting.setQuestionAudio(questionLocaleSpinner.getSelectedItem());
+                setting.setQuestionAudioLocation("");
             }
 
-            if (answerLocaleSpinner.getSelectedItemPosition() != 0) {
-                setting.setAnswerAudio(answerLocaleSpinner.getSelectedItem());
-            } else {
+            if (answerLocaleSpinner.getSelectedItemPosition() == 0) {
                 setting.setAnswerAudio("");
+            } else if (answerLocaleSpinner.getSelectedItemPosition() == 1) {
+                setting.setAnswerAudioLocation(audioLocationEdit.getText().toString());
+            } else {
+                setting.setAnswerAudio(answerLocaleSpinner.getSelectedItem());
+                setting.setAnswerAudioLocation("");
             }
 
             //-------------------------------------------
@@ -594,6 +600,8 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             setting.setHtmlLineBreakConversion(linebreakCheckbox.isChecked());
             setting.setQuestionFieldEnum(questionFields);
             setting.setAnswerEnum(answerFields);
+
+            // User audio
         }
 
         @Override
