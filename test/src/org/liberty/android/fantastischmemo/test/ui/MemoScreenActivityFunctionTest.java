@@ -118,6 +118,37 @@ public class MemoScreenActivityFunctionTest extends ActivityInstrumentationTestC
 
     }
 
+    public void testSkipCard() throws Exception {
+        solo.clickLongOnText("head");
+        // press skip
+        solo.clickOnText(solo.getString(R.string.skip_text));
+        solo.clickOnText(solo.getString(R.string.ok_text));
+        solo.sleep(5000);
+
+        // The card should not be shown
+        assertFalse(solo.searchText("head"));
+        solo.goBack();
+        solo.sleep(3000);
+        // asssert db state
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
+        try {
+            CardDao cardDao = helper.getCardDao();
+            // One card skipped ...
+            assertEquals(27, cardDao.getNewCardCount(null));
+            // ... and shouldn't be a scheduled card
+            assertEquals(0, cardDao.getScheduledCardCount(null));
+        } finally {
+            AnyMemoDBOpenHelperManager.releaseHelper(helper);
+        }
+    }
+
+    public void gotoPreviewScreen() {
+        solo.clickLongOnText("head");
+        // press skip
+        solo.clickOnText(solo.getString(R.string.goto_prev_screen));
+        assertTrue(solo.waitForActivity("EditScreen"));
+    }
+
     public void tearDown() throws Exception {
         try {
             solo.finishOpenedActivities();

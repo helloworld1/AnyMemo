@@ -1119,6 +1119,8 @@ public class MemoScreen extends AMActivity {
             public void onReceiveCategory(Category c) {
                 assert c != null : "Receive null category";
                 filterCategoryId = c.getId();
+                // Do not restart with the current card
+                currentCard = null;
                 restartActivity();
             }
         };
