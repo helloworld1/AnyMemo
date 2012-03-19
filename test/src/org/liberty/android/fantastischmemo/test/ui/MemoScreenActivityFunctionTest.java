@@ -142,11 +142,23 @@ public class MemoScreenActivityFunctionTest extends ActivityInstrumentationTestC
         }
     }
 
-    public void gotoPreviewScreen() {
+    public void testGotoPreviewScreen() {
         solo.clickLongOnText("head");
         // press skip
         solo.clickOnText(solo.getString(R.string.goto_prev_screen));
         assertTrue(solo.waitForActivity("EditScreen"));
+    }
+
+    public void testGotoDetailScreen() {
+        solo.sendKey(Solo.MENU);
+        solo.clickOnText(solo.getString(R.string.detail_menu_text));
+        assertTrue(solo.waitForActivity("DetailScreen"));
+    }
+
+    public void testGotoSettingsScreen() {
+        solo.sendKey(Solo.MENU);
+        solo.clickOnText(solo.getString(R.string.settings_menu_text));
+        assertTrue(solo.waitForActivity("SettingsScreen"));
     }
 
     public void tearDown() throws Exception {
