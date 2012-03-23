@@ -74,7 +74,6 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
     private Setting setting;
 
     // Widgets
-    // ------------------------------------------
     private AMSpinner questionFontSizeSpinner;
     private AMSpinner answerFontSizeSpinner;
     private AMSpinner questionAlignSpinner;
@@ -86,18 +85,17 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
     private LinearLayout audioLocationLayout;
     private EditText audioLocationEdit;
 
-    // ------------------------------------------
     private CheckBox colorCheckbox;
     private TableRow colorRow;
     private AMSpinner colorSpinner;
     private Button colorButton;
     private List<Integer> colors;
-    // ------------------------------------------
+
     private CheckBox qTypefaceCheckbox;
     private CheckBox aTypefaceCheckbox;
     private EditText qTypefaceEdit;
     private EditText aTypefaceEdit;
-    // ------------------------------------------
+
     private CheckBox displayInHTMLCheckbox;
     private EnumSet<CardField> fieldsDisplayedInHTML;    
     private CheckBox linebreakCheckbox;
@@ -105,7 +103,7 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
     private CheckBox field2Checkbox;
     private EnumSet<CardField> questionFields;
     private EnumSet<CardField> answerFields;
-    // ------------------------------------------
+
     private Button saveButton;
     private Button discardButton;
     private Button loadDefaultButton;
@@ -165,7 +163,6 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
         return false;
     }
 
-    // ============================================================================
     // Override method of onClickListener
     public void onClick(View v) {
         if (v == saveButton) {
@@ -338,7 +335,6 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
         builder.show();
     }
 
-    // ============================================================================
     /*
      * Load settings from database
      */
@@ -419,7 +415,6 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             audioLocationLayout = (LinearLayout) findViewById(R.id.settings_audio_location_view);
             audioLocationEdit = (EditText) findViewById(R.id.settings_audio_location);
             audioLocationEdit.setText(AMEnv.DEFAULT_AUDIO_PATH);
-            // ---------------------------------------------------
             colorCheckbox = (CheckBox) findViewById(R.id.checkbox_customize_color);
             colorCheckbox.setOnClickListener(SettingsScreen.this);
             colorRow = (TableRow) findViewById(R.id.color_row);
@@ -442,7 +437,6 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
                 }
             });
             
-            //---------------------------------------------------
             qTypefaceCheckbox = (CheckBox) findViewById(R.id.checkbox_typeface_question);
             qTypefaceCheckbox.setOnClickListener(SettingsScreen.this);
             aTypefaceCheckbox = (CheckBox) findViewById(R.id.checkbox_typeface_answer);
@@ -453,7 +447,7 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
 
             aTypefaceEdit = (EditText) findViewById(R.id.edit_typeface_answer);
             aTypefaceEdit.setOnClickListener(SettingsScreen.this);
-            //---------------------------------------------------
+
             displayInHTMLCheckbox = (CheckBox) findViewById(R.id.display_html);
             displayInHTMLCheckbox.setOnClickListener(SettingsScreen.this);
             fieldsDisplayedInHTML = setting.getDisplayInHTMLEnum();
@@ -468,7 +462,7 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             field2Checkbox = (CheckBox) findViewById(R.id.checkbox_field2);
             field2Checkbox.setOnClickListener(SettingsScreen.this);
             answerFields = setting.getAnswerFieldEnum();
-            // --------------------------------------------------
+
             saveButton = (Button) findViewById(R.id.settting_save);
             saveButton.setOnClickListener(SettingsScreen.this);
 
@@ -504,17 +498,22 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
         qaRatioSpinner.selectItemFromValue(setting.getQaRatio().toString(), 0);
         
         if (StringUtils.isNotEmpty(setting.getQuestionAudioLocation())) {
-            //TODO: NEED HERE!
-            //questionLocaleSpinner.setSelectedItem(
-
+            // 1 is the position of User audio
+            questionLocaleSpinner.setSelection(1);
         }
+
+        if (StringUtils.isNotEmpty(setting.getAnswerAudioLocation())) {
+            // 1 is the position of User audio
+            answerLocaleSpinner.setSelection(1);
+        }
+
         if (setting.getQuestionAudio().equals(Setting.AUDIO_USER_DEFINED) || 
             setting.getAnswerAudio().equals(Setting.AUDIO_USER_DEFINED)) {
             audioLocationLayout.setVisibility(View.VISIBLE);
         } else {
             audioLocationLayout.setVisibility(View.GONE);
         }
-        // -----------------------------------------------
+
         colorCheckbox.setChecked(!setting.isDefaultColor());
         if (colorCheckbox.isChecked()) {
             colorRow.setVisibility(View.VISIBLE);
@@ -522,7 +521,7 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             colorRow.setVisibility(View.GONE);
         }
         colorButton.setTextColor(colors.get(colorSpinner.getSelectedItemPosition()));
-        // -----------------------------------------------
+
         qTypefaceCheckbox.setChecked(StringUtils.isNotEmpty(setting.getQuestionFont()));
         if (qTypefaceCheckbox.isChecked()) {
             qTypefaceEdit.setVisibility(View.VISIBLE);
@@ -538,14 +537,13 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
         } else {
             aTypefaceEdit.setVisibility(View.GONE);
         }
-        // -----------------------------------------------
+
         displayInHTMLCheckbox.setChecked(!(fieldsDisplayedInHTML.isEmpty()));
         linebreakCheckbox.setChecked(setting.getHtmlLineBreakConversion());
         field1Checkbox.setChecked(!(questionFields.size() == 1 && questionFields.contains(CardField.QUESTION)));
         field2Checkbox.setChecked(!(answerFields.size() == 1 && answerFields.contains(CardField.ANSWER)));
     }
 
-    // ==============================================================
     /*
      * Save settings back to database
      */
@@ -561,7 +559,6 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             progressDialog.setCancelable(false);
             progressDialog.show();
 
-            // ------------------------------------------
             setting.setQuestionFontSize(Integer.valueOf(questionFontSizeSpinner.getSelectedItemValue()));
             setting.setAnswerFontSize(Integer.valueOf(answerFontSizeSpinner.getSelectedItemValue()));
             setting.setQuestionTextAlign(Setting.Align.valueOf(questionAlignSpinner.getSelectedItemValue()));
@@ -589,16 +586,15 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
                 setting.setAnswerAudioLocation("");
             }
 
-            //-------------------------------------------
             setting.setQuestionTextColor(colors.get(0));
             setting.setAnswerTextColor(colors.get(1));
             setting.setQuestionBackgroundColor(colors.get(2));
             setting.setAnswerBackgroundColor(colors.get(3));
             setting.setSeparatorColor(colors.get(4));
-            //-------------------------------------------
+
             setting.setQuestionFont(qTypefaceEdit.getText().toString());
             setting.setAnswerFont(aTypefaceEdit.getText().toString());
-            //-------------------------------------------
+
             setting.setDisplayInHTMLEnum(fieldsDisplayedInHTML);
             setting.setHtmlLineBreakConversion(linebreakCheckbox.isChecked());
             setting.setQuestionFieldEnum(questionFields);
