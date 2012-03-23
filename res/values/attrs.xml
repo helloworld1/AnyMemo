@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="AMSpinner">
+        <attr name="display_array" format="integer" />
+        <attr name="value_array" format="integer" />
+    </declare-styleable>
+</resources>
+

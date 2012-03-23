@@ -38,10 +38,7 @@ import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.domain.Setting.CardField;
-import org.liberty.android.fantastischmemo.ui.widgets.AMEnumSpinner;
-import org.liberty.android.fantastischmemo.ui.widgets.AMIntSpinner;
-import org.liberty.android.fantastischmemo.ui.widgets.AMPercentageSpinner;
-import org.liberty.android.fantastischmemo.ui.widgets.AMStrSpinner;
+import org.liberty.android.fantastischmemo.ui.widgets.AMSpinner;
 
 import org.liberty.android.fantastischmemo.utils.DatabaseUtils;
 
@@ -61,7 +58,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -71,8 +67,6 @@ import android.widget.TableRow;
 import android.widget.Toast;
 
 public class SettingsScreen extends AMActivity implements OnClickListener , ColorDialog.OnClickListener {
-    private final static int LAYOUT_SPINNER_DROPDOWN_ITEM = android.R.layout.simple_spinner_dropdown_item;
-    private final static int LAYOUT_SPINNER_ITEM = android.R.layout.simple_spinner_item;
 
     public static final String EXTRA_DBPATH = "dbpath";
     private String dbPath;
@@ -81,21 +75,21 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
 
     // Widgets
     // ------------------------------------------
-    private AMIntSpinner questionFontSizeSpinner;
-    private AMIntSpinner answerFontSizeSpinner;
-    private AMEnumSpinner<Setting.Align> questionAlignSpinner;
-    private AMEnumSpinner<Setting.Align> answerAlignSpinner;
-    private AMEnumSpinner<Setting.CardStyle> styleSpinner;
-    private AMPercentageSpinner qaRatioSpinner;
-    private AMStrSpinner questionLocaleSpinner;
-    private AMStrSpinner answerLocaleSpinner;
+    private AMSpinner questionFontSizeSpinner;
+    private AMSpinner answerFontSizeSpinner;
+    private AMSpinner questionAlignSpinner;
+    private AMSpinner answerAlignSpinner;
+    private AMSpinner styleSpinner;
+    private AMSpinner qaRatioSpinner;
+    private AMSpinner questionLocaleSpinner;
+    private AMSpinner answerLocaleSpinner;
     private LinearLayout audioLocationLayout;
     private EditText audioLocationEdit;
 
     // ------------------------------------------
     private CheckBox colorCheckbox;
     private TableRow colorRow;
-    private AMStrSpinner colorSpinner;
+    private AMSpinner colorSpinner;
     private Button colorButton;
     private List<Integer> colors;
     // ------------------------------------------
@@ -391,20 +385,15 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
 
         @Override
         public void onPostExecute(Void result) {
-            //---------------------------------------------------
-            questionFontSizeSpinner = new AMIntSpinner(getSpinner(R.id.question_font_size_spinner,
-                    R.array.font_size_list));
-            answerFontSizeSpinner = new AMIntSpinner(getSpinner(R.id.answer_font_size_spinner, R.array.font_size_list));
-            questionAlignSpinner = new AMEnumSpinner<Setting.Align>(getSpinner(R.id.question_align_spinner,
-                    R.array.align_list), Setting.Align.values());
-            answerAlignSpinner = new AMEnumSpinner<Setting.Align>(getSpinner(R.id.answer_align_spinner,
-                    R.array.align_list), Setting.Align.values());
-            styleSpinner = new AMEnumSpinner<Setting.CardStyle>(getSpinner(R.id.card_style_spinner,
-                    R.array.card_style_list), Setting.CardStyle.values());
-            qaRatioSpinner = new AMPercentageSpinner(getSpinner(R.id.ratio_spinner, R.array.ratio_list));
+            questionFontSizeSpinner = (AMSpinner)findViewById(R.id.question_font_size_spinner);
+            answerFontSizeSpinner =  (AMSpinner)findViewById(R.id.answer_font_size_spinner);
+            questionAlignSpinner = (AMSpinner)findViewById(R.id.question_align_spinner);
+            answerAlignSpinner = (AMSpinner)findViewById(R.id.answer_align_spinner);
+            styleSpinner =  (AMSpinner)findViewById(R.id.card_style_spinner);
+            qaRatioSpinner =  (AMSpinner)findViewById(R.id.ratio_spinner);
 
-            questionLocaleSpinner = new AMStrSpinner(getSpinner(R.id.question_locale_spinner, R.array.locale_list));
-            answerLocaleSpinner = new AMStrSpinner(getSpinner(R.id.answer_locale_spinner, R.array.locale_list));
+            questionLocaleSpinner =  (AMSpinner)findViewById(R.id.question_locale_spinner);
+            answerLocaleSpinner =  (AMSpinner)findViewById(R.id.answer_locale_spinner);
             
             AdapterView.OnItemSelectedListener localeListener = new AdapterView.OnItemSelectedListener(){
                 public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id){
@@ -434,7 +423,8 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             colorCheckbox = (CheckBox) findViewById(R.id.checkbox_customize_color);
             colorCheckbox.setOnClickListener(SettingsScreen.this);
             colorRow = (TableRow) findViewById(R.id.color_row);
-            colorSpinner = new AMStrSpinner(getSpinner(R.id.color_item_spinner, R.array.color_item_list));
+
+            colorSpinner =  (AMSpinner)findViewById(R.id.color_item_spinner);
             colorButton = (Button) findViewById(R.id.settings_color_button);
             colorButton.setOnClickListener(SettingsScreen.this);
             colors = new ArrayList<Integer>(5);
@@ -494,17 +484,30 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
         }
     }
 
-    // ==========================================================
     private void updateViews() {
-        questionFontSizeSpinner.setSelectedItem(setting.getQuestionFontSize());
-        answerFontSizeSpinner.setSelectedItem(setting.getAnswerFontSize());
-        questionAlignSpinner.setSelectedItem(setting.getQuestionTextAlign());
-        answerAlignSpinner.setSelectedItem(setting.getAnswerTextAlign());
-        questionLocaleSpinner.setSelectedItem(setting.getQuestionAudio());
-        answerLocaleSpinner.setSelectedItem(setting.getAnswerAudio());
-        styleSpinner.setSelectedItem(setting.getCardStyle());
-        qaRatioSpinner.setSelectedItem(setting.getQaRatio());
+        // Default 24 px font
+        questionFontSizeSpinner.selectItemFromValue(Integer.toString(setting.getQuestionFontSize()), 6);
+        answerFontSizeSpinner.selectItemFromValue(Integer.toString(setting.getAnswerFontSize()), 6);
+
+        // Default center
+        questionAlignSpinner.selectItemFromValue(setting.getQuestionTextAlign().toString(), 1);
+        answerAlignSpinner.selectItemFromValue(setting.getAnswerTextAlign().toString(), 1);
+
+        // Default US
+        questionLocaleSpinner.selectItemFromValue(setting.getQuestionAudio(), 2);
+        answerLocaleSpinner.selectItemFromValue(setting.getAnswerAudio(), 2);
+
+        // Default to single sided
+        styleSpinner.selectItemFromValue(setting.getCardStyle().toString(), 0);
+
+        // Default to 50
+        qaRatioSpinner.selectItemFromValue(setting.getQaRatio().toString(), 0);
         
+        if (StringUtils.isNotEmpty(setting.getQuestionAudioLocation())) {
+            //TODO: NEED HERE!
+            //questionLocaleSpinner.setSelectedItem(
+
+        }
         if (setting.getQuestionAudio().equals(Setting.AUDIO_USER_DEFINED) || 
             setting.getAnswerAudio().equals(Setting.AUDIO_USER_DEFINED)) {
             audioLocationLayout.setVisibility(View.VISIBLE);
@@ -559,12 +562,12 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             progressDialog.show();
 
             // ------------------------------------------
-            setting.setQuestionFontSize(questionFontSizeSpinner.getSelectedItem());
-            setting.setAnswerFontSize(answerFontSizeSpinner.getSelectedItem());
-            setting.setQuestionTextAlign(questionAlignSpinner.getSelectedItem());
-            setting.setAnswerTextAlign(answerAlignSpinner.getSelectedItem());
-            setting.setCardStyle(styleSpinner.getSelectedItem());
-            setting.setQaRatio(qaRatioSpinner.getSelectedItem());
+            setting.setQuestionFontSize(Integer.valueOf(questionFontSizeSpinner.getSelectedItemValue()));
+            setting.setAnswerFontSize(Integer.valueOf(answerFontSizeSpinner.getSelectedItemValue()));
+            setting.setQuestionTextAlign(Setting.Align.valueOf(questionAlignSpinner.getSelectedItemValue()));
+            setting.setAnswerTextAlign(Setting.Align.valueOf(answerAlignSpinner.getSelectedItemValue()));
+            setting.setCardStyle(Setting.CardStyle.valueOf(styleSpinner.getSelectedItemValue()));
+            setting.setQaRatio(Integer.valueOf(qaRatioSpinner.getSelectedItemValue()));
 
 
             // The posision = 0 means disabled. 1 means auto audio
@@ -573,7 +576,7 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             } else if (questionLocaleSpinner.getSelectedItemPosition() == 1) {
                 setting.setQuestionAudioLocation(audioLocationEdit.getText().toString());
             } else {
-                setting.setQuestionAudio(questionLocaleSpinner.getSelectedItem());
+                setting.setQuestionAudio(questionLocaleSpinner.getSelectedItemValue());
                 setting.setQuestionAudioLocation("");
             }
 
@@ -582,7 +585,7 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             } else if (answerLocaleSpinner.getSelectedItemPosition() == 1) {
                 setting.setAnswerAudioLocation(audioLocationEdit.getText().toString());
             } else {
-                setting.setAnswerAudio(answerLocaleSpinner.getSelectedItem());
+                setting.setAnswerAudio(answerLocaleSpinner.getSelectedItemValue());
                 setting.setAnswerAudioLocation("");
             }
 
@@ -668,15 +671,6 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
                 aTypefaceEdit.setText(file.getAbsolutePath());
             }
         };
-
-    private Spinner getSpinner(final int spinnerId, final int textArrayResId) {
-        Spinner spinner = (Spinner) findViewById(spinnerId);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(SettingsScreen.this, textArrayResId,
-                LAYOUT_SPINNER_ITEM);
-        adapter.setDropDownViewResource(LAYOUT_SPINNER_DROPDOWN_ITEM);
-        spinner.setAdapter(adapter);
-        return spinner;
-    }
     
 }
 

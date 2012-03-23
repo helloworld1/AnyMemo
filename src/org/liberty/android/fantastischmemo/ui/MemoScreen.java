@@ -939,7 +939,11 @@ public class MemoScreen extends AMActivity {
                 return;
             }
             assert result != null : "Init get null card";
-            flashcardDisplay = new SingleSidedCardDisplay(MemoScreen.this, dbName, setting, option);
+            if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED) {
+                flashcardDisplay = new DoubleSidedCardDisplay(MemoScreen.this, dbName, setting, option);
+            } else {
+                flashcardDisplay = new SingleSidedCardDisplay(MemoScreen.this, dbName, setting, option);
+            }
             if (option.getButtonStyle() == Option.ButtonStyle.ANKI) {
                 controlButtons = new AnkiGradeButtons(MemoScreen.this);
             }

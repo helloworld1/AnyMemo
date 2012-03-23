@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:anymemo="http://schemas.android.com/apk/res/org.liberty.android.fantastischmemo"
     android:scrollbars="vertical"
     android:layout_height="fill_parent"
     android:layout_width="fill_parent"> 
@@ -21,13 +22,14 @@
             android:text="@string/settings_question_font_size"
             
         />
-        <Spinner
+        <org.liberty.android.fantastischmemo.ui.widgets.AMSpinner
             android:id="@+id/question_font_size_spinner"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:drawSelectorOnTop="true"
             android:prompt="@string/settings_question_font_size_prompt"
-            />
+            anymemo:display_array="@array/font_size_list"
+            anymemo:value_array="@array/font_size_list_values" />
     </TableRow>
 
         
@@ -37,12 +39,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dip"
                 android:text="@string/settings_question_align" />
-        <Spinner
+        <org.liberty.android.fantastischmemo.ui.widgets.AMSpinner
             android:id="@+id/question_align_spinner"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:drawSelectorOnTop="true"
-            android:prompt="@string/settings_question_align_prompt" />
+            android:prompt="@string/settings_question_align_prompt"
+            anymemo:display_array="@array/align_list"
+            anymemo:value_array="@array/align_list_values" />
     </TableRow>
     <TableRow>
         <TextView
@@ -52,13 +56,14 @@
             android:text="@string/settings_answer_font_size"
             
         />
-        <Spinner
+        <org.liberty.android.fantastischmemo.ui.widgets.AMSpinner
             android:id="@+id/answer_font_size_spinner"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:drawSelectorOnTop="true"
             android:prompt="@string/settings_answer_font_size_prompt"
-            />
+            anymemo:display_array="@array/font_size_list"
+            anymemo:value_array="@array/font_size_list_values" />
     </TableRow>    
     <TableRow>
         <TextView
@@ -66,12 +71,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="3dip"
             android:text="@string/settings_answer_align" />
-        <Spinner
+        <org.liberty.android.fantastischmemo.ui.widgets.AMSpinner
             android:id="@+id/answer_align_spinner"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:drawSelectorOnTop="true"
-            android:prompt="@string/settings_answer_align_prompt" />
+            android:prompt="@string/settings_answer_align_prompt"
+            anymemo:display_array="@array/align_list"
+            anymemo:value_array="@array/align_list_values" />
     </TableRow>
         
     
@@ -81,12 +88,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="3dip"
             android:text="@string/card_style" />
-        <Spinner
+        <org.liberty.android.fantastischmemo.ui.widgets.AMSpinner
             android:id="@+id/card_style_spinner"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:drawSelectorOnTop="true"
-            android:prompt="@string/card_style" />
+            android:prompt="@string/card_style"
+            anymemo:display_array="@array/card_style_list"
+            anymemo:value_array="@array/card_style_list_values" />
     </TableRow>
 
     <TableRow>
@@ -95,12 +104,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="3dip"
             android:text="@string/settings_ratio" />
-        <Spinner
+        <org.liberty.android.fantastischmemo.ui.widgets.AMSpinner
             android:id="@+id/ratio_spinner"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:drawSelectorOnTop="true"
-            android:prompt="@string/settings_ratio" />
+            android:prompt="@string/settings_ratio"
+            anymemo:display_array="@array/ratio_list"
+            anymemo:value_array="@array/ratio_list_values" />
     </TableRow>
 
     <TableRow>
@@ -109,12 +120,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="3dip"
             android:text="@string/settings_question_locale" />
-        <Spinner
+        <org.liberty.android.fantastischmemo.ui.widgets.AMSpinner
             android:id="@+id/question_locale_spinner"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:drawSelectorOnTop="true"
-            android:prompt="@string/settings_question_locale_prompt" />
+            android:prompt="@string/settings_question_locale_prompt"
+            anymemo:display_array="@array/locale_list"
+            anymemo:value_array="@array/locale_list_values" />
     </TableRow>
     <TableRow>
         <TextView
@@ -122,12 +135,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="3dip"
             android:text="@string/settings_answer_locale" />
-        <Spinner
+        <org.liberty.android.fantastischmemo.ui.widgets.AMSpinner
             android:id="@+id/answer_locale_spinner"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:drawSelectorOnTop="true"
-            android:prompt="@string/settings_answer_locale_prompt" />
+            android:prompt="@string/settings_answer_locale_prompt"
+            anymemo:display_array="@array/locale_list"
+            anymemo:value_array="@array/locale_list_values" />
         </TableRow>
     </TableLayout>
     <LinearLayout
@@ -162,13 +177,14 @@
         android:stretchColumns="1">
         <TableRow
             android:id="@+id/color_row">
-            <Spinner
+            <org.liberty.android.fantastischmemo.ui.widgets.AMSpinner
                 android:id="@+id/color_item_spinner"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:drawSelectorOnTop="true"
                 android:prompt="@string/settings_customize_color"
-                />
+                anymemo:display_array="@array/color_item_list"
+                anymemo:value_array="@array/color_item_list" />
             <Button
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"

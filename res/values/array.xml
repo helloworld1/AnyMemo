@@ -16,10 +16,32 @@
 	<item>72</item>
 </string-array>
 
+<string-array name="font_size_list_values">
+	<item>12</item>
+	<item>14</item>
+	<item>16</item>
+	<item>18</item>
+	<item>20</item>
+	<item>22</item>
+	<item>24</item>
+	<item>28</item>
+	<item>32</item>
+	<item>36</item>
+	<item>48</item>
+	<item>64</item>
+	<item>72</item>
+</string-array>
+
 <string-array name="align_list">
     <item>@string/left_text</item>
     <item>@string/center_text</item>
     <item>@string/right_text</item>
+</string-array>
+
+<string-array name="align_list_values">
+    <item>LEFT</item>
+    <item>CENTER</item>
+    <item>RIGHT</item>
 </string-array>
 
 <string-array name="locale_list">
@@ -62,13 +84,48 @@
 	<item>ZH</item>
 	<item>AR</item>
 </string-array>
-<string-array name="html_list">
-    <item>@string/none_text</item>
-    <item>@string/both_text</item>
-    <item>@string/add_screen_question</item>
-    <item>@string/add_screen_answer</item>
-    <item>@string/auto_text</item>
+
+<string-array name="locale_list_values">
+    <item>Disabled</item>
+    <item>User audio</item>
+	<item>US</item>
+	<item>UK</item>
+	<item>FR</item>
+	<item>DE</item>
+	<item>IT</item>
+	<item>ES</item>
+	<item>AF</item>
+	<item>BS</item>
+	<item>CY</item>
+	<item>CZ</item>
+	<item>EL</item>
+	<item>EO</item>
+	<item>FI</item>
+	<item>HI</item>
+	<item>HR</item>
+	<item>HU</item>
+	<item>ID</item>
+	<item>IS</item>
+	<item>KU</item>
+	<item>LA</item>
+	<item>MK</item>
+	<item>NL</item>
+	<item>NO</item>
+	<item>PL</item>
+	<item>PT</item>
+	<item>RO</item>
+	<item>RU</item>
+	<item>SK</item>
+	<item>SR</item>
+	<item>SV</item>
+	<item>SW</item>
+	<item>TA</item>
+	<item>TR</item>
+	<item>VI</item>
+	<item>ZH</item>
+	<item>AR</item>
 </string-array>
+
 <string-array name="ratio_list">
 	<item>50%</item>
 	<item>65%</item>
@@ -77,6 +134,16 @@
 	<item>25%</item>
     <item>100%</item>
     <item>0%</item>
+</string-array>
+
+<string-array name="ratio_list_values">
+	<item>50</item>
+	<item>65</item>
+	<item>35</item>
+	<item>75</item>
+	<item>25</item>
+    <item>100</item>
+    <item>0</item>
 </string-array>
 
 <string-array name="fb_dialog_list">
@@ -210,10 +277,21 @@
     <item>@string/card_style_double</item>
 </string-array>
 
+<string-array name="card_style_list_values">
+    <item>SINGLE_SIDED</item>
+    <item>DOUBLE_SIDED</item>
+</string-array>
+
 <string-array name="card_field_list">
     <item>@string/add_screen_question</item>
     <item>@string/add_screen_answer</item>
     <item>@string/note_text</item>
+</string-array>
+
+<string-array name="card_field_list_values">
+    <item>Question</item>
+    <item>Answer</item>
+    <item>Note</item>
 </string-array>
 
 <string-array name="dict_list">
