@@ -487,9 +487,26 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
         questionAlignSpinner.selectItemFromValue(setting.getQuestionTextAlign().toString(), 1);
         answerAlignSpinner.selectItemFromValue(setting.getAnswerTextAlign().toString(), 1);
 
-        // Default US
+        // Default US but need special care
         questionLocaleSpinner.selectItemFromValue(setting.getQuestionAudio(), 2);
         answerLocaleSpinner.selectItemFromValue(setting.getAnswerAudio(), 2);
+
+        if (StringUtils.isNotEmpty(setting.getQuestionAudioLocation())) {
+            // User audio
+            questionLocaleSpinner.setSelection(1);
+        } else if (StringUtils.isEmpty(setting.getQuestionAudio())) {
+            // Disabled
+            questionLocaleSpinner.setSelection(0);
+        }
+
+        if (StringUtils.isNotEmpty(setting.getAnswerAudioLocation())) {
+            // User audio
+            answerLocaleSpinner.setSelection(1);
+        } else if (StringUtils.isEmpty(setting.getAnswerAudio())) {
+            // Disabled
+            answerLocaleSpinner.setSelection(0);
+        }
+
 
         // Default to single sided
         styleSpinner.selectItemFromValue(setting.getCardStyle().toString(), 0);
@@ -497,18 +514,8 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
         // Default to 50
         qaRatioSpinner.selectItemFromValue(setting.getQaRatio().toString(), 0);
         
-        if (StringUtils.isNotEmpty(setting.getQuestionAudioLocation())) {
-            // 1 is the position of User audio
-            questionLocaleSpinner.setSelection(1);
-        }
-
-        if (StringUtils.isNotEmpty(setting.getAnswerAudioLocation())) {
-            // 1 is the position of User audio
-            answerLocaleSpinner.setSelection(1);
-        }
-
-        if (setting.getQuestionAudio().equals(Setting.AUDIO_USER_DEFINED) || 
-            setting.getAnswerAudio().equals(Setting.AUDIO_USER_DEFINED)) {
+        if (StringUtils.isNotEmpty(setting.getQuestionAudioLocation()) || 
+            StringUtils.isNotEmpty(setting.getAnswerAudio())){
             audioLocationLayout.setVisibility(View.VISIBLE);
         } else {
             audioLocationLayout.setVisibility(View.GONE);
@@ -567,20 +574,27 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             setting.setQaRatio(Integer.valueOf(qaRatioSpinner.getSelectedItemValue()));
 
 
-            // The posision = 0 means disabled. 1 means auto audio
+            // User audio need specicial care.
+            // The posision = 0 means disabled. 1 means user audio
             if (questionLocaleSpinner.getSelectedItemPosition() == 0) {
+                // audio and location are both empty to indicate disable
                 setting.setQuestionAudio("");
+                setting.setQuestionAudioLocation("");
             } else if (questionLocaleSpinner.getSelectedItemPosition() == 1) {
                 setting.setQuestionAudioLocation(audioLocationEdit.getText().toString());
+                setting.setQuestionAudio(questionLocaleSpinner.getSelectedItemValue());
             } else {
                 setting.setQuestionAudio(questionLocaleSpinner.getSelectedItemValue());
+                // Location is empty to indicate it is not user audio
                 setting.setQuestionAudioLocation("");
             }
 
             if (answerLocaleSpinner.getSelectedItemPosition() == 0) {
                 setting.setAnswerAudio("");
+                setting.setAnswerAudioLocation("");
             } else if (answerLocaleSpinner.getSelectedItemPosition() == 1) {
                 setting.setAnswerAudioLocation(audioLocationEdit.getText().toString());
+                setting.setAnswerAudio(answerLocaleSpinner.getSelectedItemValue());
             } else {
                 setting.setAnswerAudio(answerLocaleSpinner.getSelectedItemValue());
                 setting.setAnswerAudioLocation("");
@@ -600,7 +614,6 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             setting.setQuestionFieldEnum(questionFields);
             setting.setAnswerEnum(answerFields);
 
-            // User audio
         }
 
         @Override
