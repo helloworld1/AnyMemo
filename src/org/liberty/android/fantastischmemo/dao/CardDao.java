@@ -43,6 +43,9 @@ public interface CardDao extends HelperDao<Card, Integer> {
     /* Randomly get cards that is not new */
     List<Card> getRandomReviewedCards(Category filterCategory, int limit);
 
+    /* Randonly get a list of cards */
+    List<Card> getRandomCards(Category filterCategory, int limit);
+
     /* Shuffle the ordinal */
     void shuffleOrdinals();
 

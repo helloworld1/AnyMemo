@@ -134,6 +134,11 @@
         <service
             android:name=".AnyMemoService" />
 
+        <provider
+                android:name=".provider.CardProvider"
+                android:authorities="org.liberty.android.fantastischmemo.provider"
+                android:multiprocess="true" />
+
     </application>
 
     <uses-sdk android:minSdkVersion="4" />

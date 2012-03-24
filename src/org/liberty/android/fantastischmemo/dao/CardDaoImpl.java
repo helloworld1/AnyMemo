@@ -492,6 +492,32 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
         }
     }
 
+    public List<Card> getRandomCards(Category filterCategory, int limit) {
+        try {
+            LearningDataDao learningDataDao = getHelper().getLearningDataDao();
+            QueryBuilder<LearningData, Integer> learnQb = learningDataDao.queryBuilder();
+            learnQb.selectColumns("id");
+            QueryBuilder<Card, Integer> cardQb = this.queryBuilder();
+            Where<Card, Integer> where = cardQb.where().in("learningData_id", learnQb);
+            if (filterCategory != null) {
+                where.and().eq("category_id", filterCategory.getId());
+            }
+
+            cardQb.setWhere(where);
+            // Return random ordered cards
+            cardQb.orderByRaw("random()");
+            cardQb.limit((long)limit);
+            List<Card> cs = cardQb.query();
+            for (Card c : cs) {
+                learningDataDao.refresh(c.getLearningData());
+            }
+            return cs;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
     public void swapAllQA() {
         try {
             callBatchTasks(new Callable<Void>() {
