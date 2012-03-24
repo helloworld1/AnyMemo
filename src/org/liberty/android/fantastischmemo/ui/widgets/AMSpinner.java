@@ -47,6 +47,10 @@ public class AMSpinner extends Spinner {
     private ArrayAdapter<CharSequence> mAdapter;
     private List<CharSequence> valueList;
 
+    /*
+     * This constructor should not be called directly.
+     * It is called when initializing the class using XML.
+     */
     public AMSpinner(Context context, AttributeSet attrs) {
         super(context, attrs);
         TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.AMSpinner);
