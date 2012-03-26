@@ -57,7 +57,7 @@ import java.sql.SQLException;
 import java.util.Comparator;
 import java.util.List;
 
-public class ListEditScreen extends AMActivity implements OnItemClickListener {
+public class ListEditScreen extends AMActivity {
 	private String dbPath;
 
 	private static String TAG = ListEditScreen.class.getCanonicalName();
@@ -90,17 +90,6 @@ public class ListEditScreen extends AMActivity implements OnItemClickListener {
 		InitTask initTask = new InitTask();
 		initTask.execute((Void) null);
 		
-	}
-
-	@Override
-	public void onItemClick(AdapterView<?> parentView, View childView,
-			int position, long id) {
-        DialogFragment df = new ListEditActionsFragment();
-        Bundle b = new Bundle();
-        b.putString(ListEditActionsFragment.EXTRA_DBPATH, dbPath);
-        b.putInt(ListEditActionsFragment.EXTRA_CARD_ID, mAdapter.getItem(position).getId());
-        df.setArguments(b);
-        df.show(getSupportFragmentManager(), "ListEditActions");
 	}
 
 	
@@ -187,6 +176,19 @@ public class ListEditScreen extends AMActivity implements OnItemClickListener {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    private OnItemClickListener listItemClickListener = new OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parentView, View childView,
+                int position, long id) {
+            DialogFragment df = new ListEditActionsFragment();
+            Bundle b = new Bundle();
+            b.putString(ListEditActionsFragment.EXTRA_DBPATH, dbPath);
+            b.putInt(ListEditActionsFragment.EXTRA_CARD_ID, mAdapter.getItem(position).getId());
+            df.setArguments(b);
+            df.show(getSupportFragmentManager(), "ListEditActions");
+        }
+    };
 	
     
     /*
@@ -278,7 +280,7 @@ public class ListEditScreen extends AMActivity implements OnItemClickListener {
 			listView = (ListView) findViewById(R.id.item_list);
 			listView.setAdapter(mAdapter);
 			listView.setSelection(initPosition);
-			listView.setOnItemClickListener(ListEditScreen.this);
+			listView.setOnItemClickListener(listItemClickListener);
 			progressDialog.dismiss();
 			
 				

@@ -40,6 +40,7 @@ public class MemoScreenActivityFunctionTest extends ActivityInstrumentationTestC
         if (solo.searchText("New version")) {
             solo.clickOnText(solo.getString(R.string.ok_text));
         }
+        solo.sleep(4000);
 
         // GO to Open tab
         mActivity.runOnUiThread(new Runnable() {
