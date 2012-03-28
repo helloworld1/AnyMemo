@@ -414,7 +414,18 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             answerLocaleSpinner.setOnItemSelectedListener(localeListener);
             audioLocationLayout = (LinearLayout) findViewById(R.id.settings_audio_location_view);
             audioLocationEdit = (EditText) findViewById(R.id.settings_audio_location);
-            audioLocationEdit.setText(AMEnv.DEFAULT_AUDIO_PATH);
+            if (StringUtils.isNotEmpty(setting.getQuestionAudio())) {
+                audioLocationEdit.setText(setting.getQuestionAudioLocation());
+            }
+
+            if (StringUtils.isNotEmpty(setting.getAnswerAudio())) {
+                audioLocationEdit.setText(setting.getAnswerAudioLocation());
+            }
+
+            if (StringUtils.isEmpty(audioLocationEdit.getText())) {
+                audioLocationEdit.setText(AMEnv.DEFAULT_AUDIO_PATH);
+            }
+
             colorCheckbox = (CheckBox) findViewById(R.id.checkbox_customize_color);
             colorCheckbox.setOnClickListener(SettingsScreen.this);
             colorRow = (TableRow) findViewById(R.id.color_row);
