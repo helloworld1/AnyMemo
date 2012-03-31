@@ -414,6 +414,8 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             answerLocaleSpinner.setOnItemSelectedListener(localeListener);
             audioLocationLayout = (LinearLayout) findViewById(R.id.settings_audio_location_view);
             audioLocationEdit = (EditText) findViewById(R.id.settings_audio_location);
+
+            // If we got no text, we will use the default location.
             if (StringUtils.isNotEmpty(setting.getQuestionAudio())) {
                 audioLocationEdit.setText(setting.getQuestionAudioLocation());
             }
