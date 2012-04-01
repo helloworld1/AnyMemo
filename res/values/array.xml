@@ -236,20 +236,6 @@
     <item>0</item>
 </integer-array>
 
-<string-array name="startup_screen_list">
-    <item>@string/screen_main_text</item>
-    <item>@string/screen_open_text</item>
-    <item>@string/screen_memo_text</item>
-    <item>@string/screen_edit_text</item>
-</string-array>
-
-<string-array name="startup_screen_list_values">
-    <item>MAIN</item>
-    <item>OPEN</item>
-    <item>MEMO</item>
-    <item>EDIT</item>
-</string-array>
-
 <string-array name="notification_interval_list">
     <item>@string/disabled_text</item>
     <item>@string/notification_1hr_text</item>
@@ -264,12 +250,6 @@
     <item>6</item>
     <item>12</item>
     <item>24</item>
-</string-array>
-
-<string-array name="download_source_list">
-    <item>@string/download_source_anymemo</item>
-    <item>@string/download_source_fe</item>
-    <item>@string/download_source_ss</item>
 </string-array>
 
 <string-array name="card_style_list">
