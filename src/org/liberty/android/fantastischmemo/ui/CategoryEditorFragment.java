@@ -100,7 +100,7 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
 
     public void onClick(View v) {
         if (v == okButton) {
-            mActivity.setProgressBarIndeterminateVisibility(true);
+            mActivity.setProgressBarIndeterminateVisibility(false);
             int position = categoryList.getCheckedItemPosition();
             Category selectedCategory;
             if (position == AdapterView.INVALID_POSITION) {
