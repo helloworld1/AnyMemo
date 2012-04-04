@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Vector;
 
 import org.apache.mycommons.io.FileUtils;
 
@@ -49,7 +51,11 @@ import android.preference.PreferenceManager;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+
+import android.support.v4.view.ViewPager;
 
 import android.text.Html;
 
@@ -61,12 +67,15 @@ import android.view.Display;
 import android.view.View;
 
 import android.widget.TabHost;
+import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TextView;
 
 public class AnyMemo extends AMActivity {
     private final static String WEBSITE_VERSION="http://anymemo.org/index.php?page=version";
     private TabHost mTabHost;
     private TabManager mTabManager;
+    private ViewPager mViewPager;
+    private PagerAdapter mPagerAdapter;
     private SharedPreferences settings;
 
     @Override
@@ -77,28 +86,16 @@ public class AnyMemo extends AMActivity {
         mTabHost = (TabHost)findViewById(android.R.id.tabhost);
         mTabHost.setup();
 
-        Resources res = getResources();
-        mTabManager = new TabManager(this, mTabHost, android.R.id.tabcontent);
-
-        Bundle b = new Bundle();
-        //String sdPath = AMEnv.DEFAULT_ROOT_PATH;
-       // b.putString("default_root", sdPath);
-        mTabManager.addTab(mTabHost.newTabSpec("recent").setIndicator(getString(R.string.recent_tab_text),  res.getDrawable(R.drawable.recent)),
-                RecentListFragment.class, b);
-        mTabManager.addTab(mTabHost.newTabSpec("open").setIndicator(getString(R.string.open_tab_text),  res.getDrawable(R.drawable.open)),
-                OpenTabFragment.class, b);
-        //mTabManager.addTab(mTabHost.newTabSpec("edit").setIndicator(getString(R.string.edit_tab_text),  res.getDrawable(R.drawable.edit)),
-        //        EditTabFragment.class, b);
-        mTabManager.addTab(mTabHost.newTabSpec("downloader").setIndicator(getString(R.string.download_tab_text),  res.getDrawable(R.drawable.download)),
-                DownloadTabFragment.class, b);
-
-        mTabManager.addTab(mTabHost.newTabSpec("misc").setIndicator(getString(R.string.misc_tab_text),  res.getDrawable(R.drawable.misc)),
-                MiscTabFragment.class, null);
+        // Page must be initialized before tab hosts
+        // because tab host will change tab using pager.
+        initViewPager();
+        initTabHosts();
 
         // This is the default tab.
         if (savedInstanceState != null) {
             mTabHost.setCurrentTabByTag(savedInstanceState.getString("recent"));
         }
+
         
         settings = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -209,14 +206,15 @@ public class AnyMemo extends AMActivity {
 
 
 
-    public static class TabManager implements TabHost.OnTabChangeListener {
+    @SuppressWarnings("unused")
+    private class TabManager {
         private final FragmentActivity mActivity;
         private final TabHost mTabHost;
         private final int mContainerId;
         private final HashMap<String, TabInfo> mTabs = new HashMap<String, TabInfo>();
         TabInfo mLastTab;
 
-        static final class TabInfo {
+        private final class TabInfo {
             private final String tag;
             private final Class<?> clss;
             private final Bundle args;
@@ -229,7 +227,7 @@ public class AnyMemo extends AMActivity {
             }
         }
 
-        static class DummyTabFactory implements TabHost.TabContentFactory {
+        private class DummyTabFactory implements TabHost.TabContentFactory {
             private final Context mContext;
 
             public DummyTabFactory(Context context) {
@@ -249,7 +247,7 @@ public class AnyMemo extends AMActivity {
             mActivity = activity;
             mTabHost = tabHost;
             mContainerId = containerId;
-            mTabHost.setOnTabChangedListener(this);
+            mTabHost.setOnTabChangedListener(onTabChangeLilstener);
         }
 
         public void addTab(TabHost.TabSpec tabSpec, Class<?> clss, Bundle args) {
@@ -271,33 +269,81 @@ public class AnyMemo extends AMActivity {
             mTabs.put(tag, info);
             mTabHost.addTab(tabSpec);
         }
+    }
+
+    public class PagerAdapter extends FragmentPagerAdapter {
+
+        private List<Fragment> fragments;
+
+        public PagerAdapter(FragmentManager fm, List<Fragment> fragments) {
+            super(fm);
+            this.fragments = fragments;
+        }
 
         @Override
-        public void onTabChanged(String tabId) {
-            TabInfo newTab = mTabs.get(tabId);
-            if (mLastTab != newTab) {
-                FragmentTransaction ft = mActivity.getSupportFragmentManager().beginTransaction();
-                if (mLastTab != null) {
-                    if (mLastTab.fragment != null) {
-                        ft.detach(mLastTab.fragment);
-                    }
-                }
-                if (newTab != null) {
-                    if (newTab.fragment == null) {
-                        newTab.fragment = Fragment.instantiate(mActivity,
-                                newTab.clss.getName(), newTab.args);
-                        ft.add(mContainerId, newTab.fragment, newTab.tag);
-                    } else {
-                        ft.attach(newTab.fragment);
-                    }
-                }
+        public Fragment getItem(int position) {
+            return this.fragments.get(position);
+        }
 
-                mLastTab = newTab;
-                ft.commit();
-                mActivity.getSupportFragmentManager().executePendingTransactions();
-            }
+        @Override
+        public int getCount() {
+            return this.fragments.size();
         }
     }
 
+    // Don't forget to add the new tab to view pager
+    private void initTabHosts() {
+        mTabManager = new TabManager(this, mTabHost, android.R.id.tabcontent);
+        Resources res = getResources();
+        mTabManager.addTab(mTabHost.newTabSpec("recent").setIndicator(getString(R.string.recent_tab_text),  res.getDrawable(R.drawable.recent)),
+                RecentListFragment.class, null);
+        mTabManager.addTab(mTabHost.newTabSpec("open").setIndicator(getString(R.string.open_tab_text),  res.getDrawable(R.drawable.open)),
+                OpenTabFragment.class, null);
+        mTabManager.addTab(mTabHost.newTabSpec("downloader").setIndicator(getString(R.string.download_tab_text),  res.getDrawable(R.drawable.download)),
+                DownloadTabFragment.class, null);
+        mTabManager.addTab(mTabHost.newTabSpec("misc").setIndicator(getString(R.string.misc_tab_text),  res.getDrawable(R.drawable.misc)),
+                MiscTabFragment.class, null);
+    }
 
+    private void initViewPager() {
+        List<Fragment> fragments = new Vector<Fragment>();
+        fragments.add(Fragment.instantiate(this, RecentListFragment.class.getName()));
+        fragments.add(Fragment.instantiate(this, OpenTabFragment.class.getName()));
+        fragments.add(Fragment.instantiate(this, DownloadTabFragment.class.getName()));
+        fragments.add(Fragment.instantiate(this, MiscTabFragment.class.getName()));
+        mPagerAdapter  = new PagerAdapter(super.getSupportFragmentManager(), fragments);
+        mViewPager = (ViewPager)super.findViewById(R.id.viewpager);
+        mViewPager.setAdapter(this.mPagerAdapter);
+        mViewPager.setOnPageChangeListener(onPageChangeListener);
+    }
+
+    private TabHost.OnTabChangeListener onTabChangeLilstener =
+        new OnTabChangeListener() {
+
+			@Override
+			public void onTabChanged(String tabId) {
+                int pos = mTabHost.getCurrentTab();
+                mViewPager.setCurrentItem(pos);
+				
+			}
+        };
+
+    private ViewPager.OnPageChangeListener onPageChangeListener = 
+        new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                mTabHost.setCurrentTab(position);
+            }
+
+			@Override
+			public void onPageScrollStateChanged(int arg0) {
+                // Do nothing
+			}
+
+			@Override
+			public void onPageScrolled(int arg0, float arg1, int arg2) {
+                // Do nothing
+			}
+
+        };
 }
