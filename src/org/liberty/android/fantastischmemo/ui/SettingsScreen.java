@@ -612,6 +612,7 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
                 setting.setAnswerAudio(answerLocaleSpinner.getSelectedItemValue());
                 setting.setAnswerAudioLocation("");
             }
+            
 
             setting.setQuestionTextColor(colors.get(0));
             setting.setAnswerTextColor(colors.get(1));
@@ -619,8 +620,16 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             setting.setAnswerBackgroundColor(colors.get(3));
             setting.setSeparatorColor(colors.get(4));
 
-            setting.setQuestionFont(qTypefaceEdit.getText().toString());
-            setting.setAnswerFont(aTypefaceEdit.getText().toString());
+            if (!qTypefaceCheckbox.isChecked()) {
+                setting.setQuestionFont("");
+            } else {
+                setting.setQuestionFont(qTypefaceEdit.getText().toString());
+            }
+            if (!aTypefaceCheckbox.isChecked()) {
+                setting.setAnswerFont("");
+            } else {
+                setting.setAnswerFont(aTypefaceEdit.getText().toString());
+            }
 
             setting.setDisplayInHTMLEnum(fieldsDisplayedInHTML);
             setting.setHtmlLineBreakConversion(linebreakCheckbox.isChecked());
