@@ -585,9 +585,10 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
         QueryBuilder<Card, Integer> qb = queryBuilder();
         try {
             Where<Card, Integer> where = qb.where();
-            where.gt("ordinal", ordinal)
-                .and().or(where.like("question", criteria), where.like("answer", criteria), where.like("note", criteria));
+            where.and(where.gt("ordinal", ordinal),
+                where.or(where.like("question", criteria), where.like("answer", criteria), where.like("note", criteria)));
             qb.setWhere(where);
+            qb.orderBy("ordinal", true);
             PreparedQuery<Card> pq = qb.prepare();
             Card nc = queryForFirst(pq);
             return nc;
@@ -601,9 +602,10 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
         QueryBuilder<Card, Integer> qb = queryBuilder();
         try {
             Where<Card, Integer> where = qb.where();
-            where.lt("ordinal", ordinal)
-                .and().or(where.like("question", criteria), where.like("answer", criteria), where.like("note", criteria));
+            where.and(where.lt("ordinal", ordinal),
+                where.or(where.like("question", criteria), where.like("answer", criteria), where.like("note", criteria)));
             qb.setWhere(where);
+            qb.orderBy("ordinal", false);
             PreparedQuery<Card> pq = qb.prepare();
             Card nc = queryForFirst(pq);
             return nc;
