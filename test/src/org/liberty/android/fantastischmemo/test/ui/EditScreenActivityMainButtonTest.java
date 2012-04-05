@@ -1,21 +1,12 @@
 package org.liberty.android.fantastischmemo.test.ui;
 
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
-
-import org.liberty.android.fantastischmemo.dao.CardDao;
-import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 
 import org.liberty.android.fantastischmemo.ui.AnyMemo;
 
 import com.jayway.android.robotium.solo.Solo;
 
 import android.test.ActivityInstrumentationTestCase2;
-
-import android.view.KeyEvent;
-
-import android.widget.TabHost;
 
 public class EditScreenActivityMainButtonTest extends ActivityInstrumentationTestCase2<AnyMemo> {
 
@@ -27,30 +18,20 @@ public class EditScreenActivityMainButtonTest extends ActivityInstrumentationTes
 
     private Solo solo;
 
-    private TabHost tabHost;
-
     public void setUp() throws Exception{
-        mActivity = this.getActivity();
-        tabHost = (TabHost)mActivity.findViewById(android.R.id.tabhost);
-        solo = new Solo(getInstrumentation(), mActivity);
-        UITestHelper uiTestHelper = new UITestHelper(getInstrumentation().getContext(), mActivity);
+        UITestHelper uiTestHelper = new UITestHelper(getInstrumentation());
         uiTestHelper.clearPreferences();
-        uiTestHelper.setUpFBPDatabase();
+        mActivity = this.getActivity();
+        solo = new Solo(getInstrumentation(), mActivity);
+
 
         if (solo.searchText("New version")) {
             solo.clickOnText(solo.getString(R.string.ok_text));
         }
         solo.sleep(4000);
-
-        // GO to Open tab
-        mActivity.runOnUiThread(new Runnable() {
-            public void run() {
-                tabHost.requestFocus();
-            }
-        });
-        sendKeys(KeyEvent.KEYCODE_DPAD_RIGHT);
-        solo.clickOnText(UITestHelper.SAMPLE_DB_NAME);
+        solo.clickLongOnText(UITestHelper.SAMPLE_DB_NAME);
         solo.clickOnText(solo.getString(R.string.edit_button_text));
+
         solo.waitForActivity("EditScreen");
         solo.sleep(4000);
     }

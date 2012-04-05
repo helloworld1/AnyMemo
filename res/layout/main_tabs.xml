@@ -15,7 +15,7 @@
             android:layout_weight="0" />
         <FrameLayout
             android:id="@android:id/tabcontent"
-            android:layout_width="0dp"
+            android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="0"
             android:padding="5dp" />

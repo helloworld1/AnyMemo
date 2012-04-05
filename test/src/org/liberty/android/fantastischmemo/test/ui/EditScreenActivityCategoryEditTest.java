@@ -6,7 +6,6 @@ import org.liberty.android.fantastischmemo.R;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
-import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 
 import org.liberty.android.fantastischmemo.domain.Card;
 
@@ -15,10 +14,6 @@ import org.liberty.android.fantastischmemo.ui.AnyMemo;
 import com.jayway.android.robotium.solo.Solo;
 
 import android.test.ActivityInstrumentationTestCase2;
-
-import android.view.KeyEvent;
-
-import android.widget.TabHost;
 
 public class EditScreenActivityCategoryEditTest extends ActivityInstrumentationTestCase2<AnyMemo> {
 
@@ -30,15 +25,12 @@ public class EditScreenActivityCategoryEditTest extends ActivityInstrumentationT
 
     private Solo solo;
 
-    private TabHost tabHost;
-
     public void setUp() throws Exception{
-        mActivity = this.getActivity();
-        tabHost = (TabHost)mActivity.findViewById(android.R.id.tabhost);
-        solo = new Solo(getInstrumentation(), mActivity);
-        UITestHelper uiTestHelper = new UITestHelper(getInstrumentation().getContext(), mActivity);
+        UITestHelper uiTestHelper = new UITestHelper(getInstrumentation());
         uiTestHelper.clearPreferences();
-        uiTestHelper.setUpFBPDatabase();
+        mActivity = this.getActivity();
+        solo = new Solo(getInstrumentation(), mActivity);
+
         solo.sleep(1000);
 
         if (solo.searchText("New version")) {
@@ -46,14 +38,8 @@ public class EditScreenActivityCategoryEditTest extends ActivityInstrumentationT
         }
         solo.sleep(4000);
 
-        // GO to Open tab
-        mActivity.runOnUiThread(new Runnable() {
-            public void run() {
-                tabHost.requestFocus();
-            }
-        });
-        sendKeys(KeyEvent.KEYCODE_DPAD_RIGHT);
-        solo.clickOnText(UITestHelper.SAMPLE_DB_NAME);
+
+        solo.clickLongOnText(UITestHelper.SAMPLE_DB_NAME);
         solo.clickOnText(solo.getString(R.string.edit_button_text));
         solo.waitForActivity("EditScreen");
         solo.sleep(4000);
@@ -69,6 +55,7 @@ public class EditScreenActivityCategoryEditTest extends ActivityInstrumentationT
     public void testNewCatetory() throws Exception {
         // First enter and create a category
         solo.clearEditText(0);
+        solo.sleep(300);
         solo.enterText(0, "mycategory");
         solo.clickOnText(solo.getString(R.string.new_text));
         assertTrue(solo.searchText("mycategory"));

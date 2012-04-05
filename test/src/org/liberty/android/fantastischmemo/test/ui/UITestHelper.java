@@ -8,9 +8,7 @@ import org.apache.mycommons.io.FileUtils;
 
 import org.liberty.android.fantastischmemo.AMEnv;
 
-import org.liberty.android.fantastischmemo.utils.RecentListUtil;
-
-import android.app.Activity;
+import android.app.Instrumentation;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -23,11 +21,12 @@ public class UITestHelper {
     public static final String SAMPLE_DB_PATH = "/sdcard/anymemo/french-body-parts.db";
     public static final String SAMPLE_DB_NAME= "french-body-parts.db";
 
-    Context mTestContext;
-    Activity mActivity;
-    public UITestHelper(Context testContext, Activity activity) {
-        mTestContext = testContext;
-        mActivity = activity;
+    private Context mTestContext;;
+    private Context mTargetContext;
+
+    public UITestHelper(Instrumentation ins) {
+        mTestContext = ins.getTargetContext();
+        mTargetContext = ins.getTargetContext();
     }
 
     /* Set up the french-body-parts database */
@@ -38,7 +37,6 @@ public class UITestHelper {
             outFile.delete();
 
             FileUtils.copyInputStreamToFile(in, outFile);
-            RecentListUtil.addToRecentList(mActivity, SAMPLE_DB_PATH);
             in.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -47,12 +45,9 @@ public class UITestHelper {
 
     /* Clear up the preferences for tests*/
     public void clearPreferences() {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mActivity);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mTargetContext);
         Editor editor = settings.edit();
         editor.clear();
         editor.commit(); 
-        // Don't show first fime;
-        editor.putBoolean("first_time", false);
-        editor.commit();
     }
 }

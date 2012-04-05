@@ -1,14 +1,11 @@
 package org.liberty.android.fantastischmemo.test.ui;
 
-import java.util.List;
-
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
-import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
@@ -18,10 +15,6 @@ import org.liberty.android.fantastischmemo.ui.AnyMemo;
 import com.jayway.android.robotium.solo.Solo;
 
 import android.test.ActivityInstrumentationTestCase2;
-
-import android.view.KeyEvent;
-
-import android.widget.TabHost;
 
 public class MemoScreenActivityFilterCategoryTest extends ActivityInstrumentationTestCase2<AnyMemo> {
 
@@ -33,30 +26,20 @@ public class MemoScreenActivityFilterCategoryTest extends ActivityInstrumentatio
 
     private Solo solo;
 
-    private TabHost tabHost;
-
     public void setUp() throws Exception{
-        mActivity = this.getActivity();
-        tabHost = (TabHost)mActivity.findViewById(android.R.id.tabhost);
-        solo = new Solo(getInstrumentation(), mActivity);
-        UITestHelper uiTestHelper = new UITestHelper(getInstrumentation().getContext(), mActivity);
+        UITestHelper uiTestHelper = new UITestHelper(getInstrumentation());
         uiTestHelper.clearPreferences();
-        uiTestHelper.setUpFBPDatabase();
-        setUpCategories();
+        
+        
+        mActivity = this.getActivity();
+        solo = new Solo(getInstrumentation(), mActivity);
 
         if (solo.searchText("New version")) {
             solo.clickOnText(solo.getString(R.string.ok_text));
         }
         solo.sleep(4000);
-
-        // GO to Open tab
-        mActivity.runOnUiThread(new Runnable() {
-            public void run() {
-                tabHost.requestFocus();
-            }
-        });
-        sendKeys(KeyEvent.KEYCODE_DPAD_RIGHT);
-        solo.clickOnText(UITestHelper.SAMPLE_DB_NAME);
+        setUpCategories();
+        solo.clickLongOnText(UITestHelper.SAMPLE_DB_NAME);
         solo.clickOnText(solo.getString(R.string.study_text));
         solo.waitForActivity("MemoScreen");
         solo.sleep(4000);
@@ -64,7 +47,7 @@ public class MemoScreenActivityFilterCategoryTest extends ActivityInstrumentatio
 
     // Move 2, 5, 8 to category: cat1
     private void setUpCategories() throws Exception {
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(getInstrumentation().getTargetContext(), UITestHelper.SAMPLE_DB_PATH);
         CardDao cardDao = helper.getCardDao();
         CategoryDao categoryDao = helper.getCategoryDao();
         Category cat1 = categoryDao.createOrReturn("cat1");
