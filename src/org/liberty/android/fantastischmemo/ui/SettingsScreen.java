@@ -343,9 +343,6 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
 
         @Override
         public void onPreExecute() {
-            requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-
-            setContentView(R.layout.settings_screen);
 
             Bundle extras = getIntent().getExtras();
             if (extras != null) {
@@ -381,6 +378,8 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
 
         @Override
         public void onPostExecute(Void result) {
+            setContentView(R.layout.settings_screen);
+
             questionFontSizeSpinner = (AMSpinner)findViewById(R.id.question_font_size_spinner);
             answerFontSizeSpinner =  (AMSpinner)findViewById(R.id.answer_font_size_spinner);
             questionAlignSpinner = (AMSpinner)findViewById(R.id.question_align_spinner);

@@ -150,17 +150,28 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
 
     public void testUserAudio() throws Exception {
         // Set Question audio
+
         solo.clickOnText("US");
+        // First scroll up
+        for (int i = 0; i < 6; i++) {
+        	solo.sendKey(Solo.UP);
+        }
+        
         solo.clickOnText(solo.getString(R.string.user_audio_text));
+
+        // Set answer audio
         solo.clickOnText("FR");
+        for (int i = 0; i < 6; i++) {
+        	solo.sendKey(Solo.UP);
+        }
+        
+        solo.clickOnText(solo.getString(R.string.user_audio_text));
         solo.clickOnText(solo.getString(R.string.settings_save));
         solo.sleep(3000);
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
         try {
             SettingDao settingDao = helper.getSettingDao();
             Setting setting = settingDao.queryForId(1);
-            assertEquals("", setting.getQuestionAudio());
-            assertEquals("", setting.getAnswerAudio());
             assertTrue(StringUtils.isEmpty(setting.getQuestionAudioLocation()));
             assertTrue(StringUtils.isEmpty(setting.getAnswerAudioLocation()));
 
