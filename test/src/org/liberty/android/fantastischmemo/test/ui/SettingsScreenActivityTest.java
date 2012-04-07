@@ -1,10 +1,11 @@
 package org.liberty.android.fantastischmemo.test.ui;
 
+import org.apache.mycommons.lang3.StringUtils;
+
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
 
-import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.SettingDao;
 
 import org.liberty.android.fantastischmemo.domain.Setting;
@@ -32,6 +33,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         mActivity = this.getActivity();
         solo = new Solo(getInstrumentation(), mActivity);
 
+        solo.sleep(1000);
         if (solo.searchText("New version")) {
             solo.clickOnText(solo.getString(R.string.ok_text));
         }
@@ -53,6 +55,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         assertTrue(solo.searchText("72"));
 
         solo.clickOnText(solo.getString(R.string.settings_save));
+        solo.sleep(3000);
 
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
         try {
@@ -60,6 +63,107 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
             Setting setting = settingDao.queryForId(1);
             assertEquals(48, (int)setting.getQuestionFontSize());
             assertEquals(72, (int)setting.getAnswerFontSize());
+        } finally {
+            AnyMemoDBOpenHelperManager.releaseHelper(helper);
+        }
+    }
+
+    public void testSaveAlignments() throws Exception {
+        // 1st spinner
+        solo.clickOnText(solo.getString(R.string.center_text), 1);
+        solo.clickOnText(solo.getString(R.string.left_text));
+
+        // 2nd spinner
+        solo.clickOnText(solo.getString(R.string.center_text), 1);
+        solo.clickOnText(solo.getString(R.string.right_text));
+
+        solo.clickOnText(solo.getString(R.string.settings_save));
+        solo.sleep(3000);
+
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
+        try {
+            SettingDao settingDao = helper.getSettingDao();
+            Setting setting = settingDao.queryForId(1);
+            assertEquals(Setting.Align.LEFT, setting.getQuestionTextAlign());
+            assertEquals(Setting.Align.RIGHT, setting.getAnswerTextAlign());
+        } finally {
+            AnyMemoDBOpenHelperManager.releaseHelper(helper);
+        }
+    }
+
+    public void testSaveCardStyle() throws Exception {
+        solo.clickOnText(solo.getString(R.string.card_style_single));
+        solo.clickOnText(solo.getString(R.string.card_style_double));
+        solo.clickOnText(solo.getString(R.string.settings_save));
+        solo.sleep(3000);
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
+        try {
+            SettingDao settingDao = helper.getSettingDao();
+            Setting setting = settingDao.queryForId(1);
+            assertEquals(Setting.CardStyle.DOUBLE_SIDED, setting.getCardStyle());
+        } finally {
+            AnyMemoDBOpenHelperManager.releaseHelper(helper);
+        }
+    }
+
+    public void testSaveDisplayRatio() throws Exception {
+        solo.clickOnText("50%");
+        solo.clickOnText("75%");
+        solo.clickOnText(solo.getString(R.string.settings_save));
+        solo.sleep(3000);
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
+        try {
+            SettingDao settingDao = helper.getSettingDao();
+            Setting setting = settingDao.queryForId(1);
+            assertEquals(75, (int)setting.getQaRatio());
+        } finally {
+            AnyMemoDBOpenHelperManager.releaseHelper(helper);
+        }
+    }
+
+    public void testTTSAudioLocale() throws Exception {
+        // Set Question audio
+        solo.clickOnText("US");
+        solo.clickOnText("DE");
+
+        // Set Answer audio
+        solo.clickOnText("FR");
+        solo.clickOnText("IT");
+        
+        solo.clickOnText(solo.getString(R.string.settings_save));
+
+        solo.sleep(3000);
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
+        try {
+            SettingDao settingDao = helper.getSettingDao();
+            Setting setting = settingDao.queryForId(1);
+            assertEquals("DE", setting.getQuestionAudio());
+            assertEquals("IT", setting.getAnswerAudio());
+            assertTrue(StringUtils.isEmpty(setting.getQuestionAudioLocation()));
+            assertTrue(StringUtils.isEmpty(setting.getAnswerAudioLocation()));
+
+        } finally {
+            AnyMemoDBOpenHelperManager.releaseHelper(helper);
+        }
+
+    }
+
+    public void testUserAudio() throws Exception {
+        // Set Question audio
+        solo.clickOnText("US");
+        solo.clickOnText(solo.getString(R.string.user_audio_text));
+        solo.clickOnText("FR");
+        solo.clickOnText(solo.getString(R.string.settings_save));
+        solo.sleep(3000);
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
+        try {
+            SettingDao settingDao = helper.getSettingDao();
+            Setting setting = settingDao.queryForId(1);
+            assertEquals("", setting.getQuestionAudio());
+            assertEquals("", setting.getAnswerAudio());
+            assertTrue(StringUtils.isEmpty(setting.getQuestionAudioLocation()));
+            assertTrue(StringUtils.isEmpty(setting.getAnswerAudioLocation()));
+
         } finally {
             AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }

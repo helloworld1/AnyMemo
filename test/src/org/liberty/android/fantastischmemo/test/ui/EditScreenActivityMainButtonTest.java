@@ -25,6 +25,7 @@ public class EditScreenActivityMainButtonTest extends ActivityInstrumentationTes
         solo = new Solo(getInstrumentation(), mActivity);
 
 
+        solo.sleep(1000);
         if (solo.searchText("New version")) {
             solo.clickOnText(solo.getString(R.string.ok_text));
         }
