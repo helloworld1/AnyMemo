@@ -172,8 +172,8 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         try {
             SettingDao settingDao = helper.getSettingDao();
             Setting setting = settingDao.queryForId(1);
-            assertTrue(StringUtils.isEmpty(setting.getQuestionAudioLocation()));
-            assertTrue(StringUtils.isEmpty(setting.getAnswerAudioLocation()));
+            assertTrue(StringUtils.isNotEmpty(setting.getQuestionAudioLocation()));
+            assertTrue(StringUtils.isNotEmpty(setting.getAnswerAudioLocation()));
 
         } finally {
             AnyMemoDBOpenHelperManager.releaseHelper(helper);
