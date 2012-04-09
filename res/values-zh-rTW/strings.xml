@@ -380,7 +380,7 @@
     <string name="delete_text_short">刪除</string>
     <string name="sort_by_text">排序</string>
     <string name="question_text">問題</string>
-    <string name="answer_text">daan</string>
+    <string name="answer_text">答案</string>
     <string name="exit_text">退出</string>
     <string name="sdcard_not_available_warning_title">沒有找到SD卡</string>
     <string name="sdcard_not_available_warning_message">請插入SD卡後重試!</string>
