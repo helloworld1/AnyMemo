@@ -32,14 +32,13 @@ public class AnyMemoActivityOpenTabTest extends ActivityInstrumentationTestCase2
         }
         solo.sleep(4000);
         //solo.clickOnText(solo.getString(R.string.open_tab_text));
-        solo.clickOnText("Open");
-
+        solo.clickOnText("Misc");
+        solo.sleep(500);
+        solo.clickOnText("About");
     }
 
 
     public void testActionListStudy() {
-        solo.sleep(500);
-        solo.clickOnText("bba.db");
         solo.sleep(3000);
     }
 
