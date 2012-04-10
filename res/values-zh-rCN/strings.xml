@@ -384,9 +384,6 @@
     <string name="exit_text">退出</string>
     <string name="sdcard_not_available_warning_title">没有找到SD卡</string>
     <string name="sdcard_not_available_warning_message">请插入SD卡后重试!</string>
-    <string name="crash_report_checkbox_title">向作者报告错误</string>
-    <string name="crash_report_enabled">错误将向作者报告。</string>
-    <string name="crash_report_disabled">错误不会向作者报告。</string>
     <string name="help_advanced_operations">高级功能比如交换卡片QA，清除学习记录，删除重复在卡片浏览界面长按的菜单中.</string>
     <string name="load_default_text">读取默认设置</string>
     <string name="load_default_warning_text">该操作将读取您设置的默认设置。</string>

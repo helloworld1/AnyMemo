@@ -382,9 +382,6 @@
     <string name="exit_text">Выход</string>
     <string name="sdcard_not_available_warning_title">SD карта недоступна</string>
     <string name="sdcard_not_available_warning_message">Вставьте SD карту и запустите снова!</string>
-    <string name="crash_report_checkbox_title">Отправлять отчёты об ошибках</string>
-    <string name="crash_report_enabled">Отчёты об ошибках автоматически отправлять автору.</string>
-    <string name="crash_report_disabled">Отчеты об ошибках не посылать.</string>
     <string name="help_advanced_operations">Большинство операций с базами (такие как обмен местами В и О, перемешивание карточек, удаление дубликатов) доступны из экрана Просмотр/Правка по длинному нажатию на карту.</string>
     <string name="entry_last_learn_date">дата_посл_учёбы</string>
     <string name="entry_next_learn_date">дата_след_учёбы</string>
