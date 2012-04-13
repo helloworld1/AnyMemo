@@ -215,7 +215,6 @@ public class MemoScreen extends AMActivity {
     @Override
     public void onDestroy(){
         super.onDestroy();
-        Log.v(TAG, "onDestroy now!");
         AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
         if(questionTTS != null){
             questionTTS.shutdown();
@@ -644,7 +643,6 @@ public class MemoScreen extends AMActivity {
                 MemoScreen.this.openContextMenu(flashcardDisplay.getView());
                 /* To determine which view is long clicked */
                 activeView = v;
-                Log.v(TAG, "Open Menu!");
                 return true;
             }
         };

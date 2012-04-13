@@ -222,7 +222,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
 
         }
         catch(Exception e){
-            Log.v(TAG, "cursor position is wrong", e);
+            Log.e(TAG, "cursor position is wrong", e);
         }
     }
 

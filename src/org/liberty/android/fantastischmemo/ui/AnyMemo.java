@@ -128,6 +128,15 @@ public class AnyMemo extends AMActivity {
         String thisVersion = getResources().getString(R.string.app_version);
 
         boolean firstTime = settings.getBoolean("first_time", true);
+
+        // Force clean preference for non-compstible versions.
+        if ((!savedVersion.startsWith(thisVersion.substring(0,1)) || savedVersion.equals("9.0"))) {
+            firstTime = true;
+            SharedPreferences.Editor editor = settings.edit();
+            editor.clear();
+            editor.commit();
+        }
+
         /* First time installation! It will install the sample db
          * to /sdcard/AnyMemo
          */

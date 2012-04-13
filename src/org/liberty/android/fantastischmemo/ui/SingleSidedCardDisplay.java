@@ -219,9 +219,6 @@ public class SingleSidedCardDisplay implements FlashcardDisplay, TagHandler, Ima
         /* Show the field that is enabled in settings */
         EnumSet<Setting.CardField> field1 = setting.getQuestionFieldEnum();
         EnumSet<Setting.CardField> field2 = setting.getAnswerFieldEnum();
-        Log.v(TAG, "Field1: " + field1);
-        Log.v(TAG, "Field2: " + field2);
-        Log.v(TAG, "html: " + htmlDisplay);
 
         /* Iterate all fields */
         for (Setting.CardField cf : Setting.CardField.values()) {

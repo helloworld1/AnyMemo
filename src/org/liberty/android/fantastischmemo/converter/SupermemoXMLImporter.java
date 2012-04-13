@@ -57,8 +57,7 @@ public class SupermemoXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
     private LearningData ld;
     private int count = 1;
     private int interval;
-    SimpleDateFormat supermemoFormat = new SimpleDateFormat("dd.MM.yy");
-    SimpleDateFormat anymemoFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private SimpleDateFormat supermemoFormat = new SimpleDateFormat("dd.MM.yy");
 
 	
 	private StringBuffer characterBuf;
@@ -149,8 +148,7 @@ public class SupermemoXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
             ld.setEasiness(e);
         }
         if(localName.equals("LastRepetition")){
-            try{
-                /* Convert date format from SM to AM*/
+            try {
                 Date date = supermemoFormat.parse(characterBuf.toString());
                 ld.setLastLearnDate(date);
             }
