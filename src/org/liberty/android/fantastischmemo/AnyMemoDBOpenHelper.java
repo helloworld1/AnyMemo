@@ -119,11 +119,17 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
             // copy categories
             database.execSQL("insert into categories (name)"
                 + " select category as name from dict_tbl where category != ''"
+                + " and category is not null"
                 + " group by category");
             database.execSQL("update cards set category_id = ("
                 + " select id as category_id from categories as cat"
                 + " join dict_tbl as dic on dic.category = cat.name"
                 + " where cards.id = dic._id)");
+
+            // Update category if the category is null
+            database.execSQL("update cards "
+                    + " set category_id = 1"
+                    + " where category_id is null");
 
             database.execSQL("update cards set updateDate='2010-01-01 00:00:00.000000'," + 
                     "creationDate='2010-01-01 00:00:00.000000'");
@@ -133,6 +139,8 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
             // Set unused fields
             database.execSQL("update cards"
                 + " set cardType = 0");
+
+
         }
     }
 
