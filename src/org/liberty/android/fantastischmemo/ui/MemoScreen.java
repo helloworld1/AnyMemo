@@ -704,11 +704,7 @@ public class MemoScreen extends AMActivity {
         sb.append(getString(R.string.review_short_text) + ": " + schedluledCardCount + " ");
         sb.append(getString(R.string.id_text) + ": " + currentCard.getId() + " ");
 
-        // AnyMemo 9.0 and 9.0.1 may leave category as null.
-        // Fixed in later version.
-        if (currentCard.getCategory() != null) {
-            sb.append(currentCard.getCategory().getName());
-        }
+        sb.append(currentCard.getCategory().getName());
         return sb.toString();
     }
 
