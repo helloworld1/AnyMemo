@@ -8,6 +8,8 @@ import com.jayway.android.robotium.solo.Solo;
 
 import android.test.ActivityInstrumentationTestCase2;
 
+import java.io.File;
+
 public class AnyMemoActivityRecentTabTest extends ActivityInstrumentationTestCase2<AnyMemo> {
 
     protected AnyMemo mActivity;
@@ -73,7 +75,8 @@ public class AnyMemoActivityRecentTabTest extends ActivityInstrumentationTestCas
         solo.clickLongOnText(UITestHelper.SAMPLE_DB_NAME);
         solo.clickOnText(solo.getString(R.string.delete_text));
         solo.clickOnButton(solo.getString(R.string.delete_text));
-        assertFalse(solo.searchText(UITestHelper.SAMPLE_DB_NAME));
+        solo.sleep(1000);
+        assertFalse((new File(UITestHelper.SAMPLE_DB_PATH)).exists());
     }
 
     public void tearDown() throws Exception {

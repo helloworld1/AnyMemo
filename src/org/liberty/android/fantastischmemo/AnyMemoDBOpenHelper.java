@@ -36,7 +36,7 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
 
     private final String dbPath;
 
-    private static final int CURRENT_VERSION = 2; 
+    private static final int CURRENT_VERSION = 3; 
 
     private CardDao cardDao = null;
     
@@ -147,6 +147,12 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase database, ConnectionSource connectionSource, int oldVersion, int newVersion) {
         Log.v(TAG, "Old version" + oldVersion + " new version: " + newVersion);
+        // Update possible card with null category field
+        if (oldVersion == 2) {
+            database.execSQL("update cards "
+                    + " set category_id = 1"
+                    + " where category_id is null");
+        }
     }
 
     @Override
