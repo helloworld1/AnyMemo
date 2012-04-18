@@ -601,14 +601,11 @@ public class MemoScreen extends AMActivity {
                         if(flashcardDisplay.isAnswerShown()){
                             updateFlashcardView(false);
                             hideButtons();
-                        }
-                        else{
-                            updateFlashcardView(true);
+                        } else{
                             showButtons();
                         }
 
-                    }
-                    else{
+                    } else {
                         /* For single sided card */
                         updateFlashcardView(true);
                         showButtons();
@@ -714,12 +711,6 @@ public class MemoScreen extends AMActivity {
             public void onClick(View v){
                 gradeTask = new GradeTask();
                 gradeTask.execute(grade);
-                if(questionTTS != null){
-                    questionTTS.stop();
-                }
-                if(answerTTS != null){
-                    answerTTS.stop();
-                }
             }
         };
     }
@@ -816,15 +807,18 @@ public class MemoScreen extends AMActivity {
 
     private void autoSpeak(){
         if (currentCard != null) {
-
             if(option.getSpeakingType() == Option.SpeakingType.AUTOTAP || option.getSpeakingType() == Option.SpeakingType.AUTO){
                 if(!flashcardDisplay.isAnswerShown()){
                     if(questionTTS != null){
+                        // Make sure the TTS is stop, or it will speak nothing.
+                        questionTTS.stop();
                         questionTTS.sayText(currentCard.getQuestion());
                     }
                 }
                 else{
                     if(answerTTS != null){
+                        // Make sure the TTS is stop
+                        answerTTS.stop();
                         answerTTS.sayText(currentCard.getAnswer());
                     }
                 }
@@ -909,6 +903,8 @@ public class MemoScreen extends AMActivity {
                 settingDao = dbOpenHelper.getSettingDao();
                 categoryDao = dbOpenHelper.getCategoryDao();
                 setting = settingDao.queryForId(1);
+                // Initialize the TTS early so it will have time to initialize.
+                initTTS();
                 if (filterCategoryId != -1) {
                     filterCategory = categoryDao.queryForId(filterCategoryId);
                     assert filterCategory != null : "Query filter id: " + filterCategoryId +". Get null";
@@ -954,7 +950,6 @@ public class MemoScreen extends AMActivity {
 
             currentCard = result;
             
-            initTTS();
             composeViews();
             setViewListeners();
             hideButtons();

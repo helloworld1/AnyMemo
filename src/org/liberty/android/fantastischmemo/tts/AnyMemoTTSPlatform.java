@@ -40,15 +40,24 @@ public class AnyMemoTTSPlatform implements AnyMemoTTS, TextToSpeech.OnInitListen
 		myTTS = new TextToSpeech(context, this);
 		myLocale = locale;
         Log.v(TAG, "init!" + myLocale.toString());
+        myTTS.setLanguage(myLocale);
 	}
 
 	
 	public void shutdown(){
-			myTTS.shutdown();
+        myTTS.shutdown();
 	}
 
     public void stop(){
         myTTS.stop();
+        // We wait until the tts is not speaking.
+        // This is because top is asynchronized call
+        while (myTTS.isSpeaking()) {
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException e) {
+            }
+        }
     }
 	
 	public int sayText(String s){
