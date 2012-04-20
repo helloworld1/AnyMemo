@@ -21,21 +21,43 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.tts;
 
 import java.util.Locale;
+
+import java.util.concurrent.TimeUnit;
+
+import java.util.concurrent.locks.ReentrantLock;
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
 public class AnyMemoTTSPlatform implements AnyMemoTTS, TextToSpeech.OnInitListener{
 
-	private TextToSpeech myTTS;
+	private final TextToSpeech myTTS;
 	
-	private Locale myLocale;
+	private final Locale myLocale;
+    
+    private ReentrantLock initLock = new ReentrantLock();
 
-    public final static String TAG = "org.liberty.android.fantastischmemo.TTS";
+    /* TTS Init lock's timeout in seconds. */
+    private static long INIT_LOCK_TIMEOUT = 10L;
+
+    public final static String TAG = "org.liberty.android.fantastischmemo.tts.AnyMemoTTSPlatform";
 
     public void onInit(int status){
+        try {
+            if (initLock.tryLock() || initLock.tryLock(INIT_LOCK_TIMEOUT, TimeUnit.SECONDS)) {
+                initLock.unlock();
+            } else {
+                Log.e(TAG, "TTS init timed out");
+                return;
+            }
+        } catch (InterruptedException e) {
+            Log.e(TAG, "TTS init lock waiting is interrupted.");
+        }
+
         if (status == TextToSpeech.SUCCESS) {
             Log.v(TAG, "init!" + myLocale.toString());
+            assert myTTS != null;
+            assert myLocale != null;
             int result = myTTS.setLanguage(myLocale);
             if (result == TextToSpeech.LANG_MISSING_DATA) {
                 Log.e(TAG, "Missing language data");
@@ -49,8 +71,14 @@ public class AnyMemoTTSPlatform implements AnyMemoTTS, TextToSpeech.OnInitListen
     }
 	
 	public AnyMemoTTSPlatform(Context context, Locale locale){
-		myTTS = new TextToSpeech(context, this);
+        // We must make sure the constructor happens before
+        // the onInit callback. Unfortunately, this is not
+        // always true. We have to use lock to ensure the happen before.
+        // Or a null pointer for myTTS is waiting
+        initLock.lock();
 		myLocale = locale;
+		myTTS = new TextToSpeech(context, this);
+        initLock.unlock();
 	}
 
 	
