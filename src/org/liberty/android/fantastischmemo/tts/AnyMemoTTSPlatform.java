@@ -26,13 +26,16 @@ import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
 public class AnyMemoTTSPlatform implements AnyMemoTTS, TextToSpeech.OnInitListener{
+
 	private TextToSpeech myTTS;
 	
 	private Locale myLocale;
+
     public final static String TAG = "org.liberty.android.fantastischmemo.TTS";
 
     public void onInit(int status){
         if (status == TextToSpeech.SUCCESS) {
+            Log.v(TAG, "init!" + myLocale.toString());
             int result = myTTS.setLanguage(myLocale);
             if (result == TextToSpeech.LANG_MISSING_DATA) {
                 Log.e(TAG, "Missing language data");
@@ -48,7 +51,6 @@ public class AnyMemoTTSPlatform implements AnyMemoTTS, TextToSpeech.OnInitListen
 	public AnyMemoTTSPlatform(Context context, Locale locale){
 		myTTS = new TextToSpeech(context, this);
 		myLocale = locale;
-        Log.v(TAG, "init!" + myLocale.toString());
 	}
 
 	
