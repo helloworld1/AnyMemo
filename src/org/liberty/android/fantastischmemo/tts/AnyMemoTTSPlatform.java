@@ -29,18 +29,26 @@ public class AnyMemoTTSPlatform implements AnyMemoTTS, TextToSpeech.OnInitListen
 	private TextToSpeech myTTS;
 	
 	private Locale myLocale;
-	private int errorCode;
-	private int version;
     public final static String TAG = "org.liberty.android.fantastischmemo.TTS";
 
     public void onInit(int status){
+        if (status == TextToSpeech.SUCCESS) {
+            int result = myTTS.setLanguage(myLocale);
+            if (result == TextToSpeech.LANG_MISSING_DATA) {
+                Log.e(TAG, "Missing language data");
+            }
+            if (result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Log.e(TAG, "Language is not supported");
+            }
+        } else {
+            Log.e(TAG, "Can't initialize");
+        }
     }
 	
 	public AnyMemoTTSPlatform(Context context, Locale locale){
 		myTTS = new TextToSpeech(context, this);
 		myLocale = locale;
         Log.v(TAG, "init!" + myLocale.toString());
-        myTTS.setLanguage(myLocale);
 	}
 
 	
@@ -73,7 +81,7 @@ public class AnyMemoTTSPlatform implements AnyMemoTTS, TextToSpeech.OnInitListen
 		processed_str = processed_str.replaceAll("&.*?;", "");
 
         if(!myTTS.isSpeaking()){
-            myTTS.setLanguage(myLocale);
+            //myTTS.setLanguage(myLocale);
             myTTS.speak(processed_str, 0, null);
         }
         else{
