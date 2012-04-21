@@ -179,6 +179,25 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
             AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }
     }
+    
+    public void testDoubleSidedCard() throws Exception {
+    	solo.clickOnText("Single sided");
+    	solo.clickOnText("Double sided");
+    	solo.clickOnText("Save");
+    	
+    	// Disable click on text audio
+    	solo.clickOnText("Misc");
+    	solo.clickOnText("Options");
+    	solo.clickOnText("Automatic");
+    	solo.clickOnText("Manually");
+    	solo.goBack();
+    	solo.clickOnText("Recent");
+    	
+    	// Click on the Sample DB, and check if the answer is shown
+    	solo.clickOnText(UITestHelper.SAMPLE_DB_NAME);
+    	solo.clickOnText("head");
+    	assertTrue(solo.searchText("la"));
+    }
 
 
     public void tearDown() throws Exception {

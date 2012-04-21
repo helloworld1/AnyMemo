@@ -600,6 +600,7 @@ public class MemoScreen extends AMActivity {
                             updateFlashcardView(false);
                             hideButtons();
                         } else{
+                        	updateFlashcardView(true);
                             showButtons();
                         }
 
