@@ -195,6 +195,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
     	
     	// Click on the Sample DB, and check if the answer is shown
     	solo.clickOnText(UITestHelper.SAMPLE_DB_NAME);
+    	solo.sleep(3000);
     	solo.clickOnText("head");
     	assertTrue(solo.searchText("la"));
     }
