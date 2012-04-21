@@ -25,6 +25,8 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import java.util.concurrent.locks.ReentrantLock;
+
+import org.apache.mycommons.lang3.StringUtils;
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
@@ -70,17 +72,16 @@ public class AnyMemoTTSPlatform implements AnyMemoTTS, TextToSpeech.OnInitListen
         }
     }
 	
-	public AnyMemoTTSPlatform(Context context, Locale locale){
+	public AnyMemoTTSPlatform(Context context, String locale){
         // We must make sure the constructor happens before
         // the onInit callback. Unfortunately, this is not
         // always true. We have to use lock to ensure the happen before.
         // Or a null pointer for myTTS is waiting
         initLock.lock();
-		myLocale = locale;
+		myLocale = getLocaleForTTS(locale);
 		myTTS = new TextToSpeech(context, this);
         initLock.unlock();
 	}
-
 	
 	public void shutdown(){
         myTTS.shutdown();
@@ -111,7 +112,6 @@ public class AnyMemoTTSPlatform implements AnyMemoTTS, TextToSpeech.OnInitListen
 		processed_str = processed_str.replaceAll("&.*?;", "");
 
         if(!myTTS.isSpeaking()){
-            //myTTS.setLanguage(myLocale);
             myTTS.speak(processed_str, 0, null);
         }
         else{
@@ -120,5 +120,22 @@ public class AnyMemoTTSPlatform implements AnyMemoTTS, TextToSpeech.OnInitListen
 		
 		return 0;
 	}
+
+    private Locale getLocaleForTTS(String loc) {
+        if (StringUtils.isEmpty(loc)) {
+            return Locale.US;
+        }
+
+        if (loc.toLowerCase().equals("us")) {
+            return Locale.US;
+        }
+
+        if (loc.toLowerCase().equals("uk")) {
+            return Locale.UK;
+        }
+
+        return new Locale(loc);
+
+    }
 
 }

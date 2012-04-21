@@ -50,8 +50,6 @@ import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 
 import org.liberty.android.fantastischmemo.queue.QueueManager;
-
-import java.util.Locale;
 import java.util.Map;
 
 import java.sql.SQLException;
@@ -839,7 +837,7 @@ public class MemoScreen extends AMActivity {
         if (StringUtils.isNotEmpty(setting.getQuestionAudioLocation())) {
             questionTTS = new AudioFileTTS(defaultLocation, dbName);
         } else if (StringUtils.isNotEmpty(qa)){
-            questionTTS = new AnyMemoTTSPlatform(this, new Locale(qa));
+            questionTTS = new AnyMemoTTSPlatform(this, qa);
         } else{
             questionTTS = null;
         }
@@ -847,7 +845,7 @@ public class MemoScreen extends AMActivity {
         if (StringUtils.isNotEmpty(setting.getAnswerAudioLocation())) {
             answerTTS = new AudioFileTTS(defaultLocation, dbName);
         } else if (StringUtils.isNotEmpty(aa)){
-            answerTTS = new AnyMemoTTSPlatform(this, new Locale(aa));
+            answerTTS = new AnyMemoTTSPlatform(this, aa);
         } else{
             answerTTS = null;
         }
