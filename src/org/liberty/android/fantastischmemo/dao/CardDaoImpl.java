@@ -12,6 +12,8 @@ import java.util.Map;
 
 import java.util.concurrent.Callable;
 
+import org.apache.mycommons.lang3.StringUtils;
+
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
@@ -419,7 +421,10 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
                         String currentCategoryName = card.getCategory().getName();
                         if (categoryMap.containsKey(currentCategoryName)) {
                             card.setCategory(categoryMap.get(currentCategoryName));
-                        } else {
+
+                        // Becuase the empty category is created by default
+                        // We do not
+                        } else if (StringUtils.isNotEmpty(currentCategoryName)) {
                             categoryDao.create(card.getCategory());
                             categoryMap.put(currentCategoryName, card.getCategory());
                         }

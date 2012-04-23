@@ -164,7 +164,10 @@ public class EditScreen extends AMActivity {
                 Bundle extras = data.getExtras();
                 int cardId = extras.getInt(CardEditor.EXTRA_RESULT_CARD_ID, 1);
                 try {
-                    currentCard = cardDao.queryForId(cardId);
+                    Card card = cardDao.queryForId(cardId);
+                    if (card != null) {
+                        currentCard = card;
+                    }
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
