@@ -245,7 +245,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
                         try{
                             String target = imagePath + name;
                             if(!(new File(target)).exists()){
-                                FileUtils.copyFile(new File(path + "/" + name), new File(target));
+                                FileUtils.copyFile(new File(path), new File(target));
                             }
                         }
                         catch(Exception e){
@@ -360,6 +360,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
             if (extras != null) {
                 currentCardId = extras.getInt(EXTRA_CARD_ID);
                 dbPath = extras.getString(EXTRA_DBPATH);
+                dbName = AMUtil.getFilenameFromPath(dbPath);
                 isEditNew = extras.getBoolean(EXTRA_IS_EDIT_NEW);
             }
 
