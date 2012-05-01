@@ -224,11 +224,11 @@ public class SingleSidedCardDisplay implements FlashcardDisplay, TagHandler, Ima
         for (Setting.CardField cf : Setting.CardField.values()) {
             String str = "";
             if (cf == Setting.CardField.QUESTION) {
-                str = card.getQuestion();
+                str = itemQuestion;
             } else if (cf == Setting.CardField.ANSWER) {
-                str = card.getAnswer();
+                str = itemAnswer;
             } else if (cf == Setting.CardField.NOTE) {
-                str = card.getNote();
+                str = itemNote;
             } else {
                 throw new AssertionError("This is a bug! New CardField enum has been added but the display field haven't been nupdated");
             }

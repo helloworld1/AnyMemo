@@ -1,8 +1,12 @@
 package org.liberty.android.fantastischmemo.ui;
 
+import java.lang.Void;
+
 import java.sql.SQLException;
 
 import java.util.List;
+
+import org.apache.mycommons.lang3.StringUtils;
 
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
@@ -43,7 +47,6 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
     private String dbPath;
     private CategoryDao categoryDao;
     private int currentCategoryId;
-    private List<Category> categories;
     private static final String TAG = "CategoryEditorFragment";
     private CategoryAdapter categoryAdapter;
     private ListView categoryList;
@@ -131,6 +134,7 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
      * This task will mainly populate the categoryList
      */
     private class InitTask extends AsyncTask<Void, Void, Integer> {
+        private List<Category> categories;
 
 		@Override
         public void onPreExecute() {
@@ -203,9 +207,9 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
             selectedCategory = categoryAdapter.getItem(position);
             // Should deduplicate before editing the category
             // Point to the correct category if necessary.
-            int categorySize = categories.size();
+            int categorySize = categoryAdapter.getCount();
             for (int i = 0; i < categorySize; i++) {
-                if (categories.get(i).getName().equals(editText)) {
+                if (categoryAdapter.getItem(i).getName().equals(editText)) {
                     position = i;
                     categoryList.setItemChecked(position, true);
                     categoryList.setSelection(position);
@@ -250,13 +254,9 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
             disableListeners();
             mActivity.setProgressBarIndeterminateVisibility(true);
             editText = categoryEdit.getText().toString();
-            if ("".equals(editText)) {
-                cancel(true);
-                return;
-            }
-            int categorySize = categories.size();
+            int categorySize = categoryAdapter.getCount();
             for (int i = 0; i < categorySize; i++) {
-                if (categories.get(i).getName().equals(editText)) {
+                if (categoryAdapter.getItem(i).getName().equals(editText)) {
                     categoryList.setItemChecked(i, true);
                     categoryList.setSelection(i);
                     cancel(true);
@@ -314,6 +314,10 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
 
         @Override
         public Void doInBackground(Void... params) {
+            // We don't want to remove the "Uncategorized"
+            if (StringUtils.isEmpty(selectedCategory.getName())) {
+                return null;
+            }
             categoryDao.removeCategory(selectedCategory);
             return null;
         }
@@ -325,6 +329,9 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
 
         @Override
         public void onPostExecute(Void result){
+            if (StringUtils.isNotEmpty(selectedCategory.getName())) {
+                categoryAdapter.remove(selectedCategory);
+            }
             categoryAdapter.notifyDataSetChanged();
             
             // Move to first category (Uncategorized)
