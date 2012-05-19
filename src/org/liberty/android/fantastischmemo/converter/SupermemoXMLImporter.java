@@ -108,8 +108,19 @@ public class SupermemoXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
 	public void endElement(String namespaceURI, String localName, String qName) throws SAXException{
         if(localName.equals("SuperMemoElement")){
             card.setOrdinal(count);
-            // Calculate the next learning date from interval
-            ld.setNextLearnDate(DateUtils.addDays(ld.getLastLearnDate(), interval));
+            // If this is a new card and the learning data is like this:
+            //  <LearningData>
+            //    <Repetitions>0</Repetitions>
+            //    <Lapses>0</Lapses>
+            //    <AFactor>4.620</AFactor>
+            //    <UFactor>2.500</UFactor>
+            //  </LearningData>
+            //  We will use the defualt learning data for missing fields.
+            //  Otherwise, we will caluculate it here.
+            if (ld.getLastLearnDate() != null) {
+                // Calculate the next learning date from interval
+                ld.setNextLearnDate(DateUtils.addDays(ld.getLastLearnDate(), interval));
+            }
 
             cardList.add(card);
             card = null;
