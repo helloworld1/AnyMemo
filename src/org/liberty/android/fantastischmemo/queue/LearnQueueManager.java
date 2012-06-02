@@ -79,16 +79,35 @@ public class LearnQueueManager implements QueueManager {
 	@Override
 	public synchronized Card dequeue() {
         refill();
+        shuffle();
         if (!learnQueue.isEmpty()) {
 
             Card c = learnQueue.get(0);
             learnQueue.remove(0);
-            Log.i(TAG, "Dequeue card: " + c.getId());
+            Log.d(TAG, "Dequeue card: " + c.getId());
             return c;
         } else {
             return null;
         }
 	}
+	
+	@Override
+	public synchronized Card dequeuePosition(int cardId) {
+		position(cardId);
+		refill();
+		
+		if (!learnQueue.isEmpty()) {
+
+            Card c = learnQueue.get(0);
+            learnQueue.remove(0);
+            Log.d(TAG, "Dequeue card: " + c.getId());
+            return c;
+        } else {
+            return null;
+        }
+		
+	}
+	
 	@Override
 	public synchronized void remove(Card card) {
         learnQueue.remove(card);
@@ -145,12 +164,15 @@ public class LearnQueueManager implements QueueManager {
             learnQueue.add(newCache.get(0));
             newCache.remove(0);
         }
-        // Shuffle all teh caches
-        if (shuffle) {
-            Collections.shuffle(newCache);
-            Collections.shuffle(reviewCache);
-            Collections.shuffle(learnQueue);
-        }
+    }
+    
+    private synchronized void shuffle() {
+    	// Shuffle all the caches
+    	if (shuffle) {
+    		Collections.shuffle(newCache);
+    		Collections.shuffle(reviewCache);
+    		Collections.shuffle(learnQueue);
+    	}
     }
 
 	@Override
@@ -162,9 +184,8 @@ public class LearnQueueManager implements QueueManager {
         }
         dirtyCache.add(card);
 	}
-
-    @Override
-    public void position(int cardId) {
+	
+    private void position(int cardId) {
         Iterator<Card> learnIterator= learnQueue.iterator();
         Iterator<Card> reviewCacheIterator = reviewCache.iterator();
         Iterator<Card> newCacheIterator = newCache.iterator();

@@ -67,8 +67,7 @@ public class QueuingTest extends AbstractExistingDBTest<InstrumentationActivity>
             .setFilterCategory(null)
             .setCacheSize(50)
             .build();
-        queueManager.position(5);
-        Card cqueue = queueManager.dequeue();
+        Card cqueue = queueManager.dequeuePosition(5);
         assertEquals(5, (int)cqueue.getId());
     }
 }

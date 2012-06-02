@@ -84,11 +84,6 @@ public class CramQueueManager implements QueueManager {
         // Do nothing
     }
 
-    @Override
-    public void position(int cardId) {
-        // Do not support positioning.
-    }
-
     public static class Builder {
 
         private CardDao cardDao;
@@ -122,5 +117,11 @@ public class CramQueueManager implements QueueManager {
         }
 
     }
+
+	@Override
+	public Card dequeuePosition(int cardId) {
+		// Cram queue does not support dequeuePosition 
+		return dequeue();
+	}
 
 }

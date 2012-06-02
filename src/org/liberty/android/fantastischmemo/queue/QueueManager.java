@@ -39,5 +39,5 @@ public interface QueueManager {
     void remove(Card card);
 
     /* Set the head of the queue to card. */
-    void position(int cardId);
+    Card dequeuePosition(int cardId);
 }

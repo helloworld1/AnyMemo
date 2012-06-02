@@ -911,7 +911,7 @@ public class MemoScreen extends AMActivity {
                 /* Run the learnQueue init in a separate thread */
                 createQueue();
                 if (startCardId != -1) {
-                    queueManager.position(startCardId);
+                    return queueManager.dequeuePosition(startCardId);
                 }
                 return queueManager.dequeue();
             } catch (Exception e) {

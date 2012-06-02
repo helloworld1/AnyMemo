@@ -57,7 +57,9 @@ public class EditScreenActivityCategoryEditTest extends ActivityInstrumentationT
         solo.clearEditText(0);
         solo.sleep(300);
         solo.enterText(0, "mycategory");
+        solo.sleep(300);
         solo.clickOnText(solo.getString(R.string.new_text));
+        solo.sleep(300);
         assertTrue(solo.searchText("mycategory"));
         solo.clickOnText(solo.getString(R.string.ok_text));
         
