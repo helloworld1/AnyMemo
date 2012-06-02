@@ -17,7 +17,7 @@ public class MemoScreenActivityFunctionTest extends ActivityInstrumentationTestC
 
     protected AnyMemo mActivity;
 
-    public MemoScreenActivityFunctionTest () {
+    public MemoScreenActivityFunctionTest() {
         super("org.liberty.android.fantastischmemo", AnyMemo.class);
     }
 
