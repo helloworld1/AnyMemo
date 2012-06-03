@@ -81,7 +81,6 @@ public class LearnQueueManager implements QueueManager {
         refill();
         shuffle();
         if (!learnQueue.isEmpty()) {
-
             Card c = learnQueue.get(0);
             learnQueue.remove(0);
             Log.d(TAG, "Dequeue card: " + c.getId());
@@ -97,7 +96,6 @@ public class LearnQueueManager implements QueueManager {
 		refill();
 		
 		if (!learnQueue.isEmpty()) {
-
             Card c = learnQueue.get(0);
             learnQueue.remove(0);
             Log.d(TAG, "Dequeue card: " + c.getId());
