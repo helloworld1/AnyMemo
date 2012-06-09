@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.downloader;
 
 import org.liberty.android.fantastischmemo.*;
+import org.liberty.android.fantastischmemo.utils.AMZipUtils;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 import java.util.ArrayList;
@@ -74,6 +75,7 @@ public class DownloaderAnyMemo extends DownloaderBase{
     private Handler mHandler;
     private final static String WEBSITE_JSON = "http://anymemo.org/pages/json.php";
     private final static String WEBSITE_DOWNLOAD= "http://anymemo.org/pages/download.php?wordlistname=DatabasesTable&filename=";
+    private static final int BUFFER_SIZE = 8192;
 
     @Override
     protected void initialRetrieve(){
@@ -277,10 +279,10 @@ public class DownloaderAnyMemo extends DownloaderBase{
                     }
                 });
 
-                byte[] buf = new byte[8192];
+                byte[] buf = new byte[BUFFER_SIZE];
 
                 InputStream is = ucon.getInputStream();
-                BufferedInputStream bis = new BufferedInputStream(is, 8192);
+                BufferedInputStream bis = new BufferedInputStream(is, BUFFER_SIZE);
                 Runnable increaseProgress = new Runnable(){
                     public void run(){
                         mProgressDialog.setProgress(mDownloadProgress);
@@ -311,35 +313,7 @@ public class DownloaderAnyMemo extends DownloaderBase{
                             mProgressDialog.setMessage(getString(R.string.downloader_extract_zip));
                         }
                     });
-
-                    BufferedOutputStream dest = null;
-                    BufferedInputStream ins = null;
-                    ZipEntry entry;
-                    ZipFile zipfile = new ZipFile(outFile);
-                    Enumeration<?> e = zipfile.entries();
-                    while(e.hasMoreElements()) {
-                        entry = (ZipEntry) e.nextElement();
-                        Log.v(TAG, "Extracting: " +entry);
-                        if(entry.isDirectory()){
-                            new File(sdpath + "/" + entry.getName()).mkdir();
-                        }
-                        else{
-                            ins = new BufferedInputStream
-                                (zipfile.getInputStream(entry), 8192);
-                            int count;
-                            byte data[] = new byte[8192];
-                            FileOutputStream fos = new FileOutputStream(sdpath + "/" + entry.getName());
-                            dest = new BufferedOutputStream(fos, 8192);
-                            while ((count = ins.read(data, 0, 8192)) != -1) {
-                                dest.write(data, 0, count);
-                            }
-                            dest.flush();
-                            dest.close();
-                            ins.close();
-                        }
-                    }
-                    /* Delete the zip file if it is successfully decompressed */
-                    outFile.delete();
+                    AMZipUtils.unZipFile(outFile);
                 }
                 /* We do not check ttf file as db */
                 if(!filename.toLowerCase().endsWith(".ttf")){
