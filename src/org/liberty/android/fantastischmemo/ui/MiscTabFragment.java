@@ -20,10 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import org.liberty.android.fantastischmemo.AMEnv;
-
-import org.liberty.android.fantastischmemo.ui.OptionScreen;
 import org.liberty.android.fantastischmemo.R;
-
 import org.liberty.android.fantastischmemo.converter.CSVExporter;
 import org.liberty.android.fantastischmemo.converter.CSVImporter;
 import org.liberty.android.fantastischmemo.converter.MnemosyneXMLExporter;
@@ -32,30 +29,24 @@ import org.liberty.android.fantastischmemo.converter.QATxtExporter;
 import org.liberty.android.fantastischmemo.converter.QATxtImporter;
 import org.liberty.android.fantastischmemo.converter.Supermemo2008XMLImporter;
 import org.liberty.android.fantastischmemo.converter.SupermemoXMLImporter;
+import org.liberty.android.fantastischmemo.converter.ZipImporter;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-
 import android.net.Uri;
 import android.os.Bundle;
-
 import android.preference.PreferenceManager;
-
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-
 import android.text.Html;
-
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.TextView;
 
 public class MiscTabFragment extends Fragment implements View.OnClickListener {
@@ -68,6 +59,7 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
     private View exportItems;
     private View importMnemosyneButton;
     private View importSupermemoButton;
+    private View importZipButton;
     private View importCSVButton;
     private View importTabButton;
     private View importQAButton;
@@ -108,6 +100,8 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
         importSupermemoButton.setOnClickListener(this);
         importCSVButton = v.findViewById(R.id.import_csv);
         importCSVButton.setOnClickListener(this);
+        importZipButton = v.findViewById(R.id.import_zip);
+        importZipButton.setOnClickListener(this);
         importTabButton = v.findViewById(R.id.import_tab);
         importTabButton.setOnClickListener(this);
         importQAButton = v.findViewById(R.id.import_qa);
@@ -182,6 +176,13 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
             b.putString("file_extension", ".csv");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportCSV");
+        }
+        if(v == importZipButton) {
+            DialogFragment df = new ConverterFragment(new ZipImporter(), "");
+            Bundle b = new Bundle();
+            b.putString("file_extension", ".zip");
+            df.setArguments(b);
+            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportZip");
         }
         if(v == importTabButton){
             DialogFragment df = new ConverterFragment(new CSVImporter(mActivity, '\t'), ".db");

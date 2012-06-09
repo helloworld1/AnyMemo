@@ -314,6 +314,9 @@ public class DownloaderAnyMemo extends DownloaderBase{
                         }
                     });
                     AMZipUtils.unZipFile(outFile);
+                    /* Delete the zip file if it is successfully decompressed */
+                    outFile.delete();
+
                 }
                 /* We do not check ttf file as db */
                 if(!filename.toLowerCase().endsWith(".ttf")){
