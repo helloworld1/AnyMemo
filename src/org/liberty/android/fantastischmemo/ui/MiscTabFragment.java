@@ -29,6 +29,7 @@ import org.liberty.android.fantastischmemo.converter.QATxtExporter;
 import org.liberty.android.fantastischmemo.converter.QATxtImporter;
 import org.liberty.android.fantastischmemo.converter.Supermemo2008XMLImporter;
 import org.liberty.android.fantastischmemo.converter.SupermemoXMLImporter;
+import org.liberty.android.fantastischmemo.converter.ZipExporter;
 import org.liberty.android.fantastischmemo.converter.ZipImporter;
 
 import android.app.Activity;
@@ -68,6 +69,7 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
     private View exportCSVButton;
     private View exportTabButton;
     private View exportQAButton;
+    private View exportZipButton;
 
     private View defaultSettingsButton;
     private View mergeButton;
@@ -116,6 +118,8 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
         exportTabButton.setOnClickListener(this);
         exportQAButton = v.findViewById(R.id.export_qa);
         exportQAButton.setOnClickListener(this);
+        exportZipButton = v.findViewById(R.id.export_zip);
+        exportZipButton.setOnClickListener(this);
 
         defaultSettingsButton = v.findViewById(R.id.misc_default_settings);
         defaultSettingsButton.setOnClickListener(this);
@@ -232,6 +236,13 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
             b.putString("file_extension", ".db");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ExportQA");
+        }
+        if(v == exportZipButton) {
+            DialogFragment df = new ConverterFragment(new ZipExporter(), ".zip");
+            Bundle b = new Bundle();
+            b.putString("file_extension", ".db");
+            df.setArguments(b);
+            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ExportZip");
         }
 
         if (v == defaultSettingsButton) {

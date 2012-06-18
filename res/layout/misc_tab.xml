@@ -270,6 +270,22 @@
                     android:focusable="false"
                     android:layout_gravity="center" />
             </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:id="@+id/export_zip"
+                style="@style/list_button"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="fill_parent" 
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" 
+                    android:text="@string/export_zip_text"
+                    android:textSize="20dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:layout_gravity="center" />
+            </LinearLayout>
         </LinearLayout>
     
         <LinearLayout

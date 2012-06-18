@@ -396,4 +396,5 @@
     <string name="remove_dup_message">Remove cards with duplicate questions.</string>
     <string name="ordinal_text">Ordinal</string>
     <string name="import_zip_text">Import Zip</string>
+    <string name="export_zip_text">Export Zip</string>
 </resources>
