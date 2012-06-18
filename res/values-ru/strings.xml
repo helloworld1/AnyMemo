@@ -390,4 +390,6 @@
     <string name="default_settings_text">Настройки баз по умолчанию</string>
     <string name="remove_dup_message">Удалить карты с повторяющимися вопросами.</string>
     <string name="ordinal_text">Порядок</string>
+    <string name="import_zip_text">Импорт Zip</string>
+    <string name="export_zip_text">Экспорт Zip</string>
 </resources>
