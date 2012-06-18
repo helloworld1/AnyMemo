@@ -19,10 +19,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader;
 
+import java.io.File;
+
+import org.apache.mycommons.io.FileUtils;
+import org.apache.mycommons.io.FilenameUtils;
+
 import org.liberty.android.fantastischmemo.*;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 
 import java.util.List;
+
+import org.liberty.android.fantastischmemo.utils.AMZipUtils;
 
 import android.os.Bundle;
 import android.app.AlertDialog;
@@ -117,7 +124,11 @@ public class DownloaderDropbox extends DownloaderBase {
                         public void run(){
                             try{
                                 String sdpath = AMEnv.DEFAULT_ROOT_PATH;
-                                DropboxUtils.downloadFile(dropboxToken, dropboxSecret, di, sdpath);
+                                File f = DropboxUtils.downloadFile(dropboxToken, dropboxSecret, di, sdpath);
+                                String ext = FilenameUtils.getExtension(f.getName());
+                                if (ext.toLowerCase().equals("zip")) {
+                                    AMZipUtils.unZipFile(f);
+                                }
                                 mHandler.post(new Runnable(){
                                     public void run(){
                                         mProgressDialog.dismiss();

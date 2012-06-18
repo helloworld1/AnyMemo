@@ -130,10 +130,10 @@ public class DropboxUtils{
     /*
      * savePath should be like /mnt/sdcard/anymemo/
      */
-    public static void downloadFile(String oauthToken, String oauthSecret, DownloadItem di, String savePath) throws Exception {
+    public static File downloadFile(String oauthToken, String oauthSecret, DownloadItem di, String savePath) throws Exception {
         String url = signPathUrl(oauthToken, oauthSecret, FILE_URL, di.getAddress());
 
-        DownloaderUtils.downloadFile(url, savePath + di.getTitle());
+        return DownloaderUtils.downloadFile(url, savePath + di.getTitle());
     }
 
     public static void uploadFile(String oauthToken, String oauthSecret, String fileName, String remotePath) throws Exception {

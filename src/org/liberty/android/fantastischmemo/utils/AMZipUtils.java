@@ -16,21 +16,20 @@ public class AMZipUtils {
 	private static final int BUFFER_SIZE = 8192;
 	private static final String TAG = "org.liberty.android.fantastischmemo.utils.AMZipUtils";
 
-	public static void unZipFile(File file) throws Exception{
+	public static void unZipFile(File file) throws Exception {
 		BufferedOutputStream dest = null;
 		BufferedInputStream ins = null;
 		ZipEntry entry;
 
-		try{
+		try {
 			ZipFile zipfile = new ZipFile(file);
 			Enumeration<?> e = zipfile.entries();
 			while(e.hasMoreElements()) {
 				entry = (ZipEntry) e.nextElement();
-				Log.d(TAG, "Extracting zip: " +entry);
+				Log.d(TAG, "Extracting zip: " + entry);
 				if(entry.isDirectory()){
 					new File(AMEnv.DEFAULT_ROOT_PATH + "/" + entry.getName()).mkdir();
-				}
-				else{
+				} else {
 					ins = new BufferedInputStream
 							(zipfile.getInputStream(entry), BUFFER_SIZE);
 					int count;
@@ -46,8 +45,7 @@ public class AMZipUtils {
 				}
 			}
 		} catch(Exception e) {
-			throw new Exception("Exception when extracting .zip ", e);
-
+			throw new Exception("Exception when extracting zip file: " + file, e);
 		}
 	}
 

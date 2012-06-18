@@ -71,7 +71,7 @@ public class DownloaderUtils{
         return result;
     }
 
-    public static void downloadFile(String url, String savedPath) throws IOException{
+    public static File downloadFile(String url, String savedPath) throws IOException{
         File outFile = new File(savedPath);
         OutputStream out;
 
@@ -98,6 +98,7 @@ public class DownloaderUtils{
         }
         out.close();
         is.close();
+        return outFile;
     }
 
     public static boolean validateEmail(String testString){

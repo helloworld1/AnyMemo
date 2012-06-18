@@ -522,6 +522,9 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
                 else if(name.endsWith(".txt") || name.endsWith(".csv") || name.endsWith(".xml")){
                     iv.setImageResource(R.drawable.text);
                 }
+                else if(name.endsWith(".zip")){
+                    iv.setImageResource(R.drawable.zip);
+                }
                 else{
                     iv.setImageResource(R.drawable.database);
                 }
