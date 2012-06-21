@@ -21,6 +21,9 @@ package org.liberty.android.fantastischmemo.ui;
 
 import org.liberty.android.fantastischmemo.R;
 
+import android.app.AlertDialog;
+
+import android.content.DialogInterface;
 import android.content.Intent;
 
 import android.os.Bundle;
@@ -61,9 +64,19 @@ public class OptionScreen extends PreferenceActivity {
     private Preference.OnPreferenceClickListener algorithmCustomizationPreferenceOnClickListener
         = new Preference.OnPreferenceClickListener() {
 			public boolean onPreferenceClick(Preference p) {
-                Intent intent = new Intent(OptionScreen.this, AlgorithmCustomizationScreen.class);
-                startActivity(intent);
+                new AlertDialog.Builder(OptionScreen.this)
+                    .setTitle(R.string.warning_text)
+                    .setMessage(R.string.customize_scheduling_algorithm_warning)
+                    .setPositiveButton(R.string.yes_text, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(OptionScreen.this, AlgorithmCustomizationScreen.class);
+                            startActivity(intent);
+						}
+                    })
+                    .setNegativeButton(R.string.cancel_text, null)
+                    .show();
                 return true;
 			}
+
         };
 }
