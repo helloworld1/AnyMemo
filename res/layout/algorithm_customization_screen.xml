@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="algorithm_customization"
+    android:title="@string/customize_scheduling_algorithm_text">
+    <PreferenceCategory
+        android:title="@string/learning_category">
+        <EditTextPreference
+            android:key="learning_queue_size"
+            android:defaultValue="10"
+            android:title="@string/learn_queue_size_title"
+            android:summary="@string/learn_queue_size_summary" />
+    </PreferenceCategory>
+</PreferenceScreen> 

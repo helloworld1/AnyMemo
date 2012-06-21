@@ -397,4 +397,6 @@
     <string name="ordinal_text">Ordinal</string>
     <string name="import_zip_text">Import Zip</string>
     <string name="export_zip_text">Export Zip</string>
+    <string name="customize_scheduling_algorithm_text">Customize Scheduling algorithm</string>
+    <string name="customize_scheduling_algorithm_summary">Customize the algorithm to schedule the learning interval.</string>
 </resources>

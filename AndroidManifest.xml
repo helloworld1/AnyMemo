@@ -92,6 +92,9 @@
             android:name=".ui.OptionScreen"
             android:configChanges="orientation|keyboardHidden" />
         <activity 
+            android:name=".ui.AlgorithmCustomizationScreen"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity 
             android:name=".ui.DatabaseMerger"
             android:configChanges="orientation|keyboardHidden" />
         <receiver

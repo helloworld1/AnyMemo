@@ -21,30 +21,18 @@ package org.liberty.android.fantastischmemo.ui;
 
 import org.liberty.android.fantastischmemo.R;
 
-import android.content.Intent;
-
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.content.pm.ActivityInfo;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.content.res.Configuration;
 
-public class OptionScreen extends PreferenceActivity {
-	public static final String PREFS_NAME = "fantastischhMemoPrefs";
-
-    private static final String CUSTOMIZE_SCHEDULING_ALGORITHM_KEY
-        = "customize_scheduling_algorithm_key";
+public class AlgorithmCustomizationScreen extends PreferenceActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.layout.option_screen);
-
-        // Lauch algorithm customization screen if click on the specific
-        // preference item.
-        Preference algorithmCustomizationPreference = findPreference(CUSTOMIZE_SCHEDULING_ALGORITHM_KEY);
-        algorithmCustomizationPreference.setOnPreferenceClickListener(algorithmCustomizationPreferenceOnClickListener);
+        addPreferencesFromResource(R.layout.algorithm_customization_screen);
 
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         /* set if the orientation change is allowed */
@@ -57,13 +45,4 @@ public class OptionScreen extends PreferenceActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
     }
-
-    private Preference.OnPreferenceClickListener algorithmCustomizationPreferenceOnClickListener
-        = new Preference.OnPreferenceClickListener() {
-			public boolean onPreferenceClick(Preference p) {
-                Intent intent = new Intent(OptionScreen.this, AlgorithmCustomizationScreen.class);
-                startActivity(intent);
-                return true;
-			}
-        };
 }

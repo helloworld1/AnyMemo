@@ -32,11 +32,10 @@
             android:entries="@array/button_style_list"
             android:entryValues="@array/button_style_list_values"
             android:summary="@string/button_style_summary" />
-        <EditTextPreference
-            android:key="learning_queue_size"
-            android:defaultValue="10"
-            android:title="@string/learn_queue_size_title"
-            android:summary="@string/learn_queue_size_summary" />
+        <Preference
+            android:key="customize_scheduling_algorithm_key"
+            android:title="@string/customize_scheduling_algorithm_text"
+            android:summary="@string/customize_scheduling_algorithm_summary" />
         <CheckBoxPreference
             android:key="shuffling_cards"
             android:title="@string/shuffling_cards_title" 
