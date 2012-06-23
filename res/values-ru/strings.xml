@@ -54,8 +54,8 @@
     <string name="memo_btn3_anki_text">Хорошо</string>
     <string name="memo_btn4_anki_text">Легко</string>
     <string name="memo_btn5_anki_text">ОчЛегко</string>
-    <string name="memo_current_id">ID: </string>
     <string name="memo_edit_dialog_title">Правка</string>
+    <string name="memo_current_id">ID: </string>
     <string name="global_settings">Общие настройки</string>
     <string name="settings_question_font_size">Размер шрифта вопроса</string>
     <string name="settings_question_font_size_prompt">Размер шрифта</string>
@@ -97,10 +97,10 @@
     <string name="clear_all_pref">Сбросить установки</string>
     <string name="clear_recent_list">Очистить список последних баз</string>
     <string name="export_xml">Эспорт Mnemosyne XML</string>
-    <string name="add_screen_id">ID</string>
     <string name="add_screen_question">Вопрос</string>
-    <string name="add_screen_answer">Ответ</string>
     <string name="add_screen_new">Новая</string>
+    <string name="add_screen_id">ID</string>
+    <string name="add_screen_answer">Ответ</string>
     <string name="add_screen_edit">Сохранить</string>
     <string name="add_screen_gotoid">Идти к ID</string>
     <string name="add_screen_back">Назад</string>
@@ -175,10 +175,10 @@
     <string name="button_style_summary">Изменение стиля кнопок оценок при обучении.</string>
     <string name="settings_customize_color">Настроить цвета</string>
     <string name="color_button_text">Выбрать цвет</string>
-   	<string name="color_dialog_title">Выбор цвета</string>
-	<string name="color_h">тон</string>
-	<string name="color_s">насыщенность</string>
-	<string name="color_v">значение</string>
+   <string name="color_dialog_title">Выбор цвета</string>
+    <string name="color_h">тон</string>
+    <string name="color_s">насыщенность</string>
+    <string name="color_v">значение</string>
     <string name="fullscreen_title">Полноэкранный режим</string>
     <string name="fullscreen_summary">Показывать карточки в полноэкранном режиме.</string>
     <string name="edit_dialog_category">Категория</string>
@@ -187,7 +187,7 @@
     <string name="settings_audio_location_title">Установка расположения аудио пользователя</string>
     <string name="tts_tip_user_audio">Чтобы использовать аудио пользователя, вы должны положить аудиофайлы в каталог, указанный ниже</string>
     <string name="tts_tip_extender">Загрузите Text-to-Speech Extended и выберите движок eSpeak. Также включите голосовые опции в AnyMemo.</string>
-    <string name="what_is_new_message">Чтобы посмотреть илюстрированный обзор новых возможностей программы, нажмите кнопку История версий. Или посетите официальный вебсайт: &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt;&lt;br /&gt;</string>
+    <string name="what_is_new_message">Чтобы посмотреть илюстрированный обзор новых возможностей программы, нажмите кнопку История версий. Или посетите официальный вебсайт: &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt;&lt;br /&gt;.</string>
     <string name="portrait_only_title">Только портрет</string>
     <string name="portrait_only_summary">Полностью отключает изменение ориентации экрана на всех экранах</string>
     <string name="list_mode_text">Список карточек</string>
@@ -245,7 +245,7 @@
     <string name="enable_third_party_arabic_summary">Разрешить движок арабского agawish Better-Arabic-Reshaper (альфа).</string>
     <string name="donate_text">Donate</string>
     <string name="buy_pro_text">Купить Pro</string>
-    <string name="donate_summary">Вы можете поддержать проект AnyMemo, купив pro версию в Android Market, или заплатить онлайн на сайте &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt; Спасибо за ваше участие.</string>
+    <string name="donate_summary">Вы можете поддержать проект AnyMemo, купив pro версию в Android Market, или заплатить онлайн на сайте &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;. Спасибо за ваше участие.</string>
     <string name="goto_prev_screen">К Экрану Просмотр/Правка</string>
     <string name="exception_text">Исключение</string>
     <string name="advanced_setting_text">Продвинутый ...</string>
@@ -373,6 +373,8 @@
     <string name="review_short_text">Повт</string>
     <string name="new_text">Нов</string>
     <string name="id_text">ID</string>
+    <string name="entry_last_learn_date">дата_посл_учёбы</string>
+    <string name="entry_next_learn_date">дата_след_учёбы</string>
     <string name="filter_category_text">Фильтр категорий</string>
     <string name="delete_text">Удалить</string> 
     <string name="delete_text_short">Удал</string> 
@@ -383,8 +385,6 @@
     <string name="sdcard_not_available_warning_title">SD карта недоступна</string>
     <string name="sdcard_not_available_warning_message">Вставьте SD карту и запустите снова!</string>
     <string name="help_advanced_operations">Большинство операций с базами (такие как обмен местами В и О, перемешивание карточек, удаление дубликатов) доступны из экрана Просмотр/Правка по длинному нажатию на карту.</string>
-    <string name="entry_last_learn_date">дата_посл_учёбы</string>
-    <string name="entry_next_learn_date">дата_след_учёбы</string>
     <string name="load_default_text">Загр умолч</string>
     <string name="load_default_warning_text">Будут загружены настройки, установленные вами в настройках баз по умолчанию, текущие настройки не будут сохранены.</string>
     <string name="default_settings_text">Настройки баз по умолчанию</string>
@@ -392,4 +392,31 @@
     <string name="ordinal_text">Порядок</string>
     <string name="import_zip_text">Импорт Zip</string>
     <string name="export_zip_text">Экспорт Zip</string>
+    <string name="customize_scheduling_algorithm_text">Настроить расписание</string>
+    <string name="customize_scheduling_algorithm_summary">Настроить алгоритм повторений изученого.</string>
+    <string name="customize_scheduling_algorithm_warning">Изменение алгоритма повторений только для продвинутых пользователей. Неправильная настройка может потребовать сброса всех установок к их значениям по умолчанию.</string>
+    <string name="queuing_text">Очередь</string>
+    <string name="when_first_grade_text">Когда учите карточку первый раз</string>
+    <string name="initial_grading_interval_summary">Это интервал в днях при первом изучении карточки.</string>
+    <string name="grade_0_text">Оценка 0</string>
+    <string name="grade_1_text">Оценка 1</string>
+    <string name="grade_2_text">Оценка 2</string>
+    <string name="grade_3_text">Оценка 3</string>
+    <string name="grade_4_text">Оценка 4</string>
+    <string name="grade_5_text">Оценка 5</string>
+    <string name="when_failed_to_remember_text">Когда карточка не запомнена</string>
+    <string name="minimal_interval_text">Минимальный интервал</string>
+    <string name="minimal_interval_summary">Если интервал меньше этого значения, считается что карточка не запомнена.</string>
+    <string name="failed_grading_interval_summary">Это интервал повторения, если карточка не запомнена.</string>
+    <string name="easiness_incremental_text">Изменение фактора запоминаемости для каждой оценки</string>
+    <string name="easiness_incremental_summary">Изменение фактора запоминаемости для каждой оценки.</string>
+    <string name="minimal_easiness_text">Минимальная запоминаемость</string>
+    <string name="minimal_easiness_summary">Запоминаемость не опустится ниже этого значения.</string>
+    <string name="initial_easiness_text">Задать фактор запоминаемости</string>
+    <string name="initial_easiness_summary">Новый интервал карточки это текущий интервал, умноженный на запоминаемость.</string>
+    <string name="noise_customization_text">Настройка шума</string>
+    <string name="enable_noise_text">Разрешить шум</string>
+    <string name="enable_noise_on_summary">При расчёте для расширения интервала используется шум.</string>
+    <string name="enable_noise_off_summary">Интервал не содержит шума.</string>
 </resources>
+
