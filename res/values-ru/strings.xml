@@ -419,4 +419,3 @@
     <string name="enable_noise_on_summary">При расчёте для расширения интервала используется шум.</string>
     <string name="enable_noise_off_summary">Интервал не содержит шума.</string>
 </resources>
-
