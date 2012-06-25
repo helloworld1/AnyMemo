@@ -416,7 +416,7 @@
     <string name="easiness_incremental_text">Easiness factor change for each grade</string>
     <string name="easiness_incremental_summary">Easiness factor change for each grade.</string>
     <string name="minimal_easiness_text">Minimal easiness</string>
-    <string name="minimal_easiness_summary">The easiness will not go below thisvalue.</string>
+    <string name="minimal_easiness_summary">The easiness will not go below this value.</string>
     <string name="initial_easiness_text">Initial easiness factor</string>
     <string name="initial_easiness_summary">The new interval for card is current interval times easiness.</string>
     <string name="noise_customization_text">Noise customization</string>
