@@ -55,6 +55,7 @@ import java.util.Map;
 import java.sql.SQLException;
 
 import org.liberty.android.fantastischmemo.scheduler.DefaultScheduler;
+import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTSPlatform;
@@ -144,7 +145,7 @@ public class MemoScreen extends AMActivity {
     private WaitDbTask waitDbTask;
 
     /* Schedulers */
-    private DefaultScheduler scheduler = null;
+    private Scheduler scheduler = null;
 
 
     /* current states */
@@ -174,6 +175,7 @@ public class MemoScreen extends AMActivity {
              LearnQueueManager.Builder builder = new LearnQueueManager.Builder()
                 .setCardDao(cardDao)
                 .setLearningDataDao(learningDataDao)
+                .setScheduler(scheduler)
                 .setLearnQueueSize(queueSize)
                 .setCacheSize(50)
                 .setFilterCategory(filterCategory);
@@ -1021,12 +1023,11 @@ public class MemoScreen extends AMActivity {
 
             if (isNewCard) {
                 newCardCount -= 1;
-                // TODO: need more generic abstraction
-                if (prevCard.getLearningData().getGrade() < 2) {
+                if (!scheduler.isCardLearned(prevCard.getLearningData())) {
                     schedluledCardCount += 1;
                 }
             } else {
-                if (prevCard.getLearningData().getGrade() >= 2) {
+                if (scheduler.isCardLearned(prevCard.getLearningData())) {
                     schedluledCardCount -= 1;
                 }
             }

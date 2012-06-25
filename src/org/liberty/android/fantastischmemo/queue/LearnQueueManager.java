@@ -37,12 +37,20 @@ import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 
+import org.liberty.android.fantastischmemo.scheduler.Scheduler;
+
 import android.util.Log;
 
 public class LearnQueueManager implements QueueManager {
     private CardDao cardDao;
 
     private LearningDataDao learningDataDao;
+
+    /* 
+     * The scheduler to determine whether a card should reimain
+     * in the learn queue
+     */
+    private Scheduler scheduler;
 
     private Category filterCategory;
 
@@ -70,6 +78,7 @@ public class LearnQueueManager implements QueueManager {
         this.learnQueueSize = builder.learnQueueSize;
         this.cacheSize = builder.cacheSize;
         this.shuffle = builder.shuffle;
+        this.scheduler = builder.scheduler;
         learnQueue = new LinkedList<Card>();
         newCache = new LinkedList<Card>();
         reviewCache = new LinkedList<Card>();
@@ -176,7 +185,7 @@ public class LearnQueueManager implements QueueManager {
 	@Override
 	public synchronized void update(Card card) {
         learnQueue.remove(card);
-        if (card.getLearningData().getGrade() < 2) {
+        if (!scheduler.isCardLearned(card.getLearningData())) {
             // Add to the back of the queue
             learnQueue.add(card);
         }
@@ -228,6 +237,8 @@ public class LearnQueueManager implements QueueManager {
 
         private CardDao cardDao;
 
+        private Scheduler scheduler;
+
         private LearningDataDao learningDataDao;
 
         private Category filterCategory;
@@ -237,6 +248,11 @@ public class LearnQueueManager implements QueueManager {
         private int cacheSize = 50;
 
         private boolean shuffle = false;
+
+        public Builder setScheduler(Scheduler scheduler) {
+            this.scheduler = scheduler;
+            return this;
+        }
 
 		public Builder setCardDao(CardDao cardDao) {
 			this.cardDao = cardDao;

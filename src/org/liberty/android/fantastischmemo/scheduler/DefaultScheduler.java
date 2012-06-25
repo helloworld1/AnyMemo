@@ -30,13 +30,14 @@ import org.liberty.android.fantastischmemo.utils.AMUtil;
 
 import android.util.Log;
 
-public class DefaultScheduler {
+public class DefaultScheduler implements Scheduler {
     final double MIN_INTERVAL = 0.9;
-    public final static String TAG = "DefaultScheduler";
+    private final static String TAG = "DefaultScheduler";
 
     /*
      * Return the interval of the after schedule the new card
      */
+    @Override
 	public LearningData schedule(LearningData oldData, int newGrade, boolean includeNoise) {
 		Date currentDate = new Date();
 		double actualInterval = AMUtil.diffDate(oldData.getLastLearnDate(), currentDate);
@@ -131,6 +132,20 @@ public class DefaultScheduler {
         newData.setRetRepsSinceLapse(newRetRepsSinceLapse);
         return newData;
 	}
+
+    /*
+     * This method returns true if the card should not 
+     * be repeated immediately. False if it need to be
+     * repeaeted immediately.
+     */
+    @Override
+    public boolean isCardLearned(LearningData data) {
+        if (data.getGrade() < 2) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
     /*
      * interval is in Day.

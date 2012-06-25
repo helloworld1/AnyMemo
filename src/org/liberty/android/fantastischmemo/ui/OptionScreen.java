@@ -67,7 +67,7 @@ public class OptionScreen extends PreferenceActivity {
                 new AlertDialog.Builder(OptionScreen.this)
                     .setTitle(R.string.warning_text)
                     .setMessage(R.string.customize_scheduling_algorithm_warning)
-                    .setPositiveButton(R.string.yes_text, new DialogInterface.OnClickListener() {
+                    .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int which) {
                             Intent intent = new Intent(OptionScreen.this, AlgorithmCustomizationScreen.class);
                             startActivity(intent);
