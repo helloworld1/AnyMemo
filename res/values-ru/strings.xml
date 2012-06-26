@@ -209,9 +209,9 @@
     <string name="allow_orientation_title">Ориентация экрана</string>
     <string name="allow_orientation_summary">Автоматически менять ориентацию экрана. Требуется перезагрузка.</string>
     <string name="enable_tts_extended_title">TTS Extended</string>
-    <string name="enable_tts_extended_summary">Разрешить Text-to-Speech Extended для речи на большем числе языков. </string>
+    <string name="enable_tts_extended_summary">Разрешить Text-to-Speech Extended для речи на большем числе языков.</string>
     <string name="learn_queue_size_title">Размер очереди</string>
-    <string name="learn_queue_size_summary">Задаётся количество одновременно изучаемых карточек!</string>
+    <string name="learn_queue_size_summary">Минимальное количество изучаемых карточек. Новые карточки появляются по мере изучения карточек из очереди.</string>
     <string name="actions_category">Действия</string>
     <string name="learning_category">Изучение</string>
     <string name="interface_category">Итерфейс</string>
