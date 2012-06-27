@@ -25,15 +25,27 @@ import java.util.Random;
 import org.apache.mycommons.lang3.time.DateUtils;
 
 import org.liberty.android.fantastischmemo.domain.LearningData;
+import org.liberty.android.fantastischmemo.domain.SchedulingAlgorithmParameters;
 
 import org.liberty.android.fantastischmemo.utils.AMUtil;
 
+import android.content.Context;
+
 import android.util.Log;
 
+/*
+ * Default scheduler read the algorithm parameters
+ * from the preferences and schedul card based on
+ * modified mnemosyne algorithm.
+ */
 public class DefaultScheduler implements Scheduler {
-    final double MIN_INTERVAL = 0.9;
     private final static String TAG = "DefaultScheduler";
 
+    private SchedulingAlgorithmParameters parameters;
+
+    public DefaultScheduler(Context context) {
+        parameters = new SchedulingAlgorithmParameters(context);
+    }
     /*
      * Return the interval of the after schedule the new card
      */
@@ -44,7 +56,7 @@ public class DefaultScheduler implements Scheduler {
 		double scheduleInterval = oldData.getInterval();
 		double newInterval = 0.0;
         int oldGrade = oldData.getGrade();
-        double oldEasiness = oldData.getEasiness();
+        float oldEasiness = oldData.getEasiness();
         int newLapses = oldData.getLapses();
         int newAcqReps = oldData.getAcqReps();
         int newRetReps = oldData.getRetReps();
@@ -52,49 +64,39 @@ public class DefaultScheduler implements Scheduler {
         int newRetRepsSinceLapse = oldData.getRetRepsSinceLapse();
         float newEasiness = oldData.getEasiness();
 
-		if(actualInterval <= MIN_INTERVAL){
-			actualInterval = 0.9;
+		if(actualInterval <= parameters.getMinimalInterval()){
+			actualInterval = parameters.getMinimalInterval();
 		}
         // new item (unseen = 1 in mnemosyne)
 		if(newAcqReps == 0) {
 			newAcqReps = 1;
-            // 2.5 is 40% difficult.
-            // Taken from Mnemosyne
-            newEasiness = 2.5f;
+            newEasiness = parameters.getInitialEasiness();
             newAcqRepsSinceLapse = 1;
 			newInterval = calculateInitialInterval(newGrade);
-		} 
-
-        else if(oldGrade <= 1 && newGrade <= 1){
+		} else if(!isGradeSuccessful(oldGrade, false)  && !isGradeSuccessful(newGrade, false)) {
 			newAcqReps += 1;
 			newAcqRepsSinceLapse += 1;
 			newInterval = 0;
-		} else if(oldGrade <= 1 && newGrade >= 2){
+		} else if(!isGradeSuccessful(oldGrade, false) && isGradeSuccessful(newGrade, false)){
 			newAcqReps += 1;
 			newAcqRepsSinceLapse += 1;
-			newInterval = 1;
-		} else if(oldGrade >= 2 && newGrade <= 1){
+			newInterval = parameters.getFailedGradingInterval(newGrade);
+		} else if(isGradeSuccessful(oldGrade, false) && !isGradeSuccessful(newGrade, false)){
 			newRetReps += 1;
 			newLapses += 1;
 			newAcqRepsSinceLapse = 0;
 			newRetRepsSinceLapse = 0;
 			newInterval = 0;
-		} else if(oldGrade >= 2 && newGrade >= 2){
+		} else if(isGradeSuccessful(oldGrade, false) && isGradeSuccessful(newGrade, false)){
 			newRetReps += 1;
 			newRetRepsSinceLapse += 1;
 			if(actualInterval >= scheduleInterval){
-				if(newGrade == 2){
-					newEasiness -= 0.16;
-				}
-				if(newGrade == 3){
-					newEasiness -= 0.14;
-				}
-				if(newGrade == 5){
-				    newEasiness += 0.10;
-				}
-				if(oldEasiness < 1.3){
-					newEasiness = 1.3f;
-				}
+                newEasiness = oldEasiness + parameters.getEasinessIncremental(newGrade);
+
+                if (newEasiness < parameters.getMinimalEasiness()) {
+                    newEasiness =  parameters.getMinimalEasiness();
+                }
+
                 newInterval = 0;
                 if(actualInterval <= scheduleInterval){
                     newInterval = actualInterval * newEasiness;
@@ -104,18 +106,20 @@ public class DefaultScheduler implements Scheduler {
                     newInterval = scheduleInterval * newEasiness;
                 }
 
-                if (newInterval <= MIN_INTERVAL) {
-                    Log.w(TAG, "Interval " + newInterval + " is less than " + MIN_INTERVAL + 
-                            " for old data: " + oldData);
-                    newInterval = MIN_INTERVAL;
+                if (newInterval <= parameters.getMinimalInterval()) {
+                    Log.w(TAG, "Interval " + newInterval + " is less than "
+                            + parameters.getMinimalInterval()
+                            + " for old data: " + oldData);
+                    newInterval = parameters.getMinimalInterval();
                 } 
 			}
 		}
         /* 
          * By default the noise is included. However, 
          * the estimation of days should not include noise
+         * If the noise is disabled in the algorithm customization.
          */ 
-        if(includeNoise){
+        if(includeNoise && parameters.getEnableNoise()){
             newInterval = newInterval + calculateIntervalNoise(newInterval);
         }
 
@@ -148,13 +152,25 @@ public class DefaultScheduler implements Scheduler {
     }
 
     /*
+     * Whether a grade is considered successful not not.
+     * Unsuccessful grade should be put in the queue.
+     */
+    private boolean isGradeSuccessful(int grade, boolean isNew) {
+        if (isNew) {
+            return parameters.getInitialInterval(grade) >= parameters.getMinimalInterval();
+        } else {
+            return parameters.getFailedGradingInterval(grade) >= parameters.getMinimalInterval();
+        }
+    }
+
+    /*
      * interval is in Day.
      */
 	private double calculateIntervalNoise(double interval){
         // Noise value based on Mnymosyne
 		double noise = 0.0;
 
-		if(interval <= MIN_INTERVAL){
+		if(interval <= parameters.getMinimalInterval()){
             noise = 0.0;
         } else if(interval <= 1.99999){
 			noise = randomNumber(0.0, 1.0);
@@ -168,27 +184,8 @@ public class DefaultScheduler implements Scheduler {
 		return noise;
 	}
 	
-	private int calculateInitialInterval(int grade){
-		int interval = 0;
-		switch(grade){
-		case 0:
-		case 1:
-			interval = 0;
-			break;
-		case 2:
-			interval = 1;
-			break;
-		case 3:
-			interval = 3;
-			break;
-		case 4:
-			interval = 4;
-			break;
-		case 5:
-			interval = 5;
-			break;
-		}
-		return interval;
+	private float calculateInitialInterval(int grade){
+		return parameters.getInitialInterval(grade);
 	}
 
 	private double randomNumber(double min, double max){

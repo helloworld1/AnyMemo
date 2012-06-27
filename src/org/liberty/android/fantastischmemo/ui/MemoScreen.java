@@ -887,7 +887,7 @@ public class MemoScreen extends AMActivity {
 
             option = new Option(MemoScreen.this);
 
-            scheduler = new DefaultScheduler();
+            scheduler = new DefaultScheduler(MemoScreen.this);
 
             // Strip leading path!
             dbName = AMUtil.getFilenameFromPath(dbPath);
