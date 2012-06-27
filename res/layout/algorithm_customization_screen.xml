@@ -149,10 +149,17 @@
     <PreferenceCategory
             android:title="@string/noise_customization_text">
         <CheckBoxPreference
-            android:key="noise_enable"
+            android:key="enable_noise"
             android:defaultValue="true"
             android:title="@string/enable_noise_text"
             android:summaryOn="@string/enable_noise_on_summary"
             android:summaryOff="@string/enable_noise_off_summary"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+            android:title="@string/misc_category">
+        <Preference
+                android:key="reset_customized_scheduling_algorithm"
+                android:title="@string/reset_customized_scheduling_algorithm_text"
+                android:summary="@string/reset_customized_scheduling_algorithm_summary" />
     </PreferenceCategory>
 </PreferenceScreen> 

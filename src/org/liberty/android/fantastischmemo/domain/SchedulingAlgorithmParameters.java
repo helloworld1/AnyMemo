@@ -61,4 +61,22 @@ public class SchedulingAlgorithmParameters {
         return settings.getBoolean("enable_noise", defaultEnableNoise);
     }
 
+    /*
+     * Reset all the scheduling algorithm parameters to default.
+     */
+    public void reset() {
+        int[] grades = {0, 1, 2, 3, 4, 5};
+        for (int grade : grades) {
+            editor.putFloat("initial_grading_interval_" + grade, defaultInitialIntervals[grade]);
+            editor.putFloat("failed_grading_interval_" + grade, defaultFailedGradingIntervals[grade]);
+            editor.putFloat("easiness_incremental_" + grade, defaultEasinessIncrementals[grade]);
+        }
+        editor.putBoolean("enable_noise", defaultEnableNoise);
+        editor.putFloat("minimal_interval", defaultMinimalInterval);
+        editor.putFloat("initial_easiness", defaultInitialEasiness);
+        editor.putFloat("minimal_easiness", defaultMinimalEasiness);
+
+        editor.commit();
+    }
+
 }

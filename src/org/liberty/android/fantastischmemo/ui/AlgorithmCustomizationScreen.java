@@ -21,7 +21,17 @@ package org.liberty.android.fantastischmemo.ui;
 
 import org.liberty.android.fantastischmemo.R;
 
+import org.liberty.android.fantastischmemo.domain.SchedulingAlgorithmParameters;
+
+import org.liberty.android.fantastischmemo.ui.OptionScreen;
+
+import android.app.AlertDialog;
+
+import android.content.DialogInterface;
+import android.content.Intent;
+
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.content.pm.ActivityInfo;
 import android.content.SharedPreferences;
@@ -29,12 +39,18 @@ import android.preference.PreferenceManager;
 import android.content.res.Configuration;
 
 public class AlgorithmCustomizationScreen extends PreferenceActivity {
+    private static final String RESET_CUSTOMIZED_ALGORITHM_KEY 
+        = "reset_customized_scheduling_algorithm";
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.layout.algorithm_customization_screen);
 
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+
+        Preference resetPreference = findPreference(RESET_CUSTOMIZED_ALGORITHM_KEY);
+        resetPreference.setOnPreferenceClickListener(resetPreferenceOnClickListener);
+
         /* set if the orientation change is allowed */
         if(!settings.getBoolean("allow_orientation", true)){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -45,4 +61,24 @@ public class AlgorithmCustomizationScreen extends PreferenceActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
     }
+
+    private Preference.OnPreferenceClickListener resetPreferenceOnClickListener
+        = new Preference.OnPreferenceClickListener() {
+			public boolean onPreferenceClick(Preference p) {
+                new AlertDialog.Builder(AlgorithmCustomizationScreen.this)
+                    .setTitle(R.string.warning_text)
+                    .setMessage(R.string.customize_scheduling_algorithm_warning)
+                    .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                            SchedulingAlgorithmParameters parameters = new SchedulingAlgorithmParameters(AlgorithmCustomizationScreen.this);
+                            parameters.reset();
+						}
+                    })
+                    .setNegativeButton(R.string.cancel_text, null)
+                    .show();
+                return true;
+			}
+
+        };
 }

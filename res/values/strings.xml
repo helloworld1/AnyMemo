@@ -399,7 +399,7 @@
     <string name="export_zip_text">Export Zip</string>
     <string name="customize_scheduling_algorithm_text">Customize Scheduling algorithm</string>
     <string name="customize_scheduling_algorithm_summary">Customize the algorithm to schedule the learning interval.</string>
-    <string name="customize_scheduling_algorithm_warning">Algorithm customization is for advanced user only. A bad customization may require you to reset all preferences to restore the default values.</string>
+    <string name="customize_scheduling_algorithm_warning">Algorithm customization is for advanced user only.</string>
     <string name="queuing_text">Queuing</string>
     <string name="when_first_grade_text">When grading a card for the first time</string>
     <string name="initial_grading_interval_summary">This is the interval when you first grade a card in days.</string>
@@ -423,4 +423,6 @@
     <string name="enable_noise_text">Enable noise</string>
     <string name="enable_noise_on_summary">The noise is used when calculation interval to spread the interval.</string>
     <string name="enable_noise_off_summary">The interval does not contain noise.</string>
+    <string name="reset_customized_scheduling_algorithm_text">Reset customzed scheduling algorithm</string>
+    <string name="reset_customized_scheduling_algorithm_summary">Reset customzed scheduling algorithm to default</string>
 </resources>
