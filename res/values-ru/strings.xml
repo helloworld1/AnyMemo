@@ -394,7 +394,7 @@
     <string name="export_zip_text">Экспорт Zip</string>
     <string name="customize_scheduling_algorithm_text">Настроить расписание</string>
     <string name="customize_scheduling_algorithm_summary">Настроить алгоритм повторений изученого.</string>
-    <string name="customize_scheduling_algorithm_warning">Изменение алгоритма повторений только для продвинутых пользователей. Неправильная настройка может потребовать сброса всех установок к их значениям по умолчанию.</string>
+    <string name="customize_scheduling_algorithm_warning">Изменение алгоритма повторений только для продвинутых пользователей.</string>
     <string name="queuing_text">Очередь</string>
     <string name="when_first_grade_text">Когда учите карточку первый раз</string>
     <string name="initial_grading_interval_summary">Это интервал в днях при первом изучении карточки.</string>
