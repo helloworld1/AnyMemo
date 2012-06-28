@@ -418,4 +418,6 @@
     <string name="enable_noise_text">Разрешить шум</string>
     <string name="enable_noise_on_summary">При расчёте для расширения интервала используется шум.</string>
     <string name="enable_noise_off_summary">Интервал не содержит шума.</string>
+    <string name="reset_customized_scheduling_algorithm_text">Сбросить настройки расписания</string>
+    <string name="reset_customized_scheduling_algorithm_summary">Сбросить настройки расписания к значениям по умолчанию.</string>
 </resources>
