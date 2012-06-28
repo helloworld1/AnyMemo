@@ -425,4 +425,6 @@
     <string name="enable_noise_off_summary">The interval does not contain noise.</string>
     <string name="reset_customized_scheduling_algorithm_text">Reset customzed scheduling algorithm</string>
     <string name="reset_customized_scheduling_algorithm_summary">Reset customzed scheduling algorithm to default</string>
+    <string name="statistics_text">Statistics</string>
+    <string name="cards_to_review_text">Cards to review in a month</string>
 </resources>
