@@ -75,6 +75,7 @@ public class SchedulingAlgorithmParameters {
         editor.putFloat("minimal_interval", defaultMinimalInterval);
         editor.putFloat("initial_easiness", defaultInitialEasiness);
         editor.putFloat("minimal_easiness", defaultMinimalEasiness);
+        editor.putString("learning_queue_size", "10");
 
         editor.commit();
     }
