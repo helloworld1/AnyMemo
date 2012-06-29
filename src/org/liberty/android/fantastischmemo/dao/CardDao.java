@@ -34,6 +34,8 @@ public interface CardDao extends HelperDao<Card, Integer> {
     long getNewCardCount(Category filterCategory);
     long getScheduledCardCount(Category filterCategory);
 
+    long getScheduledCardCount(Category filterCategory, int daysInAdvance);
+
     /* Create a list of cards. Also create the related LearningData and Category */
     void createCards(final List<Card> cardList);
 

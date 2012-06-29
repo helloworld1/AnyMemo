@@ -20,6 +20,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo.ui;
 
+import java.sql.SQLException;
+
 import org.achartengine.GraphicalView;
 
 import org.achartengine.chart.BarChart;
@@ -30,31 +32,72 @@ import org.achartengine.model.XYSeries;
 import org.achartengine.renderer.SimpleSeriesRenderer;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 
-import org.achartengine.renderer.XYMultipleSeriesRenderer.Orientation;
-
 import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.R;
+
+import org.liberty.android.fantastischmemo.dao.CardDao;
+
+import org.liberty.android.fantastischmemo.ui.widgets.AMSpinner;
+
+import android.app.ProgressDialog;
 
 import android.graphics.Color;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 
+import android.widget.FrameLayout;
+
 public class StatisticsScreen extends AMActivity {
+    private static final String TAG = "StatisticsScreen";
+
+    public static final String EXTRA_DBPATH = "dbpath";
+
+    private AMSpinner typeSelectSpinner;
+    private FrameLayout statisticsGraphFrame;
+    private InitTask initTask;
+    private String dbPath;
+
+    private CardDao cardDao;
+
+    private AnyMemoDBOpenHelper dbOpenHelper;
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        setContentView(R.layout.statistics_screen);
+        typeSelectSpinner = (AMSpinner)findViewById(R.id.statistics_type_spinner);
+        statisticsGraphFrame = (FrameLayout)findViewById(R.id.statistics_graph_frame);
+
+        Bundle extras = getIntent().getExtras();
+        assert extras != null : "Open StatisticsScreen without extras";
+
+        dbPath = extras.getString(EXTRA_DBPATH);
+
+        assert dbPath != null : "dbPath shouldn't be null";
+
+        dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(this, dbPath);
+
+        initTask = new InitTask();
+        initTask.execute((Void)null);
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
+    }
+
+    private GraphicalView generateBarGraph(String title, int[] x_values, int[] y_values) {
         XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
-        XYSeries series = new XYSeries("Title");
-        series.add(1,2);
-        series.add(2,3);
-        series.add(3,4);
-        series.add(4,3);
-        XYSeries series2 = new XYSeries("motto");
-        series2.add(1,8);
-        series2.add(2,4);
-        series2.add(3,7);
-        series2.add(4,2);
+        XYSeries series = new XYSeries(title);
+        assert x_values.length == y_values.length : "The number of x values should match the number of y values";
+        for(int i = 0; i < x_values.length; i++) {
+            series.add(x_values[i], y_values[i]);
+        }
         dataset.addSeries(series);
-        dataset.addSeries(series2);
         
         XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
 
@@ -62,16 +105,52 @@ public class StatisticsScreen extends AMActivity {
         SimpleSeriesRenderer r1 = new SimpleSeriesRenderer();
         r1.setColor(Color.RED);
         r1.setDisplayChartValues(true);
-        SimpleSeriesRenderer r2 = new SimpleSeriesRenderer();
-        r2.setColor(Color.GREEN);
-        r2.setDisplayChartValues(true);
         renderer.addSeriesRenderer(r1);
-        renderer.addSeriesRenderer(r2);
 
-        BarChart chart = new BarChart(dataset, renderer, BarChart.Type.STACKED);
+        BarChart chart = new BarChart(dataset, renderer, BarChart.Type.DEFAULT);
 
         GraphicalView gv = new GraphicalView(this, chart);
-        setContentView(gv);
+        return gv;
+    }
 
+    private class InitTask extends AsyncTask<Void, Void, Void> {
+        private ProgressDialog progressDialog;
+        private int[] x_values;
+        private int[] y_values;
+
+		@Override
+        public void onPreExecute() {
+            progressDialog = new ProgressDialog(StatisticsScreen.this);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setTitle(getString(R.string.loading_please_wait));
+            progressDialog.setMessage(getString(R.string.loading_database));
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        public Void doInBackground(Void... params) {
+            try {
+                cardDao = dbOpenHelper.getCardDao();
+            } catch(SQLException e) {
+                throw new RuntimeException(e);
+            }
+            x_values = new int[30];
+            y_values = new int[30];
+            for (int i = 0; i < 30; i++) {
+                x_values[i] = i;
+                y_values[i] = (int)cardDao.getScheduledCardCount(null, i);
+            }
+            return null;
+
+        }
+
+        @Override
+        public void onPostExecute(Void result){
+            GraphicalView gv = generateBarGraph("Hello", x_values, y_values);
+            statisticsGraphFrame.removeAllViews();
+            statisticsGraphFrame.addView(gv);
+            progressDialog.dismiss();
+        }
     }
 }

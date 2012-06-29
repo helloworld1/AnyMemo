@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout 
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:anymemo="http://schemas.android.com/apk/res/org.liberty.android.fantastischmemo"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <org.liberty.android.fantastischmemo.ui.widgets.AMSpinner
-            android:id="@+id/card_style_spinner"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:drawSelectorOnTop="true"
-            android:layout_weight="1"
-            android:prompt="@string/card_style"
-            anymemo:display_array="@array/card_style_list"
-            anymemo:value_array="@array/card_style_list_values" />
+        android:id="@+id/statistics_type_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawSelectorOnTop="true"
+        android:prompt="@string/statistics_type_text"
+        anymemo:display_array="@array/statistics_types_values"
+        anymemo:value_array="@array/statistics_types" />
     <FrameLayout
-        android:id="@+id/graph"
+        android:id="@+id/statistics_graph_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_weight="1"
     />
 
 </LinearLayout>

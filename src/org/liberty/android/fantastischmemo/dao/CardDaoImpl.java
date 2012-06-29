@@ -6,6 +6,7 @@ import java.sql.SQLException;
 
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,8 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 import org.apache.mycommons.lang3.StringUtils;
+
+import org.apache.mycommons.lang3.time.DateUtils;
 
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
@@ -380,6 +383,10 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
     }
 
     public long getScheduledCardCount(Category filterCategory) {
+        return getScheduledCardCount(filterCategory, 0);
+    }
+
+    public long getScheduledCardCount(Category filterCategory, int daysInAdvance) {
         try {
             LearningDataDao learningDataDao = getHelper().getLearningDataDao();
             QueryBuilder<Card, Integer> cardQb = queryBuilder();
@@ -388,7 +395,11 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
             cardQb.selectColumns("id");
             learnQb.selectColumns("id");
 
-            learnQb.where().le("nextLearnDate", Calendar.getInstance().getTime())
+            Date timeToCompare =  Calendar.getInstance().getTime();
+            timeToCompare = DateUtils.addDays(timeToCompare, daysInAdvance);
+
+
+            learnQb.where().le("nextLearnDate", timeToCompare)
                 .and().gt("acqReps", "0").prepare();
 
             Where<Card, Integer> where = cardQb.where().in("learningData_id", learnQb);
@@ -403,6 +414,7 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
             throw new RuntimeException(e);
         }
     }
+
 
     /*
      * Note the category and learningData field must be populated
