@@ -27,11 +27,15 @@ import java.util.Date;
 
 import org.achartengine.GraphicalView;
 
+import org.achartengine.chart.AbstractChart;
 import org.achartengine.chart.BarChart;
+import org.achartengine.chart.PieChart;
 
+import org.achartengine.model.CategorySeries;
 import org.achartengine.model.XYMultipleSeriesDataset;
 import org.achartengine.model.XYSeries;
 
+import org.achartengine.renderer.DefaultRenderer;
 import org.achartengine.renderer.SimpleSeriesRenderer;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 
@@ -53,6 +57,9 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import android.view.View;
+import android.widget.AdapterView;
+
 import android.widget.FrameLayout;
 
 public class StatisticsScreen extends AMActivity {
@@ -62,7 +69,6 @@ public class StatisticsScreen extends AMActivity {
 
     private AMSpinner typeSelectSpinner;
     private FrameLayout statisticsGraphFrame;
-    private InitTask initTask;
     private String dbPath;
 
     private CardDao cardDao;
@@ -83,11 +89,35 @@ public class StatisticsScreen extends AMActivity {
         assert dbPath != null : "dbPath shouldn't be null";
 
         dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(this, dbPath);
+        typeSelectSpinner.setOnItemSelectedListener(typeSelectSpinnerListener);
 
-        initTask = new InitTask();
-        initTask.execute((Void)null);
+        //typeSelectSpinnerListener.onItemSelected(null, null, 0, 0);
 
     }
+
+    private AdapterView.OnItemSelectedListener typeSelectSpinnerListener =
+        new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent , View view,
+					int position, long id) {
+                String selectedValue = typeSelectSpinner.getItemValueForPosition(position);
+                if (selectedValue.equals("CARDS_TO_REVIEW")) {
+                    ChartTask task = new CardToReviewTask();
+                    task.execute((Void)null);
+
+                } else if (selectedValue.equals("GRADE_STATISTICS")) {
+                    ChartTask task = new GradeStatisticsTask();
+                    task.execute((Void)null);
+
+                }
+				
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+                // Do nothing
+			}
+        };
 
     @Override
     public void onDestroy() {
@@ -95,33 +125,89 @@ public class StatisticsScreen extends AMActivity {
         AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
     }
 
-    private GraphicalView generateBarGraph(String title, int[] x_values, int[] y_values) {
+    private BarChart generateBarGraph(XYSeries series) {
         XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
-        XYSeries series = new XYSeries(title);
-        assert x_values.length == y_values.length : "The number of x values should match the number of y values";
-        for(int i = 0; i < x_values.length; i++) {
-            series.add(x_values[i], y_values[i]);
-        }
+        
         dataset.addSeries(series);
         
         XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
 
-        //renderer.setOrientation(Orientation.VERTICAL);
         SimpleSeriesRenderer r1 = new SimpleSeriesRenderer();
-        r1.setColor(Color.RED);
+        r1.setColor(Color.CYAN);
         r1.setDisplayChartValues(true);
+
         renderer.addSeriesRenderer(r1);
 
         BarChart chart = new BarChart(dataset, renderer, BarChart.Type.DEFAULT);
 
-        GraphicalView gv = new GraphicalView(this, chart);
-        return gv;
+        return chart;
     }
 
-    private class InitTask extends AsyncTask<Void, Void, Void> {
+    private PieChart generateGradePieChart(CategorySeries series) {
+        int[] colors = new int[] { Color.BLUE, Color.GREEN, Color.MAGENTA, Color.YELLOW, Color.CYAN, Color.RED};
+        DefaultRenderer renderer = new DefaultRenderer();
+        renderer.setLabelsTextSize(15);
+        renderer.setLegendTextSize(15);
+        renderer.setMargins(new int[] { 20, 30, 15, 0 });
+        for (int color : colors) {
+            SimpleSeriesRenderer r = new SimpleSeriesRenderer();
+            r.setColor(color);
+            renderer.addSeriesRenderer(r);
+        }
+        renderer.setZoomButtonsVisible(true);
+        renderer.setZoomEnabled(true);
+        renderer.setChartTitleTextSize(20);
+
+        return new PieChart(series, renderer);
+
+    }
+
+    private class CardToReviewTask extends ChartTask {
+        @Override
+        public AbstractChart doInBackground(Void... params) {
+            try {
+                cardDao = dbOpenHelper.getCardDao();
+            } catch(SQLException e) {
+                throw new RuntimeException(e);
+            }
+
+            XYSeries series = new XYSeries((getString(R.string.number_of_cards_scheduled_in_a_day_text)));
+            Date now = new Date();
+            for (int i = 0; i < 30; i++) {
+                Date startDate = DateUtils.addDays(now, i);
+                DateUtils.truncate(startDate, Calendar.DAY_OF_MONTH);
+                Date endDate = DateUtils.addDays(startDate, 1);
+                series.add(i, (int)cardDao.getScheduledCardCount(null, startDate, endDate));
+
+            }
+            return generateBarGraph(series);
+
+        }
+    }
+    
+    private class GradeStatisticsTask extends ChartTask {
+        @Override
+        public AbstractChart doInBackground(Void... params) {
+            try {
+                cardDao = dbOpenHelper.getCardDao();
+            } catch(SQLException e) {
+                throw new RuntimeException(e);
+            }
+
+            CategorySeries series = new CategorySeries(getString(R.string.grade_statistics_text));
+            int k = 0;
+            double[] values = new double[] { 12, 14, 11, 10, 19, 11};
+            for (double value : values) {
+                series.add("Grade" + ++k, value);
+            }
+            return generateGradePieChart(series);
+
+        }
+    }
+
+
+    private abstract class ChartTask extends AsyncTask<Void, Void, AbstractChart> {
         private ProgressDialog progressDialog;
-        private int[] x_values;
-        private int[] y_values;
 
 		@Override
         public void onPreExecute() {
@@ -134,29 +220,8 @@ public class StatisticsScreen extends AMActivity {
         }
 
         @Override
-        public Void doInBackground(Void... params) {
-            try {
-                cardDao = dbOpenHelper.getCardDao();
-            } catch(SQLException e) {
-                throw new RuntimeException(e);
-            }
-            x_values = new int[30];
-            y_values = new int[30];
-            Date now = new Date();
-            for (int i = 0; i < 30; i++) {
-                Date startDate = DateUtils.addDays(now, i);
-                DateUtils.truncate(startDate, Calendar.DAY_OF_MONTH);
-                Date endDate = DateUtils.addDays(startDate, 1);
-                x_values[i] = i;
-                y_values[i] = (int)cardDao.getScheduledCardCount(null, startDate, endDate);
-            }
-            return null;
-
-        }
-
-        @Override
-        public void onPostExecute(Void result){
-            GraphicalView gv = generateBarGraph(getString(R.string.number_of_cards_scheduled_in_a_day_text), x_values, y_values);
+        public void onPostExecute(AbstractChart result){
+            GraphicalView gv = new GraphicalView(StatisticsScreen.this, result);
             statisticsGraphFrame.removeAllViews();
             statisticsGraphFrame.addView(gv);
             progressDialog.dismiss();

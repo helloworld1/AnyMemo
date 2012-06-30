@@ -79,4 +79,8 @@ public class AMSpinner extends Spinner {
         this.setSelection(index);
     }
 
+    public String getItemValueForPosition(int position) {
+        return valueList.get(position).toString();
+    }
+
 }
