@@ -15,8 +15,6 @@ import java.util.concurrent.Callable;
 
 import org.apache.mycommons.lang3.StringUtils;
 
-import org.apache.mycommons.lang3.time.DateUtils;
-
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
@@ -383,10 +381,11 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
     }
 
     public long getScheduledCardCount(Category filterCategory) {
-        return getScheduledCardCount(filterCategory, 0);
+        // That is the number of cards that is scheduled before now
+        return getScheduledCardCount(filterCategory, new Date(0), new Date());
     }
 
-    public long getScheduledCardCount(Category filterCategory, int daysInAdvance) {
+    public long getScheduledCardCount(Category filterCategory, Date startDate, Date endDate) {
         try {
             LearningDataDao learningDataDao = getHelper().getLearningDataDao();
             QueryBuilder<Card, Integer> cardQb = queryBuilder();
@@ -395,11 +394,8 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
             cardQb.selectColumns("id");
             learnQb.selectColumns("id");
 
-            Date timeToCompare =  Calendar.getInstance().getTime();
-            timeToCompare = DateUtils.addDays(timeToCompare, daysInAdvance);
-
-
-            learnQb.where().le("nextLearnDate", timeToCompare)
+            learnQb.where().le("nextLearnDate", endDate)
+                .and().ge("nextLearnDate", startDate)
                 .and().gt("acqReps", "0").prepare();
 
             Where<Card, Integer> where = cardQb.where().in("learningData_id", learnQb);

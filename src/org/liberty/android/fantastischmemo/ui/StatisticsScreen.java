@@ -22,6 +22,9 @@ package org.liberty.android.fantastischmemo.ui;
 
 import java.sql.SQLException;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import org.achartengine.GraphicalView;
 
 import org.achartengine.chart.BarChart;
@@ -31,6 +34,8 @@ import org.achartengine.model.XYSeries;
 
 import org.achartengine.renderer.SimpleSeriesRenderer;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
+
+import org.apache.mycommons.lang3.time.DateUtils;
 
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
@@ -137,9 +142,13 @@ public class StatisticsScreen extends AMActivity {
             }
             x_values = new int[30];
             y_values = new int[30];
+            Date now = new Date();
             for (int i = 0; i < 30; i++) {
+                Date startDate = DateUtils.addDays(now, i);
+                DateUtils.truncate(startDate, Calendar.DAY_OF_MONTH);
+                Date endDate = DateUtils.addDays(startDate, 1);
                 x_values[i] = i;
-                y_values[i] = (int)cardDao.getScheduledCardCount(null, i);
+                y_values[i] = (int)cardDao.getScheduledCardCount(null, startDate, endDate);
             }
             return null;
 
@@ -147,7 +156,7 @@ public class StatisticsScreen extends AMActivity {
 
         @Override
         public void onPostExecute(Void result){
-            GraphicalView gv = generateBarGraph("Hello", x_values, y_values);
+            GraphicalView gv = generateBarGraph(getString(R.string.number_of_cards_scheduled_in_a_day_text), x_values, y_values);
             statisticsGraphFrame.removeAllViews();
             statisticsGraphFrame.addView(gv);
             progressDialog.dismiss();
