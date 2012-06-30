@@ -1,5 +1,6 @@
 package org.liberty.android.fantastischmemo.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.liberty.android.fantastischmemo.domain.Card;
@@ -32,7 +33,11 @@ public interface CardDao extends HelperDao<Card, Integer> {
 
     long getTotalCount(Category filterCategory);
     long getNewCardCount(Category filterCategory);
+    /* Get the number of cards that is due for now */
     long getScheduledCardCount(Category filterCategory);
+
+    /* get the number cards that scheduled between startDate and endDate */
+    long getScheduledCardCount(Category filterCategory, Date startDate, Date endDate);
 
     /* Create a list of cards. Also create the related LearningData and Category */
     void createCards(final List<Card> cardList);

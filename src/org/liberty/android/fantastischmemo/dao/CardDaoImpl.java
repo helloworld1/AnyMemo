@@ -6,6 +6,7 @@ import java.sql.SQLException;
 
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -380,6 +381,11 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
     }
 
     public long getScheduledCardCount(Category filterCategory) {
+        // That is the number of cards that is scheduled before now
+        return getScheduledCardCount(filterCategory, new Date(0), new Date());
+    }
+
+    public long getScheduledCardCount(Category filterCategory, Date startDate, Date endDate) {
         try {
             LearningDataDao learningDataDao = getHelper().getLearningDataDao();
             QueryBuilder<Card, Integer> cardQb = queryBuilder();
@@ -388,7 +394,8 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
             cardQb.selectColumns("id");
             learnQb.selectColumns("id");
 
-            learnQb.where().le("nextLearnDate", Calendar.getInstance().getTime())
+            learnQb.where().le("nextLearnDate", endDate)
+                .and().ge("nextLearnDate", startDate)
                 .and().gt("acqReps", "0").prepare();
 
             Where<Card, Integer> where = cardQb.where().in("learningData_id", learnQb);
@@ -403,6 +410,7 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
             throw new RuntimeException(e);
         }
     }
+
 
     /*
      * Note the category and learningData field must be populated

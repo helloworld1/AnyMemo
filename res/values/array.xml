@@ -284,4 +284,12 @@
     <item>FORA</item>
 </string-array>
 
+<string-array name="statistics_types">
+    <item>CARDS_TO_REVIEW</item>
+</string-array>
+
+<string-array name="statistics_types_values">
+    <item>@string/cards_to_review_text</item>
+</string-array>
+
 </resources>

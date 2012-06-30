@@ -49,6 +49,7 @@ public class OpenActionsFragment extends DialogFragment {
     private View listItem;
     private View cramItem;
     private View settingsItem;
+    private View statisticsItem;
     private View deleteItem;
 
     @Override
@@ -86,6 +87,9 @@ public class OpenActionsFragment extends DialogFragment {
 
         deleteItem = v.findViewById(R.id.delete);
         deleteItem.setOnClickListener(buttonClickListener);
+
+        statisticsItem = v.findViewById(R.id.statistics);
+        statisticsItem.setOnClickListener(buttonClickListener);
         return v;
     }
 
@@ -127,6 +131,13 @@ public class OpenActionsFragment extends DialogFragment {
             if (v == settingsItem) {
                 Intent myIntent = new Intent();
                 myIntent.setClass(mActivity, SettingsScreen.class);
+                myIntent.putExtra(SettingsScreen.EXTRA_DBPATH, dbPath);
+                startActivity(myIntent);
+            }
+
+            if (v == statisticsItem) {
+                Intent myIntent = new Intent();
+                myIntent.setClass(mActivity, StatisticsScreen.class);
                 myIntent.putExtra(SettingsScreen.EXTRA_DBPATH, dbPath);
                 startActivity(myIntent);
             }

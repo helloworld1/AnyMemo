@@ -97,6 +97,9 @@
         <activity 
             android:name=".ui.DatabaseMerger"
             android:configChanges="orientation|keyboardHidden" />
+        <activity 
+            android:name=".ui.StatisticsScreen"
+            android:configChanges="orientation|keyboardHidden" />
         <receiver
             android:name=".AlarmReceiver"
             android:process=":remote" />
