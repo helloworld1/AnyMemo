@@ -101,14 +101,16 @@ public class StatisticsScreen extends AMActivity {
 			public void onItemSelected(AdapterView<?> parent , View view,
 					int position, long id) {
                 String selectedValue = typeSelectSpinner.getItemValueForPosition(position);
-                if (selectedValue.equals("CARDS_TO_REVIEW")) {
+                if(selectedValue.equals("CARDS_TO_REVIEW")) {
                     ChartTask task = new CardToReviewTask();
                     task.execute((Void)null);
 
-                } else if (selectedValue.equals("GRADE_STATISTICS")) {
+                } else if(selectedValue.equals("GRADE_STATISTICS")) {
                     ChartTask task = new GradeStatisticsTask();
                     task.execute((Void)null);
-
+                } else if(selectedValue.equals("ACCUMULATIVE_CARDS_TO_REVIEW")) {
+                    ChartTask task = new AccumulativeCardsToReviewTask();
+                    task.execute((Void)null);
                 }
 				
 			}
@@ -177,6 +179,28 @@ public class StatisticsScreen extends AMActivity {
                 Date startDate = DateUtils.addDays(now, i);
                 DateUtils.truncate(startDate, Calendar.DAY_OF_MONTH);
                 Date endDate = DateUtils.addDays(startDate, 1);
+                series.add(i, (int)cardDao.getScheduledCardCount(null, startDate, endDate));
+
+            }
+            return generateBarGraph(series);
+
+        }
+    }
+
+    private class AccumulativeCardsToReviewTask extends ChartTask {
+        @Override
+        public AbstractChart doInBackground(Void... params) {
+            try {
+                cardDao = dbOpenHelper.getCardDao();
+            } catch(SQLException e) {
+                throw new RuntimeException(e);
+            }
+
+            XYSeries series = new XYSeries((getString(R.string.accumulative_cards_scheduled_text)));
+            Date now = new Date();
+            Date startDate = new Date(0);
+            for (int i = 0; i < 30; i++) {
+                Date endDate = DateUtils.addDays(now, i);
                 series.add(i, (int)cardDao.getScheduledCardCount(null, startDate, endDate));
 
             }

@@ -286,11 +286,13 @@
 
 <string-array name="statistics_types">
     <item>CARDS_TO_REVIEW</item>
+    <item>ACCUMULATIVE_CARDS_TO_REVIEW</item>
     <item>GRADE_STATISTICS</item>
 </string-array>
 
 <string-array name="statistics_types_values">
     <item>@string/cards_to_review_text</item>
+    <item>@string/accumulative_cards_scheduled_text</item>
     <item>@string/grade_statistics_text</item>
 </string-array>
 
