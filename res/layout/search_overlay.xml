@@ -27,8 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="50dip"
         android:lines="1"
-        android:layout_weight="1"
-        android:background="@android:drawable/editbox_background"/>
+        android:layout_weight="1" />
 	<ImageButton 
 		android:id="@+id/search_close_btn" 
 		android:layout_width="50dip"

@@ -411,6 +411,27 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
         }
     }
 
+    public long getNumberOfCardsWithGrade(int grade) {
+        try {
+            LearningDataDao learningDataDao = getHelper().getLearningDataDao();
+            QueryBuilder<Card, Integer> cardQb = queryBuilder();
+            QueryBuilder<LearningData, Integer> learnQb = learningDataDao.queryBuilder();
+            cardQb.setCountOf(true);
+            cardQb.selectColumns("id");
+            learnQb.selectColumns("id");
+
+            learnQb.where().eq("grade", grade)
+                .and().gt("acqReps", "0").prepare();
+
+            Where<Card, Integer> where = cardQb.where().in("learningData_id", learnQb);
+            cardQb.setWhere(where);
+
+            return countOf(cardQb.prepare());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
 
     /*
      * Note the category and learningData field must be populated

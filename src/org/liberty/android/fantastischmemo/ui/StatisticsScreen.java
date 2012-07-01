@@ -195,10 +195,9 @@ public class StatisticsScreen extends AMActivity {
             }
 
             CategorySeries series = new CategorySeries(getString(R.string.grade_statistics_text));
-            int k = 0;
-            double[] values = new double[] { 12, 14, 11, 10, 19, 11};
-            for (double value : values) {
-                series.add("Grade" + ++k, value);
+            for (int i = 0; i < 6; i++) {
+                long n = cardDao.getNumberOfCardsWithGrade(i);
+                series.add("Grade" + i + ": " + n, n);
             }
             return generateGradePieChart(series);
 

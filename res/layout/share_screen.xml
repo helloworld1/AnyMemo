@@ -24,8 +24,7 @@
                 android:layout_height="fill_parent"
                 android:inputType="textMultiLine"
                 android:gravity="top"
-                android:layout_weight="1"
-                android:background="@android:drawable/editbox_background"/>
+                android:layout_weight="1" />
             <TextView 
                 android:text="@string/add_screen_question"
                 android:layout_width="fill_parent"
@@ -38,8 +37,7 @@
                 android:inputType="textMultiLine"
                 android:gravity="top"
                 android:minLines="3"
-                android:layout_weight="1"
-                android:background="@android:drawable/editbox_background"/>
+                android:layout_weight="1" />
             <TextView 
                 android:text="@string/add_screen_answer"
                 android:layout_width="fill_parent"
@@ -52,8 +50,7 @@
                 android:inputType="textMultiLine"
                 android:gravity="top"
                 android:minLines="3"
-                android:layout_weight="1"
-                android:background="@android:drawable/editbox_background"/>
+                android:layout_weight="1" />
             <TextView 
                 android:text="@string/note_text"
                 android:layout_width="fill_parent"
@@ -66,8 +63,7 @@
                 android:inputType="textMultiLine"
                 android:gravity="top"
                 android:minLines="1"
-                android:layout_weight="1"
-                android:background="@android:drawable/editbox_background"/>
+                android:layout_weight="1" />
         </LinearLayout>
     </ScrollView>
     <LinearLayout

@@ -39,6 +39,9 @@ public interface CardDao extends HelperDao<Card, Integer> {
     /* get the number cards that scheduled between startDate and endDate */
     long getScheduledCardCount(Category filterCategory, Date startDate, Date endDate);
 
+    /* Number of cards that was graded with "grade" */
+    long getNumberOfCardsWithGrade(int grade);
+
     /* Create a list of cards. Also create the related LearningData and Category */
     void createCards(final List<Card> cardList);
 

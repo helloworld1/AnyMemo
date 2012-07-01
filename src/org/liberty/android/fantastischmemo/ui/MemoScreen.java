@@ -891,7 +891,7 @@ public class MemoScreen extends AMActivity {
 
             // Strip leading path!
             dbName = AMUtil.getFilenameFromPath(dbPath);
-            showDialog(DIALOG_LOADING_PROGRESS);
+            setProgressBarIndeterminateVisibility(true);
         }
 
         @Override
@@ -929,6 +929,7 @@ public class MemoScreen extends AMActivity {
 
         @Override
         public void onPostExecute(Card result){
+            setProgressBarIndeterminateVisibility(false);
             if (result == null) {
                 showNoItemDialog();
                 return;
@@ -958,7 +959,6 @@ public class MemoScreen extends AMActivity {
 
             refreshStatInfo();
             setTitle(getActivityTitleString());
-            removeDialog(DIALOG_LOADING_PROGRESS);
             updateFlashcardView(false);
         }
     }

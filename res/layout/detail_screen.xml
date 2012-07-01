@@ -18,7 +18,6 @@
             android:id="@+id/entry__id"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@android:drawable/editbox_background"
             android:inputType="number"/>
         <TextView 
             android:text="question"
@@ -29,8 +28,7 @@
             android:id="@+id/entry_question"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
-            android:inputType="textMultiLine"
-            android:background="@android:drawable/editbox_background"/>
+            android:inputType="textMultiLine" />
         <TextView 
             android:text="answer"
             android:layout_height="wrap_content"
@@ -40,8 +38,7 @@
             android:id="@+id/entry_answer"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
-            android:inputType="textMultiLine"
-            android:background="@android:drawable/editbox_background"/>
+            android:inputType="textMultiLine" />
         <TextView 
             android:text="note"
             android:layout_height="wrap_content"
@@ -51,8 +48,7 @@
             android:id="@+id/entry_note"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
-            android:inputType="textMultiLine"
-            android:background="@android:drawable/editbox_background"/>
+            android:inputType="textMultiLine"/>
         <TextView 
             android:text="category"
             android:layout_height="wrap_content"
@@ -62,7 +58,6 @@
             android:id="@+id/entry_category"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
-            android:background="@android:drawable/editbox_background"
             android:editable="false"/>
         <TextView 
             android:text="@string/entry_last_learn_date"
@@ -74,7 +69,6 @@
             android:inputType="date"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
-            android:background="@android:drawable/editbox_background"
             />
         <TextView 
             android:text="@string/entry_next_learn_date"
@@ -84,8 +78,7 @@
         <EditText
             android:id="@+id/entry_next_learn_date"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:drawable/editbox_background"/>
+            android:layout_height="wrap_content" />
         <TextView 
             android:text="grade"
             android:layout_width="fill_parent"
@@ -95,7 +88,6 @@
             android:id="@+id/entry_grade"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@android:drawable/editbox_background"
             android:inputType="number"/>
         <TextView 
             android:text="easiness"
@@ -106,7 +98,6 @@
             android:id="@+id/entry_easiness"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@android:drawable/editbox_background"
             android:inputType="numberDecimal"/>
         <TextView 
             android:text="acq_reps"
@@ -117,7 +108,6 @@
             android:id="@+id/entry_acq_reps"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@android:drawable/editbox_background"
             android:inputType="number"/>
         <TextView 
             android:text="ret_reps"
@@ -128,7 +118,6 @@
             android:id="@+id/entry_ret_reps"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@android:drawable/editbox_background"
             android:inputType="number"/>
         <TextView 
             android:text="lapses"
@@ -139,7 +128,6 @@
             android:id="@+id/entry_lapses"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@android:drawable/editbox_background"
             android:inputType="number"/>
         <TextView 
             android:text="acq_reps_since_lapse"
@@ -150,7 +138,6 @@
             android:id="@+id/entry_acq_reps_since_lapse"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@android:drawable/editbox_background"
             android:inputType="number"/>
         <TextView 
             android:text="ret_reps_since_lapse"
@@ -161,7 +148,6 @@
             android:id="@+id/entry_ret_reps_since_lapse"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@android:drawable/editbox_background"
             android:inputType="number"/>
         <Button 
             android:id="@+id/but_detail_update" 

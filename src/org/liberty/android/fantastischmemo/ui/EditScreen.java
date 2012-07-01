@@ -813,6 +813,7 @@ public class EditScreen extends AMActivity {
             progressDialog.setMessage(getString(R.string.loading_database));
             progressDialog.setCancelable(false);
             progressDialog.show();
+            setProgressBarIndeterminateVisibility(true);
 
 
         }
@@ -862,6 +863,7 @@ public class EditScreen extends AMActivity {
 
         @Override
         public void onPostExecute(Void result){
+            setProgressBarIndeterminateVisibility(false);
             if(setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED){
                 flashcardDisplay = new DoubleSidedCardDisplay(EditScreen.this, dbPath, setting, option);
             }
