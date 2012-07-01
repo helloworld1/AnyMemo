@@ -420,4 +420,10 @@
     <string name="enable_noise_off_summary">Интервал не содержит шума.</string>
     <string name="reset_customized_scheduling_algorithm_text">Сбросить настройки расписания</string>
     <string name="reset_customized_scheduling_algorithm_summary">Сбросить настройки расписания к значениям по умолчанию.</string>
+    <string name="statistics_text">Статистика</string>
+    <string name="statistics_type_text">Вид статистики</string>
+    <string name="cards_to_review_text">Пройдено карточек в месяц</string>
+    <string name="number_of_cards_scheduled_in_a_day_text">Количество пройденных карточек в день</string>
+    <string name="grade_statistics_text">Статистика по оценкам</string>
+    <string name="accumulative_cards_scheduled_text">Суммарно пройдено карточек</string>
 </resources>
