@@ -174,6 +174,7 @@ public class MemoScreen extends AMActivity {
         if (!isCram) {
              LearnQueueManager.Builder builder = new LearnQueueManager.Builder()
                 .setCardDao(cardDao)
+                .setCategoryDao(categoryDao)
                 .setLearningDataDao(learningDataDao)
                 .setScheduler(scheduler)
                 .setLearnQueueSize(queueSize)
@@ -701,8 +702,7 @@ public class MemoScreen extends AMActivity {
         sb.append(getString(R.string.new_text) + ": " + newCardCount + " ");
         sb.append(getString(R.string.review_short_text) + ": " + schedluledCardCount + " ");
         sb.append(getString(R.string.id_text) + ": " + currentCard.getId() + " ");
-
-        sb.append(currentCard.getCategory().getName());
+        sb.append(getString(R.string.category_short_text) + ": " + currentCard.getCategory().getName());
         return sb.toString();
     }
 
