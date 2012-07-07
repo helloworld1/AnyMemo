@@ -23,6 +23,8 @@ import org.liberty.android.fantastischmemo.R;
 
 import org.liberty.android.fantastischmemo.downloader.*;
 
+import org.liberty.android.fantastischmemo.downloader.google.GoogleAccountScreen;
+
 import android.app.Activity;
 import android.os.Bundle;
 
@@ -41,6 +43,7 @@ public class DownloadTabFragment extends Fragment implements View.OnClickListene
     private View ssButton;
     private View quizletButton;
     private View dropboxButton;
+    private View googleButton;
     private Activity mActivity;
 
     @Override
@@ -58,29 +61,34 @@ public class DownloadTabFragment extends Fragment implements View.OnClickListene
         ssButton = v.findViewById(R.id.source_ss);
         quizletButton = v.findViewById(R.id.source_quizlet);
         dropboxButton = v.findViewById(R.id.source_dropbox);
+        googleButton = v.findViewById(R.id.source_google);
         amButton.setOnClickListener(this);
         feButton.setOnClickListener(this);
         ssButton.setOnClickListener(this);
         quizletButton.setOnClickListener(this);
         dropboxButton.setOnClickListener(this);
+        googleButton.setOnClickListener(this);
         return v;
     }
     @Override
     public void onClick(View v){
-        if(v == amButton){
+        if (v == amButton){
             startActivity(new Intent(mActivity, DownloaderAnyMemo.class));
         }
-        if(v == feButton){
+        if (v == feButton){
             startActivity(new Intent(mActivity, FELauncher.class));
         }
-        if(v == ssButton){
+        if (v == ssButton){
             startActivity(new Intent(mActivity, DownloaderSS.class));
         }
-        if(v == quizletButton){
+        if (v == quizletButton){
             startActivity(new Intent(mActivity, QuizletLauncher.class));
         }
-        if(v == dropboxButton){
+        if (v == dropboxButton){
             startActivity(new Intent(mActivity, DropboxLauncher.class));
+        }
+        if (v == googleButton) {
+            startActivity(new Intent(mActivity, GoogleAccountScreen.class));
         }
     }
 
