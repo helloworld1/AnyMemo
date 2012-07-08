@@ -166,7 +166,6 @@ public class LearnQueueManager implements QueueManager {
                             public Void call() throws Exception {
                             	for(Card c: cs){
                             		categoryDao.refresh(c.getCategory());
-                            		Log.d("xinxin******", c.getCategory().getName());
                             	}
                                 return null;
                             }

@@ -3,6 +3,7 @@ package org.liberty.android.fantastischmemo.test.queue;
 import org.liberty.android.fantastischmemo.InstrumentationActivity;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
+import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 
 import org.liberty.android.fantastischmemo.domain.Card;
@@ -25,6 +26,7 @@ public class QueuingTest extends AbstractExistingDBTest<InstrumentationActivity>
 
     public void testGetNewCardQueuingWithCategory() throws Exception {
         CardDao cardDao = helper.getCardDao();
+        CategoryDao categoryDao = helper.getCategoryDao();
         LearningDataDao learningDataDao = helper.getLearningDataDao();
         Card c10 = cardDao.queryForId(10);
         assertNotNull(c10);
@@ -34,6 +36,7 @@ public class QueuingTest extends AbstractExistingDBTest<InstrumentationActivity>
         cardDao.update(c10);
         QueueManager queueManager = new LearnQueueManager.Builder()
             .setCardDao(cardDao)
+            .setCategoryDao(categoryDao)
             .setLearningDataDao(learningDataDao)
             .setLearnQueueSize(10)
             .setFilterCategory(cat)
@@ -45,9 +48,11 @@ public class QueuingTest extends AbstractExistingDBTest<InstrumentationActivity>
 
     public void testGetNewCardQueuingWithoutCategory() throws Exception {
         CardDao cardDao = helper.getCardDao();
+        CategoryDao categoryDao = helper.getCategoryDao();
         LearningDataDao learningDataDao = helper.getLearningDataDao();
         QueueManager queueManager = new LearnQueueManager.Builder()
             .setCardDao(cardDao)
+            .setCategoryDao(categoryDao)
             .setLearningDataDao(learningDataDao)
             .setLearnQueueSize(10)
             .setFilterCategory(null)
@@ -59,9 +64,11 @@ public class QueuingTest extends AbstractExistingDBTest<InstrumentationActivity>
 
     public void testQueuingPosition() throws Exception {
         CardDao cardDao = helper.getCardDao();
+        CategoryDao categoryDao = helper.getCategoryDao();
         LearningDataDao learningDataDao = helper.getLearningDataDao();
         QueueManager queueManager = new LearnQueueManager.Builder()
             .setCardDao(cardDao)
+            .setCategoryDao(categoryDao)
             .setLearningDataDao(learningDataDao)
             .setLearnQueueSize(10)
             .setFilterCategory(null)
