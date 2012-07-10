@@ -433,4 +433,6 @@
     <string name="grade_statistics_text">Grade statistics</string>
     <string name="accumulative_cards_scheduled_text">Accumulative cards scheduled</string>
     <string name="google_drive_spreadsheet_text">Google Drive Spreadsheet</string>
+    <string name="choose_account_text">Choose account</string>
+    <string name="login_account_text">Login account</string>
 </resources>

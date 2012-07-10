@@ -73,6 +73,12 @@
         <activity
             android:name=".downloader.google.GoogleAccountScreen"
             android:configChanges="orientation|keyboardHidden" />
+        <activity
+            android:name=".downloader.google.SpreadsheetScreen"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity
+            android:name=".downloader.google.GoogleAccountActivity"
+            android:configChanges="orientation|keyboardHidden" />
         <activity 
             android:name=".ui.CardEditor"
             android:configChanges="orientation|keyboardHidden" />

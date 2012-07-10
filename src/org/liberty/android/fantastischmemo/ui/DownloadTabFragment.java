@@ -23,7 +23,9 @@ import org.liberty.android.fantastischmemo.R;
 
 import org.liberty.android.fantastischmemo.downloader.*;
 
+import org.liberty.android.fantastischmemo.downloader.google.GoogleAccountActivity;
 import org.liberty.android.fantastischmemo.downloader.google.GoogleAccountScreen;
+import org.liberty.android.fantastischmemo.downloader.google.SpreadsheetScreen;
 
 import android.app.Activity;
 import android.os.Bundle;
