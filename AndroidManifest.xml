@@ -71,13 +71,7 @@
             android:name=".downloader.DropboxUploader"
             android:configChanges="orientation|keyboardHidden" />
         <activity
-            android:name=".downloader.google.GoogleAccountScreen"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity
-            android:name=".downloader.google.SpreadsheetScreen"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity
-            android:name=".downloader.google.GoogleAccountActivity"
+            android:name=".downloader.google.SpreadsheetListScreen"
             android:configChanges="orientation|keyboardHidden" />
         <activity 
             android:name=".ui.CardEditor"

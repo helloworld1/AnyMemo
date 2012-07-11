@@ -23,9 +23,7 @@ import org.liberty.android.fantastischmemo.R;
 
 import org.liberty.android.fantastischmemo.downloader.*;
 
-import org.liberty.android.fantastischmemo.downloader.google.GoogleAccountActivity;
-import org.liberty.android.fantastischmemo.downloader.google.GoogleAccountScreen;
-import org.liberty.android.fantastischmemo.downloader.google.SpreadsheetScreen;
+import org.liberty.android.fantastischmemo.downloader.google.SpreadsheetListScreen;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -90,7 +88,7 @@ public class DownloadTabFragment extends Fragment implements View.OnClickListene
             startActivity(new Intent(mActivity, DropboxLauncher.class));
         }
         if (v == googleButton) {
-            startActivity(new Intent(mActivity, GoogleAccountScreen.class));
+            startActivity(new Intent(mActivity, SpreadsheetListScreen.class));
         }
     }
 

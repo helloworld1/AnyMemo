@@ -93,6 +93,8 @@ public abstract class GoogleAccountActivity extends AMActivity {
             .setTitle(R.string.choose_account_text)
             .setItems(names, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
+                    editor.putString("saved_account_name", accounts[which].name);
+                    editor.commit();
                     GetAuthTokenTask task = new GetAuthTokenTask();
                     task.execute(accounts[which]);
                 }
