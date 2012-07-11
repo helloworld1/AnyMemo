@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2010 Haowen Ning
+Copyright (C) 2012 Haowen Ning
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -24,18 +24,23 @@ import org.liberty.android.fantastischmemo.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.liberty.android.fantastischmemo.downloader.google.GoogleAccountActivity;
-
-import android.accounts.Account;
+import org.liberty.android.fantastischmemo.downloader.DownloaderAnyMemo;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+
+import android.content.DialogInterface;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.content.Context;
 
 import android.support.v4.app.Fragment;
+
+import android.text.Html;
+
+import android.text.method.LinkMovementMethod;
 import android.widget.ArrayAdapter;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView;
@@ -76,7 +81,7 @@ public abstract class AbstractDownloaderFragment extends Fragment {
     /*
      * Download the database based on the info
      */
-    abstract protected void fetchDatabase(DownloadItem di);
+    abstract protected void fetchDatabase(DownloadItem di) throws Exception;
 
     /*
      * Get specific item from the Adapter or else
@@ -151,6 +156,66 @@ public abstract class AbstractDownloaderFragment extends Fragment {
 
     }
 
+    protected void showFetchDatabaseDialog(final DownloadItem item) {
+        View alertView = View.inflate(mActivity, R.layout.link_alert, null);
+        TextView textView = (TextView)alertView.findViewById(R.id.link_alert_message);
+        textView.setMovementMethod(LinkMovementMethod.getInstance());
+        textView.setText(Html.fromHtml(getString(R.string.downloader_download_alert_message) + item.getDescription()));
+        new AlertDialog.Builder(mActivity)
+            .setView(alertView)
+            .setTitle(getString(R.string.downloader_download_alert) + item.getTitle())
+            .setPositiveButton(getString(R.string.yes_text), new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface arg0, int arg1){
+                    startFetchDatabaseTask(item);
+                }
+            })
+            .setNegativeButton(getString(R.string.no_text), null)
+            .show();
+    }
+
+    protected void startFetchDatabaseTask(final DownloadItem item) {
+        FetchDatabaseTask task = new FetchDatabaseTask();
+        task.execute(item);
+    }
+
+	private class FetchDatabaseTask extends AsyncTask<DownloadItem, Void, Exception> {
+        private ProgressDialog progressDialog;
+
+		@Override
+        public void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(mActivity);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setTitle(getString(R.string.loading_please_wait));
+            progressDialog.setMessage(getString(R.string.loading_save));
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        public Exception doInBackground(DownloadItem... item) {
+            try {
+                fetchDatabase(item[0]);
+            } catch (Exception e) {
+                return e;
+            }
+            return null;
+        }
+
+        
+        @Override
+        public void onPostExecute(Exception e){
+            progressDialog.dismiss();
+            if (e != null) {
+                // TODO: handle it nicely
+                e.printStackTrace();
+                return;
+            }
+        }
+
+    }
+
     OnItemClickListener itemClickListener = new OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parentView, View childView, int position, long id){
@@ -166,7 +231,7 @@ public abstract class AbstractDownloaderFragment extends Fragment {
                 goBack();
             }
             else if(di.getType() == DownloadItem.TYPE_DATABASE){
-                fetchDatabase(di);
+                showFetchDatabaseDialog(di);
             }
         }
     };

@@ -46,7 +46,6 @@ class SpreadsheetListFragment extends AbstractDownloaderFragment {
 
 	@Override
 	protected List<DownloadItem> initialRetrieve() throws Exception {
-		// TODO Auto-generated method stub
         URL url = new URL("https://spreadsheets.google.com/feeds/spreadsheets/private/full");
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
         conn.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
@@ -77,6 +76,7 @@ class SpreadsheetListFragment extends AbstractDownloaderFragment {
             } else if(eventType == XmlPullParser.END_TAG) {
                 System.out.println("End tag "+xpp.getName());
                 if(xpp.getName().equals("entry")) {
+                    downloadItem.setType(DownloadItem.TYPE_DATABASE);
                     downloadItems.add(downloadItem);
                     downloadItem = null;
                 }
@@ -111,8 +111,26 @@ class SpreadsheetListFragment extends AbstractDownloaderFragment {
 	}
 
 	@Override
-	protected void fetchDatabase(DownloadItem di) {
-		// TODO Auto-generated method stub
+	protected void fetchDatabase(DownloadItem di) throws Exception {
+        String worksheetAddress = "https://spreadsheets.google.com/feeds/worksheets/" + getIdFromUrl(di.getAddress())+ "/private/full";
+        System.out.println("worksheet address: " + worksheetAddress);
+        URL url = new URL(worksheetAddress);
+        HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+        conn.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
+        List<Worksheet> worksheets = WorksheetFactory.getWorksheetsFromRequest(conn);
+        for (Worksheet w : worksheets) {
+            System.out.println(w);
+        }
+
+
+        //String s = new String(IOUtils.toByteArray(conn.getInputStream()));
+        //System.out.println(s);
+
 		
 	}
+
+    private String getIdFromUrl(String url) {
+        String[] splitedAddress = url.split("/");
+        return splitedAddress[splitedAddress.length - 1];
+    }
 }
