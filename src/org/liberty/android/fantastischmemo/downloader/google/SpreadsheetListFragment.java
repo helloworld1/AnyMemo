@@ -19,9 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.google;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-
 import java.net.URL;
 
 import java.util.ArrayList;
@@ -29,13 +26,8 @@ import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import org.apache.mycommons.io.IOUtils;
-
 import org.liberty.android.fantastischmemo.downloader.AbstractDownloaderFragment;
 import org.liberty.android.fantastischmemo.downloader.DownloadItem;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserFactory;
 
 class SpreadsheetListFragment extends AbstractDownloaderFragment {
     private String authToken = null;
@@ -50,53 +42,16 @@ class SpreadsheetListFragment extends AbstractDownloaderFragment {
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
         conn.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
 
-        //String s = new String(IOUtils.toByteArray(conn.getInputStream()));
-        //System.out.println(s);
-
-        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-        factory.setNamespaceAware(true);
-        XmlPullParser xpp = factory.newPullParser();
-        xpp.setInput(new BufferedReader(new InputStreamReader(conn.getInputStream())));
-
-        int eventType = xpp.getEventType();
-
-        List<DownloadItem> downloadItems = new ArrayList<DownloadItem>(50);
-        DownloadItem downloadItem = null;
-        String lastTag = "";
-        while (eventType != XmlPullParser.END_DOCUMENT) {
-                
-            if(eventType == XmlPullParser.START_DOCUMENT) {
-                System.out.println("Start document");
-            } else if(eventType == XmlPullParser.START_TAG) {
-                System.out.println("Start tag "+xpp.getName());
-                lastTag = xpp.getName();
-                if(xpp.getName().equals("entry")) {
-                    downloadItem = new DownloadItem();
-                }
-            } else if(eventType == XmlPullParser.END_TAG) {
-                System.out.println("End tag "+xpp.getName());
-                if(xpp.getName().equals("entry")) {
-                    downloadItem.setType(DownloadItem.TYPE_DATABASE);
-                    downloadItems.add(downloadItem);
-                    downloadItem = null;
-                }
-            } else if(eventType == XmlPullParser.TEXT) {
-                System.out.println("Text "+xpp.getText());
-                if(downloadItem != null && lastTag.equals("id")) {
-                    downloadItem.setAddress(xpp.getText());
-                }
-                if(downloadItem != null && lastTag.equals("title")) {
-                    downloadItem.setTitle(xpp.getText());
-                }
-            }
-            eventType = xpp.next();
+        List<Spreadsheet> spreadsheetList = SpreadsheetFactory.getSpreadsheetsFromRequest(conn);
+        List<DownloadItem> downloadItemList = new ArrayList<DownloadItem>(spreadsheetList.size());
+        for (Spreadsheet spreadsheet : spreadsheetList) {
+            DownloadItem di = new DownloadItem();
+            di.setTitle(spreadsheet.getTitle());
+            di.setAddress(spreadsheet.getId());
+            di.setType(DownloadItem.TYPE_DATABASE);
+            downloadItemList.add(di);
         }
-        System.out.println("End document");
-        System.out.println(downloadItems.size());
-
-
-        return downloadItems;
-		
+        return downloadItemList;
 	}
 
 	@Override
@@ -112,14 +67,21 @@ class SpreadsheetListFragment extends AbstractDownloaderFragment {
 
 	@Override
 	protected void fetchDatabase(DownloadItem di) throws Exception {
-        String worksheetAddress = "https://spreadsheets.google.com/feeds/worksheets/" + getIdFromUrl(di.getAddress())+ "/private/full";
+        String worksheetAddress = "https://spreadsheets.google.com/feeds/worksheets/" + di.getAddress()+ "/private/full";
         System.out.println("worksheet address: " + worksheetAddress);
         URL url = new URL(worksheetAddress);
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
         conn.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
         List<Worksheet> worksheets = WorksheetFactory.getWorksheetsFromRequest(conn);
+
         for (Worksheet w : worksheets) {
-            System.out.println(w);
+            System.out.println("Worksheet: " + w);
+
+            URL url1 = new URL("https://spreadsheets.google.com/feeds/cells/" + di.getAddress() + "/" + w.getId() + "/private/full");
+            HttpsURLConnection conn1 = (HttpsURLConnection) url1.openConnection();
+            conn1.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
+            Cells cells = CellsFactory.getCellsFromRequest(conn1);
+            System.out.println(cells.toString());
         }
 
 

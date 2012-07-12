@@ -37,13 +37,13 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-public class WorksheetFactory {
+public class SpreadsheetFactory {
     private static SimpleDateFormat ISO8601_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-    private WorksheetFactory() {
+    private SpreadsheetFactory() {
         throw new AssertionError("Don't call constructor");
     }
 
-    public static List<Worksheet> getWorksheetsFromRequest(HttpsURLConnection conn) throws XmlPullParserException, IOException {
+    public static List<Spreadsheet> getSpreadsheetsFromRequest(HttpsURLConnection conn) throws XmlPullParserException, IOException {
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
         factory.setNamespaceAware(true);
         XmlPullParser xpp = factory.newPullParser();
@@ -51,10 +51,9 @@ public class WorksheetFactory {
 
         int eventType = xpp.getEventType();
 
-        List<Worksheet> worksheetList = new ArrayList<Worksheet>();
-        Worksheet worksheet = null;
+        List<Spreadsheet> spreadsheetList = new ArrayList<Spreadsheet>(50);
+        Spreadsheet spreadsheet = null;
         String lastTag = "";
-
         while (eventType != XmlPullParser.END_DOCUMENT) {
                 
             if(eventType == XmlPullParser.START_DOCUMENT) {
@@ -63,25 +62,25 @@ public class WorksheetFactory {
                 System.out.println("Start tag "+xpp.getName());
                 lastTag = xpp.getName();
                 if(xpp.getName().equals("entry")) {
-                    worksheet = new Worksheet();
+                    spreadsheet = new Spreadsheet();
                 }
             } else if(eventType == XmlPullParser.END_TAG) {
                 System.out.println("End tag "+xpp.getName());
                 if(xpp.getName().equals("entry")) {
-                    worksheetList.add(worksheet);
-                    worksheet = null;
+                    spreadsheetList.add(spreadsheet);
+                    spreadsheet = null;
                 }
             } else if(eventType == XmlPullParser.TEXT) {
                 System.out.println("Text "+xpp.getText());
-                if(worksheet != null && lastTag.equals("id")) {
-                    worksheet.setId(DownloaderUtils.getLastPartFromUrl(xpp.getText()));
+                if(spreadsheet != null && lastTag.equals("id")) {
+                    spreadsheet.setId(DownloaderUtils.getLastPartFromUrl(xpp.getText()));
                 }
-                if(worksheet != null && lastTag.equals("title")) {
-                    worksheet.setTitle(xpp.getText());
+                if(spreadsheet != null && lastTag.equals("title")) {
+                    spreadsheet.setTitle(xpp.getText());
                 }
-                if(worksheet != null && lastTag.equals("updated")) {
+                if(spreadsheet != null && lastTag.equals("updated")) {
                     try {
-                        worksheet.setUpdateDate(ISO8601_FORMATTER.parse(xpp.getText()));
+                        spreadsheet.setUpdateDate(ISO8601_FORMATTER.parse(xpp.getText()));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -90,6 +89,6 @@ public class WorksheetFactory {
             eventType = xpp.next();
         }
         System.out.println("End document");
-        return worksheetList;
+        return spreadsheetList;
     }
 }

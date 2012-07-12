@@ -133,4 +133,9 @@ public class DownloaderUtils{
             return "";
         }
     }
+
+    /* https://spreadsheets.google.com/feeds/list/key/worksheetId/private/full/rowId -> rowId */
+    public static String getLastPartFromUrl(final String url){
+        return url.replaceFirst(".*/([^/?]+).*", "$1");
+    }
 }
