@@ -28,6 +28,8 @@ import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import org.apache.mycommons.lang3.StringUtils;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -72,6 +74,9 @@ public class CellsFactory {
                 System.out.println("Text "+xpp.getText());
                 if(lastTag.equals("cell")) {
                     cells.addCell(currentRow, currentCol, xpp.getText());
+                }
+                if(lastTag.equals("title") && StringUtils.isEmpty(cells.getWorksheetName())) {
+                    cells.setWorksheetName(xpp.getText());
                 }
             }
             eventType = xpp.next();

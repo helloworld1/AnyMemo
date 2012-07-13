@@ -30,14 +30,24 @@ import org.apache.mycommons.io.IOUtils;
 
 import org.liberty.android.fantastischmemo.R;
 
+import android.app.Activity;
+
+import android.content.Intent;
+
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+
 public class SpreadsheetListScreen extends GoogleAccountActivity {
-    /** Called when the activity is first created. */
-    private static final String AUTH_TOKEN_TYPE = "wise";
+    private final static String AUTH_TOKEN_TYPE = "wise";
+    private final static int UPLOAD_ACTIVITY = 1;
 
     @Override
     protected String getAuthTokenType() {
@@ -48,6 +58,43 @@ public class SpreadsheetListScreen extends GoogleAccountActivity {
     public void onCreate(Bundle bundle) {
         setContentView(R.layout.spreadsheet_list_screen);
         super.onCreate(bundle);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.spreadsheet_list_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.upload:
+            {
+                startActivityForResult(new Intent(this, UploadGoogleDriveScreen.class), UPLOAD_ACTIVITY);
+                return true;
+            }
+
+        }
+        return false;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode ==Activity.RESULT_CANCELED){
+            return;
+        }
+
+
+        switch(requestCode){
+            case UPLOAD_ACTIVITY:
+            {
+                restartActivity();
+                break;
+            }
+        }
     }
 
 
@@ -69,4 +116,5 @@ public class SpreadsheetListScreen extends GoogleAccountActivity {
         ft.add(R.id.spreadsheet_list, newFragment);
         ft.commit();
     }
+
 }

@@ -26,8 +26,12 @@ import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import org.liberty.android.fantastischmemo.AMEnv;
+
 import org.liberty.android.fantastischmemo.downloader.AbstractDownloaderFragment;
 import org.liberty.android.fantastischmemo.downloader.DownloadItem;
+
+import org.liberty.android.fantastischmemo.utils.AMUtil;
 
 class SpreadsheetListFragment extends AbstractDownloaderFragment {
     private String authToken = null;
@@ -82,6 +86,13 @@ class SpreadsheetListFragment extends AbstractDownloaderFragment {
             conn1.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
             Cells cells = CellsFactory.getCellsFromRequest(conn1);
             System.out.println(cells.toString());
+            if (!"learningdata".equalsIgnoreCase(w.getTitle())) {
+
+                CellsDBConverter converter = new CellsDBConverter(getActivity());
+                String saveDBPath= AMEnv.DEFAULT_ROOT_PATH + "/" + di.getTitle() + ".db";
+                AMUtil.deleteFileWithBackup(saveDBPath);
+                converter.convertCellsToDb(cells, null, saveDBPath);
+            }
         }
 
 

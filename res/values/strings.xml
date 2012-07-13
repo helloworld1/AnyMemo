@@ -435,4 +435,5 @@
     <string name="google_drive_spreadsheet_text">Google Drive Spreadsheet</string>
     <string name="choose_account_text">Choose account</string>
     <string name="login_account_text">Login account</string>
+    <string name="upload_text">Upload</string>
 </resources>

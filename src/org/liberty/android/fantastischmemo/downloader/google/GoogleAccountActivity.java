@@ -49,12 +49,14 @@ public abstract class GoogleAccountActivity extends AMActivity {
     SharedPreferences settings;
     SharedPreferences.Editor editor;
     AccountManager accountManager;
-    private final static int REQUEST_AUTHENTICATE = 1;
+
+    /* Use a magic number to avoid possible conflicts in subclasses */
+    private final static int REQUEST_AUTHENTICATE = 3947;
 
     /* Authenticated! Now get the auth token */
     protected abstract void onAuthenticated(final String authToken);
 
-    // Return the auth token type
+    /* Return the auth token type */
     protected abstract String getAuthTokenType();
 
     @Override
@@ -69,6 +71,9 @@ public abstract class GoogleAccountActivity extends AMActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_CANCELED) {
+            return;
+        }
         switch (requestCode) {
             case REQUEST_AUTHENTICATE:
                 if (resultCode == RESULT_OK) {

@@ -242,6 +242,7 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
 		
 				catch(Exception e){
 					new AlertDialog.Builder(mActivity).setMessage(e.toString()).show();
+                    Log.e(TAG, "Error handling click", e);
 					browseTo(new File("/"));
 				}
 			}

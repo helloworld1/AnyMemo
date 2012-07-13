@@ -24,6 +24,8 @@ import java.util.List;
 
 public class Cells {
 
+    private String worksheetName;
+
     private List<List<String>> rows;
 
     public Cells() {
@@ -54,14 +56,23 @@ public class Cells {
 	@Override
 	public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Cells data: ");
+        sb.append("Worksheet: " + worksheetName); 
+        sb.append(" Cells data: ");
 
         for (int i = 0; i < rows.size(); i++) {
-            sb.append("Row " + i + ": ");
+            sb.append(" Row " + i + ": ");
             for (String s : rows.get(i)) {
                 sb.append(s + ", ");
             }
         }
         return sb.toString();
+	}
+
+	public String getWorksheetName() {
+		return worksheetName;
+	}
+
+	public void setWorksheetName(String worksheetName) {
+		this.worksheetName = worksheetName;
 	}
 }
