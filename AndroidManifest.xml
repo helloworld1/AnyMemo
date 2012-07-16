@@ -159,9 +159,9 @@
 
     <!--
       Not ready yet
-    <uses-sdk android:minSdkVersion="4" android:targetSdkVersion="11" />
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="11" />
     -->
-    <uses-sdk android:minSdkVersion="4" />
+    <uses-sdk android:minSdkVersion="8" />
 
 
 </manifest> 

@@ -69,16 +69,17 @@ public class UploadGoogleDriveScreen extends GoogleAccountActivity {
 
     private void uploadToGoogleDrive(File file) {
         try {
-            //URL url1 = new URL("https://docs.google.com/feeds/default/private/full");
-            //HttpsURLConnection conn1 = (HttpsURLConnection) url1.openConnection();
-            //conn1.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
-            //conn1.addRequestProperty("GData-Version", "3.0");
-            //BufferedReader reader1 = new BufferedReader(new InputStreamReader(conn1.getInputStream()));
-            //String inputLine1;
-            //while ((inputLine1 = reader1.readLine()) != null) {
-            //    System.out.println(inputLine1);
-            //}
-            //reader1.close();
+            System.out.println("Listing.....................................>");
+            URL url1 = new URL("https://docs.google.com/feeds/default/private/full?title=aaaaa.db.db&title-exact=true");
+            HttpsURLConnection conn1 = (HttpsURLConnection) url1.openConnection();
+            conn1.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
+            conn1.addRequestProperty("GData-Version", "3.0");
+            BufferedReader reader1 = new BufferedReader(new InputStreamReader(conn1.getInputStream()));
+            String inputLine1;
+            while ((inputLine1 = reader1.readLine()) != null) {
+                System.out.println(inputLine1);
+            }
+            reader1.close();
 
 
             System.out.println("Uplading.....................................>");
