@@ -235,6 +235,8 @@
     <string name="widget_fail_fetch">No database.</string>
     <string name="notification_text">Notification</string>
     <string name="notification_summary">Display information on the notification area even when AnyMemo is not opened.</string>
+    <string name="recent_text">Recent</string>
+    <string name="recent_summary">Setup the max recent display number.</string>
     <string name="downloader_chooser">Choose a source</string>
     <string name="fe_search_title">Login or Search</string>
     <string name="fe_search_message">You can enter your account email address registered at flashcardexchange.com to login (eg. test@example.com) or search flashcards with specific tag (eg. spanish).</string>

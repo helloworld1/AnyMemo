@@ -122,7 +122,8 @@ public class AnyMemoService extends Service{
         finally{
             /* Set on click event */
             Intent intent = new Intent(this, MemoScreen.class);
-            intent.putExtra("dbpath", RecentListUtil.getRecentDBPath(this));
+            RecentListUtil rlu = new RecentListUtil(this);
+            intent.putExtra("dbpath", rlu.getRecentDBPath());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, WIDGET_REQ, intent, PendingIntent.FLAG_CANCEL_CURRENT);
             updateViews.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);

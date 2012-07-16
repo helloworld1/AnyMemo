@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:anymemo="http://schemas.android.com/apk/res/org.liberty.android.fantastischmemo"
     android:key="FantastischMemoPrefs"
     android:title="@string/global_settings">
     <PreferenceCategory
@@ -74,6 +75,14 @@
             android:entries="@array/notification_interval_list"
             android:entryValues="@array/notification_interval_list_values"
             android:summary="@string/notification_summary" />
+        <org.liberty.android.fantastischmemo.ui.widgets.IntegerEditTextPreference
+            android:key="recent_count"
+            android:title="@string/recent_text"
+            android:defaultValue="7"
+            android:inputType="number"
+            anymemo:maxIntValue="50"
+            anymemo:minIntValue="1"
+            android:summary="@string/recent_summary" />
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/misc_category">

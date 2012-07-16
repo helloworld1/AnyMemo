@@ -4,5 +4,10 @@
         <attr name="display_array" format="integer" />
         <attr name="value_array" format="integer" />
     </declare-styleable>
+    
+    <declare-styleable name="IntegerEditTextPreference">
+        <attr name="maxIntValue" format="integer" />
+        <attr name="minIntValue" format="integer" />
+    </declare-styleable>
 </resources>
 
