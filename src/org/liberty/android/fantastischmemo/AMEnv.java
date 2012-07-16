@@ -28,8 +28,8 @@ import android.os.Environment;
 public class AMEnv {
     public static final String EXTERNAL_STORAGE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
     private final static String DEFAULT_POSTFIX= "/anymemo/";
-    private final static String DEFAULT_AUDIO_POSTFIX = "/voice/";
-    private final static String DEFAULT_IMAGE_POSTFIX = "/images/";
+    private final static String DEFAULT_AUDIO_POSTFIX = "voice/";
+    private final static String DEFAULT_IMAGE_POSTFIX = "images/";
     public final static String DEFAULT_ROOT_PATH = EXTERNAL_STORAGE_PATH + DEFAULT_POSTFIX;
     public final static String DEFAULT_AUDIO_PATH = DEFAULT_ROOT_PATH + DEFAULT_AUDIO_POSTFIX;
     public final static String DEFAULT_IMAGE_PATH = DEFAULT_ROOT_PATH + DEFAULT_IMAGE_POSTFIX;

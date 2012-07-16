@@ -22,7 +22,6 @@
     <string name="download_button_text">Download databases</string>
     <string name="about_button_text">About</string>
     <string name="help_button_text">Help</string>
-    <string name="exit_button_text">Exit program</string>
     <string name="edit_button_text">Preview/edit</string>
     <string name="autoaudio">Automatic speak</string>
     <string name="autoaudio_summary">The question and answer will be read automatically.</string>
@@ -241,6 +240,7 @@
     <string name="edit_menu_br_text">Add br tag</string>
     <string name="edit_menu_image_text">Add image</string>
     <string name="edit_menu_audio_text">Add audio</string>
+    <string name="edit_menu_record_text">Record</string>
     <string name="widget_no_review">No card to review.</string>
     <string name="grade_text">Grade</string>
     <string name="enable_volume_key_text">Enable key shortcut</string>
@@ -441,4 +441,9 @@
     <string name="gdrive_successfully_uploaded_message">Successfully uploaded to AnyMemo folder in your Google Drive</string>
     <string name="loading_auth_text">Authenticating with the server. Please wait...</string>
     <string name="auth_error_text">Authenticate error.</string>
+    <string name="recorder_record_your_memo">Record your memo</string>
+    <string name="recorder_mic_description">recorder_mic</string>
+    <string name="recorder_record_description">recorder record</string>
+    <string name="recorder_play_description">recorder_play</string>
+    <string name="recorder_return_description">recorder return</string>
 </resources>
