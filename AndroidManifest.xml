@@ -6,7 +6,8 @@
     android:versionName="@string/app_version">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    
     <supports-screens android:anyDensity="true"/>
 
     <application 
@@ -95,6 +96,9 @@
             android:configChanges="orientation|keyboardHidden" />
         <activity 
             android:name=".ui.FileBrowserActivity"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity 
+            android:name=".ui.AudioRecorder"
             android:configChanges="orientation|keyboardHidden" />
         <activity 
             android:name=".ui.OptionScreen"

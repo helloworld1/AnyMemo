@@ -38,6 +38,7 @@ import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 
+import org.liberty.android.fantastischmemo.ui.AudioRecorderFragment.AudioRecorderResultListener;
 import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment;
 import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
 import org.liberty.android.fantastischmemo.utils.AMUtil;
@@ -66,6 +67,7 @@ import android.content.res.Configuration;
 public class CardEditor extends AMActivity implements View.OnClickListener {
     private final int ACTIVITY_IMAGE_FILE = 1;
     private final int ACTIVITY_AUDIO_FILE = 2;
+    private final int ACTIVITY_AUDIO_RECORD = 3;
     Card currentCard = null;
     Card prevCard = null;
     private Integer prevOrdinal = null;
@@ -201,8 +203,40 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
                     startActivityForResult(myIntent, ACTIVITY_AUDIO_FILE);
                 }
                 return true;
-
-            }
+            
+            case R.id.editor_menu_record:
+            	String audioFilename = AMEnv.DEFAULT_AUDIO_PATH + dbName; 
+            	new File(audioFilename).mkdirs();
+            	AudioRecorderFragment recorder = new AudioRecorderFragment();
+            	if(focusView == questionEdit){
+            		audioFilename +=  "/"+ currentCardId + "_q.ogg";
+            	} else if (focusView == answerEdit) {
+            		audioFilename +=  "/"+ currentCardId + "_a.ogg";
+            	} else {
+            		return true;
+            	}
+            	Bundle b = new Bundle();
+                b.putString("audioFilename", audioFilename);
+                
+            	recorder.setAudioRecorderResultListener(new AudioRecorderResultListener() {
+					public void onReceiveAudio() {
+						View focusView = getCurrentFocus();
+						String content = ((EditText)(focusView)).getText().toString(); 
+						if(!content.contains("src=")){
+							if(focusView == questionEdit){
+								addTextToView((EditText) focusView, "<audio src=\"" + currentCardId
+			    						+ "_q.ogg\" />");	
+							} else if (focusView == answerEdit){
+								addTextToView((EditText) focusView, "<audio src=\"" + currentCardId
+			    						+ "_a.ogg\" />");
+							}
+						}
+					}
+				});
+                recorder.setArguments(b);
+                recorder.show(getSupportFragmentManager(), "AudioRecorderDialog");
+                return true;
+        }
         return false;
     }
 
@@ -499,5 +533,6 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
                 currentCard.setCategory(c);
                 updateViews();
             }
-        };
+        }; 
+    
 }
