@@ -150,7 +150,8 @@ public class ShareScreen extends AMActivity implements View.OnClickListener{
             case ACTIVITY_FB:
             {
                 String fullpath = data.getStringExtra(FileBrowserActivity.EXTRA_RESULT_PATH);
-                RecentListUtil.addToRecentList(this, fullpath);
+                RecentListUtil rlu = new RecentListUtil(this);
+                rlu.addToRecentList(fullpath);
                 dbnameView.setText(fullpath);
             }
             break;

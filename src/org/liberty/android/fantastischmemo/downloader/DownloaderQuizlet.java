@@ -266,7 +266,8 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
         } finally {
             AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }
-        RecentListUtil.addToRecentList(this, fullpath);
+        RecentListUtil rlu = new RecentListUtil(this);
+        rlu.addToRecentList(fullpath);
     }
 
     @Override

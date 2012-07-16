@@ -19,14 +19,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader;
 
-import org.liberty.android.fantastischmemo.*;
-
-import java.util.Stack;
-import java.util.List;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Stack;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.liberty.android.fantastischmemo.AMEnv;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.CardDao;
-
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
@@ -35,18 +38,14 @@ import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.AbsListView;
-import android.util.Log;
-import android.os.Environment;
-import android.view.View;
 import android.os.Handler;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
+import android.util.Log;
+import android.view.View;
+import android.widget.AbsListView;
+import android.widget.ListView;
+import android.widget.TextView;
 
 /*
  * This is the downloader class for StudyStack
@@ -363,7 +362,8 @@ public class DownloaderSS extends DownloaderBase implements ListView.OnScrollLis
         } finally {
             AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }
-        RecentListUtil.addToRecentList(this, fullpath);
+        RecentListUtil rlu = new RecentListUtil(this);
+        rlu.addToRecentList(fullpath);
     }
 }
 

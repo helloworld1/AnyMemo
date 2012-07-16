@@ -7,9 +7,17 @@ import android.preference.PreferenceManager;
 
 public class Option {
 
-    SharedPreferences settings;
-    SharedPreferences.Editor editor;
+    private SharedPreferences settings;
+    private SharedPreferences.Editor editor;
 
+    public SharedPreferences getSettings() {
+    	return this.settings;
+    }
+    
+    public SharedPreferences.Editor getEditor() {
+    	return this.editor;
+    }
+    
     public Option (Context context) {
     	settings = PreferenceManager.getDefaultSharedPreferences(context);
         editor = settings.edit();
@@ -75,7 +83,12 @@ public class Option {
         editor.putInt(prefix + key, value);
         editor.commit();
     }
-
+    
+    public void setEditorString(String key, String value) {
+    	editor.putString(key, value);
+    	editor.commit();
+    }
+    
     public int getQueueSize() {
         String size = settings.getString("learning_queue_size", "10");
         int tmpSize = Integer.parseInt(size);
@@ -86,6 +99,10 @@ public class Option {
         }
     }
 
+    public String getSettingString(String key, String value) {
+    	return settings.getString(key, value);
+    }
+    
     public static enum ButtonStyle {
         ANYMEMO,
         MNEMOSYNE,
