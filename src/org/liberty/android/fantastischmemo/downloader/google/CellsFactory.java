@@ -23,6 +23,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import java.net.URL;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +41,11 @@ public class CellsFactory {
         throw new AssertionError("Don't call constructor");
     }
 
-    public static Cells getCellsFromRequest(HttpsURLConnection conn) throws XmlPullParserException, IOException {
+    public static Cells getCellsFromRequest(String spreadsheetId, String worksheetId, String authToken) throws XmlPullParserException, IOException {
+        URL url = new URL("https://spreadsheets.google.com/feeds/cells/" + spreadsheetId + "/" + worksheetId + "/private/full");
+        HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+        conn.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
+
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
         factory.setNamespaceAware(true);
         XmlPullParser xpp = factory.newPullParser();

@@ -22,6 +22,9 @@ package org.liberty.android.fantastischmemo.downloader.google;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+
+import java.net.URL;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -43,7 +46,11 @@ public class SpreadsheetFactory {
         throw new AssertionError("Don't call constructor");
     }
 
-    public static List<Spreadsheet> getSpreadsheetsFromRequest(HttpsURLConnection conn) throws XmlPullParserException, IOException {
+    public static List<Spreadsheet> getSpreadsheetsFromRequest(String authToken) throws XmlPullParserException, IOException {
+        URL url = new URL("https://spreadsheets.google.com/feeds/spreadsheets/private/full");
+        HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+        conn.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
+
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
         factory.setNamespaceAware(true);
         XmlPullParser xpp = factory.newPullParser();
@@ -90,5 +97,69 @@ public class SpreadsheetFactory {
         }
         System.out.println("End document");
         return spreadsheetList;
+    }
+
+    public static Spreadsheet createSpreadsheet(String title, String authToken) throws XmlPullParserException, IOException {
+        URL url = new URL("https://docs.google.com/feeds/default/private/full");
+
+        String payload = "<?xml version='1.0' encoding='UTF-8'?>" +
+            "<entry xmlns='http://www.w3.org/2005/Atom'>"+
+            "<category scheme='http://schemas.google.com/g/2005#kind'"+
+            " term='http://schemas.google.com/docs/2007#spreadsheet'/>"+
+            "<title>"+ title +"</title>"+
+            "</entry>";
+
+        HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setDoInput(true);
+        conn.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
+        conn.addRequestProperty("GData-Version", "3.0");
+        conn.addRequestProperty("Content-Type", "application/atom+xml");
+        conn.addRequestProperty("Content-Length", "" + payload.length());
+        OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
+        out.write(payload);
+        out.close();
+
+        // Now populate the response
+        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+        factory.setNamespaceAware(true);
+        XmlPullParser xpp = factory.newPullParser();
+        xpp.setInput(new BufferedReader(new InputStreamReader(conn.getInputStream())));
+
+        int eventType = xpp.getEventType();
+
+        Spreadsheet spreadsheet = null;
+        String lastTag = "";
+        while (eventType != XmlPullParser.END_DOCUMENT) {
+                
+            if(eventType == XmlPullParser.START_DOCUMENT) {
+                System.out.println("Start document");
+            } else if(eventType == XmlPullParser.START_TAG) {
+                System.out.println("Start tag "+xpp.getName());
+                lastTag = xpp.getName();
+                if(xpp.getName().equals("entry")) {
+                    spreadsheet = new Spreadsheet();
+                }
+            } else if(eventType == XmlPullParser.END_TAG) {
+                System.out.println("End tag "+xpp.getName());
+            } else if(eventType == XmlPullParser.TEXT) {
+                System.out.println("Text "+xpp.getText());
+                if(spreadsheet != null && lastTag.equals("id")) {
+                    spreadsheet.setId(DownloaderUtils.getLastPartFromUrl(xpp.getText()));
+                }
+                if(spreadsheet != null && lastTag.equals("title")) {
+                    spreadsheet.setTitle(xpp.getText());
+                }
+                if(spreadsheet != null && lastTag.equals("updated")) {
+                    try {
+                        spreadsheet.setUpdateDate(ISO8601_FORMATTER.parse(xpp.getText()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            eventType = xpp.next();
+        }
+        return spreadsheet;
     }
 }

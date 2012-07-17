@@ -23,6 +23,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import java.net.URL;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -43,7 +45,12 @@ public class WorksheetFactory {
         throw new AssertionError("Don't call constructor");
     }
 
-    public static List<Worksheet> getWorksheetsFromRequest(HttpsURLConnection conn) throws XmlPullParserException, IOException {
+    public static List<Worksheet> getWorksheetsFromRequest(String spreadsheetId, String authToken) throws XmlPullParserException, IOException {
+        String worksheetAddress = "https://spreadsheets.google.com/feeds/worksheets/" + spreadsheetId + "/private/full";
+        System.out.println("worksheet address: " + worksheetAddress);
+        URL url = new URL(worksheetAddress);
+        HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
         factory.setNamespaceAware(true);
         XmlPullParser xpp = factory.newPullParser();

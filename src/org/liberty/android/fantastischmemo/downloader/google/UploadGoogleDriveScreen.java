@@ -69,49 +69,9 @@ public class UploadGoogleDriveScreen extends GoogleAccountActivity {
 
     private void uploadToGoogleDrive(File file) {
         try {
-            System.out.println("Listing.....................................>");
-            URL url1 = new URL("https://docs.google.com/feeds/default/private/full?title=aaaaa.db.db&title-exact=true");
-            HttpsURLConnection conn1 = (HttpsURLConnection) url1.openConnection();
-            conn1.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
-            conn1.addRequestProperty("GData-Version", "3.0");
-            BufferedReader reader1 = new BufferedReader(new InputStreamReader(conn1.getInputStream()));
-            String inputLine1;
-            while ((inputLine1 = reader1.readLine()) != null) {
-                System.out.println(inputLine1);
-            }
-            reader1.close();
-
-
-            System.out.println("Uplading.....................................>");
-            //URL url = new URL("https://docs.google.com/feeds/upload/create-session/default/private/full");
-            URL url = new URL("https://docs.google.com/feeds/default/private/full");
-        // Create a SpreadSheet
-        String payload = "<?xml version='1.0' encoding='UTF-8'?>" +
-                          "<entry xmlns='http://www.w3.org/2005/Atom'>"+
-                          "<category scheme='http://schemas.google.com/g/2005#kind'"+
-                          " term='http://schemas.google.com/docs/2007#spreadsheet'/>"+
-                          "<title>"+ file.getName() +"</title>"+
-                          "</entry>";
-
-            HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setDoInput(true);
-            conn.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
-            conn.addRequestProperty("GData-Version", "3.0");
-            conn.addRequestProperty("Content-Type", "application/atom+xml");
-            conn.addRequestProperty("Content-Length", "" + payload.length());
-            OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
-            out.write(payload);
-            out.close();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String inputLine;
-            while ((inputLine = reader.readLine()) != null) {
-                System.out.println(inputLine);
-            }
-            reader.close();
-            System.out.println("Done.....................................>");
-
-
+            GoogleDriveUploadHelper uploadHelper = new GoogleDriveUploadHelper(this, authToken);
+            Spreadsheet s = uploadHelper.createSpreadsheet(file.getName());
+            System.out.println(s);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

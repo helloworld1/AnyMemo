@@ -33,33 +33,18 @@ import org.liberty.android.fantastischmemo.utils.AMUtil;
 
 import android.content.Context;
 
-public class GoogleDriveDownloadHelper {
+public class GoogleDriveUploadHelper {
     private Context mContext;
 
     private final String authToken;
 
-    public GoogleDriveDownloadHelper(Context context, String authToken) {
+    public GoogleDriveUploadHelper(Context context, String authToken) {
         this.authToken = authToken;
         mContext = context;
     }
 
-    public List<Spreadsheet> getListSpreadsheets() throws Exception {
-        List<Spreadsheet> spreadsheetList = SpreadsheetFactory.getSpreadsheetsFromRequest(authToken);
-        return spreadsheetList;
+    public Spreadsheet createSpreadsheet(String title) throws Exception {
+        return SpreadsheetFactory.createSpreadsheet(title, authToken);
     }
 
-    public void downloadSpreadsheetToDB(Spreadsheet spreadsheet) throws Exception {
-        List<Worksheet> worksheets = WorksheetFactory.getWorksheetsFromRequest(spreadsheet.getId(), authToken);
-
-        for (Worksheet w : worksheets) {
-            Cells cells = CellsFactory.getCellsFromRequest(spreadsheet.getId(), w.getId(), authToken);
-            System.out.println(cells.toString());
-            if (!"learningdata".equalsIgnoreCase(w.getTitle())) {
-                CellsDBConverter converter = new CellsDBConverter(mContext);
-                String saveDBPath= AMEnv.DEFAULT_ROOT_PATH + "/" + spreadsheet.getTitle() + ".db";
-                AMUtil.deleteFileWithBackup(saveDBPath);
-                converter.convertCellsToDb(cells, null, saveDBPath);
-            }
-        }
-    }
 }
