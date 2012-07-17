@@ -44,7 +44,14 @@ public class GoogleDriveUploadHelper {
     }
 
     public Spreadsheet createSpreadsheet(String title) throws Exception {
+        List<Spreadsheet> sl = SpreadsheetFactory.findSpreadsheets(title, authToken);
+        for (Spreadsheet s : sl) {
+            System.out.println(s);
+        }
         return SpreadsheetFactory.createSpreadsheet(title, authToken);
     }
+
+
+    
 
 }

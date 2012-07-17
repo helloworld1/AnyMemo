@@ -30,6 +30,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -161,5 +163,59 @@ public class SpreadsheetFactory {
             eventType = xpp.next();
         }
         return spreadsheet;
+    }
+
+    public static List<Spreadsheet> findSpreadsheets(String title, String authToken) throws Exception {
+        URL url = new URL("https://docs.google.com/feeds/default/private/full?title=" + title + "&title-exact=true");
+
+        HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+        conn.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
+        conn.addRequestProperty("GData-Version", "3.0");
+
+        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+        factory.setNamespaceAware(true);
+        XmlPullParser xpp = factory.newPullParser();
+        xpp.setInput(new BufferedReader(new InputStreamReader(conn.getInputStream())));
+
+        int eventType = xpp.getEventType();
+
+        List<Spreadsheet> spreadsheetList = new ArrayList<Spreadsheet>(5);
+        Spreadsheet spreadsheet = null;
+        String lastTag = "";
+        while (eventType != XmlPullParser.END_DOCUMENT) {
+                
+            if(eventType == XmlPullParser.START_DOCUMENT) {
+                System.out.println("Start document");
+            } else if(eventType == XmlPullParser.START_TAG) {
+                System.out.println("Start tag "+xpp.getName());
+                lastTag = xpp.getName();
+                if(xpp.getName().equals("entry")) {
+                    spreadsheet = new Spreadsheet();
+                }
+            } else if(eventType == XmlPullParser.END_TAG) {
+                System.out.println("End tag "+xpp.getName());
+                if(xpp.getName().equals("entry")) {
+                    spreadsheetList.add(spreadsheet);
+                    spreadsheet = null;
+                }
+            } else if(eventType == XmlPullParser.TEXT) {
+                System.out.println("Text "+xpp.getText());
+                if(spreadsheet != null && lastTag.equals("id")) {
+                    spreadsheet.setId(DownloaderUtils.getLastPartFromUrl(xpp.getText()));
+                }
+                if(spreadsheet != null && lastTag.equals("title")) {
+                    spreadsheet.setTitle(xpp.getText());
+                }
+                if(spreadsheet != null && lastTag.equals("updated")) {
+                    try {
+                        spreadsheet.setUpdateDate(ISO8601_FORMATTER.parse(xpp.getText()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            eventType = xpp.next();
+        }
+        return spreadsheetList;
     }
 }

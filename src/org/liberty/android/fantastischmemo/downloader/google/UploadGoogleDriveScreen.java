@@ -19,16 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.google;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-
-import java.net.URL;
-
-import javax.net.ssl.HttpsURLConnection;
-
-import org.apache.mycommons.io.IOUtils;
 
 import org.liberty.android.fantastischmemo.R;
 
@@ -36,7 +27,6 @@ import org.liberty.android.fantastischmemo.ui.FileBrowserFragment;
 
 import android.os.Bundle;
 
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
 public class UploadGoogleDriveScreen extends GoogleAccountActivity {
@@ -75,8 +65,6 @@ public class UploadGoogleDriveScreen extends GoogleAccountActivity {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
     private FileBrowserFragment.OnFileClickListener fileClickListener =
@@ -88,6 +76,5 @@ public class UploadGoogleDriveScreen extends GoogleAccountActivity {
 				
 			}
         };
-
 
 }
