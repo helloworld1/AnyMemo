@@ -19,33 +19,23 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.google;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-
-import java.net.URL;
-
-import javax.net.ssl.HttpsURLConnection;
-
-import org.apache.mycommons.io.IOUtils;
-
 import org.liberty.android.fantastischmemo.R;
 
 import android.app.Activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 
 import android.os.Bundle;
 
-import android.support.v4.app.DialogFragment;
+import android.preference.PreferenceManager;
+
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 
-import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 
 public class SpreadsheetListScreen extends GoogleAccountActivity {
 
@@ -70,6 +60,13 @@ public class SpreadsheetListScreen extends GoogleAccountActivity {
             case R.id.upload:
             {
                 startActivityForResult(new Intent(this, UploadGoogleDriveScreen.class), UPLOAD_ACTIVITY);
+                return true;
+            }
+            case R.id.logout:
+            {
+                invalidateSavedToken();
+                // After mark saved token to null, we should exit.
+                finish();
                 return true;
             }
 
@@ -112,6 +109,13 @@ public class SpreadsheetListScreen extends GoogleAccountActivity {
         Fragment newFragment = new SpreadsheetListFragment(authToken);
         ft.add(R.id.spreadsheet_list, newFragment);
         ft.commit();
+    }
+
+    private void invalidateSavedToken() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("google_auth_token", null);
+        editor.commit();
     }
 
 }

@@ -4,4 +4,7 @@
     <item android:id="@+id/upload"
     	android:icon="@android:drawable/ic_menu_upload"
   		android:title="@string/upload_text" />
+    <item android:id="@+id/logout"
+        android:icon="@android:drawable/ic_menu_delete"
+  		android:title="@string/logout_text" />
 </menu>
