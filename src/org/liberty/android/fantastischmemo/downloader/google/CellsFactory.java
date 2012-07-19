@@ -42,9 +42,8 @@ public class CellsFactory {
     }
 
     public static Cells getCellsFromRequest(String spreadsheetId, String worksheetId, String authToken) throws XmlPullParserException, IOException {
-        URL url = new URL("https://spreadsheets.google.com/feeds/cells/" + spreadsheetId + "/" + worksheetId + "/private/full");
+        URL url = new URL("https://spreadsheets.google.com/feeds/cells/" + spreadsheetId + "/" + worksheetId + "/private/full?access_token=" + authToken);
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-        conn.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
 
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
         factory.setNamespaceAware(true);

@@ -6,8 +6,6 @@
     android:versionName="@string/app_version">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
     <supports-screens android:anyDensity="true"/>
 
@@ -72,7 +70,8 @@
             android:configChanges="orientation|keyboardHidden" />
         <activity
             android:name=".downloader.google.SpreadsheetListScreen"
-            android:configChanges="orientation|keyboardHidden" />
+            android:configChanges="orientation|keyboardHidden" >
+        </activity>
         <activity
             android:name=".downloader.google.UploadGoogleDriveScreen"
             android:configChanges="orientation|keyboardHidden" />

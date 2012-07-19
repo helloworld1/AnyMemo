@@ -31,14 +31,8 @@ import android.support.v4.app.FragmentTransaction;
 
 public class UploadGoogleDriveScreen extends GoogleAccountActivity {
     /** Called when the activity is first created. */
-    private static final String AUTH_TOKEN_TYPE = "writely";
 
     private String authToken = null;
-
-    @Override
-    protected String getAuthTokenType() {
-        return AUTH_TOKEN_TYPE;
-    }
 
     @Override
     public void onCreate(Bundle bundle) {

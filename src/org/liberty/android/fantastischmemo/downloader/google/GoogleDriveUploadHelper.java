@@ -50,8 +50,4 @@ public class GoogleDriveUploadHelper {
         }
         return SpreadsheetFactory.createSpreadsheet(title, authToken);
     }
-
-
-    
-
 }

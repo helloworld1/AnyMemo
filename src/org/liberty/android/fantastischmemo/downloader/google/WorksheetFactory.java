@@ -46,8 +46,7 @@ public class WorksheetFactory {
     }
 
     public static List<Worksheet> getWorksheetsFromRequest(String spreadsheetId, String authToken) throws XmlPullParserException, IOException {
-        String worksheetAddress = "https://spreadsheets.google.com/feeds/worksheets/" + spreadsheetId + "/private/full";
-        System.out.println("worksheet address: " + worksheetAddress);
+        String worksheetAddress = "https://spreadsheets.google.com/feeds/worksheets/" + spreadsheetId + "/private/full?access_token=" + authToken;
         URL url = new URL(worksheetAddress);
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
 

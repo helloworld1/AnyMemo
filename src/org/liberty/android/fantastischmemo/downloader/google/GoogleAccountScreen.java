@@ -12,13 +12,6 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 public class GoogleAccountScreen extends GoogleAccountActivity {
-    /** Called when the activity is first created. */
-    protected static final String AUTH_TOKEN_TYPE = "oauth2:https://www.googleapis.com/auth/drive";
-
-    @Override
-    protected String getAuthTokenType() {
-        return AUTH_TOKEN_TYPE;
-    }
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -38,7 +31,7 @@ public class GoogleAccountScreen extends GoogleAccountActivity {
         conn.addRequestProperty("Authorization", "OAuth " + authToken);
 
         BufferedReader in = new BufferedReader(new InputStreamReader(
-                                    conn.getInputStream()));
+                                    conn.getErrorStream()));
         String inputLine;
         while ((inputLine = in.readLine()) != null) {
             System.out.println(inputLine);

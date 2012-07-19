@@ -36,7 +36,9 @@ import android.content.Intent;
 
 import android.os.Bundle;
 
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 
 import android.view.ContextMenu;
@@ -46,18 +48,13 @@ import android.view.MenuItem;
 import android.view.View;
 
 public class SpreadsheetListScreen extends GoogleAccountActivity {
-    private final static String AUTH_TOKEN_TYPE = "wise";
+
     private final static int UPLOAD_ACTIVITY = 1;
 
     @Override
-    protected String getAuthTokenType() {
-        return AUTH_TOKEN_TYPE;
-    }
-
-    @Override
     public void onCreate(Bundle bundle) {
-        setContentView(R.layout.spreadsheet_list_screen);
         super.onCreate(bundle);
+        setContentView(R.layout.spreadsheet_list_screen);
     }
 
     @Override
@@ -101,11 +98,11 @@ public class SpreadsheetListScreen extends GoogleAccountActivity {
     @Override
     protected void onAuthenticated(final String authToken) {
         //try {
-        //    URL url = new URL("https://spreadsheets.google.com/feeds/spreadsheets/private/full");
+        //    URL url = new URL("https://spreadsheets.google.com/feeds/spreadsheets/private/full?access_token="+authToken);
         //    HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-        //    conn.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
+        //    //conn.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
 
-        //    String s = new String(IOUtils.toByteArray(conn.getInputStream()));
+        //    String s = new String(IOUtils.toByteArray(conn.getErrorStream()));
         //    System.out.println(s);
         //} catch (Exception e) {
         //    e.printStackTrace();

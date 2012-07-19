@@ -30,8 +30,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -49,9 +47,9 @@ public class SpreadsheetFactory {
     }
 
     public static List<Spreadsheet> getSpreadsheetsFromRequest(String authToken) throws XmlPullParserException, IOException {
-        URL url = new URL("https://spreadsheets.google.com/feeds/spreadsheets/private/full");
+        URL url = new URL("https://spreadsheets.google.com/feeds/spreadsheets/private/full?access_token="+authToken);
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-        conn.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
+        //conn.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
 
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
         factory.setNamespaceAware(true);
@@ -102,7 +100,7 @@ public class SpreadsheetFactory {
     }
 
     public static Spreadsheet createSpreadsheet(String title, String authToken) throws XmlPullParserException, IOException {
-        URL url = new URL("https://docs.google.com/feeds/default/private/full");
+        URL url = new URL("https://docs.google.com/feeds/default/private/full?access_token=" + authToken);
 
         String payload = "<?xml version='1.0' encoding='UTF-8'?>" +
             "<entry xmlns='http://www.w3.org/2005/Atom'>"+
@@ -114,7 +112,7 @@ public class SpreadsheetFactory {
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
         conn.setDoInput(true);
-        conn.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
+        //conn.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
         conn.addRequestProperty("GData-Version", "3.0");
         conn.addRequestProperty("Content-Type", "application/atom+xml");
         conn.addRequestProperty("Content-Length", "" + payload.length());
@@ -166,7 +164,7 @@ public class SpreadsheetFactory {
     }
 
     public static List<Spreadsheet> findSpreadsheets(String title, String authToken) throws Exception {
-        URL url = new URL("https://docs.google.com/feeds/default/private/full?title=" + title + "&title-exact=true");
+        URL url = new URL("https://docs.google.com/feeds/default/private/full?title=" + title + "&title-exact=true&access_token=" + authToken);
 
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
         conn.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);

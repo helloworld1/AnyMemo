@@ -26,13 +26,17 @@ import android.os.Environment;
  * Class that defines the contants that is used in AnyMemo.
  */
 public class AMEnv {
-    public static String EXTERNAL_STORAGE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
-    private static String DEFAULT_POSTFIX= "/anymemo/";
-    private static String DEFAULT_AUDIO_POSTFIX = "/voice/";
-    private static String DEFAULT_IMAGE_POSTFIX = "/images/";
-    public static String DEFAULT_ROOT_PATH = EXTERNAL_STORAGE_PATH + DEFAULT_POSTFIX;
-    public static String DEFAULT_AUDIO_PATH = DEFAULT_ROOT_PATH + DEFAULT_AUDIO_POSTFIX;
-    public static String DEFAULT_IMAGE_PATH = DEFAULT_ROOT_PATH + DEFAULT_IMAGE_POSTFIX;
-    public static String DEFAULT_DB_NAME= "french-body-parts.db";
-    public static String EMPTY_DB_NAME= "empty.db";
+    public static final String EXTERNAL_STORAGE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
+    private final static String DEFAULT_POSTFIX= "/anymemo/";
+    private final static String DEFAULT_AUDIO_POSTFIX = "/voice/";
+    private final static String DEFAULT_IMAGE_POSTFIX = "/images/";
+    public final static String DEFAULT_ROOT_PATH = EXTERNAL_STORAGE_PATH + DEFAULT_POSTFIX;
+    public final static String DEFAULT_AUDIO_PATH = DEFAULT_ROOT_PATH + DEFAULT_AUDIO_POSTFIX;
+    public final static String DEFAULT_IMAGE_PATH = DEFAULT_ROOT_PATH + DEFAULT_IMAGE_POSTFIX;
+    public final static String DEFAULT_DB_NAME= "french-body-parts.db";
+    public final static String EMPTY_DB_NAME= "empty.db";
+    public final static String GOOGLE_CLIENT_ID = "45533559525.apps.googleusercontent.com";
+    public final static String GOOGLE_CLIENT_SECRET = "74rz27lrTr9mWNnipgxXwtEd";
+    public final static String GOOGLE_REDIRECT_URI = "http://localhost";
+    public final static String GDRIVE_SCOPE ="https://docs.google.com/feeds/ https://docs.googleusercontent.com/ https://spreadsheets.google.com/feeds/";
 }
