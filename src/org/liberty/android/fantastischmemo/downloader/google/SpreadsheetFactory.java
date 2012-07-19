@@ -34,6 +34,8 @@ import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import org.apache.mycommons.io.IOUtils;
+
 import org.liberty.android.fantastischmemo.downloader.DownloaderUtils;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -46,7 +48,7 @@ public class SpreadsheetFactory {
         throw new AssertionError("Don't call constructor");
     }
 
-    public static List<Spreadsheet> getSpreadsheetsFromRequest(String authToken) throws XmlPullParserException, IOException {
+    public static List<Spreadsheet> getSpreadsheets(String authToken) throws XmlPullParserException, IOException {
         URL url = new URL("https://spreadsheets.google.com/feeds/spreadsheets/private/full?access_token="+authToken);
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
         //conn.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
@@ -161,6 +163,29 @@ public class SpreadsheetFactory {
             eventType = xpp.next();
         }
         return spreadsheet;
+    }
+
+    public static void deleteSpreadsheet(String title, String authToken) throws Exception {
+        List<Spreadsheet> spreadsheetList = findSpreadsheets(title, authToken);
+        for (Spreadsheet spreadsheet : spreadsheetList) {
+            URL url = new URL("https://docs.google.com/feeds/default/private/full/" + spreadsheet.getId() + "?access_token=" + authToken);
+            HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+            conn.addRequestProperty("GData-Version", "3.0");
+            conn.addRequestProperty("If-Match", "*");
+
+            conn.setRequestMethod("DELETE");
+
+            int responseCode = conn.getResponseCode();
+            if (responseCode != 200) {
+                String s = new String(IOUtils.toByteArray(conn.getErrorStream()));
+                throw new Exception(s);
+            }
+
+            //conn.getInputStream().close();
+            //String s = new String(IOUtils.toByteArray(conn.getErrorStream()));
+            //System.out.println(s);
+        }
+
     }
 
     public static List<Spreadsheet> findSpreadsheets(String title, String authToken) throws Exception {

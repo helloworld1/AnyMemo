@@ -43,7 +43,7 @@ public class RowFactory {
         throw new AssertionError("Don't call constructor");
     }
 
-    public static List<Row> getRowsFromRequest(HttpsURLConnection conn) throws XmlPullParserException, IOException {
+    public static List<Row> getRows(HttpsURLConnection conn) throws XmlPullParserException, IOException {
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
         factory.setNamespaceAware(true);
         XmlPullParser xpp = factory.newPullParser();

@@ -44,10 +44,34 @@ public class GoogleDriveUploadHelper {
     }
 
     public Spreadsheet createSpreadsheet(String title) throws Exception {
-        List<Spreadsheet> sl = SpreadsheetFactory.findSpreadsheets(title, authToken);
-        for (Spreadsheet s : sl) {
-            System.out.println(s);
-        }
-        return SpreadsheetFactory.createSpreadsheet(title, authToken);
+
+        // Find the spreadsheet we want to work on
+
+        // Delete the worksheets that has already exists
+        SpreadsheetFactory.deleteSpreadsheet(title, authToken);
+        
+
+        // Create worksheets
+        
+
+        // Use batch API to update the rows
+
+
+        //Spreadsheet s = SpreadsheetFactory.createSpreadsheet(title, authToken);
+
+        //Worksheet w = WorksheetFactory.createWorksheet(s, "hahahahah", authToken);
+
+        return null;
     }
+
+    private Spreadsheet searchSpreadsheetTitle(String title) throws Exception {
+        List<Spreadsheet> sl = SpreadsheetFactory.getSpreadsheets(authToken);
+        for (Spreadsheet s : sl) {
+            if (title.equals(s.getTitle())) {
+                return s;
+            }
+        }
+        return null;
+    }
+
 }

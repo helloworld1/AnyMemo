@@ -44,12 +44,12 @@ public class GoogleDriveDownloadHelper {
     }
 
     public List<Spreadsheet> getListSpreadsheets() throws Exception {
-        List<Spreadsheet> spreadsheetList = SpreadsheetFactory.getSpreadsheetsFromRequest(authToken);
+        List<Spreadsheet> spreadsheetList = SpreadsheetFactory.getSpreadsheets(authToken);
         return spreadsheetList;
     }
 
     public void downloadSpreadsheetToDB(Spreadsheet spreadsheet) throws Exception {
-        List<Worksheet> worksheets = WorksheetFactory.getWorksheetsFromRequest(spreadsheet.getId(), authToken);
+        List<Worksheet> worksheets = WorksheetFactory.getWorksheets(spreadsheet.getId(), authToken);
 
         for (Worksheet w : worksheets) {
             Cells cells = CellsFactory.getCellsFromRequest(spreadsheet.getId(), w.getId(), authToken);

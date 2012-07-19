@@ -136,6 +136,11 @@ public class DownloaderUtils{
 
     /* https://spreadsheets.google.com/feeds/list/key/worksheetId/private/full/rowId -> rowId */
     public static String getLastPartFromUrl(final String url){
-        return url.replaceFirst(".*/([^/?]+).*", "$1");
+        String id = url.replaceFirst(".*/([^/?]+).*", "$1");
+        //if (id.contains("%3A")) {
+        //	String[] parts = id.split("%3A");
+        //	id = parts[parts.length - 1];
+        //}
+        return id;
     }
 }

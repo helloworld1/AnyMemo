@@ -125,7 +125,7 @@ public abstract class GoogleAccountActivity extends AMActivity {
                 String audience = jsonObject.getString("audience");
                 return AMEnv.GOOGLE_CLIENT_ID.equals(audience);
             } catch (Exception e) {
-                Log.e(TAG, "Error redeeming access token", e);
+                Log.i(TAG, "The saved access token is invalid", e);
             }
             return false;
         }
