@@ -22,6 +22,7 @@ package org.liberty.android.fantastischmemo.downloader.google;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 
 import java.net.URL;
 
@@ -29,6 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import org.apache.mycommons.io.IOUtils;
 
 import org.apache.mycommons.lang3.StringUtils;
 
@@ -48,6 +51,8 @@ public class CellsFactory {
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
         factory.setNamespaceAware(true);
         XmlPullParser xpp = factory.newPullParser();
+        String s = new String(IOUtils.toByteArray(conn.getInputStream()));
+        System.out.println(s);
         xpp.setInput(new BufferedReader(new InputStreamReader(conn.getInputStream())));
 
         int eventType = xpp.getEventType();
@@ -88,5 +93,49 @@ public class CellsFactory {
         }
         System.out.println("End document");
         return cells;
+    }
+
+    public static void uploadCells(Spreadsheet spreadsheet, Worksheet worksheet, Cells cells, String authToken) throws Exception {
+        URL url = new URL("https://spreadsheets.google.com/feeds/cells/" + spreadsheet.getId() + "/" + worksheet.getId() + "/private/full/batch?access_token=" + authToken);
+        String urlPrefix = "https://spreadsheets.google.com/feeds/cells/" + spreadsheet.getId() + "/" + worksheet.getId() + "/private/full";
+        StringBuilder payloadBuilder = new StringBuilder();
+        payloadBuilder.append("<?xml version='1.0' encoding='UTF-8'?>");
+        payloadBuilder.append("<feed xmlns=\"http://www.w3.org/2005/Atom\" xmlns:batch=\"http://schemas.google.com/gdata/batch\" xmlns:gs=\"http://schemas.google.com/spreadsheets/2006\">");
+        payloadBuilder.append("<id>" + urlPrefix + "</id>");
+        for (int i = 0; i < cells.getRowCounts(); i++) {
+            List<String> row = cells.getRow(i);
+            for (int j = 0; j < row.size(); j++) {
+                addEntryToRequesetString(payloadBuilder, urlPrefix, i + 1, j + 1, row.get(j));
+            }
+        }
+        payloadBuilder.append("</feed>");
+
+        String payload = payloadBuilder.toString();
+        System.out.println("PAYLOAD: " + payload);
+
+        HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setDoInput(true);
+        conn.addRequestProperty("Content-Type", "application/atom+xml");
+        //conn.addRequestProperty("Content-Length", "" + payload.length());
+        conn.addRequestProperty("If-Match", "*");
+        OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
+        out.write(payload);
+        out.close();
+        System.out.println(conn.getResponseCode());
+        if (conn.getResponseCode() / 100 >= 3) {
+            String s = new String(IOUtils.toByteArray(conn.getErrorStream()));
+            throw new Exception(s);
+        }
+    }
+
+    private static void addEntryToRequesetString(StringBuilder payloadBuilder, String urlPrefix, int row, int col, String value) {
+        payloadBuilder.append("<entry>");
+        payloadBuilder.append("<batch:id>BR" + row + "C"+ col + "</batch:id>");
+        payloadBuilder.append("<batch:operation type=\"update\"/>");
+        payloadBuilder.append("<id>"+ urlPrefix + "/R" + row + "C" + col + "</id>");
+        payloadBuilder.append("<link rel=\"edit\" type=\"application/atom+xml\" href=\"" + urlPrefix + "/R" + row + "C" + col + "\"/>");
+        payloadBuilder.append("<gs:cell row=\"" + row + "\" col=\"" + col + "\" inputValue=\"" + value + "\"/>");
+        payloadBuilder.append("</entry>");
     }
 }

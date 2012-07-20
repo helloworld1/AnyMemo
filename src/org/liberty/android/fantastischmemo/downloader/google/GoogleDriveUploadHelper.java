@@ -23,9 +23,19 @@ import java.net.URL;
 
 import java.util.List;
 
+import java.util.concurrent.Callable;
+
 import javax.net.ssl.HttpsURLConnection;
 
 import org.liberty.android.fantastischmemo.AMEnv;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+
+import org.liberty.android.fantastischmemo.dao.CardDao;
+import org.liberty.android.fantastischmemo.dao.CategoryDao;
+import org.liberty.android.fantastischmemo.dao.LearningDataDao;
+
+import org.liberty.android.fantastischmemo.domain.Card;
 
 import org.liberty.android.fantastischmemo.downloader.google.Cells;
 
@@ -43,24 +53,61 @@ public class GoogleDriveUploadHelper {
         mContext = context;
     }
 
-    public Spreadsheet createSpreadsheet(String title) throws Exception {
+    public Spreadsheet createSpreadsheet(String title, String dbPath) throws Exception {
 
-        // Find the spreadsheet we want to work on
+        // Find the spreadsheets to delete after the process is done
+        List<Spreadsheet> spreadsheetsToDelete = SpreadsheetFactory.findSpreadsheets(title, authToken);
 
-        // Delete the worksheets that has already exists
-        SpreadsheetFactory.deleteSpreadsheet(title, authToken);
-        
+
+        // Create new spreadsheet
+        SpreadsheetFactory.createSpreadsheet(title, authToken);
+        List<Spreadsheet> spreadsheetList = SpreadsheetFactory.getSpreadsheets(authToken);
+        Spreadsheet newSpreadsheet = spreadsheetList.get(0);
 
         // Create worksheets
-        
+        List<Worksheet> worksheetsToDelete = WorksheetFactory.getWorksheets(newSpreadsheet.getId(), authToken);
+        Worksheet cardsWorksheet = WorksheetFactory.createWorksheet(newSpreadsheet, "cards", authToken);
 
-        // Use batch API to update the rows
 
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, dbPath);
+        final CardDao cardDao = helper.getCardDao();
+        final CategoryDao categoryDao = helper.getCategoryDao();
+        final LearningDataDao learningDataDao = helper.getLearningDataDao();
+        List<Card> cardList = cardDao.callBatchTasks(new Callable<List<Card>>() {
+            public List<Card> call() throws Exception {
+                List<Card> cards = cardDao.queryForAll();
+                for (Card c: cards) {
+                    categoryDao.refresh(c.getCategory());
+                    learningDataDao.refresh(c.getLearningData());
+                }
+                return cards;
+            }
+        });
+        AnyMemoDBOpenHelperManager.releaseHelper(helper);
+        Cells cells = new Cells();
+        cells.addCell(1, 1, "question");
+        cells.addCell(1, 2, "answer");
+        cells.addCell(1, 3, "category");
+        cells.addCell(1, 4, "note");
+        for (int i = 0; i < cardList.size(); i++) {
+            Card c = cardList.get(i);
+            cells.addCell(i + 1, 1, c.getQuestion());
+            cells.addCell(i + 1, 2, c.getAnswer());
+            cells.addCell(i + 1, 3, c.getCategory().getName());
+            cells.addCell(i + 1, 4, c.getNote());
+        }
 
-        //Spreadsheet s = SpreadsheetFactory.createSpreadsheet(title, authToken);
+        // Insert rows into worksheet
+        CellsFactory.uploadCells(newSpreadsheet, cardsWorksheet, cells, authToken);
 
-        //Worksheet w = WorksheetFactory.createWorksheet(s, "hahahahah", authToken);
-
+        // Finally delete the unneeded worksheets ...
+        for (Worksheet ws : worksheetsToDelete) {
+            WorksheetFactory.deleteWorksheet(newSpreadsheet, ws, authToken);
+        }
+        // ... And spreadsheets with duplicated names.
+        for (Spreadsheet ss : spreadsheetsToDelete) {
+            SpreadsheetFactory.deleteSpreadsheet(ss, authToken);
+        }
         return null;
     }
 

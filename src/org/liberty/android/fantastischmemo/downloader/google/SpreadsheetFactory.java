@@ -25,6 +25,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 import java.net.URL;
+import java.net.URLEncoder;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -165,31 +166,26 @@ public class SpreadsheetFactory {
         return spreadsheet;
     }
 
-    public static void deleteSpreadsheet(String title, String authToken) throws Exception {
-        List<Spreadsheet> spreadsheetList = findSpreadsheets(title, authToken);
-        for (Spreadsheet spreadsheet : spreadsheetList) {
-            URL url = new URL("https://docs.google.com/feeds/default/private/full/" + spreadsheet.getId() + "?access_token=" + authToken);
-            HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-            conn.addRequestProperty("GData-Version", "3.0");
-            conn.addRequestProperty("If-Match", "*");
+    /*
+     * Please not the spreadsheet's ID is doc list API id not spreadsheet api id
+     */
+    public static void deleteSpreadsheet(Spreadsheet spreadsheet, String authToken) throws Exception {
+        URL url = new URL("https://docs.google.com/feeds/default/private/full/" + spreadsheet.getId() + "?access_token=" + authToken);
+        HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+        conn.addRequestProperty("GData-Version", "3.0");
+        conn.addRequestProperty("If-Match", "*");
 
-            conn.setRequestMethod("DELETE");
+        conn.setRequestMethod("DELETE");
 
-            int responseCode = conn.getResponseCode();
-            if (responseCode != 200) {
-                String s = new String(IOUtils.toByteArray(conn.getErrorStream()));
-                throw new Exception(s);
-            }
-
-            //conn.getInputStream().close();
-            //String s = new String(IOUtils.toByteArray(conn.getErrorStream()));
-            //System.out.println(s);
+        int responseCode = conn.getResponseCode();
+        if (responseCode != 200) {
+            String s = new String(IOUtils.toByteArray(conn.getErrorStream()));
+            throw new Exception(s);
         }
-
     }
 
     public static List<Spreadsheet> findSpreadsheets(String title, String authToken) throws Exception {
-        URL url = new URL("https://docs.google.com/feeds/default/private/full?title=" + title + "&title-exact=true&access_token=" + authToken);
+        URL url = new URL("https://docs.google.com/feeds/default/private/full?title=" + URLEncoder.encode(title, "UTF-8") + "&title-exact=true&access_token=" + authToken);
 
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
         conn.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);

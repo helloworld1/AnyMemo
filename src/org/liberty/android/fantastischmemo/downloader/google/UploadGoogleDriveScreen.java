@@ -54,7 +54,7 @@ public class UploadGoogleDriveScreen extends GoogleAccountActivity {
     private void uploadToGoogleDrive(File file) {
         try {
             GoogleDriveUploadHelper uploadHelper = new GoogleDriveUploadHelper(this, authToken);
-            Spreadsheet s = uploadHelper.createSpreadsheet(file.getName());
+            Spreadsheet s = uploadHelper.createSpreadsheet(file.getName(), file.getAbsolutePath());
             System.out.println(s);
         } catch (Exception e) {
             throw new RuntimeException(e);

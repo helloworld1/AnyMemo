@@ -20,18 +20,33 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo;
 
+import android.app.Application;
+
+import android.os.Build;
+
+import android.util.Log;
+
 //import org.acra.ACRA;
 
 //import org.acra.annotation.ReportsCrashes;
 
-import android.app.Application;
 
 //@ReportsCrashes(formKey = "dGhuTDRGUVY1WjA3RG9NNEFmSTFEaXc6MQ") 
 public class AMApplication extends Application {
+
+    private static final String TAG = "AMApplication";
+
     @Override
     public void onCreate() {
         // The following line triggers the initialization of ACRA
         //ACRA.init(this);
+
+        // HTTP connection reuse which was buggy pre-froyo
+        if (Integer.parseInt(Build.VERSION.SDK) < Build.VERSION_CODES.FROYO) {
+            Log.w(TAG, "Using version less than 2.2, disable urlconnection connection pool");
+            System.setProperty("http.keepAlive", "false");
+        }
+
         super.onCreate();
     }
 }

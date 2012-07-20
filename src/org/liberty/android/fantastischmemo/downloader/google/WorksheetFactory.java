@@ -26,6 +26,7 @@ import java.io.OutputStreamWriter;
 
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -107,19 +108,23 @@ public class WorksheetFactory {
     }
 
     public static void deleteWorksheet(Spreadsheet spreadsheet, Worksheet worksheet, String authToken) throws Exception {
-        String requestUrl= "https://spreadsheets.google.com/feeds/worksheets/" + spreadsheet.getId() + "/private/full/" + worksheet.getId() + "?access_token=" + authToken;
+        String requestUrl= "https://spreadsheets.google.com/feeds/worksheets/" + spreadsheet.getId() + "/private/full/" + worksheet.getId() + "/0" + "?access_token=" + authToken;
         URL url = new URL(requestUrl);
         HttpsURLConnection conn = (HttpsURLConnection)url.openConnection();
         conn.setRequestMethod("DELETE");
-        conn.getInputStream().close(); 
+        conn.addRequestProperty("If-Match", "*");
+        if (conn.getResponseCode() / 100 >= 3) {
+            String s = new String(IOUtils.toByteArray(conn.getErrorStream()));
+            throw new Exception(s);
+        }
     }
 
     public static Worksheet createWorksheet(Spreadsheet spreadsheet, String title, String authToken) throws Exception {
         URL url = new URL("https://spreadsheets.google.com/feeds/worksheets/" + spreadsheet.getId() + "/private/full?access_token=" + authToken);
 
         String payload = "<entry xmlns=\"http://www.w3.org/2005/Atom\""
-            + "xmlns:gs=\"http://schemas.google.com/spreadsheets/2006\">"
-            + "<title>" + title + "</title>"
+            + " xmlns:gs=\"http://schemas.google.com/spreadsheets/2006\">"
+            + "<title>" + URLEncoder.encode(title, "UTF-8") + "</title>"
             + "<gs:rowCount>50</gs:rowCount>"
             + "<gs:colCount>10</gs:colCount>"
             + "</entry>";
@@ -133,16 +138,24 @@ public class WorksheetFactory {
         OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
         out.write(payload);
         out.close();
+        System.out.println(conn.getResponseCode());
 
-        // Now populate the response
-        String s = new String(IOUtils.toByteArray(conn.getInputStream()));
-        System.out.println(s);
+        if (conn.getResponseCode() / 100 >= 3) {
+            String s = new String(IOUtils.toByteArray(conn.getErrorStream()));
+            throw new Exception(s);
+        }
 
-        return null;
+        List<Worksheet> worksheets = getWorksheets(spreadsheet.getId(), authToken);
+        for (Worksheet worksheet : worksheets) {
+            if (title.equals(worksheet.getTitle())) {
+                return worksheet;
+            }
+        }
+        throw new IllegalStateException("Worksheet lookup failed. Worksheet is not created properly.");
     }
 
     public static List<Spreadsheet> findSpreadsheets(String title, String authToken) throws Exception {
-        URL url = new URL("https://docs.google.com/feeds/default/private/full?title=" + title + "&title-exact=true&access_token=" + authToken);
+        URL url = new URL("https://docs.google.com/feeds/default/private/full?title=" + URLEncoder.encode(title, "UTF-8") + "&title-exact=true&access_token=" + authToken);
 
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
         conn.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
