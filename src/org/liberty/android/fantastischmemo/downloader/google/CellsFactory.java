@@ -33,6 +33,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import org.apache.mycommons.io.IOUtils;
 
+import org.apache.mycommons.lang3.StringEscapeUtils;
 import org.apache.mycommons.lang3.StringUtils;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -44,15 +45,18 @@ public class CellsFactory {
         throw new AssertionError("Don't call constructor");
     }
 
-    public static Cells getCellsFromRequest(String spreadsheetId, String worksheetId, String authToken) throws XmlPullParserException, IOException {
+    public static Cells getCells(String spreadsheetId, String worksheetId, String authToken) throws XmlPullParserException, IOException {
         URL url = new URL("https://spreadsheets.google.com/feeds/cells/" + spreadsheetId + "/" + worksheetId + "/private/full?access_token=" + authToken);
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+
+        if (conn.getResponseCode() / 100 >= 3) {
+            String s = new String(IOUtils.toByteArray(conn.getErrorStream()));
+            throw new RuntimeException(s);
+        }
 
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
         factory.setNamespaceAware(true);
         XmlPullParser xpp = factory.newPullParser();
-        String s = new String(IOUtils.toByteArray(conn.getInputStream()));
-        System.out.println(s);
         xpp.setInput(new BufferedReader(new InputStreamReader(conn.getInputStream())));
 
         int eventType = xpp.getEventType();
@@ -135,7 +139,7 @@ public class CellsFactory {
         payloadBuilder.append("<batch:operation type=\"update\"/>");
         payloadBuilder.append("<id>"+ urlPrefix + "/R" + row + "C" + col + "</id>");
         payloadBuilder.append("<link rel=\"edit\" type=\"application/atom+xml\" href=\"" + urlPrefix + "/R" + row + "C" + col + "\"/>");
-        payloadBuilder.append("<gs:cell row=\"" + row + "\" col=\"" + col + "\" inputValue=\"" + value + "\"/>");
+        payloadBuilder.append("<gs:cell row=\"" + row + "\" col=\"" + col + "\" inputValue=\"" + StringEscapeUtils.escapeXml(value) + "\"/>");
         payloadBuilder.append("</entry>");
     }
 }

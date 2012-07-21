@@ -58,6 +58,11 @@ public class WorksheetFactory {
         URL url = new URL(worksheetAddress);
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
 
+        if (conn.getResponseCode() / 100 >= 3) {
+            String s = new String(IOUtils.toByteArray(conn.getErrorStream()));
+            throw new RuntimeException(s);
+        }
+
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
         factory.setNamespaceAware(true);
         XmlPullParser xpp = factory.newPullParser();
@@ -119,14 +124,14 @@ public class WorksheetFactory {
         }
     }
 
-    public static Worksheet createWorksheet(Spreadsheet spreadsheet, String title, String authToken) throws Exception {
+    public static Worksheet createWorksheet(Spreadsheet spreadsheet, String title, int row, int col, String authToken) throws Exception {
         URL url = new URL("https://spreadsheets.google.com/feeds/worksheets/" + spreadsheet.getId() + "/private/full?access_token=" + authToken);
 
         String payload = "<entry xmlns=\"http://www.w3.org/2005/Atom\""
             + " xmlns:gs=\"http://schemas.google.com/spreadsheets/2006\">"
             + "<title>" + URLEncoder.encode(title, "UTF-8") + "</title>"
-            + "<gs:rowCount>50</gs:rowCount>"
-            + "<gs:colCount>10</gs:colCount>"
+            + "<gs:rowCount>" + row + "</gs:rowCount>"
+            + "<gs:colCount>" + col + "</gs:colCount>"
             + "</entry>";
 
 
@@ -160,6 +165,11 @@ public class WorksheetFactory {
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
         conn.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
         conn.addRequestProperty("GData-Version", "3.0");
+
+        if (conn.getResponseCode() / 100 >= 3) {
+            String s = new String(IOUtils.toByteArray(conn.getErrorStream()));
+            throw new Exception(s);
+        }
 
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
         factory.setNamespaceAware(true);

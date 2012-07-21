@@ -55,6 +55,28 @@ public class GoogleDriveUploadHelper {
 
     public Spreadsheet createSpreadsheet(String title, String dbPath) throws Exception {
 
+
+        // First read card.
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, dbPath);
+        List<Card> cardList = null;
+        try {
+            final CardDao cardDao = helper.getCardDao();
+            final CategoryDao categoryDao = helper.getCategoryDao();
+            final LearningDataDao learningDataDao = helper.getLearningDataDao();
+            cardList = cardDao.callBatchTasks(new Callable<List<Card>>() {
+                public List<Card> call() throws Exception {
+                    List<Card> cards = cardDao.queryForAll();
+                    for (Card c: cards) {
+                        categoryDao.refresh(c.getCategory());
+                        learningDataDao.refresh(c.getLearningData());
+                    }
+                    return cards;
+                }
+            });
+        } finally {
+            AnyMemoDBOpenHelperManager.releaseHelper(helper);
+        }
+
         // Find the spreadsheets to delete after the process is done
         List<Spreadsheet> spreadsheetsToDelete = SpreadsheetFactory.findSpreadsheets(title, authToken);
 
@@ -66,24 +88,8 @@ public class GoogleDriveUploadHelper {
 
         // Create worksheets
         List<Worksheet> worksheetsToDelete = WorksheetFactory.getWorksheets(newSpreadsheet.getId(), authToken);
-        Worksheet cardsWorksheet = WorksheetFactory.createWorksheet(newSpreadsheet, "cards", authToken);
+        Worksheet cardsWorksheet = WorksheetFactory.createWorksheet(newSpreadsheet, "cards", cardList.size() + 1, 5, authToken);
 
-
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, dbPath);
-        final CardDao cardDao = helper.getCardDao();
-        final CategoryDao categoryDao = helper.getCategoryDao();
-        final LearningDataDao learningDataDao = helper.getLearningDataDao();
-        List<Card> cardList = cardDao.callBatchTasks(new Callable<List<Card>>() {
-            public List<Card> call() throws Exception {
-                List<Card> cards = cardDao.queryForAll();
-                for (Card c: cards) {
-                    categoryDao.refresh(c.getCategory());
-                    learningDataDao.refresh(c.getLearningData());
-                }
-                return cards;
-            }
-        });
-        AnyMemoDBOpenHelperManager.releaseHelper(helper);
         Cells cells = new Cells();
         cells.addCell(1, 1, "question");
         cells.addCell(1, 2, "answer");
@@ -91,10 +97,11 @@ public class GoogleDriveUploadHelper {
         cells.addCell(1, 4, "note");
         for (int i = 0; i < cardList.size(); i++) {
             Card c = cardList.get(i);
-            cells.addCell(i + 1, 1, c.getQuestion());
-            cells.addCell(i + 1, 2, c.getAnswer());
-            cells.addCell(i + 1, 3, c.getCategory().getName());
-            cells.addCell(i + 1, 4, c.getNote());
+            // THe first row is the header.
+            cells.addCell(i + 2, 1, c.getQuestion());
+            cells.addCell(i + 2, 2, c.getAnswer());
+            cells.addCell(i + 2, 3, c.getCategory().getName());
+            cells.addCell(i + 2, 4, c.getNote());
         }
 
         // Insert rows into worksheet

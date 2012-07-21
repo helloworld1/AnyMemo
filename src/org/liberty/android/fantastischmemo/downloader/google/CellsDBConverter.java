@@ -56,7 +56,7 @@ public class CellsDBConverter {
         int numberOfRows = cardCells.getRowCounts();
         
         // We ignore the header row
-        List<Card> cardList = new ArrayList<Card>(numberOfRows - 1);
+        List<Card> cardList = new ArrayList<Card>(numberOfRows + 1);
         for (int i = 1; i < numberOfRows; i++) {
             List<String> row = cardCells.getRow(i);
             Card card = new Card();

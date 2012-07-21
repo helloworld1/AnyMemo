@@ -52,9 +52,9 @@ public class GoogleDriveDownloadHelper {
         List<Worksheet> worksheets = WorksheetFactory.getWorksheets(spreadsheet.getId(), authToken);
 
         for (Worksheet w : worksheets) {
-            Cells cells = CellsFactory.getCellsFromRequest(spreadsheet.getId(), w.getId(), authToken);
-            System.out.println(cells.toString());
-            if (!"learningdata".equalsIgnoreCase(w.getTitle())) {
+            Cells cells = CellsFactory.getCells(spreadsheet.getId(), w.getId(), authToken);
+            System.out.println("Cells: " + cells.toString());
+            if ("cards".equalsIgnoreCase(w.getTitle())) {
                 CellsDBConverter converter = new CellsDBConverter(mContext);
                 String saveDBPath= AMEnv.DEFAULT_ROOT_PATH + "/" + spreadsheet.getTitle() + ".db";
                 AMUtil.deleteFileWithBackup(saveDBPath);

@@ -37,6 +37,8 @@ import javax.net.ssl.HttpsURLConnection;
 
 import org.apache.mycommons.io.IOUtils;
 
+import org.apache.mycommons.lang3.StringEscapeUtils;
+
 import org.liberty.android.fantastischmemo.downloader.DownloaderUtils;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -109,7 +111,7 @@ public class SpreadsheetFactory {
             "<entry xmlns='http://www.w3.org/2005/Atom'>"+
             "<category scheme='http://schemas.google.com/g/2005#kind'"+
             " term='http://schemas.google.com/docs/2007#spreadsheet'/>"+
-            "<title>"+ title +"</title>"+
+            "<title>"+ StringEscapeUtils.escapeXml(title) +"</title>"+
             "</entry>";
 
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
