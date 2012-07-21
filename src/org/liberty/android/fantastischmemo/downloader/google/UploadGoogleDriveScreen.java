@@ -25,6 +25,10 @@ import org.liberty.android.fantastischmemo.R;
 
 import org.liberty.android.fantastischmemo.ui.FileBrowserFragment;
 
+import android.app.Activity;
+
+import android.content.Intent;
+
 import android.os.Bundle;
 
 import android.support.v4.app.FragmentTransaction;
@@ -54,8 +58,8 @@ public class UploadGoogleDriveScreen extends GoogleAccountActivity {
     private void uploadToGoogleDrive(File file) {
         try {
             GoogleDriveUploadHelper uploadHelper = new GoogleDriveUploadHelper(this, authToken);
-            Spreadsheet s = uploadHelper.createSpreadsheet(file.getName(), file.getAbsolutePath());
-            System.out.println(s);
+            uploadHelper.createSpreadsheet(file.getName(), file.getAbsolutePath());
+            setResult(Activity.RESULT_OK, new Intent());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

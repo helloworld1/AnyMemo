@@ -85,7 +85,6 @@ public abstract class GoogleAccountActivity extends AMActivity {
                 task.execute(code);
 			}
 			public void onAuthCodeError(String error) {
-                System.out.println("authCodeReceiveListener Error: " + error);
 			}
         };
 
@@ -114,7 +113,6 @@ public abstract class GoogleAccountActivity extends AMActivity {
                 HttpsURLConnection conn = (HttpsURLConnection) url1.openConnection();
 
                 String s = new String(IOUtils.toByteArray(conn.getInputStream()));
-                System.out.println(s);
                 JSONObject jsonObject = new JSONObject(s);
                 if (jsonObject.has("error")) {
                     String error = jsonObject.getString("error");

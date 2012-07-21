@@ -77,21 +77,17 @@ public class WorksheetFactory {
         while (eventType != XmlPullParser.END_DOCUMENT) {
                 
             if(eventType == XmlPullParser.START_DOCUMENT) {
-                System.out.println("Start document");
             } else if(eventType == XmlPullParser.START_TAG) {
-                System.out.println("Start tag "+xpp.getName());
                 lastTag = xpp.getName();
                 if(xpp.getName().equals("entry")) {
                     worksheet = new Worksheet();
                 }
             } else if(eventType == XmlPullParser.END_TAG) {
-                System.out.println("End tag "+xpp.getName());
                 if(xpp.getName().equals("entry")) {
                     worksheetList.add(worksheet);
                     worksheet = null;
                 }
             } else if(eventType == XmlPullParser.TEXT) {
-                System.out.println("Text "+xpp.getText());
                 if(worksheet != null && lastTag.equals("id")) {
                     worksheet.setId(DownloaderUtils.getLastPartFromUrl(xpp.getText()));
                 }
@@ -108,7 +104,6 @@ public class WorksheetFactory {
             }
             eventType = xpp.next();
         }
-        System.out.println("End document");
         return worksheetList;
     }
 
@@ -143,7 +138,6 @@ public class WorksheetFactory {
         OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
         out.write(payload);
         out.close();
-        System.out.println(conn.getResponseCode());
 
         if (conn.getResponseCode() / 100 >= 3) {
             String s = new String(IOUtils.toByteArray(conn.getErrorStream()));
@@ -184,21 +178,17 @@ public class WorksheetFactory {
         while (eventType != XmlPullParser.END_DOCUMENT) {
                 
             if(eventType == XmlPullParser.START_DOCUMENT) {
-                System.out.println("Start document");
             } else if(eventType == XmlPullParser.START_TAG) {
-                System.out.println("Start tag "+xpp.getName());
                 lastTag = xpp.getName();
                 if(xpp.getName().equals("entry")) {
                     spreadsheet = new Spreadsheet();
                 }
             } else if(eventType == XmlPullParser.END_TAG) {
-                System.out.println("End tag "+xpp.getName());
                 if(xpp.getName().equals("entry")) {
                     spreadsheetList.add(spreadsheet);
                     spreadsheet = null;
                 }
             } else if(eventType == XmlPullParser.TEXT) {
-                System.out.println("Text "+xpp.getText());
                 if(spreadsheet != null && lastTag.equals("id")) {
                     spreadsheet.setId(DownloaderUtils.getLastPartFromUrl(xpp.getText()));
                 }

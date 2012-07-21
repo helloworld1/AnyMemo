@@ -19,15 +19,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.google;
 
-import java.net.URL;
-
 import java.util.List;
 
 import java.util.concurrent.Callable;
 
-import javax.net.ssl.HttpsURLConnection;
-
-import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 
@@ -38,8 +33,6 @@ import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 
 import org.liberty.android.fantastischmemo.downloader.google.Cells;
-
-import org.liberty.android.fantastischmemo.utils.AMUtil;
 
 import android.content.Context;
 
@@ -56,7 +49,7 @@ public class GoogleDriveUploadHelper {
     public Spreadsheet createSpreadsheet(String title, String dbPath) throws Exception {
 
 
-        // First read card.
+        // First read card because if it failed we don't even bother uploading.
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, dbPath);
         List<Card> cardList = null;
         try {
@@ -88,9 +81,13 @@ public class GoogleDriveUploadHelper {
 
         // Create worksheets
         List<Worksheet> worksheetsToDelete = WorksheetFactory.getWorksheets(newSpreadsheet.getId(), authToken);
-        Worksheet cardsWorksheet = WorksheetFactory.createWorksheet(newSpreadsheet, "cards", cardList.size() + 1, 5, authToken);
+
+        // setting up the worksheet size is critical.
+        Worksheet cardsWorksheet = WorksheetFactory.createWorksheet(newSpreadsheet, "cards", cardList.size() + 1, 4, authToken);
 
         Cells cells = new Cells();
+
+        // Add the header for cards first
         cells.addCell(1, 1, "question");
         cells.addCell(1, 2, "answer");
         cells.addCell(1, 3, "category");
@@ -117,15 +114,4 @@ public class GoogleDriveUploadHelper {
         }
         return null;
     }
-
-    private Spreadsheet searchSpreadsheetTitle(String title) throws Exception {
-        List<Spreadsheet> sl = SpreadsheetFactory.getSpreadsheets(authToken);
-        for (Spreadsheet s : sl) {
-            if (title.equals(s.getTitle())) {
-                return s;
-            }
-        }
-        return null;
-    }
-
 }

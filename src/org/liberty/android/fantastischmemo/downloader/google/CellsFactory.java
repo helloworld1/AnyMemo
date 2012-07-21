@@ -70,22 +70,18 @@ public class CellsFactory {
         while (eventType != XmlPullParser.END_DOCUMENT) {
                 
             if(eventType == XmlPullParser.START_DOCUMENT) {
-                System.out.println("Start document");
             } else if(eventType == XmlPullParser.START_TAG) {
-                System.out.println("Start tag "+xpp.getName());
                 lastTag = xpp.getName();
                 if(xpp.getName().equals("cell")) {
                     currentRow = Integer.valueOf(xpp.getAttributeValue(null, "row"));
                     currentCol = Integer.valueOf(xpp.getAttributeValue(null, "col"));
                 }
             } else if(eventType == XmlPullParser.END_TAG) {
-                System.out.println("End tag "+xpp.getName());
                 if(xpp.getName().equals("entry")) {
                     rowList.add(row);
                     row = null;
                 }
             } else if(eventType == XmlPullParser.TEXT) {
-                System.out.println("Text "+xpp.getText());
                 if(lastTag.equals("cell")) {
                     cells.addCell(currentRow, currentCol, xpp.getText());
                 }
@@ -95,7 +91,6 @@ public class CellsFactory {
             }
             eventType = xpp.next();
         }
-        System.out.println("End document");
         return cells;
     }
 
@@ -115,7 +110,6 @@ public class CellsFactory {
         payloadBuilder.append("</feed>");
 
         String payload = payloadBuilder.toString();
-        System.out.println("PAYLOAD: " + payload);
 
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
@@ -126,7 +120,6 @@ public class CellsFactory {
         OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
         out.write(payload);
         out.close();
-        System.out.println(conn.getResponseCode());
         if (conn.getResponseCode() / 100 >= 3) {
             String s = new String(IOUtils.toByteArray(conn.getErrorStream()));
             throw new Exception(s);

@@ -34,7 +34,6 @@ public class GoogleAccountScreen extends GoogleAccountActivity {
                                     conn.getErrorStream()));
         String inputLine;
         while ((inputLine = in.readLine()) != null) {
-            System.out.println(inputLine);
         }
         in.close();
         } catch (Exception e) {

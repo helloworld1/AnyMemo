@@ -57,21 +57,17 @@ public class RowFactory {
         while (eventType != XmlPullParser.END_DOCUMENT) {
                 
             if(eventType == XmlPullParser.START_DOCUMENT) {
-                System.out.println("Start document");
             } else if(eventType == XmlPullParser.START_TAG) {
-                System.out.println("Start tag "+xpp.getName());
                 lastTag = xpp.getName();
                 if(xpp.getName().equals("entry")) {
                     row = new Row();
                 }
             } else if(eventType == XmlPullParser.END_TAG) {
-                System.out.println("End tag "+xpp.getName());
                 if(xpp.getName().equals("entry")) {
                     rowList.add(row);
                     row = null;
                 }
             } else if(eventType == XmlPullParser.TEXT) {
-                System.out.println("Text "+xpp.getText());
                 if(row != null && lastTag.equals("id")) {
                     row.setId(DownloaderUtils.getLastPartFromUrl(xpp.getText()));
                 }
@@ -91,7 +87,6 @@ public class RowFactory {
             }
             eventType = xpp.next();
         }
-        System.out.println("End document");
         return rowList;
     }
 }

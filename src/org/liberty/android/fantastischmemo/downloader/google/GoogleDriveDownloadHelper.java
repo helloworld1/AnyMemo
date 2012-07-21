@@ -53,7 +53,6 @@ public class GoogleDriveDownloadHelper {
 
         for (Worksheet w : worksheets) {
             Cells cells = CellsFactory.getCells(spreadsheet.getId(), w.getId(), authToken);
-            System.out.println("Cells: " + cells.toString());
             if ("cards".equalsIgnoreCase(w.getTitle())) {
                 CellsDBConverter converter = new CellsDBConverter(mContext);
                 String saveDBPath= AMEnv.DEFAULT_ROOT_PATH + "/" + spreadsheet.getTitle() + ".db";

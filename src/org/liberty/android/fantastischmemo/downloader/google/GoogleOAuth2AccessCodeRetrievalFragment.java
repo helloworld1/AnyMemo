@@ -61,7 +61,6 @@ class GoogleOAuth2AccessCodeRetrievalFragment extends DialogFragment {
                 }
                 String code = getAuthCodeFromUrl(url);
                 String error = getErrorFromUrl(url);
-                System.out.println("onPageFinished : " + url);
                 if (error != null) {
                     authCodeReceiveListener.onAuthCodeError(error);
                     authenticated = true;

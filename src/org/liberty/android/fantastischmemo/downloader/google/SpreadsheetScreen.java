@@ -159,7 +159,6 @@ public class SpreadsheetScreen extends Activity {
                                     conn.getInputStream()));
         String inputLine;
         while ((inputLine = in.readLine()) != null) {
-            System.out.println(inputLine);
         }
         in.close();
         } catch (Exception e) {

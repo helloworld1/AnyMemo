@@ -69,21 +69,17 @@ public class SpreadsheetFactory {
         while (eventType != XmlPullParser.END_DOCUMENT) {
                 
             if(eventType == XmlPullParser.START_DOCUMENT) {
-                System.out.println("Start document");
             } else if(eventType == XmlPullParser.START_TAG) {
-                System.out.println("Start tag "+xpp.getName());
                 lastTag = xpp.getName();
                 if(xpp.getName().equals("entry")) {
                     spreadsheet = new Spreadsheet();
                 }
             } else if(eventType == XmlPullParser.END_TAG) {
-                System.out.println("End tag "+xpp.getName());
                 if(xpp.getName().equals("entry")) {
                     spreadsheetList.add(spreadsheet);
                     spreadsheet = null;
                 }
             } else if(eventType == XmlPullParser.TEXT) {
-                System.out.println("Text "+xpp.getText());
                 if(spreadsheet != null && lastTag.equals("id")) {
                     spreadsheet.setId(DownloaderUtils.getLastPartFromUrl(xpp.getText()));
                 }
@@ -100,7 +96,6 @@ public class SpreadsheetFactory {
             }
             eventType = xpp.next();
         }
-        System.out.println("End document");
         return spreadsheetList;
     }
 
@@ -138,17 +133,13 @@ public class SpreadsheetFactory {
         while (eventType != XmlPullParser.END_DOCUMENT) {
                 
             if(eventType == XmlPullParser.START_DOCUMENT) {
-                System.out.println("Start document");
             } else if(eventType == XmlPullParser.START_TAG) {
-                System.out.println("Start tag "+xpp.getName());
                 lastTag = xpp.getName();
                 if(xpp.getName().equals("entry")) {
                     spreadsheet = new Spreadsheet();
                 }
             } else if(eventType == XmlPullParser.END_TAG) {
-                System.out.println("End tag "+xpp.getName());
             } else if(eventType == XmlPullParser.TEXT) {
-                System.out.println("Text "+xpp.getText());
                 if(spreadsheet != null && lastTag.equals("id")) {
                     spreadsheet.setId(DownloaderUtils.getLastPartFromUrl(xpp.getText()));
                 }
@@ -206,21 +197,17 @@ public class SpreadsheetFactory {
         while (eventType != XmlPullParser.END_DOCUMENT) {
                 
             if(eventType == XmlPullParser.START_DOCUMENT) {
-                System.out.println("Start document");
             } else if(eventType == XmlPullParser.START_TAG) {
-                System.out.println("Start tag "+xpp.getName());
                 lastTag = xpp.getName();
                 if(xpp.getName().equals("entry")) {
                     spreadsheet = new Spreadsheet();
                 }
             } else if(eventType == XmlPullParser.END_TAG) {
-                System.out.println("End tag "+xpp.getName());
                 if(xpp.getName().equals("entry")) {
                     spreadsheetList.add(spreadsheet);
                     spreadsheet = null;
                 }
             } else if(eventType == XmlPullParser.TEXT) {
-                System.out.println("Text "+xpp.getText());
                 if(spreadsheet != null && lastTag.equals("id")) {
                     spreadsheet.setId(DownloaderUtils.getLastPartFromUrl(xpp.getText()));
                 }
