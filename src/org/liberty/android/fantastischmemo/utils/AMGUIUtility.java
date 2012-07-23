@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.utils;
 
+import org.apache.mycommons.lang3.exception.ExceptionUtils;
+
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.R.string;
 
@@ -43,7 +45,7 @@ public class AMGUIUtility{
         Log.e(TAG, "displayException", e);
         new AlertDialog.Builder(activity)
             .setTitle(title)
-            .setMessage(text + "\n" + activity.getString(R.string.exception_text) +": " + e.toString())
+            .setMessage(text + "\n" + activity.getString(R.string.exception_text) +": " + ExceptionUtils.getRootCauseMessage(e) + "\n" + ExceptionUtils.getStackTrace(e))
             .setPositiveButton(activity.getString(R.string.back_menu_text), new DialogInterface.OnClickListener(){
                 public void onClick(DialogInterface arg0, int arg1){
                     activity.finish();
@@ -61,7 +63,7 @@ public class AMGUIUtility{
         Log.e(TAG, "displayException", e);
         new AlertDialog.Builder(activity)
             .setTitle(title)
-            .setMessage(text + "\n" + activity.getString(R.string.exception_text) + ": " + e.toString())
+            .setMessage(text + "\n" + activity.getString(R.string.exception_text) +": " + ExceptionUtils.getRootCauseMessage(e) + "\n" + ExceptionUtils.getStackTrace(e))
            // .setPositiveButton(activity.getString(R.string.back_menu_text), null)
             .setNeutralButton(R.string.back_menu_text, new DialogInterface.OnClickListener() {
                 @Override

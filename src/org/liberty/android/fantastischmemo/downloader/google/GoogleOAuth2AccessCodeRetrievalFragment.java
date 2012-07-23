@@ -23,6 +23,7 @@ import java.net.URLEncoder;
 
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
+import org.liberty.android.fantastischmemo.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -31,6 +32,9 @@ import android.app.Dialog;
 import android.os.Bundle;
 
 import android.support.v4.app.DialogFragment;
+
+import android.view.MotionEvent;
+import android.view.View;
 
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -49,8 +53,16 @@ class GoogleOAuth2AccessCodeRetrievalFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        final WebView webview = new WebView(mActivity);
+
+        Dialog dialog = new Dialog(mActivity);
+        dialog.setContentView(R.layout.single_webview_layout);
+        dialog.setTitle(R.string.login_account_text);
+        dialog.setCancelable(false);
+        WebView webview = (WebView) dialog.findViewById(R.id.webview);
+
         webview.getSettings().setJavaScriptEnabled(true);
+        webview.setFocusableInTouchMode(true);
+        webview.setFocusable(true);
 
         webview.setWebViewClient(new WebViewClient() {
             private boolean authenticated = false;
@@ -85,9 +97,7 @@ class GoogleOAuth2AccessCodeRetrievalFragment extends DialogFragment {
             throw new RuntimeException(e);
         }
 
-        return new AlertDialog.Builder(mActivity)
-            .setView(webview)
-            .create();
+        return dialog;
     }
 
     public void setAuthCodeReceiveListener(AuthCodeReceiveListener listener) {
