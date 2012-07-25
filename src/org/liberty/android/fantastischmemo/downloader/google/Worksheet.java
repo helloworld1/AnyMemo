@@ -19,45 +19,5 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.google;
 
-import java.util.Date;
-
-public class Worksheet {
-
-    private String id;
-
-    private Date updateDate;
-
-    private String title;
-
-    public Worksheet() {}
-
-	public String getId() {
-		return id;
-	}
-
-	public Date getUpdateDate() {
-		return updateDate;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public void setUpdateDate(Date updateDate) {
-		this.updateDate = updateDate;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	@Override
-	public String toString() {
-		return "Worksheet [id=" + id + ", updateDate=" + updateDate
-				+ ", title=" + title + "]";
-	}
+public class Worksheet extends Entry {
 }

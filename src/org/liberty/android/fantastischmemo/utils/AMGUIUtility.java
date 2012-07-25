@@ -41,8 +41,9 @@ public class AMGUIUtility{
         /* Shouldn't be invoked */
     }
 
+    // Display unrecoverable exception and exit the activity
     public static void displayError(final Activity activity, final String title, final String text, final Exception e){
-        Log.e(TAG, "displayException", e);
+        Log.e(TAG, "displayError", e);
         new AlertDialog.Builder(activity)
             .setTitle(title)
             .setMessage(text + "\n" + activity.getString(R.string.exception_text) +": " + ExceptionUtils.getRootCauseMessage(e) + "\n" + ExceptionUtils.getStackTrace(e))
@@ -59,16 +60,15 @@ public class AMGUIUtility{
             .show();
     }
 
+    // Display recoverable exception
     public static void displayException(final Activity activity, final String title, final String text, final Exception e){
         Log.e(TAG, "displayException", e);
         new AlertDialog.Builder(activity)
             .setTitle(title)
             .setMessage(text + "\n" + activity.getString(R.string.exception_text) +": " + ExceptionUtils.getRootCauseMessage(e) + "\n" + ExceptionUtils.getStackTrace(e))
-           // .setPositiveButton(activity.getString(R.string.back_menu_text), null)
             .setNeutralButton(R.string.back_menu_text, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    activity.finish();
                 }
             })
             .show();

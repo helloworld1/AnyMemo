@@ -19,21 +19,5 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.google;
 
-public class Row extends Entry {
-
-    private String content;
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-	@Override
-	public String toString() {
-		return "Row [id=" + getId() + ", updateDate=" + getUpdateDate()+ ", title="
-				+ getTitle()+ ", content=" + getContent() + "]";
-	}
+public class Folder extends Entry {
 }

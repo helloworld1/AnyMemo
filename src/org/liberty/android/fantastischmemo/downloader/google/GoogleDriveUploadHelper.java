@@ -71,11 +71,19 @@ public class GoogleDriveUploadHelper {
         }
 
         // Find the spreadsheets to delete after the process is done
-        List<Spreadsheet> spreadsheetsToDelete = SpreadsheetFactory.findSpreadsheets(title, authToken);
+        List<Document> spreadsheetsToDelete = DocumentFactory.findDocuments(title, authToken);
+
+
+
+        // Create the AnyMemo folder if needed
+        List<Folder> folders = FolderFactory.getFolders(authToken);
+        for (Folder f : folders) {
+            System.out.println("FOlder: " + f.toString());
+        }
 
 
         // Create new spreadsheet
-        SpreadsheetFactory.createSpreadsheet(title, authToken);
+        DocumentFactory.createSpreadsheet(title, authToken);
         List<Spreadsheet> spreadsheetList = SpreadsheetFactory.getSpreadsheets(authToken);
         Spreadsheet newSpreadsheet = spreadsheetList.get(0);
 
@@ -109,8 +117,8 @@ public class GoogleDriveUploadHelper {
             WorksheetFactory.deleteWorksheet(newSpreadsheet, ws, authToken);
         }
         // ... And spreadsheets with duplicated names.
-        for (Spreadsheet ss : spreadsheetsToDelete) {
-            SpreadsheetFactory.deleteSpreadsheet(ss, authToken);
+        for (Document ss : spreadsheetsToDelete) {
+            DocumentFactory.deleteDocument(ss, authToken);
         }
         return null;
     }

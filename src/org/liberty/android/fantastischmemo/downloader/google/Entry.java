@@ -19,21 +19,43 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.google;
 
-public class Row extends Entry {
+import java.util.Date;
 
-    private String content;
+public class Entry {
 
-    public String getContent() {
-        return content;
-    }
+    private String id;
 
-    public void setContent(String content) {
-        this.content = content;
-    }
+    private Date updateDate;
+
+    private String title;
+
+	public String getId() {
+		return id;
+	}
+
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
 	@Override
 	public String toString() {
-		return "Row [id=" + getId() + ", updateDate=" + getUpdateDate()+ ", title="
-				+ getTitle()+ ", content=" + getContent() + "]";
+		return getClass().getName() + " [id=" + id + ", updateDate=" + updateDate
+				+ ", title=" + title + "]";
 	}
 }

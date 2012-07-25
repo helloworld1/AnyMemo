@@ -75,7 +75,8 @@ class GoogleOAuth2AccessCodeRetrievalFragment extends DialogFragment {
         final View progressDialog = v.findViewById(R.id.auth_page_load_progress);
         final LinearLayout ll = (LinearLayout)v.findViewById(R.id.ll);
         
-        // We have to set up the dialog's webview size manually or the webview illbe zero size.
+        // We have to set up the dialog's webview size manually or the webview will be zero size.
+        // This should be a bug of Android.
         Rect displayRectangle = new Rect();
         Window window = mActivity.getWindow();
         window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
@@ -121,56 +122,6 @@ class GoogleOAuth2AccessCodeRetrievalFragment extends DialogFragment {
         });
         return v;
     }
-
-
-    //@Override
-    //public Dialog onCreateDialog(Bundle savedInstanceState) {
-
-    //    final Dialog dialog = new Dialog(mActivity);
-    //    dialog.setContentView(R.layout.single_webview_layout);
-    //    dialog.setTitle(R.string.login_account_text);
-    //    dialog.setCancelable(false);
-    //    WebView webview = (WebView) dialog.findViewById(R.id.webview);
-
-    //    webview.getSettings().setJavaScriptEnabled(true);
-    //    //webview.setFocusableInTouchMode(true);
-    //    //webview.setFocusable(true);
-
-    //    webview.setWebViewClient(new WebViewClient() {
-    //        private boolean authenticated = false;
-    //        @Override
-    //        public void onPageFinished(WebView view, String url)  {
-    //            if (authenticated == true) {
-    //                return;
-    //            }
-    //            String code = getAuthCodeFromUrl(url);
-    //            String error = getErrorFromUrl(url);
-    //            if (error != null) {
-    //                authCodeReceiveListener.onAuthCodeError(error);
-    //                authenticated = true;
-    //                dialog.dismiss();
-    //            }
-    //            if (code != null) {
-    //                authenticated = true;
-    //                authCodeReceiveListener.onAuthCodeReceived(code);
-    //                dialog.dismiss();
-    //            }
-    //        
-    //        }
-    //    });
-    //    try {
-    //        String uri = String.format("https://accounts.google.com/o/oauth2/auth?client_id=%s&response_type=%s&redirect_uri=%s&scope=%s",
-    //                URLEncoder.encode(AMEnv.GOOGLE_CLIENT_ID, "UTF-8"),
-    //                URLEncoder.encode("code", "UTF-8"),
-    //                URLEncoder.encode(AMEnv.GOOGLE_REDIRECT_URI, "UTF-8"),
-    //                URLEncoder.encode(AMEnv.GDRIVE_SCOPE, "UTF-8"));
-    //        webview.loadUrl(uri);
-    //    } catch (Exception e) {
-    //        throw new RuntimeException(e);
-    //    }
-
-    //    return dialog;
-    //}
 
     public void setAuthCodeReceiveListener(AuthCodeReceiveListener listener) {
         authCodeReceiveListener = listener;
