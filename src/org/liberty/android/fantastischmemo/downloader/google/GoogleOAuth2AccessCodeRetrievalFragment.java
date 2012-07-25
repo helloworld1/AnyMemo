@@ -95,6 +95,21 @@ class GoogleOAuth2AccessCodeRetrievalFragment extends DialogFragment {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        webview.requestFocus(View.FOCUS_DOWN);
+        webview.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                    case MotionEvent.ACTION_UP:
+                        if (!v.hasFocus()) {
+                            v.requestFocus();
+                        }
+                        break;
+                }
+                return false;
+            }
+        });
+
 
         webview.setWebViewClient(new WebViewClient() {
             private boolean authenticated = false;

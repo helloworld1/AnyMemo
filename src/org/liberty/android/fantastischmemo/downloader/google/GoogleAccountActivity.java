@@ -166,6 +166,7 @@ public abstract class GoogleAccountActivity extends AMActivity {
                 conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 conn.setRequestMethod("POST");
                 conn.setDoInput(true);
+                conn.setDoOutput(true);
                 String payload = String.format("code=%s&client_id=%s&client_secret=%s&redirect_uri=%s&grant_type=%s",
                         URLEncoder.encode(code, "UTF-8"),
                         URLEncoder.encode(AMEnv.GOOGLE_CLIENT_ID, "UTF-8"),

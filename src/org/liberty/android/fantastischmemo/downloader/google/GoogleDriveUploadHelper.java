@@ -76,14 +76,10 @@ public class GoogleDriveUploadHelper {
 
 
         // Create the AnyMemo folder if needed
-        List<Folder> folders = FolderFactory.getFolders(authToken);
-        for (Folder f : folders) {
-            System.out.println("FOlder: " + f.toString());
-        }
-
+        Folder folder = FolderFactory.createOrReturnFolder("AnyMemo", authToken);
 
         // Create new spreadsheet
-        DocumentFactory.createSpreadsheet(title, authToken);
+        Document newSpreadsheetDocument = DocumentFactory.createSpreadsheet(title, authToken);
         List<Spreadsheet> spreadsheetList = SpreadsheetFactory.getSpreadsheets(authToken);
         Spreadsheet newSpreadsheet = spreadsheetList.get(0);
 
@@ -111,6 +107,10 @@ public class GoogleDriveUploadHelper {
 
         // Insert rows into worksheet
         CellsFactory.uploadCells(newSpreadsheet, cardsWorksheet, cells, authToken);
+
+
+        // Put new spreadsheet into the folder
+        FolderFactory.addDocumentToFolder(newSpreadsheetDocument, folder, authToken);
 
         // Finally delete the unneeded worksheets ...
         for (Worksheet ws : worksheetsToDelete) {

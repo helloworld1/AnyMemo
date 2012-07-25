@@ -56,16 +56,17 @@ public class DocumentFactory {
         //conn.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
         conn.addRequestProperty("GData-Version", "3.0");
         conn.addRequestProperty("Content-Type", "application/atom+xml");
-        conn.addRequestProperty("Content-Length", "" + payload.length());
+        conn.setRequestProperty("Content-Length", Integer.toString(payload.length()));
+
+
+        OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
+        out.write(payload);
+        out.close();
 
         if (conn.getResponseCode() / 100 >= 3) {
             String s = new String(IOUtils.toByteArray(conn.getErrorStream()));
             throw new RuntimeException(s);
         }
-
-        OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
-        out.write(payload);
-        out.close();
 
         List<Document> documentList = EntryFactory.getEntries(Document.class, conn.getInputStream());
 
