@@ -119,6 +119,7 @@ public class FolderFactory {
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
         conn.setDoInput(true);
+        conn.setDoOutput(true);
         //conn.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
         conn.addRequestProperty("GData-Version", "3.0");
         conn.addRequestProperty("Content-Type", "application/atom+xml");

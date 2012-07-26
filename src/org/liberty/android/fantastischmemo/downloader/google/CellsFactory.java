@@ -114,6 +114,7 @@ public class CellsFactory {
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
         conn.setDoInput(true);
+        conn.setDoOutput(true);
         conn.addRequestProperty("Content-Type", "application/atom+xml");
         //conn.addRequestProperty("Content-Length", "" + payload.length());
         conn.addRequestProperty("If-Match", "*");

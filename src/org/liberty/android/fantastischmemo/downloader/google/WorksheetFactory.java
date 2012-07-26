@@ -80,6 +80,7 @@ public class WorksheetFactory {
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
         conn.setDoInput(true);
+        conn.setDoOutput(true);
         conn.addRequestProperty("Content-Type", "application/atom+xml");
         conn.addRequestProperty("Content-Length", "" + payload.length());
         OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
