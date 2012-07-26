@@ -25,6 +25,7 @@ import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -40,8 +41,8 @@ public class WorksheetFactory {
         throw new AssertionError("Don't call constructor");
     }
 
-    public static List<Worksheet> getWorksheets(String spreadsheetId, String authToken) throws XmlPullParserException, IOException {
-        String worksheetAddress = "https://spreadsheets.google.com/feeds/worksheets/" + spreadsheetId + "/private/full?access_token=" + authToken;
+    public static List<Worksheet> getWorksheets(Spreadsheet spreadsheet, String authToken) throws XmlPullParserException, IOException {
+        String worksheetAddress = "https://spreadsheets.google.com/feeds/worksheets/" + spreadsheet.getId() + "/private/full?access_token=" + authToken;
         URL url = new URL(worksheetAddress);
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
 
@@ -90,13 +91,24 @@ public class WorksheetFactory {
             throw new Exception(s);
         }
 
-        List<Worksheet> worksheets = getWorksheets(spreadsheet.getId(), authToken);
+        List<Worksheet> worksheets = getWorksheets(spreadsheet, authToken);
         for (Worksheet worksheet : worksheets) {
             if (title.equals(worksheet.getTitle())) {
                 return worksheet;
             }
         }
         throw new IllegalStateException("Worksheet lookup failed. Worksheet is not created properly.");
+    }
+
+    public static List<Worksheet> findWorksheetByTitle(Spreadsheet spreadsheet, String title, String authToken) throws XmlPullParserException, IOException {
+        List<Worksheet> allWorksheets = getWorksheets(spreadsheet, authToken);
+        List<Worksheet> resWorksheets = new ArrayList<Worksheet>();
+        for (Worksheet w : allWorksheets) {
+            if (w.getTitle().equals(title)) {
+                resWorksheets.add(w);
+            }
+        }
+        return resWorksheets;
     }
 
 }

@@ -45,8 +45,8 @@ public class CellsFactory {
         throw new AssertionError("Don't call constructor");
     }
 
-    public static Cells getCells(String spreadsheetId, String worksheetId, String authToken) throws XmlPullParserException, IOException {
-        URL url = new URL("https://spreadsheets.google.com/feeds/cells/" + spreadsheetId + "/" + worksheetId + "/private/full?access_token=" + authToken);
+    public static Cells getCells(Spreadsheet spreadsheet, Worksheet worksheet, String authToken) throws XmlPullParserException, IOException {
+        URL url = new URL("https://spreadsheets.google.com/feeds/cells/" + spreadsheet.getId() + "/" + worksheet.getId() + "/private/full?access_token=" + authToken);
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
 
         if (conn.getResponseCode() / 100 >= 3) {

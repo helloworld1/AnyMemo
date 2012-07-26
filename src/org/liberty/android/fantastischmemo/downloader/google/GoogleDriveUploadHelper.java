@@ -84,7 +84,7 @@ public class GoogleDriveUploadHelper {
         Spreadsheet newSpreadsheet = spreadsheetList.get(0);
 
         // Create worksheets
-        List<Worksheet> worksheetsToDelete = WorksheetFactory.getWorksheets(newSpreadsheet.getId(), authToken);
+        List<Worksheet> worksheetsToDelete = WorksheetFactory.getWorksheets(newSpreadsheet, authToken);
 
         // setting up the worksheet size is critical.
         Worksheet cardsWorksheet = WorksheetFactory.createWorksheet(newSpreadsheet, "cards", cardList.size() + 1, 4, authToken);
