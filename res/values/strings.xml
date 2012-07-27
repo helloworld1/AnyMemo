@@ -439,4 +439,5 @@
     <string name="successfully_uploaded_text">Successfully uploaded</string>
     <string name="gdrive_successfully_uploaded_message">Successfully uploaded to AnyMemo folder in your Google Drive</string>
     <string name="loading_auth_text">Authenticating with the server. Please wait...</string>
+    <string name="auth_error_text">Authenticate error.</string>
 </resources>

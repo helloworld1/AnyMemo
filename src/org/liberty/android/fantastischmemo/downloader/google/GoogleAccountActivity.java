@@ -36,8 +36,10 @@ import org.liberty.android.fantastischmemo.R;
 
 import android.accounts.AccountManager;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 
 import android.os.AsyncTask;
@@ -85,6 +87,7 @@ public abstract class GoogleAccountActivity extends AMActivity {
                 task.execute(code);
 			}
 			public void onAuthCodeError(String error) {
+                showAuthErrorDialog(error);
 			}
         };
 
@@ -191,16 +194,34 @@ public abstract class GoogleAccountActivity extends AMActivity {
         
         @Override
         public void onPostExecute(String accessToken){
+            progressDialog.dismiss();
             editor.putString("google_auth_token", accessToken);
             editor.commit();
             if (accessToken == null) {
-                // TODO: Display something beautiful.
+                showAuthErrorDialog(null);
                 
             } else {
                 onAuthenticated(accessToken);
             }
-            progressDialog.dismiss();
         }
+    }
+
+    private void showAuthErrorDialog(String error) {
+        String errorMessage = getString(R.string.auth_error_text);
+        if (error != null) {
+            errorMessage += " " + error;
+        }
+        new AlertDialog.Builder(GoogleAccountActivity.this)
+            .setTitle(R.string.error_text)
+            .setMessage(errorMessage)
+            .setPositiveButton(R.string.back_menu_text, new DialogInterface.OnClickListener() { 
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            })
+        .show();
+
     }
 
     private void invalidateSavedToken() {
