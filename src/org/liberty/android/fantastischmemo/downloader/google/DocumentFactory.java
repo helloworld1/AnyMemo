@@ -57,7 +57,7 @@ public class DocumentFactory {
         //conn.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
         conn.addRequestProperty("GData-Version", "3.0");
         conn.addRequestProperty("Content-Type", "application/atom+xml");
-        conn.setRequestProperty("Content-Length", Integer.toString(payload.length()));
+        conn.setRequestProperty("Content-Length", Integer.toString(payload.getBytes("UTF-8").length));
 
 
         OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());

@@ -152,7 +152,7 @@ public abstract class GoogleAccountActivity extends AMActivity {
             progressDialog = new ProgressDialog(GoogleAccountActivity.this);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.setTitle(getString(R.string.loading_please_wait));
-            progressDialog.setMessage(getString(R.string.loading_save));
+            progressDialog.setMessage(getString(R.string.loading_auth_text));
             progressDialog.setCancelable(false);
             progressDialog.show();
         }

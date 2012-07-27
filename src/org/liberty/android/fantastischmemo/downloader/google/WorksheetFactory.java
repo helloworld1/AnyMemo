@@ -82,7 +82,7 @@ public class WorksheetFactory {
         conn.setDoInput(true);
         conn.setDoOutput(true);
         conn.addRequestProperty("Content-Type", "application/atom+xml");
-        conn.addRequestProperty("Content-Length", "" + payload.length());
+        conn.addRequestProperty("Content-Length", "" + payload.getBytes("UTF-8").length);
         OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
         out.write(payload);
         out.close();

@@ -96,7 +96,7 @@ public class UploadGoogleDriveScreen extends GoogleAccountActivity {
             progressDialog = new ProgressDialog(UploadGoogleDriveScreen.this);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.setTitle(getString(R.string.loading_please_wait));
-            progressDialog.setMessage(getString(R.string.loading_save));
+            progressDialog.setMessage(getString(R.string.upload_wait));
             progressDialog.setCancelable(false);
             progressDialog.show();
         }
