@@ -130,7 +130,7 @@
     <string name="fail_export">Не удалось экспортировать </string>
     <string name="loading_export">Экспортирование...\n Это может занять много времени.</string>
     <string name="loading_save">Сохранение изменений...</string>
-    <string name="loading_connect_net">Идёт обновление списка через интернет...\nНажмите Назад для отмены.</string>
+    <string name="loading_connect_net">Идёт обновление списка через интернет...</string>
     <string name="loading_downloading">Загрузка... Это может занять некоторое время.</string>
     <string name="downloader_connection_error">Ошибка связи</string>
     <string name="downloader_connection_error_message">Не могу соединиться с сервером. Убедитесь в наличии соединения интернет</string>
@@ -371,6 +371,7 @@
     <string name="ordinal_text_short">Пор</string>
     <string name="total_text">Всего</string>
     <string name="review_short_text">Повт</string>
+    <string name="category_short_text">К</string>
     <string name="new_text">Нов</string>
     <string name="id_text">ID</string>
     <string name="entry_last_learn_date">дата_посл_учёбы</string>
@@ -426,4 +427,13 @@
     <string name="number_of_cards_scheduled_in_a_day_text">Количество пройденных карточек в день</string>
     <string name="grade_statistics_text">Статистика по оценкам</string>
     <string name="accumulative_cards_scheduled_text">Суммарно пройдено карточек</string>
+    <string name="google_drive_spreadsheet_text">Google Диск</string>
+    <string name="choose_account_text">Выбрать аккаунт</string>
+    <string name="login_account_text">Войти в аккаунт</string>
+    <string name="upload_text">Залить</string>
+    <string name="logout_text">Выход</string>
+    <string name="successfully_uploaded_text">Залито успешно</string>
+    <string name="gdrive_successfully_uploaded_message">Успешно залито в AnyMemo каталог в вашем Google Drive</string>
+    <string name="loading_auth_text">Авторизация на сервере. Ждите...</string>
+    <string name="auth_error_text">Ошибка авторизации.</string>
 </resources>
