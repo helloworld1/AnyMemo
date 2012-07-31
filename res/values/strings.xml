@@ -134,7 +134,8 @@
     <string name="loading_export">Exporting...\n It may take a long while.</string>
     <string name="loading_save">Saving changes...</string>
     <string name="loading_connect_net">Refreshing list from internet...</string>
-    <string name="loading_downloading">Downloading... It may take a while.</string> <string name="downloader_connection_error">Connection error</string>
+    <string name="loading_downloading">Downloading... It may take a while.</string>
+    <string name="downloader_connection_error">Connection error</string>
     <string name="downloader_connection_error_message">Cannot connect to server. Please check the internet connection.</string>
     <string name="downloader_download_success">Successfully downloaded</string>
     <string name="downloader_download_success_message">The database has been stored in: </string>
