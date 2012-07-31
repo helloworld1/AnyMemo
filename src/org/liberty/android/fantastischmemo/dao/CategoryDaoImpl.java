@@ -2,6 +2,11 @@ package org.liberty.android.fantastischmemo.dao;
 
 import java.sql.SQLException;
 
+import java.util.List;
+
+import java.util.concurrent.Callable;
+
+import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
@@ -52,6 +57,22 @@ public class CategoryDaoImpl extends BaseDaoImpl<Category, Integer> implements C
             updateRaw("update cards set category_id = 1 where category_id = ?", id.toString());
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public void populateCategory(final List<Card> cardList) {
+        try {
+            //fill category info for each card
+            callBatchTasks(new Callable<Void>() {
+                public Void call() throws Exception {
+                    for(Card c: cardList){
+                        refresh(c.getCategory());
+                    }
+                    return null;
+                }
+            });
+        } catch (Exception e) {
+            throw new RuntimeException("Filling category info for card in cache gets exception!", e);
         }
     }
 }

@@ -151,40 +151,34 @@ public class LearnQueueManager implements QueueManager {
 	}
 
     private synchronized void refill() {
-    	//Review cache needs to be first used before new cache
-    	maxReviewCacheOrdinal = refill(reviewCache, maxReviewCacheOrdinal);
-    	maxNewCacheOrdinal = refill(newCache, maxNewCacheOrdinal);
+        if (newCache.size() == 0) {
+            List<Card> cs = cardDao.getNewCards(filterCategory, maxNewCacheOrdinal, cacheSize - newCache.size());
+            categoryDao.populateCategory(cs);
+            if (cs.size() > 0) {
+                maxNewCacheOrdinal = cs.get(cs.size() - 1).getOrdinal();
+                newCache.addAll(cs);
+            }
+        }
+
+        if (reviewCache.size() == 0) {
+            List<Card> cs = cardDao.getCardForReview(filterCategory, maxReviewCacheOrdinal, cacheSize - reviewCache.size());
+            categoryDao.populateCategory(cs);
+            if (cs.size() > 0) {
+                maxReviewCacheOrdinal = cs.get(cs.size() - 1).getOrdinal();
+                reviewCache.addAll(cs);
+            }
+        }
+
+        while (learnQueue.size() < learnQueueSize && !reviewCache.isEmpty()) {
+            learnQueue.add(reviewCache.get(0));
+            reviewCache.remove(0);
+        }
+        while (learnQueue.size() < learnQueueSize && !newCache.isEmpty()) {
+            learnQueue.add(newCache.get(0));
+            newCache.remove(0);
+        }
     }
 
-    private synchronized int refill(List<Card> cache, int maxCacheOrdinal) {
-        if (cache.size() == 0) {
-            final List<Card> cs = cardDao.getNewCards(filterCategory, maxCacheOrdinal, cacheSize);
-            try {
-            	//fill category info for each card
-            	categoryDao.callBatchTasks(
-                        new Callable<Void>() {
-                            public Void call() throws Exception {
-                            	for(Card c: cs){
-                            		categoryDao.refresh(c.getCategory());
-                            	}
-                                return null;
-                            }
-                        });
-            } catch (Exception e) {
-                throw new RuntimeException("Filling category info for card in cache gets exception!", e);
-            }
-            
-            if (cs.size() > 0) {
-            	cache.addAll(cs);
-                maxCacheOrdinal = cs.get(cs.size() - 1).getOrdinal();
-            }            
-        }
-        while (learnQueue.size() < learnQueueSize && !cache.isEmpty()) {
-            learnQueue.add(cache.remove(0));
-        }
-        
-        return maxCacheOrdinal;
-    }
 
     private synchronized void shuffle() {
     	// Shuffle all the caches
