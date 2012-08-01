@@ -702,7 +702,9 @@ public class MemoScreen extends AMActivity {
         sb.append(getString(R.string.new_text) + ": " + newCardCount + " ");
         sb.append(getString(R.string.review_short_text) + ": " + schedluledCardCount + " ");
         sb.append(getString(R.string.id_text) + ": " + currentCard.getId() + " ");
-        sb.append(getString(R.string.category_short_text) + ": " + currentCard.getCategory().getName());
+        if (StringUtils.isNotEmpty(currentCard.getCategory().getName())) {
+            sb.append(getString(R.string.category_short_text) + ": " + currentCard.getCategory().getName());
+        }
         return sb.toString();
     }
 
