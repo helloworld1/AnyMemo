@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import java.util.ArrayList;
@@ -41,6 +42,9 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 public class CellsFactory {
+
+    private static final int MAX_BATCH_SIZE = 100;
+
     private CellsFactory() {
         throw new AssertionError("Don't call constructor");
     }
@@ -94,36 +98,40 @@ public class CellsFactory {
         return cells;
     }
 
-    public static void uploadCells(Spreadsheet spreadsheet, Worksheet worksheet, Cells cells, String authToken) throws Exception {
+    public static void uploadCells(Spreadsheet spreadsheet, Worksheet worksheet, Cells cells, String authToken) throws IOException {
         URL url = new URL("https://spreadsheets.google.com/feeds/cells/" + spreadsheet.getId() + "/" + worksheet.getId() + "/private/full/batch?access_token=" + authToken);
         String urlPrefix = "https://spreadsheets.google.com/feeds/cells/" + spreadsheet.getId() + "/" + worksheet.getId() + "/private/full";
-        StringBuilder payloadBuilder = new StringBuilder();
-        payloadBuilder.append("<?xml version='1.0' encoding='UTF-8'?>");
-        payloadBuilder.append("<feed xmlns=\"http://www.w3.org/2005/Atom\" xmlns:batch=\"http://schemas.google.com/gdata/batch\" xmlns:gs=\"http://schemas.google.com/spreadsheets/2006\">");
-        payloadBuilder.append("<id>" + urlPrefix + "</id>");
-        for (int i = 0; i < cells.getRowCounts(); i++) {
-            List<String> row = cells.getRow(i);
-            for (int j = 0; j < row.size(); j++) {
-                addEntryToRequesetString(payloadBuilder, urlPrefix, i + 1, j + 1, row.get(j));
+        for (int r = 0; r < cells.getRowCounts(); r += MAX_BATCH_SIZE) {
+            int upBound = Math.min(r + MAX_BATCH_SIZE, cells.getRowCounts());
+
+            HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            conn.addRequestProperty("Content-Type", "application/atom+xml");
+            //conn.addRequestProperty("Content-Length", "" + payload.length());
+            conn.addRequestProperty("If-Match", "*");
+            OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
+
+            StringBuilder payloadBuilder = new StringBuilder();
+            payloadBuilder.append("<?xml version='1.0' encoding='UTF-8'?>");
+            payloadBuilder.append("<feed xmlns=\"http://www.w3.org/2005/Atom\" xmlns:batch=\"http://schemas.google.com/gdata/batch\" xmlns:gs=\"http://schemas.google.com/spreadsheets/2006\">");
+            payloadBuilder.append("<id>" + urlPrefix + "</id>");
+            for (int i = r; i < upBound; i++) {
+                List<String> row = cells.getRow(i);
+                for (int j = 0; j < row.size(); j++) {
+                    addEntryToRequesetString(payloadBuilder, urlPrefix, i + 1, j + 1, row.get(j));
+                }
             }
-        }
-        payloadBuilder.append("</feed>");
+            payloadBuilder.append("</feed>");
+            String payload = payloadBuilder.toString();
 
-        String payload = payloadBuilder.toString();
-
-        HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
-        conn.setDoInput(true);
-        conn.setDoOutput(true);
-        conn.addRequestProperty("Content-Type", "application/atom+xml");
-        //conn.addRequestProperty("Content-Length", "" + payload.length());
-        conn.addRequestProperty("If-Match", "*");
-        OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
-        out.write(payload);
-        out.close();
-        if (conn.getResponseCode() / 100 >= 3) {
-            String s = new String(IOUtils.toByteArray(conn.getErrorStream()));
-            throw new Exception(s);
+            out.write(payload);
+            out.close();
+            if (conn.getResponseCode() / 100 >= 3) {
+                String s = new String(IOUtils.toByteArray(conn.getErrorStream()));
+                throw new IOException(s);
+            }
         }
     }
 
