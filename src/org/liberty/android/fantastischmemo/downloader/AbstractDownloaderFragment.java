@@ -26,6 +26,9 @@ import java.util.List;
 
 import org.liberty.android.fantastischmemo.downloader.DownloaderAnyMemo;
 
+import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
+import org.liberty.android.fantastischmemo.utils.RecentListUtil;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -81,7 +84,7 @@ public abstract class AbstractDownloaderFragment extends Fragment {
     /*
      * Download the database based on the info
      */
-    abstract protected void fetchDatabase(DownloadItem di) throws Exception;
+    abstract protected String fetchDatabase(DownloadItem di) throws Exception;
 
     /*
      * Get specific item from the Adapter or else
@@ -181,6 +184,8 @@ public abstract class AbstractDownloaderFragment extends Fragment {
 
 	private class FetchDatabaseTask extends AsyncTask<DownloadItem, Void, Exception> {
         private ProgressDialog progressDialog;
+        private DownloadItem item;
+        private String fetchedDbPath;
 
 		@Override
         public void onPreExecute() {
@@ -194,9 +199,10 @@ public abstract class AbstractDownloaderFragment extends Fragment {
         }
 
         @Override
-        public Exception doInBackground(DownloadItem... item) {
+        public Exception doInBackground(DownloadItem... items) {
             try {
-                fetchDatabase(item[0]);
+                item = items[0];
+                fetchedDbPath = fetchDatabase(item);
             } catch (Exception e) {
                 return e;
             }
@@ -208,9 +214,15 @@ public abstract class AbstractDownloaderFragment extends Fragment {
         public void onPostExecute(Exception e){
             progressDialog.dismiss();
             if (e != null) {
-                // TODO: handle it nicely
-                e.printStackTrace();
+                AMGUIUtility.displayException(mActivity, getString(R.string.error_text), getString(R.string.downloader_download_fail_message), e);
                 return;
+            } else {
+                new AlertDialog.Builder(mActivity)
+                    .setTitle(R.string.downloader_download_success)
+                    .setMessage(getString(R.string.downloader_download_success_message) + fetchedDbPath)
+                    .setPositiveButton(R.string.ok_text, null)
+                    .show();
+                RecentListUtil.addToRecentList(mActivity, fetchedDbPath); 
             }
         }
 

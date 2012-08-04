@@ -55,9 +55,9 @@ class SpreadsheetListFragment extends AbstractDownloaderFragment {
 	}
 
 	@Override
-	protected void fetchDatabase(DownloadItem di) throws Exception {
+	protected String fetchDatabase(DownloadItem di) throws Exception {
         GoogleDriveDownloadHelper downloadHelper = new GoogleDriveDownloadHelper(getActivity(), authToken);
-        downloadHelper.downloadSpreadsheetToDB(convertDownloadItemToSpreadsheet(di));
+        return downloadHelper.downloadSpreadsheetToDB(convertDownloadItemToSpreadsheet(di));
 	}
 
     private DownloadItem convertSpreadsheetToDownloadItem(Spreadsheet spreadsheet) {
