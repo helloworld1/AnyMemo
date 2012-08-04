@@ -222,7 +222,8 @@ public abstract class AbstractDownloaderFragment extends Fragment {
                     .setMessage(getString(R.string.downloader_download_success_message) + fetchedDbPath)
                     .setPositiveButton(R.string.ok_text, null)
                     .show();
-                RecentListUtil.addToRecentList(mActivity, fetchedDbPath); 
+                RecentListUtil recentListUtil = new RecentListUtil(mActivity);
+                recentListUtil.addToRecentList(fetchedDbPath);
             }
         }
 
