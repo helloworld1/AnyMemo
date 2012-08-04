@@ -1,6 +1,5 @@
 /*
-Copyright (C) 2010 Haowen Ning
-Modified by Xiaoyu Shi
+Copyright (C) 2010 Haowen Ning, Xiaoyu Shi
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -24,30 +23,37 @@ import org.apache.mycommons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.domain.Option;
 
 import android.content.Context;
-import android.util.Log;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 /* This class handles the operations on recent list */
 public class RecentListUtil {
 	private static final String TAG = "RecentListUtilTag";
     private int recentLength = 7;
     private Option option;
+    private SharedPreferences settings;
+    private SharedPreferences.Editor editor;
     
     public RecentListUtil(Context context) {
     	option = new Option(context);
-    	recentLength = option.getSettings().getInt("recent_count", 7);
+    	settings = PreferenceManager.getDefaultSharedPreferences(context);
+    	editor = settings.edit();
+    	recentLength = option.getRecentCount();
     }
     
     public String getRecentDBPath() {
-        return trimPath(option.getSettingString("recentdbpath0", null));
+        return trimPath(settings.getString("recentdbpath0", null));
     }
 
     public String[] getAllRecentDBPath() {
-    	// Reload the recentLength from user option.
-    	recentLength = option.getSettings().getInt("recent_count", recentLength);
+    	// TODO: Reload the recentLength from user option.
+    	// FIXME: temp hack, need re-write, don't need to get it again.
+    	recentLength = settings.getInt("recent_count", recentLength);
+    	
         String[] ret = new String[recentLength];
         
         for(int i = 0; i < recentLength; i++){
-            ret[i] = trimPath(option.getSettingString("recentdbpath" + i, null));
+            ret[i] = trimPath(settings.getString("recentdbpath" + i, null));
         }
         
         return ret;
@@ -55,8 +61,9 @@ public class RecentListUtil {
     
     public void clearRecentList() {
         for(int i = 0; i < recentLength; i++){
-            option.setEditorString("recentdbpath" + i, null);
+            editor.putString("recentdbpath" + i, null);
         }
+        editor.commit();
     }
 
     public void deleteFromRecentList(String dbpath){
@@ -68,10 +75,11 @@ public class RecentListUtil {
                 continue;
             }
             else{
-                option.setEditorString("recentdbpath" + counter, allPaths[i]);
+                editor.putString("recentdbpath" + counter, allPaths[i]);
                 counter++;
             }
         }
+        editor.commit();
     }
 
     public void addToRecentList(String dbpath){
@@ -79,9 +87,10 @@ public class RecentListUtil {
         deleteFromRecentList(dbpath);
         String[] allPaths = getAllRecentDBPath();
         for(int i = recentLength - 1; i >= 1; i--){
-            option.setEditorString("recentdbpath" + i, allPaths[i - 1]);
+            editor.putString("recentdbpath" + i, allPaths[i - 1]);
         }
-        option.setEditorString("recentdbpath" + 0, dbpath);
+        editor.putString("recentdbpath" + 0, dbpath);
+        editor.commit();
     }
 
     private static String trimPath(String path){

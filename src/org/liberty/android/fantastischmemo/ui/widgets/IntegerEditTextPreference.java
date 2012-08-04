@@ -48,10 +48,18 @@ public class IntegerEditTextPreference extends EditTextPreference {
         CharSequence maxCharValue = arr.getText(R.styleable.IntegerEditTextPreference_maxIntValue);
         CharSequence minCharValue = arr.getText(R.styleable.IntegerEditTextPreference_minIntValue);
         
-        assert maxCharValue != null && minCharValue != null;
+        if (maxCharValue != null) {
+        	this.maxIntValue = Integer.parseInt(maxCharValue.toString());
+        } else {
+        	this.maxIntValue = Integer.MAX_VALUE;
+        }
         
-        this.maxIntValue = Integer.parseInt(maxCharValue.toString());
-        this.minIntValue = Integer.parseInt(minCharValue.toString());
+        if (minCharValue != null) {
+        	this.minIntValue = Integer.parseInt(minCharValue.toString());
+        } else {
+        	this.minIntValue = Integer.MIN_VALUE;
+        }
+        
     }
 
     public IntegerEditTextPreference(Context context, AttributeSet attrs, int defStyle) {
@@ -66,8 +74,9 @@ public class IntegerEditTextPreference extends EditTextPreference {
     @Override
     protected boolean persistString(String value) {
     	int valueInt = Integer.parseInt(value);
-    	// default to the max and min int value it value exceeds the limit.
-    	valueInt = (valueInt > maxIntValue) ? maxIntValue : ((valueInt < minIntValue) ? minIntValue: valueInt);
+    	
+    	valueInt = Math.min(valueInt, maxIntValue);
+    	valueInt = Math.max(valueInt, minIntValue);
     	
         return persistInt(valueInt);
     }

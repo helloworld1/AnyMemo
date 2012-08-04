@@ -10,14 +10,6 @@ public class Option {
     private SharedPreferences settings;
     private SharedPreferences.Editor editor;
 
-    public SharedPreferences getSettings() {
-    	return this.settings;
-    }
-    
-    public SharedPreferences.Editor getEditor() {
-    	return this.editor;
-    }
-    
     public Option (Context context) {
     	settings = PreferenceManager.getDefaultSharedPreferences(context);
         editor = settings.edit();
@@ -84,9 +76,8 @@ public class Option {
         editor.commit();
     }
     
-    public void setEditorString(String key, String value) {
-    	editor.putString(key, value);
-    	editor.commit();
+    public int getRecentCount() {
+    	return settings.getInt("recent_count", 7);
     }
     
     public int getQueueSize() {
@@ -97,10 +88,6 @@ public class Option {
         } else {
             return 10;
         }
-    }
-
-    public String getSettingString(String key, String value) {
-    	return settings.getString(key, value);
     }
     
     public static enum ButtonStyle {

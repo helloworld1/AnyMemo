@@ -77,7 +77,7 @@
             android:summary="@string/notification_summary" />
         <org.liberty.android.fantastischmemo.ui.widgets.IntegerEditTextPreference
             android:key="recent_count"
-            android:title="@string/recent_text"
+            android:title="@string/max_recent_list_size_text"
             android:defaultValue="7"
             android:inputType="number"
             anymemo:maxIntValue="50"
