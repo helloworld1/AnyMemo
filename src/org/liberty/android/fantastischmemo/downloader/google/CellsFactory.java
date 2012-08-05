@@ -127,6 +127,11 @@ public class CellsFactory {
             String payload = payloadBuilder.toString();
 
             out.write(payload);
+
+            // Let GC free up memeory.
+            payloadBuilder = null;
+            payload = null;
+
             out.close();
             if (conn.getResponseCode() / 100 >= 3) {
                 String s = new String(IOUtils.toByteArray(conn.getErrorStream()));
