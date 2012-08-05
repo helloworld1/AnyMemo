@@ -56,8 +56,16 @@ public class GoogleDriveDownloadHelper {
         } else {
             cardsWorksheet = worksheets.get(0);
         }
+        Cells cardCells = CellsFactory.getCells(spreadsheet, cardsWorksheet, authToken);
 
-        Cells cells = CellsFactory.getCells(spreadsheet, cardsWorksheet, authToken);
+        List<Worksheet> learningDataWorksheets = WorksheetFactory.findWorksheetByTitle(spreadsheet, "learning_data", authToken);
+        Worksheet learningDataWorksheet = null;
+        Cells learningDataCells = null;
+        if (learningDataWorksheets.size() > 0) {
+            learningDataWorksheet = learningDataWorksheets.get(0);
+            learningDataCells = CellsFactory.getCells(spreadsheet, learningDataWorksheet, authToken);
+        }
+
         CellsDBConverter converter = new CellsDBConverter(mContext);
         String title = spreadsheet.getTitle();
         if (!title.endsWith(".db")) {
@@ -65,7 +73,7 @@ public class GoogleDriveDownloadHelper {
         }
         String saveDBPath= AMEnv.DEFAULT_ROOT_PATH + "/" + title;
         AMUtil.deleteFileWithBackup(saveDBPath);
-        converter.convertCellsToDb(cells, null, saveDBPath);
+        converter.convertCellsToDb(cardCells, learningDataCells, saveDBPath);
         return saveDBPath;
     }
 }

@@ -23,7 +23,11 @@ import java.io.IOException;
 
 import java.sql.SQLException;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
@@ -37,9 +41,15 @@ import org.liberty.android.fantastischmemo.domain.LearningData;
 
 import android.content.Context;
 
+import android.util.Log;
+
 public class CellsDBConverter {
 
     private Context mContext;
+    
+    private final static SimpleDateFormat ISO8601_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+
+    private final static String TAG = "CellsDBConverter";
 
     public CellsDBConverter(Context context) {
         mContext = context; 
@@ -54,6 +64,10 @@ public class CellsDBConverter {
     public void convertCellsToDb(Cells cardCells, Cells learningDataCells, String dbPath) throws IOException {
 
         int numberOfRows = cardCells.getRowCounts();
+        int numberOfLearningDataRows = 0;
+        if (learningDataCells != null) {
+            numberOfLearningDataRows = learningDataCells.getRowCounts();
+        }
         
         // We ignore the header row
         List<Card> cardList = new ArrayList<Card>(numberOfRows + 1);
@@ -61,14 +75,18 @@ public class CellsDBConverter {
             List<String> row = cardCells.getRow(i);
             Card card = new Card();
             Category category = new Category();
-            LearningData learningData = new LearningData();
 
-            if (row.size() < 2) {
-                throw new IOException("Each row in spreadsheet should have at least 2 column.");
+
+            if (row.size() == 0) {
+                Log.w(TAG, "Each row in spreadsheet should have at least 2 column: question and answer. Row number: " + i);
             }
 
-            card.setQuestion(row.get(0));
-            card.setAnswer(row.get(1));
+            if (row.size() >= 1) {
+                card.setQuestion(row.get(0));
+            }
+            if (row.size() >= 2) {
+                card.setAnswer(row.get(1));
+            }
 
             if (row.size() >= 3) {
                 category.setName(row.get(2));
@@ -78,9 +96,24 @@ public class CellsDBConverter {
                 card.setNote(row.get(3));
             }
 
+            // This can't be null because numberOfLearningDataRows is 0
+            // if learningDataCells is 0.
+            LearningData learningData;
+            if (i < numberOfLearningDataRows) {
+                learningData = getLearningDataFromRow(learningDataCells.getRow(i));
+
+            } else {
+                learningData = new LearningData();
+            }
+            
+
             card.setCategory(category);
             card.setLearningData(learningData);
             cardList.add(card);
+        }
+
+        if (cardList.size() == 0) {
+            throw new IOException("Wrong spreadsheet format. The spreadsheet should contain at least 1 worksheet with at least 2 columns of questions and answers.");
         }
 
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, dbPath); 
@@ -92,6 +125,36 @@ public class CellsDBConverter {
         } finally {
             AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }
+
+    }
+
+    private LearningData getLearningDataFromRow(List<String> row) {
+        LearningData learningData = new LearningData();
+        // Make sure it is valid learning data
+        if (row.size() == 9) {
+            learningData.setAcqReps(Integer.parseInt(row.get(0)));
+            learningData.setAcqRepsSinceLapse(Integer.parseInt(row.get(1)));
+            learningData.setEasiness(Float.parseFloat(row.get(2)));
+            learningData.setGrade(Integer.parseInt(row.get(3)));
+            learningData.setLapses(Integer.parseInt(row.get(4)));
+            try {
+                learningData.setLastLearnDate(ISO8601_FORMATTER.parse(row.get(5)));
+            } catch (ParseException e) {
+                Log.w(TAG, "Parset date error", e);
+                // 2010-01-01 00:00:00
+                learningData.setLastLearnDate(new Date(1262304000000L));
+            }
+            try {
+                learningData.setNextLearnDate(ISO8601_FORMATTER.parse(row.get(6)));
+            } catch (ParseException e) {
+                Log.w(TAG, "Parset date error", e);
+                // 2010-01-01 00:00:00
+                learningData.setNextLearnDate(new Date(1262304000000L));
+            }
+            learningData.setRetReps(Integer.parseInt(row.get(7)));
+            learningData.setRetRepsSinceLapse(Integer.parseInt(row.get(8)));
+        }
+        return learningData;
 
     }
 }
