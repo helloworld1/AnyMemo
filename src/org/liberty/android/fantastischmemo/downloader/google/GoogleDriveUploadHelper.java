@@ -94,24 +94,27 @@ public class GoogleDriveUploadHelper {
         // setting up the worksheet size is critical.
         Worksheet cardsWorksheet = WorksheetFactory.createWorksheet(newSpreadsheet, "cards", cardList.size() + 1, 4, authToken);
 
-        Cells cells = new Cells();
+        Cells cardCells = new Cells();
 
         // Add the header for cards first
-        cells.addCell(1, 1, "question");
-        cells.addCell(1, 2, "answer");
-        cells.addCell(1, 3, "category");
-        cells.addCell(1, 4, "note");
+        cardCells.addCell(1, 1, "question");
+        cardCells.addCell(1, 2, "answer");
+        cardCells.addCell(1, 3, "category");
+        cardCells.addCell(1, 4, "note");
         for (int i = 0; i < cardList.size(); i++) {
             Card c = cardList.get(i);
             // THe first row is the header.
-            cells.addCell(i + 2, 1, c.getQuestion());
-            cells.addCell(i + 2, 2, c.getAnswer());
-            cells.addCell(i + 2, 3, c.getCategory().getName());
-            cells.addCell(i + 2, 4, c.getNote());
+            cardCells.addCell(i + 2, 1, c.getQuestion());
+            cardCells.addCell(i + 2, 2, c.getAnswer());
+            cardCells.addCell(i + 2, 3, c.getCategory().getName());
+            cardCells.addCell(i + 2, 4, c.getNote());
         }
 
         // upload card's rows into worksheet
-        CellsFactory.uploadCells(newSpreadsheet, cardsWorksheet, cells, authToken);
+        CellsFactory.uploadCells(newSpreadsheet, cardsWorksheet, cardCells, authToken);
+
+        // Let GC free up memory
+        cardCells = null;
 
         // Now deal with learning data
         Worksheet learningDataWorksheet =
@@ -143,6 +146,7 @@ public class GoogleDriveUploadHelper {
 
         // upload learning data rows into worksheet
         CellsFactory.uploadCells(newSpreadsheet, learningDataWorksheet, learningDataCells, authToken);
+        learningDataCells = null;
 
 
         // Put new spreadsheet into the folder
