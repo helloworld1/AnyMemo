@@ -40,14 +40,17 @@ public class Cells {
         return rows.get(row);
     }
 
-    /* The rowNo and columnNo is starting from 1. The forst cell is (1,1) */
+    /* The rowNo and columnNo is starting from 1. The first cell is (1,1) */
 	public void addCell(int rowNo, int columnNo, String data) {
-        for (int i = 0; i < (rowNo - rows.size()); i++) {
+        System.out.println("Add cell"  + rowNo + " " + columnNo + " " + data);
+        int rowsSize = rows.size();
+        for (int i = 0; i < (rowNo - rowsSize); i++) {
             rows.add(new ArrayList<String>());
         }
         List<String> row = rows.get(rowNo - 1);
 
-        for (int i = 0; i < (columnNo - row.size()); i++) {
+        int rowSize = row.size();
+        for (int i = 0; i < (columnNo - rowSize); i++) {
             row.add("");
         }
         row.set(columnNo - 1, data);
