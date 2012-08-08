@@ -42,7 +42,6 @@ public class Cells {
 
     /* The rowNo and columnNo is starting from 1. The first cell is (1,1) */
 	public void addCell(int rowNo, int columnNo, String data) {
-        System.out.println("Add cell"  + rowNo + " " + columnNo + " " + data);
         int rowsSize = rows.size();
         for (int i = 0; i < (rowNo - rowsSize); i++) {
             rows.add(new ArrayList<String>());

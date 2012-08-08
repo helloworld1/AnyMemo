@@ -54,6 +54,23 @@ public abstract class AMActivity extends FragmentActivity{
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
 
+        updateInterfaceLanguage();
+    }
+
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        updateInterfaceLanguage();
+    }
+
+    public void restartActivity(){
+        startActivity(new Intent(this, this.getClass()));
+        finish();
+    }
+
+    private void updateInterfaceLanguage() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         String localeSetting = settings.getString("interface_locale", "AUTO");
         Locale locale;
         /* Force to use the a language */
@@ -99,17 +116,6 @@ public abstract class AMActivity extends FragmentActivity{
         Configuration config = new Configuration();
         config.locale = locale;
         getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-    }
-
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-    }
-
-    public void restartActivity(){
-        startActivity(new Intent(this, this.getClass()));
-        finish();
     }
 
 }
