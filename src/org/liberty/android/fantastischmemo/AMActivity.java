@@ -59,6 +59,12 @@ public abstract class AMActivity extends FragmentActivity{
 
 
     @Override
+    public void onResume() {
+        super.onResume();
+        updateInterfaceLanguage();
+    }
+
+    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         updateInterfaceLanguage();
