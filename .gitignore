@@ -7,7 +7,5 @@ bin/
 libs/armeabi
 obj/
 .settings/
-*.classpath
-*.project
 test/.project
 test/.classpath

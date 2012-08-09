@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:gravity="center_horizontal"
+    android:id="@+id/recorder_ll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
     android:orientation="vertical" >
 
     <TextView
-        android:layout_width="278dp"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text="@string/recorder_record_your_memo"
         android:textSize="15dip" />
 
     <ImageView
-        android:layout_width="156dp"
-        android:layout_height="144dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:contentDescription="@string/recorder_mic_description"
         android:scaleType="fitCenter"
         android:src="@drawable/recorder_mic" />
 
     <LinearLayout
-        android:layout_width="272dp"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal" >
 
@@ -28,19 +29,25 @@
             android:id="@+id/recorder_record_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/recorder_record" android:contentDescription="@string/recorder_record_description"/>
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/recorder_record_description"
+            android:src="@drawable/recorder_record" />
 
         <ImageButton
             android:id="@+id/recorder_play_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/recorder_play" android:contentDescription="@string/recorder_play_description"/>
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/recorder_play_description"
+            android:src="@drawable/recorder_play" />
 
         <ImageButton
             android:id="@+id/recorder_return_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/recorder_return" android:contentDescription="@string/recorder_return_description"/>
+            android:contentDescription="@string/recorder_return_description"
+            android:background="@android:color/transparent"
+            android:src="@drawable/recorder_return" />
 
     </LinearLayout>
 
