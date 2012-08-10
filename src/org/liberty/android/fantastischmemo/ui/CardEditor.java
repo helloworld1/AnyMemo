@@ -93,11 +93,12 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
     private String originalAnswer;
     private String originalNote;
 
+
     public static String EXTRA_DBPATH = "dbpath";
     public static String EXTRA_CARD_ID = "id";
     public static String EXTRA_RESULT_CARD_ID= "result_card_id";
     public static String EXTRA_IS_EDIT_NEW = "is_edit_new";
-
+    public static final String EXTRA_AUDIO_FILENAME = "audioFilename";
 
 
     @Override
@@ -199,7 +200,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
             case R.id.editor_menu_audio:
                 if(focusView == questionEdit || focusView ==answerEdit || focusView == noteEdit){
                     Intent myIntent = new Intent(this, FileBrowserActivity.class);
-                    myIntent.putExtra(FileBrowserActivity.EXTRA_FILE_EXTENSIONS, ".ogg,.mp3,.wav");
+                    myIntent.putExtra(FileBrowserActivity.EXTRA_FILE_EXTENSIONS, ".3gp,.ogg,.mp3,.wav");
                     startActivityForResult(myIntent, ACTIVITY_AUDIO_FILE);
                 }
                 return true;
@@ -209,14 +210,14 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
             	new File(audioFilename).mkdirs();
             	AudioRecorderFragment recorder = new AudioRecorderFragment();
             	if(focusView == questionEdit){
-            		audioFilename +=  "/"+ currentCardId + "_q.ogg";
+            		audioFilename +=  "/"+ currentCardId + "_q.3gp";
             	} else if (focusView == answerEdit) {
-            		audioFilename +=  "/"+ currentCardId + "_a.ogg";
+            		audioFilename +=  "/"+ currentCardId + "_a.3gp";
             	} else {
             		return true;
             	}
             	Bundle b = new Bundle();
-                b.putString("audioFilename", audioFilename);
+                b.putString(EXTRA_AUDIO_FILENAME, audioFilename);
                 
             	recorder.setAudioRecorderResultListener(new AudioRecorderResultListener() {
 					public void onReceiveAudio() {
@@ -225,10 +226,10 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
 						if(!content.contains("src=")){
 							if(focusView == questionEdit){
 								addTextToView((EditText) focusView, "<audio src=\"" + currentCardId
-			    						+ "_q.ogg\" />");	
+			    						+ "_q.3gp\" />");	
 							} else if (focusView == answerEdit){
 								addTextToView((EditText) focusView, "<audio src=\"" + currentCardId
-			    						+ "_a.ogg\" />");
+			    						+ "_a.3gp\" />");
 							}
 						}
 					}
