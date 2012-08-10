@@ -68,7 +68,7 @@ class GoogleOAuth2AccessCodeRetrievalFragment extends DialogFragment {
 
 
     @Override
-    public void onDismiss(DialogInterface dialog) {
+    public void onCancel(DialogInterface dialog) {
         authCodeReceiveListener.onCancelled();
     }
 
