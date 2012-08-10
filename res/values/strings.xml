@@ -144,7 +144,7 @@
     <string name="downloader_download_alert">Download: </string>
     <string name="downloader_download_alert_message">Details: </string>
     <string name="about_title">About</string>
-    <string name="about_text">Advanced spaced repetition flashcard learning software.&lt;br /&gt;&lt;br /&gt;Authors: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;Website: &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Acknowledge: Piotr Bazan, pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;Translators: Ladislav, jim4ever, paw3lk, Александр Гоменюк, Maksym Grinenko, Kim hyun-ho, Thomas Tempé, Alex Wirz Vieira, Neil Barry</string>
+    <string name="about_text">Advanced spaced repetition flashcard learning software.&lt;br /&gt;&lt;br /&gt;Authors: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;Website: &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Acknowledge: Piotr Bazan, pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;Translators: Ladislav, jim4ever, paw3lk, Александр Гоменюк, Maksym Grinenko, Kim hyun-ho, Thomas Tempé, Alex Wirz Vieira, Neil Barry, Mattia Monga</string>
     <string name="about_version">Version history</string>
     <string name="what_is_new">New version installed</string>
     <string name="downloader_categories">Categories</string>
@@ -441,4 +441,5 @@
     <string name="gdrive_successfully_uploaded_message">Successfully uploaded to AnyMemo folder in your Google Drive</string>
     <string name="loading_auth_text">Authenticating with the server. Please wait...</string>
     <string name="auth_error_text">Authenticate error.</string>
+    <string name="locale_italian_text">Italian</string>
 </resources>

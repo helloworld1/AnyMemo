@@ -82,41 +82,31 @@ public abstract class AMActivity extends FragmentActivity{
         /* Force to use the a language */
         if(localeSetting.equals("EN")){
             locale = Locale.US;
-        }
-        else if(localeSetting.equals("SC")){
+        } else if (localeSetting.equals("SC")){
             locale = Locale.SIMPLIFIED_CHINESE;
-        }
-        else if(localeSetting.equals("TC")){
+        } else if (localeSetting.equals("TC")){
             locale = Locale.TRADITIONAL_CHINESE;
-        }
-        else if(localeSetting.equals("CS")){
+        } else if (localeSetting.equals("CS")){
             locale = new Locale("CS");
-        }
-        else if(localeSetting.equals("PL")){
+        } else if (localeSetting.equals("PL")){
             locale = new Locale("PL");
-        }
-        else if(localeSetting.equals("RU")){
+        } else if (localeSetting.equals("RU")){
             locale = new Locale("RU");
-        }
-        else if(localeSetting.equals("DE")){
+        } else if (localeSetting.equals("DE")){
             locale = new Locale("DE");
-        }
-        else if(localeSetting.equals("KO")){
+        } else if (localeSetting.equals("KO")){
             locale = new Locale("KO");
-        }
-        else if(localeSetting.equals("FR")){
+        } else if (localeSetting.equals("FR")){
             locale = new Locale("FR");
-        }
-        else if(localeSetting.equals("PT")){
+        } else if (localeSetting.equals("PT")){
             locale = new Locale("PT");
-        }
-        else if(localeSetting.equals("JA")){
+        } else if (localeSetting.equals("JA")){
             locale = new Locale("JA");
-        }
-        else if(localeSetting.equals("ES")){
+        } else if (localeSetting.equals("ES")){
             locale = new Locale("ES");
-        }
-        else{
+        } else if (localeSetting.equals("IT")) {
+            locale = Locale.ITALIAN;
+        } else {
             locale = Locale.getDefault();
         }
         Configuration config = new Configuration();
