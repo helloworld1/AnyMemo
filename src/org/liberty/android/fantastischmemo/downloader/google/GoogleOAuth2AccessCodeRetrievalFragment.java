@@ -29,6 +29,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 
+import android.content.DialogInterface;
+
 import android.graphics.Rect;
 
 import android.os.Bundle;
@@ -64,6 +66,11 @@ class GoogleOAuth2AccessCodeRetrievalFragment extends DialogFragment {
         setStyle(STYLE_NO_TITLE, 0);
     }
 
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        authCodeReceiveListener.onCancelled();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -146,6 +153,7 @@ class GoogleOAuth2AccessCodeRetrievalFragment extends DialogFragment {
     public static interface AuthCodeReceiveListener {
         void onAuthCodeReceived(String code);
         void onAuthCodeError(String error);
+        void onCancelled();
     }
 
     private String getAuthCodeFromUrl(String url) {
