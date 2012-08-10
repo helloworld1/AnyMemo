@@ -6,6 +6,8 @@ import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.R;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
@@ -85,39 +87,31 @@ public class AudioRecorderFragment extends DialogFragment {
     
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        setStyle(STYLE_NO_TITLE, 0);
         Bundle extras =  this.getArguments();
         mFileName = extras.getString("audioFilename");
     }
-    
-     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View v = inflater.inflate(R.layout.recorder, container, false);
-            LinearLayout recorder_ll = (LinearLayout)v.findViewById(R.id.recorder_ll);
-            Rect displayRectangle = new Rect();
-            Window window = mActivity.getWindow();
-            window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
-            recorder_ll.setMinimumWidth((int)(displayRectangle.width() * 0.9f));
-            recorder_ll.setMinimumHeight((int)(displayRectangle.height() * 0.8f));
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        View v = getActivity().getLayoutInflater().inflate(R.layout.recorder, null);
+        mRecordButton = (ImageButton) v.findViewById(R.id.recorder_record_button);
+        mRecordButton.setOnClickListener(buttonListener);
+        mRecordButton.setBackgroundColor(Color.TRANSPARENT);
 
-            
-            
-            mRecordButton = (ImageButton) v.findViewById(R.id.recorder_record_button);
-            mRecordButton.setOnClickListener(buttonListener);
-            mRecordButton.setBackgroundColor(Color.TRANSPARENT);
-            
-            mPlayButton = (ImageButton) v.findViewById(R.id.recorder_play_button);
-            mPlayButton.setEnabled(false);
-            mPlayButton.setOnClickListener(buttonListener);
-            mPlayButton.setBackgroundColor(Color.TRANSPARENT);
-            
-            mReturnButton = (ImageButton) v.findViewById(R.id.recorder_return_button) ;
-            mReturnButton.setEnabled(false);
-            mReturnButton.setOnClickListener(buttonListener);
-            mReturnButton.setBackgroundColor(Color.TRANSPARENT);
-            
-            return v;
+        mPlayButton = (ImageButton) v.findViewById(R.id.recorder_play_button);
+        mPlayButton.setEnabled(false);
+        mPlayButton.setOnClickListener(buttonListener);
+        mPlayButton.setBackgroundColor(Color.TRANSPARENT);
+
+        mReturnButton = (ImageButton) v.findViewById(R.id.recorder_return_button) ;
+        mReturnButton.setEnabled(false);
+        mReturnButton.setOnClickListener(buttonListener);
+        mReturnButton.setBackgroundColor(Color.TRANSPARENT);
+
+        return new AlertDialog.Builder(getActivity())
+            .setTitle(R.string.recorder_record_your_memo_text)
+            .setView(v)
+            .create();
     }
      
     public void setAudioRecorderResultListener(AudioRecorderResultListener audioRecorderResultListener){
