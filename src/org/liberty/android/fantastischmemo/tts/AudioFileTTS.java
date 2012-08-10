@@ -20,14 +20,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.tts;
 
 public class AudioFileTTS implements AnyMemoTTS{
-    private String audioDir;
-    private String dbName;
     private SpeakWord speakWord;
     
 
     public AudioFileTTS(String audiodir, String dbname){
-        audioDir = audiodir;
-        dbName = dbname;
         speakWord = new SpeakWord(audiodir, dbname);
     }
 

@@ -88,7 +88,7 @@ public class AudioRecorderFragment extends DialogFragment {
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         Bundle extras =  this.getArguments();
-        mFileName = extras.getString("audioFilename");
+        mFileName = extras.getString(CardEditor.EXTRA_AUDIO_FILENAME);
     }
 
     @Override
@@ -166,7 +166,6 @@ public class AudioRecorderFragment extends DialogFragment {
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        mFileName = mFileName.replaceAll("<audio.*src=.*/>","");
         mRecorder.setOutputFile(mFileName);
         mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 
