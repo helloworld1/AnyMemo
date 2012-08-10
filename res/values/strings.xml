@@ -311,7 +311,7 @@
     <string name="search_user">Search by user</string>
     <string name="private_login">Access private cards</string>
     <string name="upload_db">Upload database (slow and unstable)</string>
-    <string name="upload_wait">Uploading... please wait.</string>
+    <string name="upload_wait">Uploading... please wait. It may take several minutes for a large db.</string>
     <string name="upload_finish">Upload finished</string>
     <string name="upload_finish_message">has been successfully uploaded.</string>
     <string name="access_authorization_text">Accessing authorization token. Please wait...</string>
