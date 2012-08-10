@@ -43,7 +43,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 public class CellsFactory {
 
-    private static final int MAX_BATCH_SIZE = 100;
+    private static final int MAX_BATCH_SIZE = 500;
 
     private CellsFactory() {
         throw new AssertionError("Don't call constructor");
@@ -101,6 +101,7 @@ public class CellsFactory {
     public static void uploadCells(Spreadsheet spreadsheet, Worksheet worksheet, Cells cells, String authToken) throws IOException {
         URL url = new URL("https://spreadsheets.google.com/feeds/cells/" + spreadsheet.getId() + "/" + worksheet.getId() + "/private/full/batch?access_token=" + authToken);
         String urlPrefix = "https://spreadsheets.google.com/feeds/cells/" + spreadsheet.getId() + "/" + worksheet.getId() + "/private/full";
+
         for (int r = 0; r < cells.getRowCounts(); r += MAX_BATCH_SIZE) {
             int upBound = Math.min(r + MAX_BATCH_SIZE, cells.getRowCounts());
 
@@ -113,24 +114,20 @@ public class CellsFactory {
             conn.addRequestProperty("If-Match", "*");
             OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
 
-            StringBuilder payloadBuilder = new StringBuilder();
-            payloadBuilder.append("<?xml version='1.0' encoding='UTF-8'?>");
-            payloadBuilder.append("<feed xmlns=\"http://www.w3.org/2005/Atom\" xmlns:batch=\"http://schemas.google.com/gdata/batch\" xmlns:gs=\"http://schemas.google.com/spreadsheets/2006\">");
-            payloadBuilder.append("<id>" + urlPrefix + "</id>");
+            StringBuilder head = new StringBuilder();
+            head.append("<?xml version='1.0' encoding='UTF-8'?>");
+            head.append("<feed xmlns=\"http://www.w3.org/2005/Atom\" xmlns:batch=\"http://schemas.google.com/gdata/batch\" xmlns:gs=\"http://schemas.google.com/spreadsheets/2006\">");
+            head.append("<id>" + urlPrefix + "</id>");
+
+            out.write(head.toString());
+
             for (int i = r; i < upBound; i++) {
                 List<String> row = cells.getRow(i);
                 for (int j = 0; j < row.size(); j++) {
-                    addEntryToRequesetString(payloadBuilder, urlPrefix, i + 1, j + 1, row.get(j));
+                    out.write(getEntryToRequesetString(urlPrefix, i + 1, j + 1, row.get(j)));
                 }
             }
-            payloadBuilder.append("</feed>");
-            String payload = payloadBuilder.toString();
-
-            out.write(payload);
-
-            // Let GC free up memeory.
-            payloadBuilder = null;
-            payload = null;
+            out.write("</feed>");
 
             out.close();
             if (conn.getResponseCode() / 100 >= 3) {
@@ -140,7 +137,8 @@ public class CellsFactory {
         }
     }
 
-    private static void addEntryToRequesetString(StringBuilder payloadBuilder, String urlPrefix, int row, int col, String value) {
+    private static String getEntryToRequesetString(String urlPrefix, int row, int col, String value) {
+        StringBuilder payloadBuilder = new StringBuilder();
         payloadBuilder.append("<entry>");
         payloadBuilder.append("<batch:id>BR" + row + "C"+ col + "</batch:id>");
         payloadBuilder.append("<batch:operation type=\"update\"/>");
@@ -148,5 +146,8 @@ public class CellsFactory {
         payloadBuilder.append("<link rel=\"edit\" type=\"application/atom+xml\" href=\"" + urlPrefix + "/R" + row + "C" + col + "\"/>");
         payloadBuilder.append("<gs:cell row=\"" + row + "\" col=\"" + col + "\" inputValue=\"" + StringEscapeUtils.escapeXml(value) + "\"/>");
         payloadBuilder.append("</entry>");
+        String ret = payloadBuilder.toString();
+        payloadBuilder = null;
+        return ret;
     }
 }
