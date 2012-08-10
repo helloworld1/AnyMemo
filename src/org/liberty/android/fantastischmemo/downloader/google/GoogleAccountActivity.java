@@ -89,6 +89,9 @@ public abstract class GoogleAccountActivity extends AMActivity {
 			public void onAuthCodeError(String error) {
                 showAuthErrorDialog(error);
 			}
+            public void onCancelled() {
+                finish();
+            }
         };
 
     private class ValidateAccessTokenAndRunCallbackTask extends AsyncTask<String, Void, Boolean> {
