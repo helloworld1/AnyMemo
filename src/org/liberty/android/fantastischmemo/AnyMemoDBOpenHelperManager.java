@@ -1,5 +1,7 @@
 package org.liberty.android.fantastischmemo;
 
+import java.io.File;
+
 import java.util.Map;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -51,5 +53,18 @@ public class AnyMemoDBOpenHelperManager {
             helpers.remove(dbpath);
             Log.i(TAG, "All connection released. Close helper. DB: " + dbpath); 
         }
+    }
+
+    public static synchronized void forceRelease(String path) {
+        String dbpath = FilenameUtils.normalize(path);
+        if (!helpers.containsKey(dbpath)) {
+            Log.w(TAG, "Force release a file that is not opened yet. Do nothing");
+            return;
+        }
+
+        helpers.get(dbpath).close();
+        helpers.remove(dbpath);
+        Log.i(TAG, "Force release a db file. DB: " + dbpath); 
+
     }
 }

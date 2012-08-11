@@ -38,6 +38,8 @@ import org.apache.mycommons.lang3.StringUtils;
 
 import org.apache.mycommons.lang3.time.DateUtils;
 
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+
 public class AMUtil {
     public static boolean isInteger(String s){
         try{
@@ -79,10 +81,14 @@ public class AMUtil {
         if (!new File(filepath).exists()) {
             return;
         }
+
+        AnyMemoDBOpenHelperManager.forceRelease(filepath);
+
         String ext = FilenameUtils.getExtension(filepath);
         String nameWtihoutExt = FilenameUtils.removeExtension(filepath);
         String backFileName = nameWtihoutExt + ".backup." + ext;
         copyFile(filepath, backFileName);
+        new File(filepath).delete();
     }
 
     /* Get the file name from the path name */
