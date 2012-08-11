@@ -21,8 +21,6 @@ package org.liberty.android.fantastischmemo.downloader.google;
 
 import java.io.File;
 
-import org.apache.mycommons.lang3.exception.ExceptionUtils;
-
 import org.liberty.android.fantastischmemo.R;
 
 import org.liberty.android.fantastischmemo.downloader.google.GoogleAccountActivity;
@@ -35,6 +33,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 
 import android.os.AsyncTask;
@@ -81,10 +80,24 @@ public class UploadGoogleDriveScreen extends GoogleAccountActivity {
 
 			@Override
 			public void onClick(File file) {
-                UploadTask task = new UploadTask();
-                task.execute(file);
+                showUploadDialog(file);
 			}
         };
+
+    private void showUploadDialog(final File file) {
+        new AlertDialog.Builder(this)
+            .setTitle(R.string.upload_text)
+            .setMessage(String.format(getString(R.string.upload_gdrive_message), file.getName()))
+            .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface arg0, int arg1){
+                    UploadTask task = new UploadTask();
+                    task.execute(file);
+                }
+            })
+            .setNegativeButton(R.string.cancel_text, null)
+            .show();
+    }
 
     private class UploadTask extends AsyncTask<File, Void, Exception> {
 
