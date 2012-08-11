@@ -95,12 +95,13 @@ public class OpenActionsFragment extends DialogFragment {
 
     private View.OnClickListener buttonClickListener = new View.OnClickListener() {
         public void onClick(View v) {
+        	final RecentListUtil rlu = new RecentListUtil(mActivity);
             if (v == studyItem) {
                 Intent myIntent = new Intent();
                 myIntent.setClass(mActivity, MemoScreen.class);
                 myIntent.putExtra(MemoScreen.EXTRA_DBPATH, dbPath);
                 startActivity(myIntent);
-                RecentListUtil.addToRecentList(mActivity, dbPath);
+                rlu.addToRecentList(dbPath);
             }
 
             if (v == editItem) {
@@ -108,7 +109,7 @@ public class OpenActionsFragment extends DialogFragment {
                 myIntent.setClass(mActivity, EditScreen.class);
                 myIntent.putExtra(EditScreen.EXTRA_DBPATH, dbPath);
                 startActivity(myIntent);
-                RecentListUtil.addToRecentList(mActivity, dbPath);
+                rlu.addToRecentList(dbPath);
             }
 
             if (v == listItem) {
@@ -116,7 +117,7 @@ public class OpenActionsFragment extends DialogFragment {
                 myIntent.setClass(mActivity, ListEditScreen.class);
                 myIntent.putExtra(MemoScreen.EXTRA_DBPATH, dbPath);
                 startActivity(myIntent);
-                RecentListUtil.addToRecentList(mActivity, dbPath);
+                rlu.addToRecentList(dbPath);
             }
 
             if (v == cramItem) {
@@ -125,7 +126,7 @@ public class OpenActionsFragment extends DialogFragment {
                 myIntent.putExtra(MemoScreen.EXTRA_DBPATH, dbPath);
                 myIntent.putExtra(MemoScreen.EXTRA_CRAM, true);
                 startActivity(myIntent);
-                RecentListUtil.addToRecentList(mActivity, dbPath);
+                rlu.addToRecentList(dbPath);
             }
 
             if (v == settingsItem) {
@@ -150,7 +151,7 @@ public class OpenActionsFragment extends DialogFragment {
                         public void onClick(DialogInterface dialog, int which ){
                             File fileToDelete = new File(dbPath);
                             fileToDelete.delete();
-                            RecentListUtil.deleteFromRecentList(mActivity, dbPath);
+                            rlu.deleteFromRecentList(dbPath);
                             /* Refresh the list */
                             mActivity.restartActivity();
                             

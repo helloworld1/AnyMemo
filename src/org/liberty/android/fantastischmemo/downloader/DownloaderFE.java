@@ -19,21 +19,22 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader;
 
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.io.IOException;
-import java.net.URLEncoder;
+import oauth.signpost.OAuthConsumer;
+import oauth.signpost.basic.DefaultOAuthConsumer;
 
 import org.apache.mycommons.lang3.StringUtils;
-
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
-
 import org.liberty.android.fantastischmemo.dao.CardDao;
-
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
@@ -41,28 +42,21 @@ import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 import org.liberty.android.fantastischmemo.utils.AMUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
-import android.os.Bundle;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.EditText;
-import android.util.Log;
-import android.os.Environment;
-import android.view.View;
+import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-import oauth.signpost.*;
-
-import oauth.signpost.basic.DefaultOAuthConsumer;
+import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 
 /*
  * Download from FlashcardExchange using its web api
@@ -326,6 +320,7 @@ public class DownloaderFE extends DownloaderBase{
         } finally {
             AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }
-        RecentListUtil.addToRecentList(this, fullpath);
+        RecentListUtil rlu = new RecentListUtil(this);
+        rlu.addToRecentList(fullpath);
     }
 }
