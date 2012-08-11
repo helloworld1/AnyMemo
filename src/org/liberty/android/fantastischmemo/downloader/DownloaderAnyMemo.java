@@ -389,7 +389,7 @@ public class DownloaderAnyMemo extends DownloaderBase{
                 JSONObject jsonItem = jsonArray.getJSONObject(i);
                 String dbcategory = jsonItem.getString("DBCategory");
                 DownloadItem di = new DownloadItem();
-                di.setType(DownloadItem.TYPE_CATEGORY);
+                di.setType(DownloadItem.ItemType.Category);
                 di.setTitle(dbcategory);
                 di.setAddress(WEBSITE_JSON + "?action=getdb&category=" + URLEncoder.encode(dbcategory));
                 categoryList.add(di);
@@ -437,7 +437,7 @@ public class DownloaderAnyMemo extends DownloaderBase{
                 String dbcategory = jsonItem.getString("DBCategory");
                 String filename = jsonItem.getString("FileName");
                 DownloadItem di = new DownloadItem();
-                di.setType(DownloadItem.TYPE_DATABASE);
+                di.setType(DownloadItem.ItemType.Database);
                 di.setTitle(dbname);
                 di.setDescription(dbnote);
                 di.setAddress(WEBSITE_DOWNLOAD + URLEncoder.encode(filename));

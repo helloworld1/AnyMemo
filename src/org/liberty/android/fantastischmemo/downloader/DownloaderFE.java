@@ -258,7 +258,7 @@ public class DownloaderFE extends DownloaderBase{
                 address = oauthConsumer.sign(address);
 
             }
-            DownloadItem di = new DownloadItem(DownloadItem.TYPE_DATABASE,
+            DownloadItem di = new DownloadItem(DownloadItem.ItemType.Database,
                     jsonItem.getString("title"),
                     jsonItem.getString("description"),
                     address);

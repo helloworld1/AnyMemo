@@ -98,13 +98,13 @@ public abstract class DownloaderBase extends AMActivity implements OnItemClickLi
             Log.e(TAG, "NULL Download Item");
             return;
         }
-        if(di.getType() == DownloadItem.TYPE_CATEGORY){
+        if(di.getType() == DownloadItem.ItemType.Category) {
             openCategory(di);
         }
-        else if(di.getType() == DownloadItem.TYPE_UP){
+        else if(di.getType() == DownloadItem.ItemType.Back) {
             goBack();
         }
-        else if(di.getType() == DownloadItem.TYPE_DATABASE){
+        else if(di.getType() == DownloadItem.ItemType.Database) {
             fetchDatabase(di);
         }
     }
@@ -163,10 +163,10 @@ public abstract class DownloaderBase extends AMActivity implements OnItemClickLi
             if(item != null){
                 TextView tv = (TextView)v.findViewById(R.id.file_name);
                 ImageView iv = (ImageView)v.findViewById(R.id.file_icon);
-                if(item.getType() == DownloadItem.TYPE_CATEGORY){
+                if(item.getType() == DownloadItem.ItemType.Category){
                     iv.setImageResource(R.drawable.dir);
                 }
-                else if(item.getType() == DownloadItem.TYPE_UP){
+                else if(item.getType() == DownloadItem.ItemType.Up){
                     iv.setImageResource(R.drawable.back);
                 }
                 else{

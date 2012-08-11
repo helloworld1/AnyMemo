@@ -111,10 +111,10 @@ public class DropboxUtils{
             boolean isDir = item.getBoolean("is_dir");
             DownloadItem di = new DownloadItem();
             if(isDir) {
-                di.setType(DownloadItem.TYPE_CATEGORY);
+                di.setType(DownloadItem.ItemType.Category);
             }
             else {
-                di.setType(DownloadItem.TYPE_DATABASE);
+                di.setType(DownloadItem.ItemType.Database);
             }
             /* The address is like /graphics/mydb/aaa.db */
             String address = item.getString("path");

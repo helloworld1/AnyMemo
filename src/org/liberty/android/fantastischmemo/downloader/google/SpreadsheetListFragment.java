@@ -63,7 +63,7 @@ class SpreadsheetListFragment extends AbstractDownloaderFragment {
     private DownloadItem convertSpreadsheetToDownloadItem(Spreadsheet spreadsheet) {
         DownloadItem di = new DownloadItem();
         di.setTitle(spreadsheet.getTitle());
-        di.setType(DownloadItem.TYPE_DATABASE);
+        di.setType(DownloadItem.ItemType.Spreadsheet);
         di.setAddress(spreadsheet.getId());
         return di;
     }
