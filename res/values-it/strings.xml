@@ -180,7 +180,7 @@
     <string name="downloader_download_alert">Scaricamento: </string>
     <string name="downloader_download_alert_message">Dettagli: </string>
     <string name="about_title">Informazioni</string>
-    <string name="about_text">Advanced spaced repetition flashcard learning software.&lt;br /&gt;&lt;br /&gt;Authors: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;Website: &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Acknowledge: Piotr Bazan, pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;Translators: Ladislav, jim4ever, paw3lk, Александр Гоменюк, Maksym Grinenko, Kim hyun-ho, Thomas Tempé, Alex Wirz Vieira, Neil Barry, Mattia Monga</string>
+    <string name="about_text">Advanced spaced repetition flashcard learning software.&lt;br /&gt;&lt;br /&gt;Authors: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;Website: &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Acknowledge: Piotr Bazan, pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;Translators: Ladislav, jim4ever, paw3lk, Alexander Gomenyuk, Maksym Grinenko, Kim hyun-ho, Thomas Tempé, Alex Wirz Vieira, Neil Barry, Mattia Monga</string>
     <string name="about_version">Elenco delle versioni</string>
     <string name="what_is_new">Ultimi cambiamenti</string>
     <string name="downloader_categories">Categorie</string>
@@ -328,7 +328,7 @@
     <string name="grade_text">Punteggio</string>
     <string name="enable_volume_key_text">Abilita i tasti scorciatoia</string>
     <string name="enable_volume_key_summary">Usa il volume
-    alza/abbassa kper dare i punteggi durante
+    alza/abbassa per dare i punteggi durante
     l\'apprendimento.</string>
     <string name="enable_third_party_arabic_title">Usa il motore
     d\'Arabo di terze parti</string>
@@ -410,7 +410,8 @@
     <string name="search_user">Ricerca per username</string>
     <string name="private_login">Accedi alle schede private</string>
     <string name="upload_db">Carica un database (lento e instabile)</string>
-    <string name="upload_wait">Caricamento... Attendere prego.</string>
+    <string name="upload_wait">Caricamento... Attendere prego. Può
+    metterci parecchio con un DB grosso.</string>
     <string name="upload_finish">Caricamento completato</string>
     <string name="upload_finish_message">è stato caricato
     correttamente.</string>
@@ -575,7 +576,7 @@
     <string name="cards_to_review_text">Schede in un mese</string>
     <string name="number_of_cards_scheduled_in_a_day_text">Schede in
     un giorno</string>
-    <string name="grade_statistics_text">Statistics punteggi</string>
+    <string name="grade_statistics_text">Statistiche punteggi</string>
     <string name="accumulative_cards_scheduled_text">Schede totali</string>
     <string name="google_drive_spreadsheet_text">Foglio elettronico
     Google Drive</string>
@@ -590,4 +591,8 @@
     <string name="loading_auth_text">Autenticazione col
     server. Attendere prego...</string>
     <string name="auth_error_text">Errore di autenticazione.</string>
+    <string name="locale_italian_text">Italiano</string>
+    <string name="upload_gdrive_message">Vuoi caricare %s nella tua
+    cartella Google Drive AnyMemo? Può metterci parecchio se ci sono
+    più di 1000 schede.</string>
 </resources>
