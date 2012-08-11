@@ -410,7 +410,8 @@
     <string name="search_user">Ricerca per username</string>
     <string name="private_login">Accedi alle schede private</string>
     <string name="upload_db">Carica un database (lento e instabile)</string>
-    <string name="upload_wait">Caricamento... Attendere prego.</string>
+    <string name="upload_wait">Caricamento... Attendere prego. Può
+    metterci parecchio con un DB grosso.</string>
     <string name="upload_finish">Caricamento completato</string>
     <string name="upload_finish_message">è stato caricato
     correttamente.</string>
@@ -590,4 +591,8 @@
     <string name="loading_auth_text">Autenticazione col
     server. Attendere prego...</string>
     <string name="auth_error_text">Errore di autenticazione.</string>
+    <string name="locale_italian_text">Italiano</string>
+    <string name="upload_gdrive_message">Vuoi caricare %s nella tua
+    cartella Google Drive AnyMemo? Può metterci parecchio se ci sono
+    più di 1000 schede.</string>
 </resources>
