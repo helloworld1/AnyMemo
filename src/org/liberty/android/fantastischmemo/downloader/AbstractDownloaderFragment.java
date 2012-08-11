@@ -27,6 +27,9 @@ import java.util.List;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
+import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
+import org.liberty.android.fantastischmemo.utils.RecentListUtil;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
