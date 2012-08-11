@@ -436,4 +436,5 @@
     <string name="loading_auth_text">获取Google服务器认证，请稍候...</string>
     <string name="auth_error_text">认证失败。</string>
     <string name="locale_italian_text">意大利语</string>
+    <string name="upload_gdrive_message">你要上传 %s 到你的Google Drive的AnyMemo文件夹吗? 超过1000个体卡片的DB可能要花几分钟时间上传。</string>
 </resources>
