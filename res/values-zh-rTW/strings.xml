@@ -19,7 +19,6 @@
     <string name="download_button_text">下載數據庫</string>
     <string name="about_button_text">關于</string>
     <string name="help_button_text">幫助</string>
-    <string name="exit_button_text">退出程序</string>
     <string name="edit_button_text">預覽/編輯數據庫</string>
     <string name="autoaudio">自動朗讀</string>
     <string name="autoaudio_summary">問題與答案將自動朗讀。</string>

@@ -19,7 +19,6 @@
     <string name="download_button_text">Datenbanken herunterladen</string>
     <string name="about_button_text">Über dieses Programm</string>
     <string name="help_button_text">Hilfe</string>
-    <string name="exit_button_text">Programm verlassen</string>
     <string name="edit_button_text">Datenbankvorschau/Bearbeiten</string>
 
     <string name="autoaudio">Immer vorlesen</string>

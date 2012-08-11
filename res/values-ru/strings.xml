@@ -19,7 +19,6 @@
     <string name="download_button_text">Загрузить базы</string>
     <string name="about_button_text">О программе</string>
     <string name="help_button_text">Помощь</string>
-    <string name="exit_button_text">Выйти из программы</string>
     <string name="edit_button_text">Просмотр/правка</string>
     <string name="autoaudio">Озвучивать автоматически</string>
     <string name="autoaudio_summary">Вопрос и ответ будут прочитаны автоматически</string>

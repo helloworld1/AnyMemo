@@ -21,7 +21,6 @@
     <string name="download_button_text">Télécharger de nouvelles piles de cartes</string>
     <string name="about_button_text">À propos</string>
     <string name="help_button_text">Aide</string>
-    <string name="exit_button_text">Quitter</string>
     <string name="edit_button_text">Editer une pile de cartes</string>
 
     <string name="autoaudio">Synthèse vocale auto</string>

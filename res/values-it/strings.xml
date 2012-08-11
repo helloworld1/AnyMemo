@@ -21,7 +21,6 @@
     <string name="download_button_text">Scarica database</string>
     <string name="about_button_text">Informazioni</string>
     <string name="help_button_text">Aiuto</string>
-    <string name="exit_button_text">Esci</string>
     <string name="edit_button_text">Anteprima/Modifica</string>
     <string name="autoaudio">Lettura automatica</string>
     <string name="autoaudio_summary">La domanda e la risposta verranno
