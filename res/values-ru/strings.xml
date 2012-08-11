@@ -141,7 +141,7 @@
     <string name="downloader_download_alert">Загрузка: </string>
     <string name="downloader_download_alert_message">Подробности: </string>
     <string name="about_title">О программе</string>
-    <string name="about_text">Программа для заучивания наизусть информации на карточках и продвинутой системой повторений.&lt;br /&gt;&lt;br /&gt;Авторы: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;Вебсайт: &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Признательность: pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;Переводчики: Ladislav, jim4ever, paw3lk, Alexander Gomenyuk, Maksym Grinenko</string>
+    <string name="about_text">Программа для заучивания наизусть информации на карточках и продвинутой системой повторений.&lt;br /&gt;&lt;br /&gt;Авторы: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;Вебсайт: &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Признательность: Piotr Bazan, pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;Переводчики: Ladislav, jim4ever, paw3lk, Alexander Gomenyuk, Maksym Grinenko, Kim hyun-ho, Thomas Tempé, Alex Wirz Vieira, Neil Barry, Mattia Monga</string>
     <string name="about_version">История версий</string>
     <string name="what_is_new">Установлена новая версия</string>
     <string name="downloader_categories">Категории</string>
@@ -307,7 +307,7 @@
     <string name="search_user">Поиск по пользователям</string>
     <string name="private_login">Доступ к личным картам</string>
     <string name="upload_db">Залить базы (медленно и нестабильно)</string>
-    <string name="upload_wait">Заливка... ждите.</string>
+    <string name="upload_wait">Заливка... ждите. Может занять несколько минут для больших баз.</string>
     <string name="upload_finish">Заливка закончена</string>
     <string name="upload_finish_message">успешно залита.</string>
     <string name="access_authorization_text">Получение авторизованного доступа. Ждите...</string>
@@ -436,4 +436,6 @@
     <string name="gdrive_successfully_uploaded_message">Успешно залито в AnyMemo каталог в вашем Google Drive</string>
     <string name="loading_auth_text">Авторизация на сервере. Ждите...</string>
     <string name="auth_error_text">Ошибка авторизации.</string>
+    <string name="locale_italian_text">Итальянский</string>
+    <string name="upload_gdrive_message">Хотите залить %s в ваш AnyMemo каталог в Google Drive? Может занять несколько минут, если карточек более 1000.</string>
 </resources>
