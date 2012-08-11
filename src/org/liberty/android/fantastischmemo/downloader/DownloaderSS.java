@@ -245,7 +245,7 @@ public class DownloaderSS extends DownloaderBase implements ListView.OnScrollLis
         }
         if(totalItemCount >= 25 && (firstVisibleItem + visibleItemCount == totalItemCount)){
             DownloadItem di = dlAdapter.getItem(totalItemCount - 1);
-            if(di.getType() == DownloadItem.TYPE_DATABASE){
+            if(di.getType() == DownloadItem.ItemType.Database){
                 try{
                     int page = Integer.parseInt(di.getExtras("page"));
                     page += 1;
@@ -274,7 +274,7 @@ public class DownloaderSS extends DownloaderBase implements ListView.OnScrollLis
         for(int i = 0; i < jsonArray.length(); i++){
             JSONObject jsonItem = jsonArray.getJSONObject(i);
             DownloadItem di = new DownloadItem();
-            di.setType(DownloadItem.TYPE_CATEGORY);
+            di.setType(DownloadItem.ItemType.Category);
             di.setTitle(jsonItem.getString("name"));
             di.setExtras("id", jsonItem.getString("id"));
             di.setExtras("pid", jsonItem.getString("parentId"));
@@ -303,7 +303,7 @@ public class DownloaderSS extends DownloaderBase implements ListView.OnScrollLis
         for(int i = 0; i < jsonArray.length(); i++){
             JSONObject jsonItem = jsonArray.getJSONObject(i);
             DownloadItem di = new DownloadItem();
-            di.setType(DownloadItem.TYPE_DATABASE);
+            di.setType(DownloadItem.ItemType.Database);
             di.setTitle(jsonItem.getString("stackName"));
             di.setDescription(jsonItem.getString("description"));
             di.setExtras("id", jsonItem.getString("id"));

@@ -217,7 +217,7 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
 
 
             String address = QUIZLET_API_GET + cardId;
-            DownloadItem di = new DownloadItem(DownloadItem.TYPE_DATABASE,
+            DownloadItem di = new DownloadItem(DownloadItem.ItemType.Database,
                     jsonItem.getString("title"),
                     "From Quizlet.com", 
                     address);

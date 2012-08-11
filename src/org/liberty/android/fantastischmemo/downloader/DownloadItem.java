@@ -21,11 +21,8 @@ package org.liberty.android.fantastischmemo.downloader;
 
 import java.util.HashMap;
 
-public class DownloadItem{
-    public static final int TYPE_CATEGORY = 1;
-    public static final int TYPE_DATABASE = 2;
-    public static final int TYPE_UP= 3;
-    private int type;
+public class DownloadItem {
+    private ItemType type;
     private String title = "";
     private String description = "";
     private String address = "";
@@ -35,7 +32,7 @@ public class DownloadItem{
         extras = new HashMap<String, String>();
     }
 
-    public DownloadItem(int type, String title, String description, String address){
+    public DownloadItem(ItemType type, String title, String description, String address){
         this.type = type;
         this.title = title;
         this.description = description;
@@ -49,7 +46,7 @@ public class DownloadItem{
         return newItem;
     }
 
-    public void setType(int type){
+    public void setType(ItemType type){
         this.type = type;
     }
 
@@ -69,7 +66,7 @@ public class DownloadItem{
         this.extras.put(key, item);
     }
 
-    public int getType(){
+    public ItemType getType(){
         return type;
     }
 
@@ -87,6 +84,14 @@ public class DownloadItem{
 
     public String getExtras(String key){
         return this.extras.get(key);
+    }
+
+    public static enum ItemType {
+        Category,
+        Database,
+        Up,
+        Back,
+        Spreadsheet;
     }
 
 

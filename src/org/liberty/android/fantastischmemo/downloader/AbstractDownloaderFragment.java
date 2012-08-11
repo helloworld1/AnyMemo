@@ -24,8 +24,6 @@ import org.liberty.android.fantastischmemo.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.liberty.android.fantastischmemo.downloader.DownloaderAnyMemo;
-
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
@@ -236,13 +234,11 @@ public abstract class AbstractDownloaderFragment extends Fragment {
                 Log.e(TAG, "NULL Download Item");
                 return;
             }
-            if(di.getType() == DownloadItem.TYPE_CATEGORY){
+            if(di.getType() == DownloadItem.ItemType.Category){
                 openCategory(di);
-            }
-            else if(di.getType() == DownloadItem.TYPE_UP){
+            } else if(di.getType() == DownloadItem.ItemType.Back){
                 goBack();
-            }
-            else if(di.getType() == DownloadItem.TYPE_DATABASE){
+            } else {
                 showFetchDatabaseDialog(di);
             }
         }
@@ -280,22 +276,23 @@ public abstract class AbstractDownloaderFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent){
             View v = convertView;
-            if(v == null){
+            if (v == null){
                 LayoutInflater li = (LayoutInflater)mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 /* Reuse the filebrowser's resources */
                 v = li.inflate(R.layout.filebrowser_item, null);
             }
             DownloadItem item = getItem(position);
-            if(item != null){
+            if (item != null){
                 TextView tv = (TextView)v.findViewById(R.id.file_name);
                 ImageView iv = (ImageView)v.findViewById(R.id.file_icon);
-                if(item.getType() == DownloadItem.TYPE_CATEGORY){
+                if (item.getType() == DownloadItem.ItemType.Category) {
                     iv.setImageResource(R.drawable.dir);
-                }
-                else if(item.getType() == DownloadItem.TYPE_UP){
+                } else if (item.getType() == DownloadItem.ItemType.Back) {
                     iv.setImageResource(R.drawable.back);
+                } else if (item.getType() == DownloadItem.ItemType.Spreadsheet) {
+                    iv.setImageResource(R.drawable.spreadsheet);
                 }
-                else{
+                else {
                     iv.setImageResource(R.drawable.database);
                 }
                 tv.setText(item.getTitle());

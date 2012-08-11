@@ -101,8 +101,8 @@ public class FEDirectory extends DownloaderBase{
             for(int j = 0; j < tagsArray.length(); j++){
                 JSONObject jsonItem = tagsArray.getJSONObject(j);
                 String s = jsonItem.getString("tag");
-                DownloadItem di = new DownloadItem(DownloadItem.TYPE_DATABASE, s, "", "");
-                di.setType(DownloadItem.TYPE_CATEGORY);
+                DownloadItem di = new DownloadItem(DownloadItem.ItemType.Database, s, "", "");
+                di.setType(DownloadItem.ItemType.Category);
                 diList.add(di);
             }
         }
