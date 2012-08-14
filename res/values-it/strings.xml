@@ -117,14 +117,14 @@
     nell\'apprendimento. Sicuro di volerlo saltare?</string>
     <string name="stat_total">Totale: </string>
     <string name="stat_scheduled">Ripasso: </string>
-    <string name="stat_new">Nuovo: </string>
+    <string name="stat_new">Nuove: </string>
     <string name="open_open_new_db">Apri il database esistente</string>
     <string name="open_import_xml">Importa da XML</string>
     <string name="clear_all_pref">Ripristina tutte le preferenze</string>
     <string name="clear_recent_list">Pulisci la lista dei DB recenti</string>
     <string name="export_xml">Esporta Mnemosyne XML</string>
     <string name="add_screen_question">Domanda</string>
-    <string name="add_screen_new">Nuovo</string>
+    <string name="add_screen_new">Nuova</string>
     <string name="add_screen_id">ID</string>
     <string name="add_screen_answer">Risposta</string>
     <string name="add_screen_edit">Salva</string>
@@ -139,7 +139,7 @@
     <string name="fb_create_db_message">Scrivere il nome del nuovo
     database.</string>
     <string name="fb_create_dir_message">Scrivere il nome della nuova
-    cartella..</string>
+    cartella.</string>
     <string name="fb_delete_message">Sei sicuro di voler cancellare
     questo file?</string>
     <string name="fb_edit_dialog_title">Modifica</string>
@@ -324,7 +324,7 @@
     <string name="edit_menu_br_text">Aggiungi tag br</string>
     <string name="edit_menu_image_text">Aggiungi immagine</string>
     <string name="edit_menu_audio_text">Aggiungi audio</string>
-    <string name="widget_no_review">Nessuna scheda da revisionare.</string>
+    <string name="widget_no_review">Nessuna scheda da ripassare.</string>
     <string name="grade_text">Punteggio</string>
     <string name="enable_volume_key_text">Abilita i tasti scorciatoia</string>
     <string name="enable_volume_key_summary">Usa il volume
@@ -494,7 +494,7 @@
     <string name="total_text">Totale</string>
     <string name="review_short_text">Rip</string>
     <string name="category_short_text">C</string>
-    <string name="new_text">Nuovi</string>
+    <string name="new_text">Nuove</string>
     <string name="id_text">ID</string>
     <string name="entry_last_learn_date">Data ultimo apprendimento</string>
     <string name="entry_next_learn_date">Data prossimo apprendimento</string>
