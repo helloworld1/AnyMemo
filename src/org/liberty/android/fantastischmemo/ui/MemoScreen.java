@@ -838,22 +838,8 @@ public class MemoScreen extends AMActivity {
         String defaultLocation = AMEnv.DEFAULT_AUDIO_PATH;
         String qa = setting.getQuestionAudio();
         String aa = setting.getAnswerAudio();
-
-        if (StringUtils.isNotEmpty(setting.getQuestionAudioLocation())) {
-            questionTTS = new AudioFileTTS(defaultLocation, dbName);
-        } else if (StringUtils.isNotEmpty(qa)){
-            questionTTS = new AnyMemoTTSPlatform(this, qa);
-        } else{
-            questionTTS = null;
-        }
-
-        if (StringUtils.isNotEmpty(setting.getAnswerAudioLocation())) {
-            answerTTS = new AudioFileTTS(defaultLocation, dbName);
-        } else if (StringUtils.isNotEmpty(aa)){
-            answerTTS = new AnyMemoTTSPlatform(this, aa);
-        } else{
-            answerTTS = null;
-        }
+        questionTTS = new AnyMemoTTSPlatform(this, qa, defaultLocation, dbName);
+        answerTTS = new AnyMemoTTSPlatform(this, aa, defaultLocation, dbName);
     }
 
     private void showCategoriesDialog() {

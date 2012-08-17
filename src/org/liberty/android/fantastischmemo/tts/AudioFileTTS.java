@@ -27,9 +27,8 @@ public class AudioFileTTS implements AnyMemoTTS{
         speakWord = new SpeakWord(audiodir, dbname);
     }
 
-    public int sayText(String text){
+    public void sayText(String text){
         speakWord.speakWord(text);
-        return 0;
     }
     public void stop(){
         speakWord.stop();

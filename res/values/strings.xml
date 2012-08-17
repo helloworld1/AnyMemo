@@ -449,4 +449,5 @@
     <string name="recorder_return_description">recorder return</string>
     <string name="recorder_record_your_memo_text">Record your memo</string>
     <string name="record_text">Record</string>
+    <string name="edit_audio_text">Edit audio</string>
 </resources>

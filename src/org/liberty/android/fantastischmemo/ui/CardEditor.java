@@ -45,6 +45,7 @@ import org.liberty.android.fantastischmemo.utils.AMUtil;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -67,7 +68,7 @@ import android.content.res.Configuration;
 public class CardEditor extends AMActivity implements View.OnClickListener {
     private final int ACTIVITY_IMAGE_FILE = 1;
     private final int ACTIVITY_AUDIO_FILE = 2;
-    private final int ACTIVITY_AUDIO_RECORD = 3;
+    private final int EDIT_AUDIO_DIALOG = 1;
     Card currentCard = null;
     Card prevCard = null;
     private Integer prevOrdinal = null;
@@ -102,10 +103,10 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
 
 
     @Override
-	public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		setContentView(R.layout.edit_dialog);
+        setContentView(R.layout.edit_dialog);
         initTask = new InitTask();
         initTask.execute((Void)null);
     }
@@ -145,7 +146,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
                     .setPositiveButton(R.string.yes_text, new DialogInterface.OnClickListener(){
                         public void onClick(DialogInterface  d, int which){
                             Intent resultIntent = new Intent();
-                            setResult(Activity.RESULT_CANCELED, resultIntent);    			
+                            setResult(Activity.RESULT_CANCELED, resultIntent);                
                             finish();
 
                         }
@@ -157,7 +158,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
             }
             else{
                 Intent resultIntent = new Intent();
-                setResult(Activity.RESULT_CANCELED, resultIntent);    			
+                setResult(Activity.RESULT_CANCELED, resultIntent);                
                 finish();
 
             }
@@ -175,15 +176,15 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
     }
 
     @Override    
-	public boolean onCreateOptionsMenu(Menu menu){
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.card_editor_menu, menu);
-		return true;
-	}
-	
-	public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.card_editor_menu, menu);
+        return true;
+    }
+    
+    public boolean onOptionsItemSelected(MenuItem item) {
         View focusView = getCurrentFocus();
-	    switch (item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.editor_menu_br:
                 if(focusView == questionEdit || focusView ==answerEdit || focusView == noteEdit){
                     addTextToView((EditText)focusView, "<br />");
@@ -195,52 +196,105 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
                     myIntent.putExtra(FileBrowserActivity.EXTRA_FILE_EXTENSIONS, ".png,.jpg,.tif,.bmp");
                     startActivityForResult(myIntent, ACTIVITY_IMAGE_FILE);
                 }
-                return true;
-
+                return true; 
             case R.id.editor_menu_audio:
-                if(focusView == questionEdit || focusView ==answerEdit || focusView == noteEdit){
-                    Intent myIntent = new Intent(this, FileBrowserActivity.class);
-                    myIntent.putExtra(FileBrowserActivity.EXTRA_FILE_EXTENSIONS, ".3gp,.ogg,.mp3,.wav");
-                    startActivityForResult(myIntent, ACTIVITY_AUDIO_FILE);
-                }
-                return true;
-            
-            case R.id.editor_menu_record:
-            	String audioFilename = AMEnv.DEFAULT_AUDIO_PATH + dbName; 
-            	new File(audioFilename).mkdirs();
-            	AudioRecorderFragment recorder = new AudioRecorderFragment();
-            	if(focusView == questionEdit){
-            		audioFilename +=  "/"+ currentCardId + "_q.3gp";
-            	} else if (focusView == answerEdit) {
-            		audioFilename +=  "/"+ currentCardId + "_a.3gp";
-            	} else {
-            		return true;
-            	}
-            	Bundle b = new Bundle();
-                b.putString(EXTRA_AUDIO_FILENAME, audioFilename);
-                
-            	recorder.setAudioRecorderResultListener(new AudioRecorderResultListener() {
-					public void onReceiveAudio() {
-						View focusView = getCurrentFocus();
-						String content = ((EditText)(focusView)).getText().toString(); 
-						if(!content.contains("src=")){
-							if(focusView == questionEdit){
-								addTextToView((EditText) focusView, "<audio src=\"" + currentCardId
-			    						+ "_q.3gp\" />");	
-							} else if (focusView == answerEdit){
-								addTextToView((EditText) focusView, "<audio src=\"" + currentCardId
-			    						+ "_a.3gp\" />");
-							}
-						}
-					}
-				});
-                recorder.setArguments(b);
-                recorder.show(getSupportFragmentManager(), "AudioRecorderDialog");
+                showDialog(EDIT_AUDIO_DIALOG);
                 return true;
         }
         return false;
     }
-
+    
+    protected Dialog onCreateDialog(int id) {
+        Dialog alertDialog = null;
+        final CharSequence[] audioOptionItems = {"add existing audio", "add new audio", "remove audio"};
+        switch(id) {
+        case EDIT_AUDIO_DIALOG:
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Edit audio");
+            builder.setItems(audioOptionItems, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int itemIndex) {
+                    switch(itemIndex){
+                    case 0:
+                        addExistingAudio();
+                     break;
+                     case 1:
+                         addNewAudio();
+                     break;
+                     case 2:
+                         removeAudio();
+                     break;
+                     }
+                }
+            });
+            alertDialog = builder.create();
+            break;
+        default:
+            alertDialog = null;
+        }
+        return alertDialog;
+    }
+    
+    private void addExistingAudio(){
+        View focusView = getCurrentFocus();
+        if(focusView == questionEdit || focusView ==answerEdit){
+            Intent myIntent = new Intent(this, FileBrowserActivity.class);
+            myIntent.putExtra(FileBrowserActivity.EXTRA_FILE_EXTENSIONS, ".3gp,.ogg,.mp3,.wav");
+            startActivityForResult(myIntent, ACTIVITY_AUDIO_FILE);
+        }
+    }
+    
+    private void addNewAudio(){
+        View focusView = getCurrentFocus();
+        if(focusView != questionEdit && focusView !=answerEdit) {
+            return;
+        }
+        
+        String audioFilename = AMEnv.DEFAULT_AUDIO_PATH + dbName; 
+        new File(audioFilename).mkdirs();
+        AudioRecorderFragment recorder = new AudioRecorderFragment();
+        if(focusView == questionEdit){
+            audioFilename +=  "/"+ currentCardId + "_q.3gp";
+        } else if (focusView == answerEdit) {
+            audioFilename +=  "/"+ currentCardId + "_a.3gp";
+        } else {
+            return;
+        }
+        Bundle b = new Bundle();
+        b.putString(EXTRA_AUDIO_FILENAME, audioFilename);
+        
+        recorder.setAudioRecorderResultListener(new AudioRecorderResultListener() {
+            public void onReceiveAudio() {
+                View focusView = getCurrentFocus();
+                String content = ((EditText)(focusView)).getText().toString(); 
+                if(!content.contains("src=")){
+                    if(focusView == questionEdit){
+                        addTextToView((EditText) focusView, "<audio src=\"" + currentCardId
+                                + "_q.3gp\" />");    
+                    } else if (focusView == answerEdit){
+                        addTextToView((EditText) focusView, "<audio src=\"" + currentCardId
+                                + "_a.3gp\" />");
+                    }
+                }
+            }
+        });
+        recorder.setArguments(b);
+        recorder.show(getSupportFragmentManager(), "AudioRecorderDialog");
+    }
+    
+    private void removeAudio(){
+        View focusView = getCurrentFocus();
+        if(focusView == questionEdit){
+            currentCard.setQuestion(currentCard.getQuestion().replaceAll("<audio src=.*/>", ""));
+            ((EditText)focusView).setText(currentCard.getQuestion());
+        } else if (focusView == answerEdit) {
+            currentCard.setAnswer(currentCard.getAnswer().replaceAll("<audio src=.*/>", ""));
+            ((EditText)focusView).setText(currentCard.getAnswer());
+        } else {
+            return;
+        }
+    }
+    
+    
     private void addTextToView(EditText v, String text){
         String origText = v.getText().toString();
         /* 
@@ -262,10 +316,10 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data){
-    	super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
         String name, path;
-    	switch(requestCode){
-    	    case ACTIVITY_IMAGE_FILE:
+        switch(requestCode){
+            case ACTIVITY_IMAGE_FILE:
                 if(resultCode == Activity.RESULT_OK){
                     View focusView = getCurrentFocus();
                     if(focusView == questionEdit || focusView ==answerEdit || focusView == noteEdit){
@@ -289,7 +343,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
                     }
                 }
             break;
-    	    case ACTIVITY_AUDIO_FILE:
+            case ACTIVITY_AUDIO_FILE:
                 if(resultCode == Activity.RESULT_OK){
                     View focusView = getCurrentFocus();
                     if(focusView == questionEdit || focusView ==answerEdit || focusView == noteEdit){
@@ -344,7 +398,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
             }
             RadioGroup.OnCheckedChangeListener changeListener = new RadioGroup.OnCheckedChangeListener(){
                 public void onCheckedChanged(RadioGroup group, int checkedId){
-        	        SharedPreferences.Editor editor = settings.edit();
+                    SharedPreferences.Editor editor = settings.edit();
                     if(checkedId == R.id.add_here_radio){
                         addBack = false;
                         editor.putBoolean("add_back", false);
@@ -388,7 +442,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
     private class InitTask extends AsyncTask<Void, Void, Void> {
         private ProgressDialog progressDialog;
 
-		@Override
+        @Override
         public void onPreExecute() {
             setTitle(R.string.memo_edit_dialog_title);
             Bundle extras = getIntent().getExtras();

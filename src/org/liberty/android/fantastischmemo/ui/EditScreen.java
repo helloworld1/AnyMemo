@@ -440,21 +440,9 @@ public class EditScreen extends AMActivity {
         String qa = setting.getQuestionAudio();
         String aa = setting.getAnswerAudio();
 
-        if (StringUtils.isNotEmpty(setting.getQuestionAudioLocation())) {
-            questionTTS = new AudioFileTTS(defaultLocation, dbName);
-        } else if (StringUtils.isNotEmpty(qa)){
-            questionTTS = new AnyMemoTTSPlatform(this, qa);
-        } else{
-            questionTTS = null;
-        }
+        questionTTS = new AnyMemoTTSPlatform(this, qa, defaultLocation, dbName);
+        answerTTS = new AnyMemoTTSPlatform(this, aa, defaultLocation, dbName);
 
-        if (StringUtils.isNotEmpty(setting.getAnswerAudioLocation())) {
-            answerTTS = new AudioFileTTS(defaultLocation, dbName);
-        } else if (StringUtils.isNotEmpty(aa)){
-            answerTTS = new AnyMemoTTSPlatform(this, aa);
-        } else{
-            answerTTS = null;
-        }
     }
 
     @Override
@@ -533,7 +521,6 @@ public class EditScreen extends AMActivity {
                     myIntent.putExtra(CardEditor.EXTRA_CARD_ID, currentCard.getId());
                 }
                 myIntent.putExtra(CardEditor.EXTRA_IS_EDIT_NEW, true);
-                //startActivityForResult(myIntent, ACTIVITY_EDIT);
                 startActivityForResult(myIntent, ACTIVITY_EDIT);
         }
     };

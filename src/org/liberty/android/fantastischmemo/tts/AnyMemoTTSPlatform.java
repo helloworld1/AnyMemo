@@ -34,6 +34,7 @@ import android.util.Log;
 public class AnyMemoTTSPlatform implements AnyMemoTTS, TextToSpeech.OnInitListener{
 
 	private final TextToSpeech myTTS;
+	private SpeakWord speakWord;
 	
 	private final Locale myLocale;
     
@@ -82,12 +83,25 @@ public class AnyMemoTTSPlatform implements AnyMemoTTS, TextToSpeech.OnInitListen
 		myTTS = new TextToSpeech(context, this);
         initLock.unlock();
 	}
+
+	public AnyMemoTTSPlatform(Context context, String locale, String audioDir, String dbname){
+		this(context, locale);
+		speakWord = new SpeakWord(audioDir, dbname);
+	}
 	
 	public void shutdown(){
+        if(speakWord != null){
+			speakWord.shutdown();
+        }
+		
         myTTS.shutdown();
 	}
 
     public void stop(){
+        if(speakWord != null){
+            speakWord.stop();
+        }
+    	
         myTTS.stop();
         // We wait until the tts is not speaking.
         // This is because top is asynchronized call
@@ -99,7 +113,13 @@ public class AnyMemoTTSPlatform implements AnyMemoTTS, TextToSpeech.OnInitListen
         }
     }
 	
-	public int sayText(String s){
+	public void sayText(String s){
+        /*if there is a user defined audio, speak it and return */
+		if(speakWord.speakWord(s)){
+			return;
+		}
+		
+        /*otherwise, speak the content*/
         Log.v(TAG, "say it!");
 		// Replace break with period
 		String processed_str = s.replaceAll("\\<br\\>", ". " );
@@ -118,7 +138,6 @@ public class AnyMemoTTSPlatform implements AnyMemoTTS, TextToSpeech.OnInitListen
             stop();
         }
 		
-		return 0;
 	}
 
     private Locale getLocaleForTTS(String loc) {
@@ -137,5 +156,4 @@ public class AnyMemoTTSPlatform implements AnyMemoTTS, TextToSpeech.OnInitListen
         return new Locale(loc);
 
     }
-
 }
