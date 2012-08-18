@@ -23,37 +23,26 @@
     <string name="help_button_text">Ajuda</string>
     <string name="edit_button_text">Visualizar/Editar Banco de Dados</string>
     <string name="autoaudio">Fala Automática</string>
-    <string name="autoaudio_summary">A pergunta e a resposta serão lidas
-    automaticamente</string>
+    <string name="autoaudio_summary">A pergunta e a resposta serão lidas automaticamente</string>
     <string name="btnonerow">Botão de Grade Compacta</string>
-    <string name="btnonerow_summary">Os botões com score de 0 a 5 serão exibidos
-    em 1 linha em vez de 2.</string>
+    <string name="btnonerow_summary">Os botões com score de 0 a 5 serão exibidos em 1 linha em vez de 2.</string>
     <string name="copyclipboard">Copiar para a Área de Transferência</string>
-    <string name="copyclipboard_summary">A pergunta será automaticamente copiada
-    para a Área de Transferência.</string>
+    <string name="copyclipboard_summary">A pergunta será automaticamente copiada para a Área de Transferência.</string>
     <string name="memo_show_answer">\?\nMostrar Resposta</string>
     <string name="memo_no_item_title">Sem Ítens</string>
-    <string name="memo_no_item_message">Não existem cartas para aprender por
-    enquanto. Recomendamos voltar. Use a revisão cram para aprender além do
-    tempo.</string>
+    <string name="memo_no_item_message">Não existem cartas para aprender por enquanto. Recomendamos voltar. Use a revisão cram para aprender além do tempo.</string>
     <string name="memo_btn0_text">0 Alzheimer</string>
     <string name="memo_btn1_text">1 Esqueci</string>
     <string name="memo_btn2_text">2 Insano</string>
     <string name="memo_btn3_text">3 Difícil</string>
     <string name="memo_btn4_text">4 Normal</string>
     <string name="memo_btn5_text">5 Fácil</string>
-    <string name="memo_btn0_help_text">Você esqueceu esta carta
-    completamente.</string>
-    <string name="memo_btn1_help_text">Você esqueceu esta carta
-    completamente.</string>
-    <string name="memo_btn2_help_text">Resposta quase correta. O intervalo foi
-    muito longo.</string>
-    <string name="memo_btn3_help_text">Resposta correta, mas com muito esforço. O
-    intervalo foi longo.</string>
-    <string name="memo_btn4_help_text">Resposta correta com algum esforço. O
-    intervalo foi razoável.</string>
-    <string name="memo_btn5_help_text">Resposta correta sem nenhuma
-    dificuldade. O intervalo foi curto.</string>
+    <string name="memo_btn0_help_text">Você esqueceu esta carta completamente.</string>
+    <string name="memo_btn1_help_text">Você esqueceu esta carta completamente.</string>
+    <string name="memo_btn2_help_text">Resposta quase correta. O intervalo foi muito longo.</string>
+    <string name="memo_btn3_help_text">Resposta correta, mas com muito esforço. O intervalo foi longo.</string>
+    <string name="memo_btn4_help_text">Resposta correta com algum esforço. O intervalo foi razoável.</string>
+    <string name="memo_btn5_help_text">Resposta correta sem nenhuma dificuldade. O intervalo foi curto.</string>
     <string name="memo_btn0_brief_text">0</string>
     <string name="memo_btn1_brief_text">1</string>
     <string name="memo_btn2_brief_text">2</string>
@@ -137,8 +126,7 @@
     <string name="loading_import">Importando ...\n Isso pode demorar.</string>
     <string name="success">Completado com Sucesso</string>
     <string name="fail">Falhou</string>
-    <string name="success_import">O XML foi convertido com sucesso e arquivado
-    como</string>
+    <string name="success_import">O XML foi convertido com sucesso e arquivado como</string>
     <string name="fail_import">Falha ao converter </string>
     <string name="success_export">Exportado com sucesso para </string>
     <string name="fail_export">Falha ao exportar </string>
@@ -199,13 +187,9 @@
     <string name="touch_area_title">Área de Toque</string>
     <string name="touch_area_summary">Toque para visualizar a pergunta</string>
     <string name="settings_audio_location_title">Configurar a linguagem do áudio</string>
-    <string name="tts_tip_user_audio">Para usar áudio personalizado, você
-    precisa colocar os arquivos de áudio na pasta selecionada abaixo</string>
-    <string name="tts_tip_extender">Faça o download do eSpeak engine para
-    Android 2.2 e selecione acima o engine como eSpeak.</string>
-    <string name="what_is_new_message">Para visualizar as novas features, clique
-    no botão histórico da versão, ou, visite nosso site:&lt;a href="
-    http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt;&lt;br>/&gt;</string>
+    <string name="tts_tip_user_audio">Para usar áudio personalizado, você precisa colocar os arquivos de áudio na pasta selecionada abaixo</string>
+    <string name="tts_tip_extender">Faça o download do eSpeak engine para Android 2.2 e selecione acima o engine como eSpeak.</string>
+    <string name="what_is_new_message">Para visualizar as novas features, clique no botão histórico da versão, ou, visite nosso site:&lt;a href=" http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt;&lt;br>/&gt;</string>
     <string name="portrait_only_title">Modo Retrato</string>
     <string name="portrait_only_summary">Desabilitar completamente mudanças de orientação de tela</string>
     <string name="list_mode_text">Modo Lista</string>
@@ -222,14 +206,12 @@
     <string name="merge_method_end">No final</string>
     <string name="copy_text">Copiar</string>
     <string name="paste_text">Colar</string>
-    <string name="edit_dialog_unsave_warning">A carta atual foi modificada mas
-    não foi salva. Você tem certeza que quer sair?</string>
+    <string name="edit_dialog_unsave_warning">A carta atual foi modificada mas não foi salva. Você tem certeza que quer sair?</string>
     <string name="downloader_extract_zip">Extraindo... Por favor, espere.</string>
     <string name="allow_orientation_title">Orientação</string>
     <string name="allow_orientation_summary">Mudar a orientação da tela automaticamente. (É necessário reiniciar o AnyMemo).</string>
     <string name="enable_tts_extended_title">Habilitar TTS Extended</string>
-    <string name="enable_tts_extended_summary">Habilitar o Text-to-Speech
-    Extended para falar outras linguagens. </string>
+    <string name="enable_tts_extended_summary">Habilitar o Text-to-Speech Extended para falar outras linguagens. </string>
     <string name="learn_queue_size_title">Tamanho da fila de aprendizado</string>
     <string name="learn_queue_size_summary">Control the internal flow of learning. Be careful!</string>
     <string name="actions_category">Ações</string>
@@ -242,8 +224,7 @@
     <string name="remove_dup_text">Remover duplicados</string>
     <string name="removing_dup_title">Removendo duplicados</string>
     <string name="removing_dup_warning">Remover cartas duplicadas pode demorar muito tempo dependendo do tamanho do Banco de Dados. Interromper o processo irá corromper o Banco de Dados!</string>
-    <string name="removing_dup_summary">Removendo cartas duplicadas. Isto poderá demorar
-    para grandes Bancos de Dados.</string>
+    <string name="removing_dup_summary">Removendo cartas duplicadas. Isto poderá demorar para grandes Bancos de Dados.</string>
     <string name="startup_title">Tela Inicial</string>
     <string name="startup_summary">Configurar a Tela Inicial.</string>
     <string name="detail_reset">Resetar os dados de aprendizagem</string>
@@ -251,8 +232,7 @@
     <string name="db_text">DB</string>
     <string name="widget_fail_fetch">Nenhum banco de dados.</string>
     <string name="notification_text">Notificação</string>
-    <string name="notification_summary">Mostrar informações na área de
-    notificação mesmo que o AnyMemo não esteja aberto</string>
+    <string name="notification_summary">Mostrar informações na área de notificação mesmo que o AnyMemo não esteja aberto</string>
     <string name="downloader_chooser">Escolher origem</string>
     <string name="fe_search_title">Login ou Procurar</string>
     <string name="fe_search_message">Digite o endereço de e-mail registrado no flashcardexchange.com para efetuar login (ex. test@example.com) ou procure por flashcards sem uma tag específica (eg. spanish).</string>
