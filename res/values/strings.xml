@@ -442,12 +442,6 @@
     <string name="auth_error_text">Authenticate error.</string>
     <string name="locale_italian_text">Italian</string>
     <string name="upload_gdrive_message">Do you want to upload %s to your Google Drive\'s AnyMemo folder? It may take several minutes if you have more than 1000 cards.</string>
-    <string name="recorder_record_your_memo">Record your memo</string>
-    <string name="recorder_mic_description">recorder_mic</string>
-    <string name="recorder_record_description">recorder record</string>
-    <string name="recorder_play_description">recorder_play</string>
-    <string name="recorder_return_description">recorder return</string>
-    <string name="recorder_record_your_memo_text">Record your memo</string>
-    <string name="record_text">Record</string>
     <string name="edit_audio_text">Edit audio</string>
+    <string name="record_your_memo_text">Record your memo</string>
 </resources>
