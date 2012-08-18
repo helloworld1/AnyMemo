@@ -395,6 +395,10 @@ public class MemoScreen extends AMActivity {
                 Intent myIntent = new Intent();
                 myIntent.setClass(this, EditScreen.class);
                 myIntent.putExtra(EditScreen.EXTRA_DBPATH, dbPath);
+                if (currentCard != null) {
+                    myIntent.putExtra(EditScreen.EXTRA_CARD_ID, currentCard.getId());
+                }
+                
                 startActivity(myIntent);
                 return true;
             }
