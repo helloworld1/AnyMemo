@@ -19,11 +19,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import java.io.File;
-
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.R;
 
+import org.liberty.android.fantastischmemo.utils.AMUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 import android.app.Activity;
@@ -149,12 +148,10 @@ public class OpenActionsFragment extends DialogFragment {
                     .setPositiveButton(getString(R.string.delete_text), new DialogInterface.OnClickListener(){
                         @Override
                         public void onClick(DialogInterface dialog, int which ){
-                            File fileToDelete = new File(dbPath);
-                            fileToDelete.delete();
+                            AMUtil.deleteDbSafe(dbPath);
                             rlu.deleteFromRecentList(dbPath);
                             /* Refresh the list */
                             mActivity.restartActivity();
-                            
                         }
                     })
                     .setNegativeButton(getString(R.string.cancel_text), null)
