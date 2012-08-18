@@ -18,7 +18,6 @@
     <string name="download_button_text">データベースのダウンロード</string>
     <string name="about_button_text">AnyMemoについて</string>
     <string name="help_button_text">ヘルプ</string>
-    <string name="exit_button_text">終了</string>
     <string name="edit_button_text">プレビュー・編集</string>
     <string name="autoaudio">自動スピーク</string>
     <string name="autoaudio_summary">問題と解答が自動で発声されます</string>

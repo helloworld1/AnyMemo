@@ -21,6 +21,7 @@ package org.liberty.android.fantastischmemo.tts;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,11 +43,11 @@ public class SpeakWord {
 	
 	public boolean speakWord(final String text){
 		File audioFile = null;
-		String[] fileType = {".ogg", ".wav", ".mp3"};
+		String[] fileType = {".3gp", ".ogg", ".wav", ".mp3"};
 		String candidateFile =  mAudioDir + "/";
         String word = text;
         /* Find the audio file in tags */
-        Pattern p = Pattern.compile("[A-Za-z0-9_-]+\\.(ogg|mp3|wav)");
+        Pattern p = Pattern.compile("[A-Za-z0-9_-]+\\.(3gp|ogg|mp3|wav)");
         Matcher m = p.matcher(text);
         if(m.find()){
            String audioTag = m.group();

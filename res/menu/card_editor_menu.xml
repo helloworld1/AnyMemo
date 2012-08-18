@@ -9,4 +9,5 @@
     <item 
         android:id="@+id/editor_menu_audio"
         android:title="@string/edit_menu_audio_text" />
+    <item android:id="@+id/editor_menu_record" android:title="@string/record_text"></item>
 </menu>

@@ -7,8 +7,8 @@ import android.preference.PreferenceManager;
 
 public class Option {
 
-    SharedPreferences settings;
-    SharedPreferences.Editor editor;
+    private SharedPreferences settings;
+    private SharedPreferences.Editor editor;
 
     public Option (Context context) {
     	settings = PreferenceManager.getDefaultSharedPreferences(context);
@@ -75,7 +75,11 @@ public class Option {
         editor.putInt(prefix + key, value);
         editor.commit();
     }
-
+    
+    public int getRecentCount() {
+    	return settings.getInt("recent_count", 7);
+    }
+    
     public int getQueueSize() {
         String size = settings.getString("learning_queue_size", "10");
         int tmpSize = Integer.parseInt(size);
@@ -85,7 +89,7 @@ public class Option {
             return 10;
         }
     }
-
+    
     public static enum ButtonStyle {
         ANYMEMO,
         MNEMOSYNE,

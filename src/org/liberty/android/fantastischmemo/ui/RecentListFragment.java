@@ -19,40 +19,36 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
-
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.utils.AMUtil;
 import org.liberty.android.fantastischmemo.utils.DatabaseUtils;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
-
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.TextView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.content.Context;
+import android.widget.TextView;
 
 public class RecentListFragment extends Fragment {
 
@@ -61,8 +57,7 @@ public class RecentListFragment extends Fragment {
 
     private Handler mHandler;
     private Thread updateRecentListThread;
-    SharedPreferences settings;
-    SharedPreferences.Editor editor;
+    private RecentListUtil recentListUtil;
 
     private final static String TAG = "org.liberty.android.fantastischmemo.OpenScreen";
 
@@ -72,8 +67,7 @@ public class RecentListFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = activity;
-        settings = PreferenceManager.getDefaultSharedPreferences(mActivity);
-        editor = settings.edit();
+        recentListUtil = new RecentListUtil(mActivity);
         setHasOptionsMenu(true);
     }
 
@@ -98,7 +92,7 @@ public class RecentListFragment extends Fragment {
     	super.onResume();
         updateRecentListThread = new Thread(){
             public void run(){
-                String[] allPath = RecentListUtil.getAllRecentDBPath(mActivity);
+                String[] allPath = recentListUtil.getAllRecentDBPath();
                 final List<RecentItem> ril = new ArrayList<RecentItem>();
                 /* Quick list */
                 int index = 0;
@@ -109,7 +103,7 @@ public class RecentListFragment extends Fragment {
                         }
                         final RecentItem ri = new RecentItem();
                         if (!DatabaseUtils.checkDatabase(mActivity, allPath[i])) {
-                            RecentListUtil.deleteFromRecentList(mActivity, allPath[i]);
+                            recentListUtil.deleteFromRecentList(allPath[i]);
                             continue;
                         }
                         ri.dbInfo = getString(R.string.loading_database);
@@ -174,7 +168,7 @@ public class RecentListFragment extends Fragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 	    case R.id.openmenu_clear:
-            RecentListUtil.clearRecentList(mActivity);
+            recentListUtil.clearRecentList();
             onResume();
 			return true;
 
@@ -190,7 +184,7 @@ public class RecentListFragment extends Fragment {
             myIntent.setClass(mActivity, MemoScreen.class);
             String dbPath = recentListAdapter.getItem(position).dbPath;
             myIntent.putExtra(MemoScreen.EXTRA_DBPATH, dbPath);
-            RecentListUtil.addToRecentList(mActivity, dbPath);
+            recentListUtil.addToRecentList(dbPath);
             startActivity(myIntent);
         }
     };

@@ -22,7 +22,6 @@
     <string name="download_button_text">Download databases</string>
     <string name="about_button_text">About</string>
     <string name="help_button_text">Help</string>
-    <string name="exit_button_text">Exit program</string>
     <string name="edit_button_text">Preview/edit</string>
     <string name="autoaudio">Automatic speak</string>
     <string name="autoaudio_summary">The question and answer will be read automatically.</string>
@@ -443,4 +442,8 @@
     <string name="auth_error_text">Authenticate error.</string>
     <string name="locale_italian_text">Italian</string>
     <string name="upload_gdrive_message">Do you want to upload %s to your Google Drive\'s AnyMemo folder? It may take several minutes if you have more than 1000 cards.</string>
+    <string name="recorder_record_your_memo_text">Record your memo</string>
+    <string name="record_text">Record</string>
+    <string name="max_recent_list_size_text">Max recent list size</string>
+    <string name="recent_summary">Setup the max number of DBs to display in the recent list.</string>
 </resources>

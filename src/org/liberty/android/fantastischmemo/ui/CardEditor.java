@@ -38,6 +38,7 @@ import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 
+import org.liberty.android.fantastischmemo.ui.AudioRecorderFragment.AudioRecorderResultListener;
 import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment;
 import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
 import org.liberty.android.fantastischmemo.utils.AMUtil;
@@ -66,6 +67,7 @@ import android.content.res.Configuration;
 public class CardEditor extends AMActivity implements View.OnClickListener {
     private final int ACTIVITY_IMAGE_FILE = 1;
     private final int ACTIVITY_AUDIO_FILE = 2;
+    private final int ACTIVITY_AUDIO_RECORD = 3;
     Card currentCard = null;
     Card prevCard = null;
     private Integer prevOrdinal = null;
@@ -91,11 +93,12 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
     private String originalAnswer;
     private String originalNote;
 
+
     public static String EXTRA_DBPATH = "dbpath";
     public static String EXTRA_CARD_ID = "id";
     public static String EXTRA_RESULT_CARD_ID= "result_card_id";
     public static String EXTRA_IS_EDIT_NEW = "is_edit_new";
-
+    public static final String EXTRA_AUDIO_FILENAME = "audioFilename";
 
 
     @Override
@@ -197,12 +200,44 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
             case R.id.editor_menu_audio:
                 if(focusView == questionEdit || focusView ==answerEdit || focusView == noteEdit){
                     Intent myIntent = new Intent(this, FileBrowserActivity.class);
-                    myIntent.putExtra(FileBrowserActivity.EXTRA_FILE_EXTENSIONS, ".ogg,.mp3,.wav");
+                    myIntent.putExtra(FileBrowserActivity.EXTRA_FILE_EXTENSIONS, ".3gp,.ogg,.mp3,.wav");
                     startActivityForResult(myIntent, ACTIVITY_AUDIO_FILE);
                 }
                 return true;
-
-            }
+            
+            case R.id.editor_menu_record:
+            	String audioFilename = AMEnv.DEFAULT_AUDIO_PATH + dbName; 
+            	new File(audioFilename).mkdirs();
+            	AudioRecorderFragment recorder = new AudioRecorderFragment();
+            	if(focusView == questionEdit){
+            		audioFilename +=  "/"+ currentCardId + "_q.3gp";
+            	} else if (focusView == answerEdit) {
+            		audioFilename +=  "/"+ currentCardId + "_a.3gp";
+            	} else {
+            		return true;
+            	}
+            	Bundle b = new Bundle();
+                b.putString(EXTRA_AUDIO_FILENAME, audioFilename);
+                
+            	recorder.setAudioRecorderResultListener(new AudioRecorderResultListener() {
+					public void onReceiveAudio() {
+						View focusView = getCurrentFocus();
+						String content = ((EditText)(focusView)).getText().toString(); 
+						if(!content.contains("src=")){
+							if(focusView == questionEdit){
+								addTextToView((EditText) focusView, "<audio src=\"" + currentCardId
+			    						+ "_q.3gp\" />");	
+							} else if (focusView == answerEdit){
+								addTextToView((EditText) focusView, "<audio src=\"" + currentCardId
+			    						+ "_a.3gp\" />");
+							}
+						}
+					}
+				});
+                recorder.setArguments(b);
+                recorder.show(getSupportFragmentManager(), "AudioRecorderDialog");
+                return true;
+        }
         return false;
     }
 
@@ -499,5 +534,6 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
                 currentCard.setCategory(c);
                 updateViews();
             }
-        };
+        }; 
+    
 }

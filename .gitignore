@@ -6,3 +6,4 @@ gen/
 bin/
 libs/armeabi
 obj/
+.settings/
