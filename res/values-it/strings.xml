@@ -105,8 +105,8 @@
     <string name="add_screen_edit">Salva</string>
     <string name="add_screen_gotoid">Vai a ID</string>
     <string name="add_screen_back">Indietro</string>
-    <string name="add_screen_next">Prossimo</string>
-    <string name="add_screen_previous">Precedente</string>
+    <string name="add_screen_next">⇒</string>
+    <string name="add_screen_previous">⇐</string>
     <string name="search_text">Cerca</string>
     <string name="goto_id_text">Vai a ID</string>
     <string name="fb_create_db">Crea un nuovo DB</string>
@@ -443,6 +443,6 @@
     <string name="upload_gdrive_message">Vuoi caricare %s nella tua cartella Google Drive AnyMemo? Può metterci parecchio se ci sono più di 1000 schede.</string>
     <string name="recorder_record_your_memo_text">Registra il tuo memo</string>
     <string name="record_text">Registra</string>
-    <string name="max_recent_list_size_text">Dimensione massima lista DB recenti</string>
+    <string name="max_recent_list_size_text">Dimensione max lista DB recenti</string>
     <string name="recent_summary">Configura il numero massimo di DB da mostrare nella lista di quelli recentemente visitati.</string>
 </resources>
