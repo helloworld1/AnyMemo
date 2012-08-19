@@ -441,4 +441,8 @@
     <string name="auth_error_text">Errore di autenticazione.</string>
     <string name="locale_italian_text">Italiano</string>
     <string name="upload_gdrive_message">Vuoi caricare %s nella tua cartella Google Drive AnyMemo? Può metterci parecchio se ci sono più di 1000 schede.</string>
+    <string name="recorder_record_your_memo_text">Registra il tuo memo</string>
+    <string name="record_text">Registra</string>
+    <string name="max_recent_list_size_text">Dimensione massima lista DB recenti</string>
+    <string name="recent_summary">Configura il numero massimo di DB da mostrare nella lista di quelli recentemente visitati.</string>
 </resources>
