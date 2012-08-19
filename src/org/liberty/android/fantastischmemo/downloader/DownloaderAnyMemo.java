@@ -19,39 +19,20 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader;
 
-import org.liberty.android.fantastischmemo.*;
-import org.liberty.android.fantastischmemo.utils.AMZipUtils;
-import org.liberty.android.fantastischmemo.utils.RecentListUtil;
-
-import java.util.ArrayList;
-import java.util.Stack;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipEntry;
-import java.util.Enumeration;
-import java.util.Comparator;
-import java.net.URLEncoder;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.File;
 import java.io.OutputStream;
-import java.io.FileOutputStream;
-import java.io.BufferedReader;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.net.URLConnection;
 import java.net.URL;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.util.Log;
-import android.os.Environment;
-import android.view.View;
-import android.os.Handler;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Stack;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -60,6 +41,23 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.liberty.android.fantastischmemo.AMEnv;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.utils.AMZipUtils;
+import org.liberty.android.fantastischmemo.utils.RecentListUtil;
+
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.os.Handler;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
+import android.util.Log;
+import android.view.View;
+import android.widget.ListView;
+import android.widget.TextView;
 
 public class DownloaderAnyMemo extends DownloaderBase{
     private static final String TAG = "org.liberty.android.fantastischmemo.downloader.DownloaderAnyMemo";
@@ -334,7 +332,8 @@ public class DownloaderAnyMemo extends DownloaderBase{
                     }
 
                     /* Add downloaded item to file list */
-                    RecentListUtil.addToRecentList(this, fullpath);
+                    RecentListUtil rlu = new RecentListUtil(this);
+                    rlu.addToRecentList(fullpath);
                 }
             }
             catch(Exception e){

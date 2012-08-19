@@ -19,7 +19,6 @@
     <string name="download_button_text">Загрузить базы</string>
     <string name="about_button_text">О программе</string>
     <string name="help_button_text">Помощь</string>
-    <string name="exit_button_text">Выйти из программы</string>
     <string name="edit_button_text">Просмотр/правка</string>
     <string name="autoaudio">Озвучивать автоматически</string>
     <string name="autoaudio_summary">Вопрос и ответ будут прочитаны автоматически</string>
@@ -438,4 +437,8 @@
     <string name="auth_error_text">Ошибка авторизации.</string>
     <string name="locale_italian_text">Итальянский</string>
     <string name="upload_gdrive_message">Хотите залить %s в ваш AnyMemo каталог в Google Drive? Может занять несколько минут, если карточек более 1000.</string>
+    <string name="recorder_record_your_memo_text">Запись звука</string>
+    <string name="record_text">Доб. запись</string>
+    <string name="max_recent_list_size_text">Размер списка Недавние</string>
+    <string name="recent_summary">Задать максимальное количество баз в списке Недавние.</string>
 </resources>

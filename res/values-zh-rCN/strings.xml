@@ -19,7 +19,6 @@
     <string name="download_button_text">下载数据库</string>
     <string name="about_button_text">关于</string>
     <string name="help_button_text">帮助</string>
-    <string name="exit_button_text">退出程序</string>
     <string name="edit_button_text">预览/编辑数据库</string>
     <string name="autoaudio">自动朗读</string>
     <string name="autoaudio_summary">问题与答案将自动朗读。</string>

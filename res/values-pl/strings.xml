@@ -19,7 +19,6 @@
     <string name="download_button_text">Pobierz bazy danych</string>
     <string name="about_button_text">O programie</string>
     <string name="help_button_text">Pomoc</string>
-    <string name="exit_button_text">Zamknij program</string>
     <string name="edit_button_text">Przejrzyj/Edytuj bazę danych</string>
 
     <string name="autoaudio">Automatycznie wypowiadanie</string>

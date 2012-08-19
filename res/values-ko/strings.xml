@@ -19,7 +19,6 @@
     <string name="download_button_text">학습장 내려받기</string>
     <string name="about_button_text">프로그램 정보</string>
     <string name="help_button_text">도움말</string>
-    <string name="exit_button_text">끝내기</string>
     <string name="edit_button_text">학습장 미리보기/편집</string>
 
     <string name="autoaudio">음성 자동재생</string>

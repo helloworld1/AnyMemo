@@ -77,18 +77,24 @@ public class AMUtil {
 		out.close();
 	}
 
+    public static void deleteDbSafe(String filepath) {
+        if (!new File(filepath).exists()) {
+            return;
+        }
+        AnyMemoDBOpenHelperManager.forceRelease(filepath);
+        new File(filepath).delete();
+    }
+
     public static void deleteFileWithBackup(String filepath) throws IOException {
         if (!new File(filepath).exists()) {
             return;
         }
 
-        AnyMemoDBOpenHelperManager.forceRelease(filepath);
-
         String ext = FilenameUtils.getExtension(filepath);
         String nameWtihoutExt = FilenameUtils.removeExtension(filepath);
         String backFileName = nameWtihoutExt + ".backup." + ext;
         copyFile(filepath, backFileName);
-        new File(filepath).delete();
+        deleteDbSafe(filepath);
     }
 
     /* Get the file name from the path name */

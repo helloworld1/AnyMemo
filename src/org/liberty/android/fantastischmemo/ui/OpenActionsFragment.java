@@ -19,11 +19,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import java.io.File;
-
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.R;
 
+import org.liberty.android.fantastischmemo.utils.AMUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 import android.app.Activity;
@@ -95,12 +94,13 @@ public class OpenActionsFragment extends DialogFragment {
 
     private View.OnClickListener buttonClickListener = new View.OnClickListener() {
         public void onClick(View v) {
+        	final RecentListUtil rlu = new RecentListUtil(mActivity);
             if (v == studyItem) {
                 Intent myIntent = new Intent();
                 myIntent.setClass(mActivity, MemoScreen.class);
                 myIntent.putExtra(MemoScreen.EXTRA_DBPATH, dbPath);
                 startActivity(myIntent);
-                RecentListUtil.addToRecentList(mActivity, dbPath);
+                rlu.addToRecentList(dbPath);
             }
 
             if (v == editItem) {
@@ -108,7 +108,7 @@ public class OpenActionsFragment extends DialogFragment {
                 myIntent.setClass(mActivity, EditScreen.class);
                 myIntent.putExtra(EditScreen.EXTRA_DBPATH, dbPath);
                 startActivity(myIntent);
-                RecentListUtil.addToRecentList(mActivity, dbPath);
+                rlu.addToRecentList(dbPath);
             }
 
             if (v == listItem) {
@@ -116,7 +116,7 @@ public class OpenActionsFragment extends DialogFragment {
                 myIntent.setClass(mActivity, ListEditScreen.class);
                 myIntent.putExtra(MemoScreen.EXTRA_DBPATH, dbPath);
                 startActivity(myIntent);
-                RecentListUtil.addToRecentList(mActivity, dbPath);
+                rlu.addToRecentList(dbPath);
             }
 
             if (v == cramItem) {
@@ -125,7 +125,7 @@ public class OpenActionsFragment extends DialogFragment {
                 myIntent.putExtra(MemoScreen.EXTRA_DBPATH, dbPath);
                 myIntent.putExtra(MemoScreen.EXTRA_CRAM, true);
                 startActivity(myIntent);
-                RecentListUtil.addToRecentList(mActivity, dbPath);
+                rlu.addToRecentList(dbPath);
             }
 
             if (v == settingsItem) {
@@ -148,12 +148,10 @@ public class OpenActionsFragment extends DialogFragment {
                     .setPositiveButton(getString(R.string.delete_text), new DialogInterface.OnClickListener(){
                         @Override
                         public void onClick(DialogInterface dialog, int which ){
-                            File fileToDelete = new File(dbPath);
-                            fileToDelete.delete();
-                            RecentListUtil.deleteFromRecentList(mActivity, dbPath);
+                            AMUtil.deleteDbSafe(dbPath);
+                            rlu.deleteFromRecentList(dbPath);
                             /* Refresh the list */
                             mActivity.restartActivity();
-                            
                         }
                     })
                     .setNegativeButton(getString(R.string.cancel_text), null)

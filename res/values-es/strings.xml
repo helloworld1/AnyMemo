@@ -19,7 +19,6 @@
     <string name="download_button_text">Descargar bases de datos</string>
     <string name="about_button_text">Acera de</string>
     <string name="help_button_text">Ayuda</string>
-    <string name="exit_button_text">Salir programa</string>
     <string name="edit_button_text">Previsualizar/editar base de datos</string>
     <string name="autoaudio">Síntesis de voz</string>
     <string name="autoaudio_summary">Se leerá automáticamente la pregunta y respuesta</string>

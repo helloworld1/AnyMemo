@@ -21,41 +21,28 @@
     <string name="download_button_text">Scarica database</string>
     <string name="about_button_text">Informazioni</string>
     <string name="help_button_text">Aiuto</string>
-    <string name="exit_button_text">Esci</string>
     <string name="edit_button_text">Anteprima/Modifica</string>
     <string name="autoaudio">Lettura automatica</string>
-    <string name="autoaudio_summary">La domanda e la risposta verranno
-    lette automaticamente.</string>
+    <string name="autoaudio_summary">La domanda e la risposta verranno lette automaticamente.</string>
     <string name="btnonerow">Barra di valutazione compatta</string>
-    <string name="btnonerow_summary">I pulsanti con i punteggi da 0 a
-    5 vengono visualizzati in 1 riga anziché 2.</string>
+    <string name="btnonerow_summary">I pulsanti con i punteggi da 0 a 5 vengono visualizzati in 1 riga anziché 2.</string>
     <string name="copyclipboard">Copia negli appunti</string>
-    <string name="copyclipboard_summary">La domanda verrà
-    automaticamente copiata negli appunti.</string>
+    <string name="copyclipboard_summary">La domanda verrà automaticamente copiata negli appunti.</string>
     <string name="memo_show_answer">\?\nMostra la risposta</string>
     <string name="memo_no_item_title">Nessun elemento</string>
-    <string name="memo_no_item_message">Non c\'è nessun elemento da
-    apprendere per ora. Si consiglia di tornare indietro. Per
-    apprendere in anticipo rispetto al programma, usare il ripasso
-    pre-esame.</string>
+    <string name="memo_no_item_message">Non c\'è nessun elemento da apprendere per ora. Si consiglia di tornare indietro. Per apprendere in anticipo rispetto al programma, usare il ripasso pre-esame.</string>
     <string name="memo_btn0_text">0 Dimenticato</string>
     <string name="memo_btn1_text">1 Dimenticato</string>
     <string name="memo_btn2_text">2 Molto difficile</string>
     <string name="memo_btn3_text">3 Difficile</string>
     <string name="memo_btn4_text">4 Facile</string>
     <string name="memo_btn5_text">5 Molto facile</string>
-    <string name="memo_btn0_help_text">Hai dimenticato questa scheda
-    completamente.</string>
-    <string name="memo_btn1_help_text">Hai dimenticato questa scheda
-    completamente.</string>
-    <string name="memo_btn2_help_text">Risposta corretta, ma ci hai
-    messo troppo a ricordare.</string>
-    <string name="memo_btn3_help_text">Risposta corretta, ma con
-    grande sforzo.</string>
-    <string name="memo_btn4_help_text">Risposta corretta, ma con un
-    po\' di sforzo. L\'intervallo è probabilmente corretto.</string>
-    <string name="memo_btn5_help_text">Risposta corretta, senza
-    difficoltà. L\'intervallo è probabilmente troppo corto.</string>
+    <string name="memo_btn0_help_text">Hai dimenticato questa scheda completamente.</string>
+    <string name="memo_btn1_help_text">Hai dimenticato questa scheda completamente.</string>
+    <string name="memo_btn2_help_text">Risposta corretta, ma ci hai messo troppo a ricordare.</string>
+    <string name="memo_btn3_help_text">Risposta corretta, ma con grande sforzo.</string>
+    <string name="memo_btn4_help_text">Risposta corretta, ma con un po\' di sforzo. L\'intervallo è probabilmente corretto.</string>
+    <string name="memo_btn5_help_text">Risposta corretta, senza difficoltà. L\'intervallo è probabilmente troppo corto.</string>
     <string name="memo_btn0_brief_text">0</string>
     <string name="memo_btn1_brief_text">1</string>
     <string name="memo_btn2_brief_text">2</string>
@@ -71,14 +58,10 @@
     <string name="memo_edit_dialog_title">Modifica</string>
     <string name="memo_current_id">ID: </string>
     <string name="global_settings">Impostazioni globali</string>
-    <string name="settings_question_font_size">Dimensione carattere
-    domanda</string>
-    <string name="settings_question_font_size_prompt">Dimensione
-    carattere</string>
-    <string name="settings_answer_font_size">Dimensione carattere
-    risposta</string>
-    <string name="settings_answer_font_size_prompt">Dimensione
-    carattere</string>
+    <string name="settings_question_font_size">Dimensione carattere domanda</string>
+    <string name="settings_question_font_size_prompt">Dimensione carattere</string>
+    <string name="settings_answer_font_size">Dimensione carattere risposta</string>
+    <string name="settings_answer_font_size_prompt">Dimensione carattere</string>
     <string name="settings_question_align">Allineamento testo domanda</string>
     <string name="settings_question_align_prompt">Allineamento testo</string>
     <string name="settings_answer_align">Allineamento testo risposta</string>
@@ -93,28 +76,20 @@
     <string name="settings_answer_text_color">Colore testo risposta</string>
     <string name="settings_question_bg_color">Colore sfondo domanda</string>
     <string name="settings_answer_bg_color">Colore sfondo risposta</string>
-    <string name="settings_wipe">Cancella tutti i progressi
-    nell\'apprendimento</string>
+    <string name="settings_wipe">Cancella tutti i progressi nell\'apprendimento</string>
     <string name="settings_shuffle">Mischia tutte le schede</string>
     <string name="settings_inverse">Scambia le D/R di ogni scheda</string>
     <string name="settings_save">Salva</string>
     <string name="settings_discard">Scarta</string>
     <string name="warning_text">Attenzione</string>
-    <string name="settings_wipe_warning">TUTTI i progressi
-    nell\'apprendimento verranno cancellati!</string>
-    <string name="settings_shuffle_warning">Questa operazione
-    mischierà tutte le schede e NON può essere annullata.</string>
-    <string name="settings_inverse_warning">Questa operazione
-    scambierà domande e risposte. Con Scambia+Duplica verranno
-    aggiunte tutte le schede scambiate in coda al database corrente
-    (invece di sostituirle).</string>
+    <string name="settings_wipe_warning">TUTTI i progressi nell\'apprendimento verranno cancellati!</string>
+    <string name="settings_shuffle_warning">Questa operazione mischierà tutte le schede e NON può essere annullata.</string>
+    <string name="settings_inverse_warning">Questa operazione scambierà domande e risposte. Con Scambia+Duplica verranno aggiunte tutte le schede scambiate in coda al database corrente (invece di sostituirle).</string>
     <string name="detail_update">Scrivi le modifiche</string>
     <string name="detail_back">Indietro</string>
-    <string name="delete_warning">Vuoi davvero cancellare questa
-    scheda?</string>
+    <string name="delete_warning">Vuoi davvero cancellare questa scheda?</string>
     <string name="skip_text">Salta</string>
-    <string name="skip_warning">Questo elemento non apparirà mai
-    nell\'apprendimento. Sicuro di volerlo saltare?</string>
+    <string name="skip_warning">Questo elemento non apparirà mai nell\'apprendimento. Sicuro di volerlo saltare?</string>
     <string name="stat_total">Totale: </string>
     <string name="stat_scheduled">Ripasso: </string>
     <string name="stat_new">Nuove: </string>
@@ -130,53 +105,40 @@
     <string name="add_screen_edit">Salva</string>
     <string name="add_screen_gotoid">Vai a ID</string>
     <string name="add_screen_back">Indietro</string>
-    <string name="add_screen_next">Prossimo</string>
-    <string name="add_screen_previous">Precedente</string>
+    <string name="add_screen_next">⇒</string>
+    <string name="add_screen_previous">⇐</string>
     <string name="search_text">Cerca</string>
     <string name="goto_id_text">Vai a ID</string>
     <string name="fb_create_db">Crea un nuovo DB</string>
     <string name="fb_create_dir">Crea una nuova cartella</string>
-    <string name="fb_create_db_message">Scrivere il nome del nuovo
-    database.</string>
-    <string name="fb_create_dir_message">Scrivere il nome della nuova
-    cartella.</string>
-    <string name="fb_delete_message">Sei sicuro di voler cancellare
-    questo file?</string>
+    <string name="fb_create_db_message">Scrivere il nome del nuovo database.</string>
+    <string name="fb_create_dir_message">Scrivere il nome della nuova cartella.</string>
+    <string name="fb_delete_message">Sei sicuro di voler cancellare questo file?</string>
     <string name="fb_edit_dialog_title">Modifica</string>
     <string name="fb_fail_to_clone">Errore nella copia del file.</string>
     <string name="fb_rename">Rinomina</string>
     <string name="fb_rename_message">Scrivere il nome.</string>
     <string name="fb_rename_fail">Errore nella rinomina del file.</string>
     <string name="loading_please_wait">Attendere, prego...</string>
-    <string name="loading_recent_list">Caricamento della lista dei DB
-    recenti...</string>
+    <string name="loading_recent_list">Caricamento della lista dei DB recenti...</string>
     <string name="loading_database">Caricamento del database...</string>
-    <string name="loading_import">Importazione...\n Può metterci
-    parecchio.</string>
+    <string name="loading_import">Importazione...\n Può metterci parecchio.</string>
     <string name="success">Successo</string>
     <string name="fail">Errore</string>
-    <string name="success_import">Il file XML è stato convertito
-    correttamente e memorizzato come</string>
+    <string name="success_import">Il file XML è stato convertito correttamente e memorizzato come</string>
     <string name="fail_import">Errore nella conversione </string>
     <string name="success_export">Esportato correttamente in </string>
     <string name="fail_export">Errore nell\'esportazione </string>
-    <string name="loading_export">Esportazione...\n Può metterci
-    parecchio.</string>
+    <string name="loading_export">Esportazione...\n Può metterci parecchio.</string>
     <string name="loading_save">Salvataggio delle modifiche...</string>
-    <string name="loading_connect_net">Aggiornamento della lista da
-    internet...</string>
-    <string name="loading_downloading">Scaricamento... Può metterci
-    parecchio.</string>
+    <string name="loading_connect_net">Aggiornamento della lista da internet...</string>
+    <string name="loading_downloading">Scaricamento... Può metterci parecchio.</string>
     <string name="downloader_connection_error">Errore di connessione</string>
-    <string name="downloader_connection_error_message">Non si riesce a
-    connettersi al server. Controllare la connessione
-    internet.</string>
+    <string name="downloader_connection_error_message">Non si riesce a connettersi al server. Controllare la connessione internet.</string>
     <string name="downloader_download_success">Scaricato correttamente</string>
-    <string name="downloader_download_success_message">Il database è
-    stato memorizzato in: </string>
+    <string name="downloader_download_success_message">Il database è stato memorizzato in: </string>
     <string name="downloader_download_fail">Errore nello scaricamento</string>
-    <string name="downloader_download_fail_message">Errore nello
-    scaricamento del database. Messaggio d\'errore:</string>
+    <string name="downloader_download_fail_message">Errore nello scaricamento del database. Messaggio d\'errore:</string>
     <string name="downloader_download_alert">Scaricamento: </string>
     <string name="downloader_download_alert_message">Dettagli: </string>
     <string name="about_title">Informazioni</string>
@@ -185,34 +147,22 @@
     <string name="what_is_new">Ultimi cambiamenti</string>
     <string name="downloader_categories">Categorie</string>
     <string name="downloader_databases">Database</string>
-    <string name="open_database_error_title">Errore nell\'apertura del
-    database.</string>
+    <string name="open_database_error_title">Errore nell\'apertura del database.</string>
 
-    <string name="open_database_error_message">AnyMemo non è in grado
-    di aprire questo database. Può essere dovuto a diverse
-    ragioni. Per favore, visita la sezione FAQ di anymemo.org per i
-    suggerimenti o contatta l\'autore per una segnalazione di
-    bug.</string>
-    <string name="interface_locale_title">Lingua
-    dell\'interfaccia</string>
-    <string name="interface_locale_summary">Scegliere la lingua
-    dell\'interfaccia utente. Riavviare AnyMemo perché la modifica
-    abbia effetto.</string>
-    <string name="settings_typeface_question">Carattere per le domande
-    definito dall\'utente (TTF)</string>
-    <string name="settings_typeface_answer">Carattere per le risposte
-    definito dall\'utente (TTF)</string>
+    <string name="open_database_error_message">AnyMemo non è in grado di aprire questo database. Può essere dovuto a diverse ragioni. Per favore, visita la sezione FAQ di anymemo.org per i suggerimenti o contatta l\'autore per una segnalazione di bug.</string>
+    <string name="interface_locale_title">Lingua dell\'interfaccia</string>
+    <string name="interface_locale_summary">Scegliere la lingua dell\'interfaccia utente. Riavviare AnyMemo perché la modifica abbia effetto.</string>
+    <string name="settings_typeface_question">Carattere per le domande definito dall\'utente (TTF)</string>
+    <string name="settings_typeface_answer">Carattere per le risposte definito dall\'utente (TTF)</string>
     <string name="learn_ahead">Ripasso pre-esame</string>
     <string name="menu_text">Menu</string>
     <string name="filter_text">Filtro</string>
     <string name="filter_failure_title">Errore nel filtro</string>
-    <string name="filter_failure_message">Nessuna scheda corrisponde
-    al filtro, perciò vengono mostrate tutte.</string>
+    <string name="filter_failure_message">Nessuna scheda corrisponde al filtro, perciò vengono mostrate tutte.</string>
     <string name="import_text">Importa</string>
     <string name="export_text">Esporta</string>
     <string name="clear_filter_text">Cancella</string>
-    <string name="clear_filter_message">Sei sicuro di voler cancellare
-    la lista dei filtri recenti?</string>
+    <string name="clear_filter_message">Sei sicuro di voler cancellare la lista dei filtri recenti?</string>
     <string name="import_mnemosyne_xml_text">Importa Mnemosyne XML</string>
     <string name="export_qa_txt">Esporta Q/A TXT</string>
     <string name="export_tab_txt">Esporta tab-separated TXT</string>
@@ -222,11 +172,9 @@
     <string name="import_csv">Importa CSV</string>
     <string name="import_supermemo_xml_text">Importa SuperMemo PPC XML</string>
     <string name="speech_ctl_title">Lettura automatica</string>
-    <string name="speech_ctl_summary">Come viene attivata la lettura
-    automatica durante l\'apprendimento.</string>
+    <string name="speech_ctl_summary">Come viene attivata la lettura automatica durante l\'apprendimento.</string>
     <string name="button_style_title">Stile dei pulsanti dei punteggi</string>
-    <string name="button_style_summary">Cambia lo stile dei pulsanti
-    dei punteggi usati nell\'apprendimento.</string>
+    <string name="button_style_summary">Cambia lo stile dei pulsanti dei punteggi usati nell\'apprendimento.</string>
     <string name="settings_customize_color">Personalizza i colori</string>
     <string name="color_button_text">Seleziona colore</string>
     <string name="color_dialog_title">Selezione del colore</string>
@@ -237,123 +185,78 @@
     <string name="fullscreen_summary">Mostra le schede a tutto schermo.</string>
     <string name="edit_dialog_category">Categoria</string>
     <string name="touch_area_title">Area da toccare</string>
-    <string name="touch_area_summary">Area dove toccare per mostrare
-    la risposta</string>
-    <string name="settings_audio_location_title">Imposta il percorso
-    dei file audio</string>
-    <string name="tts_tip_user_audio">Per usare l\'audio bisogna
-    mettere i file audio nella cartella indicata</string>
-    <string name="tts_tip_extender">Scarica eSpeak per Android 2.2 e
-    superiori e seleziona eSpeak.</string> <string
-    name="what_is_new_message">Vedi la guida grafica delle nuove
-    funzionalità, clicca sull\'elenco delle novità o visita:&lt;a
-    href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt;&lt;br
-    /&gt;</string>
+    <string name="touch_area_summary">Area dove toccare per mostrare la risposta</string>
+    <string name="settings_audio_location_title">Imposta il percorso dei file audio</string>
+    <string name="tts_tip_user_audio">Per usare l\'audio bisogna mettere i file audio nella cartella indicata</string>
+    <string name="tts_tip_extender">Scarica eSpeak per Android 2.2 e superiori e seleziona eSpeak.</string>
+    <string name="what_is_new_message">Vedi la guida grafica delle nuove funzionalità, clicca sull\'elenco delle novità o visita:&lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt;&lt;br /&gt;</string>
     <string name="portrait_only_title">Solo in modalità ritratto</string>
-    <string name="portrait_only_summary">Disabilita completamente i
-    cambiamenti nell\'orientamento dello schermo.</string>
+    <string name="portrait_only_summary">Disabilita completamente i cambiamenti nell\'orientamento dello schermo.</string>
     <string name="list_mode_text">Lista delle schede</string>
     <string name="merge_db_text">Fusione DB</string>
     <string name="merge_success_title">Fusione avvenuta correttamente</string>
     <string name="merge_fail_title">Errore nella fusione</string>
-    <string name="merge_success_message">I database sono stati fusi
-    correttamente.</string>
-    <string name="merge_fail_message">Errore nella fusione dei
-    database. Errore:</string>
+    <string name="merge_success_message">I database sono stati fusi correttamente.</string>
+    <string name="merge_fail_message">Errore nella fusione dei database. Errore:</string>
     <string name="merging_title">Fusione...</string>
-    <string name="merging_summary">Fusione dei database. Attendere
-    prego.</string>
+    <string name="merging_summary">Fusione dei database. Attendere prego.</string>
     <string name="merge_method_title">Modalità di fusione</string>
     <string name="merge_method_message">Dove fondere i database?</string>
     <string name="merge_method_here">Subito dopo questo punto</string>
     <string name="merge_method_end">Alla fine</string>
     <string name="copy_text">Copia</string>
     <string name="paste_text">Incolla</string>
-    <string name="edit_dialog_unsave_warning">La scheda corrente è
-    stata modificata ma non salvata. Sei sicuro di voler
-    uscire?</string>
-    <string name="downloader_extract_zip">Estrazione... Attendere
-    prego.</string>
+    <string name="edit_dialog_unsave_warning">La scheda corrente è stata modificata ma non salvata. Sei sicuro di voler uscire?</string>
+    <string name="downloader_extract_zip">Estrazione... Attendere prego.</string>
     <string name="allow_orientation_title">Orientamento</string>
-    <string name="allow_orientation_summary">Cambia automaticamente
-    l\'orientamento dello schermo. Riavviare AnyMemo perché la modifica
-    abbia effetto.</string>
-    <string name="enable_tts_extended_title">Abilita la versione
-    estesa del TTS</string>
-    <string name="enable_tts_extended_summary">Abilita la versione
-    estesa del Text-to-Speech per la lettura automatica in più
-    lingue.</string>
-    <string name="learn_queue_size_title">Dimensione della coda di
-    apprendimento</string>
-    <string name="learn_queue_size_summary">La dimensione minima della
-    coda di schede attive. Le nuove schede entrano in coda solo quando
-    si è appresa almeno una scheda.</string>
+    <string name="allow_orientation_summary">Cambia automaticamente l\'orientamento dello schermo. Riavviare AnyMemo perché la modifica abbia effetto.</string>
+    <string name="enable_tts_extended_title">Abilita la versione estesa del TTS</string>
+    <string name="enable_tts_extended_summary">Abilita la versione estesa del Text-to-Speech per la lettura automatica in più lingue.</string>
+    <string name="learn_queue_size_title">Dimensione della coda di apprendimento</string>
+    <string name="learn_queue_size_summary">La dimensione minima della coda di schede attive. Le nuove schede entrano in coda solo quando si è appresa almeno una scheda.</string>
     <string name="actions_category">Azioni</string>
     <string name="learning_category">Apprendimento</string>
     <string name="interface_category">Interfaccia</string>
     <string name="misc_category">Altro</string>
     <string name="shuffling_cards_title">Mischia le schede</string>
-    <string name="shuffling_cards_summary">Mischia le schede per il
-    ripasso. Non mischia le schede in tutto il sistema.</string>
+    <string name="shuffling_cards_summary">Mischia le schede per il ripasso. Non mischia le schede in tutto il sistema.</string>
     <string name="swap_qa_text">Scambia D e R</string>
     <string name="remove_dup_text">Cancella duplicati</string>
     <string name="removing_dup_title">Cancellazione duplicati</string>
-    <string name="removing_dup_warning">La cancellazione dei duplicati
-    può essere un processo molto lungo a seconda della dimensione del
-    database. Un\'interruzione provoca malfunzionamenti nel
-    database!</string>
-    <string name="removing_dup_summary">Cancellazione di schede
-    duplicate. Necessita di tempi lunghi se il database è
-    grosso.</string>
+    <string name="removing_dup_warning">La cancellazione dei duplicati può essere un processo molto lungo a seconda della dimensione del database. Un\'interruzione provoca malfunzionamenti nel database!</string>
+    <string name="removing_dup_summary">Cancellazione di schede duplicate. Necessita di tempi lunghi se il database è grosso.</string>
     <string name="startup_title">Schermata di partenza</string>
-    <string name="startup_summary">Imposta la schermata di
-    partenza.</string>
+    <string name="startup_summary">Imposta la schermata di partenza.</string>
     <string name="detail_reset">Azzeramento dei dati di apprendimento</string>
     <string name="anymemo_widget_name">AnyMemo Widget</string>
     <string name="db_text">DB</string>
     <string name="widget_fail_fetch">Nessun database.</string>
     <string name="notification_text">Notifiche</string>
-    <string name="notification_summary">Mostra notifiche di AnyMemo
-    anche se l\'applicazione non è aperta.</string>
+    <string name="notification_summary">Mostra notifiche di AnyMemo anche se l\'applicazione non è aperta.</string>
     <string name="downloader_chooser">Scegliere una fonte</string>
     <string name="fe_search_title">Login o Ricerca</string>
-    <string name="fe_search_message">Si può accedere con la propria
-    e-mail registrata su flashcardexchange.com
-    (p.es. test@example.com) o ricercare schede con uno specifico tag
-    (p.es. italian).</string>
+    <string name="fe_search_message">Si può accedere con la propria e-mail registrata su flashcardexchange.com (p.es. test@example.com) o ricercare schede con uno specifico tag (p.es. italian).</string>
     <string name="edit_menu_br_text">Aggiungi tag br</string>
     <string name="edit_menu_image_text">Aggiungi immagine</string>
     <string name="edit_menu_audio_text">Aggiungi audio</string>
     <string name="widget_no_review">Nessuna scheda da ripassare.</string>
     <string name="grade_text">Punteggio</string>
     <string name="enable_volume_key_text">Abilita i tasti scorciatoia</string>
-    <string name="enable_volume_key_summary">Usa il volume
-    alza/abbassa per dare i punteggi durante
-    l\'apprendimento.</string>
-    <string name="enable_third_party_arabic_title">Usa il motore
-    d\'Arabo di terze parti</string>
-    <string name="enable_third_party_arabic_summary">Usa il motore
-    agawish Better-Arabic-Reshaper (alpha).</string>
+    <string name="enable_volume_key_summary">Usa il volume alza/abbassa per dare i punteggi durante l\'apprendimento.</string>
+    <string name="enable_third_party_arabic_title">Usa il motore d\'Arabo di terze parti</string>
+    <string name="enable_third_party_arabic_summary">Usa il motore agawish Better-Arabic-Reshaper (alpha).</string>
     <string name="donate_text">Donazione</string>
     <string name="buy_pro_text">Compra la versione Donazione</string>
-    <string name="donate_summary">Si può fare una donazione al
-    progetto AnyMemo project tramite Google Play o online &lt;a
-    href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br
-    /&gt; Grazie per l\'aiuto.</string>
-    <string
-    name="anymemo_pro_link">market://search?q=pname:org.liberty.android.fantastischmemopro</string>
+    <string name="donate_summary">Si può fare una donazione al progetto AnyMemo project tramite Google Play o online &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt; Grazie per l\'aiuto.</string>
+    <string name="anymemo_pro_link">market://search?q=pname:org.liberty.android.fantastischmemopro</string>
     <string name="goto_prev_screen">Vai all\'anteprima/modifica</string>
     <string name="exception_text">Eccezione</string>
     <string name="advanced_setting_text">Avanzato ...</string>
     <string name="db_merger_title">Fusione dei database</string>
-    <string name="db_merger_explaination">Fonde il database sorgente
-    in quello destinazione.</string>
-    <string name="target_db_text">DB destinazione (1 tap focus, 2 tap
-    sfoglia)</string>
-    <string name="source_db_text">DB sorgente (1 tap focus, 2 tap
-    sfoglia)</string>
-    <string name="exception_message">Eccezione durante
-    l\'operazione.</string>
+    <string name="db_merger_explaination">Fonde il database sorgente in quello destinazione.</string>
+    <string name="target_db_text">DB destinazione (1 tap focus, 2 tap sfoglia)</string>
+    <string name="source_db_text">DB sorgente (1 tap focus, 2 tap sfoglia)</string>
+    <string name="exception_message">Eccezione durante l\'operazione.</string>
     <string name="error_text">Errore</string>
     <string name="clone_text">Copia</string>
     <string name="rename_text">Rinomina</string>
@@ -389,9 +292,7 @@
     <string name="swap_text">Scambia</string>
     <string name="swapdup_text">Scambia+Duplica</string>
     <string name="locale_german_text">Tedesco</string>
-    <string name="reset_current_warning">Questa operazione azzera i
-    dati di apprendimento soltanto di questa scheda. Non può essere
-    annullata.</string>
+    <string name="reset_current_warning">Questa operazione azzera i dati di apprendimento soltanto di questa scheda. Non può essere annullata.</string>
     <string name="locale_korean_text">Coreano</string>
     <string name="locale_french_text">Francese</string>
     <string name="locale_portuguese_text">Portoghese (Brasiliano)</string>
@@ -403,28 +304,21 @@
     <string name="db_name_text">Nome database</string>
     <string name="save_prev_text">Salva+Precedente</string>
     <string name="paint_text">Disegna</string>
-    <string name="error_no_colordict">Manca ColorDict. Scarica
-    ColorDict da Google Play. Errore: </string>
+    <string name="error_no_colordict">Manca ColorDict. Scarica ColorDict da Google Play. Errore: </string>
     <string name="flashcardexchange_text">FlashcardExchange</string>
     <string name="search_tag">Ricerca per tag</string>
     <string name="search_user">Ricerca per username</string>
     <string name="private_login">Accedi alle schede private</string>
     <string name="upload_db">Carica un database (lento e instabile)</string>
-    <string name="upload_wait">Caricamento... Attendere prego. Può
-    metterci parecchio con un DB grosso.</string>
+    <string name="upload_wait">Caricamento... Attendere prego. Può metterci parecchio con un DB grosso.</string>
     <string name="upload_finish">Caricamento completato</string>
-    <string name="upload_finish_message">è stato caricato
-    correttamente.</string>
-    <string name="access_authorization_text">Accesso al token di
-    autorizzazione. Attendere prego...</string>
+    <string name="upload_finish_message">è stato caricato correttamente.</string>
+    <string name="access_authorization_text">Accesso al token di autorizzazione. Attendere prego...</string>
     <string name="fe_directory_text">Sfoglia le cartelle</string>
-    <string name="fe_search_tag_message">Inserire un tag da
-    cercare,\np.es. Italian, math ecc.</string>
-    <string name="fe_search_user_message">Inserire un\'e-mail come
-    login,\np.es. yourname@example.com</string>
+    <string name="fe_search_tag_message">Inserire un tag da cercare,\np.es. Italian, math ecc.</string>
+    <string name="fe_search_user_message">Inserire un\'e-mail come login,\np.es. yourname@example.com</string>
     <string name="fe_private_login">Accedi ai dati privati</string>
-    <string name="fe_private_login_message">Inserisci di nuovo
-    l\'e-mail precedente,\np.es. yourname@example.com</string>
+    <string name="fe_private_login_message">Inserisci di nuovo l\'e-mail precedente,\np.es. yourname@example.com</string>
     <string name="card_style">Stile schede</string>
     <string name="card_style_double">A doppia faccia</string>
     <string name="card_style_single">A faccia singola</string>
@@ -443,38 +337,28 @@
     <string name="download_tab_text">Scarica</string>
     <string name="misc_tab_text">Altro</string>
     <string name="convert_wait">Conversione, attendere prego...</string>
-    <string name="convert_success">Conversione avvenuta con successo e
-    salvata in</string>
-    <string name="reset_all_pref_warning">Questa operazione
-    ripristinerà tutte le preferenze globali ai valori di default. I
-    dati sull\'apprendimento NON verranno cancellati. </string>
+    <string name="convert_success">Conversione avvenuta con successo e salvata in</string>
+    <string name="reset_all_pref_warning">Questa operazione ripristinerà tutte le preferenze globali ai valori di default. I dati sull\'apprendimento NON verranno cancellati. </string>
     <string name="fe_login_text">Login</string>
     <string name="fe_logout_text">Logout</string>
     <string name="fe_logged_in_text">Connesso</string>
     <string name="fe_not_login">Necessario login</string>
-    <string name="fe_not_login_message">Usare il pulsante di login
-    prima di iniziare.</string>
+    <string name="fe_not_login_message">Usare il pulsante di login prima di iniziare.</string>
     <string name="linebreak_conversion">Conversione degli a capo HTML</string>
     <string name="locale_japanese_text">Giapponese</string>
     <string name="locale_spanish_text">Spagnolo</string>
     <string name="dict_app">Applicazione per il dizionario</string>
-    <string name="dict_app_summary">Cambia l\'applicazione per il
-    dizionario utilizzabile durante l\'apprendimento.</string>
+    <string name="dict_app_summary">Cambia l\'applicazione per il dizionario utilizzabile durante l\'apprendimento.</string>
     <string name="dict_colordict">ColorDict</string>
     <string name="dict_fora">Fora Dictionary</string>
-    <string name="error_no_dict">non è installato. Scaricalo da Google
-    Play o imposta un altra applicazione per il dizionario nelle
-    preferenze. Errore: </string>
-    <string name="item_update_warning">Vuoi davvero aggiornare questo
-    elemento?</string>
+    <string name="error_no_dict">non è installato. Scaricalo da Google Play o imposta un altra applicazione per il dizionario nelle preferenze. Errore: </string>
+    <string name="item_update_warning">Vuoi davvero aggiornare questo elemento?</string>
     <string name="quizlet_text">Quizlet.com</string>
     <string name="quizlet_search_tag">Ricerca insiemi di schede per tag</string>
     <string name="quizlet_search_user">Ricerca per username</string>
     <string name="download_source_quizlet">Quizlet.com\n(sperimentale)</string>
-    <string name="quizlet_search_tag_message">Inserire un tag da
-    cercare.</string>
-    <string name="quizlet_search_user_message">Inserire una username
-    da cercare.</string>
+    <string name="quizlet_search_tag_message">Inserire un tag da cercare.</string>
+    <string name="quizlet_search_user_message">Inserire una username da cercare.</string>
     <string name="dropbox_text">Dropbox.com</string>
     <string name="dropbox_login_text">Login con account Dropbox</string>
     <string name="dropbox_download_text">Scarica da Dropbox</string>
@@ -482,14 +366,11 @@
     <string name="user_name_text">Username:</string>
     <string name="password_text">Password:</string>
     <string name="download_source_dropbox">Dropbox.com\n(sperimentale)</string>
-    <string name="dropbox_login_message">Inserire la username Dropbox
-    (Probabilmente un\'e-mail) e la password.</string>
-    <string name="import_supermemo_2008_xml_text">Importa SuperMemo
-    2008 XML</string>
+    <string name="dropbox_login_message">Inserire la username Dropbox (Probabilmente un\'e-mail) e la password.</string>
+    <string name="import_supermemo_2008_xml_text">Importa SuperMemo 2008 XML</string>
     <string name="uncategorized_text">Senza categoria</string>
     <string name="edit_text">Modifica</string>
-    <string name="category_dialog_title">Selezionare una categoria o
-    inserirne una nuova</string>
+    <string name="category_dialog_title">Selezionare una categoria o inserirne una nuova</string>
     <string name="ordinal_text_short">Ord</string>
     <string name="total_text">Totale</string>
     <string name="review_short_text">Rip</string>
@@ -505,94 +386,63 @@
     <string name="question_text">Domanda</string>
     <string name="answer_text">Risposta</string>
     <string name="exit_text">Uscita</string>
-    <string name="sdcard_not_available_warning_title">Scheda SD non
-    disponibile</string>
-    <string name="sdcard_not_available_warning_message">Inserire la
-    scheda SD e riprovare!</string>
-    <string name="help_advanced_operations">Altre operazioni come
-    scambiare D/R, mischiare le schede, cancellare i duplicati
-    appaiono nella schermata Anteprima/Modifica premendo a lungo su di
-    una scheda.</string>
+    <string name="sdcard_not_available_warning_title">Scheda SD non disponibile</string>
+    <string name="sdcard_not_available_warning_message">Inserire la scheda SD e riprovare!</string>
+    <string name="help_advanced_operations">Altre operazioni come scambiare D/R, mischiare le schede, cancellare i duplicati appaiono nella schermata Anteprima/Modifica premendo a lungo su di una scheda.</string>
     <string name="load_default_text">Carica default</string>
-    <string name="load_default_warning_text">Carica i valori di
-    default delle "Impostazioni di default" e le impostazioni correnti
-    verrano perse.</string>
+    <string name="load_default_warning_text">Carica i valori di default delle "Impostazioni di default" e le impostazioni correnti verrano perse.</string>
     <string name="default_settings_text">Impostazioni di default DB</string>
     <string name="remove_dup_message">Cancella con domande duplicate.</string>
     <string name="ordinal_text">Ordine</string>
     <string name="import_zip_text">Importa Zip</string>
     <string name="export_zip_text">Esporta Zip</string>
-    <string name="customize_scheduling_algorithm_text">Personalizza
-    l\'algoritmo di scheduling</string>
-    <string name="customize_scheduling_algorithm_summary">Personalizza
-    l\'algoritmo di scheduling con gli intervalli fra le
-    domande.</string>
-    <string name="customize_scheduling_algorithm_warning">La
-    personalizzazione dell\'algoritmo è solo per gli utenti
-    evoluti.</string>
+    <string name="customize_scheduling_algorithm_text">Personalizza l\'algoritmo di scheduling</string>
+    <string name="customize_scheduling_algorithm_summary">Personalizza l\'algoritmo di scheduling con gli intervalli fra le domande.</string>
+    <string name="customize_scheduling_algorithm_warning">La personalizzazione dell\'algoritmo è solo per gli utenti evoluti.</string>
     <string name="queuing_text">Accodamento</string>
-    <string name="when_first_grade_text">Quando si dà il punteggio a
-    una scheda per la prima volta</string>
-    <string name="initial_grading_interval_summary">Questo è
-    l\'intervallo (in giorni) dopo il primo punteggio.</string>
+    <string name="when_first_grade_text">Quando si dà il punteggio a una scheda per la prima volta</string>
+    <string name="initial_grading_interval_summary">Questo è l\'intervallo (in giorni) dopo il primo punteggio.</string>
     <string name="grade_0_text">Punti 0</string>
     <string name="grade_1_text">Punti 1</string>
     <string name="grade_2_text">Punti 2</string>
     <string name="grade_3_text">Punti 3</string>
     <string name="grade_4_text">Punti 4</string>
     <string name="grade_5_text">Punti 5</string>
-    <string name="when_failed_to_remember_text">Quando una scheda non
-    è stata ricordata</string>
+    <string name="when_failed_to_remember_text">Quando una scheda non è stata ricordata</string>
     <string name="minimal_interval_text">Intervallo minimo</string>
-    <string name="minimal_interval_summary">Se l\'intervallo è minore
-    di questo valore, equivale a non ricordare la scheda.</string>
-    <string name="failed_grading_interval_summary">Se una scheda non è
-    stata ricordata, questo è l\'intervallo dopo cui si
-    riprova.</string>
-    <string name="easiness_incremental_text">Fattore di cambiamento
-    della facilità per ogni punteggio</string>
-    <string name="easiness_incremental_summary">Fattore di cambiamento
-    della facilità per ogni punteggio.</string>
+    <string name="minimal_interval_summary">Se l\'intervallo è minore di questo valore, equivale a non ricordare la scheda.</string>
+    <string name="failed_grading_interval_summary">Se una scheda non è stata ricordata, questo è l\'intervallo dopo cui si riprova.</string>
+    <string name="easiness_incremental_text">Fattore di cambiamento della facilità per ogni punteggio</string>
+    <string name="easiness_incremental_summary">Fattore di cambiamento della facilità per ogni punteggio.</string>
     <string name="minimal_easiness_text">Facilità minima</string>
-    <string name="minimal_easiness_summary">La facilità non va mai al
-    di sotto di questo valore.</string>
+    <string name="minimal_easiness_summary">La facilità non va mai al di sotto di questo valore.</string>
     <string name="initial_easiness_text">Facilità iniziale</string>
-    <string name="initial_easiness_summary">Il nuovo intervallo per la
-    scheda equivale alla facilità corrente.</string>
-    <string name="noise_customization_text">Personalizzazione del
-    "rumore"</string>
+    <string name="initial_easiness_summary">Il nuovo intervallo per la scheda equivale alla facilità corrente.</string>
+    <string name="noise_customization_text">Personalizzazione del "rumore"</string>
     <string name="enable_noise_text">Abilita "rumore"</string>
-    <string name="enable_noise_on_summary">Il "rumore" viene usato nel
-    calcolo dell\'intervallo per allargarlo.</string>
-    <string name="enable_noise_off_summary">L\'intervallo è privo di
-    "rumore".</string>
-    <string name="reset_customized_scheduling_algorithm_text">Azzera
-    l\'algoritmo di scheduling personalizzato</string>
-    <string
-    name="reset_customized_scheduling_algorithm_summary">Ripristina
-    l\'algortmo di scheduling di default.</string>
+    <string name="enable_noise_on_summary">Il "rumore" viene usato nel calcolo dell\'intervallo per allargarlo.</string>
+    <string name="enable_noise_off_summary">L\'intervallo è privo di "rumore".</string>
+    <string name="reset_customized_scheduling_algorithm_text">Azzera l\'algoritmo di scheduling personalizzato</string>
+    <string name="reset_customized_scheduling_algorithm_summary">Ripristina l\'algortmo di scheduling di default.</string>
     <string name="statistics_text">Statistiche</string>
     <string name="statistics_type_text">Tipo di statistiche</string>
     <string name="cards_to_review_text">Schede in un mese</string>
-    <string name="number_of_cards_scheduled_in_a_day_text">Schede in
-    un giorno</string>
+    <string name="number_of_cards_scheduled_in_a_day_text">Schede in un giorno</string>
     <string name="grade_statistics_text">Statistiche punteggi</string>
     <string name="accumulative_cards_scheduled_text">Schede totali</string>
-    <string name="google_drive_spreadsheet_text">Foglio elettronico
-    Google Drive</string>
+    <string name="google_drive_spreadsheet_text">Foglio elettronico Google Drive</string>
     <string name="choose_account_text">Scegli acccount</string>
     <string name="login_account_text">Login account</string>
     <string name="upload_text">Carica</string>
     <string name="logout_text">Logout</string>
-    <string name="successfully_uploaded_text">Caricamento avvenuto
-    correttamente</string>
-    <string name="gdrive_successfully_uploaded_message">Caricamento avvenuto
-    correttamente nella cartella AnyMemo di Google Drive</string>
-    <string name="loading_auth_text">Autenticazione col
-    server. Attendere prego...</string>
+    <string name="successfully_uploaded_text">Caricamento avvenuto correttamente</string>
+    <string name="gdrive_successfully_uploaded_message">Caricamento avvenuto correttamente nella cartella AnyMemo di Google Drive</string>
+    <string name="loading_auth_text">Autenticazione col server. Attendere prego...</string>
     <string name="auth_error_text">Errore di autenticazione.</string>
     <string name="locale_italian_text">Italiano</string>
-    <string name="upload_gdrive_message">Vuoi caricare %s nella tua
-    cartella Google Drive AnyMemo? Può metterci parecchio se ci sono
-    più di 1000 schede.</string>
+    <string name="upload_gdrive_message">Vuoi caricare %s nella tua cartella Google Drive AnyMemo? Può metterci parecchio se ci sono più di 1000 schede.</string>
+    <string name="recorder_record_your_memo_text">Registra il tuo memo</string>
+    <string name="record_text">Registra</string>
+    <string name="max_recent_list_size_text">Dimensione max lista DB recenti</string>
+    <string name="recent_summary">Configura il numero massimo di DB da mostrare nella lista di quelli recentemente visitati.</string>
 </resources>

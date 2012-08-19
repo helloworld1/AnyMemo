@@ -30,8 +30,12 @@ import org.apache.mycommons.io.FileUtils;
 
 import org.apache.mycommons.lang3.StringUtils;
 
+import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.R;
+
+import org.liberty.android.fantastischmemo.utils.AMUtil;
+import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 import android.app.Activity;
 import android.app.AlertDialog;
 
@@ -69,7 +73,7 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
 	private File currentDirectory = new File("/");
 	private String defaultRoot;
 	private String[] fileExtensions;
-    private Activity mActivity;
+    private AMActivity mActivity;
     private ListView fbListView;
     private boolean dismissOnSelect = false;
 
@@ -89,7 +93,7 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mActivity = activity;
+        mActivity = (AMActivity)activity;
         settings = PreferenceManager.getDefaultSharedPreferences(mActivity);
         editor = settings.edit();
     }
@@ -294,10 +298,12 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
                                             .setPositiveButton(getString(R.string.delete_text), new DialogInterface.OnClickListener(){
                                                 @Override
                                                 public void onClick(DialogInterface dialog, int which ){
-                                                    clickedFile.delete();
+                                                    AMUtil.deleteDbSafe(clickedFile.getAbsolutePath());
                                                     File dir = new File(clickedFile.getParent());
                                                     Log.v(TAG, "DIR: " + dir.toString());
                                                     browseTo(dir);
+                                                    /* Refresh the list */
+                                                    mActivity.restartActivity();
                                                 }
                                             })
                                             .setNegativeButton(getString(R.string.cancel_text), null)
@@ -309,7 +315,7 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
                                         /* Clone */
                                         String srcDir = clickedFile.getAbsolutePath();
                                         String destDir = srcDir.replaceAll(".db", ".clone.db");
-                                        try{
+                                        try {
                                             FileUtils.copyFile(new File(srcDir), new File(destDir));
                                         }
                                         catch(IOException e){
@@ -336,10 +342,13 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
                                             public void onClick(DialogInterface dialog, int which ){
                                                 String value = input.getText().toString();
                                                 if(!value.equals(clickedFile.getAbsolutePath())){
-                                                    try{
-                                                        FileUtils.moveFile(clickedFile, new File(value));
-                                                    }
-                                                    catch(IOException e){
+                                                    try {
+                                                        FileUtils.copyFile(clickedFile, new File(value));
+                                                        AMUtil.deleteDbSafe(clickedFile.getAbsolutePath());
+                                                        RecentListUtil rlu = new RecentListUtil(mActivity);
+                                                        rlu.deleteFromRecentList(clickedFile.getAbsolutePath());
+
+                                                    } catch (IOException e) {
                                                         new AlertDialog.Builder(mActivity)
                                                             .setTitle(getString(R.string.fail))
                                                             .setMessage(getString(R.string.fb_rename_fail) + "\nError: " + e.toString())
@@ -503,7 +512,7 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
                 v = li.inflate(R.layout.filebrowser_item, null);
             }
             String name = getItem(position);
-            if(name != null){
+            if (name != null) {
                 TextView tv = (TextView)v.findViewById(R.id.file_name);
                 ImageView iv = (ImageView)v.findViewById(R.id.file_icon);
                 if(name.endsWith("/")){
