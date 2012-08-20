@@ -58,8 +58,7 @@ import org.liberty.android.fantastischmemo.scheduler.DefaultScheduler;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
-import org.liberty.android.fantastischmemo.tts.AnyMemoTTSPlatform;
-import org.liberty.android.fantastischmemo.tts.AudioFileTTS;
+import org.liberty.android.fantastischmemo.tts.AnyMemoTTSImp;
 
 import com.example.android.apis.graphics.FingerPaint;
 
@@ -842,8 +841,8 @@ public class MemoScreen extends AMActivity {
         String defaultLocation = AMEnv.DEFAULT_AUDIO_PATH;
         String qa = setting.getQuestionAudio();
         String aa = setting.getAnswerAudio();
-        questionTTS = new AnyMemoTTSPlatform(this, qa, defaultLocation, dbName);
-        answerTTS = new AnyMemoTTSPlatform(this, aa, defaultLocation, dbName);
+        questionTTS = new AnyMemoTTSImp(this, qa, defaultLocation, dbName);
+        answerTTS = new AnyMemoTTSImp(this, aa, defaultLocation, dbName);
     }
 
     private void showCategoriesDialog() {

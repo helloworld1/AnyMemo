@@ -20,11 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import java.sql.SQLException;
-
 import java.util.Map;
-
-import org.apache.mycommons.lang3.StringUtils;
-
 import org.apache.mycommons.lang3.math.NumberUtils;
 
 import org.liberty.android.fantastischmemo.AMActivity;
@@ -51,8 +47,7 @@ import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
-import org.liberty.android.fantastischmemo.tts.AnyMemoTTSPlatform;
-import org.liberty.android.fantastischmemo.tts.AudioFileTTS;
+import org.liberty.android.fantastischmemo.tts.AnyMemoTTSImp;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -440,8 +435,8 @@ public class EditScreen extends AMActivity {
         String qa = setting.getQuestionAudio();
         String aa = setting.getAnswerAudio();
 
-        questionTTS = new AnyMemoTTSPlatform(this, qa, defaultLocation, dbName);
-        answerTTS = new AnyMemoTTSPlatform(this, aa, defaultLocation, dbName);
+        questionTTS = new AnyMemoTTSImp(this, qa, defaultLocation, dbName);
+        answerTTS = new AnyMemoTTSImp(this, aa, defaultLocation, dbName);
 
     }
 
