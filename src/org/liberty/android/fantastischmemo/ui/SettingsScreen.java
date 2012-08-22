@@ -82,7 +82,6 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
     private AMSpinner qaRatioSpinner;
     private AMSpinner questionLocaleSpinner;
     private AMSpinner answerLocaleSpinner;
-    private LinearLayout audioLocationLayout;
     private EditText audioLocationEdit;
 
     private CheckBox colorCheckbox;
@@ -392,26 +391,16 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             
             AdapterView.OnItemSelectedListener localeListener = new AdapterView.OnItemSelectedListener(){
                 public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id){
-                    /* This is the position os "User Audio" */
-                    if(position == 1){
-                        audioLocationLayout.setVisibility(View.VISIBLE);
-                        Toast.makeText(SettingsScreen.this, getString(R.string.tts_tip_user_audio), Toast.LENGTH_SHORT).show();
-                    }
-                    else if(position > 7){
+                    if(position > 7){
                         Toast.makeText(SettingsScreen.this, getString(R.string.tts_tip_extender), Toast.LENGTH_SHORT).show();
-                    }
-
-                    if(answerLocaleSpinner.getSelectedItemPosition() != 1 && questionLocaleSpinner.getSelectedItemPosition() != 1) {
-                        audioLocationLayout.setVisibility(View.GONE);
                     }
                 }
                 public void onNothingSelected(AdapterView<?> adapterView){
-                    audioLocationLayout.setVisibility(View.GONE);
+                	//so far, do nothing
                 }
             };
             questionLocaleSpinner.setOnItemSelectedListener(localeListener);
             answerLocaleSpinner.setOnItemSelectedListener(localeListener);
-            audioLocationLayout = (LinearLayout) findViewById(R.id.settings_audio_location_view);
             audioLocationEdit = (EditText) findViewById(R.id.settings_audio_location);
 
             // If we got no text, we will use the default location.
@@ -526,13 +515,6 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
         // Default to 50
         qaRatioSpinner.selectItemFromValue(setting.getQaRatio().toString(), 0);
         
-        if (StringUtils.isNotEmpty(setting.getQuestionAudioLocation()) || 
-            StringUtils.isNotEmpty(setting.getAnswerAudio())){
-            audioLocationLayout.setVisibility(View.VISIBLE);
-        } else {
-            audioLocationLayout.setVisibility(View.GONE);
-        }
-
         colorCheckbox.setChecked(!setting.isDefaultColor());
         if (colorCheckbox.isChecked()) {
             colorRow.setVisibility(View.VISIBLE);

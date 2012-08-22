@@ -93,8 +93,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
     private String originalQuestion;
     private String originalAnswer;
     private String originalNote;
-
-
+    
     public static String EXTRA_DBPATH = "dbpath";
     public static String EXTRA_CARD_ID = "id";
     public static String EXTRA_RESULT_CARD_ID= "result_card_id";
@@ -213,6 +212,9 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
             builder.setTitle("Edit audio");
             builder.setItems(audioOptionItems, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int itemIndex) {
+                	if(!isViewEligibleToEditAudio()){
+                		return;
+                	}
                     switch(itemIndex){
                     case 0:
                         addExistingAudio();
@@ -234,51 +236,62 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
         return alertDialog;
     }
     
+    private boolean isViewEligibleToEditAudio(){
+    	View focusView = getCurrentFocus();
+        if(focusView == questionEdit || focusView == answerEdit){
+        	return true;
+        } else {
+        	return false;
+        }
+    }
+    
+    private void showConfirmDialog(String msg, DialogInterface.OnClickListener positiveClickListener){
+    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    	builder.setMessage(msg)
+    	       .setPositiveButton("Yes", positiveClickListener)
+    	       .setNegativeButton("No", new DialogInterface.OnClickListener() {
+			       public void onClick(DialogInterface dialog, int which) {
+				       //do nothing so far
+			       }
+		       });
+    	AlertDialog alert = builder.create();
+    	alert.show();
+    }
+    
+    private boolean audioPreviouslyExists(){
+    	View focusView = getCurrentFocus();
+        String curContent = ((EditText)focusView).getText().toString();
+        return curContent.contains("src=");
+    }
+    
     private void addExistingAudio(){
-        View focusView = getCurrentFocus();
-        if(focusView == questionEdit || focusView ==answerEdit){
-            Intent myIntent = new Intent(this, FileBrowserActivity.class);
-            myIntent.putExtra(FileBrowserActivity.EXTRA_FILE_EXTENSIONS, ".3gp,.ogg,.mp3,.wav");
-            startActivityForResult(myIntent, ACTIVITY_AUDIO_FILE);
+        if(audioPreviouslyExists()){
+            //if there is audio previously defined,show alert
+        	String alertMsg = "Are you sure you want to override current audio?";
+        	DialogInterface.OnClickListener positiveClickListener = new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					startAudioBrowser();
+				}
+			};
+			showConfirmDialog(alertMsg, positiveClickListener);
+        } else {
+        	startAudioBrowser();
         }
     }
     
     private void addNewAudio(){
-        View focusView = getCurrentFocus();
-        if(focusView != questionEdit && focusView !=answerEdit) {
-            return;
-        }
-        
-        String audioFilename = AMEnv.DEFAULT_AUDIO_PATH + dbName; 
-        new File(audioFilename).mkdirs();
-        AudioRecorderFragment recorder = new AudioRecorderFragment();
-        if(focusView == questionEdit){
-            audioFilename +=  "/"+ currentCardId + "_q.3gp";
-        } else if (focusView == answerEdit) {
-            audioFilename +=  "/"+ currentCardId + "_a.3gp";
-        } else {
-            return;
-        }
-        Bundle b = new Bundle();
-        b.putString(EXTRA_AUDIO_FILENAME, audioFilename);
-        
-        recorder.setAudioRecorderResultListener(new AudioRecorderResultListener() {
-            public void onReceiveAudio() {
-                View focusView = getCurrentFocus();
-                String content = ((EditText)(focusView)).getText().toString(); 
-                if(!content.contains("src=")){
-                    if(focusView == questionEdit){
-                        addTextToView((EditText) focusView, "<audio src=\"" + currentCardId
-                                + "_q.3gp\" />");    
-                    } else if (focusView == answerEdit){
-                        addTextToView((EditText) focusView, "<audio src=\"" + currentCardId
-                                + "_a.3gp\" />");
-                    }
-                }
-            }
-        });
-        recorder.setArguments(b);
-        recorder.show(getSupportFragmentManager(), "AudioRecorderDialog");
+         if(audioPreviouslyExists()){
+             //if there is audio previously defined,show alert
+         	String alertMsg = "Are you sure you want to override current audio?";
+         	DialogInterface.OnClickListener positiveClickListener = new DialogInterface.OnClickListener() {
+ 				public void onClick(DialogInterface dialog, int which) {
+ 					startAudioRecorder();
+ 				}
+ 			};
+ 			showConfirmDialog(alertMsg, positiveClickListener);
+         } else {
+         	startAudioRecorder();
+         }       
     }
     
     private void removeAudio(){
@@ -294,6 +307,42 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
         }
     }
     
+    private void startAudioBrowser(){
+        removeAudio();
+        Intent myIntent = new Intent(this, FileBrowserActivity.class);
+        myIntent.putExtra(FileBrowserActivity.EXTRA_FILE_EXTENSIONS, ".3gp,.ogg,.mp3,.wav");
+        startActivityForResult(myIntent, ACTIVITY_AUDIO_FILE);
+    }
+    
+    private void startAudioRecorder(){
+         removeAudio();
+    	 View focusView = getCurrentFocus();
+         String audioFilename = AMEnv.DEFAULT_AUDIO_PATH + dbName; 
+         new File(audioFilename).mkdirs();
+         AudioRecorderFragment recorder = new AudioRecorderFragment();
+         if(focusView == questionEdit){
+             audioFilename +=  "/"+ currentCardId + "_q.3gp";
+         } else if (focusView == answerEdit) {
+             audioFilename +=  "/"+ currentCardId + "_a.3gp";
+         } else {
+             return;
+         }
+         Bundle b = new Bundle();
+         b.putString(EXTRA_AUDIO_FILENAME, audioFilename);
+         
+         recorder.setAudioRecorderResultListener(new AudioRecorderResultListener() {
+             public void onReceiveAudio() {
+                 View focusView = getCurrentFocus();
+                 if(focusView == questionEdit){
+                     addTextToView((EditText) focusView, "<audio src=\"" + currentCardId + "_q.3gp\" />");    
+                 } else if (focusView == answerEdit){
+                         addTextToView((EditText) focusView, "<audio src=\"" + currentCardId + "_a.3gp\" />");
+                 }
+             }
+         });
+         recorder.setArguments(b);
+         recorder.show(getSupportFragmentManager(), "AudioRecorderDialog");
+    }
     
     private void addTextToView(EditText v, String text){
         String origText = v.getText().toString();
