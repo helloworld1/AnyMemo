@@ -80,7 +80,7 @@ public class DatabaseUtils {
         try {
             helper.getCardDao(); 
             return true;
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         } finally {

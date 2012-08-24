@@ -160,47 +160,71 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
         super.close();
     }
 
-    public synchronized CardDao getCardDao() throws SQLException {
-        if (cardDao == null) {
-            cardDao = getDao(Card.class);
-            cardDao.setHelper(this);
+    public synchronized CardDao getCardDao() {
+        try {
+            if (cardDao == null) {
+                cardDao = getDao(Card.class);
+                cardDao.setHelper(this);
+            }
+            return cardDao;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return cardDao;
     }
 
-    public synchronized DeckDao getDeckDao() throws SQLException {
-        if (deckDao == null) {
-            deckDao = getDao(Deck.class);
+    public synchronized DeckDao getDeckDao() {
+        try {
+            if (deckDao == null) {
+                deckDao = getDao(Deck.class);
+            }
+            return deckDao;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return deckDao;
     }
 
-    public synchronized SettingDao getSettingDao() throws SQLException {
-        if (settingDao == null) {
-            settingDao = getDao(Setting.class);
+    public synchronized SettingDao getSettingDao() {
+        try {
+            if (settingDao == null) {
+                settingDao = getDao(Setting.class);
+            }
+            return settingDao;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return settingDao;
     }
 
-    public synchronized FilterDao getFilterDao() throws SQLException {
-        if (filterDao == null) {
-            filterDao = getDao(Filter.class);
+    public synchronized FilterDao getFilterDao() {
+        try {
+            if (filterDao == null) {
+                filterDao = getDao(Filter.class);
+            }
+            return filterDao;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return filterDao;
     }
 
-    public synchronized CategoryDao getCategoryDao() throws SQLException {
-        if (categoryDao == null) {
-            categoryDao = getDao(Category.class);
+    public synchronized CategoryDao getCategoryDao() {
+        try {
+            if (categoryDao == null) {
+                categoryDao = getDao(Category.class);
+            }
+            return categoryDao;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return categoryDao;
     }
 
-    public synchronized LearningDataDao getLearningDataDao() throws SQLException {
-        if (learningDataDao == null) {
-            learningDataDao = getDao(LearningData.class);
+    public synchronized LearningDataDao getLearningDataDao() {
+        try {
+            if (learningDataDao == null) {
+                learningDataDao = getDao(LearningData.class);
+            }
+            return learningDataDao;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return learningDataDao;
     }
 
     /* Package private constructor used in Manager. */

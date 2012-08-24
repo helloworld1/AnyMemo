@@ -181,9 +181,9 @@ public class RecentListFragment extends Fragment {
         @Override
         public void onItemClick(AdapterView<?> parentView, View childView, int position, long id) {
             Intent myIntent = new Intent();
-            myIntent.setClass(mActivity, MemoScreen.class);
+            myIntent.setClass(mActivity, StudyActivity.class);
             String dbPath = recentListAdapter.getItem(position).dbPath;
-            myIntent.putExtra(MemoScreen.EXTRA_DBPATH, dbPath);
+            myIntent.putExtra(StudyActivity.EXTRA_DBPATH, dbPath);
             recentListUtil.addToRecentList(dbPath);
             startActivity(myIntent);
         }

@@ -11,27 +11,29 @@
         android:layout_weight="1"
         android:orientation="horizontal">
         <Button 
-            android:id="@+id/grade_btn_anymemo_0" 
+            android:id="@+id/grade_button_0" 
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" 
-            android:lines="2"
+            android:background="@drawable/blue_button"
+            style="@style/grade_button_text"
             android:layout_weight="1"
             android:layout_marginLeft="4dip" />
         <Button 
-            android:id="@+id/grade_btn_anymemo_1" 
+            android:id="@+id/grade_button_1" 
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" 
-            android:lines="2"
+            android:background="@drawable/blue_button"
+            style="@style/grade_button_text"
             android:layout_weight="1"
             android:layout_marginLeft="4dip" />
         <Button 
-            android:id="@+id/grade_btn_anymemo_2" 
+            android:id="@+id/grade_button_2" 
             android:layout_width="fill_parent"
-            android:lines="2"
-            android:layout_weight="1"
             android:layout_height="wrap_content" 
-            android:layout_marginLeft="4dip"
-            android:layout_marginRight="4dip" />
+            android:background="@drawable/blue_button"
+            style="@style/grade_button_text"
+            android:layout_weight="1"
+            android:layout_marginLeft="4dip" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="fill_parent"
@@ -39,26 +41,28 @@
         android:layout_weight="1"
         android:orientation="horizontal">
         <Button 
-            android:id="@+id/grade_btn_anymemo_3" 
-            android:layout_width="fill_parent"
-            android:lines="2"
-            android:layout_weight="1"
-            android:layout_height="wrap_content" 
-            android:layout_marginLeft="4dip" />
-        <Button 
-            android:id="@+id/grade_btn_anymemo_4" 
+            android:id="@+id/grade_button_3" 
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" 
-            android:lines="2"
+            android:background="@drawable/blue_button"
+            style="@style/grade_button_text"
             android:layout_weight="1"
             android:layout_marginLeft="4dip" />
         <Button 
-            android:id="@+id/grade_btn_anymemo_5" 
+            android:id="@+id/grade_button_4" 
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" 
-            android:lines="2"
+            android:background="@drawable/blue_button"
+            style="@style/grade_button_text"
             android:layout_weight="1"
-            android:layout_marginLeft="4dip" 
-            android:layout_marginRight="4dip" />
+            android:layout_marginLeft="4dip" />
+        <Button 
+            android:id="@+id/grade_button_5" 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" 
+            android:background="@drawable/blue_button"
+            style="@style/grade_button_text"
+            android:layout_weight="1"
+            android:layout_marginLeft="4dip" />
     </LinearLayout>
 </LinearLayout>

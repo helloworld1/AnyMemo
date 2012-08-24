@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2010 Haowen Ning
+Copyright (C) 2012 Haowen Ning
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -17,15 +17,51 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-package org.liberty.android.fantastischmemo.cardscreen;
+package org.liberty.android.fantastischmemo.ui;
 
-import org.liberty.android.fantastischmemo.*;
-import org.liberty.android.fantastischmemo.tts.*;
-import com.example.android.apis.graphics.*;
+import java.util.Date;
 
-import java.util.Locale;
+import org.apache.mycommons.lang3.StringUtils;
+
+import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.AMEnv;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.AnyMemoService;
+
+import org.liberty.android.fantastischmemo.queue.CramQueueManager;
+import org.liberty.android.fantastischmemo.queue.LearnQueueManager;
+import org.liberty.android.fantastischmemo.ui.DetailScreen;
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.ui.SettingsScreen;
+import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
+import org.liberty.android.fantastischmemo.utils.AMUtil;
+import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
+
+import org.liberty.android.fantastischmemo.dao.CardDao;
+import org.liberty.android.fantastischmemo.dao.CategoryDao;
+import org.liberty.android.fantastischmemo.dao.LearningDataDao;
+import org.liberty.android.fantastischmemo.dao.SettingDao;
+
+import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.domain.Category;
+import org.liberty.android.fantastischmemo.domain.LearningData;
+import org.liberty.android.fantastischmemo.domain.Option;
+import org.liberty.android.fantastischmemo.domain.Setting;
+
+import org.liberty.android.fantastischmemo.queue.QueueManager;
 import java.util.Map;
-import java.util.List;
+
+import java.sql.SQLException;
+
+import org.liberty.android.fantastischmemo.scheduler.DefaultScheduler;
+import org.liberty.android.fantastischmemo.scheduler.Scheduler;
+
+import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
+import org.liberty.android.fantastischmemo.tts.AnyMemoTTSPlatform;
+import org.liberty.android.fantastischmemo.tts.AudioFileTTS;
+
+import com.example.android.apis.graphics.FingerPaint;
 
 import android.os.AsyncTask;
 import android.app.Activity;
@@ -36,7 +72,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
+
 import android.text.ClipboardManager;
+
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.ContextMenu;
@@ -46,17 +84,23 @@ import android.view.View;
 import android.view.Window;
 import android.view.KeyEvent;
 import android.widget.Button;
-import android.os.Handler;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.Toast;
 import android.util.Log;
 import android.net.Uri;
 
-public class MemoScreen extends AMActivity{
-    private final static String TAG = "org.liberty.android.fantastischmemo.cardscreen.MemoScreen";
+import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
+
+public class MemoScreen extends AMActivity {
+    public static String EXTRA_DBPATH = "dbpath";
+    public static String EXTRA_CATEGORY_ID = "category_id";
+    public static String EXTRA_START_CARD_ID = "start_card_id";
+    public static String EXTRA_CRAM = "cram";
+
     private AnyMemoTTS questionTTS = null;
     private AnyMemoTTS answerTTS = null;
+
     private final int DIALOG_LOADING_PROGRESS = 100;
     private final int ACTIVITY_FILTER = 10;
     private final int ACTIVITY_EDIT = 11;
@@ -68,133 +112,122 @@ public class MemoScreen extends AMActivity{
     /* This is useful to determine which view is click or long clicked */
     private View activeView = null;
 
+    private FlashcardDisplay flashcardDisplay;
 
-    Handler mHandler;
-    Item currentItem = null;
-    Item prevItem = null;
-    String dbPath = "";
-    String dbName = "";
-    String activeFilter = "";
-    FlashcardDisplay flashcardDisplay;
-    SettingManager settingManager;
-    ControlButtons controlButtons;
-    QueueManager queueManager;
-    volatile boolean buttonDisabled = false;
-    /* Maintain this task for the exiting sync purpose*/
-    BackgroundUpdateTask bgUpdateTask = null;
+    /* State objects */
+    private Card currentCard = null;
+    private Card prevCard = null;
+    private LearningData prevLearningData = null;
+    private String dbPath = "";
+    private String dbName = "";
+    private int filterCategoryId = -1; 
+    private Category filterCategory;
+    private boolean isCram = false;
+    private int startCardId = -1;
 
+    /* DAOs */
+    private SettingDao settingDao;
+    private CardDao cardDao;
+    private LearningDataDao learningDataDao;
+    private CategoryDao categoryDao;
+
+    /* Global and db settings */
+    private Option option;
+    private Setting setting;
+    
+    private ControlButtons controlButtons;
+    private QueueManager queueManager;
+    private volatile boolean buttonDisabled = false;
+
+    /* Tasks to run */
+    private GradeTask gradeTask = null;
+    private InitTask initTask = null;
+    private WaitDbTask waitDbTask;
+
+    /* Schedulers */
+    private Scheduler scheduler = null;
+
+
+    /* current states */
+    private long schedluledCardCount = 0;
+    private long newCardCount = 0;
+
+    /* Keep the dbOpenHelper so it will be destroyed in onDestroy */
+    private AnyMemoDBOpenHelper dbOpenHelper;
 
     @Override
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        /* .. so we can display progress on the title bar */
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-
-		setContentView(R.layout.memo_screen_layout);
-
         Bundle extras = getIntent().getExtras();
-        mHandler = new Handler();
         if (extras != null) {
-            dbPath = extras.getString("dbpath");
-            dbName = extras.getString("dbname");
-            activeFilter = extras.getString("filter");
+            dbPath = extras.getString(EXTRA_DBPATH);
+            filterCategoryId = extras.getInt(EXTRA_CATEGORY_ID, -1);
+            isCram = extras.getBoolean(EXTRA_CRAM, false);
+            startCardId = extras.getInt(EXTRA_START_CARD_ID, -1);
         }
-        try{
-            settingManager = new SettingManager(this, dbPath, dbName);
-            if(settingManager.getCardStyle() == SettingManager.CardStyle.DOUBLE_SIDED){
-                flashcardDisplay = new DoubleSidedCardDisplay(this, settingManager);
-            }
-            else{
-                flashcardDisplay = new SingleSidedCardDisplay(this, settingManager);
-            }
+        initTask = new InitTask();
+        initTask.execute((Void)null);
+    }
 
-            if(settingManager.getButtonStyle() == SettingManager.ButtonStyle.ANKI){
-            controlButtons = new AnkiGradeButtons(this);
-            }
-            else if(settingManager.getButtonStyle() == SettingManager.ButtonStyle.MNEMOSYNE){
-                controlButtons = new MnemosyneGradeButtons(this);
-            }
-            else{
-                controlButtons = new AnyMemoGradeButtons(this);
-            }
-
-            initTTS();
-
-
-            composeViews();
-            hideButtons();
-            registerForContextMenu(flashcardDisplay.getView());
-            /* Run the learnQueue init in a separate thread */
-            createQueue();
-            initQueue();
-        }
-        catch(Exception e){
-            AMGUIUtility.displayError(this, getString(R.string.open_database_error_title), getString(R.string.open_database_error_message), e);
+    private void createQueue() {
+        int queueSize = option.getQueueSize();
+        if (!isCram) {
+             LearnQueueManager.Builder builder = new LearnQueueManager.Builder()
+                .setCardDao(cardDao)
+                .setCategoryDao(categoryDao)
+                .setLearningDataDao(learningDataDao)
+                .setScheduler(scheduler)
+                .setLearnQueueSize(queueSize)
+                .setCacheSize(50)
+                .setFilterCategory(filterCategory);
+             if (option.getShuffleType() == Option.ShuffleType.LOCAL) {
+                 builder.setShuffle(true);
+             } else {
+                 builder.setShuffle(false);
+             }
+             queueManager = builder.build();
+        } else {
+            queueManager = new CramQueueManager.Builder()
+                .setCardDao(cardDao)
+                .setLearnQueueSize(queueSize)
+                .build();
         }
     }
 
-    void createQueue(){
-        queueManager =new LearnQueueManager.Builder(this, dbPath, dbName)
-            .setFilter(activeFilter)
-            .setQueueSize(settingManager.getLearningQueueSize())
-            .setShuffle(settingManager.getShufflingCards())
-            .build();
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Only if the initTask has been finished and no waitDbTask is waiting.
+        if ((initTask != null && AsyncTask.Status.FINISHED.equals(initTask.getStatus()))
+                && (waitDbTask == null || !AsyncTask.Status.RUNNING.equals(waitDbTask.getStatus()))) {
+            waitDbTask = new WaitDbTask();
+            waitDbTask.execute((Void)null);
+        } else {
+            Log.i(TAG, "There is another task running. Do not run tasks");
+        }
     }
-
-    void initQueue(){
-        showDialog(DIALOG_LOADING_PROGRESS);
-        new Thread(){
-            public void run(){
-                queueManager.initQueue();
-                currentItem = queueManager.updateAndNext(null);
-                mHandler.post(new Runnable(){
-                    public void run(){
-                        if(currentItem == null){
-                            showNoItemDialog();
-                        }
-                        else{
-                            setViewListeners();
-                            updateFlashcardView(false);
-                            setTitle(getActivityTitleString());
-                        }
-                        removeDialog(DIALOG_LOADING_PROGRESS);
-                    }
-                });
-            }
-        }.start();
-    }
-
 
     @Override
     public void onPause(){
-        /* Spin the UI thread to wait for the current task done */
-        if(bgUpdateTask != null){
-            bgUpdateTask.cancel(false);
-        }
         super.onPause();
+        AnyMemoExecutor.submit(flushDatabaseTask);
     }
 
     @Override
     public void onDestroy(){
-        Log.v(TAG, "onDestroy now!");
-        if(settingManager != null){
-            settingManager.close();
-            settingManager = null;
-        }
+        super.onDestroy();
+        AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
         if(questionTTS != null){
             questionTTS.shutdown();
         }
         if(answerTTS != null){
             answerTTS.shutdown();
         }
-        if(queueManager != null){
-            queueManager.close();
-        }
+
         /* Update the widget because MemoScreen can be accessed though widget*/
         Intent myIntent = new Intent(this, AnyMemoService.class);
         myIntent.putExtra("request_code", AnyMemoService.CANCEL_NOTIFICATION | AnyMemoService.UPDATE_WIDGET);
         startService(myIntent);
-        super.onDestroy();
     }
 
     @Override
@@ -218,16 +251,16 @@ public class MemoScreen extends AMActivity{
             }
             case R.id.menuspeakquestion:
             {
-                if(questionTTS != null && currentItem != null){
-                    questionTTS.sayText(currentItem.getQuestion());
+                if(questionTTS != null && currentCard != null){
+                    questionTTS.sayText(currentCard.getQuestion());
                 }
                 return true;
             }
 
             case R.id.menuspeakanswer:
             {
-                if(answerTTS != null && currentItem != null){
-                    answerTTS.sayText(currentItem.getAnswer());
+                if(answerTTS != null && currentCard != null){
+                    answerTTS.sayText(currentCard.getAnswer());
                 }
                 return true;
             }
@@ -235,8 +268,7 @@ public class MemoScreen extends AMActivity{
             case R.id.menusettings:
             {
                 Intent myIntent = new Intent(this, SettingsScreen.class);
-                myIntent.putExtra("dbname", dbName);
-                myIntent.putExtra("dbpath", dbPath);
+                myIntent.putExtra(SettingsScreen.EXTRA_DBPATH, dbPath);
                 startActivityForResult(myIntent, ACTIVITY_SETTINGS);
                 return true;
             }
@@ -244,25 +276,21 @@ public class MemoScreen extends AMActivity{
             case R.id.menudetail:
             {
                 Intent myIntent = new Intent(this, DetailScreen.class);
-                myIntent.putExtra("dbname", this.dbName);
-                myIntent.putExtra("dbpath", this.dbPath);
-                myIntent.putExtra("itemid", currentItem.getId());
+                myIntent.putExtra(DetailScreen.EXTRA_DBPATH, this.dbPath);
+                myIntent.putExtra(DetailScreen.EXTRA_CARD_ID, currentCard.getId());
                 startActivityForResult(myIntent, ACTIVITY_DETAIL);
                 return true;
             }
 
             case R.id.menuundo:
             {
-                undoItem();
+                undoCard();
                 return true;
             }
 
-            case R.id.menu_memo_filter:
+            case R.id.menu_memo_category:
             {
-                Intent myIntent = new Intent(this, Filter.class);
-                myIntent.putExtra("dbname", dbName);
-                myIntent.putExtra("dbpath", dbPath);
-                startActivityForResult(myIntent, ACTIVITY_FILTER);
+                showCategoriesDialog();
                 return true;
             }
         }
@@ -274,13 +302,11 @@ public class MemoScreen extends AMActivity{
      * When the user select the undo from the menu
      * this is what to do
      */
-    protected void undoItem(){
-        if(prevItem != null){
-            currentItem = prevItem;
-            queueManager.insertIntoQueue(currentItem, 0);
-            prevItem = null;
-            updateFlashcardView(false);
-            hideButtons();
+    private void undoCard(){
+        if(prevLearningData != null){
+            currentCard = prevCard;
+            learningDataDao.updateLearningData(prevLearningData);
+            restartActivity();
         }
         else{
             new AlertDialog.Builder(this)
@@ -307,54 +333,89 @@ public class MemoScreen extends AMActivity{
             case R.id.menu_context_edit:
             {
                 Intent myIntent = new Intent(this, CardEditor.class);
-                myIntent.putExtra("dbname", this.dbName);
-                myIntent.putExtra("dbpath", this.dbPath);
-                myIntent.putExtra("item", currentItem);
+                myIntent.putExtra(CardEditor.EXTRA_DBPATH, this.dbPath);
+                myIntent.putExtra(CardEditor.EXTRA_CARD_ID, currentCard.getId());
+                myIntent.putExtra(CardEditor.EXTRA_IS_EDIT_NEW, false);
                 startActivityForResult(myIntent, ACTIVITY_EDIT);
                 return true;
             }
             case R.id.menu_context_delete:
             {
-                if(currentItem != null){
-                    /* DatabaseUtility is only one time used so it is created
-                     * locally here */
-                    DatabaseUtility du = new DatabaseUtility(this, dbPath, dbName);
-                    du.deleteItemFromDb(currentItem);
-                }
+                new AlertDialog.Builder(this)
+                    .setTitle(R.string.delete_text)
+                    .setMessage(R.string.delete_warning)
+                    .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            if(currentCard != null){
+                                try {
+                                    cardDao.delete(currentCard);
+                                    // Do not restart this card
+                                    currentCard = null;
+                                    restartActivity();
+                                } catch (SQLException e) {
+                                    Log.e(TAG, "Delete card error", e);
+                                }
+                            }
+                        }
+                    })
+                .setNegativeButton(R.string.cancel_text, null)
+                .show();
+
                 return true;
 
             }
             case R.id.menu_context_skip:
             {
-                DatabaseUtility du = new DatabaseUtility(this, dbPath, dbName);
-                du.skipItemFromDb(currentItem);
+                new AlertDialog.Builder(this)
+                    .setTitle(R.string.skip_text)
+                    .setMessage(R.string.skip_warning)
+                    .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            if(currentCard != null) {
+                                try {
+                                    LearningData ld = currentCard.getLearningData();
+                                    ld.setNextLearnDate(new Date(Long.MAX_VALUE));
+                                    ld.setAcqReps(1);
+                                    learningDataDao.update(ld);
+                                    // Do not restart this card
+                                    currentCard = null;
+                                    restartActivity();
+                                } catch (SQLException e) {
+                                    Log.e(TAG, "Delete card error", e);
+                                }
+                            }
+                        }
+                    })
+                .setNegativeButton(R.string.cancel_text, null)
+                .show();
                 return true;
             }
             case R.id.menu_context_gotoprev:
             {
-                Intent myIntent = new Intent(this, EditScreen.class);
-                myIntent.putExtra("dbname", this.dbName);
-                myIntent.putExtra("dbpath", this.dbPath);
-                myIntent.putExtra("id", currentItem.getId());
-                startActivityForResult(myIntent, ACTIVITY_GOTO_PREV);
+                Intent myIntent = new Intent();
+                myIntent.setClass(this, EditScreen.class);
+                myIntent.putExtra(EditScreen.EXTRA_DBPATH, dbPath);
+                if (currentCard != null) {
+                    myIntent.putExtra(EditScreen.EXTRA_CARD_ID, currentCard.getId());
+                }
+                
+                startActivity(myIntent);
                 return true;
             }
 
             case R.id.menu_context_lookup:
             {
-                if(currentItem == null){
+                if(currentCard == null){
                     return false;
                 }
                 /* default word to lookup is question */
-                String lookupWord = currentItem.getQuestion();
+                String lookupWord = currentCard.getQuestion();
 
                 if(flashcardDisplay.getAnswerView() == activeView){
-                    lookupWord = currentItem.getAnswer();
+                    lookupWord = currentCard.getAnswer();
                 }
-                    
 
-                if(settingManager.getDictApp() == SettingManager.DictApp.COLORDICT){
-                    System.out.println("Get COLORDICT");
+                if(option.getDictApp() == Option.DictApp.COLORDICT){
                     Intent intent = new Intent("colordict.intent.action.SEARCH");
                     intent.putExtra("EXTRA_QUERY", lookupWord);
                     intent.putExtra("EXTRA_FULLSCREEN", false);
@@ -369,8 +430,7 @@ public class MemoScreen extends AMActivity{
                         AMGUIUtility.displayException(this, getString(R.string.error_text), getString(R.string.dict_colordict) + " " + getString(R.string.error_no_dict), e);
                     }
                 }
-                if(settingManager.getDictApp() == SettingManager.DictApp.FORA){
-                    System.out.println("Get FORA");
+                if(option.getDictApp() == Option.DictApp.FORA){
                     Intent intent = new Intent("com.ngc.fora.action.LOOKUP");
                     intent.putExtra("HEADWORD", lookupWord);
                     try{
@@ -410,19 +470,13 @@ public class MemoScreen extends AMActivity{
             case ACTIVITY_FILTER:
             {
                 Bundle extras = data.getExtras();
-                activeFilter = extras.getString("filter");
+                filterCategoryId = extras.getInt(EXTRA_CATEGORY_ID);
                 restartActivity();
                 break;
             }
             case ACTIVITY_EDIT:
             {
-                Bundle extras = data.getExtras();
-                Item item = extras.getParcelable("item");
-                if(item != null){
-                    currentItem = item;
-                    updateFlashcardView(false);
-                    queueManager.updateQueueItem(currentItem);
-                }
+                restartActivity();
                 break;
             }
             case ACTIVITY_GOTO_PREV:
@@ -468,7 +522,7 @@ public class MemoScreen extends AMActivity{
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event){
-        if(settingManager.getVolumeKeyShortcut() && buttonDisabled == false){
+        if(option.getVolumeKeyShortcut()){
             if(keyCode == KeyEvent.KEYCODE_VOLUME_UP){
                 return true;
             }
@@ -476,13 +530,20 @@ public class MemoScreen extends AMActivity{
                 return true;
             }
         }
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            Log.v(TAG, "back button pressed");
+            FinishTask task = new FinishTask();
+            task.execute((Void)null);
+            return true;
+        }
+
         return super.onKeyDown(keyCode, event);
     }
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event){
         /* Short press to scroe the card */
 
-        if(settingManager.getVolumeKeyShortcut() && buttonDisabled == false){
+        if(option.getVolumeKeyShortcut()){
             if(keyCode == KeyEvent.KEYCODE_VOLUME_UP){
                 if(flashcardDisplay.isAnswerShown() == false){
                     updateFlashcardView(true);
@@ -510,12 +571,12 @@ public class MemoScreen extends AMActivity{
         return super.onKeyUp(keyCode, event);
     }
 
-    void updateFlashcardView(boolean showAnswer){
-        if(currentItem == null){
-            Log.e(TAG, "currentItem is null in updateFlashcardView", new NullPointerException("currentItem is null"));
+    private void updateFlashcardView(boolean showAnswer) {
+        if(currentCard == null) {
+            Log.e(TAG, "current card is null in updateFlashcardView");
             return;
         }
-        flashcardDisplay.updateView(currentItem, showAnswer);
+        flashcardDisplay.updateView(currentCard, showAnswer);
         /* Also update the visibility of buttons */
         if(showAnswer){
             showButtons();
@@ -529,30 +590,28 @@ public class MemoScreen extends AMActivity{
             setGradeButtonListeners();
         }
         /* Automatic copy the current question to clipboard */
-        if(settingManager.getCopyClipboard()){
+        if(option.getCopyClipboard()){
             ClipboardManager cm = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
-            cm.setText(currentItem.getQuestion());
+            cm.setText(currentCard.getQuestion());
         }
     }
 
 
-    void setViewListeners(){
+    private void setViewListeners(){
         View.OnClickListener showAnswerListener = new View.OnClickListener(){
             public void onClick(View v){
-                if(currentItem != null){
+                if(currentCard!= null){
                     /* Double sided card, the click will toggle question and answer */
-                    if(settingManager.getCardStyle() == SettingManager.CardStyle.DOUBLE_SIDED){
+                    if(setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED){
                         if(flashcardDisplay.isAnswerShown()){
                             updateFlashcardView(false);
                             hideButtons();
-                        }
-                        else{
-                            updateFlashcardView(true);
+                        } else{
+                        	updateFlashcardView(true);
                             showButtons();
                         }
 
-                    }
-                    else{
+                    } else {
                         /* For single sided card */
                         updateFlashcardView(true);
                         showButtons();
@@ -562,21 +621,21 @@ public class MemoScreen extends AMActivity{
         };
         View.OnClickListener speakQuestionListener = new View.OnClickListener(){
             public void onClick(View v){
-                if(currentItem != null && questionTTS != null){
-                    questionTTS.sayText(currentItem.getQuestion());
+                if(currentCard != null && questionTTS != null){
+                    questionTTS.sayText(currentCard.getQuestion());
                 }
             }
         };
         View.OnClickListener speakAnswerListener = new View.OnClickListener(){
             public void onClick(View v){
-                if(currentItem != null){
+                if (currentCard!= null) {
                     if(!flashcardDisplay.isAnswerShown()){
                         updateFlashcardView(true);
                         showButtons();
                     }
                     else{
                         if(answerTTS != null){
-                            answerTTS.sayText(currentItem.getAnswer());
+                            answerTTS.sayText(currentCard.getAnswer());
                         }
                     }
                 }
@@ -587,7 +646,6 @@ public class MemoScreen extends AMActivity{
                 MemoScreen.this.openContextMenu(flashcardDisplay.getView());
                 /* To determine which view is long clicked */
                 activeView = v;
-                Log.v(TAG, "Open Menu!");
                 return true;
             }
         };
@@ -596,7 +654,7 @@ public class MemoScreen extends AMActivity{
 
         flashcardDisplay.setQuestionLayoutClickListener(showAnswerListener);
         flashcardDisplay.setAnswerLayoutClickListener(showAnswerListener);
-        if(settingManager.getSpeechControlMethod() == SettingManager.SpeechControlMethod.TAP || settingManager.getSpeechControlMethod() == SettingManager.SpeechControlMethod.AUTOTAP){
+        if(option.getSpeakingType() == Option.SpeakingType.TAP || option.getSpeakingType() == Option.SpeakingType.AUTOTAP){
             flashcardDisplay.setQuestionTextClickListener(speakQuestionListener);
             flashcardDisplay.setAnswerTextClickListener(speakAnswerListener);
         }
@@ -608,37 +666,33 @@ public class MemoScreen extends AMActivity{
         memoRoot.setOnClickListener(showAnswerListener);
     }
 
-    void setGradeButtonTitle(){
+    private void setGradeButtonTitle() {
         Map<String, Button> hm = controlButtons.getButtons();
-        if(settingManager.getButtonStyle() == SettingManager.ButtonStyle.MNEMOSYNE){
+        if(option.getButtonStyle() == Option.ButtonStyle.MNEMOSYNE) {
             hm.get("0").setText(getString(R.string.memo_btn0_brief_text));
             hm.get("1").setText(getString(R.string.memo_btn1_brief_text));
             hm.get("2").setText(getString(R.string.memo_btn2_brief_text));
             hm.get("3").setText(getString(R.string.memo_btn3_brief_text));
             hm.get("4").setText(getString(R.string.memo_btn4_brief_text));
             hm.get("5").setText(getString(R.string.memo_btn5_brief_text));
-        }
-        else if(settingManager.getButtonStyle() == SettingManager.ButtonStyle.ANKI){
-            hm.get("0").setText(getString(R.string.memo_btn0_anki_text) + "\n+" + currentItem.processAnswer(0, false).getInterval());
-            hm.get("1").setText(getString(R.string.memo_btn1_anki_text) + "\n+" + currentItem.processAnswer(1, false).getInterval());
-            hm.get("2").setText(getString(R.string.memo_btn2_anki_text) + "\n+" + currentItem.processAnswer(2, false).getInterval());
-            hm.get("3").setText(getString(R.string.memo_btn3_anki_text) + "\n+" + currentItem.processAnswer(3, false).getInterval());
-            hm.get("4").setText(getString(R.string.memo_btn4_anki_text) + "\n+" + currentItem.processAnswer(4, false).getInterval());
-            hm.get("5").setText(getString(R.string.memo_btn5_anki_text) + "\n+" + currentItem.processAnswer(5, false).getInterval());
-        }
-        else{
-            hm.get("0").setText(getString(R.string.memo_btn0_text) + "\n+" + currentItem.processAnswer(0, false).getInterval());
-            hm.get("1").setText(getString(R.string.memo_btn1_text) + "\n+" + currentItem.processAnswer(1, false).getInterval());
-            hm.get("2").setText(getString(R.string.memo_btn2_text) + "\n+" + currentItem.processAnswer(2, false).getInterval());
-            hm.get("3").setText(getString(R.string.memo_btn3_text) + "\n+" + currentItem.processAnswer(3, false).getInterval());
-            hm.get("4").setText(getString(R.string.memo_btn4_text) + "\n+" + currentItem.processAnswer(4, false).getInterval());
-            hm.get("5").setText(getString(R.string.memo_btn5_text) + "\n+" + currentItem.processAnswer(5, false).getInterval());
-
+        } else if(option.getButtonStyle() == Option.ButtonStyle.ANKI) {
+            hm.get("0").setText(getString(R.string.memo_btn0_anki_text) + "\n+" + getIntervalToDisplay(scheduler.schedule(currentCard.getLearningData(), 0, false)));
+            hm.get("1").setText(getString(R.string.memo_btn1_anki_text) + "\n+" + getIntervalToDisplay(scheduler.schedule(currentCard.getLearningData(), 1, false)));
+            hm.get("2").setText(getString(R.string.memo_btn2_anki_text) + "\n+" + getIntervalToDisplay(scheduler.schedule(currentCard.getLearningData(), 2, false)));
+            hm.get("3").setText(getString(R.string.memo_btn3_anki_text) + "\n+" + getIntervalToDisplay(scheduler.schedule(currentCard.getLearningData(), 3, false)));
+            hm.get("4").setText(getString(R.string.memo_btn4_anki_text) + "\n+" + getIntervalToDisplay(scheduler.schedule(currentCard.getLearningData(), 4, false)));
+            hm.get("5").setText(getString(R.string.memo_btn5_anki_text) + "\n+" + getIntervalToDisplay(scheduler.schedule(currentCard.getLearningData(), 5, false)));
+        } else {
+            hm.get("0").setText(getString(R.string.memo_btn0_text) + "\n+" + getIntervalToDisplay(scheduler.schedule(currentCard.getLearningData(), 0, false)));
+            hm.get("1").setText(getString(R.string.memo_btn1_text) + "\n+" + getIntervalToDisplay(scheduler.schedule(currentCard.getLearningData(), 1, false)));
+            hm.get("2").setText(getString(R.string.memo_btn2_text) + "\n+" + getIntervalToDisplay(scheduler.schedule(currentCard.getLearningData(), 2, false)));
+            hm.get("3").setText(getString(R.string.memo_btn3_text) + "\n+" + getIntervalToDisplay(scheduler.schedule(currentCard.getLearningData(), 3, false)));
+            hm.get("4").setText(getString(R.string.memo_btn4_text) + "\n+" + getIntervalToDisplay(scheduler.schedule(currentCard.getLearningData(), 4, false)));
+            hm.get("5").setText(getString(R.string.memo_btn5_text) + "\n+" + getIntervalToDisplay(scheduler.schedule(currentCard.getLearningData(), 5, false)));
         }
     }
-    
 
-    void setGradeButtonListeners(){
+    private void setGradeButtonListeners(){
         Map<String, Button> hm = controlButtons.getButtons();
         for(int i = 0; i < 6; i++){
             Button b = hm.get(Integer.valueOf(i).toString());
@@ -647,30 +701,23 @@ public class MemoScreen extends AMActivity{
         }
     }
 
-    String getActivityTitleString(){
-        int[] stat = queueManager.getStatInfo();
-        String titleString = getString(R.string.stat_new) + stat[0] + " " + getString(R.string.stat_scheduled) + stat[1] + " " + getString(R.string.memo_current_id) + currentItem.getId();
-        if(currentItem != null && currentItem.getCategory() != null){
-            titleString += "  " + currentItem.getCategory();
+    private String getActivityTitleString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(getString(R.string.new_text) + ": " + newCardCount + " ");
+        sb.append(getString(R.string.review_short_text) + ": " + schedluledCardCount + " ");
+        sb.append(getString(R.string.id_text) + ": " + currentCard.getId() + " ");
+        if (StringUtils.isNotEmpty(currentCard.getCategory().getName())) {
+            sb.append(getString(R.string.category_short_text) + ": " + currentCard.getCategory().getName());
         }
-        return titleString;
-
+        return sb.toString();
     }
 
 
     private View.OnClickListener getGradeButtonListener(final int grade){
         return new View.OnClickListener(){
             public void onClick(View v){
-                prevItem = currentItem;
-                currentItem = currentItem.processAnswer(grade, true);
-                bgUpdateTask = new BackgroundUpdateTask();
-                bgUpdateTask.execute(currentItem);
-                if(questionTTS != null){
-                    questionTTS.stop();
-                }
-                if(answerTTS != null){
-                    answerTTS.stop();
-                }
+                gradeTask = new GradeTask();
+                gradeTask.execute(grade);
             }
         };
     }
@@ -687,7 +734,7 @@ public class MemoScreen extends AMActivity{
 
     private void hideButtons(){
         /* Does it take the place holder space? */
-        if(settingManager.getCardStyle() == SettingManager.CardStyle.DOUBLE_SIDED){
+        if(setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED){
             controlButtons.getView().setVisibility(View.GONE);
         }
         else{
@@ -711,9 +758,9 @@ public class MemoScreen extends AMActivity{
         /* This li is make the background of buttons the same as answer */
         LinearLayout li = new LinearLayout(this);
         li.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.FILL_PARENT));
-        List<Integer> colors = settingManager.getColors();
-        if(colors != null){
-            li.setBackgroundColor(settingManager.getColors().get(3));
+        Integer color = setting.getAnswerBackgroundColor();
+        if(color != null){
+            li.setBackgroundColor(color);
         }
 
         /* 
@@ -729,16 +776,12 @@ public class MemoScreen extends AMActivity{
 
     @Override
     public void restartActivity(){
-        Intent myIntent = new Intent(this, MemoScreen.class);
-        myIntent.putExtra("dbname", dbName);
-        myIntent.putExtra("dbpath", dbPath);
-        myIntent.putExtra("filter", activeFilter);
 
-        finish();
-        startActivity(myIntent);
+        RestartTask task = new RestartTask();
+        task.execute((Void)null);
     }
 
-    void showNoItemDialog(){
+    private void showNoItemDialog(){
         new AlertDialog.Builder(this)
             .setTitle(this.getString(R.string.memo_no_item_title))
             .setMessage(this.getString(R.string.memo_no_item_message))
@@ -754,9 +797,9 @@ public class MemoScreen extends AMActivity{
                 public void onClick(DialogInterface arg0, int arg1) {
                     finish();
                     Intent myIntent = new Intent();
-                    myIntent.setClass(MemoScreen.this, CramMemoScreen.class);
-                    myIntent.putExtra("dbname", dbName);
-                    myIntent.putExtra("dbpath", dbPath);
+                    myIntent.setClass(MemoScreen.this, MemoScreen.class);
+                    myIntent.putExtra(MemoScreen.EXTRA_DBPATH, dbPath);
+                    myIntent.putExtra(MemoScreen.EXTRA_CRAM, true);
                     startActivity(myIntent);
                 }
             })
@@ -769,99 +812,320 @@ public class MemoScreen extends AMActivity{
             .show();
     }
 
-    void autoSpeak(){
-        if(currentItem != null && !buttonDisabled){
-
-            if(settingManager.getSpeechControlMethod() == SettingManager.SpeechControlMethod.AUTOTAP || settingManager.getSpeechControlMethod() == SettingManager.SpeechControlMethod.AUTO){
+    private void autoSpeak(){
+        if (currentCard != null) {
+            if(option.getSpeakingType() == Option.SpeakingType.AUTOTAP || option.getSpeakingType() == Option.SpeakingType.AUTO){
                 if(!flashcardDisplay.isAnswerShown()){
                     if(questionTTS != null){
-                        questionTTS.sayText(currentItem.getQuestion());
+                        // Make sure the TTS is stop, or it will speak nothing.
+                        questionTTS.stop();
+                        questionTTS.sayText(currentCard.getQuestion());
                     }
                 }
                 else{
                     if(answerTTS != null){
-                        answerTTS.sayText(currentItem.getAnswer());
+                        // Make sure the TTS is stop
+                        answerTTS.stop();
+                        answerTTS.sayText(currentCard.getAnswer());
                     }
                 }
             }
         }
     }
 
+    private void refreshStatInfo() {
+       newCardCount = cardDao.getNewCardCount(filterCategory);
+       schedluledCardCount = cardDao.getScheduledCardCount(filterCategory);
+    }
+
     private void initTTS(){
-        String audioDir = settingManager.getAudioLocation();
-        Locale ql = settingManager.getQuestionAudioLocale();
-        Locale al = settingManager.getAnswerAudioLocale();
-        if(settingManager.getQuestionUserAudio()){
-            questionTTS = new AudioFileTTS(audioDir, dbName);
-        }
-        else if(ql != null){
-            questionTTS = new AnyMemoTTSPlatform(this, ql);
-        }
-        else{
+        String defaultLocation = AMEnv.DEFAULT_AUDIO_PATH;
+        String qa = setting.getQuestionAudio();
+        String aa = setting.getAnswerAudio();
+
+        if (StringUtils.isNotEmpty(setting.getQuestionAudioLocation())) {
+            questionTTS = new AudioFileTTS(defaultLocation, dbName);
+        } else if (StringUtils.isNotEmpty(qa)){
+            questionTTS = new AnyMemoTTSPlatform(this, qa);
+        } else{
             questionTTS = null;
         }
-        if(settingManager.getAnswerUserAudio()){
-            answerTTS = new AudioFileTTS(audioDir, dbName);
-        }
-        else if(al != null){
-            answerTTS = new AnyMemoTTSPlatform(this, al);
-        }
-        else{
+
+        if (StringUtils.isNotEmpty(setting.getAnswerAudioLocation())) {
+            answerTTS = new AudioFileTTS(defaultLocation, dbName);
+        } else if (StringUtils.isNotEmpty(aa)){
+            answerTTS = new AnyMemoTTSPlatform(this, aa);
+        } else{
             answerTTS = null;
         }
     }
 
+    private void showCategoriesDialog() {
+        CategoryEditorFragment df = new CategoryEditorFragment();
+        df.setResultListener(categoryResultListener);
+        Bundle b = new Bundle();
+        b.putString(CategoryEditorFragment.EXTRA_DBPATH, dbPath);
+        if (filterCategory == null) {
+            b.putInt(CategoryEditorFragment.EXTRA_CATEGORY_ID, currentCard.getCategory().getId());
+        } else {
+            // If we use the category filer, we can just use the currentCategory
+            // This will handle the new card situation.
+            b.putInt(CategoryEditorFragment.EXTRA_CATEGORY_ID, filterCategory.getId());
+        }
+        df.setArguments(b);
+        df.show(getSupportFragmentManager(), "CategoryEditDialog");
+        getSupportFragmentManager().findFragmentByTag("CategoryEditDialog");
+    }
 
-    /*
-     * Use AsyncTask to update the database and update the statistics
-     * information
-     */
-    private class BackgroundUpdateTask extends AsyncTask<Item, Void, Item>{
 
-        @Override
-        public void onPreExecute(){
-            super.onPreExecute();
-            buttonDisabled = true;
-            currentItem = queueManager.getNext(currentItem);
-            if(currentItem != null){
-                updateFlashcardView(false);
-            }
+    // Interval: 12.3456 -> "12.3", 12.0 -> "12.0"
+    private String getIntervalToDisplay(LearningData ld) {
+        return "" + ((double)Math.round(ld.getInterval() * 10)) / 10;
+    }
+
+    private class InitTask extends AsyncTask<Void, Void, Card> {
+
+		@Override
+        public void onPreExecute() {
+            requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+
+            setContentView(R.layout.memo_screen_layout);
+
+            option = new Option(MemoScreen.this);
+
+            scheduler = new DefaultScheduler(MemoScreen.this);
+
+            // Strip leading path!
+            dbName = AMUtil.getFilenameFromPath(dbPath);
             setProgressBarIndeterminateVisibility(true);
         }
 
         @Override
-        public Item doInBackground(Item... items){
-            Item nextItem = queueManager.updateAndNext(items[0]);
-            /* The title is only valid if there are still items in the queue */
-            return nextItem;
+        public Card doInBackground(Void... params) {
+            try {
+                
+                dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(MemoScreen.this, dbPath);
+                cardDao = dbOpenHelper.getCardDao();
+                learningDataDao = dbOpenHelper.getLearningDataDao();
+                settingDao = dbOpenHelper.getSettingDao();
+                categoryDao = dbOpenHelper.getCategoryDao();
+                setting = settingDao.queryForId(1);
+                // Initialize the TTS early so it will have time to initialize.
+                initTTS();
+                if (filterCategoryId != -1) {
+                    filterCategory = categoryDao.queryForId(filterCategoryId);
+                    assert filterCategory != null : "Query filter id: " + filterCategoryId +". Get null";
+                }
+                /* Run the learnQueue init in a separate thread */
+                createQueue();
+                if (startCardId != -1) {
+                    return queueManager.dequeuePosition(startCardId);
+                }
+                return queueManager.dequeue();
+            } catch (Exception e) {
+                Log.e(TAG, "Excepting doing in bacground", e);
+                return null;
+            }
         }
+        
         @Override
         public void onCancelled(){
             return;
         }
 
         @Override
-        public void onPostExecute(Item result){
+        public void onPostExecute(Card result){
+            setProgressBarIndeterminateVisibility(false);
+            if (result == null) {
+                showNoItemDialog();
+                return;
+            }
+            assert result != null : "Init get null card";
+            if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED) {
+                flashcardDisplay = new DoubleSidedCardDisplay(MemoScreen.this, dbName, setting, option);
+            } else {
+                flashcardDisplay = new SingleSidedCardDisplay(MemoScreen.this, dbName, setting, option);
+            }
+            if (option.getButtonStyle() == Option.ButtonStyle.ANKI) {
+                controlButtons = new AnkiGradeButtons(MemoScreen.this);
+            }
+            else if (option.getButtonStyle() == Option.ButtonStyle.MNEMOSYNE){
+                controlButtons = new MnemosyneGradeButtons(MemoScreen.this);
+            }
+            else{
+                controlButtons = new AnyMemoGradeButtons(MemoScreen.this);
+            }
+
+            currentCard = result;
+            
+            composeViews();
+            setViewListeners();
+            hideButtons();
+            registerForContextMenu(flashcardDisplay.getView());
+
+            refreshStatInfo();
+            setTitle(getActivityTitleString());
+            updateFlashcardView(false);
+        }
+    }
+
+    /*
+     * Use AsyncTask to update the database and update the statistics
+     * information
+     */
+    private class GradeTask extends AsyncTask<Integer, Void, Card>{
+        private boolean isNewCard = false;
+
+        @Override
+        public void onPreExecute() {
+            super.onPreExecute();
+            setProgressBarIndeterminateVisibility(true);
+            hideButtons();
+        }
+
+        @Override
+        public Card doInBackground(Integer... grades) {
+            assert grades.length == 1 : "Grade more than 1 time";
+            int grade = grades[0];
+            LearningData ld = currentCard.getLearningData();
+            if (ld.getAcqReps() == 0) {
+                isNewCard = true;
+            }
+
+            // This was saved to determine the stat info
+            // and the card id for undo
+            prevCard = currentCard;
+
+            // Save previous learning for Undo
+            // This part is ugly due to muutablity of ORMLite
+            prevLearningData = new LearningData();
+            prevLearningData.setId(ld.getId());
+            prevLearningData.cloneFromLearningData(ld);
+
+            LearningData newLd = scheduler.schedule(ld, grade, true);
+
+            // Need to clone the data due to ORMLite restriction on "update()" method.
+            ld.cloneFromLearningData(newLd);
+            currentCard.setLearningData(ld);
+            queueManager.update(currentCard);
+            Card nextCard = queueManager.dequeue();
+            return nextCard;
+        }
+
+        @Override
+        public void onCancelled() {
+            return;
+        }
+
+        @Override
+        public void onPostExecute(Card result){
             super.onPostExecute(result);
             setProgressBarIndeterminateVisibility(false);
-            currentItem = result;
-            if(currentItem == null){
+            currentCard = result;
+            if(currentCard == null){
                 showNoItemDialog();
+                return;
             }
-            else{ 
-                buttonDisabled = false;
-                if(!flashcardDisplay.isAnswerShown()){
-                    updateFlashcardView(false);
+
+            if (isNewCard) {
+                newCardCount -= 1;
+                if (!scheduler.isCardLearned(prevCard.getLearningData())) {
+                    schedluledCardCount += 1;
                 }
-                else{
-                    updateFlashcardView(true);
-                    showButtons();
+            } else {
+                if (scheduler.isCardLearned(prevCard.getLearningData())) {
+                    schedluledCardCount -= 1;
                 }
-                setTitle(getActivityTitleString());
+            }
+            updateFlashcardView(false);
+
+            setTitle(getActivityTitleString());
+        }
+    }
+
+    /*
+     * Use AsyncTask to make sure there is no running task for a db 
+     */
+    private class WaitDbTask extends AsyncTask<Void, Void, Void>{
+        private ProgressDialog progressDialog;
+
+        @Override
+        public void onPreExecute(){
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(MemoScreen.this);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setTitle(getString(R.string.loading_please_wait));
+            progressDialog.setMessage(getString(R.string.loading_save));
+            progressDialog.setCancelable(true);
+            progressDialog.show();
+        }
+
+        @Override
+        public Void doInBackground(Void... nothing){
+            AnyMemoExecutor.waitAllTasks();
+            return null;
+        }
+
+        @Override
+        public void onCancelled(){
+            return;
+        }
+
+        @Override
+        public void onPostExecute(Void result){
+            super.onPostExecute(result);
+            if (!isCancelled()) {
+                progressDialog.dismiss();
             }
         }
     }
 
+    /*
+     * Like the wait db task but finish the current activity
+     */
+    private class FinishTask extends WaitDbTask {
+        @Override
+        public void onPostExecute(Void result){
+            super.onPostExecute(result);
+            
+            finish();
+        }
+    }
+
+    /* When restarting an activity, we have to flush db first. */
+    private class RestartTask extends WaitDbTask {
+        @Override
+        public void onPostExecute(Void result){
+            super.onPostExecute(result);
+            
+            finish();
+            Intent myIntent = new Intent(MemoScreen.this, MemoScreen.class);
+            myIntent.putExtra(EXTRA_DBPATH, dbPath);
+            myIntent.putExtra(EXTRA_CATEGORY_ID, filterCategoryId);
+            if (currentCard != null ) {
+                myIntent.putExtra(EXTRA_START_CARD_ID, currentCard.getId());
+            }
+            startActivity(myIntent);
+        }
+    }
+
+
+    Runnable flushDatabaseTask = new Runnable() {
+        public void run() {
+            queueManager.flush();
+        }
+    };
+
+    // When a category is selected in category fragment.
+    private CategoryEditorResultListener categoryResultListener = 
+        new CategoryEditorResultListener() {
+            public void onReceiveCategory(Category c) {
+                assert c != null : "Receive null category";
+                filterCategoryId = c.getId();
+                // Do not restart with the current card
+                currentCard = null;
+                restartActivity();
+            }
+        };
+
 }
-
-

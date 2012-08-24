@@ -167,11 +167,8 @@ public class StatisticsScreen extends AMActivity {
     private class CardToReviewTask extends ChartTask {
         @Override
         public AbstractChart doInBackground(Void... params) {
-            try {
-                cardDao = dbOpenHelper.getCardDao();
-            } catch(SQLException e) {
-                throw new RuntimeException(e);
-            }
+
+            cardDao = dbOpenHelper.getCardDao();
 
             XYSeries series = new XYSeries((getString(R.string.number_of_cards_scheduled_in_a_day_text)));
             Date now = new Date();
@@ -190,11 +187,8 @@ public class StatisticsScreen extends AMActivity {
     private class AccumulativeCardsToReviewTask extends ChartTask {
         @Override
         public AbstractChart doInBackground(Void... params) {
-            try {
-                cardDao = dbOpenHelper.getCardDao();
-            } catch(SQLException e) {
-                throw new RuntimeException(e);
-            }
+
+            cardDao = dbOpenHelper.getCardDao();
 
             XYSeries series = new XYSeries((getString(R.string.accumulative_cards_scheduled_text)));
             Date now = new Date();
@@ -212,11 +206,8 @@ public class StatisticsScreen extends AMActivity {
     private class GradeStatisticsTask extends ChartTask {
         @Override
         public AbstractChart doInBackground(Void... params) {
-            try {
-                cardDao = dbOpenHelper.getCardDao();
-            } catch(SQLException e) {
-                throw new RuntimeException(e);
-            }
+
+            cardDao = dbOpenHelper.getCardDao();
 
             CategorySeries series = new CategorySeries(getString(R.string.grade_statistics_text));
             for (int i = 0; i < 6; i++) {

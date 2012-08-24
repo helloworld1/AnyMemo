@@ -109,7 +109,7 @@ public class EditScreen extends AMActivity {
     private CategoryDao categoryDao;
 
     private FlashcardDisplay flashcardDisplay;
-    private ControlButtons controlButtons;
+    //private ControlButtons controlButtons;
     private View searchNextButton;
     private View searchPrevButton;
 
@@ -475,7 +475,7 @@ public class EditScreen extends AMActivity {
         LinearLayout memoRoot = (LinearLayout)findViewById(R.id.memo_screen_root);
 
         LinearLayout flashcardDisplayView = (LinearLayout)flashcardDisplay.getView();
-        LinearLayout controlButtonsView = (LinearLayout)controlButtons.getView();
+        //LinearLayout controlButtonsView = (LinearLayout)controlButtons.getView();
         /* This li is make the background of buttons the same as answer */
         LinearLayout li = new LinearLayout(this);
         li.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.FILL_PARENT));
@@ -487,22 +487,23 @@ public class EditScreen extends AMActivity {
          * stetched
          */
         memoRoot.addView(flashcardDisplayView, -1, -1);
-        li.addView(controlButtonsView, -1, -2);
+        //li.addView(controlButtonsView, -1, -2);
         memoRoot.addView(li, -1, -2);
         flashcardDisplayView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
     }
 
     void setViewListeners(){
-        Map<String, Button> bm = controlButtons.getButtons();
-        Button newButton = bm.get("new");
-        Button editButton = bm.get("edit");
-        Button prevButton = bm.get("prev");
-        Button nextButton = bm.get("next");
-        /* Set button listeners */
-        newButton.setOnClickListener(newButtonListener);
-        editButton.setOnClickListener(editButtonListener);
-        prevButton.setOnClickListener(prevButtonListener);
-        nextButton.setOnClickListener(nextButtonListener);
+        //Map<String, Button> bm = controlButtons.getButtons();
+        // TODO: BUttons here!
+        //Button newButton = bm.get("new");
+        //Button editButton = bm.get("edit");
+        //Button prevButton = bm.get("prev");
+        //Button nextButton = bm.get("next");
+        ///* Set button listeners */
+        //newButton.setOnClickListener(newButtonListener);
+        //editButton.setOnClickListener(editButtonListener);
+        //prevButton.setOnClickListener(prevButtonListener);
+        //nextButton.setOnClickListener(nextButtonListener);
         /* For double sided card, the view can be toggled */
         if(setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED){
 
@@ -870,7 +871,7 @@ public class EditScreen extends AMActivity {
             else{
                 flashcardDisplay = new SingleSidedCardDisplay(EditScreen.this, dbPath, setting, option);
             }
-            controlButtons = new EditScreenButtons(EditScreen.this);
+            //controlButtons = new EditScreenButtons(EditScreen.this);
 
             /* databaseUtility is for global db operations */
             progressDialog.dismiss();

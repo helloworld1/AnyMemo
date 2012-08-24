@@ -120,8 +120,6 @@ public class CellsDBConverter {
         try {
             CardDao cardDao = helper.getCardDao();
             cardDao.createCards(cardList);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         } finally {
             AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }

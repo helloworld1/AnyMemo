@@ -53,11 +53,5 @@ public class AnyMemoGradeButtons extends ControlButtons{
         buttonMap.put("4", grade4);
         buttonMap.put("5", grade5);
     }
-    public Map<String, Button> getButtons(){
-        return buttonMap;
-    }
-    public View getView(){
-        return buttonView;
-    }
 }
 
