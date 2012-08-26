@@ -250,7 +250,7 @@ public class MemoScreen extends AMActivity {
             }
             case R.id.menuspeakquestion:
             {
-                if(questionTTS != null && currentCard != null){
+                if(!setting.isQuestionAudioDisabled() && questionTTS != null && currentCard != null){
                     questionTTS.sayText(currentCard.getQuestion());
                 }
                 return true;
@@ -258,7 +258,7 @@ public class MemoScreen extends AMActivity {
 
             case R.id.menuspeakanswer:
             {
-                if(answerTTS != null && currentCard != null){
+                if(!setting.isAnswerAudioDisabled() && answerTTS != null && currentCard != null){
                     answerTTS.sayText(currentCard.getAnswer());
                 }
                 return true;
@@ -620,7 +620,7 @@ public class MemoScreen extends AMActivity {
         };
         View.OnClickListener speakQuestionListener = new View.OnClickListener(){
             public void onClick(View v){
-                if(currentCard != null && questionTTS != null){
+                if(!setting.isQuestionAudioDisabled() && currentCard != null && questionTTS != null){
                     questionTTS.sayText(currentCard.getQuestion());
                 }
             }
@@ -633,7 +633,7 @@ public class MemoScreen extends AMActivity {
                         showButtons();
                     }
                     else{
-                        if(answerTTS != null){
+                        if(!setting.isAnswerAudioDisabled() && answerTTS != null){
                             answerTTS.sayText(currentCard.getAnswer());
                         }
                     }
@@ -815,14 +815,14 @@ public class MemoScreen extends AMActivity {
         if (currentCard != null) {
             if(option.getSpeakingType() == Option.SpeakingType.AUTOTAP || option.getSpeakingType() == Option.SpeakingType.AUTO){
                 if(!flashcardDisplay.isAnswerShown()){
-                    if(questionTTS != null){
+                    if(!setting.isQuestionAudioDisabled() && questionTTS != null){
                         // Make sure the TTS is stop, or it will speak nothing.
                         questionTTS.stop();
                         questionTTS.sayText(currentCard.getQuestion());
                     }
                 }
                 else{
-                    if(answerTTS != null){
+                    if(!setting.isAnswerAudioDisabled() && answerTTS != null){
                         // Make sure the TTS is stop
                         answerTTS.stop();
                         answerTTS.sayText(currentCard.getAnswer());

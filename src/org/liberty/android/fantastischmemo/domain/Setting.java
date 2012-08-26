@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.EnumSet;
 
 
+import org.apache.mycommons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.dao.SettingDaoImpl;
 import org.liberty.android.fantastischmemo.utils.AMUtil;
 
@@ -205,12 +206,20 @@ public class Setting {
 		this.questionAudio = questionAudio;
 	}
 
+    public boolean isQuestionAudioDisabled(){
+        return StringUtils.isEmpty(getQuestionAudio());
+    }
+	
 	public String getAnswerAudio() {
 		return answerAudio;
 	}
 
 	public void setAnswerAudio(String answerAudio) {
 		this.answerAudio = answerAudio;
+	}
+	
+	public boolean isAnswerAudioDisabled(){
+		return StringUtils.isEmpty(getAnswerAudio());
 	}
 
 	public Integer getQuestionTextColor() {

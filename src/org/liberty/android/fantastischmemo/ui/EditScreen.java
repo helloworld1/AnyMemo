@@ -205,7 +205,7 @@ public class EditScreen extends AMActivity {
         switch (item.getItemId()) {
             case R.id.menuspeakquestion:
             {
-                if(questionTTS != null && currentCard != null){
+                if(!setting.isQuestionAudioDisabled() && questionTTS != null && currentCard != null){
                     questionTTS.sayText(currentCard.getQuestion());
                 }
                 return true;
@@ -213,7 +213,7 @@ public class EditScreen extends AMActivity {
 
             case R.id.menuspeakanswer:
             {
-                if(answerTTS != null && currentCard != null){
+                if(!setting.isAnswerAudioDisabled() && answerTTS != null && currentCard != null){
                     answerTTS.sayText(currentCard.getAnswer());
                 }
                 return true;
