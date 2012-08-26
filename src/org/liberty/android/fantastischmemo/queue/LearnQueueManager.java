@@ -133,21 +133,20 @@ public class LearnQueueManager implements QueueManager {
         
         try {
             learningDataDao.callBatchTasks (
-                    new Callable<Void>() {
-                        public Void call() throws Exception {
-                            for (Card card : dirtyCache) {
-                                Log.i(TAG, "Flushing: " + card.getLearningData());
-                                learningDataDao.update(card.getLearningData());
-                                cardDao.update(card);
-                            }
-                            dirtyCache.clear();
-                            return null;
+                new Callable<Void>() {
+                    public Void call() throws Exception {
+                        for (Card card : dirtyCache) {
+                            Log.i(TAG, "Flushing: " + card.getLearningData());
+                            learningDataDao.update(card.getLearningData());
+                            cardDao.update(card);
                         }
-                    });
+                        dirtyCache.clear();
+                        return null;
+                    }
+                });
         } catch (Exception e) {
             throw new RuntimeException("Queue flushing get exception!", e);
         }
-
 	}
 
     private synchronized void refill() {

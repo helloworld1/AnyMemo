@@ -2,6 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/menuundo"
   		  android:icon="@drawable/undo_icon"
+          android:showAsAction="ifRoom" 
           android:title="@string/undo_text" />
     <item android:id="@+id/menudetail"
   		  android:icon="@android:drawable/ic_menu_edit"

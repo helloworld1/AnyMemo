@@ -62,12 +62,14 @@ import android.text.Html;
 import android.text.method.LinkMovementMethod;
 
 import android.util.Log;
+import android.util.TypedValue;
 
 import android.view.Display;
 import android.view.View;
 
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
+import android.widget.TabWidget;
 import android.widget.TextView;
 
 public class AnyMemo extends AMActivity {
@@ -84,6 +86,7 @@ public class AnyMemo extends AMActivity {
 
         setContentView(R.layout.main_tabs);
         mTabHost = (TabHost)findViewById(android.R.id.tabhost);
+
         mTabHost.setup();
 
         // Page must be initialized before tab hosts
@@ -96,12 +99,21 @@ public class AnyMemo extends AMActivity {
             mTabHost.setCurrentTabByTag(savedInstanceState.getString("recent"));
         }
 
+        int dips = 80; // The min width you want in DIP
+        int pixels = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (float) dips, getResources().getDisplayMetrics());
+        TabWidget widget = mTabHost.getTabWidget();
+        for (int i = 0; i < widget.getChildCount(); ++i) {
+            View v = widget.getChildAt(i);
+            v.setMinimumWidth(pixels);
+        }
+
         
         settings = PreferenceManager.getDefaultSharedPreferences(this);
 
         prepareStoreage();
         prepareFirstTimeRun();
         prepareNotification();
+
     }
 
     private void prepareStoreage() {

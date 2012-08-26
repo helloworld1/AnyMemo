@@ -8,11 +8,17 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:padding="5dp">
-        <TabWidget
-            android:id="@android:id/tabs"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0" />
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:fillViewport="true"
+            android:scrollbars="none"
+            android:layout_height="wrap_content" >
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0" />
+        </HorizontalScrollView>
         <FrameLayout
             android:id="@android:id/tabcontent"
             android:layout_width="fill_parent"

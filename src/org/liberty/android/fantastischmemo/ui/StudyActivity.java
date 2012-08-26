@@ -84,6 +84,7 @@ import android.view.Menu;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.KeyEvent;
@@ -153,6 +154,10 @@ public class StudyActivity extends QACardActivity {
 
     /* Keep the dbOpenHelper so it will be destroyed in onDestroy */
     private AnyMemoDBOpenHelper dbOpenHelper;
+
+    boolean initialized = false;
+
+    private WaitDbTask waitDbTask;
 
     @Override
 	public void onCreate(Bundle savedInstanceState){
@@ -365,6 +370,25 @@ public class StudyActivity extends QACardActivity {
 
         return super.onKeyDown(keyCode, event);
     }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        AnyMemoExecutor.submit(flushDatabaseTask);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Only if the initTask has been finished and no waitDbTask is waiting.
+        if (initialized && (waitDbTask == null || !AsyncTask.Status.RUNNING.equals(waitDbTask.getStatus()))) {
+            waitDbTask = new WaitDbTask();
+            waitDbTask.execute((Void)null);
+        } else {
+            Log.i(TAG, "There is another task running. Do not run tasks");
+        }
+    }
+
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event){
         /* Short press to scroe the card */
@@ -527,12 +551,16 @@ public class StudyActivity extends QACardActivity {
         } else {
             setCurrentCard(queueManager.dequeue());
         }
+        refreshStatInfo();
     }
 
     @Override
     public void onPostInit() {
         setupGradeButtons();
         displayCard(false);
+        initialized = true;
+        setSmallTitle(getActivityTitleString());
+        setTitle(getDbName());
     }
 
     @Override
@@ -554,6 +582,7 @@ public class StudyActivity extends QACardActivity {
         //} else {
         //    controlButtons = new AnyMemoGradeButtons(this);
         //}
+
         gradeButtons = new GradeButtons(this, R.layout.grade_buttons_anymemo);
 
         LinearLayout rootView= (LinearLayout)findViewById(R.id.root);
@@ -565,12 +594,20 @@ public class StudyActivity extends QACardActivity {
         gradeButtons.setGradeButtonBackground(4, R.drawable.green_button);
         gradeButtons.setGradeButtonBackground(5, R.drawable.green_button);
 
-        //gradeButtons.setButtonText(0, getString(R.string.memo_btn0_text), "+0.0d");
-        //gradeButtons.setButtonText(1, getString(R.string.memo_btn1_text), "+1.0d");
-        //gradeButtons.setButtonText(2, getString(R.string.memo_btn2_text), "+32.0d");
-        //gradeButtons.setButtonText(3, getString(R.string.memo_btn3_text), "+42.0d");
-        //gradeButtons.setButtonText(4, getString(R.string.memo_btn4_text), "+182.0d");
-        //gradeButtons.setButtonText(5, getString(R.string.memo_btn5_text), "+6182.0d");
+        // Make sure touching all areas can reveal the card.
+        rootView.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+                onClickAnswerView();
+			}
+        });
+        rootView.setOnTouchListener(new View.OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+                onClickAnswerView();
+				return true ;
+			}
+        });
 
         gradeButtons.setOnGradeButtonClickListener(onGradeButtonClickListener);
 
@@ -661,14 +698,12 @@ public class StudyActivity extends QACardActivity {
             }
             setCurrentCard(result);
             displayCard(false);
-            //setTitle(getActivityTitleString());
+            setSmallTitle(getActivityTitleString());
         }
     }
 
-    /*
-     * Use AsyncTask to make sure there is no running task for a db 
-     */
-    private class FinishTask extends AsyncTask<Void, Void, Void>{
+
+    private class WaitDbTask extends AsyncTask<Void, Void, Void>{
         private ProgressDialog progressDialog;
 
         @Override
@@ -678,7 +713,6 @@ public class StudyActivity extends QACardActivity {
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.setTitle(getString(R.string.loading_please_wait));
             progressDialog.setMessage(getString(R.string.loading_save));
-            progressDialog.setCancelable(true);
             progressDialog.show();
         }
 
@@ -690,22 +724,37 @@ public class StudyActivity extends QACardActivity {
 
         @Override
         public void onPostExecute(Void result){
-            progressDialog.dismiss();
+            super.onPostExecute(result);
+            if (!isCancelled()) {
+                progressDialog.dismiss();
+            }
+        }
+    }
+
+    private class FinishTask extends WaitDbTask {
+        @Override
+        public void onPostExecute(Void result){
+            super.onPostExecute(result);
             
             finish();
         }
     }
 
-    private class RestartTask extends FinishTask {
+    /* When restarting an activity, we have to flush db first. */
+    private class RestartTask extends WaitDbTask {
         @Override
         public void onPostExecute(Void result){
             super.onPostExecute(result);
+            
+            finish();
             Intent myIntent = new Intent(StudyActivity.this, StudyActivity.class);
             myIntent.putExtra(EXTRA_DBPATH, dbPath);
             myIntent.putExtra(EXTRA_CATEGORY_ID, filterCategoryId);
+
             if (getCurrentCard() != null ) {
                 myIntent.putExtra(EXTRA_START_CARD_ID, getCurrentCard().getId());
             }
+
             startActivity(myIntent);
         }
     }
@@ -753,12 +802,12 @@ public class StudyActivity extends QACardActivity {
     }
 
     private void setGradeButtonTitle() {
-        gradeButtons.setButtonText(0, getString(R.string.memo_btn0_text), "+" + getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 0, false)) + "d");
-        gradeButtons.setButtonText(1, getString(R.string.memo_btn1_text), "+" + getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 1, false)) + "d");
-        gradeButtons.setButtonText(2, getString(R.string.memo_btn2_text), "+" + getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 2, false)) + "d");
-        gradeButtons.setButtonText(3, getString(R.string.memo_btn3_text), "+" + getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 3, false)) + "d");
-        gradeButtons.setButtonText(4, getString(R.string.memo_btn4_text), "+" + getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 4, false)) + "d");
-        gradeButtons.setButtonText(5, getString(R.string.memo_btn5_text), "+" + getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 5, false)) + "d");
+        gradeButtons.setButtonText(0, getString(R.string.memo_btn0_text), "+" + getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 0, false)) + getString(R.string.day_text_short));
+        gradeButtons.setButtonText(1, getString(R.string.memo_btn1_text), "+" + getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 1, false)) + getString(R.string.day_text_short));
+        gradeButtons.setButtonText(2, getString(R.string.memo_btn2_text), "+" + getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 2, false)) + getString(R.string.day_text_short));
+        gradeButtons.setButtonText(3, getString(R.string.memo_btn3_text), "+" + getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 3, false)) + getString(R.string.day_text_short));
+        gradeButtons.setButtonText(4, getString(R.string.memo_btn4_text), "+" + getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 4, false)) + getString(R.string.day_text_short));
+        gradeButtons.setButtonText(5, getString(R.string.memo_btn5_text), "+" + getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 5, false)) + getString(R.string.day_text_short));
     }
 
 
@@ -767,7 +816,6 @@ public class StudyActivity extends QACardActivity {
 
 			@Override
 			public void onGradeButtonClick(int grade) {
-				// TODO Auto-generated method stub
                 GradeTask gradeTask = new GradeTask();
                 gradeTask.execute(grade);
 			}
@@ -776,6 +824,17 @@ public class StudyActivity extends QACardActivity {
     // Interval: 12.3456 -> "12.3", 12.0 -> "12.0"
     private String getIntervalToDisplay(LearningData ld) {
         return "" + ((double)Math.round(ld.getInterval() * 10)) / 10;
+    }
+
+    private String getActivityTitleString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(getString(R.string.new_text) + ": " + newCardCount + " ");
+        sb.append(getString(R.string.review_short_text) + ": " + schedluledCardCount + " ");
+        sb.append(getString(R.string.id_text) + ": " + getCurrentCard().getId() + " ");
+        if (StringUtils.isNotEmpty(getCurrentCard().getCategory().getName())) {
+            sb.append(getString(R.string.category_short_text) + ": " + getCurrentCard().getCategory().getName());
+        }
+        return sb.toString();
     }
 
 }

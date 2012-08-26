@@ -86,6 +86,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 
+import android.widget.TextView;
+
 abstract public class QACardActivity extends AMActivity {
 
     public static String EXTRA_DBPATH = "dbpath";
@@ -120,6 +122,8 @@ abstract public class QACardActivity extends AMActivity {
     private WaitDbTask waitDbTask = null;
 
     private boolean isAnswerShown = true;
+
+    private TextView smallTitleBar;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -303,7 +307,7 @@ abstract public class QACardActivity extends AMActivity {
         ft = getSupportFragmentManager().beginTransaction();
 
         if (isAnswerShown == false && showAnswer == true) {
-            ft.setCustomAnimations(0, R.anim.rotate);
+            ft.setCustomAnimations(0, R.anim.slide_down);
         } else {
             ft.setCustomAnimations(R.anim.slide_in, R.anim.slide_out);
         }
@@ -312,6 +316,11 @@ abstract public class QACardActivity extends AMActivity {
         ft.commit();
 
         isAnswerShown = showAnswer;
+
+        // Set up the small title bar
+        // It is defualt "GONE" so it won't take any space
+        // if there is no text
+        smallTitleBar = (TextView) findViewById(R.id.small_title_bar);
         
         onPostDisplayCard();
     }
@@ -338,6 +347,7 @@ abstract public class QACardActivity extends AMActivity {
     // Called when the initalizing finished.
     protected void onPostInit() {
         // Do nothing
+
     }
 
     private class InitTask extends AsyncTask<Void, Void, Exception> {
@@ -419,6 +429,18 @@ abstract public class QACardActivity extends AMActivity {
         Intent myIntent = new Intent(this, AnyMemoService.class);
         myIntent.putExtra("request_code", AnyMemoService.CANCEL_NOTIFICATION | AnyMemoService.UPDATE_WIDGET);
         startService(myIntent);
+    }
+
+
+    // Se
+    public void setSmallTitle(CharSequence text) {
+        if (StringUtils.isNotEmpty(text)) {
+            smallTitleBar.setText(text);
+            smallTitleBar.setVisibility(View.VISIBLE);
+        } else {
+            smallTitleBar.setVisibility(View.GONE);
+        }
+
     }
 
     /*
