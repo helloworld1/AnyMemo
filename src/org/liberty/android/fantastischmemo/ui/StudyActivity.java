@@ -114,11 +114,6 @@ public class StudyActivity extends QACardActivity {
     private final int ACTIVITY_DETAIL = 16;
     private final static String WEBSITE_HELP_MEMO="http://anymemo.org/wiki/index.php?title=Learning_screen";
 
-    /* This is useful to determine which view is click or long clicked */
-    private View activeView = null;
-
-    private FlashcardDisplay flashcardDisplay;
-
     /* State objects */
     private Card prevCard = null;
     private LearningData prevLearningData = null;
@@ -126,7 +121,6 @@ public class StudyActivity extends QACardActivity {
     private String dbName = "";
     private int filterCategoryId = -1; 
     private Category filterCategory;
-    private boolean isCram = false;
     private int startCardId = -1;
 
     private GradeButtons gradeButtons;
@@ -165,7 +159,6 @@ public class StudyActivity extends QACardActivity {
         if (extras != null) {
             dbPath = extras.getString(EXTRA_DBPATH);
             filterCategoryId = extras.getInt(EXTRA_CATEGORY_ID, -1);
-            isCram = extras.getBoolean(EXTRA_CRAM, false);
             startCardId = extras.getInt(EXTRA_START_CARD_ID, -1);
         }
         super.onCreate(savedInstanceState);
@@ -189,15 +182,10 @@ public class StudyActivity extends QACardActivity {
         queueManager = builder.build();
     }
 
-
-
-
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.memo_screen_menu, menu);
+        inflater.inflate(R.menu.study_activity_menu, menu);
         return true;
     }
 
@@ -395,26 +383,27 @@ public class StudyActivity extends QACardActivity {
 
         if(option.getVolumeKeyShortcut()){
             if(keyCode == KeyEvent.KEYCODE_VOLUME_UP){
-                if(flashcardDisplay.isAnswerShown() == false){
+                //TODO is answer shown?
+                //if(flashcardDisplay.isAnswerShown() == false){
                     //updateFlashcardView(true);
                     //showButtons();
-                }
-                else{
+                //}
+                //else{
                     /* Grade 0 for up key */
                     //getGradeButtonListener(0).onClick(null);
                     //Toast.makeText(this, getString(R.string.grade_text) + " 0", Toast.LENGTH_SHORT).show();
-                }
+                //}
                 return true;
             }
             if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
-                if(flashcardDisplay.isAnswerShown() == false){
-                    //updateFlashcardView(true);
-                }
-                else{
-                    /* Grade 3 for down key */
-                    //getGradeButtonListener(3).onClick(null);
-                    Toast.makeText(this, getString(R.string.grade_text) + " 3", Toast.LENGTH_SHORT).show();
-                }
+                //if(flashcardDisplay.isAnswerShown() == false){
+                //    //updateFlashcardView(true);
+                //}
+                //else{
+                //    /* Grade 3 for down key */
+                //    //getGradeButtonListener(3).onClick(null);
+                //    Toast.makeText(this, getString(R.string.grade_text) + " 3", Toast.LENGTH_SHORT).show();
+                //}
                 return true;
             }
         }
@@ -464,19 +453,16 @@ public class StudyActivity extends QACardActivity {
         if (getCurrentCard() != null) {
             if(option.getSpeakingType() == Option.SpeakingType.AUTOTAP
                     || option.getSpeakingType() == Option.SpeakingType.AUTO){
-                if(!flashcardDisplay.isAnswerShown()){
+                if(isAnswerShown()){
                     if(questionTTS != null){
                         // Make sure the TTS is stop, or it will speak nothing.
                         questionTTS.stop();
                         questionTTS.sayText(getCurrentCard().getQuestion());
                     }
-                }
-                else{
-                    if(answerTTS != null){
-                        // Make sure the TTS is stop
-                        answerTTS.stop();
-                        answerTTS.sayText(getCurrentCard().getAnswer());
-                    }
+                } else if(answerTTS != null){
+                    // Make sure the TTS is stop
+                    answerTTS.stop();
+                    answerTTS.sayText(getCurrentCard().getAnswer());
                 }
             }
         }

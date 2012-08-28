@@ -115,6 +115,9 @@
         <activity 
             android:name=".ui.StudyActivity"
             android:configChanges="orientation|keyboardHidden" />
+        <activity 
+            android:name=".ui.PreviewEditActivity"
+            android:configChanges="orientation|keyboardHidden" />
         <receiver
             android:name=".AlarmReceiver"
             android:process=":remote" />

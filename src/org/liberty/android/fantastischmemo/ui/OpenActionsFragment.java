@@ -97,15 +97,15 @@ public class OpenActionsFragment extends DialogFragment {
         	final RecentListUtil rlu = new RecentListUtil(mActivity);
             if (v == studyItem) {
                 Intent myIntent = new Intent();
-                myIntent.setClass(mActivity, MemoScreen.class);
-                myIntent.putExtra(MemoScreen.EXTRA_DBPATH, dbPath);
+                myIntent.setClass(mActivity, StudyActivity.class);
+                myIntent.putExtra(StudyActivity.EXTRA_DBPATH, dbPath);
                 startActivity(myIntent);
                 rlu.addToRecentList(dbPath);
             }
 
             if (v == editItem) {
                 Intent myIntent = new Intent();
-                myIntent.setClass(mActivity, EditScreen.class);
+                myIntent.setClass(mActivity, PreviewEditActivity.class);
                 myIntent.putExtra(EditScreen.EXTRA_DBPATH, dbPath);
                 startActivity(myIntent);
                 rlu.addToRecentList(dbPath);

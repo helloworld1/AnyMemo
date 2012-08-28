@@ -112,6 +112,9 @@ abstract public class QACardActivity extends AMActivity {
     private int screenWidth;
 
     private int screenHeight;
+
+    private int animationInResId = 0;
+    private int animationOutResId = 0;
     
     private Option option;
 
@@ -141,6 +144,11 @@ abstract public class QACardActivity extends AMActivity {
         Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         screenWidth = display.getWidth();
         screenHeight = display.getHeight();
+
+
+        // Set teh default animation
+        animationInResId = R.anim.slide_left_in;
+        animationOutResId = R.anim.slide_left_out;
 
         initTask = new InitTask();
         initTask.execute();
@@ -299,7 +307,7 @@ abstract public class QACardActivity extends AMActivity {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         if (isAnswerShown == false && showAnswer == true) {
         } else {
-            ft.setCustomAnimations(R.anim.slide_in, R.anim.slide_out);
+            ft.setCustomAnimations(animationInResId, animationOutResId);
         }
         ft.replace(R.id.question, questionFragment);
         ft.commit();
@@ -309,7 +317,7 @@ abstract public class QACardActivity extends AMActivity {
         if (isAnswerShown == false && showAnswer == true) {
             ft.setCustomAnimations(0, R.anim.slide_down);
         } else {
-            ft.setCustomAnimations(R.anim.slide_in, R.anim.slide_out);
+            ft.setCustomAnimations(animationInResId, animationOutResId);
         }
 
         ft.replace(R.id.answer, answerFragment);
@@ -348,6 +356,12 @@ abstract public class QACardActivity extends AMActivity {
     protected void onPostInit() {
         // Do nothing
 
+    }
+
+    // Set the card animation, 0 = no animation
+    protected void setAnimation(int animationInResId, int animationOutResId) {
+        this.animationInResId = animationInResId;
+        this.animationOutResId = animationOutResId;
     }
 
     private class InitTask extends AsyncTask<Void, Void, Exception> {
@@ -594,5 +608,4 @@ abstract public class QACardActivity extends AMActivity {
             onClickAnswerView();
 		}
     };
-
 }

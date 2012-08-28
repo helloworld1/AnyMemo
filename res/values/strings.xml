@@ -447,4 +447,5 @@
     <string name="max_recent_list_size_text">Max recent list size</string>
     <string name="recent_summary">Setup the max number of DBs to display in the recent list.</string>
     <string name="day_text_short">d</string>
+    <string name="previous_text_short">Prev</string>
 </resources>

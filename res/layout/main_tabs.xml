@@ -9,6 +9,7 @@
         android:layout_height="fill_parent"
         android:padding="5dp">
         <HorizontalScrollView
+            android:id="@+id/horizontal_scroll_view"
             android:layout_width="wrap_content"
             android:fillViewport="true"
             android:scrollbars="none"

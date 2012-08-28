@@ -67,6 +67,7 @@ import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
 
+import android.widget.HorizontalScrollView;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabWidget;
@@ -78,6 +79,9 @@ public class AnyMemo extends AMActivity {
     private TabManager mTabManager;
     private ViewPager mViewPager;
     private PagerAdapter mPagerAdapter;
+    private HorizontalScrollView mHorizontalScrollView;
+
+
     private SharedPreferences settings;
 
     @Override
@@ -86,6 +90,7 @@ public class AnyMemo extends AMActivity {
 
         setContentView(R.layout.main_tabs);
         mTabHost = (TabHost)findViewById(android.R.id.tabhost);
+        mHorizontalScrollView = (HorizontalScrollView) findViewById(R.id.horizontal_scroll_view);
 
         mTabHost.setup();
 
@@ -99,12 +104,28 @@ public class AnyMemo extends AMActivity {
             mTabHost.setCurrentTabByTag(savedInstanceState.getString("recent"));
         }
 
-        int dips = 80; // The min width you want in DIP
-        int pixels = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (float) dips, getResources().getDisplayMetrics());
+
+        // Make sure the widget will fill the screen if the
+        // screen size is large while still keep the widget
+        // tabs scrollable for small screen.
         TabWidget widget = mTabHost.getTabWidget();
+
+        int display_width_px = this.getWindowManager().getDefaultDisplay().getWidth();
+        int display_width_dp = (int)(display_width_px * getResources().getDisplayMetrics().density);
+
+
+        // This is the minimal DP of width for the widget title.
+        int minimal_dp = 80;
+
+        int minimal_px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (float) minimal_dp, getResources().getDisplayMetrics());
+
+        int width_px = minimal_px;
+        if (minimal_dp * widget.getChildCount() < display_width_dp) {
+            width_px = display_width_px / widget.getChildCount();
+        } 
         for (int i = 0; i < widget.getChildCount(); ++i) {
             View v = widget.getChildAt(i);
-            v.setMinimumWidth(pixels);
+            v.setMinimumWidth(width_px);
         }
 
         
@@ -362,8 +383,16 @@ public class AnyMemo extends AMActivity {
 			}
 
 			@Override
-			public void onPageScrolled(int arg0, float arg1, int arg2) {
-                // Do nothing
+			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                // Scroll the horizontal scroll bar that wrap the tabwidget
+                // so the current tab title can be visible.
+                View tabView = mTabHost.getTabWidget().getChildAt(position);
+                final int width = mHorizontalScrollView.getWidth(); 
+                int scrollPos = tabView.getLeft() - (width - tabView.getWidth()) / 2; 
+
+                mHorizontalScrollView.scrollTo(scrollPos, 0);
+                mHorizontalScrollView.refreshDrawableState();
+
 			}
 
         };
