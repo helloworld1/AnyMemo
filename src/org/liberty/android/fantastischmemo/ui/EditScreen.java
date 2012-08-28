@@ -20,6 +20,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import org.apache.mycommons.lang3.math.NumberUtils;
 
@@ -47,7 +49,7 @@ import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
-import org.liberty.android.fantastischmemo.tts.AnyMemoTTSImp;
+import org.liberty.android.fantastischmemo.tts.AnyMemoTTSImpl;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -434,9 +436,20 @@ public class EditScreen extends AMActivity {
         String defaultLocation = AMEnv.DEFAULT_AUDIO_PATH;
         String qa = setting.getQuestionAudio();
         String aa = setting.getAnswerAudio();
-
-        questionTTS = new AnyMemoTTSImp(this, qa, defaultLocation, dbName);
-        answerTTS = new AnyMemoTTSImp(this, aa, defaultLocation, dbName);
+        List<String> questionAudioSearchPath = new ArrayList<String>();
+        questionAudioSearchPath.add(setting.getQuestionAudioLocation());
+        questionAudioSearchPath.add(setting.getQuestionAudioLocation() + "/" + dbName);
+        questionAudioSearchPath.add(defaultLocation + "/" + dbName);
+        questionAudioSearchPath.add(setting.getQuestionAudioLocation());
+        
+        List<String> answerAudioSearchPath = new ArrayList<String>();
+        answerAudioSearchPath.add(setting.getAnswerAudioLocation());
+        answerAudioSearchPath.add(setting.getAnswerAudioLocation() + "/" + dbName);
+        answerAudioSearchPath.add(defaultLocation + "/" + dbName);
+        answerAudioSearchPath.add(defaultLocation);
+        
+        questionTTS = new AnyMemoTTSImpl(this, qa, questionAudioSearchPath);
+        answerTTS = new AnyMemoTTSImpl(this, aa, answerAudioSearchPath);
 
     }
 

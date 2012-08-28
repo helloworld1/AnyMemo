@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo.tts;
 
+import java.util.List;
 import java.util.Locale;
 
 import java.util.concurrent.TimeUnit;
@@ -31,7 +32,7 @@ import android.content.Context;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
-public class AnyMemoTTSImp implements AnyMemoTTS, TextToSpeech.OnInitListener{
+public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
 
 	private final TextToSpeech myTTS;
 	private SpeakWord speakWord;
@@ -72,9 +73,9 @@ public class AnyMemoTTSImp implements AnyMemoTTS, TextToSpeech.OnInitListener{
             Log.e(TAG, "Can't initialize");
         }
     }
-	
-	public AnyMemoTTSImp(Context context, String locale){
-        // We must make sure the constructor happens before
+
+	public AnyMemoTTSImpl(Context context, String locale, List<String> audioSearchPath){
+		 // We must make sure the constructor happens before
         // the onInit callback. Unfortunately, this is not
         // always true. We have to use lock to ensure the happen before.
         // Or a null pointer for myTTS is waiting
@@ -82,11 +83,7 @@ public class AnyMemoTTSImp implements AnyMemoTTS, TextToSpeech.OnInitListener{
 		myLocale = getLocaleForTTS(locale);
 		myTTS = new TextToSpeech(context, this);
         initLock.unlock();
-	}
-
-	public AnyMemoTTSImp(Context context, String locale, String audioDir, String dbname){
-		this(context, locale);
-		speakWord = new SpeakWord(audioDir, dbname);
+		speakWord = new SpeakWord(audioSearchPath);
 	}
 	
 	public void shutdown(){

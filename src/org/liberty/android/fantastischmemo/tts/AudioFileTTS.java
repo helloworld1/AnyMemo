@@ -17,26 +17,26 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-package org.liberty.android.fantastischmemo.tts;
-
-public class AudioFileTTS implements AnyMemoTTS{
-    private SpeakWord speakWord;
-    
-
-    public AudioFileTTS(String audiodir, String dbname){
-        speakWord = new SpeakWord(audiodir, dbname);
-    }
-
-    public void sayText(String text){
-        speakWord.speakWord(text);
-    }
-    public void stop(){
-        speakWord.stop();
-    }
-
-    public void shutdown(){
-        speakWord.shutdown();
-    }
-}
+//package org.liberty.android.fantastischmemo.tts;
+//
+//public class AudioFileTTS implements AnyMemoTTS{
+//    private SpeakWord speakWord;
+//    
+//
+//    public AudioFileTTS(String audiodir, String dbname){
+//        speakWord = new SpeakWord(audiodir, dbname);
+//    }
+//
+//    public void sayText(String text){
+//        speakWord.speakWord(text);
+//    }
+//    public void stop(){
+//        speakWord.stop();
+//    }
+//
+//    public void shutdown(){
+//        speakWord.shutdown();
+//    }
+//}
 
 
