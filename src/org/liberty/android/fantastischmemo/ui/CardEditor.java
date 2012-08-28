@@ -212,9 +212,9 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
             builder.setTitle("Edit audio");
             builder.setItems(audioOptionItems, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int itemIndex) {
-                	if(!isViewEligibleToEditAudio()){
-                		return;
-                	}
+                    if(!isViewEligibleToEditAudio()){
+                        return;
+                    }
                     switch(itemIndex){
                     case 0:
                         addExistingAudio();
@@ -237,29 +237,26 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
     }
     
     private boolean isViewEligibleToEditAudio(){
-    	View focusView = getCurrentFocus();
+        View focusView = getCurrentFocus();
         if(focusView == questionEdit || focusView == answerEdit){
-        	return true;
+            return true;
         } else {
-        	return false;
+            return false;
         }
     }
     
     private void showConfirmDialog(String msg, DialogInterface.OnClickListener positiveClickListener){
-    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	builder.setMessage(msg)
-    	       .setPositiveButton("Yes", positiveClickListener)
-    	       .setNegativeButton("No", new DialogInterface.OnClickListener() {
-			       public void onClick(DialogInterface dialog, int which) {
-				       //do nothing so far
-			       }
-		       });
-    	AlertDialog alert = builder.create();
-    	alert.show();
+        new AlertDialog.Builder(this)
+            .setMessage(msg)
+            .setPositiveButton(getString(R.string.yes_text), positiveClickListener)
+            .setNegativeButton(getString(R.string.no_text), null)
+            .create()
+            .show();
+        
     }
     
     private boolean audioPreviouslyExists(){
-    	View focusView = getCurrentFocus();
+        View focusView = getCurrentFocus();
         String curContent = ((EditText)focusView).getText().toString();
         return curContent.contains("src=");
     }
@@ -267,30 +264,28 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
     private void addExistingAudio(){
         if(audioPreviouslyExists()){
             //if there is audio previously defined,show alert
-        	String alertMsg = "Are you sure you want to override current audio?";
-        	DialogInterface.OnClickListener positiveClickListener = new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int which) {
-					startAudioBrowser();
-				}
-			};
-			showConfirmDialog(alertMsg, positiveClickListener);
+            DialogInterface.OnClickListener positiveClickListener = new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    startAudioBrowser();
+                }
+            };
+            showConfirmDialog(getString(R.string.override_audio_warning_text), positiveClickListener);
         } else {
-        	startAudioBrowser();
+            startAudioBrowser();
         }
     }
     
     private void addNewAudio(){
          if(audioPreviouslyExists()){
              //if there is audio previously defined,show alert
-         	String alertMsg = "Are you sure you want to override current audio?";
-         	DialogInterface.OnClickListener positiveClickListener = new DialogInterface.OnClickListener() {
- 				public void onClick(DialogInterface dialog, int which) {
- 					startAudioRecorder();
- 				}
- 			};
- 			showConfirmDialog(alertMsg, positiveClickListener);
+             DialogInterface.OnClickListener positiveClickListener = new DialogInterface.OnClickListener() {
+                 public void onClick(DialogInterface dialog, int which) {
+                     startAudioRecorder();
+                 }
+             };
+             showConfirmDialog(getString(R.string.override_audio_warning_text), positiveClickListener);
          } else {
-         	startAudioRecorder();
+             startAudioRecorder();
          }       
     }
     
@@ -316,7 +311,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
     
     private void startAudioRecorder(){
          removeAudio();
-    	 View focusView = getCurrentFocus();
+         View focusView = getCurrentFocus();
          String audioFilename = AMEnv.DEFAULT_AUDIO_PATH + dbName; 
          new File(audioFilename).mkdirs();
          AudioRecorderFragment recorder = new AudioRecorderFragment();
@@ -573,7 +568,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
 
     private class SaveCardTask extends AsyncTask<Void, Void, Void> {
         private ProgressDialog progressDialog;
-		@Override
+        @Override
         public void onPreExecute() {
             progressDialog = new ProgressDialog(CardEditor.this);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -625,7 +620,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
             progressDialog.dismiss();
             Intent resultIntent = new Intent();
             resultIntent.putExtra(EXTRA_RESULT_CARD_ID, currentCard.getId());
-        	setResult(Activity.RESULT_OK, resultIntent);    			
+            setResult(Activity.RESULT_OK, resultIntent);                
             finish();
         }
     }
