@@ -120,7 +120,7 @@ public class EditScreen extends AMActivity {
     private AnyMemoDBOpenHelper dbOpenHelper;
 
     @Override
-	public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         initTask = new InitTask();
         initTask.execute((Void)null);
@@ -207,7 +207,7 @@ public class EditScreen extends AMActivity {
         switch (item.getItemId()) {
             case R.id.menuspeakquestion:
             {
-                if(!setting.isQuestionAudioDisabled() && questionTTS != null && currentCard != null){
+                if(questionTTS != null && currentCard != null){
                     questionTTS.sayText(currentCard.getQuestion());
                 }
                 return true;
@@ -215,7 +215,7 @@ public class EditScreen extends AMActivity {
 
             case R.id.menuspeakanswer:
             {
-                if(!setting.isAnswerAudioDisabled() && answerTTS != null && currentCard != null){
+                if(answerTTS != null && currentCard != null){
                     answerTTS.sayText(currentCard.getAnswer());
                 }
                 return true;
@@ -787,7 +787,7 @@ public class EditScreen extends AMActivity {
         private int currentCardId;
         private static final int NULL_ID = -1;
 
-		@Override
+        @Override
         public void onPreExecute() {
             requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
@@ -888,7 +888,7 @@ public class EditScreen extends AMActivity {
 
     private class DeleteCardTask extends AsyncTask<Void, Void, Void> {
         private ProgressDialog progressDialog;
-		@Override
+        @Override
         public void onPreExecute() {
             progressDialog = new ProgressDialog(EditScreen.this);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -922,7 +922,7 @@ public class EditScreen extends AMActivity {
 
         private ProgressDialog progressDialog;
 
-		@Override
+        @Override
         public void onPreExecute() {
             progressDialog = new ProgressDialog(EditScreen.this);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);

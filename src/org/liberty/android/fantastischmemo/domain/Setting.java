@@ -205,11 +205,11 @@ public class Setting {
 	public void setQuestionAudio(String questionAudio) {
 		this.questionAudio = questionAudio;
 	}
-
-    public boolean isQuestionAudioDisabled(){
-        return StringUtils.isEmpty(getQuestionAudio());
+    
+    public boolean isQuestionAudioEnabled(){
+        return !StringUtils.isEmpty(getQuestionAudio());
     }
-	
+    
 	public String getAnswerAudio() {
 		return answerAudio;
 	}
@@ -218,8 +218,8 @@ public class Setting {
 		this.answerAudio = answerAudio;
 	}
 	
-	public boolean isAnswerAudioDisabled(){
-		return StringUtils.isEmpty(getAnswerAudio());
+	public boolean isAnswerAudioEnabled(){
+		return !StringUtils.isEmpty(getAnswerAudio());
 	}
 
 	public Integer getQuestionTextColor() {

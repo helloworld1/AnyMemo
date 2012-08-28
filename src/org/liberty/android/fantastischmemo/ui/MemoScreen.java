@@ -157,7 +157,7 @@ public class MemoScreen extends AMActivity {
     private AnyMemoDBOpenHelper dbOpenHelper;
 
     @Override
-	public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -252,7 +252,7 @@ public class MemoScreen extends AMActivity {
             }
             case R.id.menuspeakquestion:
             {
-                if(!setting.isQuestionAudioDisabled() && questionTTS != null && currentCard != null){
+                if(questionTTS != null && currentCard != null){
                     questionTTS.sayText(currentCard.getQuestion());
                 }
                 return true;
@@ -260,7 +260,7 @@ public class MemoScreen extends AMActivity {
 
             case R.id.menuspeakanswer:
             {
-                if(!setting.isAnswerAudioDisabled() && answerTTS != null && currentCard != null){
+                if(answerTTS != null && currentCard != null){
                     answerTTS.sayText(currentCard.getAnswer());
                 }
                 return true;
@@ -608,7 +608,7 @@ public class MemoScreen extends AMActivity {
                             updateFlashcardView(false);
                             hideButtons();
                         } else{
-                        	updateFlashcardView(true);
+                            updateFlashcardView(true);
                             showButtons();
                         }
 
@@ -622,7 +622,7 @@ public class MemoScreen extends AMActivity {
         };
         View.OnClickListener speakQuestionListener = new View.OnClickListener(){
             public void onClick(View v){
-                if(!setting.isQuestionAudioDisabled() && currentCard != null && questionTTS != null){
+                if(currentCard != null && questionTTS != null){
                     questionTTS.sayText(currentCard.getQuestion());
                 }
             }
@@ -635,7 +635,7 @@ public class MemoScreen extends AMActivity {
                         showButtons();
                     }
                     else{
-                        if(!setting.isAnswerAudioDisabled() && answerTTS != null){
+                        if(answerTTS != null){
                             answerTTS.sayText(currentCard.getAnswer());
                         }
                     }
@@ -817,14 +817,14 @@ public class MemoScreen extends AMActivity {
         if (currentCard != null) {
             if(option.getSpeakingType() == Option.SpeakingType.AUTOTAP || option.getSpeakingType() == Option.SpeakingType.AUTO){
                 if(!flashcardDisplay.isAnswerShown()){
-                    if(!setting.isQuestionAudioDisabled() && questionTTS != null){
+                    if(questionTTS != null){
                         // Make sure the TTS is stop, or it will speak nothing.
                         questionTTS.stop();
                         questionTTS.sayText(currentCard.getQuestion());
                     }
                 }
                 else{
-                    if(!setting.isAnswerAudioDisabled() && answerTTS != null){
+                    if(answerTTS != null){
                         // Make sure the TTS is stop
                         answerTTS.stop();
                         answerTTS.sayText(currentCard.getAnswer());
@@ -841,21 +841,26 @@ public class MemoScreen extends AMActivity {
 
     private void initTTS(){
         String defaultLocation = AMEnv.DEFAULT_AUDIO_PATH;
-        String qa = setting.getQuestionAudio();
-        String aa = setting.getAnswerAudio();
-        List<String> questionAudioSearchPath = new ArrayList<String>();
-        questionAudioSearchPath.add(setting.getQuestionAudioLocation());
-        questionAudioSearchPath.add(setting.getQuestionAudioLocation() + "/" + dbName);
-        questionAudioSearchPath.add(defaultLocation + "/" + dbName);
-        questionAudioSearchPath.add(setting.getQuestionAudioLocation());
         
-        List<String> answerAudioSearchPath = new ArrayList<String>();
-        answerAudioSearchPath.add(setting.getAnswerAudioLocation());
-        answerAudioSearchPath.add(setting.getAnswerAudioLocation() + "/" + dbName);
-        answerAudioSearchPath.add(defaultLocation + "/" + dbName);
-        answerAudioSearchPath.add(defaultLocation);
-        questionTTS = new AnyMemoTTSImpl(this, qa, questionAudioSearchPath);
-        answerTTS = new AnyMemoTTSImpl(this, aa, answerAudioSearchPath);
+        if(setting.isQuestionAudioEnabled()){
+            String qa = setting.getQuestionAudio();
+            List<String> questionAudioSearchPath = new ArrayList<String>();
+            questionAudioSearchPath.add(setting.getQuestionAudioLocation());
+            questionAudioSearchPath.add(setting.getQuestionAudioLocation() + "/" + dbName);
+            questionAudioSearchPath.add(defaultLocation + "/" + dbName);
+            questionAudioSearchPath.add(setting.getQuestionAudioLocation());
+            questionTTS = new AnyMemoTTSImpl(this, qa, questionAudioSearchPath);
+        } 
+        
+        if(setting.isAnswerAudioEnabled()){
+            String aa = setting.getAnswerAudio();
+            List<String> answerAudioSearchPath = new ArrayList<String>();
+            answerAudioSearchPath.add(setting.getAnswerAudioLocation());
+            answerAudioSearchPath.add(setting.getAnswerAudioLocation() + "/" + dbName);
+            answerAudioSearchPath.add(defaultLocation + "/" + dbName);
+            answerAudioSearchPath.add(defaultLocation);
+            answerTTS = new AnyMemoTTSImpl(this, aa, answerAudioSearchPath);
+        }
     }
 
     private void showCategoriesDialog() {
@@ -883,7 +888,7 @@ public class MemoScreen extends AMActivity {
 
     private class InitTask extends AsyncTask<Void, Void, Card> {
 
-		@Override
+        @Override
         public void onPreExecute() {
             requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
