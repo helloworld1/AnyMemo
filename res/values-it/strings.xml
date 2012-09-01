@@ -445,4 +445,6 @@
     <string name="record_text">Registra</string>
     <string name="max_recent_list_size_text">Dimensione max lista DB recenti</string>
     <string name="recent_summary">Configura il numero massimo di DB da mostrare nella lista di quelli recentemente visitati.</string>
+    <string name="day_text_short">g</string>
+    <string name="previous_text_short">Prec</string>
 </resources>
