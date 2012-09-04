@@ -788,12 +788,12 @@ public class StudyActivity extends QACardActivity {
     }
 
     private void setGradeButtonTitle() {
-        gradeButtons.setButtonText(0, getString(R.string.memo_btn0_text), "+" + getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 0, false)) + getString(R.string.day_text_short));
-        gradeButtons.setButtonText(1, getString(R.string.memo_btn1_text), "+" + getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 1, false)) + getString(R.string.day_text_short));
-        gradeButtons.setButtonText(2, getString(R.string.memo_btn2_text), "+" + getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 2, false)) + getString(R.string.day_text_short));
-        gradeButtons.setButtonText(3, getString(R.string.memo_btn3_text), "+" + getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 3, false)) + getString(R.string.day_text_short));
-        gradeButtons.setButtonText(4, getString(R.string.memo_btn4_text), "+" + getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 4, false)) + getString(R.string.day_text_short));
-        gradeButtons.setButtonText(5, getString(R.string.memo_btn5_text), "+" + getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 5, false)) + getString(R.string.day_text_short));
+        gradeButtons.setButtonText(0, getString(R.string.memo_btn0_text), ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 0, false)));
+        gradeButtons.setButtonText(1, getString(R.string.memo_btn1_text), ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 1, false)));
+        gradeButtons.setButtonText(2, getString(R.string.memo_btn2_text), ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 2, false)));
+        gradeButtons.setButtonText(3, getString(R.string.memo_btn3_text), ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 3, false)));
+        gradeButtons.setButtonText(4, getString(R.string.memo_btn4_text), ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 4, false)));
+        gradeButtons.setButtonText(5, getString(R.string.memo_btn5_text), ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 5, false)));
     }
 
 
@@ -807,9 +807,23 @@ public class StudyActivity extends QACardActivity {
 			}
         };
 
-    // Interval: 12.3456 -> "12.3", 12.0 -> "12.0"
+    // Interval: 12.3456 day -> "1.7 week", 4.76 -> "4.7 day"
     private String getIntervalToDisplay(LearningData ld) {
-        return "" + ((double)Math.round(ld.getInterval() * 10)) / 10;
+        double[] dividers = {365, 30, 7, 1};
+        String[] unitName = {getString(R.string.year_text),
+            getString(R.string.month_text),
+            getString(R.string.week_text),
+            getString(R.string.day_text)};
+        double interval = ld.getInterval();
+
+        for (int i = 0; i < dividers.length; i++) {
+            double divider = dividers[i];
+                
+            if ((interval / divider) >= 1.0 || i == (dividers.length - 1)) {
+                return "" + Double.toString(((double)Math.round(interval / divider * 10)) / 10) + " " + unitName[i];
+            }
+        }
+        return "";
     }
 
     private String getActivityTitleString(){

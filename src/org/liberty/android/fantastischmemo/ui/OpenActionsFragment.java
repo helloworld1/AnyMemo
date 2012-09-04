@@ -46,7 +46,7 @@ public class OpenActionsFragment extends DialogFragment {
     private View studyItem;
     private View editItem;
     private View listItem;
-    private View cramItem;
+    private View quizItem;
     private View settingsItem;
     private View statisticsItem;
     private View deleteItem;
@@ -78,8 +78,8 @@ public class OpenActionsFragment extends DialogFragment {
         listItem = v.findViewById(R.id.list);
         listItem.setOnClickListener(buttonClickListener);
 
-        cramItem = v.findViewById(R.id.cram);
-        cramItem.setOnClickListener(buttonClickListener);
+        quizItem = v.findViewById(R.id.quiz);
+        quizItem.setOnClickListener(buttonClickListener);
 
         settingsItem = v.findViewById(R.id.settings);
         settingsItem.setOnClickListener(buttonClickListener);
@@ -119,12 +119,12 @@ public class OpenActionsFragment extends DialogFragment {
                 rlu.addToRecentList(dbPath);
             }
 
-            if (v == cramItem) {
-                Intent myIntent = new Intent();
-                myIntent.setClass(mActivity, MemoScreen.class);
-                myIntent.putExtra(MemoScreen.EXTRA_DBPATH, dbPath);
-                myIntent.putExtra(MemoScreen.EXTRA_CRAM, true);
-                startActivity(myIntent);
+            if (v == quizItem) {
+                QuizLauncherDialogFragment df = new QuizLauncherDialogFragment();
+                Bundle b = new Bundle();
+                b.putString(CategoryEditorFragment.EXTRA_DBPATH, dbPath);
+                df.setArguments(b);
+                df.show(mActivity.getSupportFragmentManager(), "QuizLauncherDialog");
                 rlu.addToRecentList(dbPath);
             }
 
@@ -141,6 +141,7 @@ public class OpenActionsFragment extends DialogFragment {
                 myIntent.putExtra(SettingsScreen.EXTRA_DBPATH, dbPath);
                 startActivity(myIntent);
             }
+
             if (v == deleteItem) {
                 new AlertDialog.Builder(mActivity)
                     .setTitle(getString(R.string.delete_text))

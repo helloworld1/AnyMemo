@@ -81,7 +81,7 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:id="@+id/cram"
+            android:id="@+id/quiz"
             style="@style/list_button"
             android:layout_height="wrap_content">
             <ImageView
@@ -95,7 +95,7 @@
                 android:layout_width="fill_parent" 
                 android:layout_weight="1"
                 android:layout_height="wrap_content" 
-                android:text="@string/learn_ahead"
+                android:text="@string/quiz_text"
                 android:textSize="24dp"
                 android:clickable="false"
                 android:focusable="false"
