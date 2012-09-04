@@ -103,7 +103,7 @@
     <string name="add_screen_edit">Сохранить</string>
     <string name="add_screen_gotoid">Идти к ID</string>
     <string name="add_screen_back">Назад</string>
-    <string name="add_screen_next">Вперёд</string>
+    <string name="add_screen_next">След</string>
     <string name="add_screen_previous">Назад</string>
     <string name="search_text">Поиск</string>
     <string name="goto_id_text">Идти к ID</string>
