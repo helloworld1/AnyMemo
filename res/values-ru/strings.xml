@@ -103,7 +103,7 @@
     <string name="add_screen_edit">Сохранить</string>
     <string name="add_screen_gotoid">Идти к ID</string>
     <string name="add_screen_back">Назад</string>
-    <string name="add_screen_next">Вперёд</string>
+    <string name="add_screen_next">След</string>
     <string name="add_screen_previous">Назад</string>
     <string name="search_text">Поиск</string>
     <string name="goto_id_text">Идти к ID</string>
@@ -441,4 +441,16 @@
     <string name="record_text">Доб. запись</string>
     <string name="max_recent_list_size_text">Размер списка Недавние</string>
     <string name="recent_summary">Задать максимальное количество баз в списке Недавние.</string>
+    <string name="day_text_short">д</string>
+    <string name="previous_text_short">Пред</string>
+    <string name="year_text">г</string>
+    <string name="month_text">мес</string>
+    <string name="week_text">нед</string>
+    <string name="day_text">дн</string>
+    <string name="quiz_text">Опрос</string>
+    <string name="quiz_by_group_text">Опрос по группе</string>
+    <string name="quiz_by_category_text">Опрос по категории</string>
+    <string name="quiz_group_size_text">Размер группы опроса</string>
+    <string name="quiz_group_number_text">Номер группы опроса</string>
+    <string name="start_quiz_text">Начать опрос</string>
 </resources>
