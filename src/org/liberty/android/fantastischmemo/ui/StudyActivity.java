@@ -23,25 +23,19 @@ import java.util.Date;
 
 import org.apache.mycommons.lang3.StringUtils;
 
-import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.AnyMemoService;
 
-import org.liberty.android.fantastischmemo.queue.CramQueueManager;
 import org.liberty.android.fantastischmemo.queue.LearnQueueManager;
 import org.liberty.android.fantastischmemo.ui.DetailScreen;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.ui.SettingsScreen;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
-import org.liberty.android.fantastischmemo.utils.AMUtil;
 import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
-import org.liberty.android.fantastischmemo.dao.SettingDao;
 
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
@@ -50,7 +44,6 @@ import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 
 import org.liberty.android.fantastischmemo.queue.QueueManager;
-import java.util.Map;
 
 import java.sql.SQLException;
 
@@ -73,12 +66,6 @@ import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-
-import android.text.ClipboardManager;
-import android.text.Html;
-
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.ContextMenu;
@@ -86,12 +73,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.KeyEvent;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.Toast;
 import android.util.Log;
 import android.net.Uri;
 
@@ -286,19 +270,7 @@ public class StudyActivity extends QACardActivity {
                     .setMessage(R.string.skip_warning)
                     .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
                         public void onClick(DialogInterface arg0, int arg1) {
-                            if(getCurrentCard() != null) {
-                                try {
-                                    LearningData ld = getCurrentCard().getLearningData();
-                                    ld.setNextLearnDate(new Date(Long.MAX_VALUE));
-                                    ld.setAcqReps(1);
-                                    learningDataDao.update(ld);
-                                    // Do not restart this card
-                                    setCurrentCard(null);
-                                    restartActivity();
-                                } catch (SQLException e) {
-                                    Log.e(TAG, "Delete card error", e);
-                                }
-                            }
+                            skipCurrentCard();
                         }
                     })
                 .setNegativeButton(R.string.cancel_text, null)
@@ -954,6 +926,22 @@ public class StudyActivity extends QACardActivity {
             } catch(Exception e) {
                 Log.e(TAG, "Error opening Fora", e);
                 AMGUIUtility.displayException(this, getString(R.string.error_text), getString(R.string.dict_fora) + " " + getString(R.string.error_no_dict), e);
+            }
+        }
+    }
+    
+    private void skipCurrentCard() {
+        if(getCurrentCard() != null) {
+            try {
+                LearningData ld = getCurrentCard().getLearningData();
+                ld.setNextLearnDate(new Date(Long.MAX_VALUE));
+                ld.setAcqReps(1);
+                learningDataDao.update(ld);
+                // Do not restart this card
+                setCurrentCard(null);
+                restartActivity();
+            } catch (SQLException e) {
+                Log.e(TAG, "Delete card error", e);
             }
         }
     }
