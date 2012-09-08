@@ -29,6 +29,9 @@
     <item android:id="@+id/menu_edit_categories"
           android:title="@string/filter_category_text"
   		  android:icon="@android:drawable/ic_menu_search" />
+    <item android:id="@+id/menu_auto_speak"
+          android:title="@string/auto_speak_text"
+          android:icon="@android:drawable/ic_menu_search" />
     <item 
         android:id="@+id/menu_context_copy"
         android:title="@string/copy_text" />

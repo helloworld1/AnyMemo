@@ -21,64 +21,53 @@ package org.liberty.android.fantastischmemo.ui;
 
 import java.sql.SQLException;
 
-import java.util.Map;
-
 import org.apache.mycommons.lang3.StringUtils;
-
 import org.apache.mycommons.lang3.math.NumberUtils;
-
-import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.ui.DetailScreen;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.ui.SettingsScreen;
-
-import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
-import org.liberty.android.fantastischmemo.utils.AMUtil;
-
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.dao.SettingDao;
-
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
-
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTSPlatform;
 import org.liberty.android.fantastischmemo.tts.AudioFileTTS;
+import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
+import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
+import org.liberty.android.fantastischmemo.utils.AMUtil;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.text.GetChars;
+import android.util.Log;
+import android.view.ContextMenu;
+import android.view.GestureDetector;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.ContextMenu;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.LayoutInflater;
-import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.EditText;
-import android.util.Log;
-import android.net.Uri;
-import android.view.GestureDetector;
-
-import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
 
 public class PreviewEditActivity extends QACardActivity {
     private AnyMemoTTS questionTTS = null;
@@ -95,6 +84,9 @@ public class PreviewEditActivity extends QACardActivity {
     public static String EXTRA_DBPATH = "dbpath";
     public static String EXTRA_CARD_ID = "id";
     public static String EXTRA_CATEGORY = "category";
+    
+    private static final String TAG = "PreviewEditActivity";
+    private static final int MAGIC_FRAME_LAYOUT_ID = 675198655; // A magic id that we used to set frame layout id. 
 
     private Category currentCategory = null;
     private Integer savedCardId = null;
@@ -342,6 +334,23 @@ public class PreviewEditActivity extends QACardActivity {
                 startActivity(myIntent);
                 return true;
             }
+            case R.id.menu_auto_speak:
+            {
+            	FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            	LinearLayout root = (LinearLayout)findViewById(R.id.root);
+            	FrameLayout fl = new FrameLayout(this);
+            	
+            	Fragment f = new AutoSpeakFragment();
+            	
+            	fl.setId(MAGIC_FRAME_LAYOUT_ID);
+            	root.addView(fl);
+            //	Log.e(TAG, String.format("fl id is %d", fl.getId()));
+            	ft.add(fl.getId(), f);
+            	
+            	ft.commit();
+            	return true;
+            }
+        
         }
 
         return false;

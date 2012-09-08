@@ -76,7 +76,7 @@ public class CardFragment extends Fragment {
     private int textAlignment = Gravity.LEFT;
 
 
-    // The argumetn set in the factory will stored in the private variable here.
+    // The argument set in the factory will stored in the private variable here.
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
