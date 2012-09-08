@@ -101,7 +101,6 @@ public class StudyActivity extends QACardActivity {
     public static String EXTRA_DBPATH = "dbpath";
     public static String EXTRA_CATEGORY_ID = "category_id";
     public static String EXTRA_START_CARD_ID = "start_card_id";
-    public static String EXTRA_CRAM = "cram";
 
     private AnyMemoTTS questionTTS = null;
     private AnyMemoTTS answerTTS = null;
@@ -244,6 +243,98 @@ public class StudyActivity extends QACardActivity {
             {
                 showCategoriesDialog();
                 return true;
+            }
+
+            case R.id.menu_context_edit:
+            {
+                Intent myIntent = new Intent(this, CardEditor.class);
+                myIntent.putExtra(CardEditor.EXTRA_DBPATH, this.dbPath);
+                myIntent.putExtra(CardEditor.EXTRA_CARD_ID, getCurrentCard().getId());
+                myIntent.putExtra(CardEditor.EXTRA_IS_EDIT_NEW, false);
+                startActivityForResult(myIntent, ACTIVITY_EDIT);
+                return true;
+            }
+            case R.id.menu_context_delete:
+            {
+                new AlertDialog.Builder(this)
+                    .setTitle(R.string.delete_text)
+                    .setMessage(R.string.delete_warning)
+                    .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            if(getCurrentCard() != null){
+                                try {
+                                    cardDao.delete(getCurrentCard());
+                                    // Do not restart with this card
+                                    setCurrentCard(null);
+                                    restartActivity();
+                                } catch (SQLException e) {
+                                    Log.e(TAG, "Delete card error", e);
+                                }
+                            }
+                        }
+                    })
+                .setNegativeButton(R.string.cancel_text, null)
+                .show();
+
+                return true;
+
+            }
+            case R.id.menu_context_skip:
+            {
+                new AlertDialog.Builder(this)
+                    .setTitle(R.string.skip_text)
+                    .setMessage(R.string.skip_warning)
+                    .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            if(getCurrentCard() != null) {
+                                try {
+                                    LearningData ld = getCurrentCard().getLearningData();
+                                    ld.setNextLearnDate(new Date(Long.MAX_VALUE));
+                                    ld.setAcqReps(1);
+                                    learningDataDao.update(ld);
+                                    // Do not restart this card
+                                    setCurrentCard(null);
+                                    restartActivity();
+                                } catch (SQLException e) {
+                                    Log.e(TAG, "Delete card error", e);
+                                }
+                            }
+                        }
+                    })
+                .setNegativeButton(R.string.cancel_text, null)
+                .show();
+                return true;
+            }
+            case R.id.menu_context_gotoprev:
+            {
+                Intent myIntent = new Intent();
+                myIntent.setClass(this, PreviewEditActivity.class);
+                myIntent.putExtra(PreviewEditActivity.EXTRA_DBPATH, dbPath);
+                if (getCurrentCard() != null) {
+                    myIntent.putExtra(PreviewEditActivity.EXTRA_CARD_ID, getCurrentCard().getId());
+                }
+                
+                startActivity(myIntent);
+                return true;
+            }
+
+            case R.id.menu_context_lookup:
+            {
+                if(getCurrentCard() == null){
+                    return false;
+                }
+                /* default word to lookup is question */
+                String lookupWord = getCurrentCard().getQuestion();
+                lookupDictionary(lookupWord);
+
+                return true;
+
+            }
+
+            case R.id.menu_context_paint:
+            {
+                Intent myIntent = new Intent(this, FingerPaint.class);
+                startActivity(myIntent);
             }
         }
 
@@ -436,7 +527,6 @@ public class StudyActivity extends QACardActivity {
                     Intent myIntent = new Intent();
                     myIntent.setClass(StudyActivity.this, StudyActivity.class);
                     myIntent.putExtra(StudyActivity.EXTRA_DBPATH, dbPath);
-                    myIntent.putExtra(StudyActivity.EXTRA_CRAM, true);
                     startActivity(myIntent);
                 }
             })
@@ -522,15 +612,18 @@ public class StudyActivity extends QACardActivity {
         setting = getSetting();
         option = getOption();
 
+        // The query of filter cateogry should happen before createQueue
+        // because creatQueue needs to use it.
+        if (filterCategoryId != -1) {
+            filterCategory = categoryDao.queryForId(filterCategoryId);
+            assert filterCategory != null : "Query filter id: " + filterCategoryId +". Get null";
+        }
+
         // Initialize the TTS early so it will have time to initialize.
         initTTS();
         scheduler = new DefaultScheduler(this);
         createQueue();
 
-        if (filterCategoryId != -1) {
-            filterCategory = categoryDao.queryForId(filterCategoryId);
-            assert filterCategory != null : "Query filter id: " + filterCategoryId +". Get null";
-        }
         /* Run the learnQueue init in a separate thread */
         if (startCardId != -1) {
             setCurrentCard(queueManager.dequeuePosition(startCardId));
@@ -564,14 +657,6 @@ public class StudyActivity extends QACardActivity {
 
 
     private void setupGradeButtons() {
-        //if (option.getButtonStyle() == Option.ButtonStyle.ANKI) {
-        //    controlButtons = new AnkiGradeButtons(this);
-        //} else if (option.getButtonStyle() == Option.ButtonStyle.MNEMOSYNE) {
-        //    controlButtons = new MnemosyneGradeButtons(this);
-        //} else {
-        //    controlButtons = new AnyMemoGradeButtons(this);
-        //}
-
         if (option.getButtonStyle() == Option.ButtonStyle.ANKI) {
             gradeButtons = new GradeButtons(this, R.layout.grade_buttons_anki);
         } else if (option.getButtonStyle() == Option.ButtonStyle.MNEMOSYNE) {
@@ -608,7 +693,7 @@ public class StudyActivity extends QACardActivity {
 
         /* This li is make the background of buttons the same as answer */
         LinearLayout li = new LinearLayout(this);
-        li.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.FILL_PARENT));
+        li.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         Integer color = setting.getAnswerBackgroundColor();
         if(color != null) {
             li.setBackgroundColor(color);
@@ -846,4 +931,30 @@ public class StudyActivity extends QACardActivity {
         return sb.toString();
     }
 
+    private void lookupDictionary(String lookupWord) {
+        if(option.getDictApp() == Option.DictApp.COLORDICT){
+            Intent intent = new Intent("colordict.intent.action.SEARCH");
+            intent.putExtra("EXTRA_QUERY", lookupWord);
+            intent.putExtra("EXTRA_FULLSCREEN", false);
+            //intent.putExtra(EXTRA_HEIGHT, 400); //400pixel, if you don't specify, fill_parent"
+            intent.putExtra("EXTRA_GRAVITY", Gravity.BOTTOM);
+            //intent.putExtra(EXTRA_MARGIN_LEFT, 100);
+            try {
+                startActivity(intent);
+            } catch(Exception e) {
+                Log.e(TAG, "Error opening ColorDict", e);
+                AMGUIUtility.displayException(this, getString(R.string.error_text), getString(R.string.dict_colordict) + " " + getString(R.string.error_no_dict), e);
+            }
+        }
+        if(option.getDictApp() == Option.DictApp.FORA) {
+            Intent intent = new Intent("com.ngc.fora.action.LOOKUP");
+            intent.putExtra("HEADWORD", lookupWord);
+            try {
+                startActivity(intent);
+            } catch(Exception e) {
+                Log.e(TAG, "Error opening Fora", e);
+                AMGUIUtility.displayException(this, getString(R.string.error_text), getString(R.string.dict_fora) + " " + getString(R.string.error_no_dict), e);
+            }
+        }
+    }
 }

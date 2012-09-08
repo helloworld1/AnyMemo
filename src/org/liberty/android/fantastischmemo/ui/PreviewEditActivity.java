@@ -540,12 +540,6 @@ public class PreviewEditActivity extends QACardActivity {
     }
 
     void setViewListeners(){
-        //Map<String, Button> bm = controlButtons.getButtons();
-        // TODO: BUttons here!
-        //Button newButton = bm.get("new");
-        //Button editButton = bm.get("edit");
-        //Button prevButton = bm.get("prev");
-        //Button nextButton = bm.get("next");
         ///* Set button listeners */
         newButton.setOnClickListener(newButtonListener);
         editButton.setOnClickListener(editButtonListener);
