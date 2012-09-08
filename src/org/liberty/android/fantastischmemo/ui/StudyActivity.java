@@ -552,7 +552,10 @@ public class StudyActivity extends QACardActivity {
     @Override
     public void onPostDisplayCard() {
         if (isAnswerShown()) {
-            setGradeButtonTitle();
+            // Mnemosyne grade button style won't display the interval.
+            if (option.getButtonStyle() != Option.ButtonStyle.MNEMOSYNE) {
+                setGradeButtonTitle();
+            }
             gradeButtons.show();
         } else {
             gradeButtons.hide();
@@ -569,7 +572,13 @@ public class StudyActivity extends QACardActivity {
         //    controlButtons = new AnyMemoGradeButtons(this);
         //}
 
-        gradeButtons = new GradeButtons(this, R.layout.grade_buttons_anymemo);
+        if (option.getButtonStyle() == Option.ButtonStyle.ANKI) {
+            gradeButtons = new GradeButtons(this, R.layout.grade_buttons_anki);
+        } else if (option.getButtonStyle() == Option.ButtonStyle.MNEMOSYNE) {
+            gradeButtons = new GradeButtons(this, R.layout.grade_buttons_mnemosyne);
+        } else {
+            gradeButtons = new GradeButtons(this, R.layout.grade_buttons_anymemo);
+        }
 
         LinearLayout rootView= (LinearLayout)findViewById(R.id.root);
 
@@ -788,12 +797,12 @@ public class StudyActivity extends QACardActivity {
     }
 
     private void setGradeButtonTitle() {
-        gradeButtons.setButtonText(0, getString(R.string.memo_btn0_text), ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 0, false)));
-        gradeButtons.setButtonText(1, getString(R.string.memo_btn1_text), ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 1, false)));
-        gradeButtons.setButtonText(2, getString(R.string.memo_btn2_text), ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 2, false)));
-        gradeButtons.setButtonText(3, getString(R.string.memo_btn3_text), ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 3, false)));
-        gradeButtons.setButtonText(4, getString(R.string.memo_btn4_text), ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 4, false)));
-        gradeButtons.setButtonText(5, getString(R.string.memo_btn5_text), ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 5, false)));
+        gradeButtons.setButtonDescription(0, ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 0, false)));
+        gradeButtons.setButtonDescription(1, ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 1, false)));
+        gradeButtons.setButtonDescription(2, ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 2, false)));
+        gradeButtons.setButtonDescription(3, ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 3, false)));
+        gradeButtons.setButtonDescription(4, ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 4, false)));
+        gradeButtons.setButtonDescription(5, ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 5, false)));
     }
 
 

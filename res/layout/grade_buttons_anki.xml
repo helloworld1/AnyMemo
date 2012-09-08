@@ -6,39 +6,60 @@
     android:orientation="horizontal"
     android:layout_gravity="bottom">
     <Button 
-        android:id="@+id/grade_btn_anki_0" 
+        android:id="@+id/grade_button_0" 
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" 
+        android:background="@drawable/blue_button"
+        style="@style/grade_button_text"
         android:layout_weight="1"
-        android:layout_marginLeft="1dip" />
+        android:text="@string/memo_btn0_anki_text"
+        android:layout_marginLeft="4dip" />
     <Button 
-        android:id="@+id/grade_btn_anki_1" 
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:visibility="gone" />
-    <Button 
-        android:id="@+id/grade_btn_anki_2" 
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:visibility="gone" />
-    <Button 
-        android:id="@+id/grade_btn_anki_3" 
+        android:id="@+id/grade_button_1" 
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" 
+        android:background="@drawable/blue_button"
+        style="@style/grade_button_text"
         android:layout_weight="1"
-        android:layout_marginLeft="1dip" />
+        android:visibility="gone"
+        android:text="@string/memo_btn1_anki_text"
+        android:layout_marginLeft="4dip" />
     <Button 
-        android:id="@+id/grade_btn_anki_4" 
+        android:id="@+id/grade_button_2" 
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" 
+        android:background="@drawable/blue_button"
+        style="@style/grade_button_text"
         android:layout_weight="1"
-        android:layout_marginLeft="1dip" />
+        android:text="@string/memo_btn2_anki_text"
+        android:layout_marginLeft="4dip" />
     <Button 
-        android:id="@+id/grade_btn_anki_5" 
+        android:id="@+id/grade_button_3" 
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" 
+        android:background="@drawable/blue_button"
+        style="@style/grade_button_text"
         android:layout_weight="1"
-        android:layout_marginLeft="1dip" />
+        android:visibility="gone"
+        android:text="@string/memo_btn3_anki_text"
+        android:layout_marginLeft="4dip" />
+    <Button 
+        android:id="@+id/grade_button_4" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        android:background="@drawable/blue_button"
+        style="@style/grade_button_text"
+        android:layout_weight="1"
+        android:visibility="gone"
+        android:text="@string/memo_btn4_anki_text"
+        android:layout_marginLeft="4dip" />
+    <Button 
+        android:id="@+id/grade_button_5" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        android:background="@drawable/blue_button"
+        style="@style/grade_button_text"
+        android:layout_weight="1"
+        android:text="@string/memo_btn5_anki_text"
+        android:layout_marginLeft="4dip" />
 </LinearLayout>

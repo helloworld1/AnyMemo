@@ -55,4 +55,3 @@ public class FloatEditTextPreference extends EditTextPreference {
         return persistFloat(Float.valueOf(value));
     }
 }
-

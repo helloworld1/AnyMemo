@@ -64,11 +64,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.ContextMenu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.LayoutInflater;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -342,22 +340,6 @@ public class PreviewEditActivity extends QACardActivity {
                 startActivity(myIntent);
                 return true;
             }
-        }
-
-        return false;
-    }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.editscreen_context_menu, menu);
-        menu.setHeaderTitle(R.string.menu_text);
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem menuitem) {
-        switch(menuitem.getItemId()) {
             case R.id.menu_context_copy:
             {
 
@@ -484,12 +466,9 @@ public class PreviewEditActivity extends QACardActivity {
                 });
                 return true;
             }
-
-            default:
-            {
-                return super.onContextItemSelected(menuitem);
-            }
         }
+
+        return false;
     }
 
     /*
