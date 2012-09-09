@@ -20,11 +20,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import java.sql.SQLException;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-
-import org.apache.mycommons.lang3.StringUtils;
-
 import org.apache.mycommons.lang3.math.NumberUtils;
 
 import org.liberty.android.fantastischmemo.AMActivity;
@@ -50,8 +48,7 @@ import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
-import org.liberty.android.fantastischmemo.tts.AnyMemoTTSPlatform;
-import org.liberty.android.fantastischmemo.tts.AudioFileTTS;
+import org.liberty.android.fantastischmemo.tts.AnyMemoTTSImpl;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -64,11 +61,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.ContextMenu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.LayoutInflater;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -126,7 +121,7 @@ public class PreviewEditActivity extends QACardActivity {
     private int startCardId = 1;
 
     @Override
-	public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
         Bundle extras = getIntent().getExtras();
@@ -342,22 +337,6 @@ public class PreviewEditActivity extends QACardActivity {
                 startActivity(myIntent);
                 return true;
             }
-        }
-
-        return false;
-    }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.editscreen_context_menu, menu);
-        menu.setHeaderTitle(R.string.menu_text);
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem menuitem) {
-        switch(menuitem.getItemId()) {
             case R.id.menu_context_copy:
             {
 
@@ -484,13 +463,32 @@ public class PreviewEditActivity extends QACardActivity {
                 });
                 return true;
             }
+        }
 
-            default:
-            {
-                return super.onContextItemSelected(menuitem);
-            }
+        return false;
+    }
+    
+    // Handle click event for double sided card.
+    protected void onClickAnswerView() {
+        if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED) {
+            displayCard(false);
         }
     }
+
+    protected void onClickAnswerText() {
+        onClickAnswerView();
+    }
+
+    protected void onClickQuestionView() {
+        if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED) {
+            displayCard(true);
+        }
+    }
+
+    protected void onClickQuestionText() {
+        onClickQuestionView();
+    }
+
 
     /*
      * This method should be the same as the one in MemoScreen.
@@ -499,22 +497,21 @@ public class PreviewEditActivity extends QACardActivity {
         String defaultLocation = AMEnv.DEFAULT_AUDIO_PATH;
         String qa = setting.getQuestionAudio();
         String aa = setting.getAnswerAudio();
+        List<String> questionAudioSearchPath = new ArrayList<String>();
+        questionAudioSearchPath.add(setting.getQuestionAudioLocation());
+        questionAudioSearchPath.add(setting.getQuestionAudioLocation() + "/" + dbName);
+        questionAudioSearchPath.add(defaultLocation + "/" + dbName);
+        questionAudioSearchPath.add(setting.getQuestionAudioLocation());
+        
+        List<String> answerAudioSearchPath = new ArrayList<String>();
+        answerAudioSearchPath.add(setting.getAnswerAudioLocation());
+        answerAudioSearchPath.add(setting.getAnswerAudioLocation() + "/" + dbName);
+        answerAudioSearchPath.add(defaultLocation + "/" + dbName);
+        answerAudioSearchPath.add(defaultLocation);
+        
+        questionTTS = new AnyMemoTTSImpl(this, qa, questionAudioSearchPath);
+        answerTTS = new AnyMemoTTSImpl(this, aa, answerAudioSearchPath);
 
-        if (StringUtils.isNotEmpty(setting.getQuestionAudioLocation())) {
-            questionTTS = new AudioFileTTS(defaultLocation, dbName);
-        } else if (StringUtils.isNotEmpty(qa)){
-            questionTTS = new AnyMemoTTSPlatform(this, qa);
-        } else{
-            questionTTS = null;
-        }
-
-        if (StringUtils.isNotEmpty(setting.getAnswerAudioLocation())) {
-            answerTTS = new AudioFileTTS(defaultLocation, dbName);
-        } else if (StringUtils.isNotEmpty(aa)){
-            answerTTS = new AnyMemoTTSPlatform(this, aa);
-        } else{
-            answerTTS = null;
-        }
     }
 
     @Override
@@ -561,12 +558,6 @@ public class PreviewEditActivity extends QACardActivity {
     }
 
     void setViewListeners(){
-        //Map<String, Button> bm = controlButtons.getButtons();
-        // TODO: BUttons here!
-        //Button newButton = bm.get("new");
-        //Button editButton = bm.get("edit");
-        //Button prevButton = bm.get("prev");
-        //Button nextButton = bm.get("next");
         ///* Set button listeners */
         newButton.setOnClickListener(newButtonListener);
         editButton.setOnClickListener(editButtonListener);
@@ -589,7 +580,6 @@ public class PreviewEditActivity extends QACardActivity {
                     myIntent.putExtra(CardEditor.EXTRA_CARD_ID, getCurrentCard().getId());
                 }
                 myIntent.putExtra(CardEditor.EXTRA_IS_EDIT_NEW, true);
-                //startActivityForResult(myIntent, ACTIVITY_EDIT);
                 startActivityForResult(myIntent, ACTIVITY_EDIT);
         }
     };
@@ -679,7 +669,7 @@ public class PreviewEditActivity extends QACardActivity {
             if(setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED){
                 // TODO: How to handle double sided card
                 /* Double sided card, show front */
-                displayCard(true);
+                displayCard(false);
             } else {
                 /* Single sided, show both answer and questjion. */
                 displayCard(true);
@@ -833,7 +823,7 @@ public class PreviewEditActivity extends QACardActivity {
 
     private class DeleteCardTask extends AsyncTask<Void, Void, Void> {
         private ProgressDialog progressDialog;
-		@Override
+        @Override
         public void onPreExecute() {
             progressDialog = new ProgressDialog(PreviewEditActivity.this);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -867,7 +857,7 @@ public class PreviewEditActivity extends QACardActivity {
 
         private ProgressDialog progressDialog;
 
-		@Override
+        @Override
         public void onPreExecute() {
             progressDialog = new ProgressDialog(PreviewEditActivity.this);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);

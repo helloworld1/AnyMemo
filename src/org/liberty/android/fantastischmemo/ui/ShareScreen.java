@@ -30,7 +30,6 @@ import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 
-import org.liberty.android.fantastischmemo.ui.EditScreen;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
@@ -113,10 +112,10 @@ public class ShareScreen extends AMActivity implements View.OnClickListener{
                     cardDao.createCard(card);
 
                     if(v == savePrevButton){
-                        Intent myIntent = new Intent(this, EditScreen.class);
+                        Intent myIntent = new Intent(this, PreviewEditActivity.class);
                         /* This should be the newly created id */
                         myIntent.putExtra("id", card.getId());
-                        myIntent.putExtra(EditScreen.EXTRA_DBPATH, dbpath);
+                        myIntent.putExtra(PreviewEditActivity.EXTRA_DBPATH, dbpath);
                         startActivity(myIntent);
                     }
                     finish();

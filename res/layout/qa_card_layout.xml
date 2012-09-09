@@ -17,7 +17,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"/>
     <LinearLayout
-        android:id="@+id/horizontalLine"
+        android:id="@+id/horizontal_line"
         android:layout_width="fill_parent"
         android:layout_height="2dip"
         android:background="#FF909090"/>

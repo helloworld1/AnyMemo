@@ -46,7 +46,6 @@
 
 <string-array name="locale_list">
     <item>@string/disabled_text</item>
-    <item>@string/user_audio_text</item>
 	<item>US</item>
 	<item>UK</item>
 	<item>FR</item>
@@ -87,7 +86,6 @@
 
 <string-array name="locale_list_values">
     <item>Disabled</item>
-    <item>User audio</item>
 	<item>US</item>
 	<item>UK</item>
 	<item>FR</item>

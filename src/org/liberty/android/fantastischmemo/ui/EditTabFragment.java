@@ -41,8 +41,8 @@ public class EditTabFragment extends FileBrowserFragment {
                 String fullpath = file.getAbsolutePath();
                 RecentListUtil rlu = new RecentListUtil(mActivity);
                 rlu.addToRecentList(fullpath);
-                Intent myIntent = new Intent(mActivity, EditScreen.class);
-                myIntent.putExtra(EditScreen.EXTRA_DBPATH, fullpath);
+                Intent myIntent = new Intent(mActivity, PreviewEditActivity.class);
+                myIntent.putExtra(PreviewEditActivity.EXTRA_DBPATH, fullpath);
                 startActivity(myIntent);
             }
         };

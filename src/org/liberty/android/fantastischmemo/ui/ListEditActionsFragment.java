@@ -89,9 +89,9 @@ public class ListEditActionsFragment extends DialogFragment {
 
             if (v == previewItem) {
                 Intent myIntent = new Intent();
-                myIntent.setClass(mActivity, EditScreen.class);
-                myIntent.putExtra(EditScreen.EXTRA_DBPATH, dbPath);
-                myIntent.putExtra(EditScreen.EXTRA_CARD_ID, currentId);
+                myIntent.setClass(mActivity, PreviewEditActivity.class);
+                myIntent.putExtra(PreviewEditActivity.EXTRA_DBPATH, dbPath);
+                myIntent.putExtra(PreviewEditActivity.EXTRA_CARD_ID, currentId);
                 startActivityForResult(myIntent, 2);
             }
 

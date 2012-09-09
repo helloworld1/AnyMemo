@@ -19,29 +19,25 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.mycommons.lang3.StringUtils;
 
-import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.AnyMemoService;
 
-import org.liberty.android.fantastischmemo.queue.CramQueueManager;
 import org.liberty.android.fantastischmemo.queue.LearnQueueManager;
 import org.liberty.android.fantastischmemo.ui.DetailScreen;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.ui.SettingsScreen;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
-import org.liberty.android.fantastischmemo.utils.AMUtil;
 import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
-import org.liberty.android.fantastischmemo.dao.SettingDao;
 
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
@@ -50,7 +46,6 @@ import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 
 import org.liberty.android.fantastischmemo.queue.QueueManager;
-import java.util.Map;
 
 import java.sql.SQLException;
 
@@ -58,8 +53,7 @@ import org.liberty.android.fantastischmemo.scheduler.DefaultScheduler;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
-import org.liberty.android.fantastischmemo.tts.AnyMemoTTSPlatform;
-import org.liberty.android.fantastischmemo.tts.AudioFileTTS;
+import org.liberty.android.fantastischmemo.tts.AnyMemoTTSImpl;
 
 import com.example.android.apis.graphics.FingerPaint;
 
@@ -73,12 +67,6 @@ import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-
-import android.text.ClipboardManager;
-import android.text.Html;
-
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.ContextMenu;
@@ -86,12 +74,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.KeyEvent;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.Toast;
 import android.util.Log;
 import android.net.Uri;
 
@@ -101,7 +86,6 @@ public class StudyActivity extends QACardActivity {
     public static String EXTRA_DBPATH = "dbpath";
     public static String EXTRA_CATEGORY_ID = "category_id";
     public static String EXTRA_START_CARD_ID = "start_card_id";
-    public static String EXTRA_CRAM = "cram";
 
     private AnyMemoTTS questionTTS = null;
     private AnyMemoTTS answerTTS = null;
@@ -244,6 +228,86 @@ public class StudyActivity extends QACardActivity {
             {
                 showCategoriesDialog();
                 return true;
+            }
+
+            case R.id.menu_context_edit:
+            {
+                Intent myIntent = new Intent(this, CardEditor.class);
+                myIntent.putExtra(CardEditor.EXTRA_DBPATH, this.dbPath);
+                myIntent.putExtra(CardEditor.EXTRA_CARD_ID, getCurrentCard().getId());
+                myIntent.putExtra(CardEditor.EXTRA_IS_EDIT_NEW, false);
+                startActivityForResult(myIntent, ACTIVITY_EDIT);
+                return true;
+            }
+            case R.id.menu_context_delete:
+            {
+                new AlertDialog.Builder(this)
+                    .setTitle(R.string.delete_text)
+                    .setMessage(R.string.delete_warning)
+                    .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            if(getCurrentCard() != null){
+                                try {
+                                    cardDao.delete(getCurrentCard());
+                                    // Do not restart with this card
+                                    setCurrentCard(null);
+                                    restartActivity();
+                                } catch (SQLException e) {
+                                    Log.e(TAG, "Delete card error", e);
+                                }
+                            }
+                        }
+                    })
+                .setNegativeButton(R.string.cancel_text, null)
+                .show();
+
+                return true;
+
+            }
+            case R.id.menu_context_skip:
+            {
+                new AlertDialog.Builder(this)
+                    .setTitle(R.string.skip_text)
+                    .setMessage(R.string.skip_warning)
+                    .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            skipCurrentCard();
+                        }
+                    })
+                .setNegativeButton(R.string.cancel_text, null)
+                .show();
+                return true;
+            }
+            case R.id.menu_context_gotoprev:
+            {
+                Intent myIntent = new Intent();
+                myIntent.setClass(this, PreviewEditActivity.class);
+                myIntent.putExtra(PreviewEditActivity.EXTRA_DBPATH, dbPath);
+                if (getCurrentCard() != null) {
+                    myIntent.putExtra(PreviewEditActivity.EXTRA_CARD_ID, getCurrentCard().getId());
+                }
+                
+                startActivity(myIntent);
+                return true;
+            }
+
+            case R.id.menu_context_lookup:
+            {
+                if(getCurrentCard() == null){
+                    return false;
+                }
+                /* default word to lookup is question */
+                String lookupWord = getCurrentCard().getQuestion();
+                lookupDictionary(lookupWord);
+
+                return true;
+
+            }
+
+            case R.id.menu_context_paint:
+            {
+                Intent myIntent = new Intent(this, FingerPaint.class);
+                startActivity(myIntent);
             }
         }
 
@@ -410,7 +474,6 @@ public class StudyActivity extends QACardActivity {
         return super.onKeyUp(keyCode, event);
     }
 
-
     @Override
     public void restartActivity(){
 
@@ -436,7 +499,6 @@ public class StudyActivity extends QACardActivity {
                     Intent myIntent = new Intent();
                     myIntent.setClass(StudyActivity.this, StudyActivity.class);
                     myIntent.putExtra(StudyActivity.EXTRA_DBPATH, dbPath);
-                    myIntent.putExtra(StudyActivity.EXTRA_CRAM, true);
                     startActivity(myIntent);
                 }
             })
@@ -475,23 +537,25 @@ public class StudyActivity extends QACardActivity {
 
     private void initTTS(){
         String defaultLocation = AMEnv.DEFAULT_AUDIO_PATH;
-        String qa = setting.getQuestionAudio();
-        String aa = setting.getAnswerAudio();
-
-        if (StringUtils.isNotEmpty(setting.getQuestionAudioLocation())) {
-            questionTTS = new AudioFileTTS(defaultLocation, dbName);
-        } else if (StringUtils.isNotEmpty(qa)){
-            questionTTS = new AnyMemoTTSPlatform(this, qa);
-        } else{
-            questionTTS = null;
-        }
-
-        if (StringUtils.isNotEmpty(setting.getAnswerAudioLocation())) {
-            answerTTS = new AudioFileTTS(defaultLocation, dbName);
-        } else if (StringUtils.isNotEmpty(aa)){
-            answerTTS = new AnyMemoTTSPlatform(this, aa);
-        } else{
-            answerTTS = null;
+        
+        if (setting.isQuestionAudioEnabled()) {
+            String qa = setting.getQuestionAudio();
+            List<String> questionAudioSearchPath = new ArrayList<String>();
+            questionAudioSearchPath.add(setting.getQuestionAudioLocation());
+            questionAudioSearchPath.add(setting.getQuestionAudioLocation() + "/" + dbName);
+            questionAudioSearchPath.add(defaultLocation + "/" + dbName);
+            questionAudioSearchPath.add(setting.getQuestionAudioLocation());
+            questionTTS = new AnyMemoTTSImpl(this, qa, questionAudioSearchPath);
+        } 
+        
+        if (setting.isAnswerAudioEnabled()) {
+            String aa = setting.getAnswerAudio();
+            List<String> answerAudioSearchPath = new ArrayList<String>();
+            answerAudioSearchPath.add(setting.getAnswerAudioLocation());
+            answerAudioSearchPath.add(setting.getAnswerAudioLocation() + "/" + dbName);
+            answerAudioSearchPath.add(defaultLocation + "/" + dbName);
+            answerAudioSearchPath.add(defaultLocation);
+            answerTTS = new AnyMemoTTSImpl(this, aa, answerAudioSearchPath);
         }
     }
 
@@ -522,15 +586,18 @@ public class StudyActivity extends QACardActivity {
         setting = getSetting();
         option = getOption();
 
+        // The query of filter cateogry should happen before createQueue
+        // because creatQueue needs to use it.
+        if (filterCategoryId != -1) {
+            filterCategory = categoryDao.queryForId(filterCategoryId);
+            assert filterCategory != null : "Query filter id: " + filterCategoryId +". Get null";
+        }
+
         // Initialize the TTS early so it will have time to initialize.
         initTTS();
         scheduler = new DefaultScheduler(this);
         createQueue();
 
-        if (filterCategoryId != -1) {
-            filterCategory = categoryDao.queryForId(filterCategoryId);
-            assert filterCategory != null : "Query filter id: " + filterCategoryId +". Get null";
-        }
         /* Run the learnQueue init in a separate thread */
         if (startCardId != -1) {
             setCurrentCard(queueManager.dequeuePosition(startCardId));
@@ -552,24 +619,24 @@ public class StudyActivity extends QACardActivity {
     @Override
     public void onPostDisplayCard() {
         if (isAnswerShown()) {
-            setGradeButtonTitle();
+            // Mnemosyne grade button style won't display the interval.
+            if (option.getButtonStyle() != Option.ButtonStyle.MNEMOSYNE) {
+                setGradeButtonTitle();
+            }
             gradeButtons.show();
         } else {
             gradeButtons.hide();
         }
     }
 
-
     private void setupGradeButtons() {
-        //if (option.getButtonStyle() == Option.ButtonStyle.ANKI) {
-        //    controlButtons = new AnkiGradeButtons(this);
-        //} else if (option.getButtonStyle() == Option.ButtonStyle.MNEMOSYNE) {
-        //    controlButtons = new MnemosyneGradeButtons(this);
-        //} else {
-        //    controlButtons = new AnyMemoGradeButtons(this);
-        //}
-
-        gradeButtons = new GradeButtons(this, R.layout.grade_buttons_anymemo);
+        if (option.getButtonStyle() == Option.ButtonStyle.ANKI) {
+            gradeButtons = new GradeButtons(this, R.layout.grade_buttons_anki);
+        } else if (option.getButtonStyle() == Option.ButtonStyle.MNEMOSYNE) {
+            gradeButtons = new GradeButtons(this, R.layout.grade_buttons_mnemosyne);
+        } else {
+            gradeButtons = new GradeButtons(this, R.layout.grade_buttons_anymemo);
+        }
 
         LinearLayout rootView= (LinearLayout)findViewById(R.id.root);
 
@@ -599,7 +666,7 @@ public class StudyActivity extends QACardActivity {
 
         /* This li is make the background of buttons the same as answer */
         LinearLayout li = new LinearLayout(this);
-        li.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.FILL_PARENT));
+        li.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         Integer color = setting.getAnswerBackgroundColor();
         if(color != null) {
             li.setBackgroundColor(color);
@@ -784,16 +851,18 @@ public class StudyActivity extends QACardActivity {
     protected void onClickAnswerView() {
         if (!isAnswerShown()) {
             displayCard(true);
+        } else if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED && isAnswerShown()) {
+            displayCard(false);
         }
     }
 
     private void setGradeButtonTitle() {
-        gradeButtons.setButtonText(0, getString(R.string.memo_btn0_text), ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 0, false)));
-        gradeButtons.setButtonText(1, getString(R.string.memo_btn1_text), ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 1, false)));
-        gradeButtons.setButtonText(2, getString(R.string.memo_btn2_text), ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 2, false)));
-        gradeButtons.setButtonText(3, getString(R.string.memo_btn3_text), ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 3, false)));
-        gradeButtons.setButtonText(4, getString(R.string.memo_btn4_text), ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 4, false)));
-        gradeButtons.setButtonText(5, getString(R.string.memo_btn5_text), ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 5, false)));
+        gradeButtons.setButtonDescription(0, ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 0, false)));
+        gradeButtons.setButtonDescription(1, ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 1, false)));
+        gradeButtons.setButtonDescription(2, ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 2, false)));
+        gradeButtons.setButtonDescription(3, ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 3, false)));
+        gradeButtons.setButtonDescription(4, ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 4, false)));
+        gradeButtons.setButtonDescription(5, ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 5, false)));
     }
 
 
@@ -826,7 +895,7 @@ public class StudyActivity extends QACardActivity {
         return "";
     }
 
-    private String getActivityTitleString(){
+    private String getActivityTitleString() {
         StringBuilder sb = new StringBuilder();
         sb.append(getString(R.string.new_text) + ": " + newCardCount + " ");
         sb.append(getString(R.string.review_short_text) + ": " + schedluledCardCount + " ");
@@ -837,4 +906,46 @@ public class StudyActivity extends QACardActivity {
         return sb.toString();
     }
 
+    private void lookupDictionary(String lookupWord) {
+        if(option.getDictApp() == Option.DictApp.COLORDICT){
+            Intent intent = new Intent("colordict.intent.action.SEARCH");
+            intent.putExtra("EXTRA_QUERY", lookupWord);
+            intent.putExtra("EXTRA_FULLSCREEN", false);
+            //intent.putExtra(EXTRA_HEIGHT, 400); //400pixel, if you don't specify, fill_parent"
+            intent.putExtra("EXTRA_GRAVITY", Gravity.BOTTOM);
+            //intent.putExtra(EXTRA_MARGIN_LEFT, 100);
+            try {
+                startActivity(intent);
+            } catch(Exception e) {
+                Log.e(TAG, "Error opening ColorDict", e);
+                AMGUIUtility.displayException(this, getString(R.string.error_text), getString(R.string.dict_colordict) + " " + getString(R.string.error_no_dict), e);
+            }
+        }
+        if(option.getDictApp() == Option.DictApp.FORA) {
+            Intent intent = new Intent("com.ngc.fora.action.LOOKUP");
+            intent.putExtra("HEADWORD", lookupWord);
+            try {
+                startActivity(intent);
+            } catch(Exception e) {
+                Log.e(TAG, "Error opening Fora", e);
+                AMGUIUtility.displayException(this, getString(R.string.error_text), getString(R.string.dict_fora) + " " + getString(R.string.error_no_dict), e);
+            }
+        }
+    }
+    
+    private void skipCurrentCard() {
+        if(getCurrentCard() != null) {
+            try {
+                LearningData ld = getCurrentCard().getLearningData();
+                ld.setNextLearnDate(new Date(Long.MAX_VALUE));
+                ld.setAcqReps(1);
+                learningDataDao.update(ld);
+                // Do not restart this card
+                setCurrentCard(null);
+                restartActivity();
+            } catch (SQLException e) {
+                Log.e(TAG, "Delete card error", e);
+            }
+        }
+    }
 }
