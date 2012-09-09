@@ -369,7 +369,7 @@
     <string name="dropbox_login_message">Inserire la username Dropbox (Probabilmente un\'e-mail) e la password.</string>
     <string name="import_supermemo_2008_xml_text">Importa SuperMemo 2008 XML</string>
     <string name="uncategorized_text">Senza categoria</string>
-    <string name="edit_text">Modifica</string>
+    <string name="edit_text">Mod.</string>
     <string name="category_dialog_title">Selezionare una categoria o inserirne una nuova</string>
     <string name="ordinal_text_short">Ord</string>
     <string name="total_text">Totale</string>
@@ -446,7 +446,7 @@
     <string name="max_recent_list_size_text">Dimensione max lista DB recenti</string>
     <string name="recent_summary">Configura il numero massimo di DB da mostrare nella lista di quelli recentemente visitati.</string>
     <string name="day_text_short">g</string>
-    <string name="previous_text_short">Prec</string>
+    <string name="previous_text_short">⇐</string>
     <string name="year_text">anno</string>
     <string name="month_text">mese</string>
     <string name="week_text">settimana</string>
