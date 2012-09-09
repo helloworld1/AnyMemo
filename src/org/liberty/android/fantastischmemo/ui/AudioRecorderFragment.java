@@ -109,7 +109,7 @@ public class AudioRecorderFragment extends DialogFragment {
         mReturnButton.setBackgroundColor(Color.TRANSPARENT);
 
         return new AlertDialog.Builder(getActivity())
-            .setTitle(R.string.recorder_record_your_memo_text)
+            .setTitle(R.string.record_your_memo_text)
             .setView(v)
             .create();
     }

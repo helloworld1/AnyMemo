@@ -20,11 +20,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import java.sql.SQLException;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-
-import org.apache.mycommons.lang3.StringUtils;
-
 import org.apache.mycommons.lang3.math.NumberUtils;
 
 import org.liberty.android.fantastischmemo.AMActivity;
@@ -50,8 +48,7 @@ import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
-import org.liberty.android.fantastischmemo.tts.AnyMemoTTSPlatform;
-import org.liberty.android.fantastischmemo.tts.AudioFileTTS;
+import org.liberty.android.fantastischmemo.tts.AnyMemoTTSImpl;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -124,7 +121,7 @@ public class PreviewEditActivity extends QACardActivity {
     private int startCardId = 1;
 
     @Override
-	public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
         Bundle extras = getIntent().getExtras();
@@ -500,22 +497,21 @@ public class PreviewEditActivity extends QACardActivity {
         String defaultLocation = AMEnv.DEFAULT_AUDIO_PATH;
         String qa = setting.getQuestionAudio();
         String aa = setting.getAnswerAudio();
+        List<String> questionAudioSearchPath = new ArrayList<String>();
+        questionAudioSearchPath.add(setting.getQuestionAudioLocation());
+        questionAudioSearchPath.add(setting.getQuestionAudioLocation() + "/" + dbName);
+        questionAudioSearchPath.add(defaultLocation + "/" + dbName);
+        questionAudioSearchPath.add(setting.getQuestionAudioLocation());
+        
+        List<String> answerAudioSearchPath = new ArrayList<String>();
+        answerAudioSearchPath.add(setting.getAnswerAudioLocation());
+        answerAudioSearchPath.add(setting.getAnswerAudioLocation() + "/" + dbName);
+        answerAudioSearchPath.add(defaultLocation + "/" + dbName);
+        answerAudioSearchPath.add(defaultLocation);
+        
+        questionTTS = new AnyMemoTTSImpl(this, qa, questionAudioSearchPath);
+        answerTTS = new AnyMemoTTSImpl(this, aa, answerAudioSearchPath);
 
-        if (StringUtils.isNotEmpty(setting.getQuestionAudioLocation())) {
-            questionTTS = new AudioFileTTS(defaultLocation, dbName);
-        } else if (StringUtils.isNotEmpty(qa)){
-            questionTTS = new AnyMemoTTSPlatform(this, qa);
-        } else{
-            questionTTS = null;
-        }
-
-        if (StringUtils.isNotEmpty(setting.getAnswerAudioLocation())) {
-            answerTTS = new AudioFileTTS(defaultLocation, dbName);
-        } else if (StringUtils.isNotEmpty(aa)){
-            answerTTS = new AnyMemoTTSPlatform(this, aa);
-        } else{
-            answerTTS = null;
-        }
     }
 
     @Override
@@ -584,7 +580,6 @@ public class PreviewEditActivity extends QACardActivity {
                     myIntent.putExtra(CardEditor.EXTRA_CARD_ID, getCurrentCard().getId());
                 }
                 myIntent.putExtra(CardEditor.EXTRA_IS_EDIT_NEW, true);
-                //startActivityForResult(myIntent, ACTIVITY_EDIT);
                 startActivityForResult(myIntent, ACTIVITY_EDIT);
         }
     };
@@ -828,7 +823,7 @@ public class PreviewEditActivity extends QACardActivity {
 
     private class DeleteCardTask extends AsyncTask<Void, Void, Void> {
         private ProgressDialog progressDialog;
-		@Override
+        @Override
         public void onPreExecute() {
             progressDialog = new ProgressDialog(PreviewEditActivity.this);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -862,7 +857,7 @@ public class PreviewEditActivity extends QACardActivity {
 
         private ProgressDialog progressDialog;
 
-		@Override
+        @Override
         public void onPreExecute() {
             progressDialog = new ProgressDialog(PreviewEditActivity.this);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);

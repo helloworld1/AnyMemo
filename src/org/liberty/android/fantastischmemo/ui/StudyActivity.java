@@ -19,7 +19,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.mycommons.lang3.StringUtils;
 
@@ -51,8 +53,7 @@ import org.liberty.android.fantastischmemo.scheduler.DefaultScheduler;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
-import org.liberty.android.fantastischmemo.tts.AnyMemoTTSPlatform;
-import org.liberty.android.fantastischmemo.tts.AudioFileTTS;
+import org.liberty.android.fantastischmemo.tts.AnyMemoTTSImpl;
 
 import com.example.android.apis.graphics.FingerPaint;
 
@@ -473,7 +474,6 @@ public class StudyActivity extends QACardActivity {
         return super.onKeyUp(keyCode, event);
     }
 
-
     @Override
     public void restartActivity(){
 
@@ -537,23 +537,25 @@ public class StudyActivity extends QACardActivity {
 
     private void initTTS(){
         String defaultLocation = AMEnv.DEFAULT_AUDIO_PATH;
-        String qa = setting.getQuestionAudio();
-        String aa = setting.getAnswerAudio();
-
-        if (StringUtils.isNotEmpty(setting.getQuestionAudioLocation())) {
-            questionTTS = new AudioFileTTS(defaultLocation, dbName);
-        } else if (StringUtils.isNotEmpty(qa)){
-            questionTTS = new AnyMemoTTSPlatform(this, qa);
-        } else{
-            questionTTS = null;
-        }
-
-        if (StringUtils.isNotEmpty(setting.getAnswerAudioLocation())) {
-            answerTTS = new AudioFileTTS(defaultLocation, dbName);
-        } else if (StringUtils.isNotEmpty(aa)){
-            answerTTS = new AnyMemoTTSPlatform(this, aa);
-        } else{
-            answerTTS = null;
+        
+        if(setting.isQuestionAudioEnabled()){
+            String qa = setting.getQuestionAudio();
+            List<String> questionAudioSearchPath = new ArrayList<String>();
+            questionAudioSearchPath.add(setting.getQuestionAudioLocation());
+            questionAudioSearchPath.add(setting.getQuestionAudioLocation() + "/" + dbName);
+            questionAudioSearchPath.add(defaultLocation + "/" + dbName);
+            questionAudioSearchPath.add(setting.getQuestionAudioLocation());
+            questionTTS = new AnyMemoTTSImpl(this, qa, questionAudioSearchPath);
+        } 
+        
+        if(setting.isAnswerAudioEnabled()){
+            String aa = setting.getAnswerAudio();
+            List<String> answerAudioSearchPath = new ArrayList<String>();
+            answerAudioSearchPath.add(setting.getAnswerAudioLocation());
+            answerAudioSearchPath.add(setting.getAnswerAudioLocation() + "/" + dbName);
+            answerAudioSearchPath.add(defaultLocation + "/" + dbName);
+            answerAudioSearchPath.add(defaultLocation);
+            answerTTS = new AnyMemoTTSImpl(this, aa, answerAudioSearchPath);
         }
     }
 
@@ -626,7 +628,6 @@ public class StudyActivity extends QACardActivity {
             gradeButtons.hide();
         }
     }
-
 
     private void setupGradeButtons() {
         if (option.getButtonStyle() == Option.ButtonStyle.ANKI) {
