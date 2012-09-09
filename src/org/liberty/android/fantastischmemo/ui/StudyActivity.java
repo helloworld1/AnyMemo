@@ -850,6 +850,8 @@ public class StudyActivity extends QACardActivity {
     protected void onClickAnswerView() {
         if (!isAnswerShown()) {
             displayCard(true);
+        } else if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED && isAnswerShown()) {
+            displayCard(false);
         }
     }
 
@@ -892,7 +894,7 @@ public class StudyActivity extends QACardActivity {
         return "";
     }
 
-    private String getActivityTitleString(){
+    private String getActivityTitleString() {
         StringBuilder sb = new StringBuilder();
         sb.append(getString(R.string.new_text) + ": " + newCardCount + " ");
         sb.append(getString(R.string.review_short_text) + ": " + schedluledCardCount + " ");

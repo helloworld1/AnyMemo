@@ -470,6 +470,28 @@ public class PreviewEditActivity extends QACardActivity {
 
         return false;
     }
+    
+    // Handle click event for double sided card.
+    protected void onClickAnswerView() {
+        if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED) {
+            displayCard(false);
+        }
+    }
+
+    protected void onClickAnswerText() {
+        onClickAnswerView();
+    }
+
+    protected void onClickQuestionView() {
+        if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED) {
+            displayCard(true);
+        }
+    }
+
+    protected void onClickQuestionText() {
+        onClickQuestionView();
+    }
+
 
     /*
      * This method should be the same as the one in MemoScreen.
@@ -652,7 +674,7 @@ public class PreviewEditActivity extends QACardActivity {
             if(setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED){
                 // TODO: How to handle double sided card
                 /* Double sided card, show front */
-                displayCard(true);
+                displayCard(false);
             } else {
                 /* Single sided, show both answer and questjion. */
                 displayCard(true);
