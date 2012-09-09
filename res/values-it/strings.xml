@@ -51,10 +51,10 @@
     <string name="memo_btn5_brief_text">5</string>
     <string name="memo_btn0_anki_text">Ancora</string>
     <string name="memo_btn1_anki_text">Ancora</string>
-    <string name="memo_btn2_anki_text">Buono</string>
-    <string name="memo_btn3_anki_text">Buono</string>
+    <string name="memo_btn2_anki_text">Difficile</string>
+    <string name="memo_btn3_anki_text">Difficile</string>
     <string name="memo_btn4_anki_text">Facile</string>
-    <string name="memo_btn5_anki_text">TroppoFacile</string>
+    <string name="memo_btn5_anki_text">Facile</string>
     <string name="memo_edit_dialog_title">Modifica</string>
     <string name="memo_current_id">ID: </string>
     <string name="global_settings">Impostazioni globali</string>
@@ -441,7 +441,7 @@
     <string name="auth_error_text">Errore di autenticazione.</string>
     <string name="locale_italian_text">Italiano</string>
     <string name="upload_gdrive_message">Vuoi caricare %s nella tua cartella Google Drive AnyMemo? Può metterci parecchio se ci sono più di 1000 schede.</string>
-    <string name="recorder_record_your_memo_text">Registra il tuo memo</string>
+    <string name="record_your_memo_text">Registra il tuo memo</string>
     <string name="record_text">Registra</string>
     <string name="max_recent_list_size_text">Dimensione max lista DB recenti</string>
     <string name="recent_summary">Configura il numero massimo di DB da mostrare nella lista di quelli recentemente visitati.</string>
@@ -457,4 +457,6 @@
     <string name="quiz_group_size_text">Dimensione del gruppo di quiz</string>
     <string name="quiz_group_number_text">Numero del gruppo di quiz</string>
     <string name="start_quiz_text">Inizia quiz</string>
+    <string name="edit_audio_text">Modifica audio</string>
+    <string name="override_audio_warning_text">Sei sicuro di voler sostituire l'audio corrente?</string>
 </resources>
