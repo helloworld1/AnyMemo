@@ -538,7 +538,7 @@ public class StudyActivity extends QACardActivity {
     private void initTTS(){
         String defaultLocation = AMEnv.DEFAULT_AUDIO_PATH;
         
-        if(setting.isQuestionAudioEnabled()){
+        if (setting.isQuestionAudioEnabled()) {
             String qa = setting.getQuestionAudio();
             List<String> questionAudioSearchPath = new ArrayList<String>();
             questionAudioSearchPath.add(setting.getQuestionAudioLocation());
@@ -548,7 +548,7 @@ public class StudyActivity extends QACardActivity {
             questionTTS = new AnyMemoTTSImpl(this, qa, questionAudioSearchPath);
         } 
         
-        if(setting.isAnswerAudioEnabled()){
+        if (setting.isAnswerAudioEnabled()) {
             String aa = setting.getAnswerAudio();
             List<String> answerAudioSearchPath = new ArrayList<String>();
             answerAudioSearchPath.add(setting.getAnswerAudioLocation());

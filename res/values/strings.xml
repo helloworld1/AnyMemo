@@ -442,7 +442,6 @@
     <string name="auth_error_text">Authenticate error.</string>
     <string name="locale_italian_text">Italian</string>
     <string name="upload_gdrive_message">Do you want to upload %s to your Google Drive\'s AnyMemo folder? It may take several minutes if you have more than 1000 cards.</string>
-    <string name="edit_audio_text">Edit audio</string>
     <string name="record_your_memo_text">Record your memo</string>
     <string name="record_text">Record</string>
     <string name="max_recent_list_size_text">Max recent list size</string>
@@ -459,5 +458,6 @@
     <string name="quiz_group_size_text">Quiz group size</string>
     <string name="quiz_group_number_text">Quiz group number</string>
     <string name="start_quiz_text">Start quiz</string>
+    <string name="edit_audio_text">Edit audio</string>
     <string name="override_audio_warning_text">Are you sure you want to override current audio?</string>
 </resources>
