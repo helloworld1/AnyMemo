@@ -49,10 +49,10 @@
     <string name="memo_btn5_brief_text">5</string>
     <string name="memo_btn0_anki_text">Снова</string>
     <string name="memo_btn1_anki_text">Снова</string>
-    <string name="memo_btn2_anki_text">Хорошо</string>
-    <string name="memo_btn3_anki_text">Хорошо</string>
+    <string name="memo_btn2_anki_text">Тяжело</string>
+    <string name="memo_btn3_anki_text">Тяжело</string>
     <string name="memo_btn4_anki_text">Легко</string>
-    <string name="memo_btn5_anki_text">ОчЛегко</string>
+    <string name="memo_btn5_anki_text">Легко</string>
     <string name="memo_edit_dialog_title">Правка</string>
     <string name="memo_current_id">ID: </string>
     <string name="global_settings">Общие настройки</string>
@@ -437,7 +437,7 @@
     <string name="auth_error_text">Ошибка авторизации.</string>
     <string name="locale_italian_text">Итальянский</string>
     <string name="upload_gdrive_message">Хотите залить %s в ваш AnyMemo каталог в Google Drive? Может занять несколько минут, если карточек более 1000.</string>
-    <string name="recorder_record_your_memo_text">Запись звука</string>
+    <string name="record_your_memo_text">Запись звука</string>
     <string name="record_text">Доб. запись</string>
     <string name="max_recent_list_size_text">Размер списка Недавние</string>
     <string name="recent_summary">Задать максимальное количество баз в списке Недавние.</string>
@@ -453,4 +453,6 @@
     <string name="quiz_group_size_text">Размер группы опроса</string>
     <string name="quiz_group_number_text">Номер группы опроса</string>
     <string name="start_quiz_text">Начать опрос</string>
+    <string name="edit_audio_text">Правка звука</string> 
+    <string name="override_audio_warning_text">Вы действительно хотите заменить текущий звук?</string>
 </resources>
