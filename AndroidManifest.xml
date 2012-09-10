@@ -26,10 +26,6 @@
             </intent-filter>
         </activity>
         <activity 
-            android:name=".MainTabs"
-            android:configChanges="orientation|keyboardHidden" >
-        </activity>
-        <activity 
             android:name=".InstrumentationActivity"
             android:configChanges="orientation|keyboardHidden" />
         <activity
@@ -78,12 +74,6 @@
             android:configChanges="orientation|keyboardHidden" />
         <activity 
             android:name=".ui.CardEditor"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity 
-            android:name=".ui.MemoScreen"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity 
-            android:name=".ui.EditScreen"
             android:configChanges="orientation|keyboardHidden" />
         <activity 
             android:name=".ui.DetailScreen"

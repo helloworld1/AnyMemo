@@ -26,7 +26,6 @@ import java.util.List;
 import org.apache.mycommons.lang3.StringUtils;
 
 import org.liberty.android.fantastischmemo.AMEnv;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 
 import org.liberty.android.fantastischmemo.queue.LearnQueueManager;
 import org.liberty.android.fantastischmemo.ui.DetailScreen;
@@ -61,7 +60,6 @@ import android.os.AsyncTask;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
@@ -82,6 +80,8 @@ import android.net.Uri;
 
 import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
 
+import android.widget.Toast;
+
 public class StudyActivity extends QACardActivity {
     public static String EXTRA_DBPATH = "dbpath";
     public static String EXTRA_CATEGORY_ID = "category_id";
@@ -90,7 +90,6 @@ public class StudyActivity extends QACardActivity {
     private AnyMemoTTS questionTTS = null;
     private AnyMemoTTS answerTTS = null;
 
-    private final int DIALOG_LOADING_PROGRESS = 100;
     private final int ACTIVITY_FILTER = 10;
     private final int ACTIVITY_EDIT = 11;
     private final int ACTIVITY_GOTO_PREV = 14;
@@ -109,7 +108,6 @@ public class StudyActivity extends QACardActivity {
 
     private GradeButtons gradeButtons;
     private QueueManager queueManager;
-    private volatile boolean buttonDisabled = false;
 
     private CardDao cardDao;
     private LearningDataDao learningDataDao;
@@ -119,9 +117,6 @@ public class StudyActivity extends QACardActivity {
 
     private Option option;
 
-    /* Tasks to run */
-    private GradeTask gradeTask = null;
-
     /* Schedulers */
     private Scheduler scheduler = null;
 
@@ -129,9 +124,6 @@ public class StudyActivity extends QACardActivity {
     /* current states */
     private long schedluledCardCount = 0;
     private long newCardCount = 0;
-
-    /* Keep the dbOpenHelper so it will be destroyed in onDestroy */
-    private AnyMemoDBOpenHelper dbOpenHelper;
 
     boolean initialized = false;
 
@@ -146,24 +138,6 @@ public class StudyActivity extends QACardActivity {
             startCardId = extras.getInt(EXTRA_START_CARD_ID, -1);
         }
         super.onCreate(savedInstanceState);
-    }
-
-    private void createQueue() {
-        int queueSize = option.getQueueSize();
-        LearnQueueManager.Builder builder = new LearnQueueManager.Builder()
-            .setCardDao(cardDao)
-            .setCategoryDao(categoryDao)
-            .setLearningDataDao(learningDataDao)
-            .setScheduler(scheduler)
-            .setLearnQueueSize(queueSize)
-            .setCacheSize(50)
-            .setFilterCategory(filterCategory);
-        if (option.getShuffleType() == Option.ShuffleType.LOCAL) {
-            builder.setShuffle(true);
-        } else {
-            builder.setShuffle(false);
-        }
-        queueManager = builder.build();
     }
 
     @Override
@@ -314,26 +288,6 @@ public class StudyActivity extends QACardActivity {
         return false;
     }
 
-    /* 
-     * When the user select the undo from the menu
-     * this is what to do
-     */
-    private void undoCard(){
-        if(prevLearningData != null){
-            setCurrentCard(prevCard);
-            restartActivity();
-        }
-        else{
-            new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.undo_fail_text))
-                .setMessage(getString(R.string.undo_fail_message))
-                .setNeutralButton(R.string.ok_text, null)
-                .create()
-                .show();
-        }
-    }
-
-
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -383,26 +337,6 @@ public class StudyActivity extends QACardActivity {
         }
     }
 
-
-
-    @Override
-    public Dialog onCreateDialog(int id){
-        switch(id){
-            case DIALOG_LOADING_PROGRESS:{
-                ProgressDialog progressDialog = new ProgressDialog(StudyActivity.this);
-                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                progressDialog.setTitle(getString(R.string.loading_please_wait));
-                progressDialog.setMessage(getString(R.string.loading_database));
-                progressDialog.setCancelable(false);
-
-                return progressDialog;
-            }
-            default:
-                return super.onCreateDialog(id);
-
-        }
-    }
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event){
         if(option.getVolumeKeyShortcut()){
@@ -424,9 +358,21 @@ public class StudyActivity extends QACardActivity {
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         super.onPause();
         AnyMemoExecutor.submit(flushDatabaseTask);
+    }
+
+    @Override
+    public void onDestroy() {
+        if (questionTTS != null) {
+            questionTTS.shutdown();
+        }
+
+        if (answerTTS != null) {
+            answerTTS.shutdown();
+        }
+        super.onDestroy();
     }
 
     @Override
@@ -447,27 +393,24 @@ public class StudyActivity extends QACardActivity {
 
         if(option.getVolumeKeyShortcut()){
             if(keyCode == KeyEvent.KEYCODE_VOLUME_UP){
-                //TODO is answer shown?
-                //if(flashcardDisplay.isAnswerShown() == false){
-                    //updateFlashcardView(true);
-                    //showButtons();
-                //}
-                //else{
-                    /* Grade 0 for up key */
-                    //getGradeButtonListener(0).onClick(null);
-                    //Toast.makeText(this, getString(R.string.grade_text) + " 0", Toast.LENGTH_SHORT).show();
-                //}
+                onGradeButtonClickListener.onGradeButtonClick(0);
+                if (isAnswerShown()) {
+                    onGradeButtonClickListener.onGradeButtonClick(0);
+                    Toast.makeText(this, getString(R.string.grade_text) + " 0", Toast.LENGTH_SHORT).show();
+                } else {
+                    displayCard(true);
+                }
+
                 return true;
             }
             if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
-                //if(flashcardDisplay.isAnswerShown() == false){
-                //    //updateFlashcardView(true);
-                //}
-                //else{
-                //    /* Grade 3 for down key */
-                //    //getGradeButtonListener(3).onClick(null);
-                //    Toast.makeText(this, getString(R.string.grade_text) + " 3", Toast.LENGTH_SHORT).show();
-                //}
+                onGradeButtonClickListener.onGradeButtonClick(3);
+                if (isAnswerShown()) {
+                    onGradeButtonClickListener.onGradeButtonClick(3);
+                    Toast.makeText(this, getString(R.string.grade_text) + " 3", Toast.LENGTH_SHORT).show();
+                } else {
+                    displayCard(true);
+                }
                 return true;
             }
         }
@@ -479,6 +422,106 @@ public class StudyActivity extends QACardActivity {
 
         RestartTask task = new RestartTask();
         task.execute((Void)null);
+    }
+
+
+    @Override
+    public void onInit() throws Exception {
+        cardDao = getDbOpenHelper().getCardDao();
+        learningDataDao = getDbOpenHelper().getLearningDataDao();
+        categoryDao = getDbOpenHelper().getCategoryDao();
+        setting = getSetting();
+        option = getOption();
+
+        // The query of filter cateogry should happen before createQueue
+        // because creatQueue needs to use it.
+        if (filterCategoryId != -1) {
+            filterCategory = categoryDao.queryForId(filterCategoryId);
+            assert filterCategory != null : "Query filter id: " + filterCategoryId +". Get null";
+        }
+
+        // Initialize the TTS early so it will have time to initialize.
+        initTTS();
+        scheduler = new DefaultScheduler(this);
+        createQueue();
+
+        /* Run the learnQueue init in a separate thread */
+        if (startCardId != -1) {
+            setCurrentCard(queueManager.dequeuePosition(startCardId));
+        } else {
+            setCurrentCard(queueManager.dequeue());
+        }
+        refreshStatInfo();
+    }
+
+    @Override
+    public void onPostInit() {
+        setupGradeButtons();
+        displayCard(false);
+        initialized = true;
+        setSmallTitle(getActivityTitleString());
+        setTitle(getDbName());
+    }
+
+    @Override
+    public void onPostDisplayCard() {
+        // When displaying new card, we should stop the TTS reading.
+        stopTTSSpeaking();
+        if (isAnswerShown()) {
+            // Mnemosyne grade button style won't display the interval.
+            if (option.getButtonStyle() != Option.ButtonStyle.MNEMOSYNE) {
+                setGradeButtonTitle();
+            }
+            gradeButtons.show();
+        } else {
+            gradeButtons.hide();
+        }
+
+        // Auto speak after displaying a card.
+        if (option.getSpeakingType() == Option.SpeakingType.AUTO
+            || option.getSpeakingType() ==Option.SpeakingType.AUTOTAP) {
+            autoSpeak();
+        }
+    }
+
+    @Override
+    protected void onClickQuestionText() {
+        if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
+                || option.getSpeakingType() == Option.SpeakingType.TAP)
+                && questionTTS != null) {
+            questionTTS.stop();
+            questionTTS.sayText(getCurrentCard().getQuestion());
+        } else {
+            onClickQuestionView();
+        }
+    }
+
+    @Override
+    protected void onClickAnswerText() {
+        if (!isAnswerShown()) {
+            onClickAnswerView();
+        } else if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
+                || option.getSpeakingType() == Option.SpeakingType.TAP)
+                && answerTTS != null) {
+            answerTTS.stop();
+            answerTTS.sayText(getCurrentCard().getAnswer());
+        }
+    }
+
+    @Override
+    protected void onClickQuestionView() {
+        if (!isAnswerShown()) {
+            displayCard(true);
+        }
+    }
+
+    @Override
+    protected void onClickAnswerView() {
+        if (!isAnswerShown()) {
+            displayCard(true);
+        } else if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED && isAnswerShown()) {
+            displayCard(false);
+        }
     }
 
     private void showNoItemDialog(){
@@ -511,21 +554,38 @@ public class StudyActivity extends QACardActivity {
             .show();
     }
 
-    private void autoSpeak(){
+    /* Create the queue manager. */
+    private void createQueue() {
+        int queueSize = option.getQueueSize();
+        LearnQueueManager.Builder builder = new LearnQueueManager.Builder()
+            .setCardDao(cardDao)
+            .setCategoryDao(categoryDao)
+            .setLearningDataDao(learningDataDao)
+            .setScheduler(scheduler)
+            .setLearnQueueSize(queueSize)
+            .setCacheSize(50)
+            .setFilterCategory(filterCategory);
+        if (option.getShuffleType() == Option.ShuffleType.LOCAL) {
+            builder.setShuffle(true);
+        } else {
+            builder.setShuffle(false);
+        }
+        queueManager = builder.build();
+    }
+
+
+    private void autoSpeak() {
         if (getCurrentCard() != null) {
-            if(option.getSpeakingType() == Option.SpeakingType.AUTOTAP
-                    || option.getSpeakingType() == Option.SpeakingType.AUTO){
-                if(isAnswerShown()){
-                    if(questionTTS != null){
-                        // Make sure the TTS is stop, or it will speak nothing.
-                        questionTTS.stop();
-                        questionTTS.sayText(getCurrentCard().getQuestion());
-                    }
-                } else if(answerTTS != null){
-                    // Make sure the TTS is stop
-                    answerTTS.stop();
-                    answerTTS.sayText(getCurrentCard().getAnswer());
+            if(!isAnswerShown()){
+                if(questionTTS != null){
+                    // Make sure the TTS is stop, or it will speak nothing.
+                    questionTTS.stop();
+                    questionTTS.sayText(getCurrentCard().getQuestion());
                 }
+            } else if (answerTTS != null) {
+                // Make sure the TTS is stop
+                answerTTS.stop();
+                answerTTS.sayText(getCurrentCard().getAnswer());
             }
         }
     }
@@ -577,57 +637,6 @@ public class StudyActivity extends QACardActivity {
     }
 
 
-
-    @Override
-    public void onInit() throws Exception {
-        cardDao = getDbOpenHelper().getCardDao();
-        learningDataDao = getDbOpenHelper().getLearningDataDao();
-        categoryDao = getDbOpenHelper().getCategoryDao();
-        setting = getSetting();
-        option = getOption();
-
-        // The query of filter cateogry should happen before createQueue
-        // because creatQueue needs to use it.
-        if (filterCategoryId != -1) {
-            filterCategory = categoryDao.queryForId(filterCategoryId);
-            assert filterCategory != null : "Query filter id: " + filterCategoryId +". Get null";
-        }
-
-        // Initialize the TTS early so it will have time to initialize.
-        initTTS();
-        scheduler = new DefaultScheduler(this);
-        createQueue();
-
-        /* Run the learnQueue init in a separate thread */
-        if (startCardId != -1) {
-            setCurrentCard(queueManager.dequeuePosition(startCardId));
-        } else {
-            setCurrentCard(queueManager.dequeue());
-        }
-        refreshStatInfo();
-    }
-
-    @Override
-    public void onPostInit() {
-        setupGradeButtons();
-        displayCard(false);
-        initialized = true;
-        setSmallTitle(getActivityTitleString());
-        setTitle(getDbName());
-    }
-
-    @Override
-    public void onPostDisplayCard() {
-        if (isAnswerShown()) {
-            // Mnemosyne grade button style won't display the interval.
-            if (option.getButtonStyle() != Option.ButtonStyle.MNEMOSYNE) {
-                setGradeButtonTitle();
-            }
-            gradeButtons.show();
-        } else {
-            gradeButtons.hide();
-        }
-    }
 
     private void setupGradeButtons() {
         if (option.getButtonStyle() == Option.ButtonStyle.ANKI) {
@@ -793,6 +802,25 @@ public class StudyActivity extends QACardActivity {
         }
     }
 
+    /* 
+     * When the user select the undo from the menu
+     * this is what to do
+     */
+    private void undoCard(){
+        if(prevLearningData != null){
+            setCurrentCard(prevCard);
+            restartActivity();
+        }
+        else{
+            new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.undo_fail_text))
+                .setMessage(getString(R.string.undo_fail_message))
+                .setNeutralButton(R.string.ok_text, null)
+                .create()
+                .show();
+        }
+    }
+
     /* When restarting an activity, we have to flush db first. */
     private class RestartTask extends WaitDbTask {
         @Override
@@ -829,32 +857,6 @@ public class StudyActivity extends QACardActivity {
                 restartActivity();
             }
         };
-
-    protected void onClickQuestionText() {
-        if (!isAnswerShown()) {
-            displayCard(true);
-        }
-    }
-
-    protected void onClickAnswerText() {
-        if (!isAnswerShown()) {
-            displayCard(true);
-        }
-    }
-
-    protected void onClickQuestionView() {
-        if (!isAnswerShown()) {
-            displayCard(true);
-        }
-    }
-
-    protected void onClickAnswerView() {
-        if (!isAnswerShown()) {
-            displayCard(true);
-        } else if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED && isAnswerShown()) {
-            displayCard(false);
-        }
-    }
 
     private void setGradeButtonTitle() {
         gradeButtons.setButtonDescription(0, ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 0, false)));
@@ -946,6 +948,15 @@ public class StudyActivity extends QACardActivity {
             } catch (SQLException e) {
                 Log.e(TAG, "Delete card error", e);
             }
+        }
+    }
+
+    private void stopTTSSpeaking() {
+        if (questionTTS != null) {
+            questionTTS.stop();
+        }
+        if (answerTTS != null) {
+            answerTTS.stop();
         }
     }
 }
