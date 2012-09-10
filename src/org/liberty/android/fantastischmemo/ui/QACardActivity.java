@@ -321,7 +321,7 @@ abstract public class QACardActivity extends AMActivity {
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
-        if (setting.getCardStyle() != Setting.CardStyle.DOUBLE_SIDED) {
+        if (setting.getCardStyle() != Setting.CardStyle.DOUBLE_SIDED && option.getEnableAnimation()) {
             if (isAnswerShown == false && showAnswer == true) {
                 // No animation here.
             } else {
@@ -333,7 +333,7 @@ abstract public class QACardActivity extends AMActivity {
 
         ft = getSupportFragmentManager().beginTransaction();
 
-        if (setting.getCardStyle() != Setting.CardStyle.DOUBLE_SIDED) {
+        if (setting.getCardStyle() != Setting.CardStyle.DOUBLE_SIDED && option.getEnableAnimation()) {
             if (isAnswerShown == false && showAnswer == true) {
                 ft.setCustomAnimations(0, R.anim.slide_down);
             } else {

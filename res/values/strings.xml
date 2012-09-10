@@ -460,4 +460,6 @@
     <string name="start_quiz_text">Start quiz</string>
     <string name="edit_audio_text">Edit audio</string>
     <string name="override_audio_warning_text">Are you sure you want to override current audio?</string>
+    <string name="enable_animation_text">Enable animation</string>
+    <string name="enable_animation_summary">Enable the animation for card transition.</string>
 </resources>
