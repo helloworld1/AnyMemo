@@ -101,7 +101,6 @@ public class StudyActivity extends QACardActivity {
     private Card prevCard = null;
     private LearningData prevLearningData = null;
     private String dbPath = "";
-    private String dbName = "";
     private int filterCategoryId = -1; 
     private Category filterCategory;
     private int startCardId = -1;
@@ -597,6 +596,7 @@ public class StudyActivity extends QACardActivity {
 
     private void initTTS(){
         String defaultLocation = AMEnv.DEFAULT_AUDIO_PATH;
+        String dbName = getDbName();
         
         if (setting.isQuestionAudioEnabled()) {
             String qa = setting.getQuestionAudio();
