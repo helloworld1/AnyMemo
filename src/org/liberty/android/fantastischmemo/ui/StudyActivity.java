@@ -719,10 +719,11 @@ public class StudyActivity extends QACardActivity {
                 isNewCard = true;
             }
 
+            // Save current card as prev card for undo.
+            prevCard = getCurrentCard();
             try {
                 // This was saved to determine the stat info
                 // and the card id for undo
-                prevCard = cardDao.queryForId(getCurrentCard().getId());
 
                 // Save previous learning for Undo
                 // This part is ugly due to muutablity of ORMLite
@@ -815,8 +816,11 @@ public class StudyActivity extends QACardActivity {
      */
     private void undoCard(){
         if (prevLearningData != null) {
-            prevCard.setLearningData(prevLearningData);
-            queueManager.update(prevCard);
+            // We don't want the queueManager to flush the card
+            // instead we update the previous learning data
+            // manually.
+            
+            queueManager.remove(prevCard);
             learningDataDao.updateLearningData(prevLearningData);
             setCurrentCard(prevCard);
             restartActivity();
