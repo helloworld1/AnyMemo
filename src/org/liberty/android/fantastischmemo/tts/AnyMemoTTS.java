@@ -26,7 +26,7 @@ public interface AnyMemoTTS{
 
     public void shutdown();
 
-    public int sayText(String s);
+    public void sayText(String s);
 }
 
 	

@@ -68,6 +68,11 @@
             android:title="@string/allow_orientation_title" 
             android:defaultValue="true"
             android:summary="@string/allow_orientation_summary" />
+        <CheckBoxPreference
+            android:key="enable_animation"
+            android:title="@string/enable_animation_text" 
+            android:defaultValue="true"
+            android:summary="@string/enable_animation_summary" />
         <ListPreference
             android:key="notification_interval"
             android:title="@string/notification_text"

@@ -19,29 +19,25 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.mycommons.lang3.StringUtils;
 
-import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.AnyMemoService;
 
-import org.liberty.android.fantastischmemo.queue.CramQueueManager;
 import org.liberty.android.fantastischmemo.queue.LearnQueueManager;
 import org.liberty.android.fantastischmemo.ui.DetailScreen;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.ui.SettingsScreen;
+import org.liberty.android.fantastischmemo.ui.StudyActivity;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
-import org.liberty.android.fantastischmemo.utils.AMUtil;
 import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
-import org.liberty.android.fantastischmemo.dao.SettingDao;
 
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
@@ -50,7 +46,6 @@ import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 
 import org.liberty.android.fantastischmemo.queue.QueueManager;
-import java.util.Map;
 
 import java.sql.SQLException;
 
@@ -58,8 +53,9 @@ import org.liberty.android.fantastischmemo.scheduler.DefaultScheduler;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
-import org.liberty.android.fantastischmemo.tts.AnyMemoTTSPlatform;
-import org.liberty.android.fantastischmemo.tts.AudioFileTTS;
+import org.liberty.android.fantastischmemo.tts.AnyMemoTTSImpl;
+
+import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
 
 import com.example.android.apis.graphics.FingerPaint;
 
@@ -67,17 +63,10 @@ import android.os.AsyncTask;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
-
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-
-import android.text.ClipboardManager;
-import android.text.Html;
 
 import android.view.Gravity;
 import android.view.Menu;
@@ -86,27 +75,24 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.KeyEvent;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.Toast;
 import android.util.Log;
 import android.net.Uri;
 
 import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
 
+import android.widget.Toast;
+
 public class StudyActivity extends QACardActivity {
     public static String EXTRA_DBPATH = "dbpath";
     public static String EXTRA_CATEGORY_ID = "category_id";
     public static String EXTRA_START_CARD_ID = "start_card_id";
-    public static String EXTRA_CRAM = "cram";
 
     private AnyMemoTTS questionTTS = null;
     private AnyMemoTTS answerTTS = null;
 
-    private final int DIALOG_LOADING_PROGRESS = 100;
     private final int ACTIVITY_FILTER = 10;
     private final int ACTIVITY_EDIT = 11;
     private final int ACTIVITY_GOTO_PREV = 14;
@@ -125,7 +111,6 @@ public class StudyActivity extends QACardActivity {
 
     private GradeButtons gradeButtons;
     private QueueManager queueManager;
-    private volatile boolean buttonDisabled = false;
 
     private CardDao cardDao;
     private LearningDataDao learningDataDao;
@@ -135,9 +120,6 @@ public class StudyActivity extends QACardActivity {
 
     private Option option;
 
-    /* Tasks to run */
-    private GradeTask gradeTask = null;
-
     /* Schedulers */
     private Scheduler scheduler = null;
 
@@ -146,12 +128,11 @@ public class StudyActivity extends QACardActivity {
     private long schedluledCardCount = 0;
     private long newCardCount = 0;
 
-    /* Keep the dbOpenHelper so it will be destroyed in onDestroy */
-    private AnyMemoDBOpenHelper dbOpenHelper;
-
     boolean initialized = false;
 
     private WaitDbTask waitDbTask;
+
+    private DictionaryUtil dictionaryUtil;
 
     @Override
 	public void onCreate(Bundle savedInstanceState){
@@ -162,24 +143,6 @@ public class StudyActivity extends QACardActivity {
             startCardId = extras.getInt(EXTRA_START_CARD_ID, -1);
         }
         super.onCreate(savedInstanceState);
-    }
-
-    private void createQueue() {
-        int queueSize = option.getQueueSize();
-        LearnQueueManager.Builder builder = new LearnQueueManager.Builder()
-            .setCardDao(cardDao)
-            .setCategoryDao(categoryDao)
-            .setLearningDataDao(learningDataDao)
-            .setScheduler(scheduler)
-            .setLearnQueueSize(queueSize)
-            .setCacheSize(50)
-            .setFilterCategory(filterCategory);
-        if (option.getShuffleType() == Option.ShuffleType.LOCAL) {
-            builder.setShuffle(true);
-        } else {
-            builder.setShuffle(false);
-        }
-        queueManager = builder.build();
     }
 
     @Override
@@ -245,30 +208,90 @@ public class StudyActivity extends QACardActivity {
                 showCategoriesDialog();
                 return true;
             }
+
+            case R.id.menu_context_edit:
+            {
+                Intent myIntent = new Intent(this, CardEditor.class);
+                myIntent.putExtra(CardEditor.EXTRA_DBPATH, this.dbPath);
+                myIntent.putExtra(CardEditor.EXTRA_CARD_ID, getCurrentCard().getId());
+                myIntent.putExtra(CardEditor.EXTRA_IS_EDIT_NEW, false);
+                startActivityForResult(myIntent, ACTIVITY_EDIT);
+                return true;
+            }
+            case R.id.menu_context_delete:
+            {
+                new AlertDialog.Builder(this)
+                    .setTitle(R.string.delete_text)
+                    .setMessage(R.string.delete_warning)
+                    .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            if(getCurrentCard() != null){
+                                try {
+                                    cardDao.delete(getCurrentCard());
+                                    // Do not restart with this card
+                                    setCurrentCard(null);
+                                    restartActivity();
+                                } catch (SQLException e) {
+                                    Log.e(TAG, "Delete card error", e);
+                                }
+                            }
+                        }
+                    })
+                .setNegativeButton(R.string.cancel_text, null)
+                .show();
+
+                return true;
+
+            }
+            case R.id.menu_context_skip:
+            {
+                new AlertDialog.Builder(this)
+                    .setTitle(R.string.skip_text)
+                    .setMessage(R.string.skip_warning)
+                    .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            skipCurrentCard();
+                        }
+                    })
+                .setNegativeButton(R.string.cancel_text, null)
+                .show();
+                return true;
+            }
+            case R.id.menu_context_gotoprev:
+            {
+                Intent myIntent = new Intent();
+                myIntent.setClass(this, PreviewEditActivity.class);
+                myIntent.putExtra(PreviewEditActivity.EXTRA_DBPATH, dbPath);
+                if (getCurrentCard() != null) {
+                    myIntent.putExtra(PreviewEditActivity.EXTRA_CARD_ID, getCurrentCard().getId());
+                }
+                
+                startActivity(myIntent);
+                return true;
+            }
+
+            case R.id.menu_context_lookup:
+            {
+                if(getCurrentCard() == null){
+                    return false;
+                }
+                /* default word to lookup is question */
+                String lookupWord = getCurrentCard().getQuestion();
+                dictionaryUtil.lookupDictionary(lookupWord);
+
+                return true;
+
+            }
+
+            case R.id.menu_context_paint:
+            {
+                Intent myIntent = new Intent(this, FingerPaint.class);
+                startActivity(myIntent);
+            }
         }
 
         return false;
     }
-
-    /* 
-     * When the user select the undo from the menu
-     * this is what to do
-     */
-    private void undoCard(){
-        if(prevLearningData != null){
-            setCurrentCard(prevCard);
-            restartActivity();
-        }
-        else{
-            new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.undo_fail_text))
-                .setMessage(getString(R.string.undo_fail_message))
-                .setNeutralButton(R.string.ok_text, null)
-                .create()
-                .show();
-        }
-    }
-
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
@@ -319,26 +342,6 @@ public class StudyActivity extends QACardActivity {
         }
     }
 
-
-
-    @Override
-    public Dialog onCreateDialog(int id){
-        switch(id){
-            case DIALOG_LOADING_PROGRESS:{
-                ProgressDialog progressDialog = new ProgressDialog(StudyActivity.this);
-                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                progressDialog.setTitle(getString(R.string.loading_please_wait));
-                progressDialog.setMessage(getString(R.string.loading_database));
-                progressDialog.setCancelable(false);
-
-                return progressDialog;
-            }
-            default:
-                return super.onCreateDialog(id);
-
-        }
-    }
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event){
         if(option.getVolumeKeyShortcut()){
@@ -360,9 +363,21 @@ public class StudyActivity extends QACardActivity {
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         super.onPause();
         AnyMemoExecutor.submit(flushDatabaseTask);
+    }
+
+    @Override
+    public void onDestroy() {
+        if (questionTTS != null) {
+            questionTTS.shutdown();
+        }
+
+        if (answerTTS != null) {
+            answerTTS.shutdown();
+        }
+        super.onDestroy();
     }
 
     @Override
@@ -383,39 +398,136 @@ public class StudyActivity extends QACardActivity {
 
         if(option.getVolumeKeyShortcut()){
             if(keyCode == KeyEvent.KEYCODE_VOLUME_UP){
-                //TODO is answer shown?
-                //if(flashcardDisplay.isAnswerShown() == false){
-                    //updateFlashcardView(true);
-                    //showButtons();
-                //}
-                //else{
-                    /* Grade 0 for up key */
-                    //getGradeButtonListener(0).onClick(null);
-                    //Toast.makeText(this, getString(R.string.grade_text) + " 0", Toast.LENGTH_SHORT).show();
-                //}
+                onGradeButtonClickListener.onGradeButtonClick(0);
+                if (isAnswerShown()) {
+                    onGradeButtonClickListener.onGradeButtonClick(0);
+                    Toast.makeText(this, getString(R.string.grade_text) + " 0", Toast.LENGTH_SHORT).show();
+                } else {
+                    displayCard(true);
+                }
+
                 return true;
             }
             if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
-                //if(flashcardDisplay.isAnswerShown() == false){
-                //    //updateFlashcardView(true);
-                //}
-                //else{
-                //    /* Grade 3 for down key */
-                //    //getGradeButtonListener(3).onClick(null);
-                //    Toast.makeText(this, getString(R.string.grade_text) + " 3", Toast.LENGTH_SHORT).show();
-                //}
+                onGradeButtonClickListener.onGradeButtonClick(3);
+                if (isAnswerShown()) {
+                    onGradeButtonClickListener.onGradeButtonClick(3);
+                    Toast.makeText(this, getString(R.string.grade_text) + " 3", Toast.LENGTH_SHORT).show();
+                } else {
+                    displayCard(true);
+                }
                 return true;
             }
         }
         return super.onKeyUp(keyCode, event);
     }
 
-
     @Override
     public void restartActivity(){
 
         RestartTask task = new RestartTask();
         task.execute((Void)null);
+    }
+
+
+    @Override
+    public void onInit() throws Exception {
+        cardDao = getDbOpenHelper().getCardDao();
+        learningDataDao = getDbOpenHelper().getLearningDataDao();
+        categoryDao = getDbOpenHelper().getCategoryDao();
+        setting = getSetting();
+        option = getOption();
+        dictionaryUtil = new DictionaryUtil(this);
+
+        // The query of filter cateogry should happen before createQueue
+        // because creatQueue needs to use it.
+        if (filterCategoryId != -1) {
+            filterCategory = categoryDao.queryForId(filterCategoryId);
+            assert filterCategory != null : "Query filter id: " + filterCategoryId +". Get null";
+        }
+
+        // Initialize the TTS early so it will have time to initialize.
+        initTTS();
+        scheduler = new DefaultScheduler(this);
+        createQueue();
+
+        /* Run the learnQueue init in a separate thread */
+        if (startCardId != -1) {
+            setCurrentCard(queueManager.dequeuePosition(startCardId));
+        } else {
+            setCurrentCard(queueManager.dequeue());
+        }
+        refreshStatInfo();
+    }
+
+    @Override
+    public void onPostInit() {
+        setupGradeButtons();
+        displayCard(false);
+        initialized = true;
+        setSmallTitle(getActivityTitleString());
+        setTitle(getDbName());
+    }
+
+    @Override
+    public void onPostDisplayCard() {
+        // When displaying new card, we should stop the TTS reading.
+        stopTTSSpeaking();
+        if (isAnswerShown()) {
+            // Mnemosyne grade button style won't display the interval.
+            if (option.getButtonStyle() != Option.ButtonStyle.MNEMOSYNE) {
+                setGradeButtonTitle();
+            }
+            gradeButtons.show();
+        } else {
+            gradeButtons.hide();
+        }
+
+        // Auto speak after displaying a card.
+        if (option.getSpeakingType() == Option.SpeakingType.AUTO
+            || option.getSpeakingType() ==Option.SpeakingType.AUTOTAP) {
+            autoSpeak();
+        }
+    }
+
+    @Override
+    protected void onClickQuestionText() {
+        if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
+                || option.getSpeakingType() == Option.SpeakingType.TAP)
+                && questionTTS != null) {
+            questionTTS.stop();
+            questionTTS.sayText(getCurrentCard().getQuestion());
+        } else {
+            onClickQuestionView();
+        }
+    }
+
+    @Override
+    protected void onClickAnswerText() {
+        if (!isAnswerShown()) {
+            onClickAnswerView();
+        } else if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
+                || option.getSpeakingType() == Option.SpeakingType.TAP)
+                && answerTTS != null) {
+            answerTTS.stop();
+            answerTTS.sayText(getCurrentCard().getAnswer());
+        }
+    }
+
+    @Override
+    protected void onClickQuestionView() {
+        if (!isAnswerShown()) {
+            displayCard(true);
+        }
+    }
+
+    @Override
+    protected void onClickAnswerView() {
+        if (!isAnswerShown()) {
+            displayCard(true);
+        } else if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED && isAnswerShown()) {
+            displayCard(false);
+        }
     }
 
     private void showNoItemDialog(){
@@ -436,7 +548,6 @@ public class StudyActivity extends QACardActivity {
                     Intent myIntent = new Intent();
                     myIntent.setClass(StudyActivity.this, StudyActivity.class);
                     myIntent.putExtra(StudyActivity.EXTRA_DBPATH, dbPath);
-                    myIntent.putExtra(StudyActivity.EXTRA_CRAM, true);
                     startActivity(myIntent);
                 }
             })
@@ -449,21 +560,38 @@ public class StudyActivity extends QACardActivity {
             .show();
     }
 
-    private void autoSpeak(){
+    /* Create the queue manager. */
+    private void createQueue() {
+        int queueSize = option.getQueueSize();
+        LearnQueueManager.Builder builder = new LearnQueueManager.Builder()
+            .setCardDao(cardDao)
+            .setCategoryDao(categoryDao)
+            .setLearningDataDao(learningDataDao)
+            .setScheduler(scheduler)
+            .setLearnQueueSize(queueSize)
+            .setCacheSize(50)
+            .setFilterCategory(filterCategory);
+        if (option.getShuffleType() == Option.ShuffleType.LOCAL) {
+            builder.setShuffle(true);
+        } else {
+            builder.setShuffle(false);
+        }
+        queueManager = builder.build();
+    }
+
+
+    private void autoSpeak() {
         if (getCurrentCard() != null) {
-            if(option.getSpeakingType() == Option.SpeakingType.AUTOTAP
-                    || option.getSpeakingType() == Option.SpeakingType.AUTO){
-                if(isAnswerShown()){
-                    if(questionTTS != null){
-                        // Make sure the TTS is stop, or it will speak nothing.
-                        questionTTS.stop();
-                        questionTTS.sayText(getCurrentCard().getQuestion());
-                    }
-                } else if(answerTTS != null){
-                    // Make sure the TTS is stop
-                    answerTTS.stop();
-                    answerTTS.sayText(getCurrentCard().getAnswer());
+            if(!isAnswerShown()){
+                if(questionTTS != null){
+                    // Make sure the TTS is stop, or it will speak nothing.
+                    questionTTS.stop();
+                    questionTTS.sayText(getCurrentCard().getQuestion());
                 }
+            } else if (answerTTS != null) {
+                // Make sure the TTS is stop
+                answerTTS.stop();
+                answerTTS.sayText(getCurrentCard().getAnswer());
             }
         }
     }
@@ -475,23 +603,25 @@ public class StudyActivity extends QACardActivity {
 
     private void initTTS(){
         String defaultLocation = AMEnv.DEFAULT_AUDIO_PATH;
-        String qa = setting.getQuestionAudio();
-        String aa = setting.getAnswerAudio();
-
-        if (StringUtils.isNotEmpty(setting.getQuestionAudioLocation())) {
-            questionTTS = new AudioFileTTS(defaultLocation, dbName);
-        } else if (StringUtils.isNotEmpty(qa)){
-            questionTTS = new AnyMemoTTSPlatform(this, qa);
-        } else{
-            questionTTS = null;
-        }
-
-        if (StringUtils.isNotEmpty(setting.getAnswerAudioLocation())) {
-            answerTTS = new AudioFileTTS(defaultLocation, dbName);
-        } else if (StringUtils.isNotEmpty(aa)){
-            answerTTS = new AnyMemoTTSPlatform(this, aa);
-        } else{
-            answerTTS = null;
+        
+        if (setting.isQuestionAudioEnabled()) {
+            String qa = setting.getQuestionAudio();
+            List<String> questionAudioSearchPath = new ArrayList<String>();
+            questionAudioSearchPath.add(setting.getQuestionAudioLocation());
+            questionAudioSearchPath.add(setting.getQuestionAudioLocation() + "/" + dbName);
+            questionAudioSearchPath.add(defaultLocation + "/" + dbName);
+            questionAudioSearchPath.add(setting.getQuestionAudioLocation());
+            questionTTS = new AnyMemoTTSImpl(this, qa, questionAudioSearchPath);
+        } 
+        
+        if (setting.isAnswerAudioEnabled()) {
+            String aa = setting.getAnswerAudio();
+            List<String> answerAudioSearchPath = new ArrayList<String>();
+            answerAudioSearchPath.add(setting.getAnswerAudioLocation());
+            answerAudioSearchPath.add(setting.getAnswerAudioLocation() + "/" + dbName);
+            answerAudioSearchPath.add(defaultLocation + "/" + dbName);
+            answerAudioSearchPath.add(defaultLocation);
+            answerTTS = new AnyMemoTTSImpl(this, aa, answerAudioSearchPath);
         }
     }
 
@@ -514,62 +644,14 @@ public class StudyActivity extends QACardActivity {
 
 
 
-    @Override
-    public void onInit() throws Exception {
-        cardDao = getDbOpenHelper().getCardDao();
-        learningDataDao = getDbOpenHelper().getLearningDataDao();
-        categoryDao = getDbOpenHelper().getCategoryDao();
-        setting = getSetting();
-        option = getOption();
-
-        // Initialize the TTS early so it will have time to initialize.
-        initTTS();
-        scheduler = new DefaultScheduler(this);
-        createQueue();
-
-        if (filterCategoryId != -1) {
-            filterCategory = categoryDao.queryForId(filterCategoryId);
-            assert filterCategory != null : "Query filter id: " + filterCategoryId +". Get null";
-        }
-        /* Run the learnQueue init in a separate thread */
-        if (startCardId != -1) {
-            setCurrentCard(queueManager.dequeuePosition(startCardId));
-        } else {
-            setCurrentCard(queueManager.dequeue());
-        }
-        refreshStatInfo();
-    }
-
-    @Override
-    public void onPostInit() {
-        setupGradeButtons();
-        displayCard(false);
-        initialized = true;
-        setSmallTitle(getActivityTitleString());
-        setTitle(getDbName());
-    }
-
-    @Override
-    public void onPostDisplayCard() {
-        if (isAnswerShown()) {
-            setGradeButtonTitle();
-            gradeButtons.show();
-        } else {
-            gradeButtons.hide();
-        }
-    }
-
-
     private void setupGradeButtons() {
-        //if (option.getButtonStyle() == Option.ButtonStyle.ANKI) {
-        //    controlButtons = new AnkiGradeButtons(this);
-        //} else if (option.getButtonStyle() == Option.ButtonStyle.MNEMOSYNE) {
-        //    controlButtons = new MnemosyneGradeButtons(this);
-        //} else {
-        //    controlButtons = new AnyMemoGradeButtons(this);
-        //}
-
-        gradeButtons = new GradeButtons(this, R.layout.grade_buttons_anymemo);
+        if (option.getButtonStyle() == Option.ButtonStyle.ANKI) {
+            gradeButtons = new GradeButtons(this, R.layout.grade_buttons_anki);
+        } else if (option.getButtonStyle() == Option.ButtonStyle.MNEMOSYNE) {
+            gradeButtons = new GradeButtons(this, R.layout.grade_buttons_mnemosyne);
+        } else {
+            gradeButtons = new GradeButtons(this, R.layout.grade_buttons_anymemo);
+        }
 
         LinearLayout rootView= (LinearLayout)findViewById(R.id.root);
 
@@ -599,7 +681,7 @@ public class StudyActivity extends QACardActivity {
 
         /* This li is make the background of buttons the same as answer */
         LinearLayout li = new LinearLayout(this);
-        li.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.FILL_PARENT));
+        li.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         Integer color = setting.getAnswerBackgroundColor();
         if(color != null) {
             li.setBackgroundColor(color);
@@ -637,16 +719,18 @@ public class StudyActivity extends QACardActivity {
                 isNewCard = true;
             }
 
-            // This was saved to determine the stat info
-            // and the card id for undo
+            // Save current card as prev card for undo.
             prevCard = getCurrentCard();
+            try {
+                // This was saved to determine the stat info
+                // and the card id for undo
 
-            // Save previous learning for Undo
-            // This part is ugly due to muutablity of ORMLite
-            prevLearningData = new LearningData();
-            prevLearningData.setId(ld.getId());
-            prevLearningData.cloneFromLearningData(ld);
-
+                // Save previous learning for Undo
+                // This part is ugly due to muutablity of ORMLite
+                prevLearningData = learningDataDao.queryForId(ld.getId());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
             LearningData newLd = scheduler.schedule(ld, grade, true);
 
             // Need to clone the data due to ORMLite restriction on "update()" method.
@@ -726,6 +810,30 @@ public class StudyActivity extends QACardActivity {
         }
     }
 
+    /* 
+     * When the user select the undo from the menu
+     * this is what to do
+     */
+    private void undoCard(){
+        if (prevLearningData != null) {
+            // We don't want the queueManager to flush the card
+            // instead we update the previous learning data
+            // manually.
+            
+            queueManager.remove(prevCard);
+            learningDataDao.updateLearningData(prevLearningData);
+            setCurrentCard(prevCard);
+            restartActivity();
+        } else {
+            new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.undo_fail_text))
+                .setMessage(getString(R.string.undo_fail_message))
+                .setNeutralButton(R.string.ok_text, null)
+                .create()
+                .show();
+        }
+    }
+
     /* When restarting an activity, we have to flush db first. */
     private class RestartTask extends WaitDbTask {
         @Override
@@ -763,37 +871,13 @@ public class StudyActivity extends QACardActivity {
             }
         };
 
-    protected void onClickQuestionText() {
-        if (!isAnswerShown()) {
-            displayCard(true);
-        }
-    }
-
-    protected void onClickAnswerText() {
-        if (!isAnswerShown()) {
-            displayCard(true);
-        }
-    }
-
-    protected void onClickQuestionView() {
-        if (!isAnswerShown()) {
-            displayCard(true);
-        }
-    }
-
-    protected void onClickAnswerView() {
-        if (!isAnswerShown()) {
-            displayCard(true);
-        }
-    }
-
     private void setGradeButtonTitle() {
-        gradeButtons.setButtonText(0, getString(R.string.memo_btn0_text), ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 0, false)));
-        gradeButtons.setButtonText(1, getString(R.string.memo_btn1_text), ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 1, false)));
-        gradeButtons.setButtonText(2, getString(R.string.memo_btn2_text), ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 2, false)));
-        gradeButtons.setButtonText(3, getString(R.string.memo_btn3_text), ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 3, false)));
-        gradeButtons.setButtonText(4, getString(R.string.memo_btn4_text), ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 4, false)));
-        gradeButtons.setButtonText(5, getString(R.string.memo_btn5_text), ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 5, false)));
+        gradeButtons.setButtonDescription(0, ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 0, false)));
+        gradeButtons.setButtonDescription(1, ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 1, false)));
+        gradeButtons.setButtonDescription(2, ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 2, false)));
+        gradeButtons.setButtonDescription(3, ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 3, false)));
+        gradeButtons.setButtonDescription(4, ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 4, false)));
+        gradeButtons.setButtonDescription(5, ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 5, false)));
     }
 
 
@@ -826,7 +910,7 @@ public class StudyActivity extends QACardActivity {
         return "";
     }
 
-    private String getActivityTitleString(){
+    private String getActivityTitleString() {
         StringBuilder sb = new StringBuilder();
         sb.append(getString(R.string.new_text) + ": " + newCardCount + " ");
         sb.append(getString(R.string.review_short_text) + ": " + schedluledCardCount + " ");
@@ -837,4 +921,28 @@ public class StudyActivity extends QACardActivity {
         return sb.toString();
     }
 
+    private void skipCurrentCard() {
+        if(getCurrentCard() != null) {
+            try {
+                LearningData ld = getCurrentCard().getLearningData();
+                ld.setNextLearnDate(new Date(Long.MAX_VALUE));
+                ld.setAcqReps(1);
+                learningDataDao.update(ld);
+                // Do not restart this card
+                setCurrentCard(null);
+                restartActivity();
+            } catch (SQLException e) {
+                Log.e(TAG, "Delete card error", e);
+            }
+        }
+    }
+
+    private void stopTTSSpeaking() {
+        if (questionTTS != null) {
+            questionTTS.stop();
+        }
+        if (answerTTS != null) {
+            answerTTS.stop();
+        }
+    }
 }

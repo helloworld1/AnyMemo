@@ -40,6 +40,9 @@ public class GradeButtons {
     
     private Button[] gradeButtons = new Button[6];
 
+    // The default button titles from the string
+    private CharSequence[] defaultGradeButtonTitles = new CharSequence[6];
+
     private OnGradeButtonClickListener onGradeButtonClickListener = 
         new OnGradeButtonClickListener() {
             public void onGradeButtonClick(int grade) {
@@ -68,7 +71,10 @@ public class GradeButtons {
         for (int i = 0; i < 6; i++) {
             setButtonOnClickListener(gradeButtons[i], i);
             setButtonOnLongClickListener(gradeButtons[i], i);
+            defaultGradeButtonTitles[i] = gradeButtons[i].getText();
+            gradeButtons[i].setText(Html.fromHtml("<b>" + gradeButtons[i].getText() + "</b>"));
         }
+
     }
 
     public LinearLayout getView() {
@@ -96,6 +102,12 @@ public class GradeButtons {
             gradeButtons[grade].setText(Html.fromHtml("<b>" + title + "</b>" +  "<br />" + "<small>" + description + "</small>"));
         } else {
             gradeButtons[grade].setText(Html.fromHtml("<b>" + title + "</b>"));
+        }
+    }
+
+    public void setButtonDescription(int grade, CharSequence description) {
+        if (StringUtils.isNotEmpty(description)) {
+            gradeButtons[grade].setText(Html.fromHtml("<b>" + defaultGradeButtonTitles[grade] + "</b>" +  "<br />" + "<small>" + description + "</small>"));
         }
     }
 
