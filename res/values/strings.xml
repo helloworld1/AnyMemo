@@ -2,7 +2,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     <string name="app_name">AnyMemo</string>
     <string name="app_full_name">AnyMemo Free</string>
-    <string name="app_version">9.1</string>
+    <string name="app_version">9.999.1</string>
     <string name="ok_text">OK</string>
     <string name="cancel_text">Cancel</string>
     <string name="yes_text">Yes</string>
@@ -52,10 +52,10 @@
     <string name="memo_btn5_brief_text">5</string>
     <string name="memo_btn0_anki_text">Again</string>
     <string name="memo_btn1_anki_text">Again</string>
-    <string name="memo_btn2_anki_text">Good</string>
-    <string name="memo_btn3_anki_text">Good</string>
+    <string name="memo_btn2_anki_text">Hard</string>
+    <string name="memo_btn3_anki_text">Hard</string>
     <string name="memo_btn4_anki_text">Easy</string>
-    <string name="memo_btn5_anki_text">TooEasy</string>
+    <string name="memo_btn5_anki_text">Easy</string>
     <string name="memo_edit_dialog_title">Edit</string>
     <string name="memo_current_id">ID: </string>
     <string name="global_settings">Global settings</string>
@@ -442,7 +442,7 @@
     <string name="auth_error_text">Authenticate error.</string>
     <string name="locale_italian_text">Italian</string>
     <string name="upload_gdrive_message">Do you want to upload %s to your Google Drive\'s AnyMemo folder? It may take several minutes if you have more than 1000 cards.</string>
-    <string name="recorder_record_your_memo_text">Record your memo</string>
+    <string name="record_your_memo_text">Record your memo</string>
     <string name="record_text">Record</string>
     <string name="max_recent_list_size_text">Max recent list size</string>
     <string name="recent_summary">Setup the max number of DBs to display in the recent list.</string>
@@ -459,4 +459,8 @@
     <string name="quiz_group_number_text">Quiz group number</string>
     <string name="start_quiz_text">Start quiz</string>
     <string name="auto_speak_text">Auto Speak</string>
+    <string name="edit_audio_text">Edit audio</string>
+    <string name="override_audio_warning_text">Are you sure you want to override current audio?</string>
+    <string name="enable_animation_text">Enable animation</string>
+    <string name="enable_animation_summary">Enable the animation for card transition.</string>
 </resources>

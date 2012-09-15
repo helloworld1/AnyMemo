@@ -89,6 +89,10 @@ public class Option {
             return 10;
         }
     }
+
+    public boolean getEnableAnimation() {
+        return settings.getBoolean("enable_animation", true);
+    }
     
     public static enum ButtonStyle {
         ANYMEMO,

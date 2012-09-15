@@ -23,7 +23,7 @@ package org.liberty.android.fantastischmemo;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 
 import org.liberty.android.fantastischmemo.ui.AnyMemo;
-import org.liberty.android.fantastischmemo.ui.MemoScreen;
+import org.liberty.android.fantastischmemo.ui.StudyActivity;
 import org.liberty.android.fantastischmemo.utils.AMUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
@@ -121,7 +121,7 @@ public class AnyMemoService extends Service{
         }
         finally{
             /* Set on click event */
-            Intent intent = new Intent(this, MemoScreen.class);
+            Intent intent = new Intent(this, StudyActivity.class);
             RecentListUtil rlu = new RecentListUtil(this);
             intent.putExtra("dbpath", rlu.getRecentDBPath());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

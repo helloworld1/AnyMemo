@@ -23,6 +23,7 @@
             <EditText
                 android:id="@+id/quiz_group_size"
                 android:layout_width="match_parent" 
+                android:inputType="number"
                 android:layout_height="wrap_content" />
             <TextView android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -30,6 +31,7 @@
             <EditText
                 android:id="@+id/quiz_group_number"
                 android:layout_width="match_parent" 
+                android:inputType="number"
                 android:layout_height="wrap_content" />
         </LinearLayout>
         <RadioButton android:checked="false"

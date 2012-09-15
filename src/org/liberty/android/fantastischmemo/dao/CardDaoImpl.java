@@ -648,6 +648,20 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
         }
     }
 
+    public List<Card> getCardsByOrdinalAndSize(long startOrd, long size) {
+        QueryBuilder<Card, Integer> qb = queryBuilder();
+        qb.limit(size);
+        try {
+            Where<Card, Integer> where = qb.where().ge("ordinal", startOrd);
+            qb.setWhere(where);
+            qb.orderBy("ordinal", true);
+            PreparedQuery<Card> pq = qb.prepare();
+            return query(pq);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private void maintainOrdinal() throws SQLException {
         executeRaw("CREATE TABLE IF NOT EXISTS tmp_count (id INTEGER PRIMARY KEY AUTOINCREMENT, ordinal INTEGER)");
         executeRaw("INSERT INTO tmp_count(ordinal) SELECT ordinal FROM cards;");
