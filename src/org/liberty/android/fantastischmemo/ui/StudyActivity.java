@@ -26,6 +26,7 @@ import org.liberty.android.fantastischmemo.queue.LearnQueueManager;
 import org.liberty.android.fantastischmemo.ui.DetailScreen;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.ui.SettingsScreen;
+import org.liberty.android.fantastischmemo.ui.StudyActivity;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
 
@@ -46,6 +47,8 @@ import java.sql.SQLException;
 import org.liberty.android.fantastischmemo.scheduler.DefaultScheduler;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 
+
+import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
 
 import com.example.android.apis.graphics.FingerPaint;
 
@@ -117,6 +120,8 @@ public class StudyActivity extends QACardActivity {
     boolean initialized = false;
 
     private WaitDbTask waitDbTask;
+
+    private DictionaryUtil dictionaryUtil;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -255,7 +260,7 @@ public class StudyActivity extends QACardActivity {
                 }
                 /* default word to lookup is question */
                 String lookupWord = getCurrentCard().getQuestion();
-                lookupDictionary(lookupWord);
+                dictionaryUtil.lookupDictionary(lookupWord);
 
                 return true;
 
@@ -409,6 +414,7 @@ public class StudyActivity extends QACardActivity {
         categoryDao = getDbOpenHelper().getCategoryDao();
         setting = getSetting();
         option = getOption();
+        dictionaryUtil = new DictionaryUtil(this);
 
         // The query of filter cateogry should happen before createQueue
         // because creatQueue needs to use it.
@@ -664,16 +670,18 @@ public class StudyActivity extends QACardActivity {
                 isNewCard = true;
             }
 
-            // This was saved to determine the stat info
-            // and the card id for undo
+            // Save current card as prev card for undo.
             prevCard = getCurrentCard();
+            try {
+                // This was saved to determine the stat info
+                // and the card id for undo
 
-            // Save previous learning for Undo
-            // This part is ugly due to muutablity of ORMLite
-            prevLearningData = new LearningData();
-            prevLearningData.setId(ld.getId());
-            prevLearningData.cloneFromLearningData(ld);
-
+                // Save previous learning for Undo
+                // This part is ugly due to muutablity of ORMLite
+                prevLearningData = learningDataDao.queryForId(ld.getId());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
             LearningData newLd = scheduler.schedule(ld, grade, true);
 
             // Need to clone the data due to ORMLite restriction on "update()" method.
@@ -758,11 +766,16 @@ public class StudyActivity extends QACardActivity {
      * this is what to do
      */
     private void undoCard(){
-        if(prevLearningData != null){
+        if (prevLearningData != null) {
+            // We don't want the queueManager to flush the card
+            // instead we update the previous learning data
+            // manually.
+            
+            queueManager.remove(prevCard);
+            learningDataDao.updateLearningData(prevLearningData);
             setCurrentCard(prevCard);
             restartActivity();
-        }
-        else{
+        } else {
             new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.undo_fail_text))
                 .setMessage(getString(R.string.undo_fail_message))
@@ -859,33 +872,6 @@ public class StudyActivity extends QACardActivity {
         return sb.toString();
     }
 
-    private void lookupDictionary(String lookupWord) {
-        if(option.getDictApp() == Option.DictApp.COLORDICT){
-            Intent intent = new Intent("colordict.intent.action.SEARCH");
-            intent.putExtra("EXTRA_QUERY", lookupWord);
-            intent.putExtra("EXTRA_FULLSCREEN", false);
-            //intent.putExtra(EXTRA_HEIGHT, 400); //400pixel, if you don't specify, fill_parent"
-            intent.putExtra("EXTRA_GRAVITY", Gravity.BOTTOM);
-            //intent.putExtra(EXTRA_MARGIN_LEFT, 100);
-            try {
-                startActivity(intent);
-            } catch(Exception e) {
-                Log.e(TAG, "Error opening ColorDict", e);
-                AMGUIUtility.displayException(this, getString(R.string.error_text), getString(R.string.dict_colordict) + " " + getString(R.string.error_no_dict), e);
-            }
-        }
-        if(option.getDictApp() == Option.DictApp.FORA) {
-            Intent intent = new Intent("com.ngc.fora.action.LOOKUP");
-            intent.putExtra("HEADWORD", lookupWord);
-            try {
-                startActivity(intent);
-            } catch(Exception e) {
-                Log.e(TAG, "Error opening Fora", e);
-                AMGUIUtility.displayException(this, getString(R.string.error_text), getString(R.string.dict_fora) + " " + getString(R.string.error_no_dict), e);
-            }
-        }
-    }
-    
     private void skipCurrentCard() {
         if(getCurrentCard() != null) {
             try {
