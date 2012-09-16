@@ -19,7 +19,7 @@
     <string name="download_button_text">Загрузить базы</string>
     <string name="about_button_text">О программе</string>
     <string name="help_button_text">Помощь</string>
-    <string name="edit_button_text">Просмотр/правка</string>
+    <string name="edit_button_text">Просмотр/Правка</string>
     <string name="autoaudio">Озвучивать автоматически</string>
     <string name="autoaudio_summary">Вопрос и ответ будут прочитаны автоматически</string>
     <string name="btnonerow">Компактные Кнопки оценок </string>
@@ -455,4 +455,6 @@
     <string name="start_quiz_text">Начать опрос</string>
     <string name="edit_audio_text">Правка звука</string> 
     <string name="override_audio_warning_text">Вы действительно хотите заменить текущий звук?</string>
+    <string name="enable_animation_text">Разрешить анимацию</string>
+    <string name="enable_animation_summary">Разрешить анимацию при смене карточки.</string>
 </resources>

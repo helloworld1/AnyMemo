@@ -137,4 +137,5 @@ public class AMUtil {
         double date2s = date2.getTime();
         return ((double)(date2s - date1s)) / DateUtils.MILLIS_PER_DAY; 
 	}
+
 }
