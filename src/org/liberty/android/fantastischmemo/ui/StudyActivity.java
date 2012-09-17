@@ -465,6 +465,11 @@ public class StudyActivity extends QACardActivity {
 
     @Override
     public void onPostInit() {
+        // If the db does not contain any cards. Show no item dialog.
+        if (getCurrentCard() == null) {
+            showNoItemDialog();
+            return;
+        }
         setupGradeButtons();
         displayCard(false);
         initialized = true;

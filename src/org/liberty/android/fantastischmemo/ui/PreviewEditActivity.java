@@ -168,6 +168,11 @@ public class PreviewEditActivity extends QACardActivity {
             currentCard = cardDao.queryFirstOrdinal(currentCategory);
         }
 
+        // If all attemp failed. we will return null and let user to create a new card.
+        if (currentCard == null) {
+            return;
+        }
+
         categoryDao.refresh(currentCard.getCategory());
         learningDataDao.refresh(currentCard.getLearningData());
 
