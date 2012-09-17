@@ -533,9 +533,9 @@ abstract public class QACardActivity extends AMActivity {
                     /* Try the image in /sdcard/anymemo/images/myimg.png */
                     AMEnv.DEFAULT_IMAGE_PATH + source};
                 Bitmap orngBitmap = null;
-                for(String path : paths){
+                for(String path : paths) {
                     Log.v(TAG, "Try path: " + path);
-                    if(new File(path).exists()){
+                    if(new File(path).exists()) {
                         orngBitmap = BitmapFactory.decodeFile(path);
                         break;
                     }
