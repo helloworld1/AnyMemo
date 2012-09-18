@@ -24,6 +24,8 @@ import org.liberty.android.fantastischmemo.R;
 
 import android.app.Activity;
 
+import android.content.Intent;
+
 import android.graphics.Rect;
 
 import android.os.Bundle;
@@ -35,6 +37,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
+import android.widget.Button;
+
 public class QuizLauncherDialogFragment extends DialogFragment {
 
     public static String EXTRA_DBPATH = "dbpath";
@@ -42,6 +46,8 @@ public class QuizLauncherDialogFragment extends DialogFragment {
     private String dbPath = null;
 
     private AMActivity mActivity;
+
+    private Button startQuizButton;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -64,6 +70,10 @@ public class QuizLauncherDialogFragment extends DialogFragment {
         getDialog().setCanceledOnTouchOutside(true);
         getDialog().setTitle(R.string.quiz_text);
         View v = inflater.inflate(R.layout.quiz_launcher_dialog, container, false);
+
+        startQuizButton = (Button) v.findViewById(R.id.start_quiz_button);
+        startQuizButton.setOnClickListener(startQuizButtonOnClickListener);
+
         // We have to set up the dialog's webview size manually or the webview will be zero size.
         // This should be a bug of Android.
         Rect displayRectangle = new Rect();
@@ -74,5 +84,17 @@ public class QuizLauncherDialogFragment extends DialogFragment {
 
         return v;
     }
+
+    private View.OnClickListener startQuizButtonOnClickListener = new View.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+            Intent intent = new Intent(mActivity, QuizActivity.class);
+            intent.putExtra(QuizActivity.EXTRA_DBPATH, dbPath);
+            intent.putExtra(QuizActivity.EXTRA_START_CARD_ORD, 1);
+            intent.putExtra(QuizActivity.EXTRA_QUIZ_SIZE, 50);
+            startActivity(intent);
+			
+		}
+    };
 }
 

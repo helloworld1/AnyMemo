@@ -32,7 +32,7 @@ import org.liberty.android.fantastischmemo.ui.DetailScreen;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.ui.SettingsScreen;
 import org.liberty.android.fantastischmemo.ui.StudyActivity;
-import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
+import org.liberty.android.fantastischmemo.utils.AMStringUtil;
 import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
@@ -68,7 +68,6 @@ import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
@@ -133,6 +132,8 @@ public class StudyActivity extends QACardActivity {
     private WaitDbTask waitDbTask;
 
     private DictionaryUtil dictionaryUtil;
+
+    private AMStringUtil amStringUtil;
 
     @Override
 	public void onCreate(Bundle savedInstanceState){
@@ -438,6 +439,8 @@ public class StudyActivity extends QACardActivity {
         setting = getSetting();
         option = getOption();
         dictionaryUtil = new DictionaryUtil(this);
+        amStringUtil = new AMStringUtil(this);
+
 
         // The query of filter cateogry should happen before createQueue
         // because creatQueue needs to use it.
@@ -462,6 +465,11 @@ public class StudyActivity extends QACardActivity {
 
     @Override
     public void onPostInit() {
+        // If the db does not contain any cards. Show no item dialog.
+        if (getCurrentCard() == null) {
+            showNoItemDialog();
+            return;
+        }
         setupGradeButtons();
         displayCard(false);
         initialized = true;
@@ -872,12 +880,12 @@ public class StudyActivity extends QACardActivity {
         };
 
     private void setGradeButtonTitle() {
-        gradeButtons.setButtonDescription(0, ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 0, false)));
-        gradeButtons.setButtonDescription(1, ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 1, false)));
-        gradeButtons.setButtonDescription(2, ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 2, false)));
-        gradeButtons.setButtonDescription(3, ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 3, false)));
-        gradeButtons.setButtonDescription(4, ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 4, false)));
-        gradeButtons.setButtonDescription(5, ""+ getIntervalToDisplay(scheduler.schedule(getCurrentCard().getLearningData(), 5, false)));
+        gradeButtons.setButtonDescription(0, ""+ amStringUtil.convertDayIntervalToDisplayString(scheduler.schedule(getCurrentCard().getLearningData(), 0, false).getInterval()));
+        gradeButtons.setButtonDescription(1, ""+ amStringUtil.convertDayIntervalToDisplayString(scheduler.schedule(getCurrentCard().getLearningData(), 1, false).getInterval()));
+        gradeButtons.setButtonDescription(2, ""+ amStringUtil.convertDayIntervalToDisplayString(scheduler.schedule(getCurrentCard().getLearningData(), 2, false).getInterval()));
+        gradeButtons.setButtonDescription(3, ""+ amStringUtil.convertDayIntervalToDisplayString(scheduler.schedule(getCurrentCard().getLearningData(), 3, false).getInterval()));
+        gradeButtons.setButtonDescription(4, ""+ amStringUtil.convertDayIntervalToDisplayString(scheduler.schedule(getCurrentCard().getLearningData(), 4, false).getInterval()));
+        gradeButtons.setButtonDescription(5, ""+ amStringUtil.convertDayIntervalToDisplayString(scheduler.schedule(getCurrentCard().getLearningData(), 5, false).getInterval()));
     }
 
 
@@ -891,24 +899,6 @@ public class StudyActivity extends QACardActivity {
 			}
         };
 
-    // Interval: 12.3456 day -> "1.7 week", 4.76 -> "4.7 day"
-    private String getIntervalToDisplay(LearningData ld) {
-        double[] dividers = {365, 30, 7, 1};
-        String[] unitName = {getString(R.string.year_text),
-            getString(R.string.month_text),
-            getString(R.string.week_text),
-            getString(R.string.day_text)};
-        double interval = ld.getInterval();
-
-        for (int i = 0; i < dividers.length; i++) {
-            double divider = dividers[i];
-                
-            if ((interval / divider) >= 1.0 || i == (dividers.length - 1)) {
-                return "" + Double.toString(((double)Math.round(interval / divider * 10)) / 10) + " " + unitName[i];
-            }
-        }
-        return "";
-    }
 
     private String getActivityTitleString() {
         StringBuilder sb = new StringBuilder();
