@@ -61,6 +61,8 @@ import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
 
 import com.example.android.apis.graphics.FingerPaint;
 
+import android.content.Context;
+
 import android.os.AsyncTask;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -71,6 +73,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
@@ -85,6 +88,7 @@ import android.net.Uri;
 
 import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
 
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class QuizActivity extends QACardActivity {
@@ -123,6 +127,9 @@ public class QuizActivity extends QACardActivity {
 
     private boolean initialized = false;
 
+    private boolean isNewCardsCompleted = false;
+
+
     private int totalQuizSize = -1;
 
 
@@ -144,13 +151,15 @@ public class QuizActivity extends QACardActivity {
 
         createQueue();
 
+        // Keep track the initial total quiz size.
+        totalQuizSize = queueManager.getNewQueueSize();
+
         /* Run the learnQueue init in a separate thread */
         if (startCardId != -1) {
             setCurrentCard(queueManager.dequeuePosition(startCardId));
         } else {
             setCurrentCard(queueManager.dequeue());
         }
-        refreshStatInfo();
     }
 
     @Override
@@ -172,6 +181,42 @@ public class QuizActivity extends QACardActivity {
         super.onCreate(savedInstanceState);
     }
 
+    @Override
+    protected void onClickQuestionText() {
+        if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
+                || option.getSpeakingType() == Option.SpeakingType.TAP)) {
+            //TODO: Speak
+        } else {
+            onClickQuestionView();
+        }
+    }
+
+    @Override
+    protected void onClickAnswerText() {
+        if (!isAnswerShown()) {
+            onClickAnswerView();
+        } else if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
+                || option.getSpeakingType() == Option.SpeakingType.TAP)) {
+            //TODO: Speak
+        }
+    }
+
+    @Override
+    protected void onClickQuestionView() {
+        if (!isAnswerShown()) {
+            displayCard(true);
+        }
+    }
+
+    @Override
+    protected void onClickAnswerView() {
+        if (!isAnswerShown()) {
+            displayCard(true);
+        } else if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED && isAnswerShown()) {
+            displayCard(false);
+        }
+    }
+
     private void createQueue() {
         QuizQueueManager.Builder builder = new QuizQueueManager.Builder()
             .setDbOpenHelper(getDbOpenHelper())
@@ -190,10 +235,6 @@ public class QuizActivity extends QACardActivity {
             builder.setShuffle(false);
         }
         queueManager = (QuizQueueManager) builder.build();
-    }
-
-    private void refreshStatInfo() {
-
     }
 
     private void setupGradeButtons() {
@@ -258,6 +299,10 @@ public class QuizActivity extends QACardActivity {
      */
     private class GradeTask extends AsyncTask<Integer, Void, Card>{
 
+        private int newQueueSizeBeforeDequeue;
+
+        private int reviewQueueSizeBeforeDequeue;
+
         @Override
         public void onPreExecute() {
             super.onPreExecute();
@@ -277,6 +322,12 @@ public class QuizActivity extends QACardActivity {
             Card currentCard = getCurrentCard();
             currentCard.setLearningData(ld);
             queueManager.update(currentCard);
+
+            // Keep track of two values to dermine when to display dialog
+            // to promote the quiz completion
+            newQueueSizeBeforeDequeue = queueManager.getNewQueueSize();
+            reviewQueueSizeBeforeDequeue = queueManager.getReviewQueueSize();
+
             Card nextCard = queueManager.dequeue();
             return nextCard;
         }
@@ -295,9 +346,9 @@ public class QuizActivity extends QACardActivity {
                 return;
             }
 
-            if (queueManager.getNewQueueSize() <= 0) {
-                showCompleteNewDialog();
-                return;
+            if (newQueueSizeBeforeDequeue <= 0 && !isNewCardsCompleted) {
+                showCompleteNewDialog(totalQuizSize - reviewQueueSizeBeforeDequeue);
+                isNewCardsCompleted = true;
             }
 
             // Stat data
@@ -308,7 +359,14 @@ public class QuizActivity extends QACardActivity {
     }
 
     private CharSequence getActivityTitleString() {
-        return null;
+        StringBuilder sb = new StringBuilder();
+        sb.append(getString(R.string.quiz_text) + ": " + (totalQuizSize - queueManager.getNewQueueSize()) + "/" + totalQuizSize + " ");
+        sb.append(getString(R.string.review_short_text) + ": " + queueManager.getReviewQueueSize()+ " ");
+        sb.append(getString(R.string.id_text) + ": " + getCurrentCard().getId() + " ");
+        if (StringUtils.isNotEmpty(getCurrentCard().getCategory().getName())) {
+            sb.append(getString(R.string.category_short_text) + ": " + getCurrentCard().getCategory().getName());
+        }
+        return sb.toString();
     }
 
     /* Called when all quiz is completed */
@@ -316,7 +374,21 @@ public class QuizActivity extends QACardActivity {
     }
 
     /* Called when all new cards are completed. */
-    private void showCompleteNewDialog() {
+    private void showCompleteNewDialog(int correct) {
+        LayoutInflater layoutInflater
+            = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = layoutInflater.inflate(R.layout.quiz_summary_dialog, null);
+        TextView scoreView = (TextView) view.findViewById(R.id.score_text);
+        int reviewSize = queueManager.getReviewQueueSize();
+        int score = correct * 100 / totalQuizSize;
+
+        scoreView.setText("" + score + "% (" + correct + "/" + totalQuizSize + ")");
+        new AlertDialog.Builder(this)
+            .setTitle(R.string.quiz_completed_text)
+            .setView(view)
+            .setPositiveButton(R.string.review_text, null)
+            .setNegativeButton(R.string.cancel_text, null)
+            .show();
     }
 
 }

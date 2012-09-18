@@ -183,8 +183,6 @@ public class PreviewEditActivity extends QACardActivity {
 
     @Override
     public void onPostInit() {
-        // TODO: Double sided?
-
         initTTS();
         composeViews();
         //currentCard = .getItem(currentId);

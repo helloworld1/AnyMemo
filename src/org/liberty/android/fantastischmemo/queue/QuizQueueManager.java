@@ -72,11 +72,11 @@ public class QuizQueueManager implements QueueManager {
 
 	@Override
 	public synchronized Card dequeue() {
-        if (reviewCache.size() > 0) {
-            return reviewCache.remove(0);
-        }
         if (newCache.size() > 0) {
             return newCache.remove(0);
+        }
+        if (reviewCache.size() > 0) {
+            return reviewCache.remove(0);
         }
         return null;
 	}
