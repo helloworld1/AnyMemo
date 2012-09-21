@@ -465,4 +465,5 @@
     <string name="quiz_completed_text">Quiz completed</string>
     <string name="new_cards_completed_summary">You have completed the quiz. Do you want to review?</string>
     <string name="review_text">Review</string>
+    <string name="quiz_complete_summary">Congratulations, you have completed the quiz!</string>
 </resources>
