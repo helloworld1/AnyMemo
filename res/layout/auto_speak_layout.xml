@@ -2,9 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="horizontal" >
 
-        
         <ImageButton
             android:id="@+id/auto_speak_play_button"
             android:layout_width="wrap_content"
@@ -15,7 +14,49 @@
             android:layout_weight="1"
             android:src="@drawable/auto_speak_play_button"
             />
-
-  
-
+        
+        <ImageButton
+            android:id="@+id/auto_speak_previous_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@android:color/transparent"
+            android:layout_weight="1"
+            android:src="@drawable/previous"
+            />
+        
+        <ImageButton
+            android:id="@+id/auto_speak_next_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@android:color/transparent"
+            android:layout_weight="1"
+            android:src="@drawable/next"
+            />
+        
+         <ImageButton
+            android:id="@+id/auto_speak_settings_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@android:color/transparent"
+            android:layout_weight="1"
+            android:src="@drawable/settings"
+            />
+        
+        <ImageButton
+            android:id="@+id/auto_speak_exit_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@android:color/transparent"
+            android:layout_weight="1"
+            android:src="@drawable/exit"
+            />
+        
 </LinearLayout>

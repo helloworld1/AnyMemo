@@ -117,9 +117,7 @@ public class AudioRecorderFragment extends DialogFragment {
     public void setAudioRecorderResultListener(AudioRecorderResultListener audioRecorderResultListener){
         this.audioRecorderResultListener = audioRecorderResultListener;
     }
-    
 
-    
 
     private void onRecord(boolean start) {
         if (start) {
