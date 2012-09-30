@@ -457,4 +457,7 @@
     <string name="override_audio_warning_text">Вы действительно хотите заменить текущий звук?</string>
     <string name="enable_animation_text">Разрешить анимацию</string>
     <string name="enable_animation_summary">Разрешить анимацию при смене карточки.</string>
+    <string name="quiz_completed_text">Опрос завершён</string>
+    <string name="new_cards_completed_summary">Вы завершили опрос. Хотите повторить?</string>
+    <string name="review_text">Повторить</string>
 </resources>
