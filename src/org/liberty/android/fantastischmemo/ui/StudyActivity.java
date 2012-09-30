@@ -354,7 +354,6 @@ public class StudyActivity extends QACardActivity {
 
     @Override
     public void onDestroy() {
-        shutdownQAndATTS();
         super.onDestroy();
     }
 

@@ -467,6 +467,7 @@ abstract public class QACardActivity extends AMActivity {
     public void onDestroy(){
         super.onDestroy();
         AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
+        shutdownQAndATTS();
 
         /* Update the widget because StudyActivity can be accessed though widget*/
         Intent myIntent = new Intent(this, AnyMemoService.class);
@@ -641,7 +642,7 @@ abstract public class QACardActivity extends AMActivity {
         }
     }
     
-    protected void shutdownQAndATTS(){
+    private void shutdownQAndATTS(){
         if(questionTTS != null){
             questionTTS.shutdown();
         }
