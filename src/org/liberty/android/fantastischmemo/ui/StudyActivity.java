@@ -19,13 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-
 import org.apache.mycommons.lang3.StringUtils;
-
-import org.liberty.android.fantastischmemo.AMEnv;
 
 import org.liberty.android.fantastischmemo.queue.LearnQueueManager;
 import org.liberty.android.fantastischmemo.ui.DetailScreen;
@@ -52,8 +47,6 @@ import java.sql.SQLException;
 import org.liberty.android.fantastischmemo.scheduler.DefaultScheduler;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 
-import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
-import org.liberty.android.fantastischmemo.tts.AnyMemoTTSImpl;
 
 import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
 
@@ -89,9 +82,6 @@ public class StudyActivity extends QACardActivity {
     public static String EXTRA_CATEGORY_ID = "category_id";
     public static String EXTRA_START_CARD_ID = "start_card_id";
 
-    private AnyMemoTTS questionTTS = null;
-    private AnyMemoTTS answerTTS = null;
-
     private final int ACTIVITY_FILTER = 10;
     private final int ACTIVITY_EDIT = 11;
     private final int ACTIVITY_GOTO_PREV = 14;
@@ -103,7 +93,6 @@ public class StudyActivity extends QACardActivity {
     private Card prevCard = null;
     private LearningData prevLearningData = null;
     private String dbPath = "";
-    private String dbName = "";
     private int filterCategoryId = -1; 
     private Category filterCategory;
     private int startCardId = -1;
@@ -136,7 +125,7 @@ public class StudyActivity extends QACardActivity {
     private AMStringUtil amStringUtil;
 
     @Override
-	public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState){
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             dbPath = extras.getString(EXTRA_DBPATH);
@@ -167,18 +156,12 @@ public class StudyActivity extends QACardActivity {
             }
             case R.id.menuspeakquestion:
             {
-                if(questionTTS != null && getCurrentCard() != null){
-                    questionTTS.sayText(getCurrentCard().getQuestion());
-                }
-                return true;
+                return speakQuestion(getCurrentCard().getQuestion());
             }
 
             case R.id.menuspeakanswer:
             {
-                if(answerTTS != null && getCurrentCard()!= null){
-                    answerTTS.sayText(getCurrentCard().getAnswer());
-                }
-                return true;
+                return speakAnswer(getCurrentCard().getAnswer());
             }
 
             case R.id.menusettings:
@@ -371,13 +354,7 @@ public class StudyActivity extends QACardActivity {
 
     @Override
     public void onDestroy() {
-        if (questionTTS != null) {
-            questionTTS.shutdown();
-        }
-
-        if (answerTTS != null) {
-            answerTTS.shutdown();
-        }
+        shutdownQAndATTS();
         super.onDestroy();
     }
 
@@ -480,7 +457,7 @@ public class StudyActivity extends QACardActivity {
     @Override
     public void onPostDisplayCard() {
         // When displaying new card, we should stop the TTS reading.
-        stopTTSSpeaking();
+        stopQAndATTS();
         if (isAnswerShown()) {
             // Mnemosyne grade button style won't display the interval.
             if (option.getButtonStyle() != Option.ButtonStyle.MNEMOSYNE) {
@@ -501,10 +478,9 @@ public class StudyActivity extends QACardActivity {
     @Override
     protected void onClickQuestionText() {
         if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
-                || option.getSpeakingType() == Option.SpeakingType.TAP)
-                && questionTTS != null) {
-            questionTTS.stop();
-            questionTTS.sayText(getCurrentCard().getQuestion());
+                || option.getSpeakingType() == Option.SpeakingType.TAP)) {
+            stopQuestionTTS();
+            speakQuestion(getCurrentCard().getQuestion());
         } else {
             onClickQuestionView();
         }
@@ -515,10 +491,9 @@ public class StudyActivity extends QACardActivity {
         if (!isAnswerShown()) {
             onClickAnswerView();
         } else if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
-                || option.getSpeakingType() == Option.SpeakingType.TAP)
-                && answerTTS != null) {
-            answerTTS.stop();
-            answerTTS.sayText(getCurrentCard().getAnswer());
+                || option.getSpeakingType() == Option.SpeakingType.TAP)) {
+            stopAnswerTTS();
+            speakAnswer(getCurrentCard().getAnswer());
         }
     }
 
@@ -591,15 +566,13 @@ public class StudyActivity extends QACardActivity {
     private void autoSpeak() {
         if (getCurrentCard() != null) {
             if(!isAnswerShown()){
-                if(questionTTS != null){
-                    // Make sure the TTS is stop, or it will speak nothing.
-                    questionTTS.stop();
-                    questionTTS.sayText(getCurrentCard().getQuestion());
-                }
-            } else if (answerTTS != null) {
+                // Make sure the TTS is stop, or it will speak nothing.
+                stopQuestionTTS();
+                speakQuestion(getCurrentCard().getQuestion());
+            } else {
                 // Make sure the TTS is stop
-                answerTTS.stop();
-                answerTTS.sayText(getCurrentCard().getAnswer());
+                stopAnswerTTS();
+                speakAnswer(getCurrentCard().getAnswer());
             }
         }
     }
@@ -609,29 +582,7 @@ public class StudyActivity extends QACardActivity {
        schedluledCardCount = cardDao.getScheduledCardCount(filterCategory);
     }
 
-    private void initTTS(){
-        String defaultLocation = AMEnv.DEFAULT_AUDIO_PATH;
-        
-        if (setting.isQuestionAudioEnabled()) {
-            String qa = setting.getQuestionAudio();
-            List<String> questionAudioSearchPath = new ArrayList<String>();
-            questionAudioSearchPath.add(setting.getQuestionAudioLocation());
-            questionAudioSearchPath.add(setting.getQuestionAudioLocation() + "/" + dbName);
-            questionAudioSearchPath.add(defaultLocation + "/" + dbName);
-            questionAudioSearchPath.add(setting.getQuestionAudioLocation());
-            questionTTS = new AnyMemoTTSImpl(this, qa, questionAudioSearchPath);
-        } 
-        
-        if (setting.isAnswerAudioEnabled()) {
-            String aa = setting.getAnswerAudio();
-            List<String> answerAudioSearchPath = new ArrayList<String>();
-            answerAudioSearchPath.add(setting.getAnswerAudioLocation());
-            answerAudioSearchPath.add(setting.getAnswerAudioLocation() + "/" + dbName);
-            answerAudioSearchPath.add(defaultLocation + "/" + dbName);
-            answerAudioSearchPath.add(defaultLocation);
-            answerTTS = new AnyMemoTTSImpl(this, aa, answerAudioSearchPath);
-        }
-    }
+   
 
     private void showCategoriesDialog() {
         CategoryEditorFragment df = new CategoryEditorFragment();
@@ -672,17 +623,17 @@ public class StudyActivity extends QACardActivity {
 
         // Make sure touching all areas can reveal the card.
         rootView.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
+            public void onClick(View v) {
                 onClickAnswerView();
-			}
+            }
         });
         rootView.setOnTouchListener(new View.OnTouchListener() {
 
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
                 onClickAnswerView();
-				return true ;
-			}
+                return true ;
+            }
         });
 
         gradeButtons.setOnGradeButtonClickListener(onGradeButtonClickListener);
@@ -892,11 +843,11 @@ public class StudyActivity extends QACardActivity {
     private GradeButtons.OnGradeButtonClickListener onGradeButtonClickListener
         = new GradeButtons.OnGradeButtonClickListener() {
 
-			@Override
-			public void onGradeButtonClick(int grade) {
+            @Override
+            public void onGradeButtonClick(int grade) {
                 GradeTask gradeTask = new GradeTask();
                 gradeTask.execute(grade);
-			}
+            }
         };
 
 
@@ -924,15 +875,6 @@ public class StudyActivity extends QACardActivity {
             } catch (SQLException e) {
                 Log.e(TAG, "Delete card error", e);
             }
-        }
-    }
-
-    private void stopTTSSpeaking() {
-        if (questionTTS != null) {
-            questionTTS.stop();
-        }
-        if (answerTTS != null) {
-            answerTTS.stop();
         }
     }
 }
