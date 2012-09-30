@@ -24,7 +24,9 @@ import java.io.InputStream;
 
 import java.net.URL;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 
 import org.amr.arabic.ArabicUtilities;
 
@@ -46,6 +48,8 @@ import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 
+import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
+import org.liberty.android.fantastischmemo.tts.AnyMemoTTSImpl;
 import org.liberty.android.fantastischmemo.ui.StudyActivity;
 
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
@@ -127,6 +131,10 @@ abstract public class QACardActivity extends AMActivity {
     private boolean isAnswerShown = true;
 
     private TextView smallTitleBar;
+    
+    private AnyMemoTTS questionTTS = null;
+    private AnyMemoTTS answerTTS = null;
+
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -459,6 +467,7 @@ abstract public class QACardActivity extends AMActivity {
     public void onDestroy(){
         super.onDestroy();
         AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
+        shutdownQAndATTS();
 
         /* Update the widget because StudyActivity can be accessed though widget*/
         Intent myIntent = new Intent(this, AnyMemoService.class);
@@ -574,6 +583,75 @@ abstract public class QACardActivity extends AMActivity {
         }
     };
 
+    
+    protected void initTTS(){
+        String defaultLocation = AMEnv.DEFAULT_AUDIO_PATH;
+        String dbName = getDbName();
+        
+        if (setting.isQuestionAudioEnabled()) {
+            String qa = setting.getQuestionAudio();
+            List<String> questionAudioSearchPath = new ArrayList<String>();
+            questionAudioSearchPath.add(setting.getQuestionAudioLocation());
+            questionAudioSearchPath.add(setting.getQuestionAudioLocation() + "/" + dbName);
+            questionAudioSearchPath.add(defaultLocation + "/" + dbName);
+            questionAudioSearchPath.add(setting.getQuestionAudioLocation());
+            questionTTS = new AnyMemoTTSImpl(this, qa, questionAudioSearchPath);
+        } 
+        
+        if (setting.isAnswerAudioEnabled()) {
+            String aa = setting.getAnswerAudio();
+            List<String> answerAudioSearchPath = new ArrayList<String>();
+            answerAudioSearchPath.add(setting.getAnswerAudioLocation());
+            answerAudioSearchPath.add(setting.getAnswerAudioLocation() + "/" + dbName);
+            answerAudioSearchPath.add(defaultLocation + "/" + dbName);
+            answerAudioSearchPath.add(defaultLocation);
+            answerTTS = new AnyMemoTTSImpl(this, aa, answerAudioSearchPath);
+        }
+    }
+    
+    protected boolean speakQuestion(String text){
+        if(questionTTS != null && text != null){
+            questionTTS.sayText(text);
+            return true;
+        }
+        return false;
+    }
+    
+    protected boolean speakAnswer(String text){
+        if(answerTTS != null && text != null){
+            answerTTS.sayText(text);
+            return true;
+        }
+        return false;
+    }
+    
+    protected void stopQAndATTS(){
+        stopAnswerTTS();
+        stopQuestionTTS();
+    }
+    
+    protected void stopQuestionTTS(){
+        if(questionTTS != null){
+            questionTTS.stop();
+        }
+    }
+    
+    protected void stopAnswerTTS(){
+        if(answerTTS != null){
+            answerTTS.stop();
+        }
+    }
+    
+    private void shutdownQAndATTS(){
+        if(questionTTS != null){
+            questionTTS.shutdown();
+        }
+        
+        if(answerTTS != null){
+            answerTTS.shutdown();
+        }
+    }
+    
     private TagHandler tagHandler = new TagHandler() {
         @Override
         public void handleTag(boolean opening, String tag, Editable output, XMLReader xmlReader){
@@ -599,20 +677,20 @@ abstract public class QACardActivity extends AMActivity {
 
     private View.OnClickListener onQuestionTextClickListener = new View.OnClickListener() {
 
-		@Override
-		public void onClick(View v) {
+        @Override
+        public void onClick(View v) {
             onClickQuestionText();
-			
-		}
+            
+        }
     };
 
     private View.OnClickListener onAnswerTextClickListener = new View.OnClickListener() {
 
-		@Override
-		public void onClick(View v) {
+        @Override
+        public void onClick(View v) {
             onClickAnswerText();
-			
-		}
+            
+        }
     };
 
     private View.OnClickListener onQuestionViewClickListener = new View.OnClickListener() {

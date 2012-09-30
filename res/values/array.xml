@@ -46,42 +46,31 @@
 
 <string-array name="locale_list">
     <item>@string/disabled_text</item>
-	<item>US</item>
-	<item>UK</item>
-	<item>FR</item>
-	<item>DE</item>
-	<item>IT</item>
-	<item>ES</item>
-	<item>AF</item>
-	<item>BS</item>
-	<item>CY</item>
-	<item>CZ</item>
-	<item>EL</item>
-	<item>EO</item>
-	<item>FI</item>
-	<item>HI</item>
-	<item>HR</item>
-	<item>HU</item>
-	<item>ID</item>
-	<item>IS</item>
-	<item>KU</item>
-	<item>LA</item>
-	<item>MK</item>
-	<item>NL</item>
-	<item>NO</item>
-	<item>PL</item>
-	<item>PT</item>
-	<item>RO</item>
-	<item>RU</item>
-	<item>SK</item>
-	<item>SR</item>
-	<item>SV</item>
-	<item>SW</item>
-	<item>TA</item>
-	<item>TR</item>
-	<item>VI</item>
-	<item>ZH</item>
-	<item>AR</item>
+    <item>@string/us_english_text</item>
+    <item>@string/uk_english_text</item>
+    <item>@string/french_text</item>
+    <item>@string/german_text</item>
+    <item>@string/italian_text</item>
+    <item>@string/spanish_text</item>
+    <item>@string/afghanistan_text</item>
+    <item>@string/bahamas_text</item>
+    <item>@string/cyprus_text</item>
+    <item>@string/czech_text</item>
+    <item>@string/finnish_text</item>
+    <item>@string/croation_text</item>
+    <item>@string/hungarian_text</item>
+    <item>@string/icelandic_text</item>
+    <item>@string/dutch_text</item>
+    <item>@string/norwegian_text</item>
+    <item>@string/polish_text</item>
+    <item>@string/portuguese_text</item>
+    <item>@string/romanian_text</item>
+    <item>@string/russian_text</item>
+    <item>@string/slovak_text</item>
+    <item>@string/turkish_text</item>
+    <item>@string/chinese_text</item>
+    <item>@string/japanese_text</item>
+    <item>@string/korean_text</item>
 </string-array>
 
 <string-array name="locale_list_values">
@@ -96,17 +85,10 @@
 	<item>BS</item>
 	<item>CY</item>
 	<item>CZ</item>
-	<item>EL</item>
-	<item>EO</item>
 	<item>FI</item>
-	<item>HI</item>
 	<item>HR</item>
 	<item>HU</item>
-	<item>ID</item>
 	<item>IS</item>
-	<item>KU</item>
-	<item>LA</item>
-	<item>MK</item>
 	<item>NL</item>
 	<item>NO</item>
 	<item>PL</item>
@@ -114,14 +96,10 @@
 	<item>RO</item>
 	<item>RU</item>
 	<item>SK</item>
-	<item>SR</item>
-	<item>SV</item>
-	<item>SW</item>
-	<item>TA</item>
 	<item>TR</item>
-	<item>VI</item>
 	<item>ZH</item>
-	<item>AR</item>
+	<item>JA</item>
+	<item>KR</item>
 </string-array>
 
 <string-array name="ratio_list">

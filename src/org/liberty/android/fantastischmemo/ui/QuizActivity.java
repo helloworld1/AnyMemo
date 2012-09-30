@@ -19,23 +19,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import org.apache.mycommons.lang3.StringUtils;
 
-import org.liberty.android.fantastischmemo.AMEnv;
-
-import org.liberty.android.fantastischmemo.queue.LearnQueueManager;
 import org.liberty.android.fantastischmemo.queue.QuizQueueManager;
-import org.liberty.android.fantastischmemo.ui.DetailScreen;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.ui.SettingsScreen;
-import org.liberty.android.fantastischmemo.ui.StudyActivity;
-import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 import org.liberty.android.fantastischmemo.utils.AMStringUtil;
-import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
@@ -47,49 +35,26 @@ import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 
-import org.liberty.android.fantastischmemo.queue.QueueManager;
-
-import java.sql.SQLException;
-
 import org.liberty.android.fantastischmemo.scheduler.DefaultScheduler;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 
-import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
-import org.liberty.android.fantastischmemo.tts.AnyMemoTTSImpl;
-
 import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
-
-import com.example.android.apis.graphics.FingerPaint;
 
 import android.content.Context;
 
 import android.os.AsyncTask;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.ContextMenu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.KeyEvent;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.util.Log;
-import android.net.Uri;
-
-import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
 
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class QuizActivity extends QACardActivity {
     public static String EXTRA_START_CARD_ID = "start_card_id";
@@ -371,6 +336,11 @@ public class QuizActivity extends QACardActivity {
 
     /* Called when all quiz is completed */
     private void showCompleteAllDialog() {
+        new AlertDialog.Builder(this)
+            .setTitle(R.string.quiz_completed_text)
+            .setMessage(R.string.quiz_complete_summary)
+            .setPositiveButton(R.string.back_menu_text, flushAndQuitListener)
+            .show();
     }
 
     /* Called when all new cards are completed. */
@@ -379,7 +349,6 @@ public class QuizActivity extends QACardActivity {
             = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = layoutInflater.inflate(R.layout.quiz_summary_dialog, null);
         TextView scoreView = (TextView) view.findViewById(R.id.score_text);
-        int reviewSize = queueManager.getReviewQueueSize();
         int score = correct * 100 / totalQuizSize;
 
         scoreView.setText("" + score + "% (" + correct + "/" + totalQuizSize + ")");
@@ -387,8 +356,47 @@ public class QuizActivity extends QACardActivity {
             .setTitle(R.string.quiz_completed_text)
             .setView(view)
             .setPositiveButton(R.string.review_text, null)
-            .setNegativeButton(R.string.cancel_text, null)
+            .setNegativeButton(R.string.cancel_text, flushAndQuitListener)
             .show();
+    }
+    
+    private DialogInterface.OnClickListener flushAndQuitListener =
+        new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                FlushAndQuitTask task = new FlushAndQuitTask();
+                task.execute((Void)null);
+				
+			}
+        };
+
+    private class FlushAndQuitTask extends AsyncTask<Void, Void, Void>{
+        private ProgressDialog progressDialog;
+
+        @Override
+        public void onPreExecute(){
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(QuizActivity.this);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setTitle(getString(R.string.loading_please_wait));
+            progressDialog.setMessage(getString(R.string.loading_save));
+            progressDialog.show();
+            
+        }
+
+        @Override
+        public Void doInBackground(Void... nothing){
+            queueManager.flush();
+            return null;
+        }
+
+        @Override
+        public void onPostExecute(Void result){
+            super.onPostExecute(result);
+            progressDialog.dismiss();
+            finish();
+        }
     }
 
 }
