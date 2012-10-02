@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
+import org.apache.mycommons.lang3.StringUtils;
+
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
@@ -194,6 +196,7 @@ public class QuizLauncherDialogFragment extends DialogFragment {
         public void onPostExecute(Void nothing) {
             //quizGroupSizeTitle.setText(quizGroupSizeTitle.getText());
             groupSize = settings.getLong("quiz_group_size", DEFAULT_GROUP_SIZE);
+            groupNumber = settings.getLong("quiz_group_number", 1);
             setGroupSizeText();
             setGroupNumberText();
         }
@@ -203,8 +206,12 @@ public class QuizLauncherDialogFragment extends DialogFragment {
         if (totalCardNumber < groupSize) {
             groupSize = totalCardNumber;
         }
+        long maxGroupSize = Math.min(totalCardNumber, MAX_GROUP_SIZE);
         quizGroupSizeTitle.setText(getString(R.string.quiz_group_size_text)
-                + " (1-" + groupSize + ")");
+                + " (1-" + maxGroupSize + ")");
+        if (StringUtils.isEmpty(quizGroupSizeEdit.getText())) {
+            quizGroupSizeEdit.setText("" + groupSize);
+        }
     }
 
     private void setGroupNumberText() {
@@ -213,6 +220,9 @@ public class QuizLauncherDialogFragment extends DialogFragment {
             groupNumber = maxGroupNumber;
         }
         quizGroupNumberTitle.setText(getString(R.string.quiz_group_number_text) + " (1-" + maxGroupNumber + ")");
+        if (StringUtils.isEmpty(quizGroupNumberEdit.getText())) {
+            quizGroupNumberEdit.setText("" + groupNumber);
+        }
     }
 }
 
