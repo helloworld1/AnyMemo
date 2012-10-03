@@ -75,6 +75,7 @@ import android.os.Bundle;
 
 import android.support.v4.app.FragmentTransaction;
 
+import android.text.ClipboardManager;
 import android.text.Editable;
 import android.text.Html;
 
@@ -364,7 +365,13 @@ abstract public class QACardActivity extends AMActivity {
         // It is defualt "GONE" so it won't take any space
         // if there is no text
         smallTitleBar = (TextView) findViewById(R.id.small_title_bar);
-        
+
+        // Copy the question to clickboard.
+        if (option.getCopyClipboard()) {
+            ClipboardManager cm = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
+            cm.setText(currentCard.getQuestion());
+        }
+ 
         onPostDisplayCard();
     }
 
