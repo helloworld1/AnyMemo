@@ -10,7 +10,7 @@
         android:textSize="12dp" 
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/question"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,7 +20,7 @@
         android:layout_width="fill_parent"
         android:layout_height="2dip"
         android:background="#FF909090"/>
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/answer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

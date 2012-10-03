@@ -91,6 +91,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 abstract public class QACardActivity extends AMActivity {
@@ -290,6 +292,27 @@ abstract public class QACardActivity extends AMActivity {
             answerTypefaceValue = answerTypeface;
         }
 
+        // Handle the QA ratio
+        LinearLayout questionLayout = (LinearLayout) findViewById(R.id.question);
+        LinearLayout answerLayout = (LinearLayout) findViewById(R.id.answer);
+        float qRatio = setting.getQaRatio();
+        if (qRatio > 99.0f) {
+            answerLayout.setVisibility(View.GONE);
+            questionLayout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
+            answerLayout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
+        } else if (qRatio < 1.0f) {
+            questionLayout.setVisibility(View.GONE);
+            questionLayout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
+            answerLayout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
+        } else {
+            float aRatio = 100.0f - qRatio;
+            qRatio /= 50.0;
+            aRatio /= 50.0;
+            questionLayout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, qRatio));
+            answerLayout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, aRatio));
+        }
+
+        // Finally we generate the fragments
         CardFragment questionFragment = new CardFragment.Builder(sq)
             .setTextAlignment(questionAlignValue)
             .setTypefaceFromFile(questionTypefaceValue)
