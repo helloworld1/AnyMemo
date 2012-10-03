@@ -294,6 +294,8 @@ abstract public class QACardActivity extends AMActivity {
             .setTypefaceFromFile(questionTypefaceValue)
             .setTextOnClickListener(onQuestionTextClickListener)
             .setCardOnClickListener(onQuestionViewClickListener)
+            .setTextFontSize(setting.getQuestionFontSize())
+            .setTypefaceFromFile(setting.getQuestionFont())
             .build();
 
         CardFragment answerFragment = null;
@@ -304,6 +306,8 @@ abstract public class QACardActivity extends AMActivity {
                 .setTypefaceFromFile(answerTypefaceValue)
                 .setTextOnClickListener(onAnswerTextClickListener)
                 .setCardOnClickListener(onAnswerViewClickListener)
+                .setTextFontSize(setting.getAnswerFontSize())
+                .setTypefaceFromFile(setting.getAnswerFont())
                 .build();
         } else {
             answerFragment = new CardFragment.Builder(getString(R.string.memo_show_answer))
@@ -311,6 +315,8 @@ abstract public class QACardActivity extends AMActivity {
                 .setTypefaceFromFile(answerTypefaceValue)
                 .setTextOnClickListener(onAnswerTextClickListener)
                 .setCardOnClickListener(onAnswerViewClickListener)
+                .setTextFontSize(setting.getAnswerFontSize())
+                .setTypefaceFromFile(setting.getAnswerFont())
                 .build();
         }
 
