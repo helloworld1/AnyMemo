@@ -24,7 +24,9 @@ import java.io.InputStream;
 
 import java.net.URL;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 
 import org.amr.arabic.ArabicUtilities;
 
@@ -46,6 +48,8 @@ import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 
+import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
+import org.liberty.android.fantastischmemo.tts.AnyMemoTTSImpl;
 import org.liberty.android.fantastischmemo.ui.StudyActivity;
 
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
@@ -71,6 +75,7 @@ import android.os.Bundle;
 
 import android.support.v4.app.FragmentTransaction;
 
+import android.text.ClipboardManager;
 import android.text.Editable;
 import android.text.Html;
 
@@ -86,6 +91,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 abstract public class QACardActivity extends AMActivity {
@@ -127,6 +134,10 @@ abstract public class QACardActivity extends AMActivity {
     private boolean isAnswerShown = true;
 
     private TextView smallTitleBar;
+    
+    private AnyMemoTTS questionTTS = null;
+    private AnyMemoTTS answerTTS = null;
+
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -281,11 +292,34 @@ abstract public class QACardActivity extends AMActivity {
             answerTypefaceValue = answerTypeface;
         }
 
+        // Handle the QA ratio
+        LinearLayout questionLayout = (LinearLayout) findViewById(R.id.question);
+        LinearLayout answerLayout = (LinearLayout) findViewById(R.id.answer);
+        float qRatio = setting.getQaRatio();
+        if (qRatio > 99.0f) {
+            answerLayout.setVisibility(View.GONE);
+            questionLayout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
+            answerLayout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
+        } else if (qRatio < 1.0f) {
+            questionLayout.setVisibility(View.GONE);
+            questionLayout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
+            answerLayout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
+        } else {
+            float aRatio = 100.0f - qRatio;
+            qRatio /= 50.0;
+            aRatio /= 50.0;
+            questionLayout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, qRatio));
+            answerLayout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, aRatio));
+        }
+
+        // Finally we generate the fragments
         CardFragment questionFragment = new CardFragment.Builder(sq)
             .setTextAlignment(questionAlignValue)
             .setTypefaceFromFile(questionTypefaceValue)
             .setTextOnClickListener(onQuestionTextClickListener)
             .setCardOnClickListener(onQuestionViewClickListener)
+            .setTextFontSize(setting.getQuestionFontSize())
+            .setTypefaceFromFile(setting.getQuestionFont())
             .build();
 
         CardFragment answerFragment = null;
@@ -296,6 +330,8 @@ abstract public class QACardActivity extends AMActivity {
                 .setTypefaceFromFile(answerTypefaceValue)
                 .setTextOnClickListener(onAnswerTextClickListener)
                 .setCardOnClickListener(onAnswerViewClickListener)
+                .setTextFontSize(setting.getAnswerFontSize())
+                .setTypefaceFromFile(setting.getAnswerFont())
                 .build();
         } else {
             answerFragment = new CardFragment.Builder(getString(R.string.memo_show_answer))
@@ -303,6 +339,8 @@ abstract public class QACardActivity extends AMActivity {
                 .setTypefaceFromFile(answerTypefaceValue)
                 .setTextOnClickListener(onAnswerTextClickListener)
                 .setCardOnClickListener(onAnswerViewClickListener)
+                .setTextFontSize(setting.getAnswerFontSize())
+                .setTypefaceFromFile(setting.getAnswerFont())
                 .build();
         }
 
@@ -350,7 +388,13 @@ abstract public class QACardActivity extends AMActivity {
         // It is defualt "GONE" so it won't take any space
         // if there is no text
         smallTitleBar = (TextView) findViewById(R.id.small_title_bar);
-        
+
+        // Copy the question to clickboard.
+        if (option.getCopyClipboard()) {
+            ClipboardManager cm = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
+            cm.setText(currentCard.getQuestion());
+        }
+ 
         onPostDisplayCard();
     }
 
@@ -459,6 +503,7 @@ abstract public class QACardActivity extends AMActivity {
     public void onDestroy(){
         super.onDestroy();
         AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
+        shutdownQAndATTS();
 
         /* Update the widget because StudyActivity can be accessed though widget*/
         Intent myIntent = new Intent(this, AnyMemoService.class);
@@ -533,9 +578,9 @@ abstract public class QACardActivity extends AMActivity {
                     /* Try the image in /sdcard/anymemo/images/myimg.png */
                     AMEnv.DEFAULT_IMAGE_PATH + source};
                 Bitmap orngBitmap = null;
-                for(String path : paths){
+                for(String path : paths) {
                     Log.v(TAG, "Try path: " + path);
-                    if(new File(path).exists()){
+                    if(new File(path).exists()) {
                         orngBitmap = BitmapFactory.decodeFile(path);
                         break;
                     }
@@ -574,6 +619,75 @@ abstract public class QACardActivity extends AMActivity {
         }
     };
 
+    
+    protected void initTTS(){
+        String defaultLocation = AMEnv.DEFAULT_AUDIO_PATH;
+        String dbName = getDbName();
+        
+        if (setting.isQuestionAudioEnabled()) {
+            String qa = setting.getQuestionAudio();
+            List<String> questionAudioSearchPath = new ArrayList<String>();
+            questionAudioSearchPath.add(setting.getQuestionAudioLocation());
+            questionAudioSearchPath.add(setting.getQuestionAudioLocation() + "/" + dbName);
+            questionAudioSearchPath.add(defaultLocation + "/" + dbName);
+            questionAudioSearchPath.add(setting.getQuestionAudioLocation());
+            questionTTS = new AnyMemoTTSImpl(this, qa, questionAudioSearchPath);
+        } 
+        
+        if (setting.isAnswerAudioEnabled()) {
+            String aa = setting.getAnswerAudio();
+            List<String> answerAudioSearchPath = new ArrayList<String>();
+            answerAudioSearchPath.add(setting.getAnswerAudioLocation());
+            answerAudioSearchPath.add(setting.getAnswerAudioLocation() + "/" + dbName);
+            answerAudioSearchPath.add(defaultLocation + "/" + dbName);
+            answerAudioSearchPath.add(defaultLocation);
+            answerTTS = new AnyMemoTTSImpl(this, aa, answerAudioSearchPath);
+        }
+    }
+    
+    protected boolean speakQuestion(String text){
+        if(questionTTS != null && text != null){
+            questionTTS.sayText(text);
+            return true;
+        }
+        return false;
+    }
+    
+    protected boolean speakAnswer(String text){
+        if(answerTTS != null && text != null){
+            answerTTS.sayText(text);
+            return true;
+        }
+        return false;
+    }
+    
+    protected void stopQAndATTS(){
+        stopAnswerTTS();
+        stopQuestionTTS();
+    }
+    
+    protected void stopQuestionTTS(){
+        if(questionTTS != null){
+            questionTTS.stop();
+        }
+    }
+    
+    protected void stopAnswerTTS(){
+        if(answerTTS != null){
+            answerTTS.stop();
+        }
+    }
+    
+    private void shutdownQAndATTS(){
+        if(questionTTS != null){
+            questionTTS.shutdown();
+        }
+        
+        if(answerTTS != null){
+            answerTTS.shutdown();
+        }
+    }
+    
     private TagHandler tagHandler = new TagHandler() {
         @Override
         public void handleTag(boolean opening, String tag, Editable output, XMLReader xmlReader){
@@ -599,20 +713,20 @@ abstract public class QACardActivity extends AMActivity {
 
     private View.OnClickListener onQuestionTextClickListener = new View.OnClickListener() {
 
-		@Override
-		public void onClick(View v) {
+        @Override
+        public void onClick(View v) {
             onClickQuestionText();
-			
-		}
+            
+        }
     };
 
     private View.OnClickListener onAnswerTextClickListener = new View.OnClickListener() {
 
-		@Override
-		public void onClick(View v) {
+        @Override
+        public void onClick(View v) {
             onClickAnswerText();
-			
-		}
+            
+        }
     };
 
     private View.OnClickListener onQuestionViewClickListener = new View.OnClickListener() {
