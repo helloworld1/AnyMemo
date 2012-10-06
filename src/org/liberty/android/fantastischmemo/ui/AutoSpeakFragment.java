@@ -6,6 +6,7 @@ import org.liberty.android.fantastischmemo.R;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,23 @@ public class AutoSpeakFragment extends Fragment {
     
     private boolean isPlaying = false;
 
+    private AutoSpeakEventHandler autoSpeakEventHandler = 
+            new AutoSpeakEventHandler() {
+                
+                @Override
+                public void onNextButtonClick() {
+                }
+
+                @Override
+                public void onPreviousButtonClick() {
+                }
+
+                @Override
+                public boolean onPlayButtonClick() {
+                    return false;
+                }
+            };
+
     private View.OnClickListener buttonListener = new View.OnClickListener() {
 
         @Override
@@ -31,21 +49,30 @@ public class AutoSpeakFragment extends Fragment {
                 isPlaying = !isPlaying;
 
                 if(isPlaying) {
-                    playButton.setSelected(true);
+                    Log.i(TAG, "start speaking");
+                    boolean t = autoSpeakEventHandler.onPlayButtonClick();
                 } else {
                     playButton.setSelected(false);
                 }
+                
             } else if(v == previousButton) {
-                
+                autoSpeakEventHandler.onPreviousButtonClick();
             } else if(v == nextButton) {
-                
+                autoSpeakEventHandler.onNextButtonClick();
             } else if(v == settingsButton) {
-                
+                displaySettingsDialog();
             } else if(v == exitButton) {
                 
             }
         }
     };
+
+    private void displaySettingsDialog() {
+        
+    }
+    public void setAutoSpeakEventHander(AutoSpeakEventHandler autoSpeakEventHander) {
+        this.autoSpeakEventHandler = autoSpeakEventHander;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -71,11 +98,12 @@ public class AutoSpeakFragment extends Fragment {
         exitButton.setOnClickListener(buttonListener);
         exitButton.setBackgroundColor(Color.TRANSPARENT);
         
-        
-        
-        
         return v;
     }
     
-    
+    public interface AutoSpeakEventHandler {
+        void onNextButtonClick();
+        void onPreviousButtonClick();
+        boolean onPlayButtonClick();
+    }
 }

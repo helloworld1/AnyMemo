@@ -50,6 +50,7 @@ import org.liberty.android.fantastischmemo.domain.Setting;
 
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTSImpl;
+import org.liberty.android.fantastischmemo.ui.AutoSpeakFragment.AutoSpeakEventHandler;
 import org.liberty.android.fantastischmemo.ui.StudyActivity;
 
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
@@ -95,7 +96,7 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-abstract public class QACardActivity extends AMActivity {
+public abstract class QACardActivity extends AMActivity {
 
     public static String EXTRA_DBPATH = "dbpath";
 

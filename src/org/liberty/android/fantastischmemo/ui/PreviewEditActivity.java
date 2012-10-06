@@ -47,6 +47,7 @@ import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
+import org.liberty.android.fantastischmemo.ui.AutoSpeakFragment.AutoSpeakEventHandler;
 import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 import org.liberty.android.fantastischmemo.utils.AMUtil;
@@ -335,9 +336,10 @@ public class PreviewEditActivity extends QACardActivity {
             	LinearLayout root = (LinearLayout)findViewById(R.id.root);
             	FrameLayout fl = new FrameLayout(this);
             	
-            	Fragment f = new AutoSpeakFragment();
+            	AutoSpeakFragment f = new AutoSpeakFragment();
             	
             	fl.setId(MAGIC_FRAME_LAYOUT_ID);
+            	f.setAutoSpeakEventHander(autoSpeakEventHandler);
             	root.addView(fl);
             //	Log.e(TAG, String.format("fl id is %d", fl.getId()));
             	ft.add(fl.getId(), f);
@@ -917,4 +919,25 @@ public class PreviewEditActivity extends QACardActivity {
                 restartActivity();
             }
         };
+        
+    private AutoSpeakEventHandler autoSpeakEventHandler = 
+            new AutoSpeakEventHandler() {
+                
+                @Override
+                public void onNextButtonClick() {
+                    gotoNext();
+                }
+
+                @Override
+                public void onPreviousButtonClick() {
+                    gotoPrev();
+                }
+
+                @Override
+                public boolean onPlayButtonClick() {
+                    speakAnswer("Answer first");
+                    return speakQuestion("What's up bro!");
+                }
+            };
+        
 }
