@@ -29,6 +29,14 @@ import org.apache.mycommons.lang3.math.NumberUtils;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.R;
+import org.apache.mycommons.lang3.math.NumberUtils;
+
+import org.liberty.android.fantastischmemo.ui.DetailScreen;
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.ui.SettingsScreen;
+
+import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
+
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
@@ -73,8 +81,6 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 
 public class PreviewEditActivity extends QACardActivity {
-    private AnyMemoTTS questionTTS = null;
-    private AnyMemoTTS answerTTS = null;
     private boolean searchInflated = false;
     private final int ACTIVITY_EDIT = 11;
     private final int ACTIVITY_SETTINGS = 15;
@@ -94,7 +100,6 @@ public class PreviewEditActivity extends QACardActivity {
     private Category currentCategory = null;
     private Integer savedCardId = null;
     private String dbPath = "";
-    private String dbName = "";
     private int activeCategoryId = -1;
     private SettingDao settingDao;
     private CardDao cardDao;
@@ -115,7 +120,6 @@ public class PreviewEditActivity extends QACardActivity {
     
     private GestureDetector gestureDetector;
 
-    private AnyMemoDBOpenHelper dbOpenHelper;
 
     // The first card to read and display.
     private int startCardId = 1;
@@ -130,9 +134,6 @@ public class PreviewEditActivity extends QACardActivity {
             activeCategoryId = extras.getInt(EXTRA_CATEGORY, -1);
             startCardId = extras.getInt(EXTRA_CARD_ID, -1);
         }
-
-        // Strip leading path!
-        dbName = AMUtil.getFilenameFromPath(dbPath);
 
         /* 
          * Currently always set the result to OK
@@ -168,6 +169,11 @@ public class PreviewEditActivity extends QACardActivity {
             currentCard = cardDao.queryFirstOrdinal(currentCategory);
         }
 
+        // If all attemp failed. we will return null and let user to create a new card.
+        if (currentCard == null) {
+            return;
+        }
+
         categoryDao.refresh(currentCard.getCategory());
         learningDataDao.refresh(currentCard.getLearningData());
 
@@ -178,8 +184,6 @@ public class PreviewEditActivity extends QACardActivity {
 
     @Override
     public void onPostInit() {
-        // TODO: Double sided?
-
         initTTS();
         composeViews();
         //currentCard = .getItem(currentId);
@@ -196,13 +200,6 @@ public class PreviewEditActivity extends QACardActivity {
 
     @Override
     public void onDestroy(){
-        if(questionTTS != null){
-            questionTTS.shutdown();
-        }
-        if(answerTTS != null){
-            answerTTS.shutdown();
-        }
-
         super.onDestroy();
     }
 
@@ -265,18 +262,12 @@ public class PreviewEditActivity extends QACardActivity {
         switch (item.getItemId()) {
             case R.id.menuspeakquestion:
             {
-                if(questionTTS != null && getCurrentCard() != null){
-                    questionTTS.sayText(getCurrentCard().getQuestion());
-                }
-                return true;
+                return speakQuestion(getCurrentCard().getQuestion());
             }
 
             case R.id.menuspeakanswer:
             {
-                if(answerTTS != null && getCurrentCard()!= null){
-                    answerTTS.sayText(getCurrentCard().getAnswer());
-                }
-                return true;
+                return speakAnswer(getCurrentCard().getAnswer());
             }
 
             case R.id.editmenu_settings_id:
@@ -524,30 +515,6 @@ public class PreviewEditActivity extends QACardActivity {
     }
 
 
-    /*
-     * This method should be the same as the one in MemoScreen.
-     */
-    private void initTTS(){
-        String defaultLocation = AMEnv.DEFAULT_AUDIO_PATH;
-        String qa = setting.getQuestionAudio();
-        String aa = setting.getAnswerAudio();
-        List<String> questionAudioSearchPath = new ArrayList<String>();
-        questionAudioSearchPath.add(setting.getQuestionAudioLocation());
-        questionAudioSearchPath.add(setting.getQuestionAudioLocation() + "/" + dbName);
-        questionAudioSearchPath.add(defaultLocation + "/" + dbName);
-        questionAudioSearchPath.add(setting.getQuestionAudioLocation());
-        
-        List<String> answerAudioSearchPath = new ArrayList<String>();
-        answerAudioSearchPath.add(setting.getAnswerAudioLocation());
-        answerAudioSearchPath.add(setting.getAnswerAudioLocation() + "/" + dbName);
-        answerAudioSearchPath.add(defaultLocation + "/" + dbName);
-        answerAudioSearchPath.add(defaultLocation);
-        
-        questionTTS = new AnyMemoTTSImpl(this, qa, questionAudioSearchPath);
-        answerTTS = new AnyMemoTTSImpl(this, aa, answerAudioSearchPath);
-
-    }
-
     @Override
     public void restartActivity(){
         Intent myIntent = new Intent(this, PreviewEditActivity.class);
@@ -762,18 +729,14 @@ public class PreviewEditActivity extends QACardActivity {
     private View.OnClickListener prevButtonListener = new View.OnClickListener(){
         public void onClick(View v){
             gotoPrev();
-            if(questionTTS != null){
-                questionTTS.stop();
-            }
+            stopQAndATTS();
         }
     };
 
     private View.OnClickListener nextButtonListener = new View.OnClickListener(){
         public void onClick(View v){
             gotoNext();
-            if(answerTTS != null){
-                answerTTS.stop();
-            }
+            stopQAndATTS();
         }
     };
 

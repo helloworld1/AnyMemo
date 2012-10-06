@@ -32,7 +32,6 @@ import java.util.concurrent.Callable;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
-import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 
 import org.liberty.android.fantastischmemo.domain.Card;
@@ -53,28 +52,19 @@ public class QuizQueueManager implements QueueManager {
      */
     private Scheduler scheduler;
 
-    private Category filterCategory;
-
     private List<Card> newCache;
     private List<Card> reviewCache;
     private Set<Card> dirtyCache;
 
-    private int learnQueueSize;
-
-    private int cacheSize;
-
-    private int maxNewCacheOrdinal = 0;
-
-    private int maxReviewCacheOrdinal = 0; 
-    
     private boolean shuffle;
 
     private final String TAG = getClass().getSimpleName();
 
     private QuizQueueManager(Builder builder) {
-        this.filterCategory = builder.filterCategory;
         this.shuffle = builder.shuffle;
         this.scheduler = builder.scheduler;
+        this.cardDao = builder.cardDao;
+        this.learningDataDao = builder.learningDataDao;
         newCache = new LinkedList<Card>();
         reviewCache = new LinkedList<Card>();
         dirtyCache = new HashSet<Card>();
@@ -82,12 +72,34 @@ public class QuizQueueManager implements QueueManager {
 
 	@Override
 	public synchronized Card dequeue() {
-        
+        if (newCache.size() > 0) {
+            return newCache.remove(0);
+        }
+        if (reviewCache.size() > 0) {
+            return reviewCache.remove(0);
+        }
         return null;
 	}
 	
 	@Override
 	public synchronized Card dequeuePosition(int cardId) {
+        Iterator<Card> newIterator = newCache.iterator();
+        while (newIterator.hasNext()) {
+            Card card = newIterator.next();
+            if (card.getId() == card.getId()) {
+                return card;
+            }
+            newIterator.remove();
+        }
+
+        Iterator<Card> reviewIterator = reviewCache.iterator();
+        while (newIterator.hasNext()) {
+            Card card = reviewIterator.next();
+            if (card.getId() == card.getId()) {
+                return card;
+            }
+            reviewIterator.remove();
+        }
         return null;
 	}
 	
@@ -124,6 +136,17 @@ public class QuizQueueManager implements QueueManager {
         newCache.addAll(cardDao.getCardsByOrdinalAndSize(startOrd, size));
     }
 
+    private synchronized void refill(Category category) {
+        newCache.addAll(cardDao.getCardsByCategory(category, false, 500));
+    }
+    
+    public int getNewQueueSize() {
+        return newCache.size();
+    }
+
+    public int getReviewQueueSize() {
+        return reviewCache.size();
+    }
 
     private synchronized void shuffle() {
     	// Shuffle all the caches
@@ -150,7 +173,7 @@ public class QuizQueueManager implements QueueManager {
 
         private LearningDataDao learningDataDao;
 
-        private Category filterCategory;
+        private Category filterCategory = null;
 
         private boolean shuffle = false;
 
@@ -198,11 +221,16 @@ public class QuizQueueManager implements QueueManager {
             }
 
             QuizQueueManager qm = new QuizQueueManager(this);
-            qm.refill(startOrd, quizSize);
+            if (filterCategory == null) {
+                qm.refill(startOrd, quizSize);
+            } else {
+                qm.refill(filterCategory);
+            }
             if (shuffle) {
                 qm.shuffle();
             }
             return qm;
         }
     }
+
 }

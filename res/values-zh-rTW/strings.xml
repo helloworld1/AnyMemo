@@ -40,7 +40,7 @@
     <string name="memo_btn2_help_text">勉強記住一些，間隔時間太長了</string>
     <string name="memo_btn3_help_text">差不多記住，但是花費了很大功夫來想</string>
     <string name="memo_btn4_help_text">想了一會兒，但是記住了。間隔時間大概正好。</string>
-    <string name="memo_btn5_help_text">毫不費力得到答案，大概間隔時間太斷了。</string>
+    <string name="memo_btn5_help_text">毫不費力得到答案，大概間隔時間太短了。</string>
     <string name="memo_btn0_brief_text">0</string>
     <string name="memo_btn1_brief_text">1</string>
     <string name="memo_btn2_brief_text">2</string>
