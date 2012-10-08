@@ -243,12 +243,12 @@ public class PreviewEditActivity extends QACardActivity {
         switch (item.getItemId()) {
             case R.id.menuspeakquestion:
             {
-                return speakQuestion(getCurrentCard().getQuestion());
+                return speakQuestion();
             }
 
             case R.id.menuspeakanswer:
             {
-                return speakAnswer(getCurrentCard().getAnswer());
+                return speakAnswer();
             }
 
             case R.id.editmenu_settings_id:

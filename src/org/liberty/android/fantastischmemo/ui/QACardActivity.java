@@ -75,6 +75,7 @@ import android.os.Bundle;
 
 import android.support.v4.app.FragmentTransaction;
 
+import android.text.ClipboardManager;
 import android.text.Editable;
 import android.text.Html;
 
@@ -90,6 +91,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 abstract public class QACardActivity extends AMActivity {
@@ -178,6 +181,9 @@ abstract public class QACardActivity extends AMActivity {
         return dbName;
     }
 
+    // Important class that display the card using fragment
+    // the showAnswer parameter is handled differently on single
+    // sided card and double sided card.
     protected void displayCard(boolean showAnswer) {
 
         // First prepare the text to display
@@ -289,11 +295,34 @@ abstract public class QACardActivity extends AMActivity {
             answerTypefaceValue = answerTypeface;
         }
 
+        // Handle the QA ratio
+        LinearLayout questionLayout = (LinearLayout) findViewById(R.id.question);
+        LinearLayout answerLayout = (LinearLayout) findViewById(R.id.answer);
+        float qRatio = setting.getQaRatio();
+        if (qRatio > 99.0f) {
+            answerLayout.setVisibility(View.GONE);
+            questionLayout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
+            answerLayout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
+        } else if (qRatio < 1.0f) {
+            questionLayout.setVisibility(View.GONE);
+            questionLayout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
+            answerLayout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
+        } else {
+            float aRatio = 100.0f - qRatio;
+            qRatio /= 50.0;
+            aRatio /= 50.0;
+            questionLayout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, qRatio));
+            answerLayout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, aRatio));
+        }
+
+        // Finally we generate the fragments
         CardFragment questionFragment = new CardFragment.Builder(sq)
             .setTextAlignment(questionAlignValue)
             .setTypefaceFromFile(questionTypefaceValue)
             .setTextOnClickListener(onQuestionTextClickListener)
             .setCardOnClickListener(onQuestionViewClickListener)
+            .setTextFontSize(setting.getQuestionFontSize())
+            .setTypefaceFromFile(setting.getQuestionFont())
             .build();
 
         CardFragment answerFragment = null;
@@ -304,6 +333,8 @@ abstract public class QACardActivity extends AMActivity {
                 .setTypefaceFromFile(answerTypefaceValue)
                 .setTextOnClickListener(onAnswerTextClickListener)
                 .setCardOnClickListener(onAnswerViewClickListener)
+                .setTextFontSize(setting.getAnswerFontSize())
+                .setTypefaceFromFile(setting.getAnswerFont())
                 .build();
         } else {
             answerFragment = new CardFragment.Builder(getString(R.string.memo_show_answer))
@@ -311,6 +342,8 @@ abstract public class QACardActivity extends AMActivity {
                 .setTypefaceFromFile(answerTypefaceValue)
                 .setTextOnClickListener(onAnswerTextClickListener)
                 .setCardOnClickListener(onAnswerViewClickListener)
+                .setTextFontSize(setting.getAnswerFontSize())
+                .setTypefaceFromFile(setting.getAnswerFont())
                 .build();
         }
 
@@ -358,7 +391,13 @@ abstract public class QACardActivity extends AMActivity {
         // It is defualt "GONE" so it won't take any space
         // if there is no text
         smallTitleBar = (TextView) findViewById(R.id.small_title_bar);
-        
+
+        // Copy the question to clickboard.
+        if (option.getCopyClipboard()) {
+            ClipboardManager cm = (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
+            cm.setText(currentCard.getQuestion());
+        }
+ 
         onPostDisplayCard();
     }
 
@@ -609,17 +648,17 @@ abstract public class QACardActivity extends AMActivity {
         }
     }
     
-    protected boolean speakQuestion(String text){
-        if(questionTTS != null && text != null){
-            questionTTS.sayText(text);
+    protected boolean speakQuestion(){
+        if(questionTTS != null){
+            questionTTS.sayText(getCurrentCard().getQuestion());
             return true;
         }
         return false;
     }
     
-    protected boolean speakAnswer(String text){
-        if(answerTTS != null && text != null){
-            answerTTS.sayText(text);
+    protected boolean speakAnswer(){
+        if(answerTTS != null){
+            answerTTS.sayText(getCurrentCard().getAnswer());
             return true;
         }
         return false;
