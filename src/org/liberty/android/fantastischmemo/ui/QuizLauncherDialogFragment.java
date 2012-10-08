@@ -44,6 +44,9 @@ import android.preference.PreferenceManager;
 
 import android.support.v4.app.DialogFragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,9 +61,9 @@ public class QuizLauncherDialogFragment extends DialogFragment {
 
     public static final String EXTRA_DBPATH = "dbpath";
 
-    private static final long MAX_GROUP_SIZE = 100; 
+    private static final int MAX_GROUP_SIZE = 100; 
 
-    private static final long DEFAULT_GROUP_SIZE = 100; 
+    private static final int DEFAULT_GROUP_SIZE = 100; 
 
     private AnyMemoDBOpenHelper dbOpenHelper;
 
@@ -86,11 +89,11 @@ public class QuizLauncherDialogFragment extends DialogFragment {
 
     private Button categoryButton;
 
-    private long totalCardNumber;
+    private int totalCardNumber;
 
-    private long groupSize;
+    private int groupSize;
 
-    private long groupNumber;
+    private int groupNumber;
 
     private SharedPreferences settings;
 
@@ -137,15 +140,19 @@ public class QuizLauncherDialogFragment extends DialogFragment {
         quizGroupSizeTitle = (TextView) v.findViewById(R.id.quiz_group_size_title);
 
         quizGroupSizeEdit = (EditText) v.findViewById(R.id.quiz_group_size);
+        // Make sure the text value is sanity and update other information
+        // about the group size and etc accordingly.
+        quizGroupSizeEdit.addTextChangedListener(editTextWatcher);
+        quizGroupSizeEdit.setOnFocusChangeListener(sanitizeInputListener);
 
         quizGroupNumberTitle = (TextView) v.findViewById(R.id.quiz_group_number_title);
 
         quizGroupNumberEdit = (EditText) v.findViewById(R.id.quiz_group_number);
+        quizGroupNumberEdit.addTextChangedListener(editTextWatcher);
+        quizGroupNumberEdit.setOnFocusChangeListener(sanitizeInputListener);
 
         categoryButton = (Button) v.findViewById(R.id.category_button);
     
-        // We have to set up the dialog's webview size manually or the webview will be zero size.
-        // This should be a bug of Android.
         Rect displayRectangle = new Rect();
         Window window = mActivity.getWindow();
         window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
@@ -159,8 +166,9 @@ public class QuizLauncherDialogFragment extends DialogFragment {
     public void onStart() {
         super.onStart();
         dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(mActivity, dbPath);
-        InitTask task = new InitTask();
         settings = PreferenceManager.getDefaultSharedPreferences(mActivity);
+        editor = settings.edit();
+        InitTask task = new InitTask();
         task.execute((Void)null);
     }
 
@@ -168,11 +176,15 @@ public class QuizLauncherDialogFragment extends DialogFragment {
 		@Override
 		public void onClick(View v) {
             Intent intent = new Intent(mActivity, QuizActivity.class);
+            editor.putInt("quiz_group_size", groupSize);
+            editor.putInt("quiz_group_number", groupNumber);
+            editor.commit();
+
+            int startOrd = (groupNumber - 1) * groupSize + 1;
             intent.putExtra(QuizActivity.EXTRA_DBPATH, dbPath);
-            intent.putExtra(QuizActivity.EXTRA_START_CARD_ORD, 1);
-            intent.putExtra(QuizActivity.EXTRA_QUIZ_SIZE, 50);
+            intent.putExtra(QuizActivity.EXTRA_START_CARD_ORD, startOrd);
+            intent.putExtra(QuizActivity.EXTRA_QUIZ_SIZE, groupSize);
             startActivity(intent);
-			
 		}
     };
 
@@ -188,15 +200,15 @@ public class QuizLauncherDialogFragment extends DialogFragment {
         @Override
         public Void doInBackground(Void... params) {
             cardDao = dbOpenHelper.getCardDao();
-            totalCardNumber = cardDao.getTotalCount(filterCategory);
+            totalCardNumber = (int)cardDao.getTotalCount(filterCategory);
             return null;
         }
 
         @Override
         public void onPostExecute(Void nothing) {
             //quizGroupSizeTitle.setText(quizGroupSizeTitle.getText());
-            groupSize = settings.getLong("quiz_group_size", DEFAULT_GROUP_SIZE);
-            groupNumber = settings.getLong("quiz_group_number", 1);
+            groupSize = settings.getInt("quiz_group_size", DEFAULT_GROUP_SIZE);
+            groupNumber = settings.getInt("quiz_group_number", 1);
             setGroupSizeText();
             setGroupNumberText();
         }
@@ -206,7 +218,7 @@ public class QuizLauncherDialogFragment extends DialogFragment {
         if (totalCardNumber < groupSize) {
             groupSize = totalCardNumber;
         }
-        long maxGroupSize = Math.min(totalCardNumber, MAX_GROUP_SIZE);
+        int maxGroupSize = Math.min(totalCardNumber, MAX_GROUP_SIZE);
         quizGroupSizeTitle.setText(getString(R.string.quiz_group_size_text)
                 + " (1-" + maxGroupSize + ")");
         if (StringUtils.isEmpty(quizGroupSizeEdit.getText())) {
@@ -215,7 +227,7 @@ public class QuizLauncherDialogFragment extends DialogFragment {
     }
 
     private void setGroupNumberText() {
-        long maxGroupNumber = (totalCardNumber - 1) / groupSize + 1;
+        int maxGroupNumber = (totalCardNumber - 1) / groupSize + 1;
         if (groupNumber > maxGroupNumber) {
             groupNumber = maxGroupNumber;
         }
@@ -224,5 +236,61 @@ public class QuizLauncherDialogFragment extends DialogFragment {
             quizGroupNumberEdit.setText("" + groupNumber);
         }
     }
+
+    private TextWatcher editTextWatcher = new TextWatcher() {
+
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count,
+				int after) {
+            // Nothing happened
+		}
+
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before,
+				int count) {
+            // Nothing happened
+		}
+
+		@Override
+		public void afterTextChanged(Editable s) {
+            if (StringUtils.isEmpty(s)) {
+                return;
+            }
+            try {
+                groupSize = Integer.valueOf(quizGroupSizeEdit.getText().toString());
+                if (groupSize <= 0) {
+                    groupSize = 1;
+                }
+                if (groupSize > MAX_GROUP_SIZE) {
+                    groupSize = MAX_GROUP_SIZE;
+                }
+
+            } catch (NumberFormatException e) {
+                groupSize = MAX_GROUP_SIZE;
+            }
+            try {
+                groupNumber = Integer.valueOf(quizGroupNumberEdit.getText().toString());
+                if (groupNumber < 1) {
+                    groupNumber = 1;
+                }
+            } catch (NumberFormatException e) {
+                groupNumber = 1;
+            }
+            setGroupNumberText();
+            setGroupSizeText();
+		}
+    };
+
+    View.OnFocusChangeListener sanitizeInputListener =
+        new View.OnFocusChangeListener() {
+
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus == false) {
+                    quizGroupSizeEdit.setText("" + groupSize);
+                    quizGroupNumberEdit.setText("" + groupNumber);
+                }
+			}
+        };
 }
 

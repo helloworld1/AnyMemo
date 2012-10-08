@@ -156,12 +156,12 @@ public class StudyActivity extends QACardActivity {
             }
             case R.id.menuspeakquestion:
             {
-                return speakQuestion(getCurrentCard().getQuestion());
+                return speakQuestion();
             }
 
             case R.id.menuspeakanswer:
             {
-                return speakAnswer(getCurrentCard().getAnswer());
+                return speakAnswer();
             }
 
             case R.id.menusettings:
@@ -479,7 +479,7 @@ public class StudyActivity extends QACardActivity {
         if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
                 || option.getSpeakingType() == Option.SpeakingType.TAP)) {
             stopQuestionTTS();
-            speakQuestion(getCurrentCard().getQuestion());
+            speakQuestion();
         } else {
             onClickQuestionView();
         }
@@ -492,7 +492,7 @@ public class StudyActivity extends QACardActivity {
         } else if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
                 || option.getSpeakingType() == Option.SpeakingType.TAP)) {
             stopAnswerTTS();
-            speakAnswer(getCurrentCard().getAnswer());
+            speakAnswer();
         }
     }
 
@@ -567,11 +567,11 @@ public class StudyActivity extends QACardActivity {
             if(!isAnswerShown()){
                 // Make sure the TTS is stop, or it will speak nothing.
                 stopQuestionTTS();
-                speakQuestion(getCurrentCard().getQuestion());
+                speakQuestion();
             } else {
                 // Make sure the TTS is stop
                 stopAnswerTTS();
-                speakAnswer(getCurrentCard().getAnswer());
+                speakAnswer();
             }
         }
     }
