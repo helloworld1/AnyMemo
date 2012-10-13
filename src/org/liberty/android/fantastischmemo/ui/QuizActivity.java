@@ -182,6 +182,15 @@ public class QuizActivity extends QACardActivity {
         }
     }
 
+    @Override
+    protected void onPostDisplayCard() {
+        if (isAnswerShown()) {
+            gradeButtons.show();
+        } else {
+            gradeButtons.hide();
+        }
+    }
+
     private void createQueue() {
         QuizQueueManager.Builder builder = new QuizQueueManager.Builder()
             .setDbOpenHelper(getDbOpenHelper())
