@@ -515,7 +515,7 @@ abstract public class QACardActivity extends AMActivity {
     }
 
 
-    // Se
+    // Set the small title to display additional informaiton
     public void setSmallTitle(CharSequence text) {
         if (StringUtils.isNotEmpty(text)) {
             smallTitleBar.setText(text);

@@ -30,6 +30,8 @@ import org.liberty.android.fantastischmemo.dao.CardDao;
 
 import org.liberty.android.fantastischmemo.domain.Category;
 
+import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment;
+
 import android.app.Activity;
 
 import android.content.Intent;
@@ -77,7 +79,7 @@ public class QuizLauncherDialogFragment extends DialogFragment {
 
     private RadioButton quizByGroupRadio;
 
-    private RadioButton quizeByCategoryRadio;
+    private RadioButton quizByCategoryRadio;
 
     private TextView quizGroupSizeTitle;
 
@@ -94,6 +96,9 @@ public class QuizLauncherDialogFragment extends DialogFragment {
     private int groupSize;
 
     private int groupNumber;
+
+    // Default category id is "uncategorized".
+    private int categoryId = 0;
 
     private SharedPreferences settings;
 
@@ -135,7 +140,7 @@ public class QuizLauncherDialogFragment extends DialogFragment {
 
         quizByGroupRadio = (RadioButton) v.findViewById(R.id.quiz_by_group_radio);
 
-        quizeByCategoryRadio = (RadioButton) v.findViewById(R.id.quiz_by_category_radio);
+        quizByCategoryRadio = (RadioButton) v.findViewById(R.id.quiz_by_category_radio);
 
         quizGroupSizeTitle = (TextView) v.findViewById(R.id.quiz_group_size_title);
 
@@ -152,6 +157,7 @@ public class QuizLauncherDialogFragment extends DialogFragment {
         quizGroupNumberEdit.setOnFocusChangeListener(sanitizeInputListener);
 
         categoryButton = (Button) v.findViewById(R.id.category_button);
+        categoryButton.setOnClickListener(categoryButtonListener);
     
         Rect displayRectangle = new Rect();
         Window window = mActivity.getWindow();
@@ -175,16 +181,27 @@ public class QuizLauncherDialogFragment extends DialogFragment {
     private View.OnClickListener startQuizButtonOnClickListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-            Intent intent = new Intent(mActivity, QuizActivity.class);
-            editor.putInt("quiz_group_size", groupSize);
-            editor.putInt("quiz_group_number", groupNumber);
-            editor.commit();
+            if (quizByCategoryRadio.isChecked()) {
 
-            int startOrd = (groupNumber - 1) * groupSize + 1;
-            intent.putExtra(QuizActivity.EXTRA_DBPATH, dbPath);
-            intent.putExtra(QuizActivity.EXTRA_START_CARD_ORD, startOrd);
-            intent.putExtra(QuizActivity.EXTRA_QUIZ_SIZE, groupSize);
-            startActivity(intent);
+            } else {
+                Intent intent = new Intent(mActivity, QuizActivity.class);
+                editor.putInt("quiz_group_size", groupSize);
+                editor.putInt("quiz_group_number", groupNumber);
+                editor.commit();
+
+                int startOrd = (groupNumber - 1) * groupSize + 1;
+                intent.putExtra(QuizActivity.EXTRA_DBPATH, dbPath);
+                intent.putExtra(QuizActivity.EXTRA_START_CARD_ORD, startOrd);
+                intent.putExtra(QuizActivity.EXTRA_QUIZ_SIZE, groupSize);
+                startActivity(intent);
+            }
+		}
+    };
+
+    private View.OnClickListener categoryButtonListener = new View.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+            showCategoriesDialog();
 		}
     };
 
@@ -291,6 +308,27 @@ public class QuizLauncherDialogFragment extends DialogFragment {
                     quizGroupNumberEdit.setText("" + groupNumber);
                 }
 			}
+        };
+
+    private void showCategoriesDialog() {
+        CategoryEditorFragment df = new CategoryEditorFragment();
+        df.setResultListener(categoryResultListener);
+        Bundle b = new Bundle();
+        b.putString(CategoryEditorFragment.EXTRA_DBPATH, dbPath);
+        b.putInt(CategoryEditorFragment.EXTRA_CATEGORY_ID, categoryId);
+        df.setArguments(b);
+        df.show(mActivity.getSupportFragmentManager(), "CategoryEditDialog");
+        mActivity.getSupportFragmentManager().findFragmentByTag("CategoryEditDialog");
+    }
+
+    // When a category is selected in category fragment.
+    private CategoryEditorFragment.CategoryEditorResultListener categoryResultListener = 
+        new CategoryEditorFragment.CategoryEditorResultListener() {
+            public void onReceiveCategory(Category c) {
+                assert c != null : "The category got shouldn't be null.";
+                categoryId = c.getId();
+                categoryButton.setText(c.getName());
+            }
         };
 }
 
