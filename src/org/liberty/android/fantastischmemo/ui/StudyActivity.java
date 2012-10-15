@@ -260,7 +260,7 @@ public class StudyActivity extends QACardActivity {
                     return false;
                 }
                 // Look up words in both question and answer
-                dictionaryUtil.showLookupListDialog("" + getCurrentCard().getQuestion() + getCurrentCard().getAnswer());
+                dictionaryUtil.showLookupListDialog("" + getCurrentCard().getQuestion() + " " + getCurrentCard().getAnswer());
 
                 return true;
 
