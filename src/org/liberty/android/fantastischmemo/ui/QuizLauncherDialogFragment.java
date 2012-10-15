@@ -182,7 +182,10 @@ public class QuizLauncherDialogFragment extends DialogFragment {
 		@Override
 		public void onClick(View v) {
             if (quizByCategoryRadio.isChecked()) {
-
+                Intent intent = new Intent(mActivity, QuizActivity.class);
+                intent.putExtra(QuizActivity.EXTRA_DBPATH, dbPath);
+                intent.putExtra(QuizActivity.EXTRA_CATEGORY_ID, categoryId);
+                startActivity(intent);
             } else {
                 Intent intent = new Intent(mActivity, QuizActivity.class);
                 editor.putInt("quiz_group_size", groupSize);
@@ -223,7 +226,6 @@ public class QuizLauncherDialogFragment extends DialogFragment {
 
         @Override
         public void onPostExecute(Void nothing) {
-            //quizGroupSizeTitle.setText(quizGroupSizeTitle.getText());
             groupSize = settings.getInt("quiz_group_size", DEFAULT_GROUP_SIZE);
             groupNumber = settings.getInt("quiz_group_number", 1);
             setGroupSizeText();
