@@ -486,4 +486,5 @@
     <string name="chinese_text">Китайский</string>
     <string name="japanese_text">Японский</string>
     <string name="korean_text">Корейский</string>
+    <string name="thai_text">Тайский</string>
 </resources>
