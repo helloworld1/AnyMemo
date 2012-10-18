@@ -112,7 +112,7 @@
     <string name="fb_create_db_message">Введите имя новой базы.</string>
     <string name="fb_create_dir_message">Введите имя нового каталога.</string>
     <string name="fb_delete_message">Вы действительно хотите удалить этот файл?</string>
-    <string name="fb_edit_dialog_title">Правка</string>
+    <string name="fb_edit_dialog_title">Правк</string>
     <string name="fb_fail_to_clone">Не удалось клонировать файл.</string>
     <string name="fb_rename">Переименовать</string>
     <string name="fb_rename_message">Введите имя ниже</string>
