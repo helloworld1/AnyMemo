@@ -53,7 +53,7 @@
     <string name="memo_btn3_anki_text">Тяжело</string>
     <string name="memo_btn4_anki_text">Легко</string>
     <string name="memo_btn5_anki_text">Легко</string>
-    <string name="memo_edit_dialog_title">Правка</string>
+    <string name="memo_edit_dialog_title">Правк</string>
     <string name="memo_current_id">ID: </string>
     <string name="global_settings">Общие настройки</string>
     <string name="settings_question_font_size">Размер шрифта вопроса</string>
@@ -112,7 +112,7 @@
     <string name="fb_create_db_message">Введите имя новой базы.</string>
     <string name="fb_create_dir_message">Введите имя нового каталога.</string>
     <string name="fb_delete_message">Вы действительно хотите удалить этот файл?</string>
-    <string name="fb_edit_dialog_title">Правк</string>
+    <string name="fb_edit_dialog_title">Правка</string>
     <string name="fb_fail_to_clone">Не удалось клонировать файл.</string>
     <string name="fb_rename">Переименовать</string>
     <string name="fb_rename_message">Введите имя ниже</string>
