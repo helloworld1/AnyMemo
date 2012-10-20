@@ -53,7 +53,7 @@
     <string name="memo_btn3_anki_text">Тяжело</string>
     <string name="memo_btn4_anki_text">Легко</string>
     <string name="memo_btn5_anki_text">Легко</string>
-    <string name="memo_edit_dialog_title">Правк</string>
+    <string name="memo_edit_dialog_title">Правка</string>
     <string name="memo_current_id">ID: </string>
     <string name="global_settings">Общие настройки</string>
     <string name="settings_question_font_size">Размер шрифта вопроса</string>
@@ -365,7 +365,7 @@
     <string name="dropbox_login_message">Введите имя пользователя Dropbox (обычно email) и пароль.</string>
     <string name="import_supermemo_2008_xml_text">Импорт SuperMemo 2008 XML</string>
     <string name="uncategorized_text">Нет категории</string>
-    <string name="edit_text">Правка</string>
+    <string name="edit_text">Прав</string>
     <string name="category_dialog_title">Выберите категорию или введите новую</string>
     <string name="ordinal_text_short">Пор</string>
     <string name="total_text">Всего</string>
