@@ -97,7 +97,7 @@
     <string name="clear_recent_list">Очистить список последних баз</string>
     <string name="export_xml">Эспорт Mnemosyne XML</string>
     <string name="add_screen_question">Вопрос</string>
-    <string name="add_screen_new">Новая</string>
+    <string name="add_screen_new">Нов</string>
     <string name="add_screen_id">ID</string>
     <string name="add_screen_answer">Ответ</string>
     <string name="add_screen_edit">Сохранить</string>
