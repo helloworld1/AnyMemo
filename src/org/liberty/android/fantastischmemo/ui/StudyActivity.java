@@ -259,9 +259,8 @@ public class StudyActivity extends QACardActivity {
                 if(getCurrentCard() == null){
                     return false;
                 }
-                /* default word to lookup is question */
-                String lookupWord = getCurrentCard().getQuestion();
-                dictionaryUtil.lookupDictionary(lookupWord);
+                // Look up words in both question and answer
+                dictionaryUtil.showLookupListDialog("" + getCurrentCard().getQuestion() + " " + getCurrentCard().getAnswer());
 
                 return true;
 

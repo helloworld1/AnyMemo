@@ -97,7 +97,7 @@
     <string name="clear_recent_list">Очистить список последних баз</string>
     <string name="export_xml">Эспорт Mnemosyne XML</string>
     <string name="add_screen_question">Вопрос</string>
-    <string name="add_screen_new">Новая</string>
+    <string name="add_screen_new">Нов</string>
     <string name="add_screen_id">ID</string>
     <string name="add_screen_answer">Ответ</string>
     <string name="add_screen_edit">Сохранить</string>
@@ -365,7 +365,7 @@
     <string name="dropbox_login_message">Введите имя пользователя Dropbox (обычно email) и пароль.</string>
     <string name="import_supermemo_2008_xml_text">Импорт SuperMemo 2008 XML</string>
     <string name="uncategorized_text">Нет категории</string>
-    <string name="edit_text">Правка</string>
+    <string name="edit_text">Прав</string>
     <string name="category_dialog_title">Выберите категорию или введите новую</string>
     <string name="ordinal_text_short">Пор</string>
     <string name="total_text">Всего</string>
@@ -486,4 +486,5 @@
     <string name="chinese_text">Китайский</string>
     <string name="japanese_text">Японский</string>
     <string name="korean_text">Корейский</string>
+    <string name="thai_text">Тайский</string>
 </resources>
