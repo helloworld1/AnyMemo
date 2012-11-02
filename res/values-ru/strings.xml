@@ -97,7 +97,7 @@
     <string name="clear_recent_list">Очистить список последних баз</string>
     <string name="export_xml">Эспорт Mnemosyne XML</string>
     <string name="add_screen_question">Вопрос</string>
-    <string name="add_screen_new">Новая</string>
+    <string name="add_screen_new">Нов</string>
     <string name="add_screen_id">ID</string>
     <string name="add_screen_answer">Ответ</string>
     <string name="add_screen_edit">Сохранить</string>
@@ -112,7 +112,7 @@
     <string name="fb_create_db_message">Введите имя новой базы.</string>
     <string name="fb_create_dir_message">Введите имя нового каталога.</string>
     <string name="fb_delete_message">Вы действительно хотите удалить этот файл?</string>
-    <string name="fb_edit_dialog_title">Правк</string>
+    <string name="fb_edit_dialog_title">Правка</string>
     <string name="fb_fail_to_clone">Не удалось клонировать файл.</string>
     <string name="fb_rename">Переименовать</string>
     <string name="fb_rename_message">Введите имя ниже</string>
@@ -365,7 +365,7 @@
     <string name="dropbox_login_message">Введите имя пользователя Dropbox (обычно email) и пароль.</string>
     <string name="import_supermemo_2008_xml_text">Импорт SuperMemo 2008 XML</string>
     <string name="uncategorized_text">Нет категории</string>
-    <string name="edit_text">Правка</string>
+    <string name="edit_text">Прав</string>
     <string name="category_dialog_title">Выберите категорию или введите новую</string>
     <string name="ordinal_text_short">Пор</string>
     <string name="total_text">Всего</string>
