@@ -64,6 +64,7 @@ public class FEOauth extends AMActivity{
             private String authUrl;
             public void doHeavyTask() throws Exception{
                 authUrl = provider.retrieveRequestToken(consumer, CALLBACK_URL);
+                Log.i(TAG, "Auth url: " + authUrl);
             }
             public void doUITask(){
                 Log.v(TAG, "Request token: " + consumer.getToken());
