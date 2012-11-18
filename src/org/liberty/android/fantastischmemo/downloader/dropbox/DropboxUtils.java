@@ -20,99 +20,36 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.downloader.dropbox;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-
-import org.apache.myhttp.entity.mime.HttpMultipartMode;
-
-import org.apache.myhttp.entity.mime.content.FileBody;
-
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import org.apache.http.message.BasicNameValuePair;
-
-import org.apache.http.protocol.HTTP;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.liberty.android.fantastischmemo.AMEnv;
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.downloader.DownloaderUtils;
 
-import oauth.signpost.OAuthConsumer;
-
-import oauth.signpost.basic.DefaultOAuthConsumer;
-
-import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
-
-import org.apache.myhttp.entity.mime.MultipartEntity;
-
-import android.graphics.Rect;
-import android.os.AsyncTask;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.Window;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.LinearLayout;
 
 public class DropboxUtils{
     private static final String TAG = "org.liberty.android.fantastischmemo.downloader.dropbox.DropboxUtils";
-    private static final String API_KEY = "q2rclqr44ux8pe7";
-    private static final String API_SECRET = "bmgikjefor073dh";
-    private static final String TOKEN_URL = "https://api.dropbox.com/1/oauth/request_token";
+    private static final String REQUEST_TOKEN_URL = "https://api.dropbox.com/1/oauth/request_token";
+    private static final String AUTHORIZE_TOKEN_URL = "https://www.dropbox.com/1/oauth/authorize";
     
     
-    public static String OAUTH_REQUEST_TOKEN_SECRET = null;
-    public static String OAUTH_REQUEST_TOKEN = null;
+    private static String OAUTH_REQUEST_TOKEN_SECRET = null;
+    private static String OAUTH_REQUEST_TOKEN = null;
     
     
-//    private static final String METADATA_URL = "https://api.dropbox.com/0/metadata/dropbox";
-//    private static final String FILE_URL = "https://api-content.dropbox.com/0/files/dropbox";
-//    private static final String CREATE_FOLDER_URL = "https://api.dropbox.com/0/fileops/create_folder";
-
-
-    
-    
-    public static void oauthRequestToken(){
+    public static void retrieveOAuthRequestToken(){
     	
-    	Log.v("xinxin ****************", "request token called");
-    	String url = "https://api.dropbox.com/1/oauth/request_token";
     	HttpClient httpClient = new DefaultHttpClient();
-    	HttpPost httpPost = new HttpPost(url);
+    	HttpPost httpPost = new HttpPost(REQUEST_TOKEN_URL);
+    	httpPost.setHeader("Authorization", buildOAuthRequestHeader());
+    	
     	HttpResponse response = null;
-    
-    	String headerValue = "OAuth oauth_version=\"1.0\", " +
-					  "oauth_signature_method=\"PLAINTEXT\", " +
-                      "oauth_consumer_key=\"q2rclqr44ux8pe7\", "+
-						  "oauth_signature=\"bmgikjefor073dh&\"";
-    	httpPost.setHeader("Authorization", headerValue);
     	BufferedReader reader = null;
     	
         try {
@@ -127,31 +64,46 @@ public class DropboxUtils{
             	parsedResult = result.split("&");
             	OAUTH_REQUEST_TOKEN_SECRET=parsedResult[0].split("=")[1];
             	OAUTH_REQUEST_TOKEN=parsedResult[1].split("=")[1];
-            	Log.v("xinxin********** oauth request token: ", OAUTH_REQUEST_TOKEN);
-            	Log.v("xinxin********** oauth request token secret: ", OAUTH_REQUEST_TOKEN_SECRET);
             }
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			if(reader!= null){
 			    try {
 					reader.close();
-				} catch (IOException e) {
-				}
+				} catch (IOException e) {}
 			}
 		}
         
     }
     
-   
-   
+    public static String getAuthorizationPageUrl(){
+        return AUTHORIZE_TOKEN_URL + "?oauth_token="+ DropboxUtils.OAUTH_REQUEST_TOKEN+"&oauth_callback="+AMEnv.DROPBOX_REDIRECT_URI;
+    }
+    
+    
+    public static String buildOAuthAccessHeader(){
+        String headerValue = 
+                "OAuth oauth_version=\""+ AMEnv.DROPBOX_OAUTH_VERSION +"\", "
+                + "oauth_signature_method=\"PLAINTEXT\", "
+                + "oauth_token=\"" + OAUTH_REQUEST_TOKEN + "\", " 
+                + "oauth_consumer_key=\""+ AMEnv.DROPBOX_CONSUMER_KEY +"\", "
+                + "oauth_signature=\"" + AMEnv.DROPBOX_CONSUMER_SECRET+ "&" + OAUTH_REQUEST_TOKEN_SECRET + "\"";
+        
+        return headerValue;
+    }
+    
+    private static String buildOAuthRequestHeader(){
+        String requestHeader = 
+                "OAuth oauth_version=\""+AMEnv.DROPBOX_OAUTH_VERSION+"\", " +
+                "oauth_signature_method=\"PLAINTEXT\", " +
+                "oauth_consumer_key=\""+ AMEnv.DROPBOX_CONSUMER_KEY +"\", "+
+                "oauth_signature=\""+ AMEnv.DROPBOX_CONSUMER_SECRET + "&\"";
+        return requestHeader;
+        
+    }
 
+    
     
     /*
      * Return value: The index 0 is the token, index 1 is the secret
@@ -253,18 +205,18 @@ public class DropboxUtils{
 //            }
 //    }
 
-    private static String signPathUrl(String oauthToken, String oauthSecret, 
-            String apiUrl, String path) throws Exception {
-        OAuthConsumer oauthConsumer = new DefaultOAuthConsumer(API_KEY, API_SECRET);
-        oauthConsumer.setTokenWithSecret(oauthToken, oauthSecret);
-        /* Make the suitable URL for dropbox API */
-        path = URLEncoder.encode(path);
-        path = path.replace("%2F", "/");
-        path = path.replace("+", "%20");
-        String url = apiUrl + path;
-        url = oauthConsumer.sign(url);
-        return url;
-    }
+//    private static String signPathUrl(String oauthToken, String oauthSecret, 
+//            String apiUrl, String path) throws Exception {
+//        OAuthConsumer oauthConsumer = new DefaultOAuthConsumer(API_KEY, API_SECRET);
+//        oauthConsumer.setTokenWithSecret(oauthToken, oauthSecret);
+//        /* Make the suitable URL for dropbox API */
+//        path = URLEncoder.encode(path);
+//        path = path.replace("%2F", "/");
+//        path = path.replace("+", "%20");
+//        String url = apiUrl + path;
+//        url = oauthConsumer.sign(url);
+//        return url;
+//    }
 
 
 

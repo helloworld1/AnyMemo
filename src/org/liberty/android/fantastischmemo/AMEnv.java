@@ -23,7 +23,7 @@ package org.liberty.android.fantastischmemo;
 import android.os.Environment;
 
 /*
- * Class that defines the contants that is used in AnyMemo.
+ * Class that defines the constants that is used in AnyMemo.
  */
 public class AMEnv {
     public static final String EXTERNAL_STORAGE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
@@ -39,6 +39,13 @@ public class AMEnv {
     public final static String GOOGLE_CLIENT_SECRET = "74rz27lrTr9mWNnipgxXwtEd";
     public final static String GOOGLE_REDIRECT_URI = "http://localhost";
     public final static String GDRIVE_SCOPE ="https://docs.google.com/feeds/ https://docs.googleusercontent.com/ https://spreadsheets.google.com/feeds/";
+    
+    
+    // Dropbox oauth constants
     public final static String DROPBOX_REDIRECT_URI = "https://localhost";
+    public final static String DROPBOX_CONSUMER_KEY = "q2rclqr44ux8pe7";
+    public final static String DROPBOX_CONSUMER_SECRET = "bmgikjefor073dh";
+    public final static String DROPBOX_OAUTH_VERSION = "1.0";
+
 
 }

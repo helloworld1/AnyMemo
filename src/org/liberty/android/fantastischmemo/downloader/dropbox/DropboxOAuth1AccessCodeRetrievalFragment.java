@@ -19,15 +19,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.dropbox;
 
-import java.net.URLEncoder;
-
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.R;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 
 import android.content.DialogInterface;
 
@@ -38,9 +34,7 @@ import android.os.Bundle;
 
 import android.support.v4.app.DialogFragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -94,9 +88,6 @@ class DropboxOAuth1AccessCodeRetrievalFragment extends DialogFragment {
         ll.setMinimumWidth((int)(displayRectangle.width() * 0.9f));
         ll.setMinimumHeight((int)(displayRectangle.height() * 0.8f));
 
-       
-        
-//        Log.v("xinxin authorize token *******", DropboxUtils.OAUTH_REQUEST_TOKEN);
         
         webview.getSettings().setJavaScriptEnabled(true);
         webview.setWebViewClient(new WebViewClient() {
@@ -123,13 +114,8 @@ class DropboxOAuth1AccessCodeRetrievalFragment extends DialogFragment {
                 }
             }
         });
-        
-        try {
-//            webview.loadUrl(url);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
   	
+        //load webview to show the authorize page
         new RequestTokenTask().execute(webview);
         
         return v;
@@ -139,22 +125,14 @@ class DropboxOAuth1AccessCodeRetrievalFragment extends DialogFragment {
     
    
     
-    class RequestTokenTask extends AsyncTask<WebView, Void, Void> {
-
-        protected void onPostExecute() {
-            // TODO: check this.exception 
-            // TODO: do something with the feed
-        }
-
-		@Override
+    private class RequestTokenTask extends AsyncTask<WebView, Void, Void> {
+        @Override
 		protected Void doInBackground(WebView... v) {
-	        DropboxUtils.oauthRequestToken();
-	        String url = "https://www.dropbox.com/1/oauth/authorize?oauth_token="+ DropboxUtils.OAUTH_REQUEST_TOKEN+"&oauth_callback="+AMEnv.DROPBOX_REDIRECT_URI;
-	        v[0].loadUrl(url);
+	        DropboxUtils.retrieveOAuthRequestToken();
+	        v[0].loadUrl(DropboxUtils.getAuthorizationPageUrl());
 			return null;
 		}
-		
-     }
+    }
     
     public void setAuthCodeReceiveListener(AuthCodeReceiveListener listener) {
         authCodeReceiveListener = listener;
