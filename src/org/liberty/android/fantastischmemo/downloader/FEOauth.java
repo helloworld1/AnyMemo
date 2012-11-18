@@ -89,11 +89,11 @@ public class FEOauth extends AMActivity{
             String verifier = uri.getQueryParameter(OAuth.OAUTH_VERIFIER);
             try {
 
-                provider.retrieveAccessToken(consumer, verifier);
+                Log.d("Oauth Verifier ", verifier);
+                provider.retrieveAccessToken(consumer, null);
                 String token = consumer.getToken();
                 String tokenSecret= consumer.getTokenSecret();
 
-                Log.d("Oauth Verifier ", verifier);
                 Log.d("Oauth Token ", token);
                 Log.d("Oauth Token Secret ", tokenSecret);
 

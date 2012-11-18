@@ -374,7 +374,6 @@ public class StudyActivity extends QACardActivity {
 
         if(option.getVolumeKeyShortcut()){
             if(keyCode == KeyEvent.KEYCODE_VOLUME_UP){
-                onGradeButtonClickListener.onGradeButtonClick(0);
                 if (isAnswerShown()) {
                     onGradeButtonClickListener.onGradeButtonClick(0);
                     Toast.makeText(this, getString(R.string.grade_text) + " 0", Toast.LENGTH_SHORT).show();
@@ -385,7 +384,6 @@ public class StudyActivity extends QACardActivity {
                 return true;
             }
             if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
-                onGradeButtonClickListener.onGradeButtonClick(3);
                 if (isAnswerShown()) {
                     onGradeButtonClickListener.onGradeButtonClick(3);
                     Toast.makeText(this, getString(R.string.grade_text) + " 3", Toast.LENGTH_SHORT).show();
