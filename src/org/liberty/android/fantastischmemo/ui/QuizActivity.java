@@ -41,6 +41,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -155,6 +156,21 @@ public class QuizActivity extends QACardActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_lookup:
+            {
+                dictionaryUtil.showLookupListDialog("" + getCurrentCard().getQuestion() + " " + getCurrentCard().getAnswer());
+                break;
+            }
+            case R.id.menu_speak_question:
+            {
+                speakQuestion();
+                break;
+            }
+            case R.id.menu_speak_answer:
+            {
+                speakAnswer();
+                break;
+            }
         }
         return false;
     }
