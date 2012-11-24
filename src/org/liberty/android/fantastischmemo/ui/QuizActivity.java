@@ -20,40 +20,35 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import org.apache.mycommons.lang3.StringUtils;
-
-import org.liberty.android.fantastischmemo.queue.QuizQueueManager;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.utils.AMStringUtil;
-
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
-
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
-
+import org.liberty.android.fantastischmemo.queue.QuizQueueManager;
 import org.liberty.android.fantastischmemo.scheduler.DefaultScheduler;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
-
+import org.liberty.android.fantastischmemo.utils.AMStringUtil;
 import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
 
-import android.content.Context;
-
-import android.os.AsyncTask;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
-
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-
 import android.widget.TextView;
 
 public class QuizActivity extends QACardActivity {
@@ -148,6 +143,20 @@ public class QuizActivity extends QACardActivity {
         quizSize = extras.getInt(EXTRA_QUIZ_SIZE, -1);
 
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.quiz_activity_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        }
+        return false;
     }
 
     @Override
