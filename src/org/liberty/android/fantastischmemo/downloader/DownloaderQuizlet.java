@@ -66,9 +66,9 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
     private static final String TAG = "org.liberty.android.fantastischmemo.downloader.DownloaderQuizlet";
     private static final int PAGE_SIZE = 50;
     private static final String QUIZLET_API_KEY = "7bmBY5S2VgPbNpd8";
-    private static final String QUIZLET_API_TAG = "http://api.quizlet.com/1.0/sets?dev_key=" + QUIZLET_API_KEY+ "&per_page=" + PAGE_SIZE + "&q=";
-    private static final String QUIZLET_API_USER = "http://api.quizlet.com/1.0/sets?dev_key=" + QUIZLET_API_KEY+ "&per_page=" + PAGE_SIZE + "&q=creator:";
-    private static final String QUIZLET_API_GET = "http://api.quizlet.com/1.0/sets?dev_key=" + QUIZLET_API_KEY+ "&extended=on&q=ids:";
+    private static final String QUIZLET_API_TAG = "https://api.quizlet.com/2.0/search/sets?client_id=" + QUIZLET_API_KEY+ "&per_page=" + PAGE_SIZE + "&q=";
+    private static final String QUIZLET_API_USER = "https://api.quizlet.com/2.0/users/%s/sets?client_id=" + QUIZLET_API_KEY+ "&per_page=" + PAGE_SIZE;
+    private static final String QUIZLET_API_GET = "https://api.quizlet.com/2.0/sets/%d?client_id=" + QUIZLET_API_KEY;
     private DownloadListAdapter dlAdapter;
 
     private ListView listView;
@@ -191,11 +191,9 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
         String url = "";
         if(action.equals(INTENT_ACTION_SEARCH_TAG)){
             url = QUIZLET_API_TAG + URLEncoder.encode(searchCriterion);
-        }
-        else if(action.equals(INTENT_ACTION_SEARCH_USER)){
-            url = QUIZLET_API_USER + URLEncoder.encode(searchCriterion);
-        }
-        else{
+        } else if (action.equals(INTENT_ACTION_SEARCH_USER)){
+            url = String.format(QUIZLET_API_USER, URLEncoder.encode(searchCriterion));
+        } else {
             throw new IOException("Incorrect criterion used for this call");
         }
         Log.i(TAG, "Url: " + url);
@@ -203,20 +201,23 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
 
         String jsonString = DownloaderUtils.downloadJSONString(url);
         Log.v(TAG, "JSON String: " + jsonString);
-        JSONObject jsonObject = new JSONObject(jsonString);
-        String status =  jsonObject.getString("response_type");
-        if(!status.equals("ok")){
-            throw new IOException("Status is not OK. Status: " + status);
+
+        // The array that stores the result
+        JSONArray jsonArray = null;
+        if (action.equals(INTENT_ACTION_SEARCH_TAG)) {
+            JSONObject jsonObject = new JSONObject(jsonString);
+            totalPages = jsonObject.getInt("total_pages");
+            jsonArray = jsonObject.getJSONArray("sets");
+        } else if(action.equals(INTENT_ACTION_SEARCH_USER)){
+            jsonArray = new JSONArray(jsonString);
         }
-        totalPages = jsonObject.getInt("total_pages");
-        JSONArray jsonArray = jsonObject.getJSONArray("sets");
         for(int i = 0; i < jsonArray.length(); i++){
             JSONObject jsonItem = jsonArray.getJSONObject(i);
             int cardId;
             cardId = jsonItem.getInt("id");
 
 
-            String address = QUIZLET_API_GET + cardId;
+            String address = String.format(QUIZLET_API_GET, cardId);
             DownloadItem di = new DownloadItem(DownloadItem.ItemType.Database,
                     jsonItem.getString("title"),
                     "From Quizlet.com", 
@@ -231,17 +232,12 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
         String dbJsonString = DownloaderUtils.downloadJSONString(address);
         Log.v(TAG, "Download url: " + address);
         JSONObject rootObject = new JSONObject(dbJsonString);
-        String status = rootObject.getString("response_type");
-        if(!status.equals("ok")){
-            Log.e(TAG, "Content: " + dbJsonString);
-            throw new IOException("Status is not OK. Status: " + status);
-        }
-        JSONArray flashcardsArray = rootObject.getJSONArray("sets").getJSONObject(0).getJSONArray("terms");
+        JSONArray flashcardsArray = rootObject.getJSONArray("terms");
         List<Card> cardList = new LinkedList<Card>();
         for(int i = 0; i < flashcardsArray.length(); i++){
-            JSONArray jsonItem = flashcardsArray.getJSONArray(i);
-            String question = jsonItem.getString(0);
-            String answer = jsonItem.getString(1);
+            JSONObject jsonItem = flashcardsArray.getJSONObject(i);
+            String question = jsonItem.getString("term");
+            String answer = jsonItem.getString("definition");
             Card card = new Card();
             card.setQuestion(question);
             card.setAnswer(answer);

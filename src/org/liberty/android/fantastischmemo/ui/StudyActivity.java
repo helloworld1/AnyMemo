@@ -19,63 +19,50 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
+import java.sql.SQLException;
 import java.util.Date;
+
 import org.apache.mycommons.lang3.StringUtils;
-
-import org.liberty.android.fantastischmemo.queue.LearnQueueManager;
-import org.liberty.android.fantastischmemo.ui.DetailScreen;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.ui.SettingsScreen;
-import org.liberty.android.fantastischmemo.ui.StudyActivity;
-import org.liberty.android.fantastischmemo.utils.AMStringUtil;
-import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
-
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
-
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
-
+import org.liberty.android.fantastischmemo.queue.LearnQueueManager;
 import org.liberty.android.fantastischmemo.queue.QueueManager;
-
-import java.sql.SQLException;
-
 import org.liberty.android.fantastischmemo.scheduler.DefaultScheduler;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
-
-
+import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
+import org.liberty.android.fantastischmemo.utils.AMStringUtil;
+import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
 import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
 
-import com.example.android.apis.graphics.FingerPaint;
-
-import android.os.AsyncTask;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
-
-import android.view.Menu;
+import android.util.Log;
 import android.view.ContextMenu;
+import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.KeyEvent;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.util.Log;
-import android.net.Uri;
-
-import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
-
 import android.widget.Toast;
+
+import com.example.android.apis.graphics.FingerPaint;
 
 public class StudyActivity extends QACardActivity {
     public static String EXTRA_DBPATH = "dbpath";
@@ -156,12 +143,12 @@ public class StudyActivity extends QACardActivity {
             }
             case R.id.menuspeakquestion:
             {
-                return speakQuestion(getCurrentCard().getQuestion());
+                return speakQuestion();
             }
 
             case R.id.menuspeakanswer:
             {
-                return speakAnswer(getCurrentCard().getAnswer());
+                return speakAnswer();
             }
 
             case R.id.menusettings:
@@ -259,9 +246,8 @@ public class StudyActivity extends QACardActivity {
                 if(getCurrentCard() == null){
                     return false;
                 }
-                /* default word to lookup is question */
-                String lookupWord = getCurrentCard().getQuestion();
-                dictionaryUtil.lookupDictionary(lookupWord);
+                // Look up words in both question and answer
+                dictionaryUtil.showLookupListDialog("" + getCurrentCard().getQuestion() + " " + getCurrentCard().getAnswer());
 
                 return true;
 
@@ -375,7 +361,6 @@ public class StudyActivity extends QACardActivity {
 
         if(option.getVolumeKeyShortcut()){
             if(keyCode == KeyEvent.KEYCODE_VOLUME_UP){
-                onGradeButtonClickListener.onGradeButtonClick(0);
                 if (isAnswerShown()) {
                     onGradeButtonClickListener.onGradeButtonClick(0);
                     Toast.makeText(this, getString(R.string.grade_text) + " 0", Toast.LENGTH_SHORT).show();
@@ -386,7 +371,6 @@ public class StudyActivity extends QACardActivity {
                 return true;
             }
             if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
-                onGradeButtonClickListener.onGradeButtonClick(3);
                 if (isAnswerShown()) {
                     onGradeButtonClickListener.onGradeButtonClick(3);
                     Toast.makeText(this, getString(R.string.grade_text) + " 3", Toast.LENGTH_SHORT).show();
@@ -479,7 +463,7 @@ public class StudyActivity extends QACardActivity {
         if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
                 || option.getSpeakingType() == Option.SpeakingType.TAP)) {
             stopQuestionTTS();
-            speakQuestion(getCurrentCard().getQuestion());
+            speakQuestion();
         } else {
             onClickQuestionView();
         }
@@ -492,7 +476,7 @@ public class StudyActivity extends QACardActivity {
         } else if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
                 || option.getSpeakingType() == Option.SpeakingType.TAP)) {
             stopAnswerTTS();
-            speakAnswer(getCurrentCard().getAnswer());
+            speakAnswer();
         }
     }
 
@@ -567,11 +551,11 @@ public class StudyActivity extends QACardActivity {
             if(!isAnswerShown()){
                 // Make sure the TTS is stop, or it will speak nothing.
                 stopQuestionTTS();
-                speakQuestion(getCurrentCard().getQuestion());
+                speakQuestion();
             } else {
                 // Make sure the TTS is stop
                 stopAnswerTTS();
-                speakAnswer(getCurrentCard().getAnswer());
+                speakAnswer();
             }
         }
     }

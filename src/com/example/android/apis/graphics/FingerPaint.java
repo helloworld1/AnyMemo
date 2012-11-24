@@ -17,26 +17,45 @@
 package com.example.android.apis.graphics;
 
 
+import org.apache.mycommons.codec.binary.Base64;
+import org.apache.mycommons.io.output.ByteArrayOutputStream;
 import org.liberty.android.fantastischmemo.R;
+
 import android.content.Context;
-import android.graphics.*;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.BlurMaskFilter;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.EmbossMaskFilter;
+import android.graphics.MaskFilter;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Display;
 
 
 public class FingerPaint extends GraphicsActivity
         implements ColorPickerDialog.OnColorChangedListener {    
 
-
+    private MyView myView;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(new MyView(this));
+
+        Bitmap loadedBitmap = loadBitmap();
+        myView = new MyView(this, loadedBitmap);
+        setContentView(myView);
 
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
@@ -53,6 +72,12 @@ public class FingerPaint extends GraphicsActivity
         mBlur = new BlurMaskFilter(8, BlurMaskFilter.Blur.NORMAL);
         setTitle(R.string.paint_text);
 
+    }
+
+    @Override
+    public void onDestroy() {
+        saveBitmap(myView.getBitmap());
+        super.onDestroy();
     }
     
     private Paint       mPaint;
@@ -73,13 +98,11 @@ public class FingerPaint extends GraphicsActivity
         private Path    mPath;
         private Paint   mBitmapPaint;
         
-        public MyView(Context c) {
+        public MyView(Context c, Bitmap bitmap) {
             super(c);
             
-            Display display = getWindowManager().getDefaultDisplay(); 
-            int width = display.getWidth();
-            int height = display.getHeight();
-            mBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            mBitmap = bitmap;
+            mBitmap.setHasAlpha(true);
             mCanvas = new Canvas(mBitmap);
 
             mPath = new Path();
@@ -147,6 +170,10 @@ public class FingerPaint extends GraphicsActivity
             }
             return true;
         }
+
+        public Bitmap getBitmap() {
+            return mBitmap;
+        }
     }
     
     private static final int COLOR_MENU_ID = Menu.FIRST;
@@ -154,11 +181,13 @@ public class FingerPaint extends GraphicsActivity
     private static final int BLUR_MENU_ID = Menu.FIRST + 2;
     private static final int ERASE_MENU_ID = Menu.FIRST + 3;
     private static final int SRCATOP_MENU_ID = Menu.FIRST + 4;
+    private static final int ERASE_ALL_ID = Menu.FIRST + 5;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         
+        menu.add(0, ERASE_ALL_ID, 0, "Erase all").setShortcut('3', 'a');
         menu.add(0, COLOR_MENU_ID, 0, "Color").setShortcut('3', 'c');
         menu.add(0, EMBOSS_MENU_ID, 0, "Emboss").setShortcut('4', 's');
         menu.add(0, BLUR_MENU_ID, 0, "Blur").setShortcut('5', 'z');
@@ -188,6 +217,11 @@ public class FingerPaint extends GraphicsActivity
         mPaint.setAlpha(0xFF);
 
         switch (item.getItemId()) {
+            case ERASE_ALL_ID:
+                myView.getBitmap().eraseColor(Color.TRANSPARENT);
+                myView.invalidate();
+                return true;
+
             case COLOR_MENU_ID:
                 new ColorPickerDialog(this, this, mPaint.getColor()).show();
                 return true;
@@ -216,5 +250,37 @@ public class FingerPaint extends GraphicsActivity
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private Bitmap loadBitmap() {
+        SharedPreferences shre = PreferenceManager.getDefaultSharedPreferences(this);
+        String previouslyEncodedImage = shre.getString("paint_image_data", "");
+
+        if( !previouslyEncodedImage.equalsIgnoreCase("") ){
+            byte[] b = Base64.decodeBase64(previouslyEncodedImage);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
+            Bitmap mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+            return mutableBitmap;
+        }
+
+        Display display = getWindowManager().getDefaultDisplay(); 
+        int width = display.getWidth();
+        int height = display.getHeight();
+
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        return bitmap;
+    }
+
+    private void saveBitmap(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, baos);   
+        byte[] b = baos.toByteArray(); 
+
+        String encodedImage = Base64.encodeBase64String(b);
+
+        SharedPreferences shre = PreferenceManager.getDefaultSharedPreferences(this);
+        Editor edit=shre.edit();
+        edit.putString("paint_image_data",encodedImage);
+        edit.commit();
     }
 }
