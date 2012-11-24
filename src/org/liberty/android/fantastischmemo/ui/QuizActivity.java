@@ -179,7 +179,8 @@ public class QuizActivity extends QACardActivity {
     protected void onClickQuestionText() {
         if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
                 || option.getSpeakingType() == Option.SpeakingType.TAP)) {
-            //TODO: Speak
+            stopQuestionTTS();
+            speakQuestion();
         } else {
             onClickQuestionView();
         }
@@ -191,7 +192,8 @@ public class QuizActivity extends QACardActivity {
             onClickAnswerView();
         } else if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
                 || option.getSpeakingType() == Option.SpeakingType.TAP)) {
-            //TODO: Speak
+            stopAnswerTTS();
+            speakAnswer();
         }
     }
 
@@ -208,15 +210,6 @@ public class QuizActivity extends QACardActivity {
             displayCard(true);
         } else if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED && isAnswerShown()) {
             displayCard(false);
-        }
-    }
-
-    @Override
-    protected void onPostDisplayCard() {
-        if (isAnswerShown()) {
-            gradeButtons.show();
-        } else {
-            gradeButtons.hide();
         }
     }
 
