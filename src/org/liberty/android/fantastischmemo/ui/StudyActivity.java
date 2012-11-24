@@ -156,12 +156,12 @@ public class StudyActivity extends QACardActivity {
             }
             case R.id.menuspeakquestion:
             {
-                return speakQuestion(getCurrentCard().getQuestion());
+                return speakQuestion();
             }
 
             case R.id.menuspeakanswer:
             {
-                return speakAnswer(getCurrentCard().getAnswer());
+                return speakAnswer();
             }
 
             case R.id.menusettings:
@@ -259,9 +259,8 @@ public class StudyActivity extends QACardActivity {
                 if(getCurrentCard() == null){
                     return false;
                 }
-                /* default word to lookup is question */
-                String lookupWord = getCurrentCard().getQuestion();
-                dictionaryUtil.lookupDictionary(lookupWord);
+                // Look up words in both question and answer
+                dictionaryUtil.showLookupListDialog("" + getCurrentCard().getQuestion() + " " + getCurrentCard().getAnswer());
 
                 return true;
 
@@ -375,7 +374,6 @@ public class StudyActivity extends QACardActivity {
 
         if(option.getVolumeKeyShortcut()){
             if(keyCode == KeyEvent.KEYCODE_VOLUME_UP){
-                onGradeButtonClickListener.onGradeButtonClick(0);
                 if (isAnswerShown()) {
                     onGradeButtonClickListener.onGradeButtonClick(0);
                     Toast.makeText(this, getString(R.string.grade_text) + " 0", Toast.LENGTH_SHORT).show();
@@ -386,7 +384,6 @@ public class StudyActivity extends QACardActivity {
                 return true;
             }
             if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
-                onGradeButtonClickListener.onGradeButtonClick(3);
                 if (isAnswerShown()) {
                     onGradeButtonClickListener.onGradeButtonClick(3);
                     Toast.makeText(this, getString(R.string.grade_text) + " 3", Toast.LENGTH_SHORT).show();
@@ -479,7 +476,7 @@ public class StudyActivity extends QACardActivity {
         if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
                 || option.getSpeakingType() == Option.SpeakingType.TAP)) {
             stopQuestionTTS();
-            speakQuestion(getCurrentCard().getQuestion());
+            speakQuestion();
         } else {
             onClickQuestionView();
         }
@@ -492,7 +489,7 @@ public class StudyActivity extends QACardActivity {
         } else if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
                 || option.getSpeakingType() == Option.SpeakingType.TAP)) {
             stopAnswerTTS();
-            speakAnswer(getCurrentCard().getAnswer());
+            speakAnswer();
         }
     }
 
@@ -567,11 +564,11 @@ public class StudyActivity extends QACardActivity {
             if(!isAnswerShown()){
                 // Make sure the TTS is stop, or it will speak nothing.
                 stopQuestionTTS();
-                speakQuestion(getCurrentCard().getQuestion());
+                speakQuestion();
             } else {
                 // Make sure the TTS is stop
                 stopAnswerTTS();
-                speakAnswer(getCurrentCard().getAnswer());
+                speakAnswer();
             }
         }
     }

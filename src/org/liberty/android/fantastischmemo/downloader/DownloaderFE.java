@@ -284,18 +284,24 @@ public class DownloaderFE extends DownloaderBase{
             String answer = jsonItem.getString("answer");
 
             // Download image file if there is
-            String questionImageUrl = jsonItem.getString("question_image_url");
+            String questionImageUrl = null;
+            if (!jsonItem.isNull("question_image_url")) {
+                questionImageUrl = jsonItem.getString("question_image_url");
+            }
             if (StringUtils.isNotEmpty(questionImageUrl)) {
                 String downloadFilename = AMUtil.getFilenameFromPath(questionImageUrl);
-                DownloaderUtils.downloadFile(questionImageUrl, imagePath + downloadFilename); 
-                question = question + "<br /><img src=\"" + downloadFilename + "\" />";
+                DownloaderUtils.downloadFile(questionImageUrl, imagePath + "q-" + downloadFilename); 
+                question = question + "<br /><img src=\"" + "q-" + downloadFilename + "\" />";
             }
             // Download image file if there is
-            String answerImageUrl = jsonItem.getString("answer_image_url");
+            String answerImageUrl = null;
+            if (!jsonItem.isNull("answer_image_url")) {
+                answerImageUrl = jsonItem.getString("answer_image_url");
+            }
             if (StringUtils.isNotEmpty(answerImageUrl)) {
                 String downloadFilename = AMUtil.getFilenameFromPath(answerImageUrl);
-                DownloaderUtils.downloadFile(answerImageUrl, imagePath + downloadFilename); 
-                answer = answer + "<br /><img src=\"" + downloadFilename + "\" />";
+                DownloaderUtils.downloadFile(answerImageUrl, imagePath + "a-" + downloadFilename); 
+                answer = answer + "<br /><img src=\"" + "a-" + downloadFilename + "\" />";
             }
 
             Card card = new Card();

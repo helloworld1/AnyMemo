@@ -64,6 +64,7 @@ public class FEOauth extends AMActivity{
             private String authUrl;
             public void doHeavyTask() throws Exception{
                 authUrl = provider.retrieveRequestToken(consumer, CALLBACK_URL);
+                Log.i(TAG, "Auth url: " + authUrl);
             }
             public void doUITask(){
                 Log.v(TAG, "Request token: " + consumer.getToken());
@@ -88,11 +89,11 @@ public class FEOauth extends AMActivity{
             String verifier = uri.getQueryParameter(OAuth.OAUTH_VERIFIER);
             try {
 
-                provider.retrieveAccessToken(consumer, verifier);
+                Log.d("Oauth Verifier ", verifier);
+                provider.retrieveAccessToken(consumer, null);
                 String token = consumer.getToken();
                 String tokenSecret= consumer.getTokenSecret();
 
-                Log.d("Oauth Verifier ", verifier);
                 Log.d("Oauth Token ", token);
                 Log.d("Oauth Token Secret ", tokenSecret);
 

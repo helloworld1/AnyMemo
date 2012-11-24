@@ -181,6 +181,9 @@ abstract public class QACardActivity extends AMActivity {
         return dbName;
     }
 
+    // Important class that display the card using fragment
+    // the showAnswer parameter is handled differently on single
+    // sided card and double sided card.
     protected void displayCard(boolean showAnswer) {
 
         // First prepare the text to display
@@ -512,7 +515,7 @@ abstract public class QACardActivity extends AMActivity {
     }
 
 
-    // Se
+    // Set the small title to display additional informaiton
     public void setSmallTitle(CharSequence text) {
         if (StringUtils.isNotEmpty(text)) {
             smallTitleBar.setText(text);
@@ -645,17 +648,17 @@ abstract public class QACardActivity extends AMActivity {
         }
     }
     
-    protected boolean speakQuestion(String text){
-        if(questionTTS != null && text != null){
-            questionTTS.sayText(text);
+    protected boolean speakQuestion(){
+        if(questionTTS != null){
+            questionTTS.sayText(getCurrentCard().getQuestion());
             return true;
         }
         return false;
     }
     
-    protected boolean speakAnswer(String text){
-        if(answerTTS != null && text != null){
-            answerTTS.sayText(text);
+    protected boolean speakAnswer(){
+        if(answerTTS != null){
+            answerTTS.sayText(getCurrentCard().getAnswer());
             return true;
         }
         return false;

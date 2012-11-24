@@ -85,8 +85,8 @@ public class DownloaderUtils{
         outFile.createNewFile();
         out  =new FileOutputStream(outFile);
 
+        Log.i(TAG, "URL to download is: " + url);
         URL myURL = new URL(url);
-        Log.v(TAG, "URL IS: " + myURL);
         URLConnection ucon = myURL.openConnection();
         byte[] buf = new byte[8192];
 
@@ -109,7 +109,7 @@ public class DownloaderUtils{
 
     /* Return a valid dbname from original name */
     public static String validateDBName(String orngName){
-        String s1 = orngName.replaceAll("[/:]", "_");
+        String s1 = orngName.replaceAll("[/:|]", "_");
         return s1;
     }
 

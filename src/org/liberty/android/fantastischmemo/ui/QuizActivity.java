@@ -129,6 +129,10 @@ public class QuizActivity extends QACardActivity {
 
     @Override
     public void onPostInit() {
+        if (getCurrentCard() == null) {
+            showNoItemDialog();
+            return;
+        }
         setupGradeButtons();
         displayCard(false);
         initialized = true;
@@ -179,6 +183,15 @@ public class QuizActivity extends QACardActivity {
             displayCard(true);
         } else if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED && isAnswerShown()) {
             displayCard(false);
+        }
+    }
+
+    @Override
+    protected void onPostDisplayCard() {
+        if (isAnswerShown()) {
+            gradeButtons.show();
+        } else {
+            gradeButtons.hide();
         }
     }
 
@@ -397,6 +410,27 @@ public class QuizActivity extends QACardActivity {
             progressDialog.dismiss();
             finish();
         }
+    }
+
+    private void showNoItemDialog(){
+        new AlertDialog.Builder(this)
+            .setTitle(this.getString(R.string.memo_no_item_title))
+            .setMessage(this.getString(R.string.memo_no_item_message))
+            .setNeutralButton(getString(R.string.back_menu_text), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+                    /* Finish the current activity and go back to the last activity.
+                     * It should be the open screen. */
+                    finish();
+                }
+            })
+            .setOnCancelListener(new DialogInterface.OnCancelListener(){
+                public void onCancel(DialogInterface dialog){
+                    finish();
+                }
+            })
+            .create()
+            .show();
     }
 
 }
