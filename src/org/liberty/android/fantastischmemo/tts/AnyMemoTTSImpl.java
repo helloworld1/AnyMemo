@@ -20,14 +20,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo.tts;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-
 import java.util.concurrent.TimeUnit;
-
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.mycommons.lang3.StringUtils;
+
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
@@ -36,7 +36,15 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
 
 	private final TextToSpeech myTTS;
 	private SpeakWord speakWord;
-	
+	private OnTextToSpeechCompletedListener onTextToSpeechCompletedListener =
+	        new OnTextToSpeechCompletedListener() {
+        
+        @Override
+        public void onTextToSpeechCompleted(String text) {
+            // Do nothing. 
+            Log.i(TAG, "on finished " + text);
+        }
+    }; 
 	private final Locale myLocale;
     
     private ReentrantLock initLock = new ReentrantLock();
@@ -45,11 +53,13 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
     private static long INIT_LOCK_TIMEOUT = 10L;
 
     public final static String TAG = "org.liberty.android.fantastischmemo.tts.AnyMemoTTSPlatform";
-
+    
     public void onInit(int status){
         try {
             if (initLock.tryLock() || initLock.tryLock(INIT_LOCK_TIMEOUT, TimeUnit.SECONDS)) {
                 initLock.unlock();
+                
+                
             } else {
                 Log.e(TAG, "TTS init timed out");
                 return;
@@ -62,6 +72,15 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
             Log.v(TAG, "init!" + myLocale.toString());
             assert myTTS != null;
             assert myLocale != null;
+            
+            myTTS.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
+                @Override
+                public void onUtteranceCompleted(String utteranceId) {
+                    onTextToSpeechCompletedListener.onTextToSpeechCompleted(utteranceId);
+                    Log.i(TAG, "Text finished");
+                }
+            });
+            
             int result = myTTS.setLanguage(myLocale);
             if (result == TextToSpeech.LANG_MISSING_DATA) {
                 Log.e(TAG, "Missing language data");
@@ -82,6 +101,8 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
         initLock.lock();
 		myLocale = getLocaleForTTS(locale);
 		myTTS = new TextToSpeech(context, this);
+		
+		
         initLock.unlock();
 		speakWord = new SpeakWord(audioSearchPath);
 	}
@@ -129,7 +150,11 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
 		processed_str = processed_str.replaceAll("&.*?;", "");
 
         if(!myTTS.isSpeaking()){
-            myTTS.speak(processed_str, 0, null);
+            //myTTS.speak(processed_str, 0, null);
+            HashMap<String, String> params = new HashMap<String, String>();
+            params.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, s);
+            myTTS.speak(processed_str, 0, params);
+            
         }
         else{
             stop();
@@ -153,4 +178,9 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
         return new Locale(loc);
 
     }
+    
+    public interface OnTextToSpeechCompletedListener {
+        void onTextToSpeechCompleted(String text);
+    }
+    
 }

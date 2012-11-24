@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/auto_speak_settings_root"
+    android:orientation="vertical" >
+    
+    <TextView 
+        android:id="@+id/auto_speak_settings_"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="3dip"/>
+    <EditText
+        android:id="@+id/user_name_entry"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+    <TextView 
+        android:id="@+id/password_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="3dip"/>
+    <EditText
+        android:id="@+id/password_entry"
+        android:layout_width="fill_parent"
+        android:password="true"
+        android:layout_height="fill_parent" />
+
+</LinearLayout>

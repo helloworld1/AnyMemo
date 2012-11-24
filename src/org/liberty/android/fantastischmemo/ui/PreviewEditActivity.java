@@ -935,8 +935,11 @@ public class PreviewEditActivity extends QACardActivity {
 
                 @Override
                 public boolean onPlayButtonClick() {
-          //          speakAnswer("Answer first");
-          //          return speakQuestion("What's up bro!");
+                    speakQuestion();
+              
+                    speakAnswer();
+              //      gotoNext();
+//                    return speakQuestion();
                     return true;
                 }
             };
