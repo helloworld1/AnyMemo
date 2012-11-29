@@ -471,10 +471,14 @@ public class StudyActivity extends QACardActivity {
     protected void onClickAnswerText() {
         if (!isAnswerShown()) {
             onClickAnswerView();
-        } else if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
-                || option.getSpeakingType() == Option.SpeakingType.TAP)) {
-            stopAnswerTTS();
-            speakAnswer();
+        } else {
+            if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
+                        || option.getSpeakingType() == Option.SpeakingType.TAP)) {
+                stopAnswerTTS();
+                speakAnswer();
+            } else {
+                onClickAnswerView();
+            }
         }
     }
 
