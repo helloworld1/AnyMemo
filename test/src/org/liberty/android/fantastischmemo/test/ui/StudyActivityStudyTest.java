@@ -12,11 +12,11 @@ import com.jayway.android.robotium.solo.Solo;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-public class MemoScreenActivityStudyTest extends ActivityInstrumentationTestCase2<AnyMemo> {
+public class StudyActivityStudyTest extends ActivityInstrumentationTestCase2<AnyMemo> {
 
     protected AnyMemo mActivity;
 
-    public MemoScreenActivityStudyTest () {
+    public StudyActivityStudyTest () {
         super("org.liberty.android.fantastischmemo", AnyMemo.class);
     }
 
@@ -36,7 +36,7 @@ public class MemoScreenActivityStudyTest extends ActivityInstrumentationTestCase
         solo.sleep(4000);
         solo.clickLongOnText(UITestHelper.SAMPLE_DB_NAME);
         solo.clickOnText(solo.getString(R.string.study_text));
-        solo.waitForActivity("MemoScreen");
+        solo.waitForActivity("StudyActivity");
         solo.sleep(4000);
     }
 

@@ -39,27 +39,22 @@ public class AnyMemoActivityRecentTabTest extends ActivityInstrumentationTestCas
 
     public void testActionListStudy() {
         solo.clickOnText(solo.getString(R.string.study_text));
-        solo.waitForActivity("MemoScreen");
+        solo.waitForActivity("StudyActivity");
         solo.sleep(3000);
     }
 
     public void testActionListPrevEdit() {
         solo.clickOnText(solo.getString(R.string.edit_button_text));
-        solo.waitForActivity("EditScreen");
+        solo.waitForActivity("PreviewEditActivity");
         solo.sleep(3000);
     }
 
     public void testActionListCardList() {
         solo.clickOnText(solo.getString(R.string.list_mode_text));
-        solo.waitForActivity("ListEditScreen");
+        solo.waitForActivity("ListPreviewEditActivity");
         solo.sleep(3000);
     }
 
-    public void testActionListCram() {
-        solo.clickOnText(solo.getString(R.string.learn_ahead));
-        solo.waitForActivity("MemoScreen");
-        solo.sleep(3000);
-    }
 
     public void testActionListSettings() {
         solo.clickOnText(solo.getString(R.string.settings_menu_text));

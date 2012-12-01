@@ -8,11 +8,11 @@ import com.jayway.android.robotium.solo.Solo;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-public class EditScreenActivityMainButtonTest extends ActivityInstrumentationTestCase2<AnyMemo> {
+public class PreviewEditActivityMainButtonTest extends ActivityInstrumentationTestCase2<AnyMemo> {
 
     protected AnyMemo mActivity;
 
-    public EditScreenActivityMainButtonTest () {
+    public PreviewEditActivityMainButtonTest () {
         super("org.liberty.android.fantastischmemo", AnyMemo.class);
     }
 
@@ -33,7 +33,7 @@ public class EditScreenActivityMainButtonTest extends ActivityInstrumentationTes
         solo.clickLongOnText(UITestHelper.SAMPLE_DB_NAME);
         solo.clickOnText(solo.getString(R.string.edit_button_text));
 
-        solo.waitForActivity("EditScreen");
+        solo.waitForActivity("PreviewEditActivity");
         solo.sleep(4000);
     }
 

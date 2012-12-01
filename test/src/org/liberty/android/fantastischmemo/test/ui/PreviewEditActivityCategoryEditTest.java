@@ -15,11 +15,11 @@ import com.jayway.android.robotium.solo.Solo;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-public class EditScreenActivityCategoryEditTest extends ActivityInstrumentationTestCase2<AnyMemo> {
+public class PreviewEditActivityCategoryEditTest extends ActivityInstrumentationTestCase2<AnyMemo> {
 
     protected AnyMemo mActivity;
 
-    public EditScreenActivityCategoryEditTest() {
+    public PreviewEditActivityCategoryEditTest() {
         super("org.liberty.android.fantastischmemo", AnyMemo.class);
     }
 
@@ -41,7 +41,7 @@ public class EditScreenActivityCategoryEditTest extends ActivityInstrumentationT
 
         solo.clickLongOnText(UITestHelper.SAMPLE_DB_NAME);
         solo.clickOnText(solo.getString(R.string.edit_button_text));
-        solo.waitForActivity("EditScreen");
+        solo.waitForActivity("PreviewEditActivity");
         solo.sleep(4000);
         // Go to the second card
         solo.clickOnText(solo.getString(R.string.add_screen_next));
