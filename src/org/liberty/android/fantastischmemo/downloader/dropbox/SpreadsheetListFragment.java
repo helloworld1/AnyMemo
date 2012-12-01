@@ -41,11 +41,6 @@ class SpreadsheetListFragment extends AbstractDownloaderFragment {
 	protected List<DownloadItem> initialRetrieve() throws Exception {
 		DropboxDownloadHelper downloadHelper = new DropboxDownloadHelper(getActivity(), authToken, authTokenSecret);
         List<DownloadItem> spreadsheetList = downloadHelper.getListSpreadsheets();
-//		List<DownloadItem> downloadItemList = new ArrayList<DownloadItem>(50);
-//        for (Spreadsheet spreadsheet : spreadsheetList) {
-//            downloadItemList.add(convertSpreadsheetToDownloadItem(spreadsheet));
-//        }
-//        downloadItemList.add(new DownloadItem(ItemType.Spreadsheet, "t1", "test", "no"));
         return spreadsheetList;
 	}
 
@@ -61,9 +56,8 @@ class SpreadsheetListFragment extends AbstractDownloaderFragment {
 
 	@Override
 	protected String fetchDatabase(DownloadItem di) throws Exception {
-//        GoogleDriveDownloadHelper downloadHelper = new GoogleDriveDownloadHelper(getActivity(), authToken);
-//        return downloadHelper.downloadSpreadsheetToDB(convertDownloadItemToSpreadsheet(di));
-		return null;
+        DropboxDownloadHelper downloadHelper = new DropboxDownloadHelper(getActivity(), authToken, authTokenSecret);
+        return downloadHelper.downloadSpreadsheetToDB(di);
 	}
 
     private DownloadItem convertSpreadsheetToDownloadItem(Spreadsheet spreadsheet) {
