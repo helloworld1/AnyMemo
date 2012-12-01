@@ -178,9 +178,11 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
         return new Locale(loc);
 
     }
-    
-    public interface OnTextToSpeechCompletedListener {
-        void onTextToSpeechCompleted(String text);
+
+    @Override
+    public void setOnTextToSpeechCompletedListener(
+            OnTextToSpeechCompletedListener mListener) {
+        this.onTextToSpeechCompletedListener = mListener;
     }
     
 }

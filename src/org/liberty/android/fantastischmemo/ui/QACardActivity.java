@@ -1,4 +1,5 @@
 /*
+
 Copyright (C) 2012 Haowen Ning
 
 This program is free software; you can redistribute it and/or
@@ -21,79 +22,57 @@ package org.liberty.android.fantastischmemo.ui;
 
 import java.io.File;
 import java.io.InputStream;
-
 import java.net.URL;
-
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
 import org.amr.arabic.ArabicUtilities;
-
 import org.apache.mycommons.lang3.StringUtils;
-
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.AnyMemoService;
 import org.liberty.android.fantastischmemo.R;
-
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.dao.SettingDao;
-
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
-
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTSImpl;
-import org.liberty.android.fantastischmemo.ui.AutoSpeakFragment.AutoSpeakEventHandler;
-import org.liberty.android.fantastischmemo.ui.StudyActivity;
-
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 import org.liberty.android.fantastischmemo.utils.AMUtil;
 import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
-
 import org.xml.sax.XMLReader;
 
 import android.app.ProgressDialog;
-
 import android.content.Context;
 import android.content.Intent;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
-
 import android.support.v4.app.FragmentTransaction;
-
 import android.text.ClipboardManager;
 import android.text.Editable;
 import android.text.Html;
-
 import android.text.Html.ImageGetter;
 import android.text.Html.TagHandler;
-
 import android.text.SpannableStringBuilder;
-
 import android.util.Log;
-
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
-
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 public abstract class QACardActivity extends AMActivity {
@@ -139,6 +118,14 @@ public abstract class QACardActivity extends AMActivity {
     private AnyMemoTTS questionTTS = null;
     private AnyMemoTTS answerTTS = null;
 
+    private AnyMemoTTS.OnTextToSpeechCompletedListener mTTSListener = new AnyMemoTTS.OnTextToSpeechCompletedListener() {
+        
+        @Override
+        public void onTextToSpeechCompleted(String text) {
+            // TODO Auto-generated method stub
+            
+        }
+    };
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -649,17 +636,32 @@ public abstract class QACardActivity extends AMActivity {
         }
     }
     
-    protected boolean speakQuestion(){
+    protected boolean speakQuestion() {
+        return speakQuestion(null);
+    }
+    
+    protected boolean speakQuestion(AnyMemoTTS.OnTextToSpeechCompletedListener mListener){
         if(questionTTS != null){
+            if(mListener != null) {
+                questionTTS.setOnTextToSpeechCompletedListener(mListener);
+            }
             questionTTS.sayText(getCurrentCard().getQuestion());
             return true;
         }
         return false;
     }
     
-    protected boolean speakAnswer(){
+    protected boolean speakAnswer() {
+        return speakAnswer(null);
+    }
+    
+    protected boolean speakAnswer(AnyMemoTTS.OnTextToSpeechCompletedListener mListener){
         if(answerTTS != null){
             answerTTS.sayText(getCurrentCard().getAnswer());
+            if(mListener != null) {
+                answerTTS.setOnTextToSpeechCompletedListener(mListener);
+            }
+            
             return true;
         }
         return false;

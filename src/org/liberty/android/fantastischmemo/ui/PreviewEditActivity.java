@@ -125,6 +125,29 @@ public class PreviewEditActivity extends QACardActivity {
     // The first card to read and display.
     private int startCardId = 1;
 
+    private AnyMemoTTS.OnTextToSpeechCompletedListener mQuestionListener = new AnyMemoTTS.OnTextToSpeechCompletedListener() {
+        
+        @Override
+        public void onTextToSpeechCompleted(String text) {
+            speakAnswer(mAnswerListener);
+//            gotoNext();
+            Log.i(TAG, "in preview edit activity");
+        }
+    };
+    
+    private AnyMemoTTS.OnTextToSpeechCompletedListener mAnswerListener = new AnyMemoTTS.OnTextToSpeechCompletedListener() {
+        
+        @Override
+        public void onTextToSpeechCompleted(String text) {
+            //Log.i(TAG, "go to next");
+            //gotoNext();
+            speakQuestion(mQuestionListener);
+            Log.i(TAG, "in preview edit activity");
+        }
+    };
+    
+    
+    
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -935,9 +958,9 @@ public class PreviewEditActivity extends QACardActivity {
 
                 @Override
                 public boolean onPlayButtonClick() {
-                    speakQuestion();
+                    speakQuestion(mQuestionListener);
               
-                    speakAnswer();
+                    
               //      gotoNext();
 //                    return speakQuestion();
                     return true;
