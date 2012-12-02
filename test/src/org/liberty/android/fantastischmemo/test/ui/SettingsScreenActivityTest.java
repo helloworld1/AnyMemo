@@ -1,15 +1,11 @@
 package org.liberty.android.fantastischmemo.test.ui;
 
 import org.apache.mycommons.lang3.StringUtils;
-
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
-
 import org.liberty.android.fantastischmemo.dao.SettingDao;
-
 import org.liberty.android.fantastischmemo.domain.Setting;
-
 import org.liberty.android.fantastischmemo.ui.AnyMemo;
 
 import com.jayway.android.robotium.solo.Solo;
@@ -146,38 +142,6 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
             AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }
 
-    }
-
-    public void testUserAudio() throws Exception {
-        // Set Question audio
-
-        solo.clickOnText("US");
-        // First scroll up
-        for (int i = 0; i < 6; i++) {
-        	solo.sendKey(Solo.UP);
-        }
-        
-        solo.clickOnText(solo.getString(R.string.user_audio_text));
-
-        // Set answer audio
-        solo.clickOnText("FR");
-        for (int i = 0; i < 6; i++) {
-        	solo.sendKey(Solo.UP);
-        }
-        
-        solo.clickOnText(solo.getString(R.string.user_audio_text));
-        solo.clickOnText(solo.getString(R.string.settings_save));
-        solo.sleep(3000);
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
-        try {
-            SettingDao settingDao = helper.getSettingDao();
-            Setting setting = settingDao.queryForId(1);
-            assertTrue(StringUtils.isNotEmpty(setting.getQuestionAudioLocation()));
-            assertTrue(StringUtils.isNotEmpty(setting.getAnswerAudioLocation()));
-
-        } finally {
-            AnyMemoDBOpenHelperManager.releaseHelper(helper);
-        }
     }
     
     public void testDoubleSidedCard() throws Exception {

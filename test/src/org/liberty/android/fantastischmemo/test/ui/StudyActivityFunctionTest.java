@@ -13,11 +13,11 @@ import com.jayway.android.robotium.solo.Solo;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-public class MemoScreenActivityFunctionTest extends ActivityInstrumentationTestCase2<AnyMemo> {
+public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<AnyMemo> {
 
     protected AnyMemo mActivity;
 
-    public MemoScreenActivityFunctionTest() {
+    public StudyActivityFunctionTest() {
         super("org.liberty.android.fantastischmemo", AnyMemo.class);
     }
 
@@ -37,7 +37,7 @@ public class MemoScreenActivityFunctionTest extends ActivityInstrumentationTestC
         solo.sleep(4000);
         solo.clickLongOnText(UITestHelper.SAMPLE_DB_NAME);
         solo.clickOnText(solo.getString(R.string.study_text));
-        solo.waitForActivity("MemoScreen");
+        solo.waitForActivity("StudyActivity");
         solo.sleep(4000);
     }
 
@@ -133,7 +133,7 @@ public class MemoScreenActivityFunctionTest extends ActivityInstrumentationTestC
         solo.clickLongOnText("head");
         // press skip
         solo.clickOnText(solo.getString(R.string.goto_prev_screen));
-        assertTrue(solo.waitForActivity("EditScreen"));
+        assertTrue(solo.waitForActivity("PreviewEditActivity"));
     }
 
     public void testGotoDetailScreen() {

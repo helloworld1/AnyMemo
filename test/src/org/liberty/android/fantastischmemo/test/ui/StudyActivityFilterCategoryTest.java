@@ -16,11 +16,11 @@ import com.jayway.android.robotium.solo.Solo;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-public class MemoScreenActivityFilterCategoryTest extends ActivityInstrumentationTestCase2<AnyMemo> {
+public class StudyActivityFilterCategoryTest extends ActivityInstrumentationTestCase2<AnyMemo> {
 
     protected AnyMemo mActivity;
 
-    public MemoScreenActivityFilterCategoryTest() {
+    public StudyActivityFilterCategoryTest() {
         super("org.liberty.android.fantastischmemo", AnyMemo.class);
     }
 
@@ -41,7 +41,7 @@ public class MemoScreenActivityFilterCategoryTest extends ActivityInstrumentatio
         setUpCategories();
         solo.clickLongOnText(UITestHelper.SAMPLE_DB_NAME);
         solo.clickOnText(solo.getString(R.string.study_text));
-        solo.waitForActivity("MemoScreen");
+        solo.waitForActivity("StudyActivity");
         solo.sleep(4000);
     }
 

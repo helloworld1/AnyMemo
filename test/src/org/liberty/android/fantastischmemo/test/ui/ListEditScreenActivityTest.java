@@ -32,7 +32,7 @@ public class ListEditScreenActivityTest extends ActivityInstrumentationTestCase2
         solo.sleep(4000);
         solo.clickLongOnText(UITestHelper.SAMPLE_DB_NAME);
         solo.clickOnText(solo.getString(R.string.list_mode_text));
-        solo.waitForActivity("ListEditScreen");
+        solo.waitForActivity("ListPreviewEditActivity");
         solo.sleep(3000);
     }
 
@@ -53,7 +53,7 @@ public class ListEditScreenActivityTest extends ActivityInstrumentationTestCase2
     public void testGoToPrevEditor() throws Exception {
         solo.clickOnText("tooth");
         solo.clickOnText(solo.getString(R.string.edit_button_text));
-        solo.waitForActivity("EditScreen");
+        solo.waitForActivity("PreviewEditActivity");
         solo.sleep(2000);
         assertTrue(solo.searchText("tooth"));
     }

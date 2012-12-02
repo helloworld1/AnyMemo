@@ -8,11 +8,11 @@ import android.widget.TextView;
 
 import com.jayway.android.robotium.solo.Solo;
 
-public class MemoScreenActivityEditCardTest extends ActivityInstrumentationTestCase2<AnyMemo> {
+public class StudyActivityEditCardTest extends ActivityInstrumentationTestCase2<AnyMemo> {
 
 	protected AnyMemo mActivity;
 
-    public MemoScreenActivityEditCardTest() {
+    public StudyActivityEditCardTest() {
         super("org.liberty.android.fantastischmemo", AnyMemo.class);
     }
 
@@ -49,7 +49,7 @@ public class MemoScreenActivityEditCardTest extends ActivityInstrumentationTestC
     	solo.clickLongOnText(UITestHelper.SAMPLE_DB_NAME);
     	
         solo.clickOnText(solo.getString(R.string.study_text));
-        solo.waitForActivity("MemoScreen");
+        solo.waitForActivity("StudyActivity");
     	
         solo.sleep(4000);
         
@@ -75,7 +75,7 @@ public class MemoScreenActivityEditCardTest extends ActivityInstrumentationTestC
 	    	solo.clickLongOnText(UITestHelper.SAMPLE_DB_NAME);
 	    	
 	        solo.clickOnText(solo.getString(R.string.study_text));
-	        solo.waitForActivity("MemoScreen");
+	        solo.waitForActivity("StudyActivity");
 	    	
 	        solo.sleep(4000);
 	        
