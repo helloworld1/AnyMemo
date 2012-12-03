@@ -63,7 +63,7 @@ public class DropboxDownloadHelper {
         mContext = context;
     }
 
-    public List<DownloadItem> getListSpreadsheets() throws Exception {
+    public List<DownloadItem> getListSpreadsheets() {
     	InputStream is = null;
     	try {
 			String headerValue = "OAuth oauth_version=\"1.0\", "
@@ -97,16 +97,21 @@ public class DropboxDownloadHelper {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if(is != null){
-				is.close();
-			}
+			try {
+			    if(is != null){
+			        is.close();
+			    }
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
 			
 		}
     	return null;
     }
     
     
-    private static String convertStreamToString(InputStream is) {
+    public static String convertStreamToString(InputStream is) {
 		/*
 		 * To convert the InputStream to String we use the
 		 * BufferedReader.readLine() method. We iterate until the BufferedReader

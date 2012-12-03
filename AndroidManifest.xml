@@ -75,6 +75,9 @@
         <activity
             android:name=".downloader.google.UploadGoogleDriveScreen"
             android:configChanges="orientation|keyboardHidden" />
+        <activity
+            android:name=".downloader.dropbox.UploadDropboxScreen"
+            android:configChanges="orientation|keyboardHidden" />
         <activity 
             android:name=".ui.CardEditor"
             android:configChanges="orientation|keyboardHidden" />
