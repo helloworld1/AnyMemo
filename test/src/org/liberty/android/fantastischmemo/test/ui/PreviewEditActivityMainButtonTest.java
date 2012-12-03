@@ -1,19 +1,19 @@
 package org.liberty.android.fantastischmemo.test.ui;
 
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.ui.PreviewEditActivity;
 
-import org.liberty.android.fantastischmemo.ui.AnyMemo;
+import android.content.Intent;
+import android.test.ActivityInstrumentationTestCase2;
 
 import com.jayway.android.robotium.solo.Solo;
 
-import android.test.ActivityInstrumentationTestCase2;
+public class PreviewEditActivityMainButtonTest extends ActivityInstrumentationTestCase2<PreviewEditActivity> {
 
-public class PreviewEditActivityMainButtonTest extends ActivityInstrumentationTestCase2<AnyMemo> {
-
-    protected AnyMemo mActivity;
+    protected PreviewEditActivity mActivity;
 
     public PreviewEditActivityMainButtonTest () {
-        super("org.liberty.android.fantastischmemo", AnyMemo.class);
+        super("org.liberty.android.fantastischmemo", PreviewEditActivity.class);
     }
 
     private Solo solo;
@@ -21,19 +21,14 @@ public class PreviewEditActivityMainButtonTest extends ActivityInstrumentationTe
     public void setUp() throws Exception{
         UITestHelper uiTestHelper = new UITestHelper(getInstrumentation());
         uiTestHelper.clearPreferences();
+        uiTestHelper.setUpFBPDatabase();
+
+        Intent intent = new Intent();
+        intent.putExtra(PreviewEditActivity.EXTRA_DBPATH, UITestHelper.SAMPLE_DB_PATH);
+        setActivityIntent(intent);
         mActivity = this.getActivity();
+
         solo = new Solo(getInstrumentation(), mActivity);
-
-
-        solo.sleep(1000);
-        if (solo.searchText("New version")) {
-            solo.clickOnText(solo.getString(R.string.ok_text));
-        }
-        solo.sleep(4000);
-        solo.clickLongOnText(UITestHelper.SAMPLE_DB_NAME);
-        solo.clickOnText(solo.getString(R.string.edit_button_text));
-
-        solo.waitForActivity("PreviewEditActivity");
         solo.sleep(4000);
     }
 
@@ -51,15 +46,15 @@ public class PreviewEditActivityMainButtonTest extends ActivityInstrumentationTe
         assertTrue(solo.searchText("face"));
         
         // 2nd card
-        solo.clickOnText(solo.getString(R.string.add_screen_previous));
+        solo.clickOnText(solo.getString(R.string.previous_text_short));
         assertTrue(solo.searchText("hair"));
 
         // 1st card
-        solo.clickOnText(solo.getString(R.string.add_screen_previous));
+        solo.clickOnText(solo.getString(R.string.previous_text_short));
         assertTrue(solo.searchText("head"));
 
         // last (28th) card
-        solo.clickOnText(solo.getString(R.string.add_screen_previous));
+        solo.clickOnText(solo.getString(R.string.previous_text_short));
         assertTrue(solo.searchText("toe"));
 
         // 1st card
@@ -76,6 +71,7 @@ public class PreviewEditActivityMainButtonTest extends ActivityInstrumentationTe
 
         // Make sure we are editing the 2nd card
         assertTrue(solo.searchText("hair"));
+        solo.clearEditText(0);
         solo.enterText(0, "myhair");
         solo.clickOnText(solo.getString(R.string.settings_save));
         solo.sleep(4000);
