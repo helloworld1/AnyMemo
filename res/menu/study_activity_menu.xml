@@ -23,7 +23,7 @@
   		  android:icon="@android:drawable/ic_menu_help"  
           android:title="@string/help_button_text" />
     <item android:id="@+id/menu_context_edit"
-        android:title="@string/memo_edit_dialog_title" />
+        android:title="@string/edit_text" />
     <item android:id="@+id/menu_context_delete"
         android:title="@string/delete_text" />
     <item android:id="@+id/menu_context_skip"
