@@ -3,24 +3,23 @@ package org.liberty.android.fantastischmemo.test.ui;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
-
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
-
 import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.ui.CardEditor;
 
-import org.liberty.android.fantastischmemo.ui.AnyMemo;
+import android.content.Intent;
+import android.test.ActivityInstrumentationTestCase2;
+import android.view.View;
 
 import com.jayway.android.robotium.solo.Solo;
 
-import android.test.ActivityInstrumentationTestCase2;
+public class CardEditorActivityFunctionTest extends ActivityInstrumentationTestCase2<CardEditor> {
 
-public class PreviewEditActivityCategoryEditTest extends ActivityInstrumentationTestCase2<AnyMemo> {
+    protected CardEditor mActivity;
 
-    protected AnyMemo mActivity;
-
-    public PreviewEditActivityCategoryEditTest() {
-        super("org.liberty.android.fantastischmemo", AnyMemo.class);
+    public CardEditorActivityFunctionTest() {
+        super("org.liberty.android.fantastischmemo", CardEditor.class);
     }
 
     private Solo solo;
@@ -28,31 +27,22 @@ public class PreviewEditActivityCategoryEditTest extends ActivityInstrumentation
     public void setUp() throws Exception{
         UITestHelper uiTestHelper = new UITestHelper(getInstrumentation());
         uiTestHelper.clearPreferences();
+        uiTestHelper.setUpFBPDatabase();
+        
+        Intent intent = new Intent();
+        intent.putExtra(CardEditor.EXTRA_DBPATH, UITestHelper.SAMPLE_DB_PATH);
+        intent.putExtra(CardEditor.EXTRA_CARD_ID, 2);
+        setActivityIntent(intent);
+
         mActivity = this.getActivity();
         solo = new Solo(getInstrumentation(), mActivity);
-
-        solo.sleep(1000);
-
-        if (solo.searchText("New version")) {
-            solo.clickOnText(solo.getString(R.string.ok_text));
-        }
-        solo.sleep(4000);
-
-
-        solo.clickLongOnText(UITestHelper.SAMPLE_DB_NAME);
-        solo.clickOnText(solo.getString(R.string.edit_button_text));
-        solo.waitForActivity("PreviewEditActivity");
-        solo.sleep(4000);
-        // Go to the second card
-        solo.clickOnText(solo.getString(R.string.add_screen_next));
-        // Goto card editor
-        solo.clickOnText(solo.getString(R.string.edit_text));
-        // Goto category editor
-        solo.clickOnText("French");
+        solo.sleep(2000);
     }
 
 
     public void testNewCatetory() throws Exception {
+        View categoryButton = mActivity.findViewById(R.id.edit_dialog_category_button);
+        solo.clickOnView(categoryButton);
         // First enter and create a category
         solo.clearEditText(0);
         solo.sleep(300);
@@ -66,8 +56,9 @@ public class PreviewEditActivityCategoryEditTest extends ActivityInstrumentation
         solo.sleep(1000);
         // Test the UI changed to mycategory as the category edit button
         assertTrue(solo.searchText("mycategory"));
-        solo.clickOnText(solo.getString(R.string.settings_save));
-        solo.sleep(4000);
+
+        solo.sleep(2000);
+        solo.clickOnButton(solo.getString(R.string.settings_save));
 
         // Assert database state
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
