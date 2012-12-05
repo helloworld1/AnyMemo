@@ -306,7 +306,7 @@
     <string name="dropbox_login_message">Введите имя пользователя Dropbox (обычно email) и пароль.</string>
     <string name="import_supermemo_2008_xml_text">Импорт SuperMemo 2008 XML</string>
     <string name="uncategorized_text">Нет категории</string>
-    <string name="edit_text">Прав</string>
+    <string name="edit_text">Правка</string>
     <string name="category_dialog_title">Выберите категорию или введите новую</string>
     <string name="ordinal_text_short">Пор</string>
     <string name="total_text">Всего</string>
