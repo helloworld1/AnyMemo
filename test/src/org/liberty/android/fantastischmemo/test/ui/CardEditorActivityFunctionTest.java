@@ -45,6 +45,7 @@ public class CardEditorActivityFunctionTest extends ActivityInstrumentationTestC
         View categoryButton = mActivity.findViewById(R.id.edit_dialog_category_button);
         solo.clickOnView(categoryButton);
         // First enter and create a category
+        solo.waitForText(solo.getString(R.string.category_dialog_title));
         solo.clearEditText(0);
         solo.sleep(300);
         solo.enterText(0, "mycategory");
@@ -58,8 +59,8 @@ public class CardEditorActivityFunctionTest extends ActivityInstrumentationTestC
         // Test the UI changed to mycategory as the category edit button
         assertTrue(solo.searchText("mycategory"));
 
-        solo.sleep(2000);
         solo.clickOnButton(solo.getString(R.string.settings_save));
+        solo.sleep(3000);
 
         // Assert database state
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
