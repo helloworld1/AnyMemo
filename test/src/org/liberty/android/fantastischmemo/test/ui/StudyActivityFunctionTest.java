@@ -43,7 +43,8 @@ public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<
         answerView = mActivity.findViewById(R.id.answer);
 
         solo = new Solo(getInstrumentation(), mActivity);
-        solo.sleep(2000);
+        solo.waitForDialogToClose(8000);
+        solo.sleep(600);
     }
 
 
@@ -61,9 +62,9 @@ public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<
         // Undo
         solo.sendKey(Solo.MENU);
         solo.clickOnText(solo.getString(R.string.undo_text));
-        solo.sleep(5000);
 
-
+        solo.waitForDialogToClose(8000);
+        solo.sleep(600);
 
         // 2nd card should be shown
         assertTrue(solo.searchText("hair"));
@@ -73,7 +74,9 @@ public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<
         solo.clickOnText(solo.getString(R.string.memo_btn0_text));
 
         solo.goBack();
-        solo.sleep(5000);
+
+        solo.waitForDialogToClose(8000);
+        solo.sleep(600);
 
         // asssert db state
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
@@ -89,10 +92,12 @@ public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<
     }
 
     public void testDeleteCard() throws Exception {
-        solo.clickOnMenuItem(solo.getString(R.string.delete_text));
+        getInstrumentation().invokeMenuActionSync(mActivity, R.id.menu_context_delete, 0);
         solo.clickOnText(solo.getString(R.string.ok_text));
         solo.goBack();
-        solo.sleep(3000);
+
+        solo.sleep(2000);
+
         // asssert db state
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
         try {
@@ -108,16 +113,19 @@ public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<
     }
 
     public void testSkipCard() throws Exception {
-        solo.clickOnMenuItem(solo.getString(R.string.skip_text));
+        getInstrumentation().invokeMenuActionSync(mActivity, R.id.menu_context_skip, 0);
         // press skip
         solo.clickOnText(solo.getString(R.string.skip_text));
         solo.clickOnText(solo.getString(R.string.ok_text));
-        solo.sleep(5000);
+
+        solo.waitForDialogToClose(8000);
+        solo.sleep(600);
 
         // The card should not be shown
         assertFalse(solo.searchText("head"));
         solo.goBack();
-        solo.sleep(3000);
+
+        solo.sleep(2000);
         // asssert db state
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
         try {
@@ -133,19 +141,22 @@ public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<
 
     public void testGotoPreviewScreen() {
         // press skip
-        solo.clickOnMenuItem(solo.getString(R.string.goto_prev_screen));
+        getInstrumentation().invokeMenuActionSync(mActivity, R.id.menu_context_gotoprev, 0);
         assertTrue(solo.waitForActivity("PreviewEditActivity"));
+        solo.sleep(1000);
     }
 
     public void testGotoDetailScreen() {
         // The way to click menu item in action bar
         getInstrumentation().invokeMenuActionSync(mActivity, R.id.menudetail, 0);
         assertTrue(solo.waitForActivity("DetailScreen"));
+        solo.sleep(1000);
     }
 
     public void testGotoSettingsScreen() {
-        solo.clickOnMenuItem(solo.getString(R.string.settings_menu_text));
+        getInstrumentation().invokeMenuActionSync(mActivity, R.id.menusettings, 0);
         assertTrue(solo.waitForActivity("SettingsScreen"));
+        solo.sleep(1000);
     }
 
     public void tearDown() throws Exception {

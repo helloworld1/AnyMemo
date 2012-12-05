@@ -13,7 +13,7 @@ import com.jayway.android.robotium.solo.Solo;
 
 public class StudyActivityEditCardTest extends ActivityInstrumentationTestCase2<StudyActivity> {
 
-	protected StudyActivity mActivity;
+    protected StudyActivity mActivity;
 
     public StudyActivityEditCardTest() {
         super("org.liberty.android.fantastischmemo", StudyActivity.class);
@@ -21,6 +21,10 @@ public class StudyActivityEditCardTest extends ActivityInstrumentationTestCase2<
 
     private Solo solo;
 
+    /**
+     * {@inheritDoc}
+     * @see ActivityInstrumentationTestCase2#setUp()
+     */
     public void setUp() throws Exception {
         UITestHelper uiTestHelper = new UITestHelper(getInstrumentation());
         uiTestHelper.clearPreferences();
@@ -33,7 +37,56 @@ public class StudyActivityEditCardTest extends ActivityInstrumentationTestCase2<
         mActivity = this.getActivity();
 
         solo = new Solo(getInstrumentation(), mActivity);
-        solo.sleep(2000);
+        solo.waitForDialogToClose(8000);
+        solo.sleep(600);
+    }
+
+
+    public void testSaveCardWithModification() {
+        getInstrumentation().invokeMenuActionSync(mActivity, R.id.menu_context_edit, 0);
+
+        solo.waitForDialogToClose(8000);
+        solo.sleep(300);
+
+        solo.clearEditText(0);
+        solo.enterText(0, "test");
+
+        solo.clickOnText(solo.getString(R.string.edit_text));
+        solo.clickOnText(solo.getString(R.string.settings_save));
+        
+        solo.waitForActivity("StudyActivity");
+        solo.waitForDialogToClose(8000);
+        solo.sleep(600);
+        
+        // After saving, expect to see the same card
+        assertTrue(solo.searchText("test"));
+    }
+    
+    public void testSaveCardWithShuffle() {
+        // Turn on shuffle option
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mActivity);
+        Editor edit = settings.edit();
+        edit.putBoolean("shuffling_cards", true);
+        edit.commit();
+
+        // Now do the edit test
+        getInstrumentation().invokeMenuActionSync(mActivity, R.id.menu_context_edit, 0);
+        
+        solo.waitForDialogToClose(8000);
+        solo.sleep(300);
+
+        solo.clearEditText(0);
+        solo.enterText(0, "test");
+
+        solo.clickOnText(solo.getString(R.string.edit_text));
+        solo.clickOnText(solo.getString(R.string.settings_save));
+        
+        solo.waitForActivity("StudyActivity");
+        solo.waitForDialogToClose(8000);
+        solo.sleep(600);
+        
+        // After saving, expect to see the same card
+        assertTrue(solo.searchText("test"));
     }
     
     public void tearDown() throws Exception {
@@ -44,46 +97,6 @@ public class StudyActivityEditCardTest extends ActivityInstrumentationTestCase2<
             t.printStackTrace();
         }
         super.tearDown();
-    }
-
-
-    public void testSaveCardWithModification() {
-        solo.waitForActivity("StudyActivity");
-
-        solo.clickOnMenuItem(solo.getString(R.string.edit_text));
-        solo.sleep(1000);
-        solo.clearEditText(0);
-        solo.enterText(0, "test");
-
-        solo.clickOnText(solo.getString(R.string.edit_text));
-        solo.clickOnText(solo.getString(R.string.settings_save));
-        
-        solo.sleep(2000);
-        
-    	// After saving, expect to see the same card
-        assertTrue(solo.searchText("test"));
-    }
-	
-    public void testSaveCardWithShuffle() {
-        // Turn on shuffle option
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mActivity);
-        Editor edit = settings.edit();
-        edit.putBoolean("shuffling_cards", true);
-        edit.commit();
-
-        // Now do the edit test
-        solo.clickOnMenuItem(solo.getString(R.string.edit_text));
-        solo.sleep(500);
-        solo.clearEditText(0);
-        solo.enterText(0, "test");
-
-        solo.clickOnText(solo.getString(R.string.edit_text));
-        solo.clickOnText(solo.getString(R.string.settings_save));
-        
-        solo.sleep(2000);
-        
-    	// After saving, expect to see the same card
-        assertTrue(solo.searchText("test"));
     }
 }
     

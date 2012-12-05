@@ -5,16 +5,13 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.mycommons.io.FileUtils;
-
 import org.liberty.android.fantastischmemo.AMEnv;
+import org.liberty.android.fantastischmemo.R;
 
 import android.app.Instrumentation;
-
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import android.content.SharedPreferences.Editor;
-
 import android.preference.PreferenceManager;
 
 public class UITestHelper {
@@ -49,5 +46,14 @@ public class UITestHelper {
         Editor editor = settings.edit();
         editor.clear();
         editor.commit(); 
+    }
+
+    // Mark the preference that it is not the first time to use the app.
+    public void markNotFirstTime() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mTargetContext);
+        Editor editor = settings.edit();
+        editor.putBoolean("first_time", true);
+        editor.putString("saved_version", mTestContext.getString(R.string.app_version));
+        editor.commit();
     }
 }

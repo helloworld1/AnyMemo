@@ -29,7 +29,8 @@ public class PreviewEditActivityMainButtonTest extends ActivityInstrumentationTe
         mActivity = this.getActivity();
 
         solo = new Solo(getInstrumentation(), mActivity);
-        solo.sleep(4000);
+        solo.waitForDialogToClose(8000);
+        solo.sleep(600);
     }
 
 

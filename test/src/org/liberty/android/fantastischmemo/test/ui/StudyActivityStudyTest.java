@@ -42,7 +42,8 @@ public class StudyActivityStudyTest extends ActivityInstrumentationTestCase2<Stu
         answerView = mActivity.findViewById(R.id.answer);
 
         solo = new Solo(getInstrumentation(), mActivity);
-        solo.sleep(2000);
+        solo.waitForDialogToClose(8000);
+        solo.sleep(600);
     }
 
     public void testGrade() throws Exception {
@@ -75,7 +76,6 @@ public class StudyActivityStudyTest extends ActivityInstrumentationTestCase2<Stu
         solo.clickOnView(answerView);
         assertTrue(solo.searchText("yeux"));
         solo.clickOnText(solo.getString(R.string.memo_btn3_text));
-        solo.goBack();
         solo.goBack();
         solo.sleep(5000);
 

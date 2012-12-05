@@ -46,7 +46,8 @@ public class StudyActivityFilterCategoryTest extends ActivityInstrumentationTest
         answerView = mActivity.findViewById(R.id.answer);
 
         solo = new Solo(getInstrumentation(), mActivity);
-        solo.sleep(2000);
+        solo.waitForDialogToClose(8000);
+        solo.sleep(600);
     }
 
     // Move 2, 5, 8 to category: cat1
@@ -70,12 +71,15 @@ public class StudyActivityFilterCategoryTest extends ActivityInstrumentationTest
     }
 
     public void testFilterCategory() {
-        solo.clickOnMenuItem(solo.getString(R.string.filter_category_text));
+        // Filter category menu item
+        getInstrumentation().invokeMenuActionSync(mActivity, R.id.menu_memo_category, 0);
 
         solo.clickOnText("cat1");
         solo.clickOnText(solo.getString(R.string.ok_text));
         // Wait refersh the activity
-        solo.sleep(2000);
+        solo.waitForDialogToClose(8000);
+        solo.sleep(600);
+
         assertTrue(solo.searchText("hair"));
         solo.clickOnView(answerView);
         solo.clickOnText(solo.getString(R.string.memo_btn4_text));

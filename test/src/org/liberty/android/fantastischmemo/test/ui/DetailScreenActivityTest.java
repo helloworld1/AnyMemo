@@ -35,7 +35,8 @@ public class DetailScreenActivityTest extends ActivityInstrumentationTestCase2<D
 
         mActivity = this.getActivity();
         solo = new Solo(getInstrumentation(), mActivity);
-        solo.sleep(2000);
+        solo.waitForDialogToClose(8000);
+        solo.sleep(300);
     }
 
     public void testDisplayDetailInfo() throws Exception {
