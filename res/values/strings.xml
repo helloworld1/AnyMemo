@@ -428,4 +428,10 @@
     <string name="japanese_text">Japanese</string>
     <string name="korean_text">Korean</string>
     <string name="thai_text">Thai</string>
+    <string name="add_existing_audio_text">Add existing audio"</string>
+    <string name="add_new_audio_text">Add new audio</string>
+    <string name="remove_audio_text">Remove audio</string>
+    <string name="record_text">Record</string>
+    <string name="play_text">Play</string>
+    <string name="stop_text">Stop</string>
 </resources>

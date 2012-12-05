@@ -59,7 +59,7 @@ public class CardEditorActivityFunctionTest extends ActivityInstrumentationTestC
         // Test the UI changed to mycategory as the category edit button
         assertTrue(solo.searchText("mycategory"));
 
-        solo.clickOnButton(solo.getString(R.string.settings_save));
+        getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
         solo.sleep(3000);
 
         // Assert database state

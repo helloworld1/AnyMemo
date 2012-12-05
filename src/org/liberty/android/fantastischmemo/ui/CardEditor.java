@@ -45,7 +45,6 @@ import org.liberty.android.fantastischmemo.utils.AMUtil;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -65,10 +64,9 @@ import android.widget.RadioGroup;
 import android.util.Log;
 import android.content.res.Configuration;
 
-public class CardEditor extends AMActivity implements View.OnClickListener {
+public class CardEditor extends AMActivity {
     private final int ACTIVITY_IMAGE_FILE = 1;
     private final int ACTIVITY_AUDIO_FILE = 2;
-    private final int EDIT_AUDIO_DIALOG = 1;
     Card currentCard = null;
     Card prevCard = null;
     private Integer prevOrdinal = null;
@@ -80,8 +78,6 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
     private RadioGroup addRadio;
     private boolean addBack = true;
     private boolean isEditNew = false;
-    private Button btnSave;
-    private Button btnCancel;
     private String dbName = null;
     String dbPath = null;
     CardDao cardDao;
@@ -105,7 +101,7 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        setContentView(R.layout.edit_dialog);
+        setContentView(R.layout.card_editor_layout);
         initTask = new InitTask();
         initTask.execute((Void)null);
     }
@@ -126,54 +122,37 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
         finish();
         startActivity(myIntent);
     }
-        
-    
-    public void onClick(View v) {
-        if(v == btnSave) {
-            SaveCardTask task = new SaveCardTask();
-            task.execute((Void)null);
-        } 
-        
-        if(v == btnCancel){
-            String qText = questionEdit.getText().toString();
-            String aText = answerEdit.getText().toString();
-            String nText = noteEdit.getText().toString();
-            if (!isEditNew && (!qText.equals(originalQuestion) || !aText.equals(originalAnswer) || !nText.equals(originalNote))) {
-                new AlertDialog.Builder(this)
-                    .setTitle(R.string.warning_text)
-                    .setMessage(R.string.edit_dialog_unsave_warning)
-                    .setPositiveButton(R.string.yes_text, new DialogInterface.OnClickListener(){
-                        public void onClick(DialogInterface  d, int which){
-                            Intent resultIntent = new Intent();
-                            setResult(Activity.RESULT_CANCELED, resultIntent);                
-                            finish();
 
-                        }
-                    }) 
-                    .setNegativeButton(R.string.no_text, null)
-                    .create()
-                    .show();
-                    
-            }
-            else{
-                Intent resultIntent = new Intent();
-                setResult(Activity.RESULT_CANCELED, resultIntent);                
-                finish();
+    @Override
+    public void onBackPressed() {
+        String qText = questionEdit.getText().toString();
+        String aText = answerEdit.getText().toString();
+        String nText = noteEdit.getText().toString();
+        if (!isEditNew && (!qText.equals(originalQuestion) || !aText.equals(originalAnswer) || !nText.equals(originalNote))) {
+            new AlertDialog.Builder(this)
+                .setTitle(R.string.warning_text)
+                .setMessage(R.string.edit_dialog_unsave_warning)
+                .setPositiveButton(R.string.yes_text, new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface  d, int which){
+                        Intent resultIntent = new Intent();
+                        setResult(Activity.RESULT_CANCELED, resultIntent);                
+                        finish();
 
-            }
+                    }
+                }) 
+            .setNegativeButton(R.string.no_text, null)
+                .create()
+                .show();
+
         }
+        else{
+            Intent resultIntent = new Intent();
+            setResult(Activity.RESULT_CANCELED, resultIntent);                
+            finish();
 
-        if (v == categoryButton) {
-            CategoryEditorFragment df = new CategoryEditorFragment();
-            df.setResultListener(categoryResultListener);
-            Bundle b = new Bundle();
-            b.putString(CategoryEditorFragment.EXTRA_DBPATH, dbPath);
-            b.putInt(CategoryEditorFragment.EXTRA_CATEGORY_ID, currentCard.getCategory().getId());
-            df.setArguments(b);
-            df.show(getSupportFragmentManager(), "CategoryEditDialog");
         }
     }
-
+        
     @Override    
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
@@ -184,11 +163,18 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         View focusView = getCurrentFocus();
         switch (item.getItemId()) {
+
+            case R.id.save:
+                SaveCardTask task = new SaveCardTask();
+                task.execute((Void)null);
+                return true;
+
             case R.id.editor_menu_br:
                 if(focusView == questionEdit || focusView ==answerEdit || focusView == noteEdit){
                     addTextToView((EditText)focusView, "<br />");
                 }
                 return true;
+
             case R.id.editor_menu_image:
                 if(focusView == questionEdit || focusView ==answerEdit || focusView == noteEdit){
                     Intent myIntent = new Intent(this, FileBrowserActivity.class);
@@ -196,44 +182,27 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
                     startActivityForResult(myIntent, ACTIVITY_IMAGE_FILE);
                 }
                 return true; 
-            case R.id.editor_menu_audio:
-                showDialog(EDIT_AUDIO_DIALOG);
+
+            case R.id.add_existing_audio:
+                if (isViewEligibleToEditAudio()) {
+                    addExistingAudio();
+                }
                 return true;
+                
+            case R.id.add_new_audio:
+                if (isViewEligibleToEditAudio()) {
+                    addNewAudio();
+                }
+                return true;
+
+            case R.id.remove_audio:
+                if (isViewEligibleToEditAudio()) {
+                    removeAudio();
+                }
+                return true;
+
         }
         return false;
-    }
-    
-    protected Dialog onCreateDialog(int id) {
-        Dialog alertDialog = null;
-        final CharSequence[] audioOptionItems = {"add existing audio", "add new audio", "remove audio"};
-        switch(id) {
-        case EDIT_AUDIO_DIALOG:
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Edit audio");
-            builder.setItems(audioOptionItems, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int itemIndex) {
-                    if(!isViewEligibleToEditAudio()){
-                        return;
-                    }
-                    switch(itemIndex){
-                    case 0:
-                        addExistingAudio();
-                     break;
-                     case 1:
-                         addNewAudio();
-                     break;
-                     case 2:
-                         removeAudio();
-                     break;
-                     }
-                }
-            });
-            alertDialog = builder.create();
-            break;
-        default:
-            alertDialog = null;
-        }
-        return alertDialog;
     }
     
     private boolean isViewEligibleToEditAudio(){
@@ -550,12 +519,9 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
             answerEdit = (EditText)findViewById(R.id.edit_dialog_answer_entry);
             categoryButton = (Button)findViewById(R.id.edit_dialog_category_button);
             noteEdit = (EditText)findViewById(R.id.edit_dialog_note_entry);
-            btnSave = (Button)findViewById(R.id.edit_dialog_button_save);
-            btnCancel = (Button)findViewById(R.id.edit_dialog_button_cancel);
             addRadio = (RadioGroup)findViewById(R.id.add_radio);
-            btnSave.setOnClickListener(CardEditor.this);
-            btnCancel.setOnClickListener(CardEditor.this);
-            categoryButton.setOnClickListener(CardEditor.this);
+
+            categoryButton.setOnClickListener(categoryButtonClickListener);
 
             updateViews();
 
@@ -564,6 +530,20 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
             progressDialog.dismiss();
         }
     }
+
+    private View.OnClickListener categoryButtonClickListener =
+        new View.OnClickListener() {
+            public void onClick(View v) {
+                CategoryEditorFragment df = new CategoryEditorFragment();
+                df.setResultListener(categoryResultListener);
+                Bundle b = new Bundle();
+                b.putString(CategoryEditorFragment.EXTRA_DBPATH, dbPath);
+                b.putInt(CategoryEditorFragment.EXTRA_CATEGORY_ID, currentCard.getCategory().getId());
+                df.setArguments(b);
+                df.show(getSupportFragmentManager(), "CategoryEditDialog");
+            }
+        };
+
 
 
     private class SaveCardTask extends AsyncTask<Void, Void, Void> {
@@ -633,5 +613,4 @@ public class CardEditor extends AMActivity implements View.OnClickListener {
                 updateViews();
             }
         }; 
-    
 }

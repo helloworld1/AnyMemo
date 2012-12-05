@@ -18,35 +18,36 @@
         android:layout_height="match_parent"
         android:gravity="center_horizontal" >
 
-        <ImageButton
-            android:id="@+id/recorder_record_button"
+        <ToggleButton
+            android:id="@+id/record_button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:background="@android:color/transparent"
-            android:src="@drawable/recorder_record" />
+            android:checked="false"
+            android:textOff="@string/record_text"
+            android:textOn="@string/stop_text" />
 
-        <ImageButton
-            android:id="@+id/recorder_play_button"
+        <ToggleButton
+            android:id="@+id/play_button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:src="@drawable/recorder_play" />
+            android:checked="false"
+            android:textOff="@string/play_text"
+            android:textOn="@string/stop_text" />
 
-        <ImageButton
-            android:id="@+id/recorder_return_button"
+        <Button
+            android:id="@+id/save_button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:src="@drawable/recorder_return" />
+            android:text="@string/settings_save" />
 
     </LinearLayout>
 
