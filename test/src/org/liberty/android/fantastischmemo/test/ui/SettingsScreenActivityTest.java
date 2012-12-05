@@ -49,7 +49,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         assertTrue(solo.searchText("48"));
         assertTrue(solo.searchText("72"));
 
-        solo.clickOnText(solo.getString(R.string.settings_save));
+        getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
         solo.sleep(3000);
 
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
@@ -72,7 +72,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         solo.clickOnText(solo.getString(R.string.center_text), 1);
         solo.clickOnText(solo.getString(R.string.right_text));
 
-        solo.clickOnText(solo.getString(R.string.settings_save));
+        getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 1);
         solo.sleep(3000);
 
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
@@ -89,7 +89,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
     public void testSaveCardStyle() throws Exception {
         solo.clickOnText(solo.getString(R.string.card_style_single));
         solo.clickOnText(solo.getString(R.string.card_style_double));
-        solo.clickOnText(solo.getString(R.string.settings_save));
+        getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
         solo.sleep(3000);
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
         try {
@@ -104,7 +104,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
     public void testSaveDisplayRatio() throws Exception {
         solo.clickOnText("50%");
         solo.clickOnText("75%");
-        solo.clickOnText(solo.getString(R.string.settings_save));
+        getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
         solo.sleep(3000);
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
         try {
@@ -125,7 +125,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         solo.clickOnView(mActivity.findViewById((R.id.answer_locale_spinner)));
         solo.clickOnText(solo.getString(R.string.italian_text));
         
-        solo.clickOnText(solo.getString(R.string.settings_save));
+        getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
 
         solo.sleep(3000);
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
@@ -143,25 +143,26 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
 
     }
     
-    // public void testDoubleSidedCard() throws Exception {
-    // 	solo.clickOnText("Single sided");
-    // 	solo.clickOnText("Double sided");
-    // 	solo.clickOnText("Save");
-    // 	
-    // 	// Disable click on text audio
-    // 	solo.clickOnText("Misc");
-    // 	solo.clickOnText("Options");
-    // 	solo.clickOnText("Automatic");
-    // 	solo.clickOnText("Manually");
-    // 	solo.goBack();
-    // 	solo.clickOnText("Recent");
-    // 	
-    // 	// Click on the Sample DB, and check if the answer is shown
-    // 	solo.clickOnText(UITestHelper.SAMPLE_DB_NAME);
-    // 	solo.sleep(3000);
-    // 	solo.clickOnText("head");
-    // 	assertTrue(solo.searchText("la"));
-    // }
+    public void testDoubleSidedCard() throws Exception {
+        // Set Question audio
+        solo.clickOnView(mActivity.findViewById((R.id.card_style_spinner)));
+
+        solo.clickOnText(solo.getString(R.string.card_style_double));
+
+        getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
+
+        solo.sleep(3000);
+
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
+        try {
+            SettingDao settingDao = helper.getSettingDao();
+            Setting setting = settingDao.queryForId(1);
+            assertEquals(Setting.CardStyle.DOUBLE_SIDED, setting.getCardStyle());
+
+        } finally {
+            AnyMemoDBOpenHelperManager.releaseHelper(helper);
+        }
+    }
 
 
     public void tearDown() throws Exception {

@@ -21,14 +21,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import java.io.File;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
 import org.apache.mycommons.lang3.StringUtils;
-
 import org.color.ColorDialog;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
@@ -39,7 +37,6 @@ import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.domain.Setting.CardField;
 import org.liberty.android.fantastischmemo.ui.widgets.AMSpinner;
-
 import org.liberty.android.fantastischmemo.utils.DatabaseUtils;
 
 import android.app.Activity;
@@ -56,13 +53,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.Toast;
 
@@ -103,10 +97,6 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
     private EnumSet<CardField> questionFields;
     private EnumSet<CardField> answerFields;
 
-    private Button saveButton;
-    private Button discardButton;
-    private Button loadDefaultButton;
-
     private AnyMemoDBOpenHelper dbOpenHelper;
 
     private final static String WEBSITE_HELP_SETTINGS="http://anymemo.org/wiki/index.php?title=Card_styles";
@@ -139,16 +129,27 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case R.id.settingsmenu_save:
+        case R.id.save:
             SaveButtonTask task = new SaveButtonTask();
             task.execute((Void) null);
             return true;
 
-        case R.id.settingsmenu_discard:
-            Intent resultIntent = new Intent();
-            setResult(Activity.RESULT_CANCELED, resultIntent);
-            finish();
-            return true;
+        case R.id.load_default:
+            new AlertDialog.Builder(this)
+                .setTitle(R.string.load_default_text)
+                .setMessage(R.string.load_default_warning_text)
+                .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        LoadDefaultTask task = new LoadDefaultTask();
+                        task.execute((Void)null);
+                        // Need to refresh the activity that invoke this activity.
+                        Intent resultIntent = new Intent();
+                        setResult(Activity.RESULT_OK, resultIntent);
+                    }
+                })
+                .setNegativeButton(R.string.cancel_text, null)
+                .show();
+
 
         case R.id.settingsmenu_help:
             Intent myIntent = new Intent();
@@ -164,34 +165,6 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
 
     // Override method of onClickListener
     public void onClick(View v) {
-        if (v == saveButton) {
-            SaveButtonTask task = new SaveButtonTask();
-            task.execute((Void) null);
-        }
-
-        if (v == discardButton) {
-            Intent resultIntent = new Intent();
-            setResult(Activity.RESULT_CANCELED, resultIntent);
-            finish();
-        }
-
-        if (v == loadDefaultButton) {
-            new AlertDialog.Builder(this)
-                .setTitle(R.string.load_default_text)
-                .setMessage(R.string.load_default_warning_text)
-                .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        LoadDefaultTask task = new LoadDefaultTask();
-                        task.execute((Void)null);
-                        // Need to refresh the activity that invoke this activity.
-                        Intent resultIntent = new Intent();
-                        setResult(Activity.RESULT_OK, resultIntent);
-                    }
-                })
-                .setNegativeButton(R.string.cancel_text, null)
-                .show();
-        }
-        
         if (v == colorCheckbox) {
             if (colorCheckbox.isChecked()) {
                 colorRow.setVisibility(View.VISIBLE);
@@ -464,15 +437,6 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             field2Checkbox.setOnClickListener(SettingsScreen.this);
             answerFields = setting.getAnswerFieldEnum();
 
-            saveButton = (Button) findViewById(R.id.settting_save);
-            saveButton.setOnClickListener(SettingsScreen.this);
-
-            discardButton = (Button) findViewById(R.id.setting_discard);
-            discardButton.setOnClickListener(SettingsScreen.this);
-
-            loadDefaultButton = (Button) findViewById(R.id.load_default);
-            loadDefaultButton.setOnClickListener(SettingsScreen.this);
-                    
             updateViews();
 
             progressDialog.dismiss();
