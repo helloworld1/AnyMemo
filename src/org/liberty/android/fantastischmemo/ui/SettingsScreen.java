@@ -149,6 +149,7 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
                 })
                 .setNegativeButton(R.string.cancel_text, null)
                 .show();
+            return true;
 
 
         case R.id.settingsmenu_help:

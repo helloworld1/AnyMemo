@@ -40,26 +40,32 @@ public class PreviewEditActivityMainButtonTest extends ActivityInstrumentationTe
 
         // 2nd card
         solo.clickOnText(solo.getString(R.string.add_screen_next));
+        solo.sleep(300);
         assertTrue(solo.searchText("hair"));
 
         // 3rd card
         solo.clickOnText(solo.getString(R.string.add_screen_next));
+        solo.sleep(600);
         assertTrue(solo.searchText("face"));
         
         // 2nd card
         solo.clickOnText(solo.getString(R.string.previous_text_short));
+        solo.sleep(600);
         assertTrue(solo.searchText("hair"));
 
         // 1st card
         solo.clickOnText(solo.getString(R.string.previous_text_short));
+        solo.sleep(600);
         assertTrue(solo.searchText("head"));
 
         // last (28th) card
         solo.clickOnText(solo.getString(R.string.previous_text_short));
+        solo.sleep(600);
         assertTrue(solo.searchText("toe"));
 
         // 1st card
         solo.clickOnText(solo.getString(R.string.add_screen_next));
+        solo.sleep(600);
         assertTrue(solo.searchText("head"));
     }
 

@@ -49,8 +49,9 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         assertTrue(solo.searchText("48"));
         assertTrue(solo.searchText("72"));
 
+        solo.sleep(500);
         getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
-        solo.sleep(3000);
+        solo.sleep(2000);
 
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
         try {
@@ -72,8 +73,9 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         solo.clickOnText(solo.getString(R.string.center_text), 1);
         solo.clickOnText(solo.getString(R.string.right_text));
 
+        solo.sleep(500);
         getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 1);
-        solo.sleep(3000);
+        solo.sleep(2000);
 
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
         try {
@@ -89,8 +91,10 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
     public void testSaveCardStyle() throws Exception {
         solo.clickOnText(solo.getString(R.string.card_style_single));
         solo.clickOnText(solo.getString(R.string.card_style_double));
+
+        solo.sleep(500);
         getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
-        solo.sleep(3000);
+        solo.sleep(2000);
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
         try {
             SettingDao settingDao = helper.getSettingDao();
@@ -104,8 +108,9 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
     public void testSaveDisplayRatio() throws Exception {
         solo.clickOnText("50%");
         solo.clickOnText("75%");
+        solo.sleep(500);
         getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
-        solo.sleep(3000);
+        solo.sleep(2000);
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
         try {
             SettingDao settingDao = helper.getSettingDao();
@@ -125,9 +130,10 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         solo.clickOnView(mActivity.findViewById((R.id.answer_locale_spinner)));
         solo.clickOnText(solo.getString(R.string.italian_text));
         
+        solo.sleep(500);
         getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
 
-        solo.sleep(3000);
+        solo.sleep(2000);
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
         try {
             SettingDao settingDao = helper.getSettingDao();
@@ -149,9 +155,9 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
 
         solo.clickOnText(solo.getString(R.string.card_style_double));
 
+        solo.sleep(500);
         getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
-
-        solo.sleep(3000);
+        solo.sleep(2000);
 
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
         try {
