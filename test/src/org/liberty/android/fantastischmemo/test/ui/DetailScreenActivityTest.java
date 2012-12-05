@@ -5,7 +5,6 @@ import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.domain.Card;
-import org.liberty.android.fantastischmemo.ui.AnyMemo;
 import org.liberty.android.fantastischmemo.ui.DetailScreen;
 
 import android.content.Intent;
@@ -48,7 +47,9 @@ public class DetailScreenActivityTest extends ActivityInstrumentationTestCase2<D
         solo.sleep(400);
         solo.clearEditText(1);
         solo.enterText(1, "foot");
-        solo.clickOnText(solo.getString(R.string.detail_update));
+
+        getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
+
         solo.clickOnText(solo.getString(R.string.ok_text));
         solo.sleep(4000);
         // asssert db state

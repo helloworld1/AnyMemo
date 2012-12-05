@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/save"
+	    android:icon="@android:drawable/ic_menu_save"
+        android:showAsAction="ifRoom" 
+  		android:title="@string/settings_save" />
+    <item android:id="@+id/reset"
+	    android:icon="@android:drawable/ic_menu_rotate"
+  		android:title="@string/detail_reset" />
+</menu>
