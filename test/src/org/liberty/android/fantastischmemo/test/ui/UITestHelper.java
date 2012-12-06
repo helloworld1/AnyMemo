@@ -6,6 +6,7 @@ import java.io.InputStream;
 
 import org.apache.mycommons.io.FileUtils;
 import org.liberty.android.fantastischmemo.AMEnv;
+import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
 
 import android.app.Instrumentation;
@@ -52,8 +53,8 @@ public class UITestHelper {
     public void markNotFirstTime() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mTargetContext);
         Editor editor = settings.edit();
-        editor.putBoolean("first_time", true);
-        editor.putString("saved_version", mTestContext.getString(R.string.app_version));
+        editor.putBoolean(AMPrefKeys.FIRST_TIME_KEY, true);
+        editor.putString(AMPrefKeys.SAVED_VERSION_KEY, mTestContext.getString(R.string.app_version));
         editor.commit();
     }
 }

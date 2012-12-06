@@ -26,6 +26,7 @@ import java.io.File;
 import org.apache.mycommons.io.FileUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
+import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
@@ -402,7 +403,7 @@ public class CardEditor extends AMActivity {
             final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
             // Only for new card we need to add back.
             // For existing cards, we just edit the current card.
-            addBack = settings.getBoolean("add_back", true);
+            addBack = settings.getBoolean(AMPrefKeys.ADD_BACK_KEY, true);
             if(addBack){
                 addRadio.check(R.id.add_back_radio);
             }
@@ -414,12 +415,12 @@ public class CardEditor extends AMActivity {
                     SharedPreferences.Editor editor = settings.edit();
                     if(checkedId == R.id.add_here_radio){
                         addBack = false;
-                        editor.putBoolean("add_back", false);
+                        editor.putBoolean(AMPrefKeys.ADD_BACK_KEY, false);
                         editor.commit();
                     }
                     else{
                         addBack = true;
-                        editor.putBoolean("add_back", true);
+                        editor.putBoolean(AMPrefKeys.ADD_BACK_KEY, true);
                         editor.commit();
                     }
                 }

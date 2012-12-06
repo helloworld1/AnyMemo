@@ -1,5 +1,6 @@
 package org.liberty.android.fantastischmemo.test.ui;
 
+import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.ui.StudyActivity;
 
@@ -66,7 +67,7 @@ public class StudyActivityEditCardTest extends ActivityInstrumentationTestCase2<
         // Turn on shuffle option
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mActivity);
         Editor edit = settings.edit();
-        edit.putBoolean("shuffling_cards", true);
+        edit.putBoolean(AMPrefKeys.SHUFFLING_CARDS_KEY, true);
         edit.commit();
 
         // Now do the edit test

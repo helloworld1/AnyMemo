@@ -97,8 +97,8 @@ public class FEOauth extends AMActivity{
                 Log.d("Oauth Token ", token);
                 Log.d("Oauth Token Secret ", tokenSecret);
 
-                editor.putString("saved_oauth_token", token);
-                editor.putString("saved_oauth_token_secret", tokenSecret);
+                editor.putString(AMPrefKeys.FE_SAVED_OAUTH_TOKEN_KEY, token);
+                editor.putString(AMPrefKeys.FE_SAVED_OAUTH_TOKEN_SECRET_KEY, tokenSecret);
                 editor.commit();
 
                 /* Ask user to input the username */
@@ -110,7 +110,7 @@ public class FEOauth extends AMActivity{
                     .setPositiveButton(R.string.search_text, new DialogInterface.OnClickListener(){
                         public void onClick(DialogInterface dialog, int which){
                             String searchText = et.getText().toString();
-                            editor.putString("saved_username", searchText);
+                            editor.putString(AMPrefKeys.FE_SAVED_USERNAME_KEY, searchText);
                             editor.commit();
                             finish();
                         }
