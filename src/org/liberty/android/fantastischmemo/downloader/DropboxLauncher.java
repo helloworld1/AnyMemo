@@ -24,7 +24,6 @@ import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -62,7 +61,7 @@ public class DropboxLauncher extends AMActivity implements OnClickListener{
         settings = PreferenceManager.getDefaultSharedPreferences(this);
         editor = settings.edit();
         /* Retrieve saved login information */
-        String dropboxUsername = settings.getString("dropbox_username", null);
+        String dropboxUsername = settings.getString(AMPrefKeys.DROPBOX_USERNAME_KEY, null);
         if (dropboxUsername != null && !dropboxUsername.equals("")) {
             loginButton.setText(getString(R.string.fe_logged_in_text) + ": " + dropboxUsername);
         }
@@ -79,8 +78,8 @@ public class DropboxLauncher extends AMActivity implements OnClickListener{
             showLoginDialog();
         }
         if(v == downloadButton){
-            String token = settings.getString("dropbox_token", "");
-            String secret = settings.getString("dropbox_secret", "");
+            String token = settings.getString(AMPrefKeys.DROPBOX_TOKEN_KEY, "");
+            String secret = settings.getString(AMPrefKeys.DROPBOX_SECRET_KEY, "");
             if (token.equals("") || secret.equals("")){
                 showNotAuthDialog();
                 return;
@@ -92,8 +91,8 @@ public class DropboxLauncher extends AMActivity implements OnClickListener{
             startActivity(myIntent);
         }
         if(v == uploadButton){
-            String token = settings.getString("dropbox_token", "");
-            String secret = settings.getString("dropbox_secret", "");
+            String token = settings.getString(AMPrefKeys.DROPBOX_TOKEN_KEY, "");
+            String secret = settings.getString(AMPrefKeys.DROPBOX_SECRET_KEY, "");
             if (token.equals("") || secret.equals("")){
                 showNotAuthDialog();
                 return;
@@ -125,9 +124,9 @@ public class DropboxLauncher extends AMActivity implements OnClickListener{
                 public void onClick(DialogInterface dialog, int which){
                     try {
                         String[] r = DropboxUtils.retrieveToken(username.getText().toString(), password.getText().toString());
-                        editor.putString("dropbox_username", username.getText().toString());
-                        editor.putString("dropbox_token", r[0]);
-                        editor.putString("dropbox_secret", r[1]);
+                        editor.putString(AMPrefKeys.DROPBOX_USERNAME_KEY, username.getText().toString());
+                        editor.putString(AMPrefKeys.DROPBOX_TOKEN_KEY, r[0]);
+                        editor.putString(AMPrefKeys.DROPBOX_SECRET_KEY, r[1]);
                         editor.commit();
                         /* Properly display the login status in the button. */
                         restartActivity();
@@ -152,9 +151,9 @@ public class DropboxLauncher extends AMActivity implements OnClickListener{
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 	    case R.id.logout:
-            editor.putString("dropbox_username", "");
-            editor.putString("dropbox_token", "");
-            editor.putString("dropbox_secret", "");
+            editor.putString(AMPrefKeys.DROPBOX_USERNAME_KEY, "");
+            editor.putString(AMPrefKeys.DROPBOX_TOKEN_KEY, "");
+            editor.putString(AMPrefKeys.DROPBOX_SECRET_KEY, "");
             editor.commit();
             restartActivity();
 			return true;

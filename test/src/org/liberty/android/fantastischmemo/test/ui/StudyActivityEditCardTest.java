@@ -1,36 +1,95 @@
 package org.liberty.android.fantastischmemo.test.ui;
 
+import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.ui.AnyMemo;
+import org.liberty.android.fantastischmemo.ui.StudyActivity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.preference.PreferenceManager;
 import android.test.ActivityInstrumentationTestCase2;
-import android.widget.TextView;
 
 import com.jayway.android.robotium.solo.Solo;
 
-public class StudyActivityEditCardTest extends ActivityInstrumentationTestCase2<AnyMemo> {
+public class StudyActivityEditCardTest extends ActivityInstrumentationTestCase2<StudyActivity> {
 
-	protected AnyMemo mActivity;
+    protected StudyActivity mActivity;
 
     public StudyActivityEditCardTest() {
-        super("org.liberty.android.fantastischmemo", AnyMemo.class);
+        super("org.liberty.android.fantastischmemo", StudyActivity.class);
     }
 
     private Solo solo;
 
+    /**
+     * {@inheritDoc}
+     * @see ActivityInstrumentationTestCase2#setUp()
+     */
     public void setUp() throws Exception {
         UITestHelper uiTestHelper = new UITestHelper(getInstrumentation());
         uiTestHelper.clearPreferences();
+        uiTestHelper.setUpFBPDatabase();
         
-        mActivity = this.getActivity();
-        solo = new Solo(getInstrumentation(), mActivity);
-        solo.sleep(1000);
+        Intent intent = new Intent();
+        intent.putExtra(StudyActivity.EXTRA_DBPATH, UITestHelper.SAMPLE_DB_PATH);
+        setActivityIntent(intent);
 
-        if (solo.searchText("New version")) {
-            solo.clickOnText(solo.getString(R.string.ok_text));
-        }
+        mActivity = this.getActivity();
+
+        solo = new Solo(getInstrumentation(), mActivity);
+        solo.waitForDialogToClose(8000);
+        solo.sleep(600);
+    }
+
+
+    public void testSaveCardWithModification() {
+        getInstrumentation().invokeMenuActionSync(mActivity, R.id.menu_context_edit, 0);
+
+        solo.waitForDialogToClose(3000);
+        solo.sleep(300);
+
+        solo.clearEditText(0);
+        solo.enterText(0, "test");
+        solo.sleep(300);
+
+        getInstrumentation().invokeMenuActionSync(solo.getCurrentActivity(), R.id.save, 0);
         
-        solo.sleep(4000);
+        solo.waitForActivity("StudyActivity");
+        solo.waitForDialogToClose(8000);
+        solo.sleep(600);
+        
+        // After saving, expect to see the same card
+        assertTrue(solo.searchText("test"));
+    }
+    
+    public void testSaveCardWithShuffle() {
+        // Turn on shuffle option
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mActivity);
+        Editor edit = settings.edit();
+        edit.putBoolean(AMPrefKeys.SHUFFLING_CARDS_KEY, true);
+        edit.commit();
+
+        // Now do the edit test
+        getInstrumentation().invokeMenuActionSync(mActivity, R.id.menu_context_edit, 0);
+
+        
+        solo.waitForDialogToClose(3000);
+        solo.sleep(300);
+
+        solo.clearEditText(0);
+        solo.enterText(0, "test");
+
+        solo.sleep(300);
+
+        getInstrumentation().invokeMenuActionSync(solo.getCurrentActivity(), R.id.save, 0);
+        
+        solo.waitForActivity("StudyActivity");
+        solo.waitForDialogToClose(8000);
+        solo.sleep(600);
+        
+        // After saving, expect to see the same card
+        assertTrue(solo.searchText("test"));
     }
     
     public void tearDown() throws Exception {
@@ -42,55 +101,6 @@ public class StudyActivityEditCardTest extends ActivityInstrumentationTestCase2<
         }
         super.tearDown();
     }
-
-
-    public void testSaveCardWithoutShuffle() {
-    	// Save a card with shuffle turned off
-    	solo.clickLongOnText(UITestHelper.SAMPLE_DB_NAME);
-    	
-        solo.clickOnText(solo.getString(R.string.study_text));
-        solo.waitForActivity("StudyActivity");
-    	
-        solo.sleep(4000);
-        
-        solo.clickLongOnText("head");
-        solo.clickOnText(solo.getString(R.string.edit_text));
-        solo.clickOnText(solo.getString(R.string.settings_save));
-        
-        solo.sleep(4000);
-        
-    	// After saving, expect to see the same card
-        assertTrue(solo.searchText("head"));
-    }
-	
-    public void testSaveCardWithShuffle() {
-	    	// Turn on shuffle option
-	    	solo.clickOnText(solo.getString(R.string.misc_category));
-	    	solo.clickOnText(solo.getString(R.string.option_button_text));
-	    	solo.clickOnText(solo.getString(R.string.shuffling_cards_title));
-	    	solo.goBack();
-	    	solo.clickOnText(solo.getString(R.string.recent_tab_text));
-	    	
-	    	// Save a card with shuffle turned on
-	    	solo.clickLongOnText(UITestHelper.SAMPLE_DB_NAME);
-	    	
-	        solo.clickOnText(solo.getString(R.string.study_text));
-	        solo.waitForActivity("StudyActivity");
-	    	
-	        solo.sleep(4000);
-	        
-	        // Since the card is shuffled, we need to get the textview so that we know what is the current card string
-	        TextView v = (TextView)solo.getCurrentActivity().findViewById(R.id.question);
-	        String oldQuestion = v.getText().toString();
-	        
-	        solo.clickLongOnText(oldQuestion);
-	        solo.clickOnText(solo.getString(R.string.edit_text));
-	        solo.clickOnText(solo.getString(R.string.settings_save));
-	        
-	        solo.sleep(4000);
-	    	
-	        assertTrue(solo.searchText(oldQuestion));
-    	}
 }
     
 

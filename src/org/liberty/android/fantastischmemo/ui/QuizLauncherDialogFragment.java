@@ -22,6 +22,7 @@ package org.liberty.android.fantastischmemo.ui;
 import org.apache.mycommons.lang3.StringUtils;
 
 import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
@@ -188,8 +189,8 @@ public class QuizLauncherDialogFragment extends DialogFragment {
                 startActivity(intent);
             } else {
                 Intent intent = new Intent(mActivity, QuizActivity.class);
-                editor.putInt("quiz_group_size", groupSize);
-                editor.putInt("quiz_group_number", groupNumber);
+                editor.putInt(AMPrefKeys.QUIZ_GROUP_SIZE_KEY, groupSize);
+                editor.putInt(AMPrefKeys.QUIZ_GROUP_NUMBER_KEY, groupNumber);
                 editor.commit();
 
                 int startOrd = (groupNumber - 1) * groupSize + 1;
@@ -226,8 +227,8 @@ public class QuizLauncherDialogFragment extends DialogFragment {
 
         @Override
         public void onPostExecute(Void nothing) {
-            groupSize = settings.getInt("quiz_group_size", DEFAULT_GROUP_SIZE);
-            groupNumber = settings.getInt("quiz_group_number", 1);
+            groupSize = settings.getInt(AMPrefKeys.QUIZ_GROUP_SIZE_KEY, DEFAULT_GROUP_SIZE);
+            groupNumber = settings.getInt(AMPrefKeys.QUIZ_GROUP_NUMBER_KEY, 1);
             setGroupSizeText();
             setGroupNumberText();
         }

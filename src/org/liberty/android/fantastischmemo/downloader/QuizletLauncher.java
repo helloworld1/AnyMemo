@@ -68,7 +68,7 @@ public class QuizletLauncher extends AMActivity implements OnClickListener{
 
     private void showSearchTagDialog(){
         final EditText et = new EditText(this);
-        et.setText(settings.getString("quizlet_saved_search", ""));
+        et.setText(settings.getString(AMPrefKeys.QUIZLET_SAVED_SEARCH, ""));
         new AlertDialog.Builder(this)
             .setTitle(R.string.search_tag)
             .setMessage(R.string.quizlet_search_tag_message)
@@ -76,7 +76,7 @@ public class QuizletLauncher extends AMActivity implements OnClickListener{
             .setPositiveButton(R.string.search_text, new DialogInterface.OnClickListener(){
                 public void onClick(DialogInterface dialog, int which){
                     String searchText = et.getText().toString();
-                    editor.putString("quizlet_saved_search", searchText);
+                    editor.putString(AMPrefKeys.QUIZLET_SAVED_SEARCH, searchText);
                     editor.commit();
                     Intent myIntent = new Intent(QuizletLauncher.this, DownloaderQuizlet.class);
                     myIntent.setAction(DownloaderQuizlet.INTENT_ACTION_SEARCH_TAG);
@@ -91,7 +91,7 @@ public class QuizletLauncher extends AMActivity implements OnClickListener{
 
     private void showSearchUserDialog(){
         final EditText et = new EditText(this);
-        et.setText(settings.getString("quizlet_saved_user", ""));
+        et.setText(settings.getString(AMPrefKeys.QUIZLET_SAVED_USER, ""));
         new AlertDialog.Builder(this)
             .setTitle(R.string.search_user)
             .setMessage(R.string.quizlet_search_user_message)
@@ -99,7 +99,7 @@ public class QuizletLauncher extends AMActivity implements OnClickListener{
             .setPositiveButton(R.string.search_text, new DialogInterface.OnClickListener(){
                 public void onClick(DialogInterface dialog, int which){
                     String searchText = et.getText().toString();
-                    editor.putString("quizlet_saved_user", searchText);
+                    editor.putString(AMPrefKeys.QUIZLET_SAVED_USER, searchText);
                     editor.commit();
                     Intent myIntent = new Intent(QuizletLauncher.this, DownloaderQuizlet.class);
                     myIntent.setAction(DownloaderQuizlet.INTENT_ACTION_SEARCH_USER);

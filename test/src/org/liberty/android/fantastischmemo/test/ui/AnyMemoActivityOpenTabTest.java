@@ -22,15 +22,12 @@ public class AnyMemoActivityOpenTabTest extends ActivityInstrumentationTestCase2
     public void setUp() throws Exception{
         UITestHelper uiTestHelper = new UITestHelper(getInstrumentation());
         uiTestHelper.clearPreferences();
-        
+        uiTestHelper.markNotFirstTime();
+
         mActivity = this.getActivity();
         solo = new Solo(getInstrumentation(), mActivity);
-        solo.sleep(1000);
 
-        if (solo.searchText("New version")) {
-            solo.clickOnText(solo.getString(R.string.ok_text));
-        }
-        solo.sleep(4000);
+        solo.sleep(1000);
         //solo.clickOnText(solo.getString(R.string.open_tab_text));
         solo.clickOnText("Misc");
         solo.sleep(500);
@@ -39,7 +36,6 @@ public class AnyMemoActivityOpenTabTest extends ActivityInstrumentationTestCase2
 
 
     public void testActionListStudy() {
-        solo.sleep(3000);
     }
 
 

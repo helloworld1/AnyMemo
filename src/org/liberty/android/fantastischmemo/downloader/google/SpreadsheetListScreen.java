@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.google;
 
+import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
 
 import android.app.Activity;
@@ -113,7 +114,7 @@ public class SpreadsheetListScreen extends GoogleAccountActivity {
     private void invalidateSavedToken() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = settings.edit();
-        editor.putString("google_auth_token", null);
+        editor.putString(AMPrefKeys.GOOGLE_AUTH_TOKEN, null);
         editor.commit();
     }
 

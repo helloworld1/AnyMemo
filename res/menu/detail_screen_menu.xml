@@ -5,10 +5,7 @@
 	    android:icon="@android:drawable/ic_menu_save"
         android:showAsAction="ifRoom" 
   		android:title="@string/settings_save" />
-    <item android:id="@+id/load_default"
+    <item android:id="@+id/reset"
 	    android:icon="@android:drawable/ic_menu_rotate"
-  		android:title="@string/load_default_text" />
-    <item android:id="@+id/settingsmenu_help"
-	    android:icon="@android:drawable/ic_menu_help"
-  		android:title="@string/help_button_text" />
+  		android:title="@string/detail_reset" />
 </menu>
