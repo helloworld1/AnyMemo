@@ -51,7 +51,7 @@ public class SpreadsheetListScreen extends GoogleAccountActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.spreadsheet_list_menu, menu);
+        inflater.inflate(R.menu.google_drive_spreadsheet_list_menu, menu);
         return true;
     }
 
