@@ -1,5 +1,7 @@
 package org.liberty.android.fantastischmemo.domain;
 
+import org.liberty.android.fantastischmemo.AMPrefKeys;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -32,33 +34,33 @@ public class SchedulingAlgorithmParameters {
 
     public float getInitialInterval(int grade) {
         assert grade < defaultInitialIntervals.length;
-        return settings.getFloat("initial_grading_interval_" + grade, defaultInitialIntervals[grade]);
+        return settings.getFloat(AMPrefKeys.getInitialGradingIntervalKey(grade), defaultInitialIntervals[grade]);
     }
 
     public float getMinimalInterval() {
-        return settings.getFloat("minimal_interval", defaultMinimalInterval);
+        return settings.getFloat(AMPrefKeys.MINIMAL_INTERVAL_KEY, defaultMinimalInterval);
     }
 
     public float getFailedGradingInterval(int grade) {
         assert grade < defaultFailedGradingIntervals.length;
-        return settings.getFloat("failed_grading_interval_" + grade, defaultFailedGradingIntervals[grade]);
+        return settings.getFloat(AMPrefKeys.getFailedGradingIntervalKey(grade), defaultFailedGradingIntervals[grade]);
     }
 
     public float getInitialEasiness() {
-        return settings.getFloat("initial_easiness", defaultInitialEasiness);
+        return settings.getFloat(AMPrefKeys.INITIAL_EASINESS_KEY, defaultInitialEasiness);
     }
 
     public float getMinimalEasiness() {
-        return settings.getFloat("minimal_easiness", defaultMinimalEasiness);
+        return settings.getFloat(AMPrefKeys.MINIMAL_EASINESS_KEY, defaultMinimalEasiness);
     }
 
     public float getEasinessIncremental(int grade) {
         assert grade < defaultFailedGradingIntervals.length;
-        return settings.getFloat("easiness_incremental_" + grade, defaultEasinessIncrementals[grade]);
+        return settings.getFloat(AMPrefKeys.getEasinessIncrementalKey(grade), defaultEasinessIncrementals[grade]);
     }
 
     public boolean getEnableNoise() {
-        return settings.getBoolean("enable_noise", defaultEnableNoise);
+        return settings.getBoolean(AMPrefKeys.ENABLE_NOISE_KEY, defaultEnableNoise);
     }
 
     /*
@@ -67,15 +69,15 @@ public class SchedulingAlgorithmParameters {
     public void reset() {
         int[] grades = {0, 1, 2, 3, 4, 5};
         for (int grade : grades) {
-            editor.putFloat("initial_grading_interval_" + grade, defaultInitialIntervals[grade]);
-            editor.putFloat("failed_grading_interval_" + grade, defaultFailedGradingIntervals[grade]);
-            editor.putFloat("easiness_incremental_" + grade, defaultEasinessIncrementals[grade]);
+            editor.putFloat(AMPrefKeys.getInitialGradingIntervalKey(grade), defaultInitialIntervals[grade]);
+            editor.putFloat(AMPrefKeys.getFailedGradingIntervalKey(grade), defaultFailedGradingIntervals[grade]);
+            editor.putFloat(AMPrefKeys.getEasinessIncrementalKey(grade), defaultEasinessIncrementals[grade]);
         }
-        editor.putBoolean("enable_noise", defaultEnableNoise);
-        editor.putFloat("minimal_interval", defaultMinimalInterval);
-        editor.putFloat("initial_easiness", defaultInitialEasiness);
-        editor.putFloat("minimal_easiness", defaultMinimalEasiness);
-        editor.putString("learning_queue_size", "10");
+        editor.putBoolean(AMPrefKeys.ENABLE_NOISE_KEY, defaultEnableNoise);
+        editor.putFloat(AMPrefKeys.MINIMAL_INTERVAL_KEY, defaultMinimalInterval);
+        editor.putFloat(AMPrefKeys.INITIAL_EASINESS_KEY, defaultInitialEasiness);
+        editor.putFloat(AMPrefKeys.MINIMAL_EASINESS_KEY, defaultMinimalEasiness);
+        editor.putString(AMPrefKeys.LEARN_QUEUE_SIZE_KEY, "10");
 
         editor.commit();
     }

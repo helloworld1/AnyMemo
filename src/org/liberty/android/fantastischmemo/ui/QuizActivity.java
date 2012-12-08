@@ -39,6 +39,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -50,6 +51,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+
+import com.example.android.apis.graphics.FingerPaint;
 
 public class QuizActivity extends QACardActivity {
     public static String EXTRA_START_CARD_ID = "start_card_id";
@@ -155,6 +158,26 @@ public class QuizActivity extends QACardActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_lookup:
+            {
+                dictionaryUtil.showLookupListDialog("" + getCurrentCard().getQuestion() + " " + getCurrentCard().getAnswer());
+                break;
+            }
+            case R.id.menu_speak_question:
+            {
+                speakQuestion();
+                break;
+            }
+            case R.id.menu_speak_answer:
+            {
+                speakAnswer();
+                break;
+            }
+            case R.id.menu_paint:
+            {
+                Intent myIntent = new Intent(this, FingerPaint.class);
+                startActivity(myIntent);
+            }
         }
         return false;
     }
@@ -163,7 +186,8 @@ public class QuizActivity extends QACardActivity {
     protected void onClickQuestionText() {
         if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
                 || option.getSpeakingType() == Option.SpeakingType.TAP)) {
-            //TODO: Speak
+            stopQuestionTTS();
+            speakQuestion();
         } else {
             onClickQuestionView();
         }
@@ -175,7 +199,8 @@ public class QuizActivity extends QACardActivity {
             onClickAnswerView();
         } else if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
                 || option.getSpeakingType() == Option.SpeakingType.TAP)) {
-            //TODO: Speak
+            stopAnswerTTS();
+            speakAnswer();
         }
     }
 
@@ -192,15 +217,6 @@ public class QuizActivity extends QACardActivity {
             displayCard(true);
         } else if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED && isAnswerShown()) {
             displayCard(false);
-        }
-    }
-
-    @Override
-    protected void onPostDisplayCard() {
-        if (isAnswerShown()) {
-            gradeButtons.show();
-        } else {
-            gradeButtons.hide();
         }
     }
 

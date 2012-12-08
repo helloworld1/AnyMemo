@@ -32,6 +32,7 @@ import org.apache.mycommons.lang3.StringUtils;
 
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
+import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
 
 import org.liberty.android.fantastischmemo.utils.AMUtil;
@@ -121,7 +122,7 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
             defaultRoot = null;
         }
         if(defaultRoot == null){
-            defaultRoot = settings.getString("saved_fb_path", null);
+            defaultRoot = settings.getString(AMPrefKeys.SAVED_FILEBROWSER_PATH_KEY, null);
         }
 
 		if(StringUtils.isEmpty(defaultRoot)){
@@ -232,7 +233,7 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
 					}
 					else if(clickedFile.isFile()){
                         /* Save the current path */
-                        editor.putString("saved_fb_path", clickedFile.getParent());
+                        editor.putString(AMPrefKeys.SAVED_FILEBROWSER_PATH_KEY, clickedFile.getParent());
                         editor.commit();
                         if (onFileClickListener != null) {
                             onFileClickListener.onClick(clickedFile);

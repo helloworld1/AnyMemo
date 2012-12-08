@@ -173,7 +173,7 @@ public class AnyMemoService extends Service{
         public DatabaseInfo(Context context) throws Exception{
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
             /* Feed the data from the most recent database */
-            dbPath = settings.getString("recentdbpath0", "");
+            dbPath = settings.getString(AMPrefKeys.getRecentPathKey(0), "");
             dbName = AMUtil.getFilenameFromPath(dbPath);
 
             AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(AnyMemoService.this, dbPath);

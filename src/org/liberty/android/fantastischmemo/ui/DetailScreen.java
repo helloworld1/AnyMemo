@@ -18,32 +18,36 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import org.liberty.android.fantastischmemo.dao.*;
-import org.liberty.android.fantastischmemo.domain.*;
-import org.liberty.android.fantastischmemo.*;
-
 import java.sql.SQLException;
-import java.util.Calendar;
 import java.text.Format;
-import java.text.SimpleDateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import org.apache.mycommons.lang3.time.DateUtils;
+import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.dao.CardDao;
+import org.liberty.android.fantastischmemo.dao.CategoryDao;
+import org.liberty.android.fantastischmemo.dao.LearningDataDao;
+import org.liberty.android.fantastischmemo.domain.Card;
 
 import android.app.Activity;
-import android.os.AsyncTask;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.EditText;
 
-public class DetailScreen extends AMActivity implements OnClickListener{
+public class DetailScreen extends AMActivity {
 	
 	private EditText idEntry;
 	private EditText questionEntry;
@@ -59,9 +63,6 @@ public class DetailScreen extends AMActivity implements OnClickListener{
 	private EditText lapsesEntry;
 	private EditText acqRepsSinceLapseEntry;
 	private EditText retRepsSinceLapseEntry;
-	private Button backButton;
-	private Button updateButton;
-	private Button resetButton;
 	private String dbPath = "";
 
 	private CardDao cardDao;
@@ -83,6 +84,58 @@ public class DetailScreen extends AMActivity implements OnClickListener{
 
         initTask = new InitTask();
         initTask.execute((Void) null);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.detail_screen_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.save:
+            {
+                new AlertDialog.Builder(this)
+                    .setTitle(R.string.warning_text)
+                    .setMessage(R.string.item_update_warning)
+                    .setPositiveButton(R.string.ok_text,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface arg0, int arg1) {
+
+                                    saveCardTask = new SaveCardTask();
+                                    saveCardTask.execute((Void) null);
+
+                                }
+                            })
+                .setNegativeButton(R.string.cancel_text, null)
+                    .show();
+                return true;
+            }
+            case R.id.reset:
+            {
+                Calendar defaultLastLearnDate = Calendar.getInstance();
+                defaultLastLearnDate.set(2010, 0, 1);
+
+                Format formatter = new SimpleDateFormat("yyyy/MM/dd");
+                lastLearnDateEntry.setText(formatter.format(defaultLastLearnDate.getTime()));
+                Calendar defaultNextLearnDate = Calendar.getInstance();
+                defaultNextLearnDate.set(2013, 0, 1);
+                nextLearnDateEntry.setText(formatter.format(defaultNextLearnDate.getTime()));
+                gradeEntry.setText("0");
+                easinessEntry.setText("2.5");
+                acqRepsEntry.setText("0");
+                retRepsEntry.setText("0");
+                lapsesEntry.setText("0");
+                acqRepsSinceLapseEntry.setText("0");
+                retRepsSinceLapseEntry.setText("0");
+                return true;
+            }
+
+        }
+        return false;
     }
     
     private void loadEntries() {
@@ -150,49 +203,6 @@ public class DetailScreen extends AMActivity implements OnClickListener{
     public void onDestroy(){
         AnyMemoDBOpenHelperManager.releaseHelper(helper);
     	super.onDestroy();
-    	Intent resultIntent = new Intent();
-    	setResult(Activity.RESULT_CANCELED, resultIntent);
-    }
-    
-    public void onClick(View v){
-    	if(v == backButton){
-    		Intent resultIntent = new Intent();
-    		setResult(Activity.RESULT_CANCELED, resultIntent);
-    		finish();
-    	}
-    	if(v == resetButton){
-            Calendar defaultLastLearnDate = Calendar.getInstance();
-            defaultLastLearnDate.set(2010, 0, 1);
-
-            Format formatter = new SimpleDateFormat("yyyy/MM/dd");
-            lastLearnDateEntry.setText(formatter.format(defaultLastLearnDate.getTime()));
-            Calendar defaultNextLearnDate = Calendar.getInstance();
-            defaultNextLearnDate.set(2013, 0, 1);
-            nextLearnDateEntry.setText(formatter.format(defaultNextLearnDate.getTime()));
-            gradeEntry.setText("0");
-            easinessEntry.setText("2.5");
-            acqRepsEntry.setText("0");
-            retRepsEntry.setText("0");
-            lapsesEntry.setText("0");
-            acqRepsSinceLapseEntry.setText("0");
-            retRepsSinceLapseEntry.setText("0");
-    	}
-    	if(v == updateButton){
-    		new AlertDialog.Builder(this)
-                .setTitle(R.string.warning_text)
-                .setMessage(R.string.item_update_warning)
-                .setPositiveButton(R.string.ok_text,
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface arg0, int arg1) {
-                            
-                            saveCardTask = new SaveCardTask();
-                            saveCardTask.execute((Void) null);
-
-						}
-					})
-                .setNegativeButton(R.string.cancel_text, null)
-                .show();
-    	}
     }
 
     private class SaveCardTask extends AsyncTask<Void, Void, String> {
@@ -296,13 +306,6 @@ public class DetailScreen extends AMActivity implements OnClickListener{
             lapsesEntry = (EditText)findViewById(R.id.entry_lapses);
             acqRepsSinceLapseEntry = (EditText)findViewById(R.id.entry_acq_reps_since_lapse);
             retRepsSinceLapseEntry = (EditText)findViewById(R.id.entry_ret_reps_since_lapse);
-
-            backButton = (Button)findViewById(R.id.but_detail_back);
-            updateButton = (Button)findViewById(R.id.but_detail_update);
-            resetButton = (Button)findViewById(R.id.but_detail_reset);
-            backButton.setOnClickListener(DetailScreen.this);
-            resetButton.setOnClickListener(DetailScreen.this);
-            updateButton.setOnClickListener(DetailScreen.this);
 
             questionEntry.setText(currentCard.getQuestion());
 

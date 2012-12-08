@@ -3,23 +3,21 @@ package org.liberty.android.fantastischmemo.test.ui;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
-
 import org.liberty.android.fantastischmemo.dao.CardDao;
-
 import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.ui.DetailScreen;
 
-import org.liberty.android.fantastischmemo.ui.AnyMemo;
+import android.content.Intent;
+import android.test.ActivityInstrumentationTestCase2;
 
 import com.jayway.android.robotium.solo.Solo;
 
-import android.test.ActivityInstrumentationTestCase2;
+public class DetailScreenActivityTest extends ActivityInstrumentationTestCase2<DetailScreen> {
 
-public class DetailScreenActivityTest extends ActivityInstrumentationTestCase2<AnyMemo> {
-
-    protected AnyMemo mActivity;
+    protected DetailScreen mActivity;
 
     public DetailScreenActivityTest() {
-        super("org.liberty.android.fantastischmemo", AnyMemo.class);
+        super("org.liberty.android.fantastischmemo", DetailScreen.class);
     }
 
     private Solo solo;
@@ -27,43 +25,33 @@ public class DetailScreenActivityTest extends ActivityInstrumentationTestCase2<A
     public void setUp() throws Exception {
         UITestHelper uiTestHelper = new UITestHelper(getInstrumentation());
         uiTestHelper.clearPreferences();
+        uiTestHelper.setUpFBPDatabase();
         
+        Intent intent = new Intent();
+        intent.putExtra(DetailScreen.EXTRA_DBPATH, UITestHelper.SAMPLE_DB_PATH);
+        intent.putExtra(DetailScreen.EXTRA_CARD_ID, 1);
+        setActivityIntent(intent);
+
         mActivity = this.getActivity();
         solo = new Solo(getInstrumentation(), mActivity);
-        solo.sleep(1000);
-
-        if (solo.searchText("New version")) {
-            solo.clickOnText(solo.getString(R.string.ok_text));
-        }
-        solo.sleep(4000);
-        solo.clickLongOnText(UITestHelper.SAMPLE_DB_NAME);
-        solo.clickOnText(solo.getString(R.string.study_text));
-        solo.waitForActivity("MemoScreen");
-        solo.sleep(4000);
+        solo.waitForDialogToClose(8000);
+        solo.sleep(300);
     }
 
     public void testDisplayDetailInfo() throws Exception {
-        solo.sendKey(Solo.MENU);
-        solo.clickOnText(solo.getString(R.string.detail_menu_text));
-        solo.waitForActivity("DetailScreen");
-        solo.sleep(2000);
         assertTrue(solo.searchText("head"));
         assertTrue(solo.searchText("2.5"));
     }
 
     public void testSaveChanges() throws Exception {
-        solo.sendKey(Solo.MENU);
-        solo.clickOnText(solo.getString(R.string.detail_menu_text));
-        solo.waitForActivity("DetailScreen");
-        solo.sleep(2000);
-        solo.clearEditText(1);
         solo.sleep(400);
+        solo.clearEditText(1);
         solo.enterText(1, "foot");
-        solo.clickOnText(solo.getString(R.string.detail_update));
-        solo.clickOnText(solo.getString(R.string.ok_text));
-        solo.waitForActivity("MemoScreen");
-        solo.sleep(4000);
 
+        getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
+
+        solo.clickOnText(solo.getString(R.string.ok_text));
+        solo.sleep(4000);
         // asssert db state
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
         try {

@@ -68,9 +68,9 @@ public class FELauncher extends AMActivity implements OnClickListener{
     @Override
     public void onResume(){
         super.onResume();
-        String searchText = settings.getString("saved_username", "");
-        String key = settings.getString("saved_oauth_token", "");
-        String secret = settings.getString("saved_oauth_token_secret", "");
+        String searchText = settings.getString(AMPrefKeys.FE_SAVED_USERNAME_KEY, "");
+        String key = settings.getString(AMPrefKeys.FE_SAVED_OAUTH_TOKEN_KEY, "");
+        String secret = settings.getString(AMPrefKeys.FE_SAVED_OAUTH_TOKEN_SECRET_KEY, "");
         if(!searchText.equals("") && !key.equals("") && !secret.equals("")){
             loginButton.setText(getString(R.string.fe_logged_in_text) + ": " + searchText);
         }
@@ -93,9 +93,9 @@ public class FELauncher extends AMActivity implements OnClickListener{
             startActivity(myIntent);
         }
         if(v == privateButton){
-            String searchText = settings.getString("saved_username", "");
-            String key = settings.getString("saved_oauth_token", "");
-            String secret = settings.getString("saved_oauth_token_secret", "");
+            String searchText = settings.getString(AMPrefKeys.FE_SAVED_USERNAME_KEY, "");
+            String key = settings.getString(AMPrefKeys.FE_SAVED_OAUTH_TOKEN_KEY, "");
+            String secret = settings.getString(AMPrefKeys.FE_SAVED_OAUTH_TOKEN_SECRET_KEY, "");
             if(!searchText.equals("") && !key.equals("") && !secret.equals("")){
                 Intent myIntent = new Intent(FELauncher.this, DownloaderFE.class);
                 myIntent.setAction(DownloaderFE.INTENT_ACTION_SEARCH_PRIVATE);
@@ -109,9 +109,9 @@ public class FELauncher extends AMActivity implements OnClickListener{
             }
         }
         if(v == uploadButton){
-            String searchText = settings.getString("saved_username", "");
-            String key = settings.getString("saved_oauth_token", "");
-            String secret = settings.getString("saved_oauth_token_secret", "");
+            String searchText = settings.getString(AMPrefKeys.FE_SAVED_USERNAME_KEY, "");
+            String key = settings.getString(AMPrefKeys.FE_SAVED_OAUTH_TOKEN_KEY, "");
+            String secret = settings.getString(AMPrefKeys.FE_SAVED_OAUTH_TOKEN_SECRET_KEY, "");
             if(!searchText.equals("") && !key.equals("") && !secret.equals("")){
                 Intent myIntent = new Intent(FELauncher.this, FEUpload.class);
                 myIntent.putExtra("search_criterion", searchText);
@@ -136,9 +136,9 @@ public class FELauncher extends AMActivity implements OnClickListener{
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 	    case R.id.fe_logout:
-            editor.putString("saved_username", "");
-            editor.putString("saved_oauth_token", "");
-            editor.putString("saved_oauth_token_secret", "");
+            editor.putString(AMPrefKeys.FE_SAVED_USERNAME_KEY, "");
+            editor.putString(AMPrefKeys.FE_SAVED_OAUTH_TOKEN_KEY, "");
+            editor.putString(AMPrefKeys.FE_SAVED_OAUTH_TOKEN_SECRET_KEY, "");
             editor.commit();
             restartActivity();
 			return true;
@@ -160,7 +160,7 @@ public class FELauncher extends AMActivity implements OnClickListener{
 
     private void showSearchTagDialog(){
         final EditText et = new EditText(this);
-        et.setText(settings.getString("fe_saved_search", ""));
+        et.setText(settings.getString(AMPrefKeys.FE_SAVED_SEARCH_KEY, ""));
         new AlertDialog.Builder(this)
             .setTitle(R.string.search_tag)
             .setMessage(R.string.fe_search_tag_message)
@@ -168,7 +168,7 @@ public class FELauncher extends AMActivity implements OnClickListener{
             .setPositiveButton(R.string.search_text, new DialogInterface.OnClickListener(){
                 public void onClick(DialogInterface dialog, int which){
                     String searchText = et.getText().toString();
-                    editor.putString("fe_saved_search", searchText);
+                    editor.putString(AMPrefKeys.FE_SAVED_SEARCH_KEY, searchText);
                     editor.commit();
                     Intent myIntent = new Intent(FELauncher.this, DownloaderFE.class);
                     myIntent.setAction(DownloaderFE.INTENT_ACTION_SEARCH_TAG);
@@ -183,7 +183,7 @@ public class FELauncher extends AMActivity implements OnClickListener{
 
     private void showSearchUserDialog(){
         final EditText et = new EditText(this);
-        et.setText(settings.getString("fe_saved_user", ""));
+        et.setText(settings.getString(AMPrefKeys.FE_SAVED_USER_KEY, ""));
         new AlertDialog.Builder(this)
             .setTitle(R.string.search_tag)
             .setMessage(R.string.fe_search_user_message)
@@ -191,7 +191,7 @@ public class FELauncher extends AMActivity implements OnClickListener{
             .setPositiveButton(R.string.search_text, new DialogInterface.OnClickListener(){
                 public void onClick(DialogInterface dialog, int which){
                     String searchText = et.getText().toString();
-                    editor.putString("fe_saved_user", searchText);
+                    editor.putString(AMPrefKeys.FE_SAVED_USER_KEY, searchText);
                     editor.commit();
                     Intent myIntent = new Intent(FELauncher.this, DownloaderFE.class);
                     myIntent.setAction(DownloaderFE.INTENT_ACTION_SEARCH_USER);

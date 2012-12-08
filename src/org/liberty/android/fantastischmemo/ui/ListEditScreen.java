@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
@@ -274,7 +275,7 @@ public class ListEditScreen extends AMActivity {
 
 		@Override
 		public void onPostExecute(Void result) {
-            int initPosition = option.getSavedId(TAG, dbPath, 0);
+            int initPosition = option.getSavedId(AMPrefKeys.LIST_EDIT_SCREEN_PREFIX, dbPath, 0);
 			mAdapter = new CardListAdapter(ListEditScreen.this, cards);
 					
 			listView = (ListView) findViewById(R.id.item_list);
@@ -290,7 +291,7 @@ public class ListEditScreen extends AMActivity {
 
     @Override
     public void onDestroy() {
-        option.setSavedId(TAG, dbPath, listView.getFirstVisiblePosition());
+        option.setSavedId(AMPrefKeys.LIST_EDIT_SCREEN_PREFIX, dbPath, listView.getFirstVisiblePosition());
         AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
         super.onDestroy();
     }
