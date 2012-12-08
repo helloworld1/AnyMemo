@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.utils;
 
 import org.apache.mycommons.io.FilenameUtils;
+import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.domain.Option;
 
 import android.content.Context;
@@ -42,18 +43,18 @@ public class RecentListUtil {
     }
     
     public String getRecentDBPath() {
-        return trimPath(settings.getString("recentdbpath0", null));
+        return trimPath(settings.getString(AMPrefKeys.getRecentPathKey(0), null));
     }
 
     public String[] getAllRecentDBPath() {
     	// TODO: Reload the recentLength from user option.
     	// FIXME: temp hack, need re-write, don't need to get it again.
-    	recentLength = settings.getInt("recent_count", recentLength);
+    	recentLength = settings.getInt(AMPrefKeys.RECENT_COUNT_KEY, recentLength);
     	
         String[] ret = new String[recentLength];
         
         for(int i = 0; i < recentLength; i++){
-            ret[i] = trimPath(settings.getString("recentdbpath" + i, null));
+            ret[i] = trimPath(settings.getString(AMPrefKeys.getRecentPathKey(i), null));
         }
         
         return ret;
@@ -61,7 +62,7 @@ public class RecentListUtil {
     
     public void clearRecentList() {
         for(int i = 0; i < recentLength; i++){
-            editor.putString("recentdbpath" + i, null);
+            editor.putString(AMPrefKeys.getRecentPathKey(i), null);
         }
         editor.commit();
     }
@@ -71,11 +72,10 @@ public class RecentListUtil {
         String[] allPaths = getAllRecentDBPath();
         clearRecentList();
         for(int i = 0, counter = 0; i < recentLength; i++){
-            if(allPaths[i] == null || allPaths[i].equals(dbpath)){
+            if(allPaths[i] == null || allPaths[i].equals(dbpath)) {
                 continue;
-            }
-            else{
-                editor.putString("recentdbpath" + counter, allPaths[i]);
+            } else {
+                editor.putString(AMPrefKeys.getRecentPathKey(counter), allPaths[i]);
                 counter++;
             }
         }
@@ -87,9 +87,9 @@ public class RecentListUtil {
         deleteFromRecentList(dbpath);
         String[] allPaths = getAllRecentDBPath();
         for(int i = recentLength - 1; i >= 1; i--){
-            editor.putString("recentdbpath" + i, allPaths[i - 1]);
+            editor.putString(AMPrefKeys.getRecentPathKey(i), allPaths[i - 1]);
         }
-        editor.putString("recentdbpath" + 0, dbpath);
+        editor.putString(AMPrefKeys.getRecentPathKey(0), dbpath);
         editor.commit();
     }
 

@@ -2,38 +2,38 @@ package org.liberty.android.fantastischmemo.ui;
 
 import java.io.IOException;
 
-import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.graphics.Color;
-import android.graphics.Rect;
+import android.content.Context;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.ToggleButton;
 
 public class AudioRecorderFragment extends DialogFragment {
 
-    private static final String LOG_TAG = "AudioRecorder";
-    private String mFileName = null;
-    private Activity mActivity = null;
+    private static final String TAG = "AudioRecorderFragment";
 
-    private ImageButton mRecordButton = null;
+    private Activity mActivity;
+
+    private String mFileName = null;
+
+    private ToggleButton mRecordButton = null;
+    private ToggleButton mPlayButton = null;
+    private Button mSaveButton = null;
+
     private MediaRecorder mRecorder = null;
-    private ImageButton mPlayButton = null;
     private MediaPlayer mPlayer = null;
-    private ImageButton mReturnButton = null;
     
     private boolean mStartPlaying = false;
     private boolean mStartRecording = false;
@@ -47,42 +47,42 @@ public class AudioRecorderFragment extends DialogFragment {
                 mStartRecording = !mStartRecording;
                 onRecord(mStartRecording);
                 if (mStartRecording) {
-                    mRecordButton.setImageResource(R.drawable.recorder_stop);
+                    mPlayButton.setChecked(true);
                     mPlayButton.setEnabled(false);
-                    mReturnButton.setEnabled(false);
+                    mSaveButton.setEnabled(false);
                     
                 } else {
-                    mRecordButton.setImageResource(R.drawable.recorder_record);
+                    mPlayButton.setChecked(false);
                     mPlayButton.setEnabled(true);
-                    mReturnButton.setEnabled(true);
+                    mSaveButton.setEnabled(true);
                 }
             }
             if(v == mPlayButton){
                 mStartPlaying = !mStartPlaying;
                 onPlay(mStartPlaying);
                 if (mStartPlaying) {
-                    mPlayButton.setImageResource(R.drawable.recorder_pause);
+                    mPlayButton.setChecked(true);
                     mRecordButton.setEnabled(false);
-                    mReturnButton.setEnabled(false);
+                    mSaveButton.setEnabled(false);
                 } else {
-                    mPlayButton.setImageResource(R.drawable.recorder_play);
+                    mPlayButton.setChecked(false);
                     mRecordButton.setEnabled(true);
-                    mReturnButton.setEnabled(true);
+                    mSaveButton.setEnabled(true);
                 }
             }
             
-            if(v == mReturnButton){
+            if(v == mSaveButton){
                 audioRecorderResultListener.onReceiveAudio();
-                getDialog().dismiss();
+                dismiss();
             }
             
         }
     };
-    
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mActivity = (AMActivity)activity;
+        mActivity = activity;
     }
     
     public void onCreate(Bundle bundle) {
@@ -94,19 +94,21 @@ public class AudioRecorderFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         View v = getActivity().getLayoutInflater().inflate(R.layout.recorder, null);
-        mRecordButton = (ImageButton) v.findViewById(R.id.recorder_record_button);
-        mRecordButton.setOnClickListener(buttonListener);
-        mRecordButton.setBackgroundColor(Color.TRANSPARENT);
 
-        mPlayButton = (ImageButton) v.findViewById(R.id.recorder_play_button);
+        mRecordButton= (ToggleButton) v.findViewById(R.id.record_button);
+        mRecordButton.setOnClickListener(buttonListener);
+
+        mPlayButton = (ToggleButton) v.findViewById(R.id.play_button);
         mPlayButton.setEnabled(false);
         mPlayButton.setOnClickListener(buttonListener);
-        mPlayButton.setBackgroundColor(Color.TRANSPARENT);
 
-        mReturnButton = (ImageButton) v.findViewById(R.id.recorder_return_button) ;
-        mReturnButton.setEnabled(false);
-        mReturnButton.setOnClickListener(buttonListener);
-        mReturnButton.setBackgroundColor(Color.TRANSPARENT);
+        mSaveButton = (Button) v.findViewById(R.id.save_button);
+        mSaveButton.setEnabled(false);
+        mSaveButton.setOnClickListener(buttonListener);
+
+        // Hide the keyboard
+        mActivity.getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         return new AlertDialog.Builder(getActivity())
             .setTitle(R.string.record_your_memo_text)
@@ -141,9 +143,11 @@ public class AudioRecorderFragment extends DialogFragment {
             public void onCompletion(MediaPlayer mp) {
                 mStartPlaying = !mStartPlaying;
                 stopPlaying();
-                mPlayButton.setImageResource(R.drawable.recorder_play);
+
+                mPlayButton.setChecked(false);
+
                 mRecordButton.setEnabled(true);
-                mReturnButton.setEnabled(true);
+                mSaveButton.setEnabled(true);
             }
         });
         try {
@@ -151,7 +155,7 @@ public class AudioRecorderFragment extends DialogFragment {
             mPlayer.prepare();
             mPlayer.start();
         } catch (IOException e) {
-            Log.e(LOG_TAG, "prepare() failed when trying to play recorded audio");
+            Log.e(TAG, "prepare() failed when trying to play recorded audio");
         }
     }
 
@@ -170,7 +174,7 @@ public class AudioRecorderFragment extends DialogFragment {
         try {
             mRecorder.prepare();
         } catch (IOException e) {
-            Log.e(LOG_TAG, "prepare() failed when trying to start recording");
+            Log.e(TAG, "prepare() failed when trying to start recording");
         }
 
         mRecorder.start();

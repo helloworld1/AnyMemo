@@ -30,6 +30,7 @@ import java.util.Vector;
 import org.apache.mycommons.io.FileUtils;
 
 import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.AnyMemoService;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.R;
@@ -64,7 +65,6 @@ import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.util.TypedValue;
 
-import android.view.Display;
 import android.view.View;
 
 import android.widget.HorizontalScrollView;
@@ -157,10 +157,10 @@ public class AnyMemo extends AMActivity {
     private void prepareFirstTimeRun() {
         File sdPath = new File(AMEnv.DEFAULT_ROOT_PATH);
         //Check the version, if it is updated from an older version it will show a dialog
-        String savedVersion = settings.getString("saved_version", "");
+        String savedVersion = settings.getString(AMPrefKeys.SAVED_VERSION_KEY, "");
         String thisVersion = getResources().getString(R.string.app_version);
 
-        boolean firstTime = settings.getBoolean("first_time", true);
+        boolean firstTime = settings.getBoolean(AMPrefKeys.FIRST_TIME_KEY, true);
 
         // Force clean preference for non-compstible versions.
         if ((!savedVersion.startsWith(thisVersion.substring(0,1)) || savedVersion.equals("9.0"))) {
@@ -175,8 +175,8 @@ public class AnyMemo extends AMActivity {
          */
         if(firstTime == true){
             SharedPreferences.Editor editor = settings.edit();
-            editor.putBoolean("first_time", false);
-            editor.putString("recentdbpath0", AMEnv.DEFAULT_ROOT_PATH + AMEnv.DEFAULT_DB_NAME);
+            editor.putBoolean(AMPrefKeys.FIRST_TIME_KEY, false);
+            editor.putString(AMPrefKeys.getRecentPathKey(0), AMEnv.DEFAULT_ROOT_PATH + AMEnv.DEFAULT_DB_NAME);
             editor.commit();
             try {
                 InputStream in = getResources().getAssets().open(AMEnv.DEFAULT_DB_NAME);
@@ -197,11 +197,7 @@ public class AnyMemo extends AMActivity {
         if(!savedVersion.equals(thisVersion)){
             SharedPreferences.Editor editor = settings.edit();
             /* save new version number */
-            editor.putString("saved_version", thisVersion);
-            /* Save the screen dimension for further use */
-            Display display = getWindowManager().getDefaultDisplay();
-            editor.putInt("screen_width", display.getWidth());
-            editor.putInt("screen_height", display.getHeight());
+            editor.putString(AMPrefKeys.SAVED_VERSION_KEY, thisVersion);
             editor.commit();
 
             View alertView = View.inflate(this, R.layout.link_alert, null);

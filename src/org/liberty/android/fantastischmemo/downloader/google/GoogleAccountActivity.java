@@ -32,6 +32,7 @@ import org.json.JSONObject;
 
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
+import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
 
 import android.accounts.AccountManager;
@@ -64,7 +65,7 @@ public abstract class GoogleAccountActivity extends AMActivity {
         super.onCreate(bundle);
         settings = PreferenceManager.getDefaultSharedPreferences(this);
         editor = settings.edit();
-        String savedGoogleAccessToken = settings.getString("google_auth_token", null);
+        String savedGoogleAccessToken = settings.getString(AMPrefKeys.GOOGLE_AUTH_TOKEN, null);
         // Request new one if nothing saved.
         if (savedGoogleAccessToken == null) {
             showGetTokenDialog();
@@ -198,7 +199,7 @@ public abstract class GoogleAccountActivity extends AMActivity {
         @Override
         public void onPostExecute(String accessToken){
             progressDialog.dismiss();
-            editor.putString("google_auth_token", accessToken);
+            editor.putString(AMPrefKeys.GOOGLE_AUTH_TOKEN, accessToken);
             editor.commit();
             if (accessToken == null) {
                 showAuthErrorDialog(null);
@@ -228,7 +229,7 @@ public abstract class GoogleAccountActivity extends AMActivity {
     }
 
     private void invalidateSavedToken() {
-        editor.putString("google_auth_token", null);
+        editor.putString(AMPrefKeys.GOOGLE_AUTH_TOKEN, null);
         editor.commit();
     }
 }

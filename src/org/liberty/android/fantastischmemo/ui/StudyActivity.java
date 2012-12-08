@@ -409,8 +409,6 @@ public class StudyActivity extends QACardActivity {
             assert filterCategory != null : "Query filter id: " + filterCategoryId +". Get null";
         }
 
-        // Initialize the TTS early so it will have time to initialize.
-        initTTS();
         scheduler = new DefaultScheduler(this);
         createQueue();
 
@@ -473,10 +471,14 @@ public class StudyActivity extends QACardActivity {
     protected void onClickAnswerText() {
         if (!isAnswerShown()) {
             onClickAnswerView();
-        } else if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
-                || option.getSpeakingType() == Option.SpeakingType.TAP)) {
-            stopAnswerTTS();
-            speakAnswer();
+        } else {
+            if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
+                        || option.getSpeakingType() == Option.SpeakingType.TAP)) {
+                stopAnswerTTS();
+                speakAnswer();
+            } else {
+                onClickAnswerView();
+            }
         }
     }
 
@@ -643,7 +645,7 @@ public class StudyActivity extends QACardActivity {
      * Use AsyncTask to update the database and update the statistics
      * information
      */
-    private class GradeTask extends AsyncTask<Integer, Void, Card>{
+    private class GradeTask extends AsyncTask<Integer, Void, Card> {
         private boolean isNewCard = false;
 
         @Override
@@ -715,7 +717,7 @@ public class StudyActivity extends QACardActivity {
     }
 
 
-    private class WaitDbTask extends AsyncTask<Void, Void, Void>{
+    private class WaitDbTask extends AsyncTask<Void, Void, Void> {
         private ProgressDialog progressDialog;
 
         @Override

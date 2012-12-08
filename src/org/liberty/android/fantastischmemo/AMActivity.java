@@ -46,11 +46,11 @@ public abstract class AMActivity extends FragmentActivity{
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        if(settings.getBoolean("fullscreen_mode", false)){
+        if(settings.getBoolean(AMPrefKeys.FULLSCREEN_MODE_KEY, false)) {
             requestWindowFeature(Window.FEATURE_NO_TITLE);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
-        if(!settings.getBoolean("allow_orientation", true)){
+        if(!settings.getBoolean(AMPrefKeys.ALLOW_ORIENTATION_KEY, true)) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
 
@@ -77,7 +77,7 @@ public abstract class AMActivity extends FragmentActivity{
 
     private void updateInterfaceLanguage() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        String localeSetting = settings.getString("interface_locale", "AUTO");
+        String localeSetting = settings.getString(AMPrefKeys.INTERFACE_LOCALE_KEY, "AUTO");
         Locale locale;
         /* Force to use the a language */
         if(localeSetting.equals("EN")){
@@ -113,6 +113,5 @@ public abstract class AMActivity extends FragmentActivity{
         config.locale = locale;
         getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
     }
-
 }
 

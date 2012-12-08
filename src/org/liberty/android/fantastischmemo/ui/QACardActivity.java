@@ -446,6 +446,9 @@ public abstract class QACardActivity extends AMActivity {
                 categoryDao = dbOpenHelper.getCategoryDao();
                 setting = settingDao.queryForId(1);
 
+                // Init of common functions here
+                initTTS();
+
                 // Call customized init funciton defined in
                 // the subclass
                 onInit();

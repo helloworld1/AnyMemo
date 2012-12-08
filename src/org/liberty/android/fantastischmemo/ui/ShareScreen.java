@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
@@ -87,7 +88,7 @@ public class ShareScreen extends AMActivity implements View.OnClickListener{
             String text = extras.getString(Intent.EXTRA_TEXT);
             questionView.setText(subject);
             answerView.setText(text);
-            String dbPath = settings.getString("recentdbpath0", "");
+            String dbPath = settings.getString(AMPrefKeys.getRecentPathKey(0), "");
     		dbnameView.setText(dbPath);
         } else {
             finish();

@@ -208,7 +208,6 @@ public class PreviewEditActivity extends QACardActivity {
 
     @Override
     public void onPostInit() {
-        initTTS();
         composeViews();
         //currentCard = .getItem(currentId);
         setViewListeners();

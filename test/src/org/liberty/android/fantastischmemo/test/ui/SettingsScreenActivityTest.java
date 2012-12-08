@@ -1,27 +1,24 @@
 package org.liberty.android.fantastischmemo.test.ui;
 
 import org.apache.mycommons.lang3.StringUtils;
-
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
-
 import org.liberty.android.fantastischmemo.dao.SettingDao;
-
 import org.liberty.android.fantastischmemo.domain.Setting;
+import org.liberty.android.fantastischmemo.ui.SettingsScreen;
 
-import org.liberty.android.fantastischmemo.ui.AnyMemo;
+import android.content.Intent;
+import android.test.ActivityInstrumentationTestCase2;
 
 import com.jayway.android.robotium.solo.Solo;
 
-import android.test.ActivityInstrumentationTestCase2;
+public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2<SettingsScreen> {
 
-public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2<AnyMemo> {
-
-    protected AnyMemo mActivity;
+    protected SettingsScreen mActivity;
 
     public SettingsScreenActivityTest() {
-        super("org.liberty.android.fantastischmemo", AnyMemo.class);
+        super("org.liberty.android.fantastischmemo", SettingsScreen.class);
     }
 
     private Solo solo;
@@ -29,19 +26,17 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
     public void setUp() throws Exception {
         UITestHelper uiTestHelper = new UITestHelper(getInstrumentation());
         uiTestHelper.clearPreferences();
-        
+        uiTestHelper.setUpFBPDatabase();
+
+        Intent intent = new Intent();
+        intent.putExtra(SettingsScreen.EXTRA_DBPATH, UITestHelper.SAMPLE_DB_PATH);
+        setActivityIntent(intent);
+
         mActivity = this.getActivity();
         solo = new Solo(getInstrumentation(), mActivity);
 
-        solo.sleep(1000);
-        if (solo.searchText("New version")) {
-            solo.clickOnText(solo.getString(R.string.ok_text));
-        }
-        solo.sleep(4000);
-        solo.clickLongOnText(UITestHelper.SAMPLE_DB_NAME);
-        solo.clickOnText(solo.getString(R.string.settings_menu_text));
-        solo.waitForActivity("SettingsScreen");
-        solo.sleep(2000);
+        solo.waitForDialogToClose(8000);
+        solo.sleep(600);
     }
 
     public void testSaveFontSize() throws Exception {
@@ -54,8 +49,9 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         assertTrue(solo.searchText("48"));
         assertTrue(solo.searchText("72"));
 
-        solo.clickOnText(solo.getString(R.string.settings_save));
-        solo.sleep(3000);
+        solo.sleep(500);
+        getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
+        solo.sleep(2000);
 
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
         try {
@@ -77,8 +73,9 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         solo.clickOnText(solo.getString(R.string.center_text), 1);
         solo.clickOnText(solo.getString(R.string.right_text));
 
-        solo.clickOnText(solo.getString(R.string.settings_save));
-        solo.sleep(3000);
+        solo.sleep(500);
+        getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 1);
+        solo.sleep(2000);
 
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
         try {
@@ -94,8 +91,10 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
     public void testSaveCardStyle() throws Exception {
         solo.clickOnText(solo.getString(R.string.card_style_single));
         solo.clickOnText(solo.getString(R.string.card_style_double));
-        solo.clickOnText(solo.getString(R.string.settings_save));
-        solo.sleep(3000);
+
+        solo.sleep(500);
+        getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
+        solo.sleep(2000);
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
         try {
             SettingDao settingDao = helper.getSettingDao();
@@ -109,8 +108,9 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
     public void testSaveDisplayRatio() throws Exception {
         solo.clickOnText("50%");
         solo.clickOnText("75%");
-        solo.clickOnText(solo.getString(R.string.settings_save));
-        solo.sleep(3000);
+        solo.sleep(500);
+        getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
+        solo.sleep(2000);
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
         try {
             SettingDao settingDao = helper.getSettingDao();
@@ -123,16 +123,17 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
 
     public void testTTSAudioLocale() throws Exception {
         // Set Question audio
-        solo.clickOnText("US");
-        solo.clickOnText("DE");
+        solo.clickOnView(mActivity.findViewById((R.id.question_locale_spinner)));
+        solo.clickOnText(solo.getString(R.string.german_text));
 
         // Set Answer audio
-        solo.clickOnText("FR");
-        solo.clickOnText("IT");
+        solo.clickOnView(mActivity.findViewById((R.id.answer_locale_spinner)));
+        solo.clickOnText(solo.getString(R.string.italian_text));
         
-        solo.clickOnText(solo.getString(R.string.settings_save));
+        solo.sleep(500);
+        getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
 
-        solo.sleep(3000);
+        solo.sleep(2000);
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
         try {
             SettingDao settingDao = helper.getSettingDao();
@@ -147,57 +148,26 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         }
 
     }
-
-    public void testUserAudio() throws Exception {
+    
+    public void testDoubleSidedCard() throws Exception {
         // Set Question audio
+        solo.clickOnView(mActivity.findViewById((R.id.card_style_spinner)));
 
-        solo.clickOnText("US");
-        // First scroll up
-        for (int i = 0; i < 6; i++) {
-        	solo.sendKey(Solo.UP);
-        }
-        
-        solo.clickOnText(solo.getString(R.string.user_audio_text));
+        solo.clickOnText(solo.getString(R.string.card_style_double));
 
-        // Set answer audio
-        solo.clickOnText("FR");
-        for (int i = 0; i < 6; i++) {
-        	solo.sendKey(Solo.UP);
-        }
-        
-        solo.clickOnText(solo.getString(R.string.user_audio_text));
-        solo.clickOnText(solo.getString(R.string.settings_save));
-        solo.sleep(3000);
+        solo.sleep(500);
+        getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
+        solo.sleep(2000);
+
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
         try {
             SettingDao settingDao = helper.getSettingDao();
             Setting setting = settingDao.queryForId(1);
-            assertTrue(StringUtils.isNotEmpty(setting.getQuestionAudioLocation()));
-            assertTrue(StringUtils.isNotEmpty(setting.getAnswerAudioLocation()));
+            assertEquals(Setting.CardStyle.DOUBLE_SIDED, setting.getCardStyle());
 
         } finally {
             AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }
-    }
-    
-    public void testDoubleSidedCard() throws Exception {
-    	solo.clickOnText("Single sided");
-    	solo.clickOnText("Double sided");
-    	solo.clickOnText("Save");
-    	
-    	// Disable click on text audio
-    	solo.clickOnText("Misc");
-    	solo.clickOnText("Options");
-    	solo.clickOnText("Automatic");
-    	solo.clickOnText("Manually");
-    	solo.goBack();
-    	solo.clickOnText("Recent");
-    	
-    	// Click on the Sample DB, and check if the answer is shown
-    	solo.clickOnText(UITestHelper.SAMPLE_DB_NAME);
-    	solo.sleep(3000);
-    	solo.clickOnText("head");
-    	assertTrue(solo.searchText("la"));
     }
 
 
