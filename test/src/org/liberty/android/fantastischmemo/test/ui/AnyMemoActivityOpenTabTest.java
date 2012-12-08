@@ -29,9 +29,9 @@ public class AnyMemoActivityOpenTabTest extends ActivityInstrumentationTestCase2
 
         solo.sleep(1000);
         //solo.clickOnText(solo.getString(R.string.open_tab_text));
+
+        solo.clickOnText("Download");
         solo.clickOnText("Misc");
-        solo.sleep(500);
-        solo.clickOnText("About");
     }
 
 
