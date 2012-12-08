@@ -70,7 +70,9 @@ public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<
         assertTrue(solo.searchText("hair"));
 
         // Fail 2nd card 
+        answerView = solo.getCurrentActivity().findViewById(R.id.answer);
         solo.clickOnView(answerView);
+        solo.sleep(600);
         solo.clickOnText(solo.getString(R.string.memo_btn0_text));
 
         solo.goBack();
