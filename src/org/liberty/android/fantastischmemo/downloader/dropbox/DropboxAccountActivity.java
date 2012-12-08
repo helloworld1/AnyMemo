@@ -37,7 +37,6 @@ public class DropboxAccountActivity extends AMActivity {
 
 	private String OAUTH_ACCESS_TOKEN;
 	private String OAUTH_ACCESS_TOKEN_SECRET;
-	private String UID;
 	private final String ACCESS_TOKEN_URL = "https://api.dropbox.com/1/oauth/access_token";
 	private final String DROPBOX_AUTH_TOKEN="dropbox_auth_token";
 	private final String DROPBOX_AUTH_TOKEN_SECRET="dropbox_auth_token_secret";
@@ -82,7 +81,7 @@ public class DropboxAccountActivity extends AMActivity {
 		}
 	};
 
-	private class GetAccessTokenTask extends AsyncTask<String, Void, String> {
+	private class GetAccessTokenTask extends AsyncTask<String, Void, Boolean> {
 		private ProgressDialog progressDialog;
 
 		@Override
@@ -97,7 +96,7 @@ public class DropboxAccountActivity extends AMActivity {
 		}
 
 		@Override
-		public String doInBackground(String... accessCodes) {
+		public Boolean doInBackground(String... accessCodes) {
 			BufferedReader reader = null;
 			try {
 
@@ -115,26 +114,24 @@ public class DropboxAccountActivity extends AMActivity {
 				String[] parsedResult = result.split("&");
 				OAUTH_ACCESS_TOKEN_SECRET = parsedResult[0].split("=")[1];
 				OAUTH_ACCESS_TOKEN = parsedResult[1].split("=")[1];
-				UID = parsedResult[2].split("=")[1];
-				
 
-				return OAUTH_ACCESS_TOKEN;
+				return true;
 			} catch (Exception e) {
 				Log.e(TAG, "Error redeeming access token", e);
 			}
-			return null;
+			return false;
 		}
 
 		@Override
-		public void onPostExecute(String accessToken) {
+		public void onPostExecute(Boolean tokenObtained) {
 			progressDialog.dismiss();
-			editor.putString("dropbox_auth_token", OAUTH_ACCESS_TOKEN);
-			editor.putString("dropbox_auth_token_secret", OAUTH_ACCESS_TOKEN_SECRET);
-			editor.commit();
-			if (accessToken == null) {
-				 showAuthErrorDialog("Access token being null");
+			if (tokenObtained) {
+			    editor.putString("dropbox_auth_token", OAUTH_ACCESS_TOKEN);
+			    editor.putString("dropbox_auth_token_secret", OAUTH_ACCESS_TOKEN_SECRET);
+			    editor.commit();
+		        onAuthenticated(OAUTH_ACCESS_TOKEN, OAUTH_ACCESS_TOKEN_SECRET);
 			} else {
-				 onAuthenticated(OAUTH_ACCESS_TOKEN, OAUTH_ACCESS_TOKEN_SECRET);
+			    showAuthErrorDialog("Access token being null");
 			}
 		}
 	}
@@ -175,20 +172,15 @@ public class DropboxAccountActivity extends AMActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.upload:
-            {
+            case R.id.upload:{
                 startActivityForResult(new Intent(this, UploadDropboxScreen.class), 1);
-                Log.v("xinxin****", "upload clicked");
                 return true;
             }
-            case R.id.logout:
-            {
+            case R.id.logout:{
                 invalidateSavedToken();
-                // After mark saved token to null, we should exit.
                 finish();
                 return true;
             }
-
         }
         return false;
     }

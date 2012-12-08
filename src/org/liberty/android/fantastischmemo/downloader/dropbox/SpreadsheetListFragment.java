@@ -19,13 +19,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.dropbox;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.liberty.android.fantastischmemo.downloader.AbstractDownloaderFragment;
 import org.liberty.android.fantastischmemo.downloader.DownloadItem;
-import org.liberty.android.fantastischmemo.downloader.DownloadItem.ItemType;
 import org.liberty.android.fantastischmemo.downloader.google.Spreadsheet;
 
 class SpreadsheetListFragment extends AbstractDownloaderFragment {
@@ -60,20 +58,20 @@ class SpreadsheetListFragment extends AbstractDownloaderFragment {
         return downloadHelper.downloadSpreadsheetToDB(di);
 	}
 
-    private DownloadItem convertSpreadsheetToDownloadItem(Spreadsheet spreadsheet) {
-        DownloadItem di = new DownloadItem();
-        di.setTitle(spreadsheet.getTitle());
-        di.setType(DownloadItem.ItemType.Spreadsheet);
-        di.setAddress(spreadsheet.getId());
-        return di;
-    }
-
-    private Spreadsheet convertDownloadItemToSpreadsheet(DownloadItem di) {
-        Spreadsheet sp = new Spreadsheet();
-        sp.setTitle(di.getTitle());
-        sp.setId(di.getAddress());
-        sp.setUpdateDate(new Date());
-        return sp;
-    }
+//    private DownloadItem convertSpreadsheetToDownloadItem(Spreadsheet spreadsheet) {
+//        DownloadItem di = new DownloadItem();
+//        di.setTitle(spreadsheet.getTitle());
+//        di.setType(DownloadItem.ItemType.Spreadsheet);
+//        di.setAddress(spreadsheet.getId());
+//        return di;
+//    }
+//
+//    private Spreadsheet convertDownloadItemToSpreadsheet(DownloadItem di) {
+//        Spreadsheet sp = new Spreadsheet();
+//        sp.setTitle(di.getTitle());
+//        sp.setId(di.getAddress());
+//        sp.setUpdateDate(new Date());
+//        return sp;
+//    }
 
 }

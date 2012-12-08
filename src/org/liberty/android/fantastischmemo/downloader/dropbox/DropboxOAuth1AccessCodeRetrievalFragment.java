@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2012 Haowen Ning
+Copyright (C) 2012 xinxin wang
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -89,7 +89,13 @@ class DropboxOAuth1AccessCodeRetrievalFragment extends DialogFragment {
         ll.setMinimumHeight((int)(displayRectangle.height() * 0.8f));
 
         
-        webview.getSettings().setJavaScriptEnabled(true);
+        
+        WebSettings webviewSettings = webview.getSettings();
+        webviewSettings.setJavaScriptEnabled(true);
+        webviewSettings.setLoadWithOverviewMode(true);
+        webviewSettings.setUseWideViewPort(true);
+        webviewSettings.setBuiltInZoomControls(true);
+        
         webview.setWebViewClient(new WebViewClient() {
             private boolean authenticated = false;
             @Override
@@ -121,9 +127,6 @@ class DropboxOAuth1AccessCodeRetrievalFragment extends DialogFragment {
         return v;
     }
 
-    
-    
-   
     
     private class RequestTokenTask extends AsyncTask<WebView, Void, Void> {
         @Override
@@ -168,7 +171,7 @@ class DropboxOAuth1AccessCodeRetrievalFragment extends DialogFragment {
     }
 
     private String getErrorFromUrl(String url) {
-        if (!url.startsWith(AMEnv.GOOGLE_REDIRECT_URI)) {
+        if (!url.startsWith(AMEnv.DROPBOX_REDIRECT_URI)) {
             return null;
         }
         int index = url.indexOf("error=");
