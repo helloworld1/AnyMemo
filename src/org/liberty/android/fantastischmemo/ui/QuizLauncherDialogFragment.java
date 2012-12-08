@@ -22,6 +22,7 @@ package org.liberty.android.fantastischmemo.ui;
 import org.apache.mycommons.lang3.StringUtils;
 
 import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
@@ -29,6 +30,8 @@ import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 
 import org.liberty.android.fantastischmemo.domain.Category;
+
+import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment;
 
 import android.app.Activity;
 
@@ -44,6 +47,9 @@ import android.preference.PreferenceManager;
 
 import android.support.v4.app.DialogFragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,9 +64,9 @@ public class QuizLauncherDialogFragment extends DialogFragment {
 
     public static final String EXTRA_DBPATH = "dbpath";
 
-    private static final long MAX_GROUP_SIZE = 100; 
+    private static final int MAX_GROUP_SIZE = 100; 
 
-    private static final long DEFAULT_GROUP_SIZE = 100; 
+    private static final int DEFAULT_GROUP_SIZE = 100; 
 
     private AnyMemoDBOpenHelper dbOpenHelper;
 
@@ -74,7 +80,7 @@ public class QuizLauncherDialogFragment extends DialogFragment {
 
     private RadioButton quizByGroupRadio;
 
-    private RadioButton quizeByCategoryRadio;
+    private RadioButton quizByCategoryRadio;
 
     private TextView quizGroupSizeTitle;
 
@@ -86,11 +92,14 @@ public class QuizLauncherDialogFragment extends DialogFragment {
 
     private Button categoryButton;
 
-    private long totalCardNumber;
+    private int totalCardNumber;
 
-    private long groupSize;
+    private int groupSize;
 
-    private long groupNumber;
+    private int groupNumber;
+
+    // Default category id is "uncategorized".
+    private int categoryId = 0;
 
     private SharedPreferences settings;
 
@@ -132,20 +141,25 @@ public class QuizLauncherDialogFragment extends DialogFragment {
 
         quizByGroupRadio = (RadioButton) v.findViewById(R.id.quiz_by_group_radio);
 
-        quizeByCategoryRadio = (RadioButton) v.findViewById(R.id.quiz_by_category_radio);
+        quizByCategoryRadio = (RadioButton) v.findViewById(R.id.quiz_by_category_radio);
 
         quizGroupSizeTitle = (TextView) v.findViewById(R.id.quiz_group_size_title);
 
         quizGroupSizeEdit = (EditText) v.findViewById(R.id.quiz_group_size);
+        // Make sure the text value is sanity and update other information
+        // about the group size and etc accordingly.
+        quizGroupSizeEdit.addTextChangedListener(editTextWatcher);
+        quizGroupSizeEdit.setOnFocusChangeListener(sanitizeInputListener);
 
         quizGroupNumberTitle = (TextView) v.findViewById(R.id.quiz_group_number_title);
 
         quizGroupNumberEdit = (EditText) v.findViewById(R.id.quiz_group_number);
+        quizGroupNumberEdit.addTextChangedListener(editTextWatcher);
+        quizGroupNumberEdit.setOnFocusChangeListener(sanitizeInputListener);
 
         categoryButton = (Button) v.findViewById(R.id.category_button);
+        categoryButton.setOnClickListener(categoryButtonListener);
     
-        // We have to set up the dialog's webview size manually or the webview will be zero size.
-        // This should be a bug of Android.
         Rect displayRectangle = new Rect();
         Window window = mActivity.getWindow();
         window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
@@ -159,20 +173,39 @@ public class QuizLauncherDialogFragment extends DialogFragment {
     public void onStart() {
         super.onStart();
         dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(mActivity, dbPath);
-        InitTask task = new InitTask();
         settings = PreferenceManager.getDefaultSharedPreferences(mActivity);
+        editor = settings.edit();
+        InitTask task = new InitTask();
         task.execute((Void)null);
     }
 
     private View.OnClickListener startQuizButtonOnClickListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View v) {
-            Intent intent = new Intent(mActivity, QuizActivity.class);
-            intent.putExtra(QuizActivity.EXTRA_DBPATH, dbPath);
-            intent.putExtra(QuizActivity.EXTRA_START_CARD_ORD, 1);
-            intent.putExtra(QuizActivity.EXTRA_QUIZ_SIZE, 50);
-            startActivity(intent);
-			
+            if (quizByCategoryRadio.isChecked()) {
+                Intent intent = new Intent(mActivity, QuizActivity.class);
+                intent.putExtra(QuizActivity.EXTRA_DBPATH, dbPath);
+                intent.putExtra(QuizActivity.EXTRA_CATEGORY_ID, categoryId);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(mActivity, QuizActivity.class);
+                editor.putInt(AMPrefKeys.QUIZ_GROUP_SIZE_KEY, groupSize);
+                editor.putInt(AMPrefKeys.QUIZ_GROUP_NUMBER_KEY, groupNumber);
+                editor.commit();
+
+                int startOrd = (groupNumber - 1) * groupSize + 1;
+                intent.putExtra(QuizActivity.EXTRA_DBPATH, dbPath);
+                intent.putExtra(QuizActivity.EXTRA_START_CARD_ORD, startOrd);
+                intent.putExtra(QuizActivity.EXTRA_QUIZ_SIZE, groupSize);
+                startActivity(intent);
+            }
+		}
+    };
+
+    private View.OnClickListener categoryButtonListener = new View.OnClickListener() {
+		@Override
+		public void onClick(View v) {
+            showCategoriesDialog();
 		}
     };
 
@@ -188,15 +221,14 @@ public class QuizLauncherDialogFragment extends DialogFragment {
         @Override
         public Void doInBackground(Void... params) {
             cardDao = dbOpenHelper.getCardDao();
-            totalCardNumber = cardDao.getTotalCount(filterCategory);
+            totalCardNumber = (int)cardDao.getTotalCount(filterCategory);
             return null;
         }
 
         @Override
         public void onPostExecute(Void nothing) {
-            //quizGroupSizeTitle.setText(quizGroupSizeTitle.getText());
-            groupSize = settings.getLong("quiz_group_size", DEFAULT_GROUP_SIZE);
-            groupNumber = settings.getLong("quiz_group_number", 1);
+            groupSize = settings.getInt(AMPrefKeys.QUIZ_GROUP_SIZE_KEY, DEFAULT_GROUP_SIZE);
+            groupNumber = settings.getInt(AMPrefKeys.QUIZ_GROUP_NUMBER_KEY, 1);
             setGroupSizeText();
             setGroupNumberText();
         }
@@ -206,7 +238,7 @@ public class QuizLauncherDialogFragment extends DialogFragment {
         if (totalCardNumber < groupSize) {
             groupSize = totalCardNumber;
         }
-        long maxGroupSize = Math.min(totalCardNumber, MAX_GROUP_SIZE);
+        int maxGroupSize = Math.min(totalCardNumber, MAX_GROUP_SIZE);
         quizGroupSizeTitle.setText(getString(R.string.quiz_group_size_text)
                 + " (1-" + maxGroupSize + ")");
         if (StringUtils.isEmpty(quizGroupSizeEdit.getText())) {
@@ -215,7 +247,7 @@ public class QuizLauncherDialogFragment extends DialogFragment {
     }
 
     private void setGroupNumberText() {
-        long maxGroupNumber = (totalCardNumber - 1) / groupSize + 1;
+        int maxGroupNumber = (totalCardNumber - 1) / groupSize + 1;
         if (groupNumber > maxGroupNumber) {
             groupNumber = maxGroupNumber;
         }
@@ -224,5 +256,82 @@ public class QuizLauncherDialogFragment extends DialogFragment {
             quizGroupNumberEdit.setText("" + groupNumber);
         }
     }
+
+    private TextWatcher editTextWatcher = new TextWatcher() {
+
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count,
+				int after) {
+            // Nothing happened
+		}
+
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before,
+				int count) {
+            // Nothing happened
+		}
+
+		@Override
+		public void afterTextChanged(Editable s) {
+            if (StringUtils.isEmpty(s)) {
+                return;
+            }
+            try {
+                groupSize = Integer.valueOf(quizGroupSizeEdit.getText().toString());
+                if (groupSize <= 0) {
+                    groupSize = 1;
+                }
+                if (groupSize > MAX_GROUP_SIZE) {
+                    groupSize = MAX_GROUP_SIZE;
+                }
+
+            } catch (NumberFormatException e) {
+                groupSize = MAX_GROUP_SIZE;
+            }
+            try {
+                groupNumber = Integer.valueOf(quizGroupNumberEdit.getText().toString());
+                if (groupNumber < 1) {
+                    groupNumber = 1;
+                }
+            } catch (NumberFormatException e) {
+                groupNumber = 1;
+            }
+            setGroupNumberText();
+            setGroupSizeText();
+		}
+    };
+
+    View.OnFocusChangeListener sanitizeInputListener =
+        new View.OnFocusChangeListener() {
+
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus == false) {
+                    quizGroupSizeEdit.setText("" + groupSize);
+                    quizGroupNumberEdit.setText("" + groupNumber);
+                }
+			}
+        };
+
+    private void showCategoriesDialog() {
+        CategoryEditorFragment df = new CategoryEditorFragment();
+        df.setResultListener(categoryResultListener);
+        Bundle b = new Bundle();
+        b.putString(CategoryEditorFragment.EXTRA_DBPATH, dbPath);
+        b.putInt(CategoryEditorFragment.EXTRA_CATEGORY_ID, categoryId);
+        df.setArguments(b);
+        df.show(mActivity.getSupportFragmentManager(), "CategoryEditDialog");
+        mActivity.getSupportFragmentManager().findFragmentByTag("CategoryEditDialog");
+    }
+
+    // When a category is selected in category fragment.
+    private CategoryEditorFragment.CategoryEditorResultListener categoryResultListener = 
+        new CategoryEditorFragment.CategoryEditorResultListener() {
+            public void onReceiveCategory(Category c) {
+                assert c != null : "The category got shouldn't be null.";
+                categoryId = c.getId();
+                categoryButton.setText(c.getName());
+            }
+        };
 }
 

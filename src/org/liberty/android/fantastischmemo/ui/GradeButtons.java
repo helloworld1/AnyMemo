@@ -30,11 +30,14 @@ import android.text.Html;
 import android.view.LayoutInflater;
 
 import android.widget.Button;
+import android.widget.Toast;
 import android.view.View;
 
 import android.widget.LinearLayout;
 
 public class GradeButtons {
+
+    private Context mContext;
 
     private LinearLayout buttonView;
     
@@ -53,12 +56,21 @@ public class GradeButtons {
     private OnGradeButtonLongClickListener onGradeButtonLongClickListener = 
         new OnGradeButtonLongClickListener() {
             public void onGradeButtonLongClick(int grade) {
-                // Dummy implementation
+                // implementation to show help text
+              int[] helpTextArray = {R.string.memo_btn0_help_text
+                  ,R.string.memo_btn1_help_text
+                  ,R.string.memo_btn2_help_text
+                  ,R.string.memo_btn3_help_text
+                  ,R.string.memo_btn4_help_text
+                  ,R.string.memo_btn5_help_text};
+
+              Toast.makeText(mContext, helpTextArray[grade], Toast.LENGTH_SHORT).show(); 
             }
         };
 
 
     public GradeButtons(Context context, int gradeButtonResource) {
+        mContext = context;
         LayoutInflater factory = LayoutInflater.from(context);
         buttonView = (LinearLayout) factory.inflate(gradeButtonResource, null);
 

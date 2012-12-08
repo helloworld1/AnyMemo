@@ -21,14 +21,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import java.io.File;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
 import org.apache.mycommons.lang3.StringUtils;
-
 import org.color.ColorDialog;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
@@ -39,7 +37,6 @@ import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.domain.Setting.CardField;
 import org.liberty.android.fantastischmemo.ui.widgets.AMSpinner;
-
 import org.liberty.android.fantastischmemo.utils.DatabaseUtils;
 
 import android.app.Activity;
@@ -54,19 +51,16 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.Toast;
 
-public class SettingsScreen extends AMActivity implements OnClickListener , ColorDialog.OnClickListener {
+public class SettingsScreen extends AMActivity {
 
     public static final String EXTRA_DBPATH = "dbpath";
     private String dbPath;
@@ -103,17 +97,16 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
     private EnumSet<CardField> questionFields;
     private EnumSet<CardField> answerFields;
 
-    private Button saveButton;
-    private Button discardButton;
-    private Button loadDefaultButton;
-
     private AnyMemoDBOpenHelper dbOpenHelper;
+
+    private boolean settingsChanged = false;
 
     private final static String WEBSITE_HELP_SETTINGS="http://anymemo.org/wiki/index.php?title=Card_styles";
     
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        settingsChanged = false;
         InitTask initTask = new InitTask();
         initTask.execute((Void) null);
     }
@@ -139,43 +132,12 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case R.id.settingsmenu_save:
+        case R.id.save:
             SaveButtonTask task = new SaveButtonTask();
             task.execute((Void) null);
             return true;
 
-        case R.id.settingsmenu_discard:
-            Intent resultIntent = new Intent();
-            setResult(Activity.RESULT_CANCELED, resultIntent);
-            finish();
-            return true;
-
-        case R.id.settingsmenu_help:
-            Intent myIntent = new Intent();
-            myIntent.setAction(Intent.ACTION_VIEW);
-            myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
-            myIntent.setData(Uri.parse(WEBSITE_HELP_SETTINGS));
-            startActivity(myIntent);
-            return true;
-
-        }
-        return false;
-    }
-
-    // Override method of onClickListener
-    public void onClick(View v) {
-        if (v == saveButton) {
-            SaveButtonTask task = new SaveButtonTask();
-            task.execute((Void) null);
-        }
-
-        if (v == discardButton) {
-            Intent resultIntent = new Intent();
-            setResult(Activity.RESULT_CANCELED, resultIntent);
-            finish();
-        }
-
-        if (v == loadDefaultButton) {
+        case R.id.load_default:
             new AlertDialog.Builder(this)
                 .setTitle(R.string.load_default_text)
                 .setMessage(R.string.load_default_warning_text)
@@ -190,107 +152,54 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
                 })
                 .setNegativeButton(R.string.cancel_text, null)
                 .show();
-        }
-        
-        if (v == colorCheckbox) {
-            if (colorCheckbox.isChecked()) {
-                colorRow.setVisibility(View.VISIBLE);
-            } else {
-                colorRow.setVisibility(View.GONE);
-                resetToDefaultColors();
-            }
-        }
-        
-        if (v == colorButton) {
-            int pos = colorSpinner.getSelectedItemPosition();
-            ColorDialog dialog = new ColorDialog(this, colorButton, colors.get(pos), this);
-            dialog.show();
-        }
-        
-        if (v == qTypefaceCheckbox) {
-            if (qTypefaceCheckbox.isChecked()) {
-                qTypefaceEdit.setVisibility(View.VISIBLE);
-            } else {
-                qTypefaceEdit.setVisibility(View.GONE);
-                setting.setQuestionFont("");
-            }
-        }
-        
-        if (v == aTypefaceCheckbox) {
-            if (aTypefaceCheckbox.isChecked()) {
-                aTypefaceEdit.setVisibility(View.VISIBLE);
-            } else {
-                aTypefaceEdit.setVisibility(View.GONE);
-                setting.setAnswerFont("");
-            }
-        }
-        
-        if (v == displayInHTMLCheckbox) {
-            if (displayInHTMLCheckbox.isChecked()) {
-                // Create a AlertDialog for user to select fields display in HTML
-                fieldsDisplayedInHTML = setting.getDisplayInHTMLEnum();
-                showCardFieldMultipleChoiceAlertDialog(fieldsDisplayedInHTML, R.string.settings_html_display);
-            } else {
-                fieldsDisplayedInHTML = EnumSet.noneOf(CardField.class);
-            }
-            if (fieldsDisplayedInHTML.size() == 0) {
-                field1Checkbox.setChecked(false);
-            }            
-        }
+            return true;
 
-        if (v == field1Checkbox) {
-            if (field1Checkbox.isChecked()) {
-                questionFields = setting.getQuestionFieldEnum();
-                showCardFieldMultipleChoiceAlertDialog(questionFields, R.string.settings_field1);
-            } else {
-                questionFields = EnumSet.of(CardField.QUESTION);
-            }
-            if (questionFields.size() == 0) {
-                field1Checkbox.setChecked(false);
-            }            
-        }
-        
-        if (v == field2Checkbox) {
-            if (field2Checkbox.isChecked()) {
-                answerFields = setting.getAnswerFieldEnum();
-                showCardFieldMultipleChoiceAlertDialog(answerFields, R.string.settings_field2);
-            } else {
-                answerFields = EnumSet.of(CardField.ANSWER);
-            }
-            if (answerFields.size() == 0) {
-                field2Checkbox.setChecked(false);
-            }            
-        }
-        if (v == qTypefaceEdit) {
-            FileBrowserFragment df = new FileBrowserFragment();
-            Bundle b = new Bundle();
-            b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".ttf");
-            b.putString(FileBrowserFragment.EXTRA_DEFAULT_ROOT, AMEnv.DEFAULT_ROOT_PATH);
-            b.putBoolean(FileBrowserFragment.EXTRA_DISMISS_ON_SELECT, true);
-            df.setArguments(b);
-            df.setOnFileClickListener(qTypefaceEditFbListener);
-            df.show(getSupportFragmentManager(), "qTypefaceEditFB");
-        }
 
-        if (v == aTypefaceEdit) {
-            FileBrowserFragment df = new FileBrowserFragment();
-            Bundle b = new Bundle();
-            b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".ttf");
-            b.putString(FileBrowserFragment.EXTRA_DEFAULT_ROOT, AMEnv.DEFAULT_ROOT_PATH);
-            b.putBoolean(FileBrowserFragment.EXTRA_DISMISS_ON_SELECT, true);
-            df.setArguments(b);
-            df.setOnFileClickListener(aTypefaceEditFbListener);
-            df.show(getSupportFragmentManager(), "aTypefaceEditFB");
+        case R.id.settingsmenu_help:
+            Intent myIntent = new Intent();
+            myIntent.setAction(Intent.ACTION_VIEW);
+            myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
+            myIntent.setData(Uri.parse(WEBSITE_HELP_SETTINGS));
+            startActivity(myIntent);
+            return true;
+
         }
+        return false;
     }
-
 
     @Override
-    public void onClick(View view, int color){
-        int pos = colorSpinner.getSelectedItemPosition();
-        colorButton.setTextColor(color);
-        colors.set(pos, color);
+    public void onBackPressed() {
+        if (settingsChanged) {
+            new AlertDialog.Builder(this)
+                .setTitle(R.string.warning_text)
+                .setMessage(R.string.edit_dialog_unsave_warning)
+                .setPositiveButton(R.string.yes_text, new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface  d, int which){
+                        Intent resultIntent = new Intent();
+                        setResult(Activity.RESULT_CANCELED, resultIntent);                
+                        finish();
+
+                    }
+                }) 
+            .setNegativeButton(R.string.no_text, null)
+                .create()
+                .show();
+
+        } else {
+            Intent resultIntent = new Intent();
+            setResult(Activity.RESULT_CANCELED, resultIntent);                
+            finish();
+
+        }
     }
+
+    private ColorDialog.OnClickListener colorDialogOnClickListener = new ColorDialog.OnClickListener() {
+        public void onClick(View view, int color){
+            int pos = colorSpinner.getSelectedItemPosition();
+            colorButton.setTextColor(color);
+            colors.set(pos, color);
+        }
+    };
     
     private void resetToDefaultColors() {
         int[] defaultColors = getResources().getIntArray(R.array.default_color_list);
@@ -380,27 +289,21 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             setContentView(R.layout.settings_screen);
 
             questionFontSizeSpinner = (AMSpinner)findViewById(R.id.question_font_size_spinner);
+
             answerFontSizeSpinner =  (AMSpinner)findViewById(R.id.answer_font_size_spinner);
+
             questionAlignSpinner = (AMSpinner)findViewById(R.id.question_align_spinner);
+
             answerAlignSpinner = (AMSpinner)findViewById(R.id.answer_align_spinner);
+            
             styleSpinner =  (AMSpinner)findViewById(R.id.card_style_spinner);
+
             qaRatioSpinner =  (AMSpinner)findViewById(R.id.ratio_spinner);
 
             questionLocaleSpinner =  (AMSpinner)findViewById(R.id.question_locale_spinner);
+
             answerLocaleSpinner =  (AMSpinner)findViewById(R.id.answer_locale_spinner);
             
-            AdapterView.OnItemSelectedListener localeListener = new AdapterView.OnItemSelectedListener(){
-                public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id){
-                    if(position > 7){
-                        Toast.makeText(SettingsScreen.this, getString(R.string.tts_tip_extender), Toast.LENGTH_SHORT).show();
-                    }
-                }
-                public void onNothingSelected(AdapterView<?> adapterView){
-                	//so far, do nothing
-                }
-            };
-            questionLocaleSpinner.setOnItemSelectedListener(localeListener);
-            answerLocaleSpinner.setOnItemSelectedListener(localeListener);
             audioLocationEdit = (EditText) findViewById(R.id.settings_audio_location);
 
             // If we got no text, we will use the default location.
@@ -417,66 +320,98 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             }
 
             colorCheckbox = (CheckBox) findViewById(R.id.checkbox_customize_color);
-            colorCheckbox.setOnClickListener(SettingsScreen.this);
+            colorCheckbox.setOnClickListener(settingFieldOnClickListener);
             colorRow = (TableRow) findViewById(R.id.color_row);
 
             colorSpinner =  (AMSpinner)findViewById(R.id.color_item_spinner);
             colorButton = (Button) findViewById(R.id.settings_color_button);
-            colorButton.setOnClickListener(SettingsScreen.this);
+            colorButton.setOnClickListener(settingFieldOnClickListener);
             colors = new ArrayList<Integer>(5);
             colors.add(setting.getQuestionTextColor());
             colors.add(setting.getAnswerTextColor());
             colors.add(setting.getQuestionBackgroundColor());
             colors.add(setting.getAnswerBackgroundColor());
             colors.add(setting.getSeparatorColor());
-            colorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
-                public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id){
-                    colorButton.setTextColor(colors.get(position));
-
-                }
-                public void onNothingSelected(AdapterView<?> adapterView){
-                }
-            });
             
             qTypefaceCheckbox = (CheckBox) findViewById(R.id.checkbox_typeface_question);
-            qTypefaceCheckbox.setOnClickListener(SettingsScreen.this);
+            qTypefaceCheckbox.setOnClickListener(settingFieldOnClickListener);
             aTypefaceCheckbox = (CheckBox) findViewById(R.id.checkbox_typeface_answer);
-            aTypefaceCheckbox.setOnClickListener(SettingsScreen.this);
+            aTypefaceCheckbox.setOnClickListener(settingFieldOnClickListener);
 
             qTypefaceEdit = (EditText) findViewById(R.id.edit_typeface_question);
-            qTypefaceEdit.setOnClickListener(SettingsScreen.this);
+            qTypefaceEdit.setOnClickListener(settingFieldOnClickListener);
 
             aTypefaceEdit = (EditText) findViewById(R.id.edit_typeface_answer);
-            aTypefaceEdit.setOnClickListener(SettingsScreen.this);
+            aTypefaceEdit.setOnClickListener(settingFieldOnClickListener);
 
             displayInHTMLCheckbox = (CheckBox) findViewById(R.id.display_html);
-            displayInHTMLCheckbox.setOnClickListener(SettingsScreen.this);
+            displayInHTMLCheckbox.setOnClickListener(settingFieldOnClickListener);
             fieldsDisplayedInHTML = setting.getDisplayInHTMLEnum();
 
             linebreakCheckbox = (CheckBox) findViewById(R.id.linebreak_conversion);
-            linebreakCheckbox.setOnClickListener(SettingsScreen.this);
+            linebreakCheckbox.setOnClickListener(settingFieldOnClickListener);
 
             field1Checkbox = (CheckBox) findViewById(R.id.checkbox_field1);
-            field1Checkbox.setOnClickListener(SettingsScreen.this);
+            field1Checkbox.setOnClickListener(settingFieldOnClickListener);
             questionFields = setting.getQuestionFieldEnum();
             
             field2Checkbox = (CheckBox) findViewById(R.id.checkbox_field2);
-            field2Checkbox.setOnClickListener(SettingsScreen.this);
+            field2Checkbox.setOnClickListener(settingFieldOnClickListener);
             answerFields = setting.getAnswerFieldEnum();
 
-            saveButton = (Button) findViewById(R.id.settting_save);
-            saveButton.setOnClickListener(SettingsScreen.this);
-
-            discardButton = (Button) findViewById(R.id.setting_discard);
-            discardButton.setOnClickListener(SettingsScreen.this);
-
-            loadDefaultButton = (Button) findViewById(R.id.load_default);
-            loadDefaultButton.setOnClickListener(SettingsScreen.this);
-                    
             updateViews();
+
+            setSpinnerListeners();
 
             progressDialog.dismiss();
         }
+    }
+
+    private void setSpinnerListeners() {
+        // This listener is set to detect if the spinner has been touched.
+        // If it is touched then we think the settings are changed.
+        View.OnTouchListener spinnerOnTouchListener = new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    settingsChanged = true;
+                }
+
+                // This must return false, we the spinner can still work.
+                return false;
+            }
+        };
+
+        questionFontSizeSpinner.setOnTouchListener(spinnerOnTouchListener);
+        answerFontSizeSpinner.setOnTouchListener(spinnerOnTouchListener);
+        questionAlignSpinner.setOnTouchListener(spinnerOnTouchListener);
+        answerAlignSpinner.setOnTouchListener(spinnerOnTouchListener);
+        styleSpinner.setOnTouchListener(spinnerOnTouchListener);
+        qaRatioSpinner.setOnTouchListener(spinnerOnTouchListener);
+        questionLocaleSpinner.setOnTouchListener(spinnerOnTouchListener);
+        answerLocaleSpinner.setOnTouchListener(spinnerOnTouchListener);
+        colorSpinner.setOnTouchListener(spinnerOnTouchListener);
+
+        AdapterView.OnItemSelectedListener localeListener = new AdapterView.OnItemSelectedListener(){
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id){
+                if(position > 7){
+                    Toast.makeText(SettingsScreen.this, getString(R.string.tts_tip_extender), Toast.LENGTH_SHORT).show();
+                }
+            }
+            public void onNothingSelected(AdapterView<?> adapterView){
+                //so far, do nothing
+            }
+        };
+        questionLocaleSpinner.setOnItemSelectedListener(localeListener);
+        answerLocaleSpinner.setOnItemSelectedListener(localeListener);
+
+        colorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id){
+                colorButton.setTextColor(colors.get(position));
+
+            }
+            public void onNothingSelected(AdapterView<?> adapterView){
+            }
+        });
     }
 
     private void updateViews() {
@@ -669,6 +604,105 @@ public class SettingsScreen extends AMActivity implements OnClickListener , Colo
             updateViews();
         }
     }
+
+    private View.OnClickListener settingFieldOnClickListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            // If the user click on these fields, then we assume user has changed some settings.
+            settingsChanged = true;
+
+            if (v == colorCheckbox) {
+                if (colorCheckbox.isChecked()) {
+                    colorRow.setVisibility(View.VISIBLE);
+                } else {
+                    colorRow.setVisibility(View.GONE);
+                    resetToDefaultColors();
+                }
+            }
+
+            if (v == colorButton) {
+                int pos = colorSpinner.getSelectedItemPosition();
+                ColorDialog dialog = new ColorDialog(SettingsScreen.this, colorButton, colors.get(pos), colorDialogOnClickListener);
+                dialog.show();
+            }
+
+            if (v == qTypefaceCheckbox) {
+                if (qTypefaceCheckbox.isChecked()) {
+                    qTypefaceEdit.setVisibility(View.VISIBLE);
+                } else {
+                    qTypefaceEdit.setVisibility(View.GONE);
+                    setting.setQuestionFont("");
+                }
+            }
+
+            if (v == aTypefaceCheckbox) {
+                if (aTypefaceCheckbox.isChecked()) {
+                    aTypefaceEdit.setVisibility(View.VISIBLE);
+                } else {
+                    aTypefaceEdit.setVisibility(View.GONE);
+                    setting.setAnswerFont("");
+                }
+            }
+
+            if (v == displayInHTMLCheckbox) {
+                if (displayInHTMLCheckbox.isChecked()) {
+                    // Create a AlertDialog for user to select fields display in HTML
+                    fieldsDisplayedInHTML = setting.getDisplayInHTMLEnum();
+                    showCardFieldMultipleChoiceAlertDialog(fieldsDisplayedInHTML, R.string.settings_html_display);
+                } else {
+                    fieldsDisplayedInHTML = EnumSet.noneOf(CardField.class);
+                }
+                if (fieldsDisplayedInHTML.size() == 0) {
+                    field1Checkbox.setChecked(false);
+                }            
+            }
+
+            if (v == field1Checkbox) {
+                if (field1Checkbox.isChecked()) {
+                    questionFields = setting.getQuestionFieldEnum();
+                    showCardFieldMultipleChoiceAlertDialog(questionFields, R.string.settings_field1);
+                } else {
+                    questionFields = EnumSet.of(CardField.QUESTION);
+                }
+                if (questionFields.size() == 0) {
+                    field1Checkbox.setChecked(false);
+                }            
+            }
+
+            if (v == field2Checkbox) {
+                if (field2Checkbox.isChecked()) {
+                    answerFields = setting.getAnswerFieldEnum();
+                    showCardFieldMultipleChoiceAlertDialog(answerFields, R.string.settings_field2);
+                } else {
+                    answerFields = EnumSet.of(CardField.ANSWER);
+                }
+                if (answerFields.size() == 0) {
+                    field2Checkbox.setChecked(false);
+                }            
+            }
+            if (v == qTypefaceEdit) {
+                FileBrowserFragment df = new FileBrowserFragment();
+                Bundle b = new Bundle();
+                b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".ttf");
+                b.putString(FileBrowserFragment.EXTRA_DEFAULT_ROOT, AMEnv.DEFAULT_ROOT_PATH);
+                b.putBoolean(FileBrowserFragment.EXTRA_DISMISS_ON_SELECT, true);
+                df.setArguments(b);
+                df.setOnFileClickListener(qTypefaceEditFbListener);
+                df.show(getSupportFragmentManager(), "qTypefaceEditFB");
+            }
+
+            if (v == aTypefaceEdit) {
+                FileBrowserFragment df = new FileBrowserFragment();
+                Bundle b = new Bundle();
+                b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".ttf");
+                b.putString(FileBrowserFragment.EXTRA_DEFAULT_ROOT, AMEnv.DEFAULT_ROOT_PATH);
+                b.putBoolean(FileBrowserFragment.EXTRA_DISMISS_ON_SELECT, true);
+                df.setArguments(b);
+                df.setOnFileClickListener(aTypefaceEditFbListener);
+                df.show(getSupportFragmentManager(), "aTypefaceEditFB");
+            }
+        }
+    };
+
 
     private FileBrowserFragment.OnFileClickListener qTypefaceEditFbListener
         = new FileBrowserFragment.OnFileClickListener() {

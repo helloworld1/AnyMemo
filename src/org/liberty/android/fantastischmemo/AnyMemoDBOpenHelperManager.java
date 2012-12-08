@@ -8,6 +8,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.mycommons.io.FilenameUtils;
 
+import com.j256.ormlite.dao.DaoManager;
+
 import android.content.Context;
 
 import android.util.Log;
@@ -50,6 +52,8 @@ public class AnyMemoDBOpenHelperManager {
 
         if (refCounts.get(dbpath) == 0) {
             helper.close();
+            DaoManager.clearCache();
+            DaoManager.clearDaoCache();
             helpers.remove(dbpath);
             Log.i(TAG, "All connection released. Close helper. DB: " + dbpath); 
         }
@@ -63,6 +67,8 @@ public class AnyMemoDBOpenHelperManager {
         }
 
         helpers.get(dbpath).close();
+        DaoManager.clearCache();
+        DaoManager.clearDaoCache();
         helpers.remove(dbpath);
         Log.i(TAG, "Force release a db file. DB: " + dbpath); 
 

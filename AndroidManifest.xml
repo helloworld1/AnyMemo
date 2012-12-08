@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.liberty.android.fantastischmemo"
     android:installLocation="auto"
-    android:versionCode="166"
+    android:versionCode="168"
     android:versionName="@string/app_version">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -165,6 +165,6 @@
 
     </application>
 
-    <uses-sdk android:minSdkVersion="4" android:targetSdkVersion="11" />
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="11" />
 
 </manifest> 

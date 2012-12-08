@@ -20,41 +20,39 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import org.apache.mycommons.lang3.StringUtils;
-
-import org.liberty.android.fantastischmemo.queue.QuizQueueManager;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.utils.AMStringUtil;
-
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
-
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
-
+import org.liberty.android.fantastischmemo.queue.QuizQueueManager;
 import org.liberty.android.fantastischmemo.scheduler.DefaultScheduler;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
-
+import org.liberty.android.fantastischmemo.utils.AMStringUtil;
 import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
 
-import android.content.Context;
-
-import android.os.AsyncTask;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-
 import android.widget.TextView;
+
+import com.example.android.apis.graphics.FingerPaint;
 
 public class QuizActivity extends QACardActivity {
     public static String EXTRA_START_CARD_ID = "start_card_id";
@@ -129,6 +127,10 @@ public class QuizActivity extends QACardActivity {
 
     @Override
     public void onPostInit() {
+        if (getCurrentCard() == null) {
+            showNoItemDialog();
+            return;
+        }
         setupGradeButtons();
         displayCard(false);
         initialized = true;
@@ -147,10 +149,45 @@ public class QuizActivity extends QACardActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.quiz_activity_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_lookup:
+            {
+                dictionaryUtil.showLookupListDialog("" + getCurrentCard().getQuestion() + " " + getCurrentCard().getAnswer());
+                break;
+            }
+            case R.id.menu_speak_question:
+            {
+                speakQuestion();
+                break;
+            }
+            case R.id.menu_speak_answer:
+            {
+                speakAnswer();
+                break;
+            }
+            case R.id.menu_paint:
+            {
+                Intent myIntent = new Intent(this, FingerPaint.class);
+                startActivity(myIntent);
+            }
+        }
+        return false;
+    }
+
+    @Override
     protected void onClickQuestionText() {
         if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
                 || option.getSpeakingType() == Option.SpeakingType.TAP)) {
-            //TODO: Speak
+            stopQuestionTTS();
+            speakQuestion();
         } else {
             onClickQuestionView();
         }
@@ -162,7 +199,8 @@ public class QuizActivity extends QACardActivity {
             onClickAnswerView();
         } else if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
                 || option.getSpeakingType() == Option.SpeakingType.TAP)) {
-            //TODO: Speak
+            stopAnswerTTS();
+            speakAnswer();
         }
     }
 
@@ -397,6 +435,27 @@ public class QuizActivity extends QACardActivity {
             progressDialog.dismiss();
             finish();
         }
+    }
+
+    private void showNoItemDialog(){
+        new AlertDialog.Builder(this)
+            .setTitle(this.getString(R.string.memo_no_item_title))
+            .setMessage(this.getString(R.string.memo_no_item_message))
+            .setNeutralButton(getString(R.string.back_menu_text), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+                    /* Finish the current activity and go back to the last activity.
+                     * It should be the open screen. */
+                    finish();
+                }
+            })
+            .setOnCancelListener(new DialogInterface.OnCancelListener(){
+                public void onCancel(DialogInterface dialog){
+                    finish();
+                }
+            })
+            .create()
+            .show();
     }
 
 }

@@ -21,78 +21,57 @@ package org.liberty.android.fantastischmemo.ui;
 
 import java.io.File;
 import java.io.InputStream;
-
 import java.net.URL;
-
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
 import org.amr.arabic.ArabicUtilities;
-
 import org.apache.mycommons.lang3.StringUtils;
-
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.AnyMemoService;
 import org.liberty.android.fantastischmemo.R;
-
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.dao.SettingDao;
-
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
-
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTSImpl;
-import org.liberty.android.fantastischmemo.ui.StudyActivity;
-
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 import org.liberty.android.fantastischmemo.utils.AMUtil;
 import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
-
 import org.xml.sax.XMLReader;
 
 import android.app.ProgressDialog;
-
 import android.content.Context;
 import android.content.Intent;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
-
 import android.support.v4.app.FragmentTransaction;
-
 import android.text.ClipboardManager;
 import android.text.Editable;
 import android.text.Html;
-
 import android.text.Html.ImageGetter;
 import android.text.Html.TagHandler;
-
 import android.text.SpannableStringBuilder;
-
 import android.util.Log;
-
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
-
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 abstract public class QACardActivity extends AMActivity {
@@ -181,6 +160,9 @@ abstract public class QACardActivity extends AMActivity {
         return dbName;
     }
 
+    // Important class that display the card using fragment
+    // the showAnswer parameter is handled differently on single
+    // sided card and double sided card.
     protected void displayCard(boolean showAnswer) {
 
         // First prepare the text to display
@@ -455,6 +437,9 @@ abstract public class QACardActivity extends AMActivity {
                 categoryDao = dbOpenHelper.getCategoryDao();
                 setting = settingDao.queryForId(1);
 
+                // Init of common functions here
+                initTTS();
+
                 // Call customized init funciton defined in
                 // the subclass
                 onInit();
@@ -512,7 +497,7 @@ abstract public class QACardActivity extends AMActivity {
     }
 
 
-    // Se
+    // Set the small title to display additional informaiton
     public void setSmallTitle(CharSequence text) {
         if (StringUtils.isNotEmpty(text)) {
             smallTitleBar.setText(text);
@@ -645,17 +630,17 @@ abstract public class QACardActivity extends AMActivity {
         }
     }
     
-    protected boolean speakQuestion(String text){
-        if(questionTTS != null && text != null){
-            questionTTS.sayText(text);
+    protected boolean speakQuestion(){
+        if(questionTTS != null){
+            questionTTS.sayText(getCurrentCard().getQuestion());
             return true;
         }
         return false;
     }
     
-    protected boolean speakAnswer(String text){
-        if(answerTTS != null && text != null){
-            answerTTS.sayText(text);
+    protected boolean speakAnswer(){
+        if(answerTTS != null){
+            answerTTS.sayText(getCurrentCard().getAnswer());
             return true;
         }
         return false;

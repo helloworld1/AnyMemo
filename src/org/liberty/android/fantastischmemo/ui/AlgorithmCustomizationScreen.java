@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
+import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
 
 import org.liberty.android.fantastischmemo.domain.SchedulingAlgorithmParameters;
@@ -52,7 +53,7 @@ public class AlgorithmCustomizationScreen extends PreferenceActivity {
         resetPreference.setOnPreferenceClickListener(resetPreferenceOnClickListener);
 
         /* set if the orientation change is allowed */
-        if(!settings.getBoolean("allow_orientation", true)){
+        if(!settings.getBoolean(AMPrefKeys.ALLOW_ORIENTATION_KEY, true)){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
     }
