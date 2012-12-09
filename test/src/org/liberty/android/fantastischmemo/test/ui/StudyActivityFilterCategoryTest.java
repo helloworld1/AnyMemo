@@ -78,10 +78,12 @@ public class StudyActivityFilterCategoryTest extends ActivityInstrumentationTest
         solo.clickOnText(solo.getString(R.string.ok_text));
         // Wait refersh the activity
         solo.waitForDialogToClose(8000);
-        solo.sleep(600);
+        solo.sleep(2000);
 
         answerView = solo.getCurrentActivity().findViewById(R.id.answer);
+        
         assertTrue(solo.searchText("hair"));
+        
         solo.clickOnView(answerView);
         solo.clickOnText(solo.getString(R.string.memo_btn4_text));
         assertTrue(solo.searchText("eyes"));

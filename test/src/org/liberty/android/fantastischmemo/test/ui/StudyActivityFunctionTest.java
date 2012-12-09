@@ -99,6 +99,7 @@ public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<
         solo.goBack();
 
         solo.sleep(2000);
+        solo.waitForDialogToClose(8000);
 
         // asssert db state
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
