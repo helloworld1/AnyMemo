@@ -34,9 +34,9 @@ import android.util.Log;
 
 public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
 
-	private final TextToSpeech myTTS;
+	private volatile TextToSpeech myTTS;
 	private SpeakWord speakWord;
-	private OnTextToSpeechCompletedListener onTextToSpeechCompletedListener =
+	private  OnTextToSpeechCompletedListener onTextToSpeechCompletedListener =
 	        new OnTextToSpeechCompletedListener() {
         
         @Override
@@ -72,14 +72,6 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
             Log.v(TAG, "init!" + myLocale.toString());
             assert myTTS != null;
             assert myLocale != null;
-            
-            myTTS.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
-                @Override
-                public void onUtteranceCompleted(String utteranceId) {
-                    onTextToSpeechCompletedListener.onTextToSpeechCompleted(utteranceId);
-                    Log.i(TAG, "Text finished");
-                }
-            });
             
             int result = myTTS.setLanguage(myLocale);
             if (result == TextToSpeech.LANG_MISSING_DATA) {
@@ -153,6 +145,15 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
             //myTTS.speak(processed_str, 0, null);
             HashMap<String, String> params = new HashMap<String, String>();
             params.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, s);
+            
+            myTTS.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
+                @Override
+                public void onUtteranceCompleted(String utteranceId) {
+                    onTextToSpeechCompletedListener.onTextToSpeechCompleted(utteranceId);
+                    Log.i(TAG, "Text finished");
+                }
+            });
+
             myTTS.speak(processed_str, 0, params);
             
         }

@@ -660,11 +660,10 @@ public abstract class QACardActivity extends AMActivity {
     
     protected boolean speakAnswer(AnyMemoTTS.OnTextToSpeechCompletedListener mListener){
         if(answerTTS != null){
-            answerTTS.sayText(getCurrentCard().getAnswer());
             if(mListener != null) {
                 answerTTS.setOnTextToSpeechCompletedListener(mListener);
             }
-            
+            answerTTS.sayText(getCurrentCard().getAnswer());
             return true;
         }
         return false;

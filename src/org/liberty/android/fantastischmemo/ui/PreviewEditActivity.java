@@ -61,6 +61,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.GetChars;
@@ -115,6 +116,8 @@ public class PreviewEditActivity extends QACardActivity {
     private View searchNextButton;
     private View searchPrevButton;
 
+    // We need to check this since activity may finish early while TTS thread is still trying to call gotoNext().
+    private volatile boolean isActivityFinished = false;
 
     private Setting setting;
     private Option option;
@@ -128,8 +131,17 @@ public class PreviewEditActivity extends QACardActivity {
     private AnyMemoTTS.OnTextToSpeechCompletedListener mQuestionListener = new AnyMemoTTS.OnTextToSpeechCompletedListener() {
         
         @Override
-        public void onTextToSpeechCompleted(String text) {
-            speakAnswer(mAnswerListener);
+        public void onTextToSpeechCompleted(final String text) {
+            Log.i(TAG, "mAnswerListener is " + mAnswerListener);
+            
+            runOnUiThread(new Runnable() {
+                
+                public void run() {
+                    Log.i(TAG, "ppppppppppppppppppppp: " + text);
+
+                    speakAnswer(mAnswerListener);
+                }
+            });
 //            gotoNext();
             Log.i(TAG, "in preview edit activity");
         }
@@ -138,14 +150,24 @@ public class PreviewEditActivity extends QACardActivity {
     private AnyMemoTTS.OnTextToSpeechCompletedListener mAnswerListener = new AnyMemoTTS.OnTextToSpeechCompletedListener() {
         
         @Override
-        public void onTextToSpeechCompleted(String text) {
-            //Log.i(TAG, "go to next");
-            //gotoNext();
-            speakQuestion(mQuestionListener);
-            Log.i(TAG, "in preview edit activity");
+        public void onTextToSpeechCompleted(final String text) {
+
+            // Need to run gotoNext() in UI thread not TTS thread since it changes view. 
+            runOnUiThread(new Runnable() {
+                
+                public void run() {
+                    Log.i(TAG, "jiiiiwowoowjiowjeifjweoifgjeos: " + text);
+                    
+                    if(!isActivityFinished) {
+                        gotoNext();
+                        speakQuestion(mQuestionListener);
+                    }
+                }
+            });
+            
+            Log.i(TAG, "lalalala");
         }
     };
-    
     
     
     @Override
@@ -157,6 +179,7 @@ public class PreviewEditActivity extends QACardActivity {
             dbPath = extras.getString(EXTRA_DBPATH);
             activeCategoryId = extras.getInt(EXTRA_CATEGORY, -1);
             startCardId = extras.getInt(EXTRA_CARD_ID, -1);
+            
         }
 
         /* 
@@ -222,7 +245,8 @@ public class PreviewEditActivity extends QACardActivity {
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
+        isActivityFinished = true;
         super.onDestroy();
     }
 
@@ -870,6 +894,26 @@ public class PreviewEditActivity extends QACardActivity {
         }
     }
 
+    private class GotoNextCardTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        public void onPreExecute() {
+
+        }
+        @Override
+        public Void doInBackground(Void... params) {
+            
+            //speakQuestion(mQuestionListener);
+            return null;
+        }
+        @Override
+        public void onPostExecute(Void result){
+            gotoNext();
+            speakQuestion(mQuestionListener);
+        }
+    }
+    
+    
+    
     /*
      * params[2] = {Search Method, Search criteria}
      * Search Method should be in SearchMethod enum.
