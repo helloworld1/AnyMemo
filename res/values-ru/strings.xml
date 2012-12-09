@@ -87,7 +87,7 @@
     <string name="add_screen_new">Нов</string>
     <string name="add_screen_id">ID</string>
     <string name="add_screen_answer">Ответ</string>
-    <string name="add_screen_edit">Сохранить</string>
+    <string name="add_screen_edit">Сохр</string>
     <string name="add_screen_gotoid">Идти к ID</string>
     <string name="add_screen_back">Назад</string>
     <string name="add_screen_next">След</string>
@@ -423,4 +423,10 @@
     <string name="japanese_text">Японский</string>
     <string name="korean_text">Корейский</string>
     <string name="thai_text">Тайский</string>
+    <string name="add_existing_audio_text">Доб. имеющееся аудио</string>
+    <string name="add_new_audio_text">Доб. новое аудио</string>
+    <string name="remove_audio_text">Удалить аудио</string>
+    <string name="record_text">Запись</string>
+    <string name="play_text">Игра</string>
+    <string name="stop_text">Стоп</string>
 </resources>
