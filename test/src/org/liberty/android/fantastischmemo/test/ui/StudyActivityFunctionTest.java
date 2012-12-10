@@ -70,7 +70,9 @@ public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<
         assertTrue(solo.searchText("hair"));
 
         // Fail 2nd card 
+        answerView = solo.getCurrentActivity().findViewById(R.id.answer);
         solo.clickOnView(answerView);
+        solo.sleep(600);
         solo.clickOnText(solo.getString(R.string.memo_btn0_text));
 
         solo.goBack();
@@ -97,6 +99,7 @@ public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<
         solo.goBack();
 
         solo.sleep(2000);
+        solo.waitForDialogToClose(8000);
 
         // asssert db state
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);

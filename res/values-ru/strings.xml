@@ -65,7 +65,7 @@
     <string name="settings_wipe">Сбросить весь прогресс изучения</string>
     <string name="settings_shuffle">Перемешать карточки</string>
     <string name="settings_inverse">Поменять ВО всех карточек</string>
-    <string name="settings_save">Сохранить</string>
+    <string name="settings_save">Сохр</string>
     <string name="settings_discard">Отказаться</string>
     <string name="warning_text">Предупреждение</string>
     <string name="settings_wipe_warning">ВЕСЬ прогресс изучения будет сброшен!</string>
@@ -423,4 +423,10 @@
     <string name="japanese_text">Японский</string>
     <string name="korean_text">Корейский</string>
     <string name="thai_text">Тайский</string>
+    <string name="add_existing_audio_text">Доб. имеющееся аудио</string>
+    <string name="add_new_audio_text">Доб. новое аудио</string>
+    <string name="remove_audio_text">Удалить аудио</string>
+    <string name="record_text">Запись</string>
+    <string name="play_text">Игра</string>
+    <string name="stop_text">Стоп</string>
 </resources>

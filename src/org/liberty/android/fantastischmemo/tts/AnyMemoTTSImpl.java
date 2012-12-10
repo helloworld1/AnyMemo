@@ -34,12 +34,14 @@ import android.util.Log;
 
 public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
 
-	private final TextToSpeech myTTS;
+	private volatile TextToSpeech myTTS;
 	private SpeakWord speakWord;
 	
 	private final Locale myLocale;
     
-    private ReentrantLock initLock = new ReentrantLock();
+    private volatile ReentrantLock initLock = new ReentrantLock();
+
+    private volatile ReentrantLock speakLock = new ReentrantLock();
 
     /* TTS Init lock's timeout in seconds. */
     private static long INIT_LOCK_TIMEOUT = 10L;
@@ -82,8 +84,8 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
         initLock.lock();
 		myLocale = getLocaleForTTS(locale);
 		myTTS = new TextToSpeech(context, this);
-        initLock.unlock();
 		speakWord = new SpeakWord(audioSearchPath);
+        initLock.unlock();
 	}
 	
 	public void shutdown(){
@@ -129,7 +131,10 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
 		processed_str = processed_str.replaceAll("&.*?;", "");
 
         if(!myTTS.isSpeaking()){
+            speakLock.lock();
+            myTTS.setLanguage(myLocale);
             myTTS.speak(processed_str, 0, null);
+            speakLock.unlock();
         }
         else{
             stop();
