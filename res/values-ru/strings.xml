@@ -65,7 +65,7 @@
     <string name="settings_wipe">Сбросить весь прогресс изучения</string>
     <string name="settings_shuffle">Перемешать карточки</string>
     <string name="settings_inverse">Поменять ВО всех карточек</string>
-    <string name="settings_save">Сохранить</string>
+    <string name="settings_save">Сохр</string>
     <string name="settings_discard">Отказаться</string>
     <string name="warning_text">Предупреждение</string>
     <string name="settings_wipe_warning">ВЕСЬ прогресс изучения будет сброшен!</string>
@@ -87,7 +87,7 @@
     <string name="add_screen_new">Нов</string>
     <string name="add_screen_id">ID</string>
     <string name="add_screen_answer">Ответ</string>
-    <string name="add_screen_edit">Сохр</string>
+    <string name="add_screen_edit">Сохранить</string>
     <string name="add_screen_gotoid">Идти к ID</string>
     <string name="add_screen_back">Назад</string>
     <string name="add_screen_next">След</string>
