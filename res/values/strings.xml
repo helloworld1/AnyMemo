@@ -291,7 +291,7 @@
     <string name="locale_spanish_text">Spanish</string>
     <string name="dict_app">Dictionary application</string>
     <string name="dict_app_summary">Change the dictionary application that can be looked up directly when learning.</string>
-    <string name="dict_colordict">ColorDict</string>
+    <string name="dict_colordict">ColorDict / GoldenDict</string>
     <string name="dict_fora">Fora Dictionary</string>
     <string name="error_no_dict">is not installed. Please download it from Android Market or set another dictionary app in Options. Error: </string>
     <string name="item_update_warning">Do you really want to update this item?</string>
@@ -434,4 +434,5 @@
     <string name="record_text">Record</string>
     <string name="play_text">Play</string>
     <string name="stop_text">Stop</string>
+    <string name="dict_bluedict">BlueDict</string>
 </resources>
