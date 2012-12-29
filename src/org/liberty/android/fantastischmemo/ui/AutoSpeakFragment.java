@@ -68,7 +68,7 @@ public class AutoSpeakFragment extends Fragment {
             } else if(v == settingsButton) {
                 displaySettingsDialog();
             } else if(v == exitButton) {
-                
+                dismissFragment();
             }
         }
     };
@@ -76,6 +76,12 @@ public class AutoSpeakFragment extends Fragment {
     private void displaySettingsDialog() {
         
     }
+    
+    private void dismissFragment() {
+        autoSpeakEventHandler.onPauseButtonClick();
+        getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
+    }
+    
     public void setAutoSpeakEventHander(AutoSpeakEventHandler autoSpeakEventHander) {
         this.autoSpeakEventHandler = autoSpeakEventHander;
     }
