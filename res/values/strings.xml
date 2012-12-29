@@ -434,4 +434,7 @@
     <string name="record_text">Record</string>
     <string name="play_text">Play</string>
     <string name="stop_text">Stop</string>
+    <string name="dropbox_successfully_uploaded_message">Successfully uploaded to AnyMemo folder in your dropbox</string>
+    <string name="upload_dropbox_message">Do you want to upload %s to your Dropbox\'s AnyMemo folder? It may take several minutes if you have more than 1000 cards.</string>
+    
 </resources>

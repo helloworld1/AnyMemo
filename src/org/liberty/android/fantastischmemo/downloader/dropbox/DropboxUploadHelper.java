@@ -17,7 +17,6 @@ import android.util.Log;
 
 public class DropboxUploadHelper {
 
-    
     private Context mContext;
 
     private final String authToken;
@@ -25,7 +24,6 @@ public class DropboxUploadHelper {
     
     private final String FILE_UPLOAD_URL="https://api-content.dropbox.com/1/files_put/dropbox/";
 
-//    private static SimpleDateFormat ISO8601_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
     public DropboxUploadHelper(Context context, String authToken, String authTokenSecret) {
         this.authToken = authToken;
@@ -60,10 +58,9 @@ public class DropboxUploadHelper {
             HttpResponse response = httpclient.execute(httppost);
             HttpEntity resEntity = response.getEntity();
 
-            Log.v("xinxin**** ", response.getStatusLine().toString());
             if (resEntity != null) {
                 InputStream is = resEntity.getContent();
-                String resultString = DropboxDownloadHelper.convertStreamToString(is);
+                String resultString = DropboxUtils.convertStreamToString(is);
                 JSONObject jsonResponse = new JSONObject(resultString);
                 if(jsonResponse.getString("modified") != null){
                     return true;
@@ -74,55 +71,6 @@ public class DropboxUploadHelper {
         }
         
         return false;
-        
     };
-    
-//    private String getRev(String path){
-//        String rev = null;
-//        String url = "https://api.dropbox.com/1/metadata/dropbox/" + path;
-//        
-//        InputStream is = null;
-//        try {
-//            String headerValue = "OAuth oauth_version=\"1.0\", "
-//                    + "oauth_signature_method=\"PLAINTEXT\", "
-//                    + "oauth_consumer_key=\"" + AMEnv.DROPBOX_CONSUMER_KEY + "\", "
-//                    + "oauth_token=\"" + authToken + "\", "
-//                    + "oauth_signature=\"" + AMEnv.DROPBOX_CONSUMER_SECRET + "&"
-//                    + authTokenSecret + "\"";
-//
-//            HttpClient httpClient = new DefaultHttpClient();
-//            HttpGet httpGet = new HttpGet(url);
-//            httpGet.setHeader("Authorization", headerValue);
-//            HttpResponse response = null;
-//            response = httpClient.execute(httpGet);
-//            HttpEntity entity = response.getEntity();
-//            is = entity.getContent();
-//            JSONObject jsonResponse = new JSONObject(DropboxDownloadHelper.convertStreamToString(is));
-//            JSONArray filesJSON = jsonResponse.getJSONArray("contents");
-//            JSONObject entryJSON;
-//            List<DownloadItem> spreadsheetList = new ArrayList<DownloadItem>(); 
-//            for(int i = 0 ; i < filesJSON.length(); i++){
-//                entryJSON = filesJSON.getJSONObject(i);
-//                if(entryJSON.getString("path").endsWith(".db")){
-//                    spreadsheetList.add(new DownloadItem(ItemType.Spreadsheet, entryJSON.getString("path"), entryJSON.getString("modified"),  ""));
-//                }
-//            }
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//            try {
-//                if(is != null){
-//                    is.close();
-//                }
-//            } catch (IOException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//            }
-//            
-//        }
-//        return rev;
-//    }
-    
     
 }

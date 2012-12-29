@@ -27,9 +27,6 @@ public class UploadDropboxScreen extends DropboxAccountActivity{
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.upload_dropbox_screen);
-//        onAuthenticated(authToken, authTokenSecret);
-        
-//        super.onCreate(bundle);
     }
 
     protected void onAuthenticated(final String authToken, final String authTokenSecret) {
@@ -43,7 +40,6 @@ public class UploadDropboxScreen extends DropboxAccountActivity{
     }
 
     private FileBrowserFragment.OnFileClickListener fileClickListener = new FileBrowserFragment.OnFileClickListener() {
-
         @Override
         public void onClick(File file) {
             showUploadDialog(file);
@@ -53,8 +49,7 @@ public class UploadDropboxScreen extends DropboxAccountActivity{
     private void showUploadDialog(final File file) {
         new AlertDialog.Builder(this)
                 .setTitle(R.string.upload_text)
-//                .setMessage(String.format(getString(R.string.upload_gdrive_message), file.getName()))
-                .setMessage("Upload" + file.getName() + " to dropbox?")
+                .setMessage(String.format(getString(R.string.dropbox_upload_text), file.getName() ))
                 .setPositiveButton(R.string.ok_text,new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
@@ -68,7 +63,6 @@ public class UploadDropboxScreen extends DropboxAccountActivity{
     private void uploadToDropbox(File file) {
         try {
             DropboxUploadHelper uploadHelper = new DropboxUploadHelper(this, authToken, authTokenSecret);
-//            uploadHelper.createSpreadsheet(file.getName(), file.getAbsolutePath());
             uploadHelper.upload(file.getName(), file.getAbsolutePath());
             setResult(Activity.RESULT_OK, new Intent());
         } catch (Exception e) {
@@ -111,7 +105,7 @@ public class UploadDropboxScreen extends DropboxAccountActivity{
             } else {
                 new AlertDialog.Builder(UploadDropboxScreen.this)
                     .setTitle(R.string.successfully_uploaded_text)
-                    .setMessage(R.string.gdrive_successfully_uploaded_message)
+                    .setMessage(R.string.dropbox_successfully_uploaded_message)
                     .setPositiveButton(R.string.ok_text, null)
                     .show();
             }

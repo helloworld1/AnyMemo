@@ -9,12 +9,9 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONObject;
 import org.liberty.android.fantastischmemo.AMActivity;
-import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.downloader.dropbox.DropboxOAuth1AccessCodeRetrievalFragment;
-import org.liberty.android.fantastischmemo.downloader.google.UploadGoogleDriveScreen;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -49,7 +46,6 @@ public class DropboxAccountActivity extends AMActivity {
 		OAUTH_ACCESS_TOKEN = settings.getString(DROPBOX_AUTH_TOKEN, null);
 		OAUTH_ACCESS_TOKEN_SECRET = settings.getString(DROPBOX_AUTH_TOKEN_SECRET, null);
 
-		// Request new one if nothing saved.
 		 if (OAUTH_ACCESS_TOKEN == null || OAUTH_ACCESS_TOKEN_SECRET == null) {
 			 showGetTokenDialog();
 		 } 
@@ -165,7 +161,7 @@ public class DropboxAccountActivity extends AMActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.spreadsheet_list_menu, menu);
+        inflater.inflate(R.menu.dropbox_list_menu, menu);
         return true;
     }
 

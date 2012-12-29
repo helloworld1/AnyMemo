@@ -20,9 +20,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.downloader.dropbox;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -77,10 +80,58 @@ public class DropboxUtils{
         
     }
     
+    public static String convertStreamToString(InputStream is) {
+        /*
+         * To convert the InputStream to String we use the
+         * BufferedReader.readLine() method. We iterate until the BufferedReader
+         * return null which means there's no more data to read. Each line will
+         * appended to a StringBuilder and returned as String.
+         */
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+
+        String line = null;
+        try {
+            while ((line = reader.readLine()) != null) {
+                sb.append(line + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return sb.toString();
+    }
+    
+    public static void convertStreamToFile(InputStream is, File f) {
+        try {
+            // write the inputStream to a FileOutputStream
+            OutputStream out = new FileOutputStream(f);
+         
+            int read = 0;
+            byte[] bytes = new byte[1024];
+         
+            while ((read = is.read(bytes)) != -1) {
+                out.write(bytes, 0, read);
+            }
+         
+            is.close();
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
     public static String getAuthorizationPageUrl(){
         return AUTHORIZE_TOKEN_URL + "?oauth_token="+ DropboxUtils.OAUTH_REQUEST_TOKEN+"&oauth_callback="+AMEnv.DROPBOX_REDIRECT_URI;
     }
     
+
     
     public static String buildOAuthAccessHeader(){
         String headerValue = 
@@ -102,5 +153,7 @@ public class DropboxUtils{
         return requestHeader;
         
     }
+    
+    
 
 }

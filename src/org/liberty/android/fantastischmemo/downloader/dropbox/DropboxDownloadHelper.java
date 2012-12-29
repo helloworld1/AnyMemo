@@ -19,43 +19,36 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.dropbox;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.liberty.android.fantastischmemo.AMEnv;
 
 import org.liberty.android.fantastischmemo.downloader.DownloadItem;
 import org.liberty.android.fantastischmemo.downloader.DownloadItem.ItemType;
-import org.liberty.android.fantastischmemo.downloader.google.Spreadsheet;
-import org.liberty.android.fantastischmemo.downloader.google.WorksheetFactory;
 
 
 import android.content.Context;
-import android.util.Log;
-
 public class DropboxDownloadHelper {
     private Context mContext;
 
     private final String authToken;
     private final String authTokenSecret;
     
-    private final String DATA_ACCESS_URL = "https://api.dropbox.com/1/metadata/dropbox/?list=true";
+    private final String METADATA_ACCESS_URL = "https://api.dropbox.com/1/metadata/dropbox/?list=true";
+    private final String DOWNLOAD_URL = "https://api-content.dropbox.com/1/files/dropbox/";
 
     public DropboxDownloadHelper(Context context, String authToken, String authTokenSecret) {
         this.authToken = authToken;
@@ -74,13 +67,13 @@ public class DropboxDownloadHelper {
 					+ authTokenSecret + "\"";
 
 			HttpClient httpClient = new DefaultHttpClient();
-			HttpGet httpGet = new HttpGet(DATA_ACCESS_URL);
+			HttpGet httpGet = new HttpGet(METADATA_ACCESS_URL);
 			httpGet.setHeader("Authorization", headerValue);
 			HttpResponse response = null;
 			response = httpClient.execute(httpGet);
 			HttpEntity entity = response.getEntity();
 			is = entity.getContent();
-			JSONObject jsonResponse = new JSONObject(convertStreamToString(is));
+			JSONObject jsonResponse = new JSONObject(DropboxUtils.convertStreamToString(is));
 			JSONArray filesJSON = jsonResponse.getJSONArray("contents");
 			JSONObject entryJSON;
 			List<DownloadItem> spreadsheetList = new ArrayList<DownloadItem>(); 
@@ -91,7 +84,6 @@ public class DropboxDownloadHelper {
 				}
 			}
 			
-			Log.v("xinxin *************done parse json", "done");
 			return spreadsheetList;
 
 		} catch (Exception e) {
@@ -110,69 +102,20 @@ public class DropboxDownloadHelper {
     	return null;
     }
     
-    
-    public static String convertStreamToString(InputStream is) {
-		/*
-		 * To convert the InputStream to String we use the
-		 * BufferedReader.readLine() method. We iterate until the BufferedReader
-		 * return null which means there's no more data to read. Each line will
-		 * appended to a StringBuilder and returned as String.
-		 */
-		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-		StringBuilder sb = new StringBuilder();
-
-		String line = null;
-		try {
-			while ((line = reader.readLine()) != null) {
-				sb.append(line + "\n");
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				is.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return sb.toString();
-	}
-    
-    private static void convertStreamToFile(InputStream is, File f) {
-        try {
-            // write the inputStream to a FileOutputStream
-            OutputStream out = new FileOutputStream(f);
-         
-            int read = 0;
-            byte[] bytes = new byte[1024];
-         
-            while ((read = is.read(bytes)) != -1) {
-                out.write(bytes, 0, read);
-            }
-         
-            is.close();
-            out.flush();
-            out.close();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-    }
+   
 
     public String downloadSpreadsheetToDB(DownloadItem di) throws Exception {
-        
-        String downloadURL = di.getAddress();
-        
 
-        String url="https://api-content.dropbox.com/1/files/dropbox/"+ di.getTitle();
+        String url= DOWNLOAD_URL + di.getTitle();
         HttpClient httpClient = new DefaultHttpClient();
         HttpGet httpGet = new HttpGet(url);
         HttpResponse response = null;
         response = httpClient.execute(httpGet);
         HttpEntity entity = response.getEntity();
         InputStream is = entity.getContent();
-        String saveDBPath= AMEnv.DEFAULT_ROOT_PATH + "/" + di.getTitle();
+        String saveDBPath= AMEnv.DEFAULT_ROOT_PATH  + di.getTitle();
         File f = new File(saveDBPath);
-        convertStreamToFile(is, f);
+        DropboxUtils.convertStreamToFile(is, f);
         return saveDBPath;
     }
 }
