@@ -36,8 +36,11 @@ public class AutoSpeakFragment extends Fragment {
                 }
 
                 @Override
-                public boolean onPlayButtonClick() {
-                    return false;
+                public void onPlayButtonClick() {
+                }
+
+                @Override
+                public void onPauseButtonClick() {
                 }
             };
 
@@ -47,11 +50,14 @@ public class AutoSpeakFragment extends Fragment {
         public void onClick(View v) {
             if(v == playButton) {
                 isPlaying = !isPlaying;
+                Log.i(TAG, "Play button clicked, isPlaying " + isPlaying);
 
                 if(isPlaying) {
                     Log.i(TAG, "start speaking");
-                    boolean t = autoSpeakEventHandler.onPlayButtonClick();
+                    autoSpeakEventHandler.onPlayButtonClick();
+                    playButton.setSelected(true);
                 } else {
+                    autoSpeakEventHandler.onPauseButtonClick();
                     playButton.setSelected(false);
                 }
                 
@@ -104,6 +110,7 @@ public class AutoSpeakFragment extends Fragment {
     public interface AutoSpeakEventHandler {
         void onNextButtonClick();
         void onPreviousButtonClick();
-        boolean onPlayButtonClick();
+        void onPlayButtonClick();
+        void onPauseButtonClick();
     }
 }

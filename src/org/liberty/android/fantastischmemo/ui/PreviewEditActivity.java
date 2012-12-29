@@ -1000,13 +1000,14 @@ public class PreviewEditActivity extends QACardActivity {
                 }
 
                 @Override
-                public boolean onPlayButtonClick() {
+                public void onPlayButtonClick() {
+                    isActivityFinished = false;
                     speakQuestion(mQuestionListener);
-              
-                    
-              //      gotoNext();
-//                    return speakQuestion();
-                    return true;
+                }
+
+                @Override
+                public void onPauseButtonClick() {
+                    isActivityFinished = true;
                 }
             };
         
