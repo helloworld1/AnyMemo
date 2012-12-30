@@ -42,7 +42,6 @@ import org.liberty.android.fantastischmemo.downloader.DownloadItem.ItemType;
 
 import android.content.Context;
 public class DropboxDownloadHelper {
-    private Context mContext;
 
     private final String authToken;
     private final String authTokenSecret;
@@ -53,22 +52,14 @@ public class DropboxDownloadHelper {
     public DropboxDownloadHelper(Context context, String authToken, String authTokenSecret) {
         this.authToken = authToken;
         this.authTokenSecret = authTokenSecret;
-        mContext = context;
     }
 
     public List<DownloadItem> getListSpreadsheets() {
     	InputStream is = null;
     	try {
-			String headerValue = "OAuth oauth_version=\"1.0\", "
-					+ "oauth_signature_method=\"PLAINTEXT\", "
-					+ "oauth_consumer_key=\"" + AMEnv.DROPBOX_CONSUMER_KEY + "\", "
-					+ "oauth_token=\"" + authToken + "\", "
-					+ "oauth_signature=\"" + AMEnv.DROPBOX_CONSUMER_SECRET + "&"
-					+ authTokenSecret + "\"";
-
 			HttpClient httpClient = new DefaultHttpClient();
 			HttpGet httpGet = new HttpGet(METADATA_ACCESS_URL);
-			httpGet.setHeader("Authorization", headerValue);
+			httpGet.setHeader("Authorization", getAuthHeader());
 			HttpResponse response = null;
 			response = httpClient.execute(httpGet);
 			HttpEntity entity = response.getEntity();
@@ -83,7 +74,6 @@ public class DropboxDownloadHelper {
 				    spreadsheetList.add(new DownloadItem(ItemType.Spreadsheet, entryJSON.getString("path"), entryJSON.getString("modified"),  ""));
 				}
 			}
-			
 			return spreadsheetList;
 
 		} catch (Exception e) {
@@ -97,7 +87,6 @@ public class DropboxDownloadHelper {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-			
 		}
     	return null;
     }
@@ -105,10 +94,10 @@ public class DropboxDownloadHelper {
    
 
     public String downloadSpreadsheetToDB(DownloadItem di) throws Exception {
-
         String url= DOWNLOAD_URL + di.getTitle();
         HttpClient httpClient = new DefaultHttpClient();
         HttpGet httpGet = new HttpGet(url);
+        httpGet.setHeader("Authorization", getAuthHeader());
         HttpResponse response = null;
         response = httpClient.execute(httpGet);
         HttpEntity entity = response.getEntity();
@@ -117,5 +106,14 @@ public class DropboxDownloadHelper {
         File f = new File(saveDBPath);
         DropboxUtils.convertStreamToFile(is, f);
         return saveDBPath;
+    }
+    
+    private String getAuthHeader(){
+        return "OAuth oauth_version=\"1.0\", "
+                + "oauth_signature_method=\"PLAINTEXT\", "
+                + "oauth_consumer_key=\"" + AMEnv.DROPBOX_CONSUMER_KEY + "\", "
+                + "oauth_token=\"" + authToken + "\", "
+                + "oauth_signature=\"" + AMEnv.DROPBOX_CONSUMER_SECRET + "&"
+                + authTokenSecret + "\"";
     }
 }

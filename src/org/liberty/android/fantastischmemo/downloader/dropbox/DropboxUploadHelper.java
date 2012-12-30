@@ -7,6 +7,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.FileEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.myhttp.entity.mime.MultipartEntity;
 import org.apache.myhttp.entity.mime.content.FileBody;
@@ -46,15 +47,7 @@ public class DropboxUploadHelper {
             String url = FILE_UPLOAD_URL + URLEncoder.encode(fileName, "utf-8"); 
             HttpPost httppost = new HttpPost(url);
             httppost.addHeader("Authorization", headerValue);
-            httppost.addHeader("Content-Type", "application/x-sqlite3");
-
-            FileBody fileToUpload = new FileBody(new File(filePath));
-
-            MultipartEntity reqEntity = new MultipartEntity();
-            reqEntity.addPart("file to upload", fileToUpload);
-
-            httppost.setEntity(reqEntity);
-
+            httppost.setEntity(new FileEntity(new File(filePath), "application/x-sqlite3"));
             HttpResponse response = httpclient.execute(httppost);
             HttpEntity resEntity = response.getEntity();
 
