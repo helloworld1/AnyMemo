@@ -58,6 +58,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.Toast;
@@ -597,7 +598,7 @@ public class StudyActivity extends QACardActivity {
             gradeButtons = new GradeButtons(this, R.layout.grade_buttons_anymemo);
         }
 
-        LinearLayout rootView= (LinearLayout)findViewById(R.id.root);
+        ViewGroup rootView= (ViewGroup)findViewById(R.id.root);
 
         LinearLayout gradeButtonsView = gradeButtons.getView();
 
