@@ -54,7 +54,7 @@ public class Option {
     }
 
 	public DictApp getDictApp() {
-        return DictApp.parse(settings.getString(AMPrefKeys.DICT_APP_KEY, "FORA"));
+        return DictApp.parse(settings.getString(AMPrefKeys.DICT_APP_KEY, "COLORDICT"));
 	}
 
 	public ShuffleType getShuffleType() {
@@ -116,12 +116,16 @@ public class Option {
 
     public static enum DictApp {
         COLORDICT,
-        FORA;
+        FORA,
+        BLUEDICT;
+
         public static DictApp parse(String a){
-            if(a.equals("COLORDICT")){
-                return COLORDICT;
-            } else{
+            if(a.equals("FORA")){
                 return FORA;
+            } else if (a.equals("BLUEDICT")) {
+                return BLUEDICT;
+            } else {
+                return COLORDICT;
             }
         }
     }

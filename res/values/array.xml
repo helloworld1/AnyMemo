@@ -256,11 +256,13 @@
 <string-array name="dict_list">
     <item>@string/dict_colordict</item>
     <item>@string/dict_fora</item>
+    <item>@string/dict_bluedict</item>
 </string-array>
 
 <string-array name="dict_list_values">
     <item>COLORDICT</item>
     <item>FORA</item>
+    <item>BLUEDICT</item>
 </string-array>
 
 <string-array name="statistics_types">

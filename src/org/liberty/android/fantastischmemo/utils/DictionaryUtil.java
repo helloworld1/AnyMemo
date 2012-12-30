@@ -100,6 +100,7 @@ public class DictionaryUtil {
                 AMGUIUtility.displayException(mActivity, mActivity.getString(R.string.error_text), mActivity.getString(R.string.dict_colordict) + " " + mActivity.getString(R.string.error_no_dict), e);
             }
         }
+
         if(option.getDictApp() == Option.DictApp.FORA) {
             Intent intent = new Intent("com.ngc.fora.action.LOOKUP");
             intent.putExtra("HEADWORD", lookupWord);
@@ -109,5 +110,26 @@ public class DictionaryUtil {
                 AMGUIUtility.displayException(mActivity, mActivity.getString(R.string.error_text), mActivity.getString(R.string.dict_fora) + " " + mActivity.getString(R.string.error_no_dict), e);
             }
         }
+
+        if(option.getDictApp() == Option.DictApp.BLUEDICT) {
+            try {
+                Intent intent = new Intent();
+                intent.setAction("bluedict.intent.action.FLOATSEARCH");
+                intent.putExtra("EXTRA_QUERY", lookupWord);
+
+                intent.putExtra("EXTRA_FULLSCREEN", false);
+                intent.putExtra("EXTRA_GRAVITY",Gravity.BOTTOM);
+                // intent.putExtra("EXTRA_HEIGHT", 500);
+                intent.putExtra("EXTRA_MARGIN_LEFT",4);
+                intent.putExtra("EXTRA_MARGIN_RIGHT",4);
+                intent.putExtra("EXTRA_MARGIN_TOP",4);
+                intent.putExtra("EXTRA_MARGIN_BOTTOM",4);
+                mActivity.startActivity(intent);
+            } catch(Exception e) {
+                AMGUIUtility.displayException(mActivity, mActivity.getString(R.string.error_text), mActivity.getString(R.string.dict_fora) + " " + mActivity.getString(R.string.error_no_dict), e);
+            }
+
+        }
+
     }
 }

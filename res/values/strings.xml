@@ -2,7 +2,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     <string name="app_name">AnyMemo</string>
     <string name="app_full_name">AnyMemo Free</string>
-    <string name="app_version">9.999.1</string>
+    <string name="app_version">9.999.2</string>
     <string name="ok_text">OK</string>
     <string name="cancel_text">Cancel</string>
     <string name="yes_text">Yes</string>
@@ -291,7 +291,7 @@
     <string name="locale_spanish_text">Spanish</string>
     <string name="dict_app">Dictionary application</string>
     <string name="dict_app_summary">Change the dictionary application that can be looked up directly when learning.</string>
-    <string name="dict_colordict">ColorDict</string>
+    <string name="dict_colordict">ColorDict / GoldenDict</string>
     <string name="dict_fora">Fora Dictionary</string>
     <string name="error_no_dict">is not installed. Please download it from Android Market or set another dictionary app in Options. Error: </string>
     <string name="item_update_warning">Do you really want to update this item?</string>
@@ -428,13 +428,13 @@
     <string name="japanese_text">Japanese</string>
     <string name="korean_text">Korean</string>
     <string name="thai_text">Thai</string>
-    <string name="add_existing_audio_text">Add existing audio"</string>
+    <string name="add_existing_audio_text">Add existing audio</string>
     <string name="add_new_audio_text">Add new audio</string>
     <string name="remove_audio_text">Remove audio</string>
     <string name="record_text">Record</string>
     <string name="play_text">Play</string>
     <string name="stop_text">Stop</string>
+    <string name="dict_bluedict">BlueDict</string>
     <string name="dropbox_successfully_uploaded_message">Successfully uploaded to your dropbox root directory</string>
     <string name="upload_dropbox_message">Do you want to upload %s to your Dropbox\'s AnyMemo folder? It may take several minutes if you have more than 1000 cards.</string>
-    
 </resources>
