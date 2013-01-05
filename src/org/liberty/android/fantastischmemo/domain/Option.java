@@ -95,6 +95,15 @@ public class Option {
     public boolean getEnableAnimation() {
         return settings.getBoolean(AMPrefKeys.ENABLE_ANIMATION_KEY, true);
     }
+
+    public boolean getCardGestureEnabled() {
+        return settings.getBoolean(AMPrefKeys.CARD_GESTURE_ENABLED, false);
+    }
+
+    public void setCardGestureEnabled(boolean enable) {
+        editor.putBoolean(AMPrefKeys.CARD_GESTURE_ENABLED, enable);
+        editor.commit();
+    }
     
     public static enum ButtonStyle {
         ANYMEMO,

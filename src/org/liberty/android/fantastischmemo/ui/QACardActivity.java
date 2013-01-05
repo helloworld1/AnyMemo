@@ -292,25 +292,23 @@ abstract public class QACardActivity extends AMActivity {
         if (qRatio > 99.0f) {
             answerLayout.setVisibility(View.GONE);
             questionLayout.setLayoutParams(new LayoutParams(
-                    LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
+                    LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1.0f));
             answerLayout.setLayoutParams(new LayoutParams(
-                    LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
+                    LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1.0f));
         } else if (qRatio < 1.0f) {
             questionLayout.setVisibility(View.GONE);
             questionLayout.setLayoutParams(new LayoutParams(
-                    LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
+                    LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1.0f));
             answerLayout.setLayoutParams(new LayoutParams(
-                    LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
+                    LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1.0f));
         } else {
             float aRatio = 100.0f - qRatio;
             qRatio /= 50.0;
             aRatio /= 50.0;
-            questionLayout
-                    .setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
-                            LayoutParams.FILL_PARENT, qRatio));
-            answerLayout
-                    .setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
-                            LayoutParams.FILL_PARENT, aRatio));
+            questionLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+                            LayoutParams.MATCH_PARENT, qRatio));
+            answerLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+                            LayoutParams.MATCH_PARENT, aRatio));
         }
 
         // Finally we generate the fragments
@@ -697,8 +695,13 @@ abstract public class QACardActivity extends AMActivity {
 
     private void loadGestures() {
         gestureLibrary = GestureLibraries.fromRawResource(this, R.raw.gestures);
+        gestureLibrary.load();
+
         GestureOverlayView gestureOverlay =  (GestureOverlayView) findViewById(R.id.gesture_overlay);
         gestureOverlay.addOnGesturePerformedListener(onGesturePerformedListener);
+
+        // Set if gestures are enabled if set on preference
+        gestureOverlay.setEnabled(option.getCardGestureEnabled());
     }
 
     private TagHandler tagHandler = new TagHandler() {
@@ -722,6 +725,10 @@ abstract public class QACardActivity extends AMActivity {
     }
 
     protected void onClickAnswerView() {
+        // Nothing
+    }
+
+    protected void onGestureDetected(GestureName gestureName) {
         // Nothing
     }
 
@@ -757,18 +764,46 @@ abstract public class QACardActivity extends AMActivity {
             onClickAnswerView();
         }
     };
+
     private GestureOverlayView.OnGesturePerformedListener onGesturePerformedListener = new GestureOverlayView.OnGesturePerformedListener() {
 
         @Override
-        public void onGesturePerformed(GestureOverlayView overlay,
-            Gesture gesture) {
+        public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
             List<Prediction> predictions = gestureLibrary.recognize(gesture);
-            Log.v(TAG," gesture performed");
-            if (predictions.size() > 0 && predictions.get(0).score > 1.0) {
-                String action = predictions.get(0).name;
-                Log.v(TAG,"gesture is" + action);
+            if (predictions.size() > 0 && predictions.get(0).score > 3.0) {
+
+                GestureName name = GestureName.parse(predictions.get(0).name);
+                // Run the callback on the Activity.
+                onGestureDetected(name);
             }
 
         }
     };
+
+    // The gesture name for known gestures
+    public static enum GestureName {
+        LEFT_SWIPE("left-swipe"),
+        RIGHT_SWIPE("right-swipe"),
+        S_SHAPE("s-shape"),
+        O_SHAPE("o-shape");
+
+        private String gestureName;
+
+        private GestureName(String name) {
+            this.gestureName = name;
+        }
+
+        public String getName() {
+            return gestureName;
+        }
+
+        public static GestureName parse(String name) {
+            for (GestureName gn : GestureName.values()) {
+                if (name.equals(gn.getName())) {
+                    return gn;
+                }
+            }
+            throw new IllegalArgumentException("The input gesture name is invalid");
+        }
+    }
 }

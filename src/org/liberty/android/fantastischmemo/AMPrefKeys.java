@@ -120,5 +120,7 @@ public class AMPrefKeys {
 
     // AnyMemoService
     public static final String NOTIFICATION_INTERVAL_KEY = "notification_interval";
-    
+
+    // QA Card Activity
+    public static final String CARD_GESTURE_ENABLED= "card_gesture_enabled";
 }
