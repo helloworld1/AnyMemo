@@ -42,8 +42,8 @@ public class DropboxUtils{
     private static final String AUTHORIZE_TOKEN_URL = "https://www.dropbox.com/1/oauth/authorize";
     
     
-    private static String OAUTH_REQUEST_TOKEN_SECRET = null;
-    private static String OAUTH_REQUEST_TOKEN = null;
+    private static String oauthRequestTokenSecret = null;
+    private static String oauthRequestToken = null;
     
     
     public static void retrieveOAuthRequestToken(){
@@ -56,7 +56,6 @@ public class DropboxUtils{
     	BufferedReader reader = null;
     	
         try {
-            //response example: oauth_token_secret=f5pua2ozvgd1qnm&oauth_token=7npmduv9camokae
 			response = httpClient.execute(httpPost);
         	HttpEntity entity = response.getEntity();
             InputStream instream = entity.getContent();
@@ -65,8 +64,8 @@ public class DropboxUtils{
             String[] parsedResult = null;
             if(result.length() != 0){
             	parsedResult = result.split("&");
-            	OAUTH_REQUEST_TOKEN_SECRET=parsedResult[0].split("=")[1];
-            	OAUTH_REQUEST_TOKEN=parsedResult[1].split("=")[1];
+            	oauthRequestTokenSecret=parsedResult[0].split("=")[1];
+            	oauthRequestToken=parsedResult[1].split("=")[1];
             }
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -81,12 +80,6 @@ public class DropboxUtils{
     }
     
     public static String convertStreamToString(InputStream is) {
-        /*
-         * To convert the InputStream to String we use the
-         * BufferedReader.readLine() method. We iterate until the BufferedReader
-         * return null which means there's no more data to read. Each line will
-         * appended to a StringBuilder and returned as String.
-         */
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb = new StringBuilder();
 
@@ -108,27 +101,29 @@ public class DropboxUtils{
     }
     
     public static void convertStreamToFile(InputStream is, File f) {
+        OutputStream out = null;
         try {
-            // write the inputStream to a FileOutputStream
-            OutputStream out = new FileOutputStream(f);
-         
+            out = new FileOutputStream(f);
             int read = 0;
             byte[] bytes = new byte[1024];
-         
             while ((read = is.read(bytes)) != -1) {
                 out.write(bytes, 0, read);
             }
-         
-            is.close();
             out.flush();
-            out.close();
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
+        } finally { 
+            try {
+                is.close();
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
     
     public static String getAuthorizationPageUrl(){
-        return AUTHORIZE_TOKEN_URL + "?oauth_token="+ DropboxUtils.OAUTH_REQUEST_TOKEN+"&oauth_callback="+AMEnv.DROPBOX_REDIRECT_URI;
+        return AUTHORIZE_TOKEN_URL + "?oauth_token="+ DropboxUtils.oauthRequestToken+"&oauth_callback="+AMEnv.DROPBOX_REDIRECT_URI;
     }
     
 
@@ -137,9 +132,9 @@ public class DropboxUtils{
         String headerValue = 
                 "OAuth oauth_version=\""+ AMEnv.DROPBOX_OAUTH_VERSION +"\", "
                 + "oauth_signature_method=\"PLAINTEXT\", "
-                + "oauth_token=\"" + OAUTH_REQUEST_TOKEN + "\", " 
+                + "oauth_token=\"" + oauthRequestToken + "\", " 
                 + "oauth_consumer_key=\""+ AMEnv.DROPBOX_CONSUMER_KEY +"\", "
-                + "oauth_signature=\"" + AMEnv.DROPBOX_CONSUMER_SECRET+ "&" + OAUTH_REQUEST_TOKEN_SECRET + "\"";
+                + "oauth_signature=\"" + AMEnv.DROPBOX_CONSUMER_SECRET+ "&" + oauthRequestTokenSecret + "\"";
         
         return headerValue;
     }
@@ -154,6 +149,15 @@ public class DropboxUtils{
         
     }
     
+    
+    public static String getFileExchangeAuthHeader(String authToken, String authTokenSecret){
+        return "OAuth oauth_version=\"1.0\", "
+                + "oauth_signature_method=\"PLAINTEXT\", "
+                + "oauth_consumer_key=\"" + AMEnv.DROPBOX_CONSUMER_KEY + "\", "
+                + "oauth_token=\"" + authToken + "\", "
+                + "oauth_signature=\"" + AMEnv.DROPBOX_CONSUMER_SECRET + "&"
+                + authTokenSecret + "\"";
+    }
     
 
 }

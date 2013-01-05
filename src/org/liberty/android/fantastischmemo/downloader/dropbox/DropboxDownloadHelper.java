@@ -20,10 +20,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.downloader.dropbox;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +31,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.liberty.android.fantastischmemo.AMEnv;
 
@@ -46,20 +45,21 @@ public class DropboxDownloadHelper {
     private final String authToken;
     private final String authTokenSecret;
     
-    private final String METADATA_ACCESS_URL = "https://api.dropbox.com/1/metadata/dropbox/?list=true";
-    private final String DOWNLOAD_URL = "https://api-content.dropbox.com/1/files/dropbox/";
+    private static final String METADATA_ACCESS_URL = "https://api.dropbox.com/1/metadata/dropbox/?list=true";
+    private static final String DOWNLOAD_URL = "https://api-content.dropbox.com/1/files/dropbox/";
 
     public DropboxDownloadHelper(Context context, String authToken, String authTokenSecret) {
         this.authToken = authToken;
         this.authTokenSecret = authTokenSecret;
     }
 
-    public List<DownloadItem> getListSpreadsheets() {
+    // Fetch the list of db files
+    public List<DownloadItem> fetchDBFileList() {
     	InputStream is = null;
     	try {
 			HttpClient httpClient = new DefaultHttpClient();
 			HttpGet httpGet = new HttpGet(METADATA_ACCESS_URL);
-			httpGet.setHeader("Authorization", getAuthHeader());
+			httpGet.setHeader("Authorization", DropboxUtils.getFileExchangeAuthHeader(authToken, authTokenSecret));
 			HttpResponse response = null;
 			response = httpClient.execute(httpGet);
 			HttpEntity entity = response.getEntity();
@@ -67,24 +67,26 @@ public class DropboxDownloadHelper {
 			JSONObject jsonResponse = new JSONObject(DropboxUtils.convertStreamToString(is));
 			JSONArray filesJSON = jsonResponse.getJSONArray("contents");
 			JSONObject entryJSON;
-			List<DownloadItem> spreadsheetList = new ArrayList<DownloadItem>(); 
+			List<DownloadItem> dbFileList = new ArrayList<DownloadItem>(); 
 			for(int i = 0 ; i < filesJSON.length(); i++){
 				entryJSON = filesJSON.getJSONObject(i);
 				if(entryJSON.getString("path").endsWith(".db")){
-				    spreadsheetList.add(new DownloadItem(ItemType.Spreadsheet, entryJSON.getString("path"), entryJSON.getString("modified"),  ""));
+				    dbFileList.add(new DownloadItem(ItemType.Spreadsheet, entryJSON.getString("path"), entryJSON.getString("modified"),  ""));
 				}
 			}
-			return spreadsheetList;
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
+			return dbFileList;
+		} catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
 			try {
 			    if(is != null){
 			        is.close();
 			    }
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
 		}
@@ -93,11 +95,11 @@ public class DropboxDownloadHelper {
     
    
 
-    public String downloadSpreadsheetToDB(DownloadItem di) throws Exception {
+    public String downloadDBFromDropbox(DownloadItem di) throws Exception {
         String url= DOWNLOAD_URL + di.getTitle();
         HttpClient httpClient = new DefaultHttpClient();
         HttpGet httpGet = new HttpGet(url);
-        httpGet.setHeader("Authorization", getAuthHeader());
+        httpGet.setHeader("Authorization", DropboxUtils.getFileExchangeAuthHeader(authToken, authTokenSecret));
         HttpResponse response = null;
         response = httpClient.execute(httpGet);
         HttpEntity entity = response.getEntity();
@@ -108,12 +110,5 @@ public class DropboxDownloadHelper {
         return saveDBPath;
     }
     
-    private String getAuthHeader(){
-        return "OAuth oauth_version=\"1.0\", "
-                + "oauth_signature_method=\"PLAINTEXT\", "
-                + "oauth_consumer_key=\"" + AMEnv.DROPBOX_CONSUMER_KEY + "\", "
-                + "oauth_token=\"" + authToken + "\", "
-                + "oauth_signature=\"" + AMEnv.DROPBOX_CONSUMER_SECRET + "&"
-                + authTokenSecret + "\"";
-    }
+   
 }

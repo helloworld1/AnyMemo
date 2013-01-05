@@ -45,7 +45,7 @@ import android.webkit.WebViewClient;
 
 import android.widget.LinearLayout;
 
-class DropboxOAuth1AccessCodeRetrievalFragment extends DialogFragment {
+public class DropboxOAuthTokenRetrievalDialogFragment extends DialogFragment {
     private Activity mActivity;
     private AuthCodeReceiveListener authCodeReceiveListener = null;
 

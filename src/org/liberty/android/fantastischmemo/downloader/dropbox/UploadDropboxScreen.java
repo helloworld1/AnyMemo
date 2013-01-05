@@ -61,13 +61,9 @@ public class UploadDropboxScreen extends DropboxAccountActivity{
     
     
     private void uploadToDropbox(File file) {
-        try {
             DropboxUploadHelper uploadHelper = new DropboxUploadHelper(this, authToken, authTokenSecret);
             uploadHelper.upload(file.getName(), file.getAbsolutePath());
             setResult(Activity.RESULT_OK, new Intent());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
     
     private class UploadTask extends AsyncTask<File, Void, Exception> {
@@ -96,7 +92,6 @@ public class UploadDropboxScreen extends DropboxAccountActivity{
             }
             return null;
         }
-
         
         @Override
         public void onPostExecute(Exception e){

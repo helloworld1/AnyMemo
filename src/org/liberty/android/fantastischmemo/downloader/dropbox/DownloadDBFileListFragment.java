@@ -24,20 +24,16 @@ import java.util.List;
 import org.liberty.android.fantastischmemo.downloader.AbstractDownloaderFragment;
 import org.liberty.android.fantastischmemo.downloader.DownloadItem;
 
-class SpreadsheetListFragment extends AbstractDownloaderFragment {
-    private final String authToken;
-    private final String authTokenSecret;
+class DownloadDBFileListFragment extends AbstractDownloaderFragment {
+    private DropboxDownloadHelper downloadHelper;
 
-    public SpreadsheetListFragment(String authToken, String authTokenSecret) {
-        this.authToken = authToken;
-        this.authTokenSecret = authTokenSecret;
+    public DownloadDBFileListFragment(String authToken, String authTokenSecret) {
+        downloadHelper = new DropboxDownloadHelper(getActivity(), authToken, authTokenSecret);
     }
 
 	@Override
 	protected List<DownloadItem> initialRetrieve() throws Exception {
-		DropboxDownloadHelper downloadHelper = new DropboxDownloadHelper(getActivity(), authToken, authTokenSecret);
-        List<DownloadItem> spreadsheetList = downloadHelper.getListSpreadsheets();
-        return spreadsheetList;
+	    return downloadHelper.fetchDBFileList();
 	}
 
 	@Override
@@ -52,9 +48,7 @@ class SpreadsheetListFragment extends AbstractDownloaderFragment {
 
 	@Override
 	protected String fetchDatabase(DownloadItem di) throws Exception {
-        DropboxDownloadHelper downloadHelper = new DropboxDownloadHelper(getActivity(), authToken, authTokenSecret);
-        return downloadHelper.downloadSpreadsheetToDB(di);
+        return downloadHelper.downloadDBFromDropbox(di);
 	}
-
 
 }

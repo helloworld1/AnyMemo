@@ -437,4 +437,5 @@
     <string name="dict_bluedict">BlueDict</string>
     <string name="dropbox_successfully_uploaded_message">Successfully uploaded to your dropbox root directory</string>
     <string name="upload_dropbox_message">Do you want to upload %s to your Dropbox\'s AnyMemo folder? It may take several minutes if you have more than 1000 cards.</string>
+    <string name="dropbox_token_failure_text">Fail to fetch your access token. Please try again</string>
 </resources>
