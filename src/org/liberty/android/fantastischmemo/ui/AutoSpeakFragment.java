@@ -7,6 +7,7 @@ import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ public class AutoSpeakFragment extends Fragment {
     private PreviewEditActivity previewEditActivity;
     
     private boolean isPlaying = false;
+    private Handler handler;
     
     // We need to check this since activity may finish early while TTS thread is still trying to call gotoNext().
     private volatile boolean isActivityFinished = false;
@@ -40,14 +42,30 @@ public class AutoSpeakFragment extends Fragment {
         public void onTextToSpeechCompleted(final String text) {
             Log.i(TAG, "mAnswerListener is " + mAnswerListener);
             
-                previewEditActivity.runOnUiThread(new Runnable() {
-                
-                public void run() {
-                    Log.i(TAG, "ppppppppppppppppppppp: " + text);
-
-                    previewEditActivity.speakAnswer(mAnswerListener);
+                //TODO: This won't block UI thread but blocked TTS thread.
+            // Should use postDelay in handler 
+                /* 
+                try {
+                    Thread.sleep(10000);
+                } catch(InterruptedException e) {
+                    Log.i(TAG, "ffffffff" + e.getMessage());
                 }
-            });
+                */
+                
+                
+                Runnable r = new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.i(TAG, "ppppppppppppppppppppp: " + text);
+                        if(!isActivityFinished) {
+                            previewEditActivity.speakAnswer(mAnswerListener);
+                        }
+                    }
+                };
+                
+                    handler.postDelayed(r, 5000);
+               // previewEditActivity.runOnUiThread(r);
+                
             Log.i(TAG, "in preview edit activity");
         }
     };
@@ -78,6 +96,7 @@ public class AutoSpeakFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.previewEditActivity = (PreviewEditActivity)activity;
+        this.handler = new Handler();
     }
     
     @Override
