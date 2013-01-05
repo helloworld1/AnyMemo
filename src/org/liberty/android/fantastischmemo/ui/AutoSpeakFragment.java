@@ -2,7 +2,9 @@ package org.liberty.android.fantastischmemo.ui;
 
 
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,26 +23,91 @@ public class AutoSpeakFragment extends Fragment {
     private ImageButton nextButton;
     private ImageButton settingsButton;
     private ImageButton exitButton;
+    private PreviewEditActivity previewEditActivity;
     
     private boolean isPlaying = false;
+    
+    // We need to check this since activity may finish early while TTS thread is still trying to call gotoNext().
+    private volatile boolean isActivityFinished = false;
 
+    public AutoSpeakEventHandler getAutoSpeakEventHandler() {
+        return this.autoSpeakEventHandler;
+    } 
+  
+    private AnyMemoTTS.OnTextToSpeechCompletedListener mQuestionListener = new AnyMemoTTS.OnTextToSpeechCompletedListener() {
+        
+        @Override
+        public void onTextToSpeechCompleted(final String text) {
+            Log.i(TAG, "mAnswerListener is " + mAnswerListener);
+            
+                previewEditActivity.runOnUiThread(new Runnable() {
+                
+                public void run() {
+                    Log.i(TAG, "ppppppppppppppppppppp: " + text);
+
+                    previewEditActivity.speakAnswer(mAnswerListener);
+                }
+            });
+            Log.i(TAG, "in preview edit activity");
+        }
+    };
+    
+    private AnyMemoTTS.OnTextToSpeechCompletedListener mAnswerListener = new AnyMemoTTS.OnTextToSpeechCompletedListener() {
+        
+        @Override
+        public void onTextToSpeechCompleted(final String text) {
+
+            // Need to run gotoNext() in UI thread not TTS thread since it changes view. 
+            previewEditActivity.runOnUiThread(new Runnable() {
+                
+                public void run() {
+                    Log.i(TAG, "jiiiiwowoowjiowjeifjweoifgjeos: " + text);
+                    
+                    if(!isActivityFinished) {
+                        previewEditActivity.gotoNext();
+                        previewEditActivity.speakQuestion(mQuestionListener);
+                    }
+                }
+            });
+            
+            Log.i(TAG, "lalalala");
+        }
+    };
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.previewEditActivity = (PreviewEditActivity)activity;
+    }
+    
+    @Override
+    public void onDestroy() {
+        this.isActivityFinished = true;
+        super.onDestroy();
+    }
+    
     private AutoSpeakEventHandler autoSpeakEventHandler = 
             new AutoSpeakEventHandler() {
                 
                 @Override
                 public void onNextButtonClick() {
+                    previewEditActivity.gotoNext();
                 }
 
                 @Override
                 public void onPreviousButtonClick() {
+                    previewEditActivity.gotoPrev();
                 }
 
                 @Override
                 public void onPlayButtonClick() {
+                    isActivityFinished = false;
+                    previewEditActivity.speakQuestion(mQuestionListener);
                 }
 
                 @Override
                 public void onPauseButtonClick() {
+                    isActivityFinished = true;
                 }
             };
 
@@ -112,11 +179,5 @@ public class AutoSpeakFragment extends Fragment {
         
         return v;
     }
-    
-    public interface AutoSpeakEventHandler {
-        void onNextButtonClick();
-        void onPreviousButtonClick();
-        void onPlayButtonClick();
-        void onPauseButtonClick();
-    }
+
 }

@@ -47,7 +47,6 @@ import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
-import org.liberty.android.fantastischmemo.ui.AutoSpeakFragment.AutoSpeakEventHandler;
 import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 import org.liberty.android.fantastischmemo.utils.AMUtil;
@@ -116,9 +115,6 @@ public class PreviewEditActivity extends QACardActivity {
     private View searchNextButton;
     private View searchPrevButton;
 
-    // We need to check this since activity may finish early while TTS thread is still trying to call gotoNext().
-    private volatile boolean isActivityFinished = false;
-
     private Setting setting;
     private Option option;
     
@@ -128,52 +124,12 @@ public class PreviewEditActivity extends QACardActivity {
     // The first card to read and display.
     private int startCardId = 1;
 
-    private AnyMemoTTS.OnTextToSpeechCompletedListener mQuestionListener = new AnyMemoTTS.OnTextToSpeechCompletedListener() {
-        
-        @Override
-        public void onTextToSpeechCompleted(final String text) {
-            Log.i(TAG, "mAnswerListener is " + mAnswerListener);
-            
-            runOnUiThread(new Runnable() {
-                
-                public void run() {
-                    Log.i(TAG, "ppppppppppppppppppppp: " + text);
-
-                    speakAnswer(mAnswerListener);
-                }
-            });
-//            gotoNext();
-            Log.i(TAG, "in preview edit activity");
-        }
-    };
-    
-    private AnyMemoTTS.OnTextToSpeechCompletedListener mAnswerListener = new AnyMemoTTS.OnTextToSpeechCompletedListener() {
-        
-        @Override
-        public void onTextToSpeechCompleted(final String text) {
-
-            // Need to run gotoNext() in UI thread not TTS thread since it changes view. 
-            runOnUiThread(new Runnable() {
-                
-                public void run() {
-                    Log.i(TAG, "jiiiiwowoowjiowjeifjweoifgjeos: " + text);
-                    
-                    if(!isActivityFinished) {
-                        gotoNext();
-                        speakQuestion(mQuestionListener);
-                    }
-                }
-            });
-            
-            Log.i(TAG, "lalalala");
-        }
-    };
-    
+      
     
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-
+        
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             dbPath = extras.getString(EXTRA_DBPATH);
@@ -246,7 +202,6 @@ public class PreviewEditActivity extends QACardActivity {
 
     @Override
     public void onDestroy() {
-        isActivityFinished = true;
         super.onDestroy();
     }
 
@@ -385,7 +340,7 @@ public class PreviewEditActivity extends QACardActivity {
             	AutoSpeakFragment f = new AutoSpeakFragment();
             	
             	fl.setId(MAGIC_FRAME_LAYOUT_ID);
-            	f.setAutoSpeakEventHander(autoSpeakEventHandler);
+            	f.setAutoSpeakEventHander(f.getAutoSpeakEventHandler());
             	root.addView(fl);
             //	Log.e(TAG, String.format("fl id is %d", fl.getId()));
             	ft.add(fl.getId(), f);
@@ -656,7 +611,7 @@ public class PreviewEditActivity extends QACardActivity {
         }
     }
     
-    private void gotoNext(){
+    public void gotoNext(){
         if (getCurrentCard() != null) {
             setCurrentCard(cardDao.queryNextCard(getCurrentCard(), currentCategory));
             try {
@@ -690,7 +645,7 @@ public class PreviewEditActivity extends QACardActivity {
         }
     }
 
-    private void gotoPrev(){
+    public void gotoPrev(){
         if (getCurrentCard() != null) {
             setCurrentCard(cardDao.queryPrevCard(getCurrentCard(), currentCategory));
             try {
@@ -893,26 +848,6 @@ public class PreviewEditActivity extends QACardActivity {
             restartActivity();
         }
     }
-
-    private class GotoNextCardTask extends AsyncTask<Void, Void, Void> {
-        @Override
-        public void onPreExecute() {
-
-        }
-        @Override
-        public Void doInBackground(Void... params) {
-            
-            //speakQuestion(mQuestionListener);
-            return null;
-        }
-        @Override
-        public void onPostExecute(Void result){
-            gotoNext();
-            speakQuestion(mQuestionListener);
-        }
-    }
-    
-    
     
     /*
      * params[2] = {Search Method, Search criteria}
@@ -985,30 +920,5 @@ public class PreviewEditActivity extends QACardActivity {
                 restartActivity();
             }
         };
-        
-    private AutoSpeakEventHandler autoSpeakEventHandler = 
-            new AutoSpeakEventHandler() {
-                
-                @Override
-                public void onNextButtonClick() {
-                    gotoNext();
-                }
-
-                @Override
-                public void onPreviousButtonClick() {
-                    gotoPrev();
-                }
-
-                @Override
-                public void onPlayButtonClick() {
-                    isActivityFinished = false;
-                    speakQuestion(mQuestionListener);
-                }
-
-                @Override
-                public void onPauseButtonClick() {
-                    isActivityFinished = true;
-                }
-            };
         
 }
