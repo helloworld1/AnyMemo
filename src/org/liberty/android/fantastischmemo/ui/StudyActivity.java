@@ -120,6 +120,7 @@ public class StudyActivity extends QACardActivity {
             filterCategoryId = extras.getInt(EXTRA_CATEGORY_ID, -1);
             startCardId = extras.getInt(EXTRA_START_CARD_ID, -1);
         }
+        setTitle(R.string.gestures_text);
         super.onCreate(savedInstanceState);
     }
 
@@ -254,10 +255,17 @@ public class StudyActivity extends QACardActivity {
 
             }
 
+            case R.id.menu_gestures:
+            {
+                showGesturesDialog();
+                return true;
+            }
+
             case R.id.menu_context_paint:
             {
                 Intent myIntent = new Intent(this, FingerPaint.class);
                 startActivity(myIntent);
+                return true;
             }
         }
 
@@ -862,5 +870,10 @@ public class StudyActivity extends QACardActivity {
                 Log.e(TAG, "Delete card error", e);
             }
         }
+    }
+
+    private void showGesturesDialog() {
+        GestureSelectionDialogFragment df = new GestureSelectionDialogFragment();
+        df.show(getSupportFragmentManager(), "GestureSelectionDialog");
     }
 }

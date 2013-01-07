@@ -96,11 +96,11 @@ public class Option {
         return settings.getBoolean(AMPrefKeys.ENABLE_ANIMATION_KEY, true);
     }
 
-    public boolean getCardGestureEnabled() {
+    public boolean getGestureEnabled() {
         return settings.getBoolean(AMPrefKeys.CARD_GESTURE_ENABLED, false);
     }
 
-    public void setCardGestureEnabled(boolean enable) {
+    public void setGestureEnabled(boolean enable) {
         editor.putBoolean(AMPrefKeys.CARD_GESTURE_ENABLED, enable);
         editor.commit();
     }

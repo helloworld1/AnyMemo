@@ -22,51 +22,39 @@ package org.liberty.android.fantastischmemo.ui;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
 import org.apache.mycommons.io.FileUtils;
-
 import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.AnyMemoService;
-import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.SetAlarmReceiver;
+import org.liberty.android.fantastischmemo.utils.AMUiUtil;
 
 import android.app.AlertDialog;
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-
 import android.content.res.Resources;
-
 import android.net.Uri;
 import android.os.Bundle;
-
 import android.preference.PreferenceManager;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-
 import android.support.v4.view.ViewPager;
-
 import android.text.Html;
-
 import android.text.method.LinkMovementMethod;
-
 import android.util.Log;
 import android.util.TypedValue;
-
 import android.view.View;
-
 import android.widget.HorizontalScrollView;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
@@ -81,14 +69,17 @@ public class AnyMemo extends AMActivity {
     private PagerAdapter mPagerAdapter;
     private HorizontalScrollView mHorizontalScrollView;
 
-
     private SharedPreferences settings;
+
+    private AMUiUtil amUiUtil;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.main_tabs);
+
+        amUiUtil = new AMUiUtil(this);
         mTabHost = (TabHost)findViewById(android.R.id.tabhost);
         mHorizontalScrollView = (HorizontalScrollView) findViewById(R.id.horizontal_scroll_view);
 
@@ -111,13 +102,13 @@ public class AnyMemo extends AMActivity {
         TabWidget widget = mTabHost.getTabWidget();
 
         int display_width_px = this.getWindowManager().getDefaultDisplay().getWidth();
-        int display_width_dp = (int)(display_width_px * getResources().getDisplayMetrics().density);
+        int display_width_dp = amUiUtil.convertPxToDp(display_width_px);
 
 
         // This is the minimal DP of width for the widget title.
         int minimal_dp = 80;
 
-        int minimal_px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (float) minimal_dp, getResources().getDisplayMetrics());
+        int minimal_px = amUiUtil.convertDpToPx(minimal_dp);
 
         int width_px = minimal_px;
         if (minimal_dp * widget.getChildCount() < display_width_dp) {
