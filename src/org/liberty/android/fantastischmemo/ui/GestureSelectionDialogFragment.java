@@ -75,8 +75,7 @@ public class GestureSelectionDialogFragment extends DialogFragment {
         gestureList = (ListView) v.findViewById(R.id.gesture_list);
         enableGestureCheckbox = (CheckBox) v.findViewById(R.id.enable_gestures);
         enableGestureCheckbox.setChecked(option.getGestureEnabled());
-        enableGestureCheckbox
-                .setOnCheckedChangeListener(enableGestureCheckboxChangeListener);
+        enableGestureCheckbox.setOnCheckedChangeListener(enableGestureCheckboxChangeListener);
 
         GesturesAdapter adapter = new GesturesAdapter(mActivity);
         gestureList.setAdapter(adapter);

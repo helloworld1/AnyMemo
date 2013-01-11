@@ -331,14 +331,15 @@ public class StudyActivity extends QACardActivity {
                 return true;
             }
         }
-        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            Log.v(TAG, "back button pressed");
-            FinishTask task = new FinishTask();
-            task.execute((Void)null);
-            return true;
-        }
 
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.v(TAG, "back button pressed");
+        FinishTask task = new FinishTask();
+        task.execute((Void)null);
     }
 
     @Override
@@ -740,8 +741,10 @@ public class StudyActivity extends QACardActivity {
         }
 
         @Override
-        public Void doInBackground(Void... nothing){
+        public Void doInBackground(Void... nothing) {
+            AnyMemoExecutor.submit(flushDatabaseTask);
             AnyMemoExecutor.waitAllTasks();
+            Log.v(TAG, "DB task completed.");
             return null;
         }
 
