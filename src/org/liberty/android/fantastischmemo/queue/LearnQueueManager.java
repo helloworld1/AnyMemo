@@ -135,16 +135,18 @@ public class LearnQueueManager implements QueueManager {
             learningDataDao.callBatchTasks (
                 new Callable<Void>() {
                     public Void call() throws Exception {
+                        Log.i(TAG, "Cards to flush: " + dirtyCache.size());
                         for (Card card : dirtyCache) {
                             Log.i(TAG, "Flushing: " + card.getLearningData());
                             learningDataDao.update(card.getLearningData());
                             cardDao.update(card);
                         }
-                        dirtyCache.clear();
-                        return null;
+                       return null;
                     }
                 });
+            dirtyCache.clear();
         } catch (Exception e) {
+            Log.e(TAG, "Error encounter when flushing: ", e);
             throw new RuntimeException("Queue flushing get exception!", e);
         }
 	}

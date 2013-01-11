@@ -133,7 +133,10 @@ abstract public class QACardActivity extends AMActivity {
             dbPath = extras.getString(EXTRA_DBPATH);
         }
 
+        option = new Option(QACardActivity.this);
+
         dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(this, dbPath);
+        dbName = AMUtil.getFilenameFromPath(dbPath);
 
         dbPath = extras.getString(EXTRA_DBPATH);
         setContentView(R.layout.qa_card_layout);
@@ -441,8 +444,6 @@ abstract public class QACardActivity extends AMActivity {
             progressDialog.setCancelable(false);
             progressDialog.show();
 
-            option = new Option(QACardActivity.this);
-            dbName = AMUtil.getFilenameFromPath(dbPath);
         }
 
         @Override
@@ -695,13 +696,15 @@ abstract public class QACardActivity extends AMActivity {
 
     private void loadGestures() {
         gestureLibrary = GestureLibraries.fromRawResource(this, R.raw.gestures);
-        gestureLibrary.load();
+        if (!gestureLibrary.load()) {
+            Log.e(TAG, "Gestures can not be load");
+        }
 
         GestureOverlayView gestureOverlay =  (GestureOverlayView) findViewById(R.id.gesture_overlay);
         gestureOverlay.addOnGesturePerformedListener(onGesturePerformedListener);
 
         // Set if gestures are enabled if set on preference
-        gestureOverlay.setEnabled(option.getCardGestureEnabled());
+        gestureOverlay.setEnabled(option.getGestureEnabled());
     }
 
     private TagHandler tagHandler = new TagHandler() {

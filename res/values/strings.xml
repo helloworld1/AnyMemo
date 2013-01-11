@@ -435,4 +435,6 @@
     <string name="play_text">Play</string>
     <string name="stop_text">Stop</string>
     <string name="dict_bluedict">BlueDict</string>
+    <string name="gestures_text">Gestures</string>
+    <string name="enable_gestures_text">Enable gestures</string>
 </resources>

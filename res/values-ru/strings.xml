@@ -429,4 +429,7 @@
     <string name="record_text">Запись</string>
     <string name="play_text">Игра</string>
     <string name="stop_text">Стоп</string>
+    <string name="dict_bluedict">BlueDict</string>
+    <string name="gestures_text">Жесты</string>
+    <string name="enable_gestures_text">Разрешить жесты</string>
 </resources>
