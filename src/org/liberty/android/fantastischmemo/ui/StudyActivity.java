@@ -136,11 +136,7 @@ public class StudyActivity extends QACardActivity {
         switch (item.getItemId()) {
             case R.id.menu_memo_help:
             {
-                Intent myIntent = new Intent();
-                myIntent.setAction(Intent.ACTION_VIEW);
-                myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
-                myIntent.setData(Uri.parse(WEBSITE_HELP_MEMO));
-                startActivity(myIntent);
+                gotoHelp();
                 return true;
             }
             case R.id.menuspeakquestion:
@@ -155,18 +151,13 @@ public class StudyActivity extends QACardActivity {
 
             case R.id.menusettings:
             {
-                Intent myIntent = new Intent(this, SettingsScreen.class);
-                myIntent.putExtra(SettingsScreen.EXTRA_DBPATH, dbPath);
-                startActivityForResult(myIntent, ACTIVITY_SETTINGS);
+                gotoSettings();
                 return true;
             }
 
             case R.id.menudetail:
             {
-                Intent myIntent = new Intent(this, DetailScreen.class);
-                myIntent.putExtra(DetailScreen.EXTRA_DBPATH, this.dbPath);
-                myIntent.putExtra(DetailScreen.EXTRA_CARD_ID, getCurrentCard().getId());
-                startActivityForResult(myIntent, ACTIVITY_DETAIL);
+                gotoDetail();
                 return true;
             }
 
@@ -184,62 +175,23 @@ public class StudyActivity extends QACardActivity {
 
             case R.id.menu_context_edit:
             {
-                Intent myIntent = new Intent(this, CardEditor.class);
-                myIntent.putExtra(CardEditor.EXTRA_DBPATH, this.dbPath);
-                myIntent.putExtra(CardEditor.EXTRA_CARD_ID, getCurrentCard().getId());
-                myIntent.putExtra(CardEditor.EXTRA_IS_EDIT_NEW, false);
-                startActivityForResult(myIntent, ACTIVITY_EDIT);
+                showEditDialog();
                 return true;
             }
             case R.id.menu_context_delete:
             {
-                new AlertDialog.Builder(this)
-                    .setTitle(R.string.delete_text)
-                    .setMessage(R.string.delete_warning)
-                    .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
-                        public void onClick(DialogInterface arg0, int arg1) {
-                            if(getCurrentCard() != null){
-                                try {
-                                    cardDao.delete(getCurrentCard());
-                                    // Do not restart with this card
-                                    setCurrentCard(null);
-                                    restartActivity();
-                                } catch (SQLException e) {
-                                    Log.e(TAG, "Delete card error", e);
-                                }
-                            }
-                        }
-                    })
-                .setNegativeButton(R.string.cancel_text, null)
-                .show();
-
+                showDeleteDialog();
                 return true;
 
             }
             case R.id.menu_context_skip:
             {
-                new AlertDialog.Builder(this)
-                    .setTitle(R.string.skip_text)
-                    .setMessage(R.string.skip_warning)
-                    .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
-                        public void onClick(DialogInterface arg0, int arg1) {
-                            skipCurrentCard();
-                        }
-                    })
-                .setNegativeButton(R.string.cancel_text, null)
-                .show();
+                showSkipDialog();
                 return true;
             }
             case R.id.menu_context_gotoprev:
             {
-                Intent myIntent = new Intent();
-                myIntent.setClass(this, PreviewEditActivity.class);
-                myIntent.putExtra(PreviewEditActivity.EXTRA_DBPATH, dbPath);
-                if (getCurrentCard() != null) {
-                    myIntent.putExtra(PreviewEditActivity.EXTRA_CARD_ID, getCurrentCard().getId());
-                }
-                
-                startActivity(myIntent);
+                gotoPreviewEdit();
                 return true;
             }
 
@@ -249,7 +201,7 @@ public class StudyActivity extends QACardActivity {
                     return false;
                 }
                 // Look up words in both question and answer
-                dictionaryUtil.showLookupListDialog("" + getCurrentCard().getQuestion() + " " + getCurrentCard().getAnswer());
+                lookupDictionary();
 
                 return true;
 
@@ -263,8 +215,7 @@ public class StudyActivity extends QACardActivity {
 
             case R.id.menu_context_paint:
             {
-                Intent myIntent = new Intent(this, FingerPaint.class);
-                startActivity(myIntent);
+                gotoPaint();
                 return true;
             }
         }
@@ -467,6 +418,22 @@ public class StudyActivity extends QACardActivity {
     }
 
     @Override
+    protected void onGestureDetected(GestureName gestureName) {
+        switch (gestureName) {
+            case O_SHAPE:
+                lookupDictionary();
+                break;
+
+            case S_SHAPE:
+                gotoPaint();
+                break;
+            default:
+                break;
+
+        }
+    }
+
+    @Override
     protected void onClickQuestionText() {
         if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
                 || option.getSpeakingType() == Option.SpeakingType.TAP)) {
@@ -576,8 +543,6 @@ public class StudyActivity extends QACardActivity {
        newCardCount = cardDao.getNewCardCount(filterCategory);
        schedluledCardCount = cardDao.getScheduledCardCount(filterCategory);
     }
-
-   
 
     private void showCategoriesDialog() {
         CategoryEditorFragment df = new CategoryEditorFragment();
@@ -878,5 +843,89 @@ public class StudyActivity extends QACardActivity {
     private void showGesturesDialog() {
         GestureSelectionDialogFragment df = new GestureSelectionDialogFragment();
         df.show(getSupportFragmentManager(), "GestureSelectionDialog");
+    }
+
+    private void lookupDictionary() {
+        dictionaryUtil.showLookupListDialog("" + getCurrentCard().getQuestion() + " " + getCurrentCard().getAnswer());
+    }
+
+    private void showEditDialog() {
+        Intent myIntent = new Intent(this, CardEditor.class);
+        myIntent.putExtra(CardEditor.EXTRA_DBPATH, this.dbPath);
+        myIntent.putExtra(CardEditor.EXTRA_CARD_ID, getCurrentCard().getId());
+        myIntent.putExtra(CardEditor.EXTRA_IS_EDIT_NEW, false);
+        startActivityForResult(myIntent, ACTIVITY_EDIT);
+    }
+
+    private void showDeleteDialog() {
+        new AlertDialog.Builder(this)
+            .setTitle(R.string.delete_text)
+            .setMessage(R.string.delete_warning)
+            .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
+                public void onClick(DialogInterface arg0, int arg1) {
+                    if(getCurrentCard() != null){
+                        try {
+                            cardDao.delete(getCurrentCard());
+                            // Do not restart with this card
+                            setCurrentCard(null);
+                            restartActivity();
+                        } catch (SQLException e) {
+                            Log.e(TAG, "Delete card error", e);
+                        }
+                    }
+                }
+            })
+        .setNegativeButton(R.string.cancel_text, null)
+            .show();
+    }
+
+    private void showSkipDialog() {
+        new AlertDialog.Builder(this)
+            .setTitle(R.string.skip_text)
+            .setMessage(R.string.skip_warning)
+            .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
+                public void onClick(DialogInterface arg0, int arg1) {
+                    skipCurrentCard();
+                }
+            })
+        .setNegativeButton(R.string.cancel_text, null)
+            .show();
+    }
+
+    private void gotoPreviewEdit() {
+        Intent myIntent = new Intent();
+        myIntent.setClass(this, PreviewEditActivity.class);
+        myIntent.putExtra(PreviewEditActivity.EXTRA_DBPATH, dbPath);
+        if (getCurrentCard() != null) {
+            myIntent.putExtra(PreviewEditActivity.EXTRA_CARD_ID, getCurrentCard().getId());
+        }
+
+        startActivity(myIntent);
+    }
+
+    private void gotoPaint() {
+        Intent myIntent = new Intent(this, FingerPaint.class);
+        startActivity(myIntent);
+    }
+
+    private void gotoDetail() {
+        Intent myIntent = new Intent(this, DetailScreen.class);
+        myIntent.putExtra(DetailScreen.EXTRA_DBPATH, this.dbPath);
+        myIntent.putExtra(DetailScreen.EXTRA_CARD_ID, getCurrentCard().getId());
+        startActivityForResult(myIntent, ACTIVITY_DETAIL);
+    }
+
+    private void gotoSettings() {
+        Intent myIntent = new Intent(this, SettingsScreen.class);
+        myIntent.putExtra(SettingsScreen.EXTRA_DBPATH, dbPath);
+        startActivityForResult(myIntent, ACTIVITY_SETTINGS);
+    }
+
+    private void gotoHelp() {
+        Intent myIntent = new Intent();
+        myIntent.setAction(Intent.ACTION_VIEW);
+        myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
+        myIntent.setData(Uri.parse(WEBSITE_HELP_MEMO));
+        startActivity(myIntent);
     }
 }
