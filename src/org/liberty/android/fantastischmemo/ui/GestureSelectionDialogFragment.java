@@ -27,6 +27,7 @@ import org.liberty.android.fantastischmemo.utils.AMUiUtil;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.gesture.Gesture;
 import android.gesture.GestureLibraries;
 import android.gesture.GestureLibrary;
@@ -59,6 +60,8 @@ public class GestureSelectionDialogFragment extends DialogFragment {
 
     private Option option;
 
+    private boolean isOptionChanged = false;
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -77,8 +80,8 @@ public class GestureSelectionDialogFragment extends DialogFragment {
         enableGestureCheckbox.setChecked(option.getGestureEnabled());
         enableGestureCheckbox.setOnCheckedChangeListener(enableGestureCheckboxChangeListener);
 
-        GesturesAdapter adapter = new GesturesAdapter(mActivity);
-        gestureList.setAdapter(adapter);
+        gestureAdapter= new GesturesAdapter(mActivity);
+        gestureList.setAdapter(gestureAdapter);
 
         GestureLibrary gestureLibrary = GestureLibraries.fromRawResource(
                 mActivity, R.raw.gestures);
@@ -89,7 +92,7 @@ public class GestureSelectionDialogFragment extends DialogFragment {
                 NamedGesture namedGesture = new NamedGesture();
                 namedGesture.name = gestureEntry;
                 namedGesture.gesture = gesture;
-                adapter.add(namedGesture);
+                gestureAdapter.add(namedGesture);
             }
         }
 
@@ -142,6 +145,13 @@ public class GestureSelectionDialogFragment extends DialogFragment {
         }
     }
 
+    @Override
+    public void onDismiss(DialogInterface di) {
+        if (isOptionChanged) {
+            mActivity.restartActivity();
+        }
+    }
+
     static class NamedGesture {
         String name;
         Gesture gesture;
@@ -152,7 +162,10 @@ public class GestureSelectionDialogFragment extends DialogFragment {
         @Override
         public void onCheckedChanged(CompoundButton buttonView,
                 boolean isChecked) {
-            option.setGestureEnabled(true);
+            option.setGestureEnabled(isChecked);
+            isOptionChanged = true;
         }
     };
+
+
 }
