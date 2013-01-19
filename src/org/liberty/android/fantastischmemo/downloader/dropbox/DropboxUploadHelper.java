@@ -17,7 +17,7 @@ public class DropboxUploadHelper {
     private final String authToken;
     private final String authTokenSecret;
     
-    private static final String FILE_UPLOAD_URL="https://api-content.dropbox.com/1/files_put/dropbox/";
+    private static final String FILE_UPLOAD_URL="https://api-content.dropbox.com/1/files_put/dropbox/anymemo/";
 
 
     public DropboxUploadHelper(Context context, String authToken, String authTokenSecret) {

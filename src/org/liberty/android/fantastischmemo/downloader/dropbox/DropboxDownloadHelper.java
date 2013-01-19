@@ -45,7 +45,7 @@ public class DropboxDownloadHelper {
     private final String authToken;
     private final String authTokenSecret;
     
-    private static final String METADATA_ACCESS_URL = "https://api.dropbox.com/1/metadata/dropbox/?list=true";
+    private static final String METADATA_ACCESS_URL = "https://api.dropbox.com/1/metadata/dropbox/anymemo?list=true";
     private static final String DOWNLOAD_URL = "https://api-content.dropbox.com/1/files/dropbox/";
 
     public DropboxDownloadHelper(Context context, String authToken, String authTokenSecret) {
@@ -93,7 +93,6 @@ public class DropboxDownloadHelper {
     	return null;
     }
     
-   
 
     public String downloadDBFromDropbox(DownloadItem di) throws Exception {
         String url= DOWNLOAD_URL + di.getTitle();
@@ -104,7 +103,7 @@ public class DropboxDownloadHelper {
         response = httpClient.execute(httpGet);
         HttpEntity entity = response.getEntity();
         InputStream is = entity.getContent();
-        String saveDBPath= AMEnv.DEFAULT_ROOT_PATH  + di.getTitle();
+        String saveDBPath= AMEnv.DEFAULT_ROOT_PATH  + new File(di.getTitle()).getName();
         File f = new File(saveDBPath);
         DropboxUtils.convertStreamToFile(is, f);
         return saveDBPath;
