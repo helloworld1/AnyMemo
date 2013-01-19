@@ -1,12 +1,13 @@
 package org.liberty.android.fantastischmemo;
 
+import java.sql.SQLException;
+
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.DeckDao;
 import org.liberty.android.fantastischmemo.dao.FilterDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.dao.SettingDao;
-
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.Deck;
@@ -14,21 +15,15 @@ import org.liberty.android.fantastischmemo.domain.Filter;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.domain.Setting;
 
-import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
-
-import com.j256.ormlite.support.ConnectionSource;
-
-import com.j256.ormlite.table.TableUtils;
-
 import android.content.Context;
-
-import java.sql.SQLException;
-
 import android.database.Cursor;
-
 import android.database.sqlite.SQLiteDatabase;
-
 import android.util.Log;
+
+import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
+import com.j256.ormlite.support.ConnectionSource;
+import com.j256.ormlite.support.DatabaseConnection;
+import com.j256.ormlite.table.TableUtils;
 
 public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
 
@@ -157,6 +152,12 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
 
     @Override
     public void close() {
+        try {
+            DatabaseConnection connection = getConnectionSource().getReadWriteConnection();
+            getConnectionSource().releaseConnection(connection);
+        } catch (SQLException e) {
+            Log.e(TAG, "Error releasing the connection.", e); 
+        }
         super.close();
     }
 

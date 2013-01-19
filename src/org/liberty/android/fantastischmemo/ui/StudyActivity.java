@@ -58,6 +58,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.Toast;
@@ -119,6 +120,7 @@ public class StudyActivity extends QACardActivity {
             filterCategoryId = extras.getInt(EXTRA_CATEGORY_ID, -1);
             startCardId = extras.getInt(EXTRA_START_CARD_ID, -1);
         }
+        setTitle(R.string.gestures_text);
         super.onCreate(savedInstanceState);
     }
 
@@ -253,10 +255,17 @@ public class StudyActivity extends QACardActivity {
 
             }
 
+            case R.id.menu_gestures:
+            {
+                showGesturesDialog();
+                return true;
+            }
+
             case R.id.menu_context_paint:
             {
                 Intent myIntent = new Intent(this, FingerPaint.class);
                 startActivity(myIntent);
+                return true;
             }
         }
 
@@ -322,14 +331,15 @@ public class StudyActivity extends QACardActivity {
                 return true;
             }
         }
-        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            Log.v(TAG, "back button pressed");
-            FinishTask task = new FinishTask();
-            task.execute((Void)null);
-            return true;
-        }
 
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.v(TAG, "back button pressed");
+        FinishTask task = new FinishTask();
+        task.execute((Void)null);
     }
 
     @Override
@@ -597,7 +607,7 @@ public class StudyActivity extends QACardActivity {
             gradeButtons = new GradeButtons(this, R.layout.grade_buttons_anymemo);
         }
 
-        LinearLayout rootView= (LinearLayout)findViewById(R.id.root);
+        ViewGroup rootView= (ViewGroup)findViewById(R.id.root);
 
         LinearLayout gradeButtonsView = gradeButtons.getView();
 
@@ -731,8 +741,10 @@ public class StudyActivity extends QACardActivity {
         }
 
         @Override
-        public Void doInBackground(Void... nothing){
+        public Void doInBackground(Void... nothing) {
+            AnyMemoExecutor.submit(flushDatabaseTask);
             AnyMemoExecutor.waitAllTasks();
+            Log.v(TAG, "DB task completed.");
             return null;
         }
 
@@ -861,5 +873,10 @@ public class StudyActivity extends QACardActivity {
                 Log.e(TAG, "Delete card error", e);
             }
         }
+    }
+
+    private void showGesturesDialog() {
+        GestureSelectionDialogFragment df = new GestureSelectionDialogFragment();
+        df.show(getSupportFragmentManager(), "GestureSelectionDialog");
     }
 }

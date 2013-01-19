@@ -435,6 +435,8 @@
     <string name="play_text">Play</string>
     <string name="stop_text">Stop</string>
     <string name="dict_bluedict">BlueDict</string>
+    <string name="gestures_text">Gestures</string>
+    <string name="enable_gestures_text">Enable gestures</string>
     <string name="dropbox_successfully_uploaded_message">Successfully uploaded the file to your dropbox anymemo directory</string>
     <string name="upload_dropbox_message">Do you want to upload %s to your Dropbox\'s AnyMemo folder? It may take several minutes if you have more than 1000 cards.</string>
     <string name="dropbox_token_failure_text">Fail to fetch your access token. Please try again</string>

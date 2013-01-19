@@ -64,6 +64,7 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
         super.onAttach(activity);
         mActivity = (AMActivity)activity;
     }
+
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
