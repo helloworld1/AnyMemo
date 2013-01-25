@@ -21,7 +21,7 @@
     <string name="copyclipboard_summary">Вопрос будет автоматически скопирован в буфер обмена.</string>
     <string name="memo_show_answer">\?\nПоказать ответ</string>
     <string name="memo_no_item_title">Нет объекта</string>
-    <string name="memo_no_item_message">Нет объектов для изучения. Рекомендуем вернуться назад. Нажмите Зубрёжка чтобы учить карточки наперёд.</string>
+    <string name="memo_no_item_message">Нет объектов для изучения. Если хотите повторить, выберите Опрос при долгом нажатии на базу в меню &quot;Недавние&quot;.</string>
     <string name="memo_btn0_text">0 Забыто</string>
     <string name="memo_btn1_text">1 Забыто</string>
     <string name="memo_btn2_text">2 ОчТяжел</string>
@@ -81,7 +81,7 @@
     <string name="stat_new">Новые: </string>
     <string name="open_open_new_db">Открыть существующие базы</string>
     <string name="clear_all_pref">Сбросить установки</string>
-    <string name="clear_recent_list">Очистить список последних баз</string>
+    <string name="clear_recent_list">Очистить список недавних</string>
     <string name="export_xml">Эспорт Mnemosyne XML</string>
     <string name="add_screen_question">Вопрос</string>
     <string name="add_screen_new">Нов</string>
