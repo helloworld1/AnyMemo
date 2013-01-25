@@ -24,7 +24,7 @@
     <string name="copyclipboard_summary">The question will be automatically copied to clipboard.</string>
     <string name="memo_show_answer">\?\nShow answer</string>
     <string name="memo_no_item_title">No item</string>
-    <string name="memo_no_item_message">There is no item to learn for now. Going back is recommended. Use the cram review to learn ahead of time.</string>
+    <string name="memo_no_item_message">There is no item to learn for now. If you want to cram, you can do quizzes by long clicking a db in the &quot;Recent&quot; tab.</string>
     <string name="memo_btn0_text">0 Forgot</string>
     <string name="memo_btn1_text">1 Forgot</string>
     <string name="memo_btn2_text">2 Very Hard</string>

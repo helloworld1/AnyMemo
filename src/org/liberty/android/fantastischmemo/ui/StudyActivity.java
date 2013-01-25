@@ -484,21 +484,12 @@ public class StudyActivity extends QACardActivity {
                 public void onClick(DialogInterface arg0, int arg1) {
                     /* Finish the current activity and go back to the last activity.
                      * It should be the open screen. */
-                    finish();
+                        onBackPressed();
                     }
                 })
-            .setNegativeButton(getString(R.string.learn_ahead), new OnClickListener(){
-                public void onClick(DialogInterface arg0, int arg1) {
-                    finish();
-                    Intent myIntent = new Intent();
-                    myIntent.setClass(StudyActivity.this, StudyActivity.class);
-                    myIntent.putExtra(StudyActivity.EXTRA_DBPATH, dbPath);
-                    startActivity(myIntent);
-                }
-            })
             .setOnCancelListener(new DialogInterface.OnCancelListener(){
                 public void onCancel(DialogInterface dialog){
-                    finish();
+                        onBackPressed();
                     }
                 })
             .create()
