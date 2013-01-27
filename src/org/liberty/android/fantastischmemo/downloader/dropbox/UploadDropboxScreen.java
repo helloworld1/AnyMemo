@@ -1,10 +1,11 @@
 package org.liberty.android.fantastischmemo.downloader.dropbox;
 
 import java.io.File;
+import java.io.IOException;
 
-import org.liberty.android.fantastischmemo.AMActivity;
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.downloader.google.GoogleDriveUploadHelper;
 import org.liberty.android.fantastischmemo.ui.FileBrowserFragment;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 
@@ -48,26 +49,24 @@ public class UploadDropboxScreen extends DropboxAccountActivity{
 
     private void showUploadDialog(final File file) {
         new AlertDialog.Builder(this)
-                .setTitle(R.string.upload_text)
-                .setMessage(String.format(getString(R.string.dropbox_upload_text), file.getName() ))
-                .setPositiveButton(R.string.ok_text,new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        UploadTask task = new UploadTask();
-                        task.execute(file);
-                    }
-                 }).setNegativeButton(R.string.cancel_text, null).show();
+            .setTitle(R.string.upload_text)
+            .setMessage(String.format(getString(R.string.dropbox_upload_text), file.getName() ))
+            .setPositiveButton(R.string.ok_text,new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+                    UploadTask task = new UploadTask();
+                    task.execute(file);
+                }
+             }).setNegativeButton(R.string.cancel_text, null).show();
     }
     
     
-    private void uploadToDropbox(File file) {
-            DropboxUploadHelper uploadHelper = new DropboxUploadHelper(this, authToken, authTokenSecret);
-            uploadHelper.upload(file.getName(), file.getAbsolutePath());
-            setResult(Activity.RESULT_OK, new Intent());
+    private void uploadToDropbox(File file) throws ClientProtocolException, IOException, JSONException {
+        DropboxUploadHelper uploadHelper = new DropboxUploadHelper(this, authToken, authTokenSecret);
+        uploadHelper.upload(file.getName(), file.getAbsolutePath());
     }
     
     private class UploadTask extends AsyncTask<File, Void, Exception> {
-
         private ProgressDialog progressDialog;
 
         @Override
@@ -83,11 +82,9 @@ public class UploadDropboxScreen extends DropboxAccountActivity{
 
         @Override
         public Exception doInBackground(File... files) {
-            File file = files[0];
             try {
-                uploadToDropbox(file);
+                uploadToDropbox(files[0]);
             } catch (Exception e) {
-                Log.e(TAG, "Error uploading ", e);
                 return e;
             }
             return null;
@@ -95,15 +92,16 @@ public class UploadDropboxScreen extends DropboxAccountActivity{
         
         @Override
         public void onPostExecute(Exception e){
-            if (e != null) {
-                AMGUIUtility.displayException(UploadDropboxScreen.this, getString(R.string.error_text), getString(R.string.error_text), e);
-            } else {
+            if (e == null) {
                 new AlertDialog.Builder(UploadDropboxScreen.this)
-                    .setTitle(R.string.successfully_uploaded_text)
-                    .setMessage(R.string.dropbox_successfully_uploaded_message)
-                    .setPositiveButton(R.string.ok_text, null)
-                    .show();
+                .setTitle(R.string.successfully_uploaded_text)
+                .setMessage(R.string.dropbox_successfully_uploaded_message)
+                .setPositiveButton(R.string.ok_text, null)
+                .show();
+            } else {
+                AMGUIUtility.displayException(UploadDropboxScreen.this, getString(R.string.error_text), getString(R.string.error_text), e);
             }
+            
             progressDialog.dismiss();
         }
     }

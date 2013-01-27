@@ -27,6 +27,7 @@ import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -46,7 +47,7 @@ public class DropboxDownloadHelper {
     private final String authTokenSecret;
     
     private static final String METADATA_ACCESS_URL = "https://api.dropbox.com/1/metadata/dropbox/anymemo?list=true";
-    private static final String DOWNLOAD_URL = "https://api-content.dropbox.com/1/files/dropbox/";
+    private static final String DOWNLOAD_URL = "https://api-content.dropbox.com/1/files/dropbox/anymemo/";
 
     public DropboxDownloadHelper(Context context, String authToken, String authTokenSecret) {
         this.authToken = authToken;
@@ -54,58 +55,54 @@ public class DropboxDownloadHelper {
     }
 
     // Fetch the list of db files
-    public List<DownloadItem> fetchDBFileList() {
-    	InputStream is = null;
-    	try {
-			HttpClient httpClient = new DefaultHttpClient();
-			HttpGet httpGet = new HttpGet(METADATA_ACCESS_URL);
-			httpGet.setHeader("Authorization", DropboxUtils.getFileExchangeAuthHeader(authToken, authTokenSecret));
-			HttpResponse response = null;
-			response = httpClient.execute(httpGet);
-			HttpEntity entity = response.getEntity();
-			is = entity.getContent();
-			JSONObject jsonResponse = new JSONObject(DropboxUtils.convertStreamToString(is));
-			JSONArray filesJSON = jsonResponse.getJSONArray("contents");
-			JSONObject entryJSON;
-			List<DownloadItem> dbFileList = new ArrayList<DownloadItem>(); 
-			for(int i = 0 ; i < filesJSON.length(); i++){
-				entryJSON = filesJSON.getJSONObject(i);
-				if(entryJSON.getString("path").endsWith(".db")){
-				    dbFileList.add(new DownloadItem(ItemType.Spreadsheet, entryJSON.getString("path"), entryJSON.getString("modified"),  ""));
-				}
-			}
-			return dbFileList;
-		} catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-			try {
-			    if(is != null){
-			        is.close();
-			    }
-            } catch (IOException e) {
-                e.printStackTrace();
+    public List<DownloadItem> fetchDBFileList() throws ClientProtocolException, IOException, JSONException {
+        List<DownloadItem> dbFileList = new ArrayList<DownloadItem>(); 
+
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpGet httpGet = new HttpGet(METADATA_ACCESS_URL);
+        httpGet.setHeader("Authorization", DropboxUtils.getFileExchangeAuthHeader(authToken, authTokenSecret));
+        HttpResponse response = httpClient.execute(httpGet);
+        int statusCode = response.getStatusLine().getStatusCode();
+        
+        if(statusCode == 200 ){
+            InputStream is = response.getEntity().getContent();
+            JSONObject jsonResponse = new JSONObject(DropboxUtils.convertStreamToString(is));
+            JSONArray fileList = jsonResponse.getJSONArray("contents");
+            JSONObject file;
+            File filePath;
+            for(int i = 0 ; i < fileList.length(); i++){
+                file = fileList.getJSONObject(i);
+                if(file.getString("path").endsWith(".db")){
+                    filePath = new File(file.getString("path"));
+                    dbFileList.add(new DownloadItem(ItemType.Spreadsheet, filePath.getName(), file.getString("modified"),  ""));
+                }
             }
-		}
-    	return null;
+            is.close();
+        } else {
+            throw new IOException("Error fetching file list. Get status code: " + statusCode);
+        }
+        
+        return dbFileList;
     }
     
 
-    public String downloadDBFromDropbox(DownloadItem di) throws Exception {
+    public String downloadDBFromDropbox(DownloadItem di) throws ClientProtocolException, IOException  {
+        String saveDBPath= AMEnv.DEFAULT_ROOT_PATH  + new File(di.getTitle()).getName();
         String url= DOWNLOAD_URL + di.getTitle();
         HttpClient httpClient = new DefaultHttpClient();
         HttpGet httpGet = new HttpGet(url);
         httpGet.setHeader("Authorization", DropboxUtils.getFileExchangeAuthHeader(authToken, authTokenSecret));
-        HttpResponse response = null;
-        response = httpClient.execute(httpGet);
-        HttpEntity entity = response.getEntity();
-        InputStream is = entity.getContent();
-        String saveDBPath= AMEnv.DEFAULT_ROOT_PATH  + new File(di.getTitle()).getName();
-        File f = new File(saveDBPath);
-        DropboxUtils.convertStreamToFile(is, f);
+        HttpResponse response = httpClient.execute(httpGet);
+        int statusCode = response.getStatusLine().getStatusCode();
+        
+        if(statusCode == 200 ){
+            InputStream is = response.getEntity().getContent();
+            DropboxUtils.convertStreamToFile(is, new File(saveDBPath));
+            is.close();
+        } else {
+            throw new IOException("Error Downloading file. Get status code: " + statusCode);
+        }
+         
         return saveDBPath;
     }
     

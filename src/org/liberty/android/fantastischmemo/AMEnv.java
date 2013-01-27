@@ -46,6 +46,6 @@ public class AMEnv {
     public final static String DROPBOX_CONSUMER_KEY = "q2rclqr44ux8pe7";
     public final static String DROPBOX_CONSUMER_SECRET = "bmgikjefor073dh";
     public final static String DROPBOX_OAUTH_VERSION = "1.0";
-
+    public final static String DROPBOX_OAUTH_SIGNATURE_METHOD="PLAINTEXT";
 
 }

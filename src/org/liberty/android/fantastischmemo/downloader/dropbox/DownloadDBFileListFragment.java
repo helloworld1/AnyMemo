@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.liberty.android.fantastischmemo.downloader.AbstractDownloaderFragment;
 import org.liberty.android.fantastischmemo.downloader.DownloadItem;
+import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 
 class DownloadDBFileListFragment extends AbstractDownloaderFragment {
     private DropboxDownloadHelper downloadHelper;
@@ -31,24 +32,30 @@ class DownloadDBFileListFragment extends AbstractDownloaderFragment {
         downloadHelper = new DropboxDownloadHelper(getActivity(), authToken, authTokenSecret);
     }
 
-	@Override
-	protected List<DownloadItem> initialRetrieve() throws Exception {
-	    return downloadHelper.fetchDBFileList();
-	}
+    @Override
+    protected List<DownloadItem> initialRetrieve() {
+        List<DownloadItem> listFiles = null;
+        try {
+            listFiles = downloadHelper.fetchDBFileList();
+        } catch (Exception e) {
+            AMGUIUtility.displayException(getActivity(), "Dropbox", "Fail to fetch", e);
+        }
+        return listFiles;
+    }
 
-	@Override
-	protected void openCategory(DownloadItem di) {
+    @Override
+    protected void openCategory(DownloadItem di) {
         // Do nothing
-	}
+    }
 
-	@Override
-	protected void goBack() {
+    @Override
+    protected void goBack() {
         // Do nothing
-	}
+    }
 
-	@Override
-	protected String fetchDatabase(DownloadItem di) throws Exception {
+    @Override
+    protected String fetchDatabase(DownloadItem di) throws Exception {
         return downloadHelper.downloadDBFromDropbox(di);
-	}
+    }
 
 }

@@ -1,11 +1,12 @@
 package org.liberty.android.fantastischmemo.downloader.dropbox;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -13,7 +14,6 @@ import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.downloader.dropbox.DropboxOAuthTokenRetrievalDialogFragment;
-
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -30,107 +30,124 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 public class DropboxAccountActivity extends AMActivity {
-	private SharedPreferences settings;
-	private SharedPreferences.Editor editor;
+    private SharedPreferences settings;
+    private SharedPreferences.Editor editor;
 
-	private String oatuhAccessToken;
-	private String oauthAccessTokenSecret;
-	private static final String ACCESS_TOKEN_URL = "https://api.dropbox.com/1/oauth/access_token";
+    private String oatuhAccessToken;
+    private String oauthAccessTokenSecret;
+    private static final String ACCESS_TOKEN_URL = "https://api.dropbox.com/1/oauth/access_token";
+    private static final int UPLOAD_ACTIVITY = 1;
 
-	public void onCreate(Bundle bundle) {
-		super.onCreate(bundle);
-		settings = PreferenceManager.getDefaultSharedPreferences(this);
-		editor = settings.edit();
+    public void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+        settings = PreferenceManager.getDefaultSharedPreferences(this);
+        editor = settings.edit();
 
-		oatuhAccessToken = settings.getString(AMPrefKeys.DROPBOX_AUTH_TOKEN, null);
-		oauthAccessTokenSecret = settings.getString(AMPrefKeys.DROPBOX_AUTH_TOKEN_SECRET, null);
+        oatuhAccessToken = settings.getString(AMPrefKeys.DROPBOX_AUTH_TOKEN, null);
+        oauthAccessTokenSecret = settings.getString(AMPrefKeys.DROPBOX_AUTH_TOKEN_SECRET, null);
 
-		 if (oatuhAccessToken == null || oauthAccessTokenSecret == null) {
-			 showGetTokenDialog();
-		 } else {
-		     onAuthenticated(oatuhAccessToken, oauthAccessTokenSecret);
-		 }
-		 
-		 setContentView(R.layout.spreadsheet_list_screen);
-	}
+         if (oatuhAccessToken == null || oauthAccessTokenSecret == null) {
+             showGetTokenDialog();
+         } else {
+             onAuthenticated(oatuhAccessToken, oauthAccessTokenSecret);
+         }
+         
+         setContentView(R.layout.spreadsheet_list_screen);
+    }
 
-	private void showGetTokenDialog() {
-		DropboxOAuthTokenRetrievalDialogFragment tokenFetchAuthDialog = new DropboxOAuthTokenRetrievalDialogFragment();
-		tokenFetchAuthDialog.setAuthCodeReceiveListener(authCodeReceiveListener);
-		tokenFetchAuthDialog.show(getSupportFragmentManager(), TAG);
-	}
+    private void showGetTokenDialog() {
+        DropboxOAuthTokenRetrievalDialogFragment tokenFetchAuthDialog = new DropboxOAuthTokenRetrievalDialogFragment();
+        tokenFetchAuthDialog.setAuthCodeReceiveListener(authCodeReceiveListener);
+        tokenFetchAuthDialog.show(getSupportFragmentManager(), TAG);
+    }
 
-	private DropboxOAuthTokenRetrievalDialogFragment.AuthCodeReceiveListener authCodeReceiveListener = new DropboxOAuthTokenRetrievalDialogFragment.AuthCodeReceiveListener() {
-		public void onAuthCodeReceived(String uid) {
-			GetAccessTokenTask task = new GetAccessTokenTask();
-			task.execute(uid);
-		}
+    private DropboxOAuthTokenRetrievalDialogFragment.AuthCodeReceiveListener authCodeReceiveListener = new DropboxOAuthTokenRetrievalDialogFragment.AuthCodeReceiveListener() {
+        public void onRequestTokenNSecretReceived(String[] requestTokenNSecret) {
+            GetAccessTokenTask task = new GetAccessTokenTask();
+            task.execute(requestTokenNSecret);
+        }
 
-		public void onAuthCodeError(String error) {
-			 showAuthErrorDialog(error);
-		}
+        public void onRequestTokenNSecretError(String error) {
+             showAuthErrorDialog(error);
+        }
 
-		public void onCancelled() {
-			finish();
-		}
-	};
+        public void onCancelled() {
+            finish();
+        }
+    };
 
-	private class GetAccessTokenTask extends AsyncTask<String, Void, Boolean> {
-		private ProgressDialog progressDialog;
+    private class GetAccessTokenTask extends AsyncTask<String, Void, Exception> {
+        private ProgressDialog progressDialog;
 
-		@Override
-		public void onPreExecute() {
-			super.onPreExecute();
-			progressDialog = new ProgressDialog(DropboxAccountActivity.this);
-			progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-			progressDialog.setTitle(getString(R.string.loading_please_wait));
-			progressDialog.setMessage(getString(R.string.loading_auth_text));
-			progressDialog.setCancelable(false);
-			progressDialog.show();
-		}
+        @Override
+        public void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(DropboxAccountActivity.this);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setTitle(getString(R.string.loading_please_wait));
+            progressDialog.setMessage(getString(R.string.loading_auth_text));
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
 
-		@Override
-		public Boolean doInBackground(String... accessCodes) {
-			BufferedReader reader = null;
-			try {
+        @Override
+        public Exception doInBackground(String... requestTokenNSecret) {
+            Exception exception = null;
+            
+            // requestTokenNSecret should be a two elements array containing token and secret 
+            if(requestTokenNSecret.length != 2){
+                Log.e(TAG, "Error fetching request token and secret");
+                exception = new IOException("Error fetching request token and secret");
+            } else {
+                BufferedReader reader = null;
+                HttpClient httpClient = new DefaultHttpClient();
+                HttpPost httpPost = new HttpPost(ACCESS_TOKEN_URL);
+                httpPost.setHeader("Authorization", DropboxUtils.buildOAuthAccessHeader(requestTokenNSecret[0], requestTokenNSecret[1]));
+                
+                try {
+                    HttpResponse response = httpClient.execute(httpPost);
+                    int statusCode = response.getStatusLine().getStatusCode();
+                    
+                    if(statusCode == 200){
+                        HttpEntity entity = response.getEntity();
+                        reader = new BufferedReader(new InputStreamReader(entity.getContent()));
+                        String[] parsedResult = reader.readLine().split("&");
+                        oauthAccessTokenSecret = parsedResult[0].split("=")[1];
+                        oatuhAccessToken = parsedResult[1].split("=")[1];
+                    } else {
+                        throw new IOException("Fetching access token request returns error code: " + statusCode);
+                    }
+                    
+                } catch (ClientProtocolException e) {
+                    exception = e;
+                } catch (IOException e) {
+                    exception = e;
+                } finally {
+                    if(reader != null){
+                        try {
+                            reader.close();
+                        } catch (IOException e) {}
+                    }
+                }
+            }
+            return exception;
+        }
 
-				HttpClient httpClient = new DefaultHttpClient();
-				HttpPost httpPost = new HttpPost(ACCESS_TOKEN_URL);
-				httpPost.setHeader("Authorization", DropboxUtils.buildOAuthAccessHeader());
-				
-				HttpResponse response = null;
-				response = httpClient.execute(httpPost);
-				HttpEntity entity = response.getEntity();
-				
-				InputStream instream = entity.getContent();
-				reader = new BufferedReader(new InputStreamReader(instream));
-				String result = reader.readLine();
-				String[] parsedResult = result.split("&");
-				oauthAccessTokenSecret = parsedResult[0].split("=")[1];
-				oatuhAccessToken = parsedResult[1].split("=")[1];
-
-				return true;
-			} catch (Exception e) {
-				Log.e(TAG, "Error redeeming access token", e);
-			}
-			return false;
-		}
-
-		@Override
-		public void onPostExecute(Boolean tokenObtained) {
-			progressDialog.dismiss();
-			if (tokenObtained) {
-			    editor.putString("dropbox_auth_token", oatuhAccessToken);
-			    editor.putString("dropbox_auth_token_secret", oauthAccessTokenSecret);
-			    editor.commit();
-		        onAuthenticated(oatuhAccessToken, oauthAccessTokenSecret);
-			} else {
-			    showAuthErrorDialog(getString(R.string.dropbox_token_failure_text));
-			}
-		}
-	}
-	
-	
+        @Override
+        public void onPostExecute(Exception e) {
+            progressDialog.dismiss();
+            if (e == null) {
+                editor.putString("dropbox_auth_token", oatuhAccessToken);
+                editor.putString("dropbox_auth_token_secret", oauthAccessTokenSecret);
+                editor.commit();
+                onAuthenticated(oatuhAccessToken, oauthAccessTokenSecret);
+            } else {
+                showAuthErrorDialog(getString(R.string.dropbox_token_failure_text));
+            }
+        }
+    }
+    
+    
     private void showAuthErrorDialog(String error) {
         String errorMessage = getString(R.string.auth_error_text);
         if (error != null) {
@@ -167,7 +184,7 @@ public class DropboxAccountActivity extends AMActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.upload:{
-                startActivity(new Intent(this, UploadDropboxScreen.class));
+                startActivityForResult(new Intent(this, UploadDropboxScreen.class), UPLOAD_ACTIVITY);
                 return true;
             }
             case R.id.logout:{
@@ -177,6 +194,20 @@ public class DropboxAccountActivity extends AMActivity {
             }
         }
         return false;
+    }
+    
+    
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch(requestCode){
+            case UPLOAD_ACTIVITY:
+            {
+                restartActivity();
+                break;
+            }
+        }
     }
     
     

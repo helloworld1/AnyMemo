@@ -19,21 +19,30 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.dropbox;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.mycommons.lang3.exception.ExceptionUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 
 import android.app.Activity;
-
+import android.app.AlertDialog;
 import android.content.DialogInterface;
-
 import android.graphics.Rect;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
-
 import android.support.v4.app.DialogFragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +59,12 @@ public class DropboxOAuthTokenRetrievalDialogFragment extends DialogFragment {
     private AuthCodeReceiveListener authCodeReceiveListener = null;
 
     private final static String TAG = "DropboxAuthFragment";
+    private static final String REQUEST_TOKEN_URL = "https://api.dropbox.com/1/oauth/request_token";
+    private static final String AUTHORIZE_TOKEN_URL = "https://www.dropbox.com/1/oauth/authorize";
+ 
+    private String oauthRequestTokenSecret = null;
+    private String oauthRequestToken = null;
+    private WebView webview;
 
     @Override
     public void onAttach(Activity activity) {
@@ -74,7 +89,7 @@ public class DropboxOAuthTokenRetrievalDialogFragment extends DialogFragment {
             Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final View v = inflater.inflate(R.layout.oauth_login_layout, container, false);
-        final WebView webview = (WebView)v.findViewById(R.id.login_page);
+        webview = (WebView)v.findViewById(R.id.login_page);
         final View loadingText = v.findViewById(R.id.auth_page_load_text);
         final View progressDialog = v.findViewById(R.id.auth_page_load_progress);
         final LinearLayout ll = (LinearLayout)v.findViewById(R.id.ll);
@@ -87,8 +102,6 @@ public class DropboxOAuthTokenRetrievalDialogFragment extends DialogFragment {
 
         ll.setMinimumWidth((int)(displayRectangle.width() * 0.9f));
         ll.setMinimumHeight((int)(displayRectangle.height() * 0.8f));
-
-        
         
         WebSettings webviewSettings = webview.getSettings();
         webviewSettings.setJavaScriptEnabled(true);
@@ -109,32 +122,56 @@ public class DropboxOAuthTokenRetrievalDialogFragment extends DialogFragment {
                 String code = getAuthCodeFromUrl(url);
                 String error = getErrorFromUrl(url);
                 if (error != null) {
-                    authCodeReceiveListener.onAuthCodeError(error);
+                    authCodeReceiveListener.onRequestTokenNSecretError(error);
                     authenticated = true;
                     dismiss();
                 }
                 if (code != null) {
                     authenticated = true;
-                    authCodeReceiveListener.onAuthCodeReceived(code);
+                    authCodeReceiveListener.onRequestTokenNSecretReceived(new String[]{oauthRequestToken, oauthRequestTokenSecret});
                     dismiss();
                 }
             }
         });
   	
         //load webview to show the authorize page
-        new RequestTokenTask().execute(webview);
+        new RequestTokenTask().execute();
         
         return v;
     }
 
     
-    private class RequestTokenTask extends AsyncTask<WebView, Void, Void> {
+    private class RequestTokenTask extends AsyncTask<Void, Void, Exception> {
         @Override
-		protected Void doInBackground(WebView... v) {
-	        DropboxUtils.retrieveOAuthRequestToken();
-	        v[0].loadUrl(DropboxUtils.getAuthorizationPageUrl());
-			return null;
+		protected Exception doInBackground(Void... params) {
+            try {
+                retrieveOAuthRequestToken();
+            } catch (IOException e) {
+                return e;
+            }
+            return null;
 		}
+
+        protected void onPostExecute(Exception e) {
+            if(e == null){
+                webview.loadUrl(AUTHORIZE_TOKEN_URL + "?oauth_token="+ oauthRequestToken+"&oauth_callback="+AMEnv.DROPBOX_REDIRECT_URI);
+            } else {
+               displayExceptionAndFinishActivity(mActivity, getString(R.string.error_text), getString(R.string.error_text), e);
+            }
+        }
+        
+        private void displayExceptionAndFinishActivity(final Activity activity, String title, String text, Exception e){
+            new AlertDialog.Builder(activity)
+                .setTitle(title)
+                .setMessage(text + "\n" + activity.getString(R.string.exception_text) +": " + ExceptionUtils.getRootCauseMessage(e) + "\n" + ExceptionUtils.getStackTrace(e))
+                .setNeutralButton(R.string.back_menu_text, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        activity.finish();
+                    }
+                })
+                .show();
+        }
     }
     
     public void setAuthCodeReceiveListener(AuthCodeReceiveListener listener) {
@@ -142,8 +179,8 @@ public class DropboxOAuthTokenRetrievalDialogFragment extends DialogFragment {
     }
 
     public static interface AuthCodeReceiveListener {
-        void onAuthCodeReceived(String code);
-        void onAuthCodeError(String error);
+        void onRequestTokenNSecretReceived(String[] requestTokenNSecret);
+        void onRequestTokenNSecretError(String error);
         void onCancelled();
     }
 
@@ -183,5 +220,28 @@ public class DropboxOAuthTokenRetrievalDialogFragment extends DialogFragment {
         return url.substring(index);
     }
 
+    
+    public void retrieveOAuthRequestToken() throws IOException{
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpPost httpPost = new HttpPost(REQUEST_TOKEN_URL);
+        httpPost.setHeader("Authorization", DropboxUtils.buildOAuthRequestHeader());
+        HttpResponse response = httpClient.execute(httpPost);
+        
+        if( response.getStatusLine().getStatusCode() == 200){
+            HttpEntity entity = response.getEntity();
+            InputStream instream = entity.getContent();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(instream));
+            String result = reader.readLine();
+            
+            if(result.length() != 0){
+                String[] parsedResult = result.split("&");
+                oauthRequestTokenSecret=parsedResult[0].split("=")[1];
+                oauthRequestToken=parsedResult[1].split("=")[1];
+            } 
+            reader.close();
+        } else {
+            throw new IOException("HTTP code for fetching Request token: " + response.getStatusLine().getStatusCode());
+        }
+    }
 
 }
