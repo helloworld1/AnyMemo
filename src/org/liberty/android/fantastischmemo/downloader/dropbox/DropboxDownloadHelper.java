@@ -38,6 +38,8 @@ import org.liberty.android.fantastischmemo.AMEnv;
 
 import org.liberty.android.fantastischmemo.downloader.DownloadItem;
 import org.liberty.android.fantastischmemo.downloader.DownloadItem.ItemType;
+import org.liberty.android.fantastischmemo.utils.AMUiUtil;
+import org.liberty.android.fantastischmemo.utils.AMUtil;
 
 
 import android.content.Context;
@@ -87,7 +89,13 @@ public class DropboxDownloadHelper {
     
 
     public String downloadDBFromDropbox(DownloadItem di) throws ClientProtocolException, IOException  {
-        String saveDBPath= AMEnv.DEFAULT_ROOT_PATH  + new File(di.getTitle()).getName();
+        String saveDBPath = AMEnv.DEFAULT_ROOT_PATH  + new File(di.getTitle()).getName();
+
+        // Back up and delete db if it exists.
+        if (new File(saveDBPath).exists()) {
+            AMUtil.deleteFileWithBackup(saveDBPath);
+        }
+
         String url= DOWNLOAD_URL + di.getTitle();
         HttpClient httpClient = new DefaultHttpClient();
         HttpGet httpGet = new HttpGet(url);

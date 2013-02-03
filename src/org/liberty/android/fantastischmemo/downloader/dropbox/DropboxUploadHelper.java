@@ -20,7 +20,7 @@ public class DropboxUploadHelper {
     private final String authToken;
     private final String authTokenSecret;
     
-    private static final String FILE_UPLOAD_URL="https://api-content.dropbox.com/1/files_put/dropbox/anymemo/";
+    private static final String FILE_UPLOAD_URL="https://api-content.dropbox.com/1/files_put/dropbox/AnyMemo/";
 
 
     public DropboxUploadHelper(Context context, String authToken, String authTokenSecret) {
@@ -28,6 +28,7 @@ public class DropboxUploadHelper {
         this.authTokenSecret = authTokenSecret;
     }
 
+    // Return true if upload succeeded. false if something goes wrong.
     public boolean upload(String fileName, String filePath) throws ClientProtocolException, IOException, JSONException{
         
         HttpClient httpclient = new DefaultHttpClient();
@@ -48,7 +49,7 @@ public class DropboxUploadHelper {
                 return true;
             }
         }
-        throw new IOException("Fail to upload file");
+        return false;
     };
     
 }

@@ -56,6 +56,7 @@ public class UploadDropboxScreen extends DropboxAccountActivity{
                 public void onClick(DialogInterface arg0, int arg1) {
                     UploadTask task = new UploadTask();
                     task.execute(file);
+                    setResult(Activity.RESULT_OK);
                 }
              }).setNegativeButton(R.string.cancel_text, null).show();
     }

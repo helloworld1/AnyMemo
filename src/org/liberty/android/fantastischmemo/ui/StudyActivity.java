@@ -235,9 +235,10 @@ public class StudyActivity extends QACardActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode ==Activity.RESULT_CANCELED){
+        if (resultCode == Activity.RESULT_CANCELED) {
             return;
         }
+
         switch(requestCode){
             case ACTIVITY_FILTER:
             {

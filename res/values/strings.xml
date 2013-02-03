@@ -307,7 +307,7 @@
     <string name="dropbox_upload_text">Upload to Dropbox</string>
     <string name="user_name_text">User name:</string>
     <string name="password_text">Password:</string>
-    <string name="download_source_dropbox">Dropbox.com\n(experimental)</string>
+    <string name="download_source_dropbox">Dropbox.com</string>
     <string name="dropbox_login_message">Please enter your dropbox user name (Mostly email address) and password.</string>
     <string name="import_supermemo_2008_xml_text">Import SuperMemo 2008 XML</string>
     <string name="uncategorized_text">Uncategorized</string>
@@ -438,10 +438,10 @@
     <string name="gestures_text">Gestures</string>
     <string name="enable_gestures_text">Enable gestures</string>
     <string name="select_category_text">Select category</string>
-    <string name="dropbox_successfully_uploaded_message">Successfully uploaded the file to your dropbox anymemo directory</string>
+    <string name="dropbox_successfully_uploaded_message">Successfully uploaded the file to your dropbox AnyMemo directory</string>
     <string name="upload_dropbox_message">Do you want to upload %s to your Dropbox\'s AnyMemo folder? It may take several minutes if you have more than 1000 cards.</string>
     <string name="dropbox_token_failure_text">Fail to fetch your access token. Please try again</string>
-    <string name="dropbox_file_fetch_failure_text">Fail to fetch your db files from dropbox anymemo folder. Please try again</string>
-    <string name="dropbox_file_fetch_success_text">Fetched all .db files from your dropbox anymemo folder. </string>
-    <string name="dropbox_no_file_to_fetch_text">The anymemo directory does not exist or there is no .db file from your dropbox anymemo folder. </string>
+    <string name="dropbox_file_fetch_failure_text">Error: Fail to list your db files from dropbox AnyMemo folder. Please try again</string>
+    <string name="dropbox_file_fetch_success_text">Successfully listed all .db files from AnyMemo folder in DropBox. </string>
+    <string name="dropbox_no_file_to_fetch_text">The AnyMemo directory does not exist or there is no .db file from your dropbox AnyMemo folder. </string>
 </resources>

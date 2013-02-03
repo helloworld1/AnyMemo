@@ -13,7 +13,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.downloader.dropbox.DropboxOAuthTokenRetrievalDialogFragment;
+
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -201,6 +202,10 @@ public class DropboxAccountActivity extends AMActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
 
+        if (resultCode == Activity.RESULT_CANCELED){
+            return;
+        }
+
         switch(requestCode){
             case UPLOAD_ACTIVITY:
             {
@@ -209,7 +214,6 @@ public class DropboxAccountActivity extends AMActivity {
             }
         }
     }
-    
     
     private void invalidateSavedToken() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
