@@ -21,6 +21,7 @@ package org.liberty.android.fantastischmemo.ui;
 
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.HashMap;
 
 import org.apache.mycommons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.R;
@@ -45,7 +46,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -832,7 +832,16 @@ public class StudyActivity extends QACardActivity {
     }
 
     private void showGesturesDialog() {
+        final HashMap<String, String> gestureNameDescriptionMap
+            = new HashMap<String, String>();
+        gestureNameDescriptionMap.put(GestureName.O_SHAPE.getName(), getString(R.string.look_up_text));
+        gestureNameDescriptionMap.put(GestureName.S_SHAPE.getName(), getString(R.string.paint_text));
+
+
         GestureSelectionDialogFragment df = new GestureSelectionDialogFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(GestureSelectionDialogFragment.EXTRA_GESTURE_NAME_DESCRIPTION_MAP, gestureNameDescriptionMap);
+        df.setArguments(args);
         df.show(getSupportFragmentManager(), "GestureSelectionDialog");
     }
 

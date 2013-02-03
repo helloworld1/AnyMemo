@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 
 import org.apache.mycommons.lang3.math.NumberUtils;
 import org.liberty.android.fantastischmemo.R;
@@ -872,7 +873,16 @@ public class PreviewEditActivity extends QACardActivity {
     }
 
     private void showGesturesDialog() {
+        final HashMap<String, String> gestureNameDescriptionMap
+            = new HashMap<String, String>();
+        gestureNameDescriptionMap.put(GestureName.LEFT_SWIPE.getName(), getString(R.string.add_screen_next));
+        gestureNameDescriptionMap.put(GestureName.RIGHT_SWIPE.getName(), getString(R.string.previous_text_short));
+
+
         GestureSelectionDialogFragment df = new GestureSelectionDialogFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(GestureSelectionDialogFragment.EXTRA_GESTURE_NAME_DESCRIPTION_MAP, gestureNameDescriptionMap);
+        df.setArguments(args);
         df.show(getSupportFragmentManager(), "GestureSelectionDialog");
     }
 
