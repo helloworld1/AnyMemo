@@ -24,6 +24,7 @@ import org.liberty.android.fantastischmemo.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.liberty.android.fantastischmemo.ui.DownloadTabFragment;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
@@ -48,6 +49,7 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.ListView;
 import android.widget.ImageView;
+import android.widget.Toast;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,12 +58,16 @@ import android.view.ViewGroup;
 public abstract class AbstractDownloaderFragment extends Fragment {
 
     private static final String TAG = "org.liberty.android.fantastischmemo.downloader.DownloaderBase";
+    private static final int TOAST_MSG_DURATION = 5000;
+    
 
     private Activity mActivity;
     
     private ListView listView;
 
     private DownloadListAdapter dlAdapter;
+    
+    
 
     /*
      * Retrieve the data when the user first open the
@@ -148,9 +154,15 @@ public abstract class AbstractDownloaderFragment extends Fragment {
         public void onPostExecute(Exception e){
             progressDialog.dismiss();
             if (e != null) {
-                // TODO: handle it nicely
+                Toast.makeText(getActivity(), R.string.dropbox_file_fetch_failure_text, TOAST_MSG_DURATION).show();
                 e.printStackTrace();
                 return;
+            }
+            
+            if(downloadItems.size() == 0){
+                Toast.makeText(getActivity(), R.string.dropbox_no_file_to_fetch_text, TOAST_MSG_DURATION).show();
+            } else {
+                Toast.makeText(getActivity(), R.string.dropbox_file_fetch_success_text, TOAST_MSG_DURATION).show();
             }
             dlAdapter.addList(downloadItems);
         }
