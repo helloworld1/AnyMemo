@@ -437,4 +437,5 @@
     <string name="dict_bluedict">BlueDict</string>
     <string name="gestures_text">Gestures</string>
     <string name="enable_gestures_text">Enable gestures</string>
+    <string name="select_category_text">Select category</string>
 </resources>

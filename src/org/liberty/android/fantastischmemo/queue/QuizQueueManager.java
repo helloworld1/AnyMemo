@@ -60,6 +60,8 @@ public class QuizQueueManager implements QueueManager {
 
     private final String TAG = getClass().getSimpleName();
 
+    private static final int MAX_QUEUE_SIZE = 500;
+
     private QuizQueueManager(Builder builder) {
         this.shuffle = builder.shuffle;
         this.scheduler = builder.scheduler;
@@ -137,7 +139,7 @@ public class QuizQueueManager implements QueueManager {
     }
 
     private synchronized void refill(Category category) {
-        newCache.addAll(cardDao.getCardsByCategory(category, false, 500));
+        newCache.addAll(cardDao.getCardsByCategory(category, true, MAX_QUEUE_SIZE));
     }
     
     public int getNewQueueSize() {
