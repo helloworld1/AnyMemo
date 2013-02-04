@@ -35,7 +35,8 @@ public class DropboxUploadHelper {
         HttpClient httpclient = new DefaultHttpClient();
         String headerValue = DropboxUtils.getFileExchangeAuthHeader(authToken, authTokenSecret);
         
-        String url = FILE_UPLOAD_URL + URLEncoder.encode(fileName, "utf-8"); 
+        // See related encoding change in DropboxDownloadHelper.
+        String url = FILE_UPLOAD_URL + URLEncoder.encode(fileName, "UTF-8").replace("+", "%20");
         HttpPost httppost = new HttpPost(url);
         httppost.addHeader("Authorization", headerValue);
         httppost.setEntity(new FileEntity(new File(filePath), "application/x-sqlite3"));

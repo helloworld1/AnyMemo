@@ -304,7 +304,7 @@
     <string name="dropbox_text">Dropbox.com</string>
     <string name="dropbox_login_text">Login using Dropbox account</string>
     <string name="dropbox_download_text">Download from Dropbox</string>
-    <string name="dropbox_upload_text">Upload to Dropbox</string>
+    <string name="dropbox_upload_text">Upload %s to Dropbox</string>
     <string name="user_name_text">User name:</string>
     <string name="password_text">Password:</string>
     <string name="download_source_dropbox">Dropbox.com</string>

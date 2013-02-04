@@ -26,7 +26,6 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -38,12 +37,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.liberty.android.fantastischmemo.AMEnv;
-
 import org.liberty.android.fantastischmemo.downloader.DownloadItem;
-import org.liberty.android.fantastischmemo.downloader.DownloadItem.ItemType;
-import org.liberty.android.fantastischmemo.utils.AMUiUtil;
 import org.liberty.android.fantastischmemo.utils.AMUtil;
-
+import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 import android.content.Context;
 public class DropboxDownloadHelper {
@@ -54,9 +50,12 @@ public class DropboxDownloadHelper {
     private static final String METADATA_ACCESS_URL = "https://api.dropbox.com/1/metadata/dropbox/anymemo?list=true";
     private static final String DOWNLOAD_URL = "https://api-content.dropbox.com/1/files/dropbox/anymemo/";
 
+    private final RecentListUtil recentListUtil;
+
     public DropboxDownloadHelper(Context context, String authToken, String authTokenSecret) {
         this.authToken = authToken;
         this.authTokenSecret = authTokenSecret;
+        this.recentListUtil = new RecentListUtil(context);
     }
 
     // Fetch the list of db files
@@ -79,7 +78,7 @@ public class DropboxDownloadHelper {
                 file = fileList.getJSONObject(i);
                 if(file.getString("path").endsWith(".db")){
                     filePath = new File(file.getString("path"));
-                    dbFileList.add(new DownloadItem(ItemType.Spreadsheet, filePath.getName(), file.getString("modified"),  ""));
+                    dbFileList.add(new DownloadItem(DownloadItem.ItemType.Database, filePath.getName(), file.getString("modified"),  ""));
                 }
             }
             is.close();
@@ -99,7 +98,12 @@ public class DropboxDownloadHelper {
             AMUtil.deleteFileWithBackup(saveDBPath);
         }
 
-        String url = DOWNLOAD_URL + URLEncoder.encode(di.getTitle(), "UTF-8");
+        // Make sure the space is translated correctly.
+        // application/x-www-form-urlencoded specified that 
+        // The space character " " is converted into a plus sign "+".
+        // However dropbox need %20.
+        String url = DOWNLOAD_URL + URLEncoder.encode(di.getTitle(), "UTF-8").replace("+", "%20");
+
         HttpClient httpClient = new DefaultHttpClient();
         HttpGet httpGet = new HttpGet(url);
         httpGet.setHeader("Authorization", DropboxUtils.getFileExchangeAuthHeader(authToken, authTokenSecret));
@@ -109,6 +113,7 @@ public class DropboxDownloadHelper {
         if (statusCode == 200) {
             InputStream is = response.getEntity().getContent();
             FileUtils.copyInputStreamToFile(is, new File(saveDBPath));
+            recentListUtil.addToRecentList(saveDBPath);
             is.close();
             return saveDBPath;
         } if (statusCode == 404) {

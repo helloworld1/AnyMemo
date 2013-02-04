@@ -201,6 +201,7 @@ public abstract class AbstractDownloaderFragment extends Fragment {
                 item = items[0];
                 fetchedDbPath = fetchDatabase(item);
             } catch (Exception e) {
+                Log.e(TAG, "Error fetch db lists", e);
                 return e;
             }
             return null;
@@ -291,8 +292,7 @@ public abstract class AbstractDownloaderFragment extends Fragment {
                     iv.setImageResource(R.drawable.back);
                 } else if (item.getType() == DownloadItem.ItemType.Spreadsheet) {
                     iv.setImageResource(R.drawable.spreadsheet);
-                }
-                else {
+                } else {
                     iv.setImageResource(R.drawable.database);
                 }
                 tv.setText(item.getTitle());

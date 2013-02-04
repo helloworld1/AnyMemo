@@ -201,7 +201,6 @@ public abstract class DropboxAccountActivity extends AMActivity {
         @Override
         // Return true if we want to invalidate the token
 		protected Boolean doInBackground(Void... params) {
-            progressDialog.dismiss();
             try {
                 return verifyToken(oauthAccessToken, oauthAccessTokenSecret);
             } catch (IOException e) {
@@ -214,8 +213,10 @@ public abstract class DropboxAccountActivity extends AMActivity {
 
         @Override
         protected void onPostExecute(Boolean result) {
+            progressDialog.dismiss();
             if (backgroundTaskException != null) {
                 AMGUIUtility.displayError(DropboxAccountActivity.this, getString(R.string.error_text), getString(R.string.exception_text), backgroundTaskException);
+                return;
             }
             if (result) {
                 onAuthenticated(oauthAccessToken, oauthAccessTokenSecret);
@@ -237,6 +238,7 @@ public abstract class DropboxAccountActivity extends AMActivity {
         int statusCode = response.getStatusLine().getStatusCode();
         
         if (statusCode == 200){
+            Log.i(TAG, "Token verified");
             return true;
         } else {
             Log.w(TAG, "Call " + ACCOUNT_INFO_URL + " Status code: " + statusCode);

@@ -27,10 +27,22 @@ import org.json.JSONException;
 import org.liberty.android.fantastischmemo.downloader.AbstractDownloaderFragment;
 import org.liberty.android.fantastischmemo.downloader.DownloadItem;
 
+import android.os.Bundle;
+
 class DownloadDBFileListFragment extends AbstractDownloaderFragment {
+
     private DropboxDownloadHelper downloadHelper;
 
-    public DownloadDBFileListFragment(String authToken, String authTokenSecret) {
+    public static final String EXTRA_AUTH_TOKEN = "authToken";
+
+    public static final String EXTRA_AUTH_TOKEN_SECRET = "autoTokenSecret";
+
+    public void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+        Bundle args = getArguments();
+        assert args != null : "The DownloadDBFileListFragment must have authToken and autoTokenSecret";
+        String authToken = args.getString(EXTRA_AUTH_TOKEN);
+        String authTokenSecret = args.getString(EXTRA_AUTH_TOKEN_SECRET);
         downloadHelper = new DropboxDownloadHelper(getActivity(), authToken, authTokenSecret);
     }
 

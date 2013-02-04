@@ -42,7 +42,11 @@ public class DropboxDBListActivity extends DropboxAccountActivity {
     @Override
     protected void onAuthenticated(final String authToken, final String authTokenSecret) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        Fragment newFragment = new DownloadDBFileListFragment(authToken, authTokenSecret);
+        Fragment newFragment = new DownloadDBFileListFragment();
+        Bundle args = new Bundle();
+        args.putString(DownloadDBFileListFragment.EXTRA_AUTH_TOKEN, authToken);
+        args.putString(DownloadDBFileListFragment.EXTRA_AUTH_TOKEN_SECRET, authTokenSecret);
+        newFragment.setArguments(args);
         ft.add(R.id.spreadsheet_list, newFragment);
         ft.commit();
     }
