@@ -22,6 +22,7 @@ package org.liberty.android.fantastischmemo.downloader.dropbox;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +32,8 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.mycommons.io.FileUtils;
+import org.apache.mycommons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -68,7 +71,7 @@ public class DropboxDownloadHelper {
         
         if(statusCode == 200 ){
             InputStream is = response.getEntity().getContent();
-            JSONObject jsonResponse = new JSONObject(DropboxUtils.convertStreamToString(is));
+            JSONObject jsonResponse = new JSONObject(IOUtils.toString(is));
             JSONArray fileList = jsonResponse.getJSONArray("contents");
             JSONObject file;
             File filePath;
@@ -96,22 +99,23 @@ public class DropboxDownloadHelper {
             AMUtil.deleteFileWithBackup(saveDBPath);
         }
 
-        String url= DOWNLOAD_URL + di.getTitle();
+        String url = DOWNLOAD_URL + URLEncoder.encode(di.getTitle(), "UTF-8");
         HttpClient httpClient = new DefaultHttpClient();
         HttpGet httpGet = new HttpGet(url);
         httpGet.setHeader("Authorization", DropboxUtils.getFileExchangeAuthHeader(authToken, authTokenSecret));
         HttpResponse response = httpClient.execute(httpGet);
         int statusCode = response.getStatusLine().getStatusCode();
         
-        if(statusCode == 200 ){
+        if (statusCode == 200) {
             InputStream is = response.getEntity().getContent();
-            DropboxUtils.convertStreamToFile(is, new File(saveDBPath));
+            FileUtils.copyInputStreamToFile(is, new File(saveDBPath));
             is.close();
+            return saveDBPath;
+        } if (statusCode == 404) {
+            throw new IOException("Could not found requested file. Get status code: " + statusCode);
         } else {
             throw new IOException("Error Downloading file. Get status code: " + statusCode);
         }
-         
-        return saveDBPath;
     }
     
    

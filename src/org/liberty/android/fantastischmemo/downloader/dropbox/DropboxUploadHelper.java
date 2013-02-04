@@ -11,6 +11,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.FileEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.mycommons.io.IOUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.content.Context;
@@ -42,8 +43,7 @@ public class DropboxUploadHelper {
         HttpEntity resEntity = response.getEntity();
         if(response.getStatusLine().getStatusCode() == 200 && resEntity != null){
             InputStream is = resEntity.getContent();
-            String resultString = DropboxUtils.convertStreamToString(is);
-            JSONObject jsonResponse = new JSONObject(resultString);
+            JSONObject jsonResponse = new JSONObject(IOUtils.toString(is));
             if(jsonResponse.getString("modified") != null){
                 is.close();
                 return true;

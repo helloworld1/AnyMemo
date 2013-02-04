@@ -66,7 +66,7 @@
             android:name=".downloader.DropboxUploader"
             android:configChanges="orientation|keyboardHidden" />
         <activity
-            android:name=".downloader.dropbox.DropboxAccountActivity"
+            android:name=".downloader.dropbox.DropboxDBListActivity"
             android:configChanges="orientation|keyboardHidden" />
         <activity
             android:name=".downloader.google.SpreadsheetListScreen"

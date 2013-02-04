@@ -27,65 +27,41 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 
+import org.apache.mycommons.io.FileUtils;
 import org.liberty.android.fantastischmemo.AMEnv;
 
 
-public class DropboxUtils{
-    private static final String TAG = "org.liberty.android.fantastischmemo.downloader.dropbox.DropboxUtils";
-    
-    public static String convertStreamToString(InputStream is) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder sb = new StringBuilder();
-
-        String line = null;
-        while ((line = reader.readLine()) != null) {
-            sb.append(line + "\n");
-        }
-        is.close();
-        
-        return sb.toString();
-    }
-    
-    public static void convertStreamToFile(InputStream is, File f) throws IOException {
-        OutputStream out = new FileOutputStream(f);
-        int read = 0;
-        byte[] bytes = new byte[1024];
-        while ((read = is.read(bytes)) != -1) {
-            out.write(bytes, 0, read);
-        }
-        out.flush();
-        is.close();
-        out.close();
-    }
+public class DropboxUtils {
+    private static final String TAG = "DropboxUtils";
     
     public static String buildOAuthAccessHeader(String oauthRequestToken, String oauthRequestTokenSecret){
         String headerValue = 
-                "OAuth oauth_version=\""+ AMEnv.DROPBOX_OAUTH_VERSION +"\", "
-                + "oauth_signature_method=\""+ AMEnv.DROPBOX_OAUTH_SIGNATURE_METHOD+"\", "
-                + "oauth_token=\"" + oauthRequestToken + "\", " 
-                + "oauth_consumer_key=\""+ AMEnv.DROPBOX_CONSUMER_KEY +"\", "
-                + "oauth_signature=\"" + AMEnv.DROPBOX_CONSUMER_SECRET+ "&" + oauthRequestTokenSecret + "\"";
-        
+            "OAuth oauth_version=\""+ AMEnv.DROPBOX_OAUTH_VERSION +"\", "
+            + "oauth_signature_method=\""+ AMEnv.DROPBOX_OAUTH_SIGNATURE_METHOD+"\", "
+            + "oauth_token=\"" + oauthRequestToken + "\", " 
+            + "oauth_consumer_key=\""+ AMEnv.DROPBOX_CONSUMER_KEY +"\", "
+            + "oauth_signature=\"" + AMEnv.DROPBOX_CONSUMER_SECRET+ "&" + oauthRequestTokenSecret + "\"";
+
         return headerValue;
     }
     
     public static String buildOAuthRequestHeader(){
         String requestHeader = 
-                "OAuth oauth_version=\""+AMEnv.DROPBOX_OAUTH_VERSION+"\", " +
-                "oauth_signature_method=\""+ AMEnv.DROPBOX_OAUTH_SIGNATURE_METHOD +"\", " +
-                "oauth_consumer_key=\""+ AMEnv.DROPBOX_CONSUMER_KEY +"\", "+
-                "oauth_signature=\""+ AMEnv.DROPBOX_CONSUMER_SECRET + "&\"";
+            "OAuth oauth_version=\""+AMEnv.DROPBOX_OAUTH_VERSION+"\", " +
+            "oauth_signature_method=\""+ AMEnv.DROPBOX_OAUTH_SIGNATURE_METHOD +"\", " +
+            "oauth_consumer_key=\""+ AMEnv.DROPBOX_CONSUMER_KEY +"\", "+
+            "oauth_signature=\""+ AMEnv.DROPBOX_CONSUMER_SECRET + "&\"";
         return requestHeader;
-        
+
     }
     
     public static String getFileExchangeAuthHeader(String authToken, String authTokenSecret){
         return "OAuth oauth_version=\""+ AMEnv.DROPBOX_OAUTH_VERSION +"\", "
-                + "oauth_signature_method=\""+ AMEnv.DROPBOX_OAUTH_SIGNATURE_METHOD +"\", "
-                + "oauth_consumer_key=\"" + AMEnv.DROPBOX_CONSUMER_KEY + "\", "
-                + "oauth_token=\"" + authToken + "\", "
-                + "oauth_signature=\"" + AMEnv.DROPBOX_CONSUMER_SECRET + "&"
-                + authTokenSecret + "\"";
+            + "oauth_signature_method=\""+ AMEnv.DROPBOX_OAUTH_SIGNATURE_METHOD +"\", "
+            + "oauth_consumer_key=\"" + AMEnv.DROPBOX_CONSUMER_KEY + "\", "
+            + "oauth_token=\"" + authToken + "\", "
+            + "oauth_signature=\"" + AMEnv.DROPBOX_CONSUMER_SECRET + "&"
+            + authTokenSecret + "\"";
     }
 
 }

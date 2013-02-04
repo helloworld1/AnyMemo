@@ -122,13 +122,13 @@ public class DropboxOAuthTokenRetrievalDialogFragment extends DialogFragment {
                 String code = getAuthCodeFromUrl(url);
                 String error = getErrorFromUrl(url);
                 if (error != null) {
-                    authCodeReceiveListener.onRequestTokenNSecretError(error);
+                    authCodeReceiveListener.onRequestTokenSecretError(error);
                     authenticated = true;
                     dismiss();
                 }
                 if (code != null) {
                     authenticated = true;
-                    authCodeReceiveListener.onRequestTokenNSecretReceived(new String[]{oauthRequestToken, oauthRequestTokenSecret});
+                    authCodeReceiveListener.onRequestTokenSecretReceived(new String[]{oauthRequestToken, oauthRequestTokenSecret});
                     dismiss();
                 }
             }
@@ -179,8 +179,8 @@ public class DropboxOAuthTokenRetrievalDialogFragment extends DialogFragment {
     }
 
     public static interface AuthCodeReceiveListener {
-        void onRequestTokenNSecretReceived(String[] requestTokenNSecret);
-        void onRequestTokenNSecretError(String error);
+        void onRequestTokenSecretReceived(String[] requestTokenSecret);
+        void onRequestTokenSecretError(String error);
         void onCancelled();
     }
 
