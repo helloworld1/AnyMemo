@@ -102,6 +102,7 @@ class GoogleOAuth2AccessCodeRetrievalFragment extends DialogFragment {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
         // This is workaround to show input on some android version.
         webview.requestFocus(View.FOCUS_DOWN);
         webview.setOnTouchListener(new View.OnTouchListener() {

@@ -33,7 +33,6 @@ import org.apache.mycommons.lang3.exception.ExceptionUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -42,16 +41,14 @@ import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-
 import android.widget.LinearLayout;
 
 public class DropboxOAuthTokenRetrievalDialogFragment extends DialogFragment {
@@ -131,6 +128,22 @@ public class DropboxOAuthTokenRetrievalDialogFragment extends DialogFragment {
                     authCodeReceiveListener.onRequestTokenSecretReceived(new String[]{oauthRequestToken, oauthRequestTokenSecret});
                     dismiss();
                 }
+            }
+        });
+
+        // This is workaround to show input on some android version.
+        webview.requestFocus(View.FOCUS_DOWN);
+        webview.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                    case MotionEvent.ACTION_UP:
+                        if (!v.hasFocus()) {
+                            v.requestFocus();
+                        }
+                        break;
+                }
+                return false;
             }
         });
   	
