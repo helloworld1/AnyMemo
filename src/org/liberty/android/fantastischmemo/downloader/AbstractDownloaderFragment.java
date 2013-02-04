@@ -19,41 +19,34 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader;
 
-import org.liberty.android.fantastischmemo.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import org.liberty.android.fantastischmemo.ui.DownloadTabFragment;
+import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-
+import android.content.Context;
 import android.content.DialogInterface;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.content.Context;
-
 import android.support.v4.app.Fragment;
-
 import android.text.Html;
-
 import android.text.method.LinkMovementMethod;
-import android.widget.ArrayAdapter;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView;
-import android.widget.TextView;
-import android.widget.ListView;
-import android.widget.ImageView;
-import android.widget.Toast;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 
 public abstract class AbstractDownloaderFragment extends Fragment {
 
@@ -154,16 +147,10 @@ public abstract class AbstractDownloaderFragment extends Fragment {
         public void onPostExecute(Exception e){
             progressDialog.dismiss();
             if (e != null) {
-                Toast.makeText(getActivity(), R.string.dropbox_file_fetch_failure_text, TOAST_MSG_DURATION).show();
-                e.printStackTrace();
+                AMGUIUtility.displayError(mActivity, getString(R.string.downloader_connection_error), getString(R.string.downloader_connection_error_message), e);
                 return;
             }
             
-            if(downloadItems.size() == 0){
-                Toast.makeText(getActivity(), R.string.dropbox_no_file_to_fetch_text, TOAST_MSG_DURATION).show();
-            } else {
-                Toast.makeText(getActivity(), R.string.dropbox_file_fetch_success_text, TOAST_MSG_DURATION).show();
-            }
             dlAdapter.addList(downloadItems);
         }
 

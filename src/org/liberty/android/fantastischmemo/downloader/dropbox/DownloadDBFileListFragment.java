@@ -19,11 +19,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.dropbox;
 
+import java.io.IOException;
 import java.util.List;
 
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
 import org.liberty.android.fantastischmemo.downloader.AbstractDownloaderFragment;
 import org.liberty.android.fantastischmemo.downloader.DownloadItem;
-import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 
 class DownloadDBFileListFragment extends AbstractDownloaderFragment {
     private DropboxDownloadHelper downloadHelper;
@@ -33,14 +35,9 @@ class DownloadDBFileListFragment extends AbstractDownloaderFragment {
     }
 
     @Override
-    protected List<DownloadItem> initialRetrieve() {
-        List<DownloadItem> listFiles = null;
-        try {
-            listFiles = downloadHelper.fetchDBFileList();
-        } catch (Exception e) {
-            AMGUIUtility.displayException(getActivity(), "Dropbox", "Fail to fetch", e);
-        }
-        return listFiles;
+    protected List<DownloadItem> initialRetrieve() throws ClientProtocolException,
+              IOException, JSONException {
+        return downloadHelper.fetchDBFileList();
     }
 
     @Override

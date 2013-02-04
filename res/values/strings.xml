@@ -2,7 +2,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     <string name="app_name">AnyMemo</string>
     <string name="app_full_name">AnyMemo Free</string>
-    <string name="app_version">9.999.2</string>
+    <string name="app_version">9.999.3</string>
     <string name="ok_text">OK</string>
     <string name="cancel_text">Cancel</string>
     <string name="yes_text">Yes</string>
@@ -440,8 +440,5 @@
     <string name="select_category_text">Select category</string>
     <string name="dropbox_successfully_uploaded_message">Successfully uploaded the file to your dropbox AnyMemo directory</string>
     <string name="upload_dropbox_message">Do you want to upload %s to your Dropbox\'s AnyMemo folder? It may take several minutes if you have more than 1000 cards.</string>
-    <string name="dropbox_token_failure_text">Fail to fetch your access token. Please try again</string>
-    <string name="dropbox_file_fetch_failure_text">Error: Fail to list your db files from dropbox AnyMemo folder. Please try again</string>
-    <string name="dropbox_file_fetch_success_text">Successfully listed all .db files from AnyMemo folder in DropBox. </string>
-    <string name="dropbox_no_file_to_fetch_text">The AnyMemo directory does not exist or there is no .db file from your dropbox AnyMemo folder. </string>
+    <string name="dropbox_token_failure_text">Fail to fetch your access token. Please try again.</string>
 </resources>
