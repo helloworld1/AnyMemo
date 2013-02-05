@@ -68,9 +68,9 @@ public abstract class DropboxAccountActivity extends AMActivity {
     }
 
     private DropboxOAuthTokenRetrievalDialogFragment.AuthCodeReceiveListener authCodeReceiveListener = new DropboxOAuthTokenRetrievalDialogFragment.AuthCodeReceiveListener() {
-        public void onRequestTokenSecretReceived(String[] requestTokenSecret) {
+        public void onRequestTokenSecretReceived(String requestToken, String requestTokenSecret) {
             GetAccessTokenTask task = new GetAccessTokenTask();
-            task.execute(requestTokenSecret);
+            task.execute(requestToken, requestTokenSecret);
         }
 
         public void onRequestTokenSecretError(String error) {

@@ -125,7 +125,7 @@ public class DropboxOAuthTokenRetrievalDialogFragment extends DialogFragment {
                 }
                 if (code != null) {
                     authenticated = true;
-                    authCodeReceiveListener.onRequestTokenSecretReceived(new String[]{oauthRequestToken, oauthRequestTokenSecret});
+                    authCodeReceiveListener.onRequestTokenSecretReceived(oauthRequestToken, oauthRequestTokenSecret);
                     dismiss();
                 }
             }
@@ -192,7 +192,7 @@ public class DropboxOAuthTokenRetrievalDialogFragment extends DialogFragment {
     }
 
     public static interface AuthCodeReceiveListener {
-        void onRequestTokenSecretReceived(String[] requestTokenSecret);
+        void onRequestTokenSecretReceived(String requestToken, String requestTokenSecret);
         void onRequestTokenSecretError(String error);
         void onCancelled();
     }
