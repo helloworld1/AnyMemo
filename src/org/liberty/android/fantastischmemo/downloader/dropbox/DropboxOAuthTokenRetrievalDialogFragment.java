@@ -33,6 +33,7 @@ import org.apache.mycommons.lang3.exception.ExceptionUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -56,12 +57,21 @@ public class DropboxOAuthTokenRetrievalDialogFragment extends DialogFragment {
     private AuthCodeReceiveListener authCodeReceiveListener = null;
 
     private final static String TAG = "DropboxAuthFragment";
+
     private static final String REQUEST_TOKEN_URL = "https://api.dropbox.com/1/oauth/request_token";
     private static final String AUTHORIZE_TOKEN_URL = "https://www.dropbox.com/1/oauth/authorize";
  
     private String oauthRequestTokenSecret = null;
     private String oauthRequestToken = null;
+
     private WebView webview;
+
+    private View loadingText;
+
+    private View progressDialog;
+
+    private LinearLayout rootView;
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -86,10 +96,14 @@ public class DropboxOAuthTokenRetrievalDialogFragment extends DialogFragment {
             Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final View v = inflater.inflate(R.layout.oauth_login_layout, container, false);
+
         webview = (WebView)v.findViewById(R.id.login_page);
-        final View loadingText = v.findViewById(R.id.auth_page_load_text);
-        final View progressDialog = v.findViewById(R.id.auth_page_load_progress);
-        final LinearLayout ll = (LinearLayout)v.findViewById(R.id.ll);
+
+        loadingText = v.findViewById(R.id.auth_page_load_text);
+
+        progressDialog = v.findViewById(R.id.auth_page_load_progress);
+
+        rootView = (LinearLayout)v.findViewById(R.id.ll);
         
         // We have to set up the dialog's webview size manually or the webview will be zero size.
         // This should be a bug of Android.
@@ -97,61 +111,16 @@ public class DropboxOAuthTokenRetrievalDialogFragment extends DialogFragment {
         Window window = mActivity.getWindow();
         window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
-        ll.setMinimumWidth((int)(displayRectangle.width() * 0.9f));
-        ll.setMinimumHeight((int)(displayRectangle.height() * 0.8f));
+        rootView.setMinimumWidth((int)(displayRectangle.width() * 0.9f));
+        rootView.setMinimumHeight((int)(displayRectangle.height() * 0.8f));
         
-        WebSettings webviewSettings = webview.getSettings();
-        webviewSettings.setJavaScriptEnabled(true);
-
-        // This is workaround to show input on some android version.
-        webview.requestFocus(View.FOCUS_DOWN);
-        webview.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                    case MotionEvent.ACTION_UP:
-                        if (!v.hasFocus()) {
-                            v.requestFocus();
-                        }
-                        break;
-                }
-                return false;
-            }
-        });
-        
-        webview.setWebViewClient(new WebViewClient() {
-            private boolean authenticated = false;
-            @Override
-            public void onPageFinished(WebView view, String url)  {
-                loadingText.setVisibility(View.GONE);
-                progressDialog.setVisibility(View.GONE);
-                webview.setVisibility(View.VISIBLE);
-
-                if (authenticated == true) {
-                    return;
-                }
-                String code = getAuthCodeFromUrl(url);
-                String error = getErrorFromUrl(url);
-                if (error != null) {
-                    authCodeReceiveListener.onRequestTokenSecretError(error);
-                    authenticated = true;
-                    dismiss();
-                }
-                if (code != null) {
-                    authenticated = true;
-                    authCodeReceiveListener.onRequestTokenSecretReceived(oauthRequestToken, oauthRequestTokenSecret);
-                    dismiss();
-                }
-            }
-        });
-
-  	
         //load webview to show the authorize page
-        webview.loadUrl(AUTHORIZE_TOKEN_URL + "?oauth_token=" + oauthRequestToken + "&oauth_callback=" + AMEnv.DROPBOX_REDIRECT_URI);
+        new RequestTokenTask().execute();
         
         return v;
     }
-    
+
+        
     public void setAuthCodeReceiveListener(AuthCodeReceiveListener listener) {
         authCodeReceiveListener = listener;
     }
@@ -199,7 +168,7 @@ public class DropboxOAuthTokenRetrievalDialogFragment extends DialogFragment {
     }
 
     
-    public void retrieveOAuthRequestToken() throws IOException{
+    private void retrieveOAuthRequestToken() throws IOException{
         HttpClient httpClient = new DefaultHttpClient();
         HttpPost httpPost = new HttpPost(REQUEST_TOKEN_URL);
         httpPost.setHeader("Authorization", DropboxUtils.buildOAuthRequestHeader());
@@ -219,6 +188,75 @@ public class DropboxOAuthTokenRetrievalDialogFragment extends DialogFragment {
             reader.close();
         } else {
             throw new IOException("HTTP code for fetching Request token: " + response.getStatusLine().getStatusCode());
+        }
+    }
+
+    
+    private class RequestTokenTask extends AsyncTask<Void, Void, Exception> {
+
+        protected void onPreExecute() {
+            WebSettings webviewSettings = webview.getSettings();
+            webviewSettings.setJavaScriptEnabled(true);
+            
+            webview.setWebViewClient(new WebViewClient() {
+                private boolean authenticated = false;
+                @Override
+                public void onPageFinished(WebView view, String url)  {
+                    loadingText.setVisibility(View.GONE);
+                    progressDialog.setVisibility(View.GONE);
+                    webview.setVisibility(View.VISIBLE);
+                    if (authenticated == true) {
+                        return;
+                    }
+                    String code = getAuthCodeFromUrl(url);
+                    String error = getErrorFromUrl(url);
+                    if (error != null) {
+                        authCodeReceiveListener.onRequestTokenSecretError(error);
+                        authenticated = true;
+                        dismiss();
+                        cancel(true);
+                    }
+                    if (code != null) {
+                        authenticated = true;
+                        authCodeReceiveListener.onRequestTokenSecretReceived(oauthRequestToken, oauthRequestTokenSecret);
+                        dismiss();
+                        cancel(true);
+                    }
+                }
+            });
+
+        }
+        @Override
+		protected Exception doInBackground(Void... params) {
+            try {
+                retrieveOAuthRequestToken();
+            } catch (IOException e) {
+                return e;
+            }
+            return null;
+		}
+
+        protected void onPostExecute(Exception e) {
+            if(e == null){
+                // This is workaround to show input on some android version.
+                webview.requestFocus(View.FOCUS_DOWN);
+                webview.setOnTouchListener(new View.OnTouchListener() {
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+                            case MotionEvent.ACTION_UP:
+                                if (!v.hasFocus()) {
+                                    v.requestFocus();
+                                }
+                                break;
+                        }
+                        return false;
+                    }
+                });
+                webview.loadUrl(AUTHORIZE_TOKEN_URL + "?oauth_token="+ oauthRequestToken+"&oauth_callback="+AMEnv.DROPBOX_REDIRECT_URI);
+            } else {
+                AMGUIUtility.displayError(mActivity, getString(R.string.error_text), getString(R.string.error_text), e);
+            }
         }
     }
 
