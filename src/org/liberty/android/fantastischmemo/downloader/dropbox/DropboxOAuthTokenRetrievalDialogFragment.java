@@ -194,6 +194,7 @@ public class DropboxOAuthTokenRetrievalDialogFragment extends DialogFragment {
     
     private class RequestTokenTask extends AsyncTask<Void, Void, Exception> {
 
+        @Override
         protected void onPreExecute() {
             WebSettings webviewSettings = webview.getSettings();
             webviewSettings.setJavaScriptEnabled(true);
@@ -202,9 +203,10 @@ public class DropboxOAuthTokenRetrievalDialogFragment extends DialogFragment {
                 private boolean authenticated = false;
                 @Override
                 public void onPageFinished(WebView view, String url)  {
-                    loadingText.setVisibility(View.GONE);
-                    progressDialog.setVisibility(View.GONE);
+                    // Disable the progress and show the loaded webpage.
                     webview.setVisibility(View.VISIBLE);
+                    progressDialog.setVisibility(View.GONE);
+                    loadingText.setVisibility(View.GONE);
                     if (authenticated == true) {
                         return;
                     }
@@ -225,6 +227,21 @@ public class DropboxOAuthTokenRetrievalDialogFragment extends DialogFragment {
                 }
             });
 
+            // This is workaround to show input on some android version.
+            webview.setOnTouchListener(new View.OnTouchListener() {
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                        case MotionEvent.ACTION_UP:
+                            if (!v.hasFocus()) {
+                                v.requestFocus();
+                            }
+                            break;
+                    }
+                    return false;
+                }
+            });
+            webview.requestFocus(View.FOCUS_DOWN);
         }
         @Override
 		protected Exception doInBackground(Void... params) {
@@ -237,22 +254,7 @@ public class DropboxOAuthTokenRetrievalDialogFragment extends DialogFragment {
 		}
 
         protected void onPostExecute(Exception e) {
-            if(e == null){
-                // This is workaround to show input on some android version.
-                webview.requestFocus(View.FOCUS_DOWN);
-                webview.setOnTouchListener(new View.OnTouchListener() {
-                    public boolean onTouch(View v, MotionEvent event) {
-                        switch (event.getAction()) {
-                            case MotionEvent.ACTION_DOWN:
-                            case MotionEvent.ACTION_UP:
-                                if (!v.hasFocus()) {
-                                    v.requestFocus();
-                                }
-                                break;
-                        }
-                        return false;
-                    }
-                });
+            if (e == null){
                 webview.loadUrl(AUTHORIZE_TOKEN_URL + "?oauth_token="+ oauthRequestToken+"&oauth_callback="+AMEnv.DROPBOX_REDIRECT_URI);
             } else {
                 AMGUIUtility.displayError(mActivity, getString(R.string.error_text), getString(R.string.error_text), e);
