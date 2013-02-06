@@ -52,7 +52,6 @@ public abstract class AbstractDownloaderFragment extends Fragment {
 
     private static final String TAG = "org.liberty.android.fantastischmemo.downloader.DownloaderBase";
     private static final int TOAST_MSG_DURATION = 5000;
-    
 
     private Activity mActivity;
     
@@ -60,8 +59,6 @@ public abstract class AbstractDownloaderFragment extends Fragment {
 
     private DownloadListAdapter dlAdapter;
     
-    
-
     /*
      * Retrieve the data when the user first open the
      * Downloader

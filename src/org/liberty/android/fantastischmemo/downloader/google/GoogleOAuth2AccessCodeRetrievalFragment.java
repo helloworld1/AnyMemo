@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.google;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import org.liberty.android.fantastischmemo.AMActivity;
@@ -26,26 +27,17 @@ import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.R;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-
 import android.content.DialogInterface;
-
 import android.graphics.Rect;
-
 import android.os.Bundle;
-
 import android.support.v4.app.DialogFragment;
-
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-
 import android.widget.LinearLayout;
 
 class GoogleOAuth2AccessCodeRetrievalFragment extends DialogFragment {
@@ -92,6 +84,7 @@ class GoogleOAuth2AccessCodeRetrievalFragment extends DialogFragment {
         ll.setMinimumHeight((int)(displayRectangle.height() * 0.8f));
 
         webview.getSettings().setJavaScriptEnabled(true);
+
         try {
             String uri = String.format("https://accounts.google.com/o/oauth2/auth?client_id=%s&response_type=%s&redirect_uri=%s&scope=%s",
                     URLEncoder.encode(AMEnv.GOOGLE_CLIENT_ID, "UTF-8"),
@@ -99,7 +92,7 @@ class GoogleOAuth2AccessCodeRetrievalFragment extends DialogFragment {
                     URLEncoder.encode(AMEnv.GOOGLE_REDIRECT_URI, "UTF-8"),
                     URLEncoder.encode(AMEnv.GDRIVE_SCOPE, "UTF-8"));
             webview.loadUrl(uri);
-        } catch (Exception e) {
+        } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
 

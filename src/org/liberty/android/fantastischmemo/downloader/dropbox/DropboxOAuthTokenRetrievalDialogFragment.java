@@ -102,9 +102,22 @@ public class DropboxOAuthTokenRetrievalDialogFragment extends DialogFragment {
         
         WebSettings webviewSettings = webview.getSettings();
         webviewSettings.setJavaScriptEnabled(true);
-        webviewSettings.setLoadWithOverviewMode(true);
-        webviewSettings.setUseWideViewPort(true);
-        webviewSettings.setBuiltInZoomControls(true);
+
+        // This is workaround to show input on some android version.
+        webview.requestFocus(View.FOCUS_DOWN);
+        webview.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                    case MotionEvent.ACTION_UP:
+                        if (!v.hasFocus()) {
+                            v.requestFocus();
+                        }
+                        break;
+                }
+                return false;
+            }
+        });
         
         webview.setWebViewClient(new WebViewClient() {
             private boolean authenticated = false;
@@ -113,6 +126,7 @@ public class DropboxOAuthTokenRetrievalDialogFragment extends DialogFragment {
                 loadingText.setVisibility(View.GONE);
                 progressDialog.setVisibility(View.GONE);
                 webview.setVisibility(View.VISIBLE);
+
                 if (authenticated == true) {
                     return;
                 }
@@ -131,60 +145,11 @@ public class DropboxOAuthTokenRetrievalDialogFragment extends DialogFragment {
             }
         });
 
-        // This is workaround to show input on some android version.
-        webview.requestFocus(View.FOCUS_DOWN);
-        webview.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                    case MotionEvent.ACTION_UP:
-                        if (!v.hasFocus()) {
-                            v.requestFocus();
-                        }
-                        break;
-                }
-                return false;
-            }
-        });
   	
         //load webview to show the authorize page
-        new RequestTokenTask().execute();
+        webview.loadUrl(AUTHORIZE_TOKEN_URL + "?oauth_token=" + oauthRequestToken + "&oauth_callback=" + AMEnv.DROPBOX_REDIRECT_URI);
         
         return v;
-    }
-
-    
-    private class RequestTokenTask extends AsyncTask<Void, Void, Exception> {
-        @Override
-		protected Exception doInBackground(Void... params) {
-            try {
-                retrieveOAuthRequestToken();
-            } catch (IOException e) {
-                return e;
-            }
-            return null;
-		}
-
-        protected void onPostExecute(Exception e) {
-            if(e == null){
-                webview.loadUrl(AUTHORIZE_TOKEN_URL + "?oauth_token="+ oauthRequestToken+"&oauth_callback="+AMEnv.DROPBOX_REDIRECT_URI);
-            } else {
-               displayExceptionAndFinishActivity(mActivity, getString(R.string.error_text), getString(R.string.error_text), e);
-            }
-        }
-        
-        private void displayExceptionAndFinishActivity(final Activity activity, String title, String text, Exception e){
-            new AlertDialog.Builder(activity)
-                .setTitle(title)
-                .setMessage(text + "\n" + activity.getString(R.string.exception_text) +": " + ExceptionUtils.getRootCauseMessage(e) + "\n" + ExceptionUtils.getStackTrace(e))
-                .setNeutralButton(R.string.back_menu_text, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        activity.finish();
-                    }
-                })
-                .show();
-        }
     }
     
     public void setAuthCodeReceiveListener(AuthCodeReceiveListener listener) {
