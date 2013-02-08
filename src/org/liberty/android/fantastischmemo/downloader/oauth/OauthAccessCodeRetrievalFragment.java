@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2012 Haowen Ning
+Copyright (C) 2013 Haowen Ning
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -17,13 +17,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-package org.liberty.android.fantastischmemo.downloader.google;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+package org.liberty.android.fantastischmemo.downloader.oauth;
 
 import org.liberty.android.fantastischmemo.AMActivity;
-import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.R;
 
 import android.app.Activity;
@@ -40,12 +36,20 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 
-class GoogleOAuth2AccessCodeRetrievalFragment extends DialogFragment {
+public abstract class OauthAccessCodeRetrievalFragment extends DialogFragment {
     private Activity mActivity;
     private AuthCodeReceiveListener authCodeReceiveListener = null;
 
-    private final static String TAG = "GoogleAuthFragment";
+    private final static String TAG = "OauthAccessCodeRetrievalFragment";
 
+    // Return the URL to request token
+    protected abstract String getTokenRequesetUrl();
+
+    protected abstract String[] getAuthCodeFromUrl(String url);
+
+    protected abstract String getErrorFromUrl(String url);
+
+    
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -57,6 +61,7 @@ class GoogleOAuth2AccessCodeRetrievalFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         setStyle(STYLE_NO_TITLE, 0);
     }
+
 
     @Override
     public void onCancel(DialogInterface dialog) {
@@ -84,16 +89,7 @@ class GoogleOAuth2AccessCodeRetrievalFragment extends DialogFragment {
 
         webview.getSettings().setJavaScriptEnabled(true);
 
-        try {
-            String uri = String.format("https://accounts.google.com/o/oauth2/auth?client_id=%s&response_type=%s&redirect_uri=%s&scope=%s",
-                    URLEncoder.encode(AMEnv.GOOGLE_CLIENT_ID, "UTF-8"),
-                    URLEncoder.encode("code", "UTF-8"),
-                    URLEncoder.encode(AMEnv.GOOGLE_REDIRECT_URI, "UTF-8"),
-                    URLEncoder.encode(AMEnv.GDRIVE_SCOPE, "UTF-8"));
-            webview.loadUrl(uri);
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
+        webview.loadUrl(getTokenRequesetUrl());
 
         // This is workaround to show input on some android version.
         webview.requestFocus(View.FOCUS_DOWN);
@@ -111,6 +107,7 @@ class GoogleOAuth2AccessCodeRetrievalFragment extends DialogFragment {
             }
         });
 
+
         webview.setWebViewClient(new WebViewClient() {
             private boolean authenticated = false;
             @Override
@@ -121,16 +118,16 @@ class GoogleOAuth2AccessCodeRetrievalFragment extends DialogFragment {
                 if (authenticated == true) {
                     return;
                 }
-                String code = getAuthCodeFromUrl(url);
+                String[] codes = getAuthCodeFromUrl(url);
                 String error = getErrorFromUrl(url);
                 if (error != null) {
                     authCodeReceiveListener.onAuthCodeError(error);
                     authenticated = true;
                     dismiss();
                 }
-                if (code != null) {
+                if (codes != null) {
                     authenticated = true;
-                    authCodeReceiveListener.onAuthCodeReceived(code);
+                    authCodeReceiveListener.onAuthCodeReceived(codes);
                     dismiss();
                 }
             }
@@ -143,36 +140,12 @@ class GoogleOAuth2AccessCodeRetrievalFragment extends DialogFragment {
     }
 
     public static interface AuthCodeReceiveListener {
-        void onAuthCodeReceived(String code);
+        // the auth code received are different for oauth1 an oauth2
+        // so this mehtod just has a list of possible codes
+        void onAuthCodeReceived(String... codes);
+
         void onAuthCodeError(String error);
+
         void onCancelled();
     }
-
-    private String getAuthCodeFromUrl(String url) {
-        if (!url.startsWith(AMEnv.GOOGLE_REDIRECT_URI)) {
-            return null;
-        }
-        int index = url.indexOf("code=");
-        if (index == -1) {
-            return null;
-        }
-        // Move index through "code="
-        index += 5;
-        return url.substring(index);
-    }
-
-    private String getErrorFromUrl(String url) {
-        if (!url.startsWith(AMEnv.GOOGLE_REDIRECT_URI)) {
-            return null;
-        }
-        int index = url.indexOf("error=");
-        if (index == -1) {
-            return null;
-        }
-        // Move index through "error="
-        index += 6;
-        return url.substring(index);
-    }
-
-
 }

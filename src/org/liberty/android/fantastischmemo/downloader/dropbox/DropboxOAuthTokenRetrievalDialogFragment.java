@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2012 xinxin wang
+Copyright (C) 2012 Xinxin Wang, Haowen Ning
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -29,14 +29,12 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.mycommons.lang3.exception.ExceptionUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Rect;
 import android.os.AsyncTask;
@@ -207,6 +205,7 @@ public class DropboxOAuthTokenRetrievalDialogFragment extends DialogFragment {
                     webview.setVisibility(View.VISIBLE);
                     progressDialog.setVisibility(View.GONE);
                     loadingText.setVisibility(View.GONE);
+
                     if (authenticated == true) {
                         return;
                     }
@@ -261,5 +260,4 @@ public class DropboxOAuthTokenRetrievalDialogFragment extends DialogFragment {
             }
         }
     }
-
 }

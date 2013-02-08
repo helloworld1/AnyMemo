@@ -126,4 +126,8 @@ public class AMPrefKeys {
 
     // QA Card Activity
     public static final String CARD_GESTURE_ENABLED= "card_gesture_enabled";
+
+    // The prefix for oauth access token preference
+    public static final String OAUTH_ACCESS_TOKEN_KEY_PREFIX = "oauth_access_token_";
+
 }

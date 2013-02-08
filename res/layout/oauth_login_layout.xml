@@ -21,7 +21,7 @@
 
     <!-- This page was initially invisible,
       when it get loaded, the code should set it to visible.
-      This view should be "none" because a big in Android 2.x
+      This view should not be "none" because a big in Android 2.x
       failed to calculate the correct size of the view after
       changing from "none" to "visible"
     -->
