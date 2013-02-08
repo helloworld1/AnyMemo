@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2013 Haowen Ning
+Copyright (C) 2012 Haowen Ning
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -19,12 +19,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.oauth;
 
+import java.io.IOException;
+
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.graphics.Rect;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -38,18 +42,31 @@ import android.widget.LinearLayout;
 
 public abstract class OauthAccessCodeRetrievalFragment extends DialogFragment {
     private Activity mActivity;
+
     private AuthCodeReceiveListener authCodeReceiveListener = null;
 
     private final static String TAG = "OauthAccessCodeRetrievalFragment";
 
-    // Return the URL to request token
-    protected abstract String getTokenRequesetUrl();
+    private WebView webview;
 
-    protected abstract String[] getAuthCodeFromUrl(String url);
+    private View loadingText;
 
-    protected abstract String getErrorFromUrl(String url);
+    private View progressDialog;
 
-    
+    private LinearLayout rootView;
+
+    // Return the URL that show the web login
+    protected abstract String getLoginUrl();
+
+    // The token request for oauth 1, retrieve the oauth token
+    // and the token secret
+    protected abstract void requestToken() throws IOException;
+
+    // Process the callback for oauth 1 and 2
+    // For Oauth 2, the access token are retrieve from here.
+    // return true if the url is handled
+    protected abstract boolean processCallbackUrl(String url);
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -73,10 +90,10 @@ public abstract class OauthAccessCodeRetrievalFragment extends DialogFragment {
             Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final View v = inflater.inflate(R.layout.oauth_login_layout, container, false);
-        final WebView webview = (WebView)v.findViewById(R.id.login_page);
-        final View loadingText = v.findViewById(R.id.auth_page_load_text);
-        final View progressDialog = v.findViewById(R.id.auth_page_load_progress);
-        final LinearLayout ll = (LinearLayout)v.findViewById(R.id.ll);
+        webview = (WebView)v.findViewById(R.id.login_page);
+        loadingText = v.findViewById(R.id.auth_page_load_text);
+        progressDialog = v.findViewById(R.id.auth_page_load_progress);
+        rootView = (LinearLayout)v.findViewById(R.id.ll);
         
         // We have to set up the dialog's webview size manually or the webview will be zero size.
         // This should be a bug of Android.
@@ -84,55 +101,81 @@ public abstract class OauthAccessCodeRetrievalFragment extends DialogFragment {
         Window window = mActivity.getWindow();
         window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
-        ll.setMinimumWidth((int)(displayRectangle.width() * 0.9f));
-        ll.setMinimumHeight((int)(displayRectangle.height() * 0.8f));
+        rootView.setMinimumWidth((int)(displayRectangle.width() * 0.9f));
+        rootView.setMinimumHeight((int)(displayRectangle.height() * 0.8f));
 
-        webview.getSettings().setJavaScriptEnabled(true);
+        RequestTokenTask task = new RequestTokenTask();
+        task.execute((Void)null);
 
-        webview.loadUrl(getTokenRequesetUrl());
-
-        // This is workaround to show input on some android version.
-        webview.requestFocus(View.FOCUS_DOWN);
-        webview.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                    case MotionEvent.ACTION_UP:
-                        if (!v.hasFocus()) {
-                            v.requestFocus();
-                        }
-                        break;
-                }
-                return false;
-            }
-        });
-
-
-        webview.setWebViewClient(new WebViewClient() {
-            private boolean authenticated = false;
-            @Override
-            public void onPageFinished(WebView view, String url)  {
-                loadingText.setVisibility(View.GONE);
-                progressDialog.setVisibility(View.GONE);
-                webview.setVisibility(View.VISIBLE);
-                if (authenticated == true) {
-                    return;
-                }
-                String[] codes = getAuthCodeFromUrl(url);
-                String error = getErrorFromUrl(url);
-                if (error != null) {
-                    authCodeReceiveListener.onAuthCodeError(error);
-                    authenticated = true;
-                    dismiss();
-                }
-                if (codes != null) {
-                    authenticated = true;
-                    authCodeReceiveListener.onAuthCodeReceived(codes);
-                    dismiss();
-                }
-            }
-        });
         return v;
+    }
+
+    
+    // For subclass to call method in the authCodeReceiveListener
+    protected AuthCodeReceiveListener getAuthCodeReceiveListener() {
+        return authCodeReceiveListener;
+    }
+
+    private class RequestTokenTask extends AsyncTask<Void, Void, Void> {
+    	
+    	private Exception backgroundTaskException;
+    	
+        @Override
+        protected void onPreExecute() {
+            loadingText.setVisibility(View.VISIBLE);
+            progressDialog.setVisibility(View.VISIBLE);
+            webview.setVisibility(View.INVISIBLE);
+        }
+
+        @Override
+		protected Void doInBackground(Void... params) {
+        	try {
+        		requestToken();
+        	} catch (Exception e) {
+        		backgroundTaskException = e;
+        	}
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void v) {
+        	if (backgroundTaskException != null) {
+        		AMGUIUtility.displayError(mActivity, getString(R.string.error_text), getString(R.string.exception_text), backgroundTaskException);
+        	}
+            webview.getSettings().setJavaScriptEnabled(true);
+
+            webview.loadUrl(getLoginUrl());
+
+            // This is workaround to show input on some android version.
+            webview.requestFocus(View.FOCUS_DOWN);
+            webview.setOnTouchListener(new View.OnTouchListener() {
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                        case MotionEvent.ACTION_UP:
+                            if (!v.hasFocus()) {
+                                v.requestFocus();
+                            }
+                            break;
+                    }
+                    return false;
+                }
+            });
+
+
+            webview.setWebViewClient(new WebViewClient() {
+                @Override
+                public void onPageFinished(WebView view, String url)  {
+                    loadingText.setVisibility(View.GONE);
+                    progressDialog.setVisibility(View.GONE);
+                    webview.setVisibility(View.VISIBLE);
+                    if (processCallbackUrl(url)) {
+                        dismiss();
+                    }
+                }
+            });
+        }
+
     }
 
     public void setAuthCodeReceiveListener(AuthCodeReceiveListener listener) {
@@ -145,7 +188,6 @@ public abstract class OauthAccessCodeRetrievalFragment extends DialogFragment {
         void onAuthCodeReceived(String... codes);
 
         void onAuthCodeError(String error);
-
         void onCancelled();
     }
 }

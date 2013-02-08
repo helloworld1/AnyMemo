@@ -19,9 +19,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.oauth;
 
+import java.io.IOException;
+
+import org.apache.mycommons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -39,18 +43,28 @@ public abstract class OauthAccountActivity extends AMActivity {
     SharedPreferences.Editor editor;
 
     /* Authenticated! Now get the auth token */
-    protected abstract void onAuthenticated(final String authToken);
+    // For oauth1, the accessTokens are accessToken and accessKey
+    // For oauth2 the accessTokens are just acces token.
+    protected abstract void onAuthenticated(final String[] authTokens);
 
-    protected abstract boolean verifyAccessToken(final String accessToken);
+    // Verify the accessTokens. Return true if it is valid.
+    // For oauth1, the accessTokens are accessToken and accessKey
+    // For oauth2 the accessTokens are just acces token.
+    protected abstract boolean verifyAccessToken(final String[] accessTokens) throws IOException;
 
-    // Get the access token string from the request strings
-    protected abstract String getAccessToken(final String... requests);
+    // Get the access tokens string from the request strings
+    // For oauth 1, the request has requestToken and requestSecret
+    // and returns the accessToken and accessKey
+    // For oauth 2, the request is access code
+    // and  returns the access token.
+    protected abstract String[] getAccessTokens(final String[] requests) throws IOException;
 
     // Get the fragment that request the Oauth through a web page.
     protected abstract OauthAccessCodeRetrievalFragment getOauthRequestFragment();
 
-    // The preference key to save / retrieve the access token
-    private final String oauthAccessTokenPrefKey = AMPrefKeys.OAUTH_ACCESS_TOKEN_KEY_PREFIX + getClass().getName();
+    // The preference key to save / retrieve the access token. The preference name is based 
+    // on the prefix and the package of the class. So the same package use the same keys.
+    private final String oauthAccessTokenPrefKey = AMPrefKeys.OAUTH_ACCESS_TOKEN_KEY_PREFIX + getClass().getPackage().getName();
 
 
     @Override
@@ -59,14 +73,16 @@ public abstract class OauthAccountActivity extends AMActivity {
         settings = PreferenceManager.getDefaultSharedPreferences(this);
         editor = settings.edit();
 
-        String savedGoogleAccessToken = settings.getString(oauthAccessTokenPrefKey, null);
+        String savedTokens = settings.getString(oauthAccessTokenPrefKey, null);
 
         // Request new one if nothing saved.
-        if (savedGoogleAccessToken == null) {
+        if (savedTokens == null) {
             showGetTokenDialog();
         } else {
+            String[] tokens = savedTokens.split(",");
+
             ValidateAccessTokenAndRunCallbackTask task = new ValidateAccessTokenAndRunCallbackTask();
-            task.execute(savedGoogleAccessToken);
+            task.execute(tokens);
         }
     }
 
@@ -93,7 +109,9 @@ public abstract class OauthAccountActivity extends AMActivity {
 
         private ProgressDialog progressDialog;
 
-        private String token = null;
+    	private Exception backgroundTaskException = null;
+
+        private String[] tokens = null;
 
 		@Override
         public void onPreExecute() {
@@ -108,26 +126,39 @@ public abstract class OauthAccountActivity extends AMActivity {
 
         @Override
         public Boolean doInBackground(String... accessTokens) {
-            return verifyAccessToken(accessTokens[0]);
+            tokens = accessTokens;
+
+        	try {
+                return verifyAccessToken(accessTokens);
+        	} catch (Exception e) {
+        		backgroundTaskException = e;
+                return false;
+            }
         }
 
         
         @Override
         public void onPostExecute(Boolean isTokenValid){
+            progressDialog.dismiss();
+
+            if (backgroundTaskException != null) {
+        		AMGUIUtility.displayError(OauthAccountActivity.this, getString(R.string.error_text), getString(R.string.exception_text), backgroundTaskException);
+            }
             if (isTokenValid) {
-                onAuthenticated(token);
+                onAuthenticated(tokens);
             } else {
                 invalidateSavedToken();
                 showGetTokenDialog();
             }
-            progressDialog.dismiss();
         }
     }
 
 
-    private class GetAccessTokenTask extends AsyncTask<String, Void, String> {
+    private class GetAccessTokenTask extends AsyncTask<String, Void, String[]> {
 
         private ProgressDialog progressDialog;
+
+    	private Exception backgroundTaskException = null;
 
 		@Override
         public void onPreExecute() {
@@ -141,21 +172,32 @@ public abstract class OauthAccountActivity extends AMActivity {
         }
 
         @Override
-        public String doInBackground(String... requests) {
-            return getAccessToken(requests);
+        public String[] doInBackground(String... requests) {
+            try {
+                return getAccessTokens(requests);
+            } catch (Exception e) {
+                backgroundTaskException = e;
+                return null;
+            }
         }
 
-        
         @Override
-        public void onPostExecute(String accessToken){
+        public void onPostExecute(String[] accessTokens){
             progressDialog.dismiss();
-            editor.putString(AMPrefKeys.GOOGLE_AUTH_TOKEN, accessToken);
+
+        	if (backgroundTaskException != null) {
+        		AMGUIUtility.displayError(OauthAccountActivity.this, getString(R.string.error_text), getString(R.string.exception_text), backgroundTaskException);
+                return;
+        	}
+
+            editor.putString(oauthAccessTokenPrefKey, StringUtils.join(accessTokens, ","));
             editor.commit();
-            if (accessToken == null) {
+
+            if (accessTokens == null) {
                 showAuthErrorDialog(null);
                 
             } else {
-                onAuthenticated(accessToken);
+                onAuthenticated(accessTokens);
             }
         }
     }

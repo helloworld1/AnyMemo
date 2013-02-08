@@ -40,12 +40,15 @@ public class DropboxDBListActivity extends DropboxAccountActivity {
     }
 
     @Override
-    protected void onAuthenticated(final String authToken, final String authTokenSecret) {
+    protected void onAuthenticated(final String[] accessTokens) {
+        String accessToken = accessTokens[0];
+        String accessTokenSecret = accessTokens[1];
+
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         Fragment newFragment = new DownloadDBFileListFragment();
         Bundle args = new Bundle();
-        args.putString(DownloadDBFileListFragment.EXTRA_AUTH_TOKEN, authToken);
-        args.putString(DownloadDBFileListFragment.EXTRA_AUTH_TOKEN_SECRET, authTokenSecret);
+        args.putString(DownloadDBFileListFragment.EXTRA_AUTH_TOKEN, accessToken);
+        args.putString(DownloadDBFileListFragment.EXTRA_AUTH_TOKEN_SECRET, accessTokenSecret);
         newFragment.setArguments(args);
         ft.add(R.id.spreadsheet_list, newFragment);
         ft.commit();

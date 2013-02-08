@@ -19,7 +19,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
-public class UploadDropboxScreen extends DropboxAccountActivity{
+public class UploadDropboxScreen extends DropboxAccountActivity {
     
     private String authToken;
     private String authTokenSecret;
@@ -30,9 +30,10 @@ public class UploadDropboxScreen extends DropboxAccountActivity{
         setContentView(R.layout.upload_dropbox_screen);
     }
 
-    protected void onAuthenticated(final String authToken, final String authTokenSecret) {
-        this.authToken=authToken;
-        this.authTokenSecret=authTokenSecret;
+    @Override
+    protected void onAuthenticated(final String[] accessTokens) {
+        this.authToken = accessTokens[0];
+        this.authTokenSecret = accessTokens[1];
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         FileBrowserFragment fragment = new FileBrowserFragment();
         fragment.setOnFileClickListener(fileClickListener);
