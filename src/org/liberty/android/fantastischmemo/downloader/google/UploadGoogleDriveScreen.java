@@ -54,10 +54,11 @@ public class UploadGoogleDriveScreen extends GoogleAccountActivity {
         super.onCreate(bundle);
     }
 
-
     @Override
-    protected void onAuthenticated(final String authToken) {
-        this.authToken = authToken;
+    protected void onAuthenticated(final String[] authTokens) {
+
+        this.authToken = authTokens[0];
+
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         FileBrowserFragment fragment = new FileBrowserFragment();
         fragment.setOnFileClickListener(fileClickListener);

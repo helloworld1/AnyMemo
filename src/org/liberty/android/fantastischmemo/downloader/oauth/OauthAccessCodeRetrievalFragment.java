@@ -164,12 +164,22 @@ public abstract class OauthAccessCodeRetrievalFragment extends DialogFragment {
 
 
             webview.setWebViewClient(new WebViewClient() {
+
+                // Make sure the callback is used only once
+                // Sometimes, the website will call this method
+                // twice.
+                private boolean authenticated = false;
+
                 @Override
                 public void onPageFinished(WebView view, String url)  {
                     loadingText.setVisibility(View.GONE);
                     progressDialog.setVisibility(View.GONE);
                     webview.setVisibility(View.VISIBLE);
+                    if (authenticated) {
+                        return;
+                    }
                     if (processCallbackUrl(url)) {
+                        authenticated = true;
                         dismiss();
                     }
                 }

@@ -19,217 +19,81 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.google;
 
+import java.io.IOException;
 import java.io.OutputStreamWriter;
-
 import java.net.URL;
 import java.net.URLEncoder;
 
 import javax.net.ssl.HttpsURLConnection;
 
 import org.apache.mycommons.io.IOUtils;
-
+import org.json.JSONException;
 import org.json.JSONObject;
-
-import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
-import org.liberty.android.fantastischmemo.AMPrefKeys;
-import org.liberty.android.fantastischmemo.R;
-
-import android.accounts.AccountManager;
-
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-
-import android.content.DialogInterface;
-import android.content.SharedPreferences;
-
-import android.os.AsyncTask;
-import android.os.Bundle;
-
-import android.preference.PreferenceManager;
-
-import android.support.v4.app.FragmentActivity;
+import org.liberty.android.fantastischmemo.downloader.oauth.OauthAccessCodeRetrievalFragment;
+import org.liberty.android.fantastischmemo.downloader.oauth.OauthAccountActivity;
 
 import android.util.Log;
 
-public abstract class GoogleAccountActivity extends AMActivity {
-    SharedPreferences settings;
-    SharedPreferences.Editor editor;
-    AccountManager accountManager;
-
-    /* Authenticated! Now get the auth token */
-    protected abstract void onAuthenticated(final String authToken);
+public abstract class GoogleAccountActivity extends OauthAccountActivity {
 
     @Override
-    public void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-        settings = PreferenceManager.getDefaultSharedPreferences(this);
-        editor = settings.edit();
-        String savedGoogleAccessToken = settings.getString(AMPrefKeys.GOOGLE_AUTH_TOKEN, null);
-        // Request new one if nothing saved.
-        if (savedGoogleAccessToken == null) {
-            showGetTokenDialog();
-        } else {
-            ValidateAccessTokenAndRunCallbackTask task = new ValidateAccessTokenAndRunCallbackTask();
-            task.execute(savedGoogleAccessToken);
+    protected boolean verifyAccessToken(final String[] accessTokens) throws IOException {
+        String token = accessTokens[0];
+        try {
+            URL url1 = new URL("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=" + token);
+            HttpsURLConnection conn = (HttpsURLConnection) url1.openConnection();
+
+            String s = new String(IOUtils.toByteArray(conn.getInputStream()));
+            JSONObject jsonObject = new JSONObject(s);
+            if (jsonObject.has("error")) {
+                String error = jsonObject.getString("error");
+                Log.e(TAG, "Token validation error: " + error);
+                return false;
+            }
+
+            String audience = jsonObject.getString("audience");
+            System.err.println("EEEEEEEEEEEEEEEEEEE:" + AMEnv.GOOGLE_CLIENT_ID.equals(audience));
+            return AMEnv.GOOGLE_CLIENT_ID.equals(audience);
+        } catch (Exception e) {
+            Log.i(TAG, "The saved access token is invalid", e);
+        }
+        return false;
+    }
+
+    @Override
+    protected String[] getAccessTokens(final String[] requests) throws IOException {
+        String code = requests[0];
+        URL url1 = new URL("https://accounts.google.com/o/oauth2/token");
+        HttpsURLConnection conn = (HttpsURLConnection) url1.openConnection();
+        conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        conn.setRequestMethod("POST");
+        conn.setDoInput(true);
+        conn.setDoOutput(true);
+        String payload = String.format("code=%s&client_id=%s&client_secret=%s&redirect_uri=%s&grant_type=%s",
+                URLEncoder.encode(code, "UTF-8"),
+                URLEncoder.encode(AMEnv.GOOGLE_CLIENT_ID, "UTF-8"),
+                URLEncoder.encode(AMEnv.GOOGLE_CLIENT_SECRET, "UTF-8"),
+                URLEncoder.encode(AMEnv.GOOGLE_REDIRECT_URI, "UTF-8"),
+                URLEncoder.encode("authorization_code", "UTF-8"));
+        OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
+        out.write(payload);
+        out.close();
+
+        String s = new String(IOUtils.toByteArray(conn.getInputStream()));
+        try {
+            JSONObject jsonObject = new JSONObject(s);
+            String accessToken = jsonObject.getString("access_token");
+            //String refreshToken= jsonObject.getString("refresh_token");
+            return new String[] {accessToken};
+        } catch (JSONException e) {
+            // Throw out JSON exception. it is unlikely to happen
+            throw new RuntimeException(e);
         }
     }
 
-    private void showGetTokenDialog() {
-        GoogleOAuth2AccessCodeRetrievalFragment df = new GoogleOAuth2AccessCodeRetrievalFragment();
-        df.setAuthCodeReceiveListener(authCodeReceiveListener);
-        df.show(((FragmentActivity)this).getSupportFragmentManager(), "GoogleAutoFragment");
-    }
-
-    private GoogleOAuth2AccessCodeRetrievalFragment.AuthCodeReceiveListener authCodeReceiveListener = 
-        new GoogleOAuth2AccessCodeRetrievalFragment.AuthCodeReceiveListener() {
-			public void onAuthCodeReceived(String code) {
-                GetAccessTokenTask task = new GetAccessTokenTask();
-                task.execute(code);
-			}
-			public void onAuthCodeError(String error) {
-                showAuthErrorDialog(error);
-			}
-            public void onCancelled() {
-                finish();
-            }
-        };
-
-    private class ValidateAccessTokenAndRunCallbackTask extends AsyncTask<String, Void, Boolean> {
-
-        private ProgressDialog progressDialog;
-
-        private String token = null;
-
-		@Override
-        public void onPreExecute() {
-            super.onPreExecute();
-            progressDialog = new ProgressDialog(GoogleAccountActivity.this);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setTitle(getString(R.string.loading_please_wait));
-            progressDialog.setMessage(getString(R.string.loading_connect_net));
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-        }
-
-        @Override
-        public Boolean doInBackground(String... accessTokens) {
-            token = accessTokens[0];
-            try {
-                URL url1 = new URL("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=" + token);
-                HttpsURLConnection conn = (HttpsURLConnection) url1.openConnection();
-
-                String s = new String(IOUtils.toByteArray(conn.getInputStream()));
-                JSONObject jsonObject = new JSONObject(s);
-                if (jsonObject.has("error")) {
-                    String error = jsonObject.getString("error");
-                    Log.e(TAG, "Token validation error: " + error);
-                    return false;
-                }
-
-                String audience = jsonObject.getString("audience");
-                return AMEnv.GOOGLE_CLIENT_ID.equals(audience);
-            } catch (Exception e) {
-                Log.i(TAG, "The saved access token is invalid", e);
-            }
-            return false;
-        }
-
-        
-        @Override
-        public void onPostExecute(Boolean isTokenValid){
-            if (isTokenValid) {
-                onAuthenticated(token);
-            } else {
-                invalidateSavedToken();
-                showGetTokenDialog();
-            }
-            progressDialog.dismiss();
-        }
-    }
-
-
-    private class GetAccessTokenTask extends AsyncTask<String, Void, String> {
-
-        private ProgressDialog progressDialog;
-
-		@Override
-        public void onPreExecute() {
-            super.onPreExecute();
-            progressDialog = new ProgressDialog(GoogleAccountActivity.this);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setTitle(getString(R.string.loading_please_wait));
-            progressDialog.setMessage(getString(R.string.loading_auth_text));
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-        }
-
-        @Override
-        public String doInBackground(String... accessCodes) {
-            String code = accessCodes[0];
-            try {
-                URL url1 = new URL("https://accounts.google.com/o/oauth2/token");
-                HttpsURLConnection conn = (HttpsURLConnection) url1.openConnection();
-                conn.addRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                conn.setRequestMethod("POST");
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
-                String payload = String.format("code=%s&client_id=%s&client_secret=%s&redirect_uri=%s&grant_type=%s",
-                        URLEncoder.encode(code, "UTF-8"),
-                        URLEncoder.encode(AMEnv.GOOGLE_CLIENT_ID, "UTF-8"),
-                        URLEncoder.encode(AMEnv.GOOGLE_CLIENT_SECRET, "UTF-8"),
-                        URLEncoder.encode(AMEnv.GOOGLE_REDIRECT_URI, "UTF-8"),
-                        URLEncoder.encode("authorization_code", "UTF-8"));
-                OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
-                out.write(payload);
-                out.close();
-
-                String s = new String(IOUtils.toByteArray(conn.getInputStream()));
-                JSONObject jsonObject = new JSONObject(s);
-                String accessToken = jsonObject.getString("access_token");
-                //String refreshToken= jsonObject.getString("refresh_token");
-                return accessToken;
-            } catch (Exception e) {
-                Log.e(TAG, "Error redeeming access token", e);
-            }
-            return null;
-        }
-
-        
-        @Override
-        public void onPostExecute(String accessToken){
-            progressDialog.dismiss();
-            editor.putString(AMPrefKeys.GOOGLE_AUTH_TOKEN, accessToken);
-            editor.commit();
-            if (accessToken == null) {
-                showAuthErrorDialog(null);
-                
-            } else {
-                onAuthenticated(accessToken);
-            }
-        }
-    }
-
-    private void showAuthErrorDialog(String error) {
-        String errorMessage = getString(R.string.auth_error_text);
-        if (error != null) {
-            errorMessage += " " + error;
-        }
-        new AlertDialog.Builder(GoogleAccountActivity.this)
-            .setTitle(R.string.error_text)
-            .setMessage(errorMessage)
-            .setPositiveButton(R.string.back_menu_text, new DialogInterface.OnClickListener() { 
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    finish();
-                }
-            })
-        .show();
-
-    }
-
-    private void invalidateSavedToken() {
-        editor.putString(AMPrefKeys.GOOGLE_AUTH_TOKEN, null);
-        editor.commit();
+    // Get the fragment that request the Oauth through a web page.
+    protected OauthAccessCodeRetrievalFragment getOauthRequestFragment() {
+        return new GoogleOAuth2AccessCodeRetrievalFragment();
     }
 }

@@ -35,6 +35,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 
 public abstract class OauthAccountActivity extends AMActivity {
 
@@ -145,6 +146,7 @@ public abstract class OauthAccountActivity extends AMActivity {
         		AMGUIUtility.displayError(OauthAccountActivity.this, getString(R.string.error_text), getString(R.string.exception_text), backgroundTaskException);
             }
             if (isTokenValid) {
+                Log.i(TAG, "Token is valid");
                 onAuthenticated(tokens);
             } else {
                 invalidateSavedToken();
