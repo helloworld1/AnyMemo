@@ -19,50 +19,46 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader;
 
-import org.liberty.android.fantastischmemo.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-
+import android.content.Context;
 import android.content.DialogInterface;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.content.Context;
-
 import android.support.v4.app.Fragment;
-
 import android.text.Html;
-
 import android.text.method.LinkMovementMethod;
-import android.widget.ArrayAdapter;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView;
-import android.widget.TextView;
-import android.widget.ListView;
-import android.widget.ImageView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 
 public abstract class AbstractDownloaderFragment extends Fragment {
 
     private static final String TAG = "org.liberty.android.fantastischmemo.downloader.DownloaderBase";
+    private static final int TOAST_MSG_DURATION = 5000;
 
     private Activity mActivity;
     
     private ListView listView;
 
     private DownloadListAdapter dlAdapter;
-
+    
     /*
      * Retrieve the data when the user first open the
      * Downloader
@@ -148,10 +144,10 @@ public abstract class AbstractDownloaderFragment extends Fragment {
         public void onPostExecute(Exception e){
             progressDialog.dismiss();
             if (e != null) {
-                // TODO: handle it nicely
-                e.printStackTrace();
+                AMGUIUtility.displayError(mActivity, getString(R.string.downloader_connection_error), getString(R.string.downloader_connection_error_message), e);
                 return;
             }
+            
             dlAdapter.addList(downloadItems);
         }
 
@@ -202,6 +198,7 @@ public abstract class AbstractDownloaderFragment extends Fragment {
                 item = items[0];
                 fetchedDbPath = fetchDatabase(item);
             } catch (Exception e) {
+                Log.e(TAG, "Error fetch db lists", e);
                 return e;
             }
             return null;
@@ -292,8 +289,7 @@ public abstract class AbstractDownloaderFragment extends Fragment {
                     iv.setImageResource(R.drawable.back);
                 } else if (item.getType() == DownloadItem.ItemType.Spreadsheet) {
                     iv.setImageResource(R.drawable.spreadsheet);
-                }
-                else {
+                } else {
                     iv.setImageResource(R.drawable.database);
                 }
                 tv.setText(item.getTitle());

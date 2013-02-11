@@ -21,7 +21,7 @@
     <string name="copyclipboard_summary">Вопрос будет автоматически скопирован в буфер обмена.</string>
     <string name="memo_show_answer">\?\nПоказать ответ</string>
     <string name="memo_no_item_title">Нет объекта</string>
-    <string name="memo_no_item_message">Нет объектов для изучения. Рекомендуем вернуться назад. Нажмите Зубрёжка чтобы учить карточки наперёд.</string>
+    <string name="memo_no_item_message">Нет объектов для изучения. Если хотите повторить, выберите Опрос при долгом нажатии на базу в меню &quot;Недавние&quot;.</string>
     <string name="memo_btn0_text">0 Забыто</string>
     <string name="memo_btn1_text">1 Забыто</string>
     <string name="memo_btn2_text">2 ОчТяжел</string>
@@ -81,7 +81,7 @@
     <string name="stat_new">Новые: </string>
     <string name="open_open_new_db">Открыть существующие базы</string>
     <string name="clear_all_pref">Сбросить установки</string>
-    <string name="clear_recent_list">Очистить список последних баз</string>
+    <string name="clear_recent_list">Очистить список недавних</string>
     <string name="export_xml">Эспорт Mnemosyne XML</string>
     <string name="add_screen_question">Вопрос</string>
     <string name="add_screen_new">Нов</string>
@@ -299,10 +299,10 @@
     <string name="dropbox_text">Dropbox.com</string>
     <string name="dropbox_login_text">Войти, используя аккаунт Dropbox</string>
     <string name="dropbox_download_text">Загрузить из Dropbox</string>
-    <string name="dropbox_upload_text">Залить в Dropbox</string>
+    <string name="dropbox_upload_text">Залить %s в Dropbox</string>
     <string name="user_name_text">Имя пользователя:</string>
     <string name="password_text">Пароль:</string>
-    <string name="download_source_dropbox">Dropbox.com\n(экспериментально)</string>
+    <string name="download_source_dropbox">Dropbox.com</string>
     <string name="dropbox_login_message">Введите имя пользователя Dropbox (обычно email) и пароль.</string>
     <string name="import_supermemo_2008_xml_text">Импорт SuperMemo 2008 XML</string>
     <string name="uncategorized_text">Нет категории</string>
@@ -432,4 +432,8 @@
     <string name="dict_bluedict">BlueDict</string>
     <string name="gestures_text">Жесты</string>
     <string name="enable_gestures_text">Разрешить жесты</string>
+    <string name="select_category_text">Выбрать категорию</string>
+    <string name="dropbox_successfully_uploaded_message">Файл успешно залит в ваш Dropbox AnyMemo каталог</string>
+    <string name="upload_dropbox_message">Хотите залить %s в ваш Dropbox AnyMemo каталог? Это может занять несколько минут, если карточек более 1000.</string>
+    <string name="dropbox_token_failure_text">Не удалось получить доступ. Попробуйте снова.</string>
 </resources>

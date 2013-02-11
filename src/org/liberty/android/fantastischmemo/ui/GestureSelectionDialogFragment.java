@@ -20,6 +20,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo.ui;
 
+import java.util.Collections;
+import java.util.Map;
+
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.domain.Option;
@@ -27,6 +30,7 @@ import org.liberty.android.fantastischmemo.utils.AMUiUtil;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.gesture.Gesture;
 import android.gesture.GestureLibraries;
 import android.gesture.GestureLibrary;
@@ -34,6 +38,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +49,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class GestureSelectionDialogFragment extends DialogFragment {
+
+    public static final String EXTRA_GESTURE_NAME_DESCRIPTION_MAP = "gesture_name_description_map";
 
     private static final String TAG = "GestureSelectionDialogFragment";
 
@@ -59,12 +66,25 @@ public class GestureSelectionDialogFragment extends DialogFragment {
 
     private Option option;
 
+    private boolean isOptionChanged = false;
+
+    private Map<String, String> gestureNameDescriptionMap = Collections.emptyMap();
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = (AMActivity) activity;
         amUiUtil = new AMUiUtil(mActivity);
         option = new Option(mActivity);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+        assert bundle != null : "The gesture_name_description_map must be passed in";
+        Bundle args = getArguments();
+        gestureNameDescriptionMap = (Map<String, String>) args.getSerializable(EXTRA_GESTURE_NAME_DESCRIPTION_MAP);
     }
 
     @Override
@@ -77,8 +97,8 @@ public class GestureSelectionDialogFragment extends DialogFragment {
         enableGestureCheckbox.setChecked(option.getGestureEnabled());
         enableGestureCheckbox.setOnCheckedChangeListener(enableGestureCheckboxChangeListener);
 
-        GesturesAdapter adapter = new GesturesAdapter(mActivity);
-        gestureList.setAdapter(adapter);
+        gestureAdapter= new GesturesAdapter(mActivity);
+        gestureList.setAdapter(gestureAdapter);
 
         GestureLibrary gestureLibrary = GestureLibraries.fromRawResource(
                 mActivity, R.raw.gestures);
@@ -89,7 +109,13 @@ public class GestureSelectionDialogFragment extends DialogFragment {
                 NamedGesture namedGesture = new NamedGesture();
                 namedGesture.name = gestureEntry;
                 namedGesture.gesture = gesture;
-                adapter.add(namedGesture);
+                // Only add the gestures that has description
+                // passed from the activity.
+                // This can essentially prevent gestures the activity
+                // do not want to use.
+                if (gestureNameDescriptionMap.containsKey(gestureEntry)) {
+                    gestureAdapter.add(namedGesture);
+                }
             }
         }
 
@@ -134,11 +160,20 @@ public class GestureSelectionDialogFragment extends DialogFragment {
                     mActivity.getResources(), bitmap);
 
             label.setTag(gesture);
-            label.setText(gesture.name);
+            // label.setText(gesture.name + "hello");
+            label.setText(Html.fromHtml("<b>" + gesture.name + "</b><br />"
+                        + "<small>" + gestureNameDescriptionMap.get(gesture.name) + "</small>"));
             label.setCompoundDrawablesWithIntrinsicBounds(bitmapDrawable, null,
                     null, null);
 
             return convertView;
+        }
+    }
+
+    @Override
+    public void onDismiss(DialogInterface di) {
+        if (isOptionChanged) {
+            mActivity.restartActivity();
         }
     }
 
@@ -152,7 +187,10 @@ public class GestureSelectionDialogFragment extends DialogFragment {
         @Override
         public void onCheckedChanged(CompoundButton buttonView,
                 boolean isChecked) {
-            option.setGestureEnabled(true);
+            option.setGestureEnabled(isChecked);
+            isOptionChanged = true;
         }
     };
+
+
 }

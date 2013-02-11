@@ -75,6 +75,9 @@ public class AMPrefKeys {
     public static final String DROPBOX_TOKEN_KEY = "dropbox_token";
 
     public static final String DROPBOX_SECRET_KEY = "dropbox_secret";
+    public static final String DROPBOX_AUTH_TOKEN="dropbox_auth_token";
+    public static final String DROPBOX_AUTH_TOKEN_SECRET="dropbox_auth_token_secret";
+
 
     // FlashcardExchange
     public static final String FE_SAVED_USERNAME_KEY = "saved_username";
@@ -123,4 +126,8 @@ public class AMPrefKeys {
 
     // QA Card Activity
     public static final String CARD_GESTURE_ENABLED= "card_gesture_enabled";
+
+    // The prefix for oauth access token preference
+    public static final String OAUTH_ACCESS_TOKEN_KEY_PREFIX = "oauth_access_token_";
+
 }

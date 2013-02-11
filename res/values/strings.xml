@@ -2,7 +2,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     <string name="app_name">AnyMemo</string>
     <string name="app_full_name">AnyMemo Free</string>
-    <string name="app_version">9.999.2</string>
+    <string name="app_version">9.999.3</string>
     <string name="ok_text">OK</string>
     <string name="cancel_text">Cancel</string>
     <string name="yes_text">Yes</string>
@@ -24,7 +24,7 @@
     <string name="copyclipboard_summary">The question will be automatically copied to clipboard.</string>
     <string name="memo_show_answer">\?\nShow answer</string>
     <string name="memo_no_item_title">No item</string>
-    <string name="memo_no_item_message">There is no item to learn for now. Going back is recommended. Use the cram review to learn ahead of time.</string>
+    <string name="memo_no_item_message">There is no item to learn for now. If you want to cram, you can do quizzes by long clicking a db in the &quot;Recent&quot; tab.</string>
     <string name="memo_btn0_text">0 Forgot</string>
     <string name="memo_btn1_text">1 Forgot</string>
     <string name="memo_btn2_text">2 Very Hard</string>
@@ -304,10 +304,10 @@
     <string name="dropbox_text">Dropbox.com</string>
     <string name="dropbox_login_text">Login using Dropbox account</string>
     <string name="dropbox_download_text">Download from Dropbox</string>
-    <string name="dropbox_upload_text">Upload to Dropbox</string>
+    <string name="dropbox_upload_text">Upload %s to Dropbox</string>
     <string name="user_name_text">User name:</string>
     <string name="password_text">Password:</string>
-    <string name="download_source_dropbox">Dropbox.com\n(experimental)</string>
+    <string name="download_source_dropbox">Dropbox.com</string>
     <string name="dropbox_login_message">Please enter your dropbox user name (Mostly email address) and password.</string>
     <string name="import_supermemo_2008_xml_text">Import SuperMemo 2008 XML</string>
     <string name="uncategorized_text">Uncategorized</string>
@@ -437,4 +437,8 @@
     <string name="dict_bluedict">BlueDict</string>
     <string name="gestures_text">Gestures</string>
     <string name="enable_gestures_text">Enable gestures</string>
+    <string name="select_category_text">Select category</string>
+    <string name="dropbox_successfully_uploaded_message">Successfully uploaded the file to your dropbox AnyMemo directory</string>
+    <string name="upload_dropbox_message">Do you want to upload %s to your Dropbox\'s AnyMemo folder? It may take several minutes if you have more than 1000 cards.</string>
+    <string name="dropbox_token_failure_text">Fail to fetch your access token. Please try again.</string>
 </resources>

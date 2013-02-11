@@ -51,7 +51,8 @@
             <Button
                     android:id="@+id/category_button"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="@string/select_category_text" />
         </LinearLayout>
     </RadioGroup>
     <Button android:id="@+id/start_quiz_button"

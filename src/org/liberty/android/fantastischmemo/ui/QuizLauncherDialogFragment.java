@@ -330,7 +330,11 @@ public class QuizLauncherDialogFragment extends DialogFragment {
             public void onReceiveCategory(Category c) {
                 assert c != null : "The category got shouldn't be null.";
                 categoryId = c.getId();
-                categoryButton.setText(c.getName());
+                if (StringUtils.isEmpty(c.getName())) {
+                    categoryButton.setText(R.string.uncategorized_text);
+                } else {
+                    categoryButton.setText(c.getName());
+                }
             }
         };
 }

@@ -20,17 +20,20 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import org.liberty.android.fantastischmemo.R;
-
-import org.liberty.android.fantastischmemo.downloader.*;
-
+import org.liberty.android.fantastischmemo.downloader.DownloaderAnyMemo;
+import org.liberty.android.fantastischmemo.downloader.DownloaderSS;
+import org.liberty.android.fantastischmemo.downloader.FELauncher;
+import org.liberty.android.fantastischmemo.downloader.QuizletLauncher;
+import org.liberty.android.fantastischmemo.downloader.dropbox.DropboxDBListActivity;
 import org.liberty.android.fantastischmemo.downloader.google.SpreadsheetListScreen;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-
 import android.support.v4.app.Fragment;
-import android.view.*;
-import android.content.*;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 /* 
  * This class is invoked when the user share the card from other
@@ -85,7 +88,7 @@ public class DownloadTabFragment extends Fragment implements View.OnClickListene
             startActivity(new Intent(mActivity, QuizletLauncher.class));
         }
         if (v == dropboxButton){
-            startActivity(new Intent(mActivity, DropboxLauncher.class));
+        	startActivity(new Intent(mActivity, DropboxDBListActivity.class));
         }
         if (v == googleButton) {
             startActivity(new Intent(mActivity, SpreadsheetListScreen.class));

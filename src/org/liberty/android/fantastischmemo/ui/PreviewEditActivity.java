@@ -20,49 +20,44 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import java.sql.SQLException;
+import java.util.HashMap;
+
 import org.apache.mycommons.lang3.math.NumberUtils;
-
-import org.liberty.android.fantastischmemo.ui.DetailScreen;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.ui.SettingsScreen;
-
-import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
-
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.dao.SettingDao;
-
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
+import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
+import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.LayoutInflater;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.EditText;
-import android.util.Log;
-import android.net.Uri;
-import android.view.GestureDetector;
-
-import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
+import android.widget.Toast;
 
 public class PreviewEditActivity extends QACardActivity {
     private boolean searchInflated = false;
@@ -312,6 +307,7 @@ public class PreviewEditActivity extends QACardActivity {
             {
 
                 if (getCurrentCard()!= null){
+                    Toast.makeText(this, R.string.copy_text, Toast.LENGTH_LONG).show();
                     savedCardId = getCurrentCard().getId();
                 }
                 return true;
@@ -362,38 +358,44 @@ public class PreviewEditActivity extends QACardActivity {
 
             case R.id.menu_context_swap:
             {
-        new AlertDialog.Builder(this)
-            .setTitle(R.string.warning_text)
-            .setIcon(R.drawable.alert_dialog_icon)
-            .setMessage(R.string.settings_inverse_warning)
-            .setPositiveButton(R.string.swap_text, new DialogInterface.OnClickListener(){
-                        public void onClick(DialogInterface arg0, int arg1){
-                    AMGUIUtility.doProgressTask(PreviewEditActivity.this, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask(){
-                        public void doHeavyTask(){
-                            cardDao.swapAllQA();
-                        }
-                        public void doUITask(){
-                            restartActivity();
-                        }
-                    });
-                }
-            })
-            .setNeutralButton(R.string.swapdup_text, new DialogInterface.OnClickListener(){
+                new AlertDialog.Builder(this)
+                    .setTitle(R.string.warning_text)
+                    .setIcon(R.drawable.alert_dialog_icon)
+                    .setMessage(R.string.settings_inverse_warning)
+                    .setPositiveButton(R.string.swap_text, new DialogInterface.OnClickListener(){
                         public void onClick(DialogInterface arg0, int arg1){
                             AMGUIUtility.doProgressTask(PreviewEditActivity.this, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask(){
-                        public void doHeavyTask(){
-                            cardDao.swapAllQADup();
+                                public void doHeavyTask(){
+                                    cardDao.swapAllQA();
+                                }
+                                public void doUITask(){
+                                    restartActivity();
+                                }
+                            });
                         }
-                        public void doUITask(){
-                            restartActivity();
-                        }
-                    });
-                }
-            })
-            .setNegativeButton(R.string.cancel_text, null)
-            .create()
-            .show();
+                    })
+                .setNeutralButton(R.string.swapdup_text, new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface arg0, int arg1){
+                        AMGUIUtility.doProgressTask(PreviewEditActivity.this, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask(){
+                            public void doHeavyTask(){
+                                cardDao.swapAllQADup();
+                            }
+                            public void doUITask(){
+                                restartActivity();
+                            }
+                        });
+                    }
+                })
+                .setNegativeButton(R.string.cancel_text, null)
+                    .create()
+                    .show();
 
+                return true;
+            }
+
+            case R.id.menu_gestures:
+            {
+                showGesturesDialog();
                 return true;
             }
 
@@ -458,6 +460,27 @@ public class PreviewEditActivity extends QACardActivity {
 
     protected void onClickQuestionText() {
         onClickQuestionView();
+    }
+
+    @Override
+    protected void onGestureDetected(GestureName gestureName) {
+        switch (gestureName) {
+            case O_SHAPE:
+                break;
+
+            case S_SHAPE:
+                break;
+            case LEFT_SWIPE:
+                gotoNext();
+                break;
+
+            case RIGHT_SWIPE:
+                gotoPrev();
+                break;
+            default:
+                break;
+
+        }
     }
 
 
@@ -847,6 +870,20 @@ public class PreviewEditActivity extends QACardActivity {
             updateCardFrontSide();
             updateTitle();
         }
+    }
+
+    private void showGesturesDialog() {
+        final HashMap<String, String> gestureNameDescriptionMap
+            = new HashMap<String, String>();
+        gestureNameDescriptionMap.put(GestureName.LEFT_SWIPE.getName(), getString(R.string.add_screen_next));
+        gestureNameDescriptionMap.put(GestureName.RIGHT_SWIPE.getName(), getString(R.string.previous_text_short));
+
+
+        GestureSelectionDialogFragment df = new GestureSelectionDialogFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(GestureSelectionDialogFragment.EXTRA_GESTURE_NAME_DESCRIPTION_MAP, gestureNameDescriptionMap);
+        df.setArguments(args);
+        df.show(getSupportFragmentManager(), "GestureSelectionDialog");
     }
 
     private static enum SearchMethod {
