@@ -29,7 +29,7 @@ main = do
   case length args of
     2 -> diffs (head args) (last args)
     _ -> do 
-      putStrLn $ "Usage: " ++ p ++ " ../values/strings.xml strings.xml"
+      putStrLn $ "Usage: " ++ p ++ " res/values/strings.xml res/values-it/strings.xml"
       exitFailure
 
 

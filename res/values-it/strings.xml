@@ -396,7 +396,7 @@
     <string name="edit_audio_text">Modifica audio</string>
     <string name="override_audio_warning_text">Sei sicuro di voler sostituire l\'audio corrente?</string>
     <string name="enable_animation_text">Abilita animazione</string>
-    <string name="enable_animation_summary">Abilita l'animazione nel cambiamento di scheda.</string>
+    <string name="enable_animation_summary">Abilita l\'animazione nel cambiamento di scheda.</string>
     <string name="quiz_completed_text">Quiz completato</string>
     <string name="new_cards_completed_summary">Hai completato il quiz. Vuoi ripassare?</string>
     <string name="review_text">Ripasso</string>
