@@ -51,6 +51,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.apis.graphics.FingerPaint;
 
@@ -218,6 +219,29 @@ public class QuizActivity extends QACardActivity {
         } else if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED && isAnswerShown()) {
             displayCard(false);
         }
+    }
+
+    @Override
+    protected boolean onVolumeUpKeyPressed() {
+        if (isAnswerShown()) {
+            onGradeButtonClickListener.onGradeButtonClick(0);
+            Toast.makeText(this, getString(R.string.grade_text) + " 0", Toast.LENGTH_SHORT).show();
+        } else {
+            displayCard(true);
+        }
+
+        return true;
+    }
+
+    @Override
+    protected boolean onVolumeDownKeyPressed() {
+        if (isAnswerShown()) {
+            onGradeButtonClickListener.onGradeButtonClick(3);
+            Toast.makeText(this, getString(R.string.grade_text) + " 3", Toast.LENGTH_SHORT).show();
+        } else {
+            displayCard(true);
+        }
+        return true;
     }
 
     private void createQueue() {

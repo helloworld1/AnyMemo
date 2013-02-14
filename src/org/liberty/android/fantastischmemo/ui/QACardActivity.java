@@ -73,6 +73,7 @@ import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -733,6 +734,49 @@ abstract public class QACardActivity extends AMActivity {
 
     protected void onGestureDetected(GestureName gestureName) {
         // Nothing
+    }
+
+    // Return true if handled. Default not handle it.
+    // This method will only be called if the volume key shortcut option is enabled.
+    protected boolean onVolumeUpKeyPressed() {
+        return false;
+    }
+
+    // Return true if handled. Default not handle it.
+    protected boolean onVolumeDownKeyPressed() {
+        return false;
+    }
+
+    // Do not handle the key down event. We handle it in onKeyUp 
+    // This method will only be called if the volume key shortcut option is enabled.
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+        if (option.getVolumeKeyShortcut()) {
+            if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+                return true;
+            }
+
+            if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+                return true;
+            }
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+    // handle the key event
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if(option.getVolumeKeyShortcut()) {
+            if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+                return onVolumeUpKeyPressed();
+            }
+
+            if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+                return onVolumeDownKeyPressed();
+            }
+        }
+        return super.onKeyUp(keyCode, event);
     }
 
     private View.OnClickListener onQuestionTextClickListener = new View.OnClickListener() {
