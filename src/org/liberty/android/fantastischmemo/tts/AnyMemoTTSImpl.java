@@ -99,6 +99,7 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
     public void stop(){
         if(speakWord != null){
             speakWord.stop();
+            return;
         }
     	
         myTTS.stop();
@@ -108,6 +109,7 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
             try {
                 Thread.sleep(20);
             } catch (InterruptedException e) {
+                // Do not need to handle this case.
             }
         }
     }

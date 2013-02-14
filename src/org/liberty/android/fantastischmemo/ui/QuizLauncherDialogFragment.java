@@ -19,43 +19,35 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import org.apache.mycommons.lang3.StringUtils;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.apache.mycommons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
-
 import org.liberty.android.fantastischmemo.dao.CardDao;
-
 import org.liberty.android.fantastischmemo.domain.Category;
 
-import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment;
-
 import android.app.Activity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
-
 import android.graphics.Rect;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
-
 import android.preference.PreferenceManager;
-
 import android.support.v4.app.DialogFragment;
-
 import android.text.Editable;
 import android.text.TextWatcher;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -90,6 +82,8 @@ public class QuizLauncherDialogFragment extends DialogFragment {
 
     private EditText quizGroupNumberEdit;
 
+    private CheckBox shuffleCheckbox;
+
     private Button categoryButton;
 
     private int totalCardNumber;
@@ -106,6 +100,8 @@ public class QuizLauncherDialogFragment extends DialogFragment {
     private SharedPreferences.Editor editor;
 
     private Category filterCategory;
+
+    private Map<CompoundButton, View> radioButtonSettingsMapping;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -141,7 +137,11 @@ public class QuizLauncherDialogFragment extends DialogFragment {
 
         quizByGroupRadio = (RadioButton) v.findViewById(R.id.quiz_by_group_radio);
 
+        quizByGroupRadio.setOnCheckedChangeListener(onCheckedChangeListener);
+
         quizByCategoryRadio = (RadioButton) v.findViewById(R.id.quiz_by_category_radio);
+
+        quizByCategoryRadio.setOnCheckedChangeListener(onCheckedChangeListener);
 
         quizGroupSizeTitle = (TextView) v.findViewById(R.id.quiz_group_size_title);
 
@@ -159,6 +159,12 @@ public class QuizLauncherDialogFragment extends DialogFragment {
 
         categoryButton = (Button) v.findViewById(R.id.category_button);
         categoryButton.setOnClickListener(categoryButtonListener);
+
+        radioButtonSettingsMapping = new HashMap<CompoundButton, View>(2);
+        radioButtonSettingsMapping.put(quizByGroupRadio, v.findViewById(R.id.quiz_by_group_settings));
+        radioButtonSettingsMapping.put(quizByCategoryRadio, v.findViewById(R.id.quiz_by_category_settings));
+
+        shuffleCheckbox = (CheckBox) v.findViewById(R.id.shuffle_checkbox);
     
         Rect displayRectangle = new Rect();
         Window window = mActivity.getWindow();
@@ -179,13 +185,30 @@ public class QuizLauncherDialogFragment extends DialogFragment {
         task.execute((Void)null);
     }
 
+    private CompoundButton.OnCheckedChangeListener onCheckedChangeListener
+        = new CompoundButton.OnCheckedChangeListener() {
+
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView,
+                boolean isChecked) {
+                View settingsView = radioButtonSettingsMapping.get(buttonView);
+                if (isChecked) {
+                    settingsView.setVisibility(View.VISIBLE);
+                } else {
+                    settingsView.setVisibility(View.GONE);
+                }
+            }
+        };
+
+
     private View.OnClickListener startQuizButtonOnClickListener = new View.OnClickListener() {
-		@Override
-		public void onClick(View v) {
+        @Override
+        public void onClick(View v) {
             if (quizByCategoryRadio.isChecked()) {
                 Intent intent = new Intent(mActivity, QuizActivity.class);
                 intent.putExtra(QuizActivity.EXTRA_DBPATH, dbPath);
                 intent.putExtra(QuizActivity.EXTRA_CATEGORY_ID, categoryId);
+                intent.putExtra(QuizActivity.EXTRA_SHUFFLE_CARDS, shuffleCheckbox.isChecked());
                 startActivity(intent);
             } else {
                 Intent intent = new Intent(mActivity, QuizActivity.class);
@@ -197,16 +220,17 @@ public class QuizLauncherDialogFragment extends DialogFragment {
                 intent.putExtra(QuizActivity.EXTRA_DBPATH, dbPath);
                 intent.putExtra(QuizActivity.EXTRA_START_CARD_ORD, startOrd);
                 intent.putExtra(QuizActivity.EXTRA_QUIZ_SIZE, groupSize);
+                intent.putExtra(QuizActivity.EXTRA_SHUFFLE_CARDS, shuffleCheckbox.isChecked());
                 startActivity(intent);
             }
-		}
+        }
     };
 
     private View.OnClickListener categoryButtonListener = new View.OnClickListener() {
-		@Override
-		public void onClick(View v) {
+        @Override
+        public void onClick(View v) {
             showCategoriesDialog();
-		}
+        }
     };
 
     /*
@@ -214,7 +238,7 @@ public class QuizLauncherDialogFragment extends DialogFragment {
      */
     private class InitTask extends AsyncTask<Void, Void, Void> {
 
-		@Override
+        @Override
         public void onPreExecute() {
         }
 
@@ -259,20 +283,20 @@ public class QuizLauncherDialogFragment extends DialogFragment {
 
     private TextWatcher editTextWatcher = new TextWatcher() {
 
-		@Override
-		public void beforeTextChanged(CharSequence s, int start, int count,
-				int after) {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count,
+                int after) {
             // Nothing happened
-		}
+        }
 
-		@Override
-		public void onTextChanged(CharSequence s, int start, int before,
-				int count) {
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before,
+                int count) {
             // Nothing happened
-		}
+        }
 
-		@Override
-		public void afterTextChanged(Editable s) {
+        @Override
+        public void afterTextChanged(Editable s) {
             if (StringUtils.isEmpty(s)) {
                 return;
             }
@@ -298,19 +322,19 @@ public class QuizLauncherDialogFragment extends DialogFragment {
             }
             setGroupNumberText();
             setGroupSizeText();
-		}
+        }
     };
 
     View.OnFocusChangeListener sanitizeInputListener =
         new View.OnFocusChangeListener() {
 
-			@Override
-			public void onFocusChange(View v, boolean hasFocus) {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus == false) {
                     quizGroupSizeEdit.setText("" + groupSize);
                     quizGroupNumberEdit.setText("" + groupNumber);
                 }
-			}
+            }
         };
 
     private void showCategoriesDialog() {

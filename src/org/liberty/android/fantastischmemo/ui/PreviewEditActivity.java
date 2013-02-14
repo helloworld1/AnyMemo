@@ -698,14 +698,14 @@ public class PreviewEditActivity extends QACardActivity {
     private View.OnClickListener prevButtonListener = new View.OnClickListener(){
         public void onClick(View v){
             gotoPrev();
-            stopQAndATTS();
+            stopSpeak();
         }
     };
 
     private View.OnClickListener nextButtonListener = new View.OnClickListener(){
         public void onClick(View v){
             gotoNext();
-            stopQAndATTS();
+            stopSpeak();
         }
     };
 

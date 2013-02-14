@@ -52,7 +52,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -358,7 +357,7 @@ public class StudyActivity extends QACardActivity {
     @Override
     public void onPostDisplayCard() {
         // When displaying new card, we should stop the TTS reading.
-        stopQAndATTS();
+        stopSpeak();
         if (isAnswerShown()) {
             // Mnemosyne grade button style won't display the interval.
             if (option.getButtonStyle() != Option.ButtonStyle.MNEMOSYNE) {
@@ -396,7 +395,6 @@ public class StudyActivity extends QACardActivity {
     protected void onClickQuestionText() {
         if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
                 || option.getSpeakingType() == Option.SpeakingType.TAP)) {
-            stopQuestionTTS();
             speakQuestion();
         } else {
             onClickQuestionView();
@@ -410,7 +408,6 @@ public class StudyActivity extends QACardActivity {
         } else {
             if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
                         || option.getSpeakingType() == Option.SpeakingType.TAP)) {
-                stopAnswerTTS();
                 speakAnswer();
             } else {
                 onClickAnswerView();
@@ -502,11 +499,9 @@ public class StudyActivity extends QACardActivity {
         if (getCurrentCard() != null) {
             if(!isAnswerShown()){
                 // Make sure the TTS is stop, or it will speak nothing.
-                stopQuestionTTS();
                 speakQuestion();
             } else {
                 // Make sure the TTS is stop
-                stopAnswerTTS();
                 speakAnswer();
             }
         }

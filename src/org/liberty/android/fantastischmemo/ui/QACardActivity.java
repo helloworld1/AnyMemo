@@ -510,7 +510,7 @@ abstract public class QACardActivity extends AMActivity {
     public void onDestroy() {
         super.onDestroy();
         AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
-        shutdownQAndATTS();
+        shutdownTTS();
 
         /* Update the widget because StudyActivity can be accessed though widget*/
         Intent myIntent = new Intent(this, AnyMemoService.class);
@@ -653,6 +653,7 @@ abstract public class QACardActivity extends AMActivity {
     }
 
     protected boolean speakQuestion() {
+        stopSpeak();
         if (questionTTS != null) {
             questionTTS.sayText(getCurrentCard().getQuestion());
             return true;
@@ -661,6 +662,7 @@ abstract public class QACardActivity extends AMActivity {
     }
 
     protected boolean speakAnswer() {
+        stopSpeak();
         if (answerTTS != null) {
             answerTTS.sayText(getCurrentCard().getAnswer());
             return true;
@@ -668,24 +670,24 @@ abstract public class QACardActivity extends AMActivity {
         return false;
     }
 
-    protected void stopQAndATTS() {
+    protected void stopSpeak() {
         stopAnswerTTS();
         stopQuestionTTS();
     }
 
-    protected void stopQuestionTTS() {
+    private void stopQuestionTTS() {
         if (questionTTS != null) {
             questionTTS.stop();
         }
     }
 
-    protected void stopAnswerTTS() {
+    private void stopAnswerTTS() {
         if (answerTTS != null) {
             answerTTS.stop();
         }
     }
 
-    private void shutdownQAndATTS() {
+    private void shutdownTTS() {
         if (questionTTS != null) {
             questionTTS.shutdown();
         }
