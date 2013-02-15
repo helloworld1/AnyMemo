@@ -263,19 +263,25 @@ public class QuizLauncherDialogFragment extends DialogFragment {
             groupSize = totalCardNumber;
         }
         int maxGroupSize = Math.min(totalCardNumber, MAX_GROUP_SIZE);
+
+        //  If maxGroupNumberis 0, Math.min(maxGroupSize, 1) will display 0
         quizGroupSizeTitle.setText(getString(R.string.quiz_group_size_text)
-                + " (1-" + maxGroupSize + ")");
+                + " (" + Math.min(maxGroupSize, 1) + "-" + maxGroupSize + ")");
         if (StringUtils.isEmpty(quizGroupSizeEdit.getText())) {
             quizGroupSizeEdit.setText("" + groupSize);
         }
     }
 
     private void setGroupNumberText() {
-        int maxGroupNumber = (totalCardNumber - 1) / groupSize + 1;
+        // The groupSize can be 0, so use max (1, groupSize) to
+        // fix divided by zero problem
+        int maxGroupNumber = (totalCardNumber - 1) / Math.max(1, groupSize) + 1;
         if (groupNumber > maxGroupNumber) {
             groupNumber = maxGroupNumber;
         }
-        quizGroupNumberTitle.setText(getString(R.string.quiz_group_number_text) + " (1-" + maxGroupNumber + ")");
+        //  If maxGroupNumberis 0, Math.min(maxGroupNumber, 1) will display 0
+        quizGroupNumberTitle.setText(getString(R.string.quiz_group_number_text)
+                + " (" + Math.min(maxGroupNumber, 1) + "-" + maxGroupNumber + ")");
         if (StringUtils.isEmpty(quizGroupNumberEdit.getText())) {
             quizGroupNumberEdit.setText("" + groupNumber);
         }
