@@ -52,7 +52,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -274,20 +273,6 @@ public class StudyActivity extends QACardActivity {
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event){
-        if(option.getVolumeKeyShortcut()){
-            if(keyCode == KeyEvent.KEYCODE_VOLUME_UP){
-                return true;
-            }
-            else if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
-                return true;
-            }
-        }
-
-        return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
     public void onBackPressed() {
         Log.v(TAG, "back button pressed");
         FinishTask task = new FinishTask();
@@ -315,34 +300,6 @@ public class StudyActivity extends QACardActivity {
         } else {
             Log.i(TAG, "There is another task running. Do not run tasks");
         }
-    }
-
-    @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event){
-        /* Short press to scroe the card */
-
-        if(option.getVolumeKeyShortcut()){
-            if(keyCode == KeyEvent.KEYCODE_VOLUME_UP){
-                if (isAnswerShown()) {
-                    onGradeButtonClickListener.onGradeButtonClick(0);
-                    Toast.makeText(this, getString(R.string.grade_text) + " 0", Toast.LENGTH_SHORT).show();
-                } else {
-                    displayCard(true);
-                }
-
-                return true;
-            }
-            if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
-                if (isAnswerShown()) {
-                    onGradeButtonClickListener.onGradeButtonClick(3);
-                    Toast.makeText(this, getString(R.string.grade_text) + " 3", Toast.LENGTH_SHORT).show();
-                } else {
-                    displayCard(true);
-                }
-                return true;
-            }
-        }
-        return super.onKeyUp(keyCode, event);
     }
 
     @Override
@@ -400,7 +357,7 @@ public class StudyActivity extends QACardActivity {
     @Override
     public void onPostDisplayCard() {
         // When displaying new card, we should stop the TTS reading.
-        stopQAndATTS();
+        stopSpeak();
         if (isAnswerShown()) {
             // Mnemosyne grade button style won't display the interval.
             if (option.getButtonStyle() != Option.ButtonStyle.MNEMOSYNE) {
@@ -438,7 +395,6 @@ public class StudyActivity extends QACardActivity {
     protected void onClickQuestionText() {
         if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
                 || option.getSpeakingType() == Option.SpeakingType.TAP)) {
-            stopQuestionTTS();
             speakQuestion();
         } else {
             onClickQuestionView();
@@ -452,7 +408,6 @@ public class StudyActivity extends QACardActivity {
         } else {
             if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
                         || option.getSpeakingType() == Option.SpeakingType.TAP)) {
-                stopAnswerTTS();
                 speakAnswer();
             } else {
                 onClickAnswerView();
@@ -474,6 +429,29 @@ public class StudyActivity extends QACardActivity {
         } else if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED && isAnswerShown()) {
             displayCard(false);
         }
+    }
+
+    @Override
+    protected boolean onVolumeUpKeyPressed() {
+        if (isAnswerShown()) {
+            onGradeButtonClickListener.onGradeButtonClick(0);
+            Toast.makeText(this, getString(R.string.grade_text) + " 0", Toast.LENGTH_SHORT).show();
+        } else {
+            displayCard(true);
+        }
+
+        return true;
+    }
+
+    @Override
+    protected boolean onVolumeDownKeyPressed() {
+        if (isAnswerShown()) {
+            onGradeButtonClickListener.onGradeButtonClick(3);
+            Toast.makeText(this, getString(R.string.grade_text) + " 3", Toast.LENGTH_SHORT).show();
+        } else {
+            displayCard(true);
+        }
+        return true;
     }
 
     private void showNoItemDialog(){
@@ -521,11 +499,9 @@ public class StudyActivity extends QACardActivity {
         if (getCurrentCard() != null) {
             if(!isAnswerShown()){
                 // Make sure the TTS is stop, or it will speak nothing.
-                stopQuestionTTS();
                 speakQuestion();
             } else {
                 // Make sure the TTS is stop
-                stopAnswerTTS();
                 speakAnswer();
             }
         }

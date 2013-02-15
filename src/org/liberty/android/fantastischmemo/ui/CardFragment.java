@@ -25,18 +25,14 @@ import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.R;
 
 import android.app.Activity;
-
 import android.graphics.Typeface;
-
 import android.os.Bundle;
-
 import android.support.v4.app.Fragment;
-
+import android.text.method.LinkMovementMethod;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -98,6 +94,10 @@ public class CardFragment extends Fragment {
         rootView = (LinearLayout) v.findViewById(R.id.root);
 
         cardTextView.setText(mCardText);
+
+        // Uncomment the line below for the text field to handle links.
+        // The line is commented out because it is not well tested.
+        // cardTextView.setMovementMethod(LinkMovementMethod.getInstance());
 
         if (cardOnClickListener != null) {
             rootView.setOnClickListener(cardOnClickListener);

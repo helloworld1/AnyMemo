@@ -53,7 +53,6 @@ import android.support.v4.view.ViewPager;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.TabHost;
@@ -62,7 +61,10 @@ import android.widget.TabWidget;
 import android.widget.TextView;
 
 public class AnyMemo extends AMActivity {
-    private final static String WEBSITE_VERSION="http://anymemo.org/index.php?page=version";
+    private static final String WEBSITE_VERSION="http://anymemo.org/index.php?page=version";
+
+    public static final String EXTRA_INITIAL_TAB = "initial_tab";
+
     private TabHost mTabHost;
     private TabManager mTabManager;
     private ViewPager mViewPager;
@@ -90,10 +92,18 @@ public class AnyMemo extends AMActivity {
         initViewPager();
         initTabHosts();
 
-        // This is the default tab.
-        if (savedInstanceState != null) {
-            mTabHost.setCurrentTabByTag(savedInstanceState.getString("recent"));
+        // Find out the initial tab.
+        String initialTab = "recent";
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            initialTab = extras.getString(EXTRA_INITIAL_TAB);
+        } else if (savedInstanceState != null) {
+            // This is the default tab.
+            initialTab = savedInstanceState.getString("recent");
         }
+
+        mTabHost.setCurrentTabByTag(initialTab);
 
 
         // Make sure the widget will fill the screen if the
@@ -233,7 +243,14 @@ public class AnyMemo extends AMActivity {
         startService(myIntent);
     }
 
-
+    @Override
+    public void restartActivity() {
+        // The restart activity remember the current tab.
+        Intent intent = new Intent(this, this.getClass());
+        intent.putExtra(EXTRA_INITIAL_TAB, mTabHost.getCurrentTabTag());
+        startActivity(intent);
+        finish();
+    }
 
     @SuppressWarnings("unused")
     private class TabManager {

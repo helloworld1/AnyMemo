@@ -51,6 +51,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.apis.graphics.FingerPaint;
 
@@ -59,6 +60,7 @@ public class QuizActivity extends QACardActivity {
     public static String EXTRA_CATEGORY_ID = "category_id";
     public static String EXTRA_START_CARD_ORD = "start_card_ord";
     public static String EXTRA_QUIZ_SIZE = "quiz_size";
+    public static String EXTRA_SHUFFLE_CARDS = "shuffle_cards";
 
     private CardDao cardDao;
     private LearningDataDao learningDataDao;
@@ -92,9 +94,9 @@ public class QuizActivity extends QACardActivity {
 
     private boolean isNewCardsCompleted = false;
 
+    private boolean shuffleCards = false;
 
     private int totalQuizSize = -1;
-
 
     @Override
     public void onInit() throws Exception {
@@ -144,6 +146,7 @@ public class QuizActivity extends QACardActivity {
         categoryId = extras.getInt(EXTRA_CATEGORY_ID, -1);
         startCardOrd = extras.getInt(EXTRA_START_CARD_ORD, -1);
         quizSize = extras.getInt(EXTRA_QUIZ_SIZE, -1);
+        shuffleCards = extras.getBoolean(EXTRA_SHUFFLE_CARDS, false);
 
         super.onCreate(savedInstanceState);
     }
@@ -186,7 +189,6 @@ public class QuizActivity extends QACardActivity {
     protected void onClickQuestionText() {
         if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
                 || option.getSpeakingType() == Option.SpeakingType.TAP)) {
-            stopQuestionTTS();
             speakQuestion();
         } else {
             onClickQuestionView();
@@ -199,7 +201,6 @@ public class QuizActivity extends QACardActivity {
             onClickAnswerView();
         } else if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
                 || option.getSpeakingType() == Option.SpeakingType.TAP)) {
-            stopAnswerTTS();
             speakAnswer();
         }
     }
@@ -220,24 +221,54 @@ public class QuizActivity extends QACardActivity {
         }
     }
 
+    @Override
+    protected boolean onVolumeUpKeyPressed() {
+        if (isAnswerShown()) {
+            onGradeButtonClickListener.onGradeButtonClick(0);
+            Toast.makeText(this, getString(R.string.grade_text) + " 0", Toast.LENGTH_SHORT).show();
+        } else {
+            displayCard(true);
+        }
+
+        return true;
+    }
+
+    @Override
+    protected boolean onVolumeDownKeyPressed() {
+        if (isAnswerShown()) {
+            onGradeButtonClickListener.onGradeButtonClick(3);
+            Toast.makeText(this, getString(R.string.grade_text) + " 3", Toast.LENGTH_SHORT).show();
+        } else {
+            displayCard(true);
+        }
+        return true;
+    }
+
     private void createQueue() {
         QuizQueueManager.Builder builder = new QuizQueueManager.Builder()
             .setDbOpenHelper(getDbOpenHelper())
             .setScheduler(scheduler)
             .setStartCardOrd(startCardOrd)
-            .setFilterCategory(filterCategory);
+            .setFilterCategory(filterCategory)
+            .setShuffle(shuffleCards);
 
         if (startCardOrd != -1) {
             builder.setStartCardOrd(startCardOrd)
                 .setQuizSize(quizSize);
         }
 
-        if (option.getShuffleType() == Option.ShuffleType.LOCAL) {
-            builder.setShuffle(true);
-        } else {
-            builder.setShuffle(false);
-        }
         queueManager = (QuizQueueManager) builder.build();
+    }
+
+    @Override
+    public void onPostDisplayCard() {
+        // When displaying new card, we should stop the TTS reading.
+        stopSpeak();
+        if (isAnswerShown()) {
+            gradeButtons.show();
+        } else {
+            gradeButtons.hide();
+        }
     }
 
     private void setupGradeButtons() {

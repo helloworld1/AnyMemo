@@ -139,7 +139,7 @@ public class QuizQueueManager implements QueueManager {
     }
 
     private synchronized void refill(Category category) {
-        newCache.addAll(cardDao.getCardsByCategory(category, true, MAX_QUEUE_SIZE));
+        newCache.addAll(cardDao.getCardsByCategory(category, false, MAX_QUEUE_SIZE));
     }
     
     public int getNewQueueSize() {
