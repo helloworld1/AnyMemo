@@ -439,5 +439,4 @@
     <string name="select_category_text">Seleziona categoria</string>
     <string name="dropbox_successfully_uploaded_message">Il file è stato correttamente caricato nella tua cartella Dropbox AnyMemo</string>
     <string name="upload_dropbox_message">Vuoi caricare %s nella tua cartella Dropbox AnyMemo? Potrebbe metterci parecchio se ci sono più di 1000 schede.</string>
-    <string name="dropbox_token_failure_text">Errore nel caricamento del token di accesso. Riprova.</string>
 </resources>
