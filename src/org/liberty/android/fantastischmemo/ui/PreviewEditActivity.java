@@ -648,6 +648,10 @@ public class PreviewEditActivity extends QACardActivity {
     }
 
     private void createSearchOverlay(){
+        // Disable the function if there are no cards.
+        if (getCurrentCard() == null) {
+            return;
+        }
         if(searchInflated == false){
             LinearLayout root = (LinearLayout)findViewById(R.id.root);
             LayoutInflater.from(this).inflate(R.layout.search_overlay, root);

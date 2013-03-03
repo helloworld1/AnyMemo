@@ -365,7 +365,12 @@ public class StudyActivity extends QACardActivity {
             }
             gradeButtons.show();
         } else {
-            gradeButtons.hide();
+            // The grade button should be gone for double sided cards.
+            if (setting.getCardStyle() ==  Setting.CardStyle.DOUBLE_SIDED) {
+                gradeButtons.hide();
+            } else {
+                gradeButtons.invisible();
+            }
         }
 
         // Auto speak after displaying a card.
@@ -549,6 +554,9 @@ public class StudyActivity extends QACardActivity {
         gradeButtons.setGradeButtonBackground(4, R.drawable.green_button);
         gradeButtons.setGradeButtonBackground(5, R.drawable.green_button);
 
+        // Set up the background color the same as the color.
+        gradeButtons.setBackgroundColor(setting.getAnswerBackgroundColor());
+
         // Make sure touching all areas can reveal the card.
         rootView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -567,20 +575,16 @@ public class StudyActivity extends QACardActivity {
         gradeButtons.setOnGradeButtonClickListener(onGradeButtonClickListener);
 
         /* This li is make the background of buttons the same as answer */
-        LinearLayout li = new LinearLayout(this);
-        li.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-        Integer color = setting.getAnswerBackgroundColor();
-        if(color != null) {
-            li.setBackgroundColor(color);
-        }
+        LinearLayout buttonsLayout = new LinearLayout(this);
+        buttonsLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
         /* 
          * -1: Match parent -2: Wrap content
          * This is necessary or the view will not be 
          * stetched
          */
-        li.addView(gradeButtonsView, -1, -2);
-        rootView.addView(li, -1, -2);
+        buttonsLayout.addView(gradeButtonsView, -1, -2);
+        rootView.addView(buttonsLayout, -1, -2);
     }
 
 

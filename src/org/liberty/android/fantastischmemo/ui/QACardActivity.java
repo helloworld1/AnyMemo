@@ -315,6 +315,18 @@ abstract public class QACardActivity extends AMActivity {
                             LayoutParams.MATCH_PARENT, aRatio));
         }
 
+        // Double sided card has no animation and no horizontal line
+        if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED) {
+            if (showAnswer) {
+                findViewById(R.id.question).setVisibility(View.GONE);
+                findViewById(R.id.answer).setVisibility(View.VISIBLE);
+            } else {
+                findViewById(R.id.question).setVisibility(View.VISIBLE);
+                findViewById(R.id.answer).setVisibility(View.GONE);
+            }
+            findViewById(R.id.horizontal_line).setVisibility(View.GONE);
+        }
+
         // Finally we generate the fragments
         CardFragment questionFragment = new CardFragment.Builder(sq)
                 .setTextAlignment(questionAlignValue)
@@ -355,18 +367,6 @@ abstract public class QACardActivity extends AMActivity {
                     .build();
         }
 
-        // Double sided card has no animation and no horizontal line
-        if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED) {
-            if (showAnswer) {
-                findViewById(R.id.question).setVisibility(View.GONE);
-                findViewById(R.id.answer).setVisibility(View.VISIBLE);
-            } else {
-                findViewById(R.id.question).setVisibility(View.VISIBLE);
-                findViewById(R.id.answer).setVisibility(View.GONE);
-            }
-            findViewById(R.id.horizontal_line).setVisibility(View.GONE);
-        }
-
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
         if (setting.getCardStyle() != Setting.CardStyle.DOUBLE_SIDED
@@ -382,17 +382,22 @@ abstract public class QACardActivity extends AMActivity {
 
         ft = getSupportFragmentManager().beginTransaction();
 
-        if (setting.getCardStyle() != Setting.CardStyle.DOUBLE_SIDED
-                && option.getEnableAnimation()) {
-            if (isAnswerShown == false && showAnswer == true) {
-                ft.setCustomAnimations(0, R.anim.slide_down);
+        if (option.getEnableAnimation()) {
+            if (setting.getCardStyle() != Setting.CardStyle.DOUBLE_SIDED) {
+                if (isAnswerShown == false && showAnswer == true) {
+                    ft.setCustomAnimations(0, R.anim.slide_down);
+                } else {
+                    ft.setCustomAnimations(animationInResId, animationOutResId);
+                }
             } else {
-                ft.setCustomAnimations(animationInResId, animationOutResId);
+                // Animation for double sided cards
+                // Current no animation
             }
         }
 
         ft.replace(R.id.answer, answerFragment);
         ft.commit();
+
 
         isAnswerShown = showAnswer;
 
