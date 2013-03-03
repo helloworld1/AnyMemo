@@ -322,7 +322,10 @@ abstract public class QACardActivity extends AMActivity {
                 .setTextOnClickListener(onQuestionTextClickListener)
                 .setCardOnClickListener(onQuestionViewClickListener)
                 .setTextFontSize(setting.getQuestionFontSize())
-                .setTypefaceFromFile(setting.getQuestionFont()).build();
+                .setTypefaceFromFile(setting.getQuestionFont())
+                .setTextColor(setting.getQuestionTextColor())
+                .setBackgroundColor(setting.getQuestionBackgroundColor())
+                .build();
 
         CardFragment answerFragment = null;
 
@@ -334,7 +337,10 @@ abstract public class QACardActivity extends AMActivity {
                     .setTextOnClickListener(onAnswerTextClickListener)
                     .setCardOnClickListener(onAnswerViewClickListener)
                     .setTextFontSize(setting.getAnswerFontSize())
-                    .setTypefaceFromFile(setting.getAnswerFont()).build();
+                    .setTextColor(setting.getAnswerTextColor())
+                    .setBackgroundColor(setting.getAnswerBackgroundColor())
+                    .setTypefaceFromFile(setting.getAnswerFont())
+                    .build();
         } else {
             answerFragment = new CardFragment.Builder(
                     getString(R.string.memo_show_answer))
@@ -343,7 +349,10 @@ abstract public class QACardActivity extends AMActivity {
                     .setTextOnClickListener(onAnswerTextClickListener)
                     .setCardOnClickListener(onAnswerViewClickListener)
                     .setTextFontSize(setting.getAnswerFontSize())
-                    .setTypefaceFromFile(setting.getAnswerFont()).build();
+                    .setTextColor(setting.getAnswerTextColor())
+                    .setBackgroundColor(setting.getAnswerBackgroundColor())
+                    .setTypefaceFromFile(setting.getAnswerFont())
+                    .build();
         }
 
         // Double sided card has no animation and no horizontal line

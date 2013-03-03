@@ -408,6 +408,7 @@ public class QuizActivity extends QACardActivity {
             .setTitle(R.string.quiz_completed_text)
             .setMessage(R.string.quiz_complete_summary)
             .setPositiveButton(R.string.back_menu_text, flushAndQuitListener)
+            .setCancelable(false)
             .show();
     }
 
@@ -425,6 +426,7 @@ public class QuizActivity extends QACardActivity {
             .setView(view)
             .setPositiveButton(R.string.review_text, null)
             .setNegativeButton(R.string.cancel_text, flushAndQuitListener)
+            .setCancelable(false)
             .show();
     }
     
