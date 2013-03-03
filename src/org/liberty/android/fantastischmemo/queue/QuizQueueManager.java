@@ -116,22 +116,24 @@ public class QuizQueueManager implements QueueManager {
 	public synchronized void flush() {
         // Update the queue
         
-        try {
-            learningDataDao.callBatchTasks (
-                new Callable<Void>() {
-                    public Void call() throws Exception {
-                        for (Card card : dirtyCache) {
-                            Log.i(TAG, "Flushing: " + card.getLearningData());
-                            learningDataDao.update(card.getLearningData());
-                            cardDao.update(card);
-                        }
-                        dirtyCache.clear();
-                        return null;
-                    }
-                });
-        } catch (Exception e) {
-            throw new RuntimeException("Queue flushing get exception!", e);
-        }
+        // Current it is not quite functional.
+        throw new UnsupportedOperationException("QuizQueue's flush function is not quite functional");
+        // try {
+        //     learningDataDao.callBatchTasks (
+        //         new Callable<Void>() {
+        //             public Void call() throws Exception {
+        //                 for (Card card : dirtyCache) {
+        //                     Log.i(TAG, "Flushing: " + card.getLearningData());
+        //                     learningDataDao.update(card.getLearningData());
+        //                     cardDao.update(card);
+        //                 }
+        //                 dirtyCache.clear();
+        //                 return null;
+        //             }
+        //         });
+        // } catch (Exception e) {
+        //     throw new RuntimeException("Queue flushing get exception!", e);
+        // }
 	}
 
     private synchronized void refill(long startOrd, long size) {

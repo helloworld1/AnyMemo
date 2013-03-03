@@ -36,7 +36,6 @@ import org.liberty.android.fantastischmemo.utils.AMStringUtil;
 import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -429,44 +428,16 @@ public class QuizActivity extends QACardActivity {
             .show();
     }
     
+    // Current flush is not functional. So this method only quit and does not flush
+    // the queue.
     private DialogInterface.OnClickListener flushAndQuitListener =
         new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                FlushAndQuitTask task = new FlushAndQuitTask();
-                task.execute((Void)null);
-				
+                finish();
 			}
         };
-
-    private class FlushAndQuitTask extends AsyncTask<Void, Void, Void>{
-        private ProgressDialog progressDialog;
-
-        @Override
-        public void onPreExecute(){
-            super.onPreExecute();
-            progressDialog = new ProgressDialog(QuizActivity.this);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setTitle(getString(R.string.loading_please_wait));
-            progressDialog.setMessage(getString(R.string.loading_save));
-            progressDialog.show();
-            
-        }
-
-        @Override
-        public Void doInBackground(Void... nothing){
-            queueManager.flush();
-            return null;
-        }
-
-        @Override
-        public void onPostExecute(Void result){
-            super.onPostExecute(result);
-            progressDialog.dismiss();
-            finish();
-        }
-    }
 
     private void showNoItemDialog(){
         new AlertDialog.Builder(this)
@@ -488,5 +459,4 @@ public class QuizActivity extends QACardActivity {
             .create()
             .show();
     }
-
 }
