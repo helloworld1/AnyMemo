@@ -81,6 +81,7 @@ public class PreviewEditActivity extends QACardActivity {
     private CardDao cardDao;
     private LearningDataDao learningDataDao;
     private CategoryDao categoryDao;
+    LinearLayout buttonsLayout;
 
     Button newButton;
     Button editButton;
@@ -445,6 +446,8 @@ public class PreviewEditActivity extends QACardActivity {
     protected void onClickAnswerView() {
         if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED) {
             displayCard(false);
+            // Also the buttons should match the color.
+            buttonsLayout.setBackgroundColor(setting.getQuestionBackgroundColor());
         }
     }
 
@@ -455,6 +458,7 @@ public class PreviewEditActivity extends QACardActivity {
     protected void onClickQuestionView() {
         if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED) {
             displayCard(true);
+            buttonsLayout.setBackgroundColor(setting.getAnswerBackgroundColor());
         }
     }
 
@@ -506,18 +510,17 @@ public class PreviewEditActivity extends QACardActivity {
 
         //LinearLayout controlButtonsView = (LinearLayout)controlButtons.getView();
         /* This li is make the background of buttons the same as answer */
-        LinearLayout li = new LinearLayout(this);
-        li.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.FILL_PARENT));
-        li.setBackgroundColor(setting.getAnswerBackgroundColor());
+        buttonsLayout = new LinearLayout(this);
+        buttonsLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
         /* 
          * -1: Match parent -2: Wrap content
          * This is necessary or the view will not be 
          * stetched
          */
-        li.addView(controlButtonsView, -1, -2);
+        buttonsLayout.addView(controlButtonsView, -1, -2);
         
-        rootView.addView(li, -1, -2);
+        rootView.addView(buttonsLayout, -1, -2);
         //rootView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
 
         newButton = (Button) findViewById(R.id.new_button);
@@ -637,12 +640,13 @@ public class PreviewEditActivity extends QACardActivity {
     private void updateCardFrontSide(){
         if(getCurrentCard() != null){
             if(setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED){
-                // TODO: How to handle double sided card
                 /* Double sided card, show front */
                 displayCard(false);
+                buttonsLayout.setBackgroundColor(setting.getQuestionBackgroundColor());
             } else {
                 /* Single sided, show both answer and questjion. */
                 displayCard(true);
+                buttonsLayout.setBackgroundColor(setting.getAnswerBackgroundColor());
             }
         }
     }
