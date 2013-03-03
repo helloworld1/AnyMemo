@@ -2,7 +2,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     <string name="app_name">AnyMemo</string>
     <string name="app_full_name">AnyMemo Free</string>
-    <string name="app_version">10.0</string>
+    <string name="app_version">10.0.1</string>
     <string name="ok_text">OK</string>
     <string name="cancel_text">Cancel</string>
     <string name="yes_text">Yes</string>
