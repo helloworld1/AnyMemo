@@ -127,7 +127,9 @@ public class GradeButtons {
     // color, but the buttons are invisible
     public void invisible() {
         for (Button b : gradeButtons) {
-            b.setVisibility(View.INVISIBLE);
+            if (b.getVisibility() == View.VISIBLE) {
+                b.setVisibility(View.INVISIBLE);
+            }
         }
     }
 
@@ -137,7 +139,9 @@ public class GradeButtons {
 
     public void show() {
         for (Button b : gradeButtons) {
-            b.setVisibility(View.VISIBLE);
+            if (b.getVisibility() == View.INVISIBLE) {
+                b.setVisibility(View.VISIBLE);
+            }
         }
         buttonView.setVisibility(View.VISIBLE);
     }
