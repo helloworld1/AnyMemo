@@ -19,17 +19,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import org.apache.mycommons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.utils.AMUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
+import org.liberty.android.fantastischmemo.utils.ShareUtil;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -39,7 +38,11 @@ import android.view.ViewGroup;
 public class OpenActionsFragment extends DialogFragment {
     public static String EXTRA_DBPATH = "dbpath";
     private AMActivity mActivity;
+
+    private ShareUtil shareUtil;
+
     private String dbPath;
+
     private View studyItem;
     private View editItem;
     private View listItem;
@@ -53,6 +56,7 @@ public class OpenActionsFragment extends DialogFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = (AMActivity)activity;
+        shareUtil = new ShareUtil(activity);
     }
     @Override
     public void onCreate(Bundle bundle) {
@@ -145,11 +149,7 @@ public class OpenActionsFragment extends DialogFragment {
             }
 
             if (v == shareItem) {
-                Intent sendIntent= new Intent(Intent.ACTION_SEND);
-                sendIntent.setType("application/x-sqlite3");
-                sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + dbPath));
-                sendIntent.putExtra(Intent.EXTRA_SUBJECT, FilenameUtils.getName(dbPath));
-                startActivity(Intent.createChooser(sendIntent, getString(R.string.share_text)));
+                shareUtil.shareDb(dbPath);
             }
 
             if (v == deleteItem) {

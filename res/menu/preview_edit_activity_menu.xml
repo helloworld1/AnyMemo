@@ -41,7 +41,8 @@
     <item 
         android:id="@+id/menu_context_reset_current"
         android:title="@string/detail_reset" />
-
+    <item android:id="@+id/menu_share"
+            android:title="@string/share_text" />
     <item android:id="@+id/menu_gestures"
             android:title="@string/gestures_text" />
     <item

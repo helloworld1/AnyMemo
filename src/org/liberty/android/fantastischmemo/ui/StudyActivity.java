@@ -41,6 +41,7 @@ import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEdi
 import org.liberty.android.fantastischmemo.utils.AMStringUtil;
 import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
 import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
+import org.liberty.android.fantastischmemo.utils.ShareUtil;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -110,6 +111,8 @@ public class StudyActivity extends QACardActivity {
     private DictionaryUtil dictionaryUtil;
 
     private AMStringUtil amStringUtil;
+
+    private ShareUtil shareUtil;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -217,6 +220,13 @@ public class StudyActivity extends QACardActivity {
                 gotoPaint();
                 return true;
             }
+
+            case R.id.menu_share:
+            {
+                shareUtil.shareCard(getCurrentCard());
+                return true;
+            }
+
         }
 
         return false;
@@ -319,6 +329,7 @@ public class StudyActivity extends QACardActivity {
         option = getOption();
         dictionaryUtil = new DictionaryUtil(this);
         amStringUtil = new AMStringUtil(this);
+        shareUtil = new ShareUtil(this);
 
 
         // The query of filter cateogry should happen before createQueue

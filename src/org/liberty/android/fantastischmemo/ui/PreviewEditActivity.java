@@ -35,6 +35,7 @@ import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
+import org.liberty.android.fantastischmemo.utils.ShareUtil;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -94,8 +95,11 @@ public class PreviewEditActivity extends QACardActivity {
 
     private Setting setting;
     private Option option;
+
+    private ShareUtil shareUtil;
     
     private GestureDetector gestureDetector;
+
 
 
     // The first card to read and display.
@@ -131,6 +135,8 @@ public class PreviewEditActivity extends QACardActivity {
         settingDao = getDbOpenHelper().getSettingDao();
         setting = settingDao.queryForId(1);
         option = new Option(PreviewEditActivity.this);
+
+        shareUtil = new ShareUtil(this);
 
         // If category is set, it will override the card id.
         if (activeCategoryId != -1) {
@@ -435,6 +441,12 @@ public class PreviewEditActivity extends QACardActivity {
                         restartActivity();
                     }
                 });
+                return true;
+            }
+
+            case R.id.menu_share:
+            {
+                shareUtil.shareCard(getCurrentCard());
                 return true;
             }
         }
