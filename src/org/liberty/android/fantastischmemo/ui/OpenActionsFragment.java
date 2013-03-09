@@ -19,22 +19,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
+import org.apache.mycommons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.R;
-
 import org.liberty.android.fantastischmemo.utils.AMUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-
 import android.content.DialogInterface;
 import android.content.Intent;
-
+import android.net.Uri;
 import android.os.Bundle;
-
 import android.support.v4.app.DialogFragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +46,7 @@ public class OpenActionsFragment extends DialogFragment {
     private View quizItem;
     private View settingsItem;
     private View statisticsItem;
+    private View shareItem;
     private View deleteItem;
 
     @Override
@@ -89,6 +87,10 @@ public class OpenActionsFragment extends DialogFragment {
 
         statisticsItem = v.findViewById(R.id.statistics);
         statisticsItem.setOnClickListener(buttonClickListener);
+
+        shareItem = v.findViewById(R.id.share);
+        shareItem.setOnClickListener(buttonClickListener);
+
         return v;
     }
 
@@ -140,6 +142,14 @@ public class OpenActionsFragment extends DialogFragment {
                 myIntent.setClass(mActivity, StatisticsScreen.class);
                 myIntent.putExtra(SettingsScreen.EXTRA_DBPATH, dbPath);
                 startActivity(myIntent);
+            }
+
+            if (v == shareItem) {
+                Intent sendIntent= new Intent(Intent.ACTION_SEND);
+                sendIntent.setType("application/x-sqlite3");
+                sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + dbPath));
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT, FilenameUtils.getName(dbPath));
+                startActivity(Intent.createChooser(sendIntent, getString(R.string.share_text)));
             }
 
             if (v == deleteItem) {
