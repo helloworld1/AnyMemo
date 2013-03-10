@@ -435,4 +435,5 @@
     <string name="select_category_text">Выбрать категорию</string>
     <string name="dropbox_successfully_uploaded_message">Файл успешно залит в ваш Dropbox AnyMemo каталог</string>
     <string name="upload_dropbox_message">Хотите залить %s в ваш Dropbox AnyMemo каталог? Это может занять несколько минут, если карточек более 1000.</string>
+    <string name="share_text">Делиться</string>
 </resources>
