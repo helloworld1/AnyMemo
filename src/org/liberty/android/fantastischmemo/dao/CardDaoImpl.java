@@ -443,7 +443,16 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
             callBatchTasks(new Callable<Void>() {
                 // Use the map to get rid of duplicate category creation
                 final Map<String, Category> categoryMap = new HashMap<String, Category>();
+
                 public Void call() throws Exception {
+                    List<Category> existingCategories = categoryDao.queryForAll();
+
+                    for (Category c : existingCategories) {
+                        assert c != null : "Null category in db";
+                        if (c != null) {
+                            categoryMap.put(c.getName(), c);
+                        }
+                    }
                     for (Card card : cardList) {
                         assert card.getCategory() != null : "Card's category must be populated";
                         assert card.getLearningData() != null : "Card's learningData must be populated";
@@ -476,12 +485,25 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
         try {
             final LearningDataDao learningDataDao = getHelper().getLearningDataDao();
             final CategoryDao categoryDao = getHelper().getCategoryDao();
+
+            // Use the map to get rid of duplicate category creation
+
             callBatchTasks(new Callable<Void>() {
-                // Use the map to get rid of duplicate category creation
                 final Map<String, Category> categoryMap = new HashMap<String, Category>();
                 public Void call() throws Exception {
                     assert card.getCategory() != null : "Card's category must be populated";
                     assert card.getLearningData() != null : "Card's learningData must be populated";
+
+                    // Populate the existing categories.
+                    List<Category> existingCategories = categoryDao.queryForAll();
+
+                    for (Category c : existingCategories) {
+                        assert c != null : "Null category in db";
+                        if (c != null) {
+                            categoryMap.put(c.getName(), c);
+                        }
+                    }
+
                     String currentCategoryName = card.getCategory().getName();
                     if (categoryMap.containsKey(currentCategoryName)) {
                         card.setCategory(categoryMap.get(currentCategoryName));

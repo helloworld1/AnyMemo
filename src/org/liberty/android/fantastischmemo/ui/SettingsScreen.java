@@ -37,7 +37,7 @@ import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.domain.Setting.CardField;
 import org.liberty.android.fantastischmemo.ui.widgets.AMSpinner;
-import org.liberty.android.fantastischmemo.utils.DatabaseUtils;
+import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -98,6 +98,8 @@ public class SettingsScreen extends AMActivity {
     private EnumSet<CardField> answerFields;
 
     private AnyMemoDBOpenHelper dbOpenHelper;
+    
+    private DatabaseUtil databaseUtil;
 
     private boolean settingsChanged = false;
 
@@ -107,6 +109,7 @@ public class SettingsScreen extends AMActivity {
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         settingsChanged = false;
+        databaseUtil = new DatabaseUtil(this);
         InitTask initTask = new InitTask();
         initTask.execute((Void) null);
     }
@@ -589,7 +592,7 @@ public class SettingsScreen extends AMActivity {
         @Override
         public Void doInBackground(Void... params) {
             try {
-                Setting defaultSetting = DatabaseUtils.readDefaultSetting(SettingsScreen.this);
+                Setting defaultSetting = databaseUtil.readDefaultSetting();
                 settingDao.replaceSetting(defaultSetting);
                 setting = settingDao.queryForId(1);
             } catch (SQLException e) {

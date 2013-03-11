@@ -27,7 +27,7 @@ import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.utils.AMUtil;
-import org.liberty.android.fantastischmemo.utils.DatabaseUtils;
+import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 import android.app.Activity;
@@ -62,6 +62,8 @@ public class RecentListFragment extends Fragment {
     private final static String TAG = "org.liberty.android.fantastischmemo.OpenScreen";
 
     private Activity mActivity;
+    
+    private DatabaseUtil databaseUtil;
 
     @Override
     public void onAttach(Activity activity) {
@@ -69,6 +71,7 @@ public class RecentListFragment extends Fragment {
         mActivity = activity;
         recentListUtil = new RecentListUtil(mActivity);
         setHasOptionsMenu(true);
+        databaseUtil = new DatabaseUtil(mActivity);
     }
 
 	@Override
@@ -102,7 +105,7 @@ public class RecentListFragment extends Fragment {
                             continue;
                         }
                         final RecentItem ri = new RecentItem();
-                        if (!DatabaseUtils.checkDatabase(mActivity, allPath[i])) {
+                        if (!databaseUtil.checkDatabase(allPath[i])) {
                             recentListUtil.deleteFromRecentList(allPath[i]);
                             continue;
                         }

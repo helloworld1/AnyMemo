@@ -18,16 +18,21 @@ import org.liberty.android.fantastischmemo.dao.SettingDao;
 
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
-import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.domain.Setting;
 
 import android.content.Context;
 
-public class DatabaseUtils {
+public class DatabaseUtil {
 
-    public static Setting readDefaultSetting(Context context) {
-        String emptyDbPath = context.getApplicationContext().getFilesDir().getAbsolutePath() + "/" + AMEnv.EMPTY_DB_NAME;
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(context, emptyDbPath);
+    private Context mContext;
+
+    public DatabaseUtil(Context context) {
+        mContext = context;
+    }
+
+    public Setting readDefaultSetting() {
+        String emptyDbPath = mContext.getApplicationContext().getFilesDir().getAbsolutePath() + "/" + AMEnv.EMPTY_DB_NAME;
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, emptyDbPath);
         try {
             SettingDao settingDao = helper.getSettingDao(); 
             return settingDao.queryForId(1);
@@ -39,30 +44,31 @@ public class DatabaseUtils {
 
     }
 
-    public static void mergeDatabases(Context context, String destPath, String srcPath) throws Exception {
-        AnyMemoDBOpenHelper destHelper = AnyMemoDBOpenHelperManager.getHelper(context, destPath);
-        AnyMemoDBOpenHelper srcHelper = AnyMemoDBOpenHelperManager.getHelper(context, srcPath);
+    public void mergeDatabases(String destPath, String srcPath) throws Exception {
+        AnyMemoDBOpenHelper destHelper = AnyMemoDBOpenHelperManager.getHelper(mContext, destPath);
+        AnyMemoDBOpenHelper srcHelper = AnyMemoDBOpenHelperManager.getHelper(mContext, srcPath);
 
         final CardDao cardDaoDest = destHelper.getCardDao();
-        final LearningDataDao learningDataDaoDest = destHelper.getLearningDataDao();
-        final CategoryDao categoryDaoDest = destHelper.getCategoryDao();
+        final LearningDataDao learningDataDaoSrc= srcHelper.getLearningDataDao();
+        final CategoryDao categoryDaoSrc = srcHelper.getCategoryDao();
         final CardDao cardDaoSrc = srcHelper.getCardDao();
         final List<Card> srcCards = cardDaoSrc.queryForAll();
-        final Category uncategorized = categoryDaoDest.queryForId(1);
-        cardDaoDest.callBatchTasks(
-            new Callable<Void>() {
-                public Void call() throws Exception {
-                    for (Card c : srcCards) {
-                        LearningData emptyLearningData = new LearningData();
-                        c.setCategory(uncategorized);
-                        learningDataDaoDest.create(emptyLearningData);
-                        c.setLearningData(emptyLearningData);
-                        c.setOrdinal(null);
-                        cardDaoDest.create(c);
+
+        cardDaoSrc.callBatchTasks(
+                new Callable<Void>() {
+                    public Void call() throws Exception {
+                        for (Card c : srcCards) {
+                            // Make sure to create a new ordinal
+                            c.setOrdinal(null);
+                            learningDataDaoSrc.refresh(c.getLearningData());
+                            categoryDaoSrc.refresh(c.getCategory());
+                        }
+                        return null;
                     }
-                    return null;
-                }
-            });
+                });
+
+        cardDaoDest.createCards(srcCards);
+
         System.out.println("DatabaseUtils release destPath");
         AnyMemoDBOpenHelperManager.releaseHelper(destHelper);
         System.out.println("DatabaseUtils release srcPath");
@@ -72,11 +78,11 @@ public class DatabaseUtils {
     /*
      * Check if the database is in the correct format
      */
-    public static boolean checkDatabase(Context context, String dbPath) {
+    public boolean checkDatabase(String dbPath) {
         if (!(new File(dbPath)).exists()) {
             return false;
         }
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(context, dbPath);
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, dbPath);
         try {
             helper.getCardDao(); 
             return true;
