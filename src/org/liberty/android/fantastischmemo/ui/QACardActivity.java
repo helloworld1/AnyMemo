@@ -327,6 +327,10 @@ abstract public class QACardActivity extends AMActivity {
             findViewById(R.id.horizontal_line).setVisibility(View.GONE);
         }
 
+        // Set the color of the horizontal line
+        View horizontalLine = findViewById(R.id.horizontal_line);
+        horizontalLine.setBackgroundColor(setting.getSeparatorColor());
+
         // Finally we generate the fragments
         CardFragment questionFragment = new CardFragment.Builder(sq)
                 .setTextAlignment(questionAlignValue)
