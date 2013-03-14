@@ -495,9 +495,7 @@ public class StudyActivity extends QACardActivity {
     private void createQueue() {
         int queueSize = option.getQueueSize();
         LearnQueueManager.Builder builder = new LearnQueueManager.Builder()
-            .setCardDao(cardDao)
-            .setCategoryDao(categoryDao)
-            .setLearningDataDao(learningDataDao)
+            .setDbOpenHelper(getDbOpenHelper())
             .setScheduler(scheduler)
             .setLearnQueueSize(queueSize)
             .setCacheSize(50)

@@ -27,8 +27,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import java.util.concurrent.Callable;
-
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
@@ -42,6 +40,7 @@ import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 import android.util.Log;
 
 public class QuizQueueManager implements QueueManager {
+
     private CardDao cardDao;
     
     private LearningDataDao learningDataDao;
