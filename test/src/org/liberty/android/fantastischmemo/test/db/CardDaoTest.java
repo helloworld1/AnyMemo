@@ -15,9 +15,9 @@ import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
 
-public class CardOperationTest extends AbstractExistingDBTest<InstrumentationActivity> {
+public class CardDaoTest extends AbstractExistingDBTest<InstrumentationActivity> {
 
-    public CardOperationTest() {
+    public CardDaoTest() {
         super("org.liberty.android.fantastischmemo", InstrumentationActivity.class);
     }
 
@@ -275,6 +275,33 @@ public class CardOperationTest extends AbstractExistingDBTest<InstrumentationAct
 
         c = cardDao.searchPrevCard("mouth", 8);
         assertNull(c);
+    }
+
+    public void testGetRandomCardsWithoutCategory() throws Exception {
+        CardDao cardDao = helper.getCardDao();
+
+        // limit higher than total number of cards
+        List<Card> cards = cardDao.getRandomCards(null, 50);
+        assertEquals(28, cards.size());
+
+        // limit lower than total number of cards
+        List<Card> cards2 = cardDao.getRandomCards(null, 10);
+        assertEquals(10, cards2.size());
+    }
+
+    public void testGetRandomCardsWithCategory() throws Exception {
+        CardDao cardDao = helper.getCardDao();
+        CategoryDao categoryDao = helper.getCategoryDao();
+        setupThreeCategories();
+        Category filterCategory1 = categoryDao.createOrReturn("My category");
+
+        // larger than limit
+        List<Card> cards1 = cardDao.getRandomCards(filterCategory1, 50);
+        assertEquals(3, cards1.size());
+
+        // smaller than limit
+        List<Card> cards2 = cardDao.getRandomCards(filterCategory1, 1);
+        assertEquals(1, cards2.size());
     }
 
     /*
