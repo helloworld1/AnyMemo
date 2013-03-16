@@ -289,6 +289,21 @@ public class CardDaoTest extends AbstractExistingDBTest<InstrumentationActivity>
         assertEquals(10, cards2.size());
     }
 
+    public void testGetRandomCardsWithCategory() throws Exception {
+        CardDao cardDao = helper.getCardDao();
+        CategoryDao categoryDao = helper.getCategoryDao();
+        setupThreeCategories();
+        Category filterCategory1 = categoryDao.createOrReturn("My category");
+
+        // larger than limit
+        List<Card> cards1 = cardDao.getRandomCards(filterCategory1, 50);
+        assertEquals(3, cards1.size());
+
+        // smaller than limit
+        List<Card> cards2 = cardDao.getRandomCards(filterCategory1, 1);
+        assertEquals(1, cards2.size());
+    }
+
     public void testGetCardsByOrdinalAndSize() throws Exception {
         CardDao cardDao = helper.getCardDao();
 
@@ -305,24 +320,38 @@ public class CardDaoTest extends AbstractExistingDBTest<InstrumentationActivity>
         assertEquals(28, (int) cards2.get(8).getOrdinal());
 
         // Get nothing
-        List<Card> cards3 = cardDao.getCardsByOrdinalAndSize(30, 10);
+        List<Card> cards3 = cardDao.getCardsByOrdinalAndSize(31, 10);
+        assertEquals(9, (int) cards2.size());
         assertEquals(0, (int) cards3.size());
 
     }
 
-    public void testGetRandomCardsWithCategory() throws Exception {
+    public void testGetCardsByCategory() throws Exception {
         CardDao cardDao = helper.getCardDao();
         CategoryDao categoryDao = helper.getCategoryDao();
+
         setupThreeCategories();
         Category filterCategory1 = categoryDao.createOrReturn("My category");
 
-        // larger than limit
-        List<Card> cards1 = cardDao.getRandomCards(filterCategory1, 50);
-        assertEquals(3, cards1.size());
+        // If category specified is null, return all cards up to limit
+        List<Card> cards1 = cardDao.getCardsByCategory(null, false, 50);
+        assertEquals(28, cards1.size());
 
-        // smaller than limit
-        List<Card> cards2 = cardDao.getRandomCards(filterCategory1, 1);
-        assertEquals(1, cards2.size());
+        // No category specified but with limit
+        List<Card> cards2 = cardDao.getCardsByCategory(null, false, 10);
+        assertEquals(10, cards2.size());
+
+        // Get by category
+        List<Card> cards3 = cardDao.getCardsByCategory(filterCategory1, false, 50);
+        assertEquals(3, cards3.size());
+
+        // Get by category with limit
+        List<Card> cards4 = cardDao.getCardsByCategory(filterCategory1, false, 2);
+        assertEquals(2, cards4.size());
+
+        // Random cards shouldn't affect number of cards to get
+        List<Card> cards5 = cardDao.getCardsByCategory(filterCategory1, true, 50);
+        assertEquals(3, cards5.size());
     }
 
     /*
