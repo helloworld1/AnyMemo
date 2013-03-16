@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.liberty.android.fantastischmemo.dao.CardDaoImpl;
 
+import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 
 import com.j256.ormlite.table.DatabaseTable;
@@ -36,10 +37,10 @@ public class Card {
     @DatabaseField(defaultValue = "0")
     private Integer cardType = 0;
 
-    @DatabaseField
+    @DatabaseField(format="yyyy-MM-dd HH:mm:ss.SSSSSS", dataType=DataType.DATE_STRING)
     private Date creationDate;
 
-    @DatabaseField(version = true)
+    @DatabaseField(version = true, format="yyyy-MM-dd HH:mm:ss.SSSSSS", dataType=DataType.DATE_STRING)
     private Date updateDate;
 
     public Card() {}

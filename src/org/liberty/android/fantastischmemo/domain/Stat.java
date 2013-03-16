@@ -4,8 +4,8 @@ import java.util.Date;
 
 import org.liberty.android.fantastischmemo.dao.StatDaoImpl;
 
+import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
-
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "stats", daoClass = StatDaoImpl.class)
@@ -25,7 +25,7 @@ public class Stat {
     @DatabaseField
     private Integer oldInterval;
 
-    @DatabaseField(version = true)
+    @DatabaseField(version = true, format="yyyy-MM-dd HH:mm:ss.SSSSSS", dataType=DataType.DATE_STRING)
     private Date updateDate;
 
     public Stat() {}

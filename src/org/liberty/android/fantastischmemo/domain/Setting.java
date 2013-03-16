@@ -3,13 +3,12 @@ package org.liberty.android.fantastischmemo.domain;
 import java.util.Date;
 import java.util.EnumSet;
 
-
 import org.apache.mycommons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.dao.SettingDaoImpl;
 import org.liberty.android.fantastischmemo.utils.AMUtil;
 
+import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
-
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "settings", daoClass = SettingDaoImpl.class)
@@ -100,10 +99,10 @@ public class Setting {
     @DatabaseField(defaultValue = "")
     private String answerAudioLocation = "";
 
-    @DatabaseField
+    @DatabaseField(format="yyyy-MM-dd HH:mm:ss.SSSSSS", dataType=DataType.DATE_STRING)
     private Date creationDate = new Date();
 
-    @DatabaseField(version = true)
+    @DatabaseField(version = true, format="yyyy-MM-dd HH:mm:ss.SSSSSS", dataType=DataType.DATE_STRING)
     private Date updateDate = new Date();
 
     public Setting() {}
