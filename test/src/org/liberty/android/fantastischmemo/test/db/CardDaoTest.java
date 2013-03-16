@@ -289,6 +289,27 @@ public class CardDaoTest extends AbstractExistingDBTest<InstrumentationActivity>
         assertEquals(10, cards2.size());
     }
 
+    public void testGetCardsByOrdinalAndSize() throws Exception {
+        CardDao cardDao = helper.getCardDao();
+
+        // Card ordianl 1 to 10
+        List<Card> cards1 = cardDao.getCardsByOrdinalAndSize(1, 10);
+        assertEquals(10, (int) cards1.size());
+        assertEquals(1, (int) cards1.get(0).getOrdinal());
+        assertEquals(10, (int) cards1.get(9).getOrdinal());
+
+        // Card orgdinal 20 to 28
+        List<Card> cards2 = cardDao.getCardsByOrdinalAndSize(20, 10);
+        assertEquals(9, (int) cards2.size());
+        assertEquals(20,(int) cards2.get(0).getOrdinal());
+        assertEquals(28, (int) cards2.get(8).getOrdinal());
+
+        // Get nothing
+        List<Card> cards3 = cardDao.getCardsByOrdinalAndSize(30, 10);
+        assertEquals(0, (int) cards3.size());
+
+    }
+
     public void testGetRandomCardsWithCategory() throws Exception {
         CardDao cardDao = helper.getCardDao();
         CategoryDao categoryDao = helper.getCategoryDao();
