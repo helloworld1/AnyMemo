@@ -35,21 +35,27 @@ public class AnyMemoActivityRecentTabTest extends ActivityInstrumentationTestCas
 
 
     public void testActionListStudy() {
-        solo.clickOnText(solo.getString(R.string.study_text));
+        // The study action item
+        solo.clickOnView(solo.getView(R.id.study));
+
         solo.waitForActivity("StudyActivity");
         solo.waitForDialogToClose(8000);
         solo.sleep(600);
     }
 
     public void testActionListPrevEdit() {
-        solo.clickOnText(solo.getString(R.string.edit_button_text));
+        // The list action item
+        solo.clickOnView(solo.getView(R.id.edit));
+
         solo.waitForActivity("PreviewEditActivity");
         solo.waitForDialogToClose(8000);
         solo.sleep(600);
     }
 
     public void testActionListCardList() {
-        solo.clickOnText(solo.getString(R.string.list_mode_text));
+        // The list action item
+        solo.clickOnView(solo.getView(R.id.list));
+
         solo.waitForActivity("ListPreviewEditActivity");
         solo.waitForDialogToClose(8000);
         solo.sleep(600);
@@ -57,21 +63,28 @@ public class AnyMemoActivityRecentTabTest extends ActivityInstrumentationTestCas
 
 
     public void testActionListSettings() {
-        solo.clickOnText(solo.getString(R.string.settings_menu_text));
+        // The settings action item
+        solo.clickOnView(solo.getView(R.id.settings));
+
         solo.waitForActivity("SettingsScreen");
         solo.waitForDialogToClose(8000);
         solo.sleep(600);
     }
 
     public void testActionListDelete() {
-        solo.clickOnText(solo.getString(R.string.delete_text));
-        solo.clickOnButton(solo.getString(R.string.cancel_text));
+        // The delete action item
+        solo.clickOnView(solo.getView(R.id.delete));
+
+        // The cancel button
+        solo.clickOnView(solo.getView(android.R.id.button2));
         assertTrue(solo.searchText(UITestHelper.SAMPLE_DB_NAME));
         
         solo.clickLongOnText(UITestHelper.SAMPLE_DB_NAME);
-        solo.clickOnText(solo.getString(R.string.delete_text));
-        solo.clickOnButton(solo.getString(R.string.delete_text));
-        solo.sleep(1000);
+        // The delete action item
+        solo.clickOnView(solo.getView(R.id.delete));
+
+        // The delete button
+        solo.clickOnView(solo.getView(android.R.id.button1));
         assertFalse((new File(UITestHelper.SAMPLE_DB_PATH)).exists());
     }
 
