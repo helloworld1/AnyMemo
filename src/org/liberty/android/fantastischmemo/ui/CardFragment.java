@@ -23,6 +23,7 @@ import java.io.File;
 
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.domain.Setting;
 
 import android.app.Activity;
 import android.graphics.Typeface;
@@ -69,7 +70,7 @@ public class CardFragment extends Fragment {
 
     private int backgroundColor = 0xFF000000;
 
-    private int textAlignment = Gravity.LEFT;
+    private Setting.Align textAlignment = Setting.Align.CENTER;
 
 
     // The argumetn set in the factory will stored in the private variable here.
@@ -127,16 +128,36 @@ public class CardFragment extends Fragment {
         cardTextView.setTextSize(fontSize);
 
         // It is tricky to set up the alignment of the text.
-        if (textAlignment == Gravity.CENTER) {
-            cardTextView.setGravity(Gravity.CENTER);
-            rootView.setGravity(Gravity.CENTER);
-        } else if (textAlignment == Gravity.RIGHT) {
-            cardTextView.setGravity(Gravity.RIGHT);
-            rootView.setGravity(Gravity.NO_GRAVITY);
-        } else {
-            cardTextView.setGravity(Gravity.LEFT);
-            rootView.setGravity(Gravity.CENTER);
-            rootView.setGravity(Gravity.NO_GRAVITY);
+
+        switch (textAlignment) {
+            case CENTER:
+                cardTextView.setGravity(Gravity.CENTER);
+                rootView.setGravity(Gravity.CENTER);
+                break;
+
+            case RIGHT:
+                cardTextView.setGravity(Gravity.RIGHT);
+                rootView.setGravity(Gravity.NO_GRAVITY);
+                break;
+
+            case LEFT:
+                cardTextView.setGravity(Gravity.LEFT);
+                rootView.setGravity(Gravity.NO_GRAVITY);
+                break;
+
+            case CENTER_LEFT:
+                cardTextView.setGravity(Gravity.LEFT);
+                rootView.setGravity(Gravity.CENTER);
+                break;
+
+            case CENTER_RIGHT:
+                cardTextView.setGravity(Gravity.RIGHT);
+                rootView.setGravity(Gravity.CENTER);
+                break;
+
+            default:
+                cardTextView.setGravity(Gravity.CENTER);
+                rootView.setGravity(Gravity.CENTER);
         }
 
         return v;
@@ -203,8 +224,8 @@ public class CardFragment extends Fragment {
          * Set up the alignment of the text in the card.
          * The parameter gravity is from Gravity.*
          */
-        public Builder setTextAlignment(int gravity) {
-            fragment.textAlignment = gravity;
+        public Builder setTextAlignment(Setting.Align align) {
+            fragment.textAlignment = align;
             return this;
         }
 

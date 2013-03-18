@@ -261,22 +261,6 @@ abstract public class QACardActivity extends AMActivity {
 
         int questionAlignValue;
         int answerAlignValue;
-        /* Here is tricky to set up the alignment of the text */
-        if (questionAlign == Setting.Align.CENTER) {
-            questionAlignValue = Gravity.CENTER;
-        } else if (questionAlign == Setting.Align.RIGHT) {
-            questionAlignValue = Gravity.RIGHT;
-        } else {
-            questionAlignValue = Gravity.LEFT;
-        }
-
-        if (answerAlign == Setting.Align.CENTER) {
-            answerAlignValue = Gravity.CENTER;
-        } else if (answerAlign == Setting.Align.RIGHT) {
-            answerAlignValue = Gravity.RIGHT;
-        } else {
-            answerAlignValue = Gravity.LEFT;
-        }
 
         String questionTypefaceValue = null;
         String answerTypefaceValue = null;
@@ -333,7 +317,7 @@ abstract public class QACardActivity extends AMActivity {
 
         // Finally we generate the fragments
         CardFragment questionFragment = new CardFragment.Builder(sq)
-                .setTextAlignment(questionAlignValue)
+                .setTextAlignment(questionAlign)
                 .setTypefaceFromFile(questionTypefaceValue)
                 .setTextOnClickListener(onQuestionTextClickListener)
                 .setCardOnClickListener(onQuestionViewClickListener)
@@ -348,7 +332,7 @@ abstract public class QACardActivity extends AMActivity {
         if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED
                 || showAnswer) {
             answerFragment = new CardFragment.Builder(sa)
-                    .setTextAlignment(answerAlignValue)
+                    .setTextAlignment(answerAlign)
                     .setTypefaceFromFile(answerTypefaceValue)
                     .setTextOnClickListener(onAnswerTextClickListener)
                     .setCardOnClickListener(onAnswerViewClickListener)
@@ -360,7 +344,7 @@ abstract public class QACardActivity extends AMActivity {
         } else {
             answerFragment = new CardFragment.Builder(
                     getString(R.string.memo_show_answer))
-                    .setTextAlignment(answerAlignValue)
+                    .setTextAlignment(answerAlign)
                     .setTypefaceFromFile(answerTypefaceValue)
                     .setTextOnClickListener(onAnswerTextClickListener)
                     .setCardOnClickListener(onAnswerViewClickListener)

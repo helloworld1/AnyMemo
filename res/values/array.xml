@@ -36,12 +36,16 @@
     <item>@string/left_text</item>
     <item>@string/center_text</item>
     <item>@string/right_text</item>
+    <item>@string/center_left_text</item>
+    <item>@string/center_right_text</item>
 </string-array>
 
 <string-array name="align_list_values">
     <item>LEFT</item>
     <item>CENTER</item>
     <item>RIGHT</item>
+    <item>CENTER_LEFT</item>
+    <item>CENTER_RIGHT</item>
 </string-array>
 
 <string-array name="locale_list">

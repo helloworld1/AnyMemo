@@ -441,4 +441,6 @@
     <string name="dropbox_successfully_uploaded_message">Successfully uploaded the file to your dropbox AnyMemo directory</string>
     <string name="upload_dropbox_message">Do you want to upload %s to your Dropbox\'s AnyMemo folder? It may take several minutes if you have more than 1000 cards.</string>
     <string name="share_text">Share</string>
+    <string name="center_left_text">Center left</string>
+    <string name="center_right_text">Center right</string>
 </resources>
