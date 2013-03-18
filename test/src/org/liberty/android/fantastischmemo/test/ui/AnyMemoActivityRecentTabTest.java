@@ -38,16 +38,16 @@ public class AnyMemoActivityRecentTabTest extends ActivityInstrumentationTestCas
         // The study action item
         solo.clickOnView(solo.getView(R.id.study));
 
-        solo.waitForActivity("StudyActivity");
+        assertTrue(solo.waitForActivity("StudyActivity"));
         solo.waitForDialogToClose(8000);
         solo.sleep(600);
     }
 
     public void testActionListPrevEdit() {
-        // The list action item
+        // The edit action item
         solo.clickOnView(solo.getView(R.id.edit));
 
-        solo.waitForActivity("PreviewEditActivity");
+        assertTrue(solo.waitForActivity("PreviewEditActivity"));
         solo.waitForDialogToClose(8000);
         solo.sleep(600);
     }
@@ -56,7 +56,7 @@ public class AnyMemoActivityRecentTabTest extends ActivityInstrumentationTestCas
         // The list action item
         solo.clickOnView(solo.getView(R.id.list));
 
-        solo.waitForActivity("ListPreviewEditActivity");
+        assertTrue(solo.waitForActivity("ListEditScreen"));
         solo.waitForDialogToClose(8000);
         solo.sleep(600);
     }
@@ -66,7 +66,7 @@ public class AnyMemoActivityRecentTabTest extends ActivityInstrumentationTestCas
         // The settings action item
         solo.clickOnView(solo.getView(R.id.settings));
 
-        solo.waitForActivity("SettingsScreen");
+        assertTrue(solo.waitForActivity("SettingsScreen"));
         solo.waitForDialogToClose(8000);
         solo.sleep(600);
     }

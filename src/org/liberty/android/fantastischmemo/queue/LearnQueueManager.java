@@ -45,6 +45,7 @@ import android.util.Log;
 
 public class LearnQueueManager implements QueueManager {
     private CardDao cardDao;
+
     private CategoryDao categoryDao;
     
     private LearningDataDao learningDataDao;

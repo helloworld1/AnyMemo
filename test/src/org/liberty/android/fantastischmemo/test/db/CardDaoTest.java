@@ -1,31 +1,21 @@
 package org.liberty.android.fantastischmemo.test.db;
 
 import java.sql.SQLException;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import org.liberty.android.fantastischmemo.InstrumentationActivity;
-
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
-
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
 
-public class CardDaoTest extends AbstractExistingDBTest<InstrumentationActivity> {
+import android.test.suitebuilder.annotation.SmallTest;
 
-    public CardDaoTest() {
-        super("org.liberty.android.fantastischmemo", InstrumentationActivity.class);
-    }
+public class CardDaoTest extends AbstractExistingDBTest {
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
+    @SmallTest
     public void testDeleteCardMaintainOrdinal() throws Exception {
         CardDao cardDao = helper.getCardDao();
         Card c13 = cardDao.queryForId(13);
@@ -41,6 +31,7 @@ public class CardDaoTest extends AbstractExistingDBTest<InstrumentationActivity>
         assertEquals(14, (int)c15.getOrdinal());
     }
 
+    @SmallTest
     public void testCreateCardMaintainOrdinal() throws Exception {
         CardDao cardDao = helper.getCardDao();
         // Create card has null ordinal, append to the end
@@ -63,6 +54,7 @@ public class CardDaoTest extends AbstractExistingDBTest<InstrumentationActivity>
         assertEquals(16, (int)c15.getOrdinal());
     }
 
+    @SmallTest
     public void testSwapQA() throws Exception {
         CardDao cardDao = helper.getCardDao();
         Card c14 = cardDao.queryForId(14);
@@ -74,6 +66,7 @@ public class CardDaoTest extends AbstractExistingDBTest<InstrumentationActivity>
         assertEquals(question, c14.getAnswer());
     }
 
+    @SmallTest
     public void testRemoveDuplicates() throws Exception {
         CardDao cardDao = helper.getCardDao();
         long originalSize = cardDao.countOf();
@@ -95,6 +88,7 @@ public class CardDaoTest extends AbstractExistingDBTest<InstrumentationActivity>
         assertEquals(29, (int)cc.getOrdinal());
     }
 
+    @SmallTest
     public void testSearchFirstOrdinalWithcategoryIfExists() throws Exception {
         setupThreeCategories();
         CardDao cardDao = helper.getCardDao();
@@ -105,6 +99,7 @@ public class CardDaoTest extends AbstractExistingDBTest<InstrumentationActivity>
         assertEquals(2, (int)c.getId());
     }
     
+    @SmallTest
     public void testSearchLastOrdinalWithcategoryIfExists() throws Exception {
         setupThreeCategories();
         CardDao cardDao = helper.getCardDao();
@@ -116,6 +111,7 @@ public class CardDaoTest extends AbstractExistingDBTest<InstrumentationActivity>
     }
 
 
+    @SmallTest
     public void testQueryNextCardWithoutCategory() throws Exception {
         setupThreeCategories();
         CardDao cardDao = helper.getCardDao();
@@ -126,6 +122,7 @@ public class CardDaoTest extends AbstractExistingDBTest<InstrumentationActivity>
         assertEquals(1, (int)c1.getOrdinal());
     }
 
+    @SmallTest
     public void testQueryPrevCardWithoutCategory() throws Exception {
         setupThreeCategories();
         CardDao cardDao = helper.getCardDao();
@@ -136,6 +133,7 @@ public class CardDaoTest extends AbstractExistingDBTest<InstrumentationActivity>
         assertEquals(28, (int)c28.getOrdinal());
     }
 
+    @SmallTest
     public void testQueryNextCardWithCategory() throws Exception {
         setupThreeCategories();
         CardDao cardDao = helper.getCardDao();
@@ -150,6 +148,7 @@ public class CardDaoTest extends AbstractExistingDBTest<InstrumentationActivity>
         assertEquals(2, (int)c2.getId());
     }
 
+    @SmallTest
     public void testQueryPrevCardWithCategory() throws Exception {
         setupThreeCategories();
         CardDao cardDao = helper.getCardDao();
@@ -163,12 +162,14 @@ public class CardDaoTest extends AbstractExistingDBTest<InstrumentationActivity>
         assertEquals(8, (int)c8.getId());
     }
 
+    @SmallTest
     public void testShuffleOrdinals() throws Exception {
         CardDao cardDao = helper.getCardDao();
         cardDao.shuffleOrdinals();
         assertEquals(28, cardDao.countOf());
     }
 
+    @SmallTest
     public void testSwapAllQA() throws Exception {
         CardDao cardDao = helper.getCardDao();
         // Randomly sample 2 cards
@@ -188,12 +189,14 @@ public class CardDaoTest extends AbstractExistingDBTest<InstrumentationActivity>
         assertEquals(question18, c18.getAnswer());
     }
 
+    @SmallTest
     public void testGetRandomReviewedCards() throws Exception {
         CardDao cardDao = helper.getCardDao();
         List<Card> cards = cardDao.getRandomReviewedCards(null, 10);
         assertEquals(0, cards.size());
     }
 
+    @SmallTest
     public void testCreateCard() throws Exception {
         CardDao cardDao = helper.getCardDao();
         Card c = new Card();
@@ -204,6 +207,7 @@ public class CardDaoTest extends AbstractExistingDBTest<InstrumentationActivity>
         assertEquals(29, cardDao.countOf());
     }
 
+    @SmallTest
     public void testCreateCards() throws Exception {
         CardDao cardDao = helper.getCardDao();
         Card c = new Card();
@@ -225,6 +229,7 @@ public class CardDaoTest extends AbstractExistingDBTest<InstrumentationActivity>
         assertEquals(30, cardDao.countOf());
     }
 
+    @SmallTest
     public void testGetNewCardCount() throws Exception {
         CardDao cardDao = helper.getCardDao();
         assertEquals(28L, cardDao.getNewCardCount(null));
@@ -236,6 +241,7 @@ public class CardDaoTest extends AbstractExistingDBTest<InstrumentationActivity>
         assertEquals(3L, cardDao.getNewCardCount(ct));
     }
 
+    @SmallTest
     public void testGetScheduledCardCount() throws Exception {
         CardDao cardDao = helper.getCardDao();
         assertEquals(0L, cardDao.getScheduledCardCount(null));
@@ -247,6 +253,7 @@ public class CardDaoTest extends AbstractExistingDBTest<InstrumentationActivity>
         assertEquals(0L, cardDao.getScheduledCardCount(ct));
     }
 
+    @SmallTest
     public void testSearchNextCard() throws Exception {
         CardDao cardDao = helper.getCardDao();
         Card c = cardDao.searchNextCard("mouth", 1);
@@ -262,6 +269,7 @@ public class CardDaoTest extends AbstractExistingDBTest<InstrumentationActivity>
         assertNull(c);
     }
 
+    @SmallTest
     public void testSearchPrevCard() throws Exception {
         CardDao cardDao = helper.getCardDao();
         Card c = cardDao.searchPrevCard("mouth", 10);
@@ -277,6 +285,7 @@ public class CardDaoTest extends AbstractExistingDBTest<InstrumentationActivity>
         assertNull(c);
     }
 
+    @SmallTest
     public void testGetRandomCardsWithoutCategory() throws Exception {
         CardDao cardDao = helper.getCardDao();
 
@@ -289,6 +298,7 @@ public class CardDaoTest extends AbstractExistingDBTest<InstrumentationActivity>
         assertEquals(10, cards2.size());
     }
 
+    @SmallTest
     public void testGetRandomCardsWithCategory() throws Exception {
         CardDao cardDao = helper.getCardDao();
         CategoryDao categoryDao = helper.getCategoryDao();
@@ -304,6 +314,7 @@ public class CardDaoTest extends AbstractExistingDBTest<InstrumentationActivity>
         assertEquals(1, cards2.size());
     }
 
+    @SmallTest
     public void testGetCardsByOrdinalAndSize() throws Exception {
         CardDao cardDao = helper.getCardDao();
 
@@ -326,6 +337,7 @@ public class CardDaoTest extends AbstractExistingDBTest<InstrumentationActivity>
 
     }
 
+    @SmallTest
     public void testGetCardsByCategory() throws Exception {
         CardDao cardDao = helper.getCardDao();
         CategoryDao categoryDao = helper.getCategoryDao();

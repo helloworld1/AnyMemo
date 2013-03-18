@@ -135,6 +135,7 @@ public class CardFragment extends Fragment {
             rootView.setGravity(Gravity.NO_GRAVITY);
         } else {
             cardTextView.setGravity(Gravity.LEFT);
+            rootView.setGravity(Gravity.CENTER);
             rootView.setGravity(Gravity.NO_GRAVITY);
         }
 

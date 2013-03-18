@@ -1,29 +1,18 @@
 package org.liberty.android.fantastischmemo.test.queue;
 
-import java.util.Date;
-
-import org.liberty.android.fantastischmemo.InstrumentationActivity;
 import org.liberty.android.fantastischmemo.dao.CardDao;
-import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
-import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.queue.QueueManager;
 import org.liberty.android.fantastischmemo.queue.QuizQueueManager;
 import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
 import org.liberty.android.fantastischmemo.test.mock.MockScheduler;
 
-public class QuizQueuingManagerTest extends AbstractExistingDBTest<InstrumentationActivity> {
+import android.test.suitebuilder.annotation.SmallTest;
 
-    public QuizQueuingManagerTest() {
-        super("org.liberty.android.fantastischmemo", InstrumentationActivity.class);
-    }
+public class QuizQueuingManagerTest extends AbstractExistingDBTest {
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
+    @SmallTest
     public void testFilterCategory() throws Exception {
         CardDao cardDao = helper.getCardDao();
         Card c10 = cardDao.queryForId(10);
@@ -40,6 +29,7 @@ public class QuizQueuingManagerTest extends AbstractExistingDBTest<Instrumentati
         assertEquals(10, (int)cqueue.getId());
     }
 
+    @SmallTest
     public void testFilterByGroup() throws Exception {
         // Create a quiz start the quiz size 3 from card 5
         QueueManager queueManager = new QuizQueueManager.Builder()
@@ -61,6 +51,7 @@ public class QuizQueuingManagerTest extends AbstractExistingDBTest<Instrumentati
         assertNull(nullCard);
     }
 
+    @SmallTest
     public void testUpdateCard() throws Exception {
         MockScheduler mockScheduler = new MockScheduler();
 

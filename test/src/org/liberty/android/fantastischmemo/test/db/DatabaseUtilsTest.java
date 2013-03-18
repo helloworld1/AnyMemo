@@ -1,11 +1,9 @@
 package org.liberty.android.fantastischmemo.test.db;
 
 import java.io.File;
-import java.util.List;
 
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.InstrumentationActivity;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
@@ -16,38 +14,34 @@ import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
 import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
 
+import android.test.suitebuilder.annotation.SmallTest;
 
-public class DatabaseUtilsTest extends AbstractExistingDBTest<InstrumentationActivity> {
-    private InstrumentationActivity mActivity;  // the activity under test
 
-    AnyMemoDBOpenHelper helper;
-    
+public class DatabaseUtilsTest extends AbstractExistingDBTest {
+
     DatabaseUtil databaseUtil;
 
     String dbPath = "/sdcard/french-body-parts.db";
 
-    public DatabaseUtilsTest() {
-        super("org.liberty.android.fantastischmemo", InstrumentationActivity.class);
-    }
-
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        mActivity = this.getActivity();
-        databaseUtil = new DatabaseUtil(mActivity);
-        helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, dbPath);
+        databaseUtil = new DatabaseUtil(getContext());
     }
 
+    @SmallTest
     public void testGetDefaultSetting() throws Exception {
         Setting setting = databaseUtil.readDefaultSetting();
         assertNotNull(setting);
     }
 
+    @SmallTest
+    @SuppressWarnings("unused")
     public void testMergeDatabase() throws Exception {
         // Create testing DB to merge
         String path2 = "/sdcard/testdb2.db";
         new File(path2).delete();
-        AnyMemoDBOpenHelper helper2 = AnyMemoDBOpenHelperManager.getHelper(mActivity, path2);
+        AnyMemoDBOpenHelper helper2 = AnyMemoDBOpenHelperManager.getHelper(getContext(), path2);
 
         // DAOs to use
         CardDao destCardDao = helper.getCardDao();
@@ -56,6 +50,7 @@ public class DatabaseUtilsTest extends AbstractExistingDBTest<InstrumentationAct
 
         CardDao srcCardDao = helper2.getCardDao();
         CategoryDao srcCategoryDao= helper2.getCategoryDao();
+
         LearningDataDao srcLearningDataDao = helper2.getLearningDataDao();
 
         // Create some categories in both db to test category merge
