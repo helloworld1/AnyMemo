@@ -311,6 +311,10 @@ public class Setting {
 		this.answerField = answerField;
 	}
 
+	public void setAnswerFieldEnum(EnumSet<CardField> answerFieldEnum) {
+        answerField = AMUtil.getStringFromEnumSet(answerFieldEnum);
+	}
+
 	public EnumSet<CardField> getAnswerFieldEnum() {
 		return AMUtil.getEnumSetFromString(CardField.class, answerField);
 	}
