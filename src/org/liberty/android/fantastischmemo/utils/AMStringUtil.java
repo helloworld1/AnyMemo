@@ -31,7 +31,7 @@ public class AMStringUtil {
         this.context = context;
     }
 
-    // Interval: 12.3456 day -> "1.7 week", 4.76 -> "4.7 day"
+    // Interval: 12.3456 day -> "1.8 week", 4.76 -> "4.8 day"
     public String convertDayIntervalToDisplayString(double intervalInDay) {
         double[] dividers = {365, 30, 7, 1};
         String[] unitName = {context.getString(R.string.year_text),
