@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.liberty.android.fantastischmemo"
     android:installLocation="auto"
-    android:versionCode="176"
+    android:versionCode="177"
     android:versionName="@string/app_version">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -25,9 +25,6 @@
                     android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity 
-            android:name=".InstrumentationActivity"
-            android:configChanges="orientation|keyboardHidden" />
         <activity
             android:name=".downloader.DownloaderAnyMemo"
             android:configChanges="orientation|keyboardHidden" />
