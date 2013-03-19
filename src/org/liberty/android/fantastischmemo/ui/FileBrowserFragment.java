@@ -527,7 +527,7 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
                 else if(name.endsWith(".png") || name.endsWith(".jpg") || name.endsWith(".tif") || name.endsWith(".bmp")){
                     iv.setImageResource(R.drawable.picture);
                 }
-                else if(name.endsWith(".ogg") || name.endsWith(".mp3") || name.endsWith(".wav")){
+                else if(name.endsWith(".ogg") || name.endsWith(".mp3") || name.endsWith(".wav") || name.endsWith(".amr")){
                     iv.setImageResource(R.drawable.audio);
                 }
                 else if(name.endsWith(".txt") || name.endsWith(".csv") || name.endsWith(".xml")){

@@ -32,13 +32,13 @@ import android.util.Log;
 public class SpeakWord {
     private volatile MediaPlayer mp;
     private final List<String> searchPath; 
-    private final String[] SUPPORTED_AUDIO_FILE_TYPE = {".3gp", ".ogg", ".wav", ".mp3"};
+    private final String[] SUPPORTED_AUDIO_FILE_TYPE = {".3gp", ".ogg", ".wav", ".mp3", ".amr"};
     private final String TAG = "SpeakWord";
 
     /* Search in all given search path and try to find exact match audio file with name specified in the text*/
     private File searchGivenPath(String cardText){
         // The regex here should match the file types in SUPPORTED_AUDIO_FILE_TYPE
-        Pattern p = Pattern.compile("[A-Za-z0-9_-]+\\.(3gp|ogg|mp3|wav)");
+        Pattern p = Pattern.compile("[A-Za-z0-9_-]+\\.(3gp|ogg|mp3|wav|amr)");
         Matcher m = p.matcher(cardText);
         File audioFile = null;
         if(m.find()){

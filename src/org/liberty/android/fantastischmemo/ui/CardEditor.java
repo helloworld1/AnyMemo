@@ -275,7 +275,7 @@ public class CardEditor extends AMActivity {
     private void startAudioBrowser(){
         removeAudio();
         Intent myIntent = new Intent(this, FileBrowserActivity.class);
-        myIntent.putExtra(FileBrowserActivity.EXTRA_FILE_EXTENSIONS, ".3gp,.ogg,.mp3,.wav");
+        myIntent.putExtra(FileBrowserActivity.EXTRA_FILE_EXTENSIONS, ".3gp,.ogg,.mp3,.wav,.amr");
         startActivityForResult(myIntent, ACTIVITY_AUDIO_FILE);
     }
     
