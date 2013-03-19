@@ -64,6 +64,21 @@ public class RecentListUtilTest extends AbstractPreferencesTest {
         assertEquals("/sdcard/1.db", recentList[2]);
     }
 
+    @SmallTest
+    public void testAddEquivalentPath() {
+        // Equivalent path are considered the same
+        RecentListUtil recentListUtil = new RecentListUtil(getContext());
+        recentListUtil.addToRecentList("/sdcard/1.db");
+        recentListUtil.addToRecentList("/sdcard//1.db");
+        recentListUtil.addToRecentList("//sdcard/1.db");
+        recentListUtil.addToRecentList("/sdcard/1.db");
+        recentListUtil.addToRecentList("/sdcard/./2.db");
+        recentListUtil.addToRecentList("/sdcard//2.db");
+
+        String[] recentList = recentListUtil.getAllRecentDBPath();
+        assertEquals("/sdcard/2.db", recentList[0]);
+        assertEquals("/sdcard/1.db", recentList[1]);
+    }
 
     @SmallTest
     public void testClearRecentList() {
