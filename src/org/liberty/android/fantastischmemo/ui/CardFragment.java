@@ -29,7 +29,6 @@ import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.method.LinkMovementMethod;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,13 +55,13 @@ public class CardFragment extends Fragment {
 
     private String fontFile = null;
 
-    private View.OnClickListener cardOnClickListener = null;
+    private OnClickListener cardOnClickListener = null;
 
-    private View.OnLongClickListener cardOnLongClickListener = null;
+    private OnLongClickListener cardOnLongClickListener = null;
     
-    private View.OnClickListener textOnClickListener = null;
+    private OnClickListener textOnClickListener = null;
 
-    private View.OnLongClickListener textOnLongClickListener = null;
+    private OnLongClickListener textOnLongClickListener = null;
 
     private int fontSize = 24;
 
@@ -109,7 +108,14 @@ public class CardFragment extends Fragment {
         }
 
         if (textOnClickListener != null) {
-            cardTextView.setOnClickListener(textOnClickListener);
+            cardTextView.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    // Make sure the link (set for text view autoLink="web") is not recognized as a click
+                    if (((TextView) v).getSelectionStart() == -1 && ((TextView) v).getSelectionEnd() == -1) {
+                        textOnClickListener.onClick(v);
+                    }
+                }
+            });
         }
 
         if (textOnLongClickListener != null) {
@@ -163,6 +169,14 @@ public class CardFragment extends Fragment {
         return v;
     }
 
+    public static interface OnClickListener extends View.OnClickListener {
+        // No definitions, inherrited void onClick(View v)
+    }
+
+    public static interface OnLongClickListener extends View.OnLongClickListener{
+        // No definitions, inherrited void onClick(View v)
+    }
+
 
     public static class Builder {
         CardFragment fragment;
@@ -175,25 +189,25 @@ public class CardFragment extends Fragment {
         }
 
         /* Set the click listener on the card */
-        public Builder setCardOnClickListener(View.OnClickListener l) {
+        public Builder setCardOnClickListener(OnClickListener l) {
             fragment.cardOnClickListener = l;
             return this;
         }
 
         /* Set the click listener on the card text */
-        public Builder setCardOnLongClickListener(View.OnLongClickListener l) {
+        public Builder setCardOnLongClickListener(OnLongClickListener l) {
             fragment.cardOnLongClickListener = l;
             return this;
         }
 
         /* Set the click listener on the card text */
-        public Builder setTextOnClickListener(View.OnClickListener l) {
+        public Builder setTextOnClickListener(OnClickListener l) {
             fragment.textOnClickListener = l;
             return this;
         }
 
         /* Set the long click listener on the card text */
-        public Builder setTextOnLongClickListener(View.OnLongClickListener l) {
+        public Builder setTextOnLongClickListener(OnLongClickListener l) {
             fragment.textOnLongClickListener = l;
             return this;
         }

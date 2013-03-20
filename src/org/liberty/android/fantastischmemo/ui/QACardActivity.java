@@ -783,32 +783,30 @@ abstract public class QACardActivity extends AMActivity {
         return super.onKeyUp(keyCode, event);
     }
 
-    private View.OnClickListener onQuestionTextClickListener = new View.OnClickListener() {
+    private CardFragment.OnClickListener onQuestionTextClickListener = new CardFragment.OnClickListener() {
 
         @Override
         public void onClick(View v) {
             onClickQuestionText();
-
         }
     };
 
-    private View.OnClickListener onAnswerTextClickListener = new View.OnClickListener() {
+    private CardFragment.OnClickListener onAnswerTextClickListener = new CardFragment.OnClickListener() {
 
         @Override
         public void onClick(View v) {
             onClickAnswerText();
-
         }
     };
 
-    private View.OnClickListener onQuestionViewClickListener = new View.OnClickListener() {
+    private CardFragment.OnClickListener onQuestionViewClickListener = new CardFragment.OnClickListener() {
 
         @Override
         public void onClick(View v) {
             onClickQuestionView();
         }
     };
-    private View.OnClickListener onAnswerViewClickListener = new View.OnClickListener() {
+    private CardFragment.OnClickListener onAnswerViewClickListener = new CardFragment.OnClickListener() {
 
         @Override
         public void onClick(View v) {
