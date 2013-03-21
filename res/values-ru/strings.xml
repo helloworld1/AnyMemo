@@ -267,9 +267,9 @@
     <string name="card_style_single">Односторонний</string>
     <string name="settings_field1">Настроить 1 поле карточки</string>
     <string name="settings_field2">Настроить 2 поле карточки</string>
-    <string name="left_text">По левому краю</string>
+    <string name="left_text">Слева сверху</string>
     <string name="center_text">По центру</string>
-    <string name="right_text">По правому краю</string>
+    <string name="right_text">Справа сверху</string>
     <string name="recent_tab_text">Недавние</string>
     <string name="open_tab_text">Открыть</string>
     <string name="download_tab_text">Загрузить</string>
@@ -436,4 +436,6 @@
     <string name="dropbox_successfully_uploaded_message">Файл успешно залит в ваш Dropbox AnyMemo каталог</string>
     <string name="upload_dropbox_message">Хотите залить %s в ваш Dropbox AnyMemo каталог? Это может занять несколько минут, если карточек более 1000.</string>
     <string name="share_text">Передать</string>
+    <string name="center_left_text">Слева по центру</string>
+		<string name="center_right_text">Справа по центру</string>
 </resources>
