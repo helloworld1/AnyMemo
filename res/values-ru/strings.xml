@@ -437,5 +437,5 @@
     <string name="upload_dropbox_message">Хотите залить %s в ваш Dropbox AnyMemo каталог? Это может занять несколько минут, если карточек более 1000.</string>
     <string name="share_text">Передать</string>
     <string name="center_left_text">Слева по центру</string>
-		<string name="center_right_text">Справа по центру</string>
+    <string name="center_right_text">Справа по центру</string>
 </resources>
