@@ -84,8 +84,8 @@ public class GestureSelectionDialogFragment extends DialogFragment {
     @SuppressWarnings("unchecked")
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        assert bundle != null : "The gesture_name_description_map must be passed in";
         Bundle args = getArguments();
+        assert args != null : "The gesture_name_description_map must be passed in";
         gestureNameDescriptionMap = (Map<String, String>) args.getSerializable(EXTRA_GESTURE_NAME_DESCRIPTION_MAP);
     }
 
