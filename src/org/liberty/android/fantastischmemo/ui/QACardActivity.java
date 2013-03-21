@@ -342,9 +342,12 @@ abstract public class QACardActivity extends AMActivity {
                     .setTypefaceFromFile(setting.getAnswerFont())
                     .build();
         } else {
+            // For "Show answer" text, we do not use the
+            // alignment from the settings.
+            // It is always center aligned
             answerFragment = new CardFragment.Builder(
                     getString(R.string.memo_show_answer))
-                    .setTextAlignment(answerAlign)
+                    .setTextAlignment(Setting.Align.CENTER)
                     .setTypefaceFromFile(answerTypefaceValue)
                     .setTextOnClickListener(onAnswerTextClickListener)
                     .setCardOnClickListener(onAnswerViewClickListener)
