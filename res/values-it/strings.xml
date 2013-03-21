@@ -439,4 +439,8 @@
     <string name="select_category_text">Seleziona categoria</string>
     <string name="dropbox_successfully_uploaded_message">Il file è stato correttamente caricato nella tua cartella Dropbox AnyMemo</string>
     <string name="upload_dropbox_message">Vuoi caricare %s nella tua cartella Dropbox AnyMemo? Potrebbe metterci parecchio se ci sono più di 1000 schede.</string>
+    <string name="share_text">Condividi</string>
+    <string name="center_left_text">Centra allineando a sinistra</string>
+    <string name="center_right_text">Centra allineando a destra</string>
+
 </resources>
