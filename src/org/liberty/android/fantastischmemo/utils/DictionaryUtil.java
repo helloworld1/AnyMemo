@@ -19,55 +19,67 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.utils;
 
-import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.liberty.android.fantastischmemo.R;
-
 import org.liberty.android.fantastischmemo.domain.Option;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-
 import android.content.DialogInterface;
 import android.content.Intent;
-
+import android.util.Log;
 import android.view.Gravity;
 
 public class DictionaryUtil {
+
+    private static final String TAG = "DictionaryUtil";
+
     private Activity mActivity;
 
     private Option option;
 
+    private AMStringUtil amStringUtil;
+
     public DictionaryUtil(Activity activity) {
         mActivity = activity;
         option = new Option(mActivity);
+        amStringUtil = new AMStringUtil(mActivity);
     }
 
     /*
-     * Show a dialog to look up words in the text
+     * Show a dialog to look up a list of words in the text
      */
-    public void showLookupListDialog(String text) {
+    public void showLookupListDialog(String text, String... texts) {
 
-		// Replace break
-		String processed_str = text.replaceAll("\\<br\\>", " " );
-		// Remove HTML
-		processed_str = processed_str.replaceAll("\\<.*?>", " ");
-		// Remove () [] and their content
-		processed_str = processed_str.replaceAll("\\[.*?\\]", " ");
-        // Remove the XML special character
-		processed_str = processed_str.replaceAll("\\[.*?\\]", " ");
+        assert text != null : "showLookupListDialog shoul not get null input";
 
-        String[] words = processed_str.split("[\\s\t\n\r\f,;.(){}?!]+");
-
-        System.out.println("Splitted : " + Arrays.toString(words));
+        // For the null input, do nothing.
+        if (text == null) {
+            Log.e(TAG, "showLookupListDialog get input null");
+            return;
+        }
 
         // Maintina the order of words in the original text
         Set<String> wordSet = new LinkedHashSet<String>();
+        wordSet.add(amStringUtil.stripHTML(text));
+        for (String t : texts) {
+            wordSet.add(amStringUtil.stripHTML(t));
+        }
 
-        for (String word : words) {
+        String[] splittedText = amStringUtil.stripHTML(text).split(" ");
+
+        for (String word : splittedText) {
             wordSet.add(word);
+        }
+
+        for (String t : texts) {
+            String[] splitted = amStringUtil.stripHTML(t).split(" ");
+
+            for (String word : splitted) {
+                wordSet.add(word);
+            }
         }
 
         final String[] wordsToDisplay = new String[wordSet.size()];

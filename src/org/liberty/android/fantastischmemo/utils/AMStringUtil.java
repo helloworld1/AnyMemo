@@ -49,4 +49,17 @@ public class AMStringUtil {
         return "";
     }
 
+    // Strip the HTML from the text and return plain text
+    public String stripHTML(String htmlText) {
+		// Replace break
+		String processed_str = htmlText.replaceAll("\\<br\\>", "" );
+		// Remove HTML
+		processed_str = processed_str.replaceAll("\\<.*?>", "");
+		// Remove () [] and their content
+		processed_str = processed_str.replaceAll("\\[.*?\\]", "");
+        // Remove the XML special character
+		processed_str = processed_str.replaceAll("\\[.*?\\]", "");
+        return processed_str.trim();
+    }
+
 }

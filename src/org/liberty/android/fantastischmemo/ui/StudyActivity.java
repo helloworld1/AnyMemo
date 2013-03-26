@@ -836,7 +836,7 @@ public class StudyActivity extends QACardActivity {
     }
 
     private void lookupDictionary() {
-        dictionaryUtil.showLookupListDialog("" + getCurrentCard().getQuestion() + " " + getCurrentCard().getAnswer());
+        dictionaryUtil.showLookupListDialog(getCurrentCard().getQuestion(), getCurrentCard().getAnswer());
     }
 
     private void showEditDialog() {
