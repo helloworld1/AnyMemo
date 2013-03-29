@@ -29,7 +29,7 @@ import org.liberty.android.fantastischmemo.downloader.DownloadItem;
 
 import android.os.Bundle;
 
-class DownloadDBFileListFragment extends AbstractDownloaderFragment {
+public class DownloadDBFileListFragment extends AbstractDownloaderFragment {
 
     private DropboxDownloadHelper downloadHelper;
 

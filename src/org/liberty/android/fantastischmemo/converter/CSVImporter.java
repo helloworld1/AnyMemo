@@ -55,15 +55,15 @@ public class CSVImporter implements AbstractConverter {
     public void convert(String src, String dest) throws Exception {
         new File(dest).delete();
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, dest);
+        CSVReader reader;
+        if (separator == null) {
+            reader = new CSVReader(new FileReader(src));
+        } else {
+            reader = new CSVReader(new FileReader(src), separator);
+        }
         try {
             final CardDao cardDao = helper.getCardDao();
 
-            CSVReader reader;
-            if (separator == null) {
-                reader = new CSVReader(new FileReader(src));
-            } else {
-                reader = new CSVReader(new FileReader(src), separator);
-            }
 
             String[] nextLine;
             int count = 0;
@@ -98,7 +98,18 @@ public class CSVImporter implements AbstractConverter {
             cardDao.createCards(cardList);
         } finally {
             AnyMemoDBOpenHelperManager.releaseHelper(helper);
+            reader.close();
         }
+    }
+
+    @Override
+    public String getSrcExtension() {
+        return "csv";
+    }
+
+    @Override
+    public String getDestExtension() {
+        return "db";
     }
 }
 

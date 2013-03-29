@@ -54,21 +54,11 @@
             android:name=".downloader.DownloaderQuizlet"
             android:configChanges="orientation|keyboardHidden" />
         <activity
-            android:name=".downloader.DropboxLauncher"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity
-            android:name=".downloader.DownloaderDropbox"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity
-            android:name=".downloader.DropboxUploader"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity
             android:name=".downloader.dropbox.DropboxDBListActivity"
             android:configChanges="orientation|keyboardHidden" />
         <activity
             android:name=".downloader.google.SpreadsheetListScreen"
-            android:configChanges="orientation|keyboardHidden" >
-        </activity>
+            android:configChanges="orientation|keyboardHidden" />
         <activity
             android:name=".downloader.google.UploadGoogleDriveScreen"
             android:configChanges="orientation|keyboardHidden" />
@@ -89,9 +79,6 @@
             android:configChanges="orientation|keyboardHidden" />
         <activity 
             android:name=".ui.FileBrowserActivity"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity 
-            android:name=".ui.AudioRecorder"
             android:configChanges="orientation|keyboardHidden" />
         <activity 
             android:name=".ui.OptionScreen"

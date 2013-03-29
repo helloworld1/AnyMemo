@@ -28,7 +28,7 @@ import org.liberty.android.fantastischmemo.downloader.oauth.OauthAccessCodeRetri
 
 import android.util.Log;
 
-final class GoogleOAuth2AccessCodeRetrievalFragment extends OauthAccessCodeRetrievalFragment {
+public final class GoogleOAuth2AccessCodeRetrievalFragment extends OauthAccessCodeRetrievalFragment {
 
     private final static String TAG = "GoogleAuthFragment";
 

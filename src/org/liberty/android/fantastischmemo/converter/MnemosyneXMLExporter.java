@@ -48,6 +48,7 @@ public class MnemosyneXMLExporter implements AbstractConverter {
     public void convert(String src, String dest) throws Exception {
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, src);
         String dbName = AMUtil.getFilenameFromPath(dest);
+        PrintWriter outxml = null;
         try {
             final CardDao cardDao = helper.getCardDao();
             final LearningDataDao learningDataDao = helper.getLearningDataDao();
@@ -69,7 +70,7 @@ public class MnemosyneXMLExporter implements AbstractConverter {
 
 
 
-            PrintWriter outxml = new PrintWriter(new BufferedWriter(new FileWriter(dest)));
+            outxml = new PrintWriter(new BufferedWriter(new FileWriter(dest)));
             if(outxml.checkError()){
                 throw new IOException("Can't open: " + dest);
             }
@@ -160,6 +161,19 @@ public class MnemosyneXMLExporter implements AbstractConverter {
             outxml.close();
         } finally {
             AnyMemoDBOpenHelperManager.releaseHelper(helper);
+            if (outxml != null) {
+                outxml.close();
+            }
         }
+    }
+
+    @Override
+    public String getSrcExtension() {
+        return "db";
+    }
+
+    @Override
+    public String getDestExtension() {
+        return "xml";
     }
 }

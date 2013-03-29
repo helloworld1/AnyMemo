@@ -26,7 +26,7 @@ import java.util.List;
 import org.liberty.android.fantastischmemo.downloader.AbstractDownloaderFragment;
 import org.liberty.android.fantastischmemo.downloader.DownloadItem;
 
-class SpreadsheetListFragment extends AbstractDownloaderFragment {
+public class SpreadsheetListFragment extends AbstractDownloaderFragment {
     private String authToken = null;
 
     public SpreadsheetListFragment(String authToken) {

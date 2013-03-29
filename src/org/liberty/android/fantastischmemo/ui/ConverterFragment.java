@@ -22,34 +22,37 @@ package org.liberty.android.fantastischmemo.ui;
 import java.io.File;
 
 import org.liberty.android.fantastischmemo.R;
-
 import org.liberty.android.fantastischmemo.converter.AbstractConverter;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-
 import android.os.AsyncTask;
-
+import android.os.Bundle;
 import android.util.Log;
 
 public class ConverterFragment extends FileBrowserFragment {
+    public static final String EXTRA_CONVERTER = "converterObject";
     private Activity mActivity;
     private AbstractConverter mConverter;
-    private String destExtension;
 
     private final static String TAG = "ConverterFragment";
-
-    public ConverterFragment(AbstractConverter converter, String destExtension) {
-        mConverter = converter;
-        this.destExtension = destExtension;
-    }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = activity;
         setOnFileClickListener(fileClickListener);
+    }
+
+    @Override
+    public void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+
+        Bundle args = getArguments();
+        assert args != null : "Null args in ConverterFragment";
+
+        mConverter = (AbstractConverter) args.getSerializable(EXTRA_CONVERTER);
     }
 
     /*
@@ -122,7 +125,7 @@ public class ConverterFragment extends FileBrowserFragment {
             public void onClick(File file) {
                 String fullpath = file.getAbsolutePath();
                 ConvertTask task = new ConvertTask();
-                task.execute(fullpath, fullpath + destExtension);
+                task.execute(fullpath, fullpath + "." +  mConverter.getDestExtension());
             }
         };
 }

@@ -51,6 +51,7 @@ public class CSVExporter implements AbstractConverter {
         this.separator = separator;
     }
 
+    @Override
     public void convert(String src, String dest) throws Exception{
         new File(dest).delete();
 
@@ -64,29 +65,42 @@ public class CSVExporter implements AbstractConverter {
         } else {
             writer = new CSVWriter(new FileWriter(dest), separator);
         }
-        final List<Card> cardList = cardDao.queryForAll();
+        try {
+            final List<Card> cardList = cardDao.queryForAll();
 
-        // Populate all category field in a transaction.
-        categoryDao.callBatchTasks(new Callable<Void>() {
-            public Void call() throws Exception {
-                for (Card c: cardList) {
-                    categoryDao.refresh(c.getCategory());
+            // Populate all category field in a transaction.
+            categoryDao.callBatchTasks(new Callable<Void>() {
+                public Void call() throws Exception {
+                    for (Card c: cardList) {
+                        categoryDao.refresh(c.getCategory());
+                    }
+                    return null;
                 }
-                return null;
+            });
+            AnyMemoDBOpenHelperManager.releaseHelper(helper);
+            if(cardList.size() == 0){
+                throw new IOException("Can't retrieve cards for database: " + src);
             }
-        });
-        AnyMemoDBOpenHelperManager.releaseHelper(helper);
-        if(cardList.size() == 0){
-            throw new IOException("Can't retrieve cards for database: " + src);
+            String[] entries = new String[4];
+            for(Card card: cardList){
+                entries[0] = card.getQuestion();
+                entries[1] = card.getAnswer();
+                entries[2] = card.getCategory().getName();
+                entries[3] = card.getNote();
+                writer.writeNext(entries);
+            }
+        } finally {
+            writer.close();
         }
-        String[] entries = new String[4];
-        for(Card card: cardList){
-            entries[0] = card.getQuestion();
-            entries[1] = card.getAnswer();
-            entries[2] = card.getCategory().getName();
-            entries[3] = card.getNote();
-            writer.writeNext(entries);
-        }
-        writer.close();
+    }
+
+    @Override
+    public String getSrcExtension() {
+        return "db";
+    }
+
+    @Override
+    public String getDestExtension() {
+        return "csv";
     }
 }

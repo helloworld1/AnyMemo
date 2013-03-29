@@ -27,7 +27,6 @@ import org.liberty.android.fantastischmemo.domain.Option;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.Gravity;
