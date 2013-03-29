@@ -53,7 +53,6 @@ public abstract class GoogleAccountActivity extends OauthAccountActivity {
             }
 
             String audience = jsonObject.getString("audience");
-            System.err.println("EEEEEEEEEEEEEEEEEEE:" + AMEnv.GOOGLE_CLIENT_ID.equals(audience));
             return AMEnv.GOOGLE_CLIENT_ID.equals(audience);
         } catch (Exception e) {
             Log.i(TAG, "The saved access token is invalid", e);

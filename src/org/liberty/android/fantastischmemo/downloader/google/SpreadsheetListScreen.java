@@ -88,7 +88,10 @@ public class SpreadsheetListScreen extends GoogleAccountActivity {
         String authToken = authTokens[0];
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        Fragment newFragment = new SpreadsheetListFragment(authToken);
+        Fragment newFragment = new SpreadsheetListFragment();
+        Bundle args = new Bundle();
+        args.putString(SpreadsheetListFragment.EXTRA_AUTH_TOKEN, authToken);
+        newFragment.setArguments(args);
         ft.add(R.id.spreadsheet_list, newFragment);
         ft.commit();
     }
