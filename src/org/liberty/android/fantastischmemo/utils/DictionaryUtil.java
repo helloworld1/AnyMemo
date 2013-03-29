@@ -31,6 +31,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 public class DictionaryUtil {
 
@@ -85,17 +89,28 @@ public class DictionaryUtil {
         final String[] wordsToDisplay = new String[wordSet.size()];
         wordSet.toArray(wordsToDisplay);
 
-        new AlertDialog.Builder(mActivity)
-            .setTitle(R.string.look_up_text)
-            .setItems(wordsToDisplay, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    lookupDictionary(wordsToDisplay[which]);
-                }
+        // Get the ListView
+        ListView listView = new ListView(mActivity);
+        ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(mActivity,
+                R.layout.single_line_text_list_item, wordsToDisplay);
+        listView.setAdapter(listAdapter);
 
-            })
+        final AlertDialog alertDialog = new AlertDialog.Builder(mActivity)
+            .setTitle(R.string.look_up_text)
+            .setView(listView)
             .show();
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    alertDialog.dismiss();
+                    lookupDictionary(wordsToDisplay[position]);
+
+                }
+            });
+
+
     }
 
     public void lookupDictionary(String lookupWord) {
@@ -144,4 +159,5 @@ public class DictionaryUtil {
         }
 
     }
+
 }
