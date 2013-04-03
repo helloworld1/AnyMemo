@@ -1,12 +1,15 @@
 package org.liberty.android.fantastischmemo.test.queue;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.queue.QueueManager;
 import org.liberty.android.fantastischmemo.queue.QuizQueueManager;
+import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
-import org.liberty.android.fantastischmemo.test.mock.MockScheduler;
 
 import android.test.suitebuilder.annotation.SmallTest;
 
@@ -53,7 +56,7 @@ public class QuizQueuingManagerTest extends AbstractExistingDBTest {
 
     @SmallTest
     public void testUpdateCard() throws Exception {
-        MockScheduler mockScheduler = new MockScheduler();
+        Scheduler mockScheduler = mock(Scheduler.class);
 
         // Create a quiz start the quiz size 3 from card 5
         QueueManager queueManager = new QuizQueueManager.Builder()
@@ -63,26 +66,30 @@ public class QuizQueuingManagerTest extends AbstractExistingDBTest {
             .setScheduler(mockScheduler)
             .build();
 
-        mockScheduler.setMockedCardLearned(true);
         Card card5 = queueManager.dequeue();
         assertEquals(5, (int)card5.getOrdinal());
+        when(mockScheduler.isCardLearned(card5.getLearningData()))
+            .thenReturn(true);
         queueManager.update(card5);
 
-        mockScheduler.setMockedCardLearned(false);
         Card card6 = queueManager.dequeue();
         assertEquals(6, (int)card6.getOrdinal());
+        when(mockScheduler.isCardLearned(card6.getLearningData()))
+            .thenReturn(false);
         queueManager.update(card6);
 
-        mockScheduler.setMockedCardLearned(true);
         Card card7 = queueManager.dequeue();
         assertEquals(7, (int)card7.getOrdinal());
+        when(mockScheduler.isCardLearned(card7.getLearningData()))
+            .thenReturn(true);
         queueManager.update(card7);
 
         // Now cards in the queue is the card we failed
         // and we succeed this time
-        mockScheduler.setMockedCardLearned(true);
         Card card6Again = queueManager.dequeue();
         assertEquals(6, (int)card6Again.getOrdinal());
+        when(mockScheduler.isCardLearned(card6.getLearningData()))
+            .thenReturn(true);
         queueManager.update(card6Again);
 
         // No cards in the queue
