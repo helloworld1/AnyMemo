@@ -121,4 +121,8 @@ public class AMPrefKeys {
     // AnyMemoService
     public static final String NOTIFICATION_INTERVAL_KEY = "notification_interval";
     
+    // AutoSpeak
+    public static final String AUTO_SPEAK_QA_SLEEP_INTERVAL_KEY = "auto_speak_qa_sleep_interval";
+    public static final String AUTO_SPEAK_CARD_SLEEP_INTERVAL_KEY = "auto_speak_card_sleep_interval";
+    
 }

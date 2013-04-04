@@ -1,28 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/auto_speak_settings_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/auto_speak_settings_root"
     android:orientation="vertical" >
-    
-    <TextView 
-        android:id="@+id/auto_speak_settings_"
-        android:layout_width="fill_parent"
+
+    <TextView
+        android:id="@+id/auto_speak_qa_sleep_interval_text"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="3dip"/>
-    <EditText
-        android:id="@+id/user_name_entry"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
-    <TextView 
-        android:id="@+id/password_title"
-        android:layout_width="fill_parent"
+        android:padding="3dip"
+        android:text="@string/auto_speak_qa_sleep_interval_text" />
+
+    <SeekBar
+        android:id="@+id/auto_speak_qa_sleep_interval"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="3dip"/>
-    <EditText
-        android:id="@+id/password_entry"
-        android:layout_width="fill_parent"
-        android:password="true"
-        android:layout_height="fill_parent" />
+        android:max="10" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/auto_speak_setting_seekbar_value" />
+
+        <TextView
+            android:id="@+id/auto_speak_qa_sleep_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/auto_speak_card_sleep_interval_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="3dip"
+        android:text="@string/auto_speak_card_sleep_interval_text" />
+
+    <SeekBar
+        android:id="@+id/auto_speak_card_sleep_interval"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="10" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/auto_speak_setting_seekbar_value" />
+
+        <TextView
+            android:id="@+id/auto_speak_card_sleep_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
 </LinearLayout>

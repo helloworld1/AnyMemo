@@ -1,13 +1,17 @@
 package org.liberty.android.fantastischmemo.ui;
 
 
+import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,6 +30,9 @@ public class AutoSpeakFragment extends Fragment {
     private ImageButton exitButton;
     private PreviewEditActivity previewEditActivity;
     
+    private SharedPreferences settings;
+    private SharedPreferences.Editor editor;
+    
     private boolean isPlaying = false;
     private Handler handler;
     
@@ -41,29 +48,19 @@ public class AutoSpeakFragment extends Fragment {
         @Override
         public void onTextToSpeechCompleted(final String text) {
             Log.i(TAG, "mAnswerListener is " + mAnswerListener);
-            
-                //TODO: This won't block UI thread but blocked TTS thread.
-            // Should use postDelay in handler 
-                /* 
-                try {
-                    Thread.sleep(10000);
-                } catch(InterruptedException e) {
-                    Log.i(TAG, "ffffffff" + e.getMessage());
-                }
-                */
-                
                 
                 Runnable r = new Runnable() {
                     @Override
                     public void run() {
                         Log.i(TAG, "ppppppppppppppppppppp: " + text);
-                        if(!isActivityFinished) {
+                        if(!isActivityFinished && isPlaying) {
                             previewEditActivity.speakAnswer(mAnswerListener);
                         }
                     }
                 };
                 
-                    handler.postDelayed(r, 5000);
+                Log.i(TAG, "sleep time is " + settings.getInt(AMPrefKeys.AUTO_SPEAK_QA_SLEEP_INTERVAL_KEY, 1));
+                handler.postDelayed(r, 1000 * settings.getInt(AMPrefKeys.AUTO_SPEAK_QA_SLEEP_INTERVAL_KEY, 1));
                // previewEditActivity.runOnUiThread(r);
                 
             Log.i(TAG, "in preview edit activity");
@@ -75,20 +72,28 @@ public class AutoSpeakFragment extends Fragment {
         @Override
         public void onTextToSpeechCompleted(final String text) {
 
+            Runnable r = new Runnable() {
+                @Override
+                public void run() {
+                    Log.i(TAG, "jiiiiwowoowjiowjeifjweoifgjeos: " + text);
+                    
+                    if(!isActivityFinished && isPlaying) {
+                        previewEditActivity.gotoNext();
+                        previewEditActivity.speakQuestion(mQuestionListener);
+                    }
+
+                }
+            };
+            handler.postDelayed(r, 1000 * settings.getInt(AMPrefKeys.AUTO_SPEAK_CARD_SLEEP_INTERVAL_KEY, 1));
+            /*
             // Need to run gotoNext() in UI thread not TTS thread since it changes view. 
             previewEditActivity.runOnUiThread(new Runnable() {
                 
                 public void run() {
-                    Log.i(TAG, "jiiiiwowoowjiowjeifjweoifgjeos: " + text);
-                    
-                    if(!isActivityFinished) {
-                        previewEditActivity.gotoNext();
-                        previewEditActivity.speakQuestion(mQuestionListener);
-                    }
                 }
             });
-            
-            Log.i(TAG, "lalalala");
+            */
+
         }
     };
 
@@ -97,6 +102,8 @@ public class AutoSpeakFragment extends Fragment {
         super.onAttach(activity);
         this.previewEditActivity = (PreviewEditActivity)activity;
         this.handler = new Handler();
+        settings = PreferenceManager.getDefaultSharedPreferences(activity);
+        editor = settings.edit();
     }
     
     @Override
@@ -137,7 +144,7 @@ public class AutoSpeakFragment extends Fragment {
             if(v == playButton) {
                 isPlaying = !isPlaying;
                 Log.i(TAG, "Play button clicked, isPlaying " + isPlaying);
-
+                
                 if(isPlaying) {
                     Log.i(TAG, "start speaking");
                     autoSpeakEventHandler.onPlayButtonClick();
@@ -160,7 +167,11 @@ public class AutoSpeakFragment extends Fragment {
     };
 
     private void displaySettingsDialog() {
-        
+        isPlaying = !isPlaying;
+        Log.i(TAG, "display dialog");
+        playButton.setSelected(false);
+        AutoSpeakSettingDialogFragment a = new AutoSpeakSettingDialogFragment();
+        a.show(getActivity().getSupportFragmentManager(), "title");
     }
     
     private void dismissFragment() {
