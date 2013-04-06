@@ -28,10 +28,10 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.Vector;
 
 import java.util.concurrent.Callable;
 
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
@@ -45,6 +45,7 @@ import android.util.Log;
 
 public class LearnQueueManager implements QueueManager {
     private CardDao cardDao;
+
     private CategoryDao categoryDao;
     
     private LearningDataDao learningDataDao;
@@ -135,16 +136,18 @@ public class LearnQueueManager implements QueueManager {
             learningDataDao.callBatchTasks (
                 new Callable<Void>() {
                     public Void call() throws Exception {
+                        Log.i(TAG, "Cards to flush: " + dirtyCache.size());
                         for (Card card : dirtyCache) {
                             Log.i(TAG, "Flushing: " + card.getLearningData());
                             learningDataDao.update(card.getLearningData());
                             cardDao.update(card);
                         }
-                        dirtyCache.clear();
-                        return null;
+                       return null;
                     }
                 });
+            dirtyCache.clear();
         } catch (Exception e) {
+            Log.e(TAG, "Error encounter when flushing: ", e);
             throw new RuntimeException("Queue flushing get exception!", e);
         }
 	}
@@ -241,12 +244,15 @@ public class LearnQueueManager implements QueueManager {
 
     public static class Builder {
 
+        private AnyMemoDBOpenHelper dbOpenHelper;
+
         private CardDao cardDao;
+
         private CategoryDao categoryDao;
 
-        private Scheduler scheduler;
-
         private LearningDataDao learningDataDao;
+
+        private Scheduler scheduler;
 
         private Category filterCategory;
 
@@ -261,19 +267,11 @@ public class LearnQueueManager implements QueueManager {
             return this;
         }
 
-		public Builder setCardDao(CardDao cardDao) {
-			this.cardDao = cardDao;
+        public Builder setDbOpenHelper(AnyMemoDBOpenHelper helper) {
+            dbOpenHelper = helper;
             return this;
-		}
-		public Builder setCategoryDao(CategoryDao categoryDao) {
-			this.categoryDao = categoryDao;
-            return this;
-		}
-		
-		public Builder setLearningDataDao(LearningDataDao learningDataDao) {
-			this.learningDataDao = learningDataDao;
-            return this;
-		}
+        }
+
 		public Builder setFilterCategory(Category filterCategory) {
 			this.filterCategory = filterCategory;
             return this;
@@ -292,6 +290,12 @@ public class LearnQueueManager implements QueueManager {
         }
 
         public QueueManager build() {
+            cardDao = dbOpenHelper.getCardDao();
+
+            learningDataDao = dbOpenHelper.getLearningDataDao();
+
+            categoryDao = dbOpenHelper.getCategoryDao();
+
             if (cardDao == null || learningDataDao == null) {
                 throw new AssertionError("cardDao and learningDataDao must set");
             }

@@ -27,8 +27,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import java.util.concurrent.Callable;
-
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
@@ -42,6 +40,7 @@ import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 import android.util.Log;
 
 public class QuizQueueManager implements QueueManager {
+
     private CardDao cardDao;
     
     private LearningDataDao learningDataDao;
@@ -59,6 +58,8 @@ public class QuizQueueManager implements QueueManager {
     private boolean shuffle;
 
     private final String TAG = getClass().getSimpleName();
+
+    private static final int MAX_QUEUE_SIZE = 500;
 
     private QuizQueueManager(Builder builder) {
         this.shuffle = builder.shuffle;
@@ -114,22 +115,24 @@ public class QuizQueueManager implements QueueManager {
 	public synchronized void flush() {
         // Update the queue
         
-        try {
-            learningDataDao.callBatchTasks (
-                new Callable<Void>() {
-                    public Void call() throws Exception {
-                        for (Card card : dirtyCache) {
-                            Log.i(TAG, "Flushing: " + card.getLearningData());
-                            learningDataDao.update(card.getLearningData());
-                            cardDao.update(card);
-                        }
-                        dirtyCache.clear();
-                        return null;
-                    }
-                });
-        } catch (Exception e) {
-            throw new RuntimeException("Queue flushing get exception!", e);
-        }
+        // Current it is not quite functional.
+        throw new UnsupportedOperationException("QuizQueue's flush function is not quite functional");
+        // try {
+        //     learningDataDao.callBatchTasks (
+        //         new Callable<Void>() {
+        //             public Void call() throws Exception {
+        //                 for (Card card : dirtyCache) {
+        //                     Log.i(TAG, "Flushing: " + card.getLearningData());
+        //                     learningDataDao.update(card.getLearningData());
+        //                     cardDao.update(card);
+        //                 }
+        //                 dirtyCache.clear();
+        //                 return null;
+        //             }
+        //         });
+        // } catch (Exception e) {
+        //     throw new RuntimeException("Queue flushing get exception!", e);
+        // }
 	}
 
     private synchronized void refill(long startOrd, long size) {
@@ -137,7 +140,7 @@ public class QuizQueueManager implements QueueManager {
     }
 
     private synchronized void refill(Category category) {
-        newCache.addAll(cardDao.getCardsByCategory(category, false, 500));
+        newCache.addAll(cardDao.getCardsByCategory(category, false, MAX_QUEUE_SIZE));
     }
     
     public int getNewQueueSize() {

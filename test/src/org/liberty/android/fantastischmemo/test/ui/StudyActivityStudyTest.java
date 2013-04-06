@@ -77,6 +77,7 @@ public class StudyActivityStudyTest extends ActivityInstrumentationTestCase2<Stu
         assertTrue(solo.searchText("yeux"));
         solo.clickOnText(solo.getString(R.string.memo_btn3_text));
         solo.goBack();
+        solo.waitForDialogToClose(8000);
         solo.sleep(5000);
 
         // asssert db state
@@ -121,6 +122,7 @@ public class StudyActivityStudyTest extends ActivityInstrumentationTestCase2<Stu
         solo.clickOnText(solo.getString(R.string.memo_btn0_text));
         solo.goBack();
 
+        solo.waitForDialogToClose(8000);
         solo.sleep(2000);
 
         // asssert db state

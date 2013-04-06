@@ -21,20 +21,16 @@ package org.liberty.android.fantastischmemo.ui;
 
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.R;
-
-import org.liberty.android.fantastischmemo.utils.AMUtil;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
+import org.liberty.android.fantastischmemo.utils.ShareUtil;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-
 import android.content.DialogInterface;
 import android.content.Intent;
-
 import android.os.Bundle;
-
 import android.support.v4.app.DialogFragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,19 +38,25 @@ import android.view.ViewGroup;
 public class OpenActionsFragment extends DialogFragment {
     public static String EXTRA_DBPATH = "dbpath";
     private AMActivity mActivity;
+
+    private ShareUtil shareUtil;
+
     private String dbPath;
+
     private View studyItem;
     private View editItem;
     private View listItem;
     private View quizItem;
     private View settingsItem;
     private View statisticsItem;
+    private View shareItem;
     private View deleteItem;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = (AMActivity)activity;
+        shareUtil = new ShareUtil(activity);
     }
     @Override
     public void onCreate(Bundle bundle) {
@@ -89,6 +91,10 @@ public class OpenActionsFragment extends DialogFragment {
 
         statisticsItem = v.findViewById(R.id.statistics);
         statisticsItem.setOnClickListener(buttonClickListener);
+
+        shareItem = v.findViewById(R.id.share);
+        shareItem.setOnClickListener(buttonClickListener);
+
         return v;
     }
 
@@ -142,6 +148,10 @@ public class OpenActionsFragment extends DialogFragment {
                 startActivity(myIntent);
             }
 
+            if (v == shareItem) {
+                shareUtil.shareDb(dbPath);
+            }
+
             if (v == deleteItem) {
                 new AlertDialog.Builder(mActivity)
                     .setTitle(getString(R.string.delete_text))
@@ -149,7 +159,7 @@ public class OpenActionsFragment extends DialogFragment {
                     .setPositiveButton(getString(R.string.delete_text), new DialogInterface.OnClickListener(){
                         @Override
                         public void onClick(DialogInterface dialog, int which ){
-                            AMUtil.deleteDbSafe(dbPath);
+                            AMFileUtil.deleteDbSafe(dbPath);
                             rlu.deleteFromRecentList(dbPath);
                             /* Refresh the list */
                             mActivity.restartActivity();

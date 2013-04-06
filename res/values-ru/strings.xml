@@ -21,7 +21,7 @@
     <string name="copyclipboard_summary">Вопрос будет автоматически скопирован в буфер обмена.</string>
     <string name="memo_show_answer">\?\nПоказать ответ</string>
     <string name="memo_no_item_title">Нет объекта</string>
-    <string name="memo_no_item_message">Нет объектов для изучения. Рекомендуем вернуться назад. Нажмите Зубрёжка чтобы учить карточки наперёд.</string>
+    <string name="memo_no_item_message">Нет объектов для изучения. Если хотите повторить, выберите Опрос при долгом нажатии на базу в меню &quot;Недавние&quot;.</string>
     <string name="memo_btn0_text">0 Забыто</string>
     <string name="memo_btn1_text">1 Забыто</string>
     <string name="memo_btn2_text">2 ОчТяжел</string>
@@ -65,7 +65,7 @@
     <string name="settings_wipe">Сбросить весь прогресс изучения</string>
     <string name="settings_shuffle">Перемешать карточки</string>
     <string name="settings_inverse">Поменять ВО всех карточек</string>
-    <string name="settings_save">Сохранить</string>
+    <string name="settings_save">Сохр</string>
     <string name="settings_discard">Отказаться</string>
     <string name="warning_text">Предупреждение</string>
     <string name="settings_wipe_warning">ВЕСЬ прогресс изучения будет сброшен!</string>
@@ -81,13 +81,13 @@
     <string name="stat_new">Новые: </string>
     <string name="open_open_new_db">Открыть существующие базы</string>
     <string name="clear_all_pref">Сбросить установки</string>
-    <string name="clear_recent_list">Очистить список последних баз</string>
+    <string name="clear_recent_list">Очистить список недавних</string>
     <string name="export_xml">Эспорт Mnemosyne XML</string>
     <string name="add_screen_question">Вопрос</string>
     <string name="add_screen_new">Нов</string>
     <string name="add_screen_id">ID</string>
     <string name="add_screen_answer">Ответ</string>
-    <string name="add_screen_edit">Сохр</string>
+    <string name="add_screen_edit">Сохранить</string>
     <string name="add_screen_gotoid">Идти к ID</string>
     <string name="add_screen_back">Назад</string>
     <string name="add_screen_next">След</string>
@@ -267,9 +267,9 @@
     <string name="card_style_single">Односторонний</string>
     <string name="settings_field1">Настроить 1 поле карточки</string>
     <string name="settings_field2">Настроить 2 поле карточки</string>
-    <string name="left_text">По левому краю</string>
+    <string name="left_text">Слева сверху</string>
     <string name="center_text">По центру</string>
-    <string name="right_text">По правому краю</string>
+    <string name="right_text">Справа сверху</string>
     <string name="recent_tab_text">Недавние</string>
     <string name="open_tab_text">Открыть</string>
     <string name="download_tab_text">Загрузить</string>
@@ -299,10 +299,10 @@
     <string name="dropbox_text">Dropbox.com</string>
     <string name="dropbox_login_text">Войти, используя аккаунт Dropbox</string>
     <string name="dropbox_download_text">Загрузить из Dropbox</string>
-    <string name="dropbox_upload_text">Залить в Dropbox</string>
+    <string name="dropbox_upload_text">Залить %s в Dropbox</string>
     <string name="user_name_text">Имя пользователя:</string>
     <string name="password_text">Пароль:</string>
-    <string name="download_source_dropbox">Dropbox.com\n(экспериментально)</string>
+    <string name="download_source_dropbox">Dropbox.com</string>
     <string name="dropbox_login_message">Введите имя пользователя Dropbox (обычно email) и пароль.</string>
     <string name="import_supermemo_2008_xml_text">Импорт SuperMemo 2008 XML</string>
     <string name="uncategorized_text">Нет категории</string>
@@ -429,4 +429,13 @@
     <string name="record_text">Запись</string>
     <string name="play_text">Игра</string>
     <string name="stop_text">Стоп</string>
+    <string name="dict_bluedict">BlueDict</string>
+    <string name="gestures_text">Жесты</string>
+    <string name="enable_gestures_text">Разрешить жесты</string>
+    <string name="select_category_text">Выбрать категорию</string>
+    <string name="dropbox_successfully_uploaded_message">Файл успешно залит в ваш Dropbox AnyMemo каталог</string>
+    <string name="upload_dropbox_message">Хотите залить %s в ваш Dropbox AnyMemo каталог? Это может занять несколько минут, если карточек более 1000.</string>
+    <string name="share_text">Передать</string>
+    <string name="center_left_text">Слева по центру</string>
+    <string name="center_right_text">Справа по центру</string>
 </resources>

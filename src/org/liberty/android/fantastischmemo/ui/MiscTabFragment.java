@@ -29,6 +29,8 @@ import org.liberty.android.fantastischmemo.converter.QATxtExporter;
 import org.liberty.android.fantastischmemo.converter.QATxtImporter;
 import org.liberty.android.fantastischmemo.converter.Supermemo2008XMLImporter;
 import org.liberty.android.fantastischmemo.converter.SupermemoXMLImporter;
+import org.liberty.android.fantastischmemo.converter.TabTxtExporter;
+import org.liberty.android.fantastischmemo.converter.TabTxtImporter;
 import org.liberty.android.fantastischmemo.converter.ZipExporter;
 import org.liberty.android.fantastischmemo.converter.ZipImporter;
 
@@ -161,86 +163,98 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
         }
 
         if(v == importMnemosyneButton){
-            DialogFragment df = new ConverterFragment(new MnemosyneXMLImporter(mActivity), ".db");
+            DialogFragment df = new ConverterFragment();
             Bundle b = new Bundle();
-            b.putString("file_extension", ".xml");
+            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, new MnemosyneXMLImporter(mActivity));
+            b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".xml");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportMnemosyne");
         }
         if(v == importSupermemoButton){
-            DialogFragment df = new ConverterFragment(new SupermemoXMLImporter(mActivity), ".db");
+            DialogFragment df = new ConverterFragment();
             Bundle b = new Bundle();
-            b.putString("file_extension", ".xml");
+            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, new SupermemoXMLImporter(mActivity));
+            b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".xml");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportSuperMemo2008");
         }
         if(v == importCSVButton) {
-            DialogFragment df = new ConverterFragment(new CSVImporter(mActivity), ".db");
+            DialogFragment df = new ConverterFragment();
             Bundle b = new Bundle();
-            b.putString("file_extension", ".csv");
+            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, new CSVImporter(mActivity));
+            b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".csv");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportCSV");
         }
         if(v == importZipButton) {
-            DialogFragment df = new ConverterFragment(new ZipImporter(), "");
+            DialogFragment df = new ConverterFragment();
             Bundle b = new Bundle();
-            b.putString("file_extension", ".zip");
+            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, new ZipImporter());
+            b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".zip");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportZip");
         }
         if(v == importTabButton){
-            DialogFragment df = new ConverterFragment(new CSVImporter(mActivity, '\t'), ".db");
+            DialogFragment df = new ConverterFragment();
             Bundle b = new Bundle();
-            b.putString("file_extension", ".txt");
+            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, new TabTxtImporter(mActivity));
+            b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".txt");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportTabTxt");
         }
         if(v == importQAButton){
-            DialogFragment df = new ConverterFragment(new QATxtImporter(mActivity), ".db");
+            DialogFragment df = new ConverterFragment();
             Bundle b = new Bundle();
-            b.putString("file_extension", ".txt");
+            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, new QATxtImporter(mActivity));
+            b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".txt");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportCSV");
         }
         if(v == importSupermemo2008Button) {
-            DialogFragment df = new ConverterFragment(new Supermemo2008XMLImporter(mActivity), ".db");
+            DialogFragment df = new ConverterFragment();
             Bundle b = new Bundle();
-            b.putString("file_extension", ".xml");
+            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, new Supermemo2008XMLImporter(mActivity));
+            b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".xml");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportSuperMemo2008");
         }
         if(v == exportMnemosyneButton){
-            DialogFragment df = new ConverterFragment(new MnemosyneXMLExporter(mActivity), ".xml");
+            DialogFragment df = new ConverterFragment();
             Bundle b = new Bundle();
-            b.putString("file_extension", ".db");
+            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, new MnemosyneXMLExporter(mActivity));
+            b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".db");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ExportMnemosyne");
         }
         if(v == exportCSVButton){
-            DialogFragment df = new ConverterFragment(new CSVExporter(mActivity), ".csv");
+            DialogFragment df = new ConverterFragment();
             Bundle b = new Bundle();
-            b.putString("file_extension", ".db");
+            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, new CSVExporter(mActivity));
+            b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".db");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ExportCSV");
         }
         if(v == exportTabButton){
-            DialogFragment df = new ConverterFragment(new CSVExporter(mActivity, '\t'), ".txt");
+            DialogFragment df = new ConverterFragment();
             Bundle b = new Bundle();
-            b.putString("file_extension", ".db");
+            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, new TabTxtExporter(mActivity));
+            b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".db");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ExportTabTxt");
         }
         if(v == exportQAButton){
-            DialogFragment df = new ConverterFragment(new QATxtExporter(mActivity), ".txt");
+            DialogFragment df = new ConverterFragment();
             Bundle b = new Bundle();
-            b.putString("file_extension", ".db");
+            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, new QATxtExporter(mActivity));
+            b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".db");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ExportQA");
         }
         if(v == exportZipButton) {
-            DialogFragment df = new ConverterFragment(new ZipExporter(), ".zip");
+            DialogFragment df = new ConverterFragment();
             Bundle b = new Bundle();
-            b.putString("file_extension", ".db");
+            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, new ZipExporter());
+            b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".db");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ExportZip");
         }

@@ -30,7 +30,17 @@ public class ZipExporter implements AbstractConverter {
      */
 
     public void convert(String src, String dest) throws Exception {
-		AMZipUtils.compressFile(new File(src), new File(dest));
+        AMZipUtils.compressFile(new File(src), new File(dest));
 
+    }
+
+    @Override
+    public String getSrcExtension() {
+        return "db";
+    }
+
+    @Override
+    public String getDestExtension() {
+        return "zip";
     }
 }

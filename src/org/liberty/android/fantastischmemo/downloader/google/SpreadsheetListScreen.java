@@ -19,21 +19,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.google;
 
-import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
 
 import android.app.Activity;
-
 import android.content.Intent;
-import android.content.SharedPreferences;
-
 import android.os.Bundle;
-
-import android.preference.PreferenceManager;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -78,10 +70,9 @@ public class SpreadsheetListScreen extends GoogleAccountActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode ==Activity.RESULT_CANCELED){
+        if(resultCode ==Activity.RESULT_CANCELED) {
             return;
         }
-
 
         switch(requestCode){
             case UPLOAD_ACTIVITY:
@@ -92,30 +83,16 @@ public class SpreadsheetListScreen extends GoogleAccountActivity {
         }
     }
 
-
     @Override
-    protected void onAuthenticated(final String authToken) {
-        //try {
-        //    URL url = new URL("https://spreadsheets.google.com/feeds/spreadsheets/private/full?access_token="+authToken);
-        //    HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-        //    //conn.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
-
-        //    String s = new String(IOUtils.toByteArray(conn.getErrorStream()));
-        //} catch (Exception e) {
-        //    e.printStackTrace();
-        //}
+    protected void onAuthenticated(final String[] authTokens) {
+        String authToken = authTokens[0];
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        Fragment newFragment = new SpreadsheetListFragment(authToken);
+        Fragment newFragment = new SpreadsheetListFragment();
+        Bundle args = new Bundle();
+        args.putString(SpreadsheetListFragment.EXTRA_AUTH_TOKEN, authToken);
+        newFragment.setArguments(args);
         ft.add(R.id.spreadsheet_list, newFragment);
         ft.commit();
     }
-
-    private void invalidateSavedToken() {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString(AMPrefKeys.GOOGLE_AUTH_TOKEN, null);
-        editor.commit();
-    }
-
 }

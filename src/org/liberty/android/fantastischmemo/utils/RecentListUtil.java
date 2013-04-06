@@ -49,7 +49,7 @@ public class RecentListUtil {
     public String[] getAllRecentDBPath() {
     	// TODO: Reload the recentLength from user option.
     	// FIXME: temp hack, need re-write, don't need to get it again.
-    	recentLength = settings.getInt(AMPrefKeys.RECENT_COUNT_KEY, recentLength);
+    	recentLength = option.getRecentCount();
     	
         String[] ret = new String[recentLength];
         

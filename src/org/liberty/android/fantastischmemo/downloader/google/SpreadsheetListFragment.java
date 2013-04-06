@@ -26,11 +26,20 @@ import java.util.List;
 import org.liberty.android.fantastischmemo.downloader.AbstractDownloaderFragment;
 import org.liberty.android.fantastischmemo.downloader.DownloadItem;
 
-class SpreadsheetListFragment extends AbstractDownloaderFragment {
+import android.os.Bundle;
+
+public class SpreadsheetListFragment extends AbstractDownloaderFragment {
+
+    public static final String EXTRA_AUTH_TOKEN = "authToken";
+
     private String authToken = null;
 
-    public SpreadsheetListFragment(String authToken) {
-        this.authToken = authToken;
+    @Override
+    public void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+        Bundle args = getArguments();
+        assert args != null : "The EXTRA_AUTH_TOKEN must be passed to SpreadsheetListFragment";
+        this.authToken = args.getString(EXTRA_AUTH_TOKEN);
     }
 
 	@Override

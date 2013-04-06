@@ -34,8 +34,8 @@ import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
-import org.liberty.android.fantastischmemo.utils.AMUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 
@@ -250,7 +250,7 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
         String dbname = DownloaderUtils.validateDBName(di.getTitle()) + ".db";
         String dbpath = AMEnv.DEFAULT_ROOT_PATH;
         String fullpath = dbpath + dbname;
-        AMUtil.deleteFileWithBackup(fullpath);
+        AMFileUtil.deleteFileWithBackup(fullpath);
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(DownloaderQuizlet.this, fullpath);
         try {
             CardDao cardDao = helper.getCardDao();

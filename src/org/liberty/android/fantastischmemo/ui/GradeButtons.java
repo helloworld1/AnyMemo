@@ -123,11 +123,26 @@ public class GradeButtons {
         }
     }
 
+    // The view still take space and display the background
+    // color, but the buttons are invisible
+    public void invisible() {
+        for (Button b : gradeButtons) {
+            if (b.getVisibility() == View.VISIBLE) {
+                b.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
+
     public void hide() {
-        buttonView.setVisibility(View.INVISIBLE);
+        buttonView.setVisibility(View.GONE);
     }
 
     public void show() {
+        for (Button b : gradeButtons) {
+            if (b.getVisibility() == View.INVISIBLE) {
+                b.setVisibility(View.VISIBLE);
+            }
+        }
         buttonView.setVisibility(View.VISIBLE);
     }
 

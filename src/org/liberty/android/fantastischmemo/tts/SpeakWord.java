@@ -32,13 +32,13 @@ import android.util.Log;
 public class SpeakWord {
     private volatile MediaPlayer mp;
     private final List<String> searchPath; 
-    private final String[] SUPPORTED_AUDIO_FILE_TYPE = {".3gp", ".ogg", ".wav", ".mp3"};
+    private final String[] SUPPORTED_AUDIO_FILE_TYPE = {".3gp", ".ogg", ".wav", ".mp3", ".amr"};
     private final String TAG = "SpeakWord";
 
     /* Search in all given search path and try to find exact match audio file with name specified in the text*/
     private File searchGivenPath(String cardText){
         // The regex here should match the file types in SUPPORTED_AUDIO_FILE_TYPE
-        Pattern p = Pattern.compile("[A-Za-z0-9_-]+\\.(3gp|ogg|mp3|wav)");
+        Pattern p = Pattern.compile("[A-Za-z0-9_-]+\\.(3gp|ogg|mp3|wav|amr)");
         Matcher m = p.matcher(cardText);
         File audioFile = null;
         if(m.find()){
@@ -162,94 +162,6 @@ public class SpeakWord {
         return true;
     }
     
-//    public boolean speakWord(final String text){
-//        File audioFile = null;
-//        String[] fileType = {".3gp", ".ogg", ".wav", ".mp3"};
-//        String candidateFile =  mAudioDir + "/";
-//        String word = text;
-//        /* Find the audio file in tags */
-//        Pattern p = Pattern.compile("[A-Za-z0-9_-]+\\.(3gp|ogg|mp3|wav)");
-//        Matcher m = p.matcher(text);
-//        if(m.find()){
-//           String audioTag = m.group();
-//           audioFile = new File(mAudioDir + "/" + dbName + "/" + audioTag);
-//           if(!audioFile.exists()){
-//               audioFile = new File(mAudioDir + "/" + audioTag);
-//           }
-//        }
-//
-//        if(audioFile == null || ! audioFile.exists()){
-//            // Replace break with period
-//            word = word.replaceAll("\\<br\\>", ". " );
-//            // Remove HTML
-//            word = word.replaceAll("\\<.*?>", "");
-//            // Remove () [] 
-//            word = word.replaceAll("[\\[\\]\\(\\)]", "");
-//            // Remove white spaces
-//            word = word.replaceAll("^\\s+", "");
-//            word = word.replaceAll("\\s+$", "");
-//            if(word.length() < 1){
-//                return false;
-//            }
-//        }
-//
-//        
-//
-//        
-//        if(audioFile == null || !audioFile.exists()){
-//            for(String s : fileType){
-//                audioFile = new File(candidateFile + word + s);
-//                
-//                if(audioFile.exists()){
-//                    candidateFile = candidateFile + word + s;
-//                    break;
-//                }
-//            }
-//        }
-//        if(audioFile == null || !audioFile.exists()){
-//            for(String s : fileType){
-//                audioFile = new File(candidateFile + word.substring(0, 1) + "/" + word + s);
-//                if(audioFile.exists()){
-//                    candidateFile += word.substring(0, 1) + "/" + word + s;
-//                    break;
-//                }
-//            }
-//        }
-//        if(audioFile == null || !audioFile.exists()){
-//            return false;
-//        }
-//        
-//        try{
-//            final FileInputStream fis = new FileInputStream(audioFile);
-//            new Thread(){
-//                public void run(){
-//                    try{
-//                        if(!mp.isPlaying()){
-//                            mp.reset();
-//                            mp.setDataSource(fis.getFD());
-//                            mp.prepare();
-//                            mp.start();
-//                        }
-//                        else{
-//                            stop();
-//                        }
-//                        
-//                    }
-//
-//                    catch(Exception e){
-//                        Log.e(TAG, "Error loading audio. Maybe it is race condition", e);
-//                    }
-//                    
-//                }
-//            }.start();
-//        }
-//        catch(Exception e){
-//            Log.e(TAG, "Speak error", e);
-//            return false;
-//        }
-//        return true;
-//    }
-
     public void stop(){
         if(mp != null){
             try{

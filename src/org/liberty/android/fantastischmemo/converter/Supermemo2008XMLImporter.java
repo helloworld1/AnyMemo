@@ -46,14 +46,14 @@ import org.xml.sax.XMLReader;
 import android.content.Context;
 
 public class Supermemo2008XMLImporter extends org.xml.sax.helpers.DefaultHandler implements AbstractConverter{
-	public Locator mLocator;
+    public Locator mLocator;
     private Context mContext;
     private List<Card> cardList;
     private Card card;
     private int count = 1;
-	
-	private StringBuffer characterBuf;
-	
+    
+    private StringBuffer characterBuf;
+    
     public Supermemo2008XMLImporter(Context context){
         mContext = context;
     }
@@ -62,17 +62,17 @@ public class Supermemo2008XMLImporter extends org.xml.sax.helpers.DefaultHandler
     public void convert(String src, String dest) throws Exception{
         new File(dest).delete();
 
-		URL mXMLUrl = new URL("file:///" + src);
-		cardList = new LinkedList<Card>();
+        URL mXMLUrl = new URL("file:///" + src);
+        cardList = new LinkedList<Card>();
         characterBuf = new StringBuffer();
 
         System.setProperty("org.xml.sax.driver","org.xmlpull.v1.sax2.Driver"); 
 
-		SAXParserFactory spf = SAXParserFactory.newInstance();
-		SAXParser sp = spf.newSAXParser();
-		XMLReader xr = sp.getXMLReader();
-		xr.setContentHandler(this);
-		xr.parse(new InputSource(mXMLUrl.openStream()));
+        SAXParserFactory spf = SAXParserFactory.newInstance();
+        SAXParser sp = spf.newSAXParser();
+        XMLReader xr = sp.getXMLReader();
+        xr.setContentHandler(this);
+        xr.parse(new InputSource(mXMLUrl.openStream()));
 
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, dest);
         try {
@@ -82,8 +82,8 @@ public class Supermemo2008XMLImporter extends org.xml.sax.helpers.DefaultHandler
             AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }
     }
-	
-	public void startElement(String namespaceURI, String localName, String qName, Attributes atts) throws SAXException{
+    
+    public void startElement(String namespaceURI, String localName, String qName, Attributes atts) throws SAXException{
         if(localName.equals("Question")){
             characterBuf = new StringBuffer();
             card = new Card();
@@ -93,31 +93,41 @@ public class Supermemo2008XMLImporter extends org.xml.sax.helpers.DefaultHandler
         if(localName.equals("Answer")){
             characterBuf = new StringBuffer();
         }
-	}
-	
-	public void endElement(String namespaceURI, String localName, String qName) throws SAXException{
-		if(localName.equals("Question")){
+    }
+    
+    public void endElement(String namespaceURI, String localName, String qName) throws SAXException{
+        if(localName.equals("Question")){
             card.setQuestion(characterBuf.toString());
-		}
-		if(localName.equals("Answer")){
+        }
+        if(localName.equals("Answer")){
             card.setAnswer(characterBuf.toString());
             card.setOrdinal(count);
             count++;
             cardList.add(card);
-		}
-	}
-	
-	public void setDocumentLocator(Locator locator){
-		mLocator = locator;
-	}
-	
-	public void characters(char ch[], int start, int length){
-		characterBuf.append(ch, start, length);
-	}
-	
-	public void startDocument() throws SAXException{
-	}
-	
-	public void endDocument() throws SAXException{
-	}
+        }
+    }
+    
+    public void setDocumentLocator(Locator locator){
+        mLocator = locator;
+    }
+    
+    public void characters(char ch[], int start, int length){
+        characterBuf.append(ch, start, length);
+    }
+    
+    public void startDocument() throws SAXException{
+    }
+    
+    public void endDocument() throws SAXException{
+    }
+
+    @Override
+    public String getSrcExtension() {
+        return "xml";
+    }
+
+    @Override
+    public String getDestExtension() {
+        return "db";
+    }
 }

@@ -21,7 +21,7 @@ package org.liberty.android.fantastischmemo.ui;
 
 import org.liberty.android.fantastischmemo.*;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
-import org.liberty.android.fantastischmemo.utils.DatabaseUtils;
+import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -43,6 +43,8 @@ public class DatabaseMerger extends AMActivity implements View.OnClickListener{
     private EditText sourceEdit;
     private Button mergeButton;
     private Button cancelButton;
+    
+    private DatabaseUtil databaseUtil;
 
     @Override
 	public void onCreate(Bundle savedInstanceState){
@@ -62,6 +64,8 @@ public class DatabaseMerger extends AMActivity implements View.OnClickListener{
         mergeButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
         targetEdit.setText(dbPath);
+        
+        databaseUtil = new DatabaseUtil(this);
     }
 
     @Override
@@ -112,7 +116,7 @@ public class DatabaseMerger extends AMActivity implements View.OnClickListener{
                 public void doHeavyTask() throws Exception {
                     String targetPath = targetEdit.getText().toString();
                     String sourcePath = sourceEdit.getText().toString();
-                    DatabaseUtils.mergeDatabases(DatabaseMerger.this, targetPath, sourcePath);
+                    databaseUtil.mergeDatabases(targetPath, sourcePath);
                 }
 
                 public void doUITask(){

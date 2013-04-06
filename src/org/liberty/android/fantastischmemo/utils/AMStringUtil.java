@@ -19,6 +19,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.utils;
 
+import java.util.EnumSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.mycommons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.R;
 
 import android.content.Context;
@@ -31,7 +36,7 @@ public class AMStringUtil {
         this.context = context;
     }
 
-    // Interval: 12.3456 day -> "1.7 week", 4.76 -> "4.7 day"
+    // Interval: 12.3456 day -> "1.8 week", 4.76 -> "4.8 day"
     public String convertDayIntervalToDisplayString(double intervalInDay) {
         double[] dividers = {365, 30, 7, 1};
         String[] unitName = {context.getString(R.string.year_text),
@@ -47,6 +52,63 @@ public class AMStringUtil {
             }
         }
         return "";
+    }
+
+    // Strip the HTML from the text and return plain text
+    public String stripHTML(String htmlText) {
+		// Replace break
+		String processed_str = htmlText.replaceAll("\\<br\\>", "" );
+		// Remove HTML
+		processed_str = processed_str.replaceAll("\\<.*?>", "");
+		// Remove () [] and their content
+		processed_str = processed_str.replaceAll("\\[.*?\\]", "");
+        // Remove the XML special character
+		processed_str = processed_str.replaceAll("\\[.*?\\]", "");
+        return processed_str.trim();
+    }
+
+    public static boolean isInteger(String s){
+        try{
+            Integer.parseInt(s);
+            return true;
+        }
+        catch(Exception e){
+            return false;
+        }
+    }
+
+    public static boolean isHTML(String s){
+        assert s != null : "Verify Null string";
+        Pattern htmlPattern1 = Pattern.compile("<[a-zA-Z]+[0-9]*(\\s[a-zA-Z]+[0-9]*=.*)*\\s*/??>");
+        Pattern htmlPattern2 = Pattern.compile("&#?[a-z0-9]+;");
+        Matcher m1 = htmlPattern1.matcher(s);
+        Matcher m2 = htmlPattern2.matcher(s);
+        return m1.find() || m2.find();
+    }
+
+    /* Get the EnumSet from a string in format "A,B,C" */
+    public static <E extends Enum<E>> EnumSet<E> getEnumSetFromString(Class<E> enumType, String enumString) {
+        EnumSet<E> es = EnumSet.noneOf(enumType);
+
+        if (StringUtils.isNotEmpty(enumString)) {
+            String[] split = enumString.split(",");
+            for (String s : split) {
+                es.add(Enum.valueOf(enumType, s));
+            }
+        }
+        return es;
+    }
+
+    /* Get the String a string in format "A,B,C" from EnumSet */
+    public static <E extends Enum<E>> String getStringFromEnumSet(EnumSet<E> e) {
+        String res = "";
+        for (E cf : e) {
+            res = res + cf.toString() + ",";
+        }
+        if (res.length() != 0) {
+            res = res.substring(0, res.length() - 1);
+        }
+        return res;
     }
 
 }

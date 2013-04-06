@@ -4,18 +4,21 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"> 
 <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
     <RadioGroup android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-        <RadioButton android:checked="true"
-                android:id="@+id/quiz_by_group_radio"
-                android:text="@string/quiz_by_group_text" />
+        <RadioButton
+            android:checked="true"
+            android:id="@+id/quiz_by_group_radio"
+            android:text="@string/quiz_by_group_text" />
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/quiz_by_group_settings"
+            android:visibility="visible"
             android:orientation="vertical">
             <TextView android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -36,12 +39,15 @@
                 android:inputType="number"
                 android:layout_height="wrap_content" />
         </LinearLayout>
-        <RadioButton android:checked="false"
-                android:text="@string/quiz_by_category_text"
-                android:id="@+id/quiz_by_category_radio" />
+        <RadioButton
+            android:checked="false"
+            android:text="@string/quiz_by_category_text"
+            android:id="@+id/quiz_by_category_radio" />
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/quiz_by_category_settings"
+            android:visibility="gone"
             android:orientation="vertical">
             <TextView 
                     android:text="@string/edit_dialog_category"
@@ -51,9 +57,17 @@
             <Button
                     android:id="@+id/category_button"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="@string/select_category_text" />
         </LinearLayout>
     </RadioGroup>
+
+    <CheckBox
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/shuffle_checkbox"
+        android:text="@string/shuffling_cards_title" />
+
     <Button android:id="@+id/start_quiz_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

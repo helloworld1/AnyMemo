@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.liberty.android.fantastischmemo"
     android:installLocation="auto"
-    android:versionCode="168"
+    android:versionCode="177"
     android:versionName="@string/app_version">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -25,9 +25,6 @@
                     android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity 
-            android:name=".InstrumentationActivity"
-            android:configChanges="orientation|keyboardHidden" />
         <activity
             android:name=".downloader.DownloaderAnyMemo"
             android:configChanges="orientation|keyboardHidden" />
@@ -57,20 +54,16 @@
             android:name=".downloader.DownloaderQuizlet"
             android:configChanges="orientation|keyboardHidden" />
         <activity
-            android:name=".downloader.DropboxLauncher"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity
-            android:name=".downloader.DownloaderDropbox"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity
-            android:name=".downloader.DropboxUploader"
+            android:name=".downloader.dropbox.DropboxDBListActivity"
             android:configChanges="orientation|keyboardHidden" />
         <activity
             android:name=".downloader.google.SpreadsheetListScreen"
-            android:configChanges="orientation|keyboardHidden" >
-        </activity>
+            android:configChanges="orientation|keyboardHidden" />
         <activity
             android:name=".downloader.google.UploadGoogleDriveScreen"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity
+            android:name=".downloader.dropbox.UploadDropboxScreen"
             android:configChanges="orientation|keyboardHidden" />
         <activity 
             android:name=".ui.CardEditor"
@@ -86,9 +79,6 @@
             android:configChanges="orientation|keyboardHidden" />
         <activity 
             android:name=".ui.FileBrowserActivity"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity 
-            android:name=".ui.AudioRecorder"
             android:configChanges="orientation|keyboardHidden" />
         <activity 
             android:name=".ui.OptionScreen"

@@ -1,33 +1,19 @@
 package org.liberty.android.fantastischmemo.test.queue;
 
-import org.liberty.android.fantastischmemo.InstrumentationActivity;
-
 import org.liberty.android.fantastischmemo.dao.CardDao;
-import org.liberty.android.fantastischmemo.dao.CategoryDao;
-import org.liberty.android.fantastischmemo.dao.LearningDataDao;
-
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
-
 import org.liberty.android.fantastischmemo.queue.LearnQueueManager;
 import org.liberty.android.fantastischmemo.queue.QueueManager;
 import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
 
-public class QueuingTest extends AbstractExistingDBTest<InstrumentationActivity> {
+import android.test.suitebuilder.annotation.SmallTest;
 
-    public QueuingTest() {
-        super("org.liberty.android.fantastischmemo", InstrumentationActivity.class);
-    }
+public class LearnQueuingManagerTest extends AbstractExistingDBTest {
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
+    @SmallTest
     public void testGetNewCardQueuingWithCategory() throws Exception {
         CardDao cardDao = helper.getCardDao();
-        CategoryDao categoryDao = helper.getCategoryDao();
-        LearningDataDao learningDataDao = helper.getLearningDataDao();
         Card c10 = cardDao.queryForId(10);
         assertNotNull(c10);
         Category cat = new Category();
@@ -35,9 +21,7 @@ public class QueuingTest extends AbstractExistingDBTest<InstrumentationActivity>
         c10.setCategory(cat);
         cardDao.update(c10);
         QueueManager queueManager = new LearnQueueManager.Builder()
-            .setCardDao(cardDao)
-            .setCategoryDao(categoryDao)
-            .setLearningDataDao(learningDataDao)
+            .setDbOpenHelper(helper)
             .setLearnQueueSize(10)
             .setFilterCategory(cat)
             .setCacheSize(50)
@@ -46,30 +30,24 @@ public class QueuingTest extends AbstractExistingDBTest<InstrumentationActivity>
         assertEquals(10, (int)cqueue.getId());
     }
 
+    @SmallTest
     public void testGetNewCardQueuingWithoutCategory() throws Exception {
-        CardDao cardDao = helper.getCardDao();
-        CategoryDao categoryDao = helper.getCategoryDao();
-        LearningDataDao learningDataDao = helper.getLearningDataDao();
+        System.out.println("##############################################");
         QueueManager queueManager = new LearnQueueManager.Builder()
-            .setCardDao(cardDao)
-            .setCategoryDao(categoryDao)
-            .setLearningDataDao(learningDataDao)
+        	.setDbOpenHelper(helper)
             .setLearnQueueSize(10)
             .setFilterCategory(null)
             .setCacheSize(50)
             .build();
         Card cqueue = queueManager.dequeue();
         assertEquals(1, (int)cqueue.getId());
+        System.out.println("##############################################");
     }
 
+    @SmallTest
     public void testQueuingPosition() throws Exception {
-        CardDao cardDao = helper.getCardDao();
-        CategoryDao categoryDao = helper.getCategoryDao();
-        LearningDataDao learningDataDao = helper.getLearningDataDao();
         QueueManager queueManager = new LearnQueueManager.Builder()
-            .setCardDao(cardDao)
-            .setCategoryDao(categoryDao)
-            .setLearningDataDao(learningDataDao)
+            .setDbOpenHelper(helper)
             .setLearnQueueSize(10)
             .setFilterCategory(null)
             .setCacheSize(50)

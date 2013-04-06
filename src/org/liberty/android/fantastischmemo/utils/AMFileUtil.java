@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2010 Haowen Ning
+Copyright (C) 2013 Haowen Ning
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -17,6 +17,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
+
 package org.liberty.android.fantastischmemo.utils;
 
 import java.io.File;
@@ -26,38 +27,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import java.util.Date;
-import java.util.EnumSet;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import org.apache.mycommons.io.FileUtils;
 import org.apache.mycommons.io.FilenameUtils;
-
-import org.apache.mycommons.lang3.StringUtils;
-
-import org.apache.mycommons.lang3.time.DateUtils;
-
+import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 
-public class AMUtil {
-    public static boolean isInteger(String s){
-        try{
-            Integer.parseInt(s);
-            return true;
-        }
-        catch(Exception e){
-            return false;
-        }
-    }
+import android.content.Context;
 
-    public static boolean isHTML(String s){
-        assert s != null : "Verify Null string";
-        Pattern htmlPattern1 = Pattern.compile("<[a-zA-Z]+[0-9]*(\\s[a-zA-Z]+[0-9]*=.*)*\\s*/??>");
-        Pattern htmlPattern2 = Pattern.compile("&#?[a-z0-9]+;");
-        Matcher m1 = htmlPattern1.matcher(s);
-        Matcher m2 = htmlPattern2.matcher(s);
-        return m1.find() || m2.find();
+public class AMFileUtil {
+
+    private Context mContext;
+
+    public AMFileUtil(Context context) {
+        mContext = context;
     }
 
 	public static void copyFile(String source, String dest) throws IOException{
@@ -106,36 +88,16 @@ public class AMUtil {
         return new File(path).getParent();
     }
 
-    /* Get the EnumSet from a string in format "A,B,C" */
-    public static <E extends Enum<E>> EnumSet<E> getEnumSetFromString(Class<E> enumType, String enumString) {
-        EnumSet<E> es = EnumSet.noneOf(enumType);
-
-        if (StringUtils.isNotEmpty(enumString)) {
-            String[] split = enumString.split(",");
-            for (String s : split) {
-                es.add(Enum.valueOf(enumType, s));
+    // Copy a file from asset to the dest file.
+    public void copyFileFromAsset(String fileName, File dest) throws IOException {
+        InputStream in = null;
+        try {
+            in = mContext.getResources().getAssets().open(fileName);
+            FileUtils.copyInputStreamToFile(in, dest);
+        } finally {
+            if (in != null) {
+                in.close();
             }
         }
-        return es;
     }
-
-    /* Get the String a string in format "A,B,C" from EnumSet */
-    public static <E extends Enum<E>> String getStringFromEnumSet(EnumSet<E> e) {
-        String res = "";
-        for (E cf : e) {
-            res = res + cf.toString() + ",";
-        }
-        if (res.length() != 0) {
-            res = res.substring(0, res.length() - 1);
-        }
-        return res;
-    }
-
-    /* Difference in days between date1 and date2*/
-	public static double diffDate(Date date1, Date date2){
-        double date1s = date1.getTime();
-        double date2s = date2.getTime();
-        return ((double)(date2s - date1s)) / DateUtils.MILLIS_PER_DAY; 
-	}
-
 }

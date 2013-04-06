@@ -54,7 +54,7 @@ public class Option {
     }
 
 	public DictApp getDictApp() {
-        return DictApp.parse(settings.getString(AMPrefKeys.DICT_APP_KEY, "FORA"));
+        return DictApp.parse(settings.getString(AMPrefKeys.DICT_APP_KEY, "COLORDICT"));
 	}
 
 	public ShuffleType getShuffleType() {
@@ -95,6 +95,15 @@ public class Option {
     public boolean getEnableAnimation() {
         return settings.getBoolean(AMPrefKeys.ENABLE_ANIMATION_KEY, true);
     }
+
+    public boolean getGestureEnabled() {
+        return settings.getBoolean(AMPrefKeys.CARD_GESTURE_ENABLED, false);
+    }
+
+    public void setGestureEnabled(boolean enable) {
+        editor.putBoolean(AMPrefKeys.CARD_GESTURE_ENABLED, enable);
+        editor.commit();
+    }
     
     public static enum ButtonStyle {
         ANYMEMO,
@@ -116,12 +125,16 @@ public class Option {
 
     public static enum DictApp {
         COLORDICT,
-        FORA;
+        FORA,
+        BLUEDICT;
+
         public static DictApp parse(String a){
-            if(a.equals("COLORDICT")){
-                return COLORDICT;
-            } else{
+            if(a.equals("FORA")){
                 return FORA;
+            } else if (a.equals("BLUEDICT")) {
+                return BLUEDICT;
+            } else {
+                return COLORDICT;
             }
         }
     }

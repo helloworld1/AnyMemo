@@ -36,12 +36,16 @@
     <item>@string/left_text</item>
     <item>@string/center_text</item>
     <item>@string/right_text</item>
+    <item>@string/center_left_text</item>
+    <item>@string/center_right_text</item>
 </string-array>
 
 <string-array name="align_list_values">
     <item>LEFT</item>
     <item>CENTER</item>
     <item>RIGHT</item>
+    <item>CENTER_LEFT</item>
+    <item>CENTER_RIGHT</item>
 </string-array>
 
 <string-array name="locale_list">
@@ -256,11 +260,13 @@
 <string-array name="dict_list">
     <item>@string/dict_colordict</item>
     <item>@string/dict_fora</item>
+    <item>@string/dict_bluedict</item>
 </string-array>
 
 <string-array name="dict_list_values">
     <item>COLORDICT</item>
     <item>FORA</item>
+    <item>BLUEDICT</item>
 </string-array>
 
 <string-array name="statistics_types">

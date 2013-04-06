@@ -124,5 +124,15 @@ public class QATxtImporter implements AbstractConverter{
             AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }
     }
+
+    @Override
+    public String getSrcExtension() {
+        return "txt";
+    }
+
+    @Override
+    public String getDestExtension() {
+        return "db";
+    }
 }
 

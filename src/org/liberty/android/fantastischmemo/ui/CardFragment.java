@@ -23,20 +23,16 @@ import java.io.File;
 
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.domain.Setting;
 
 import android.app.Activity;
-
 import android.graphics.Typeface;
-
 import android.os.Bundle;
-
 import android.support.v4.app.Fragment;
-
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -59,13 +55,13 @@ public class CardFragment extends Fragment {
 
     private String fontFile = null;
 
-    private View.OnClickListener cardOnClickListener = null;
+    private OnClickListener cardOnClickListener = null;
 
-    private View.OnLongClickListener cardOnLongClickListener = null;
+    private OnLongClickListener cardOnLongClickListener = null;
     
-    private View.OnClickListener textOnClickListener = null;
+    private OnClickListener textOnClickListener = null;
 
-    private View.OnLongClickListener textOnLongClickListener = null;
+    private OnLongClickListener textOnLongClickListener = null;
 
     private int fontSize = 24;
 
@@ -73,7 +69,7 @@ public class CardFragment extends Fragment {
 
     private int backgroundColor = 0xFF000000;
 
-    private int textAlignment = Gravity.LEFT;
+    private Setting.Align textAlignment = Setting.Align.CENTER;
 
 
     // The argument set in the factory will stored in the private variable here.
@@ -99,6 +95,10 @@ public class CardFragment extends Fragment {
 
         cardTextView.setText(mCardText);
 
+        // Uncomment the line below for the text field to handle links.
+        // The line is commented out because it is not well tested.
+        // cardTextView.setMovementMethod(LinkMovementMethod.getInstance());
+
         if (cardOnClickListener != null) {
             rootView.setOnClickListener(cardOnClickListener);
         }
@@ -108,7 +108,14 @@ public class CardFragment extends Fragment {
         }
 
         if (textOnClickListener != null) {
-            cardTextView.setOnClickListener(textOnClickListener);
+            cardTextView.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    // Make sure the link (set for text view autoLink="web") is not recognized as a click
+                    if (((TextView) v).getSelectionStart() == -1 && ((TextView) v).getSelectionEnd() == -1) {
+                        textOnClickListener.onClick(v);
+                    }
+                }
+            });
         }
 
         if (textOnLongClickListener != null) {
@@ -127,18 +134,47 @@ public class CardFragment extends Fragment {
         cardTextView.setTextSize(fontSize);
 
         // It is tricky to set up the alignment of the text.
-        if (textAlignment == Gravity.CENTER) {
-            cardTextView.setGravity(Gravity.CENTER);
-            rootView.setGravity(Gravity.CENTER);
-        } else if (textAlignment == Gravity.RIGHT) {
-            cardTextView.setGravity(Gravity.RIGHT);
-            rootView.setGravity(Gravity.NO_GRAVITY);
-        } else {
-            cardTextView.setGravity(Gravity.LEFT);
-            rootView.setGravity(Gravity.NO_GRAVITY);
+
+        switch (textAlignment) {
+            case CENTER:
+                cardTextView.setGravity(Gravity.CENTER);
+                rootView.setGravity(Gravity.CENTER);
+                break;
+
+            case RIGHT:
+                cardTextView.setGravity(Gravity.RIGHT);
+                rootView.setGravity(Gravity.NO_GRAVITY);
+                break;
+
+            case LEFT:
+                cardTextView.setGravity(Gravity.LEFT);
+                rootView.setGravity(Gravity.NO_GRAVITY);
+                break;
+
+            case CENTER_LEFT:
+                cardTextView.setGravity(Gravity.LEFT);
+                rootView.setGravity(Gravity.CENTER);
+                break;
+
+            case CENTER_RIGHT:
+                cardTextView.setGravity(Gravity.RIGHT);
+                rootView.setGravity(Gravity.CENTER);
+                break;
+
+            default:
+                cardTextView.setGravity(Gravity.CENTER);
+                rootView.setGravity(Gravity.CENTER);
         }
 
         return v;
+    }
+
+    public static interface OnClickListener extends View.OnClickListener {
+        // No definitions, inherrited void onClick(View v)
+    }
+
+    public static interface OnLongClickListener extends View.OnLongClickListener{
+        // No definitions, inherrited void onClick(View v)
     }
 
 
@@ -153,25 +189,25 @@ public class CardFragment extends Fragment {
         }
 
         /* Set the click listener on the card */
-        public Builder setCardOnClickListener(View.OnClickListener l) {
+        public Builder setCardOnClickListener(OnClickListener l) {
             fragment.cardOnClickListener = l;
             return this;
         }
 
         /* Set the click listener on the card text */
-        public Builder setCardOnLongClickListener(View.OnLongClickListener l) {
+        public Builder setCardOnLongClickListener(OnLongClickListener l) {
             fragment.cardOnLongClickListener = l;
             return this;
         }
 
         /* Set the click listener on the card text */
-        public Builder setTextOnClickListener(View.OnClickListener l) {
+        public Builder setTextOnClickListener(OnClickListener l) {
             fragment.textOnClickListener = l;
             return this;
         }
 
         /* Set the long click listener on the card text */
-        public Builder setTextOnLongClickListener(View.OnLongClickListener l) {
+        public Builder setTextOnLongClickListener(OnLongClickListener l) {
             fragment.textOnLongClickListener = l;
             return this;
         }
@@ -202,8 +238,8 @@ public class CardFragment extends Fragment {
          * Set up the alignment of the text in the card.
          * The parameter gravity is from Gravity.*
          */
-        public Builder setTextAlignment(int gravity) {
-            fragment.textAlignment = gravity;
+        public Builder setTextAlignment(Setting.Align align) {
+            fragment.textAlignment = align;
             return this;
         }
 

@@ -42,7 +42,7 @@ import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.ui.AudioRecorderFragment.AudioRecorderResultListener;
 import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment;
 import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
-import org.liberty.android.fantastischmemo.utils.AMUtil;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -275,7 +275,7 @@ public class CardEditor extends AMActivity {
     private void startAudioBrowser(){
         removeAudio();
         Intent myIntent = new Intent(this, FileBrowserActivity.class);
-        myIntent.putExtra(FileBrowserActivity.EXTRA_FILE_EXTENSIONS, ".3gp,.ogg,.mp3,.wav");
+        myIntent.putExtra(FileBrowserActivity.EXTRA_FILE_EXTENSIONS, ".3gp,.ogg,.mp3,.wav,.amr");
         startActivityForResult(myIntent, ACTIVITY_AUDIO_FILE);
     }
     
@@ -338,7 +338,7 @@ public class CardEditor extends AMActivity {
                     View focusView = getCurrentFocus();
                     if(focusView == questionEdit || focusView ==answerEdit || focusView == noteEdit){
                         path = data.getStringExtra(FileBrowserActivity.EXTRA_RESULT_PATH);
-                        name = AMUtil.getFilenameFromPath(path);
+                        name = AMFileUtil.getFilenameFromPath(path);
                         addTextToView((EditText)focusView, "<img src=\"" + name + "\" />");
                         /* Copy the image to correct location */
                         String imageRoot = AMEnv.DEFAULT_IMAGE_PATH;
@@ -362,7 +362,7 @@ public class CardEditor extends AMActivity {
                     View focusView = getCurrentFocus();
                     if(focusView == questionEdit || focusView ==answerEdit || focusView == noteEdit){
                         path = data.getStringExtra(FileBrowserActivity.EXTRA_RESULT_PATH);
-                        name = AMUtil.getFilenameFromPath(path);
+                        name = AMFileUtil.getFilenameFromPath(path);
                         addTextToView((EditText)focusView, "<audio src=\"" + name + "\" />");
                         /* Copy the image to correct location */
                         String audioRoot = AMEnv.DEFAULT_AUDIO_PATH;
@@ -463,7 +463,7 @@ public class CardEditor extends AMActivity {
             if (extras != null) {
                 currentCardId = extras.getInt(EXTRA_CARD_ID);
                 dbPath = extras.getString(EXTRA_DBPATH);
-                dbName = AMUtil.getFilenameFromPath(dbPath);
+                dbName = AMFileUtil.getFilenameFromPath(dbPath);
                 isEditNew = extras.getBoolean(EXTRA_IS_EDIT_NEW);
             }
 

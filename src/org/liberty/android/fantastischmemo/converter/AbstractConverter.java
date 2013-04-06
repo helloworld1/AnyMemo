@@ -19,6 +19,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.converter;
 
-public interface AbstractConverter {
+import java.io.Serializable;
+
+// The implementation should be serializable so it can be
+// passed to Activity as strategy.
+public interface AbstractConverter extends Serializable {
+
+    /* Convert the src to dest */
     void convert(String src, String dest) throws Exception;
+
+    /* Get the source's file extension */
+    String getSrcExtension();
+
+    /* Get the destination's fle extension */
+    String getDestExtension();
 }

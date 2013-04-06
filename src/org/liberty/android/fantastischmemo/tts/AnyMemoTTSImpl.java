@@ -47,7 +47,9 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
     }; 
 	private final Locale myLocale;
     
-    private ReentrantLock initLock = new ReentrantLock();
+    private volatile ReentrantLock initLock = new ReentrantLock();
+
+    private volatile ReentrantLock speakLock = new ReentrantLock();
 
     /* TTS Init lock's timeout in seconds. */
     private static long INIT_LOCK_TIMEOUT = 10L;
@@ -84,19 +86,18 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
             Log.e(TAG, "Can't initialize");
         }
     }
-
-	public AnyMemoTTSImpl(Context context, String locale, List<String> audioSearchPath){
-		 // We must make sure the constructor happens before
+        
+    public AnyMemoTTSImpl(Context context, String locale, List<String> audioSearchPath){
+        // We must make sure the constructor happens before
         // the onInit callback. Unfortunately, this is not
         // always true. We have to use lock to ensure the happen before.
         // Or a null pointer for myTTS is waiting
-        initLock.lock();
+                initLock.lock();
 		myLocale = getLocaleForTTS(locale);
 		myTTS = new TextToSpeech(context, this);
 		
-		
-        initLock.unlock();
 		speakWord = new SpeakWord(audioSearchPath);
+                initLock.unlock();
 	}
 	
 	public void shutdown(){
@@ -110,6 +111,7 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
     public void stop(){
         if(speakWord != null){
             speakWord.stop();
+            return;
         }
     	
         myTTS.stop();
@@ -119,6 +121,7 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
             try {
                 Thread.sleep(20);
             } catch (InterruptedException e) {
+                // Do not need to handle this case.
             }
         }
     }
@@ -141,8 +144,7 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
 		processed_str = processed_str.replaceAll("\\[.*?\\]", "");
 		processed_str = processed_str.replaceAll("&.*?;", "");
 
-        if(!myTTS.isSpeaking()){
-            //myTTS.speak(processed_str, 0, null);
+        if (!myTTS.isSpeaking()) {
             HashMap<String, String> params = new HashMap<String, String>();
             params.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, s);
             
@@ -150,14 +152,14 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
                 @Override
                 public void onUtteranceCompleted(String utteranceId) {
                     onTextToSpeechCompletedListener.onTextToSpeechCompleted(utteranceId);
-                    Log.i(TAG, "Text finished");
                 }
             });
 
+            speakLock.lock();
+            myTTS.setLanguage(myLocale);
             myTTS.speak(processed_str, 0, params);
-            
-        }
-        else{
+            speakLock.unlock();
+        } else {
             stop();
         }
 		

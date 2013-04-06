@@ -3,13 +3,10 @@ package org.liberty.android.fantastischmemo.domain;
 import java.util.Date;
 
 import org.liberty.android.fantastischmemo.dao.LearningDataDaoImpl;
+import org.liberty.android.fantastischmemo.utils.AMDateUtil;
 
-import org.liberty.android.fantastischmemo.domain.LearningData;
-
-import org.liberty.android.fantastischmemo.utils.AMUtil;
-
+import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
-
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "learning_data", daoClass = LearningDataDaoImpl.class)
@@ -17,10 +14,10 @@ public class LearningData {
     @DatabaseField(generatedId = true)
     private Integer id;
 
-    @DatabaseField(defaultValue = "2010-01-01 00:00:00.000000")
+    @DatabaseField(defaultValue = "2010-01-01 00:00:00.000000", format="yyyy-MM-dd HH:mm:ss.SSSSSS", dataType=DataType.DATE_STRING)
     private Date lastLearnDate;
 
-    @DatabaseField(defaultValue = "2010-01-01 00:00:00.000000")
+    @DatabaseField(defaultValue = "2010-01-01 00:00:00.000000", format="yyyy-MM-dd HH:mm:ss.SSSSSS", dataType=DataType.DATE_STRING)
     private Date nextLearnDate;
 
     @DatabaseField
@@ -44,7 +41,7 @@ public class LearningData {
     @DatabaseField
     private Integer retRepsSinceLapse = 0;
 
-    @DatabaseField(version = true)
+    @DatabaseField(version = true, format="yyyy-MM-dd HH:mm:ss.SSSSSS", dataType=DataType.DATE_STRING)
     private Date updateDate;
 
     public LearningData() {}
@@ -150,7 +147,7 @@ public class LearningData {
     }
 
     public double getInterval() {
-        return AMUtil.diffDate(getLastLearnDate(), getNextLearnDate());
+        return AMDateUtil.diffDate(getLastLearnDate(), getNextLearnDate());
     }
 
 	@Override

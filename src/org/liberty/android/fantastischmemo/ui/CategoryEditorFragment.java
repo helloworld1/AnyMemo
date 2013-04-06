@@ -64,12 +64,14 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
         super.onAttach(activity);
         mActivity = (AMActivity)activity;
     }
+
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         Bundle args = this.getArguments();
         dbPath = args.getString(EXTRA_DBPATH);
         currentCategoryId = args.getInt(EXTRA_CATEGORY_ID, 1);
+        setStyle(DialogFragment.STYLE_NO_TITLE, 0);
     }
 
     public void setResultListener(CategoryEditorResultListener resultListener) {
@@ -185,7 +187,6 @@ public class CategoryEditorFragment extends DialogFragment implements View.OnCli
             mActivity.setProgressBarIndeterminateVisibility(false);
         }
     }
-
 
     /*
      * This task will edit the category in the list

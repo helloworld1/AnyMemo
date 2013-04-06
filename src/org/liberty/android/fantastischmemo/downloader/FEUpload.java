@@ -34,8 +34,8 @@ import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 
 import org.liberty.android.fantastischmemo.ui.FileBrowserActivity;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
-import org.liberty.android.fantastischmemo.utils.AMUtil;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -107,7 +107,7 @@ public class FEUpload extends AMActivity{
     }
 
     private void uploadDB(String dbPath) throws Exception{
-        final String dbName = AMUtil.getFilenameFromPath(dbPath);
+        final String dbName = AMFileUtil.getFilenameFromPath(dbPath);
         int cardId = addCardSet(dbName, "Import from AnyMemo");
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(this, dbPath);
         CardDao cardDao = helper.getCardDao();

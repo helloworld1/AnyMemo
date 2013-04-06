@@ -21,6 +21,7 @@ package org.liberty.android.fantastischmemo.ui;
 
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.HashMap;
 
 import org.apache.mycommons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.R;
@@ -40,24 +41,24 @@ import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEdi
 import org.liberty.android.fantastischmemo.utils.AMStringUtil;
 import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
 import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
+import org.liberty.android.fantastischmemo.utils.ShareUtil;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.Toast;
@@ -111,6 +112,8 @@ public class StudyActivity extends QACardActivity {
 
     private AMStringUtil amStringUtil;
 
+    private ShareUtil shareUtil;
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         Bundle extras = getIntent().getExtras();
@@ -119,6 +122,7 @@ public class StudyActivity extends QACardActivity {
             filterCategoryId = extras.getInt(EXTRA_CATEGORY_ID, -1);
             startCardId = extras.getInt(EXTRA_START_CARD_ID, -1);
         }
+        setTitle(R.string.gestures_text);
         super.onCreate(savedInstanceState);
     }
 
@@ -134,11 +138,7 @@ public class StudyActivity extends QACardActivity {
         switch (item.getItemId()) {
             case R.id.menu_memo_help:
             {
-                Intent myIntent = new Intent();
-                myIntent.setAction(Intent.ACTION_VIEW);
-                myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
-                myIntent.setData(Uri.parse(WEBSITE_HELP_MEMO));
-                startActivity(myIntent);
+                gotoHelp();
                 return true;
             }
             case R.id.menuspeakquestion:
@@ -153,18 +153,13 @@ public class StudyActivity extends QACardActivity {
 
             case R.id.menusettings:
             {
-                Intent myIntent = new Intent(this, SettingsScreen.class);
-                myIntent.putExtra(SettingsScreen.EXTRA_DBPATH, dbPath);
-                startActivityForResult(myIntent, ACTIVITY_SETTINGS);
+                gotoSettings();
                 return true;
             }
 
             case R.id.menudetail:
             {
-                Intent myIntent = new Intent(this, DetailScreen.class);
-                myIntent.putExtra(DetailScreen.EXTRA_DBPATH, this.dbPath);
-                myIntent.putExtra(DetailScreen.EXTRA_CARD_ID, getCurrentCard().getId());
-                startActivityForResult(myIntent, ACTIVITY_DETAIL);
+                gotoDetail();
                 return true;
             }
 
@@ -182,62 +177,23 @@ public class StudyActivity extends QACardActivity {
 
             case R.id.menu_context_edit:
             {
-                Intent myIntent = new Intent(this, CardEditor.class);
-                myIntent.putExtra(CardEditor.EXTRA_DBPATH, this.dbPath);
-                myIntent.putExtra(CardEditor.EXTRA_CARD_ID, getCurrentCard().getId());
-                myIntent.putExtra(CardEditor.EXTRA_IS_EDIT_NEW, false);
-                startActivityForResult(myIntent, ACTIVITY_EDIT);
+                showEditDialog();
                 return true;
             }
             case R.id.menu_context_delete:
             {
-                new AlertDialog.Builder(this)
-                    .setTitle(R.string.delete_text)
-                    .setMessage(R.string.delete_warning)
-                    .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
-                        public void onClick(DialogInterface arg0, int arg1) {
-                            if(getCurrentCard() != null){
-                                try {
-                                    cardDao.delete(getCurrentCard());
-                                    // Do not restart with this card
-                                    setCurrentCard(null);
-                                    restartActivity();
-                                } catch (SQLException e) {
-                                    Log.e(TAG, "Delete card error", e);
-                                }
-                            }
-                        }
-                    })
-                .setNegativeButton(R.string.cancel_text, null)
-                .show();
-
+                showDeleteDialog();
                 return true;
 
             }
             case R.id.menu_context_skip:
             {
-                new AlertDialog.Builder(this)
-                    .setTitle(R.string.skip_text)
-                    .setMessage(R.string.skip_warning)
-                    .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
-                        public void onClick(DialogInterface arg0, int arg1) {
-                            skipCurrentCard();
-                        }
-                    })
-                .setNegativeButton(R.string.cancel_text, null)
-                .show();
+                showSkipDialog();
                 return true;
             }
             case R.id.menu_context_gotoprev:
             {
-                Intent myIntent = new Intent();
-                myIntent.setClass(this, PreviewEditActivity.class);
-                myIntent.putExtra(PreviewEditActivity.EXTRA_DBPATH, dbPath);
-                if (getCurrentCard() != null) {
-                    myIntent.putExtra(PreviewEditActivity.EXTRA_CARD_ID, getCurrentCard().getId());
-                }
-                
-                startActivity(myIntent);
+                gotoPreviewEdit();
                 return true;
             }
 
@@ -247,17 +203,30 @@ public class StudyActivity extends QACardActivity {
                     return false;
                 }
                 // Look up words in both question and answer
-                dictionaryUtil.showLookupListDialog("" + getCurrentCard().getQuestion() + " " + getCurrentCard().getAnswer());
+                lookupDictionary();
 
                 return true;
 
             }
 
+            case R.id.menu_gestures:
+            {
+                showGesturesDialog();
+                return true;
+            }
+
             case R.id.menu_context_paint:
             {
-                Intent myIntent = new Intent(this, FingerPaint.class);
-                startActivity(myIntent);
+                gotoPaint();
+                return true;
             }
+
+            case R.id.menu_share:
+            {
+                shareUtil.shareCard(getCurrentCard());
+                return true;
+            }
+
         }
 
         return false;
@@ -275,9 +244,10 @@ public class StudyActivity extends QACardActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode ==Activity.RESULT_CANCELED){
+        if (resultCode == Activity.RESULT_CANCELED) {
             return;
         }
+
         switch(requestCode){
             case ACTIVITY_FILTER:
             {
@@ -313,23 +283,10 @@ public class StudyActivity extends QACardActivity {
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event){
-        if(option.getVolumeKeyShortcut()){
-            if(keyCode == KeyEvent.KEYCODE_VOLUME_UP){
-                return true;
-            }
-            else if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
-                return true;
-            }
-        }
-        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            Log.v(TAG, "back button pressed");
-            FinishTask task = new FinishTask();
-            task.execute((Void)null);
-            return true;
-        }
-
-        return super.onKeyDown(keyCode, event);
+    public void onBackPressed() {
+        Log.v(TAG, "back button pressed");
+        FinishTask task = new FinishTask();
+        task.execute((Void)null);
     }
 
     @Override
@@ -356,34 +313,6 @@ public class StudyActivity extends QACardActivity {
     }
 
     @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event){
-        /* Short press to scroe the card */
-
-        if(option.getVolumeKeyShortcut()){
-            if(keyCode == KeyEvent.KEYCODE_VOLUME_UP){
-                if (isAnswerShown()) {
-                    onGradeButtonClickListener.onGradeButtonClick(0);
-                    Toast.makeText(this, getString(R.string.grade_text) + " 0", Toast.LENGTH_SHORT).show();
-                } else {
-                    displayCard(true);
-                }
-
-                return true;
-            }
-            if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
-                if (isAnswerShown()) {
-                    onGradeButtonClickListener.onGradeButtonClick(3);
-                    Toast.makeText(this, getString(R.string.grade_text) + " 3", Toast.LENGTH_SHORT).show();
-                } else {
-                    displayCard(true);
-                }
-                return true;
-            }
-        }
-        return super.onKeyUp(keyCode, event);
-    }
-
-    @Override
     public void restartActivity(){
 
         RestartTask task = new RestartTask();
@@ -400,6 +329,7 @@ public class StudyActivity extends QACardActivity {
         option = getOption();
         dictionaryUtil = new DictionaryUtil(this);
         amStringUtil = new AMStringUtil(this);
+        shareUtil = new ShareUtil(this);
 
 
         // The query of filter cateogry should happen before createQueue
@@ -438,7 +368,7 @@ public class StudyActivity extends QACardActivity {
     @Override
     public void onPostDisplayCard() {
         // When displaying new card, we should stop the TTS reading.
-        stopQAndATTS();
+        stopSpeak();
         if (isAnswerShown()) {
             // Mnemosyne grade button style won't display the interval.
             if (option.getButtonStyle() != Option.ButtonStyle.MNEMOSYNE) {
@@ -446,7 +376,12 @@ public class StudyActivity extends QACardActivity {
             }
             gradeButtons.show();
         } else {
-            gradeButtons.hide();
+            // The grade button should be gone for double sided cards.
+            if (setting.getCardStyle() ==  Setting.CardStyle.DOUBLE_SIDED) {
+                gradeButtons.hide();
+            } else {
+                gradeButtons.invisible();
+            }
         }
 
         // Auto speak after displaying a card.
@@ -457,10 +392,25 @@ public class StudyActivity extends QACardActivity {
     }
 
     @Override
+    protected void onGestureDetected(GestureName gestureName) {
+        switch (gestureName) {
+            case O_SHAPE:
+                lookupDictionary();
+                break;
+
+            case S_SHAPE:
+                gotoPaint();
+                break;
+            default:
+                break;
+
+        }
+    }
+
+    @Override
     protected void onClickQuestionText() {
         if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
                 || option.getSpeakingType() == Option.SpeakingType.TAP)) {
-            stopQuestionTTS();
             speakQuestion();
         } else {
             onClickQuestionView();
@@ -474,7 +424,6 @@ public class StudyActivity extends QACardActivity {
         } else {
             if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
                         || option.getSpeakingType() == Option.SpeakingType.TAP)) {
-                stopAnswerTTS();
                 speakAnswer();
             } else {
                 onClickAnswerView();
@@ -498,6 +447,29 @@ public class StudyActivity extends QACardActivity {
         }
     }
 
+    @Override
+    protected boolean onVolumeUpKeyPressed() {
+        if (isAnswerShown()) {
+            onGradeButtonClickListener.onGradeButtonClick(0);
+            Toast.makeText(this, getString(R.string.grade_text) + " 0", Toast.LENGTH_SHORT).show();
+        } else {
+            displayCard(true);
+        }
+
+        return true;
+    }
+
+    @Override
+    protected boolean onVolumeDownKeyPressed() {
+        if (isAnswerShown()) {
+            onGradeButtonClickListener.onGradeButtonClick(3);
+            Toast.makeText(this, getString(R.string.grade_text) + " 3", Toast.LENGTH_SHORT).show();
+        } else {
+            displayCard(true);
+        }
+        return true;
+    }
+
     private void showNoItemDialog(){
         new AlertDialog.Builder(this)
             .setTitle(this.getString(R.string.memo_no_item_title))
@@ -507,21 +479,12 @@ public class StudyActivity extends QACardActivity {
                 public void onClick(DialogInterface arg0, int arg1) {
                     /* Finish the current activity and go back to the last activity.
                      * It should be the open screen. */
-                    finish();
+                        onBackPressed();
                     }
                 })
-            .setNegativeButton(getString(R.string.learn_ahead), new OnClickListener(){
-                public void onClick(DialogInterface arg0, int arg1) {
-                    finish();
-                    Intent myIntent = new Intent();
-                    myIntent.setClass(StudyActivity.this, StudyActivity.class);
-                    myIntent.putExtra(StudyActivity.EXTRA_DBPATH, dbPath);
-                    startActivity(myIntent);
-                }
-            })
             .setOnCancelListener(new DialogInterface.OnCancelListener(){
                 public void onCancel(DialogInterface dialog){
-                    finish();
+                        onBackPressed();
                     }
                 })
             .create()
@@ -532,9 +495,7 @@ public class StudyActivity extends QACardActivity {
     private void createQueue() {
         int queueSize = option.getQueueSize();
         LearnQueueManager.Builder builder = new LearnQueueManager.Builder()
-            .setCardDao(cardDao)
-            .setCategoryDao(categoryDao)
-            .setLearningDataDao(learningDataDao)
+            .setDbOpenHelper(getDbOpenHelper())
             .setScheduler(scheduler)
             .setLearnQueueSize(queueSize)
             .setCacheSize(50)
@@ -552,11 +513,9 @@ public class StudyActivity extends QACardActivity {
         if (getCurrentCard() != null) {
             if(!isAnswerShown()){
                 // Make sure the TTS is stop, or it will speak nothing.
-                stopQuestionTTS();
                 speakQuestion();
             } else {
                 // Make sure the TTS is stop
-                stopAnswerTTS();
                 speakAnswer();
             }
         }
@@ -566,8 +525,6 @@ public class StudyActivity extends QACardActivity {
        newCardCount = cardDao.getNewCardCount(filterCategory);
        schedluledCardCount = cardDao.getScheduledCardCount(filterCategory);
     }
-
-   
 
     private void showCategoriesDialog() {
         CategoryEditorFragment df = new CategoryEditorFragment();
@@ -597,7 +554,7 @@ public class StudyActivity extends QACardActivity {
             gradeButtons = new GradeButtons(this, R.layout.grade_buttons_anymemo);
         }
 
-        LinearLayout rootView= (LinearLayout)findViewById(R.id.root);
+        ViewGroup rootView= (ViewGroup)findViewById(R.id.root);
 
         LinearLayout gradeButtonsView = gradeButtons.getView();
 
@@ -605,6 +562,9 @@ public class StudyActivity extends QACardActivity {
         gradeButtons.setGradeButtonBackground(1, R.drawable.red_button);
         gradeButtons.setGradeButtonBackground(4, R.drawable.green_button);
         gradeButtons.setGradeButtonBackground(5, R.drawable.green_button);
+
+        // Set up the background color the same as the color.
+        gradeButtons.setBackgroundColor(setting.getAnswerBackgroundColor());
 
         // Make sure touching all areas can reveal the card.
         rootView.setOnClickListener(new View.OnClickListener() {
@@ -624,20 +584,16 @@ public class StudyActivity extends QACardActivity {
         gradeButtons.setOnGradeButtonClickListener(onGradeButtonClickListener);
 
         /* This li is make the background of buttons the same as answer */
-        LinearLayout li = new LinearLayout(this);
-        li.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-        Integer color = setting.getAnswerBackgroundColor();
-        if(color != null) {
-            li.setBackgroundColor(color);
-        }
+        LinearLayout buttonsLayout = new LinearLayout(this);
+        buttonsLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
         /* 
          * -1: Match parent -2: Wrap content
          * This is necessary or the view will not be 
          * stetched
          */
-        li.addView(gradeButtonsView, -1, -2);
-        rootView.addView(li, -1, -2);
+        buttonsLayout.addView(gradeButtonsView, -1, -2);
+        rootView.addView(buttonsLayout, -1, -2);
     }
 
 
@@ -731,8 +687,10 @@ public class StudyActivity extends QACardActivity {
         }
 
         @Override
-        public Void doInBackground(Void... nothing){
+        public Void doInBackground(Void... nothing) {
+            AnyMemoExecutor.submit(flushDatabaseTask);
             AnyMemoExecutor.waitAllTasks();
+            Log.v(TAG, "DB task completed.");
             return null;
         }
 
@@ -861,5 +819,103 @@ public class StudyActivity extends QACardActivity {
                 Log.e(TAG, "Delete card error", e);
             }
         }
+    }
+
+    private void showGesturesDialog() {
+        final HashMap<String, String> gestureNameDescriptionMap
+            = new HashMap<String, String>();
+        gestureNameDescriptionMap.put(GestureName.O_SHAPE.getName(), getString(R.string.look_up_text));
+        gestureNameDescriptionMap.put(GestureName.S_SHAPE.getName(), getString(R.string.paint_text));
+
+
+        GestureSelectionDialogFragment df = new GestureSelectionDialogFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(GestureSelectionDialogFragment.EXTRA_GESTURE_NAME_DESCRIPTION_MAP, gestureNameDescriptionMap);
+        df.setArguments(args);
+        df.show(getSupportFragmentManager(), "GestureSelectionDialog");
+    }
+
+    private void lookupDictionary() {
+        dictionaryUtil.showLookupListDialog(getCurrentCard().getQuestion(), getCurrentCard().getAnswer());
+    }
+
+    private void showEditDialog() {
+        Intent myIntent = new Intent(this, CardEditor.class);
+        myIntent.putExtra(CardEditor.EXTRA_DBPATH, this.dbPath);
+        myIntent.putExtra(CardEditor.EXTRA_CARD_ID, getCurrentCard().getId());
+        myIntent.putExtra(CardEditor.EXTRA_IS_EDIT_NEW, false);
+        startActivityForResult(myIntent, ACTIVITY_EDIT);
+    }
+
+    private void showDeleteDialog() {
+        new AlertDialog.Builder(this)
+            .setTitle(R.string.delete_text)
+            .setMessage(R.string.delete_warning)
+            .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
+                public void onClick(DialogInterface arg0, int arg1) {
+                    if(getCurrentCard() != null){
+                        try {
+                            cardDao.delete(getCurrentCard());
+                            // Do not restart with this card
+                            setCurrentCard(null);
+                            restartActivity();
+                        } catch (SQLException e) {
+                            Log.e(TAG, "Delete card error", e);
+                        }
+                    }
+                }
+            })
+        .setNegativeButton(R.string.cancel_text, null)
+            .show();
+    }
+
+    private void showSkipDialog() {
+        new AlertDialog.Builder(this)
+            .setTitle(R.string.skip_text)
+            .setMessage(R.string.skip_warning)
+            .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
+                public void onClick(DialogInterface arg0, int arg1) {
+                    skipCurrentCard();
+                }
+            })
+        .setNegativeButton(R.string.cancel_text, null)
+            .show();
+    }
+
+    private void gotoPreviewEdit() {
+        Intent myIntent = new Intent();
+        myIntent.setClass(this, PreviewEditActivity.class);
+        myIntent.putExtra(PreviewEditActivity.EXTRA_DBPATH, dbPath);
+        if (getCurrentCard() != null) {
+            myIntent.putExtra(PreviewEditActivity.EXTRA_CARD_ID, getCurrentCard().getId());
+        }
+
+        startActivity(myIntent);
+    }
+
+    private void gotoPaint() {
+        Intent myIntent = new Intent(this, FingerPaint.class);
+        startActivity(myIntent);
+    }
+
+    private void gotoDetail() {
+        Intent myIntent = new Intent(this, DetailScreen.class);
+        myIntent.putExtra(DetailScreen.EXTRA_DBPATH, this.dbPath);
+        myIntent.putExtra(DetailScreen.EXTRA_CARD_ID, getCurrentCard().getId());
+        startActivityForResult(myIntent, ACTIVITY_DETAIL);
+    }
+
+    private void gotoSettings() {
+        Intent myIntent = new Intent(this, SettingsScreen.class);
+        myIntent.putExtra(SettingsScreen.EXTRA_DBPATH, dbPath);
+        startActivityForResult(myIntent, ACTIVITY_SETTINGS);
+    }
+
+    private void gotoHelp() {
+        Intent myIntent = new Intent();
+        myIntent.setAction(Intent.ACTION_VIEW);
+        myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
+        myIntent.setData(Uri.parse(WEBSITE_HELP_MEMO));
+        startActivity(myIntent);
     }
 }

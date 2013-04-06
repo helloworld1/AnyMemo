@@ -62,6 +62,16 @@ public class QATxtExporter implements AbstractConverter {
             AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }
     }
+
+    @Override
+    public String getSrcExtension() {
+        return "db";
+    }
+
+    @Override
+    public String getDestExtension() {
+        return "txt";
+    }
 }
 
 

@@ -102,7 +102,6 @@ public class FingerPaint extends GraphicsActivity
             super(c);
             
             mBitmap = bitmap;
-            mBitmap.setHasAlpha(true);
             mCanvas = new Canvas(mBitmap);
 
             mPath = new Path();

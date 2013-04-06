@@ -36,7 +36,6 @@ import org.liberty.android.fantastischmemo.utils.AMStringUtil;
 import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -51,6 +50,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.apis.graphics.FingerPaint;
 
@@ -59,6 +59,7 @@ public class QuizActivity extends QACardActivity {
     public static String EXTRA_CATEGORY_ID = "category_id";
     public static String EXTRA_START_CARD_ORD = "start_card_ord";
     public static String EXTRA_QUIZ_SIZE = "quiz_size";
+    public static String EXTRA_SHUFFLE_CARDS = "shuffle_cards";
 
     private CardDao cardDao;
     private LearningDataDao learningDataDao;
@@ -92,9 +93,9 @@ public class QuizActivity extends QACardActivity {
 
     private boolean isNewCardsCompleted = false;
 
+    private boolean shuffleCards = false;
 
     private int totalQuizSize = -1;
-
 
     @Override
     public void onInit() throws Exception {
@@ -144,6 +145,7 @@ public class QuizActivity extends QACardActivity {
         categoryId = extras.getInt(EXTRA_CATEGORY_ID, -1);
         startCardOrd = extras.getInt(EXTRA_START_CARD_ORD, -1);
         quizSize = extras.getInt(EXTRA_QUIZ_SIZE, -1);
+        shuffleCards = extras.getBoolean(EXTRA_SHUFFLE_CARDS, false);
 
         super.onCreate(savedInstanceState);
     }
@@ -186,7 +188,6 @@ public class QuizActivity extends QACardActivity {
     protected void onClickQuestionText() {
         if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
                 || option.getSpeakingType() == Option.SpeakingType.TAP)) {
-            stopQuestionTTS();
             speakQuestion();
         } else {
             onClickQuestionView();
@@ -199,7 +200,6 @@ public class QuizActivity extends QACardActivity {
             onClickAnswerView();
         } else if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
                 || option.getSpeakingType() == Option.SpeakingType.TAP)) {
-            stopAnswerTTS();
             speakAnswer();
         }
     }
@@ -220,24 +220,54 @@ public class QuizActivity extends QACardActivity {
         }
     }
 
+    @Override
+    protected boolean onVolumeUpKeyPressed() {
+        if (isAnswerShown()) {
+            onGradeButtonClickListener.onGradeButtonClick(0);
+            Toast.makeText(this, getString(R.string.grade_text) + " 0", Toast.LENGTH_SHORT).show();
+        } else {
+            displayCard(true);
+        }
+
+        return true;
+    }
+
+    @Override
+    protected boolean onVolumeDownKeyPressed() {
+        if (isAnswerShown()) {
+            onGradeButtonClickListener.onGradeButtonClick(3);
+            Toast.makeText(this, getString(R.string.grade_text) + " 3", Toast.LENGTH_SHORT).show();
+        } else {
+            displayCard(true);
+        }
+        return true;
+    }
+
     private void createQueue() {
         QuizQueueManager.Builder builder = new QuizQueueManager.Builder()
             .setDbOpenHelper(getDbOpenHelper())
             .setScheduler(scheduler)
             .setStartCardOrd(startCardOrd)
-            .setFilterCategory(filterCategory);
+            .setFilterCategory(filterCategory)
+            .setShuffle(shuffleCards);
 
         if (startCardOrd != -1) {
             builder.setStartCardOrd(startCardOrd)
                 .setQuizSize(quizSize);
         }
 
-        if (option.getShuffleType() == Option.ShuffleType.LOCAL) {
-            builder.setShuffle(true);
-        } else {
-            builder.setShuffle(false);
-        }
         queueManager = (QuizQueueManager) builder.build();
+    }
+
+    @Override
+    public void onPostDisplayCard() {
+        // When displaying new card, we should stop the TTS reading.
+        stopSpeak();
+        if (isAnswerShown()) {
+            gradeButtons.show();
+        } else {
+            gradeButtons.hide();
+        }
     }
 
     private void setupGradeButtons() {
@@ -378,6 +408,7 @@ public class QuizActivity extends QACardActivity {
             .setTitle(R.string.quiz_completed_text)
             .setMessage(R.string.quiz_complete_summary)
             .setPositiveButton(R.string.back_menu_text, flushAndQuitListener)
+            .setCancelable(false)
             .show();
     }
 
@@ -395,47 +426,20 @@ public class QuizActivity extends QACardActivity {
             .setView(view)
             .setPositiveButton(R.string.review_text, null)
             .setNegativeButton(R.string.cancel_text, flushAndQuitListener)
+            .setCancelable(false)
             .show();
     }
     
+    // Current flush is not functional. So this method only quit and does not flush
+    // the queue.
     private DialogInterface.OnClickListener flushAndQuitListener =
         new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                FlushAndQuitTask task = new FlushAndQuitTask();
-                task.execute((Void)null);
-				
+                finish();
 			}
         };
-
-    private class FlushAndQuitTask extends AsyncTask<Void, Void, Void>{
-        private ProgressDialog progressDialog;
-
-        @Override
-        public void onPreExecute(){
-            super.onPreExecute();
-            progressDialog = new ProgressDialog(QuizActivity.this);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setTitle(getString(R.string.loading_please_wait));
-            progressDialog.setMessage(getString(R.string.loading_save));
-            progressDialog.show();
-            
-        }
-
-        @Override
-        public Void doInBackground(Void... nothing){
-            queueManager.flush();
-            return null;
-        }
-
-        @Override
-        public void onPostExecute(Void result){
-            super.onPostExecute(result);
-            progressDialog.dismiss();
-            finish();
-        }
-    }
 
     private void showNoItemDialog(){
         new AlertDialog.Builder(this)
@@ -457,5 +461,4 @@ public class QuizActivity extends QACardActivity {
             .create()
             .show();
     }
-
 }

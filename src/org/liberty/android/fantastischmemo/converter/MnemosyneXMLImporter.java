@@ -49,17 +49,17 @@ import android.content.Context;
 
 public class MnemosyneXMLImporter extends org.xml.sax.helpers.DefaultHandler implements AbstractConverter{
     private long timeOfStart = 0L;
-	public Locator mLocator;
+    public Locator mLocator;
     private int count = 1;
     private List<Card> cardList;
     private final long MILLSECS_PER_DAY = 24 * 60 * 60 * 1000;
 
-	private StringBuffer characterBuf;
+    private StringBuffer characterBuf;
     private Context mContext;
     private final String TAG = "org.liberty.android.fantastischmemo.MnemosyneXMLImporter";
     private Card card;
 
-	
+    
     public MnemosyneXMLImporter(Context context){
         mContext = context;
     }
@@ -67,16 +67,16 @@ public class MnemosyneXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
     @Override
     public void convert(String src, String dest) throws Exception {
         new File(dest).delete();
-		URL mXMLUrl = new URL("file:///" + src);
-		cardList = new LinkedList<Card>();
+        URL mXMLUrl = new URL("file:///" + src);
+        cardList = new LinkedList<Card>();
 
         System.setProperty("org.xml.sax.driver","org.xmlpull.v1.sax2.Driver"); 
-		SAXParserFactory spf = SAXParserFactory.newInstance();
-		SAXParser sp = spf.newSAXParser();
+        SAXParserFactory spf = SAXParserFactory.newInstance();
+        SAXParser sp = spf.newSAXParser();
 
-		XMLReader xr = sp.getXMLReader();
-		xr.setContentHandler(this);
-		xr.parse(new InputSource(mXMLUrl.openStream()));
+        XMLReader xr = sp.getXMLReader();
+        xr.setContentHandler(this);
+        xr.parse(new InputSource(mXMLUrl.openStream()));
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, dest);
         try {
             CardDao cardDao = helper.getCardDao();
@@ -86,7 +86,7 @@ public class MnemosyneXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
         }
     }
 
-	public void startElement(String namespaceURI, String localName, String qName, Attributes atts) throws SAXException {
+    public void startElement(String namespaceURI, String localName, String qName, Attributes atts) throws SAXException {
         if(localName.equals("mnemosyne")) {
             try {
                 timeOfStart = Long.parseLong(atts.getValue("time_of_start"));
@@ -104,7 +104,7 @@ public class MnemosyneXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
             }
         }
 
-		if (localName.equals("item")) {
+        if (localName.equals("item")) {
             card = new Card();
             LearningData learningData = new LearningData();
             card.setLearningData(learningData);
@@ -116,7 +116,7 @@ public class MnemosyneXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
             count += 1;
 
             // Id field is not used here. We use "count" variable instead
-			// String idAttr = atts.getValue("id");
+            // String idAttr = atts.getValue("id");
             String grAttr = atts.getValue("gr");
 
             if (grAttr != null) {
@@ -173,40 +173,50 @@ public class MnemosyneXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
                 learningData.setLastLearnDate(new Date(lrp));
                 learningData.setNextLearnDate(new Date(nrp));
             }
-		}
-		characterBuf = new StringBuffer();
-	}
-	
-	public void endElement(String namespaceURI, String localName, String qName) throws SAXException{
-		if(localName.equals("item")) {
+        }
+        characterBuf = new StringBuffer();
+    }
+    
+    public void endElement(String namespaceURI, String localName, String qName) throws SAXException{
+        if(localName.equals("item")) {
             cardList.add(card);
             /* The end of life of itemBuilder */
             card= null;
-		}
+        }
 
-		if(localName.equals("cat")) {
+        if(localName.equals("cat")) {
             card.getCategory().setName(characterBuf.toString());
-		}
-		if(localName.equals("Q")|| localName.equals("Question")) {
+        }
+        if(localName.equals("Q")|| localName.equals("Question")) {
             card.setQuestion(characterBuf.toString());
-		}
-		if(localName.equals("A")|| localName.equals("Answer")) {
+        }
+        if(localName.equals("A")|| localName.equals("Answer")) {
             card.setAnswer(characterBuf.toString());
-		}
-		
-	}
-	
-	public void setDocumentLocator(Locator locator){
-		mLocator = locator;
-	}
-	
-	public void characters(char ch[], int start, int length){
-		characterBuf.append(ch, start, length);
-	}
-	
-	public void startDocument() throws SAXException{
-	}
-	
-	public void endDocument() throws SAXException{
-	}
+        }
+        
+    }
+    
+    public void setDocumentLocator(Locator locator){
+        mLocator = locator;
+    }
+    
+    public void characters(char ch[], int start, int length){
+        characterBuf.append(ch, start, length);
+    }
+    
+    public void startDocument() throws SAXException{
+    }
+    
+    public void endDocument() throws SAXException{
+    }
+
+    @Override
+    public String getSrcExtension() {
+        return "xml";
+    }
+
+    @Override
+    public String getDestExtension() {
+        return "db";
+    }
 }

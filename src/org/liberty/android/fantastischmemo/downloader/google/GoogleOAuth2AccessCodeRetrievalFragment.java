@@ -19,168 +19,64 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.google;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
-import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.downloader.oauth.OauthAccessCodeRetrievalFragment;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
+import android.util.Log;
 
-import android.content.DialogInterface;
-
-import android.graphics.Rect;
-
-import android.os.Bundle;
-
-import android.support.v4.app.DialogFragment;
-
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-
-import android.widget.LinearLayout;
-
-class GoogleOAuth2AccessCodeRetrievalFragment extends DialogFragment {
-    private Activity mActivity;
-    private AuthCodeReceiveListener authCodeReceiveListener = null;
+public final class GoogleOAuth2AccessCodeRetrievalFragment extends OauthAccessCodeRetrievalFragment {
 
     private final static String TAG = "GoogleAuthFragment";
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (AMActivity)activity;
+    protected void requestToken() throws IOException {
+        // Do nothing.
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setStyle(STYLE_NO_TITLE, 0);
-    }
-
-
-    @Override
-    public void onCancel(DialogInterface dialog) {
-        authCodeReceiveListener.onCancelled();
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        final View v = inflater.inflate(R.layout.oauth_login_layout, container, false);
-        final WebView webview = (WebView)v.findViewById(R.id.login_page);
-        final View loadingText = v.findViewById(R.id.auth_page_load_text);
-        final View progressDialog = v.findViewById(R.id.auth_page_load_progress);
-        final LinearLayout ll = (LinearLayout)v.findViewById(R.id.ll);
-        
-        // We have to set up the dialog's webview size manually or the webview will be zero size.
-        // This should be a bug of Android.
-        Rect displayRectangle = new Rect();
-        Window window = mActivity.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
-
-        ll.setMinimumWidth((int)(displayRectangle.width() * 0.9f));
-        ll.setMinimumHeight((int)(displayRectangle.height() * 0.8f));
-
-        webview.getSettings().setJavaScriptEnabled(true);
+    protected String getLoginUrl() {
         try {
             String uri = String.format("https://accounts.google.com/o/oauth2/auth?client_id=%s&response_type=%s&redirect_uri=%s&scope=%s",
                     URLEncoder.encode(AMEnv.GOOGLE_CLIENT_ID, "UTF-8"),
                     URLEncoder.encode("code", "UTF-8"),
                     URLEncoder.encode(AMEnv.GOOGLE_REDIRECT_URI, "UTF-8"),
                     URLEncoder.encode(AMEnv.GDRIVE_SCOPE, "UTF-8"));
-            webview.loadUrl(uri);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        // This is workaround to show input on some android version.
-        webview.requestFocus(View.FOCUS_DOWN);
-        webview.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                    case MotionEvent.ACTION_UP:
-                        if (!v.hasFocus()) {
-                            v.requestFocus();
-                        }
-                        break;
-                }
-                return false;
-            }
-        });
-
-
-        webview.setWebViewClient(new WebViewClient() {
-            private boolean authenticated = false;
-            @Override
-            public void onPageFinished(WebView view, String url)  {
-                loadingText.setVisibility(View.GONE);
-                progressDialog.setVisibility(View.GONE);
-                webview.setVisibility(View.VISIBLE);
-                if (authenticated == true) {
-                    return;
-                }
-                String code = getAuthCodeFromUrl(url);
-                String error = getErrorFromUrl(url);
-                if (error != null) {
-                    authCodeReceiveListener.onAuthCodeError(error);
-                    authenticated = true;
-                    dismiss();
-                }
-                if (code != null) {
-                    authenticated = true;
-                    authCodeReceiveListener.onAuthCodeReceived(code);
-                    dismiss();
-                }
-            }
-        });
-        return v;
-    }
-
-    public void setAuthCodeReceiveListener(AuthCodeReceiveListener listener) {
-        authCodeReceiveListener = listener;
-    }
-
-    public static interface AuthCodeReceiveListener {
-        void onAuthCodeReceived(String code);
-        void onAuthCodeError(String error);
-        void onCancelled();
-    }
-
-    private String getAuthCodeFromUrl(String url) {
-        if (!url.startsWith(AMEnv.GOOGLE_REDIRECT_URI)) {
+            return uri;
+        } catch (UnsupportedEncodingException e) {
+            // This is unlikely to happen
+            Log.e(TAG, "The URL encodeing UTF-8 is not supported " + e);
             return null;
         }
+    }
+
+    @Override
+    protected boolean processCallbackUrl(String url) {
+        if (!url.startsWith(AMEnv.GOOGLE_REDIRECT_URI)) {
+            return false;
+        }
+
         int index = url.indexOf("code=");
-        if (index == -1) {
-            return null;
+        // If there is access token
+        if (index != -1) {
+            // Move index through "code="
+            index += 5;
+            String accessToken = url.substring(index);
+            getAuthCodeReceiveListener().onAuthCodeReceived(accessToken);
+            return true;
         }
-        // Move index through "code="
-        index += 5;
-        return url.substring(index);
+
+        index = url.indexOf("error=");
+        if (index != -1) {
+            // Move index through "error="
+            index += 6;
+            String errorString = url.substring(index);
+            getAuthCodeReceiveListener().onAuthCodeError(errorString);
+            return true;
+        }
+        return false;
     }
-
-    private String getErrorFromUrl(String url) {
-        if (!url.startsWith(AMEnv.GOOGLE_REDIRECT_URI)) {
-            return null;
-        }
-        int index = url.indexOf("error=");
-        if (index == -1) {
-            return null;
-        }
-        // Move index through "error="
-        index += 6;
-        return url.substring(index);
-    }
-
-
 }
