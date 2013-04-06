@@ -29,6 +29,8 @@ import org.liberty.android.fantastischmemo.converter.QATxtExporter;
 import org.liberty.android.fantastischmemo.converter.QATxtImporter;
 import org.liberty.android.fantastischmemo.converter.Supermemo2008XMLImporter;
 import org.liberty.android.fantastischmemo.converter.SupermemoXMLImporter;
+import org.liberty.android.fantastischmemo.converter.TabTxtExporter;
+import org.liberty.android.fantastischmemo.converter.TabTxtImporter;
 import org.liberty.android.fantastischmemo.converter.ZipExporter;
 import org.liberty.android.fantastischmemo.converter.ZipImporter;
 
@@ -195,7 +197,7 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
         if(v == importTabButton){
             DialogFragment df = new ConverterFragment();
             Bundle b = new Bundle();
-            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, new CSVImporter(mActivity, '\t'));
+            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, new TabTxtImporter(mActivity));
             b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".txt");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportTabTxt");
@@ -235,7 +237,7 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
         if(v == exportTabButton){
             DialogFragment df = new ConverterFragment();
             Bundle b = new Bundle();
-            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, new CSVExporter(mActivity, '\t'));
+            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, new TabTxtExporter(mActivity));
             b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".db");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ExportTabTxt");

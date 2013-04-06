@@ -70,7 +70,7 @@ public class QATxtExporter implements AbstractConverter {
 
     @Override
     public String getDestExtension() {
-        return "xml";
+        return "txt";
     }
 }
 
