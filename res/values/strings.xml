@@ -434,9 +434,8 @@
     <string name="record_text">Record</string>
     <string name="play_text">Play</string>
     <string name="stop_text">Stop</string>
-    <string name="auto_speak_qa_sleep_interval_text">QA sleep interval in sec (0 to 10)</string>
-    <string name="auto_speak_card_sleep_interval_text">Card sleep interval in sec (0 to 10)</string>
+    <string name="auto_speak_qa_sleep_interval_text">Interval between question and answer is %d sec</string>
+    <string name="auto_speak_card_sleep_interval_text">Interval between each card is %d sec</string>
     <string name="auto_speak_text">Auto Speak</string>
     <string name="auto_speak_setting_dialog">Setting Dialog</string>
-    <string name="auto_speak_setting_seekbar_value">Value is </string>
 </resources>

@@ -21,7 +21,6 @@ import android.widget.ImageButton;
 
 
 public class AutoSpeakFragment extends Fragment {
-    
     private static final String TAG = "AutoSpeakFragment";
     private ImageButton playButton;
     private ImageButton previousButton;
@@ -47,23 +46,17 @@ public class AutoSpeakFragment extends Fragment {
         
         @Override
         public void onTextToSpeechCompleted(final String text) {
-            Log.i(TAG, "mAnswerListener is " + mAnswerListener);
-                
+            
                 Runnable r = new Runnable() {
                     @Override
                     public void run() {
-                        Log.i(TAG, "ppppppppppppppppppppp: " + text);
                         if(!isActivityFinished && isPlaying) {
                             previewEditActivity.speakAnswer(mAnswerListener);
                         }
                     }
                 };
                 
-                Log.i(TAG, "sleep time is " + settings.getInt(AMPrefKeys.AUTO_SPEAK_QA_SLEEP_INTERVAL_KEY, 1));
                 handler.postDelayed(r, 1000 * settings.getInt(AMPrefKeys.AUTO_SPEAK_QA_SLEEP_INTERVAL_KEY, 1));
-               // previewEditActivity.runOnUiThread(r);
-                
-            Log.i(TAG, "in preview edit activity");
         }
     };
     
@@ -75,7 +68,6 @@ public class AutoSpeakFragment extends Fragment {
             Runnable r = new Runnable() {
                 @Override
                 public void run() {
-                    Log.i(TAG, "jiiiiwowoowjiowjeifjweoifgjeos: " + text);
                     
                     if(!isActivityFinished && isPlaying) {
                         previewEditActivity.gotoNext();
@@ -85,18 +77,24 @@ public class AutoSpeakFragment extends Fragment {
                 }
             };
             handler.postDelayed(r, 1000 * settings.getInt(AMPrefKeys.AUTO_SPEAK_CARD_SLEEP_INTERVAL_KEY, 1));
-            /*
-            // Need to run gotoNext() in UI thread not TTS thread since it changes view. 
-            previewEditActivity.runOnUiThread(new Runnable() {
-                
-                public void run() {
-                }
-            });
-            */
-
         }
     };
 
+    @Override
+    public void onPause() {
+        isActivityFinished = true;
+        isPlaying = !isPlaying;
+        super.onPause();
+    }
+    
+    @Override
+    public void onResume() {
+        isActivityFinished = false;
+        isPlaying = !isPlaying;
+        playButton.setSelected(false);
+        super.onResume();
+    }
+    
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -168,7 +166,6 @@ public class AutoSpeakFragment extends Fragment {
 
     private void displaySettingsDialog() {
         isPlaying = !isPlaying;
-        Log.i(TAG, "display dialog");
         playButton.setSelected(false);
         AutoSpeakSettingDialogFragment a = new AutoSpeakSettingDialogFragment();
         a.show(getActivity().getSupportFragmentManager(), "title");

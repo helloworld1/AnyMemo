@@ -13,26 +13,10 @@
         android:text="@string/auto_speak_qa_sleep_interval_text" />
 
     <SeekBar
-        android:id="@+id/auto_speak_qa_sleep_interval"
+        android:id="@+id/auto_speak_qa_sleep_interval_seekbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:max="10" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/auto_speak_setting_seekbar_value" />
-
-        <TextView
-            android:id="@+id/auto_speak_qa_sleep_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
 
     <TextView
         android:id="@+id/auto_speak_card_sleep_interval_text"
@@ -42,25 +26,14 @@
         android:text="@string/auto_speak_card_sleep_interval_text" />
 
     <SeekBar
-        android:id="@+id/auto_speak_card_sleep_interval"
+        android:id="@+id/auto_speak_card_sleep_interval_seekbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:max="10" />
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/auto_speak_card_sleep_value"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/auto_speak_setting_seekbar_value" />
-
-        <TextView
-            android:id="@+id/auto_speak_card_sleep_value"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
