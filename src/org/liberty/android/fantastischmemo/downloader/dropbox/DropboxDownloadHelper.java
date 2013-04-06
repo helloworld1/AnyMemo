@@ -38,7 +38,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.downloader.DownloadItem;
-import org.liberty.android.fantastischmemo.utils.AMUtil;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 import android.content.Context;
@@ -95,7 +95,7 @@ public class DropboxDownloadHelper {
 
         // Back up and delete db if it exists.
         if (new File(saveDBPath).exists()) {
-            AMUtil.deleteFileWithBackup(saveDBPath);
+            AMFileUtil.deleteFileWithBackup(saveDBPath);
         }
 
         // Make sure the space is translated correctly.

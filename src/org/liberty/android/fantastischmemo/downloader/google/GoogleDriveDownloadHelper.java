@@ -24,8 +24,7 @@ import java.util.List;
 import org.liberty.android.fantastischmemo.AMEnv;
 
 import org.liberty.android.fantastischmemo.downloader.google.Cells;
-
-import org.liberty.android.fantastischmemo.utils.AMUtil;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
 import android.content.Context;
 
@@ -72,7 +71,7 @@ public class GoogleDriveDownloadHelper {
             title += ".db";
         }
         String saveDBPath= AMEnv.DEFAULT_ROOT_PATH + "/" + title;
-        AMUtil.deleteFileWithBackup(saveDBPath);
+        AMFileUtil.deleteFileWithBackup(saveDBPath);
         converter.convertCellsToDb(cardCells, learningDataCells, saveDBPath);
         return saveDBPath;
     }

@@ -38,8 +38,8 @@ import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
-import org.liberty.android.fantastischmemo.utils.AMUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 import android.app.AlertDialog;
@@ -289,7 +289,7 @@ public class DownloaderFE extends DownloaderBase{
                 questionImageUrl = jsonItem.getString("question_image_url");
             }
             if (StringUtils.isNotEmpty(questionImageUrl)) {
-                String downloadFilename = AMUtil.getFilenameFromPath(questionImageUrl);
+                String downloadFilename = AMFileUtil.getFilenameFromPath(questionImageUrl);
                 DownloaderUtils.downloadFile(questionImageUrl, imagePath + "q-" + downloadFilename); 
                 question = question + "<br /><img src=\"" + "q-" + downloadFilename + "\" />";
             }
@@ -299,7 +299,7 @@ public class DownloaderFE extends DownloaderBase{
                 answerImageUrl = jsonItem.getString("answer_image_url");
             }
             if (StringUtils.isNotEmpty(answerImageUrl)) {
-                String downloadFilename = AMUtil.getFilenameFromPath(answerImageUrl);
+                String downloadFilename = AMFileUtil.getFilenameFromPath(answerImageUrl);
                 DownloaderUtils.downloadFile(answerImageUrl, imagePath + "a-" + downloadFilename); 
                 answer = answer + "<br /><img src=\"" + "a-" + downloadFilename + "\" />";
             }

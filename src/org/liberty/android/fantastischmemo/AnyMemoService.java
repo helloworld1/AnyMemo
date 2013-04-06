@@ -24,7 +24,7 @@ import org.liberty.android.fantastischmemo.dao.CardDao;
 
 import org.liberty.android.fantastischmemo.ui.AnyMemo;
 import org.liberty.android.fantastischmemo.ui.StudyActivity;
-import org.liberty.android.fantastischmemo.utils.AMUtil;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 import android.app.PendingIntent;
@@ -174,7 +174,7 @@ public class AnyMemoService extends Service{
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
             /* Feed the data from the most recent database */
             dbPath = settings.getString(AMPrefKeys.getRecentPathKey(0), "");
-            dbName = AMUtil.getFilenameFromPath(dbPath);
+            dbName = AMFileUtil.getFilenameFromPath(dbPath);
 
             AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(AnyMemoService.this, dbPath);
             try {

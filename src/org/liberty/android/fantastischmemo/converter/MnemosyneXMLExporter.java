@@ -29,7 +29,7 @@ import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.LearningData;
-import org.liberty.android.fantastischmemo.utils.AMUtil;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
 import android.content.Context;
 import java.io.BufferedWriter;
@@ -47,7 +47,7 @@ public class MnemosyneXMLExporter implements AbstractConverter {
 
     public void convert(String src, String dest) throws Exception {
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, src);
-        String dbName = AMUtil.getFilenameFromPath(dest);
+        String dbName = AMFileUtil.getFilenameFromPath(dest);
         PrintWriter outxml = null;
         try {
             final CardDao cardDao = helper.getCardDao();

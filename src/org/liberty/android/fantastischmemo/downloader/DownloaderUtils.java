@@ -27,8 +27,6 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
-import org.liberty.android.fantastischmemo.utils.AMUtil;
-
 import java.io.InputStream;
 import java.io.BufferedReader;
 import java.io.BufferedInputStream;
@@ -42,6 +40,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
 public class DownloaderUtils{
     public static final String TAG = "org.liberty.android.fantastischmemo.downloader.DownloaderUtils";
@@ -76,7 +75,7 @@ public class DownloaderUtils{
         OutputStream out;
 
         // Delete and backup if the file exists
-        AMUtil.deleteFileWithBackup(savedPath);
+        AMFileUtil.deleteFileWithBackup(savedPath);
         
         // Create the dir if necessary
         File parentDir = outFile.getParentFile();

@@ -26,7 +26,7 @@ import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.CardDao;
-import org.liberty.android.fantastischmemo.utils.AMUtil;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
@@ -113,7 +113,7 @@ public class RecentListFragment extends Fragment {
                         ri.index = index++;
                         ril.add(ri);
                         ri.dbPath = allPath[i];
-                        ri.dbName = AMUtil.getFilenameFromPath(allPath[i]);
+                        ri.dbName = AMFileUtil.getFilenameFromPath(allPath[i]);
                         /* In order to add interrupted exception */
                         Thread.sleep(5);
                     }

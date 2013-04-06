@@ -43,8 +43,9 @@ import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTSImpl;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
-import org.liberty.android.fantastischmemo.utils.AMUtil;
+import org.liberty.android.fantastischmemo.utils.AMStringUtil;
 import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
 import org.xml.sax.XMLReader;
 
@@ -137,7 +138,7 @@ abstract public class QACardActivity extends AMActivity {
         option = new Option(QACardActivity.this);
 
         dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(this, dbPath);
-        dbName = AMUtil.getFilenameFromPath(dbPath);
+        dbName = AMFileUtil.getFilenameFromPath(dbPath);
 
         dbPath = extras.getString(EXTRA_DBPATH);
         setContentView(R.layout.qa_card_layout);
@@ -229,7 +230,7 @@ abstract public class QACardActivity extends AMActivity {
             SpannableStringBuilder buffer = new SpannableStringBuilder();
 
             /* Automatic check HTML */
-            if (AMUtil.isHTML(str) && (htmlDisplay.contains(cf))) {
+            if (AMStringUtil.isHTML(str) && (htmlDisplay.contains(cf))) {
                 if (setting.getHtmlLineBreakConversion() == true) {
                     String s = str.replace("\n", "<br />");
                     buffer.append(Html.fromHtml(s, imageGetter, tagHandler));
@@ -579,7 +580,7 @@ abstract public class QACardActivity extends AMActivity {
         @Override
         public Drawable getDrawable(String source) {
             Log.v(TAG, "Source: " + source);
-            String dbName = AMUtil.getFilenameFromPath(dbPath);
+            String dbName = AMFileUtil.getFilenameFromPath(dbPath);
             try {
                 String[] paths = {
                 /* Relative path */

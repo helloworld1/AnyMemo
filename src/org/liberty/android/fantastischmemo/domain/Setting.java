@@ -5,7 +5,7 @@ import java.util.EnumSet;
 
 import org.apache.mycommons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.dao.SettingDaoImpl;
-import org.liberty.android.fantastischmemo.utils.AMUtil;
+import org.liberty.android.fantastischmemo.utils.AMStringUtil;
 
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
@@ -272,11 +272,11 @@ public class Setting {
 	}
 
 	public EnumSet<CardField> getDisplayInHTMLEnum() {
-		return AMUtil.getEnumSetFromString(CardField.class, displayInHTML);
+		return AMStringUtil.getEnumSetFromString(CardField.class, displayInHTML);
 	}
 
 	public void setDisplayInHTMLEnum(EnumSet<CardField> displayInHTMLEnum) {
-        displayInHTML = AMUtil.getStringFromEnumSet(displayInHTMLEnum);
+        displayInHTML = AMStringUtil.getStringFromEnumSet(displayInHTMLEnum);
 	}
 
 	public Boolean getHtmlLineBreakConversion() {
@@ -296,11 +296,11 @@ public class Setting {
 	}
 
 	public EnumSet<CardField> getQuestionFieldEnum() {
-		return AMUtil.getEnumSetFromString(CardField.class, questionField);
+		return AMStringUtil.getEnumSetFromString(CardField.class, questionField);
 	}
 
 	public void setQuestionFieldEnum(EnumSet<CardField> questionFieldEnum) {
-        questionField = AMUtil.getStringFromEnumSet(questionFieldEnum);
+        questionField = AMStringUtil.getStringFromEnumSet(questionFieldEnum);
 	}
 
 	public String getAnswerField() {
@@ -312,15 +312,15 @@ public class Setting {
 	}
 
 	public void setAnswerFieldEnum(EnumSet<CardField> answerFieldEnum) {
-        answerField = AMUtil.getStringFromEnumSet(answerFieldEnum);
+        answerField = AMStringUtil.getStringFromEnumSet(answerFieldEnum);
 	}
 
 	public EnumSet<CardField> getAnswerFieldEnum() {
-		return AMUtil.getEnumSetFromString(CardField.class, answerField);
+		return AMStringUtil.getEnumSetFromString(CardField.class, answerField);
 	}
 
 	public void setAnswerEnum(EnumSet<CardField> answerFieldEnum) {
-        answerField = AMUtil.getStringFromEnumSet(answerFieldEnum);
+        answerField = AMStringUtil.getStringFromEnumSet(answerFieldEnum);
 	}
 
 	public String getQuestionFont() {

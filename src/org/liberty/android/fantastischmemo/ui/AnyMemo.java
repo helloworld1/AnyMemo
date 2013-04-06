@@ -33,6 +33,7 @@ import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.AnyMemoService;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.SetAlarmReceiver;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.AMUiUtil;
 
 import android.app.AlertDialog;
@@ -75,6 +76,8 @@ public class AnyMemo extends AMActivity {
 
     private AMUiUtil amUiUtil;
 
+    private AMFileUtil amFileUtil;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +85,8 @@ public class AnyMemo extends AMActivity {
         setContentView(R.layout.main_tabs);
 
         amUiUtil = new AMUiUtil(this);
+        amFileUtil = new AMFileUtil(this);
+
         mTabHost = (TabHost)findViewById(android.R.id.tabhost);
         mHorizontalScrollView = (HorizontalScrollView) findViewById(R.id.horizontal_scroll_view);
 
@@ -180,13 +185,11 @@ public class AnyMemo extends AMActivity {
             editor.putString(AMPrefKeys.getRecentPathKey(0), AMEnv.DEFAULT_ROOT_PATH + AMEnv.DEFAULT_DB_NAME);
             editor.commit();
             try {
-                InputStream in = getResources().getAssets().open(AMEnv.DEFAULT_DB_NAME);
-                FileUtils.copyInputStreamToFile(in, new File(sdPath + "/" + AMEnv.DEFAULT_DB_NAME));
+                amFileUtil.copyFileFromAsset(AMEnv.DEFAULT_DB_NAME,  new File(sdPath + "/" + AMEnv.DEFAULT_DB_NAME));
 
                 InputStream in2 = getResources().getAssets().open(AMEnv.EMPTY_DB_NAME);
                 String emptyDbPath = getApplicationContext().getFilesDir().getAbsolutePath() + "/" + AMEnv.EMPTY_DB_NAME;
                 FileUtils.copyInputStreamToFile(in2, new File(emptyDbPath));
-                in.close();
                 in2.close();
             }
             catch(IOException e){

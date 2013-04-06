@@ -27,7 +27,7 @@ import org.apache.mycommons.lang3.time.DateUtils;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.domain.SchedulingAlgorithmParameters;
 
-import org.liberty.android.fantastischmemo.utils.AMUtil;
+import org.liberty.android.fantastischmemo.utils.AMDateUtil;
 
 import android.content.Context;
 
@@ -52,7 +52,7 @@ public class DefaultScheduler implements Scheduler {
     @Override
 	public LearningData schedule(LearningData oldData, int newGrade, boolean includeNoise) {
 		Date currentDate = new Date();
-		double actualInterval = AMUtil.diffDate(oldData.getLastLearnDate(), currentDate);
+		double actualInterval = AMDateUtil.diffDate(oldData.getLastLearnDate(), currentDate);
 		double scheduleInterval = oldData.getInterval();
 		double newInterval = 0.0;
         int oldGrade = oldData.getGrade();
