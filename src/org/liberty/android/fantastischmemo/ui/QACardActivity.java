@@ -401,7 +401,11 @@ abstract public class QACardActivity extends AMActivity {
         // Copy the question to clickboard.
         if (option.getCopyClipboard()) {
             ClipboardManager cm = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-            cm.setText(currentCard.getQuestion());
+            // Some Samsung device doesn't have ClipboardManager. So check
+            // the null here to prevent crash.
+            if (cm != null) {
+                cm.setText(currentCard.getQuestion());
+            }
         }
 
         onPostDisplayCard();
