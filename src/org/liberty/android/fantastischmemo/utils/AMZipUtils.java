@@ -24,7 +24,7 @@ public class AMZipUtils {
 	private static final String TAG = "org.liberty.android.fantastischmemo.utils.AMZipUtils";
 
     // unzipped file is in [external]/anymemo/
-	public static void unZipFile(File file, File outputPath) throws IOException {
+	public static void unZipFile(File file, File outputPath) throws Exception {
 		BufferedOutputStream dest = null;
 		BufferedInputStream ins = null;
 		ZipEntry entry;
@@ -51,7 +51,7 @@ public class AMZipUtils {
 				}
 			}
 		} catch (IOException e) {
-			throw new IOException("Exception when extracting zip file: " + file, e);
+			throw new Exception("Exception when extracting zip file: " + file, e);
 		} finally {
             if (dest != null) {
                 dest.close();
@@ -66,7 +66,7 @@ public class AMZipUtils {
 
     // Zip the db file, the image files in [external]/anymemo/images/[db_name]/
     // and audio files in [external]/anymemo/voice/[db_name]/
-    public static File compressFile(File dbFile, File outZipFile) throws IOException {
+    public static File compressFile(File dbFile, File outZipFile) throws Exception {
         ZipOutputStream zos = null;
         try {
             zos = new ZipOutputStream(new FileOutputStream(outZipFile));
@@ -89,7 +89,7 @@ public class AMZipUtils {
             }
 
 		} catch(IOException e) {
-			throw new IOException("Exception when compressing zip file: " + dbFile, e);
+			throw new Exception("Exception when compressing zip file: " + dbFile, e);
 		} finally {
             if (zos != null) {
                 zos.close();
