@@ -7,7 +7,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
 import java.net.URI;
 import java.util.Enumeration;
 import java.util.LinkedList;
@@ -16,7 +15,6 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 import org.apache.mycommons.io.IOUtils;
-
 import org.liberty.android.fantastischmemo.AMEnv;
 
 import android.util.Log;
@@ -26,7 +24,7 @@ public class AMZipUtils {
 	private static final String TAG = "org.liberty.android.fantastischmemo.utils.AMZipUtils";
 
     // unzipped file is in [external]/anymemo/
-	public static void unZipFile(File file) throws Exception {
+	public static void unZipFile(File file, File outputPath) throws IOException {
 		BufferedOutputStream dest = null;
 		BufferedInputStream ins = null;
 		ZipEntry entry;
@@ -44,24 +42,31 @@ public class AMZipUtils {
 							(zipfile.getInputStream(entry), BUFFER_SIZE);
 					int count;
 					byte data[] = new byte[BUFFER_SIZE];
-					FileOutputStream fos = new FileOutputStream(AMEnv.DEFAULT_ROOT_PATH + "/" + entry.getName());
+					FileOutputStream fos = new FileOutputStream(outputPath.getAbsolutePath() + "/" + entry.getName());
 					dest = new BufferedOutputStream(fos, BUFFER_SIZE);
 					while ((count = ins.read(data, 0, BUFFER_SIZE)) != -1) {
 						dest.write(data, 0, count);
 					}
 					dest.flush();
-					dest.close();
-					ins.close();
 				}
 			}
-		} catch(Exception e) {
-			throw new Exception("Exception when extracting zip file: " + file, e);
-		}
+		} catch (IOException e) {
+			throw new IOException("Exception when extracting zip file: " + file, e);
+		} finally {
+            if (dest != null) {
+                dest.close();
+            }
+
+            if (ins != null) {
+                ins.close();
+            }
+        }
+
 	}
 
     // Zip the db file, the image files in [external]/anymemo/images/[db_name]/
     // and audio files in [external]/anymemo/voice/[db_name]/
-    public static File compressFile(File dbFile, File outZipFile) throws Exception{
+    public static File compressFile(File dbFile, File outZipFile) throws IOException {
         ZipOutputStream zos = null;
         try {
             zos = new ZipOutputStream(new FileOutputStream(outZipFile));
@@ -83,10 +88,12 @@ public class AMZipUtils {
                 zipDirectory(imageDirectory, imageRelativePath, zos);
             }
 
-		} catch(Exception e) {
-			throw new Exception("Exception when compressing zip file: " + dbFile, e);
+		} catch(IOException e) {
+			throw new IOException("Exception when compressing zip file: " + dbFile, e);
 		} finally {
-            zos.close();
+            if (zos != null) {
+                zos.close();
+            }
         }
         return null;
     }
