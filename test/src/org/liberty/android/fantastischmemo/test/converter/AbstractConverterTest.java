@@ -52,8 +52,6 @@ public abstract class AbstractConverterTest extends AndroidTestCase {
     }
 
     public void testDown() {
-        System.out.println(srcFilePath);
-        System.out.println(destFilePath);
         (new File(srcFilePath)).delete();
         (new File(destFilePath)).delete();
     }

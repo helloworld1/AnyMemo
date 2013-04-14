@@ -30,9 +30,11 @@ public class AMEnv {
     private final static String DEFAULT_POSTFIX= "/anymemo/";
     private final static String DEFAULT_AUDIO_POSTFIX = "voice/";
     private final static String DEFAULT_IMAGE_POSTFIX = "images/";
+    private final static String DEFAULT_TMP_POSTFIX = "tmp/";
     public final static String DEFAULT_ROOT_PATH = EXTERNAL_STORAGE_PATH + DEFAULT_POSTFIX;
     public final static String DEFAULT_AUDIO_PATH = DEFAULT_ROOT_PATH + DEFAULT_AUDIO_POSTFIX;
     public final static String DEFAULT_IMAGE_PATH = DEFAULT_ROOT_PATH + DEFAULT_IMAGE_POSTFIX;
+    public final static String DEFAULT_TMP_PATH = DEFAULT_ROOT_PATH + DEFAULT_TMP_POSTFIX;
     public final static String DEFAULT_DB_NAME= "french-body-parts.db";
     public final static String EMPTY_DB_NAME= "empty.db";
     public final static String GOOGLE_CLIENT_ID = "45533559525.apps.googleusercontent.com";
