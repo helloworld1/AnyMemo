@@ -91,7 +91,7 @@ public class AMZipUtils {
             if (audioDirectory.exists()) {
                 zos.putNextEntry(new ZipEntry("voice/"));
                 zos.putNextEntry(new ZipEntry(audioRelativePath));
-                zipDirectory(imageDirectory, imageRelativePath, zos);
+                zipDirectory(audioDirectory, audioRelativePath, zos);
             }
 
         } catch(IOException e) {
