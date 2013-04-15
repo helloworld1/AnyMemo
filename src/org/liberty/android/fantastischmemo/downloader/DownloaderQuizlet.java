@@ -19,18 +19,20 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader;
 
-import java.util.LinkedList;
-
-import org.liberty.android.fantastischmemo.*;
-
+import java.io.File;
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.io.IOException;
-import java.net.URLEncoder;
-
+import org.apache.mycommons.io.FileUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.liberty.android.fantastischmemo.AMEnv;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.CardDao;
-
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
@@ -38,23 +40,19 @@ import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
-
-import android.os.Bundle;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.widget.AbsListView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.util.Log;
-import android.view.View;
+import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
+import android.util.Log;
+import android.view.View;
+import android.widget.AbsListView;
+import android.widget.ListView;
+import android.widget.TextView;
 
 /*
  * Download from FlashcardExchange using its web api
@@ -233,21 +231,45 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
         Log.v(TAG, "Download url: " + address);
         JSONObject rootObject = new JSONObject(dbJsonString);
         JSONArray flashcardsArray = rootObject.getJSONArray("terms");
-        List<Card> cardList = new LinkedList<Card>();
+        int termCount = rootObject.getInt("term_count");
+        boolean hasImage = rootObject.getBoolean("has_images");
+        List<Card> cardList = new ArrayList<Card>(termCount);
+
+        // handle image
+        String dbname = DownloaderUtils.validateDBName(di.getTitle()) + ".db";
+        String imagePath = AMEnv.DEFAULT_IMAGE_PATH + dbname + "/";
+        if (hasImage) {
+            FileUtils.forceMkdir(new File(imagePath));
+        }
+
+
         for(int i = 0; i < flashcardsArray.length(); i++){
             JSONObject jsonItem = flashcardsArray.getJSONObject(i);
             String question = jsonItem.getString("term");
             String answer = jsonItem.getString("definition");
+
+            // Download images, ignore image downloading error.
+            try {
+                if (jsonItem.has("image") && !jsonItem.isNull("image") && hasImage) {
+                    JSONObject imageItem = jsonItem.getJSONObject("image");
+                    String imageUrl = imageItem.getString("url");
+                    String downloadFilename = AMFileUtil.getFilenameFromPath(imageUrl);
+                    DownloaderUtils.downloadFile(imageUrl, imagePath + downloadFilename);
+                    answer += "<br /><img src=\"" + downloadFilename + "\"/>";
+                }
+            } catch (Exception e) {
+                Log.w(TAG, "Error downloading image.", e);
+            }
             Card card = new Card();
             card.setQuestion(question);
             card.setAnswer(answer);
             card.setCategory(new Category());
             card.setLearningData(new LearningData());
             cardList.add(card);
+
         }
         
         /* Make a valid dbname from the title */
-        String dbname = DownloaderUtils.validateDBName(di.getTitle()) + ".db";
         String dbpath = AMEnv.DEFAULT_ROOT_PATH;
         String fullpath = dbpath + dbname;
         AMFileUtil.deleteFileWithBackup(fullpath);
