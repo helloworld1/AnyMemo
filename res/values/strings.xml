@@ -85,7 +85,7 @@
     <string name="open_open_new_db">Open existing database</string>
     <string name="clear_all_pref">Reset all preferences</string>
     <string name="clear_recent_list">Clear recent list</string>
-    <string name="export_xml">Export Mnemosyne XML</string>
+    <string name="export_xml">Export Mnemosyne1 XML</string>
     <string name="add_screen_question">Question</string>
     <string name="add_screen_new">New</string>
     <string name="add_screen_id">ID</string>
@@ -138,7 +138,7 @@
     <string name="import_text">Import</string>
     <string name="export_text">Export</string>
     <string name="clear_filter_text">Clear</string>
-    <string name="import_mnemosyne_xml_text">Import Mnemosyne XML</string>
+    <string name="import_mnemosyne_xml_text">Import Mnemosyne1 XML</string>
     <string name="export_qa_txt">Export Q/A TXT</string>
     <string name="export_tab_txt">Export tab-separated TXT</string>
     <string name="export_csv">Export CSV</string>
@@ -443,4 +443,5 @@
     <string name="share_text">Share</string>
     <string name="center_left_text">Center left</string>
     <string name="center_right_text">Center right</string>
+    <string name="import_mnemosyne2_cards_text">Import Mnemosyne2 cards</string>
 </resources>

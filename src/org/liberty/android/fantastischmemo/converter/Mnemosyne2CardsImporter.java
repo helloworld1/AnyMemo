@@ -26,6 +26,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -33,6 +34,9 @@ import java.util.Map;
 
 import org.apache.mycommons.io.FileUtils;
 import org.apache.mycommons.io.FilenameUtils;
+import org.apache.mycommons.io.IOCase;
+import org.apache.mycommons.io.filefilter.DirectoryFileFilter;
+import org.apache.mycommons.io.filefilter.SuffixFileFilter;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
@@ -94,12 +98,26 @@ public class Mnemosyne2CardsImporter implements AbstractConverter {
             helper = AnyMemoDBOpenHelperManager.getHelper(mContext, dest);
             CardDao cardDao = helper.getCardDao();
             cardDao.createCards(cardList);
+
+            // The last step is to see if there are images to import.
+            Collection<File> imageFiles = FileUtils.listFiles(
+                    tmpDirectory, 
+                    new SuffixFileFilter(new String[] {"jpg", "png", "bmp"}, IOCase.INSENSITIVE), 
+                    DirectoryFileFilter.DIRECTORY
+                    );
+            if (!imageFiles.isEmpty()) {
+                String destDbName = FilenameUtils.getName(dest);
+                File imageDir = new File(AMEnv.DEFAULT_IMAGE_PATH + destDbName);
+                FileUtils.forceMkdir(imageDir);
+                for (File imageFile : imageFiles) {
+                    FileUtils.copyFileToDirectory(imageFile, imageDir);
+                }
+            }
         } finally {
             if (helper != null) {
                 AnyMemoDBOpenHelperManager.releaseHelper(helper);
             }
-            // FileUtils.delee(tmpDirectory);
-
+            FileUtils.deleteDirectory(tmpDirectory);
         }
 
         

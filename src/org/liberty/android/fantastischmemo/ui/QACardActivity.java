@@ -27,6 +27,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 import org.amr.arabic.ArabicUtilities;
+import org.apache.mycommons.io.FilenameUtils;
 import org.apache.mycommons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
@@ -592,7 +593,11 @@ abstract public class QACardActivity extends AMActivity {
                 /* Try the image in /sdcard/anymemo/images/dbname/myimg.png */
                 AMEnv.DEFAULT_IMAGE_PATH + dbName + "/" + source,
                 /* Try the image in /sdcard/anymemo/images/myimg.png */
-                AMEnv.DEFAULT_IMAGE_PATH + source };
+                AMEnv.DEFAULT_IMAGE_PATH + source,
+                /* Just the last part of the name */
+                AMEnv.DEFAULT_IMAGE_PATH + dbName + "/" + FilenameUtils.getName(source),
+                AMEnv.DEFAULT_IMAGE_PATH + FilenameUtils.getName(source)
+                };
                 Bitmap orngBitmap = null;
                 for (String path : paths) {
                     Log.v(TAG, "Try path: " + path);
