@@ -23,6 +23,7 @@ import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.converter.CSVExporter;
 import org.liberty.android.fantastischmemo.converter.CSVImporter;
+import org.liberty.android.fantastischmemo.converter.Mnemosyne2CardsExporter;
 import org.liberty.android.fantastischmemo.converter.Mnemosyne2CardsImporter;
 import org.liberty.android.fantastischmemo.converter.MnemosyneXMLExporter;
 import org.liberty.android.fantastischmemo.converter.MnemosyneXMLImporter;
@@ -74,6 +75,7 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
     private View exportTabButton;
     private View exportQAButton;
     private View exportZipButton;
+    private View exportMnemosyne2CardsButton;
 
     private View defaultSettingsButton;
     private View mergeButton;
@@ -126,6 +128,8 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
         exportQAButton.setOnClickListener(this);
         exportZipButton = v.findViewById(R.id.export_zip);
         exportZipButton.setOnClickListener(this);
+        exportMnemosyne2CardsButton = v.findViewById(R.id.export_mnemosyne2_cards);
+        exportMnemosyne2CardsButton.setOnClickListener(this);
 
         defaultSettingsButton = v.findViewById(R.id.misc_default_settings);
         defaultSettingsButton.setOnClickListener(this);
@@ -269,6 +273,14 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
             b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".db");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ExportZip");
+        }
+        if(v == exportMnemosyne2CardsButton) {
+            DialogFragment df = new ConverterFragment();
+            Bundle b = new Bundle();
+            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, new Mnemosyne2CardsExporter(mActivity));
+            b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".db");
+            df.setArguments(b);
+            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ExportMnemosyne2Cards");
         }
 
         if (v == defaultSettingsButton) {

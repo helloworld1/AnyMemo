@@ -444,4 +444,5 @@
     <string name="center_left_text">Center left</string>
     <string name="center_right_text">Center right</string>
     <string name="import_mnemosyne2_cards_text">Import Mnemosyne2 cards</string>
+    <string name="export_mnemosyne2_cards_text">Export Mnemosyne2 cards</string>
 </resources>

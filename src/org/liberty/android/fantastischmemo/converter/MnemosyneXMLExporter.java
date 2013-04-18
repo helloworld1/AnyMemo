@@ -19,26 +19,28 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.converter;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
 import java.util.concurrent.Callable;
 
-import org.liberty.android.fantastischmemo.*;
-
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
-
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
 import android.content.Context;
-import java.io.BufferedWriter;
-import java.io.PrintWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.List;
 
 public class MnemosyneXMLExporter implements AbstractConverter {
+
+    private static final long serialVersionUID = -7419489770698078017L;
+
     private Context mContext;
 
     public MnemosyneXMLExporter(Context context){

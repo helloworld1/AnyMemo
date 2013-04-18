@@ -116,10 +116,24 @@ public class AMZipUtils {
         }
     }
 
+    // directory: the directoyr to compress
+    // prefixDir: The prefix in ziped file for compressed dir
+    // outputFile, the output zip file
+    public static void zipDirectory(File directory, String prefixDir, File outputFile) throws IOException {
+        ZipOutputStream zos = null;
+        try {
+            zos = new ZipOutputStream(new FileOutputStream(outputFile));
+            zipDirectory(directory, prefixDir, zos);
+        } finally {
+            zos.close();
+        }
+
+    }
+
     // Helper method to compress from ZIP
     // Inspired from: 
     // http://stackoverflow.com/questions/1399126/java-util-zip-recreating-directory-structure
-    // directory: the directoyr to compress
+    // directory: the directory to compress
     // prefixDir: The prefix in ziped file for compressed dir
     // zout: the zip output stream opened in the caller
     private static void zipDirectory(File directory, String prefixDir, ZipOutputStream zout) throws IOException {
@@ -128,6 +142,7 @@ public class AMZipUtils {
         queue.addLast(directory);
         while (!queue.isEmpty()) {
             directory = queue.removeFirst();
+            System.out.println("DIR: " + directory);
             for (File kid : directory.listFiles()) {
                 String name = prefixDir + base.relativize(kid.toURI()).getPath();
                 if (kid.isDirectory()) {

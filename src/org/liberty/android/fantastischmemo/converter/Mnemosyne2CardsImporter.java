@@ -101,10 +101,9 @@ public class Mnemosyne2CardsImporter implements AbstractConverter {
 
             // The last step is to see if there are images to import.
             Collection<File> imageFiles = FileUtils.listFiles(
-                    tmpDirectory, 
-                    new SuffixFileFilter(new String[] {"jpg", "png", "bmp"}, IOCase.INSENSITIVE), 
-                    DirectoryFileFilter.DIRECTORY
-                    );
+                tmpDirectory, 
+                new SuffixFileFilter(new String[] {"jpg", "png", "bmp"}, IOCase.INSENSITIVE), 
+                DirectoryFileFilter.DIRECTORY);
             if (!imageFiles.isEmpty()) {
                 String destDbName = FilenameUtils.getName(dest);
                 File imageDir = new File(AMEnv.DEFAULT_IMAGE_PATH + destDbName);
@@ -171,7 +170,9 @@ public class Mnemosyne2CardsImporter implements AbstractConverter {
                     // Use LinkedHashMap to maintain insertion order.
                     cardOidMap = new LinkedHashMap<String, Card> (cardCount * 4 / 3);
                     categoryOidMAP = new LinkedHashMap<String, Category>();
-                } else if (xpp.getName().equals("log")) {
+                }
+
+                if (xpp.getName().equals("log")) {
                     lastType  = Integer.parseInt(xpp.getAttributeValue(null, "type"));
                     lastOid = xpp.getAttributeValue(null, "o_id");
                 }
