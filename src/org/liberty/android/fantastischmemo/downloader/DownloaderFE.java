@@ -84,8 +84,11 @@ public class DownloaderFE extends DownloaderBase{
     private String oauthTokenSecret = null;
     private OAuthConsumer oauthConsumer = null;
 
+    private DownloaderUtils downloaderUtils;
+
     @Override
     protected void initialRetrieve(){
+        downloaderUtils = new DownloaderUtils(this);
         mHandler = new Handler();
         dlAdapter = new DownloadListAdapter(this, R.layout.filebrowser_item);
         listView = (ListView)findViewById(R.id.file_list);
@@ -227,7 +230,7 @@ public class DownloaderFE extends DownloaderBase{
         }
         Log.i(TAG, "Url: " + url);
 
-        String jsonString = DownloaderUtils.downloadJSONString(url);
+        String jsonString = downloaderUtils.downloadJSONString(url);
         Log.v(TAG, "JSON String: " + jsonString);
         JSONObject jsonObject = new JSONObject(jsonString);
         String status =  jsonObject.getString("response_type");
@@ -263,11 +266,11 @@ public class DownloaderFE extends DownloaderBase{
 
     private void downloadDatabase(DownloadItem di) throws Exception{
         /* Make a valid dbname from the title */
-        String dbname = DownloaderUtils.validateDBName(di.getTitle()) + ".db";
+        String dbname = downloaderUtils.validateDBName(di.getTitle()) + ".db";
         String imagePath = AMEnv.DEFAULT_IMAGE_PATH + dbname + "/";
 
         String address = di.getAddress();
-        String dbJsonString = DownloaderUtils.downloadJSONString(address);
+        String dbJsonString = downloaderUtils.downloadJSONString(address);
         Log.v(TAG, "Download url: " + address);
         JSONObject rootObject = new JSONObject(dbJsonString);
         String status = rootObject.getString("response_type");
@@ -290,7 +293,7 @@ public class DownloaderFE extends DownloaderBase{
             }
             if (StringUtils.isNotEmpty(questionImageUrl)) {
                 String downloadFilename = AMFileUtil.getFilenameFromPath(questionImageUrl);
-                DownloaderUtils.downloadFile(questionImageUrl, imagePath + "q-" + downloadFilename); 
+                downloaderUtils.downloadFile(questionImageUrl, imagePath + "q-" + downloadFilename); 
                 question = question + "<br /><img src=\"" + "q-" + downloadFilename + "\" />";
             }
             // Download image file if there is
@@ -300,7 +303,7 @@ public class DownloaderFE extends DownloaderBase{
             }
             if (StringUtils.isNotEmpty(answerImageUrl)) {
                 String downloadFilename = AMFileUtil.getFilenameFromPath(answerImageUrl);
-                DownloaderUtils.downloadFile(answerImageUrl, imagePath + "a-" + downloadFilename); 
+                downloaderUtils.downloadFile(answerImageUrl, imagePath + "a-" + downloadFilename); 
                 answer = answer + "<br /><img src=\"" + "a-" + downloadFilename + "\" />";
             }
 

@@ -62,8 +62,11 @@ public class Mnemosyne2CardsExporter implements AbstractConverter {
 
     private Context mContext;
 
+    private AMFileUtil amFileUtil;
+
     public Mnemosyne2CardsExporter(Context context) {
         mContext = context;
+        amFileUtil = new AMFileUtil(mContext);
     }
 
     @Override
@@ -88,7 +91,7 @@ public class Mnemosyne2CardsExporter implements AbstractConverter {
             File xmlFile = new File(tmpDirectory + "/cards.xml");
 
             // Before opening dest. Try to backup and delete the dest db.
-            AMFileUtil.deleteFileWithBackup(dest);
+            amFileUtil.deleteFileWithBackup(dest);
             createXMLFile(src, xmlFile);
 
             File metadataFile = new File(tmpDirectory + "/METADATA");

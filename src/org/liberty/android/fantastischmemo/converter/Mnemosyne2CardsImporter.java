@@ -64,8 +64,11 @@ public class Mnemosyne2CardsImporter implements AbstractConverter {
 
     private Context mContext;
 
+    private AMFileUtil amFileUtil;
+
     public Mnemosyne2CardsImporter(Context context) {
         mContext = context;
+        amFileUtil = new AMFileUtil(context);
     }
 
     @Override
@@ -94,7 +97,7 @@ public class Mnemosyne2CardsImporter implements AbstractConverter {
             List<Card> cardList = xmlToCards(xmlFile);
 
             // Before opening dest. Try to backup and delete the dest db.
-            AMFileUtil.deleteFileWithBackup(dest);
+            amFileUtil.deleteFileWithBackup(dest);
             helper = AnyMemoDBOpenHelperManager.getHelper(mContext, dest);
             CardDao cardDao = helper.getCardDao();
             cardDao.createCards(cardList);

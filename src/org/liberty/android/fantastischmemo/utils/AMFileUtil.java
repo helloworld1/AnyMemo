@@ -59,15 +59,21 @@ public class AMFileUtil {
 		out.close();
 	}
 
-    public static void deleteDbSafe(String filepath) {
+    public void deleteDbSafe(String filepath) {
         if (!new File(filepath).exists()) {
             return;
         }
         AnyMemoDBOpenHelperManager.forceRelease(filepath);
+
+
+        // Also delete all the preference related to the db file.
+        AMPrefUtil amPrefUtil = new AMPrefUtil(mContext);
+        amPrefUtil.removePrefKeys(filepath);
+
         new File(filepath).delete();
     }
 
-    public static void deleteFileWithBackup(String filepath) throws IOException {
+    public void deleteFileWithBackup(String filepath) throws IOException {
         if (!new File(filepath).exists()) {
             return;
         }

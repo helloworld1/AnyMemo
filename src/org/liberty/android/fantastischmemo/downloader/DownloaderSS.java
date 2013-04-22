@@ -63,8 +63,11 @@ public class DownloaderSS extends DownloaderBase implements ListView.OnScrollLis
     private Handler mHandler;
     private List<DownloadItem> categoryList = null;
 
+    private DownloaderUtils downloaderUtils;
+
     @Override
     protected void initialRetrieve(){
+        downloaderUtils = new DownloaderUtils(this);
         dlAdapter = new DownloadListAdapter(this, R.layout.filebrowser_item);
         dlStack = new Stack<List<DownloadItem>>();
         categoryIdStack = new Stack<String>();
@@ -269,7 +272,7 @@ public class DownloaderSS extends DownloaderBase implements ListView.OnScrollLis
 
     private List<DownloadItem> retrieveCategories() throws Exception{
         List<DownloadItem> diList = new LinkedList<DownloadItem>();
-        JSONArray jsonArray = new JSONArray(DownloaderUtils.downloadJSONString(SS_API_GET_CATEGORIES));
+        JSONArray jsonArray = new JSONArray(downloaderUtils.downloadJSONString(SS_API_GET_CATEGORIES));
         for(int i = 0; i < jsonArray.length(); i++){
             JSONObject jsonItem = jsonArray.getJSONObject(i);
             DownloadItem di = new DownloadItem();
@@ -298,7 +301,7 @@ public class DownloaderSS extends DownloaderBase implements ListView.OnScrollLis
         }
 
 
-        JSONArray jsonArray = new JSONArray(DownloaderUtils.downloadJSONString(url));
+        JSONArray jsonArray = new JSONArray(downloaderUtils.downloadJSONString(url));
         for(int i = 0; i < jsonArray.length(); i++){
             JSONObject jsonItem = jsonArray.getJSONObject(i);
             DownloadItem di = new DownloadItem();
@@ -329,7 +332,7 @@ public class DownloaderSS extends DownloaderBase implements ListView.OnScrollLis
     
     private void downloadDatabase(DownloadItem di) throws Exception{
         String url = di.getAddress();
-        String jsonString = DownloaderUtils.downloadJSONString(url);
+        String jsonString = downloaderUtils.downloadJSONString(url);
         JSONObject jsonObject = new JSONObject(jsonString);
         JSONArray jsonDataArray = jsonObject.getJSONArray("data");
         List<Card> cardList = new LinkedList<Card>();

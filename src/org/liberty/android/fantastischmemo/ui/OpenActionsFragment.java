@@ -20,8 +20,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
+import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 import org.liberty.android.fantastischmemo.utils.ShareUtil;
 
@@ -41,6 +43,10 @@ public class OpenActionsFragment extends DialogFragment {
 
     private ShareUtil shareUtil;
 
+    private AMPrefUtil amPrefUtil;
+
+    private AMFileUtil amFileUtil;
+
     private String dbPath;
 
     private View studyItem;
@@ -57,6 +63,8 @@ public class OpenActionsFragment extends DialogFragment {
         super.onAttach(activity);
         mActivity = (AMActivity)activity;
         shareUtil = new ShareUtil(activity);
+        amPrefUtil = new AMPrefUtil(activity);
+        amFileUtil = new AMFileUtil(activity);
     }
     @Override
     public void onCreate(Bundle bundle) {
@@ -113,6 +121,8 @@ public class OpenActionsFragment extends DialogFragment {
                 Intent myIntent = new Intent();
                 myIntent.setClass(mActivity, PreviewEditActivity.class);
                 myIntent.putExtra(PreviewEditActivity.EXTRA_DBPATH, dbPath);
+                int startId = amPrefUtil.getSavedId(AMPrefKeys.PREVIEW_EDIT_START_ID_PREFIX, dbPath, 1);
+                myIntent.putExtra(PreviewEditActivity.EXTRA_CARD_ID, startId);
                 startActivity(myIntent);
                 rlu.addToRecentList(dbPath);
             }
@@ -159,7 +169,7 @@ public class OpenActionsFragment extends DialogFragment {
                     .setPositiveButton(getString(R.string.delete_text), new DialogInterface.OnClickListener(){
                         @Override
                         public void onClick(DialogInterface dialog, int which ){
-                            AMFileUtil.deleteDbSafe(dbPath);
+                            amFileUtil.deleteDbSafe(dbPath);
                             rlu.deleteFromRecentList(dbPath);
                             /* Refresh the list */
                             mActivity.restartActivity();

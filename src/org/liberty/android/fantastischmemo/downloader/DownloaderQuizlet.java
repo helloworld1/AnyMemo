@@ -22,7 +22,10 @@ package org.liberty.android.fantastischmemo.downloader;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.mycommons.io.FileUtils;
@@ -42,6 +45,7 @@ import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -78,8 +82,14 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
     /* This will change after first retriving list */
     private int totalPages = 1;
 
+    private AMFileUtil amFileUtil;
+
+    private DownloaderUtils downloaderUtils;
+
     @Override
     protected void initialRetrieve(){
+        amFileUtil = new AMFileUtil(this);
+        downloaderUtils = new DownloaderUtils(this);
         mHandler = new Handler();
         dlAdapter = new DownloadListAdapter(this, R.layout.filebrowser_item);
         listView = (ListView)findViewById(R.id.file_list);
@@ -197,7 +207,7 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
         Log.i(TAG, "Url: " + url);
         url += "&page=" + currentPage;
 
-        String jsonString = DownloaderUtils.downloadJSONString(url);
+        String jsonString = downloaderUtils.downloadJSONString(url);
         Log.v(TAG, "JSON String: " + jsonString);
 
         // The array that stores the result
@@ -216,9 +226,16 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
 
 
             String address = String.format(QUIZLET_API_GET, cardId);
+            String description = new DescriptionBuilder(this)
+                .setCardCount(jsonItem.getInt("term_count"))
+                .setCreationDateUnixTime(jsonItem.getLong("created_date"))
+                .setDescription(jsonItem.getString("description"))
+                .setAuthor(jsonItem.getString("created_by"))
+                .build();
+
             DownloadItem di = new DownloadItem(DownloadItem.ItemType.Database,
                     jsonItem.getString("title"),
-                    "From Quizlet.com", 
+                    description, 
                     address);
             diList.add(di);
         }
@@ -227,7 +244,7 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
 
     private void downloadDatabase(DownloadItem di) throws Exception{
         String address = di.getAddress();
-        String dbJsonString = DownloaderUtils.downloadJSONString(address);
+        String dbJsonString = downloaderUtils.downloadJSONString(address);
         Log.v(TAG, "Download url: " + address);
         JSONObject rootObject = new JSONObject(dbJsonString);
         JSONArray flashcardsArray = rootObject.getJSONArray("terms");
@@ -236,7 +253,7 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
         List<Card> cardList = new ArrayList<Card>(termCount);
 
         // handle image
-        String dbname = DownloaderUtils.validateDBName(di.getTitle()) + ".db";
+        String dbname = downloaderUtils.validateDBName(di.getTitle()) + ".db";
         String imagePath = AMEnv.DEFAULT_IMAGE_PATH + dbname + "/";
         if (hasImage) {
             FileUtils.forceMkdir(new File(imagePath));
@@ -254,7 +271,7 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
                     JSONObject imageItem = jsonItem.getJSONObject("image");
                     String imageUrl = imageItem.getString("url");
                     String downloadFilename = AMFileUtil.getFilenameFromPath(imageUrl);
-                    DownloaderUtils.downloadFile(imageUrl, imagePath + downloadFilename);
+                    downloaderUtils.downloadFile(imageUrl, imagePath + downloadFilename);
                     answer += "<br /><img src=\"" + downloadFilename + "\"/>";
                 }
             } catch (Exception e) {
@@ -272,7 +289,7 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
         /* Make a valid dbname from the title */
         String dbpath = AMEnv.DEFAULT_ROOT_PATH;
         String fullpath = dbpath + dbname;
-        AMFileUtil.deleteFileWithBackup(fullpath);
+        amFileUtil.deleteFileWithBackup(fullpath);
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(DownloaderQuizlet.this, fullpath);
         try {
             CardDao cardDao = helper.getCardDao();
@@ -309,5 +326,58 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
+    }
+
+    private static class DescriptionBuilder {
+
+        private Context context;
+
+        private String author = "";
+
+        private String creationDateString = "";
+
+        private int cardCount = 0;
+
+        private String description = "";
+
+        public DescriptionBuilder(Context context) {
+            this.context = context;
+        }
+
+        public DescriptionBuilder setAuthor(String author) {
+            this.author = author;
+            return this;
+        }
+
+        public DescriptionBuilder setCreationDateUnixTime(long creationDate) {
+            Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            this.creationDateString = formatter.format(new Date(creationDate * 1000L));
+            return this;
+        }
+
+        public DescriptionBuilder setCardCount(int cardCount) {
+            this.cardCount = cardCount;
+            return this;
+        }
+
+        public DescriptionBuilder setDescription(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public String build() {
+            StringBuilder sb = new StringBuilder();
+            sb.append("<br />");
+            sb.append(context.getString(R.string.author_text) + ": " + author + "<br />");
+
+
+            sb.append(context.getString(R.string.creation_date_text) + ": " + creationDateString + "<br />");
+            sb.append(context.getString(R.string.card_count_text) + ": " + cardCount + "<br /><br />");
+            sb.append(description);
+
+            return sb.toString();
+
+        }
+
     }
 }
