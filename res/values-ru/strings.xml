@@ -440,4 +440,7 @@
     <string name="center_right_text">Справа по центру</string>
     <string name="import_mnemosyne2_cards_text">Импорт Mnemosyne XML2</string>
     <string name="export_mnemosyne2_cards_text">Экспорт Mnemosyne XML2</string>
+    <string name="author_text">Автор</string>
+    <string name="creation_date_text">Дата создания</string>
+    <string name="card_count_text">Счёт карт</string>
 </resources>
