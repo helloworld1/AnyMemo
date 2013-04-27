@@ -38,26 +38,29 @@ public class AMFileUtil {
 
     private Context mContext;
 
+    private AMPrefUtil amPrefUtil;
+
     public AMFileUtil(Context context) {
         mContext = context;
+        amPrefUtil = new AMPrefUtil(mContext);
     }
 
-	public static void copyFile(String source, String dest) throws IOException{
+    public static void copyFile(String source, String dest) throws IOException{
         File sourceFile = new File(source);
         File destFile = new File(dest);
-		
+        
         destFile.createNewFile();
-		InputStream in = new FileInputStream(sourceFile);
-		OutputStream out = new FileOutputStream(destFile);
-		
-		byte[] buf = new byte[1024];
-		int len;
-		while ((len = in.read(buf)) > 0) {
-			out.write(buf, 0, len);
-		}
-		in.close();
-		out.close();
-	}
+        InputStream in = new FileInputStream(sourceFile);
+        OutputStream out = new FileOutputStream(destFile);
+        
+        byte[] buf = new byte[1024];
+        int len;
+        while ((len = in.read(buf)) > 0) {
+            out.write(buf, 0, len);
+        }
+        in.close();
+        out.close();
+    }
 
     public void deleteDbSafe(String filepath) {
         if (!new File(filepath).exists()) {
@@ -67,7 +70,6 @@ public class AMFileUtil {
 
 
         // Also delete all the preference related to the db file.
-        AMPrefUtil amPrefUtil = new AMPrefUtil(mContext);
         amPrefUtil.removePrefKeys(filepath);
 
         new File(filepath).delete();
@@ -105,5 +107,10 @@ public class AMFileUtil {
                 in.close();
             }
         }
+    }
+
+    // Used For unit tests to inject the dependency.
+    public void setAmPrefUtil(AMPrefUtil amPrefUtil) {
+        this.amPrefUtil = amPrefUtil;
     }
 }
