@@ -25,8 +25,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.liberty.android.fantastischmemo.tts.AnyMemoTTS.OnTextToSpeechCompletedListener;
 
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.util.Log;
 
 public class SpeakWord {
@@ -34,7 +36,13 @@ public class SpeakWord {
     private final List<String> searchPath; 
     private final String[] SUPPORTED_AUDIO_FILE_TYPE = {".3gp", ".ogg", ".wav", ".mp3", ".amr"};
     private final String TAG = "SpeakWord";
-
+    private OnCompletedListener mOnCompletedListener = new OnCompletedListener() {
+        @Override
+        public void onCompleted() {
+            Log.i(TAG, "SpeakWord on completed");
+        }
+    };
+    
     /* Search in all given search path and try to find exact match audio file with name specified in the text*/
     private File searchGivenPath(String cardText){
         // The regex here should match the file types in SUPPORTED_AUDIO_FILE_TYPE
@@ -132,6 +140,14 @@ public class SpeakWord {
             return false;
         }
         
+        mp.setOnCompletionListener(new OnCompletionListener() {
+            
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mOnCompletedListener.onCompleted();
+            }
+        });
+        
         try{
             final FileInputStream fis = new FileInputStream(audioFile);
             new Thread(){
@@ -165,6 +181,9 @@ public class SpeakWord {
     public void stop(){
         if(mp != null){
             try{
+                if (mp.isPlaying()) {
+                    mOnCompletedListener.onCompleted();
+                }
                 mp.reset();
             }
             catch(Exception e){
@@ -185,4 +204,13 @@ public class SpeakWord {
         }
     }
 
+    public void setOnCompletedListener(OnCompletedListener ocl) {
+        this.mOnCompletedListener = ocl;
+    }
+    
+    public interface OnCompletedListener {
+        public void onCompleted();
+    }
+    
+    
 }

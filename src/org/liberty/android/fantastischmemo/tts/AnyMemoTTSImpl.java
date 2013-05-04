@@ -27,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.mycommons.lang3.StringUtils;
+import org.liberty.android.fantastischmemo.tts.SpeakWord.OnCompletedListener;
 
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
@@ -126,9 +127,18 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
         }
     }
 	
-	public void sayText(String s){
+	public void sayText(final String s){
         /*if there is a user defined audio, speak it and return */
-		if(speakWord.speakWord(s)){
+		if (speakWord.speakWord(s)) {
+		    // This enables auto speak for user defined audio files.
+		    speakWord.setOnCompletedListener(new OnCompletedListener() {
+                
+                @Override
+                public void onCompleted() {
+                    onTextToSpeechCompletedListener.onTextToSpeechCompleted(s);
+                }
+            });
+		    
 			return;
 		}
 		
@@ -151,7 +161,7 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
             myTTS.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
                 @Override
                 public void onUtteranceCompleted(String utteranceId) {
-                    onTextToSpeechCompletedListener.onTextToSpeechCompleted(utteranceId);
+                    onTextToSpeechCompletedListener.onTextToSpeechCompleted(s);
                 }
             });
 

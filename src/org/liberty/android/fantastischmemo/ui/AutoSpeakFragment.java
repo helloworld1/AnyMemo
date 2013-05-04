@@ -1,6 +1,7 @@
 package org.liberty.android.fantastischmemo.ui;
 
 
+import org.apache.mycommons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
@@ -46,11 +47,14 @@ public class AutoSpeakFragment extends Fragment {
         
         @Override
         public void onTextToSpeechCompleted(final String text) {
-            
                 Runnable r = new Runnable() {
                     @Override
                     public void run() {
                         if(!isActivityFinished && isPlaying) {
+                            if (!StringUtils.equals(text, previewEditActivity.getCurrentCard().getQuestion())) {
+                                previewEditActivity.speakQuestion(mQuestionListener);
+                                return;
+                            }
                             previewEditActivity.speakAnswer(mAnswerListener);
                         }
                     }
@@ -64,12 +68,17 @@ public class AutoSpeakFragment extends Fragment {
         
         @Override
         public void onTextToSpeechCompleted(final String text) {
-
+            
             Runnable r = new Runnable() {
                 @Override
                 public void run() {
                     
                     if(!isActivityFinished && isPlaying) {
+                        if (!StringUtils.equals(text, previewEditActivity.getCurrentCard().getAnswer())) {
+                            previewEditActivity.speakQuestion(mQuestionListener);
+                            return;
+                        }
+                        Log.i(TAG, "going to the next card");
                         previewEditActivity.gotoNext();
                         previewEditActivity.speakQuestion(mQuestionListener);
                     }
