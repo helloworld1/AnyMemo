@@ -437,4 +437,9 @@
     <string name="share_text">分享</string>
     <string name="center_left_text">左中</string>
     <string name="center_right_text">右中</string>
+    <string name="import_mnemosyne2_cards_text">导入Mnemosyne2 cards</string>
+    <string name="export_mnemosyne2_cards_text">导出Mnemosyne2 cards</string>
+    <string name="author_text">作者</string>
+    <string name="creation_date_text">创建时间</string>
+    <string name="card_count_text">卡片数量</string>
 </resources>
