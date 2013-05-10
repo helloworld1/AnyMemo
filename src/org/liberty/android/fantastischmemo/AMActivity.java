@@ -20,19 +20,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo;
 
-import android.content.pm.ActivityInfo;
-import android.content.SharedPreferences;
-import android.content.Intent;
-
-
-import android.support.v4.app.FragmentActivity;
-
-import android.view.WindowManager;
-import android.preference.PreferenceManager;
-import android.os.Bundle;
-import android.content.res.Configuration;
-import android.view.Window;
 import java.util.Locale;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
+import android.view.Window;
+import android.view.WindowManager;
 
 /*
  * This class is the base class for all screen type
@@ -45,6 +43,10 @@ public abstract class AMActivity extends FragmentActivity{
     @Override
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+
+        // Inject all the dependencies first
+        DependencyInjectionHelper.injectDependencies(this, DependencyInjectionHelper.getInjector(this));
+    
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         if(settings.getBoolean(AMPrefKeys.FULLSCREEN_MODE_KEY, false)) {
             requestWindowFeature(Window.FEATURE_NO_TITLE);

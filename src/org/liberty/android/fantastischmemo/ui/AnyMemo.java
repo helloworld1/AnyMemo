@@ -26,6 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
+import javax.inject.Inject;
+
 import org.apache.mycommons.io.FileUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
@@ -73,9 +75,10 @@ public class AnyMemo extends AMActivity {
     private HorizontalScrollView mHorizontalScrollView;
 
     private SharedPreferences settings;
-
+    @Inject
     private AMUiUtil amUiUtil;
 
+    @Inject
     private AMFileUtil amFileUtil;
 
     @Override
@@ -83,9 +86,6 @@ public class AnyMemo extends AMActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.main_tabs);
-
-        amUiUtil = new AMUiUtil(this);
-        amFileUtil = new AMFileUtil(this);
 
         mTabHost = (TabHost)findViewById(android.R.id.tabhost);
         mHorizontalScrollView = (HorizontalScrollView) findViewById(R.id.horizontal_scroll_view);

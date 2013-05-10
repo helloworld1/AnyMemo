@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2012 Haowen Ning
+Copyright (C) 2013 Haowen Ning
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -17,38 +17,24 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-package org.liberty.android.fantastischmemo.utils;
-
-import javax.inject.Inject;
+package org.liberty.android.fantastischmemo;
 
 import android.content.Context;
-import android.util.TypedValue;
 
-/*
- * Util that is related to user interface.
- */
-public class AMUiUtil {
+import com.google.inject.AbstractModule;
 
-    private Context mContext;
+/* Define the moduled used in Guice dependency injection. */
+public class Modules extends AbstractModule {
 
-    @Inject
-    public AMUiUtil(Context context) {
-        mContext = context;
+    Context context;
+
+    public Modules(Context context) {
+        this.context = context;
     }
 
-    /*
-     * Convert Pixel unit to DP unit.
-     */
-    public int convertPxToDp(int px) {
-        return (int)(px * mContext.getResources().getDisplayMetrics().density);
+    @Override
+    protected void configure() {
+        bind(Context.class).toInstance(context);
     }
-
-    /*
-     * Convert DP to Pixel
-     */
-    public int convertDpToPx(int dp) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                (float) dp, mContext.getResources().getDisplayMetrics());
-    }
-
 }
+
