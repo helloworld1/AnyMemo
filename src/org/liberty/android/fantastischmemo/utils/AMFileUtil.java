@@ -21,11 +21,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.utils;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import javax.inject.Inject;
 
@@ -45,23 +42,6 @@ public class AMFileUtil {
     @Inject
     public AMFileUtil(Context context) {
         mContext = context;
-    }
-
-    public static void copyFile(String source, String dest) throws IOException{
-        File sourceFile = new File(source);
-        File destFile = new File(dest);
-        
-        destFile.createNewFile();
-        InputStream in = new FileInputStream(sourceFile);
-        OutputStream out = new FileOutputStream(destFile);
-        
-        byte[] buf = new byte[1024];
-        int len;
-        while ((len = in.read(buf)) > 0) {
-            out.write(buf, 0, len);
-        }
-        in.close();
-        out.close();
     }
 
     public void deleteDbSafe(String filepath) {
@@ -85,17 +65,8 @@ public class AMFileUtil {
         String ext = FilenameUtils.getExtension(filepath);
         String nameWtihoutExt = FilenameUtils.removeExtension(filepath);
         String backFileName = nameWtihoutExt + ".backup." + ext;
-        copyFile(filepath, backFileName);
+        FileUtils.copyFile(new File(filepath), new File(backFileName));
         deleteDbSafe(filepath);
-    }
-
-    /* Get the file name from the path name */
-    public static String getFilenameFromPath(String path) {
-        return new File(path).getName();
-    }
-
-    public static String getDirectoryFromPath(String path) {
-        return new File(path).getParent();
     }
 
     // Copy a file from asset to the dest file.

@@ -24,6 +24,7 @@ import java.sql.SQLException;
 import java.io.File;
 
 import org.apache.mycommons.io.FileUtils;
+import org.apache.mycommons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
@@ -338,7 +339,7 @@ public class CardEditor extends AMActivity {
                     View focusView = getCurrentFocus();
                     if(focusView == questionEdit || focusView ==answerEdit || focusView == noteEdit){
                         path = data.getStringExtra(FileBrowserActivity.EXTRA_RESULT_PATH);
-                        name = AMFileUtil.getFilenameFromPath(path);
+                        name = FilenameUtils.getName(path);
                         addTextToView((EditText)focusView, "<img src=\"" + name + "\" />");
                         /* Copy the image to correct location */
                         String imageRoot = AMEnv.DEFAULT_IMAGE_PATH;
@@ -362,7 +363,7 @@ public class CardEditor extends AMActivity {
                     View focusView = getCurrentFocus();
                     if(focusView == questionEdit || focusView ==answerEdit || focusView == noteEdit){
                         path = data.getStringExtra(FileBrowserActivity.EXTRA_RESULT_PATH);
-                        name = AMFileUtil.getFilenameFromPath(path);
+                        name = FilenameUtils.getName(path);
                         addTextToView((EditText)focusView, "<audio src=\"" + name + "\" />");
                         /* Copy the image to correct location */
                         String audioRoot = AMEnv.DEFAULT_AUDIO_PATH;
@@ -463,7 +464,7 @@ public class CardEditor extends AMActivity {
             if (extras != null) {
                 currentCardId = extras.getInt(EXTRA_CARD_ID);
                 dbPath = extras.getString(EXTRA_DBPATH);
-                dbName = AMFileUtil.getFilenameFromPath(dbPath);
+                dbName = FilenameUtils.getName(dbPath);
                 isEditNew = extras.getBoolean(EXTRA_IS_EDIT_NEW);
             }
 

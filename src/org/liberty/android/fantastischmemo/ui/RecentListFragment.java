@@ -22,6 +22,7 @@ package org.liberty.android.fantastischmemo.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.mycommons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
@@ -113,7 +114,7 @@ public class RecentListFragment extends Fragment {
                         ri.index = index++;
                         ril.add(ri);
                         ri.dbPath = allPath[i];
-                        ri.dbName = AMFileUtil.getFilenameFromPath(allPath[i]);
+                        ri.dbName = FilenameUtils.getName(allPath[i]);
                         /* In order to add interrupted exception */
                         Thread.sleep(5);
                     }

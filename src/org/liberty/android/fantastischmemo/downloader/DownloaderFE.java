@@ -47,6 +47,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -292,7 +293,7 @@ public class DownloaderFE extends DownloaderBase{
                 questionImageUrl = jsonItem.getString("question_image_url");
             }
             if (StringUtils.isNotEmpty(questionImageUrl)) {
-                String downloadFilename = AMFileUtil.getFilenameFromPath(questionImageUrl);
+                String downloadFilename = Uri.parse(questionImageUrl).getLastPathSegment();
                 downloaderUtils.downloadFile(questionImageUrl, imagePath + "q-" + downloadFilename); 
                 question = question + "<br /><img src=\"" + "q-" + downloadFilename + "\" />";
             }
@@ -302,7 +303,7 @@ public class DownloaderFE extends DownloaderBase{
                 answerImageUrl = jsonItem.getString("answer_image_url");
             }
             if (StringUtils.isNotEmpty(answerImageUrl)) {
-                String downloadFilename = AMFileUtil.getFilenameFromPath(answerImageUrl);
+                String downloadFilename =  Uri.parse(answerImageUrl).getLastPathSegment();
                 downloaderUtils.downloadFile(answerImageUrl, imagePath + "a-" + downloadFilename); 
                 answer = answer + "<br /><img src=\"" + "a-" + downloadFilename + "\" />";
             }
