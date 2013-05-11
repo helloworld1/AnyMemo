@@ -156,7 +156,7 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
 
         if (!myTTS.isSpeaking()) {
             HashMap<String, String> params = new HashMap<String, String>();
-            params.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, s);
+            params.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "id");
             
             myTTS.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
                 @Override
@@ -167,6 +167,8 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
 
             speakLock.lock();
             myTTS.setLanguage(myLocale);
+            
+            Log.i(TAG, "processed_str is \"" + processed_str + "\"");
             myTTS.speak(processed_str, 0, params);
             speakLock.unlock();
         } else {

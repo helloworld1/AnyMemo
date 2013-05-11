@@ -689,6 +689,7 @@ public abstract class QACardActivity extends AMActivity {
             }
 
             questionTTS.sayText(getCurrentCard().getQuestion());
+            Log.i(TAG, "++question is " + getCurrentCard().getQuestion());
             return true;
         }
         return false;
@@ -706,6 +707,7 @@ public abstract class QACardActivity extends AMActivity {
                 answerTTS.setOnTextToSpeechCompletedListener(mListener);
             }
             answerTTS.sayText(getCurrentCard().getAnswer());
+            Log.i(TAG, "++answer is " + getCurrentCard().getAnswer());
             return true;
         }
         return false;

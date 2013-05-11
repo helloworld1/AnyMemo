@@ -51,6 +51,10 @@ public class AutoSpeakFragment extends Fragment {
                     @Override
                     public void run() {
                         if(!isActivityFinished && isPlaying) {
+                            Log.i(TAG, "question callback");
+                            Log.i(TAG, "text is |" + text + "| and question is " + previewEditActivity.getCurrentCard().getQuestion());
+                            // This logic ensures that if we change card when speaking, we want to start from the question 
+                            // for the new card. 
                             if (!StringUtils.equals(text, previewEditActivity.getCurrentCard().getQuestion())) {
                                 previewEditActivity.speakQuestion(mQuestionListener);
                                 return;

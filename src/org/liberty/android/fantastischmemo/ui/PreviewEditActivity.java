@@ -265,12 +265,18 @@ public class PreviewEditActivity extends QACardActivity {
         switch (item.getItemId()) {
             case R.id.menuspeakquestion:
             {
-                return speakQuestion();
+                if (getCurrentCard() != null) {
+                    return speakQuestion();
+                }
+                return true;
             }
 
             case R.id.menuspeakanswer:
             {
-                return speakAnswer();
+                if (getCurrentCard() != null) {
+                    return speakAnswer();
+                }
+                return true;
             }
 
             case R.id.editmenu_settings_id:
@@ -278,12 +284,14 @@ public class PreviewEditActivity extends QACardActivity {
                 Intent myIntent = new Intent(this, SettingsScreen.class);
                 myIntent.putExtra(SettingsScreen.EXTRA_DBPATH, dbPath);
                 startActivityForResult(myIntent, ACTIVITY_SETTINGS);
-                return true;
             }
+                return true;
 
             case R.id.editmenu_delete_id:
             {
-                deleteCurrent();
+                if (getCurrentCard() != null) {
+                    deleteCurrent();
+                }
                 return true;
             }
 
@@ -313,12 +321,16 @@ public class PreviewEditActivity extends QACardActivity {
 
             case R.id.menu_edit_categories:
             {
-                showCategoriesDialog();
+                if (getCurrentCard() != null) {
+                    showCategoriesDialog();
+                }
                 return true;
             }
             case R.id.editmenu_search_id:
             {
-                createSearchOverlay();
+                if (getCurrentCard() != null) {
+                    createSearchOverlay();
+                }
                 return true;
             }
 
@@ -334,22 +346,23 @@ public class PreviewEditActivity extends QACardActivity {
 
             case R.id.menu_auto_speak:
             {
-            	FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            	LinearLayout root = (LinearLayout)findViewById(R.id.root);
-            	FrameLayout fl = new FrameLayout(this);
-            	
-            	AutoSpeakFragment f = new AutoSpeakFragment();
-            	
-            	fl.setId(MAGIC_FRAME_LAYOUT_ID);
-            	f.setAutoSpeakEventHander(f.getAutoSpeakEventHandler());
-            	root.addView(fl);
-            //	Log.e(TAG, String.format("fl id is %d", fl.getId()));
-            	ft.add(fl.getId(), f);
-            	
-            	ft.commit();
-            	return true;
+                if (getCurrentCard() != null) {
+                	FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                	LinearLayout root = (LinearLayout)findViewById(R.id.root);
+                	FrameLayout fl = new FrameLayout(this);
+                	
+                	AutoSpeakFragment f = new AutoSpeakFragment();
+                	
+                	fl.setId(MAGIC_FRAME_LAYOUT_ID);
+                	f.setAutoSpeakEventHander(f.getAutoSpeakEventHandler());
+                	root.addView(fl);
+                //	Log.e(TAG, String.format("fl id is %d", fl.getId()));
+                	ft.add(fl.getId(), f);
+                	
+                	ft.commit();
+                }
+                return true;
             }
-        
         }
 
         return false;
