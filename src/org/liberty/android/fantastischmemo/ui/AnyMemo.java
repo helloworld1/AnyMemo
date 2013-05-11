@@ -75,20 +75,11 @@ public class AnyMemo extends AMActivity {
     private HorizontalScrollView mHorizontalScrollView;
 
     private SharedPreferences settings;
-
+    @Inject
     private AMUiUtil amUiUtil;
 
+    @Inject
     private AMFileUtil amFileUtil;
-
-    @Inject
-    public void setAmUiUtil(AMUiUtil amUiUtil) {
-        this.amUiUtil = amUiUtil;
-    }
-
-    @Inject
-    public void setAmFileUtil(AMFileUtil amFileUtil) {
-        this.amFileUtil = amFileUtil;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -378,12 +369,12 @@ public class AnyMemo extends AMActivity {
     private TabHost.OnTabChangeListener onTabChangeLilstener =
         new OnTabChangeListener() {
 
-            @Override
-            public void onTabChanged(String tabId) {
+			@Override
+			public void onTabChanged(String tabId) {
                 int pos = mTabHost.getCurrentTab();
                 mViewPager.setCurrentItem(pos);
-                
-            }
+				
+			}
         };
 
     private ViewPager.OnPageChangeListener onPageChangeListener = 
@@ -393,13 +384,13 @@ public class AnyMemo extends AMActivity {
                 mTabHost.setCurrentTab(position);
             }
 
-            @Override
-            public void onPageScrollStateChanged(int arg0) {
+			@Override
+			public void onPageScrollStateChanged(int arg0) {
                 // Do nothing
-            }
+			}
 
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+			@Override
+			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 // Scroll the horizontal scroll bar that wrap the tabwidget
                 // so the current tab title can be visible.
                 View tabView = mTabHost.getTabWidget().getChildAt(position);
@@ -409,7 +400,7 @@ public class AnyMemo extends AMActivity {
                 mHorizontalScrollView.scrollTo(scrollPos, 0);
                 mHorizontalScrollView.refreshDrawableState();
 
-            }
+			}
 
         };
 }

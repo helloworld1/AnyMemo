@@ -20,7 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo;
 
-import org.apache.mycommons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 
 import org.liberty.android.fantastischmemo.ui.AnyMemo;
@@ -175,7 +174,7 @@ public class AnyMemoService extends Service{
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
             /* Feed the data from the most recent database */
             dbPath = settings.getString(AMPrefKeys.getRecentPathKey(0), "");
-            dbName = FilenameUtils.getName(dbPath);
+            dbName = AMFileUtil.getFilenameFromPath(dbPath);
 
             AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(AnyMemoService.this, dbPath);
             try {
