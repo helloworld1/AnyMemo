@@ -27,10 +27,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import javax.inject.Inject;
-
 import org.apache.mycommons.io.FileUtils;
 import org.apache.mycommons.io.FilenameUtils;
+import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 
 import android.content.Context;
@@ -39,12 +38,11 @@ public class AMFileUtil {
 
     private Context mContext;
 
-    @Inject
     private AMPrefUtil amPrefUtil;
 
-    @Inject
     public AMFileUtil(Context context) {
         mContext = context;
+        amPrefUtil = new AMPrefUtil(mContext);
     }
 
     public static void copyFile(String source, String dest) throws IOException{

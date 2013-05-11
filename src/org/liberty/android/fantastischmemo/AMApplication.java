@@ -20,19 +20,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo;
 
-import java.lang.reflect.Field;
+import java.io.IOException;
 
-import javax.inject.Inject;
-
-import android.app.Activity;
 import android.app.Application;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.util.Modules;
 
 //import org.acra.ACRA;
 
