@@ -148,7 +148,7 @@ public abstract class QACardActivity extends AMActivity {
         option = new Option(QACardActivity.this);
 
         dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(this, dbPath);
-        dbName = FilenameUtils.getName(dbPath);
+        dbName = AMFileUtil.getFilenameFromPath(dbPath);
 
         dbPath = extras.getString(EXTRA_DBPATH);
         setContentView(R.layout.qa_card_layout);
@@ -594,7 +594,7 @@ public abstract class QACardActivity extends AMActivity {
         @Override
         public Drawable getDrawable(String source) {
             Log.v(TAG, "Source: " + source);
-            String dbName = FilenameUtils.getName(dbPath);
+            String dbName = AMFileUtil.getFilenameFromPath(dbPath);
             try {
                 String[] paths = {
                 /* Relative path */

@@ -48,7 +48,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
@@ -271,7 +270,7 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
                 if (jsonItem.has("image") && !jsonItem.isNull("image") && hasImage) {
                     JSONObject imageItem = jsonItem.getJSONObject("image");
                     String imageUrl = imageItem.getString("url");
-                    String downloadFilename = Uri.parse(imageUrl).getLastPathSegment();
+                    String downloadFilename = AMFileUtil.getFilenameFromPath(imageUrl);
                     downloaderUtils.downloadFile(imageUrl, imagePath + downloadFilename);
                     answer += "<br /><img src=\"" + downloadFilename + "\"/>";
                 }

@@ -21,8 +21,6 @@ package org.liberty.android.fantastischmemo.utils;
 
 import java.util.Map;
 
-import javax.inject.Inject;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -33,7 +31,6 @@ public class AMPrefUtil {
 
     private SharedPreferences.Editor editor;
 
-    @Inject
     public AMPrefUtil(Context context) {
     	settings = PreferenceManager.getDefaultSharedPreferences(context);
         editor = settings.edit();
