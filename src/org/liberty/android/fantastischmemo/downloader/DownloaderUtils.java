@@ -19,21 +19,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
-
 import java.net.URL;
 import java.net.URLConnection;
-
-import java.io.InputStream;
-import java.io.BufferedReader;
-import java.io.BufferedInputStream;
-import java.io.InputStreamReader;
-import java.util.regex.*;
-
-import android.util.Log;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -42,9 +39,22 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
-public class DownloaderUtils{
+import android.content.Context;
+import android.util.Log;
+
+public class DownloaderUtils {
     public static final String TAG = "org.liberty.android.fantastischmemo.downloader.DownloaderUtils";
-    public static String downloadJSONString(String url) throws Exception{
+
+    private Context mContext;
+
+    private AMFileUtil amFileUtil;
+
+    public DownloaderUtils(Context context) {
+        mContext = context;
+        amFileUtil = new AMFileUtil(context);
+    }
+
+    public String downloadJSONString(String url) throws Exception{
         HttpClient httpclient = new DefaultHttpClient();
         HttpGet httpget = new HttpGet(url);
         HttpResponse response;
@@ -70,12 +80,12 @@ public class DownloaderUtils{
         return result;
     }
 
-    public static File downloadFile(String url, String savedPath) throws IOException{
+    public File downloadFile(String url, String savedPath) throws IOException{
         File outFile = new File(savedPath);
         OutputStream out;
 
         // Delete and backup if the file exists
-        AMFileUtil.deleteFileWithBackup(savedPath);
+        amFileUtil.deleteFileWithBackup(savedPath);
         
         // Create the dir if necessary
         File parentDir = outFile.getParentFile();
@@ -100,14 +110,14 @@ public class DownloaderUtils{
         return outFile;
     }
 
-    public static boolean validateEmail(String testString){
+    public boolean validateEmail(String testString){
         Pattern p = Pattern.compile("^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Za-z]{2,4}$");
         Matcher m = p.matcher(testString);
         return m.matches();
     }
 
     /* Return a valid dbname from original name */
-    public static String validateDBName(String orngName){
+    public String validateDBName(String orngName){
         String s1 = orngName.replaceAll("[/:|]", "_");
         return s1;
     }
@@ -115,7 +125,7 @@ public class DownloaderUtils{
     /*
      * Read the HTTPResponse, return the string content
      */
-    public static String readResponse(HttpResponse response) throws IOException {
+    public String readResponse(HttpResponse response) throws IOException {
         HttpEntity ent = response.getEntity();
         if (ent != null) {
             BufferedReader in = new BufferedReader(new InputStreamReader(ent.getContent()), 8192);
@@ -134,7 +144,7 @@ public class DownloaderUtils{
     }
 
     /* https://spreadsheets.google.com/feeds/list/key/worksheetId/private/full/rowId -> rowId */
-    public static String getLastPartFromUrl(final String url){
+    public String getLastPartFromUrl(final String url){
         String id = url.replaceFirst(".*/([^/?]+).*", "$1");
         //if (id.contains("%3A")) {
         //	String[] parts = id.split("%3A");

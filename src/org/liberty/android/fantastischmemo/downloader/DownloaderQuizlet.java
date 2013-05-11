@@ -19,18 +19,23 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader;
 
-import java.util.LinkedList;
-
-import org.liberty.android.fantastischmemo.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
+import org.apache.mycommons.io.FileUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.liberty.android.fantastischmemo.AMEnv;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.CardDao;
-
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
@@ -38,23 +43,21 @@ import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
-
-import android.os.Bundle;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.widget.AbsListView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.util.Log;
-import android.view.View;
+import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
+import android.util.Log;
+import android.view.View;
+import android.widget.AbsListView;
+import android.widget.ListView;
+import android.widget.TextView;
 
 /*
  * Download from FlashcardExchange using its web api
@@ -80,8 +83,14 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
     /* This will change after first retriving list */
     private int totalPages = 1;
 
+    private AMFileUtil amFileUtil;
+
+    private DownloaderUtils downloaderUtils;
+
     @Override
     protected void initialRetrieve(){
+        amFileUtil = new AMFileUtil(this);
+        downloaderUtils = new DownloaderUtils(this);
         mHandler = new Handler();
         dlAdapter = new DownloadListAdapter(this, R.layout.filebrowser_item);
         listView = (ListView)findViewById(R.id.file_list);
@@ -199,7 +208,7 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
         Log.i(TAG, "Url: " + url);
         url += "&page=" + currentPage;
 
-        String jsonString = DownloaderUtils.downloadJSONString(url);
+        String jsonString = downloaderUtils.downloadJSONString(url);
         Log.v(TAG, "JSON String: " + jsonString);
 
         // The array that stores the result
@@ -218,9 +227,16 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
 
 
             String address = String.format(QUIZLET_API_GET, cardId);
+            String description = new DescriptionBuilder(this)
+                .setCardCount(jsonItem.getInt("term_count"))
+                .setCreationDateUnixTime(jsonItem.getLong("created_date"))
+                .setDescription(jsonItem.getString("description"))
+                .setAuthor(jsonItem.getString("created_by"))
+                .build();
+
             DownloadItem di = new DownloadItem(DownloadItem.ItemType.Database,
                     jsonItem.getString("title"),
-                    "From Quizlet.com", 
+                    description, 
                     address);
             diList.add(di);
         }
@@ -229,28 +245,52 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
 
     private void downloadDatabase(DownloadItem di) throws Exception{
         String address = di.getAddress();
-        String dbJsonString = DownloaderUtils.downloadJSONString(address);
+        String dbJsonString = downloaderUtils.downloadJSONString(address);
         Log.v(TAG, "Download url: " + address);
         JSONObject rootObject = new JSONObject(dbJsonString);
         JSONArray flashcardsArray = rootObject.getJSONArray("terms");
-        List<Card> cardList = new LinkedList<Card>();
+        int termCount = rootObject.getInt("term_count");
+        boolean hasImage = rootObject.getBoolean("has_images");
+        List<Card> cardList = new ArrayList<Card>(termCount);
+
+        // handle image
+        String dbname = downloaderUtils.validateDBName(di.getTitle()) + ".db";
+        String imagePath = AMEnv.DEFAULT_IMAGE_PATH + dbname + "/";
+        if (hasImage) {
+            FileUtils.forceMkdir(new File(imagePath));
+        }
+
+
         for(int i = 0; i < flashcardsArray.length(); i++){
             JSONObject jsonItem = flashcardsArray.getJSONObject(i);
             String question = jsonItem.getString("term");
             String answer = jsonItem.getString("definition");
+
+            // Download images, ignore image downloading error.
+            try {
+                if (jsonItem.has("image") && !jsonItem.isNull("image") && hasImage) {
+                    JSONObject imageItem = jsonItem.getJSONObject("image");
+                    String imageUrl = imageItem.getString("url");
+                    String downloadFilename = Uri.parse(imageUrl).getLastPathSegment();
+                    downloaderUtils.downloadFile(imageUrl, imagePath + downloadFilename);
+                    answer += "<br /><img src=\"" + downloadFilename + "\"/>";
+                }
+            } catch (Exception e) {
+                Log.w(TAG, "Error downloading image.", e);
+            }
             Card card = new Card();
             card.setQuestion(question);
             card.setAnswer(answer);
             card.setCategory(new Category());
             card.setLearningData(new LearningData());
             cardList.add(card);
+
         }
         
         /* Make a valid dbname from the title */
-        String dbname = DownloaderUtils.validateDBName(di.getTitle()) + ".db";
         String dbpath = AMEnv.DEFAULT_ROOT_PATH;
         String fullpath = dbpath + dbname;
-        AMFileUtil.deleteFileWithBackup(fullpath);
+        amFileUtil.deleteFileWithBackup(fullpath);
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(DownloaderQuizlet.this, fullpath);
         try {
             CardDao cardDao = helper.getCardDao();
@@ -287,5 +327,58 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
+    }
+
+    private static class DescriptionBuilder {
+
+        private Context context;
+
+        private String author = "";
+
+        private String creationDateString = "";
+
+        private int cardCount = 0;
+
+        private String description = "";
+
+        public DescriptionBuilder(Context context) {
+            this.context = context;
+        }
+
+        public DescriptionBuilder setAuthor(String author) {
+            this.author = author;
+            return this;
+        }
+
+        public DescriptionBuilder setCreationDateUnixTime(long creationDate) {
+            Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            this.creationDateString = formatter.format(new Date(creationDate * 1000L));
+            return this;
+        }
+
+        public DescriptionBuilder setCardCount(int cardCount) {
+            this.cardCount = cardCount;
+            return this;
+        }
+
+        public DescriptionBuilder setDescription(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public String build() {
+            StringBuilder sb = new StringBuilder();
+            sb.append("<br />");
+            sb.append(context.getString(R.string.author_text) + ": " + author + "<br />");
+
+
+            sb.append(context.getString(R.string.creation_date_text) + ": " + creationDateString + "<br />");
+            sb.append(context.getString(R.string.card_count_text) + ": " + cardCount + "<br /><br />");
+            sb.append(description);
+
+            return sb.toString();
+
+        }
+
     }
 }

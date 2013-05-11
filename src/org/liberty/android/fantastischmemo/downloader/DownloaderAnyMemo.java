@@ -311,7 +311,7 @@ public class DownloaderAnyMemo extends DownloaderBase{
                             mProgressDialog.setMessage(getString(R.string.downloader_extract_zip));
                         }
                     });
-                    AMZipUtils.unZipFile(outFile);
+                    AMZipUtils.unZipFile(outFile, new File(AMEnv.DEFAULT_ROOT_PATH));
                     /* Delete the zip file if it is successfully decompressed */
                     outFile.delete();
 

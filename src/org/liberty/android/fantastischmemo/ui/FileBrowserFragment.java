@@ -87,6 +87,8 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
     private SharedPreferences settings;
     private SharedPreferences.Editor editor;
 
+    private AMFileUtil amFileUtil;
+
     public void setOnFileClickListener(OnFileClickListener listener) {
         this.onFileClickListener = listener;
     }
@@ -97,6 +99,7 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
         mActivity = (AMActivity)activity;
         settings = PreferenceManager.getDefaultSharedPreferences(mActivity);
         editor = settings.edit();
+        amFileUtil = new AMFileUtil(mActivity);
     }
 
 
@@ -299,7 +302,7 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
                                             .setPositiveButton(getString(R.string.delete_text), new DialogInterface.OnClickListener(){
                                                 @Override
                                                 public void onClick(DialogInterface dialog, int which ){
-                                                    AMFileUtil.deleteDbSafe(clickedFile.getAbsolutePath());
+                                                    amFileUtil.deleteDbSafe(clickedFile.getAbsolutePath());
                                                     File dir = new File(clickedFile.getParent());
                                                     Log.v(TAG, "DIR: " + dir.toString());
                                                     browseTo(dir);
@@ -345,7 +348,7 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
                                                 if(!value.equals(clickedFile.getAbsolutePath())){
                                                     try {
                                                         FileUtils.copyFile(clickedFile, new File(value));
-                                                        AMFileUtil.deleteDbSafe(clickedFile.getAbsolutePath());
+                                                        amFileUtil.deleteDbSafe(clickedFile.getAbsolutePath());
                                                         RecentListUtil rlu = new RecentListUtil(mActivity);
                                                         rlu.deleteFromRecentList(clickedFile.getAbsolutePath());
 

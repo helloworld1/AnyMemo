@@ -27,6 +27,7 @@ public abstract class AbstractConverterTest extends AndroidTestCase {
 
     protected abstract void verify(String destFilePath) throws Exception;
 
+    @Override
     public void setUp() throws Exception {
         // Reflect out the test context
         Method getTestContext = ServiceTestCase.class.getMethod("getTestContext");
@@ -51,9 +52,8 @@ public abstract class AbstractConverterTest extends AndroidTestCase {
         verify(destFilePath);
     }
 
-    public void testDown() {
-        System.out.println(srcFilePath);
-        System.out.println(destFilePath);
+    @Override
+    public void tearDown() {
         (new File(srcFilePath)).delete();
         (new File(destFilePath)).delete();
     }

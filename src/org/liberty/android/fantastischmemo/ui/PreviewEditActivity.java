@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 import org.apache.mycommons.lang3.math.NumberUtils;
+import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
@@ -35,6 +36,7 @@ import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
+import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
 import org.liberty.android.fantastischmemo.utils.ShareUtil;
 
 import android.app.Activity;
@@ -99,9 +101,10 @@ public class PreviewEditActivity extends QACardActivity {
     private View searchPrevButton;
 
     private Setting setting;
-    private Option option;
 
     private ShareUtil shareUtil;
+
+    private AMPrefUtil amPrefUtil;
     
     private GestureDetector gestureDetector;
 
@@ -142,9 +145,9 @@ public class PreviewEditActivity extends QACardActivity {
         categoryDao = getDbOpenHelper().getCategoryDao();
         settingDao = getDbOpenHelper().getSettingDao();
         setting = settingDao.queryForId(1);
-        option = new Option(PreviewEditActivity.this);
 
         shareUtil = new ShareUtil(this);
+        amPrefUtil = new AMPrefUtil(this);
 
         // If category is set, it will override the card id.
         if (activeCategoryId != -1) {
@@ -186,6 +189,16 @@ public class PreviewEditActivity extends QACardActivity {
         if(setting.getCardStyle() != Setting.CardStyle.DOUBLE_SIDED){
             gestureDetector= new GestureDetector(PreviewEditActivity.this, gestureListener);
         }
+    }
+
+    // Save the card id in onPause
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (getCurrentCard() != null) {
+            amPrefUtil.setSavedId(AMPrefKeys.PREVIEW_EDIT_START_ID_PREFIX, dbPath, getCurrentCard().getId());
+        }
+
     }
 
     @Override

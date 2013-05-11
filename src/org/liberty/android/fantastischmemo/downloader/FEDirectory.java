@@ -38,8 +38,11 @@ public class FEDirectory extends DownloaderBase{
     private static final String FE_API_KEY = "anymemo_android";
 
     private static final String FE_API_DIRECTORY = "http://api.flashcardexchange.com/v1/get_directory?api_key=" + FE_API_KEY;
+
+    private DownloaderUtils downloaderUtils;
     @Override
     protected void initialRetrieve(){
+        downloaderUtils = new DownloaderUtils(this);
         dlAdapter = new DownloadListAdapter(this, R.layout.filebrowser_item);
         ListView listView = (ListView)findViewById(R.id.file_list);
         listView.setAdapter(dlAdapter);
@@ -83,7 +86,7 @@ public class FEDirectory extends DownloaderBase{
     private List<DownloadItem> retrieveList() throws Exception{
         List<DownloadItem> diList = new ArrayList<DownloadItem>();
         String url = FE_API_DIRECTORY;
-        String jsonString = DownloaderUtils.downloadJSONString(url);
+        String jsonString = downloaderUtils.downloadJSONString(url);
         JSONObject jsonObject = new JSONObject(jsonString);
         String status =  jsonObject.getString("response_type");
         Log.v(TAG, "JSON String: " + jsonString);

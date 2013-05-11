@@ -50,7 +50,8 @@ public class AnyMemoDBOpenHelperManager {
             String dbpath = FilenameUtils.normalize(helper.getDbPath());
 
             if (!helpers.containsKey(dbpath)) {
-                throw new RuntimeException("Release a wrong db path or release an already been released helper!");
+                Log.w(TAG, "Release a wrong db path or release an already been released helper!");
+                return;
             }
 
             Log.i(TAG, "Release AnyMemoDBOpenHelper: " + dbpath + " Ref count: " + refCounts.get(dbpath)); 

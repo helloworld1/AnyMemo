@@ -26,6 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
+import javax.inject.Inject;
+
 import org.apache.mycommons.io.FileUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
@@ -78,14 +80,21 @@ public class AnyMemo extends AMActivity {
 
     private AMFileUtil amFileUtil;
 
+    @Inject
+    public void setAmUiUtil(AMUiUtil amUiUtil) {
+        this.amUiUtil = amUiUtil;
+    }
+
+    @Inject
+    public void setAmFileUtil(AMFileUtil amFileUtil) {
+        this.amFileUtil = amFileUtil;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.main_tabs);
-
-        amUiUtil = new AMUiUtil(this);
-        amFileUtil = new AMFileUtil(this);
 
         mTabHost = (TabHost)findViewById(android.R.id.tabhost);
         mHorizontalScrollView = (HorizontalScrollView) findViewById(R.id.horizontal_scroll_view);
@@ -369,12 +378,12 @@ public class AnyMemo extends AMActivity {
     private TabHost.OnTabChangeListener onTabChangeLilstener =
         new OnTabChangeListener() {
 
-			@Override
-			public void onTabChanged(String tabId) {
+            @Override
+            public void onTabChanged(String tabId) {
                 int pos = mTabHost.getCurrentTab();
                 mViewPager.setCurrentItem(pos);
-				
-			}
+                
+            }
         };
 
     private ViewPager.OnPageChangeListener onPageChangeListener = 
@@ -384,13 +393,13 @@ public class AnyMemo extends AMActivity {
                 mTabHost.setCurrentTab(position);
             }
 
-			@Override
-			public void onPageScrollStateChanged(int arg0) {
+            @Override
+            public void onPageScrollStateChanged(int arg0) {
                 // Do nothing
-			}
+            }
 
-			@Override
-			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 // Scroll the horizontal scroll bar that wrap the tabwidget
                 // so the current tab title can be visible.
                 View tabView = mTabHost.getTabWidget().getChildAt(position);
@@ -400,7 +409,7 @@ public class AnyMemo extends AMActivity {
                 mHorizontalScrollView.scrollTo(scrollPos, 0);
                 mHorizontalScrollView.refreshDrawableState();
 
-			}
+            }
 
         };
 }

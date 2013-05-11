@@ -52,10 +52,13 @@ public class DropboxDownloadHelper {
 
     private final RecentListUtil recentListUtil;
 
+    private final AMFileUtil amFileUtil; 
+
     public DropboxDownloadHelper(Context context, String authToken, String authTokenSecret) {
         this.authToken = authToken;
         this.authTokenSecret = authTokenSecret;
         this.recentListUtil = new RecentListUtil(context);
+        this.amFileUtil = new AMFileUtil(context);
     }
 
     // Fetch the list of db files
@@ -95,7 +98,7 @@ public class DropboxDownloadHelper {
 
         // Back up and delete db if it exists.
         if (new File(saveDBPath).exists()) {
-            AMFileUtil.deleteFileWithBackup(saveDBPath);
+            amFileUtil.deleteFileWithBackup(saveDBPath);
         }
 
         // Make sure the space is translated correctly.

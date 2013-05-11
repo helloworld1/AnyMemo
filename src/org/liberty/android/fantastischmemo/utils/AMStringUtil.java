@@ -111,4 +111,14 @@ public class AMStringUtil {
         return res;
     }
 
+    /* Escape the text in XML */
+    public static String encodeXML(final String text) {
+        String outText = text.replaceAll("&", "&amp;");
+        outText = outText.replaceAll("<", "&lt;");
+        outText = outText.replaceAll(">", "&gt;");
+        outText = outText.replaceAll("'", "&apos;");
+        outText = outText.replaceAll("\"", "&quot;");
+        return outText;
+    }
+
 }

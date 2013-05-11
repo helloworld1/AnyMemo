@@ -42,6 +42,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.util.Log;
+
+import org.apache.mycommons.io.FilenameUtils;
 import org.json.JSONObject;
 
 import oauth.signpost.OAuthConsumer;
@@ -59,9 +61,12 @@ public class FEUpload extends AMActivity{
     private String oauthTokenSecret = null;
     private OAuthConsumer consumer;
 
+    private DownloaderUtils downloaderUtils;
+
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
+        downloaderUtils = new DownloaderUtils(this);
         if(extras != null){
             oauthToken = extras.getString("oauth_token");
             oauthTokenSecret = extras.getString("oauth_token_secret");
@@ -107,7 +112,7 @@ public class FEUpload extends AMActivity{
     }
 
     private void uploadDB(String dbPath) throws Exception{
-        final String dbName = AMFileUtil.getFilenameFromPath(dbPath);
+        final String dbName = FilenameUtils.getName(dbPath);
         int cardId = addCardSet(dbName, "Import from AnyMemo");
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(this, dbPath);
         CardDao cardDao = helper.getCardDao();
@@ -126,7 +131,7 @@ public class FEUpload extends AMActivity{
         String urlDescription = URLEncoder.encode(description);
         String url = FE_API_ADD_CARDSET + "&title="+ urlTitle + "&tags=" + urlTitle + "&description=" + urlDescription + "&private=false&oauth_token_secret=" + oauthTokenSecret+ "&oauth_token=" + oauthToken;
         url = consumer.sign(url);
-        String jsonString = DownloaderUtils.downloadJSONString(url);
+        String jsonString = downloaderUtils.downloadJSONString(url);
         Log.v(TAG, "Request url: " + url);
         Log.v(TAG, jsonString);
         JSONObject rootObject = new JSONObject(jsonString);
@@ -145,7 +150,7 @@ public class FEUpload extends AMActivity{
         url = consumer.sign(url);
         Log.v(TAG, "Request url_signed: " + url);
 
-        String jsonString = DownloaderUtils.downloadJSONString(url);
+        String jsonString = downloaderUtils.downloadJSONString(url);
         JSONObject rootObject = new JSONObject(jsonString);
         String status = rootObject.getString("response_type");
         if(!status.equals("ok")){

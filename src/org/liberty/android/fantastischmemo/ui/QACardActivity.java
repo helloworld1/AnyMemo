@@ -28,6 +28,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 import org.amr.arabic.ArabicUtilities;
+import org.apache.mycommons.io.FilenameUtils;
 import org.apache.mycommons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
@@ -147,7 +148,7 @@ public abstract class QACardActivity extends AMActivity {
         option = new Option(QACardActivity.this);
 
         dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(this, dbPath);
-        dbName = AMFileUtil.getFilenameFromPath(dbPath);
+        dbName = FilenameUtils.getName(dbPath);
 
         dbPath = extras.getString(EXTRA_DBPATH);
         setContentView(R.layout.qa_card_layout);
@@ -410,7 +411,11 @@ public abstract class QACardActivity extends AMActivity {
         // Copy the question to clickboard.
         if (option.getCopyClipboard()) {
             ClipboardManager cm = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-            cm.setText(currentCard.getQuestion());
+            // Some Samsung device doesn't have ClipboardManager. So check
+            // the null here to prevent crash.
+            if (cm != null) {
+                cm.setText(currentCard.getQuestion());
+            }
         }
 
         onPostDisplayCard();
@@ -589,7 +594,7 @@ public abstract class QACardActivity extends AMActivity {
         @Override
         public Drawable getDrawable(String source) {
             Log.v(TAG, "Source: " + source);
-            String dbName = AMFileUtil.getFilenameFromPath(dbPath);
+            String dbName = FilenameUtils.getName(dbPath);
             try {
                 String[] paths = {
                 /* Relative path */
@@ -597,7 +602,11 @@ public abstract class QACardActivity extends AMActivity {
                 /* Try the image in /sdcard/anymemo/images/dbname/myimg.png */
                 AMEnv.DEFAULT_IMAGE_PATH + dbName + "/" + source,
                 /* Try the image in /sdcard/anymemo/images/myimg.png */
-                AMEnv.DEFAULT_IMAGE_PATH + source };
+                AMEnv.DEFAULT_IMAGE_PATH + source,
+                /* Just the last part of the name */
+                AMEnv.DEFAULT_IMAGE_PATH + dbName + "/" + FilenameUtils.getName(source),
+                AMEnv.DEFAULT_IMAGE_PATH + FilenameUtils.getName(source)
+                };
                 Bitmap orngBitmap = null;
                 for (String path : paths) {
                     Log.v(TAG, "Try path: " + path);

@@ -7,7 +7,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
 import java.net.URI;
 import java.util.Enumeration;
 import java.util.LinkedList;
@@ -15,53 +14,65 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.mycommons.io.FileUtils;
 import org.apache.mycommons.io.IOUtils;
-
 import org.liberty.android.fantastischmemo.AMEnv;
 
 import android.util.Log;
 
 public class AMZipUtils {
-	private static final int BUFFER_SIZE = 8192;
-	private static final String TAG = "org.liberty.android.fantastischmemo.utils.AMZipUtils";
+    private static final int BUFFER_SIZE = 8192;
+    private static final String TAG = "org.liberty.android.fantastischmemo.utils.AMZipUtils";
 
     // unzipped file is in [external]/anymemo/
-	public static void unZipFile(File file) throws Exception {
-		BufferedOutputStream dest = null;
-		BufferedInputStream ins = null;
-		ZipEntry entry;
+    public static void unZipFile(File file, File outputPath) throws Exception {
+        BufferedOutputStream dest = null;
+        BufferedInputStream ins = null;
+        ZipEntry entry;
 
-		try {
-			ZipFile zipfile = new ZipFile(file);
-			Enumeration<?> e = zipfile.entries();
-			while(e.hasMoreElements()) {
-				entry = (ZipEntry) e.nextElement();
-				Log.d(TAG, "Extracting zip: " + entry);
-				if(entry.isDirectory()){
-					new File(AMEnv.DEFAULT_ROOT_PATH + "/" + entry.getName()).mkdir();
-				} else {
-					ins = new BufferedInputStream
-							(zipfile.getInputStream(entry), BUFFER_SIZE);
-					int count;
-					byte data[] = new byte[BUFFER_SIZE];
-					FileOutputStream fos = new FileOutputStream(AMEnv.DEFAULT_ROOT_PATH + "/" + entry.getName());
-					dest = new BufferedOutputStream(fos, BUFFER_SIZE);
-					while ((count = ins.read(data, 0, BUFFER_SIZE)) != -1) {
-						dest.write(data, 0, count);
-					}
-					dest.flush();
-					dest.close();
-					ins.close();
-				}
-			}
-		} catch(Exception e) {
-			throw new Exception("Exception when extracting zip file: " + file, e);
-		}
-	}
+        try {
+            ZipFile zipfile = new ZipFile(file);
+            Enumeration<?> e = zipfile.entries();
+            while(e.hasMoreElements()) {
+                entry = (ZipEntry) e.nextElement();
+                Log.d(TAG, "Extracting zip: " + entry);
+                if(entry.isDirectory()){
+                    FileUtils.forceMkdir(new File(outputPath.getAbsolutePath() + "/" + entry.getName()));
+                } else {
+                    ins = new BufferedInputStream
+                            (zipfile.getInputStream(entry), BUFFER_SIZE);
+                    int count;
+                    byte data[] = new byte[BUFFER_SIZE];
+
+                    // Make sure the directory is there
+                    File outputFile = new File(outputPath.getAbsolutePath() + "/" + entry.getName());
+                    FileUtils.forceMkdir(new File(outputFile.getParent()));
+
+                    FileOutputStream fos = new FileOutputStream(outputFile);
+                    dest = new BufferedOutputStream(fos, BUFFER_SIZE);
+                    while ((count = ins.read(data, 0, BUFFER_SIZE)) != -1) {
+                        dest.write(data, 0, count);
+                    }
+                    dest.flush();
+                }
+            }
+        } catch (IOException e) {
+            throw new Exception("Exception when extracting zip file: " + file, e);
+        } finally {
+            if (dest != null) {
+                dest.close();
+            }
+
+            if (ins != null) {
+                ins.close();
+            }
+        }
+
+    }
 
     // Zip the db file, the image files in [external]/anymemo/images/[db_name]/
     // and audio files in [external]/anymemo/voice/[db_name]/
-    public static File compressFile(File dbFile, File outZipFile) throws Exception{
+    public static File compressFile(File dbFile, File outZipFile) throws Exception {
         ZipOutputStream zos = null;
         try {
             zos = new ZipOutputStream(new FileOutputStream(outZipFile));
@@ -80,13 +91,15 @@ public class AMZipUtils {
             if (audioDirectory.exists()) {
                 zos.putNextEntry(new ZipEntry("voice/"));
                 zos.putNextEntry(new ZipEntry(audioRelativePath));
-                zipDirectory(imageDirectory, imageRelativePath, zos);
+                zipDirectory(audioDirectory, audioRelativePath, zos);
             }
 
-		} catch(Exception e) {
-			throw new Exception("Exception when compressing zip file: " + dbFile, e);
-		} finally {
-            zos.close();
+        } catch(IOException e) {
+            throw new Exception("Exception when compressing zip file: " + dbFile, e);
+        } finally {
+            if (zos != null) {
+                zos.close();
+            }
         }
         return null;
     }
@@ -103,10 +116,24 @@ public class AMZipUtils {
         }
     }
 
+    // directory: the directoyr to compress
+    // prefixDir: The prefix in ziped file for compressed dir
+    // outputFile, the output zip file
+    public static void zipDirectory(File directory, String prefixDir, File outputFile) throws IOException {
+        ZipOutputStream zos = null;
+        try {
+            zos = new ZipOutputStream(new FileOutputStream(outputFile));
+            zipDirectory(directory, prefixDir, zos);
+        } finally {
+            zos.close();
+        }
+
+    }
+
     // Helper method to compress from ZIP
     // Inspired from: 
     // http://stackoverflow.com/questions/1399126/java-util-zip-recreating-directory-structure
-    // directory: the directoyr to compress
+    // directory: the directory to compress
     // prefixDir: The prefix in ziped file for compressed dir
     // zout: the zip output stream opened in the caller
     private static void zipDirectory(File directory, String prefixDir, ZipOutputStream zout) throws IOException {
@@ -115,6 +142,7 @@ public class AMZipUtils {
         queue.addLast(directory);
         while (!queue.isEmpty()) {
             directory = queue.removeFirst();
+            System.out.println("DIR: " + directory);
             for (File kid : directory.listFiles()) {
                 String name = prefixDir + base.relativize(kid.toURI()).getPath();
                 if (kid.isDirectory()) {

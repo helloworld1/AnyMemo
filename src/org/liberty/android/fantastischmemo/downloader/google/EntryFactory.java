@@ -23,22 +23,16 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
-import java.net.URL;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.net.ssl.HttpsURLConnection;
-
-import org.liberty.android.fantastischmemo.downloader.DownloaderUtils;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
+
+import android.net.Uri;
 
 public class EntryFactory {
     private static SimpleDateFormat ISO8601_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
@@ -83,7 +77,8 @@ public class EntryFactory {
                 }
             } else if(eventType == XmlPullParser.TEXT) {
                 if(entry != null && lastTag.equals("id")) {
-                    entry.setId(DownloaderUtils.getLastPartFromUrl(xpp.getText()));
+                    // Get the last part of the uri, as it is the id.
+                    entry.setId(Uri.parse(xpp.getText()).getLastPathSegment());
                 }
                 if(entry != null && lastTag.equals("title")) {
                     entry.setTitle(xpp.getText());

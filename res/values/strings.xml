@@ -2,7 +2,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     <string name="app_name">AnyMemo</string>
     <string name="app_full_name">AnyMemo Free</string>
-    <string name="app_version">10.0.991</string>
+    <string name="app_version">10.1.991</string>
     <string name="ok_text">OK</string>
     <string name="cancel_text">Cancel</string>
     <string name="yes_text">Yes</string>
@@ -85,7 +85,7 @@
     <string name="open_open_new_db">Open existing database</string>
     <string name="clear_all_pref">Reset all preferences</string>
     <string name="clear_recent_list">Clear recent list</string>
-    <string name="export_xml">Export Mnemosyne XML</string>
+    <string name="export_xml">Export Mnemosyne1 XML</string>
     <string name="add_screen_question">Question</string>
     <string name="add_screen_new">New</string>
     <string name="add_screen_id">ID</string>
@@ -138,7 +138,7 @@
     <string name="import_text">Import</string>
     <string name="export_text">Export</string>
     <string name="clear_filter_text">Clear</string>
-    <string name="import_mnemosyne_xml_text">Import Mnemosyne XML</string>
+    <string name="import_mnemosyne_xml_text">Import Mnemosyne1 XML</string>
     <string name="export_qa_txt">Export Q/A TXT</string>
     <string name="export_tab_txt">Export tab-separated TXT</string>
     <string name="export_csv">Export CSV</string>
@@ -447,5 +447,9 @@
     <string name="auto_speak_card_sleep_interval_text">Interval between each card is %d sec</string>
     <string name="auto_speak_text">Auto Speak</string>
     <string name="auto_speak_setting_dialog">Setting Dialog</string>
-    
+    <string name="import_mnemosyne2_cards_text">Import Mnemosyne2 cards</string>
+    <string name="export_mnemosyne2_cards_text">Export Mnemosyne2 cards</string>
+    <string name="author_text">Author</string>
+    <string name="creation_date_text">Creation date</string>
+    <string name="card_count_text">Card count</string>
 </resources>

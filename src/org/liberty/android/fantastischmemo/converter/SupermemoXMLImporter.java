@@ -99,7 +99,7 @@ public class SupermemoXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
             card.setLearningData(ld);
 
             // Set a default interval, in case of malformed the xml file
-            interval = 1;
+            interval = 0;
 
         }
         characterBuf = new StringBuffer();
@@ -120,6 +120,11 @@ public class SupermemoXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
             if (ld.getLastLearnDate() != null) {
                 // Calculate the next learning date from interval
                 ld.setNextLearnDate(DateUtils.addDays(ld.getLastLearnDate(), interval));
+            }
+
+            // If an old card get interval 0, then we assume the last grade is 0 as failure card.
+            if (interval == 0 && ld.getAcqReps() != 0) {
+                ld.setGrade(0);
             }
 
             cardList.add(card);
@@ -144,13 +149,9 @@ public class SupermemoXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
         }
         if(localName.equals("AFactor")){
             double g = Double.parseDouble(characterBuf.toString());
-            if(g <= 1.5){
-                ld.setGrade(1);
-            }
-            else if(g <= 5.5){
+            if(g <= 5.5) {
                 ld.setGrade(2);
-            }
-            else{
+            } else {
                 ld.setGrade(3);
             }
         }

@@ -87,34 +87,34 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
             Log.e(TAG, "Can't initialize");
         }
     }
-        
+
     public AnyMemoTTSImpl(Context context, String locale, List<String> audioSearchPath){
         // We must make sure the constructor happens before
         // the onInit callback. Unfortunately, this is not
         // always true. We have to use lock to ensure the happen before.
         // Or a null pointer for myTTS is waiting
-                initLock.lock();
-		myLocale = getLocaleForTTS(locale);
-		myTTS = new TextToSpeech(context, this);
-		
-		speakWord = new SpeakWord(audioSearchPath);
-                initLock.unlock();
-	}
-	
-	public void shutdown(){
+    
+        initLock.lock();
+        myLocale = getLocaleForTTS(locale);
+        myTTS = new TextToSpeech(context, this);
+        speakWord = new SpeakWord(audioSearchPath);
+        initLock.unlock();
+    }
+    
+    public void shutdown(){
         if(speakWord != null){
-			speakWord.shutdown();
+            speakWord.shutdown();
         }
-		
+        
         myTTS.shutdown();
-	}
+    }
 
     public void stop(){
         if(speakWord != null){
             speakWord.stop();
             return;
         }
-    	
+        
         myTTS.stop();
         // We wait until the tts is not speaking.
         // This is because top is asynchronized call
@@ -144,15 +144,15 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
 		
         /*otherwise, speak the content*/
         Log.v(TAG, "say it!");
-		// Replace break with period
-		String processed_str = s.replaceAll("\\<br\\>", ". " );
-		// Remove HTML
-		processed_str = processed_str.replaceAll("\\<.*?>", "");
-		// Remove () [] and their content
-		processed_str = processed_str.replaceAll("\\[.*?\\]", "");
+        // Replace break with period
+        String processed_str = s.replaceAll("\\<br\\>", ". " );
+        // Remove HTML
+        processed_str = processed_str.replaceAll("\\<.*?>", "");
+        // Remove () [] and their content
+        processed_str = processed_str.replaceAll("\\[.*?\\]", "");
         // Remove the XML special character
-		processed_str = processed_str.replaceAll("\\[.*?\\]", "");
-		processed_str = processed_str.replaceAll("&.*?;", "");
+        processed_str = processed_str.replaceAll("\\[.*?\\]", "");
+        processed_str = processed_str.replaceAll("&.*?;", "");
 
         if (!myTTS.isSpeaking()) {
             HashMap<String, String> params = new HashMap<String, String>();
@@ -172,8 +172,8 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
         } else {
             stop();
         }
-		
-	}
+        
+    }
 
     private Locale getLocaleForTTS(String loc) {
         if (StringUtils.isEmpty(loc)) {

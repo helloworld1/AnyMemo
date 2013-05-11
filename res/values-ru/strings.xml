@@ -82,7 +82,7 @@
     <string name="open_open_new_db">Открыть существующие базы</string>
     <string name="clear_all_pref">Сбросить установки</string>
     <string name="clear_recent_list">Очистить список недавних</string>
-    <string name="export_xml">Эспорт Mnemosyne XML</string>
+    <string name="export_xml">Эспорт Mnemosyne XML1</string>
     <string name="add_screen_question">Вопрос</string>
     <string name="add_screen_new">Нов</string>
     <string name="add_screen_id">ID</string>
@@ -438,4 +438,9 @@
     <string name="share_text">Передать</string>
     <string name="center_left_text">Слева по центру</string>
     <string name="center_right_text">Справа по центру</string>
+    <string name="import_mnemosyne2_cards_text">Импорт Mnemosyne XML2</string>
+    <string name="export_mnemosyne2_cards_text">Экспорт Mnemosyne XML2</string>
+    <string name="author_text">Автор</string>
+    <string name="creation_date_text">Дата создания</string>
+    <string name="card_count_text">Счёт карт</string>
 </resources>

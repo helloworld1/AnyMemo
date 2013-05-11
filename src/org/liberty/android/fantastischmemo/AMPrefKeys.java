@@ -129,9 +129,11 @@ public class AMPrefKeys {
     public static final String AUTO_SPEAK_CARD_SLEEP_INTERVAL_KEY = "auto_speak_card_sleep_interval";
     
     // QA Card Activity
-    public static final String CARD_GESTURE_ENABLED= "card_gesture_enabled";
+    public static final String CARD_GESTURE_ENABLED = "card_gesture_enabled";
 
     // The prefix for oauth access token preference
     public static final String OAUTH_ACCESS_TOKEN_KEY_PREFIX = "oauth_access_token_";
 
+    // The prefix for remembered id for preview edit mode.
+    public static final String PREVIEW_EDIT_START_ID_PREFIX = "preview_edit_start_id_prefix";
 }

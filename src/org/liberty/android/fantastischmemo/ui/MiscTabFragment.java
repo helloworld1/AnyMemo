@@ -23,6 +23,8 @@ import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.converter.CSVExporter;
 import org.liberty.android.fantastischmemo.converter.CSVImporter;
+import org.liberty.android.fantastischmemo.converter.Mnemosyne2CardsExporter;
+import org.liberty.android.fantastischmemo.converter.Mnemosyne2CardsImporter;
 import org.liberty.android.fantastischmemo.converter.MnemosyneXMLExporter;
 import org.liberty.android.fantastischmemo.converter.MnemosyneXMLImporter;
 import org.liberty.android.fantastischmemo.converter.QATxtExporter;
@@ -67,11 +69,13 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
     private View importTabButton;
     private View importQAButton;
     private View importSupermemo2008Button;
+    private View importMnemosyne2CardsButton;
     private View exportMnemosyneButton;
     private View exportCSVButton;
     private View exportTabButton;
     private View exportQAButton;
     private View exportZipButton;
+    private View exportMnemosyne2CardsButton;
 
     private View defaultSettingsButton;
     private View mergeButton;
@@ -112,6 +116,8 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
         importQAButton.setOnClickListener(this);
         importSupermemo2008Button = v.findViewById(R.id.import_supermemo_2008);
         importSupermemo2008Button.setOnClickListener(this);
+        importMnemosyne2CardsButton= v.findViewById(R.id.import_mnemosyne2_cards);
+        importMnemosyne2CardsButton.setOnClickListener(this);
         exportMnemosyneButton = v.findViewById(R.id.export_mnemosyne);
         exportMnemosyneButton.setOnClickListener(this);
         exportCSVButton = v.findViewById(R.id.export_csv);
@@ -122,6 +128,8 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
         exportQAButton.setOnClickListener(this);
         exportZipButton = v.findViewById(R.id.export_zip);
         exportZipButton.setOnClickListener(this);
+        exportMnemosyne2CardsButton = v.findViewById(R.id.export_mnemosyne2_cards);
+        exportMnemosyne2CardsButton.setOnClickListener(this);
 
         defaultSettingsButton = v.findViewById(R.id.misc_default_settings);
         defaultSettingsButton.setOnClickListener(this);
@@ -218,6 +226,14 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportSuperMemo2008");
         }
+        if(v == importMnemosyne2CardsButton) {
+            DialogFragment df = new ConverterFragment();
+            Bundle b = new Bundle();
+            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, new Mnemosyne2CardsImporter(mActivity));
+            b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".cards");
+            df.setArguments(b);
+            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportMnemosyne2Cards");
+        }
         if(v == exportMnemosyneButton){
             DialogFragment df = new ConverterFragment();
             Bundle b = new Bundle();
@@ -257,6 +273,14 @@ public class MiscTabFragment extends Fragment implements View.OnClickListener {
             b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".db");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ExportZip");
+        }
+        if(v == exportMnemosyne2CardsButton) {
+            DialogFragment df = new ConverterFragment();
+            Bundle b = new Bundle();
+            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, new Mnemosyne2CardsExporter(mActivity));
+            b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".db");
+            df.setArguments(b);
+            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ExportMnemosyne2Cards");
         }
 
         if (v == defaultSettingsButton) {

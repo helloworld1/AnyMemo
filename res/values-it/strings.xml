@@ -84,7 +84,7 @@
     <string name="open_open_new_db">Apri il database esistente</string>
     <string name="clear_all_pref">Ripristina tutte le preferenze</string>
     <string name="clear_recent_list">Pulisci la lista dei DB recenti</string>
-    <string name="export_xml">Esporta Mnemosyne XML</string>
+    <string name="export_xml">Esporta Mnemosyne1 XML</string>
     <string name="add_screen_question">Domanda</string>
     <string name="add_screen_new">Nuova</string>
     <string name="add_screen_id">ID</string>
@@ -442,5 +442,9 @@
     <string name="share_text">Condividi</string>
     <string name="center_left_text">Centra allineando a sinistra</string>
     <string name="center_right_text">Centra allineando a destra</string>
-
+    <string name="import_mnemosyne2_cards_text">Importa schede Mnemosyne2</string>
+    <string name="export_mnemosyne2_cards_text">Esporta schede Mnemosyne2</string>
+    <string name="author_text">Autore</string>
+    <string name="creation_date_text">Data di creazione</string>
+    <string name="card_count_text">Numero scheda</string>
 </resources>

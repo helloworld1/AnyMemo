@@ -69,15 +69,6 @@ public class Option {
         return SpeakingType.parse(settings.getString(AMPrefKeys.SPEECH_CONTROL_KEY, "TAP"));
 	}
 
-    public int getSavedId(String prefix, String key, int defaultValue) {
-        return settings.getInt(prefix + key, defaultValue);
-    }
-
-    public void setSavedId(String prefix, String key, int value) {
-        editor.putInt(prefix + key, value);
-        editor.commit();
-    }
-    
     public int getRecentCount() {
     	return settings.getInt(AMPrefKeys.RECENT_COUNT_KEY, 7);
     }

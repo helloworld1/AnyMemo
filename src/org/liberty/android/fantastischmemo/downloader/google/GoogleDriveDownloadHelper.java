@@ -22,8 +22,6 @@ package org.liberty.android.fantastischmemo.downloader.google;
 import java.util.List;
 
 import org.liberty.android.fantastischmemo.AMEnv;
-
-import org.liberty.android.fantastischmemo.downloader.google.Cells;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
 import android.content.Context;
@@ -33,9 +31,12 @@ public class GoogleDriveDownloadHelper {
 
     private final String authToken;
 
+    private AMFileUtil amFileUtil;
+
     public GoogleDriveDownloadHelper(Context context, String authToken) {
         this.authToken = authToken;
         mContext = context;
+        amFileUtil = new AMFileUtil(context);
     }
 
     public List<Spreadsheet> getListSpreadsheets() throws Exception {
@@ -71,7 +72,7 @@ public class GoogleDriveDownloadHelper {
             title += ".db";
         }
         String saveDBPath= AMEnv.DEFAULT_ROOT_PATH + "/" + title;
-        AMFileUtil.deleteFileWithBackup(saveDBPath);
+        amFileUtil.deleteFileWithBackup(saveDBPath);
         converter.convertCellsToDb(cardCells, learningDataCells, saveDBPath);
         return saveDBPath;
     }
