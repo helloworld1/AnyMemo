@@ -51,8 +51,6 @@ public class AutoSpeakFragment extends Fragment {
                     @Override
                     public void run() {
                         if(!isActivityFinished && isPlaying) {
-                            Log.i(TAG, "question callback");
-                            Log.i(TAG, "text is |" + text + "| and question is " + previewEditActivity.getCurrentCard().getQuestion());
                             // This logic ensures that if we change card when speaking, we want to start from the question 
                             // for the new card. 
                             if (!StringUtils.equals(text, previewEditActivity.getCurrentCard().getQuestion())) {
@@ -76,7 +74,8 @@ public class AutoSpeakFragment extends Fragment {
             Runnable r = new Runnable() {
                 @Override
                 public void run() {
-                    
+                    // This logic ensures that if we change card when speaking, we want to start from the question 
+                    // for the new card. 
                     if(!isActivityFinished && isPlaying) {
                         if (!StringUtils.equals(text, previewEditActivity.getCurrentCard().getAnswer())) {
                             previewEditActivity.speakQuestion(mQuestionListener);
@@ -181,7 +180,7 @@ public class AutoSpeakFragment extends Fragment {
         isPlaying = !isPlaying;
         playButton.setSelected(false);
         AutoSpeakSettingDialogFragment a = new AutoSpeakSettingDialogFragment();
-        a.show(getActivity().getSupportFragmentManager(), "title");
+        a.show(getActivity().getSupportFragmentManager(), TAG);
     }
     
     private void dismissFragment() {

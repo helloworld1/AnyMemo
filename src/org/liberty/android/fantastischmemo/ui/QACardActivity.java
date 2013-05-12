@@ -75,7 +75,6 @@ import android.text.Html.TagHandler;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.Display;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -125,15 +124,6 @@ public abstract class QACardActivity extends AMActivity {
 
     private AnyMemoTTS questionTTS = null;
     private AnyMemoTTS answerTTS = null;
-
-    private AnyMemoTTS.OnTextToSpeechCompletedListener mTTSListener = new AnyMemoTTS.OnTextToSpeechCompletedListener() {
-        
-        @Override
-        public void onTextToSpeechCompleted(String text) {
-            // TODO Auto-generated method stub
-            
-        }
-    };
     
     private GestureLibrary gestureLibrary;
 
@@ -689,7 +679,6 @@ public abstract class QACardActivity extends AMActivity {
             }
 
             questionTTS.sayText(getCurrentCard().getQuestion());
-            Log.i(TAG, "++question is " + getCurrentCard().getQuestion());
             return true;
         }
         return false;
@@ -707,7 +696,6 @@ public abstract class QACardActivity extends AMActivity {
                 answerTTS.setOnTextToSpeechCompletedListener(mListener);
             }
             answerTTS.sayText(getCurrentCard().getAnswer());
-            Log.i(TAG, "++answer is " + getCurrentCard().getAnswer());
             return true;
         }
         return false;

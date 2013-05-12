@@ -43,7 +43,7 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
         @Override
         public void onTextToSpeechCompleted(String text) {
             // Do nothing. 
-            Log.i(TAG, "on finished " + text);
+            Log.i(TAG, "on TextToSpeechCompleted " + text);
         }
     }; 
 	private final Locale myLocale;

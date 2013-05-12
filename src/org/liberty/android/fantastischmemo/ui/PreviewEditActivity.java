@@ -32,7 +32,6 @@ import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
-import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
@@ -107,8 +106,6 @@ public class PreviewEditActivity extends QACardActivity {
     private AMPrefUtil amPrefUtil;
     
     private GestureDetector gestureDetector;
-
-
 
     // The first card to read and display.
     private int startCardId = 1;
