@@ -25,7 +25,8 @@ import java.util.HashMap;
 import org.apache.mycommons.lang3.math.NumberUtils;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.aspect.CheckNull;
+import org.liberty.android.fantastischmemo.aspect.CheckNullArgs;
+import org.liberty.android.fantastischmemo.aspect.DisplayError;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
@@ -621,7 +622,7 @@ public class PreviewEditActivity extends QACardActivity {
         }
     }
 
-    @CheckNull
+    @CheckNullArgs
     private void deleteCard(final Card cardToDelete){
         new AlertDialog.Builder(this)
             .setTitle(getString(R.string.delete_text))

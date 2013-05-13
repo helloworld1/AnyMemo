@@ -27,9 +27,9 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 
 @Aspect
-public class CheckNullAspect {
+public class CheckNullArgsAspect {
 
-    @Pointcut("execution(@org.liberty.android.fantastischmemo.aspect.CheckNull * org.liberty.android.fantastischmemo..*(..))")
+    @Pointcut("execution(@org.liberty.android.fantastischmemo.aspect.CheckNullArgs * org.liberty.android.fantastischmemo..*(..))")
     public void checkNull(){}
 
     @Around("checkNull()")
@@ -53,7 +53,7 @@ public class CheckNullAspect {
 
         if (hasNull == true) {
             System.err.println(messageBuilder.toString());
-            CheckNull checkNullAnnotation = signature.getMethod().getAnnotation(CheckNull.class);
+            CheckNullArgs checkNullAnnotation = signature.getMethod().getAnnotation(CheckNullArgs.class);
             if (checkNullAnnotation.throwException()) {
                 throw new NullPointerException(messageBuilder.toString());
             }

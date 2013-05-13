@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.mycommons.lang3.StringUtils;
-import org.liberty.android.fantastischmemo.aspect.CheckNull;
+import org.liberty.android.fantastischmemo.aspect.CheckNullArgs;
 
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
@@ -114,7 +114,7 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
         }
     }
     
-    @CheckNull
+    @CheckNullArgs
     public void sayText(String s){
         /*if there is a user defined audio, speak it and return */
         if(speakWord.speakWord(s)){

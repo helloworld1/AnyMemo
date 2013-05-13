@@ -26,11 +26,13 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface CheckNull {
-    /*
-     * If throw is true, the method will throw NullPointerException.
-     * Otherwise the annoated method will return silently.
-     */
-    boolean throwException() default false;
-}
 
+/*
+ * Use this annotation for methods in an Activity or a Fragment.
+ * When the method throw a RuntimeException, the error will be displayed
+ * using an AlertDialog. If the finishActivity is true, the current Activity
+ * will be finished. Otherwise continue the current Activity.
+ */
+public @interface DisplayError {
+    boolean finishActivity() default true;
+}
