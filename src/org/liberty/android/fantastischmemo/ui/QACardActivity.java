@@ -669,7 +669,7 @@ abstract public class QACardActivity extends AMActivity {
 
     protected boolean speakQuestion() {
         stopSpeak();
-        if (questionTTS != null) {
+        if (questionTTS != null && getCurrentCard() != null) {
             questionTTS.sayText(getCurrentCard().getQuestion());
             return true;
         }
@@ -678,7 +678,7 @@ abstract public class QACardActivity extends AMActivity {
 
     protected boolean speakAnswer() {
         stopSpeak();
-        if (answerTTS != null) {
+        if (answerTTS != null && getCurrentCard() != null) {
             answerTTS.sayText(getCurrentCard().getAnswer());
             return true;
         }
