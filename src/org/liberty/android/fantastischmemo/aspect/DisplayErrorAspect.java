@@ -23,6 +23,7 @@ import org.apache.mycommons.lang3.exception.ExceptionUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.DeclarePrecedence;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.liberty.android.fantastischmemo.R;
@@ -35,19 +36,19 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 
 @Aspect
+@DeclarePrecedence("org.liberty.android.roboguiceplayground.DisplayErrorAspect,org.liberty.android.roboguiceplayground.RetryAspect")
 public class DisplayErrorAspect {
 
     @Pointcut("execution(@org.liberty.android.fantastischmemo.aspect.DisplayError * org.liberty.android.fantastischmemo..*(..))")
     public void errorPointcut(){}
 
     @Around(value="errorPointcut()")
-    public void displayErrorWhenMethodThrowException(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object displayErrorWhenMethodThrowException(ProceedingJoinPoint joinPoint) throws Throwable {
         RuntimeException e = null;
 
         // Only handle RuntimeException!
         try {
-            joinPoint.proceed();
-            return;
+            return joinPoint.proceed();
         } catch (RuntimeException ex) {
             e = ex;
             Ln.e(e, "Error caught in displayError aspect");
@@ -85,6 +86,7 @@ public class DisplayErrorAspect {
             })
             .show();
 
+        return null;
 
     }
 }

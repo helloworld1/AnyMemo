@@ -33,7 +33,7 @@ public class CheckNullArgsAspect {
     public void checkNull(){}
 
     @Around("checkNull()")
-    public void aroundCheckNullPointcut(ProceedingJoinPoint point) throws Throwable {
+    public Object aroundCheckNullPointcut(ProceedingJoinPoint point) throws Throwable {
         MethodSignature signature = (MethodSignature) point.getSignature();
         Class<?>[] argTypes = signature.getParameterTypes();
         String[] argNames = signature.getParameterNames();
@@ -54,11 +54,15 @@ public class CheckNullArgsAspect {
         if (hasNull == true) {
             System.err.println(messageBuilder.toString());
             CheckNullArgs checkNullAnnotation = signature.getMethod().getAnnotation(CheckNullArgs.class);
-            if (checkNullAnnotation.throwException()) {
+            // For all non void return type, we will throw exception out no matter what throwException
+            // annotation argument say.
+            if (checkNullAnnotation.throwException() || !signature.getReturnType().equals(Void.TYPE)) {
                 throw new NullPointerException(messageBuilder.toString());
+            } else {
+                return null;
             }
         } else {
-            point.proceed();
+            return point.proceed();
         }
     }
 
