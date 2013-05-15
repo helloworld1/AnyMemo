@@ -26,44 +26,44 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.mycommons.io.FileUtils;
-
 import org.apache.mycommons.lang3.StringUtils;
-
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
-
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
+
+import roboguice.fragment.RoboDialogFragment;
+
 import android.app.Activity;
 import android.app.AlertDialog;
-
-import android.support.v4.app.DialogFragment;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.ArrayAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.ViewGroup;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
-import android.widget.ImageView;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.util.Log;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
-public class FileBrowserFragment extends DialogFragment implements OnItemClickListener, OnItemLongClickListener {
+public class FileBrowserFragment extends RoboDialogFragment implements OnItemClickListener, OnItemLongClickListener {
     public final static String EXTRA_DEFAULT_ROOT = "default_root";
     public final static String EXTRA_FILE_EXTENSIONS = "file_extension";
     public final static String EXTRA_DISMISS_ON_SELECT = "dismiss_on_select";
@@ -87,11 +87,16 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
     private SharedPreferences settings;
     private SharedPreferences.Editor editor;
 
-    private AMFileUtil amFileUtil;
-
     public void setOnFileClickListener(OnFileClickListener listener) {
         this.onFileClickListener = listener;
     }
+
+    private AMFileUtil amFileUtil;
+
+    @Inject
+    public void setAmFileUtil(AMFileUtil amFileUtil) { 
+        this.amFileUtil = amFileUtil;
+    }  
 
     @Override
     public void onAttach(Activity activity) {
@@ -99,7 +104,6 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
         mActivity = (AMActivity)activity;
         settings = PreferenceManager.getDefaultSharedPreferences(mActivity);
         editor = settings.edit();
-        amFileUtil = new AMFileUtil(mActivity);
     }
 
 

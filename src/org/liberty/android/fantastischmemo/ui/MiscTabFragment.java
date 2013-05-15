@@ -36,6 +36,8 @@ import org.liberty.android.fantastischmemo.converter.TabTxtImporter;
 import org.liberty.android.fantastischmemo.converter.ZipExporter;
 import org.liberty.android.fantastischmemo.converter.ZipImporter;
 
+import roboguice.fragment.RoboFragment;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -45,7 +47,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -54,7 +55,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class MiscTabFragment extends Fragment implements View.OnClickListener {
+public class MiscTabFragment extends RoboFragment implements View.OnClickListener {
     private static final String WEBSITE_VERSION="http://anymemo.org/index.php?page=version";
     private Activity mActivity;
     private View optionButton;

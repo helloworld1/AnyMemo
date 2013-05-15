@@ -48,7 +48,6 @@ public class DictionaryUtil {
     public DictionaryUtil(Activity activity) {
         mActivity = activity;
         option = new Option(mActivity);
-        amStringUtil = new AMStringUtil(mActivity);
     }
 
     /*

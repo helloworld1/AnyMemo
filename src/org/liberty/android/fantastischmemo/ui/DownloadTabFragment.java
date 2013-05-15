@@ -27,10 +27,11 @@ import org.liberty.android.fantastischmemo.downloader.QuizletLauncher;
 import org.liberty.android.fantastischmemo.downloader.dropbox.DropboxDBListActivity;
 import org.liberty.android.fantastischmemo.downloader.google.SpreadsheetListScreen;
 
+import roboguice.fragment.RoboFragment;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +40,7 @@ import android.view.ViewGroup;
  * This class is invoked when the user share the card from other
  * apps like ColorDict 
  */
-public class DownloadTabFragment extends Fragment implements View.OnClickListener{
+public class DownloadTabFragment extends RoboFragment implements View.OnClickListener{
     private static final String TAG = "org.liberty.android.fantastischmemo.ui.DownloadTabFragment";
     private View amButton;
     private View feButton;

@@ -22,6 +22,8 @@ package org.liberty.android.fantastischmemo.downloader.dropbox;
 import java.io.IOException;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.liberty.android.fantastischmemo.downloader.AbstractDownloaderFragment;
@@ -31,11 +33,19 @@ import android.os.Bundle;
 
 public class DownloadDBFileListFragment extends AbstractDownloaderFragment {
 
+    private DropboxDownloadHelperFactory downloadHelperFactory;
+
     private DropboxDownloadHelper downloadHelper;
 
     public static final String EXTRA_AUTH_TOKEN = "authToken";
 
     public static final String EXTRA_AUTH_TOKEN_SECRET = "autoTokenSecret";
+
+    @Inject
+    public void setDownloadHelperFactory(
+            DropboxDownloadHelperFactory downloadHelperFactory) {
+        this.downloadHelperFactory = downloadHelperFactory;
+    }
 
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -43,7 +53,7 @@ public class DownloadDBFileListFragment extends AbstractDownloaderFragment {
         assert args != null : "The DownloadDBFileListFragment must have authToken and autoTokenSecret";
         String authToken = args.getString(EXTRA_AUTH_TOKEN);
         String authTokenSecret = args.getString(EXTRA_AUTH_TOKEN_SECRET);
-        downloadHelper = new DropboxDownloadHelper(getActivity(), authToken, authTokenSecret);
+        downloadHelper = downloadHelperFactory.create(authToken, authTokenSecret);
     }
 
     @Override
@@ -66,5 +76,6 @@ public class DownloadDBFileListFragment extends AbstractDownloaderFragment {
     protected String fetchDatabase(DownloadItem di) throws Exception {
         return downloadHelper.downloadDBFromDropbox(di);
     }
+
 
 }

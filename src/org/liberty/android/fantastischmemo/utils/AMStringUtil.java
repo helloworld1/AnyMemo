@@ -24,38 +24,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.mycommons.lang3.StringUtils;
-import org.liberty.android.fantastischmemo.R;
-
-import android.content.Context;
 
 public class AMStringUtil {
 
-    private Context context;
-
-    public AMStringUtil(Context context) {
-        this.context = context;
-    }
-
-    // Interval: 12.3456 day -> "1.8 week", 4.76 -> "4.8 day"
-    public String convertDayIntervalToDisplayString(double intervalInDay) {
-        double[] dividers = {365, 30, 7, 1};
-        String[] unitName = {context.getString(R.string.year_text),
-            context.getString(R.string.month_text),
-            context.getString(R.string.week_text),
-            context.getString(R.string.day_text)};
-
-        for (int i = 0; i < dividers.length; i++) {
-            double divider = dividers[i];
-                
-            if ((intervalInDay / divider) >= 1.0 || i == (dividers.length - 1)) {
-                return "" + Double.toString(((double)Math.round(intervalInDay / divider * 10)) / 10) + " " + unitName[i];
-            }
-        }
-        return "";
-    }
-
     // Strip the HTML from the text and return plain text
-    public String stripHTML(String htmlText) {
+    public static String stripHTML(String htmlText) {
 		// Replace break
 		String processed_str = htmlText.replaceAll("\\<br\\>", "" );
 		// Remove HTML

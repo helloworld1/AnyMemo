@@ -28,6 +28,8 @@ import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.utils.AMUiUtil;
 
+import roboguice.fragment.RoboDialogFragment;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -38,7 +40,6 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,7 +51,7 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class GestureSelectionDialogFragment extends DialogFragment {
+public class GestureSelectionDialogFragment extends RoboDialogFragment {
 
     public static final String EXTRA_GESTURE_NAME_DESCRIPTION_MAP = "gesture_name_description_map";
 

@@ -38,7 +38,7 @@ import org.liberty.android.fantastischmemo.queue.QueueManager;
 import org.liberty.android.fantastischmemo.scheduler.DefaultScheduler;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
-import org.liberty.android.fantastischmemo.utils.AMStringUtil;
+import org.liberty.android.fantastischmemo.utils.AMDateUtil;
 import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
 import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
 import org.liberty.android.fantastischmemo.utils.ShareUtil;
@@ -110,7 +110,7 @@ public class StudyActivity extends QACardActivity {
 
     private DictionaryUtil dictionaryUtil;
 
-    private AMStringUtil amStringUtil;
+    private AMDateUtil amDateUtil;
 
     private ShareUtil shareUtil;
 
@@ -328,8 +328,8 @@ public class StudyActivity extends QACardActivity {
         setting = getSetting();
         option = getOption();
         dictionaryUtil = new DictionaryUtil(this);
-        amStringUtil = new AMStringUtil(this);
         shareUtil = new ShareUtil(this);
+        amDateUtil = new AMDateUtil(this);
 
 
         // The query of filter cateogry should happen before createQueue
@@ -774,12 +774,12 @@ public class StudyActivity extends QACardActivity {
         };
 
     private void setGradeButtonTitle() {
-        gradeButtons.setButtonDescription(0, ""+ amStringUtil.convertDayIntervalToDisplayString(scheduler.schedule(getCurrentCard().getLearningData(), 0, false).getInterval()));
-        gradeButtons.setButtonDescription(1, ""+ amStringUtil.convertDayIntervalToDisplayString(scheduler.schedule(getCurrentCard().getLearningData(), 1, false).getInterval()));
-        gradeButtons.setButtonDescription(2, ""+ amStringUtil.convertDayIntervalToDisplayString(scheduler.schedule(getCurrentCard().getLearningData(), 2, false).getInterval()));
-        gradeButtons.setButtonDescription(3, ""+ amStringUtil.convertDayIntervalToDisplayString(scheduler.schedule(getCurrentCard().getLearningData(), 3, false).getInterval()));
-        gradeButtons.setButtonDescription(4, ""+ amStringUtil.convertDayIntervalToDisplayString(scheduler.schedule(getCurrentCard().getLearningData(), 4, false).getInterval()));
-        gradeButtons.setButtonDescription(5, ""+ amStringUtil.convertDayIntervalToDisplayString(scheduler.schedule(getCurrentCard().getLearningData(), 5, false).getInterval()));
+        gradeButtons.setButtonDescription(0, ""+ amDateUtil.convertDayIntervalToDisplayString(scheduler.schedule(getCurrentCard().getLearningData(), 0, false).getInterval()));
+        gradeButtons.setButtonDescription(1, ""+ amDateUtil.convertDayIntervalToDisplayString(scheduler.schedule(getCurrentCard().getLearningData(), 1, false).getInterval()));
+        gradeButtons.setButtonDescription(2, ""+ amDateUtil.convertDayIntervalToDisplayString(scheduler.schedule(getCurrentCard().getLearningData(), 2, false).getInterval()));
+        gradeButtons.setButtonDescription(3, ""+ amDateUtil.convertDayIntervalToDisplayString(scheduler.schedule(getCurrentCard().getLearningData(), 3, false).getInterval()));
+        gradeButtons.setButtonDescription(4, ""+ amDateUtil.convertDayIntervalToDisplayString(scheduler.schedule(getCurrentCard().getLearningData(), 4, false).getInterval()));
+        gradeButtons.setButtonDescription(5, ""+ amDateUtil.convertDayIntervalToDisplayString(scheduler.schedule(getCurrentCard().getLearningData(), 5, false).getInterval()));
     }
 
 

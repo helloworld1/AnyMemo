@@ -21,32 +21,34 @@ package org.liberty.android.fantastischmemo.downloader.google;
 
 import java.io.File;
 
+import javax.inject.Inject;
+
 import org.liberty.android.fantastischmemo.R;
-
-import org.liberty.android.fantastischmemo.downloader.google.GoogleAccountActivity;
-
 import org.liberty.android.fantastischmemo.ui.FileBrowserFragment;
-
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-
 import android.content.DialogInterface;
 import android.content.Intent;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
-
 import android.support.v4.app.FragmentTransaction;
-
 import android.util.Log;
 
 public class UploadGoogleDriveScreen extends GoogleAccountActivity {
     /** Called when the activity is first created. */
 
     private String authToken = null;
+
+    private GoogleDriveUploadHelperFactory uploadHelperFactory;
+
+    @Inject
+    public void setUploadHelperFactory(
+            GoogleDriveUploadHelperFactory uploadHelperFactory) {
+        this.uploadHelperFactory = uploadHelperFactory;
+    }
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -68,7 +70,7 @@ public class UploadGoogleDriveScreen extends GoogleAccountActivity {
 
     private void uploadToGoogleDrive(File file) {
         try {
-            GoogleDriveUploadHelper uploadHelper = new GoogleDriveUploadHelper(this, authToken);
+            GoogleDriveUploadHelper uploadHelper = uploadHelperFactory.create(authToken);
             uploadHelper.createSpreadsheet(file.getName(), file.getAbsolutePath());
             setResult(Activity.RESULT_OK, new Intent());
         } catch (Exception e) {
@@ -79,10 +81,10 @@ public class UploadGoogleDriveScreen extends GoogleAccountActivity {
     private FileBrowserFragment.OnFileClickListener fileClickListener =
         new FileBrowserFragment.OnFileClickListener() {
 
-			@Override
-			public void onClick(File file) {
+            @Override
+            public void onClick(File file) {
                 showUploadDialog(file);
-			}
+            }
         };
 
     private void showUploadDialog(final File file) {
@@ -104,7 +106,7 @@ public class UploadGoogleDriveScreen extends GoogleAccountActivity {
 
         private ProgressDialog progressDialog;
 
-		@Override
+        @Override
         public void onPreExecute() {
             super.onPreExecute();
             progressDialog = new ProgressDialog(UploadGoogleDriveScreen.this);

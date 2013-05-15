@@ -21,22 +21,32 @@ package org.liberty.android.fantastischmemo.downloader.google;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
 import android.content.Context;
 
+import com.google.inject.assistedinject.Assisted;
+
 public class GoogleDriveDownloadHelper {
+
     private Context mContext;
 
     private final String authToken;
 
     private AMFileUtil amFileUtil;
 
-    public GoogleDriveDownloadHelper(Context context, String authToken) {
+    @Inject
+    public GoogleDriveDownloadHelper(Context context, @Assisted String authToken) {
         this.authToken = authToken;
         mContext = context;
-        amFileUtil = new AMFileUtil(context);
+    }
+
+    @Inject
+    public void setAmFileUtil(AMFileUtil amFileUtil) {
+        this.amFileUtil = amFileUtil;
     }
 
     public List<Spreadsheet> getListSpreadsheets() throws Exception {
@@ -76,4 +86,5 @@ public class GoogleDriveDownloadHelper {
         converter.convertCellsToDb(cardCells, learningDataCells, saveDBPath);
         return saveDBPath;
     }
+
 }

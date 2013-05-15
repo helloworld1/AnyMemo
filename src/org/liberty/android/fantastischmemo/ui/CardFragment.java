@@ -25,10 +25,11 @@ import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.domain.Setting;
 
+import roboguice.fragment.RoboFragment;
+
 import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +40,7 @@ import android.widget.TextView;
 /*
  * This class display a side of the card and export necessary callbacks.
  */
-public class CardFragment extends Fragment {
+public class CardFragment extends RoboFragment {
 
     public static final String EXTRA_CARD_TEXT = "cardText";
 

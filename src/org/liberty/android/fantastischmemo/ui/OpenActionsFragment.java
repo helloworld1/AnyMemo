@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
+import javax.inject.Inject;
+
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
@@ -26,6 +28,8 @@ import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 import org.liberty.android.fantastischmemo.utils.ShareUtil;
+
+import roboguice.fragment.RoboDialogFragment;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -37,15 +41,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class OpenActionsFragment extends DialogFragment {
+public class OpenActionsFragment extends RoboDialogFragment {
     public static String EXTRA_DBPATH = "dbpath";
     private AMActivity mActivity;
 
     private ShareUtil shareUtil;
 
     private AMPrefUtil amPrefUtil;
-
-    private AMFileUtil amFileUtil;
 
     private String dbPath;
 
@@ -58,13 +60,19 @@ public class OpenActionsFragment extends DialogFragment {
     private View shareItem;
     private View deleteItem;
 
+    private AMFileUtil amFileUtil;
+
+    @Inject
+    public void setAmFileUtil(AMFileUtil amFileUtil) {
+        this.amFileUtil = amFileUtil;
+    }   
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = (AMActivity)activity;
         shareUtil = new ShareUtil(activity);
         amPrefUtil = new AMPrefUtil(activity);
-        amFileUtil = new AMFileUtil(activity);
     }
     @Override
     public void onCreate(Bundle bundle) {

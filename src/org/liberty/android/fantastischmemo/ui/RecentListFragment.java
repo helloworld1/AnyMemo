@@ -22,13 +22,15 @@ package org.liberty.android.fantastischmemo.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.mycommons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.CardDao;
-import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
+
+import roboguice.fragment.RoboFragment;
 
 import android.app.Activity;
 import android.content.Context;
@@ -36,7 +38,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -50,7 +51,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class RecentListFragment extends Fragment {
+public class RecentListFragment extends RoboFragment {
 
     private ListView recentListView;
     private RecentListAdapter recentListAdapter;
@@ -113,7 +114,7 @@ public class RecentListFragment extends Fragment {
                         ri.index = index++;
                         ril.add(ri);
                         ri.dbPath = allPath[i];
-                        ri.dbName = AMFileUtil.getFilenameFromPath(allPath[i]);
+                        ri.dbName = FilenameUtils.getName(allPath[i]);
                         /* In order to add interrupted exception */
                         Thread.sleep(5);
                     }

@@ -105,7 +105,6 @@ public class QuizActivity extends QACardActivity {
         setting = getSetting();
         option = getOption();
         dictionaryUtil = new DictionaryUtil(this);
-        amStringUtil = new AMStringUtil(this);
         if (categoryId!= -1) {
             filterCategory = categoryDao.queryForId(categoryId);
             assert filterCategory != null : "Query filter id: " + categoryId + ". Get null";

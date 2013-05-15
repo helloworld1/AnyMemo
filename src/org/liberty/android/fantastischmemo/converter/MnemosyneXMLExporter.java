@@ -26,6 +26,7 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import org.apache.mycommons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.dao.CardDao;
@@ -33,7 +34,6 @@ import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.LearningData;
-import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
 import android.content.Context;
 
@@ -49,7 +49,7 @@ public class MnemosyneXMLExporter implements AbstractConverter {
 
     public void convert(String src, String dest) throws Exception {
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, src);
-        String dbName = AMFileUtil.getFilenameFromPath(dest);
+        String dbName = FilenameUtils.getName(dest);
         PrintWriter outxml = null;
         try {
             final CardDao cardDao = helper.getCardDao();

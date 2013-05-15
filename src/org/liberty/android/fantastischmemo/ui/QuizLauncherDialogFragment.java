@@ -31,6 +31,8 @@ import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.domain.Category;
 
+import roboguice.fragment.RoboDialogFragment;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -38,7 +40,6 @@ import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -52,7 +53,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-public class QuizLauncherDialogFragment extends DialogFragment {
+public class QuizLauncherDialogFragment extends RoboDialogFragment {
 
     public static final String EXTRA_DBPATH = "dbpath";
 
