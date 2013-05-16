@@ -23,6 +23,8 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 
+import javax.inject.Inject;
+
 import org.apache.mycommons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.CardDao;
@@ -113,6 +115,11 @@ public class StudyActivity extends QACardActivity {
     private AMDateUtil amDateUtil;
 
     private ShareUtil shareUtil;
+
+    @Inject
+    public void setDictionaryUtil(DictionaryUtil dictionaryUtil) {
+        this.dictionaryUtil = dictionaryUtil;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -327,7 +334,6 @@ public class StudyActivity extends QACardActivity {
         categoryDao = getDbOpenHelper().getCategoryDao();
         setting = getSetting();
         option = getOption();
-        dictionaryUtil = new DictionaryUtil(this);
         shareUtil = new ShareUtil(this);
         amDateUtil = new AMDateUtil(this);
 

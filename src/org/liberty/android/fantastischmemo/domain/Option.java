@@ -1,10 +1,11 @@
 package org.liberty.android.fantastischmemo.domain;
 
+import javax.inject.Inject;
+
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import android.preference.PreferenceManager;
 
 public class Option {
@@ -12,6 +13,7 @@ public class Option {
     private SharedPreferences settings;
     private SharedPreferences.Editor editor;
 
+    @Inject
     public Option (Context context) {
     	settings = PreferenceManager.getDefaultSharedPreferences(context);
         editor = settings.edit();
