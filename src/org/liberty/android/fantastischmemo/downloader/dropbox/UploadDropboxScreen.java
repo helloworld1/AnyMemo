@@ -26,6 +26,8 @@ public class UploadDropboxScreen extends DropboxAccountActivity {
     private String authTokenSecret;
 
     private DropboxUploadHelperFactory uploadHelperFactory;
+
+    private DropboxUploadHelper uploadHelper;
     
     @Inject
     public void setUploadHelperFactory(
@@ -43,6 +45,9 @@ public class UploadDropboxScreen extends DropboxAccountActivity {
     protected void onAuthenticated(final String[] accessTokens) {
         this.authToken = accessTokens[0];
         this.authTokenSecret = accessTokens[1];
+
+        uploadHelper = uploadHelperFactory.create(authToken, authTokenSecret);
+
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         FileBrowserFragment fragment = new FileBrowserFragment();
         fragment.setOnFileClickListener(fileClickListener);
@@ -73,7 +78,6 @@ public class UploadDropboxScreen extends DropboxAccountActivity {
     
     
     private void uploadToDropbox(File file) throws ClientProtocolException, IOException, JSONException {
-        DropboxUploadHelper uploadHelper = uploadHelperFactory.create(authToken, authTokenSecret);
         uploadHelper.upload(file.getName(), file.getAbsolutePath());
     }
 

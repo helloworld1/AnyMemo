@@ -23,7 +23,7 @@ import java.io.Serializable;
 
 // The implementation should be serializable so it can be
 // passed to Activity as strategy.
-public interface AbstractConverter extends Serializable {
+public interface Converter extends Serializable {
 
     /* Convert the src to dest */
     void convert(String src, String dest) throws Exception;

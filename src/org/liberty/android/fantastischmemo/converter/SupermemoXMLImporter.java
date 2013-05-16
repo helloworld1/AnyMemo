@@ -19,37 +19,43 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.converter;
 
-import org.apache.mycommons.lang3.time.DateUtils;
-
-import org.liberty.android.fantastischmemo.*;
-
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Date;
-import java.text.SimpleDateFormat;
-import java.text.ParseException;
 
-
+import javax.inject.Inject;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.apache.mycommons.lang3.time.DateUtils;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.dao.CardDao;
-
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-import android.util.Log;
 import android.content.Context;
+import android.util.Log;
 
-public class SupermemoXMLImporter extends org.xml.sax.helpers.DefaultHandler implements AbstractConverter{
+import com.google.inject.BindingAnnotation;
+
+public class SupermemoXMLImporter extends org.xml.sax.helpers.DefaultHandler implements Converter{
+
+    private static final long serialVersionUID = 8958250001470549241L;
+
     public Locator mLocator;
     private Context mContext;
     private List<Card> cardList;
@@ -62,9 +68,8 @@ public class SupermemoXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
     
     private StringBuffer characterBuf;
     private final String TAG = "org.liberty.android.fantastischmemo.SupermemoXMLConverter";
-
     
-    
+    @Inject
     public SupermemoXMLImporter(Context context){
         mContext = context;
     }
@@ -196,5 +201,10 @@ public class SupermemoXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
     public String getDestExtension() {
         return "db";
     }
+
+    @BindingAnnotation
+    @Target({ ElementType. FIELD, ElementType.PARAMETER, ElementType.METHOD })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface Type {};
 
 }

@@ -1,11 +1,17 @@
 package org.liberty.android.fantastischmemo.converter;
 
 import java.io.File;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 import org.apache.mycommons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.utils.AMZipUtils;
 
-public class ZipImporter implements AbstractConverter {
+import com.google.inject.BindingAnnotation;
+
+public class ZipImporter implements Converter {
     
     private static final long serialVersionUID = 8597517392515565023L;
 
@@ -24,5 +30,10 @@ public class ZipImporter implements AbstractConverter {
     public String getDestExtension() {
         return "db";
     }
+
+    @BindingAnnotation
+    @Target({ ElementType. FIELD, ElementType.PARAMETER, ElementType.METHOD })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface Type {};
 
 }

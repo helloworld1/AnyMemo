@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.converter.AbstractConverter;
+import org.liberty.android.fantastischmemo.converter.Converter;
 import org.liberty.android.fantastischmemo.converter.QATxtImporter;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.domain.Card;
@@ -12,7 +12,7 @@ import org.liberty.android.fantastischmemo.domain.Card;
 public class QATxtImporterTest extends AbstractConverterTest {
 
     @Override
-    protected AbstractConverter getConverter() {
+    protected Converter getConverter() {
         return new QATxtImporter(getContext());
     }
 

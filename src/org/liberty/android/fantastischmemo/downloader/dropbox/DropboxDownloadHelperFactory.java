@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.dropbox;
 
+import com.google.inject.assistedinject.Assisted;
+
 public interface DropboxDownloadHelperFactory {
-    public DropboxDownloadHelper create(String authToken, String authTokenSecret);
+    public DropboxDownloadHelper create(@Assisted("authToken") String authToken, @Assisted("authTokenSecret") String authTokenSecret);
 }

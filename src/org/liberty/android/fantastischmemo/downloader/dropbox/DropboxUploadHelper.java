@@ -30,7 +30,7 @@ public class DropboxUploadHelper {
     private static final String FILE_UPLOAD_URL="https://api-content.dropbox.com/1/files_put/dropbox/AnyMemo/";
 
     @Inject
-    public DropboxUploadHelper(Context context, @Assisted String authToken, @Assisted String authTokenSecret) {
+    public DropboxUploadHelper(Context context, @Assisted("authToken") String authToken, @Assisted("authTokenSecret") String authTokenSecret) {
         this.authToken = authToken;
         this.authTokenSecret = authTokenSecret;
     }

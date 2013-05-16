@@ -27,6 +27,8 @@ import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
+import roboguice.fragment.RoboFragment;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -34,7 +36,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
@@ -48,7 +49,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public abstract class AbstractDownloaderFragment extends Fragment {
+public abstract class AbstractDownloaderFragment extends RoboFragment {
 
     private static final String TAG = "org.liberty.android.fantastischmemo.downloader.DownloaderBase";
     private static final int TOAST_MSG_DURATION = 5000;

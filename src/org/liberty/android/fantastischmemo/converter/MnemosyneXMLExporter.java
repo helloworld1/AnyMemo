@@ -23,8 +23,14 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.util.List;
 import java.util.concurrent.Callable;
+
+import javax.inject.Inject;
 
 import org.apache.mycommons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
@@ -37,12 +43,15 @@ import org.liberty.android.fantastischmemo.domain.LearningData;
 
 import android.content.Context;
 
-public class MnemosyneXMLExporter implements AbstractConverter {
+import com.google.inject.BindingAnnotation;
+
+public class MnemosyneXMLExporter implements Converter {
 
     private static final long serialVersionUID = -7419489770698078017L;
 
     private Context mContext;
 
+    @Inject
     public MnemosyneXMLExporter(Context context){
         mContext = context;
     }
@@ -178,4 +187,9 @@ public class MnemosyneXMLExporter implements AbstractConverter {
     public String getDestExtension() {
         return "xml";
     }
+
+    @BindingAnnotation
+    @Target({ ElementType. FIELD, ElementType.PARAMETER, ElementType.METHOD })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface Type {};
 }

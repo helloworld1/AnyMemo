@@ -44,6 +44,8 @@ public class UploadGoogleDriveScreen extends GoogleAccountActivity {
 
     private GoogleDriveUploadHelperFactory uploadHelperFactory;
 
+    private GoogleDriveUploadHelper uploadHelper;
+
     @Inject
     public void setUploadHelperFactory(
             GoogleDriveUploadHelperFactory uploadHelperFactory) {
@@ -52,14 +54,16 @@ public class UploadGoogleDriveScreen extends GoogleAccountActivity {
 
     @Override
     public void onCreate(Bundle bundle) {
-        setContentView(R.layout.upload_google_drive_screen);
         super.onCreate(bundle);
+        setContentView(R.layout.upload_google_drive_screen);
     }
 
     @Override
     protected void onAuthenticated(final String[] authTokens) {
 
         this.authToken = authTokens[0];
+
+        uploadHelper = uploadHelperFactory.create(authToken);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         FileBrowserFragment fragment = new FileBrowserFragment();
@@ -70,7 +74,6 @@ public class UploadGoogleDriveScreen extends GoogleAccountActivity {
 
     private void uploadToGoogleDrive(File file) {
         try {
-            GoogleDriveUploadHelper uploadHelper = uploadHelperFactory.create(authToken);
             uploadHelper.createSpreadsheet(file.getName(), file.getAbsolutePath());
             setResult(Activity.RESULT_OK, new Intent());
         } catch (Exception e) {

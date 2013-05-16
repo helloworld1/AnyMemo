@@ -19,10 +19,32 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo;
 
+import org.liberty.android.fantastischmemo.converter.CSVExporter;
+import org.liberty.android.fantastischmemo.converter.CSVImporter;
+import org.liberty.android.fantastischmemo.converter.Converter;
+import org.liberty.android.fantastischmemo.converter.Mnemosyne2CardsExporter;
+import org.liberty.android.fantastischmemo.converter.Mnemosyne2CardsImporter;
+import org.liberty.android.fantastischmemo.converter.MnemosyneXMLExporter;
+import org.liberty.android.fantastischmemo.converter.MnemosyneXMLImporter;
+import org.liberty.android.fantastischmemo.converter.QATxtExporter;
+import org.liberty.android.fantastischmemo.converter.QATxtImporter;
+import org.liberty.android.fantastischmemo.converter.Supermemo2008XMLImporter;
+import org.liberty.android.fantastischmemo.converter.SupermemoXMLImporter;
+import org.liberty.android.fantastischmemo.converter.TabTxtExporter;
+import org.liberty.android.fantastischmemo.converter.TabTxtImporter;
+import org.liberty.android.fantastischmemo.converter.ZipExporter;
+import org.liberty.android.fantastischmemo.converter.ZipImporter;
+import org.liberty.android.fantastischmemo.downloader.dropbox.DropboxDownloadHelperFactory;
+import org.liberty.android.fantastischmemo.downloader.dropbox.DropboxUploadHelperFactory;
 import org.liberty.android.fantastischmemo.downloader.google.GoogleDriveDownloadHelperFactory;
 import org.liberty.android.fantastischmemo.downloader.google.GoogleDriveUploadHelperFactory;
+import org.liberty.android.fantastischmemo.scheduler.DefaultScheduler;
+import org.liberty.android.fantastischmemo.scheduler.Scheduler;
+
+import android.content.Context;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 
 /* Define the moduled used in Guice dependency injection. */
@@ -35,8 +57,14 @@ public class AMModules extends AbstractModule {
 
         install(new FactoryModuleBuilder()
                 .build(GoogleDriveUploadHelperFactory.class));
-        /*
-        bind(Scheduler.class).to(DefaultScheduler.class);
+
+        install(new FactoryModuleBuilder()
+                .build(DropboxDownloadHelperFactory.class));
+
+        install(new FactoryModuleBuilder()
+                .build(DropboxUploadHelperFactory.class));
+
+        // bind(Scheduler.class).to(DefaultScheduler.class);
 
         bind(Converter.class).annotatedWith(Mnemosyne2CardsExporter.Type.class).to(Mnemosyne2CardsExporter.class);
 
@@ -59,11 +87,9 @@ public class AMModules extends AbstractModule {
         bind(Converter.class).annotatedWith(ZipExporter.Type.class).to(ZipExporter.class);
 
         bind(Converter.class).annotatedWith(ZipImporter.Type.class).to(ZipImporter.class);
-        */
 
     }
 
-    /*
     @Provides
     @CSVExporter.Type
     Converter provideCSVExporter(Context context) {
@@ -87,7 +113,5 @@ public class AMModules extends AbstractModule {
     Converter provideTabTxtImprter(Context context) {
         return new TabTxtImporter(context, '\t');
     }
-    */
-
 }
 

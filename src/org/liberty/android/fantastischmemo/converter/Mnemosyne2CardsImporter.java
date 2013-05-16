@@ -25,12 +25,18 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.inject.Inject;
 
 import org.apache.mycommons.io.FileUtils;
 import org.apache.mycommons.io.FilenameUtils;
@@ -52,7 +58,9 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 import android.content.Context;
 
-public class Mnemosyne2CardsImporter implements AbstractConverter {
+import com.google.inject.BindingAnnotation;
+
+public class Mnemosyne2CardsImporter implements Converter {
 
     private static final long serialVersionUID = 3472937456L;
 
@@ -66,9 +74,14 @@ public class Mnemosyne2CardsImporter implements AbstractConverter {
 
     private AMFileUtil amFileUtil;
 
+    @Inject
     public Mnemosyne2CardsImporter(Context context) {
         mContext = context;
-        amFileUtil = new AMFileUtil(context);
+    }
+
+    @Inject
+    public void setAmFileUtil(AMFileUtil amFileUtil) {
+        this.amFileUtil = amFileUtil;
     }
 
     @Override
@@ -287,6 +300,12 @@ public class Mnemosyne2CardsImporter implements AbstractConverter {
         CARD_FRONT,
         CARD_BACK;
     }
+
+    @BindingAnnotation
+    @Target({ ElementType. FIELD, ElementType.PARAMETER, ElementType.METHOD })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface Type {};
+
 }
 
 
