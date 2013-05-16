@@ -3,17 +3,15 @@ package org.liberty.android.fantastischmemo.test.converter;
 import java.io.File;
 import java.lang.reflect.Method;
 
-import org.liberty.android.fantastischmemo.AMApplication;
 import org.liberty.android.fantastischmemo.converter.Converter;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
-import roboguice.RoboGuice;
-
 import android.content.Context;
+import android.test.AndroidTestCase;
 import android.test.ServiceTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
-public abstract class AbstractConverterTest extends RoboUnitTestCase<AMApplication> {
+public abstract class AbstractConverterTest extends AndroidTestCase {
 
     private Converter converter;
 
@@ -36,9 +34,6 @@ public abstract class AbstractConverterTest extends RoboUnitTestCase<AMApplicati
         testContext = (Context) getTestContext.invoke(this);
 
         converter = getConverter();
-
-        // Inject real fields for tests
-        RoboGuice.injectMembers(getContext(), converter);
 
         String srcFileName = getFileNamePrefix() + "." + converter.getSrcExtension();
 
