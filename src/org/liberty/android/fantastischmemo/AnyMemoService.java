@@ -20,31 +20,32 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo;
 
+import javax.inject.Inject;
+
 import org.apache.mycommons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.dao.CardDao;
-
 import org.liberty.android.fantastischmemo.ui.AnyMemo;
 import org.liberty.android.fantastischmemo.ui.StudyActivity;
-import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
+import roboguice.service.RoboService;
+
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
-import android.os.Bundle;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.Bundle;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.RemoteViews;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.graphics.Color;
 
-public class AnyMemoService extends Service{
+public class AnyMemoService extends RoboService{
     public static int UPDATE_WIDGET = 1;
     public static int UPDATE_NOTIFICATION = 2;
     public static int CANCEL_NOTIFICATION = 4;
@@ -53,16 +54,23 @@ public class AnyMemoService extends Service{
     private final int WIDGET_REQ = 23579234;
     private final static String TAG = "org.liberty.android.fantastischmemo.AnyMemoService";
 
+    private RecentListUtil recentListUtil;
+
+    @Inject
+    public void setRecentListUtil(RecentListUtil recentListUtil) {
+        this.recentListUtil = recentListUtil;
+    }
+
     @Override
     public void onStart(Intent intent, int startId){
-		Bundle extras = intent.getExtras();
+        Bundle extras = intent.getExtras();
         if(extras == null){
             Log.e(TAG, "Extras is NULL!");
             return;
         }
             Log.v(TAG, "Service now!");
         
-		int serviceReq = extras.getInt("request_code", 0);
+        int serviceReq = extras.getInt("request_code", 0);
         if((serviceReq & UPDATE_WIDGET) != 0){
             updateWidget();
         }
@@ -123,8 +131,7 @@ public class AnyMemoService extends Service{
         finally{
             /* Set on click event */
             Intent intent = new Intent(this, StudyActivity.class);
-            RecentListUtil rlu = new RecentListUtil(this);
-            intent.putExtra("dbpath", rlu.getRecentDBPath());
+            intent.putExtra("dbpath", recentListUtil.getRecentDBPath());
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, WIDGET_REQ, intent, PendingIntent.FLAG_CANCEL_CURRENT);
             updateViews.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);

@@ -19,14 +19,22 @@ package org.liberty.android.fantastischmemo.ui;
 
 import java.io.File;
 
+import javax.inject.Inject;
+
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 import android.app.Activity;
-
 import android.content.Intent;
 
 public class EditTabFragment extends FileBrowserFragment {
     Activity mActivity;
+
+    private RecentListUtil recentListUtil;
+
+    @Inject
+    public void setRecentListUtil(RecentListUtil recentListUtil) {
+        this.recentListUtil = recentListUtil;
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -39,11 +47,11 @@ public class EditTabFragment extends FileBrowserFragment {
         = new FileBrowserFragment.OnFileClickListener() {
             public void onClick(File file) {
                 String fullpath = file.getAbsolutePath();
-                RecentListUtil rlu = new RecentListUtil(mActivity);
-                rlu.addToRecentList(fullpath);
+                recentListUtil.addToRecentList(fullpath);
                 Intent myIntent = new Intent(mActivity, PreviewEditActivity.class);
                 myIntent.putExtra(PreviewEditActivity.EXTRA_DBPATH, fullpath);
                 startActivity(myIntent);
             }
-        };
+    };
+
 }

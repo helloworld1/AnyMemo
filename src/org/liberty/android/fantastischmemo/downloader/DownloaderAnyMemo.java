@@ -34,6 +34,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Stack;
 
+import javax.inject.Inject;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -74,6 +76,13 @@ public class DownloaderAnyMemo extends DownloaderBase{
     private final static String WEBSITE_JSON = "http://anymemo.org/pages/json.php";
     private final static String WEBSITE_DOWNLOAD= "http://anymemo.org/pages/download.php?wordlistname=DatabasesTable&filename=";
     private static final int BUFFER_SIZE = 8192;
+
+    private RecentListUtil recentListUtil;
+
+    @Inject
+    public void setRecentListUtil(RecentListUtil recentListUtil) {
+        this.recentListUtil = recentListUtil;
+    }
 
     @Override
     protected void initialRetrieve(){
@@ -332,8 +341,7 @@ public class DownloaderAnyMemo extends DownloaderBase{
                     }
 
                     /* Add downloaded item to file list */
-                    RecentListUtil rlu = new RecentListUtil(this);
-                    rlu.addToRecentList(fullpath);
+                    recentListUtil.addToRecentList(fullpath);
                 }
             }
             catch(Exception e){
@@ -463,5 +471,6 @@ public class DownloaderAnyMemo extends DownloaderBase{
             }
         });
     }
+
 
 }

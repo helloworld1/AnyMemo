@@ -62,10 +62,17 @@ public class OpenActionsFragment extends RoboDialogFragment {
 
     private AMFileUtil amFileUtil;
 
+    private RecentListUtil recentListUtil;
+
     @Inject
     public void setAmFileUtil(AMFileUtil amFileUtil) {
         this.amFileUtil = amFileUtil;
     }   
+
+    @Inject
+    public void setRecentListUtil(RecentListUtil recentListUtil) {
+        this.recentListUtil = recentListUtil;
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -116,13 +123,12 @@ public class OpenActionsFragment extends RoboDialogFragment {
 
     private View.OnClickListener buttonClickListener = new View.OnClickListener() {
         public void onClick(View v) {
-        	final RecentListUtil rlu = new RecentListUtil(mActivity);
             if (v == studyItem) {
                 Intent myIntent = new Intent();
                 myIntent.setClass(mActivity, StudyActivity.class);
                 myIntent.putExtra(StudyActivity.EXTRA_DBPATH, dbPath);
                 startActivity(myIntent);
-                rlu.addToRecentList(dbPath);
+                recentListUtil.addToRecentList(dbPath);
             }
 
             if (v == editItem) {
@@ -132,7 +138,7 @@ public class OpenActionsFragment extends RoboDialogFragment {
                 int startId = amPrefUtil.getSavedId(AMPrefKeys.PREVIEW_EDIT_START_ID_PREFIX, dbPath, 1);
                 myIntent.putExtra(PreviewEditActivity.EXTRA_CARD_ID, startId);
                 startActivity(myIntent);
-                rlu.addToRecentList(dbPath);
+                recentListUtil.addToRecentList(dbPath);
             }
 
             if (v == listItem) {
@@ -140,7 +146,7 @@ public class OpenActionsFragment extends RoboDialogFragment {
                 myIntent.setClass(mActivity, ListEditScreen.class);
                 myIntent.putExtra(StudyActivity.EXTRA_DBPATH, dbPath);
                 startActivity(myIntent);
-                rlu.addToRecentList(dbPath);
+                recentListUtil.addToRecentList(dbPath);
             }
 
             if (v == quizItem) {
@@ -149,7 +155,7 @@ public class OpenActionsFragment extends RoboDialogFragment {
                 b.putString(CategoryEditorFragment.EXTRA_DBPATH, dbPath);
                 df.setArguments(b);
                 df.show(mActivity.getSupportFragmentManager(), "QuizLauncherDialog");
-                rlu.addToRecentList(dbPath);
+                recentListUtil.addToRecentList(dbPath);
             }
 
             if (v == settingsItem) {
@@ -178,7 +184,7 @@ public class OpenActionsFragment extends RoboDialogFragment {
                         @Override
                         public void onClick(DialogInterface dialog, int which ){
                             amFileUtil.deleteDbSafe(dbPath);
-                            rlu.deleteFromRecentList(dbPath);
+                            recentListUtil.deleteFromRecentList(dbPath);
                             /* Refresh the list */
                             mActivity.restartActivity();
                         }

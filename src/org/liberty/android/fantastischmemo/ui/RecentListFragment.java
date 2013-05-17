@@ -22,6 +22,8 @@ package org.liberty.android.fantastischmemo.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.mycommons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
@@ -66,16 +68,21 @@ public class RecentListFragment extends RoboFragment {
     
     private DatabaseUtil databaseUtil;
 
+    @Inject
+    public void setRecentListUtil(RecentListUtil recentListUtil) {
+        this.recentListUtil = recentListUtil;
+    }
+
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = activity;
-        recentListUtil = new RecentListUtil(mActivity);
         setHasOptionsMenu(true);
         databaseUtil = new DatabaseUtil(mActivity);
     }
 
-	@Override
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.recent_list, container, false);
@@ -87,13 +94,13 @@ public class RecentListFragment extends RoboFragment {
         recentListAdapter = new RecentListAdapter(mActivity, R.layout.open_screen_recent_item);
         recentListView.setAdapter(recentListAdapter);
         return v;
-	}
+    }
 
 
-	
+    
     @Override
     public void onResume(){
-    	super.onResume();
+        super.onResume();
         updateRecentListThread = new Thread(){
             public void run(){
                 String[] allPath = recentListUtil.getAllRecentDBPath();
@@ -163,23 +170,23 @@ public class RecentListFragment extends RoboFragment {
         }
     }
 
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
         super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.open_screen_menu, menu);
-	}
-	
-	public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {
-	    case R.id.openmenu_clear:
+        inflater.inflate(R.menu.open_screen_menu, menu);
+    }
+    
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.openmenu_clear:
             recentListUtil.clearRecentList();
             onResume();
-			return true;
+            return true;
 
-	    }
+        }
 
-	    return false;
-	}
+        return false;
+    }
 
     private AdapterView.OnItemClickListener listItemClickListener = new AdapterView.OnItemClickListener() {
         @Override

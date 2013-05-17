@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.amr.arabic.ArabicUtilities;
 import org.apache.mycommons.io.FilenameUtils;
 import org.apache.mycommons.lang3.StringUtils;
@@ -44,7 +46,6 @@ import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTSImpl;
-import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 import org.liberty.android.fantastischmemo.utils.AMStringUtil;
 import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
@@ -74,7 +75,6 @@ import android.text.Html.TagHandler;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.Display;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -128,6 +128,11 @@ abstract public class QACardActivity extends AMActivity {
     
     private GestureLibrary gestureLibrary;
 
+    @Inject
+    public void setOption(Option option) {
+        this.option = option;
+    }
+
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -135,8 +140,6 @@ abstract public class QACardActivity extends AMActivity {
         if (extras != null) {
             dbPath = extras.getString(EXTRA_DBPATH);
         }
-
-        option = new Option(QACardActivity.this);
 
         dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(this, dbPath);
         dbName = FilenameUtils.getName(dbPath);

@@ -23,6 +23,8 @@ package org.liberty.android.fantastischmemo.ui;
 import java.util.Collections;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.domain.Option;
@@ -73,12 +75,16 @@ public class GestureSelectionDialogFragment extends RoboDialogFragment {
 
     private Map<String, String> gestureNameDescriptionMap = Collections.emptyMap();
 
+    @Inject
+    public void setOption(Option option) {
+        this.option = option;
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = (AMActivity) activity;
         amUiUtil = new AMUiUtil(mActivity);
-        option = new Option(mActivity);
     }
 
     @Override

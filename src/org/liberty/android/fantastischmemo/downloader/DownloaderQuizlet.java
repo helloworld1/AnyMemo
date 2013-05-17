@@ -89,9 +89,16 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
 
     private AMFileUtil amFileUtil;
 
+    private RecentListUtil recentListUtil;
+
     @Inject
     public void setAmFileUtil(AMFileUtil amFileUtil) {
         this.amFileUtil = amFileUtil;
+    }
+
+    @Inject
+    public void setRecentListUtil(RecentListUtil recentListUtil) {
+        this.recentListUtil = recentListUtil;
     }
 
     @Override
@@ -308,8 +315,7 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
         } finally {
             AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }
-        RecentListUtil rlu = new RecentListUtil(this);
-        rlu.addToRecentList(fullpath);
+        recentListUtil.addToRecentList(fullpath);
     }
 
     @Override

@@ -22,6 +22,8 @@ package org.liberty.android.fantastischmemo.downloader;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
@@ -59,6 +61,8 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
     private ListView listView;
 
     private DownloadListAdapter dlAdapter;
+
+    private RecentListUtil recentListUtil;
     
     /*
      * Retrieve the data when the user first open the
@@ -92,6 +96,12 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
         return dlAdapter.getCount();
     }
 
+    @Inject
+    public void setRecentListUtil(RecentListUtil recentListUtil) {
+        this.recentListUtil = recentListUtil;
+    }
+
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -115,11 +125,11 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
         return v;
     }
 
-	private class InitRetrieveTask extends AsyncTask<Void, Void, Exception> {
+    private class InitRetrieveTask extends AsyncTask<Void, Void, Exception> {
         private ProgressDialog progressDialog;
         private List<DownloadItem> downloadItems;
 
-		@Override
+        @Override
         public void onPreExecute() {
             super.onPreExecute();
             progressDialog = new ProgressDialog(mActivity);
@@ -177,12 +187,12 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
         task.execute(item);
     }
 
-	private class FetchDatabaseTask extends AsyncTask<DownloadItem, Void, Exception> {
+    private class FetchDatabaseTask extends AsyncTask<DownloadItem, Void, Exception> {
         private ProgressDialog progressDialog;
         private DownloadItem item;
         private String fetchedDbPath;
 
-		@Override
+        @Override
         public void onPreExecute() {
             super.onPreExecute();
             progressDialog = new ProgressDialog(mActivity);
@@ -218,7 +228,6 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
                     .setMessage(getString(R.string.downloader_download_success_message) + fetchedDbPath)
                     .setPositiveButton(R.string.ok_text, null)
                     .show();
-                RecentListUtil recentListUtil = new RecentListUtil(mActivity);
                 recentListUtil.addToRecentList(fetchedDbPath);
             }
         }

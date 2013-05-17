@@ -24,6 +24,8 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.basic.DefaultOAuthConsumer;
 
@@ -38,7 +40,6 @@ import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
-import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
@@ -86,6 +87,13 @@ public class DownloaderFE extends DownloaderBase{
     private OAuthConsumer oauthConsumer = null;
 
     private DownloaderUtils downloaderUtils;
+    
+    private RecentListUtil recentListUtil;
+
+    @Inject
+    public void setRecentListUtil(RecentListUtil recentListUtil) {
+        this.recentListUtil = recentListUtil;
+    }
 
     @Override
     protected void initialRetrieve(){
@@ -330,7 +338,6 @@ public class DownloaderFE extends DownloaderBase{
         } finally {
             AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }
-        RecentListUtil rlu = new RecentListUtil(this);
-        rlu.addToRecentList(fullpath);
+        recentListUtil.addToRecentList(fullpath);
     }
 }
