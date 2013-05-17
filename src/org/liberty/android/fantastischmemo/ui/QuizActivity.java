@@ -32,7 +32,6 @@ import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.queue.QuizQueueManager;
-import org.liberty.android.fantastischmemo.scheduler.DefaultScheduler;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 import org.liberty.android.fantastischmemo.utils.AMStringUtil;
 import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
@@ -80,10 +79,9 @@ public class QuizActivity extends QACardActivity {
 
     private AMStringUtil amStringUtil;
 
-    /* Schedulers */
-    private Scheduler scheduler = null;
-
     private QuizQueueManager queueManager;
+
+    private Scheduler scheduler;
 
     private int startCardId = -1;
     private int categoryId = -1;
@@ -100,10 +98,14 @@ public class QuizActivity extends QACardActivity {
 
     private int totalQuizSize = -1;
 
-
     @Inject
     public void setDictionaryUtil(DictionaryUtil dictionaryUtil) {
         this.dictionaryUtil = dictionaryUtil;
+    }
+
+    @Inject
+    public void setScheduler(Scheduler scheduler) {
+        this.scheduler = scheduler;
     }
 
     @Override
@@ -117,8 +119,6 @@ public class QuizActivity extends QACardActivity {
             filterCategory = categoryDao.queryForId(categoryId);
             assert filterCategory != null : "Query filter id: " + categoryId + ". Get null";
         }
-
-        scheduler = new DefaultScheduler(this);
 
         createQueue();
 

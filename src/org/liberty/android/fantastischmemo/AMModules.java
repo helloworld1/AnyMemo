@@ -64,7 +64,7 @@ public class AMModules extends AbstractModule {
         install(new FactoryModuleBuilder()
                 .build(DropboxUploadHelperFactory.class));
 
-        // bind(Scheduler.class).to(DefaultScheduler.class);
+        bind(Scheduler.class).to(DefaultScheduler.class);
 
         bind(Converter.class).annotatedWith(Mnemosyne2CardsExporter.Type.class).to(Mnemosyne2CardsExporter.class);
 

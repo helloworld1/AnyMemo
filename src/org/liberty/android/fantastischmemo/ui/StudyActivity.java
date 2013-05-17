@@ -37,7 +37,6 @@ import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.queue.LearnQueueManager;
 import org.liberty.android.fantastischmemo.queue.QueueManager;
-import org.liberty.android.fantastischmemo.scheduler.DefaultScheduler;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
 import org.liberty.android.fantastischmemo.utils.AMDateUtil;
@@ -101,7 +100,6 @@ public class StudyActivity extends QACardActivity {
     /* Schedulers */
     private Scheduler scheduler = null;
 
-
     /* current states */
     private long schedluledCardCount = 0;
     private long newCardCount = 0;
@@ -115,6 +113,11 @@ public class StudyActivity extends QACardActivity {
     private AMDateUtil amDateUtil;
 
     private ShareUtil shareUtil;
+
+    @Inject
+    public void setScheduler(Scheduler scheduler) {
+        this.scheduler = scheduler;
+    }
 
     @Inject
     public void setDictionaryUtil(DictionaryUtil dictionaryUtil) {
@@ -345,7 +348,6 @@ public class StudyActivity extends QACardActivity {
             assert filterCategory != null : "Query filter id: " + filterCategoryId +". Get null";
         }
 
-        scheduler = new DefaultScheduler(this);
         createQueue();
 
         /* Run the learnQueue init in a separate thread */
