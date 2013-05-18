@@ -32,6 +32,8 @@ import java.net.URLConnection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.inject.Inject;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -47,12 +49,19 @@ public class DownloaderUtils {
 
     private Context mContext;
 
+
     private AMFileUtil amFileUtil;
 
+    @Inject
     public DownloaderUtils(Context context) {
         mContext = context;
-        amFileUtil = new AMFileUtil(context);
     }
+
+
+    @Inject
+    public void setAmFileUtil(AMFileUtil amFileUtil) { 
+        this.amFileUtil = amFileUtil;
+    }  
 
     public String downloadJSONString(String url) throws Exception{
         HttpClient httpclient = new DefaultHttpClient();

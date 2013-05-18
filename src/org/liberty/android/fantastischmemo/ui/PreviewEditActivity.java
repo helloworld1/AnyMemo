@@ -22,9 +22,12 @@ package org.liberty.android.fantastischmemo.ui;
 import java.sql.SQLException;
 import java.util.HashMap;
 
+import javax.inject.Inject;
+
 import org.apache.mycommons.lang3.math.NumberUtils;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.aspect.CheckNullArgs;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
@@ -32,7 +35,6 @@ import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
-import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
@@ -108,6 +110,11 @@ public class PreviewEditActivity extends QACardActivity {
     // The first card to read and display.
     private int startCardId = 1;
 
+    @Inject
+    public void setShareUtil(ShareUtil shareUtil) {
+        this.shareUtil = shareUtil;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -138,7 +145,6 @@ public class PreviewEditActivity extends QACardActivity {
         settingDao = getDbOpenHelper().getSettingDao();
         setting = settingDao.queryForId(1);
 
-        shareUtil = new ShareUtil(this);
         amPrefUtil = new AMPrefUtil(this);
 
         // If category is set, it will override the card id.
@@ -275,7 +281,7 @@ public class PreviewEditActivity extends QACardActivity {
 
             case R.id.editmenu_delete_id:
             {
-                deleteCurrent();
+                deleteCard(getCurrentCard());
                 return true;
             }
 
@@ -621,22 +627,21 @@ public class PreviewEditActivity extends QACardActivity {
         }
     }
 
-    private void deleteCurrent(){
-        if(getCurrentCard() != null){
-            new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.delete_text))
-                .setMessage(getString(R.string.delete_warning))
-                .setPositiveButton(getString(R.string.yes_text),
+    @CheckNullArgs
+    private void deleteCard(final Card cardToDelete){
+        new AlertDialog.Builder(this)
+            .setTitle(getString(R.string.delete_text))
+            .setMessage(getString(R.string.delete_warning))
+            .setPositiveButton(getString(R.string.yes_text),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface arg0, int arg1) {
                             DeleteCardTask task = new DeleteCardTask();
                             task.execute((Void)null);
                         }
                     })
-                .setNegativeButton(getString(R.string.no_text), null)
-                .create()
-                .show();
-        }
+        .setNegativeButton(getString(R.string.no_text), null)
+            .create()
+            .show();
     }
 
     private void gotoPrev(){

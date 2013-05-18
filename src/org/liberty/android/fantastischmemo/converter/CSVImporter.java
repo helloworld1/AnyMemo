@@ -20,34 +20,42 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.converter;
 
 import java.io.File;
-
+import java.io.FileReader;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.util.LinkedList;
 import java.util.List;
 
-import org.liberty.android.fantastischmemo.*;
+import javax.inject.Inject;
 
-import java.io.FileReader;
-import java.util.LinkedList;
-
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.dao.CardDao;
-
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
-import au.com.bytecode.opencsv.CSVReader;
 
 import android.content.Context;
 
-public class CSVImporter implements AbstractConverter {
+import au.com.bytecode.opencsv.CSVReader;
+
+import com.google.inject.BindingAnnotation;
+
+public class CSVImporter implements Converter {
+    /**
+     *
+     */
+    private static final long serialVersionUID = 234745119864085982L;
+
     private Context mContext;
     
     /* Null is for default separator "," */
     private Character separator = null;
 
-    public CSVImporter(Context context) {
-        mContext = context;
-    }
-
-    public CSVImporter(Context context, char separator) {
+    @Inject
+    public CSVImporter(Context context, Character separator) {
         mContext = context;
         this.separator = separator;
     }
@@ -111,5 +119,10 @@ public class CSVImporter implements AbstractConverter {
     public String getDestExtension() {
         return "db";
     }
+
+    @BindingAnnotation
+    @Target({ ElementType. FIELD, ElementType.PARAMETER, ElementType.METHOD })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface Type {};
 }
 

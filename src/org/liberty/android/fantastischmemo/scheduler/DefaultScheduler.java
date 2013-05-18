@@ -22,15 +22,14 @@ package org.liberty.android.fantastischmemo.scheduler;
 import java.util.Date;
 import java.util.Random;
 
-import org.apache.mycommons.lang3.time.DateUtils;
+import javax.inject.Inject;
 
+import org.apache.mycommons.lang3.time.DateUtils;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.domain.SchedulingAlgorithmParameters;
-
 import org.liberty.android.fantastischmemo.utils.AMDateUtil;
 
 import android.content.Context;
-
 import android.util.Log;
 
 /*
@@ -43,8 +42,9 @@ public class DefaultScheduler implements Scheduler {
 
     private SchedulingAlgorithmParameters parameters;
 
-    public DefaultScheduler(Context context) {
-        parameters = new SchedulingAlgorithmParameters(context);
+    @Inject
+    public DefaultScheduler(SchedulingAlgorithmParameters parameters) {
+        this.parameters = parameters;
     }
     /*
      * Return the interval of the after schedule the new card

@@ -22,13 +22,17 @@ package org.liberty.android.fantastischmemo.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import org.apache.mycommons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.CardDao;
-import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
+
+import roboguice.fragment.RoboFragment;
 
 import android.app.Activity;
 import android.content.Context;
@@ -36,7 +40,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -50,7 +53,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class RecentListFragment extends Fragment {
+public class RecentListFragment extends RoboFragment {
 
     private ListView recentListView;
     private RecentListAdapter recentListAdapter;
@@ -65,16 +68,21 @@ public class RecentListFragment extends Fragment {
     
     private DatabaseUtil databaseUtil;
 
+    @Inject
+    public void setRecentListUtil(RecentListUtil recentListUtil) {
+        this.recentListUtil = recentListUtil;
+    }
+
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = activity;
-        recentListUtil = new RecentListUtil(mActivity);
         setHasOptionsMenu(true);
         databaseUtil = new DatabaseUtil(mActivity);
     }
 
-	@Override
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.recent_list, container, false);
@@ -86,13 +94,13 @@ public class RecentListFragment extends Fragment {
         recentListAdapter = new RecentListAdapter(mActivity, R.layout.open_screen_recent_item);
         recentListView.setAdapter(recentListAdapter);
         return v;
-	}
+    }
 
 
-	
+    
     @Override
     public void onResume(){
-    	super.onResume();
+        super.onResume();
         updateRecentListThread = new Thread(){
             public void run(){
                 String[] allPath = recentListUtil.getAllRecentDBPath();
@@ -113,7 +121,7 @@ public class RecentListFragment extends Fragment {
                         ri.index = index++;
                         ril.add(ri);
                         ri.dbPath = allPath[i];
-                        ri.dbName = AMFileUtil.getFilenameFromPath(allPath[i]);
+                        ri.dbName = FilenameUtils.getName(allPath[i]);
                         /* In order to add interrupted exception */
                         Thread.sleep(5);
                     }
@@ -162,23 +170,23 @@ public class RecentListFragment extends Fragment {
         }
     }
 
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
         super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.open_screen_menu, menu);
-	}
-	
-	public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {
-	    case R.id.openmenu_clear:
+        inflater.inflate(R.menu.open_screen_menu, menu);
+    }
+    
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.openmenu_clear:
             recentListUtil.clearRecentList();
             onResume();
-			return true;
+            return true;
 
-	    }
+        }
 
-	    return false;
-	}
+        return false;
+    }
 
     private AdapterView.OnItemClickListener listItemClickListener = new AdapterView.OnItemClickListener() {
         @Override

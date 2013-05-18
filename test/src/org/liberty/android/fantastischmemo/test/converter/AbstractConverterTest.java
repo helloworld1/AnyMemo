@@ -3,7 +3,7 @@ package org.liberty.android.fantastischmemo.test.converter;
 import java.io.File;
 import java.lang.reflect.Method;
 
-import org.liberty.android.fantastischmemo.converter.AbstractConverter;
+import org.liberty.android.fantastischmemo.converter.Converter;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
 import android.content.Context;
@@ -13,7 +13,7 @@ import android.test.suitebuilder.annotation.SmallTest;
 
 public abstract class AbstractConverterTest extends AndroidTestCase {
 
-    private AbstractConverter converter;
+    private Converter converter;
 
     private String srcFilePath;
 
@@ -21,7 +21,7 @@ public abstract class AbstractConverterTest extends AndroidTestCase {
 
     private Context testContext;
 
-    protected abstract AbstractConverter getConverter();
+    protected abstract Converter getConverter();
 
     protected abstract String getFileNamePrefix();
 

@@ -20,26 +20,25 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo;
 
-import android.content.pm.ActivityInfo;
-import android.content.SharedPreferences;
-import android.content.Intent;
-
-
-import android.support.v4.app.FragmentActivity;
-
-import android.view.WindowManager;
-import android.preference.PreferenceManager;
-import android.os.Bundle;
-import android.content.res.Configuration;
-import android.view.Window;
 import java.util.Locale;
+
+import roboguice.activity.RoboFragmentActivity;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.Window;
+import android.view.WindowManager;
 
 /*
  * This class is the base class for all screen type
  * class in AnyMemo
  * It contains basic configuration of the Activity
  */
-public abstract class AMActivity extends FragmentActivity{
+public abstract class AMActivity extends RoboFragmentActivity{
     protected String TAG = getClass().getSimpleName();
 
     @Override

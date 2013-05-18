@@ -3,6 +3,8 @@ package org.liberty.android.fantastischmemo.downloader.dropbox;
 import java.io.File;
 import java.io.IOException;
 
+import javax.inject.Inject;
+
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.liberty.android.fantastischmemo.R;
@@ -13,16 +15,25 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 
 public class UploadDropboxScreen extends DropboxAccountActivity {
     
     private String authToken;
+
     private String authTokenSecret;
+
+    private DropboxUploadHelperFactory uploadHelperFactory;
+
+    private DropboxUploadHelper uploadHelper;
+    
+    @Inject
+    public void setUploadHelperFactory(
+            DropboxUploadHelperFactory uploadHelperFactory) {
+        this.uploadHelperFactory = uploadHelperFactory;
+    }
     
     @Override
     public void onCreate(Bundle bundle) {
@@ -34,6 +45,9 @@ public class UploadDropboxScreen extends DropboxAccountActivity {
     protected void onAuthenticated(final String[] accessTokens) {
         this.authToken = accessTokens[0];
         this.authTokenSecret = accessTokens[1];
+
+        uploadHelper = uploadHelperFactory.create(authToken, authTokenSecret);
+
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         FileBrowserFragment fragment = new FileBrowserFragment();
         fragment.setOnFileClickListener(fileClickListener);
@@ -64,10 +78,9 @@ public class UploadDropboxScreen extends DropboxAccountActivity {
     
     
     private void uploadToDropbox(File file) throws ClientProtocolException, IOException, JSONException {
-        DropboxUploadHelper uploadHelper = new DropboxUploadHelper(this, authToken, authTokenSecret);
         uploadHelper.upload(file.getName(), file.getAbsolutePath());
     }
-    
+
     private class UploadTask extends AsyncTask<File, Void, Exception> {
         private ProgressDialog progressDialog;
 

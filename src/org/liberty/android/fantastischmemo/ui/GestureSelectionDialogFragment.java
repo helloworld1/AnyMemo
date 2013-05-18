@@ -23,10 +23,14 @@ package org.liberty.android.fantastischmemo.ui;
 import java.util.Collections;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.utils.AMUiUtil;
+
+import roboguice.fragment.RoboDialogFragment;
 
 import android.app.Activity;
 import android.content.Context;
@@ -38,7 +42,6 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,7 +53,7 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class GestureSelectionDialogFragment extends DialogFragment {
+public class GestureSelectionDialogFragment extends RoboDialogFragment {
 
     public static final String EXTRA_GESTURE_NAME_DESCRIPTION_MAP = "gesture_name_description_map";
 
@@ -72,12 +75,16 @@ public class GestureSelectionDialogFragment extends DialogFragment {
 
     private Map<String, String> gestureNameDescriptionMap = Collections.emptyMap();
 
+    @Inject
+    public void setOption(Option option) {
+        this.option = option;
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = (AMActivity) activity;
         amUiUtil = new AMUiUtil(mActivity);
-        option = new Option(mActivity);
     }
 
     @Override

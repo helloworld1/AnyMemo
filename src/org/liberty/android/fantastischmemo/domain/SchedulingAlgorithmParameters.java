@@ -1,10 +1,11 @@
 package org.liberty.android.fantastischmemo.domain;
 
+import javax.inject.Inject;
+
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import android.preference.PreferenceManager;
 
 public class SchedulingAlgorithmParameters {
@@ -27,6 +28,7 @@ public class SchedulingAlgorithmParameters {
 
     private static boolean defaultEnableNoise = true;
 
+    @Inject
     public SchedulingAlgorithmParameters(Context context) {
     	settings = PreferenceManager.getDefaultSharedPreferences(context);
         editor = settings.edit();

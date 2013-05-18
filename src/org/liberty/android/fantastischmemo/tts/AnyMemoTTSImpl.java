@@ -22,12 +22,12 @@ package org.liberty.android.fantastischmemo.tts;
 
 import java.util.List;
 import java.util.Locale;
-
 import java.util.concurrent.TimeUnit;
-
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.mycommons.lang3.StringUtils;
+import org.liberty.android.fantastischmemo.aspect.CheckNullArgs;
+
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
@@ -114,6 +114,7 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
         }
     }
     
+    @CheckNullArgs
     public void sayText(String s){
         /*if there is a user defined audio, speak it and return */
         if(speakWord.speakWord(s)){

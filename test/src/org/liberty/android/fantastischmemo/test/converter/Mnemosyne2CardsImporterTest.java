@@ -4,19 +4,22 @@ import java.util.List;
 
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.converter.AbstractConverter;
+import org.liberty.android.fantastischmemo.converter.Converter;
 import org.liberty.android.fantastischmemo.converter.Mnemosyne2CardsImporter;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
 public class Mnemosyne2CardsImporterTest extends AbstractConverterTest {
 
     @Override
-    protected AbstractConverter getConverter() {
-        return new Mnemosyne2CardsImporter(getContext());
+    protected Converter getConverter() {
+        Mnemosyne2CardsImporter importer = new Mnemosyne2CardsImporter(getContext());
+        importer.setAmFileUtil(new AMFileUtil(getContext()));
+        return importer;
     }
 
     @Override

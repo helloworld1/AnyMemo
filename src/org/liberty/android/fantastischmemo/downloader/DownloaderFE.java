@@ -24,6 +24,8 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.basic.DefaultOAuthConsumer;
 
@@ -38,7 +40,6 @@ import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
-import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
@@ -47,6 +48,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -85,6 +87,13 @@ public class DownloaderFE extends DownloaderBase{
     private OAuthConsumer oauthConsumer = null;
 
     private DownloaderUtils downloaderUtils;
+    
+    private RecentListUtil recentListUtil;
+
+    @Inject
+    public void setRecentListUtil(RecentListUtil recentListUtil) {
+        this.recentListUtil = recentListUtil;
+    }
 
     @Override
     protected void initialRetrieve(){
@@ -292,7 +301,7 @@ public class DownloaderFE extends DownloaderBase{
                 questionImageUrl = jsonItem.getString("question_image_url");
             }
             if (StringUtils.isNotEmpty(questionImageUrl)) {
-                String downloadFilename = AMFileUtil.getFilenameFromPath(questionImageUrl);
+                String downloadFilename = Uri.parse(questionImageUrl).getLastPathSegment();
                 downloaderUtils.downloadFile(questionImageUrl, imagePath + "q-" + downloadFilename); 
                 question = question + "<br /><img src=\"" + "q-" + downloadFilename + "\" />";
             }
@@ -302,7 +311,7 @@ public class DownloaderFE extends DownloaderBase{
                 answerImageUrl = jsonItem.getString("answer_image_url");
             }
             if (StringUtils.isNotEmpty(answerImageUrl)) {
-                String downloadFilename = AMFileUtil.getFilenameFromPath(answerImageUrl);
+                String downloadFilename = Uri.parse(answerImageUrl).getLastPathSegment();
                 downloaderUtils.downloadFile(answerImageUrl, imagePath + "a-" + downloadFilename); 
                 answer = answer + "<br /><img src=\"" + "a-" + downloadFilename + "\" />";
             }
@@ -329,7 +338,6 @@ public class DownloaderFE extends DownloaderBase{
         } finally {
             AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }
-        RecentListUtil rlu = new RecentListUtil(this);
-        rlu.addToRecentList(fullpath);
+        recentListUtil.addToRecentList(fullpath);
     }
 }

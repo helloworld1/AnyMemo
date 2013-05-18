@@ -21,16 +21,21 @@ package org.liberty.android.fantastischmemo.utils;
 
 import java.util.Map;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+@Singleton
 public class AMPrefUtil {
 
     private SharedPreferences settings;
 
     private SharedPreferences.Editor editor;
 
+    @Inject
     public AMPrefUtil(Context context) {
     	settings = PreferenceManager.getDefaultSharedPreferences(context);
         editor = settings.edit();

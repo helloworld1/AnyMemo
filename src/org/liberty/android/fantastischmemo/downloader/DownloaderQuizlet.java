@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.mycommons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -48,6 +50,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
@@ -82,13 +85,24 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
     /* This will change after first retriving list */
     private int totalPages = 1;
 
+    private DownloaderUtils downloaderUtils;
+
     private AMFileUtil amFileUtil;
 
-    private DownloaderUtils downloaderUtils;
+    private RecentListUtil recentListUtil;
+
+    @Inject
+    public void setAmFileUtil(AMFileUtil amFileUtil) {
+        this.amFileUtil = amFileUtil;
+    }
+
+    @Inject
+    public void setRecentListUtil(RecentListUtil recentListUtil) {
+        this.recentListUtil = recentListUtil;
+    }
 
     @Override
     protected void initialRetrieve(){
-        amFileUtil = new AMFileUtil(this);
         downloaderUtils = new DownloaderUtils(this);
         mHandler = new Handler();
         dlAdapter = new DownloadListAdapter(this, R.layout.filebrowser_item);
@@ -270,7 +284,7 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
                 if (jsonItem.has("image") && !jsonItem.isNull("image") && hasImage) {
                     JSONObject imageItem = jsonItem.getJSONObject("image");
                     String imageUrl = imageItem.getString("url");
-                    String downloadFilename = AMFileUtil.getFilenameFromPath(imageUrl);
+                    String downloadFilename = Uri.parse(imageUrl).getLastPathSegment();
                     downloaderUtils.downloadFile(imageUrl, imagePath + downloadFilename);
                     answer += "<br /><img src=\"" + downloadFilename + "\"/>";
                 }
@@ -301,8 +315,7 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
         } finally {
             AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }
-        RecentListUtil rlu = new RecentListUtil(this);
-        rlu.addToRecentList(fullpath);
+        recentListUtil.addToRecentList(fullpath);
     }
 
     @Override

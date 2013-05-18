@@ -1,38 +1,28 @@
 package org.liberty.android.fantastischmemo.ui;
 
-import java.lang.Void;
-
 import java.sql.SQLException;
-
 import java.util.List;
 
 import org.apache.mycommons.lang3.StringUtils;
-
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
-
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
-
 import org.liberty.android.fantastischmemo.domain.Category;
 
+import roboguice.fragment.RoboDialogFragment;
+
 import android.app.Activity;
-
 import android.content.Context;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
-
 import android.support.v4.app.DialogFragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.AdapterView;
-
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -40,7 +30,7 @@ import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ListView;
 
-public class CategoryEditorFragment extends DialogFragment implements View.OnClickListener {
+public class CategoryEditorFragment extends RoboDialogFragment implements View.OnClickListener {
     public static String EXTRA_DBPATH = "dbpath";
     public static String EXTRA_CATEGORY_ID = "id";
     private AMActivity mActivity;

@@ -23,6 +23,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
+import javax.inject.Inject;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.liberty.android.fantastischmemo.AMEnv;
@@ -64,6 +66,13 @@ public class DownloaderSS extends DownloaderBase implements ListView.OnScrollLis
     private List<DownloadItem> categoryList = null;
 
     private DownloaderUtils downloaderUtils;
+
+    private RecentListUtil recentListUtil;
+
+    @Inject
+    public void setRecentListUtil(RecentListUtil recentListUtil) {
+        this.recentListUtil = recentListUtil;
+    }
 
     @Override
     protected void initialRetrieve(){
@@ -365,8 +374,8 @@ public class DownloaderSS extends DownloaderBase implements ListView.OnScrollLis
         } finally {
             AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }
-        RecentListUtil rlu = new RecentListUtil(this);
-        rlu.addToRecentList(fullpath);
+        recentListUtil.addToRecentList(fullpath);
     }
+
 }
 

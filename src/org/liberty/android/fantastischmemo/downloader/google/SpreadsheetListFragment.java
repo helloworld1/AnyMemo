@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.liberty.android.fantastischmemo.downloader.AbstractDownloaderFragment;
 import org.liberty.android.fantastischmemo.downloader.DownloadItem;
 
@@ -34,17 +36,27 @@ public class SpreadsheetListFragment extends AbstractDownloaderFragment {
 
     private String authToken = null;
 
+    private GoogleDriveDownloadHelperFactory downloadHelperFactory;
+
+    private GoogleDriveDownloadHelper downloadHelper;
+
+    @Inject
+    public void setDownloadHelperFactory(
+            GoogleDriveDownloadHelperFactory downloadHelperFactory) {
+        this.downloadHelperFactory = downloadHelperFactory;
+    }
+
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         Bundle args = getArguments();
         assert args != null : "The EXTRA_AUTH_TOKEN must be passed to SpreadsheetListFragment";
         this.authToken = args.getString(EXTRA_AUTH_TOKEN);
+        downloadHelper = downloadHelperFactory.create(authToken);
     }
 
 	@Override
 	protected List<DownloadItem> initialRetrieve() throws Exception {
-        GoogleDriveDownloadHelper downloadHelper = new GoogleDriveDownloadHelper(getActivity(), authToken);
         List<Spreadsheet> spreadsheetList = downloadHelper.getListSpreadsheets();
         List<DownloadItem> downloadItemList = new ArrayList<DownloadItem>(50);
         for (Spreadsheet spreadsheet : spreadsheetList) {
@@ -65,7 +77,6 @@ public class SpreadsheetListFragment extends AbstractDownloaderFragment {
 
 	@Override
 	protected String fetchDatabase(DownloadItem di) throws Exception {
-        GoogleDriveDownloadHelper downloadHelper = new GoogleDriveDownloadHelper(getActivity(), authToken);
         return downloadHelper.downloadSpreadsheetToDB(convertDownloadItemToSpreadsheet(di));
 	}
 

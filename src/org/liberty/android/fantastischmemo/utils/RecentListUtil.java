@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.utils;
 
+import javax.inject.Inject;
+
 import org.apache.mycommons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.domain.Option;
@@ -29,17 +31,20 @@ import android.preference.PreferenceManager;
 
 /* This class handles the operations on recent list */
 public class RecentListUtil {
-	private static final String TAG = "RecentListUtilTag";
+    private static final String TAG = "RecentListUtilTag";
     private int recentLength = 7;
+
     private Option option;
+
     private SharedPreferences settings;
     private SharedPreferences.Editor editor;
-    
-    public RecentListUtil(Context context) {
-    	option = new Option(context);
-    	settings = PreferenceManager.getDefaultSharedPreferences(context);
-    	editor = settings.edit();
-    	recentLength = option.getRecentCount();
+
+    @Inject
+    public RecentListUtil(Context context, Option option) {
+        settings = PreferenceManager.getDefaultSharedPreferences(context);
+        editor = settings.edit();
+        recentLength = option.getRecentCount();
+        this.option = option;
     }
     
     public String getRecentDBPath() {
@@ -47,10 +52,10 @@ public class RecentListUtil {
     }
 
     public String[] getAllRecentDBPath() {
-    	// TODO: Reload the recentLength from user option.
-    	// FIXME: temp hack, need re-write, don't need to get it again.
-    	recentLength = option.getRecentCount();
-    	
+        // TODO: Reload the recentLength from user option.
+        // FIXME: temp hack, need re-write, don't need to get it again.
+        recentLength = option.getRecentCount();
+        
         String[] ret = new String[recentLength];
         
         for(int i = 0; i < recentLength; i++){

@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
+import javax.inject.Inject;
+
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
@@ -26,6 +28,8 @@ import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 import org.liberty.android.fantastischmemo.utils.ShareUtil;
+
+import roboguice.fragment.RoboDialogFragment;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -37,15 +41,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class OpenActionsFragment extends DialogFragment {
+public class OpenActionsFragment extends RoboDialogFragment {
     public static String EXTRA_DBPATH = "dbpath";
     private AMActivity mActivity;
 
     private ShareUtil shareUtil;
 
     private AMPrefUtil amPrefUtil;
-
-    private AMFileUtil amFileUtil;
 
     private String dbPath;
 
@@ -58,13 +60,30 @@ public class OpenActionsFragment extends DialogFragment {
     private View shareItem;
     private View deleteItem;
 
+    private AMFileUtil amFileUtil;
+
+    private RecentListUtil recentListUtil;
+
+    @Inject
+    public void setShareUtil(ShareUtil shareUtil) {
+        this.shareUtil = shareUtil;
+    }
+
+    @Inject
+    public void setAmFileUtil(AMFileUtil amFileUtil) {
+        this.amFileUtil = amFileUtil;
+    }   
+
+    @Inject
+    public void setRecentListUtil(RecentListUtil recentListUtil) {
+        this.recentListUtil = recentListUtil;
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = (AMActivity)activity;
-        shareUtil = new ShareUtil(activity);
         amPrefUtil = new AMPrefUtil(activity);
-        amFileUtil = new AMFileUtil(activity);
     }
     @Override
     public void onCreate(Bundle bundle) {
@@ -108,13 +127,12 @@ public class OpenActionsFragment extends DialogFragment {
 
     private View.OnClickListener buttonClickListener = new View.OnClickListener() {
         public void onClick(View v) {
-        	final RecentListUtil rlu = new RecentListUtil(mActivity);
             if (v == studyItem) {
                 Intent myIntent = new Intent();
                 myIntent.setClass(mActivity, StudyActivity.class);
                 myIntent.putExtra(StudyActivity.EXTRA_DBPATH, dbPath);
                 startActivity(myIntent);
-                rlu.addToRecentList(dbPath);
+                recentListUtil.addToRecentList(dbPath);
             }
 
             if (v == editItem) {
@@ -124,7 +142,7 @@ public class OpenActionsFragment extends DialogFragment {
                 int startId = amPrefUtil.getSavedId(AMPrefKeys.PREVIEW_EDIT_START_ID_PREFIX, dbPath, 1);
                 myIntent.putExtra(PreviewEditActivity.EXTRA_CARD_ID, startId);
                 startActivity(myIntent);
-                rlu.addToRecentList(dbPath);
+                recentListUtil.addToRecentList(dbPath);
             }
 
             if (v == listItem) {
@@ -132,7 +150,7 @@ public class OpenActionsFragment extends DialogFragment {
                 myIntent.setClass(mActivity, ListEditScreen.class);
                 myIntent.putExtra(StudyActivity.EXTRA_DBPATH, dbPath);
                 startActivity(myIntent);
-                rlu.addToRecentList(dbPath);
+                recentListUtil.addToRecentList(dbPath);
             }
 
             if (v == quizItem) {
@@ -141,7 +159,7 @@ public class OpenActionsFragment extends DialogFragment {
                 b.putString(CategoryEditorFragment.EXTRA_DBPATH, dbPath);
                 df.setArguments(b);
                 df.show(mActivity.getSupportFragmentManager(), "QuizLauncherDialog");
-                rlu.addToRecentList(dbPath);
+                recentListUtil.addToRecentList(dbPath);
             }
 
             if (v == settingsItem) {
@@ -170,7 +188,7 @@ public class OpenActionsFragment extends DialogFragment {
                         @Override
                         public void onClick(DialogInterface dialog, int which ){
                             amFileUtil.deleteDbSafe(dbPath);
-                            rlu.deleteFromRecentList(dbPath);
+                            recentListUtil.deleteFromRecentList(dbPath);
                             /* Refresh the list */
                             mActivity.restartActivity();
                         }

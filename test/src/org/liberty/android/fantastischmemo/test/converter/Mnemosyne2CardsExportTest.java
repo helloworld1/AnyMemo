@@ -2,14 +2,17 @@ package org.liberty.android.fantastischmemo.test.converter;
 
 import java.io.File;
 
-import org.liberty.android.fantastischmemo.converter.AbstractConverter;
+import org.liberty.android.fantastischmemo.converter.Converter;
 import org.liberty.android.fantastischmemo.converter.Mnemosyne2CardsExporter;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
 public class Mnemosyne2CardsExportTest extends AbstractConverterTest {
 
     @Override
-    protected AbstractConverter getConverter() {
-        return new Mnemosyne2CardsExporter(getContext());
+    protected Converter getConverter() {
+        Mnemosyne2CardsExporter exporter = new Mnemosyne2CardsExporter(getContext());
+        exporter.setAmFileUtil(new AMFileUtil(getContext()));
+        return exporter;
     }
 
     @Override

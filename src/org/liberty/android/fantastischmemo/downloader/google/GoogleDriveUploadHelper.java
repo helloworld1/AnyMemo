@@ -20,24 +20,22 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.downloader.google;
 
 import java.text.SimpleDateFormat;
-
 import java.util.List;
-
 import java.util.concurrent.Callable;
+
+import javax.inject.Inject;
 
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
-
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 
-import org.liberty.android.fantastischmemo.downloader.google.Cells;
-
 import android.content.Context;
+
+import com.google.inject.assistedinject.Assisted;
 
 public class GoogleDriveUploadHelper {
     private Context mContext;
@@ -46,7 +44,8 @@ public class GoogleDriveUploadHelper {
 
     private static SimpleDateFormat ISO8601_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
-    public GoogleDriveUploadHelper(Context context, String authToken) {
+    @Inject
+    public GoogleDriveUploadHelper(Context context, @Assisted String authToken) {
         this.authToken = authToken;
         mContext = context;
     }

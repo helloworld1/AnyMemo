@@ -42,6 +42,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.util.Log;
+
+import org.apache.mycommons.io.FilenameUtils;
 import org.json.JSONObject;
 
 import oauth.signpost.OAuthConsumer;
@@ -110,7 +112,7 @@ public class FEUpload extends AMActivity{
     }
 
     private void uploadDB(String dbPath) throws Exception{
-        final String dbName = AMFileUtil.getFilenameFromPath(dbPath);
+        final String dbName = FilenameUtils.getName(dbPath);
         int cardId = addCardSet(dbName, "Import from AnyMemo");
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(this, dbPath);
         CardDao cardDao = helper.getCardDao();

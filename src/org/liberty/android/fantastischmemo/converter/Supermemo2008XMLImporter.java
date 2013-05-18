@@ -20,23 +20,24 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.converter;
 
 import java.io.File;
-
-import org.liberty.android.fantastischmemo.*;
-
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 
-
+import javax.inject.Inject;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.dao.CardDao;
-
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
@@ -45,7 +46,12 @@ import org.xml.sax.XMLReader;
 
 import android.content.Context;
 
-public class Supermemo2008XMLImporter extends org.xml.sax.helpers.DefaultHandler implements AbstractConverter{
+import com.google.inject.BindingAnnotation;
+
+public class Supermemo2008XMLImporter extends org.xml.sax.helpers.DefaultHandler implements Converter{
+
+    private static final long serialVersionUID = 8285843731806571485L;
+
     public Locator mLocator;
     private Context mContext;
     private List<Card> cardList;
@@ -54,6 +60,7 @@ public class Supermemo2008XMLImporter extends org.xml.sax.helpers.DefaultHandler
     
     private StringBuffer characterBuf;
     
+    @Inject
     public Supermemo2008XMLImporter(Context context){
         mContext = context;
     }
@@ -130,4 +137,9 @@ public class Supermemo2008XMLImporter extends org.xml.sax.helpers.DefaultHandler
     public String getDestExtension() {
         return "db";
     }
+
+    @BindingAnnotation
+    @Target({ ElementType. FIELD, ElementType.PARAMETER, ElementType.METHOD })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface Type {};
 }

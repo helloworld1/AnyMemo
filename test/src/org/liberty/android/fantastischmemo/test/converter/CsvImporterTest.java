@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.converter.AbstractConverter;
+import org.liberty.android.fantastischmemo.converter.Converter;
 import org.liberty.android.fantastischmemo.converter.CSVImporter;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
@@ -14,8 +14,8 @@ import org.liberty.android.fantastischmemo.domain.Category;
 public class CsvImporterTest extends AbstractConverterTest {
 
     @Override
-    protected AbstractConverter getConverter() {
-        return new CSVImporter(getContext());
+    protected Converter getConverter() {
+        return new CSVImporter(getContext(), ',');
     }
 
     @Override
