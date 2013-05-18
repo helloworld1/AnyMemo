@@ -23,9 +23,16 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import javax.inject.Inject;
+
+import org.apache.mycommons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.dao.CardDao;
@@ -33,23 +40,25 @@ import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.LearningData;
-import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
 import android.content.Context;
 
-public class MnemosyneXMLExporter implements AbstractConverter {
+import com.google.inject.BindingAnnotation;
+
+public class MnemosyneXMLExporter implements Converter {
 
     private static final long serialVersionUID = -7419489770698078017L;
 
     private Context mContext;
 
+    @Inject
     public MnemosyneXMLExporter(Context context){
         mContext = context;
     }
 
     public void convert(String src, String dest) throws Exception {
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, src);
-        String dbName = AMFileUtil.getFilenameFromPath(dest);
+        String dbName = FilenameUtils.getName(dest);
         PrintWriter outxml = null;
         try {
             final CardDao cardDao = helper.getCardDao();
@@ -178,4 +187,9 @@ public class MnemosyneXMLExporter implements AbstractConverter {
     public String getDestExtension() {
         return "xml";
     }
+
+    @BindingAnnotation
+    @Target({ ElementType. FIELD, ElementType.PARAMETER, ElementType.METHOD })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface Type {};
 }

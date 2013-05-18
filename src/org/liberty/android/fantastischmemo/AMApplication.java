@@ -20,11 +20,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo;
 
-import java.io.IOException;
+import roboguice.RoboGuice;
 
 import android.app.Application;
 import android.os.Build;
-import android.os.Bundle;
 import android.util.Log;
 
 //import org.acra.ACRA;
@@ -39,15 +38,19 @@ public class AMApplication extends Application {
 
     @Override
     public void onCreate() {
+        super.onCreate();
         // The following line triggers the initialization of ACRA
         //ACRA.init(this);
 
         // HTTP connection reuse which was buggy pre-froyo
+
         if (Integer.parseInt(Build.VERSION.SDK) < Build.VERSION_CODES.FROYO) {
             Log.w(TAG, "Using version less than 2.2, disable urlconnection connection pool");
             System.setProperty("http.keepAlive", "false");
         }
 
-        super.onCreate();
+        // Handle customized module binding
+        RoboGuice.setBaseApplicationInjector(this, RoboGuice.DEFAULT_STAGE, 
+                RoboGuice.newDefaultRoboModule(this), new AMModules());
     }
 }

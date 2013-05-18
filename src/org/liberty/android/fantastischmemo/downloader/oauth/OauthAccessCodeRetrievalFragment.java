@@ -25,12 +25,13 @@ import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 
+import roboguice.fragment.RoboDialogFragment;
+
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -40,7 +41,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 
-public abstract class OauthAccessCodeRetrievalFragment extends DialogFragment {
+public abstract class OauthAccessCodeRetrievalFragment extends RoboDialogFragment {
     private Activity mActivity;
 
     private AuthCodeReceiveListener authCodeReceiveListener = null;

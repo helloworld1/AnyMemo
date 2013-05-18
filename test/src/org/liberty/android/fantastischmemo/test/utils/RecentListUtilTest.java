@@ -1,8 +1,11 @@
 package org.liberty.android.fantastischmemo.test.utils;
 
 import org.liberty.android.fantastischmemo.AMPrefKeys;
+import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.test.AbstractPreferencesTest;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import android.test.suitebuilder.annotation.SmallTest;
 
@@ -10,7 +13,10 @@ public class RecentListUtilTest extends AbstractPreferencesTest {
 
     @SmallTest
     public void testAddRecentListWithinLimit() {
-        RecentListUtil recentListUtil = new RecentListUtil(getContext());
+        Option mockOption = mock(Option.class);
+        when(mockOption.getRecentCount())
+            .thenReturn(7);
+        RecentListUtil recentListUtil = new RecentListUtil(getContext(), mockOption);
         recentListUtil.addToRecentList("/sdcard/a.db");
         assertEquals("/sdcard/a.db", recentListUtil.getRecentDBPath());
 
@@ -22,12 +28,13 @@ public class RecentListUtilTest extends AbstractPreferencesTest {
 
     @SmallTest
     public void testAddRecentListLargerThanLimit() {
-        // Set the limit to 3.
-        editor.putInt(AMPrefKeys.RECENT_COUNT_KEY, 3);
-        editor.commit();
+        // Mock recent count limit to 3.
+        Option mockOption = mock(Option.class);
+        when(mockOption.getRecentCount())
+            .thenReturn(3);
 
         // Add 5 dbs
-        RecentListUtil recentListUtil = new RecentListUtil(getContext());
+        RecentListUtil recentListUtil = new RecentListUtil(getContext(), mockOption);
         recentListUtil.addToRecentList("/sdcard/1.db");
         recentListUtil.addToRecentList("/sdcard/2.db");
         recentListUtil.addToRecentList("/sdcard/3.db");
@@ -44,8 +51,11 @@ public class RecentListUtilTest extends AbstractPreferencesTest {
 
     @SmallTest
     public void testDeleteRecentItem() {
+        Option mockOption = mock(Option.class);
+        when(mockOption.getRecentCount())
+            .thenReturn(7);
         // Add 5 dbs
-        RecentListUtil recentListUtil = new RecentListUtil(getContext());
+        RecentListUtil recentListUtil = new RecentListUtil(getContext(), mockOption);
         recentListUtil.addToRecentList("/sdcard/1.db");
         recentListUtil.addToRecentList("/sdcard/2.db");
         recentListUtil.addToRecentList("/sdcard/3.db");
@@ -66,8 +76,11 @@ public class RecentListUtilTest extends AbstractPreferencesTest {
 
     @SmallTest
     public void testAddEquivalentPath() {
+        Option mockOption = mock(Option.class);
+        when(mockOption.getRecentCount())
+            .thenReturn(7);
         // Equivalent path are considered the same
-        RecentListUtil recentListUtil = new RecentListUtil(getContext());
+        RecentListUtil recentListUtil = new RecentListUtil(getContext(), mockOption);
         recentListUtil.addToRecentList("/sdcard/1.db");
         recentListUtil.addToRecentList("/sdcard//1.db");
         recentListUtil.addToRecentList("//sdcard/1.db");
@@ -82,7 +95,10 @@ public class RecentListUtilTest extends AbstractPreferencesTest {
 
     @SmallTest
     public void testClearRecentList() {
-        RecentListUtil recentListUtil = new RecentListUtil(getContext());
+        Option mockOption = mock(Option.class);
+        when(mockOption.getRecentCount())
+            .thenReturn(7);
+        RecentListUtil recentListUtil = new RecentListUtil(getContext(), mockOption);
         recentListUtil.addToRecentList("/sdcard/a.db");
         recentListUtil.addToRecentList("/sdcard/b.db");
 

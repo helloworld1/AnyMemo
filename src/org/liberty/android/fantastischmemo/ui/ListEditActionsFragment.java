@@ -22,19 +22,17 @@ package org.liberty.android.fantastischmemo.ui;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.R;
 
+import roboguice.fragment.RoboDialogFragment;
+
 import android.app.Activity;
-
 import android.content.Intent;
-
 import android.os.Bundle;
-
 import android.support.v4.app.DialogFragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class ListEditActionsFragment extends DialogFragment {
+public class ListEditActionsFragment extends RoboDialogFragment {
     public static String EXTRA_DBPATH = "dbpath";
     public static String EXTRA_CARD_ID = "id";
     private AMActivity mActivity;

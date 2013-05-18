@@ -20,10 +20,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.converter;
 
 import java.io.File;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 import org.liberty.android.fantastischmemo.utils.AMZipUtils;
 
-public class ZipExporter implements AbstractConverter {
+import com.google.inject.BindingAnnotation;
+
+public class ZipExporter implements Converter {
 
     private static final long serialVersionUID = -7316554160292269944L;
 
@@ -31,7 +37,6 @@ public class ZipExporter implements AbstractConverter {
      * Dest is not used, it is always in [external]/anymemo
      * directory
      */
-
 
     public void convert(String src, String dest) throws Exception {
         AMZipUtils.compressFile(new File(src), new File(dest));
@@ -47,4 +52,9 @@ public class ZipExporter implements AbstractConverter {
     public String getDestExtension() {
         return "zip";
     }
+
+    @BindingAnnotation
+    @Target({ ElementType. FIELD, ElementType.PARAMETER, ElementType.METHOD })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface Type {};
 }

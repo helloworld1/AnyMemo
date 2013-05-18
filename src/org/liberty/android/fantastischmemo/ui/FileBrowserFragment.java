@@ -26,54 +26,54 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.mycommons.io.FileUtils;
-
 import org.apache.mycommons.lang3.StringUtils;
-
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
-
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
+
+import roboguice.fragment.RoboDialogFragment;
+
 import android.app.Activity;
 import android.app.AlertDialog;
-
-import android.support.v4.app.DialogFragment;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.ArrayAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.ViewGroup;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
-import android.widget.ImageView;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.util.Log;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
-public class FileBrowserFragment extends DialogFragment implements OnItemClickListener, OnItemLongClickListener {
+public class FileBrowserFragment extends RoboDialogFragment implements OnItemClickListener, OnItemLongClickListener {
     public final static String EXTRA_DEFAULT_ROOT = "default_root";
     public final static String EXTRA_FILE_EXTENSIONS = "file_extension";
     public final static String EXTRA_DISMISS_ON_SELECT = "dismiss_on_select";
 
-	private enum DISPLAYMODE{ABSOLUTE, RELATIVE;}
-	private final DISPLAYMODE displayMode = DISPLAYMODE.RELATIVE;
-	private ArrayList<String> directoryEntries = new ArrayList<String>();
-	private File currentDirectory = new File("/");
-	private String defaultRoot;
-	private String[] fileExtensions;
+    private enum DISPLAYMODE{ABSOLUTE, RELATIVE;}
+    private final DISPLAYMODE displayMode = DISPLAYMODE.RELATIVE;
+    private ArrayList<String> directoryEntries = new ArrayList<String>();
+    private File currentDirectory = new File("/");
+    private String defaultRoot;
+    private String[] fileExtensions;
     private AMActivity mActivity;
     private ListView fbListView;
     private boolean dismissOnSelect = false;
@@ -87,10 +87,22 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
     private SharedPreferences settings;
     private SharedPreferences.Editor editor;
 
-    private AMFileUtil amFileUtil;
-
     public void setOnFileClickListener(OnFileClickListener listener) {
         this.onFileClickListener = listener;
+    }
+
+    private AMFileUtil amFileUtil;
+
+    private RecentListUtil recentListUtil;
+
+    @Inject
+    public void setAmFileUtil(AMFileUtil amFileUtil) { 
+        this.amFileUtil = amFileUtil;
+    }  
+
+    @Inject
+    public void setRecentListUtil(RecentListUtil recentListUtil) {
+        this.recentListUtil = recentListUtil;
     }
 
     @Override
@@ -99,7 +111,6 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
         mActivity = (AMActivity)activity;
         settings = PreferenceManager.getDefaultSharedPreferences(mActivity);
         editor = settings.edit();
-        amFileUtil = new AMFileUtil(mActivity);
     }
 
 
@@ -128,15 +139,15 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
             defaultRoot = settings.getString(AMPrefKeys.SAVED_FILEBROWSER_PATH_KEY, null);
         }
 
-		if(StringUtils.isEmpty(defaultRoot)){
-			File sdPath = new File(AMEnv.DEFAULT_ROOT_PATH);
-			sdPath.mkdir();
-			
-			currentDirectory = sdPath;
-		}
-		else{
-			currentDirectory = new File(defaultRoot + "/");
-		}
+        if(StringUtils.isEmpty(defaultRoot)){
+            File sdPath = new File(AMEnv.DEFAULT_ROOT_PATH);
+            sdPath.mkdir();
+            
+            currentDirectory = sdPath;
+        }
+        else{
+            currentDirectory = new File(defaultRoot + "/");
+        }
         System.err.println("defaultRoot: " + defaultRoot);
 
         // Should use this to enable menu
@@ -146,46 +157,46 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-		
+        
         View v = inflater.inflate(R.layout.file_browser, container, false);
         fbListView = (ListView)v.findViewById(R.id.file_list);
         return v;
-	}
+    }
 
     @Override
     public void onResume(){
         super.onResume();
         browseTo(currentDirectory);
     }
-	
-	
-	
-	private void browseTo(final File aDirectory){
-		if(aDirectory.isDirectory()){
-			mActivity.setTitle(aDirectory.getPath());
-			this.currentDirectory = aDirectory;
-			fill(aDirectory.listFiles());
-		}
-	}
-	
-	private void fill(File[] files){
-		this.directoryEntries.clear();
-		
-		if(this.currentDirectory.getParent() != null){
-			this.directoryEntries.add(UP_ONE_LEVEL_DIR);
-		}
-		switch(this.displayMode){
-		case ABSOLUTE:
-			for(File file : files){
-				this.directoryEntries.add(file.getPath());
-			}
-			break;
-		case RELATIVE:
-			int currentPathStringLength = this.currentDirectory.getAbsolutePath().length();
-			for(File file: files){
-				if(file.isDirectory()){
-						this.directoryEntries.add(file.getAbsolutePath().substring(currentPathStringLength) + "/");
-				}
+    
+    
+    
+    private void browseTo(final File aDirectory){
+        if(aDirectory.isDirectory()){
+            mActivity.setTitle(aDirectory.getPath());
+            this.currentDirectory = aDirectory;
+            fill(aDirectory.listFiles());
+        }
+    }
+    
+    private void fill(File[] files){
+        this.directoryEntries.clear();
+        
+        if(this.currentDirectory.getParent() != null){
+            this.directoryEntries.add(UP_ONE_LEVEL_DIR);
+        }
+        switch(this.displayMode){
+        case ABSOLUTE:
+            for(File file : files){
+                this.directoryEntries.add(file.getPath());
+            }
+            break;
+        case RELATIVE:
+            int currentPathStringLength = this.currentDirectory.getAbsolutePath().length();
+            for(File file: files){
+                if(file.isDirectory()){
+                        this.directoryEntries.add(file.getAbsolutePath().substring(currentPathStringLength) + "/");
+                }
                 else{
                     for(String fileExtension : fileExtensions){
                         if(file.getName().toLowerCase().endsWith(fileExtension.toLowerCase())){
@@ -193,48 +204,48 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
                         }
                     }
                 }
-				
-			}
-		}
+                
+            }
+        }
 
-		FileBrowserAdapter directoryList = new FileBrowserAdapter(mActivity, R.layout.filebrowser_item, directoryEntries);
-	    fbListView.setAdapter(directoryList);
+        FileBrowserAdapter directoryList = new FileBrowserAdapter(mActivity, R.layout.filebrowser_item, directoryEntries);
+        fbListView.setAdapter(directoryList);
         fbListView.setOnItemClickListener(this);
         fbListView.setOnItemLongClickListener(this);
-	}
-	
-	
-	private void upOneLevel(){
-		if(this.currentDirectory.getParent() != null){
-			this.browseTo(this.currentDirectory.getParentFile());
-		}
-	}
-	
+    }
+    
+    
+    private void upOneLevel(){
+        if(this.currentDirectory.getParent() != null){
+            this.browseTo(this.currentDirectory.getParentFile());
+        }
+    }
+    
     @Override
-	public void onItemClick(AdapterView<?> parentView, View childView, int position, long id){
-		String selectedFileString = this.directoryEntries.get(position);
-		if(selectedFileString.equals(CURRENT_DIR)){
-			this.browseTo(this.currentDirectory);
-		}
-		else if(selectedFileString.equals(UP_ONE_LEVEL_DIR)) {
-			this.upOneLevel();
-		}
-		else{
-			File clickedFile = null;
-			switch(this.displayMode){
-			case RELATIVE:
-				clickedFile = new File(this.currentDirectory.getAbsolutePath() + this.directoryEntries.get(position));
-				break;
-			case ABSOLUTE:
-				clickedFile = new File(this.directoryEntries.get(position));
-				break;
-			}
-			if(clickedFile != null){
-				try{
-					if(clickedFile.isDirectory()){
-						this.browseTo(clickedFile);
-					}
-					else if(clickedFile.isFile()){
+    public void onItemClick(AdapterView<?> parentView, View childView, int position, long id){
+        String selectedFileString = this.directoryEntries.get(position);
+        if(selectedFileString.equals(CURRENT_DIR)){
+            this.browseTo(this.currentDirectory);
+        }
+        else if(selectedFileString.equals(UP_ONE_LEVEL_DIR)) {
+            this.upOneLevel();
+        }
+        else{
+            File clickedFile = null;
+            switch(this.displayMode){
+            case RELATIVE:
+                clickedFile = new File(this.currentDirectory.getAbsolutePath() + this.directoryEntries.get(position));
+                break;
+            case ABSOLUTE:
+                clickedFile = new File(this.directoryEntries.get(position));
+                break;
+            }
+            if(clickedFile != null){
+                try{
+                    if(clickedFile.isDirectory()){
+                        this.browseTo(clickedFile);
+                    }
+                    else if(clickedFile.isFile()){
                         /* Save the current path */
                         editor.putString(AMPrefKeys.SAVED_FILEBROWSER_PATH_KEY, clickedFile.getParent());
                         editor.commit();
@@ -245,50 +256,50 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
                                 dismiss();
                             }
                         }
-					}
-				}
-		
-				catch(Exception e){
-					new AlertDialog.Builder(mActivity).setMessage(e.toString()).show();
+                    }
+                }
+        
+                catch(Exception e){
+                    new AlertDialog.Builder(mActivity).setMessage(e.toString()).show();
                     Log.e(TAG, "Error handling click", e);
-					browseTo(new File("/"));
-				}
-			}
-		}
+                    browseTo(new File("/"));
+                }
+            }
+        }
 
-		
-		
-	}
+        
+        
+    }
 
 
     @Override
     public boolean onItemLongClick(AdapterView<?>  parent, View  view, int position, long id){
-		String selectedFileString = this.directoryEntries.get(position);
-		if(selectedFileString.equals(CURRENT_DIR)){
+        String selectedFileString = this.directoryEntries.get(position);
+        if(selectedFileString.equals(CURRENT_DIR)){
             /* Do nothing */
-		}
-		else if(selectedFileString.equals(UP_ONE_LEVEL_DIR)){
+        }
+        else if(selectedFileString.equals(UP_ONE_LEVEL_DIR)){
             /* Do nithing */
-		}
-		else{
-			final File clickedFile;
-			switch(this.displayMode){
-			case RELATIVE:
-				clickedFile = new File(this.currentDirectory.getAbsolutePath() + this.directoryEntries.get(position));
-				break;
-			case ABSOLUTE:
-				clickedFile = new File(this.directoryEntries.get(position));
-				break;
+        }
+        else{
+            final File clickedFile;
+            switch(this.displayMode){
+            case RELATIVE:
+                clickedFile = new File(this.currentDirectory.getAbsolutePath() + this.directoryEntries.get(position));
+                break;
+            case ABSOLUTE:
+                clickedFile = new File(this.directoryEntries.get(position));
+                break;
             default:
                 /* Since clickedFile is final, it have to be initiated */
                 clickedFile = new File(this.currentDirectory.getAbsolutePath() + this.directoryEntries.get(position));
-			}
-			if(clickedFile != null){
-				try{
-					if(clickedFile.isDirectory()){
-						this.browseTo(clickedFile);
-					}
-					else if(clickedFile.isFile()){
+            }
+            if(clickedFile != null){
+                try{
+                    if(clickedFile.isDirectory()){
+                        this.browseTo(clickedFile);
+                    }
+                    else if(clickedFile.isFile()){
                         new AlertDialog.Builder(mActivity)
                             .setTitle(getString(R.string.fb_edit_dialog_title))
                             .setItems(R.array.fb_dialog_list, new DialogInterface.OnClickListener(){
@@ -349,8 +360,7 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
                                                     try {
                                                         FileUtils.copyFile(clickedFile, new File(value));
                                                         amFileUtil.deleteDbSafe(clickedFile.getAbsolutePath());
-                                                        RecentListUtil rlu = new RecentListUtil(mActivity);
-                                                        rlu.deleteFromRecentList(clickedFile.getAbsolutePath());
+                                                        recentListUtil.deleteFromRecentList(clickedFile.getAbsolutePath());
 
                                                     } catch (IOException e) {
                                                         new AlertDialog.Builder(mActivity)
@@ -379,28 +389,28 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
                             .create()
                             .show();
 
-					}
-				}
-		
-				catch(Exception e){
-					new AlertDialog.Builder(mActivity).setMessage(e.toString()).show();
-					browseTo(new File("/"));
-				}
-			}
-		}
+                    }
+                }
+        
+                catch(Exception e){
+                    new AlertDialog.Builder(mActivity).setMessage(e.toString()).show();
+                    browseTo(new File("/"));
+                }
+            }
+        }
         return true;
 
     }
 
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
         super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.file_browser_menu, menu);
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
+        inflater.inflate(R.menu.file_browser_menu, menu);
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.file_browser_createdb:{
                 /* Create a new DB */
                 final EditText input = new EditText(mActivity);
@@ -453,9 +463,9 @@ public class FileBrowserFragment extends DialogFragment implements OnItemClickLi
                 return true;
                 
             }
-	    }
-	    return false;
-	}
+        }
+        return false;
+    }
 
     private class FileBrowserAdapter extends ArrayAdapter<String> implements SectionIndexer{
         /* quick index sections */

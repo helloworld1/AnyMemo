@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
+import javax.inject.Inject;
+
 import org.apache.mycommons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.CardDao;
@@ -30,9 +32,8 @@ import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.queue.QuizQueueManager;
-import org.liberty.android.fantastischmemo.scheduler.DefaultScheduler;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
-import org.liberty.android.fantastischmemo.utils.AMStringUtil;
+import org.liberty.android.fantastischmemo.utils.AMStringUtils;
 import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
 
 import android.app.AlertDialog;
@@ -75,12 +76,12 @@ public class QuizActivity extends QACardActivity {
     
     /* Utils */
     private DictionaryUtil dictionaryUtil;
-    private AMStringUtil amStringUtil;
 
-    /* Schedulers */
-    private Scheduler scheduler = null;
+    private AMStringUtils amStringUtil;
 
     private QuizQueueManager queueManager;
+
+    private Scheduler scheduler;
 
     private int startCardId = -1;
     private int categoryId = -1;
@@ -97,6 +98,16 @@ public class QuizActivity extends QACardActivity {
 
     private int totalQuizSize = -1;
 
+    @Inject
+    public void setDictionaryUtil(DictionaryUtil dictionaryUtil) {
+        this.dictionaryUtil = dictionaryUtil;
+    }
+
+    @Inject
+    public void setScheduler(Scheduler scheduler) {
+        this.scheduler = scheduler;
+    }
+
     @Override
     public void onInit() throws Exception {
         cardDao = getDbOpenHelper().getCardDao();
@@ -104,14 +115,10 @@ public class QuizActivity extends QACardActivity {
         categoryDao = getDbOpenHelper().getCategoryDao();
         setting = getSetting();
         option = getOption();
-        dictionaryUtil = new DictionaryUtil(this);
-        amStringUtil = new AMStringUtil(this);
         if (categoryId!= -1) {
             filterCategory = categoryDao.queryForId(categoryId);
             assert filterCategory != null : "Query filter id: " + categoryId + ". Get null";
         }
-
-        scheduler = new DefaultScheduler(this);
 
         createQueue();
 
@@ -140,7 +147,7 @@ public class QuizActivity extends QACardActivity {
     }
 
     @Override
-	public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState){
         Bundle extras = getIntent().getExtras();
         categoryId = extras.getInt(EXTRA_CATEGORY_ID, -1);
         startCardOrd = extras.getInt(EXTRA_START_CARD_ORD, -1);
@@ -284,17 +291,17 @@ public class QuizActivity extends QACardActivity {
 
         // Make sure touching all areas can reveal the card.
         rootView.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
+            public void onClick(View v) {
                 onClickAnswerView();
-			}
+            }
         });
         rootView.setOnTouchListener(new View.OnTouchListener() {
 
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
                 onClickAnswerView();
-				return true ;
-			}
+                return true ;
+            }
         });
 
         gradeButtons.setOnGradeButtonClickListener(onGradeButtonClickListener);
@@ -319,11 +326,11 @@ public class QuizActivity extends QACardActivity {
     private GradeButtons.OnGradeButtonClickListener onGradeButtonClickListener
         = new GradeButtons.OnGradeButtonClickListener() {
 
-			@Override
-			public void onGradeButtonClick(int grade) {
+            @Override
+            public void onGradeButtonClick(int grade) {
                 GradeTask gradeTask = new GradeTask();
                 gradeTask.execute(grade);
-			}
+            }
         };
 
     /*
@@ -434,11 +441,11 @@ public class QuizActivity extends QACardActivity {
     // the queue.
     private DialogInterface.OnClickListener flushAndQuitListener =
         new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 finish();
-			}
+            }
         };
 
     private void showNoItemDialog(){

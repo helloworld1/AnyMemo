@@ -25,6 +25,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.sql.SQLException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -33,6 +37,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import javax.inject.Inject;
 
 import org.apache.mycommons.io.FileUtils;
 import org.apache.mycommons.io.FilenameUtils;
@@ -51,12 +57,14 @@ import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
-import org.liberty.android.fantastischmemo.utils.AMStringUtil;
+import org.liberty.android.fantastischmemo.utils.AMStringUtils;
 import org.liberty.android.fantastischmemo.utils.AMZipUtils;
 
 import android.content.Context;
 
-public class Mnemosyne2CardsExporter implements AbstractConverter {
+import com.google.inject.BindingAnnotation;
+
+public class Mnemosyne2CardsExporter implements Converter {
 
     private static final long serialVersionUID = -8315483384166979473L;
 
@@ -64,9 +72,14 @@ public class Mnemosyne2CardsExporter implements AbstractConverter {
 
     private AMFileUtil amFileUtil;
 
+    @Inject
     public Mnemosyne2CardsExporter(Context context) {
         mContext = context;
-        amFileUtil = new AMFileUtil(mContext);
+    }
+
+    @Inject
+    public void setAmFileUtil(AMFileUtil amFileUtil) {
+        this.amFileUtil = amFileUtil;
     }
 
     @Override
@@ -149,7 +162,7 @@ public class Mnemosyne2CardsExporter implements AbstractConverter {
                 categoryOidMap.put(tagName, oId);
                 outXml.printf("<log type=\"10\" o_id=\"%s\"><name>%s</name></log>\n",
                         oId,
-                        AMStringUtil.encodeXML(tagName));
+                        AMStringUtils.encodeXML(tagName));
             }
             // Then cards
             Iterator<Card> cardIterator = cardDao.iterator();
@@ -161,8 +174,8 @@ public class Mnemosyne2CardsExporter implements AbstractConverter {
                 cardIdOidMap.put(card.getId(), oId);
                 outXml.printf("<log type=\"16\" o_id=\"%s\"><b>%s</b><f>%s</f></log>\n"
                         , oId
-                        , AMStringUtil.encodeXML(back)
-                        , AMStringUtil.encodeXML(front));
+                        , AMStringUtils.encodeXML(back)
+                        , AMStringUtils.encodeXML(front));
             }
 
             // Then learningData
@@ -238,6 +251,11 @@ public class Mnemosyne2CardsExporter implements AbstractConverter {
     public String getDestExtension() {
         return "cards";
     }
+
+    @BindingAnnotation
+    @Target({ ElementType. FIELD, ElementType.PARAMETER, ElementType.METHOD })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface Type {};
 
 }
 

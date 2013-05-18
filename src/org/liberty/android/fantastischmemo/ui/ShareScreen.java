@@ -19,32 +19,27 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
+import javax.inject.Inject;
+
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
-
 import org.liberty.android.fantastischmemo.dao.CardDao;
-
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
-
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 import android.app.Activity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
-
 import android.os.Bundle;
-import android.util.Log;
 import android.preference.PreferenceManager;
-
+import android.util.Log;
 import android.view.View;
-
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -62,6 +57,13 @@ public class ShareScreen extends AMActivity implements View.OnClickListener{
     private Button cancelButton;
     private SharedPreferences settings;
     private final int ACTIVITY_FB = 1;
+
+    private RecentListUtil recentListUtil;
+
+    @Inject
+    public void setRecentListUtil(RecentListUtil recentListUtil) {
+        this.recentListUtil = recentListUtil;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,7 +91,7 @@ public class ShareScreen extends AMActivity implements View.OnClickListener{
             questionView.setText(subject);
             answerView.setText(text);
             String dbPath = settings.getString(AMPrefKeys.getRecentPathKey(0), "");
-    		dbnameView.setText(dbPath);
+            dbnameView.setText(dbPath);
         } else {
             finish();
         }
@@ -150,11 +152,11 @@ public class ShareScreen extends AMActivity implements View.OnClickListener{
             case ACTIVITY_FB:
             {
                 String fullpath = data.getStringExtra(FileBrowserActivity.EXTRA_RESULT_PATH);
-                RecentListUtil rlu = new RecentListUtil(this);
-                rlu.addToRecentList(fullpath);
+                recentListUtil.addToRecentList(fullpath);
                 dbnameView.setText(fullpath);
             }
             break;
         }
     }
+
 }

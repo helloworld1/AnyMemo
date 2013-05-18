@@ -2,14 +2,14 @@ package org.liberty.android.fantastischmemo.test.converter;
 
 import java.io.File;
 
-import org.liberty.android.fantastischmemo.converter.AbstractConverter;
+import org.liberty.android.fantastischmemo.converter.Converter;
 import org.liberty.android.fantastischmemo.converter.TabTxtExporter;
 
 public class TabTxtExporterTest extends AbstractConverterTest {
 
     @Override
-    protected AbstractConverter getConverter() {
-        return new TabTxtExporter(getContext());
+    protected Converter getConverter() {
+        return new TabTxtExporter(getContext(), '\t');
     }
 
     @Override

@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
+
+import javax.inject.Inject;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -14,7 +17,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.mycommons.io.IOUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import android.content.Context;
+
+import com.google.inject.assistedinject.Assisted;
 
 public class DropboxUploadHelper {
 
@@ -23,8 +29,8 @@ public class DropboxUploadHelper {
     
     private static final String FILE_UPLOAD_URL="https://api-content.dropbox.com/1/files_put/dropbox/AnyMemo/";
 
-
-    public DropboxUploadHelper(Context context, String authToken, String authTokenSecret) {
+    @Inject
+    public DropboxUploadHelper(Context context, @Assisted("authToken") String authToken, @Assisted("authTokenSecret") String authTokenSecret) {
         this.authToken = authToken;
         this.authTokenSecret = authTokenSecret;
     }

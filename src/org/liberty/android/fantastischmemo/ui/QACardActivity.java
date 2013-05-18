@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.amr.arabic.ArabicUtilities;
 import org.apache.mycommons.io.FilenameUtils;
 import org.apache.mycommons.lang3.StringUtils;
@@ -45,9 +47,8 @@ import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTSImpl;
-import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
-import org.liberty.android.fantastischmemo.utils.AMStringUtil;
+import org.liberty.android.fantastischmemo.utils.AMStringUtils;
 import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
 import org.xml.sax.XMLReader;
 
@@ -127,6 +128,11 @@ public abstract class QACardActivity extends AMActivity {
     
     private GestureLibrary gestureLibrary;
 
+    @Inject
+    public void setOption(Option option) {
+        this.option = option;
+    }
+
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -135,10 +141,8 @@ public abstract class QACardActivity extends AMActivity {
             dbPath = extras.getString(EXTRA_DBPATH);
         }
 
-        option = new Option(QACardActivity.this);
-
         dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(this, dbPath);
-        dbName = AMFileUtil.getFilenameFromPath(dbPath);
+        dbName = FilenameUtils.getName(dbPath);
 
         dbPath = extras.getString(EXTRA_DBPATH);
         setContentView(R.layout.qa_card_layout);
@@ -230,7 +234,7 @@ public abstract class QACardActivity extends AMActivity {
             SpannableStringBuilder buffer = new SpannableStringBuilder();
 
             /* Automatic check HTML */
-            if (AMStringUtil.isHTML(str) && (htmlDisplay.contains(cf))) {
+            if (AMStringUtils.isHTML(str) && (htmlDisplay.contains(cf))) {
                 if (setting.getHtmlLineBreakConversion() == true) {
                     String s = str.replace("\n", "<br />");
                     buffer.append(Html.fromHtml(s, imageGetter, tagHandler));
@@ -584,7 +588,7 @@ public abstract class QACardActivity extends AMActivity {
         @Override
         public Drawable getDrawable(String source) {
             Log.v(TAG, "Source: " + source);
-            String dbName = AMFileUtil.getFilenameFromPath(dbPath);
+            String dbName = FilenameUtils.getName(dbPath);
             try {
                 String[] paths = {
                 /* Relative path */
@@ -673,13 +677,13 @@ public abstract class QACardActivity extends AMActivity {
     protected boolean speakQuestion(AnyMemoTTS.OnTextToSpeechCompletedListener mListener){
         stopSpeak();
 
-        if (questionTTS != null) {
+        if (questionTTS != null && getCurrentCard() != null) {
             if(mListener != null) {
                 questionTTS.setOnTextToSpeechCompletedListener(mListener);
             }
-
             questionTTS.sayText(getCurrentCard().getQuestion());
             return true;
+
         }
         return false;
     }
@@ -687,20 +691,21 @@ public abstract class QACardActivity extends AMActivity {
     protected boolean speakAnswer() {
         return speakAnswer(null);
     }
-    
+
     protected boolean speakAnswer(AnyMemoTTS.OnTextToSpeechCompletedListener mListener) {
         stopSpeak();
 
-        if (answerTTS != null) {
+        if (answerTTS != null && getCurrentCard() != null) {
             if(mListener != null) {
                 answerTTS.setOnTextToSpeechCompletedListener(mListener);
             }
             answerTTS.sayText(getCurrentCard().getAnswer());
             return true;
         }
+        
         return false;
     }
-
+    
     protected void stopSpeak() {
         stopAnswerTTS();
         stopQuestionTTS();

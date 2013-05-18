@@ -26,6 +26,8 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -42,6 +44,8 @@ import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 import android.content.Context;
+
+import com.google.inject.assistedinject.Assisted;
 public class DropboxDownloadHelper {
 
     private final String authToken;
@@ -52,14 +56,20 @@ public class DropboxDownloadHelper {
 
     private final RecentListUtil recentListUtil;
 
-    private final AMFileUtil amFileUtil; 
+    private AMFileUtil amFileUtil;
 
-    public DropboxDownloadHelper(Context context, String authToken, String authTokenSecret) {
+    @Inject
+    public DropboxDownloadHelper(Context context, RecentListUtil recentListUtil,
+            @Assisted("authToken") String authToken, @Assisted("authTokenSecret") String authTokenSecret) {
         this.authToken = authToken;
         this.authTokenSecret = authTokenSecret;
-        this.recentListUtil = new RecentListUtil(context);
-        this.amFileUtil = new AMFileUtil(context);
+        this.recentListUtil = recentListUtil;
     }
+
+    @Inject
+    public void setAmFileUtil(AMFileUtil amFileUtil) { 
+        this.amFileUtil = amFileUtil;
+    }  
 
     // Fetch the list of db files
     public List<DownloadItem> fetchDBFileList() throws ClientProtocolException, IOException, JSONException {

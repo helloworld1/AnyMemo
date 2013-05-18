@@ -28,6 +28,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.mycommons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.tts.SpeakWord.OnCompletedListener;
+import org.liberty.android.fantastischmemo.aspect.CheckNullArgs;
 
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
@@ -126,8 +127,9 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
             }
         }
     }
-	
-	public void sayText(final String s){
+
+    @CheckNullArgs
+    public void sayText(final String s){
         /*if there is a user defined audio, speak it and return */
 		if (speakWord.speakWord(s)) {
 		    // This enables auto speak for user defined audio files.

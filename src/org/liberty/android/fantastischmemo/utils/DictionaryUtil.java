@@ -22,6 +22,8 @@ package org.liberty.android.fantastischmemo.utils;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.domain.Option;
 
@@ -43,12 +45,15 @@ public class DictionaryUtil {
 
     private Option option;
 
-    private AMStringUtil amStringUtil;
-
+    @Inject
     public DictionaryUtil(Activity activity) {
         mActivity = activity;
-        option = new Option(mActivity);
-        amStringUtil = new AMStringUtil(mActivity);
+    }
+
+
+    @Inject
+    public void setOption(Option option) {
+        this.option = option;
     }
 
     /*
@@ -66,19 +71,19 @@ public class DictionaryUtil {
 
         // Maintina the order of words in the original text
         Set<String> wordSet = new LinkedHashSet<String>();
-        wordSet.add(amStringUtil.stripHTML(text));
+        wordSet.add(AMStringUtils.stripHTML(text));
         for (String t : texts) {
-            wordSet.add(amStringUtil.stripHTML(t));
+            wordSet.add(AMStringUtils.stripHTML(t));
         }
 
-        String[] splittedText = amStringUtil.stripHTML(text).split(" ");
+        String[] splittedText = AMStringUtils.stripHTML(text).split(" ");
 
         for (String word : splittedText) {
             wordSet.add(word);
         }
 
         for (String t : texts) {
-            String[] splitted = amStringUtil.stripHTML(t).split(" ");
+            String[] splitted = AMStringUtils.stripHTML(t).split(" ");
 
             for (String word : splitted) {
                 wordSet.add(word);
@@ -113,8 +118,7 @@ public class DictionaryUtil {
     }
 
     public void lookupDictionary(String lookupWord) {
-        if(option.getDictApp() == Option.DictApp.COLORDICT){
-            Intent intent = new Intent("colordict.intent.action.SEARCH");
+        if(option.getDictApp() == Option.DictApp.COLORDICT){ Intent intent = new Intent("colordict.intent.action.SEARCH");
             intent.putExtra("EXTRA_QUERY", lookupWord);
             intent.putExtra("EXTRA_FULLSCREEN", false);
             //intent.putExtra(EXTRA_HEIGHT, 400); //400pixel, if you don't specify, fill_parent"

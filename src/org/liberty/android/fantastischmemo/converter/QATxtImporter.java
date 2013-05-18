@@ -19,26 +19,35 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.converter;
 
+import java.io.BufferedReader;
 import java.io.File;
-
+import java.io.FileReader;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.util.LinkedList;
 import java.util.List;
 
-import org.liberty.android.fantastischmemo.*;
+import javax.inject.Inject;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.util.LinkedList;
-
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.dao.CardDao;
-
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
+
 import android.content.Context;
 
-public class QATxtImporter implements AbstractConverter{
+import com.google.inject.BindingAnnotation;
+
+public class QATxtImporter implements Converter{
+
+    private static final long serialVersionUID = 7934270553043502048L;
     private Context mContext;
 
+    @Inject
     public QATxtImporter(Context context){
         mContext = context;
     }
@@ -134,5 +143,10 @@ public class QATxtImporter implements AbstractConverter{
     public String getDestExtension() {
         return "db";
     }
+
+    @BindingAnnotation
+    @Target({ ElementType. FIELD, ElementType.PARAMETER, ElementType.METHOD })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface Type {};
 }
 

@@ -22,7 +22,7 @@ package org.liberty.android.fantastischmemo.ui;
 import java.io.File;
 
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.converter.AbstractConverter;
+import org.liberty.android.fantastischmemo.converter.Converter;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -34,7 +34,7 @@ import android.util.Log;
 public class ConverterFragment extends FileBrowserFragment {
     public static final String EXTRA_CONVERTER = "converterObject";
     private Activity mActivity;
-    private AbstractConverter mConverter;
+    private Converter mConverter;
 
     private final static String TAG = "ConverterFragment";
 
@@ -52,7 +52,7 @@ public class ConverterFragment extends FileBrowserFragment {
         Bundle args = getArguments();
         assert args != null : "Null args in ConverterFragment";
 
-        mConverter = (AbstractConverter) args.getSerializable(EXTRA_CONVERTER);
+        mConverter = (Converter) args.getSerializable(EXTRA_CONVERTER);
     }
 
     /*

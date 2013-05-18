@@ -4,23 +4,22 @@ import java.io.IOException;
 
 import org.liberty.android.fantastischmemo.R;
 
+import roboguice.fragment.RoboDialogFragment;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaRecorder;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ToggleButton;
 
-public class AudioRecorderFragment extends DialogFragment {
+public class AudioRecorderFragment extends RoboDialogFragment {
 
     private static final String TAG = "AudioRecorderFragment";
 
