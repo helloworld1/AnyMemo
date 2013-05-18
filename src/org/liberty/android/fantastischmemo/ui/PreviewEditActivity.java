@@ -103,11 +103,8 @@ public class PreviewEditActivity extends QACardActivity {
     private View searchPrevButton;
 
     private Setting setting;
-
     private ShareUtil shareUtil;
-
     private AMPrefUtil amPrefUtil;
-    
     private GestureDetector gestureDetector;
 
     // The first card to read and display.
@@ -127,7 +124,6 @@ public class PreviewEditActivity extends QACardActivity {
             dbPath = extras.getString(EXTRA_DBPATH);
             activeCategoryId = extras.getInt(EXTRA_CATEGORY, -1);
             startCardId = extras.getInt(EXTRA_CARD_ID, -1);
-            
         }
 
         /* 
@@ -354,7 +350,6 @@ public class PreviewEditActivity extends QACardActivity {
                 	AutoSpeakFragment f = new AutoSpeakFragment();
                 	
                 	fl.setId(MAGIC_FRAME_LAYOUT_ID);
-                	f.setAutoSpeakEventHander(f.getAutoSpeakEventHandler());
                 	root.addView(fl);
                 //	Log.e(TAG, String.format("fl id is %d", fl.getId()));
                 	ft.add(fl.getId(), f);
@@ -661,7 +656,7 @@ public class PreviewEditActivity extends QACardActivity {
         }
     }
     
-    public void gotoNext(){
+    protected void gotoNext(){
         if (getCurrentCard() != null) {
             setCurrentCard(cardDao.queryNextCard(getCurrentCard(), currentCategory));
             try {
@@ -694,7 +689,7 @@ public class PreviewEditActivity extends QACardActivity {
             .show();
     }
 
-    public void gotoPrev(){
+    protected void gotoPrev(){
         if (getCurrentCard() != null) {
             setCurrentCard(cardDao.queryPrevCard(getCurrentCard(), currentCategory));
             try {

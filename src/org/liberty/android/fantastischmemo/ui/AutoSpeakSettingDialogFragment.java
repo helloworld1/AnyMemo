@@ -19,6 +19,12 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 public class AutoSpeakSettingDialogFragment extends DialogFragment{
+    private static final int MAX_QA_SLEEP_TIME_IN_SEC = 10;
+    private static final int MAX_CARD_SLEEP_TIME_IN_SEC = 10;
+    private static final int DEFAULT_QA_SLEEP_TIME_IN_SEC = 1;
+    private static final int DEFAULT_CARD_SLEEP_TIME_IN_SEC = 1;
+    
+    
     private SeekBar seekBarQA;
     private TextView textViewQA;
     private SeekBar seekBarCard;
@@ -32,9 +38,6 @@ public class AutoSpeakSettingDialogFragment extends DialogFragment{
     private SharedPreferences.Editor editor;
     private Activity mActivity;
     
-    private static final int MAX_QA_SLEEP_TIME_IN_SEC = 10;
-    private static final int MAX_CARD_SLEEP_TIME_IN_SEC = 10;
-    
     public static AutoSpeakSettingDialogFragment newInstance(int title) {
         AutoSpeakSettingDialogFragment frag = new AutoSpeakSettingDialogFragment();
         Bundle bundle = new Bundle();
@@ -42,14 +45,6 @@ public class AutoSpeakSettingDialogFragment extends DialogFragment{
         frag.setArguments(bundle);
         return frag;
     }
-    
-    /*
-    public Dialog onCreateDialog(Bundle bundle) {
-        //int title = getArguments().getInt("title");
-        
-        return new AlertDialog.Builder(getActivity()).create();
-    }
-    */
     
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -59,7 +54,7 @@ public class AutoSpeakSettingDialogFragment extends DialogFragment{
         
         textViewQA = (TextView) v.findViewById(R.id.auto_speak_qa_sleep_interval_text);
         seekBarQA = (SeekBar) v.findViewById(R.id.auto_speak_qa_sleep_interval_seekbar);
-        qaSleepTime = settings.getInt(AMPrefKeys.AUTO_SPEAK_QA_SLEEP_INTERVAL_KEY, 1);
+        qaSleepTime = settings.getInt(AMPrefKeys.AUTO_SPEAK_QA_SLEEP_INTERVAL_KEY, DEFAULT_QA_SLEEP_TIME_IN_SEC);
         textViewQA.setText(String.format(getString(R.string.auto_speak_qa_sleep_interval_text), qaSleepTime));
         
         seekBarQA.setProgress(qaSleepTime);
@@ -82,7 +77,7 @@ public class AutoSpeakSettingDialogFragment extends DialogFragment{
         
         
         seekBarCard = (SeekBar) v.findViewById(R.id.auto_speak_card_sleep_interval_seekbar);
-        cardSleepTime = settings.getInt(AMPrefKeys.AUTO_SPEAK_CARD_SLEEP_INTERVAL_KEY, 1);
+        cardSleepTime = settings.getInt(AMPrefKeys.AUTO_SPEAK_CARD_SLEEP_INTERVAL_KEY, DEFAULT_CARD_SLEEP_TIME_IN_SEC);
         seekBarCard.setProgress(cardSleepTime);
         textViewCard = (TextView) v.findViewById(R.id.auto_speak_card_sleep_interval_text);
         textViewCard.setText(String.format(getString(R.string.auto_speak_card_sleep_interval_text), cardSleepTime));
@@ -104,20 +99,18 @@ public class AutoSpeakSettingDialogFragment extends DialogFragment{
             }
         });
         
-        getDialog().setTitle(R.string.auto_speak_setting_dialog);
+        getDialog().setTitle(R.string.settings_menu_text);
         
         return v;
     }
     
     @Override
     public void onDismiss(DialogInterface dialog) {
-   //     Log.i(TAG, "Previous value is " + settings.getInt(AMPrefKeys.AUTO_SPEAK_SLEEP_TIME_KEY, 5));
         int qa = seekBarQA.getProgress();
         int card = seekBarCard.getProgress();
         
         editor.putInt(AMPrefKeys.AUTO_SPEAK_QA_SLEEP_INTERVAL_KEY, qa);
         editor.putInt(AMPrefKeys.AUTO_SPEAK_CARD_SLEEP_INTERVAL_KEY, card) ;
-  //      Log.i(TAG, editText.getText().toString());
         editor.commit();
         super.onDismiss(dialog);
     }

@@ -21,20 +21,17 @@ package org.liberty.android.fantastischmemo.tts;
 
 
 public interface AnyMemoTTS {
-
+    
+    // Stop the current play while keeping the media player.
     void stop();
+    
+    // Release the media player. 
+    void destory();
 
-    void shutdown();
-
-    void sayText(String s);
-
-    void setOnTextToSpeechCompletedListener(OnTextToSpeechCompletedListener mListener);
+    void sayText(final String s, final OnTextToSpeechCompletedListener onTextToSpeechCompletedListener);
 
     interface OnTextToSpeechCompletedListener {
         void onTextToSpeechCompleted(String text);
     }
     
 }
-
-
-

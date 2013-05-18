@@ -189,8 +189,8 @@ public class SpeakWord {
             }
         }
     }
-
-    public void shutdown(){
+    
+    public void destory(){
         if(mp != null){
             try{
                 mp.reset();

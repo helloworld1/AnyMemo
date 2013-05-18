@@ -38,15 +38,6 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
 
 	private volatile TextToSpeech myTTS;
 	private SpeakWord speakWord;
-	private  OnTextToSpeechCompletedListener onTextToSpeechCompletedListener =
-	        new OnTextToSpeechCompletedListener() {
-        
-        @Override
-        public void onTextToSpeechCompleted(String text) {
-            // Do nothing. 
-            Log.i(TAG, "on TextToSpeechCompleted " + text);
-        }
-    }; 
 	private final Locale myLocale;
     
     private volatile ReentrantLock initLock = new ReentrantLock();
@@ -102,9 +93,9 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
         initLock.unlock();
     }
     
-    public void shutdown(){
+    public void destory(){
         if(speakWord != null){
-            speakWord.shutdown();
+            speakWord.destory();
         }
         
         myTTS.shutdown();
@@ -128,8 +119,7 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
         }
     }
 
-    @CheckNullArgs
-    public void sayText(final String s){
+    public void sayText(final String s, final OnTextToSpeechCompletedListener onTextToSpeechCompletedListener){
         /*if there is a user defined audio, speak it and return */
 		if (speakWord.speakWord(s)) {
 		    // This enables auto speak for user defined audio files.
@@ -137,7 +127,9 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
                 
                 @Override
                 public void onCompleted() {
-                    onTextToSpeechCompletedListener.onTextToSpeechCompleted(s);
+                    if (onTextToSpeechCompletedListener != null) {
+                        onTextToSpeechCompletedListener.onTextToSpeechCompleted(s);
+                    }
                 }
             });
 		    
@@ -146,6 +138,8 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
 		
         /*otherwise, speak the content*/
         Log.v(TAG, "say it!");
+        // This is slightly different from AMStringUtils.stripHTML since we replace the <br> with
+        // a period to let it have a short pause. 
         // Replace break with period
         String processed_str = s.replaceAll("\\<br\\>", ". " );
         // Remove HTML
@@ -163,7 +157,9 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
             myTTS.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
                 @Override
                 public void onUtteranceCompleted(String utteranceId) {
-                    onTextToSpeechCompletedListener.onTextToSpeechCompleted(s);
+                    if (onTextToSpeechCompletedListener != null) {
+                        onTextToSpeechCompletedListener.onTextToSpeechCompleted(s);
+                    }
                 }
             });
 
@@ -194,12 +190,6 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
 
         return new Locale(loc);
 
-    }
-
-    @Override
-    public void setOnTextToSpeechCompletedListener(
-            OnTextToSpeechCompletedListener mListener) {
-        this.onTextToSpeechCompletedListener = mListener;
     }
     
 }

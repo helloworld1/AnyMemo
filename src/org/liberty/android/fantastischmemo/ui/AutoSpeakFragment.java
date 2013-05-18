@@ -2,12 +2,12 @@ package org.liberty.android.fantastischmemo.ui;
 
 
 import org.apache.mycommons.lang3.StringUtils;
+import org.apache.mycommons.lang3.time.DateUtils;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -23,6 +23,7 @@ import android.widget.ImageButton;
 
 public class AutoSpeakFragment extends Fragment {
     private static final String TAG = "AutoSpeakFragment";
+    private static final int DEFAULT_SLEEP_TIME_IN_SEC = 1;
     private ImageButton playButton;
     private ImageButton previousButton;
     private ImageButton nextButton;
@@ -33,15 +34,11 @@ public class AutoSpeakFragment extends Fragment {
     private SharedPreferences settings;
     private SharedPreferences.Editor editor;
     
-    private boolean isPlaying = false;
+    private boolean isPlayButtonSelected = false;
     private Handler handler;
     
     // We need to check this since activity may finish early while TTS thread is still trying to call gotoNext().
     private volatile boolean isActivityFinished = false;
-
-    public AutoSpeakEventHandler getAutoSpeakEventHandler() {
-        return this.autoSpeakEventHandler;
-    } 
   
     private AnyMemoTTS.OnTextToSpeechCompletedListener mQuestionListener = new AnyMemoTTS.OnTextToSpeechCompletedListener() {
         
@@ -50,7 +47,7 @@ public class AutoSpeakFragment extends Fragment {
                 Runnable r = new Runnable() {
                     @Override
                     public void run() {
-                        if(!isActivityFinished && isPlaying) {
+                        if(!isActivityFinished && isPlayButtonSelected) {
                             // This logic ensures that if we change card when speaking, we want to start from the question 
                             // for the new card. 
                             if (!StringUtils.equals(text, previewEditActivity.getCurrentCard().getQuestion())) {
@@ -62,7 +59,8 @@ public class AutoSpeakFragment extends Fragment {
                     }
                 };
                 
-                handler.postDelayed(r, 1000 * settings.getInt(AMPrefKeys.AUTO_SPEAK_QA_SLEEP_INTERVAL_KEY, 1));
+                handler.postDelayed(r, 
+                        DateUtils.MILLIS_PER_SECOND * settings.getInt(AMPrefKeys.AUTO_SPEAK_QA_SLEEP_INTERVAL_KEY, DEFAULT_SLEEP_TIME_IN_SEC));
         }
     };
     
@@ -76,7 +74,7 @@ public class AutoSpeakFragment extends Fragment {
                 public void run() {
                     // This logic ensures that if we change card when speaking, we want to start from the question 
                     // for the new card. 
-                    if(!isActivityFinished && isPlaying) {
+                    if(!isActivityFinished && isPlayButtonSelected) {
                         if (!StringUtils.equals(text, previewEditActivity.getCurrentCard().getAnswer())) {
                             previewEditActivity.speakQuestion(mQuestionListener);
                             return;
@@ -88,23 +86,25 @@ public class AutoSpeakFragment extends Fragment {
 
                 }
             };
-            handler.postDelayed(r, 1000 * settings.getInt(AMPrefKeys.AUTO_SPEAK_CARD_SLEEP_INTERVAL_KEY, 1));
+            handler.postDelayed(r, 
+                    DateUtils.MILLIS_PER_SECOND * settings.getInt(AMPrefKeys.AUTO_SPEAK_CARD_SLEEP_INTERVAL_KEY, DEFAULT_SLEEP_TIME_IN_SEC));
         }
     };
 
     @Override
     public void onPause() {
-        isActivityFinished = true;
-        isPlaying = !isPlaying;
         super.onPause();
+        isActivityFinished = true;
+        if (isPlayButtonSelected) {
+            isPlayButtonSelected = false;
+        }
     }
     
     @Override
     public void onResume() {
-        isActivityFinished = false;
-        isPlaying = !isPlaying;
-        playButton.setSelected(false);
         super.onResume();
+        isActivityFinished = false;
+        playButton.setSelected(false);
     }
     
     @Override
@@ -121,53 +121,29 @@ public class AutoSpeakFragment extends Fragment {
         this.isActivityFinished = true;
         super.onDestroy();
     }
-    
-    private AutoSpeakEventHandler autoSpeakEventHandler = 
-            new AutoSpeakEventHandler() {
-                
-                @Override
-                public void onNextButtonClick() {
-                    previewEditActivity.gotoNext();
-                }
-
-                @Override
-                public void onPreviousButtonClick() {
-                    previewEditActivity.gotoPrev();
-                }
-
-                @Override
-                public void onPlayButtonClick() {
-                    isActivityFinished = false;
-                    previewEditActivity.speakQuestion(mQuestionListener);
-                }
-
-                @Override
-                public void onPauseButtonClick() {
-                    isActivityFinished = true;
-                }
-            };
 
     private View.OnClickListener buttonListener = new View.OnClickListener() {
 
         @Override
         public void onClick(View v) {
             if(v == playButton) {
-                isPlaying = !isPlaying;
-                Log.i(TAG, "Play button clicked, isPlaying " + isPlaying);
+                isPlayButtonSelected = !isPlayButtonSelected;
+                Log.i(TAG, "Play button clicked, isPlaying " + isPlayButtonSelected);
                 
-                if(isPlaying) {
+                if(isPlayButtonSelected) {
                     Log.i(TAG, "start speaking");
-                    autoSpeakEventHandler.onPlayButtonClick();
+                    isActivityFinished = false;
+                    previewEditActivity.speakQuestion(mQuestionListener);
                     playButton.setSelected(true);
                 } else {
-                    autoSpeakEventHandler.onPauseButtonClick();
+                    isActivityFinished = true;
                     playButton.setSelected(false);
                 }
                 
             } else if(v == previousButton) {
-                autoSpeakEventHandler.onPreviousButtonClick();
+                previewEditActivity.gotoPrev();
             } else if(v == nextButton) {
-                autoSpeakEventHandler.onNextButtonClick();
+                previewEditActivity.gotoNext();
             } else if(v == settingsButton) {
                 displaySettingsDialog();
             } else if(v == exitButton) {
@@ -177,19 +153,15 @@ public class AutoSpeakFragment extends Fragment {
     };
 
     private void displaySettingsDialog() {
-        isPlaying = !isPlaying;
+        isPlayButtonSelected = !isPlayButtonSelected;
         playButton.setSelected(false);
         AutoSpeakSettingDialogFragment a = new AutoSpeakSettingDialogFragment();
         a.show(getActivity().getSupportFragmentManager(), TAG);
     }
     
     private void dismissFragment() {
-        autoSpeakEventHandler.onPauseButtonClick();
+        isActivityFinished = true;
         getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
-    }
-    
-    public void setAutoSpeakEventHander(AutoSpeakEventHandler autoSpeakEventHander) {
-        this.autoSpeakEventHandler = autoSpeakEventHander;
     }
 
     @Override

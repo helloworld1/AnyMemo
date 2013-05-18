@@ -446,7 +446,6 @@
     <string name="auto_speak_qa_sleep_interval_text">Interval between question and answer is %d sec</string>
     <string name="auto_speak_card_sleep_interval_text">Interval between each card is %d sec</string>
     <string name="auto_speak_text">Auto Speak</string>
-    <string name="auto_speak_setting_dialog">Setting Dialog</string>
     <string name="import_mnemosyne2_cards_text">Import Mnemosyne2 cards</string>
     <string name="export_mnemosyne2_cards_text">Export Mnemosyne2 cards</string>
     <string name="author_text">Author</string>

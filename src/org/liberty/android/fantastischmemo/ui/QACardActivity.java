@@ -84,7 +84,6 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 public abstract class QACardActivity extends AMActivity {
-
     public static String EXTRA_DBPATH = "dbpath";
 
     private String dbPath;
@@ -678,10 +677,7 @@ public abstract class QACardActivity extends AMActivity {
         stopSpeak();
 
         if (questionTTS != null && getCurrentCard() != null) {
-            if(mListener != null) {
-                questionTTS.setOnTextToSpeechCompletedListener(mListener);
-            }
-            questionTTS.sayText(getCurrentCard().getQuestion());
+            questionTTS.sayText(getCurrentCard().getQuestion(), mListener);
             return true;
 
         }
@@ -696,10 +692,7 @@ public abstract class QACardActivity extends AMActivity {
         stopSpeak();
 
         if (answerTTS != null && getCurrentCard() != null) {
-            if(mListener != null) {
-                answerTTS.setOnTextToSpeechCompletedListener(mListener);
-            }
-            answerTTS.sayText(getCurrentCard().getAnswer());
+            answerTTS.sayText(getCurrentCard().getAnswer(), mListener);
             return true;
         }
         
@@ -725,11 +718,11 @@ public abstract class QACardActivity extends AMActivity {
 
     private void shutdownTTS() {
         if (questionTTS != null) {
-            questionTTS.shutdown();
+            questionTTS.destory();
         }
 
         if (answerTTS != null) {
-            answerTTS.shutdown();
+            answerTTS.destory();
         }
     }
 
