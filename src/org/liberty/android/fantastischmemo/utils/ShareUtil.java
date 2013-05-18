@@ -1,5 +1,7 @@
 package org.liberty.android.fantastischmemo.utils;
 
+import javax.inject.Inject;
+
 import org.apache.mycommons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.domain.Card;
@@ -9,8 +11,10 @@ import android.content.Intent;
 import android.net.Uri;
 
 public class ShareUtil {
+
     private Context mContext;
 
+    @Inject
     public ShareUtil(Context context) {
         mContext = context;
     }

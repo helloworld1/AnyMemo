@@ -65,6 +65,11 @@ public class OpenActionsFragment extends RoboDialogFragment {
     private RecentListUtil recentListUtil;
 
     @Inject
+    public void setShareUtil(ShareUtil shareUtil) {
+        this.shareUtil = shareUtil;
+    }
+
+    @Inject
     public void setAmFileUtil(AMFileUtil amFileUtil) {
         this.amFileUtil = amFileUtil;
     }   
@@ -78,7 +83,6 @@ public class OpenActionsFragment extends RoboDialogFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = (AMActivity)activity;
-        shareUtil = new ShareUtil(activity);
         amPrefUtil = new AMPrefUtil(activity);
     }
     @Override

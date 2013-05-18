@@ -22,11 +22,12 @@ package org.liberty.android.fantastischmemo.ui;
 import java.sql.SQLException;
 import java.util.HashMap;
 
+import javax.inject.Inject;
+
 import org.apache.mycommons.lang3.math.NumberUtils;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.aspect.CheckNullArgs;
-import org.liberty.android.fantastischmemo.aspect.DisplayError;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
@@ -109,6 +110,11 @@ public class PreviewEditActivity extends QACardActivity {
     // The first card to read and display.
     private int startCardId = 1;
 
+    @Inject
+    public void setShareUtil(ShareUtil shareUtil) {
+        this.shareUtil = shareUtil;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -139,7 +145,6 @@ public class PreviewEditActivity extends QACardActivity {
         settingDao = getDbOpenHelper().getSettingDao();
         setting = settingDao.queryForId(1);
 
-        shareUtil = new ShareUtil(this);
         amPrefUtil = new AMPrefUtil(this);
 
         // If category is set, it will override the card id.

@@ -124,6 +124,11 @@ public class StudyActivity extends QACardActivity {
         this.dictionaryUtil = dictionaryUtil;
     }
 
+    @Inject
+    public void setShareUtil(ShareUtil shareUtil) {
+        this.shareUtil = shareUtil;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         Bundle extras = getIntent().getExtras();
@@ -337,7 +342,6 @@ public class StudyActivity extends QACardActivity {
         categoryDao = getDbOpenHelper().getCategoryDao();
         setting = getSetting();
         option = getOption();
-        shareUtil = new ShareUtil(this);
         amDateUtil = new AMDateUtil(this);
 
 
