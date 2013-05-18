@@ -617,12 +617,20 @@ abstract public class QACardActivity extends AMActivity {
                 int scaledWidth = width;
                 int scaledHeight = height;
                 float scaleFactor = ((float) screenWidth) / width;
+                float largeFactor = (((float) screenWidth) * 0.6f) / width;
                 Matrix matrix = new Matrix();
                 if (scaleFactor < 1.0f) {
                     matrix.postScale(scaleFactor, scaleFactor);
                     scaledWidth = (int) (width * scaleFactor);
                     scaledHeight = (int) (height * scaleFactor);
                 }
+                
+                if (scaleFactor > 5.0f || scaleFactor > 1.67f) {
+                    matrix.postScale(largeFactor, largeFactor);
+                    scaledWidth = (int) (width * largeFactor);
+                    scaledHeight = (int) (height * largeFactor);
+                }
+                
                 Bitmap resizedBitmap = Bitmap.createBitmap(orngBitmap, 0, 0,
                         width, height, matrix, true);
                 BitmapDrawable d = new BitmapDrawable(resizedBitmap);
