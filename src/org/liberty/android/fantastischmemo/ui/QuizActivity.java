@@ -33,7 +33,7 @@ import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.queue.QuizQueueManager;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
-import org.liberty.android.fantastischmemo.utils.AMStringUtil;
+import org.liberty.android.fantastischmemo.utils.AMStringUtils;
 import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
 
 import android.app.AlertDialog;
@@ -77,7 +77,7 @@ public class QuizActivity extends QACardActivity {
     /* Utils */
     private DictionaryUtil dictionaryUtil;
 
-    private AMStringUtil amStringUtil;
+    private AMStringUtils amStringUtil;
 
     private QuizQueueManager queueManager;
 

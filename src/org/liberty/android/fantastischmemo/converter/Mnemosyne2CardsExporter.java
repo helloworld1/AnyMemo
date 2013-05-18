@@ -57,7 +57,7 @@ import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
-import org.liberty.android.fantastischmemo.utils.AMStringUtil;
+import org.liberty.android.fantastischmemo.utils.AMStringUtils;
 import org.liberty.android.fantastischmemo.utils.AMZipUtils;
 
 import android.content.Context;
@@ -162,7 +162,7 @@ public class Mnemosyne2CardsExporter implements Converter {
                 categoryOidMap.put(tagName, oId);
                 outXml.printf("<log type=\"10\" o_id=\"%s\"><name>%s</name></log>\n",
                         oId,
-                        AMStringUtil.encodeXML(tagName));
+                        AMStringUtils.encodeXML(tagName));
             }
             // Then cards
             Iterator<Card> cardIterator = cardDao.iterator();
@@ -174,8 +174,8 @@ public class Mnemosyne2CardsExporter implements Converter {
                 cardIdOidMap.put(card.getId(), oId);
                 outXml.printf("<log type=\"16\" o_id=\"%s\"><b>%s</b><f>%s</f></log>\n"
                         , oId
-                        , AMStringUtil.encodeXML(back)
-                        , AMStringUtil.encodeXML(front));
+                        , AMStringUtils.encodeXML(back)
+                        , AMStringUtils.encodeXML(front));
             }
 
             // Then learningData

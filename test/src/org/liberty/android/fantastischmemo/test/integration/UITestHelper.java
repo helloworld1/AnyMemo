@@ -1,4 +1,4 @@
-package org.liberty.android.fantastischmemo.test.ui;
+package org.liberty.android.fantastischmemo.test.integration;
 
 import java.io.File;
 import java.io.IOException;

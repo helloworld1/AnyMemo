@@ -71,19 +71,19 @@ public class DictionaryUtil {
 
         // Maintina the order of words in the original text
         Set<String> wordSet = new LinkedHashSet<String>();
-        wordSet.add(AMStringUtil.stripHTML(text));
+        wordSet.add(AMStringUtils.stripHTML(text));
         for (String t : texts) {
-            wordSet.add(AMStringUtil.stripHTML(t));
+            wordSet.add(AMStringUtils.stripHTML(t));
         }
 
-        String[] splittedText = AMStringUtil.stripHTML(text).split(" ");
+        String[] splittedText = AMStringUtils.stripHTML(text).split(" ");
 
         for (String word : splittedText) {
             wordSet.add(word);
         }
 
         for (String t : texts) {
-            String[] splitted = AMStringUtil.stripHTML(t).split(" ");
+            String[] splitted = AMStringUtils.stripHTML(t).split(" ");
 
             for (String word : splitted) {
                 wordSet.add(word);

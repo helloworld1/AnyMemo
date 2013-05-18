@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 
 import org.apache.mycommons.lang3.StringUtils;
 
-public class AMStringUtil {
+public class AMStringUtils {
 
     // Strip the HTML from the text and return plain text
     public static String stripHTML(String htmlText) {

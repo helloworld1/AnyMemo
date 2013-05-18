@@ -1,4 +1,4 @@
-package org.liberty.android.fantastischmemo.test.ui;
+package org.liberty.android.fantastischmemo.test.integration;
 
 import org.liberty.android.fantastischmemo.R;
 

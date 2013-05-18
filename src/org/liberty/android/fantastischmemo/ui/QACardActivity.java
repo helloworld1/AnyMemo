@@ -47,7 +47,7 @@ import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTSImpl;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
-import org.liberty.android.fantastischmemo.utils.AMStringUtil;
+import org.liberty.android.fantastischmemo.utils.AMStringUtils;
 import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
 import org.xml.sax.XMLReader;
 
@@ -234,7 +234,7 @@ abstract public class QACardActivity extends AMActivity {
             SpannableStringBuilder buffer = new SpannableStringBuilder();
 
             /* Automatic check HTML */
-            if (AMStringUtil.isHTML(str) && (htmlDisplay.contains(cf))) {
+            if (AMStringUtils.isHTML(str) && (htmlDisplay.contains(cf))) {
                 if (setting.getHtmlLineBreakConversion() == true) {
                     String s = str.replace("\n", "<br />");
                     buffer.append(Html.fromHtml(s, imageGetter, tagHandler));
