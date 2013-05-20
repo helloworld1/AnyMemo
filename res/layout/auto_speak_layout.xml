@@ -12,8 +12,7 @@
             android:layout_marginRight="10dp"
             android:background="@android:color/transparent"
             android:layout_weight="1"
-            android:src="@drawable/auto_speak_play_button"
-            />
+            android:src="@drawable/auto_speak_play_button" />
 
         <ImageButton
             android:id="@+id/auto_speak_previous_button"
@@ -23,8 +22,7 @@
             android:layout_marginRight="10dp"
             android:background="@android:color/transparent"
             android:layout_weight="1"
-            android:src="@drawable/previous"
-            />
+            android:src="@drawable/media_backward" />
 
         <ImageButton
             android:id="@+id/auto_speak_next_button"
@@ -34,8 +32,7 @@
             android:layout_marginRight="10dp"
             android:background="@android:color/transparent"
             android:layout_weight="1"
-            android:src="@drawable/next"
-            />
+            android:src="@drawable/media_forward" />
 
          <ImageButton
             android:id="@+id/auto_speak_settings_button"
@@ -45,8 +42,7 @@
             android:layout_marginRight="10dp"
             android:background="@android:color/transparent"
             android:layout_weight="1"
-            android:src="@drawable/settings"
-            />
+            android:src="@drawable/media_setting" />
 
         <ImageButton
             android:id="@+id/auto_speak_exit_button"
@@ -56,7 +52,6 @@
             android:layout_marginRight="10dp"
             android:background="@android:color/transparent"
             android:layout_weight="1"
-            android:src="@drawable/exit"
-            />
+            android:src="@drawable/media_close" />
 
 </LinearLayout>
