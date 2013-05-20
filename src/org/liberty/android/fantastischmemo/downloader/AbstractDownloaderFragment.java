@@ -57,13 +57,13 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
     private static final int TOAST_MSG_DURATION = 5000;
 
     private Activity mActivity;
-    
+
     private ListView listView;
 
     private DownloadListAdapter dlAdapter;
 
     private RecentListUtil recentListUtil;
-    
+
     /*
      * Retrieve the data when the user first open the
      * Downloader
@@ -79,7 +79,7 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
      * Go back to the previous list
      */
     abstract protected void goBack();
-    
+
     /*
      * Download the database based on the info
      */
@@ -150,7 +150,7 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
             return null;
         }
 
-        
+
         @Override
         public void onPostExecute(Exception e){
             progressDialog.dismiss();
@@ -158,7 +158,7 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
                 AMGUIUtility.displayError(mActivity, getString(R.string.downloader_connection_error), getString(R.string.downloader_connection_error_message), e);
                 return;
             }
-            
+
             dlAdapter.addList(downloadItems);
         }
 
@@ -215,7 +215,7 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
             return null;
         }
 
-        
+
         @Override
         public void onPostExecute(Exception e){
             progressDialog.dismiss();
@@ -252,8 +252,8 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
         }
     };
 
-    /* 
-     * Helper class to provide the info for each items 
+    /*
+     * Helper class to provide the info for each items
      * that could be categories, databases and other
      * special things
      */
@@ -306,7 +306,7 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
             }
             return v;
         }
-        
+
     }
 }
 

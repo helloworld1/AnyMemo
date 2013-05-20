@@ -24,7 +24,7 @@ package org.liberty.android.fantastischmemo;
  * Class that defines the contants that is used in AnyMemo.
  */
 public class AMPrefKeys {
-    
+
     // Keys for Algorithm customization.
     public static final String getInitialGradingIntervalKey(int grade) {
         return "initial_grading_interval_" + grade;
@@ -71,7 +71,7 @@ public class AMPrefKeys {
 
     // Dropbox
     public static final String DROPBOX_USERNAME_KEY = "dropbox_username";
-    
+
     public static final String DROPBOX_TOKEN_KEY = "dropbox_token";
 
     public static final String DROPBOX_SECRET_KEY = "dropbox_secret";
@@ -88,7 +88,7 @@ public class AMPrefKeys {
     public static final String QUIZLET_SAVED_SEARCH = "quizlet_saved_search";
     public static final String QUIZLET_SAVED_USER = "quizlet_saved_user";
     public static final String GOOGLE_AUTH_TOKEN = "google_auth_token";
-    
+
     // AnyMemo main activity
     public static final String FIRST_TIME_KEY = "first_time";
 
@@ -107,10 +107,10 @@ public class AMPrefKeys {
 
     // Card Editor
     public static final String ADD_BACK_KEY = "add_back";
-    // public static final String 
-    // public static final String 
-    // public static final String 
-    
+    // public static final String
+    // public static final String
+    // public static final String
+
     // List edit screen
     public static final String LIST_EDIT_SCREEN_PREFIX = "ListEditScreen";
 
@@ -123,11 +123,11 @@ public class AMPrefKeys {
 
     // AnyMemoService
     public static final String NOTIFICATION_INTERVAL_KEY = "notification_interval";
-    
+
     // AutoSpeak
     public static final String AUTO_SPEAK_QA_SLEEP_INTERVAL_KEY = "auto_speak_qa_sleep_interval";
     public static final String AUTO_SPEAK_CARD_SLEEP_INTERVAL_KEY = "auto_speak_card_sleep_interval";
-    
+
     // QA Card Activity
     public static final String CARD_GESTURE_ENABLED = "card_gesture_enabled";
 

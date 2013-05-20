@@ -46,18 +46,18 @@ import android.util.Log;
 public class CellsDBConverter {
 
     private Context mContext;
-    
+
     private final static SimpleDateFormat ISO8601_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
     private final static String TAG = "CellsDBConverter";
 
     public CellsDBConverter(Context context) {
-        mContext = context; 
+        mContext = context;
     }
 
     /* cardCells contains the question, answer, category and note
      * category and note is optionally.
-     * learningDataCells contains all necessary learning data. 
+     * learningDataCells contains all necessary learning data.
      * If learningDataCells, new learning data is used.
      * dbPath is the place to store converted database
      */
@@ -68,7 +68,7 @@ public class CellsDBConverter {
         if (learningDataCells != null) {
             numberOfLearningDataRows = learningDataCells.getRowCounts();
         }
-        
+
         // We ignore the header row
         List<Card> cardList = new ArrayList<Card>(numberOfRows + 1);
         for (int i = 1; i < numberOfRows; i++) {
@@ -105,7 +105,7 @@ public class CellsDBConverter {
             } else {
                 learningData = new LearningData();
             }
-            
+
 
             card.setCategory(category);
             card.setLearningData(learningData);
@@ -116,7 +116,7 @@ public class CellsDBConverter {
             throw new IOException("Wrong spreadsheet format. The spreadsheet should contain at least 1 worksheet with at least 2 columns of questions and answers.");
         }
 
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, dbPath); 
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, dbPath);
         try {
             CardDao cardDao = helper.getCardDao();
             cardDao.createCards(cardList);

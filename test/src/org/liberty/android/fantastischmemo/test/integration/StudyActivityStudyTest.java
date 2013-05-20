@@ -30,7 +30,7 @@ public class StudyActivityStudyTest extends ActivityInstrumentationTestCase2<Stu
         UITestHelper uiTestHelper = new UITestHelper(getInstrumentation());
         uiTestHelper.clearPreferences();
         uiTestHelper.setUpFBPDatabase();
-        
+
         Intent intent = new Intent();
         intent.putExtra(StudyActivity.EXTRA_DBPATH, UITestHelper.SAMPLE_DB_PATH);
         setActivityIntent(intent);
@@ -102,7 +102,7 @@ public class StudyActivityStudyTest extends ActivityInstrumentationTestCase2<Stu
             if (i == 0 || i == 2) {
                 solo.clickOnText(solo.getString(R.string.memo_btn1_text));
             } else {
-                // Success 8 other 
+                // Success 8 other
                 solo.clickOnText(solo.getString(R.string.memo_btn4_text));
             }
         }
@@ -110,7 +110,7 @@ public class StudyActivityStudyTest extends ActivityInstrumentationTestCase2<Stu
         assertTrue(solo.searchText("head"));
         solo.clickOnView(answerView);
         solo.clickOnText(solo.getString(R.string.memo_btn4_text));
-        
+
         // 11th card, new
         assertTrue(solo.searchText("ear"));
         solo.clickOnView(answerView);

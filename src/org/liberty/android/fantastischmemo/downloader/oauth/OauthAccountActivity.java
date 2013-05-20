@@ -63,7 +63,7 @@ public abstract class OauthAccountActivity extends AMActivity {
     // Get the fragment that request the Oauth through a web page.
     protected abstract OauthAccessCodeRetrievalFragment getOauthRequestFragment();
 
-    // The preference key to save / retrieve the access token. The preference name is based 
+    // The preference key to save / retrieve the access token. The preference name is based
     // on the prefix and the package of the class. So the same package use the same keys.
     private final String oauthAccessTokenPrefKey = AMPrefKeys.OAUTH_ACCESS_TOKEN_KEY_PREFIX + getClass().getPackage().getName();
 
@@ -92,7 +92,7 @@ public abstract class OauthAccountActivity extends AMActivity {
         editor.commit();
     }
 
-    private OauthAccessCodeRetrievalFragment.AuthCodeReceiveListener authCodeReceiveListener = 
+    private OauthAccessCodeRetrievalFragment.AuthCodeReceiveListener authCodeReceiveListener =
         new OauthAccessCodeRetrievalFragment.AuthCodeReceiveListener() {
 			public void onAuthCodeReceived(String... codes) {
                 GetAccessTokenTask task = new GetAccessTokenTask();
@@ -137,7 +137,7 @@ public abstract class OauthAccountActivity extends AMActivity {
             }
         }
 
-        
+
         @Override
         public void onPostExecute(Boolean isTokenValid){
             progressDialog.dismiss();
@@ -197,7 +197,7 @@ public abstract class OauthAccountActivity extends AMActivity {
 
             if (accessTokens == null) {
                 showAuthErrorDialog(null);
-                
+
             } else {
                 onAuthenticated(accessTokens);
             }
@@ -212,7 +212,7 @@ public abstract class OauthAccountActivity extends AMActivity {
         new AlertDialog.Builder(OauthAccountActivity.this)
             .setTitle(R.string.error_text)
             .setMessage(errorMessage)
-            .setPositiveButton(R.string.back_menu_text, new DialogInterface.OnClickListener() { 
+            .setPositiveButton(R.string.back_menu_text, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     finish();
@@ -224,7 +224,7 @@ public abstract class OauthAccountActivity extends AMActivity {
 
     // show the diaglog ti get the token
     private void showGetTokenDialog() {
-        OauthAccessCodeRetrievalFragment df = getOauthRequestFragment(); 
+        OauthAccessCodeRetrievalFragment df = getOauthRequestFragment();
         df.setAuthCodeReceiveListener(authCodeReceiveListener);
         df.show(((FragmentActivity)this).getSupportFragmentManager(), "OauthAccessCodeRetrievalFragment");
     }

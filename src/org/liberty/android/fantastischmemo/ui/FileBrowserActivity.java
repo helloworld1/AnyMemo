@@ -68,7 +68,7 @@ public class FileBrowserActivity extends AMActivity {
         setResult(Activity.RESULT_OK, resultIntent);
         finish();
     }
-    
+
     private FileBrowserFragment.OnFileClickListener fileClickListener
         = new FileBrowserFragment.OnFileClickListener() {
         public void onClick(File file) {

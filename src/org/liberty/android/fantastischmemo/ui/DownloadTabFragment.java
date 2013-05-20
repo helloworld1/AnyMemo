@@ -36,9 +36,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/* 
+/*
  * This class is invoked when the user share the card from other
- * apps like ColorDict 
+ * apps like ColorDict
  */
 public class DownloadTabFragment extends RoboFragment implements View.OnClickListener{
     private static final String TAG = "org.liberty.android.fantastischmemo.ui.DownloadTabFragment";

@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,7 +25,7 @@ import org.apache.mycommons.io.IOCase;
 /**
  * Filters filenames for a certain name.
  * <p>
- * For example, to print all files and directories in the 
+ * For example, to print all files and directories in the
  * current directory whose name is <code>Test</code>:
  *
  * <pre>
@@ -38,7 +38,7 @@ import org.apache.mycommons.io.IOCase;
  *
  * @since Commons IO 1.0
  * @version $Revision: 1005099 $ $Date: 2010-10-06 12:13:01 -0400 (Wed, 06 Oct 2010) $
- * 
+ *
  * @author Stephen Colebourne
  * @author Federico Barbieri
  * @author Serge Knystautas
@@ -47,7 +47,7 @@ import org.apache.mycommons.io.IOCase;
  * @see FileFilterUtils#nameFileFilter(String, IOCase)
  */
 public class NameFileFilter extends AbstractFileFilter implements Serializable {
-    
+
     /** The filenames to search for */
     private final String[] names;
     /** Whether the comparison is case sensitive. */
@@ -55,7 +55,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
 
     /**
      * Constructs a new case-sensitive name file filter for a single name.
-     * 
+     *
      * @param name  the name to allow, must not be null
      * @throws IllegalArgumentException if the name is null
      */
@@ -83,7 +83,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
      * <p>
      * The array is not cloned, so could be changed after constructing the
      * instance. This would be inadvisable however.
-     * 
+     *
      * @param names  the names to allow, must not be null
      * @throws IllegalArgumentException if the names array is null
      */
@@ -96,7 +96,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
      * <p>
      * The array is not cloned, so could be changed after constructing the
      * instance. This would be inadvisable however.
-     * 
+     *
      * @param names  the names to allow, must not be null
      * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
      * @throws IllegalArgumentException if the names array is null
@@ -112,7 +112,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
 
     /**
      * Constructs a new case-sensitive name file filter for a list of names.
-     * 
+     *
      * @param names  the names to allow, must not be null
      * @throws IllegalArgumentException if the name list is null
      * @throws ClassCastException if the list does not contain Strings
@@ -123,7 +123,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
 
     /**
      * Constructs a new name file filter for a list of names specifying case-sensitivity.
-     * 
+     *
      * @param names  the names to allow, must not be null
      * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
      * @throws IllegalArgumentException if the name list is null
@@ -140,7 +140,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
     //-----------------------------------------------------------------------
     /**
      * Checks to see if the filename matches.
-     * 
+     *
      * @param file  the File to check
      * @return true if the filename matches
      */
@@ -157,7 +157,7 @@ public class NameFileFilter extends AbstractFileFilter implements Serializable {
 
     /**
      * Checks to see if the filename matches.
-     * 
+     *
      * @param file  the File directory
      * @param name  the filename
      * @return true if the filename matches

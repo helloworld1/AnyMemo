@@ -975,7 +975,7 @@ public class Validate {
 
     /**
      * Validates that the argument is an instance of the specified class, if not throws an exception.
-     *  
+     *
      * <p>This method is useful when validating according to an arbitrary class</p>
      *
      * <pre>Validate.isInstanceOf(OkClass.class, object);</pre>
@@ -1024,7 +1024,7 @@ public class Validate {
 
     /**
      * Validates that the argument can be converted to the specified class, if not, throws an exception.
-     * 
+     *
      * <p>This method is useful when validating that there will be no casting errors.</p>
      *
      * <pre>Validate.isAssignableFrom(SuperClass.class, object.getClass());</pre>
@@ -1047,7 +1047,7 @@ public class Validate {
 
     /**
      * Validates that the argument can be converted to the specified class, if not throws an exception.
-     *  
+     *
      * <p>This method is useful when validating if there will be no casting errors.</p>
      *
      * <pre>Validate.isAssignableFrom(SuperClass.class, object.getClass());</pre>

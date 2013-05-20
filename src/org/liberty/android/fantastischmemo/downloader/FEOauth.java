@@ -49,7 +49,7 @@ public class FEOauth extends AMActivity{
     private static final String ACCESS_TOKEN_URL = "https://secure.flashcardexchange.com/oauth_access_token";
     private static final String CALLBACK_URL = "anymemo-fe://fe";
     private static OAuthConsumer consumer = new CommonsHttpOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
-    private static OAuthProvider provider = new CommonsHttpOAuthProvider(REQUEST_URL, ACCESS_TOKEN_URL, AUTH_URL); 
+    private static OAuthProvider provider = new CommonsHttpOAuthProvider(REQUEST_URL, ACCESS_TOKEN_URL, AUTH_URL);
     private WebView webview;
     private SharedPreferences settings;
     private SharedPreferences.Editor editor;

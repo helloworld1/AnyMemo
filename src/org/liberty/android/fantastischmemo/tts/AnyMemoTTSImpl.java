@@ -39,7 +39,7 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
 	private volatile TextToSpeech myTTS;
 	private SpeakWord speakWord;
 	private final Locale myLocale;
-    
+
     private volatile ReentrantLock initLock = new ReentrantLock();
 
     private volatile ReentrantLock speakLock = new ReentrantLock();
@@ -48,13 +48,13 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
     private static long INIT_LOCK_TIMEOUT = 10L;
 
     public final static String TAG = "org.liberty.android.fantastischmemo.tts.AnyMemoTTSPlatform";
-    
+
     public void onInit(int status){
         try {
             if (initLock.tryLock() || initLock.tryLock(INIT_LOCK_TIMEOUT, TimeUnit.SECONDS)) {
                 initLock.unlock();
-                
-                
+
+
             } else {
                 Log.e(TAG, "TTS init timed out");
                 return;
@@ -67,7 +67,7 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
             Log.v(TAG, "init!" + myLocale.toString());
             assert myTTS != null;
             assert myLocale != null;
-            
+
             int result = myTTS.setLanguage(myLocale);
             if (result == TextToSpeech.LANG_MISSING_DATA) {
                 Log.e(TAG, "Missing language data");
@@ -85,19 +85,19 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
         // the onInit callback. Unfortunately, this is not
         // always true. We have to use lock to ensure the happen before.
         // Or a null pointer for myTTS is waiting
-    
+
         initLock.lock();
         myLocale = getLocaleForTTS(locale);
         myTTS = new TextToSpeech(context, this);
         speakWord = new SpeakWord(audioSearchPath);
         initLock.unlock();
     }
-    
+
     public void destory(){
         if(speakWord != null){
             speakWord.destory();
         }
-        
+
         myTTS.shutdown();
     }
 
@@ -106,7 +106,7 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
             speakWord.stop();
             return;
         }
-        
+
         myTTS.stop();
         // We wait until the tts is not speaking.
         // This is because top is asynchronized call
@@ -124,7 +124,7 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
 		if (speakWord.speakWord(s)) {
 		    // This enables auto speak for user defined audio files.
 		    speakWord.setOnCompletedListener(new OnCompletedListener() {
-                
+
                 @Override
                 public void onCompleted() {
                     if (onTextToSpeechCompletedListener != null) {
@@ -132,14 +132,14 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
                     }
                 }
             });
-		    
+
 			return;
 		}
-		
+
         /*otherwise, speak the content*/
         Log.v(TAG, "say it!");
         // This is slightly different from AMStringUtils.stripHTML since we replace the <br> with
-        // a period to let it have a short pause. 
+        // a period to let it have a short pause.
         // Replace break with period
         String processed_str = s.replaceAll("\\<br\\>", ". " );
         // Remove HTML
@@ -153,7 +153,7 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
         if (!myTTS.isSpeaking()) {
             HashMap<String, String> params = new HashMap<String, String>();
             params.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "id");
-            
+
             myTTS.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
                 @Override
                 public void onUtteranceCompleted(String utteranceId) {
@@ -165,14 +165,14 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
 
             speakLock.lock();
             myTTS.setLanguage(myLocale);
-            
+
             Log.i(TAG, "processed_str is \"" + processed_str + "\"");
             myTTS.speak(processed_str, 0, params);
             speakLock.unlock();
         } else {
             stop();
         }
-        
+
     }
 
     private Locale getLocaleForTTS(String loc) {
@@ -191,5 +191,5 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
         return new Locale(loc);
 
     }
-    
+
 }

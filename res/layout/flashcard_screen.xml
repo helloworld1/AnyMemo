@@ -5,7 +5,7 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:layout_weight="1">
-    <LinearLayout 
+    <LinearLayout
         android:orientation="vertical"
         android:id="@+id/layout_question"
         android:layout_width="fill_parent"
@@ -17,8 +17,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" >
             <TextView
-                android:id="@+id/question" 
-                android:textSize="16pt" 
+                android:id="@+id/question"
+                android:textSize="16pt"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"/>
         </ScrollView>
@@ -29,8 +29,8 @@
         android:layout_width="fill_parent"
         android:layout_height="2dip"
         android:background="#FF909090"/>
-     
-    <LinearLayout 
+
+    <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -40,8 +40,8 @@
             android:id="@+id/scroll_answer"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" >
-            <TextView android:id="@+id/answer" 
-                android:textSize="16pt" 
+            <TextView android:id="@+id/answer"
+                android:textSize="16pt"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" />
         </ScrollView>

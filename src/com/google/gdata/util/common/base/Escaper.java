@@ -35,7 +35,7 @@ package com.google.gdata.util.common.base;
  * CharEscapers}. To create your own escapers, use {@link
  * CharEscaperBuilder}, or extend {@link CharEscaper} or {@code UnicodeEscaper}.
  *
- * 
+ *
  */
 public interface Escaper {
   /**

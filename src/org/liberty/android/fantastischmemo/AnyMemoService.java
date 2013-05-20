@@ -69,7 +69,7 @@ public class AnyMemoService extends RoboService{
             return;
         }
             Log.v(TAG, "Service now!");
-        
+
         int serviceReq = extras.getInt("request_code", 0);
         if((serviceReq & UPDATE_WIDGET) != 0){
             updateWidget();
@@ -157,7 +157,7 @@ public class AnyMemoService extends RoboService{
             Log.v(TAG, "Notification Invoked!");
         }
         catch(Exception e){
-            /* Do not show notification when AnyMemo can not 
+            /* Do not show notification when AnyMemo can not
              * fetch the into
              */
         }
@@ -187,7 +187,7 @@ public class AnyMemoService extends RoboService{
             AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(AnyMemoService.this, dbPath);
             try {
                 final CardDao cardDao = helper.getCardDao();
-                revCount = (int)cardDao.getScheduledCardCount(null); 
+                revCount = (int)cardDao.getScheduledCardCount(null);
                 newCount = (int)cardDao.getNewCardCount(null);
             } finally {
                 AnyMemoDBOpenHelperManager.releaseHelper(helper);

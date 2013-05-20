@@ -132,7 +132,7 @@ public class FELauncher extends AMActivity implements OnClickListener{
 		inflater.inflate(R.menu.fe_menu, menu);
 		return true;
 	}
-	
+
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 	    case R.id.fe_logout:

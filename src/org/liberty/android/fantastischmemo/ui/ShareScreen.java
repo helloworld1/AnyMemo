@@ -43,9 +43,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-/* 
+/*
  * This class is invoked when the user share the card from other
- * apps like ColorDict 
+ * apps like ColorDict
  */
 public class ShareScreen extends AMActivity implements View.OnClickListener{
     private TextView dbnameView;
@@ -103,7 +103,7 @@ public class ShareScreen extends AMActivity implements View.OnClickListener{
             Log.v(TAG, dbpath);
 
             if(v == saveButton || v == savePrevButton){
-                AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(this, dbpath); 
+                AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(this, dbpath);
                 CardDao cardDao = helper.getCardDao();
                 try {
                     Card card = new Card();

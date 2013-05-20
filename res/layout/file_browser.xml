@@ -7,6 +7,6 @@
     <ListView
         android:id="@+id/file_list"
         android:fastScrollEnabled="true"
-        android:layout_width="fill_parent" 
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>

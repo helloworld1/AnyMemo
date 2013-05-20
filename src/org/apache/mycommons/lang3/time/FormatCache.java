@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,7 +27,7 @@ import java.util.concurrent.ConcurrentMap;
 
 /**
  * <p>FormatCache is a cache and factory for {@link Format}s.</p>
- * 
+ *
  * @since 3.0
  * @version $Id: FormatCache 892161 2009-12-18 07:21:10Z  $
  */
@@ -37,17 +37,17 @@ abstract class FormatCache<F extends Format> {
      * No date or no time.  Used in same parameters as DateFormat.SHORT or DateFormat.LONG
      */
     static final int NONE= -1;
-    
-    private final ConcurrentMap<MultipartKey, F> cInstanceCache 
+
+    private final ConcurrentMap<MultipartKey, F> cInstanceCache
         = new ConcurrentHashMap<MultipartKey, F>(7);
-    
-    private final ConcurrentMap<MultipartKey, String> cDateTimeInstanceCache 
+
+    private final ConcurrentMap<MultipartKey, String> cDateTimeInstanceCache
         = new ConcurrentHashMap<MultipartKey, String>(7);
 
     /**
      * <p>Gets a formatter instance using the default pattern in the
      * default timezone and locale.</p>
-     * 
+     *
      * @return a date/time formatter
      */
     public F getInstance() {
@@ -57,7 +57,7 @@ abstract class FormatCache<F extends Format> {
     /**
      * <p>Gets a formatter instance using the specified pattern, time zone
      * and locale.</p>
-     * 
+     *
      * @param pattern  {@link java.text.SimpleDateFormat} compatible
      *  pattern
      * @param timeZone  the non-null time zone
@@ -78,22 +78,22 @@ abstract class FormatCache<F extends Format> {
         }
         MultipartKey key = new MultipartKey(pattern, timeZone, locale);
         F format = cInstanceCache.get(key);
-        if (format == null) {           
+        if (format == null) {
             format = createInstance(pattern, timeZone, locale);
             F previousValue= cInstanceCache.putIfAbsent(key, format);
             if (previousValue != null) {
                 // another thread snuck in and did the same work
                 // we should return the instance that is in ConcurrentMap
-                format= previousValue;              
+                format= previousValue;
             }
         }
         return format;
     }
-    
+
     /**
      * <p>Create a format instance using the specified pattern, time zone
      * and locale.</p>
-     * 
+     *
      * @param pattern  {@link java.text.SimpleDateFormat} compatible pattern, this will not be null.
      * @param timeZone  time zone, this will not be null.
      * @param locale  locale, this will not be null.
@@ -102,11 +102,11 @@ abstract class FormatCache<F extends Format> {
      *  or <code>null</code>
      */
     abstract protected F createInstance(String pattern, TimeZone timeZone, Locale locale);
-        
+
     /**
      * <p>Gets a date/time formatter instance using the specified style,
      * time zone and locale.</p>
-     * 
+     *
      * @param dateStyle  date style: FULL, LONG, MEDIUM, or SHORT
      * @param timeStyle  time style: FULL, LONG, MEDIUM, or SHORT
      * @param timeZone  optional time zone, overrides time zone of
@@ -127,10 +127,10 @@ abstract class FormatCache<F extends Format> {
             try {
                 DateFormat formatter;
                 if (dateStyle == null) {
-                    formatter = DateFormat.getTimeInstance(timeStyle, locale);                    
+                    formatter = DateFormat.getTimeInstance(timeStyle, locale);
                 }
                 else if (timeStyle == null) {
-                    formatter = DateFormat.getDateInstance(dateStyle, locale);                    
+                    formatter = DateFormat.getDateInstance(dateStyle, locale);
                 }
                 else {
                     formatter = DateFormat.getDateTimeInstance(dateStyle, timeStyle, locale);
@@ -147,7 +147,7 @@ abstract class FormatCache<F extends Format> {
                 throw new IllegalArgumentException("No date time pattern for locale: " + locale);
             }
         }
-        
+
         return getInstance(pattern, timeZone, locale);
     }
 

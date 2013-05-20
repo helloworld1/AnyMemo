@@ -75,7 +75,7 @@ public class ConverterFragment extends FileBrowserFragment {
             progressDialog.show();
         }
 
-        
+
         /*
          * The paths should be passed as 2 argument.
          * paths[0] is the src, path[1] is the dest

@@ -27,7 +27,7 @@ import oauth.signpost.http.HttpResponse;
  * ABC for all provider implementations. If you're writing a custom provider,
  * you will probably inherit from this class, since it takes a lot of work from
  * you.
- * 
+ *
  * @author Matthias Kaeppler
  */
 public abstract class AbstractOAuthProvider implements OAuthProvider {
@@ -119,7 +119,7 @@ public abstract class AbstractOAuthProvider implements OAuthProvider {
      * OAuth specific parameters being removed</li>
      * </ul>
      * </p>
-     * 
+     *
      * @param consumer
      *        the {@link OAuthConsumer} that should be used to sign the request
      * @param endpointUrl
@@ -246,7 +246,7 @@ public abstract class AbstractOAuthProvider implements OAuthProvider {
     /**
      * Overrride this method if you want to customize the logic for building a
      * request object for the given endpoint URL.
-     * 
+     *
      * @param endpointUrl
      *        the URL to which the request will go
      * @return the request object
@@ -258,7 +258,7 @@ public abstract class AbstractOAuthProvider implements OAuthProvider {
     /**
      * Override this method if you want to customize the logic for how the given
      * request is sent to the server.
-     * 
+     *
      * @param request
      *        the request to send
      * @return the response to the request
@@ -270,7 +270,7 @@ public abstract class AbstractOAuthProvider implements OAuthProvider {
     /**
      * Called when the connection is being finalized after receiving the
      * response. Use this to do any cleanup / resource freeing.
-     * 
+     *
      * @param request
      *        the request that has been sent
      * @param response
@@ -290,7 +290,7 @@ public abstract class AbstractOAuthProvider implements OAuthProvider {
      * Returns a single query parameter as served by the service provider in a
      * token reply. You must call {@link #setResponseParameters} with the set of
      * parameters before using this method.
-     * 
+     *
      * @param key
      *        the parameter name
      * @return the parameter value

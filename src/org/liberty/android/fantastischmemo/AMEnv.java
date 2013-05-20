@@ -41,8 +41,8 @@ public class AMEnv {
     public final static String GOOGLE_CLIENT_SECRET = "74rz27lrTr9mWNnipgxXwtEd";
     public final static String GOOGLE_REDIRECT_URI = "http://localhost";
     public final static String GDRIVE_SCOPE ="https://docs.google.com/feeds/ https://docs.googleusercontent.com/ https://spreadsheets.google.com/feeds/";
-    
-    
+
+
     // Dropbox oauth constants
     public final static String DROPBOX_REDIRECT_URI = "https://localhost";
     public final static String DROPBOX_CONSUMER_KEY = "q2rclqr44ux8pe7";

@@ -31,11 +31,11 @@ public class LearningDataDaoImpl extends BaseDaoImpl<LearningData, Integer>
             deleteById(id);
             create(ld);
             updateId(ld, id);
-        } catch (SQLException e) { 
+        } catch (SQLException e) {
             throw new RuntimeException("Error replacing settings", e);
         }
     }
-    
+
     public void resetLearningData(LearningData ld) {
         ld.cloneFromLearningData(new LearningData());
         try {

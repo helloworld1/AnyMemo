@@ -57,7 +57,7 @@ public class EntryFactory {
         T entry = null;
         String lastTag = "";
         while (eventType != XmlPullParser.END_DOCUMENT) {
-                
+
             if(eventType == XmlPullParser.START_DOCUMENT) {
             } else if(eventType == XmlPullParser.START_TAG) {
                 lastTag = xpp.getName();

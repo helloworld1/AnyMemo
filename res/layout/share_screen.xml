@@ -5,7 +5,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
-    <ScrollView 
+    <ScrollView
         android:layout_height="fill_parent"
         android:layout_weight="1"
         android:layout_width="fill_parent">
@@ -13,7 +13,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical">
-            <TextView 
+            <TextView
                 android:text="@string/db_name_text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
                 android:inputType="textMultiLine"
                 android:gravity="top"
                 android:layout_weight="1" />
-            <TextView 
+            <TextView
                 android:text="@string/add_screen_question"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
                 android:gravity="top"
                 android:minLines="3"
                 android:layout_weight="1" />
-            <TextView 
+            <TextView
                 android:text="@string/add_screen_answer"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
                 android:gravity="top"
                 android:minLines="3"
                 android:layout_weight="1" />
-            <TextView 
+            <TextView
                 android:text="@string/note_text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -70,26 +70,26 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <Button 
-            android:id="@+id/share_button_save" 
+        <Button
+            android:id="@+id/share_button_save"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" 
+            android:layout_height="wrap_content"
             android:text="@string/settings_save"
             android:layout_weight="1"
             android:layout_marginLeft="5dip"
             android:layout_marginRight="5dip" />
-        <Button 
-            android:id="@+id/share_button_saveprev" 
+        <Button
+            android:id="@+id/share_button_saveprev"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" 
+            android:layout_height="wrap_content"
             android:text="@string/save_prev_text"
             android:layout_weight="0.9"
             android:layout_marginLeft="5dip"
             android:layout_marginRight="5dip" />
-        <Button 
-            android:id="@+id/share_button_cancel" 
+        <Button
+            android:id="@+id/share_button_cancel"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" 
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/cancel_text"
             android:layout_marginLeft="5dip"

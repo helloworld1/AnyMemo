@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,10 +24,10 @@ import java.io.Writer;
  *
  * For example, "\45" should go back to being the specific value (a %).
  *
- * Note that this currently only supports the viable range of octal for Java; namely 
+ * Note that this currently only supports the viable range of octal for Java; namely
  * 1 to 377. This is both because parsing Java is the main use case and Integer.parseInt
  * throws an exception when values are larger than octal 377.
- * 
+ *
  * @since 3.0
  * @version $Id: OctalUnescaper.java 967237 2010-07-23 20:08:57Z mbenson $
  */

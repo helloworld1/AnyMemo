@@ -95,7 +95,7 @@ public abstract class OauthAccessCodeRetrievalFragment extends RoboDialogFragmen
         loadingText = v.findViewById(R.id.auth_page_load_text);
         progressDialog = v.findViewById(R.id.auth_page_load_progress);
         rootView = (LinearLayout)v.findViewById(R.id.ll);
-        
+
         // We have to set up the dialog's webview size manually or the webview will be zero size.
         // This should be a bug of Android.
         Rect displayRectangle = new Rect();
@@ -111,16 +111,16 @@ public abstract class OauthAccessCodeRetrievalFragment extends RoboDialogFragmen
         return v;
     }
 
-    
+
     // For subclass to call method in the authCodeReceiveListener
     protected AuthCodeReceiveListener getAuthCodeReceiveListener() {
         return authCodeReceiveListener;
     }
 
     private class RequestTokenTask extends AsyncTask<Void, Void, Void> {
-    	
+
     	private Exception backgroundTaskException;
-    	
+
         @Override
         protected void onPreExecute() {
             loadingText.setVisibility(View.VISIBLE);

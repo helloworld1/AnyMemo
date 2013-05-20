@@ -113,9 +113,9 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
         Intent intent = getIntent();
         action = intent.getAction();
         if(action.equals(INTENT_ACTION_SEARCH_TAG)){
-        } 
+        }
         else if(action.equals(INTENT_ACTION_SEARCH_USER)){
-        } 
+        }
         else{
             Log.e(TAG, "Invalid intent to invoke this activity.");
             finish();
@@ -148,7 +148,7 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
     protected DownloadItem getDownloadItem(int position){
         return dlAdapter.getItem(position);
     }
-    
+
     @Override
     protected void goBack(){
         finish();
@@ -249,7 +249,7 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
 
             DownloadItem di = new DownloadItem(DownloadItem.ItemType.Database,
                     jsonItem.getString("title"),
-                    description, 
+                    description,
                     address);
             diList.add(di);
         }
@@ -299,7 +299,7 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
             cardList.add(card);
 
         }
-        
+
         /* Make a valid dbname from the title */
         String dbpath = AMEnv.DEFAULT_ROOT_PATH;
         String fullpath = dbpath + dbname;

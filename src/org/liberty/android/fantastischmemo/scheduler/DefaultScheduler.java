@@ -111,14 +111,14 @@ public class DefaultScheduler implements Scheduler {
                             + parameters.getMinimalInterval()
                             + " for old data: " + oldData);
                     newInterval = parameters.getMinimalInterval();
-                } 
+                }
 			}
 		}
-        /* 
-         * By default the noise is included. However, 
+        /*
+         * By default the noise is included. However,
          * the estimation of days should not include noise
          * If the noise is disabled in the algorithm customization.
-         */ 
+         */
         if(includeNoise && parameters.getEnableNoise()){
             newInterval = newInterval + calculateIntervalNoise(newInterval);
         }
@@ -138,7 +138,7 @@ public class DefaultScheduler implements Scheduler {
 	}
 
     /*
-     * This method returns true if the card should not 
+     * This method returns true if the card should not
      * be repeated immediately. False if it need to be
      * repeaeted immediately.
      */
@@ -183,7 +183,7 @@ public class DefaultScheduler implements Scheduler {
 		}
 		return noise;
 	}
-	
+
 	private float calculateInitialInterval(int grade){
 		return parameters.getInitialInterval(grade);
 	}

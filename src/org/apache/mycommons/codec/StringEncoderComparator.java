@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,7 +20,7 @@ package org.apache.mycommons.codec;
 import java.util.Comparator;
 
 /**
- * Strings are comparable, and this comparator allows 
+ * Strings are comparable, and this comparator allows
  * you to configure it with an instance of a class
  * which implements StringEncoder.  This comparator
  * is used to sort Strings by an encoding scheme such
@@ -40,7 +40,7 @@ public class StringEncoderComparator implements Comparator {
 
     /**
      * Constructs a new instance.
-     * @deprecated as creating without a StringEncoder will lead to a 
+     * @deprecated as creating without a StringEncoder will lead to a
      *             broken NullPointerException creating comparator.
      */
     public StringEncoderComparator() {
@@ -56,13 +56,13 @@ public class StringEncoderComparator implements Comparator {
     }
 
     /**
-     * Compares two strings based not on the strings 
-     * themselves, but on an encoding of the two 
+     * Compares two strings based not on the strings
+     * themselves, but on an encoding of the two
      * strings using the StringEncoder this Comparator
      * was created with.
-     * 
+     *
      * If an {@link EncoderException} is encountered, return <code>0</code>.
-     * 
+     *
      * @param o1 the object to compare
      * @param o2 the object to compare to
      * @return the Comparable.compareTo() return code or 0 if an encoding error was caught.
@@ -76,7 +76,7 @@ public class StringEncoderComparator implements Comparator {
             Comparable s1 = (Comparable) this.stringEncoder.encode(o1);
             Comparable s2 = (Comparable) this.stringEncoder.encode(o2);
             compareCode = s1.compareTo(s2);
-        } 
+        }
         catch (EncoderException ee) {
             compareCode = 0;
         }

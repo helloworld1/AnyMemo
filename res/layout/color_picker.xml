@@ -17,7 +17,7 @@
 			android:layout_marginBottom="8dip"
 			android:id="@+id/preview"
 		/>
-		<LinearLayout 
+		<LinearLayout
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:orientation="vertical"

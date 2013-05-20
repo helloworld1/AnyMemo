@@ -30,26 +30,26 @@ public class AutoSpeakFragment extends Fragment {
     private ImageButton settingsButton;
     private ImageButton exitButton;
     private PreviewEditActivity previewEditActivity;
-    
+
     private SharedPreferences settings;
     private SharedPreferences.Editor editor;
-    
+
     private boolean isPlayButtonSelected = false;
     private Handler handler;
-    
+
     // We need to check this since activity may finish early while TTS thread is still trying to call gotoNext().
     private volatile boolean isActivityFinished = false;
-  
+
     private AnyMemoTTS.OnTextToSpeechCompletedListener mQuestionListener = new AnyMemoTTS.OnTextToSpeechCompletedListener() {
-        
+
         @Override
         public void onTextToSpeechCompleted(final String text) {
                 Runnable r = new Runnable() {
                     @Override
                     public void run() {
                         if(!isActivityFinished && isPlayButtonSelected) {
-                            // This logic ensures that if we change card when speaking, we want to start from the question 
-                            // for the new card. 
+                            // This logic ensures that if we change card when speaking, we want to start from the question
+                            // for the new card.
                             if (!StringUtils.equals(text, previewEditActivity.getCurrentCard().getQuestion())) {
                                 previewEditActivity.speakQuestion(mQuestionListener);
                                 return;
@@ -58,22 +58,22 @@ public class AutoSpeakFragment extends Fragment {
                         }
                     }
                 };
-                
-                handler.postDelayed(r, 
+
+                handler.postDelayed(r,
                         DateUtils.MILLIS_PER_SECOND * settings.getInt(AMPrefKeys.AUTO_SPEAK_QA_SLEEP_INTERVAL_KEY, DEFAULT_SLEEP_TIME_IN_SEC));
         }
     };
-    
+
     private AnyMemoTTS.OnTextToSpeechCompletedListener mAnswerListener = new AnyMemoTTS.OnTextToSpeechCompletedListener() {
-        
+
         @Override
         public void onTextToSpeechCompleted(final String text) {
-            
+
             Runnable r = new Runnable() {
                 @Override
                 public void run() {
-                    // This logic ensures that if we change card when speaking, we want to start from the question 
-                    // for the new card. 
+                    // This logic ensures that if we change card when speaking, we want to start from the question
+                    // for the new card.
                     if(!isActivityFinished && isPlayButtonSelected) {
                         if (!StringUtils.equals(text, previewEditActivity.getCurrentCard().getAnswer())) {
                             previewEditActivity.speakQuestion(mQuestionListener);
@@ -86,7 +86,7 @@ public class AutoSpeakFragment extends Fragment {
 
                 }
             };
-            handler.postDelayed(r, 
+            handler.postDelayed(r,
                     DateUtils.MILLIS_PER_SECOND * settings.getInt(AMPrefKeys.AUTO_SPEAK_CARD_SLEEP_INTERVAL_KEY, DEFAULT_SLEEP_TIME_IN_SEC));
         }
     };
@@ -99,14 +99,14 @@ public class AutoSpeakFragment extends Fragment {
             isPlayButtonSelected = false;
         }
     }
-    
+
     @Override
     public void onResume() {
         super.onResume();
         isActivityFinished = false;
         playButton.setSelected(false);
     }
-    
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -115,7 +115,7 @@ public class AutoSpeakFragment extends Fragment {
         settings = PreferenceManager.getDefaultSharedPreferences(activity);
         editor = settings.edit();
     }
-    
+
     @Override
     public void onDestroy() {
         this.isActivityFinished = true;
@@ -129,7 +129,7 @@ public class AutoSpeakFragment extends Fragment {
             if(v == playButton) {
                 isPlayButtonSelected = !isPlayButtonSelected;
                 Log.i(TAG, "Play button clicked, isPlaying " + isPlayButtonSelected);
-                
+
                 if(isPlayButtonSelected) {
                     Log.i(TAG, "start speaking");
                     isActivityFinished = false;
@@ -139,7 +139,7 @@ public class AutoSpeakFragment extends Fragment {
                     isActivityFinished = true;
                     playButton.setSelected(false);
                 }
-                
+
             } else if(v == previousButton) {
                 previewEditActivity.gotoPrev();
             } else if(v == nextButton) {
@@ -158,7 +158,7 @@ public class AutoSpeakFragment extends Fragment {
         AutoSpeakSettingDialogFragment a = new AutoSpeakSettingDialogFragment();
         a.show(getActivity().getSupportFragmentManager(), TAG);
     }
-    
+
     private void dismissFragment() {
         isActivityFinished = true;
         getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
@@ -171,23 +171,23 @@ public class AutoSpeakFragment extends Fragment {
         View v = inflater.inflate(R.layout.auto_speak_layout, container, false);
         playButton = (ImageButton) v.findViewById(R.id.auto_speak_play_button);
         playButton.setOnClickListener(buttonListener);
-        
+
         previousButton = (ImageButton) v.findViewById(R.id.auto_speak_previous_button);
         previousButton.setOnClickListener(buttonListener);
         previousButton.setBackgroundColor(Color.TRANSPARENT);
-        
+
         nextButton = (ImageButton) v.findViewById(R.id.auto_speak_next_button);
         nextButton.setOnClickListener(buttonListener);
         nextButton.setBackgroundColor(Color.TRANSPARENT);
-        
+
         settingsButton = (ImageButton) v.findViewById(R.id.auto_speak_settings_button);
         settingsButton.setOnClickListener(buttonListener);
         settingsButton.setBackgroundColor(Color.TRANSPARENT);
-        
+
         exitButton = (ImageButton) v.findViewById(R.id.auto_speak_exit_button);
         exitButton.setOnClickListener(buttonListener);
         exitButton.setBackgroundColor(Color.TRANSPARENT);
-        
+
         return v;
     }
 

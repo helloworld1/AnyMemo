@@ -72,7 +72,7 @@ public class OpenActionsFragment extends RoboDialogFragment {
     @Inject
     public void setAmFileUtil(AMFileUtil amFileUtil) {
         this.amFileUtil = amFileUtil;
-    }   
+    }
 
     @Inject
     public void setRecentListUtil(RecentListUtil recentListUtil) {

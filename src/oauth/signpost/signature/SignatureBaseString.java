@@ -29,7 +29,7 @@ public class SignatureBaseString {
     /**
      * Constructs a new SBS instance that will operate on the given request
      * object and parameter set.
-     * 
+     *
      * @param request
      *        the HTTP request
      * @param requestParameters
@@ -44,7 +44,7 @@ public class SignatureBaseString {
     /**
      * Builds the signature base string from the data this instance was
      * configured with.
-     * 
+     *
      * @return the signature base string
      * @throws OAuthMessageSignerException
      */
@@ -85,7 +85,7 @@ public class SignatureBaseString {
     /**
      * Normalizes the set of request parameters this instance was configured
      * with, as per OAuth spec section 9.1.1.
-     * 
+     *
      * @param parameters
      *        the set of request parameters
      * @return the normalized params string

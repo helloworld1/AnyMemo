@@ -229,7 +229,7 @@ public class SerializationUtils {
      * containers and application servers, no matter in which of the
      * <code>ClassLoader</code> the particular class that encapsulates
      * serialization/deserialization lives. </p>
-     * 
+     *
      * <p>For more in-depth information about the problem for which this
      * class here is a workaround, see the JIRA issue LANG-626. </p>
      */

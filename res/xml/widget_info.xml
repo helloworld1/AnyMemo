@@ -1,4 +1,4 @@
-<appwidget-provider 
+<appwidget-provider
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:minWidth="146dp"
     android:minHeight="72dp"

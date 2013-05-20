@@ -74,7 +74,7 @@ public class Option {
     public int getRecentCount() {
     	return settings.getInt(AMPrefKeys.RECENT_COUNT_KEY, 7);
     }
-    
+
     public int getQueueSize() {
         String size = settings.getString(AMPrefKeys.LEARN_QUEUE_SIZE_KEY, "10");
         int tmpSize = Integer.parseInt(size);
@@ -97,7 +97,7 @@ public class Option {
         editor.putBoolean(AMPrefKeys.CARD_GESTURE_ENABLED, enable);
         editor.commit();
     }
-    
+
     public static enum ButtonStyle {
         ANYMEMO,
         MNEMOSYNE,
@@ -154,7 +154,7 @@ public class Option {
                 return TAP;
             }
         }
-        
+
     }
 
 }

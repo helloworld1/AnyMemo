@@ -33,7 +33,7 @@ import oauth.signpost.signature.SigningStrategy;
 /**
  * ABC for consumer implementations. If you're developing a custom consumer you
  * will probably inherit from this class to save you a lot of work.
- * 
+ *
  * @author Matthias Kaeppler
  */
 public abstract class AbstractOAuthConsumer implements OAuthConsumer {
@@ -138,7 +138,7 @@ public abstract class AbstractOAuthConsumer implements OAuthConsumer {
     /**
      * Adapts the given request object to a Signpost {@link HttpRequest}. How
      * this is done depends on the consumer implementation.
-     * 
+     *
      * @param request
      *        the native HTTP request instance
      * @return the adapted request
@@ -178,7 +178,7 @@ public abstract class AbstractOAuthConsumer implements OAuthConsumer {
      * to generate different nonces or timestamps, override
      * {@link #generateNonce()} or {@link #generateTimestamp()} instead.
      * </p>
-     * 
+     *
      * @param out
      *        the request parameter which should be completed
      */

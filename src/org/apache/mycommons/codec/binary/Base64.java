@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,7 +26,7 @@ import org.apache.mycommons.codec.EncoderException;
 
 /**
  * Provides Base64 encoding and decoding as defined by RFC 2045.
- * 
+ *
  * <p>
  * This class implements section <cite>6.8. Base64 Content-Transfer-Encoding</cite> from RFC 2045 <cite>Multipurpose
  * Internet Mail Extensions (MIME) Part One: Format of Internet Message Bodies</cite> by Freed and Borenstein.
@@ -44,7 +44,7 @@ import org.apache.mycommons.codec.EncoderException;
  * Since this class operates directly on byte streams, and not character streams, it is hard-coded to only encode/decode
  * character encodings which are compatible with the lower 127 ASCII chart (ISO-8859-1, Windows-1252, UTF-8, etc).
  * </p>
- * 
+ *
  * @see <a href="http://www.ietf.org/rfc/rfc2045.txt">RFC 2045</a>
  * @author Apache Software Foundation
  * @since 1.0
@@ -57,12 +57,12 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
 
     /**
      * Chunk size per RFC 2045 section 6.8.
-     * 
+     *
      * <p>
      * The {@value} character limit does not count the trailing CRLF, but counts all other characters, including any
      * equal signs.
      * </p>
-     * 
+     *
      * @see <a href="http://www.ietf.org/rfc/rfc2045.txt">RFC 2045 section 6.8</a>
      */
     static final int CHUNK_SIZE = 76;
@@ -73,7 +73,7 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
      * <p>
      * N.B. The next major release may break compatibility and make this field private.
      * </p>
-     * 
+     *
      * @see <a href="http://www.ietf.org/rfc/rfc2045.txt">RFC 2045 section 2.1</a>
      */
     static final byte[] CHUNK_SEPARATOR = {'\r', '\n'};
@@ -81,7 +81,7 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
     /**
      * This array is a lookup table that translates 6-bit positive integer index values into their "Base64 Alphabet"
      * equivalents as specified in Table 1 of RFC 2045.
-     * 
+     *
      * Thanks to "commons" project in ws.apache.org for this code.
      * http://svn.apache.org/repos/asf/webservices/commons/trunk/modules/util/
      */
@@ -97,7 +97,7 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
      * This is a copy of the STANDARD_ENCODE_TABLE above, but with + and /
      * changed to - and _ to make the encoded Base64 results more URL-SAFE.
      * This table is only used when the Base64's mode is set to URL-SAFE.
-     */    
+     */
     private static final byte[] URL_SAFE_ENCODE_TABLE = {
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
             'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
@@ -115,10 +115,10 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
      * This array is a lookup table that translates Unicode characters drawn from the "Base64 Alphabet" (as specified in
      * Table 1 of RFC 2045) into their 6-bit positive integer equivalents. Characters that are not in the Base64
      * alphabet but fall within the bounds of the array are translated to -1.
-     * 
+     *
      * Note: '+' and '-' both decode to 62. '/' and '_' both decode to 63. This means decoder seamlessly handles both
      * URL_SAFE and STANDARD base64. (The encoder, on the other hand, needs to know ahead of time what to emit).
-     * 
+     *
      * Thanks to "commons" project in ws.apache.org for this code.
      * http://svn.apache.org/repos/asf/webservices/commons/trunk/modules/util/
      */
@@ -216,7 +216,7 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
      * <p>
      * When encoding the line length is 76, the line separator is CRLF, and the encoding table is STANDARD_ENCODE_TABLE.
      * </p>
-     * 
+     *
      * <p>
      * When decoding all variants are supported.
      * </p>
@@ -230,11 +230,11 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
      * <p>
      * When encoding the line length is 76, the line separator is CRLF, and the encoding table is STANDARD_ENCODE_TABLE.
      * </p>
-     * 
+     *
      * <p>
      * When decoding all variants are supported.
      * </p>
-     * 
+     *
      * @param urlSafe
      *            if <code>true</code>, URL-safe encoding is used. In most cases this should be set to
      *            <code>false</code>.
@@ -256,7 +256,7 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
      * <p>
      * When decoding all variants are supported.
      * </p>
-     * 
+     *
      * @param lineLength
      *            Each line of encoded data will be at most of the given length (rounded down to nearest multiple of 4).
      *            If lineLength <= 0, then the output will not be divided into lines (chunks). Ignored when decoding.
@@ -278,7 +278,7 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
      * <p>
      * When decoding all variants are supported.
      * </p>
-     * 
+     *
      * @param lineLength
      *            Each line of encoded data will be at most of the given length (rounded down to nearest multiple of 4).
      *            If lineLength <= 0, then the output will not be divided into lines (chunks). Ignored when decoding.
@@ -304,7 +304,7 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
      * <p>
      * When decoding all variants are supported.
      * </p>
-     * 
+     *
      * @param lineLength
      *            Each line of encoded data will be at most of the given length (rounded down to nearest multiple of 4).
      *            If lineLength <= 0, then the output will not be divided into lines (chunks). Ignored when decoding.
@@ -340,7 +340,7 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
 
     /**
      * Returns our current encode mode. True if we're URL-SAFE, false otherwise.
-     * 
+     *
      * @return true if we're in URL-SAFE mode, false otherwise.
      * @since 1.4
      */
@@ -350,7 +350,7 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
 
     /**
      * Returns true if this Base64 object has buffered data for reading.
-     * 
+     *
      * @return true if there is Base64 object still available for reading.
      */
     boolean hasData() {
@@ -359,7 +359,7 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
 
     /**
      * Returns the amount of buffered data available for reading.
-     * 
+     *
      * @return The amount of buffered data available for reading.
      */
     int avail() {
@@ -382,7 +382,7 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
     /**
      * Extracts buffered data into the provided byte[] array, starting at position bPos, up to a maximum of bAvail
      * bytes. Returns how many bytes were actually extracted.
-     * 
+     *
      * @param b
      *            byte[] array to extract the buffered data into.
      * @param bPos
@@ -413,7 +413,7 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
     /**
      * Sets the streaming buffer. This is a small optimization where we try to buffer directly to the consumer's output
      * array for one round (if the consumer calls this method first) instead of starting our own buffer.
-     * 
+     *
      * @param out
      *            byte[] array to buffer directly to.
      * @param outPos
@@ -441,7 +441,7 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
      * Thanks to "commons" project in ws.apache.org for the bitwise operations, and general approach.
      * http://svn.apache.org/repos/asf/webservices/commons/trunk/modules/util/
      * </p>
-     * 
+     *
      * @param in
      *            byte[] array of binary data to base64 encode.
      * @param inPos
@@ -527,7 +527,7 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
      * Thanks to "commons" project in ws.apache.org for the bitwise operations, and general approach.
      * http://svn.apache.org/repos/asf/webservices/commons/trunk/modules/util/
      * </p>
-     * 
+     *
      * @param in
      *            byte[] array of ascii data to base64 decode.
      * @param inPos
@@ -587,7 +587,7 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
 
     /**
      * Returns whether or not the <code>octet</code> is in the base 64 alphabet.
-     * 
+     *
      * @param octet
      *            The value to test
      * @return <code>true</code> if the value is defined in the the base 64 alphabet, <code>false</code> otherwise.
@@ -600,7 +600,7 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
     /**
      * Tests a given byte array to see if it contains only valid characters within the Base64 alphabet. Currently the
      * method treats whitespace as valid.
-     * 
+     *
      * @param arrayOctet
      *            byte array to test
      * @return <code>true</code> if all bytes are valid characters in the Base64 alphabet or if the byte array is empty;
@@ -617,7 +617,7 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
 
     /**
      * Tests a given byte array to see if it contains only valid characters within the Base64 alphabet.
-     * 
+     *
      * @param arrayOctet
      *            byte array to test
      * @return <code>true</code> if any byte is a valid character in the Base64 alphabet; false herwise
@@ -633,7 +633,7 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
 
     /**
      * Encodes binary data using the base64 algorithm but does not chunk the output.
-     * 
+     *
      * @param binaryData
      *            binary data to encode
      * @return byte[] containing Base64 characters in their UTF-8 representation.
@@ -649,15 +649,15 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
      *            binary data to encode
      * @return String containing Base64 characters.
      * @since 1.4
-     */    
+     */
     public static String encodeBase64String(byte[] binaryData) {
         return StringUtils.newStringUtf8(encodeBase64(binaryData, true));
     }
-    
+
     /**
      * Encodes binary data using a URL-safe variation of the base64 algorithm but does not chunk the output. The
      * url-safe variation emits - and _ instead of + and / characters.
-     * 
+     *
      * @param binaryData
      *            binary data to encode
      * @return byte[] containing Base64 characters in their UTF-8 representation.
@@ -675,14 +675,14 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
      *            binary data to encode
      * @return String containing Base64 characters
      * @since 1.4
-     */    
+     */
     public static String encodeBase64URLSafeString(byte[] binaryData) {
         return StringUtils.newStringUtf8(encodeBase64(binaryData, false, true));
-    }    
+    }
 
     /**
      * Encodes binary data using the base64 algorithm and chunks the encoded output into 76 character blocks
-     * 
+     *
      * @param binaryData
      *            binary data to encode
      * @return Base64 characters chunked in 76 character blocks
@@ -694,14 +694,14 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
     /**
      * Decodes an Object using the base64 algorithm. This method is provided in order to satisfy the requirements of the
      * Decoder interface, and will throw a DecoderException if the supplied object is not of type byte[] or String.
-     * 
+     *
      * @param pObject
      *            Object to decode
      * @return An object (of type byte[]) containing the binary data which corresponds to the byte[] or String supplied.
      * @throws DecoderException
      *             if the parameter supplied is not of type byte[]
      */
-    public Object decode(Object pObject) throws DecoderException {        
+    public Object decode(Object pObject) throws DecoderException {
         if (pObject instanceof byte[]) {
             return decode((byte[]) pObject);
         } else if (pObject instanceof String) {
@@ -725,7 +725,7 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
 
     /**
      * Decodes a byte[] containing containing characters in the Base64 alphabet.
-     * 
+     *
      * @param pArray
      *            A byte array containing Base64 character data
      * @return a byte array containing binary data
@@ -754,7 +754,7 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
 
     /**
      * Encodes binary data using the base64 algorithm, optionally chunking the output into 76 character blocks.
-     * 
+     *
      * @param binaryData
      *            Array containing binary data to encode.
      * @param isChunked
@@ -769,7 +769,7 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
 
     /**
      * Encodes binary data using the base64 algorithm, optionally chunking the output into 76 character blocks.
-     * 
+     *
      * @param binaryData
      *            Array containing binary data to encode.
      * @param isChunked
@@ -787,7 +787,7 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
 
     /**
      * Encodes binary data using the base64 algorithm, optionally chunking the output into 76 character blocks.
-     * 
+     *
      * @param binaryData
      *            Array containing binary data to encode.
      * @param isChunked
@@ -813,7 +813,7 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
                 ") than the specified maxium size of " +
                 maxResultSize);
         }
-                
+
         Base64 b64 = isChunked ? new Base64(urlSafe) : new Base64(0, CHUNK_SEPARATOR, urlSafe);
         return b64.encode(binaryData);
     }
@@ -832,7 +832,7 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
 
     /**
      * Decodes Base64 data into octets
-     * 
+     *
      * @param base64Data
      *            Byte array containing Base64 data
      * @return Array containing decoded data.
@@ -843,7 +843,7 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
 
     /**
      * Discards any whitespace from a base-64 encoded block.
-     * 
+     *
      * @param data
      *            The base-64 encoded data to discard the whitespace from.
      * @return The data, less whitespace (see RFC 2045).
@@ -870,7 +870,7 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
 
     /**
      * Checks if a byte value is whitespace or not.
-     * 
+     *
      * @param byteToCheck
      *            the byte to check
      * @return true if byte is whitespace, false otherwise
@@ -892,7 +892,7 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
     /**
      * Encodes an Object using the base64 algorithm. This method is provided in order to satisfy the requirements of the
      * Encoder interface, and will throw an EncoderException if the supplied object is not of type byte[].
-     * 
+     *
      * @param pObject
      *            Object to encode
      * @return An object (of type byte[]) containing the base64 encoded data which corresponds to the byte[] supplied.
@@ -913,20 +913,20 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
      *            a byte array containing binary data
      * @return A String containing only Base64 character data
      * @since 1.4
-     */    
+     */
     public String encodeToString(byte[] pArray) {
         return StringUtils.newStringUtf8(encode(pArray));
     }
 
     /**
      * Encodes a byte[] containing binary data, into a byte[] containing characters in the Base64 alphabet.
-     * 
+     *
      * @param pArray
      *            a byte array containing binary data
      * @return A byte array containing only Base64 character data
      */
     public byte[] encode(byte[] pArray) {
-        reset();        
+        reset();
         if (pArray == null || pArray.length == 0) {
             return pArray;
         }
@@ -946,7 +946,7 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
             System.arraycopy(buf, 0, smallerBuf, 0, pos);
             buf = smallerBuf;
         }
-        return buf;        
+        return buf;
     }
 
     /**
@@ -982,7 +982,7 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
     // Implementation of integer encoding used for crypto
     /**
      * Decodes a byte64-encoded integer according to crypto standards such as W3C's XML-Signature
-     * 
+     *
      * @param pArray
      *            a byte array containing base64 character data
      * @return A BigInteger
@@ -994,7 +994,7 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
 
     /**
      * Encodes to a byte64-encoded integer according to crypto standards such as W3C's XML-Signature
-     * 
+     *
      * @param bigInt
      *            a BigInteger
      * @return A byte array containing base64 character data
@@ -1011,7 +1011,7 @@ public class Base64 implements BinaryEncoder, BinaryDecoder {
 
     /**
      * Returns a byte-array representation of a <code>BigInteger</code> without sign bit.
-     * 
+     *
      * @param bigInt
      *            <code>BigInteger</code> to be converted
      * @return a byte array representation of the BigInteger parameter

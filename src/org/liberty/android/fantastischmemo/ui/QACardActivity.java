@@ -124,7 +124,7 @@ public abstract class QACardActivity extends AMActivity {
 
     private AnyMemoTTS questionTTS = null;
     private AnyMemoTTS answerTTS = null;
-    
+
     private GestureLibrary gestureLibrary;
 
     @Inject
@@ -668,11 +668,11 @@ public abstract class QACardActivity extends AMActivity {
             answerTTS = new AnyMemoTTSImpl(this, aa, answerAudioSearchPath);
         }
     }
-    
+
     protected boolean speakQuestion() {
         return speakQuestion(null);
     }
-    
+
     protected boolean speakQuestion(AnyMemoTTS.OnTextToSpeechCompletedListener mListener){
         stopSpeak();
 
@@ -695,10 +695,10 @@ public abstract class QACardActivity extends AMActivity {
             answerTTS.sayText(getCurrentCard().getAnswer(), mListener);
             return true;
         }
-        
+
         return false;
     }
-    
+
     protected void stopSpeak() {
         stopAnswerTTS();
         stopQuestionTTS();
@@ -778,7 +778,7 @@ public abstract class QACardActivity extends AMActivity {
         return false;
     }
 
-    // Do not handle the key down event. We handle it in onKeyUp 
+    // Do not handle the key down event. We handle it in onKeyUp
     // This method will only be called if the volume key shortcut option is enabled.
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event){

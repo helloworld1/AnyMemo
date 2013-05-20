@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
-    <TextView 
+    <TextView
         android:id="@+id/score_text"
         android:layout_gravity="center"
         android:gravity="center"
@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"/>
-    <TextView 
+    <TextView
         android:id="@+id/description_text"
         android:text="@string/new_cards_completed_summary"
         android:layout_width="match_parent"

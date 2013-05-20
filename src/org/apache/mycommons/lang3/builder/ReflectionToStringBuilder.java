@@ -81,7 +81,7 @@ import org.apache.mycommons.lang3.ClassUtils;
  * <p>
  * The exact format of the <code>toString</code> is determined by the {@link ToStringStyle} passed into the constructor.
  * </p>
- * 
+ *
  * @since 2.0
  * @version $Id: ReflectionToStringBuilder.java 1200177 2011-11-10 06:14:33Z ggregory $
  */

@@ -5,34 +5,34 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:layout_gravity="bottom">
-    <Button 
-        android:id="@+id/edit_screen_btn_new" 
+    <Button
+        android:id="@+id/edit_screen_btn_new"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" 
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:lines="1"
         android:text="@string/add_screen_new"
         android:layout_marginLeft="1dip" />
-    <Button 
-        android:id="@+id/edit_screen_btn_edit" 
+    <Button
+        android:id="@+id/edit_screen_btn_edit"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" 
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:lines="1"
         android:text="@string/memo_edit_dialog_title"
         android:layout_marginLeft="1dip" />
-    <Button 
-        android:id="@+id/edit_screen_btn_prev" 
+    <Button
+        android:id="@+id/edit_screen_btn_prev"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" 
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:lines="1"
         android:text="@string/add_screen_previous"
         android:layout_marginLeft="1dip" />
-    <Button 
-        android:id="@+id/edit_screen_btn_next" 
+    <Button
+        android:id="@+id/edit_screen_btn_next"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" 
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:lines="1"
         android:text="@string/add_screen_next"

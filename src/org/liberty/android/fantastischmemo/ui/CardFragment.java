@@ -59,7 +59,7 @@ public class CardFragment extends RoboFragment {
     private OnClickListener cardOnClickListener = null;
 
     private OnLongClickListener cardOnLongClickListener = null;
-    
+
     private OnClickListener textOnClickListener = null;
 
     private OnLongClickListener textOnLongClickListener = null;

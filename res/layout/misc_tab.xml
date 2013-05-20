@@ -2,8 +2,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:scrollbars="vertical"
     android:layout_height="fill_parent"
-    android:layout_width="fill_parent"> 
-    <LinearLayout 
+    android:layout_width="fill_parent">
+    <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -22,9 +22,9 @@
                 android:paddingRight="5dp"
                 android:src="@drawable/options" />
             <TextView
-                android:layout_width="fill_parent" 
+                android:layout_width="fill_parent"
                 android:layout_weight="1"
-                android:layout_height="wrap_content" 
+                android:layout_height="wrap_content"
                 android:text="@string/option_button_text"
                 android:textSize="24dp"
                 android:clickable="false"
@@ -45,9 +45,9 @@
                 android:paddingRight="5dp"
                 android:src="@drawable/import_icon" />
             <TextView
-                android:layout_width="fill_parent" 
+                android:layout_width="fill_parent"
                 android:layout_weight="1"
-                android:layout_height="wrap_content" 
+                android:layout_height="wrap_content"
                 android:text="@string/import_text"
                 android:textSize="24dp"
                 android:clickable="false"
@@ -69,9 +69,9 @@
                 style="@style/list_button"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:layout_width="fill_parent" 
+                    android:layout_width="fill_parent"
                     android:layout_weight="1"
-                    android:layout_height="wrap_content" 
+                    android:layout_height="wrap_content"
                     android:text="@string/import_mnemosyne_xml_text"
                     android:textSize="20dp"
                     android:clickable="false"
@@ -85,9 +85,9 @@
                 style="@style/list_button"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:layout_width="fill_parent" 
+                    android:layout_width="fill_parent"
                     android:layout_weight="1"
-                    android:layout_height="wrap_content" 
+                    android:layout_height="wrap_content"
                     android:text="@string/import_mnemosyne2_cards_text"
                     android:textSize="20dp"
                     android:clickable="false"
@@ -101,9 +101,9 @@
                 style="@style/list_button"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:layout_width="fill_parent" 
+                    android:layout_width="fill_parent"
                     android:layout_weight="1"
-                    android:layout_height="wrap_content" 
+                    android:layout_height="wrap_content"
                     android:text="@string/import_supermemo_xml_text"
                     android:textSize="20dp"
                     android:clickable="false"
@@ -117,9 +117,9 @@
                 style="@style/list_button"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:layout_width="fill_parent" 
+                    android:layout_width="fill_parent"
                     android:layout_weight="1"
-                    android:layout_height="wrap_content" 
+                    android:layout_height="wrap_content"
                     android:text="@string/import_csv"
                     android:textSize="20dp"
                     android:clickable="false"
@@ -133,9 +133,9 @@
                 style="@style/list_button"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:layout_width="fill_parent" 
+                    android:layout_width="fill_parent"
                     android:layout_weight="1"
-                    android:layout_height="wrap_content" 
+                    android:layout_height="wrap_content"
                     android:text="@string/import_tab_txt"
                     android:textSize="20dp"
                     android:clickable="false"
@@ -149,9 +149,9 @@
                 style="@style/list_button"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:layout_width="fill_parent" 
+                    android:layout_width="fill_parent"
                     android:layout_weight="1"
-                    android:layout_height="wrap_content" 
+                    android:layout_height="wrap_content"
                     android:text="@string/import_qa_txt"
                     android:textSize="20dp"
                     android:clickable="false"
@@ -165,9 +165,9 @@
                 style="@style/list_button"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:layout_width="fill_parent" 
+                    android:layout_width="fill_parent"
                     android:layout_weight="1"
-                    android:layout_height="wrap_content" 
+                    android:layout_height="wrap_content"
                     android:text="@string/import_supermemo_2008_xml_text"
                     android:textSize="20dp"
                     android:clickable="false"
@@ -181,9 +181,9 @@
                 style="@style/list_button"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:layout_width="fill_parent" 
+                    android:layout_width="fill_parent"
                     android:layout_weight="1"
-                    android:layout_height="wrap_content" 
+                    android:layout_height="wrap_content"
                     android:text="@string/import_zip_text"
                     android:textSize="20dp"
                     android:clickable="false"
@@ -205,9 +205,9 @@
                 android:paddingRight="5dp"
                 android:src="@drawable/export_icon" />
             <TextView
-                android:layout_width="fill_parent" 
+                android:layout_width="fill_parent"
                 android:layout_weight="1"
-                android:layout_height="wrap_content" 
+                android:layout_height="wrap_content"
                 android:text="@string/export_text"
                 android:textSize="24dp"
                 android:clickable="false"
@@ -229,9 +229,9 @@
                 style="@style/list_button"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:layout_width="fill_parent" 
+                    android:layout_width="fill_parent"
                     android:layout_weight="1"
-                    android:layout_height="wrap_content" 
+                    android:layout_height="wrap_content"
                     android:text="@string/export_xml"
                     android:textSize="20dp"
                     android:clickable="false"
@@ -245,9 +245,9 @@
                 style="@style/list_button"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:layout_width="fill_parent" 
+                    android:layout_width="fill_parent"
                     android:layout_weight="1"
-                    android:layout_height="wrap_content" 
+                    android:layout_height="wrap_content"
                     android:text="@string/export_mnemosyne2_cards_text"
                     android:textSize="20dp"
                     android:clickable="false"
@@ -261,9 +261,9 @@
                 style="@style/list_button"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:layout_width="fill_parent" 
+                    android:layout_width="fill_parent"
                     android:layout_weight="1"
-                    android:layout_height="wrap_content" 
+                    android:layout_height="wrap_content"
                     android:text="@string/export_csv"
                     android:textSize="20dp"
                     android:clickable="false"
@@ -277,9 +277,9 @@
                 style="@style/list_button"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:layout_width="fill_parent" 
+                    android:layout_width="fill_parent"
                     android:layout_weight="1"
-                    android:layout_height="wrap_content" 
+                    android:layout_height="wrap_content"
                     android:text="@string/export_tab_txt"
                     android:textSize="20dp"
                     android:clickable="false"
@@ -293,9 +293,9 @@
                 style="@style/list_button"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:layout_width="fill_parent" 
+                    android:layout_width="fill_parent"
                     android:layout_weight="1"
-                    android:layout_height="wrap_content" 
+                    android:layout_height="wrap_content"
                     android:text="@string/export_qa_txt"
                     android:textSize="20dp"
                     android:clickable="false"
@@ -309,9 +309,9 @@
                 style="@style/list_button"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:layout_width="fill_parent" 
+                    android:layout_width="fill_parent"
                     android:layout_weight="1"
-                    android:layout_height="wrap_content" 
+                    android:layout_height="wrap_content"
                     android:text="@string/export_zip_text"
                     android:textSize="20dp"
                     android:clickable="false"
@@ -319,7 +319,7 @@
                     android:layout_gravity="center" />
             </LinearLayout>
         </LinearLayout>
-    
+
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
@@ -334,9 +334,9 @@
                 android:paddingRight="5dp"
                 android:src="@drawable/settings" />
             <TextView
-                android:layout_width="fill_parent" 
+                android:layout_width="fill_parent"
                 android:layout_weight="1"
-                android:layout_height="wrap_content" 
+                android:layout_height="wrap_content"
                 android:text="@string/default_settings_text"
                 android:textSize="24dp"
                 android:clickable="false"
@@ -357,9 +357,9 @@
                 android:paddingRight="5dp"
                 android:src="@drawable/merge" />
             <TextView
-                android:layout_width="fill_parent" 
+                android:layout_width="fill_parent"
                 android:layout_weight="1"
-                android:layout_height="wrap_content" 
+                android:layout_height="wrap_content"
                 android:text="@string/merge_db_text"
                 android:textSize="24dp"
                 android:clickable="false"
@@ -380,9 +380,9 @@
                 android:paddingRight="5dp"
                 android:src="@drawable/trash" />
             <TextView
-                android:layout_width="fill_parent" 
+                android:layout_width="fill_parent"
                 android:layout_weight="1"
-                android:layout_height="wrap_content" 
+                android:layout_height="wrap_content"
                 android:text="@string/clear_all_pref"
                 android:textSize="24dp"
                 android:clickable="false"
@@ -403,9 +403,9 @@
                 android:paddingRight="5dp"
                 android:src="@drawable/donate" />
             <TextView
-                android:layout_width="fill_parent" 
+                android:layout_width="fill_parent"
                 android:layout_weight="1"
-                android:layout_height="wrap_content" 
+                android:layout_height="wrap_content"
                 android:text="@string/donate_text"
                 android:textSize="24dp"
                 android:clickable="false"
@@ -426,9 +426,9 @@
                 android:paddingRight="5dp"
                 android:src="@drawable/help" />
             <TextView
-                android:layout_width="fill_parent" 
+                android:layout_width="fill_parent"
                 android:layout_weight="1"
-                android:layout_height="wrap_content" 
+                android:layout_height="wrap_content"
                 android:text="@string/help_button_text"
                 android:textSize="24dp"
                 android:clickable="false"
@@ -449,9 +449,9 @@
                 android:paddingRight="5dp"
                 android:src="@drawable/about" />
             <TextView
-                android:layout_width="fill_parent" 
+                android:layout_width="fill_parent"
                 android:layout_weight="1"
-                android:layout_height="wrap_content" 
+                android:layout_height="wrap_content"
                 android:text="@string/about_title"
                 android:textSize="24dp"
                 android:clickable="false"

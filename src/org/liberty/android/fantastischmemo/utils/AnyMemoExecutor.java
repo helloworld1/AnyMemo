@@ -37,7 +37,7 @@ public class AnyMemoExecutor {
         futures.add(f);
         return f;
     }
-    
+
     public static synchronized void waitTask(Future<?> f) {
         try {
             f.get();
@@ -48,7 +48,7 @@ public class AnyMemoExecutor {
             e.printStackTrace();
         }
     }
-    
+
     public static synchronized void waitAllTasks() {
         Iterator<Future<?>> fi = futures.iterator();
         while (fi.hasNext()) {

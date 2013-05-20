@@ -33,7 +33,7 @@ public class ZipExporter implements Converter {
 
     private static final long serialVersionUID = -7316554160292269944L;
 
-    /* 
+    /*
      * Dest is not used, it is always in [external]/anymemo
      * directory
      */

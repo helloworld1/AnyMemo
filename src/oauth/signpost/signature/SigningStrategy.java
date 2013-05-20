@@ -14,7 +14,7 @@ import oauth.signpost.http.HttpParameters;
  * generate a signature, this class is concered with <i>where</i> to write it
  * (e.g. HTTP header or query string).
  * </p>
- * 
+ *
  * @author Matthias Kaeppler
  */
 public interface SigningStrategy extends Serializable {
@@ -22,7 +22,7 @@ public interface SigningStrategy extends Serializable {
     /**
      * Writes an OAuth signature and all remaining required parameters to an
      * HTTP message.
-     * 
+     *
      * @param signature
      *        the signature to write
      * @param request
@@ -33,5 +33,5 @@ public interface SigningStrategy extends Serializable {
      *         header field
      */
     String writeSignature(String signature, HttpRequest request, HttpParameters requestParameters);
-    
+
 }

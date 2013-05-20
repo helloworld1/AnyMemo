@@ -43,7 +43,7 @@ public class DatabaseMerger extends AMActivity implements View.OnClickListener{
     private EditText sourceEdit;
     private Button mergeButton;
     private Button cancelButton;
-    
+
     private DatabaseUtil databaseUtil;
 
     @Override
@@ -64,7 +64,7 @@ public class DatabaseMerger extends AMActivity implements View.OnClickListener{
         mergeButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
         targetEdit.setText(dbPath);
-        
+
         databaseUtil = new DatabaseUtil(this);
     }
 
@@ -91,10 +91,10 @@ public class DatabaseMerger extends AMActivity implements View.OnClickListener{
                 sourceEdit.setText(dbPath);
                 break;
             }
-                
+
         }
     }
-    
+
     @Override
     public void onClick(View v){
         if(v == targetEdit){

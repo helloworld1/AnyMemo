@@ -31,7 +31,7 @@ import android.util.Log;
 
 public class SpeakWord {
     private volatile MediaPlayer mp;
-    private final List<String> searchPath; 
+    private final List<String> searchPath;
     private final String[] SUPPORTED_AUDIO_FILE_TYPE = {".3gp", ".ogg", ".wav", ".mp3", ".amr"};
     private final String TAG = "SpeakWord";
     private OnCompletedListener mOnCompletedListener = new OnCompletedListener() {
@@ -40,7 +40,7 @@ public class SpeakWord {
             Log.i(TAG, "SpeakWord on completed");
         }
     };
-    
+
     /* Search in all given search path and try to find exact match audio file with name specified in the text*/
     private File searchGivenPath(String cardText){
         // The regex here should match the file types in SUPPORTED_AUDIO_FILE_TYPE
@@ -49,7 +49,7 @@ public class SpeakWord {
         File audioFile = null;
         if(m.find()){
             String audioTag = m.group();
-            for(String sp : searchPath){ 
+            for(String sp : searchPath){
                 audioFile = new File(sp + "/" + audioTag);
                 if(audioFile.exists()){
                     break;
@@ -58,7 +58,7 @@ public class SpeakWord {
         }
         return audioFile;
     }
-    
+
     /* Search alternative filenames and subpaths */
     private File searchAlternatives(String cardText){
         File audioFile = null;
@@ -71,12 +71,12 @@ public class SpeakWord {
         if(isAudioFileValid(audioFile)){
             return audioFile;
         }
-        
+
         audioFile = searchAltSubPath(alternativeFilename);
-        
+
         return audioFile;
     }
-    
+
     private File searchAltFilename(String alternativeFilename){
         File audioFile = null;
         for(String sp : searchPath){
@@ -89,7 +89,7 @@ public class SpeakWord {
         }
         return audioFile;
     }
-    
+
     private File searchAltSubPath(String filename){
         File audioFile = null;
         for(String sp :searchPath){
@@ -101,51 +101,51 @@ public class SpeakWord {
             }
         }
         return audioFile;
-        
+
     }
-    
+
     private String stripNonCardContent(String text){
         // Replace break with period
         text = text.replaceAll("\\<br\\>", ". " );
         // Remove HTML
         text = text.replaceAll("\\<.*?>", "");
-        // Remove () [] 
+        // Remove () []
         text = text.replaceAll("[\\[\\]\\(\\)]", "");
         // Remove white spaces
         text = text.replaceAll("^\\s+", "");
         text = text.replaceAll("\\s+$", "");
         return text;
     }
-    
+
     private boolean isAudioFileValid(File audioFile){
         return audioFile!=null && audioFile.exists();
     }
-    
+
     public SpeakWord(List<String> audioSearchPath){
         mp = new MediaPlayer();
         searchPath = audioSearchPath;
     }
-    
-    
+
+
     public boolean speakWord(String text){
         File audioFile = searchGivenPath(text);
 
         if(!isAudioFileValid(audioFile)){
-            audioFile = searchAlternatives(text);   
+            audioFile = searchAlternatives(text);
         }
-        
+
         if(!isAudioFileValid(audioFile)){
             return false;
         }
-        
+
         mp.setOnCompletionListener(new OnCompletionListener() {
-            
+
             @Override
             public void onCompletion(MediaPlayer mp) {
                 mOnCompletedListener.onCompleted();
             }
         });
-        
+
         try{
             final FileInputStream fis = new FileInputStream(audioFile);
             new Thread(){
@@ -165,7 +165,7 @@ public class SpeakWord {
                     catch(Exception e){
                         Log.e(TAG, "Error loading audio. Maybe it is race condition", e);
                     }
-                    
+
                 }
             }.start();
         }
@@ -175,7 +175,7 @@ public class SpeakWord {
         }
         return true;
     }
-    
+
     public void stop(){
         if(mp != null){
             try{
@@ -189,7 +189,7 @@ public class SpeakWord {
             }
         }
     }
-    
+
     public void destory(){
         if(mp != null){
             try{
@@ -205,10 +205,10 @@ public class SpeakWord {
     public void setOnCompletedListener(OnCompletedListener ocl) {
         this.mOnCompletedListener = ocl;
     }
-    
+
     public interface OnCompletedListener {
         public void onCompleted();
     }
-    
-    
+
+
 }

@@ -50,7 +50,7 @@ public class DropboxDownloadHelper {
 
     private final String authToken;
     private final String authTokenSecret;
-    
+
     private static final String METADATA_ACCESS_URL = "https://api.dropbox.com/1/metadata/dropbox/anymemo?list=true";
     private static final String DOWNLOAD_URL = "https://api-content.dropbox.com/1/files/dropbox/anymemo/";
 
@@ -67,20 +67,20 @@ public class DropboxDownloadHelper {
     }
 
     @Inject
-    public void setAmFileUtil(AMFileUtil amFileUtil) { 
+    public void setAmFileUtil(AMFileUtil amFileUtil) {
         this.amFileUtil = amFileUtil;
-    }  
+    }
 
     // Fetch the list of db files
     public List<DownloadItem> fetchDBFileList() throws ClientProtocolException, IOException, JSONException {
-        List<DownloadItem> dbFileList = new ArrayList<DownloadItem>(); 
+        List<DownloadItem> dbFileList = new ArrayList<DownloadItem>();
 
         HttpClient httpClient = new DefaultHttpClient();
         HttpGet httpGet = new HttpGet(METADATA_ACCESS_URL);
         httpGet.setHeader("Authorization", DropboxUtils.getFileExchangeAuthHeader(authToken, authTokenSecret));
         HttpResponse response = httpClient.execute(httpGet);
         int statusCode = response.getStatusLine().getStatusCode();
-        
+
         if(statusCode == 200 ){
             InputStream is = response.getEntity().getContent();
             JSONObject jsonResponse = new JSONObject(IOUtils.toString(is));
@@ -98,10 +98,10 @@ public class DropboxDownloadHelper {
         } else {
             throw new IOException("Error fetching file list. Get status code: " + statusCode);
         }
-        
+
         return dbFileList;
     }
-    
+
 
     public String downloadDBFromDropbox(DownloadItem di) throws ClientProtocolException, IOException  {
         String saveDBPath = AMEnv.DEFAULT_ROOT_PATH  + new File(di.getTitle()).getName();
@@ -112,7 +112,7 @@ public class DropboxDownloadHelper {
         }
 
         // Make sure the space is translated correctly.
-        // application/x-www-form-urlencoded specified that 
+        // application/x-www-form-urlencoded specified that
         // The space character " " is converted into a plus sign "+".
         // However dropbox need %20.
         String url = DOWNLOAD_URL + URLEncoder.encode(di.getTitle(), "UTF-8").replace("+", "%20");
@@ -122,7 +122,7 @@ public class DropboxDownloadHelper {
         httpGet.setHeader("Authorization", DropboxUtils.getFileExchangeAuthHeader(authToken, authTokenSecret));
         HttpResponse response = httpClient.execute(httpGet);
         int statusCode = response.getStatusLine().getStatusCode();
-        
+
         if (statusCode == 200) {
             InputStream is = response.getEntity().getContent();
             FileUtils.copyInputStreamToFile(is, new File(saveDBPath));
@@ -135,6 +135,6 @@ public class DropboxDownloadHelper {
             throw new IOException("Error Downloading file. Get status code: " + statusCode);
         }
     }
-    
-   
+
+
 }

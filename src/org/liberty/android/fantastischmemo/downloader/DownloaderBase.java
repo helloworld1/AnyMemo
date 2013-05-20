@@ -67,7 +67,7 @@ public abstract class DownloaderBase extends AMActivity implements OnItemClickLi
      */
 
     abstract protected void goBack();
-    
+
     /*
      * Download the database based on the info
      */
@@ -90,7 +90,7 @@ public abstract class DownloaderBase extends AMActivity implements OnItemClickLi
 
 
 
-    
+
     @Override
 	public void onItemClick(AdapterView<?> parentView, View childView, int position, long id){
         DownloadItem di = getDownloadItem(position);
@@ -121,9 +121,9 @@ public abstract class DownloaderBase extends AMActivity implements OnItemClickLi
     }
 
 
-    
-    /* 
-     * Helper class to provide the info for each items 
+
+    /*
+     * Helper class to provide the info for each items
      * that could be categories, databases and other
      * special things
      */
@@ -176,7 +176,7 @@ public abstract class DownloaderBase extends AMActivity implements OnItemClickLi
             }
             return v;
         }
-        
+
     }
 
 }

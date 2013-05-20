@@ -95,8 +95,8 @@ public class FEDirectory extends DownloaderBase{
             throw new IOException("Status is not OK. Status: " + status);
         }
         JSONArray directoryArray = jsonObject.getJSONArray("results");
-        /* 
-         * Each result has tags which is an array containing 
+        /*
+         * Each result has tags which is an array containing
          * tags and a string of tag group title
          */
         for(int i = 0; i < directoryArray.length(); i++){

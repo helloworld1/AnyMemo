@@ -6,7 +6,7 @@ import oauth.signpost.http.HttpResponse;
 /**
  * Provides hooks into the token request handling procedure executed by
  * {@link OAuthProvider}.
- * 
+ *
  * @author Matthias Kaeppler
  */
 public interface OAuthProviderListener {
@@ -14,7 +14,7 @@ public interface OAuthProviderListener {
     /**
      * Called after the request has been created and default headers added, but
      * before the request has been signed.
-     * 
+     *
      * @param request
      *        the request to be sent
      * @throws Exception
@@ -23,7 +23,7 @@ public interface OAuthProviderListener {
 
     /**
      * Called after the request has been signed, but before it's being sent.
-     * 
+     *
      * @param request
      *        the request to be sent
      * @throws Exception
@@ -33,7 +33,7 @@ public interface OAuthProviderListener {
     /**
      * Called when the server response has been received. You can implement this
      * to manually handle the response data.
-     * 
+     *
      * @param request
      *        the request that was sent
      * @param response
