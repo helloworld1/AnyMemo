@@ -51,7 +51,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -351,29 +350,12 @@ public class PreviewEditActivity extends QACardActivity {
 
                 	fl.setId(MAGIC_FRAME_LAYOUT_ID);
                 	root.addView(fl);
-                //	Log.e(TAG, String.format("fl id is %d", fl.getId()));
                 	ft.add(fl.getId(), f);
-
                 	ft.commit();
                 }
                 return true;
             }
-        }
 
-        return false;
-    }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.editscreen_context_menu, menu);
-        menu.setHeaderTitle(R.string.menu_text);
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem menuitem) {
-        switch(menuitem.getItemId()) {
             case R.id.menu_context_copy:
             {
 
