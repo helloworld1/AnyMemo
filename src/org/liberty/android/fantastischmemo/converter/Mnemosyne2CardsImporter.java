@@ -89,7 +89,7 @@ public class Mnemosyne2CardsImporter implements Converter {
         // Make the tmp directory tmp/[src file name]/
         String srcFilename = FilenameUtils.getName(src);
         File tmpDirectory = new File(AMEnv.DEFAULT_TMP_PATH + srcFilename);
-        
+
         FileUtils.deleteDirectory(tmpDirectory);
         FileUtils.forceMkdir(tmpDirectory);
 
@@ -117,8 +117,8 @@ public class Mnemosyne2CardsImporter implements Converter {
 
             // The last step is to see if there are images to import.
             Collection<File> imageFiles = FileUtils.listFiles(
-                tmpDirectory, 
-                new SuffixFileFilter(new String[] {"jpg", "png", "bmp"}, IOCase.INSENSITIVE), 
+                tmpDirectory,
+                new SuffixFileFilter(new String[] {"jpg", "png", "bmp"}, IOCase.INSENSITIVE),
                 DirectoryFileFilter.DIRECTORY);
             if (!imageFiles.isEmpty()) {
                 String destDbName = FilenameUtils.getName(dest);
@@ -135,7 +135,7 @@ public class Mnemosyne2CardsImporter implements Converter {
             FileUtils.deleteDirectory(tmpDirectory);
         }
 
-        
+
     }
 
     /*
@@ -164,7 +164,7 @@ public class Mnemosyne2CardsImporter implements Converter {
         // Map between xml oid to card
         Map<String, Card> cardOidMap = null;
         // Map between xml oid to category
-        Map<String, Category> categoryOidMAP = null; 
+        Map<String, Category> categoryOidMAP = null;
 
         int lastType = 0;
         int currentOrd = 1;

@@ -8,14 +8,14 @@
         android:title="@string/actions_category">
         <ListPreference
             android:key="speech_ctl"
-            android:title="@string/speech_ctl_title" 
+            android:title="@string/speech_ctl_title"
             android:defaultValue="TAP"
             android:entries="@array/speech_ctl_list"
             android:entryValues="@array/speech_ctl_list_values"
             android:summary="@string/speech_ctl_summary" />
         <CheckBoxPreference
             android:key="copyclipboard"
-            android:title="@string/copyclipboard" 
+            android:title="@string/copyclipboard"
             android:defaultValue="true"
             android:summary="@string/copyclipboard_summary" />
         <CheckBoxPreference
@@ -28,7 +28,7 @@
         android:title="@string/learning_category">
         <ListPreference
             android:key="button_style"
-            android:title="@string/button_style_title" 
+            android:title="@string/button_style_title"
             android:defaultValue="ANYMEMO"
             android:entries="@array/button_style_list"
             android:entryValues="@array/button_style_list_values"
@@ -39,12 +39,12 @@
             android:summary="@string/customize_scheduling_algorithm_summary" />
         <CheckBoxPreference
             android:key="shuffling_cards"
-            android:title="@string/shuffling_cards_title" 
+            android:title="@string/shuffling_cards_title"
             android:defaultValue="false"
             android:summary="@string/shuffling_cards_summary" />
         <ListPreference
             android:key="dict_app"
-            android:title="@string/dict_app" 
+            android:title="@string/dict_app"
             android:defaultValue="COLORDICT"
             android:entries="@array/dict_list"
             android:entryValues="@array/dict_list_values"
@@ -54,23 +54,23 @@
         android:title="@string/interface_category">
         <ListPreference
             android:key="interface_locale"
-            android:title="@string/interface_locale_title" 
+            android:title="@string/interface_locale_title"
             android:defaultValue="AUTO"
             android:entries="@array/interface_locale_list"
             android:entryValues="@array/interface_locale_list_values"
-            android:summary="@string/interface_locale_summary" /> 
+            android:summary="@string/interface_locale_summary" />
         <CheckBoxPreference android:key="fullscreen_mode"
-            android:title="@string/fullscreen_title" 
+            android:title="@string/fullscreen_title"
             android:defaultValue="false"
             android:summary="@string/fullscreen_summary" />
         <CheckBoxPreference
             android:key="allow_orientation"
-            android:title="@string/allow_orientation_title" 
+            android:title="@string/allow_orientation_title"
             android:defaultValue="true"
             android:summary="@string/allow_orientation_summary" />
         <CheckBoxPreference
             android:key="enable_animation"
-            android:title="@string/enable_animation_text" 
+            android:title="@string/enable_animation_text"
             android:defaultValue="true"
             android:summary="@string/enable_animation_summary" />
         <ListPreference
@@ -93,8 +93,8 @@
         android:title="@string/misc_category">
         <CheckBoxPreference
             android:key="enable_third_party_arabic"
-            android:title="@string/enable_third_party_arabic_title" 
+            android:title="@string/enable_third_party_arabic_title"
             android:defaultValue="true"
             android:summary="@string/enable_third_party_arabic_summary" />
     </PreferenceCategory>
-</PreferenceScreen> 
+</PreferenceScreen>

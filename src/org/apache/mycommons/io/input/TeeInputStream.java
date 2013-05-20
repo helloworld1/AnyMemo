@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -101,7 +101,7 @@ public class TeeInputStream extends ProxyInputStream {
      * the associated output stream.
      *
      * @return next byte from the stream, or -1 if the stream has ended
-     * @throws IOException if the stream could not be read (or written) 
+     * @throws IOException if the stream could not be read (or written)
      */
     @Override
     public int read() throws IOException {
@@ -120,7 +120,7 @@ public class TeeInputStream extends ProxyInputStream {
      * @param st start offset within the buffer
      * @param end maximum number of bytes to read
      * @return number of bytes read, or -1 if the stream has ended
-     * @throws IOException if the stream could not be read (or written) 
+     * @throws IOException if the stream could not be read (or written)
      */
     @Override
     public int read(byte[] bts, int st, int end) throws IOException {
@@ -137,7 +137,7 @@ public class TeeInputStream extends ProxyInputStream {
      *
      * @param bts byte buffer
      * @return number of bytes read, or -1 if the stream has ended
-     * @throws IOException if the stream could not be read (or written) 
+     * @throws IOException if the stream could not be read (or written)
      */
     @Override
     public int read(byte[] bts) throws IOException {

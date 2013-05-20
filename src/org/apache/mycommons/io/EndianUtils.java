@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -188,7 +188,7 @@ public class EndianUtils {
 
         long high = data[ offset + 3 ] & 0xff;
 
-        return (high << 24) + (0xffffffffL & low); 
+        return (high << 24) + (0xffffffffL & low);
     }
 
     /**
@@ -217,17 +217,17 @@ public class EndianUtils {
      * @return the value read
      */
     public static long readSwappedLong(byte[] data, int offset) {
-        long low = 
+        long low =
             ( ( data[ offset + 0 ] & 0xff ) << 0 ) +
             ( ( data[ offset + 1 ] & 0xff ) << 8 ) +
             ( ( data[ offset + 2 ] & 0xff ) << 16 ) +
             ( ( data[ offset + 3 ] & 0xff ) << 24 );
-        long high = 
+        long high =
             ( ( data[ offset + 4 ] & 0xff ) << 0 ) +
             ( ( data[ offset + 5 ] & 0xff ) << 8 ) +
             ( ( data[ offset + 6 ] & 0xff ) << 16 ) +
             ( ( data[ offset + 7 ] & 0xff ) << 24 );
-        return (high << 32) + (0xffffffffL & low); 
+        return (high << 32) + (0xffffffffL & low);
     }
 
     /**
@@ -377,7 +377,7 @@ public class EndianUtils {
 
         long high = value4 & 0xff;
 
-        return (high << 24) + (0xffffffffL & low); 
+        return (high << 24) + (0xffffffffL & low);
     }
 
     /**

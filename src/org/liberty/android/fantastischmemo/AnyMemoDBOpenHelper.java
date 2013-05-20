@@ -31,10 +31,10 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
 
     private final String dbPath;
 
-    private static final int CURRENT_VERSION = 3; 
+    private static final int CURRENT_VERSION = 3;
 
     private CardDao cardDao = null;
-    
+
     private DeckDao deckDao = null;
 
     private SettingDao settingDao = null;
@@ -48,7 +48,7 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
         Log.v(TAG, "Now we are creating a new database!");
-        Log.i(TAG, "Newly created db version: " + database.getVersion()); 
+        Log.i(TAG, "Newly created db version: " + database.getVersion());
 
         try {
             TableUtils.createTable(connectionSource, Card.class);
@@ -126,10 +126,10 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
                     + " set category_id = 1"
                     + " where category_id is null");
 
-            database.execSQL("update cards set updateDate='2010-01-01 00:00:00.000000'," + 
+            database.execSQL("update cards set updateDate='2010-01-01 00:00:00.000000'," +
                     "creationDate='2010-01-01 00:00:00.000000'");
-            database.execSQL("update categories set updateDate='2010-01-01 00:00:00.000000'"); 
-            database.execSQL("update learning_data set updateDate='2010-01-01 00:00:00.000000'"); 
+            database.execSQL("update categories set updateDate='2010-01-01 00:00:00.000000'");
+            database.execSQL("update learning_data set updateDate='2010-01-01 00:00:00.000000'");
 
             // Set unused fields
             database.execSQL("update cards"
@@ -156,7 +156,7 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
             DatabaseConnection connection = getConnectionSource().getReadWriteConnection();
             getConnectionSource().releaseConnection(connection);
         } catch (SQLException e) {
-            Log.e(TAG, "Error releasing the connection.", e); 
+            Log.e(TAG, "Error releasing the connection.", e);
         }
         super.close();
     }

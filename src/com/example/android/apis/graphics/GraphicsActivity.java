@@ -34,7 +34,7 @@ class GraphicsActivity extends Activity {
             vg.addView(view);
             view = vg;
         }
-        
+
         super.setContentView(view);
     }
 }

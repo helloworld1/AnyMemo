@@ -13,7 +13,7 @@ import oauth.signpost.basic.HttpURLConnectionRequestAdapter;
  * want to extend Signpost to sign a different kind of HTTP request than those
  * currently supported, you'll have to write an adapter which implements this
  * interface and a custom {@link OAuthConsumer} which performs the wrapping.
- * 
+ *
  * @see HttpURLConnectionRequestAdapter
  * @author Matthias Kaeppler
  */
@@ -37,7 +37,7 @@ public interface HttpRequest {
 
     /**
      * Returns the wrapped request object, in case you must work directly on it.
-     * 
+     *
      * @return the wrapped request object
      */
     Object unwrap();

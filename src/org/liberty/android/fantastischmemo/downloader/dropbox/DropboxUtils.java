@@ -33,20 +33,20 @@ import org.liberty.android.fantastischmemo.AMEnv;
 
 public class DropboxUtils {
     private static final String TAG = "DropboxUtils";
-    
+
     public static String buildOAuthAccessHeader(String oauthRequestToken, String oauthRequestTokenSecret){
-        String headerValue = 
+        String headerValue =
             "OAuth oauth_version=\""+ AMEnv.DROPBOX_OAUTH_VERSION +"\", "
             + "oauth_signature_method=\""+ AMEnv.DROPBOX_OAUTH_SIGNATURE_METHOD+"\", "
-            + "oauth_token=\"" + oauthRequestToken + "\", " 
+            + "oauth_token=\"" + oauthRequestToken + "\", "
             + "oauth_consumer_key=\""+ AMEnv.DROPBOX_CONSUMER_KEY +"\", "
             + "oauth_signature=\"" + AMEnv.DROPBOX_CONSUMER_SECRET+ "&" + oauthRequestTokenSecret + "\"";
 
         return headerValue;
     }
-    
+
     public static String buildOAuthRequestHeader(){
-        String requestHeader = 
+        String requestHeader =
             "OAuth oauth_version=\""+AMEnv.DROPBOX_OAUTH_VERSION+"\", " +
             "oauth_signature_method=\""+ AMEnv.DROPBOX_OAUTH_SIGNATURE_METHOD +"\", " +
             "oauth_consumer_key=\""+ AMEnv.DROPBOX_CONSUMER_KEY +"\", "+
@@ -54,7 +54,7 @@ public class DropboxUtils {
         return requestHeader;
 
     }
-    
+
     public static String getFileExchangeAuthHeader(String authToken, String authTokenSecret){
         return "OAuth oauth_version=\""+ AMEnv.DROPBOX_OAUTH_VERSION +"\", "
             + "oauth_signature_method=\""+ AMEnv.DROPBOX_OAUTH_SIGNATURE_METHOD +"\", "

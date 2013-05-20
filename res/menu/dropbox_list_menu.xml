@@ -3,7 +3,7 @@
   xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/upload"
     	android:icon="@android:drawable/ic_menu_upload"
-        android:showAsAction="ifRoom" 
+        android:showAsAction="ifRoom"
   		android:title="@string/upload_text" />
     <item android:id="@+id/logout"
         android:icon="@android:drawable/ic_menu_delete"

@@ -279,7 +279,7 @@ public class CategoryEditorFragment extends RoboDialogFragment implements View.O
         public void onPostExecute(Category result){
             categoryAdapter.add(result);
             categoryAdapter.notifyDataSetChanged();
-            
+
             // Select and scroll to newly created category
             int lastPos = categoryAdapter.getCount() - 1;
             categoryList.setItemChecked(lastPos, true);
@@ -324,7 +324,7 @@ public class CategoryEditorFragment extends RoboDialogFragment implements View.O
                 categoryAdapter.remove(selectedCategory);
             }
             categoryAdapter.notifyDataSetChanged();
-            
+
             // Move to first category (Uncategorized)
             categoryList.setItemChecked(0, true);
             categoryList.setSelection(0);

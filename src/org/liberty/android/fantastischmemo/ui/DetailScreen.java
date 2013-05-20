@@ -48,7 +48,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 
 public class DetailScreen extends AMActivity {
-	
+
 	private EditText idEntry;
 	private EditText questionEntry;
 	private EditText answerEntry;
@@ -68,7 +68,7 @@ public class DetailScreen extends AMActivity {
 	private CardDao cardDao;
 	private CategoryDao categoryDao;
 	private LearningDataDao learningDataDao;
-	private AnyMemoDBOpenHelper helper;	
+	private AnyMemoDBOpenHelper helper;
     private Card currentCard;
     private InitTask initTask;
     private SaveCardTask saveCardTask;
@@ -76,11 +76,11 @@ public class DetailScreen extends AMActivity {
 
 	public static String EXTRA_DBPATH = "dbpath";
 	public static String EXTRA_CARD_ID = "card_id";
-	
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.detail_screen);	
+        setContentView(R.layout.detail_screen);
 
         initTask = new InitTask();
         initTask.execute((Void) null);
@@ -137,7 +137,7 @@ public class DetailScreen extends AMActivity {
         }
         return false;
     }
-    
+
     private void loadEntries() {
 
  	   	idEntry.setText("" + currentCard.getId());
@@ -157,19 +157,19 @@ public class DetailScreen extends AMActivity {
 		acqRepsSinceLapseEntry.setText("" + currentCard.getLearningData().getAcqRepsSinceLapse());
 		retRepsSinceLapseEntry.setText("" + currentCard.getLearningData().getRetRepsSinceLapse());
     }
-    
+
     private String refreshEntries() {
         try {
             currentCard.setId(Integer.parseInt(idEntry.getText().toString()));
             currentCard.setQuestion(questionEntry.getText().toString());
             currentCard.setAnswer(answerEntry.getText().toString());
             currentCard.setNote(noteEntry.getText().toString());
-            
+
             String[] parsers = {"yyyy/MM/dd"};
             currentCard.getLearningData().setLastLearnDate(DateUtils.parseDateStrictly(lastLearnDateEntry.getText().toString(), parsers));
             currentCard.getLearningData().setNextLearnDate(DateUtils.parseDateStrictly(nextLearnDateEntry.getText().toString(), parsers));
 
-            currentCard.getLearningData().setGrade(Integer.parseInt(gradeEntry.getText().toString()));  
+            currentCard.getLearningData().setGrade(Integer.parseInt(gradeEntry.getText().toString()));
             currentCard.getLearningData().setEasiness(Float.parseFloat(easinessEntry.getText().toString()));
             currentCard.getLearningData().setAcqReps(Integer.parseInt(acqRepsEntry.getText().toString()));
             currentCard.getLearningData().setRetReps(Integer.parseInt(retRepsEntry.getText().toString()));
@@ -199,7 +199,7 @@ public class DetailScreen extends AMActivity {
 
         return error;
     }
-    
+
     public void onDestroy(){
         AnyMemoDBOpenHelperManager.releaseHelper(helper);
     	super.onDestroy();
@@ -207,7 +207,7 @@ public class DetailScreen extends AMActivity {
 
     private class SaveCardTask extends AsyncTask<Void, Void, String> {
         private ProgressDialog progressDialog;
-        
+
         @Override
         public void onPreExecute() {
             progressDialog = new ProgressDialog(DetailScreen.this);
@@ -221,12 +221,12 @@ public class DetailScreen extends AMActivity {
         @Override
         public String doInBackground(Void... params) {
             return saveEntries();
-        }   
+        }
 
         @Override
         public void onPostExecute(String error) {
             progressDialog.dismiss();
-            
+
             if (error != null) {
                 new AlertDialog.Builder(DetailScreen.this)
                     .setTitle(R.string.warning_text)
@@ -252,7 +252,7 @@ public class DetailScreen extends AMActivity {
         @Override
         public void onPreExecute() {
     	    Bundle extras = getIntent().getExtras();
-            
+
     	    if (extras != null) {
         	    dbPath = extras.getString(EXTRA_DBPATH);
                 assert dbPath != null : "dbPath should not be null!";
@@ -277,19 +277,19 @@ public class DetailScreen extends AMActivity {
         		cardDao = helper.getCardDao();
         		categoryDao = helper.getCategoryDao();
         		learningDataDao = helper.getLearningDataDao();
-        		
+
             	currentCard = cardDao.queryForId(cardId);
                 categoryDao.refresh(currentCard.getCategory());
                 learningDataDao.refresh(currentCard.getLearningData());
-    		
+
         	} catch (SQLException e) {
         		Log.e(TAG, "Error creating daos!", e);
         		throw new RuntimeException("Dao creation error!");
         	}
-            
+
             return null;
         }
-        
+
         @Override
         public void onPostExecute(Void result) {
             idEntry = (EditText)findViewById(R.id.entry__id);

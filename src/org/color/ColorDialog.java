@@ -31,7 +31,7 @@ public class ColorDialog extends AlertDialog implements OnSeekBarChangeListener,
     public interface OnClickListener {
         public void onClick(View view, int color);
     }
-    
+
 	private SeekBar mHue;
 	private SeekBar mSaturation;
 	private SeekBar mValue;
@@ -51,7 +51,7 @@ public class ColorDialog extends AlertDialog implements OnSeekBarChangeListener,
 		setButton(BUTTON_NEGATIVE, res.getText(android.R.string.cancel), this);
 		View root = LayoutInflater.from(context).inflate(R.layout.color_picker, null);
 		setView(root);
-		
+
 		View preview = root.findViewById(R.id.preview);
 		mPreviewDrawable = new GradientDrawable();
 		// 2 pix more than color_picker_frame's radius
@@ -61,11 +61,11 @@ public class ColorDialog extends AlertDialog implements OnSeekBarChangeListener,
 			res.getDrawable(R.drawable.color_picker_frame),
 		};
 		preview.setBackgroundDrawable(new LayerDrawable(layers));
-		
+
 		mHue = (SeekBar) root.findViewById(R.id.hue);
 		mSaturation = (SeekBar) root.findViewById(R.id.saturation);
 		mValue = (SeekBar) root.findViewById(R.id.value);
-		
+
 		mColor = color;
 		float[] hsv = new float[3];
 		Color.colorToHSV(color, hsv);
@@ -75,10 +75,10 @@ public class ColorDialog extends AlertDialog implements OnSeekBarChangeListener,
 		setupSeekBar(mHue, R.string.color_h, h, res);
 		setupSeekBar(mSaturation, R.string.color_s, s, res);
 		setupSeekBar(mValue, R.string.color_v, v, res);
-		
+
 		updatePreview(color);
 	}
-	
+
 	private void setupSeekBar(SeekBar seekBar, int id, int value, Resources res) {
 		seekBar.setProgressDrawable(new TextSeekBarDrawable(res, id, value < seekBar.getMax() / 2));
 		seekBar.setProgress(value);
@@ -94,7 +94,7 @@ public class ColorDialog extends AlertDialog implements OnSeekBarChangeListener,
 		mColor = Color.HSVToColor(hsv);
 		updatePreview(mColor);
 	}
-	
+
 	private void updatePreview(int color) {
 		mPreviewDrawable.setColor(color);
 		mPreviewDrawable.invalidateSelf();
@@ -116,12 +116,12 @@ public class ColorDialog extends AlertDialog implements OnSeekBarChangeListener,
 		}
 		dismiss();
 	}
-	
+
 	static final int[] STATE_FOCUSED = {android.R.attr.state_focused};
 	static final int[] STATE_PRESSED = {android.R.attr.state_pressed};
-	
+
 	class TextSeekBarDrawable extends Drawable implements Runnable {
-		
+
 		private static final String TAG = "TextSeekBarDrawable";
 		private static final long DELAY = 25;
 		private String mText;
@@ -153,19 +153,19 @@ public class ColorDialog extends AlertDialog implements OnSeekBarChangeListener,
 		protected void onBoundsChange(Rect bounds) {
 			mProgress.setBounds(bounds);
 		}
-		
+
 		@Override
 		protected boolean onStateChange(int[] state) {
 			mActive = StateSet.stateSetMatches(STATE_FOCUSED, state) | StateSet.stateSetMatches(STATE_PRESSED, state);
 			invalidateSelf();
 			return false;
 		}
-		
+
 		@Override
 		public boolean isStateful() {
 			return true;
 		}
-		
+
 		@Override
 		protected boolean onLevelChange(int level) {
 //			Log.d(TAG, "onLevelChange " + level);
@@ -181,7 +181,7 @@ public class ColorDialog extends AlertDialog implements OnSeekBarChangeListener,
 			}
 			return mProgress.setLevel(level);
 		}
-		
+
 		@Override
 		public void draw(Canvas canvas) {
 			mProgress.draw(canvas);

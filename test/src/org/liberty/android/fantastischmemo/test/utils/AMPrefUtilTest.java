@@ -44,7 +44,7 @@ public class AMPrefUtilTest extends AbstractPreferencesTest {
         // Default value because it is deleted
         assertEquals(0, amPrefUtil.getSavedId("Prefix", "key2", 0));
 
-        // This should remove all keys containing "key" 
+        // This should remove all keys containing "key"
         amPrefUtil.removePrefKeys("key");
 
         assertEquals(0, amPrefUtil.getSavedId("Prefix", "key1", 0));

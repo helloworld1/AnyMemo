@@ -91,7 +91,7 @@ public class CardEditor extends AMActivity {
     private String originalQuestion;
     private String originalAnswer;
     private String originalNote;
-    
+
     public static String EXTRA_DBPATH = "dbpath";
     public static String EXTRA_CARD_ID = "id";
     public static String EXTRA_RESULT_CARD_ID= "result_card_id";
@@ -137,11 +137,11 @@ public class CardEditor extends AMActivity {
                 .setPositiveButton(R.string.yes_text, new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface  d, int which){
                         Intent resultIntent = new Intent();
-                        setResult(Activity.RESULT_CANCELED, resultIntent);                
+                        setResult(Activity.RESULT_CANCELED, resultIntent);
                         finish();
 
                     }
-                }) 
+                })
             .setNegativeButton(R.string.no_text, null)
                 .create()
                 .show();
@@ -149,19 +149,19 @@ public class CardEditor extends AMActivity {
         }
         else{
             Intent resultIntent = new Intent();
-            setResult(Activity.RESULT_CANCELED, resultIntent);                
+            setResult(Activity.RESULT_CANCELED, resultIntent);
             finish();
 
         }
     }
-        
-    @Override    
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.card_editor_menu, menu);
         return true;
     }
-    
+
     public boolean onOptionsItemSelected(MenuItem item) {
         View focusView = getCurrentFocus();
         switch (item.getItemId()) {
@@ -183,14 +183,14 @@ public class CardEditor extends AMActivity {
                     myIntent.putExtra(FileBrowserActivity.EXTRA_FILE_EXTENSIONS, ".png,.jpg,.tif,.bmp");
                     startActivityForResult(myIntent, ACTIVITY_IMAGE_FILE);
                 }
-                return true; 
+                return true;
 
             case R.id.add_existing_audio:
                 if (isViewEligibleToEditAudio()) {
                     addExistingAudio();
                 }
                 return true;
-                
+
             case R.id.add_new_audio:
                 if (isViewEligibleToEditAudio()) {
                     addNewAudio();
@@ -206,7 +206,7 @@ public class CardEditor extends AMActivity {
         }
         return false;
     }
-    
+
     private boolean isViewEligibleToEditAudio(){
         View focusView = getCurrentFocus();
         if(focusView == questionEdit || focusView == answerEdit){
@@ -215,7 +215,7 @@ public class CardEditor extends AMActivity {
             return false;
         }
     }
-    
+
     private void showConfirmDialog(String msg, DialogInterface.OnClickListener positiveClickListener){
         new AlertDialog.Builder(this)
             .setMessage(msg)
@@ -223,15 +223,15 @@ public class CardEditor extends AMActivity {
             .setNegativeButton(getString(R.string.no_text), null)
             .create()
             .show();
-        
+
     }
-    
+
     private boolean audioPreviouslyExists(){
         View focusView = getCurrentFocus();
         String curContent = ((EditText)focusView).getText().toString();
         return curContent.contains("src=");
     }
-    
+
     private void addExistingAudio(){
         if(audioPreviouslyExists()){
             //if there is audio previously defined,show alert
@@ -245,7 +245,7 @@ public class CardEditor extends AMActivity {
             startAudioBrowser();
         }
     }
-    
+
     private void addNewAudio(){
          if(audioPreviouslyExists()){
              //if there is audio previously defined,show alert
@@ -257,9 +257,9 @@ public class CardEditor extends AMActivity {
              showConfirmDialog(getString(R.string.override_audio_warning_text), positiveClickListener);
          } else {
              startAudioRecorder();
-         }       
+         }
     }
-    
+
     private void removeAudio(){
         View focusView = getCurrentFocus();
         if(focusView == questionEdit){
@@ -272,18 +272,18 @@ public class CardEditor extends AMActivity {
             return;
         }
     }
-    
+
     private void startAudioBrowser(){
         removeAudio();
         Intent myIntent = new Intent(this, FileBrowserActivity.class);
         myIntent.putExtra(FileBrowserActivity.EXTRA_FILE_EXTENSIONS, ".3gp,.ogg,.mp3,.wav,.amr");
         startActivityForResult(myIntent, ACTIVITY_AUDIO_FILE);
     }
-    
+
     private void startAudioRecorder(){
          removeAudio();
          View focusView = getCurrentFocus();
-         String audioFilename = AMEnv.DEFAULT_AUDIO_PATH + dbName; 
+         String audioFilename = AMEnv.DEFAULT_AUDIO_PATH + dbName;
          new File(audioFilename).mkdirs();
          AudioRecorderFragment recorder = new AudioRecorderFragment();
          if(focusView == questionEdit){
@@ -295,12 +295,12 @@ public class CardEditor extends AMActivity {
          }
          Bundle b = new Bundle();
          b.putString(EXTRA_AUDIO_FILENAME, audioFilename);
-         
+
          recorder.setAudioRecorderResultListener(new AudioRecorderResultListener() {
              public void onReceiveAudio() {
                  View focusView = getCurrentFocus();
                  if(focusView == questionEdit){
-                     addTextToView((EditText) focusView, "<audio src=\"" + currentCardId + "_q.3gp\" />");    
+                     addTextToView((EditText) focusView, "<audio src=\"" + currentCardId + "_q.3gp\" />");
                  } else if (focusView == answerEdit){
                          addTextToView((EditText) focusView, "<audio src=\"" + currentCardId + "_a.3gp\" />");
                  }
@@ -309,12 +309,12 @@ public class CardEditor extends AMActivity {
          recorder.setArguments(b);
          recorder.show(getSupportFragmentManager(), "AudioRecorderDialog");
     }
-    
+
     private void addTextToView(EditText v, String text){
         String origText = v.getText().toString();
-        /* 
-         * keep track of the cursor location and restore it 
-         * after pasting because the default location is the 
+        /*
+         * keep track of the cursor location and restore it
+         * after pasting because the default location is the
          * begining of the EditText
          */
         int cursorPos = v.getSelectionStart();
@@ -396,8 +396,8 @@ public class CardEditor extends AMActivity {
             addBack = false;
         }
         else{
-            /* 
-             * The radio button is only valid when the user is creating 
+            /*
+             * The radio button is only valid when the user is creating
              * new items. If the user is editng, it has no effect at all
              */
             addRadio.setVisibility(View.VISIBLE);
@@ -565,7 +565,7 @@ public class CardEditor extends AMActivity {
             currentCard.setQuestion(qText);
             currentCard.setAnswer(aText);
             currentCard.setNote(nText);
-            
+
             assert currentCard != null : "Current card shouldn't be null";
         }
 
@@ -602,17 +602,17 @@ public class CardEditor extends AMActivity {
             progressDialog.dismiss();
             Intent resultIntent = new Intent();
             resultIntent.putExtra(EXTRA_RESULT_CARD_ID, currentCard.getId());
-            setResult(Activity.RESULT_OK, resultIntent);                
+            setResult(Activity.RESULT_OK, resultIntent);
             finish();
         }
     }
 
     // When a category is selected in category fragment.
-    private CategoryEditorResultListener categoryResultListener = 
+    private CategoryEditorResultListener categoryResultListener =
         new CategoryEditorResultListener() {
             public void onReceiveCategory(Category c) {
                 currentCard.setCategory(c);
                 updateViews();
             }
-        }; 
+        };
 }

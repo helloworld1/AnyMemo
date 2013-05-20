@@ -43,7 +43,7 @@ public class SettingTest extends AbstractExistingDBTest {
         Setting savedSetting = setSetting(setting);
         assertEquals(Setting.Align.CENTER_LEFT, savedSetting.getAnswerTextAlign());
     }
-    
+
     @SmallTest
     public void testCardStyle() throws Exception {
         Setting setting = getCurrentSetting();

@@ -34,7 +34,7 @@ public class DatabaseUtil {
         String emptyDbPath = mContext.getApplicationContext().getFilesDir().getAbsolutePath() + "/" + AMEnv.EMPTY_DB_NAME;
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, emptyDbPath);
         try {
-            SettingDao settingDao = helper.getSettingDao(); 
+            SettingDao settingDao = helper.getSettingDao();
             return settingDao.queryForId(1);
         } catch (SQLException e) {
             throw new RuntimeException("Could not read setting from default db", e);
@@ -84,7 +84,7 @@ public class DatabaseUtil {
         }
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, dbPath);
         try {
-            helper.getCardDao(); 
+            helper.getCardDao();
             return true;
         } catch (Exception e) {
             e.printStackTrace();

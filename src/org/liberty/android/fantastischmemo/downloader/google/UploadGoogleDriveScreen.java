@@ -132,7 +132,7 @@ public class UploadGoogleDriveScreen extends GoogleAccountActivity {
             return null;
         }
 
-        
+
         @Override
         public void onPostExecute(Exception e){
             if (e != null) {

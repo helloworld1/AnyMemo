@@ -112,7 +112,7 @@ public class StatisticsScreen extends AMActivity {
                     ChartTask task = new AccumulativeCardsToReviewTask();
                     task.execute((Void)null);
                 }
-				
+
 			}
 
 			@Override
@@ -129,9 +129,9 @@ public class StatisticsScreen extends AMActivity {
 
     private BarChart generateBarGraph(XYSeries series) {
         XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
-        
+
         dataset.addSeries(series);
-        
+
         XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
 
         SimpleSeriesRenderer r1 = new SimpleSeriesRenderer();
@@ -202,7 +202,7 @@ public class StatisticsScreen extends AMActivity {
 
         }
     }
-    
+
     private class GradeStatisticsTask extends ChartTask {
         @Override
         public AbstractChart doInBackground(Void... params) {

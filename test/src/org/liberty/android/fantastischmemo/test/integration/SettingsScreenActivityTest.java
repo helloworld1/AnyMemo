@@ -45,7 +45,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
 
         solo.clickOnText("24", 1);
         solo.clickOnText("72");
-        
+
         assertTrue(solo.searchText("48"));
         assertTrue(solo.searchText("72"));
 
@@ -129,7 +129,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         // Set Answer audio
         solo.clickOnView(mActivity.findViewById((R.id.answer_locale_spinner)));
         solo.clickOnText(solo.getString(R.string.italian_text));
-        
+
         solo.sleep(500);
         getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
 
@@ -148,7 +148,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         }
 
     }
-    
+
     public void testDoubleSidedCard() throws Exception {
         // Set Question audio
         solo.clickOnView(mActivity.findViewById((R.id.card_style_spinner)));

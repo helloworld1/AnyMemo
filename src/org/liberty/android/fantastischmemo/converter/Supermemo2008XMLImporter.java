@@ -57,9 +57,9 @@ public class Supermemo2008XMLImporter extends org.xml.sax.helpers.DefaultHandler
     private List<Card> cardList;
     private Card card;
     private int count = 1;
-    
+
     private StringBuffer characterBuf;
-    
+
     @Inject
     public Supermemo2008XMLImporter(Context context){
         mContext = context;
@@ -73,7 +73,7 @@ public class Supermemo2008XMLImporter extends org.xml.sax.helpers.DefaultHandler
         cardList = new LinkedList<Card>();
         characterBuf = new StringBuffer();
 
-        System.setProperty("org.xml.sax.driver","org.xmlpull.v1.sax2.Driver"); 
+        System.setProperty("org.xml.sax.driver","org.xmlpull.v1.sax2.Driver");
 
         SAXParserFactory spf = SAXParserFactory.newInstance();
         SAXParser sp = spf.newSAXParser();
@@ -89,7 +89,7 @@ public class Supermemo2008XMLImporter extends org.xml.sax.helpers.DefaultHandler
             AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }
     }
-    
+
     public void startElement(String namespaceURI, String localName, String qName, Attributes atts) throws SAXException{
         if(localName.equals("Question")){
             characterBuf = new StringBuffer();
@@ -101,7 +101,7 @@ public class Supermemo2008XMLImporter extends org.xml.sax.helpers.DefaultHandler
             characterBuf = new StringBuffer();
         }
     }
-    
+
     public void endElement(String namespaceURI, String localName, String qName) throws SAXException{
         if(localName.equals("Question")){
             card.setQuestion(characterBuf.toString());
@@ -113,18 +113,18 @@ public class Supermemo2008XMLImporter extends org.xml.sax.helpers.DefaultHandler
             cardList.add(card);
         }
     }
-    
+
     public void setDocumentLocator(Locator locator){
         mLocator = locator;
     }
-    
+
     public void characters(char ch[], int start, int length){
         characterBuf.append(ch, start, length);
     }
-    
+
     public void startDocument() throws SAXException{
     }
-    
+
     public void endDocument() throws SAXException{
     }
 

@@ -50,7 +50,7 @@ public class CSVImporter implements Converter {
     private static final long serialVersionUID = 234745119864085982L;
 
     private Context mContext;
-    
+
     /* Null is for default separator "," */
     private Character separator = null;
 

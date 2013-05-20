@@ -1,4 +1,5 @@
 /*
+
 Copyright (C) 2012 Haowen Ning
 
 This program is free software; you can redistribute it and/or
@@ -82,8 +83,7 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
-abstract public class QACardActivity extends AMActivity {
-
+public abstract class QACardActivity extends AMActivity {
     public static String EXTRA_DBPATH = "dbpath";
 
     private String dbPath;
@@ -125,7 +125,6 @@ abstract public class QACardActivity extends AMActivity {
     private AnyMemoTTS questionTTS = null;
     private AnyMemoTTS answerTTS = null;
 
-    
     private GestureLibrary gestureLibrary;
 
     @Inject
@@ -671,20 +670,32 @@ abstract public class QACardActivity extends AMActivity {
     }
 
     protected boolean speakQuestion() {
+        return speakQuestion(null);
+    }
+
+    protected boolean speakQuestion(AnyMemoTTS.OnTextToSpeechCompletedListener mListener){
         stopSpeak();
+
         if (questionTTS != null && getCurrentCard() != null) {
-            questionTTS.sayText(getCurrentCard().getQuestion());
+            questionTTS.sayText(getCurrentCard().getQuestion(), mListener);
             return true;
+
         }
         return false;
     }
 
     protected boolean speakAnswer() {
+        return speakAnswer(null);
+    }
+
+    protected boolean speakAnswer(AnyMemoTTS.OnTextToSpeechCompletedListener mListener) {
         stopSpeak();
+
         if (answerTTS != null && getCurrentCard() != null) {
-            answerTTS.sayText(getCurrentCard().getAnswer());
+            answerTTS.sayText(getCurrentCard().getAnswer(), mListener);
             return true;
         }
+
         return false;
     }
 
@@ -707,11 +718,11 @@ abstract public class QACardActivity extends AMActivity {
 
     private void shutdownTTS() {
         if (questionTTS != null) {
-            questionTTS.shutdown();
+            questionTTS.destory();
         }
 
         if (answerTTS != null) {
-            answerTTS.shutdown();
+            answerTTS.destory();
         }
     }
 
@@ -767,7 +778,7 @@ abstract public class QACardActivity extends AMActivity {
         return false;
     }
 
-    // Do not handle the key down event. We handle it in onKeyUp 
+    // Do not handle the key down event. We handle it in onKeyUp
     // This method will only be called if the volume key shortcut option is enabled.
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event){

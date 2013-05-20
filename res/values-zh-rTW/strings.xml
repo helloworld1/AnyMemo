@@ -188,7 +188,7 @@
     <string name="db_text">數據庫</string>
     <string name="widget_fail_fetch">沒有數據庫</string>
     <string name="notification_text">定時提醒</string>
-    <string name="notification_summary">設定定時提醒的時間間隔。</string>   
+    <string name="notification_summary">設定定時提醒的時間間隔。</string>
     <string name="edit_menu_br_text">加入換行符</string>
     <string name="edit_menu_image_text">添加圖片</string>
     <string name="widget_no_review">今天沒有要復習的卡片。</string>

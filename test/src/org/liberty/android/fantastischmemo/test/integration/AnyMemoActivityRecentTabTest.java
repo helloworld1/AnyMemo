@@ -25,7 +25,7 @@ public class AnyMemoActivityRecentTabTest extends ActivityInstrumentationTestCas
         UITestHelper uiTestHelper = new UITestHelper(getInstrumentation());
         uiTestHelper.clearPreferences();
         uiTestHelper.markNotFirstTime();
-        
+
         mActivity = this.getActivity();
         solo = new Solo(getInstrumentation(), mActivity);
 
@@ -78,7 +78,7 @@ public class AnyMemoActivityRecentTabTest extends ActivityInstrumentationTestCas
         // The cancel button
         solo.clickOnView(solo.getView(android.R.id.button2));
         assertTrue(solo.searchText(UITestHelper.SAMPLE_DB_NAME));
-        
+
         solo.clickLongOnText(UITestHelper.SAMPLE_DB_NAME);
         // The delete action item
         solo.clickOnView(solo.getView(R.id.delete));

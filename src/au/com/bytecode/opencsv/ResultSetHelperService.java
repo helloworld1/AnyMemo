@@ -23,19 +23,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 
- * 
+ *
+ *
  *  helper class for processing JDBC ResultSet objects
- * 
- * 
+ *
+ *
  */
 public class ResultSetHelperService implements ResultSetHelper {
     public static final int CLOBBUFFERSIZE = 2048;
-    
+
     // note: we want to maintain compatibility with Java 5 VM's
     // These types don't exist in Java 5
 	private static final int NVARCHAR = -9;
-	private static final int NCHAR = -15; 
+	private static final int NCHAR = -15;
 	private static final int LONGNVARCHAR = -16;
 	private static final int NCLOB = 2011;
 

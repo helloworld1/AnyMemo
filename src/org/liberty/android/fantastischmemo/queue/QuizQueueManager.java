@@ -42,10 +42,10 @@ import android.util.Log;
 public class QuizQueueManager implements QueueManager {
 
     private CardDao cardDao;
-    
+
     private LearningDataDao learningDataDao;
 
-    /* 
+    /*
      * The scheduler to determine whether a card should reimain
      * in the learn queue
      */
@@ -81,7 +81,7 @@ public class QuizQueueManager implements QueueManager {
         }
         return null;
 	}
-	
+
 	@Override
 	public synchronized Card dequeuePosition(int cardId) {
         Iterator<Card> newIterator = newCache.iterator();
@@ -103,7 +103,7 @@ public class QuizQueueManager implements QueueManager {
         }
         return null;
 	}
-	
+
 	@Override
 	public synchronized void remove(Card card) {
         dirtyCache.remove(card);
@@ -114,7 +114,7 @@ public class QuizQueueManager implements QueueManager {
 	@Override
 	public synchronized void flush() {
         // Update the queue
-        
+
         // Current it is not quite functional.
         throw new UnsupportedOperationException("QuizQueue's flush function is not quite functional");
         // try {
@@ -142,7 +142,7 @@ public class QuizQueueManager implements QueueManager {
     private synchronized void refill(Category category) {
         newCache.addAll(cardDao.getCardsByCategory(category, false, MAX_QUEUE_SIZE));
     }
-    
+
     public int getNewQueueSize() {
         return newCache.size();
     }
@@ -210,7 +210,7 @@ public class QuizQueueManager implements QueueManager {
             this.quizSize = quizSize;
             return this;
         }
-        
+
         public Builder setShuffle(boolean shuffle) {
             this.shuffle = shuffle;
             return this;

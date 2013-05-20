@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/menu_lookup"
-        android:showAsAction="ifRoom" 
-  	    android:icon="@android:drawable/ic_menu_search"  
+        android:showAsAction="ifRoom"
+  	    android:icon="@android:drawable/ic_menu_search"
         android:title="@string/look_up_text" />
     <item android:id="@+id/menu_paint"
         android:title="@string/paint_text" />

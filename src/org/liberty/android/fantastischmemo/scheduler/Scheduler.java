@@ -11,7 +11,7 @@ public interface Scheduler {
 			boolean includeNoise);
 
 	/*
-	 * This method returns true if the card should not 
+	 * This method returns true if the card should not
 	 * be repeated immediately. False if it need to be
 	 * repeaeted immediately.
 	 */

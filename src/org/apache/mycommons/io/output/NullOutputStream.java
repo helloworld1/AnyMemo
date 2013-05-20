@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 package org.apache.mycommons.io.output;
- 
+
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -24,12 +24,12 @@ import java.io.OutputStream;
  * <p>
  * This output stream has no destination (file/socket etc.) and all
  * bytes written to it are ignored and lost.
- * 
+ *
  * @author Jeremias Maerki
  * @version $Id: NullOutputStream.java 659817 2008-05-24 13:23:10Z niallp $
  */
 public class NullOutputStream extends OutputStream {
-    
+
     /**
      * A singleton.
      */

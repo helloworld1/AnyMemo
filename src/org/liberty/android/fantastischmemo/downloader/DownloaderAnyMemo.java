@@ -64,8 +64,8 @@ import android.widget.TextView;
 public class DownloaderAnyMemo extends DownloaderBase{
     private static final String TAG = "org.liberty.android.fantastischmemo.downloader.DownloaderAnyMemo";
     private DownloadListAdapter dlAdapter;
-    /* 
-     * dlStack caches the previous result so user can press 
+    /*
+     * dlStack caches the previous result so user can press
      * back button to go back
      */
     private Stack<ArrayList<DownloadItem>> dlStack;
@@ -380,7 +380,7 @@ public class DownloaderAnyMemo extends DownloaderBase{
 
         if(entity != null){
             InputStream instream = entity.getContent();
-            // Now convert stream to string 
+            // Now convert stream to string
             BufferedReader reader = new BufferedReader(new InputStreamReader(instream));
             StringBuilder sb = new StringBuilder();
             String line = null;
@@ -425,7 +425,7 @@ public class DownloaderAnyMemo extends DownloaderBase{
 
         if(entity != null){
             InputStream instream = entity.getContent();
-            // Now convert stream to string 
+            // Now convert stream to string
             BufferedReader reader = new BufferedReader(new InputStreamReader(instream));
             StringBuilder sb = new StringBuilder();
             String line = null;

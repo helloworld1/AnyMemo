@@ -71,7 +71,7 @@ public class DatabaseUtilsTest extends AbstractExistingDBTest {
         destLd20.setAcqReps(15);
         destLearningDataDao.update(destLd20);
         destCardDao.update(destCard20);
-        
+
         // Another card for testing duplicated category in src and dest
         Card destCard21 = destCardDao.queryForId(21);
         destCategoryDao.refresh(destCard21.getCategory());

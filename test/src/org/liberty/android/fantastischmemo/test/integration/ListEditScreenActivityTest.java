@@ -24,7 +24,7 @@ public class ListEditScreenActivityTest extends ActivityInstrumentationTestCase2
         UITestHelper uiTestHelper = new UITestHelper(getInstrumentation());
         uiTestHelper.clearPreferences();
         uiTestHelper.setUpFBPDatabase();
-        
+
         Intent intent = new Intent();
         intent.putExtra(ListEditScreen.EXTRA_DBPATH, UITestHelper.SAMPLE_DB_PATH);
         setActivityIntent(intent);
@@ -34,7 +34,7 @@ public class ListEditScreenActivityTest extends ActivityInstrumentationTestCase2
         solo = new Solo(getInstrumentation(), mActivity);
         solo.sleep(2000);
     }
-    
+
     // TODO: Why it doesn't work?
     // public void testListCards() throws Exception {
     //    assertTrue(solo.searchText("head"));
@@ -49,7 +49,7 @@ public class ListEditScreenActivityTest extends ActivityInstrumentationTestCase2
         solo.sleep(2000);
         assertTrue(solo.searchText("tooth"));
     }
-    
+
     public void testGoToPrevEditor() throws Exception {
         solo.clickOnText("tooth");
         solo.clickOnText(solo.getString(R.string.edit_button_text));

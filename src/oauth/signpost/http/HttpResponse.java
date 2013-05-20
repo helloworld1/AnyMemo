@@ -14,7 +14,7 @@ public interface HttpResponse {
     /**
      * Returns the underlying response object, in case you need to work on it
      * directly.
-     * 
+     *
      * @return the wrapped response object
      */
     Object unwrap();

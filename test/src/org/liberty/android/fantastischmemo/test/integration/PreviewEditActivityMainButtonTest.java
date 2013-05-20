@@ -47,7 +47,7 @@ public class PreviewEditActivityMainButtonTest extends ActivityInstrumentationTe
         solo.clickOnText(solo.getString(R.string.add_screen_next));
         solo.sleep(600);
         assertTrue(solo.searchText("face"));
-        
+
         // 2nd card
         solo.clickOnText(solo.getString(R.string.previous_text_short));
         solo.sleep(600);
@@ -80,7 +80,7 @@ public class PreviewEditActivityMainButtonTest extends ActivityInstrumentationTe
         assertTrue(solo.searchText("hair"));
         solo.clearEditText(0);
         solo.enterText(0, "myhair");
-        
+
         getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
         solo.sleep(4000);
         assertTrue(solo.searchText("myhair"));

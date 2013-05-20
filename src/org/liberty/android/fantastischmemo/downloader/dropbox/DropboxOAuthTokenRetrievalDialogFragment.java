@@ -39,7 +39,7 @@ public final class DropboxOAuthTokenRetrievalDialogFragment extends OauthAccessC
     private static final String AUTHORIZE_TOKEN_URL = "https://www.dropbox.com/1/oauth/authorize";
 
     private String oauthToken = null;
- 
+
     private String oauthTokenSecret = null;
 
     @Override
@@ -48,18 +48,18 @@ public final class DropboxOAuthTokenRetrievalDialogFragment extends OauthAccessC
         HttpPost httpPost = new HttpPost(REQUEST_TOKEN_URL);
         httpPost.setHeader("Authorization", DropboxUtils.buildOAuthRequestHeader());
         HttpResponse response = httpClient.execute(httpPost);
-        
+
         if( response.getStatusLine().getStatusCode() == 200){
             HttpEntity entity = response.getEntity();
             InputStream instream = entity.getContent();
             BufferedReader reader = new BufferedReader(new InputStreamReader(instream));
             String result = reader.readLine();
-            
+
             if (result.length() != 0){
                 String[] parsedResult = result.split("&");
                 oauthTokenSecret = parsedResult[0].split("=")[1];
                 oauthToken = parsedResult[1].split("=")[1];
-            } 
+            }
             reader.close();
         } else {
             throw new IOException("HTTP code for fetching Request token: " + response.getStatusLine().getStatusCode());

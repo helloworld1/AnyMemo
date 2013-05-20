@@ -250,7 +250,7 @@ public class FastDateFormat extends Format {
     public static FastDateFormat getDateInstance(int style, TimeZone timeZone) {
         return cache.getDateTimeInstance(style, null, timeZone, null);
     }
-    
+
     /**
      * <p>Gets a date formatter instance using the specified style, time
      * zone and locale.</p>
@@ -847,7 +847,7 @@ public class FastDateFormat extends Format {
         }
         FastDateFormat other = (FastDateFormat) obj;
         return mPattern.equals(other.mPattern)
-            && mTimeZone.equals(other.mTimeZone) 
+            && mTimeZone.equals(other.mTimeZone)
             && mLocale.equals(other.mLocale);
     }
 

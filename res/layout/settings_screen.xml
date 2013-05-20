@@ -3,7 +3,7 @@
     xmlns:anymemo="http://schemas.android.com/apk/res/org.liberty.android.fantastischmemo"
     android:scrollbars="vertical"
     android:layout_height="fill_parent"
-    android:layout_width="fill_parent"> 
+    android:layout_width="fill_parent">
 <LinearLayout
     android:layout_height="fill_parent"
     android:layout_width="fill_parent"
@@ -19,7 +19,7 @@
             android:layout_marginTop="3dip"
             android:layout_weight="1"
             android:text="@string/settings_question_font_size"
-            
+
         />
         <org.liberty.android.fantastischmemo.ui.widgets.AMSpinner
             android:id="@+id/question_font_size_spinner"
@@ -32,7 +32,7 @@
             anymemo:value_array="@array/font_size_list_values" />
     </LinearLayout>
 
-        
+
     <LinearLayout
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
@@ -64,7 +64,7 @@
             android:layout_marginTop="3dip"
             android:layout_weight="1"
             android:text="@string/settings_answer_font_size"
-            
+
         />
         <org.liberty.android.fantastischmemo.ui.widgets.AMSpinner
             android:id="@+id/answer_font_size_spinner"
@@ -75,7 +75,7 @@
             anymemo:display_array="@array/font_size_list"
             android:layout_weight="1"
             anymemo:value_array="@array/font_size_list_values" />
-    </LinearLayout>    
+    </LinearLayout>
 
     <LinearLayout
         android:layout_height="wrap_content"
@@ -97,8 +97,8 @@
             anymemo:display_array="@array/align_list"
             anymemo:value_array="@array/align_list_values" />
     </LinearLayout>
-        
-    
+
+
     <LinearLayout
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
@@ -185,8 +185,8 @@
 
 
     <LinearLayout
-        android:layout_width="fill_parent" 
-        android:layout_height="wrap_content" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/settings_audio_location_view"
         android:orientation="vertical" >
         <TextView
@@ -196,7 +196,7 @@
             android:text="@string/settings_audio_location_title" />
         <EditText
             android:id="@+id/settings_audio_location"
-            android:layout_width="fill_parent" 
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
 
@@ -237,26 +237,26 @@
         android:layout_height="2dip"
         android:background="#FF909090" />
     <LinearLayout
-        android:layout_width="fill_parent" 
-        android:layout_height="wrap_content" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical" >
-            <CheckBox 
+            <CheckBox
                 android:id="@+id/checkbox_typeface_question"
-                android:layout_width="wrap_content" 
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_typeface_question" />
             <EditText
                 android:id="@+id/edit_typeface_question"
-                android:layout_width="fill_parent" 
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content" />
-            <CheckBox 
+            <CheckBox
                 android:id="@+id/checkbox_typeface_answer"
-                android:layout_width="wrap_content" 
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_typeface_answer" />
             <EditText
                 android:id="@+id/edit_typeface_answer"
-                android:layout_width="fill_parent" 
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content" />
     </LinearLayout>
 

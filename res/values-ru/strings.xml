@@ -317,8 +317,8 @@
     <string name="entry_last_learn_date">дата_посл_учёбы</string>
     <string name="entry_next_learn_date">дата_след_учёбы</string>
     <string name="filter_category_text">Фильтр категорий</string>
-    <string name="delete_text">Удалить</string> 
-    <string name="delete_text_short">Удал</string> 
+    <string name="delete_text">Удалить</string>
+    <string name="delete_text_short">Удал</string>
     <string name="sort_by_text">Сортировка по</string>
     <string name="question_text">Вопрос</string>
     <string name="answer_text">Ответ</string>
@@ -389,7 +389,7 @@
     <string name="quiz_group_size_text">Размер группы опроса</string>
     <string name="quiz_group_number_text">Номер группы опроса</string>
     <string name="start_quiz_text">Начать опрос</string>
-    <string name="edit_audio_text">Правка звука</string> 
+    <string name="edit_audio_text">Правка звука</string>
     <string name="override_audio_warning_text">Вы действительно хотите заменить текущий звук?</string>
     <string name="enable_animation_text">Разрешить анимацию</string>
     <string name="enable_animation_summary">Разрешить анимацию при смене карточки.</string>

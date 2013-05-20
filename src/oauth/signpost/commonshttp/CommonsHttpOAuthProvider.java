@@ -28,7 +28,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
  * should use this provider implementation in favor of the default one, since
  * the latter is known to cause problems with Android's Apache Harmony
  * underpinnings.
- * 
+ *
  * @author Matthias Kaeppler
  */
 public class CommonsHttpOAuthProvider extends AbstractOAuthProvider {

@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:scrollbars="vertical"
     android:layout_height="match_parent"
-    android:layout_width="match_parent"> 
+    android:layout_width="match_parent">
 <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
                     android:text="@string/quiz_group_size_text" />
             <EditText
                 android:id="@+id/quiz_group_size"
-                android:layout_width="match_parent" 
+                android:layout_width="match_parent"
                 android:inputType="number"
                 android:layout_height="wrap_content" />
             <TextView android:layout_width="match_parent"
@@ -35,7 +35,7 @@
                     android:text="@string/quiz_group_number_text" />
             <EditText
                 android:id="@+id/quiz_group_number"
-                android:layout_width="match_parent" 
+                android:layout_width="match_parent"
                 android:inputType="number"
                 android:layout_height="wrap_content" />
         </LinearLayout>
@@ -49,7 +49,7 @@
             android:id="@+id/quiz_by_category_settings"
             android:visibility="gone"
             android:orientation="vertical">
-            <TextView 
+            <TextView
                     android:text="@string/edit_dialog_category"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"

@@ -8,14 +8,14 @@
     <Button
         android:id="@+id/open_screen_open_exist"
         android:text="@string/open_open_new_db"
-        android:layout_width="300dip" 
+        android:layout_width="300dip"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:drawableLeft="@drawable/file_manager" />
-        
+
     <TextView
-        android:layout_width="fill_parent" 
-        android:layout_height="wrap_content" 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/recent_databases"/>
 	<LinearLayout
@@ -25,6 +25,6 @@
 		android:background="#5f5f5f"/>
     <ListView
         android:id="@+id/recent_open_list"
-        android:layout_width="fill_parent" 
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>

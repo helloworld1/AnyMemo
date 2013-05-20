@@ -26,7 +26,7 @@ public class DetailScreenActivityTest extends ActivityInstrumentationTestCase2<D
         UITestHelper uiTestHelper = new UITestHelper(getInstrumentation());
         uiTestHelper.clearPreferences();
         uiTestHelper.setUpFBPDatabase();
-        
+
         Intent intent = new Intent();
         intent.putExtra(DetailScreen.EXTRA_DBPATH, UITestHelper.SAMPLE_DB_PATH);
         intent.putExtra(DetailScreen.EXTRA_CARD_ID, 1);

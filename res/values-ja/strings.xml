@@ -190,7 +190,7 @@
     <string name="notification_text">通知</string>
     <string name="notification_summary">AnyMemoが閉じている時でも、インフォメーションを通知表示エリアに表示します。</string>
     <string name="edit_menu_br_text">タグの追加</string>
-    
+
     <string name="widget_no_review">復習するカードがありません。</string>
     <string name="grade_text">評価</string>
     <string name="enable_volume_key_text">ショートカットキー有効</string>
@@ -284,5 +284,5 @@
     <string name="fe_not_login">ログインしてください。</string>
     <string name="fe_not_login_message">ログインボタンを押してログインしてください。</string>
     <string name="linebreak_conversion">改行をHTML形式に自動変換</string>
-    <string name="locale_japanese_text">日本語</string> 
+    <string name="locale_japanese_text">日本語</string>
 </resources>

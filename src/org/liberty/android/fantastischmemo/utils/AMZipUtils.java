@@ -131,7 +131,7 @@ public class AMZipUtils {
     }
 
     // Helper method to compress from ZIP
-    // Inspired from: 
+    // Inspired from:
     // http://stackoverflow.com/questions/1399126/java-util-zip-recreating-directory-structure
     // directory: the directory to compress
     // prefixDir: The prefix in ziped file for compressed dir

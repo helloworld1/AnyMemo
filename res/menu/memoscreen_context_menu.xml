@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item 
+    <item
         android:id="@+id/menu_context_edit"
         android:title="@string/memo_edit_dialog_title" />
-    <item 
+    <item
         android:id="@+id/menu_context_delete"
         android:title="@string/delete_text" />
-    <item 
+    <item
         android:id="@+id/menu_context_skip"
         android:title="@string/skip_text" />
     <item

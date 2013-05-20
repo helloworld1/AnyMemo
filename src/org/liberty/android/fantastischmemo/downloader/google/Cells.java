@@ -58,7 +58,7 @@ public class Cells {
 	@Override
 	public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Worksheet: " + worksheetName); 
+        sb.append("Worksheet: " + worksheetName);
         sb.append(" Cells data: ");
 
         for (int i = 0; i < rows.size(); i++) {

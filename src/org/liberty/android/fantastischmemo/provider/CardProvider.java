@@ -109,7 +109,7 @@ public class CardProvider extends ContentProvider {
         try {
             CardDao cardDao = helper.getCardDao();
             List<Card> cards = cardDao.getRandomCards(null, 50);
-            
+
             MatrixCursor cursor = new MatrixCursor(columnNames, 50);
 
 

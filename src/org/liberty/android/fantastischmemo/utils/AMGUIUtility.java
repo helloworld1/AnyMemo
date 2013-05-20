@@ -31,7 +31,7 @@ import android.content.DialogInterface;
 import android.os.Handler;
 import android.util.Log;
 
-/* 
+/*
  * This utility class provides some useful static rucurring GUI methods
  * that generate dialogs or etc
  */

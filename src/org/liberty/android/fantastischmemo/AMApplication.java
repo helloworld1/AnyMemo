@@ -31,7 +31,7 @@ import android.util.Log;
 //import org.acra.annotation.ReportsCrashes;
 
 
-//@ReportsCrashes(formKey = "dGhuTDRGUVY1WjA3RG9NNEFmSTFEaXc6MQ") 
+//@ReportsCrashes(formKey = "dGhuTDRGUVY1WjA3RG9NNEFmSTFEaXc6MQ")
 public class AMApplication extends Application {
 
     private static final String TAG = "AMApplication";
@@ -50,7 +50,7 @@ public class AMApplication extends Application {
         }
 
         // Handle customized module binding
-        RoboGuice.setBaseApplicationInjector(this, RoboGuice.DEFAULT_STAGE, 
+        RoboGuice.setBaseApplicationInjector(this, RoboGuice.DEFAULT_STAGE,
                 RoboGuice.newDefaultRoboModule(this), new AMModules());
     }
 }

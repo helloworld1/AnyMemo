@@ -11,7 +11,7 @@
             android:layout_width="fill_parent"
             android:layout_weight="1"
             android:orientation="vertical">
-        <TextView 
+        <TextView
                 android:text="@string/category_dialog_title"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" />
@@ -24,49 +24,49 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-            <Button 
-                    android:id="@+id/button_new" 
+            <Button
+                    android:id="@+id/button_new"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" 
+                    android:layout_height="wrap_content"
                     android:text="@string/add_screen_new"
                     android:layout_weight="1"
                     android:layout_marginLeft="2dip"
                     android:layout_marginRight="2dip" />
-            <Button 
-                    android:id="@+id/button_edit" 
+            <Button
+                    android:id="@+id/button_edit"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" 
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/edit_text"
                     android:layout_marginLeft="2dip"
                     android:layout_marginRight="2dip" />
         </LinearLayout>
-        <TextView 
+        <TextView
                 android:text="@string/downloader_categories"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" />
         <ListView
                 android:id="@+id/category_list"
-                android:layout_width="fill_parent" 
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content" />
     </LinearLayout>
     <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-        <Button 
-                android:id="@+id/button_ok" 
+        <Button
+                android:id="@+id/button_ok"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" 
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/ok_text"
                 android:layout_marginLeft="2dip"
                 android:layout_marginRight="2dip" />
 
-        <Button 
-                android:id="@+id/button_delete" 
+        <Button
+                android:id="@+id/button_delete"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" 
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/delete_text_short"
                 android:layout_marginLeft="2dip"

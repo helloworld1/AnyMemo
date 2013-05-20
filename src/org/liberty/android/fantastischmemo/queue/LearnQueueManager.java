@@ -47,10 +47,10 @@ public class LearnQueueManager implements QueueManager {
     private CardDao cardDao;
 
     private CategoryDao categoryDao;
-    
+
     private LearningDataDao learningDataDao;
 
-    /* 
+    /*
      * The scheduler to determine whether a card should reimain
      * in the learn queue
      */
@@ -69,8 +69,8 @@ public class LearnQueueManager implements QueueManager {
 
     private int maxNewCacheOrdinal = 0;
 
-    private int maxReviewCacheOrdinal = 0; 
-    
+    private int maxReviewCacheOrdinal = 0;
+
     private boolean shuffle;
 
     private final String TAG = getClass().getSimpleName();
@@ -103,12 +103,12 @@ public class LearnQueueManager implements QueueManager {
             return null;
         }
 	}
-	
+
 	@Override
 	public synchronized Card dequeuePosition(int cardId) {
 		position(cardId);
 		refill();
-		
+
 		if (!learnQueue.isEmpty()) {
             Card c = learnQueue.get(0);
             learnQueue.remove(0);
@@ -117,9 +117,9 @@ public class LearnQueueManager implements QueueManager {
         } else {
             return null;
         }
-		
+
 	}
-	
+
 	@Override
 	public synchronized void remove(Card card) {
         learnQueue.remove(card);
@@ -131,7 +131,7 @@ public class LearnQueueManager implements QueueManager {
 	@Override
 	public synchronized void flush() {
         // Update the queue
-        
+
         try {
             learningDataDao.callBatchTasks (
                 new Callable<Void>() {
@@ -200,7 +200,7 @@ public class LearnQueueManager implements QueueManager {
         }
         dirtyCache.add(card);
 	}
-	
+
     private void position(int cardId) {
         Iterator<Card> learnIterator= learnQueue.iterator();
         Iterator<Card> reviewCacheIterator = reviewCache.iterator();

@@ -188,7 +188,7 @@
     <string name="db_text">数据库</string>
     <string name="widget_fail_fetch">没有数据库</string>
     <string name="notification_text">定时提醒</string>
-    <string name="notification_summary">设定定时提醒的时间间隔。</string>   
+    <string name="notification_summary">设定定时提醒的时间间隔。</string>
     <string name="edit_menu_br_text">加入换行符</string>
     <string name="edit_menu_image_text">添加图片</string>
     <string name="widget_no_review">今天没有要复习的卡片。</string>

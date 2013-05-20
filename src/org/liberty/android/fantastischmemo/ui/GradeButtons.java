@@ -40,20 +40,20 @@ public class GradeButtons {
     private Context mContext;
 
     private LinearLayout buttonView;
-    
+
     private Button[] gradeButtons = new Button[6];
 
     // The default button titles from the string
     private CharSequence[] defaultGradeButtonTitles = new CharSequence[6];
 
-    private OnGradeButtonClickListener onGradeButtonClickListener = 
+    private OnGradeButtonClickListener onGradeButtonClickListener =
         new OnGradeButtonClickListener() {
             public void onGradeButtonClick(int grade) {
                 // Dummy implementation
             }
         };
 
-    private OnGradeButtonLongClickListener onGradeButtonLongClickListener = 
+    private OnGradeButtonLongClickListener onGradeButtonLongClickListener =
         new OnGradeButtonLongClickListener() {
             public void onGradeButtonLongClick(int grade) {
                 // implementation to show help text
@@ -64,7 +64,7 @@ public class GradeButtons {
                   ,R.string.memo_btn4_help_text
                   ,R.string.memo_btn5_help_text};
 
-              Toast.makeText(mContext, helpTextArray[grade], Toast.LENGTH_SHORT).show(); 
+              Toast.makeText(mContext, helpTextArray[grade], Toast.LENGTH_SHORT).show();
             }
         };
 

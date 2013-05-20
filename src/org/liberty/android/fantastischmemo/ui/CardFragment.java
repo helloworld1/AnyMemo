@@ -59,7 +59,7 @@ public class CardFragment extends RoboFragment {
     private OnClickListener cardOnClickListener = null;
 
     private OnLongClickListener cardOnLongClickListener = null;
-    
+
     private OnClickListener textOnClickListener = null;
 
     private OnLongClickListener textOnLongClickListener = null;
@@ -73,7 +73,7 @@ public class CardFragment extends RoboFragment {
     private Setting.Align textAlignment = Setting.Align.CENTER;
 
 
-    // The argumetn set in the factory will stored in the private variable here.
+    // The argument set in the factory will stored in the private variable here.
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
