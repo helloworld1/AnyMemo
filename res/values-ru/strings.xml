@@ -438,6 +438,9 @@
     <string name="share_text">Передать</string>
     <string name="center_left_text">Слева по центру</string>
     <string name="center_right_text">Справа по центру</string>
+    <string name="auto_speak_qa_sleep_interval_text">Интервал между вопросом и ответом %d сек</string>
+    <string name="auto_speak_card_sleep_interval_text">Интервал между карточками %d сек</string>
+    <string name="auto_speak_text">Авто речь</string>
     <string name="import_mnemosyne2_cards_text">Импорт Mnemosyne XML2</string>
     <string name="export_mnemosyne2_cards_text">Экспорт Mnemosyne XML2</string>
     <string name="author_text">Автор</string>
