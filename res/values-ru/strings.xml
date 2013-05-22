@@ -199,7 +199,7 @@
     <string name="donate_text">Donate</string>
     <string name="buy_pro_text">Купить Pro</string>
     <string name="donate_summary">Вы можете поддержать проект AnyMemo, купив pro версию в Android Market, или заплатить онлайн на сайте &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt; Спасибо за ваше участие.</string>
-    <string name="goto_prev_screen">К Экрану Просмотр/Правка</string>
+    <string name="goto_prev_screen">Экран Просмотр/Правка</string>
     <string name="exception_text">Исключение</string>
     <string name="advanced_setting_text">Продвинутый ...</string>
     <string name="db_merger_title">Объединение баз</string>
