@@ -114,6 +114,11 @@ public class PreviewEditActivity extends QACardActivity {
         this.shareUtil = shareUtil;
     }
 
+    @Inject
+    public void setAmPrefUtil(AMPrefUtil amPrefUtil) {
+        this.amPrefUtil = amPrefUtil;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -143,8 +148,6 @@ public class PreviewEditActivity extends QACardActivity {
         categoryDao = getDbOpenHelper().getCategoryDao();
         settingDao = getDbOpenHelper().getSettingDao();
         setting = settingDao.queryForId(1);
-
-        amPrefUtil = new AMPrefUtil(this);
 
         // If category is set, it will override the card id.
         if (activeCategoryId != -1) {
@@ -342,16 +345,16 @@ public class PreviewEditActivity extends QACardActivity {
             case R.id.menu_auto_speak:
             {
                 if (getCurrentCard() != null) {
-                	FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                	LinearLayout root = (LinearLayout)findViewById(R.id.root);
-                	FrameLayout fl = new FrameLayout(this);
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    LinearLayout root = (LinearLayout)findViewById(R.id.root);
+                    FrameLayout fl = new FrameLayout(this);
 
-                	AutoSpeakFragment f = new AutoSpeakFragment();
+                    AutoSpeakFragment f = new AutoSpeakFragment();
 
-                	fl.setId(MAGIC_FRAME_LAYOUT_ID);
-                	root.addView(fl);
-                	ft.add(fl.getId(), f);
-                	ft.commit();
+                    fl.setId(MAGIC_FRAME_LAYOUT_ID);
+                    root.addView(fl);
+                    ft.add(fl.getId(), f);
+                    ft.commit();
                 }
                 return true;
             }

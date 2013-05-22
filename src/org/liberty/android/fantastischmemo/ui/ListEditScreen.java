@@ -20,130 +20,130 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo.ui;
 
+import java.sql.SQLException;
+import java.util.Comparator;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
-
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
 
 import android.app.Activity;
-
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.content.Context;
-
 import android.support.v4.app.DialogFragment;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.LayoutInflater;
-import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SectionIndexer;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView;
-import android.app.ProgressDialog;
-
-import java.sql.SQLException;
-import java.util.Comparator;
-import java.util.List;
+import android.widget.TextView;
 
 public class ListEditScreen extends AMActivity {
-	private String dbPath;
+    private String dbPath;
 
-	private static String TAG = ListEditScreen.class.getCanonicalName();
+    private static String TAG = ListEditScreen.class.getCanonicalName();
 
-	private CardListAdapter mAdapter;
+    private CardListAdapter mAdapter;
 
     private AnyMemoDBOpenHelper dbOpenHelper;
 
-	private ListView listView;
+    private ListView listView;
 
-	private AMPrefUtil amPrefUtil;
+    private AMPrefUtil amPrefUtil;
 
-	/* Initial position in the list */
+    /* Initial position in the list */
 
-	private List<Card> cards;
+    private List<Card> cards;
 
-	public static String EXTRA_DBPATH = "dbpath";
+    public static String EXTRA_DBPATH = "dbpath";
 
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.list_edit_screen);
+    @Inject
+    public void setAmPrefUtil(AMPrefUtil amPrefUtil) {
+        this.amPrefUtil = amPrefUtil;
+    }
 
-        amPrefUtil = new AMPrefUtil(this);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.list_edit_screen);
 
-		Bundle extras = getIntent().getExtras();
-		if (extras != null) {
-			dbPath = extras.getString(ListEditScreen.EXTRA_DBPATH);
-		}
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            dbPath = extras.getString(ListEditScreen.EXTRA_DBPATH);
+        }
 
-		InitTask initTask = new InitTask();
-		initTask.execute((Void) null);
+        InitTask initTask = new InitTask();
+        initTask.execute((Void) null);
 
-	}
+    }
 
+    private class CardListAdapter extends ArrayAdapter<Card> implements
+            SectionIndexer {
+        /* quick index sections */
+        private String[] sections;
 
-	private class CardListAdapter extends ArrayAdapter<Card> implements
-			SectionIndexer {
-		/* quick index sections */
-		private String[] sections;
+        public CardListAdapter(Context context, List<Card> cards) {
+            super(context, 0, cards);
 
-		public CardListAdapter(Context context, List<Card> cards) {
-			super(context, 0, cards);
+            int sectionSize = getCount() / 100;
+            sections = new String[sectionSize];
+            for (int i = 0; i < sectionSize; i++) {
+                sections[i] = String.valueOf(i*100);
+            }
+        }
 
-			int sectionSize = getCount() / 100;
-			sections = new String[sectionSize];
-			for (int i = 0; i < sectionSize; i++) {
-				sections[i] = String.valueOf(i*100);
-			}
-		}
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = li.inflate(R.layout.list_edit_screen_item, null);
+            }
+            TextView idView = (TextView) convertView.findViewById(R.id.item_id);
+            TextView questionView = (TextView) convertView
+                    .findViewById(R.id.item_question);
+            TextView answerView = (TextView) convertView
+                    .findViewById(R.id.item_answer);
 
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				convertView = li.inflate(R.layout.list_edit_screen_item, null);
-			}
-			TextView idView = (TextView) convertView.findViewById(R.id.item_id);
-			TextView questionView = (TextView) convertView
-					.findViewById(R.id.item_question);
-			TextView answerView = (TextView) convertView
-					.findViewById(R.id.item_answer);
+            idView.setText("" + getItem(position).getOrdinal());
+            questionView.setText(getItem(position).getQuestion());
+            answerView.setText(getItem(position).getAnswer());
 
-			idView.setText("" + getItem(position).getOrdinal());
-			questionView.setText(getItem(position).getQuestion());
-			answerView.setText(getItem(position).getAnswer());
+            return convertView;
+        }
 
-			return convertView;
-		}
+        /* Display the quick index when the user is scrolling */
+        @Override
+        public int getPositionForSection(int section) {
+            return section * 100;
+        }
 
-		/* Display the quick index when the user is scrolling */
-		@Override
-		public int getPositionForSection(int section) {
-			return section * 100;
-		}
+        @Override
+        public int getSectionForPosition(int position) {
+            return 1;
+        }
 
-		@Override
-		public int getSectionForPosition(int position) {
-			return 1;
-		}
-
-		@Override
-		public Object[] getSections() {
-			return sections;
-		}
-	}
+        @Override
+        public Object[] getSections() {
+            return sections;
+        }
+    }
 
 
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
@@ -165,13 +165,13 @@ public class ListEditScreen extends AMActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.by_ord:
-            	new SortListTask().execute("ord");
+                new SortListTask().execute("ord");
                 return true;
             case R.id.by_question:
-            	new SortListTask().execute("question");
+                new SortListTask().execute("question");
                 return true;
             case R.id.by_answer:
-            	new SortListTask().execute("answer");
+                new SortListTask().execute("answer");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -195,99 +195,99 @@ public class ListEditScreen extends AMActivity {
     /*
      * Async task that sort the list based on user input
      */
-	private class SortListTask extends AsyncTask<String, Void, String> {
-		private ProgressDialog progressDialog;
+    private class SortListTask extends AsyncTask<String, Void, String> {
+        private ProgressDialog progressDialog;
 
-		@Override
-		public void onPreExecute() {
-			progressDialog = new ProgressDialog(ListEditScreen.this);
-			progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-			progressDialog.setTitle(getString(R.string.loading_please_wait));
-			progressDialog.setMessage(getString(R.string.loading_database));
-			progressDialog.setCancelable(false);
-			progressDialog.show();
-		}
-
-
-		public void onPostExecute(final String sortBy) {
-			if(sortBy.equals("ord")){
-				mAdapter.sort(new Comparator<Card>(){
-					@Override
-					public int compare(Card c1, Card c2) {
-							return c1.getOrdinal() - c2.getOrdinal();
-					};
-			    });
-			}
-			else if(sortBy.equals("question")){
-				mAdapter.sort(new Comparator<Card>(){
-					@Override
-					public int compare(Card c1, Card c2) {
-							return c1.getQuestion().compareTo(c2.getQuestion());
-					};
-			    });
-			} else {
-				mAdapter.sort(new Comparator<Card>(){
-					@Override
-					public int compare(Card c1, Card c2) {
-							return c1.getAnswer().compareTo(c2.getAnswer());
-					};
-			    });
-			}
-
-			progressDialog.dismiss();
-		}
-
-		@Override
-		protected String doInBackground(String... sortBy) {
-			return sortBy[0];
-		}
-
-	}
+        @Override
+        public void onPreExecute() {
+            progressDialog = new ProgressDialog(ListEditScreen.this);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setTitle(getString(R.string.loading_please_wait));
+            progressDialog.setMessage(getString(R.string.loading_database));
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
 
 
-	private class InitTask extends AsyncTask<Void, Void, Void> {
-		private ProgressDialog progressDialog;
+        public void onPostExecute(final String sortBy) {
+            if(sortBy.equals("ord")){
+                mAdapter.sort(new Comparator<Card>(){
+                    @Override
+                    public int compare(Card c1, Card c2) {
+                            return c1.getOrdinal() - c2.getOrdinal();
+                    };
+                });
+            }
+            else if(sortBy.equals("question")){
+                mAdapter.sort(new Comparator<Card>(){
+                    @Override
+                    public int compare(Card c1, Card c2) {
+                            return c1.getQuestion().compareTo(c2.getQuestion());
+                    };
+                });
+            } else {
+                mAdapter.sort(new Comparator<Card>(){
+                    @Override
+                    public int compare(Card c1, Card c2) {
+                            return c1.getAnswer().compareTo(c2.getAnswer());
+                    };
+                });
+            }
 
-		@Override
-		public void onPreExecute() {
-			progressDialog = new ProgressDialog(ListEditScreen.this);
-			progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-			progressDialog.setTitle(getString(R.string.loading_please_wait));
-			progressDialog.setMessage(getString(R.string.loading_database));
-			progressDialog.setCancelable(false);
-			progressDialog.show();
-		}
+            progressDialog.dismiss();
+        }
 
-		@Override
-		protected Void doInBackground(Void... params) {
-			dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(
-					ListEditScreen.this, dbPath);
+        @Override
+        protected String doInBackground(String... sortBy) {
+            return sortBy[0];
+        }
 
-			try {
-				CardDao cardDao = dbOpenHelper.getCardDao();
-				cards = cardDao.queryForAll();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+    }
 
-			return null;
-		}
 
-		@Override
-		public void onPostExecute(Void result) {
+    private class InitTask extends AsyncTask<Void, Void, Void> {
+        private ProgressDialog progressDialog;
+
+        @Override
+        public void onPreExecute() {
+            progressDialog = new ProgressDialog(ListEditScreen.this);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setTitle(getString(R.string.loading_please_wait));
+            progressDialog.setMessage(getString(R.string.loading_database));
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(
+                    ListEditScreen.this, dbPath);
+
+            try {
+                CardDao cardDao = dbOpenHelper.getCardDao();
+                cards = cardDao.queryForAll();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        public void onPostExecute(Void result) {
             int initPosition = amPrefUtil.getSavedId(AMPrefKeys.LIST_EDIT_SCREEN_PREFIX, dbPath, 0);
-			mAdapter = new CardListAdapter(ListEditScreen.this, cards);
+            mAdapter = new CardListAdapter(ListEditScreen.this, cards);
 
-			listView = (ListView) findViewById(R.id.item_list);
-			listView.setAdapter(mAdapter);
-			listView.setSelection(initPosition);
-			listView.setOnItemClickListener(listItemClickListener);
-			progressDialog.dismiss();
+            listView = (ListView) findViewById(R.id.item_list);
+            listView.setAdapter(mAdapter);
+            listView.setSelection(initPosition);
+            listView.setOnItemClickListener(listItemClickListener);
+            progressDialog.dismiss();
 
 
-		}
+        }
 
-	}
+    }
 
     @Override
     public void onDestroy() {
