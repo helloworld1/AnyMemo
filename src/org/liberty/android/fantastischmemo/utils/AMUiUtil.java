@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.utils;
 
+import javax.inject.Inject;
+
 import android.content.Context;
 import android.util.TypedValue;
 
@@ -29,6 +31,7 @@ public class AMUiUtil {
 
     private Context mContext;
 
+    @Inject
     public AMUiUtil(Context context) {
         mContext = context;
     }
