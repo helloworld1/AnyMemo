@@ -19,7 +19,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import org.liberty.android.fantastischmemo.*;
+import javax.inject.Inject;
+
+import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
 
@@ -28,10 +31,10 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.util.Log;
 
 public class DatabaseMerger extends AMActivity implements View.OnClickListener{
     public static final String EXTRA_SRC_PATH = "src_path";
@@ -46,10 +49,15 @@ public class DatabaseMerger extends AMActivity implements View.OnClickListener{
 
     private DatabaseUtil databaseUtil;
 
+    @Inject
+    public void setDatabaseUtil(DatabaseUtil databaseUtil) {
+        this.databaseUtil = databaseUtil;
+    }
+
     @Override
-	public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-		setContentView(R.layout.merge_layout);
+        setContentView(R.layout.merge_layout);
         Bundle extras = getIntent().getExtras();
         String dbPath = "";
         if (extras != null) {
@@ -64,8 +72,6 @@ public class DatabaseMerger extends AMActivity implements View.OnClickListener{
         mergeButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
         targetEdit.setText(dbPath);
-
-        databaseUtil = new DatabaseUtil(this);
     }
 
     @Override

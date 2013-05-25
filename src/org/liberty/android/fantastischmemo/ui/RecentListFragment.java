@@ -73,13 +73,16 @@ public class RecentListFragment extends RoboFragment {
         this.recentListUtil = recentListUtil;
     }
 
+    @Inject
+    public void setDatabaseUtil(DatabaseUtil databaseUtil) {
+        this.databaseUtil = databaseUtil;
+    }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = activity;
         setHasOptionsMenu(true);
-        databaseUtil = new DatabaseUtil(mActivity);
     }
 
     @Override

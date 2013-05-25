@@ -1,23 +1,20 @@
 package org.liberty.android.fantastischmemo.utils;
 
 import java.io.File;
-
 import java.sql.SQLException;
-
 import java.util.List;
-
 import java.util.concurrent.Callable;
 
+import javax.inject.Inject;
+
+import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.dao.SettingDao;
-
 import org.liberty.android.fantastischmemo.domain.Card;
-import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.Setting;
 
 import android.content.Context;
@@ -26,6 +23,7 @@ public class DatabaseUtil {
 
     private Context mContext;
 
+    @Inject
     public DatabaseUtil(Context context) {
         mContext = context;
     }

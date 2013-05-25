@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.mycommons.lang3.StringUtils;
 import org.color.ColorDialog;
 import org.liberty.android.fantastischmemo.AMActivity;
@@ -105,11 +107,16 @@ public class SettingsScreen extends AMActivity {
 
     private final static String WEBSITE_HELP_SETTINGS="http://anymemo.org/wiki/index.php?title=Card_styles";
 
+    @Inject
+    public void setDatabaseUtil(DatabaseUtil databaseUtil) {
+        this.databaseUtil = databaseUtil;
+    }
+
+
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         settingsChanged = false;
-        databaseUtil = new DatabaseUtil(this);
         InitTask initTask = new InitTask();
         initTask.execute((Void) null);
     }
