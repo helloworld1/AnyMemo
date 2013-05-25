@@ -73,19 +73,21 @@ class CardImageGetter implements ImageGetter {
             int height = orngBitmap.getHeight();
             int scaledWidth = width;
             int scaledHeight = height;
-            float scaleFactor = ((float) screenWidth) / width;
-            float largeFactor = (((float) screenWidth) * 0.6f) / width;
+            
+            float scaleFactor = 1.0f;
             Matrix matrix = new Matrix();
-            if (scaleFactor < 1.0f) {
+            if (width > screenWidth) {
+                scaleFactor = ((float) screenWidth) / width;
                 matrix.postScale(scaleFactor, scaleFactor);
                 scaledWidth = (int) (width * scaleFactor);
                 scaledHeight = (int) (height * scaleFactor);
             }
-            
-            if (scaleFactor > 5.0f || scaleFactor > 1.67f) {
-                matrix.postScale(largeFactor, largeFactor);
-                scaledWidth = (int) (width * largeFactor);
-                scaledHeight = (int) (height * largeFactor);
+
+            if (width > 0.2 * screenWidth && width < 0.6 * screenWidth) {
+                scaleFactor = (((float) screenWidth) * 0.6f) / width;
+                matrix.postScale(scaleFactor, scaleFactor);
+                scaledWidth = (int) (width * scaleFactor);
+                scaledHeight = (int) (height * scaleFactor);
             }
             
             Bitmap resizedBitmap = Bitmap.createBitmap(orngBitmap, 0, 0,
