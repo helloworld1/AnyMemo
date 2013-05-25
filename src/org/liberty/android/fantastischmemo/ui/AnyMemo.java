@@ -81,6 +81,11 @@ public class AnyMemo extends AMActivity {
     private AMFileUtil amFileUtil;
 
     @Inject
+    public void setAmUiUtil(AMUiUtil amUiUtil) {
+        this.amUiUtil = amUiUtil;
+    }
+
+    @Inject
     public void setAmFileUtil(AMFileUtil amFileUtil) {
         this.amFileUtil = amFileUtil;
     }
@@ -90,8 +95,6 @@ public class AnyMemo extends AMActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.main_tabs);
-
-        amUiUtil = new AMUiUtil(this);
 
         mTabHost = (TabHost)findViewById(android.R.id.tabhost);
         mHorizontalScrollView = (HorizontalScrollView) findViewById(R.id.horizontal_scroll_view);
