@@ -442,6 +442,9 @@
     <string name="share_text">Condividi</string>
     <string name="center_left_text">Centra allineando a sinistra</string>
     <string name="center_right_text">Centra allineando a destra</string>
+    <string name="auto_speak_qa_sleep_interval_text">L\'intervallo fra domanda e risposta è di %d secondi</string>
+    <string name="auto_speak_card_sleep_interval_text">L\'intervallo fra una scheda e l\'altra è di %d secondi</string>
+    <string name="auto_speak_text">Parla automaticamente</string>
     <string name="import_mnemosyne2_cards_text">Importa schede Mnemosyne2</string>
     <string name="export_mnemosyne2_cards_text">Esporta schede Mnemosyne2</string>
     <string name="author_text">Autore</string>
