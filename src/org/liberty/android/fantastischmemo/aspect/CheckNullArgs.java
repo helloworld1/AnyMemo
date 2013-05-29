@@ -38,5 +38,7 @@ public @interface CheckNullArgs {
      * Otherwise the annoated method will return silently.
      */
     boolean throwException() default false;
+
+    int[] argIndexToCheck() default {};
 }
 

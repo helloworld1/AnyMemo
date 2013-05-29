@@ -110,7 +110,7 @@ public class AMTTSService extends RoboService {
         speakCardQuestion(card, null);
     }
 
-    @CheckNullArgs
+    @CheckNullArgs(argIndexToCheck = {0})
     public void speakCardQuestion(Card card, AnyMemoTTS.OnTextToSpeechCompletedListener onTextToSpeechCompletedListener) {
         stopSpeak();
         questionTTS.sayText(card.getQuestion(), onTextToSpeechCompletedListener);
@@ -121,7 +121,7 @@ public class AMTTSService extends RoboService {
         speakCardAnswer(card, null);
     }
 
-    @CheckNullArgs
+    @CheckNullArgs(argIndexToCheck = {0})
     public void speakCardAnswer(Card card, AnyMemoTTS.OnTextToSpeechCompletedListener onTextToSpeechCompletedListener) {
         stopSpeak();
         answerTTS.sayText(card.getAnswer(), onTextToSpeechCompletedListener);

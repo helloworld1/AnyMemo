@@ -32,7 +32,9 @@ public class NullAnyMemoTTS implements AnyMemoTTS {
 
     public void sayText(final String s, final OnTextToSpeechCompletedListener onTextToSpeechCompletedListener) {
         // Do nothing, but callback completion immediately
-        onTextToSpeechCompletedListener.onTextToSpeechCompleted(s);
+        if (onTextToSpeechCompletedListener != null) {
+            onTextToSpeechCompletedListener.onTextToSpeechCompleted(s);
+        }
     }
 }
 
