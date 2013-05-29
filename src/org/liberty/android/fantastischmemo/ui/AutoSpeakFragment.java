@@ -1,38 +1,28 @@
 package org.liberty.android.fantastischmemo.ui;
 
 
-import org.apache.mycommons.lang3.StringUtils;
-import org.apache.mycommons.lang3.time.DateUtils;
-import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.service.autospeak.AutoSpeakEventHandler;
-import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
 
 import roboguice.fragment.RoboFragment;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 public class AutoSpeakFragment extends RoboFragment {
-    private static final int DEFAULT_SLEEP_TIME_IN_SEC = 1;
     private ImageButton playButton;
     private ImageButton previousButton;
     private ImageButton nextButton;
     private ImageButton settingsButton;
     private ImageButton exitButton;
     private PreviewEditActivity previewEditActivity;
-
-    private SharedPreferences settings;
 
     @Override
     public void onPause() {
@@ -48,7 +38,6 @@ public class AutoSpeakFragment extends RoboFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.previewEditActivity = (PreviewEditActivity) activity;
-        settings = PreferenceManager.getDefaultSharedPreferences(activity);
     }
 
     @Override
@@ -73,6 +62,12 @@ public class AutoSpeakFragment extends RoboFragment {
         exitButton.setOnClickListener(buttonListener);
 
         return v;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        stopPlaying();
     }
 
 

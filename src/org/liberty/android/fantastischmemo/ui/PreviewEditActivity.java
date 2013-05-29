@@ -344,18 +344,7 @@ public class PreviewEditActivity extends QACardActivity {
 
             case R.id.menu_auto_speak:
             {
-                if (getCurrentCard() != null) {
-                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                    LinearLayout root = (LinearLayout)findViewById(R.id.root);
-                    FrameLayout fl = new FrameLayout(this);
-
-                    AutoSpeakFragment f = new AutoSpeakFragment();
-
-                    fl.setId(MAGIC_FRAME_LAYOUT_ID);
-                    root.addView(fl);
-                    ft.add(fl.getId(), f);
-                    ft.commit();
-                }
+                showAutoSpeakFragment();
                 return true;
             }
 
@@ -970,6 +959,21 @@ public class PreviewEditActivity extends QACardActivity {
         args.putSerializable(GestureSelectionDialogFragment.EXTRA_GESTURE_NAME_DESCRIPTION_MAP, gestureNameDescriptionMap);
         df.setArguments(args);
         df.show(getSupportFragmentManager(), "GestureSelectionDialog");
+    }
+
+    private void showAutoSpeakFragment() {
+        if (getCurrentCard() != null) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            LinearLayout root = (LinearLayout)findViewById(R.id.root);
+            FrameLayout fl = new FrameLayout(this);
+
+            AutoSpeakFragment f = new AutoSpeakFragment();
+
+            fl.setId(MAGIC_FRAME_LAYOUT_ID);
+            root.addView(fl);
+            ft.replace(fl.getId(), f);
+            ft.commit();
+        }
     }
 
     private static enum SearchMethod {

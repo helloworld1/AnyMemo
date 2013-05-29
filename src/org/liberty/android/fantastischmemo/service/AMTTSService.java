@@ -99,6 +99,9 @@ public class AMTTSService extends RoboService {
     public boolean onUnbind(Intent intent) {
         Ln.v("Unbind from AMTTSService using intent: " + intent);
         cleanUp();
+        // Always stop service on unbind so the service will not be reused
+        // for the next binding.
+        stopSelf();
         return false;
     }
 
