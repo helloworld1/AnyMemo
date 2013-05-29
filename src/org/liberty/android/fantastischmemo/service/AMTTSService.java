@@ -143,6 +143,14 @@ public class AMTTSService extends RoboService {
         autoSpeakContext.getState().transition(autoSpeakContext, AutoSpeakMessage.START_PLAYING);
     }
 
+    public void skipToNext() {
+        autoSpeakContext.getState().transition(autoSpeakContext, AutoSpeakMessage.GO_TO_NEXT);
+    }
+
+    public void skipToPrev() {
+        autoSpeakContext.getState().transition(autoSpeakContext, AutoSpeakMessage.GO_TO_PREV);
+    }
+
     public void stopPlaying() {
         Ln.v("Stop playing");
         autoSpeakContext.getState().transition(autoSpeakContext, AutoSpeakMessage.STOP_PLAYING);

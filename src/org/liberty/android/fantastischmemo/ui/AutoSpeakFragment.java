@@ -22,7 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-public class AutoSpeakFragment extends Fragment {
+public class AutoSpeakFragment extends RoboFragment {
     private static final String TAG = "AutoSpeakFragment";
     private static final int DEFAULT_SLEEP_TIME_IN_SEC = 1;
     private ImageButton playButton;
@@ -145,9 +145,9 @@ public class AutoSpeakFragment extends Fragment {
                 }
 
             } else if (v == previousButton) {
-                previewEditActivity.gotoPrev();
+                previewEditActivity.getAMTTSService().skipToPrev();
             } else if (v == nextButton) {
-                previewEditActivity.gotoNext();
+                previewEditActivity.getAMTTSService().skipToNext();
             } else if (v == settingsButton) {
                 displaySettingsDialog();
             } else if (v == exitButton) {

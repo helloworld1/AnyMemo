@@ -1,5 +1,6 @@
 package org.liberty.android.fantastischmemo.service.autospeak;
 
+import org.apache.mycommons.lang3.StringUtils;
 import org.apache.mycommons.lang3.time.DateUtils;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
@@ -16,6 +17,7 @@ public enum AutoSpeakState implements AutoSpeakStateTransition {
                 playQuestion(context);
                 break;
             default:
+                // Once it is in STOPPED state, no call other than START_PLAYING can go through.
                 break;
 
             }
@@ -25,8 +27,17 @@ public enum AutoSpeakState implements AutoSpeakStateTransition {
         public void transition(AutoSpeakContext context, AutoSpeakMessage message) {
             switch(message) {
             case GO_TO_NEXT:
+                context.getAmTTSService().stopSpeak();
+                context.setCurrentCard(findNextCard(context));
+                context.setState(PLAYING_QUESTION);
+                playQuestion(context);
+
                 break;
             case GO_TO_PREV:
+                context.getAmTTSService().stopSpeak();
+                context.setCurrentCard(findPrevCard(context));
+                context.setState(PLAYING_QUESTION);
+                playQuestion(context);
                 break;
             case PLAYING_ANSWER_COMPLETED:
                 Ln.w("Wrong state, the question is playing but receive message that answer completed!");
@@ -48,8 +59,16 @@ public enum AutoSpeakState implements AutoSpeakStateTransition {
         public void transition(AutoSpeakContext context, AutoSpeakMessage message) {
             switch(message) {
             case GO_TO_NEXT:
+                context.getAmTTSService().stopSpeak();
+                context.setCurrentCard(findNextCard(context));
+                context.setState(PLAYING_QUESTION);
+                playQuestion(context);
                 break;
             case GO_TO_PREV:
+                context.getAmTTSService().stopSpeak();
+                context.setCurrentCard(findPrevCard(context));
+                context.setState(PLAYING_QUESTION);
+                playQuestion(context);
                 break;
             case PLAYING_ANSWER_COMPLETED:
                 context.setCurrentCard(findNextCard(context));
@@ -71,14 +90,25 @@ public enum AutoSpeakState implements AutoSpeakStateTransition {
 
     private static void playQuestion(final AutoSpeakContext context) {
         Ln.v("Playing Question: " + context.getCurrentCard().getId());
+
+        // Callback to the handler first since the actual TTS call would take some time.
+        // We usually need UI to update first.
         context.getEventHandler().onPlayCard(context.getCurrentCard());
+
         context.getAmTTSService().speakCardQuestion(context.getCurrentCard(),
             new AnyMemoTTS.OnTextToSpeechCompletedListener() {
-                public void onTextToSpeechCompleted(String text) {
+                public void onTextToSpeechCompleted(final String text) {
+                    // Use UI thread's handler to post call instead of sleeping.
+                    // Note the TTS is running on its own thread.
                     context.getAmTTSServiceHandler().postDelayed(new Runnable() {
                         public void run() {
-                            Ln.v("Playing question completed for id " + context.getCurrentCard().getId());
-                            context.getState().transition(context, AutoSpeakMessage.PLAYING_QUESTION_COMPLETED);
+                            // Make sure the card is still current.
+                            // If the card changed, it is most likely the fast foward / backward
+                            // function is needed.
+                            if (StringUtils.equals(context.getCurrentCard().getQuestion(), text)) {
+                                Ln.v("Playing question completed for id " + context.getCurrentCard().getId());
+                                context.getState().transition(context, AutoSpeakMessage.PLAYING_QUESTION_COMPLETED);
+                            }
                         }
                     }, context.getDelayBeteenQAInSec() * DateUtils.MILLIS_PER_SECOND);
 
@@ -91,11 +121,13 @@ public enum AutoSpeakState implements AutoSpeakStateTransition {
         context.getEventHandler().onPlayCard(context.getCurrentCard());
         context.getAmTTSService().speakCardAnswer(context.getCurrentCard(),
             new AnyMemoTTS.OnTextToSpeechCompletedListener() {
-                public void onTextToSpeechCompleted(String text) {
+                public void onTextToSpeechCompleted(final String text) {
                     context.getAmTTSServiceHandler().postDelayed(new Runnable() {
                         public void run() {
-                            Ln.v("Playing answer completed for id " + context.getCurrentCard().getId());
-                            context.getState().transition(context, AutoSpeakMessage.PLAYING_ANSWER_COMPLETED);
+                            if (StringUtils.equals(context.getCurrentCard().getAnswer(), text)) {
+                                Ln.v("Playing answer completed for id " + context.getCurrentCard().getId());
+                                context.getState().transition(context, AutoSpeakMessage.PLAYING_ANSWER_COMPLETED);
+                            }
                         }
                     }, context.getDelayBeteenQAInSec() * DateUtils.MILLIS_PER_SECOND);
 
