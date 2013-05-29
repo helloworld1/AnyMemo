@@ -7,7 +7,7 @@ import org.liberty.android.fantastischmemo.service.AMTTSService;
 import android.os.Handler;
 
 public class AutoSpeakContext {
-    private volatile AutoSpeakState state;
+    private volatile AutoSpeakState state = AutoSpeakState.STOPPED;
     private volatile Card currentCard;
     
     private final AutoSpeakEventHandler eventHandler;
@@ -15,18 +15,22 @@ public class AutoSpeakContext {
     private final Handler amTTSServiceHandler;
     private final AnyMemoDBOpenHelper dbOpenHelper;
 
-    private final int delayBeteenQAInSec = 1;
-    private final int delayBeteenCardsInSec = 1;
+    private final int delayBeteenQAInSec;
+    private final int delayBeteenCardsInSec;
 
     public AutoSpeakContext(
             AutoSpeakEventHandler eventHandler,
             AMTTSService amTTSService,
             Handler amTTSServiceHandler,
-            AnyMemoDBOpenHelper dbOpenHelper) {
+            AnyMemoDBOpenHelper dbOpenHelper,
+            int delayBeteenQAInSec,
+            int delayBeteenCardsInSec) {
         this.eventHandler = eventHandler;
         this.amTTSService = amTTSService;
         this.amTTSServiceHandler = amTTSServiceHandler;
         this.dbOpenHelper = dbOpenHelper;
+        this.delayBeteenQAInSec = delayBeteenQAInSec;
+        this.delayBeteenCardsInSec = delayBeteenCardsInSec;
     }
 
     public AutoSpeakState getState() {

@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.mycommons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
@@ -12,13 +14,14 @@ import org.liberty.android.fantastischmemo.aspect.CheckNullArgs;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.service.autospeak.AutoSpeakContext;
 import org.liberty.android.fantastischmemo.service.autospeak.AutoSpeakEventHandler;
 import org.liberty.android.fantastischmemo.service.autospeak.AutoSpeakMessage;
-import org.liberty.android.fantastischmemo.service.autospeak.AutoSpeakState;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTSImpl;
+import org.liberty.android.fantastischmemo.tts.NullAnyMemoTTS;
 
 import roboguice.service.RoboService;
 import roboguice.util.Ln;
@@ -50,10 +53,17 @@ public class AMTTSService extends RoboService {
 
     private Setting setting;
 
-    private Card currentPlayingCard;
-
     private Handler handler;
 
+    private Option option;
+
+    @Inject
+    public void setOption(Option option) {
+        this.option = option;
+    }
+
+    // Note, it is recommended for service binding in a thread different
+    // from UI thread. The initialization like DAO creation is quite heavy
     @Override
     public IBinder onBind(Intent intent) {
         Ln.v("Bind to AMTTSService using intent: " + intent);
@@ -64,7 +74,8 @@ public class AMTTSService extends RoboService {
 
         dbPath = extras.getString(EXTRA_DBPATH);
 
-        // Clean up first in case the service is started multiple times;
+        // It is possible the service is started multiple times and reuse
+        // the same instance. So clean up first.
         cleanUp();
         
         dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(this, dbPath);
@@ -76,15 +87,6 @@ public class AMTTSService extends RoboService {
 
         return binder;
     }
-
-    @Override
-    public void onCreate() {
-        // mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-
-        // // Display a notification about us starting.  We put an icon in the status bar.
-        // showNotification();
-    }
-
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -131,29 +133,41 @@ public class AMTTSService extends RoboService {
 
     @CheckNullArgs
     public void startPlaying(Card startCard, AutoSpeakEventHandler eventHandler) {
-        if (autoSpeakContext == null) {
-            autoSpeakContext = new AutoSpeakContext(
+        autoSpeakContext = new AutoSpeakContext(
                 eventHandler,
                 this,
                 handler,
-                dbOpenHelper);
-        }
+                dbOpenHelper,
+                option.getAutoSpeakIntervalBetweenQA(),
+                option.getAutoSpeakIntervalBetweenCards());
+
         autoSpeakContext.setCurrentCard(startCard);
-        autoSpeakContext.setState(AutoSpeakState.STOPPED);
         autoSpeakContext.getState().transition(autoSpeakContext, AutoSpeakMessage.START_PLAYING);
     }
 
     public void skipToNext() {
-        autoSpeakContext.getState().transition(autoSpeakContext, AutoSpeakMessage.GO_TO_NEXT);
+        if (autoSpeakContext != null) {
+            autoSpeakContext.getState().transition(autoSpeakContext, AutoSpeakMessage.GO_TO_NEXT);
+        } else {
+            Ln.i("Call skipToPrev with null autoSpeakContext. Do nothing.");
+        }
     }
 
     public void skipToPrev() {
-        autoSpeakContext.getState().transition(autoSpeakContext, AutoSpeakMessage.GO_TO_PREV);
+        if (autoSpeakContext != null) {
+            autoSpeakContext.getState().transition(autoSpeakContext, AutoSpeakMessage.GO_TO_PREV);
+        } else {
+            Ln.i("Call skipToPrev with null autoSpeakContext. Do nothing.");
+        }
     }
 
     public void stopPlaying() {
         Ln.v("Stop playing");
-        autoSpeakContext.getState().transition(autoSpeakContext, AutoSpeakMessage.STOP_PLAYING);
+        if (autoSpeakContext != null) {
+            autoSpeakContext.getState().transition(autoSpeakContext, AutoSpeakMessage.STOP_PLAYING);
+        } {
+            Ln.i("Call stopPlaying with null autoSpeakContext. Do nothing.");
+        }
     }
 
     private void initTTS() {
@@ -176,6 +190,8 @@ public class AMTTSService extends RoboService {
             questionAudioSearchPath.add(defaultLocation + "/" + dbName);
             questionAudioSearchPath.add(setting.getQuestionAudioLocation());
             questionTTS = new AnyMemoTTSImpl(this, qa, questionAudioSearchPath);
+        } else {
+            questionTTS = new NullAnyMemoTTS();
         }
 
         if (setting.isAnswerAudioEnabled()) {
@@ -187,6 +203,8 @@ public class AMTTSService extends RoboService {
             answerAudioSearchPath.add(defaultLocation + "/" + dbName);
             answerAudioSearchPath.add(defaultLocation);
             answerTTS = new AnyMemoTTSImpl(this, aa, answerAudioSearchPath);
+        }  else {
+            answerTTS = new NullAnyMemoTTS();
         }
     }
 
@@ -207,6 +225,7 @@ public class AMTTSService extends RoboService {
     }
 
 
+    // A local binder that works for local methos call.
     public class LocalBinder extends Binder {
         public AMTTSService getService() {
             return AMTTSService.this;

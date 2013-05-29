@@ -166,7 +166,6 @@ public abstract class QACardActivity extends AMActivity {
 
         // Load gestures
         loadGestures();
-        bindServices();
 
         initTask = new InitTask();
         initTask.execute();
@@ -477,6 +476,8 @@ public abstract class QACardActivity extends AMActivity {
                 settingDao = dbOpenHelper.getSettingDao();
                 categoryDao = dbOpenHelper.getCategoryDao();
                 setting = settingDao.queryForId(1);
+
+                bindServices();
 
                 // Init of common functions here
                 // Call customized init funciton defined in
