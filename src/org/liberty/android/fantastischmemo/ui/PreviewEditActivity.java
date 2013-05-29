@@ -658,6 +658,24 @@ public class PreviewEditActivity extends QACardActivity {
     }
 
     @CheckNullArgs
+    protected void gotoCard(Card card) {
+        Card currentCard = getCurrentCard();
+        if (currentCard.getOrdinal() > card.getOrdinal()) {
+            // This is previoius card
+            setAnimation(R.anim.slide_right_in, R.anim.slide_right_out);
+        } else {
+            setAnimation(R.anim.slide_left_in, R.anim.slide_left_out);
+        }
+        setCurrentCard(card);
+
+        updateCardFrontSide();
+        updateTitle();
+
+        // Set animation back
+        setAnimation(R.anim.slide_left_in, R.anim.slide_left_out);
+    }
+
+    @CheckNullArgs
     private void deleteCard(final Card cardToDelete){
         new AlertDialog.Builder(this)
             .setTitle(getString(R.string.delete_text))
@@ -766,14 +784,14 @@ public class PreviewEditActivity extends QACardActivity {
     private View.OnClickListener prevButtonListener = new View.OnClickListener(){
         public void onClick(View v){
             gotoPrev();
-            stopSpeak();
+            getAMTTSService().stopSpeak();
         }
     };
 
     private View.OnClickListener nextButtonListener = new View.OnClickListener(){
         public void onClick(View v){
             gotoNext();
-            stopSpeak();
+            getAMTTSService().stopSpeak();
         }
     };
 

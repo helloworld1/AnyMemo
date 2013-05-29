@@ -5,6 +5,8 @@ import org.apache.mycommons.lang3.StringUtils;
 import org.apache.mycommons.lang3.time.DateUtils;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.service.autospeak.AutoSpeakEventHandler;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
 
 import android.app.Activity;
@@ -19,7 +21,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-
 
 public class AutoSpeakFragment extends Fragment {
     private static final String TAG = "AutoSpeakFragment";
@@ -44,23 +45,20 @@ public class AutoSpeakFragment extends Fragment {
 
         @Override
         public void onTextToSpeechCompleted(final String text) {
-                Runnable r = new Runnable() {
-                    @Override
-                    public void run() {
-                        if(!isActivityFinished && isPlayButtonSelected) {
-                            // This logic ensures that if we change card when speaking, we want to start from the question
-                            // for the new card.
-                            if (!StringUtils.equals(text, previewEditActivity.getCurrentCard().getQuestion())) {
-                                previewEditActivity.speakQuestion(mQuestionListener);
-                                return;
-                            }
-                            previewEditActivity.speakAnswer(mAnswerListener);
-                        }
+            Runnable r = new Runnable() {
+                @Override
+                public void run() {
+                    if (!isActivityFinished && isPlayButtonSelected) {
                     }
-                };
+                }
+            };
 
-                handler.postDelayed(r,
-                        DateUtils.MILLIS_PER_SECOND * settings.getInt(AMPrefKeys.AUTO_SPEAK_QA_SLEEP_INTERVAL_KEY, DEFAULT_SLEEP_TIME_IN_SEC));
+            handler.postDelayed(
+                    r,
+                    DateUtils.MILLIS_PER_SECOND
+                            * settings
+                                    .getInt(AMPrefKeys.AUTO_SPEAK_QA_SLEEP_INTERVAL_KEY,
+                                            DEFAULT_SLEEP_TIME_IN_SEC));
         }
     };
 
@@ -74,20 +72,23 @@ public class AutoSpeakFragment extends Fragment {
                 public void run() {
                     // This logic ensures that if we change card when speaking, we want to start from the question
                     // for the new card.
-                    if(!isActivityFinished && isPlayButtonSelected) {
-                        if (!StringUtils.equals(text, previewEditActivity.getCurrentCard().getAnswer())) {
-                            previewEditActivity.speakQuestion(mQuestionListener);
+                    if (!isActivityFinished && isPlayButtonSelected) {
+                        if (!StringUtils.equals(text, previewEditActivity
+                                .getCurrentCard().getAnswer())) {
                             return;
                         }
                         Log.i(TAG, "going to the next card");
                         previewEditActivity.gotoNext();
-                        previewEditActivity.speakQuestion(mQuestionListener);
                     }
 
                 }
             };
-            handler.postDelayed(r,
-                    DateUtils.MILLIS_PER_SECOND * settings.getInt(AMPrefKeys.AUTO_SPEAK_CARD_SLEEP_INTERVAL_KEY, DEFAULT_SLEEP_TIME_IN_SEC));
+            handler.postDelayed(
+                    r,
+                    DateUtils.MILLIS_PER_SECOND
+                            * settings
+                                    .getInt(AMPrefKeys.AUTO_SPEAK_CARD_SLEEP_INTERVAL_KEY,
+                                            DEFAULT_SLEEP_TIME_IN_SEC));
         }
     };
 
@@ -110,7 +111,7 @@ public class AutoSpeakFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.previewEditActivity = (PreviewEditActivity)activity;
+        this.previewEditActivity = (PreviewEditActivity) activity;
         this.handler = new Handler();
         settings = PreferenceManager.getDefaultSharedPreferences(activity);
         editor = settings.edit();
@@ -126,27 +127,30 @@ public class AutoSpeakFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            if(v == playButton) {
+            if (v == playButton) {
                 isPlayButtonSelected = !isPlayButtonSelected;
-                Log.i(TAG, "Play button clicked, isPlaying " + isPlayButtonSelected);
+                Log.i(TAG, "Play button clicked, isPlaying "
+                        + isPlayButtonSelected);
 
-                if(isPlayButtonSelected) {
+                if (isPlayButtonSelected) {
                     Log.i(TAG, "start speaking");
                     isActivityFinished = false;
-                    previewEditActivity.speakQuestion(mQuestionListener);
                     playButton.setSelected(true);
+                    previewEditActivity.getAMTTSService().startPlaying(
+                            previewEditActivity.getCurrentCard(), autoSpeakEventHandler);
                 } else {
                     isActivityFinished = true;
                     playButton.setSelected(false);
+                    previewEditActivity.getAMTTSService().stopPlaying();
                 }
 
-            } else if(v == previousButton) {
+            } else if (v == previousButton) {
                 previewEditActivity.gotoPrev();
-            } else if(v == nextButton) {
+            } else if (v == nextButton) {
                 previewEditActivity.gotoNext();
-            } else if(v == settingsButton) {
+            } else if (v == settingsButton) {
                 displaySettingsDialog();
-            } else if(v == exitButton) {
+            } else if (v == exitButton) {
                 dismissFragment();
             }
         }
@@ -161,8 +165,18 @@ public class AutoSpeakFragment extends Fragment {
 
     private void dismissFragment() {
         isActivityFinished = true;
-        getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .remove(this).commit();
     }
+
+    private AutoSpeakEventHandler autoSpeakEventHandler = new AutoSpeakEventHandler() {
+        @Override
+        public void onPlayCard(Card card) {
+            if (card.getId() != previewEditActivity.getCurrentCard().getId()) {
+                previewEditActivity.gotoCard(card);
+            }
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater,
