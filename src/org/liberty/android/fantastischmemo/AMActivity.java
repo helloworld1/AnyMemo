@@ -41,6 +41,10 @@ import android.view.WindowManager;
 public abstract class AMActivity extends RoboFragmentActivity{
     protected String TAG = getClass().getSimpleName();
 
+    boolean activityForeground = false;
+
+    boolean activityCreated = false;
+
     @Override
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -54,6 +58,7 @@ public abstract class AMActivity extends RoboFragmentActivity{
         }
 
         updateInterfaceLanguage();
+        activityCreated = true;
     }
 
 
@@ -61,6 +66,19 @@ public abstract class AMActivity extends RoboFragmentActivity{
     public void onResume() {
         super.onResume();
         updateInterfaceLanguage();
+        activityForeground = true;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        activityForeground = false;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        activityCreated = false;
     }
 
     @Override
@@ -69,9 +87,18 @@ public abstract class AMActivity extends RoboFragmentActivity{
         updateInterfaceLanguage();
     }
 
+
     public void restartActivity(){
         startActivity(new Intent(this, this.getClass()));
         finish();
+    }
+
+    public boolean isActivityForeground() {
+        return activityForeground;
+    }
+
+    public boolean isActivityCreated() {
+        return activityCreated;
     }
 
     private void updateInterfaceLanguage() {

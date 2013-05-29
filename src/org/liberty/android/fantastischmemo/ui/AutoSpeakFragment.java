@@ -119,7 +119,10 @@ public class AutoSpeakFragment extends RoboFragment {
     private AutoSpeakEventHandler autoSpeakEventHandler = new AutoSpeakEventHandler() {
         @Override
         public void onPlayCard(Card card) {
-            if (card.getId() != previewEditActivity.getCurrentCard().getId()) {
+            // 1. Make sure the activity is foreground to update the card.
+            // 2. Only update the card if the card is different.
+            if (previewEditActivity.isActivityForeground()
+                    && card.getId() != previewEditActivity.getCurrentCard().getId()) {
                 previewEditActivity.gotoCard(card);
             }
         }
