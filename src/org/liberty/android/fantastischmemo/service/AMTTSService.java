@@ -10,6 +10,7 @@ import org.apache.mycommons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.aspect.CheckNullArgs;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.SettingDao;
@@ -22,19 +23,26 @@ import org.liberty.android.fantastischmemo.service.autospeak.AutoSpeakMessage;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTSImpl;
 import org.liberty.android.fantastischmemo.tts.NullAnyMemoTTS;
+import org.liberty.android.fantastischmemo.ui.PreviewEditActivity;
 
 import roboguice.service.RoboService;
 import roboguice.util.Ln;
 
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 
 public class AMTTSService extends RoboService {
 
     public static final String EXTRA_DBPATH = "dbpath";
+
+    // Magic id used for AutoSpeak's notification
+    private static final int NOTIFICATION_ID = 9283372;
 
     // This is the object that receives interactions from clients.
     private final IBinder binder = new LocalBinder();
@@ -59,7 +67,6 @@ public class AMTTSService extends RoboService {
 
     // The context used for autoSpeak state machine.
     private volatile AutoSpeakContext autoSpeakContext = null;
-
 
     @Inject
     public void setOption(Option option) {
@@ -109,6 +116,10 @@ public class AMTTSService extends RoboService {
         return false;
     }
 
+    /* 
+     * This will speak the question of the card and will not
+     * set a callback for speaking completion.
+     */
     @CheckNullArgs
     public void speakCardQuestion(Card card) {
         speakCardQuestion(card, null);
@@ -120,6 +131,10 @@ public class AMTTSService extends RoboService {
         questionTTS.sayText(card.getQuestion(), onTextToSpeechCompletedListener);
     }
 
+    /* 
+     * This will speak the answer of the card and will not
+     * set a callback for speaking completion.
+     */
     @CheckNullArgs
     public void speakCardAnswer(Card card) {
         speakCardAnswer(card, null);
@@ -150,6 +165,7 @@ public class AMTTSService extends RoboService {
 
         autoSpeakContext.setCurrentCard(startCard);
         autoSpeakContext.getState().transition(autoSpeakContext, AutoSpeakMessage.START_PLAYING);
+        showNotification();
     }
 
     public void skipToNext() {
@@ -170,6 +186,7 @@ public class AMTTSService extends RoboService {
 
     public void stopPlaying() {
         Ln.v("Stop playing");
+        cancelNotification();
         if (autoSpeakContext != null) {
             autoSpeakContext.getState().transition(autoSpeakContext, AutoSpeakMessage.STOP_PLAYING);
         } else {
@@ -229,6 +246,45 @@ public class AMTTSService extends RoboService {
         }
         cardDao = null;
         settingDao = null;
+    }
+
+    private void showNotification() {
+
+        Intent resultIntent = new Intent(this, PreviewEditActivity.class);
+
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+
+        stackBuilder.addParentStack(PreviewEditActivity.class);
+
+        resultIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        resultIntent.putExtra(PreviewEditActivity.EXTRA_DBPATH, dbPath);
+        resultIntent.putExtra(PreviewEditActivity.EXTRA_SHOW_AUTO_SPEAK, true);
+        if (autoSpeakContext != null) {
+            resultIntent.putExtra(PreviewEditActivity.EXTRA_CARD_ID, autoSpeakContext.getCurrentCard().getId());
+        } else {
+            Ln.w("The notification for AutoSpeak is shown but the autoSpeakContext is null!");
+        }
+
+        stackBuilder.addNextIntent(resultIntent);
+
+        PendingIntent resultPendingIntent =
+            stackBuilder.getPendingIntent( 0, PendingIntent.FLAG_UPDATE_CURRENT );
+
+        NotificationCompat.Builder mBuilder =
+            new NotificationCompat.Builder(this)
+            .setSmallIcon(R.drawable.icon)
+            .setContentTitle(getString(R.string.auto_speak_notification_title))
+            .setContentText(getString(R.string.auto_speak_notification_text))
+            .setContentIntent(resultPendingIntent)
+            .setOngoing(true);
+
+        // Basically make the service foreground so a notification is shown
+        // And the service is less susceptible to be kill by Android system.
+        startForeground(NOTIFICATION_ID, mBuilder.build());
+    }
+
+    private void cancelNotification() {
+        stopForeground(true);
     }
 
 

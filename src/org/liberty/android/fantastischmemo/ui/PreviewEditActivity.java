@@ -79,6 +79,7 @@ public class PreviewEditActivity extends QACardActivity {
     public static String EXTRA_DBPATH = "dbpath";
     public static String EXTRA_CARD_ID = "id";
     public static String EXTRA_CATEGORY = "category";
+    public static String EXTRA_SHOW_AUTO_SPEAK= "showAutoSpeak";
 
     private static final String TAG = "PreviewEditActivity";
     private static final int MAGIC_FRAME_LAYOUT_ID = 675198655; // A magic id that we used to set frame layout id.
@@ -109,6 +110,8 @@ public class PreviewEditActivity extends QACardActivity {
     // The first card to read and display.
     private int startCardId = 1;
 
+    private boolean showAutoSpeakFragmentOnCreate = false;
+
     @Inject
     public void setShareUtil(ShareUtil shareUtil) {
         this.shareUtil = shareUtil;
@@ -124,11 +127,13 @@ public class PreviewEditActivity extends QACardActivity {
         super.onCreate(savedInstanceState);
 
         Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            dbPath = extras.getString(EXTRA_DBPATH);
-            activeCategoryId = extras.getInt(EXTRA_CATEGORY, -1);
-            startCardId = extras.getInt(EXTRA_CARD_ID, -1);
-        }
+
+        assert extras != null : "Extras for PreviewEditActivity should have at least dbPath!";
+
+        dbPath = extras.getString(EXTRA_DBPATH);
+        activeCategoryId = extras.getInt(EXTRA_CATEGORY, -1);
+        startCardId = extras.getInt(EXTRA_CARD_ID, -1);
+        showAutoSpeakFragmentOnCreate = extras.getBoolean(EXTRA_SHOW_AUTO_SPEAK, false);
 
         /*
          * Currently always set the result to OK
@@ -173,7 +178,6 @@ public class PreviewEditActivity extends QACardActivity {
 
         totalCardCount = cardDao.countOf();
         setCurrentCard(currentCard);
-
     }
 
     @Override
@@ -188,6 +192,10 @@ public class PreviewEditActivity extends QACardActivity {
         /* Double sided card can't use the flip gesture*/
         if(setting.getCardStyle() != Setting.CardStyle.DOUBLE_SIDED){
             gestureDetector= new GestureDetector(PreviewEditActivity.this, gestureListener);
+        }
+
+        if (showAutoSpeakFragmentOnCreate) {
+            showAutoSpeakFragment();
         }
     }
 

@@ -1,5 +1,7 @@
 package org.liberty.android.fantastischmemo.service.autospeak;
 
+import java.sql.SQLException;
+
 import org.apache.mycommons.lang3.StringUtils;
 import org.apache.mycommons.lang3.time.DateUtils;
 import org.liberty.android.fantastischmemo.domain.Card;
@@ -136,11 +138,26 @@ public enum AutoSpeakState implements AutoSpeakStateTransition {
     }
 
     private static Card findNextCard(final AutoSpeakContext context) {
-        return context.getDbOpenHelper().getCardDao().queryNextCard(context.getCurrentCard());
-
+        try {
+            Card card = context.getDbOpenHelper().getCardDao().queryNextCard(context.getCurrentCard());
+            context.getDbOpenHelper().getLearningDataDao().refresh(card.getLearningData());
+            context.getDbOpenHelper().getCategoryDao().refresh(card.getCategory());
+            return card;
+        } catch (SQLException e) {
+            Ln.e(e);
+            throw new RuntimeException(e);
+        }
     }
 
     private static Card findPrevCard(final AutoSpeakContext context) {
-        return context.getDbOpenHelper().getCardDao().queryPrevCard(context.getCurrentCard());
+        try {
+            Card card = context.getDbOpenHelper().getCardDao().queryPrevCard(context.getCurrentCard());
+            context.getDbOpenHelper().getLearningDataDao().refresh(card.getLearningData());
+            context.getDbOpenHelper().getCategoryDao().refresh(card.getCategory());
+            return card;
+        } catch (SQLException e) {
+            Ln.e(e);
+            throw new RuntimeException(e);
+        }
     }
 }

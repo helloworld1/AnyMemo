@@ -451,4 +451,6 @@
     <string name="author_text">Author</string>
     <string name="creation_date_text">Creation date</string>
     <string name="card_count_text">Card count</string>
+    <string name="auto_speak_notification_title">AnyMemo AutoSpeak</string>
+    <string name="auto_speak_notification_text">Speaking cards in progress</string>
 </resources>
