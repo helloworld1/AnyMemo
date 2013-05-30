@@ -122,6 +122,8 @@ public class AutoSpeakStateTest extends AbstractExistingDBTest {
         verifyStateTransition(AutoSpeakState.PLAYING_ANSWER,
                 AutoSpeakMessage.PLAYING_ANSWER_COMPLETED, AutoSpeakState.PLAYING_QUESTION);
         verify(mockAmTTSService, times(1)).speakCardQuestion(any(Card.class), any(AnyMemoTTS.OnTextToSpeechCompletedListener.class));
+        // Also verify the event callback to the fragment.
+        verify(mockEventHandler, times(1)).onPlayCard(any(Card.class));
         assertEquals(TEST_CARD_ID + 1, (int)autoSpeakContext.getCurrentCard().getId());
     }
 
