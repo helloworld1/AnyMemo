@@ -57,6 +57,10 @@ public class AMTTSService extends RoboService {
 
     private Option option;
 
+    // The context used for autoSpeak state machine.
+    private volatile AutoSpeakContext autoSpeakContext = null;
+
+
     @Inject
     public void setOption(Option option) {
         this.option = option;
@@ -132,10 +136,10 @@ public class AMTTSService extends RoboService {
         answerTTS.stop();
     }
 
-    private volatile AutoSpeakContext autoSpeakContext = null;
-
     @CheckNullArgs
     public void startPlaying(Card startCard, AutoSpeakEventHandler eventHandler) {
+        // Always to create a new context if we start playing to ensure it is playing
+        // from a clean state.
         autoSpeakContext = new AutoSpeakContext(
                 eventHandler,
                 this,
@@ -168,7 +172,7 @@ public class AMTTSService extends RoboService {
         Ln.v("Stop playing");
         if (autoSpeakContext != null) {
             autoSpeakContext.getState().transition(autoSpeakContext, AutoSpeakMessage.STOP_PLAYING);
-        } {
+        } else {
             Ln.i("Call stopPlaying with null autoSpeakContext. Do nothing.");
         }
     }

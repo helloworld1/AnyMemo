@@ -15,11 +15,13 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 public class AutoSpeakFragment extends RoboFragment {
+
     private ImageButton playButton;
     private ImageButton previousButton;
     private ImageButton nextButton;
     private ImageButton settingsButton;
     private ImageButton exitButton;
+
     private PreviewEditActivity previewEditActivity;
 
     @Override
@@ -65,9 +67,10 @@ public class AutoSpeakFragment extends RoboFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
+        // Make sure stop playing if the fragment is killed.
         stopPlaying();
     }
-
 
     private View.OnClickListener buttonListener = new View.OnClickListener() {
 
@@ -75,13 +78,12 @@ public class AutoSpeakFragment extends RoboFragment {
         public void onClick(View v) {
             if (v == playButton) {
                 if (playButton.isSelected()) {
-                    // Button is in "Playing" state 
+                    // Button is currently in "Playing" state 
                     stopPlaying();
                 } else {
-                    // Button is in "Not playing" state 
+                    // Button is currently in "Not playing" state 
                     startPlaying();
                 }
-
             } else if (v == previousButton) {
                 previewEditActivity.getAMTTSService().skipToPrev();
             } else if (v == nextButton) {
