@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.mycommons.lang3.StringUtils;
 import org.color.ColorDialog;
 import org.liberty.android.fantastischmemo.AMActivity;
@@ -90,7 +92,7 @@ public class SettingsScreen extends AMActivity {
     private EditText aTypefaceEdit;
 
     private CheckBox displayInHTMLCheckbox;
-    private EnumSet<CardField> fieldsDisplayedInHTML;    
+    private EnumSet<CardField> fieldsDisplayedInHTML;
     private CheckBox linebreakCheckbox;
     private CheckBox field1Checkbox;
     private CheckBox field2Checkbox;
@@ -98,18 +100,23 @@ public class SettingsScreen extends AMActivity {
     private EnumSet<CardField> answerFields;
 
     private AnyMemoDBOpenHelper dbOpenHelper;
-    
+
     private DatabaseUtil databaseUtil;
 
     private boolean settingsChanged = false;
 
     private final static String WEBSITE_HELP_SETTINGS="http://anymemo.org/wiki/index.php?title=Card_styles";
-    
+
+    @Inject
+    public void setDatabaseUtil(DatabaseUtil databaseUtil) {
+        this.databaseUtil = databaseUtil;
+    }
+
+
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         settingsChanged = false;
-        databaseUtil = new DatabaseUtil(this);
         InitTask initTask = new InitTask();
         initTask.execute((Void) null);
     }
@@ -131,7 +138,7 @@ public class SettingsScreen extends AMActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
     }
-    
+
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -179,18 +186,18 @@ public class SettingsScreen extends AMActivity {
                 .setPositiveButton(R.string.yes_text, new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface  d, int which){
                         Intent resultIntent = new Intent();
-                        setResult(Activity.RESULT_CANCELED, resultIntent);                
+                        setResult(Activity.RESULT_CANCELED, resultIntent);
                         finish();
 
                     }
-                }) 
+                })
             .setNegativeButton(R.string.no_text, null)
                 .create()
                 .show();
 
         } else {
             Intent resultIntent = new Intent();
-            setResult(Activity.RESULT_CANCELED, resultIntent);                
+            setResult(Activity.RESULT_CANCELED, resultIntent);
             finish();
 
         }
@@ -203,17 +210,17 @@ public class SettingsScreen extends AMActivity {
             colors.set(pos, color);
         }
     };
-    
+
     private void resetToDefaultColors() {
         int[] defaultColors = getResources().getIntArray(R.array.default_color_list);
         for (int i=0; i < colors.size() && i < defaultColors.length; i++) {
             colors.set(i, defaultColors[i]);
         }
     }
-    
-    private void showCardFieldMultipleChoiceAlertDialog(final EnumSet<CardField> selectedFields, 
+
+    private void showCardFieldMultipleChoiceAlertDialog(final EnumSet<CardField> selectedFields,
                                                         final int titleStringId) {
-        // Create a AlertDialog for user to select fields in field 1 (the question part).        
+        // Create a AlertDialog for user to select fields in field 1 (the question part).
         boolean[] fieldSelection = new boolean[CardField.values().length];
         int i = 0;
         for (CardField field: CardField.values()) {
@@ -298,7 +305,7 @@ public class SettingsScreen extends AMActivity {
             questionAlignSpinner = (AMSpinner)findViewById(R.id.question_align_spinner);
 
             answerAlignSpinner = (AMSpinner)findViewById(R.id.answer_align_spinner);
-            
+
             styleSpinner =  (AMSpinner)findViewById(R.id.card_style_spinner);
 
             qaRatioSpinner =  (AMSpinner)findViewById(R.id.ratio_spinner);
@@ -306,7 +313,7 @@ public class SettingsScreen extends AMActivity {
             questionLocaleSpinner =  (AMSpinner)findViewById(R.id.question_locale_spinner);
 
             answerLocaleSpinner =  (AMSpinner)findViewById(R.id.answer_locale_spinner);
-            
+
             audioLocationEdit = (EditText) findViewById(R.id.settings_audio_location);
 
             // If we got no text, we will use the default location.
@@ -335,7 +342,7 @@ public class SettingsScreen extends AMActivity {
             colors.add(setting.getQuestionBackgroundColor());
             colors.add(setting.getAnswerBackgroundColor());
             colors.add(setting.getSeparatorColor());
-            
+
             qTypefaceCheckbox = (CheckBox) findViewById(R.id.checkbox_typeface_question);
             qTypefaceCheckbox.setOnClickListener(settingFieldOnClickListener);
             aTypefaceCheckbox = (CheckBox) findViewById(R.id.checkbox_typeface_answer);
@@ -357,7 +364,7 @@ public class SettingsScreen extends AMActivity {
             field1Checkbox = (CheckBox) findViewById(R.id.checkbox_field1);
             field1Checkbox.setOnClickListener(settingFieldOnClickListener);
             questionFields = setting.getQuestionFieldEnum();
-            
+
             field2Checkbox = (CheckBox) findViewById(R.id.checkbox_field2);
             field2Checkbox.setOnClickListener(settingFieldOnClickListener);
             answerFields = setting.getAnswerFieldEnum();
@@ -452,7 +459,7 @@ public class SettingsScreen extends AMActivity {
 
         // Default to 50
         qaRatioSpinner.selectItemFromValue(setting.getQaRatio().toString(), 0);
-        
+
         colorCheckbox.setChecked(!setting.isDefaultColor());
         if (colorCheckbox.isChecked()) {
             colorRow.setVisibility(View.VISIBLE);
@@ -468,7 +475,7 @@ public class SettingsScreen extends AMActivity {
         } else {
             qTypefaceEdit.setVisibility(View.GONE);
         }
-        
+
         aTypefaceCheckbox.setChecked(StringUtils.isNotEmpty(setting.getAnswerFont()));
         if (aTypefaceCheckbox.isChecked()) {
             aTypefaceEdit.setVisibility(View.VISIBLE);
@@ -531,7 +538,7 @@ public class SettingsScreen extends AMActivity {
                 setting.setAnswerAudio(answerLocaleSpinner.getSelectedItemValue());
                 setting.setAnswerAudioLocation("");
             }
-            
+
 
             setting.setQuestionTextColor(colors.get(0));
             setting.setAnswerTextColor(colors.get(1));
@@ -656,7 +663,7 @@ public class SettingsScreen extends AMActivity {
                 }
                 if (fieldsDisplayedInHTML.size() == 0) {
                     field1Checkbox.setChecked(false);
-                }            
+                }
             }
 
             if (v == field1Checkbox) {
@@ -668,7 +675,7 @@ public class SettingsScreen extends AMActivity {
                 }
                 if (questionFields.size() == 0) {
                     field1Checkbox.setChecked(false);
-                }            
+                }
             }
 
             if (v == field2Checkbox) {
@@ -680,7 +687,7 @@ public class SettingsScreen extends AMActivity {
                 }
                 if (answerFields.size() == 0) {
                     field2Checkbox.setChecked(false);
-                }            
+                }
             }
             if (v == qTypefaceEdit) {
                 FileBrowserFragment df = new FileBrowserFragment();
@@ -720,6 +727,6 @@ public class SettingsScreen extends AMActivity {
                 aTypefaceEdit.setText(file.getAbsolutePath());
             }
         };
-    
+
 }
 

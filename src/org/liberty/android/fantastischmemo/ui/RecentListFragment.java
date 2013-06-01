@@ -65,7 +65,7 @@ public class RecentListFragment extends RoboFragment {
     private final static String TAG = "org.liberty.android.fantastischmemo.OpenScreen";
 
     private Activity mActivity;
-    
+
     private DatabaseUtil databaseUtil;
 
     @Inject
@@ -73,13 +73,16 @@ public class RecentListFragment extends RoboFragment {
         this.recentListUtil = recentListUtil;
     }
 
+    @Inject
+    public void setDatabaseUtil(DatabaseUtil databaseUtil) {
+        this.databaseUtil = databaseUtil;
+    }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mActivity = activity;
         setHasOptionsMenu(true);
-        databaseUtil = new DatabaseUtil(mActivity);
     }
 
     @Override
@@ -97,7 +100,7 @@ public class RecentListFragment extends RoboFragment {
     }
 
 
-    
+
     @Override
     public void onResume(){
         super.onResume();
@@ -175,7 +178,7 @@ public class RecentListFragment extends RoboFragment {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.open_screen_menu, menu);
     }
-    
+
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case R.id.openmenu_clear:
@@ -212,7 +215,7 @@ public class RecentListFragment extends RoboFragment {
             return true;
         }
     };
-    
+
     /* Aux class to store data */
     private class RecentItem {
         public String dbName;

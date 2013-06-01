@@ -46,7 +46,7 @@ public class RecentListUtil {
         recentLength = option.getRecentCount();
         this.option = option;
     }
-    
+
     public String getRecentDBPath() {
         return trimPath(settings.getString(AMPrefKeys.getRecentPathKey(0), null));
     }
@@ -55,16 +55,16 @@ public class RecentListUtil {
         // TODO: Reload the recentLength from user option.
         // FIXME: temp hack, need re-write, don't need to get it again.
         recentLength = option.getRecentCount();
-        
+
         String[] ret = new String[recentLength];
-        
+
         for(int i = 0; i < recentLength; i++){
             ret[i] = trimPath(settings.getString(AMPrefKeys.getRecentPathKey(i), null));
         }
-        
+
         return ret;
     }
-    
+
     public void clearRecentList() {
         for(int i = 0; i < recentLength; i++){
             editor.putString(AMPrefKeys.getRecentPathKey(i), null);

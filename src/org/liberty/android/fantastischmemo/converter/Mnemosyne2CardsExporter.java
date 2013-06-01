@@ -91,7 +91,7 @@ public class Mnemosyne2CardsExporter implements Converter {
         String deckName = FilenameUtils.removeExtension(srcFilename);
 
         File tmpDirectory = new File(AMEnv.DEFAULT_TMP_PATH + deckName);
-        
+
         FileUtils.deleteDirectory(tmpDirectory);
         FileUtils.forceMkdir(tmpDirectory);
 
@@ -109,15 +109,15 @@ public class Mnemosyne2CardsExporter implements Converter {
 
             File metadataFile = new File(tmpDirectory + "/METADATA");
             createMetadata(deckName, metadataFile);
-            
+
 
             // The last step is to see if there are images to export.
             File imageDir = new File(AMEnv.DEFAULT_IMAGE_PATH + srcFilename);
             if (imageDir.exists() && imageDir.isDirectory()) {
                 // Copy all the images to the tmp directory
                 Collection<File> imageFiles = FileUtils.listFiles(
-                    imageDir, 
-                    new SuffixFileFilter(new String[] {"jpg", "png", "bmp"}, IOCase.INSENSITIVE), 
+                    imageDir,
+                    new SuffixFileFilter(new String[] {"jpg", "png", "bmp"}, IOCase.INSENSITIVE),
                     DirectoryFileFilter.DIRECTORY);
 
                 for (File f : imageFiles) {
@@ -132,7 +132,7 @@ public class Mnemosyne2CardsExporter implements Converter {
             FileUtils.deleteDirectory(tmpDirectory);
         }
 
-        
+
     }
 
     private void createXMLFile(String dbPath, File xmlFile) throws SQLException, IOException {
@@ -147,7 +147,7 @@ public class Mnemosyne2CardsExporter implements Converter {
 
             outXml = new PrintWriter(new BufferedWriter(new FileWriter(xmlFile)));
             outXml.printf("<openSM2sync number_of_entries=\"%d\">\n", cardCount);
-            // First card tags (categories) 
+            // First card tags (categories)
 
             Map<String, String> categoryOidMap = new HashMap<String, String>();
             Map<Integer, String> cardIdOidMap = new HashMap<Integer, String>(cardCount * 4 / 3);

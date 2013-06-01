@@ -96,9 +96,9 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
     private RecentListUtil recentListUtil;
 
     @Inject
-    public void setAmFileUtil(AMFileUtil amFileUtil) { 
+    public void setAmFileUtil(AMFileUtil amFileUtil) {
         this.amFileUtil = amFileUtil;
-    }  
+    }
 
     @Inject
     public void setRecentListUtil(RecentListUtil recentListUtil) {
@@ -142,7 +142,7 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
         if(StringUtils.isEmpty(defaultRoot)){
             File sdPath = new File(AMEnv.DEFAULT_ROOT_PATH);
             sdPath.mkdir();
-            
+
             currentDirectory = sdPath;
         }
         else{
@@ -157,7 +157,7 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        
+
         View v = inflater.inflate(R.layout.file_browser, container, false);
         fbListView = (ListView)v.findViewById(R.id.file_list);
         return v;
@@ -168,9 +168,9 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
         super.onResume();
         browseTo(currentDirectory);
     }
-    
-    
-    
+
+
+
     private void browseTo(final File aDirectory){
         if(aDirectory.isDirectory()){
             mActivity.setTitle(aDirectory.getPath());
@@ -178,10 +178,10 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
             fill(aDirectory.listFiles());
         }
     }
-    
+
     private void fill(File[] files){
         this.directoryEntries.clear();
-        
+
         if(this.currentDirectory.getParent() != null){
             this.directoryEntries.add(UP_ONE_LEVEL_DIR);
         }
@@ -204,7 +204,7 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
                         }
                     }
                 }
-                
+
             }
         }
 
@@ -213,14 +213,14 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
         fbListView.setOnItemClickListener(this);
         fbListView.setOnItemLongClickListener(this);
     }
-    
-    
+
+
     private void upOneLevel(){
         if(this.currentDirectory.getParent() != null){
             this.browseTo(this.currentDirectory.getParentFile());
         }
     }
-    
+
     @Override
     public void onItemClick(AdapterView<?> parentView, View childView, int position, long id){
         String selectedFileString = this.directoryEntries.get(position);
@@ -258,7 +258,7 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
                         }
                     }
                 }
-        
+
                 catch(Exception e){
                     new AlertDialog.Builder(mActivity).setMessage(e.toString()).show();
                     Log.e(TAG, "Error handling click", e);
@@ -267,8 +267,8 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
             }
         }
 
-        
-        
+
+
     }
 
 
@@ -374,10 +374,10 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
                                                 }
 
                                                 browseTo(currentDirectory);
-                                                
+
                                             }
                                         })
-                                        .setNegativeButton(getString(R.string.cancel_text), null) 
+                                        .setNegativeButton(getString(R.string.cancel_text), null)
                                         .create()
                                         .show();
                                     }
@@ -391,7 +391,7 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
 
                     }
                 }
-        
+
                 catch(Exception e){
                     new AlertDialog.Builder(mActivity).setMessage(e.toString()).show();
                     browseTo(new File("/"));
@@ -407,7 +407,7 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.file_browser_menu, menu);
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -432,15 +432,15 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
                             Log.e(TAG, "Fail to create file", e);
                         }
                         browseTo(currentDirectory);
-                        
+
                     }
                 })
-                .setNegativeButton(this.getString(R.string.cancel_text), null) 
+                .setNegativeButton(this.getString(R.string.cancel_text), null)
                 .create()
                 .show();
                 return true;
             }
-            
+
             case R.id.file_browser_createdirectory:{
                 final EditText input = new EditText(mActivity);
                 new AlertDialog.Builder(mActivity)
@@ -454,14 +454,14 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
                             File newDir = new File(currentDirectory + "/" + value);
                             newDir.mkdir();
                             browseTo(currentDirectory);
-                            
+
                         }
                     })
                     .setNegativeButton(this.getString(R.string.cancel_text), null)
                     .create()
                     .show();
                 return true;
-                
+
             }
         }
         return false;
@@ -563,7 +563,7 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
         }
 
         /* Display the quick index when the user is scrolling */
-        
+
         @Override
         public int getPositionForSection(int section){
             String letters = sections[section];

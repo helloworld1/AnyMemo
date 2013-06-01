@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,13 +20,13 @@ import java.util.Random;
 
 /**
  * <p>Operations for random {@code String}s.</p>
- * <p>Currently <em>private high surrogate</em> characters are ignored. 
+ * <p>Currently <em>private high surrogate</em> characters are ignored.
  * These are Unicode characters that fall between the values 56192 (db80)
- * and 56319 (dbff) as we don't know how to handle them. 
- * High and low surrogates are correctly dealt with - that is if a 
- * high surrogate is randomly chosen, 55296 (d800) to 56191 (db7f) 
- * then it is followed by a low surrogate. If a low surrogate is chosen, 
- * 56320 (dc00) to 57343 (dfff) then it is placed after a randomly 
+ * and 56319 (dbff) as we don't know how to handle them.
+ * High and low surrogates are correctly dealt with - that is if a
+ * high surrogate is randomly chosen, 55296 (d800) to 56191 (db7f)
+ * then it is followed by a low surrogate. If a low surrogate is chosen,
+ * 56320 (dc00) to 57343 (dfff) then it is placed after a randomly
  * chosen high surrogate. </p>
  *
  * <p>#ThreadSafe#</p>
@@ -37,7 +37,7 @@ public class RandomStringUtils {
 
     /**
      * <p>Random object used by random method. This has to be not local
-     * to the random method so as to not return the same value in the 
+     * to the random method so as to not return the same value in the
      * same millisecond.</p>
      */
     private static final Random RANDOM = new Random();
@@ -82,7 +82,7 @@ public class RandomStringUtils {
     public static String randomAscii(int count) {
         return random(count, 32, 127, false, false);
     }
-    
+
     /**
      * <p>Creates a random string whose length is the number of characters
      * specified.</p>
@@ -96,7 +96,7 @@ public class RandomStringUtils {
     public static String randomAlphabetic(int count) {
         return random(count, true, false);
     }
-    
+
     /**
      * <p>Creates a random string whose length is the number of characters
      * specified.</p>
@@ -110,7 +110,7 @@ public class RandomStringUtils {
     public static String randomAlphanumeric(int count) {
         return random(count, true, true);
     }
-    
+
     /**
      * <p>Creates a random string whose length is the number of characters
      * specified.</p>
@@ -142,7 +142,7 @@ public class RandomStringUtils {
     public static String random(int count, boolean letters, boolean numbers) {
         return random(count, 0, 0, letters, numbers);
     }
-    
+
     /**
      * <p>Creates a random string whose length is the number of characters
      * specified.</p>
@@ -201,7 +201,7 @@ public class RandomStringUtils {
      * end are chosen.</p>
      *
      * <p>This method accepts a user-supplied {@link Random}
-     * instance to use as a source of randomness. By seeding a single 
+     * instance to use as a source of randomness. By seeding a single
      * {@link Random} instance with a fixed seed and using it for each call,
      * the same random sequence of strings can be generated repeatedly
      * and predictably.</p>
@@ -318,5 +318,5 @@ public class RandomStringUtils {
         }
         return random(count, 0, chars.length, false, false, chars, RANDOM);
     }
-    
+
 }

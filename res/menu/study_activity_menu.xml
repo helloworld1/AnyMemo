@@ -19,11 +19,11 @@
             android:title="@string/filter_category_text"
             android:icon="@android:drawable/ic_menu_search" />
     <item android:id="@+id/menu_memo_help"
-            android:icon="@android:drawable/ic_menu_help"  
+            android:icon="@android:drawable/ic_menu_help"
             android:title="@string/help_button_text" />
     <item android:id="@+id/menu_context_edit"
             android:icon="@android:drawable/ic_menu_edit"
-            android:showAsAction="ifRoom" 
+            android:showAsAction="ifRoom"
             android:title="@string/edit_text" />
     <item android:id="@+id/menu_share"
             android:title="@string/share_text" />
@@ -34,8 +34,8 @@
     <item android:id="@+id/menu_context_gotoprev"
             android:title="@string/goto_prev_screen" />
     <item android:id="@+id/menu_context_lookup"
-            android:showAsAction="ifRoom" 
-            android:icon="@android:drawable/ic_menu_search"  
+            android:showAsAction="ifRoom"
+            android:icon="@android:drawable/ic_menu_search"
             android:title="@string/look_up_text" />
     <item android:id="@+id/menu_gestures"
             android:title="@string/gestures_text" />

@@ -48,7 +48,7 @@ public class AnyMemoWidgetProvider extends AppWidgetProvider{
         Intent myIntent = new Intent(context, AnyMemoService.class);
         myIntent.putExtra("request_code", AnyMemoService.UPDATE_WIDGET);
         /* Use the service to update, otherwise it may cause some
-         * strange behaviors 
+         * strange behaviors
          */
         context.startService(myIntent);
     }

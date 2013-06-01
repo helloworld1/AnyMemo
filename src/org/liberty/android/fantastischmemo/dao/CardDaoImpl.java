@@ -68,7 +68,7 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
             throw new RuntimeException(e);
         }
     }
-    
+
     /*
      * Get the last card in ordinal.
      */
@@ -123,7 +123,7 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
         try {
             QueryBuilder<Card, Integer> qb = queryBuilder();
             qb.limit(1L).orderBy("ordinal", true);
-            PreparedQuery<Card> pq; 
+            PreparedQuery<Card> pq;
             if (ct != null ) {
                 pq = qb.where()
                     .eq("category_id", ct.getId())
@@ -617,7 +617,7 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
             throw new RuntimeException("Error swapping QA of all cards.", e);
         }
     }
-    
+
     public void shuffleOrdinals() {
         final List<Card> cards = queryForAll();
         Collections.shuffle(cards);
@@ -685,7 +685,7 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
             for (Card c : result) {
                 learningDataDao.refresh(c.getLearningData());
             }
-            
+
             return result;
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -49,6 +49,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -59,6 +60,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -77,6 +79,10 @@ public class PreviewEditActivity extends QACardActivity {
     public static String EXTRA_DBPATH = "dbpath";
     public static String EXTRA_CARD_ID = "id";
     public static String EXTRA_CATEGORY = "category";
+    public static String EXTRA_SHOW_AUTO_SPEAK= "showAutoSpeak";
+
+    private static final String TAG = "PreviewEditActivity";
+    private static final int MAGIC_FRAME_LAYOUT_ID = 675198655; // A magic id that we used to set frame layout id.
 
     private Category currentCategory = null;
     private Integer savedCardId = null;
@@ -96,23 +102,24 @@ public class PreviewEditActivity extends QACardActivity {
     private View searchNextButton;
     private View searchPrevButton;
 
-
     private Setting setting;
-
     private ShareUtil shareUtil;
-
     private AMPrefUtil amPrefUtil;
-    
     private GestureDetector gestureDetector;
-
-
 
     // The first card to read and display.
     private int startCardId = 1;
 
+    private boolean showAutoSpeakFragmentOnCreate = false;
+
     @Inject
     public void setShareUtil(ShareUtil shareUtil) {
         this.shareUtil = shareUtil;
+    }
+
+    @Inject
+    public void setAmPrefUtil(AMPrefUtil amPrefUtil) {
+        this.amPrefUtil = amPrefUtil;
     }
 
     @Override
@@ -120,13 +127,15 @@ public class PreviewEditActivity extends QACardActivity {
         super.onCreate(savedInstanceState);
 
         Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            dbPath = extras.getString(EXTRA_DBPATH);
-            activeCategoryId = extras.getInt(EXTRA_CATEGORY, -1);
-            startCardId = extras.getInt(EXTRA_CARD_ID, -1);
-        }
 
-        /* 
+        assert extras != null : "Extras for PreviewEditActivity should have at least dbPath!";
+
+        dbPath = extras.getString(EXTRA_DBPATH);
+        activeCategoryId = extras.getInt(EXTRA_CATEGORY, -1);
+        startCardId = extras.getInt(EXTRA_CARD_ID, -1);
+        showAutoSpeakFragmentOnCreate = extras.getBoolean(EXTRA_SHOW_AUTO_SPEAK, false);
+
+        /*
          * Currently always set the result to OK
          * to assume there are always some changes.
          * This may be changed in the future to reflect the
@@ -144,8 +153,6 @@ public class PreviewEditActivity extends QACardActivity {
         categoryDao = getDbOpenHelper().getCategoryDao();
         settingDao = getDbOpenHelper().getSettingDao();
         setting = settingDao.queryForId(1);
-
-        amPrefUtil = new AMPrefUtil(this);
 
         // If category is set, it will override the card id.
         if (activeCategoryId != -1) {
@@ -171,7 +178,6 @@ public class PreviewEditActivity extends QACardActivity {
 
         totalCardCount = cardDao.countOf();
         setCurrentCard(currentCard);
-
     }
 
     @Override
@@ -187,6 +193,10 @@ public class PreviewEditActivity extends QACardActivity {
         if(setting.getCardStyle() != Setting.CardStyle.DOUBLE_SIDED){
             gestureDetector= new GestureDetector(PreviewEditActivity.this, gestureListener);
         }
+
+        if (showAutoSpeakFragmentOnCreate) {
+            showAutoSpeakFragment();
+        }
     }
 
     // Save the card id in onPause
@@ -200,7 +210,7 @@ public class PreviewEditActivity extends QACardActivity {
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
     }
 
@@ -263,12 +273,18 @@ public class PreviewEditActivity extends QACardActivity {
         switch (item.getItemId()) {
             case R.id.menuspeakquestion:
             {
-                return speakQuestion();
+                if (getCurrentCard() != null) {
+                    return speakQuestion();
+                }
+                return true;
             }
 
             case R.id.menuspeakanswer:
             {
-                return speakAnswer();
+                if (getCurrentCard() != null) {
+                    return speakAnswer();
+                }
+                return true;
             }
 
             case R.id.editmenu_settings_id:
@@ -276,8 +292,8 @@ public class PreviewEditActivity extends QACardActivity {
                 Intent myIntent = new Intent(this, SettingsScreen.class);
                 myIntent.putExtra(SettingsScreen.EXTRA_DBPATH, dbPath);
                 startActivityForResult(myIntent, ACTIVITY_SETTINGS);
-                return true;
             }
+                return true;
 
             case R.id.editmenu_delete_id:
             {
@@ -311,12 +327,16 @@ public class PreviewEditActivity extends QACardActivity {
 
             case R.id.menu_edit_categories:
             {
-                showCategoriesDialog();
+                if (getCurrentCard() != null) {
+                    showCategoriesDialog();
+                }
                 return true;
             }
             case R.id.editmenu_search_id:
             {
-                createSearchOverlay();
+                if (getCurrentCard() != null) {
+                    createSearchOverlay();
+                }
                 return true;
             }
 
@@ -329,6 +349,13 @@ public class PreviewEditActivity extends QACardActivity {
                 startActivity(myIntent);
                 return true;
             }
+
+            case R.id.menu_auto_speak:
+            {
+                showAutoSpeakFragment();
+                return true;
+            }
+
             case R.id.menu_context_copy:
             {
 
@@ -353,7 +380,7 @@ public class PreviewEditActivity extends QACardActivity {
                         throw new RuntimeException(e);
                     }
                 }
-                
+
                 return true;
             }
             case R.id.menu_context_swap_current:
@@ -472,7 +499,7 @@ public class PreviewEditActivity extends QACardActivity {
 
         return false;
     }
-    
+
     // Handle click event for double sided card.
     protected void onClickAnswerView() {
         if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED) {
@@ -544,13 +571,13 @@ public class PreviewEditActivity extends QACardActivity {
         buttonsLayout = new LinearLayout(this);
         buttonsLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
-        /* 
+        /*
          * -1: Match parent -2: Wrap content
-         * This is necessary or the view will not be 
+         * This is necessary or the view will not be
          * stetched
          */
         buttonsLayout.addView(controlButtonsView, -1, -2);
-        
+
         rootView.addView(buttonsLayout, -1, -2);
         //rootView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
 
@@ -558,7 +585,7 @@ public class PreviewEditActivity extends QACardActivity {
         editButton = (Button) findViewById(R.id.edit_button);
         prevButton = (Button) findViewById(R.id.prev_button);
         nextButton = (Button) findViewById(R.id.next_button);
-        
+
     }
 
     void setViewListeners(){
@@ -610,8 +637,8 @@ public class PreviewEditActivity extends QACardActivity {
             setSmallTitle(sb.toString());
         }
     }
-    
-    private void gotoNext(){
+
+    protected void gotoNext(){
         if (getCurrentCard() != null) {
             setCurrentCard(cardDao.queryNextCard(getCurrentCard(), currentCategory));
             try {
@@ -625,6 +652,24 @@ public class PreviewEditActivity extends QACardActivity {
             updateCardFrontSide();
             updateTitle();
         }
+    }
+
+    @CheckNullArgs
+    protected void gotoCard(Card card) {
+        Card currentCard = getCurrentCard();
+        if (currentCard.getOrdinal() > card.getOrdinal()) {
+            // This is previoius card
+            setAnimation(R.anim.slide_right_in, R.anim.slide_right_out);
+        } else {
+            setAnimation(R.anim.slide_left_in, R.anim.slide_left_out);
+        }
+        setCurrentCard(card);
+
+        updateCardFrontSide();
+        updateTitle();
+
+        // Set animation back
+        setAnimation(R.anim.slide_left_in, R.anim.slide_left_out);
     }
 
     @CheckNullArgs
@@ -644,7 +689,7 @@ public class PreviewEditActivity extends QACardActivity {
             .show();
     }
 
-    private void gotoPrev(){
+    protected void gotoPrev(){
         if (getCurrentCard() != null) {
             setCurrentCard(cardDao.queryPrevCard(getCurrentCard(), currentCategory));
             try {
@@ -662,8 +707,8 @@ public class PreviewEditActivity extends QACardActivity {
         }
     }
 
-    /* 
-     * Show the front side of the current card 
+    /*
+     * Show the front side of the current card
      * This method is called instead directly update the flashcard
      * so both single and double sided card will work.
      */
@@ -736,14 +781,14 @@ public class PreviewEditActivity extends QACardActivity {
     private View.OnClickListener prevButtonListener = new View.OnClickListener(){
         public void onClick(View v){
             gotoPrev();
-            stopSpeak();
+            getAMTTSService().stopSpeak();
         }
     };
 
     private View.OnClickListener nextButtonListener = new View.OnClickListener(){
         public void onClick(View v){
             gotoNext();
-            stopSpeak();
+            getAMTTSService().stopSpeak();
         }
     };
 
@@ -796,12 +841,12 @@ public class PreviewEditActivity extends QACardActivity {
         private static final int SWIPE_MAX_OFF_PATH = 250;
         private static final int SWIPE_THRESHOLD_VELOCITY = 200;
 
-        @Override 
+        @Override
         public boolean onDown(MotionEvent e){
             /* Trick: Prevent the menu to popup twice */
             return true;
         }
-        @Override 
+        @Override
         public void onLongPress(MotionEvent e){
             // TODO: Long press what???
         }
@@ -924,6 +969,21 @@ public class PreviewEditActivity extends QACardActivity {
         df.show(getSupportFragmentManager(), "GestureSelectionDialog");
     }
 
+    private void showAutoSpeakFragment() {
+        if (getCurrentCard() != null) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            LinearLayout root = (LinearLayout)findViewById(R.id.root);
+            FrameLayout fl = new FrameLayout(this);
+
+            AutoSpeakFragment f = new AutoSpeakFragment();
+
+            fl.setId(MAGIC_FRAME_LAYOUT_ID);
+            root.addView(fl);
+            ft.replace(fl.getId(), f);
+            ft.commit();
+        }
+    }
+
     private static enum SearchMethod {
         TEXT_FORWARD,
         TEXT_BACKWARD,
@@ -931,11 +991,12 @@ public class PreviewEditActivity extends QACardActivity {
     }
 
     // When a category is selected in category fragment.
-    private CategoryEditorResultListener categoryResultListener = 
+    private CategoryEditorResultListener categoryResultListener =
         new CategoryEditorResultListener() {
             public void onReceiveCategory(Category c) {
                 activeCategoryId = c.getId();
                 restartActivity();
             }
         };
+
 }

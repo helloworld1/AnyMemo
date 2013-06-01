@@ -31,7 +31,7 @@ public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<
         UITestHelper uiTestHelper = new UITestHelper(getInstrumentation());
         uiTestHelper.clearPreferences();
         uiTestHelper.setUpFBPDatabase();
-        
+
         Intent intent = new Intent();
         intent.putExtra(StudyActivity.EXTRA_DBPATH, UITestHelper.SAMPLE_DB_PATH);
         setActivityIntent(intent);
@@ -69,7 +69,7 @@ public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<
         // 2nd card should be shown
         assertTrue(solo.searchText("hair"));
 
-        // Fail 2nd card 
+        // Fail 2nd card
         answerView = solo.getCurrentActivity().findViewById(R.id.answer);
         solo.clickOnView(answerView);
         solo.sleep(600);

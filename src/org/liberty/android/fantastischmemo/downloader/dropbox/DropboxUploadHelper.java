@@ -26,7 +26,7 @@ public class DropboxUploadHelper {
 
     private final String authToken;
     private final String authTokenSecret;
-    
+
     private static final String FILE_UPLOAD_URL="https://api-content.dropbox.com/1/files_put/dropbox/AnyMemo/";
 
     @Inject
@@ -37,10 +37,10 @@ public class DropboxUploadHelper {
 
     // Return true if upload succeeded. false if something goes wrong.
     public boolean upload(String fileName, String filePath) throws ClientProtocolException, IOException, JSONException{
-        
+
         HttpClient httpclient = new DefaultHttpClient();
         String headerValue = DropboxUtils.getFileExchangeAuthHeader(authToken, authTokenSecret);
-        
+
         // See related encoding change in DropboxDownloadHelper.
         String url = FILE_UPLOAD_URL + URLEncoder.encode(fileName, "UTF-8").replace("+", "%20");
         HttpPost httppost = new HttpPost(url);
@@ -58,5 +58,5 @@ public class DropboxUploadHelper {
         }
         return false;
     };
-    
+
 }

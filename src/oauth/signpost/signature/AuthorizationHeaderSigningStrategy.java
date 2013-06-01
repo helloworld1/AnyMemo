@@ -6,7 +6,7 @@ import oauth.signpost.http.HttpRequest;
 
 /**
  * Writes to the HTTP Authorization header field.
- * 
+ *
  * @author Matthias Kaeppler
  */
 public class AuthorizationHeaderSigningStrategy implements SigningStrategy {

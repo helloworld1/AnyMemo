@@ -16,17 +16,22 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-*/
+ */
 package org.liberty.android.fantastischmemo.tts;
 
 
-public interface AnyMemoTTS{
+public interface AnyMemoTTS {
 
-    public void stop();
+    // Stop the current play while keeping the media player.
+    void stop();
 
-    public void shutdown();
+    // Release the media player.
+    void destory();
 
-    public void sayText(String s);
+    void sayText(final String s, final OnTextToSpeechCompletedListener onTextToSpeechCompletedListener);
+
+    interface OnTextToSpeechCompletedListener {
+        void onTextToSpeechCompleted(String text);
+    }
+
 }
-
-	

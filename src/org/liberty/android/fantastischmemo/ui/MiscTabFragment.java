@@ -105,7 +105,7 @@ public class MiscTabFragment extends RoboFragment implements View.OnClickListene
     private Converter qaTxtImporter;
 
     private Converter supermemo2008XMLImporter;
-    
+
     private Converter supermemoXMLImporter;
 
     private Converter tabTxtExporter;

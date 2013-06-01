@@ -65,10 +65,10 @@ public class SupermemoXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
     private int interval;
     private SimpleDateFormat supermemoFormat = new SimpleDateFormat("dd.MM.yy");
 
-    
+
     private StringBuffer characterBuf;
     private final String TAG = "org.liberty.android.fantastischmemo.SupermemoXMLConverter";
-    
+
     @Inject
     public SupermemoXMLImporter(Context context){
         mContext = context;
@@ -79,7 +79,7 @@ public class SupermemoXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
         URL mXMLUrl = new URL("file:///" + src);
         cardList = new LinkedList<Card>();
 
-        System.setProperty("org.xml.sax.driver","org.xmlpull.v1.sax2.Driver"); 
+        System.setProperty("org.xml.sax.driver","org.xmlpull.v1.sax2.Driver");
 
         SAXParserFactory spf = SAXParserFactory.newInstance();
         SAXParser sp = spf.newSAXParser();
@@ -95,7 +95,7 @@ public class SupermemoXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
             AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }
     }
-    
+
     public void startElement(String namespaceURI, String localName, String qName, Attributes atts) throws SAXException{
         if(localName.equals("SuperMemoElement")){
             card = new Card();
@@ -109,7 +109,7 @@ public class SupermemoXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
         }
         characterBuf = new StringBuffer();
     }
-    
+
     public void endElement(String namespaceURI, String localName, String qName) throws SAXException{
         if(localName.equals("SuperMemoElement")){
             card.setOrdinal(count);
@@ -174,22 +174,22 @@ public class SupermemoXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
             }
         }
     }
-    
+
     public void setDocumentLocator(Locator locator){
         mLocator = locator;
     }
-    
+
     public void characters(char ch[], int start, int length){
         characterBuf.append(ch, start, length);
     }
-    
+
     public void startDocument() throws SAXException{
-        
+
     }
-    
+
     public void endDocument() throws SAXException{
-        
-        
+
+
     }
 
     @Override

@@ -22,7 +22,7 @@ import oauth.signpost.http.HttpRequest;
 /**
  * The default implementation for an OAuth consumer. Only supports signing
  * {@link java.net.HttpURLConnection} type requests.
- * 
+ *
  * @author Matthias Kaeppler
  */
 public class DefaultOAuthConsumer extends AbstractOAuthConsumer {

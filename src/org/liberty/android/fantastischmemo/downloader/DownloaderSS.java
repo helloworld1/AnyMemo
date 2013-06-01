@@ -326,7 +326,7 @@ public class DownloaderSS extends DownloaderBase implements ListView.OnScrollLis
         }
         return diList;
     }
-    
+
 
     private void showRootCategories(){
         if(categoryList == null){
@@ -338,7 +338,7 @@ public class DownloaderSS extends DownloaderBase implements ListView.OnScrollLis
             }
         }
     }
-    
+
     private void downloadDatabase(DownloadItem di) throws Exception{
         String url = di.getAddress();
         String jsonString = downloaderUtils.downloadJSONString(url);
@@ -358,7 +358,7 @@ public class DownloaderSS extends DownloaderBase implements ListView.OnScrollLis
                 card.setLearningData(new LearningData());
                 cardList.add(card);
             }
-            
+
         }
         String dbname = di.getTitle() + ".db";
         String dbpath = AMEnv.DEFAULT_ROOT_PATH;

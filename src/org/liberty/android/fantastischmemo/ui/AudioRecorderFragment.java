@@ -33,23 +33,23 @@ public class AudioRecorderFragment extends RoboDialogFragment {
 
     private MediaRecorder mRecorder = null;
     private MediaPlayer mPlayer = null;
-    
+
     private boolean mStartPlaying = false;
     private boolean mStartRecording = false;
-    
+
     private AudioRecorderResultListener audioRecorderResultListener;
-    
+
     private View.OnClickListener buttonListener = new View.OnClickListener(){
         public void onClick(View v) {
             if (v == mRecordButton) {
-                
+
                 mStartRecording = !mStartRecording;
                 onRecord(mStartRecording);
                 if (mStartRecording) {
                     mPlayButton.setChecked(true);
                     mPlayButton.setEnabled(false);
                     mSaveButton.setEnabled(false);
-                    
+
                 } else {
                     mPlayButton.setChecked(false);
                     mPlayButton.setEnabled(true);
@@ -69,12 +69,12 @@ public class AudioRecorderFragment extends RoboDialogFragment {
                     mSaveButton.setEnabled(true);
                 }
             }
-            
+
             if(v == mSaveButton){
                 audioRecorderResultListener.onReceiveAudio();
                 dismiss();
             }
-            
+
         }
     };
 
@@ -83,7 +83,7 @@ public class AudioRecorderFragment extends RoboDialogFragment {
         super.onAttach(activity);
         mActivity = activity;
     }
-    
+
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         Bundle extras =  this.getArguments();
@@ -114,13 +114,11 @@ public class AudioRecorderFragment extends RoboDialogFragment {
             .setView(v)
             .create();
     }
-     
+
     public void setAudioRecorderResultListener(AudioRecorderResultListener audioRecorderResultListener){
         this.audioRecorderResultListener = audioRecorderResultListener;
     }
-    
 
-    
 
     private void onRecord(boolean start) {
         if (start) {
@@ -187,7 +185,7 @@ public class AudioRecorderFragment extends RoboDialogFragment {
         mRecorder.release();
         mRecorder = null;
     }
-    
+
     public static interface AudioRecorderResultListener {
         void onReceiveAudio();
     }

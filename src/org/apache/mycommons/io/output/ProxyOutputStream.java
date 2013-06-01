@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,14 +21,14 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * A Proxy stream which acts as expected, that is it passes the method 
- * calls on to the proxied stream and doesn't change which methods are 
+ * A Proxy stream which acts as expected, that is it passes the method
+ * calls on to the proxied stream and doesn't change which methods are
  * being called. It is an alternative base class to FilterOutputStream
  * to increase reusability.
  * <p>
  * See the protected methods for ways in which a subclass can easily decorate
  * a stream with custom pre-, post- or error processing functionality.
- * 
+ *
  * @author Stephen Colebourne
  * @version $Id: ProxyOutputStream.java 1003340 2010-10-01 00:31:53Z sebb $
  */
@@ -36,7 +36,7 @@ public class ProxyOutputStream extends FilterOutputStream {
 
     /**
      * Constructs a new ProxyOutputStream.
-     * 
+     *
      * @param proxy  the OutputStream to delegate to
      */
     public ProxyOutputStream(OutputStream proxy) {

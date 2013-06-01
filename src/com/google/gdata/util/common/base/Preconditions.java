@@ -52,10 +52,10 @@ import java.util.NoSuchElementException;
  * #checkNotNull(Object)} -- and technically this parameter could be even marked
  * as {@link Nullable} -- yet the method will still throw an exception anyway,
  * because that's what its contract says to do.
- * 
+ *
  * <p>This class may be used with the Google Web Toolkit (GWT).
  *
- * 
+ *
  */
 public final class Preconditions {
   private Preconditions() {}
@@ -290,12 +290,12 @@ public final class Preconditions {
     }
     return iterable;
   }
-  
+
   private static boolean containsOrIsNull(Iterable<?> iterable) {
     if (iterable == null) {
       return true;
     }
-    
+
     if (iterable instanceof Collection) {
       Collection<?> collection = (Collection<?>) iterable;
       try {

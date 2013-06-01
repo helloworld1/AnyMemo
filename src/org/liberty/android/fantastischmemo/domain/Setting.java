@@ -14,7 +14,7 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "settings", daoClass = SettingDaoImpl.class)
 public class Setting {
     public static final String AUDIO_USER_DEFINED = "User Audio";
-    
+
     public static final Integer DEFAULT_QUESTION_TEXT_COLOR = 0xFFBEBEBE;
     public static final Integer DEFAULT_ANSWER_TEXT_COLOR = 0xFFBEBEBE;
     public static final Integer DEFAULT_QUESTION_BACKGROUND_COLOR = 0xFF000000;
@@ -52,7 +52,7 @@ public class Setting {
 
     @DatabaseField(defaultValue = "US")
     private String answerAudio = "US";
-    
+
     // 0xFFBEBEBE
     @DatabaseField(defaultValue = "-4276546")
     private Integer questionTextColor = DEFAULT_QUESTION_TEXT_COLOR;
@@ -206,11 +206,11 @@ public class Setting {
 	public void setQuestionAudio(String questionAudio) {
 		this.questionAudio = questionAudio;
 	}
-    
+
     public boolean isQuestionAudioEnabled(){
         return !StringUtils.isEmpty(getQuestionAudio());
     }
-    
+
 	public String getAnswerAudio() {
 		return answerAudio;
 	}
@@ -218,7 +218,7 @@ public class Setting {
 	public void setAnswerAudio(String answerAudio) {
 		this.answerAudio = answerAudio;
 	}
-	
+
 	public boolean isAnswerAudioEnabled(){
 		return !StringUtils.isEmpty(getAnswerAudio());
 	}
@@ -371,10 +371,10 @@ public class Setting {
 	public void setAnswerAudioLocation(String answerAudioLocation) {
 		this.answerAudioLocation = answerAudioLocation;
 	}
-	
+
 	public boolean isDefaultColor() {
-	    return (questionTextColor.equals(DEFAULT_QUESTION_TEXT_COLOR)) && 
-	           (answerTextColor.equals(DEFAULT_ANSWER_TEXT_COLOR)) && 
+	    return (questionTextColor.equals(DEFAULT_QUESTION_TEXT_COLOR)) &&
+	           (answerTextColor.equals(DEFAULT_ANSWER_TEXT_COLOR)) &&
 	           (questionBackgroundColor.equals(DEFAULT_QUESTION_BACKGROUND_COLOR)) &&
 	           (answerBackgroundColor.equals(DEFAULT_ANSWER_BACKGROUND_COLOR)) &&
 	           (separatorColor.equals(DEFAULT_SEPARATOR_COLOR));

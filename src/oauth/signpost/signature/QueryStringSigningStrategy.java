@@ -10,7 +10,7 @@ import oauth.signpost.http.HttpRequest;
  * because most HTTP request implementations do not allow the client to change
  * the URL once the request has been instantiated, so there is no way to append
  * parameters to it.
- * 
+ *
  * @author Matthias Kaeppler
  */
 public class QueryStringSigningStrategy implements SigningStrategy {

@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,7 +26,7 @@ import org.apache.mycommons.io.IOCase;
  * Filters files based on the suffix (what the filename ends with).
  * This is used in retrieving all the files of a particular type.
  * <p>
- * For example, to retrieve and print all <code>*.java</code> files 
+ * For example, to retrieve and print all <code>*.java</code> files
  * in the current directory:
  *
  * <pre>
@@ -39,7 +39,7 @@ import org.apache.mycommons.io.IOCase;
  *
  * @since Commons IO 1.0
  * @version $Revision: 1005099 $ $Date: 2010-10-06 12:13:01 -0400 (Wed, 06 Oct 2010) $
- * 
+ *
  * @author Stephen Colebourne
  * @author Federico Barbieri
  * @author Serge Knystautas
@@ -48,7 +48,7 @@ import org.apache.mycommons.io.IOCase;
  * @see FileFilterUtils#suffixFileFilter(String, IOCase)
  */
 public class SuffixFileFilter extends AbstractFileFilter implements Serializable {
-    
+
     /** The filename suffixes to search for */
     private final String[] suffixes;
 
@@ -57,7 +57,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
 
     /**
      * Constructs a new Suffix file filter for a single extension.
-     * 
+     *
      * @param suffix  the suffix to allow, must not be null
      * @throws IllegalArgumentException if the suffix is null
      */
@@ -87,7 +87,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
      * <p>
      * The array is not cloned, so could be changed after constructing the
      * instance. This would be inadvisable however.
-     * 
+     *
      * @param suffixes  the suffixes to allow, must not be null
      * @throws IllegalArgumentException if the suffix array is null
      */
@@ -101,7 +101,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
      * <p>
      * The array is not cloned, so could be changed after constructing the
      * instance. This would be inadvisable however.
-     * 
+     *
      * @param suffixes  the suffixes to allow, must not be null
      * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
      * @throws IllegalArgumentException if the suffix array is null
@@ -118,7 +118,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
 
     /**
      * Constructs a new Suffix file filter for a list of suffixes.
-     * 
+     *
      * @param suffixes  the suffixes to allow, must not be null
      * @throws IllegalArgumentException if the suffix list is null
      * @throws ClassCastException if the list does not contain Strings
@@ -130,7 +130,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
     /**
      * Constructs a new Suffix file filter for a list of suffixes
      * specifying case-sensitivity.
-     * 
+     *
      * @param suffixes  the suffixes to allow, must not be null
      * @param caseSensitivity  how to handle case sensitivity, null means case-sensitive
      * @throws IllegalArgumentException if the suffix list is null
@@ -147,7 +147,7 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
 
     /**
      * Checks to see if the filename ends with the suffix.
-     * 
+     *
      * @param file  the File to check
      * @return true if the filename ends with one of our suffixes
      */
@@ -161,10 +161,10 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
         }
         return false;
     }
-    
+
     /**
      * Checks to see if the filename ends with the suffix.
-     * 
+     *
      * @param file  the File directory
      * @param name  the filename
      * @return true if the filename ends with one of our suffixes
@@ -200,5 +200,5 @@ public class SuffixFileFilter extends AbstractFileFilter implements Serializable
         buffer.append(")");
         return buffer.toString();
     }
-    
+
 }

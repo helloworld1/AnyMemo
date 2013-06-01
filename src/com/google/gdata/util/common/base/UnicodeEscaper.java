@@ -49,7 +49,7 @@ import java.io.IOException;
  * CharEscapers}. To create your own escapers extend this class and implement
  * the {@link #escape(int)} method.
  *
- * 
+ *
  */
 public abstract class UnicodeEscaper implements Escaper {
   /** The amount of padding (chars) to use when growing the escape buffer. */

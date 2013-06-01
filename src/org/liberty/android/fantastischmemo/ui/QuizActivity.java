@@ -65,7 +65,7 @@ public class QuizActivity extends QACardActivity {
     private CardDao cardDao;
     private LearningDataDao learningDataDao;
     private CategoryDao categoryDao;
-    
+
 
     /* UI elements */
     private GradeButtons gradeButtons;
@@ -73,7 +73,7 @@ public class QuizActivity extends QACardActivity {
     /* Settings */
     private Setting setting;
     private Option option;
-    
+
     /* Utils */
     private DictionaryUtil dictionaryUtil;
 
@@ -269,7 +269,7 @@ public class QuizActivity extends QACardActivity {
     @Override
     public void onPostDisplayCard() {
         // When displaying new card, we should stop the TTS reading.
-        stopSpeak();
+        getAMTTSService().stopSpeak();
         if (isAnswerShown()) {
             gradeButtons.show();
         } else {
@@ -314,9 +314,9 @@ public class QuizActivity extends QACardActivity {
             li.setBackgroundColor(color);
         }
 
-        /* 
+        /*
          * -1: Match parent -2: Wrap content
-         * This is necessary or the view will not be 
+         * This is necessary or the view will not be
          * stetched
          */
         li.addView(gradeButtonsView, -1, -2);
@@ -436,7 +436,7 @@ public class QuizActivity extends QACardActivity {
             .setCancelable(false)
             .show();
     }
-    
+
     // Current flush is not functional. So this method only quit and does not flush
     // the queue.
     private DialogInterface.OnClickListener flushAndQuitListener =

@@ -28,13 +28,13 @@ public class AnyMemoDBOpenHelperManager {
             assert dbpath != null : "dbpath should not be null";
             dbpath = FilenameUtils.normalize(dbpath);
             if (!helpers.containsKey(dbpath)) {
-                Log.i(TAG, "Call get AnyMemoDBOpenHelper for first time."); 
+                Log.i(TAG, "Call get AnyMemoDBOpenHelper for first time.");
                 AnyMemoDBOpenHelper helper = new AnyMemoDBOpenHelper(context, dbpath);
                 helpers.put(dbpath, helper);
                 refCounts.put(dbpath, 1);
                 return helpers.get(dbpath);
             } else {
-                Log.i(TAG, "Call get AnyMemoDBOpenHelper for " + dbpath + " again, return existing helper."); 
+                Log.i(TAG, "Call get AnyMemoDBOpenHelper for " + dbpath + " again, return existing helper.");
                 refCounts.put(dbpath, refCounts.get(dbpath) + 1);
                 return helpers.get(dbpath);
             }
@@ -54,7 +54,7 @@ public class AnyMemoDBOpenHelperManager {
                 return;
             }
 
-            Log.i(TAG, "Release AnyMemoDBOpenHelper: " + dbpath + " Ref count: " + refCounts.get(dbpath)); 
+            Log.i(TAG, "Release AnyMemoDBOpenHelper: " + dbpath + " Ref count: " + refCounts.get(dbpath));
 
             refCounts.put(dbpath, refCounts.get(dbpath) - 1);
 
@@ -63,7 +63,7 @@ public class AnyMemoDBOpenHelperManager {
                 DaoManager.clearCache();
                 DaoManager.clearDaoCache();
                 helpers.remove(dbpath);
-                Log.i(TAG, "All connection released. Close helper. DB: " + dbpath); 
+                Log.i(TAG, "All connection released. Close helper. DB: " + dbpath);
             }
         } finally {
             bigLock.unlock();
@@ -83,7 +83,7 @@ public class AnyMemoDBOpenHelperManager {
             DaoManager.clearCache();
             DaoManager.clearDaoCache();
             helpers.remove(dbpath);
-            Log.i(TAG, "Force release a db file. DB: " + dbpath); 
+            Log.i(TAG, "Force release a db file. DB: " + dbpath);
         } finally {
             bigLock.unlock();
         }

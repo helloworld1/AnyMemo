@@ -22,7 +22,7 @@ import oauth.signpost.http.HttpResponse;
 /**
  * This default implementation uses {@link java.net.HttpURLConnection} type GET
  * requests to receive tokens from a service provider.
- * 
+ *
  * @author Matthias Kaeppler
  */
 public class DefaultOAuthProvider extends AbstractOAuthProvider {

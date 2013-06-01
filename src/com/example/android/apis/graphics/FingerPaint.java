@@ -45,10 +45,10 @@ import android.view.View;
 
 
 public class FingerPaint extends GraphicsActivity
-        implements ColorPickerDialog.OnColorChangedListener {    
+        implements ColorPickerDialog.OnColorChangedListener {
 
     private MyView myView;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +65,7 @@ public class FingerPaint extends GraphicsActivity
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setStrokeWidth(12);
-        
+
         mEmboss = new EmbossMaskFilter(new float[] { 1, 1, 1 },
                                        0.4f, 6, 3.5f);
 
@@ -79,28 +79,28 @@ public class FingerPaint extends GraphicsActivity
         saveBitmap(myView.getBitmap());
         super.onDestroy();
     }
-    
+
     private Paint       mPaint;
     private MaskFilter  mEmboss;
     private MaskFilter  mBlur;
-    
+
     public void colorChanged(int color) {
         mPaint.setColor(color);
     }
 
     public class MyView extends View {
-        
+
         private static final float MINP = 0.25f;
         private static final float MAXP = 0.75f;
-        
+
         private Bitmap  mBitmap;
         private Canvas  mCanvas;
         private Path    mPath;
         private Paint   mBitmapPaint;
-        
+
         public MyView(Context c, Bitmap bitmap) {
             super(c);
-            
+
             mBitmap = bitmap;
             mCanvas = new Canvas(mBitmap);
 
@@ -112,19 +112,19 @@ public class FingerPaint extends GraphicsActivity
         protected void onSizeChanged(int w, int h, int oldw, int oldh) {
             super.onSizeChanged(w, h, oldw, oldh);
         }
-        
+
         @Override
         protected void onDraw(Canvas canvas) {
             canvas.drawColor(0x6FAAAAAA);
-            
+
             canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
-            
+
             canvas.drawPath(mPath, mPaint);
         }
-        
+
         private float mX, mY;
         private static final float TOUCH_TOLERANCE = 4;
-        
+
         private void touch_start(float x, float y) {
             mPath.reset();
             mPath.moveTo(x, y);
@@ -147,12 +147,12 @@ public class FingerPaint extends GraphicsActivity
             // kill this so we don't double draw
             mPath.reset();
         }
-        
+
         @Override
         public boolean onTouchEvent(MotionEvent event) {
             float x = event.getX();
             float y = event.getY();
-            
+
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     touch_start(x, y);
@@ -174,7 +174,7 @@ public class FingerPaint extends GraphicsActivity
             return mBitmap;
         }
     }
-    
+
     private static final int COLOR_MENU_ID = Menu.FIRST;
     private static final int EMBOSS_MENU_ID = Menu.FIRST + 1;
     private static final int BLUR_MENU_ID = Menu.FIRST + 2;
@@ -185,7 +185,7 @@ public class FingerPaint extends GraphicsActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        
+
         menu.add(0, ERASE_ALL_ID, 0, "Erase all").setShortcut('3', 'a');
         menu.add(0, COLOR_MENU_ID, 0, "Color").setShortcut('3', 'c');
         menu.add(0, EMBOSS_MENU_ID, 0, "Emboss").setShortcut('4', 's');
@@ -203,13 +203,13 @@ public class FingerPaint extends GraphicsActivity
         *****/
         return true;
     }
-    
+
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         return true;
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         mPaint.setXfermode(null);
@@ -262,7 +262,7 @@ public class FingerPaint extends GraphicsActivity
             return mutableBitmap;
         }
 
-        Display display = getWindowManager().getDefaultDisplay(); 
+        Display display = getWindowManager().getDefaultDisplay();
         int width = display.getWidth();
         int height = display.getHeight();
 
@@ -272,8 +272,8 @@ public class FingerPaint extends GraphicsActivity
 
     private void saveBitmap(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 0, baos);   
-        byte[] b = baos.toByteArray(); 
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, baos);
+        byte[] b = baos.toByteArray();
 
         String encodedImage = Base64.encodeBase64String(b);
 

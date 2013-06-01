@@ -82,7 +82,7 @@ public class StudyActivity extends QACardActivity {
     private Card prevCard = null;
     private LearningData prevLearningData = null;
     private String dbPath = "";
-    private int filterCategoryId = -1; 
+    private int filterCategoryId = -1;
     private Category filterCategory;
     private int startCardId = -1;
 
@@ -380,7 +380,7 @@ public class StudyActivity extends QACardActivity {
     @Override
     public void onPostDisplayCard() {
         // When displaying new card, we should stop the TTS reading.
-        stopSpeak();
+        getAMTTSService().stopSpeak();
         if (isAnswerShown()) {
             // Mnemosyne grade button style won't display the interval.
             if (option.getButtonStyle() != Option.ButtonStyle.MNEMOSYNE) {
@@ -599,9 +599,9 @@ public class StudyActivity extends QACardActivity {
         LinearLayout buttonsLayout = new LinearLayout(this);
         buttonsLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
-        /* 
+        /*
          * -1: Match parent -2: Wrap content
-         * This is necessary or the view will not be 
+         * This is necessary or the view will not be
          * stetched
          */
         buttonsLayout.addView(gradeButtonsView, -1, -2);
@@ -719,12 +719,12 @@ public class StudyActivity extends QACardActivity {
         @Override
         public void onPostExecute(Void result){
             super.onPostExecute(result);
-            
+
             finish();
         }
     }
 
-    /* 
+    /*
      * When the user select the undo from the menu
      * this is what to do
      */
@@ -733,7 +733,7 @@ public class StudyActivity extends QACardActivity {
             // We don't want the queueManager to flush the card
             // instead we update the previous learning data
             // manually.
-            
+
             queueManager.remove(prevCard);
             learningDataDao.updateLearningData(prevLearningData);
             setCurrentCard(prevCard);
@@ -753,7 +753,7 @@ public class StudyActivity extends QACardActivity {
         @Override
         public void onPostExecute(Void result){
             super.onPostExecute(result);
-            
+
             finish();
             Intent myIntent = new Intent(StudyActivity.this, StudyActivity.class);
             myIntent.putExtra(EXTRA_DBPATH, dbPath);
@@ -774,7 +774,7 @@ public class StudyActivity extends QACardActivity {
     };
 
     // When a category is selected in category fragment.
-    private CategoryEditorResultListener categoryResultListener = 
+    private CategoryEditorResultListener categoryResultListener =
         new CategoryEditorResultListener() {
             public void onReceiveCategory(Category c) {
                 assert c != null : "Receive null category";

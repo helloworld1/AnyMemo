@@ -57,9 +57,9 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
 
     public static final String EXTRA_DBPATH = "dbpath";
 
-    private static final int MAX_GROUP_SIZE = 100; 
+    private static final int MAX_GROUP_SIZE = 100;
 
-    private static final int DEFAULT_GROUP_SIZE = 100; 
+    private static final int DEFAULT_GROUP_SIZE = 100;
 
     private AnyMemoDBOpenHelper dbOpenHelper;
 
@@ -112,7 +112,7 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
             dbPath = extras.getString(EXTRA_DBPATH);
         }
     }
-    
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -166,7 +166,7 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
         radioButtonSettingsMapping.put(quizByCategoryRadio, v.findViewById(R.id.quiz_by_category_settings));
 
         shuffleCheckbox = (CheckBox) v.findViewById(R.id.shuffle_checkbox);
-    
+
         Rect displayRectangle = new Rect();
         Window window = mActivity.getWindow();
         window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
@@ -356,7 +356,7 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
     }
 
     // When a category is selected in category fragment.
-    private CategoryEditorFragment.CategoryEditorResultListener categoryResultListener = 
+    private CategoryEditorFragment.CategoryEditorResultListener categoryResultListener =
         new CategoryEditorFragment.CategoryEditorResultListener() {
             public void onReceiveCategory(Category c) {
                 assert c != null : "The category got shouldn't be null.";

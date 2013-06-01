@@ -40,7 +40,7 @@ public class RecentListUtilTest extends AbstractPreferencesTest {
         recentListUtil.addToRecentList("/sdcard/3.db");
         recentListUtil.addToRecentList("/sdcard/4.db");
         recentListUtil.addToRecentList("/sdcard/5.db");
-    
+
         // Only 3 should be in recent list
         String[] recentList = recentListUtil.getAllRecentDBPath();
         assertEquals(3, recentList.length);

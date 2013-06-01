@@ -39,12 +39,25 @@ public class CheckNullArgsAspect {
         String[] argNames = signature.getParameterNames();
         Object[] args = point.getArgs();
 
+        CheckNullArgs checkNullAnnotation = signature.getMethod().getAnnotation(CheckNullArgs.class);
+
         boolean hasNull = false;
         StringBuilder messageBuilder = new StringBuilder();
         messageBuilder.append("Method " + signature.toLongString() + " has null arguments.");
         messageBuilder.append(" " + signature.getName() + "(");
-        for (int i = 0; i < args.length; i++) {
-            if ((args[i]) == null) {
+
+        // Use the argIndexToCheck annotation argument if it is set
+        // otherwise, fill it with all argument indices.
+        int[] argIndexToCheck = checkNullAnnotation.argIndexToCheck();
+        if (argIndexToCheck.length == 0) {
+            argIndexToCheck = new int[args.length];
+            for (int i = 0; i < argIndexToCheck.length; i++) {
+                argIndexToCheck[i] = i;
+            }
+        }
+
+        for (int i = 0; i < argIndexToCheck.length; i++) {
+            if ((args[argIndexToCheck[i]]) == null) {
                 hasNull = true;
             }
             messageBuilder.append(argTypes[i].getCanonicalName() + " " + argNames[i] + " = " + args[i] + ", ");
@@ -53,7 +66,6 @@ public class CheckNullArgsAspect {
 
         if (hasNull == true) {
             System.err.println(messageBuilder.toString());
-            CheckNullArgs checkNullAnnotation = signature.getMethod().getAnnotation(CheckNullArgs.class);
             // For all non void return type, we will throw exception out no matter what throwException
             // annotation argument say.
             if (checkNullAnnotation.throwException() || !signature.getReturnType().equals(Void.TYPE)) {

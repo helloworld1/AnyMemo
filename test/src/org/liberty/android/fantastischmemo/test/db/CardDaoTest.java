@@ -98,7 +98,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
         Card c = cardDao.queryFirstOrdinal(ct);
         assertEquals(2, (int)c.getId());
     }
-    
+
     @SmallTest
     public void testSearchLastOrdinalWithcategoryIfExists() throws Exception {
         setupThreeCategories();

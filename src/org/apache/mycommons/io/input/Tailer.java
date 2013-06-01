@@ -42,7 +42,7 @@ import org.apache.mycommons.io.IOUtils;
  *      }
  *  }
  * </pre>
- * 
+ *
  * <h2>2. Using a Tailer</h2>
  *
  * You can create and use a Tailer in one of three ways:
@@ -59,16 +59,16 @@ import org.apache.mycommons.io.IOUtils;
  * </ul>
  *
  * An example of each of these is shown below.
- * 
+ *
  * <h3>2.1 Using the static helper method</h3>
  *
  * <pre>
  *      TailerListener listener = new MyTailerListener();
  *      Tailer tailer = Tailer.create(file, listener, delay);
  * </pre>
- *      
+ *
  * <h3>2.2 Use an Executor</h3>
- * 
+ *
  * <pre>
  *      TailerListener listener = new MyTailerListener();
  *      Tailer tailer = new Tailer(file, listener, delay);
@@ -82,8 +82,8 @@ import org.apache.mycommons.io.IOUtils;
  *
  *      executor.execute(tailer);
  * </pre>
- *      
- *      
+ *
+ *
  * <h3>2.3 Use a Thread</h3>
  * <pre>
  *      TailerListener listener = new MyTailerListener();
@@ -170,7 +170,7 @@ public class Tailer implements Runnable {
 
     /**
      * Creates and starts a Tailer for the given file.
-     * 
+     *
      * @param file the file to follow.
      * @param listener the TailerListener to use.
      * @param delay the delay between checks of the file for new content in milliseconds.
@@ -187,7 +187,7 @@ public class Tailer implements Runnable {
 
     /**
      * Creates and starts a Tailer for the given file, starting at the beginning of the file
-     * 
+     *
      * @param file the file to follow.
      * @param listener the TailerListener to use.
      * @param delay the delay between checks of the file for new content in milliseconds.
@@ -200,7 +200,7 @@ public class Tailer implements Runnable {
     /**
      * Creates and starts a Tailer for the given file, starting at the beginning of the file
      * with the default delay of 1.0s
-     * 
+     *
      * @param file the file to follow.
      * @param listener the TailerListener to use.
      * @return The new tailer
@@ -252,7 +252,7 @@ public class Tailer implements Runnable {
                     // The current position in the file
                     position = end ? file.length() : 0;
                     last = System.currentTimeMillis();
-                    reader.seek(position);                    
+                    reader.seek(position);
                 }
             }
 

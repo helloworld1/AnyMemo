@@ -57,7 +57,7 @@ package com.google.gdata.util.common.base;
  * <i>"URI producers and normalizers should use uppercase hexadecimal digits
  * for all percent-encodings."</i>
  *
- * 
+ *
  */
 public class PercentEscaper extends UnicodeEscaper {
   /**
@@ -81,7 +81,7 @@ public class PercentEscaper extends UnicodeEscaper {
    */
   public static final String SAFEQUERYSTRINGCHARS_URLENCODER
       = "-_.!~*'()@:$,;/?:";
-  
+
   // In some uri escapers spaces are escaped to '+'
   private static final char[] URI_ESCAPED_SPACE = { '+' };
 

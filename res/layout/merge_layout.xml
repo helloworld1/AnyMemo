@@ -11,18 +11,18 @@
         android:layout_width="fill_parent"
         android:layout_weight="1"
         android:orientation="vertical">
-        <TextView 
+        <TextView
             android:text="@string/db_merger_title"
             android:layout_width="fill_parent"
             android:gravity="center"
             android:textSize="32dp"
             android:layout_height="wrap_content" />
-        <TextView 
+        <TextView
             android:text="@string/db_merger_explaination"
             android:textSize="24dp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
-        <TextView 
+        <TextView
             android:text="@string/target_db_text"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
@@ -31,7 +31,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:lines="2" />
-        <TextView 
+        <TextView
             android:text="@string/source_db_text"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
@@ -45,18 +45,18 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <Button 
-            android:id="@+id/merge_button" 
+        <Button
+            android:id="@+id/merge_button"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" 
+            android:layout_height="wrap_content"
             android:text="@string/merge_db_text"
             android:layout_weight="1"
             android:layout_marginLeft="10dip"
             android:layout_marginRight="10dip" />
-        <Button 
-            android:id="@+id/cancel_button" 
+        <Button
+            android:id="@+id/cancel_button"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" 
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/cancel_text"
             android:layout_marginLeft="10dip"

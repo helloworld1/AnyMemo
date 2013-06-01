@@ -39,14 +39,14 @@ public class UITestHelper {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    } 
+    }
 
     /* Clear up the preferences for tests*/
     public void clearPreferences() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mTargetContext);
         Editor editor = settings.edit();
         editor.clear();
-        editor.commit(); 
+        editor.commit();
     }
 
     // Mark the preference that it is not the first time to use the app.

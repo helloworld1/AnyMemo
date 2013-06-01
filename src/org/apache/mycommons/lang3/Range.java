@@ -21,12 +21,12 @@ import java.util.Comparator;
 
 /**
  * <p>An immutable range of objects from a minimum to maximum point inclusive.</p>
- * 
+ *
  * <p>The objects need to either be implementations of {@code Comparable}
  * or you need to supply a {@code Comparator}. </p>
  *
  * <p>#ThreadSafe# if the objects and comparator are thread-safe</p>
- * 
+ *
  * @since 3.0
  * @version $Id: Range.java 1199894 2011-11-09 17:53:59Z ggregory $
  */
@@ -62,7 +62,7 @@ public final class Range<T> implements Serializable {
     /**
      * <p>Obtains a range using the specified element as both the minimum
      * and maximum in this range.</p>
-     * 
+     *
      * <p>The range uses the natural ordering of the elements to determine where
      * values lie in the range.</p>
      *
@@ -79,7 +79,7 @@ public final class Range<T> implements Serializable {
     /**
      * <p>Obtains a range using the specified element as both the minimum
      * and maximum in this range.</p>
-     * 
+     *
      * <p>The range uses the specified {@code Comparator} to determine where
      * values lie in the range.</p>
      *
@@ -96,7 +96,7 @@ public final class Range<T> implements Serializable {
 
     /**
      * <p>Obtains a range with the specified minimum and maximum values (both inclusive).</p>
-     * 
+     *
      * <p>The range uses the natural ordering of the elements to determine where
      * values lie in the range.</p>
      *
@@ -116,7 +116,7 @@ public final class Range<T> implements Serializable {
 
     /**
      * <p>Obtains a range with the specified minimum and maximum values (both inclusive).</p>
-     * 
+     *
      * <p>The range uses the specified {@code Comparator} to determine where
      * values lie in the range.</p>
      *
@@ -184,7 +184,7 @@ public final class Range<T> implements Serializable {
 
     /**
      * <p>Gets the comparator being used to determine if objects are within the range.</p>
-     * 
+     *
      * <p>Natural ordering uses an internal comparator implementation, thus this
      * method never returns null. See {@link #isNaturalOrdering()}.</p>
      *
@@ -196,7 +196,7 @@ public final class Range<T> implements Serializable {
 
     /**
      * <p>Whether or not the Range is using the natural ordering of the elements.</p>
-     * 
+     *
      * <p>Natural ordering uses an internal comparator implementation, thus this
      * method is the only way to check if a null comparator was specified.</p>
      *
@@ -276,7 +276,7 @@ public final class Range<T> implements Serializable {
 
     /**
      * <p>Checks where the specified element occurs relative to this range.</p>
-     * 
+     *
      * <p>The API is reminiscent of the Comparable interface returning {@code -1} if
      * the element is before the range, {@code 0} if contained within the range and
      * {@code 1} if the element is after the range. </p>
@@ -336,7 +336,7 @@ public final class Range<T> implements Serializable {
 
     /**
      * <p>Checks whether this range is overlapped by the specified range.</p>
-     * 
+     *
      * <p>Two ranges overlap if there is at least one element in common.</p>
      *
      * <p>This method may fail if the ranges have two different comparators or element types.</p>
@@ -460,13 +460,13 @@ public final class Range<T> implements Serializable {
 
     /**
      * <p>Formats the receiver using the given format.</p>
-     * 
+     *
      * <p>This uses {@link java.util.Formattable} to perform the formatting. Three variables may
      * be used to embed the minimum, maximum and comparator.
      * Use {@code %1$s} for the minimum element, {@code %2$s} for the maximum element
      * and {@code %3$s} for the comparator.
      * The default format used by {@code toString()} is {@code [%1$s..%2$s]}.</p>
-     * 
+     *
      * @param format  the format string, optionally containing {@code %1$s}, {@code %2$s} and  {@code %3$s}, not null
      * @return the formatted string, not null
      */
@@ -479,7 +479,7 @@ public final class Range<T> implements Serializable {
     private enum ComparableComparator implements Comparator {
         INSTANCE;
         /**
-         * Comparable based compare implementation. 
+         * Comparable based compare implementation.
          *
          * @param obj1 left hand side of comparison
          * @param obj2 right hand side of comparison

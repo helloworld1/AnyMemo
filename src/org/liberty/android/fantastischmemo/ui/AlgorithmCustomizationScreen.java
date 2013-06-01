@@ -40,7 +40,7 @@ import android.preference.PreferenceManager;
 import android.content.res.Configuration;
 
 public class AlgorithmCustomizationScreen extends PreferenceActivity {
-    private static final String RESET_CUSTOMIZED_ALGORITHM_KEY 
+    private static final String RESET_CUSTOMIZED_ALGORITHM_KEY
         = "reset_customized_scheduling_algorithm";
 
     public void onCreate(Bundle savedInstanceState) {

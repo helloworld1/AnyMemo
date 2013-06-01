@@ -194,20 +194,20 @@ public class OAuth {
 
     /**
      * Appends a list of key/value pairs to the given URL, e.g.:
-     * 
+     *
      * <pre>
      * String url = OAuth.addQueryParameters(&quot;http://example.com?a=1&quot;, b, 2, c, 3);
      * </pre>
-     * 
+     *
      * which yields:
-     * 
+     *
      * <pre>
      * http://example.com?a=1&b=2&c=3
      * </pre>
-     * 
+     *
      * All parameters will be encoded according to OAuth's percent encoding
      * rules.
-     * 
+     *
      * @param url
      *        the URL
      * @param kvPairs
@@ -241,17 +241,17 @@ public class OAuth {
     /**
      * Builds an OAuth header from the given list of header fields. All
      * parameters starting in 'oauth_*' will be percent encoded.
-     * 
+     *
      * <pre>
      * String authHeader = OAuth.prepareOAuthHeader(&quot;realm&quot;, &quot;http://example.com&quot;, &quot;oauth_token&quot;, &quot;x%y&quot;);
      * </pre>
-     * 
+     *
      * which yields:
-     * 
+     *
      * <pre>
      * OAuth realm="http://example.com", oauth_token="x%25y"
      * </pre>
-     * 
+     *
      * @param kvPairs
      *        the list of key/value pairs
      * @return a string eligible to be used as an OAuth HTTP Authorization
@@ -288,7 +288,7 @@ public class OAuth {
      * Helper method to concatenate a parameter and its value to a pair that can
      * be used in an HTTP header. This method percent encodes both parts before
      * joining them.
-     * 
+     *
      * @param name
      *        the OAuth parameter name, e.g. oauth_token
      * @param value

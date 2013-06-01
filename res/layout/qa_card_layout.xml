@@ -14,8 +14,8 @@
     android:orientation="vertical"
     android:layout_weight="1">
 
-    <TextView android:id="@+id/small_title_bar" 
-        android:textSize="14dp" 
+    <TextView android:id="@+id/small_title_bar"
+        android:textSize="14dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <LinearLayout

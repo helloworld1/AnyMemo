@@ -34,7 +34,7 @@ public class StudyActivityFilterCategoryTest extends ActivityInstrumentationTest
         uiTestHelper.clearPreferences();
         uiTestHelper.setUpFBPDatabase();
         setUpCategories();
-        
+
         Intent intent = new Intent();
         intent.putExtra(StudyActivity.EXTRA_DBPATH, UITestHelper.SAMPLE_DB_PATH);
         setActivityIntent(intent);
@@ -81,9 +81,9 @@ public class StudyActivityFilterCategoryTest extends ActivityInstrumentationTest
         solo.sleep(2000);
 
         answerView = solo.getCurrentActivity().findViewById(R.id.answer);
-        
+
         assertTrue(solo.searchText("hair"));
-        
+
         solo.clickOnView(answerView);
         solo.clickOnText(solo.getString(R.string.memo_btn4_text));
         assertTrue(solo.searchText("eyes"));

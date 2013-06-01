@@ -74,7 +74,7 @@ public class SetAlarmReceiver extends BroadcastReceiver{
         due.set(Calendar.SECOND, 3);
         due.add(Calendar.SECOND, (int)(interval / 1000));
         Calendar now = Calendar.getInstance();
-        /* 
+        /*
          * Decide to set the time to "due" or the now + interval
          * This will avoid the alarm triggering when setting.
          */

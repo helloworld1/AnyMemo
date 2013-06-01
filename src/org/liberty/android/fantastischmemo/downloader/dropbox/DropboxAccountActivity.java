@@ -36,7 +36,7 @@ public abstract class DropboxAccountActivity extends OauthAccountActivity {
 
     @Override
     protected String[] getAccessTokens(final String[] requests) throws IOException {
-        // requestTokenSecret should be a two elements array containing request token and secret 
+        // requestTokenSecret should be a two elements array containing request token and secret
         if (requests.length != 2){
             throw new AssertionError("Error fetching request token and secret");
         }
@@ -78,7 +78,7 @@ public abstract class DropboxAccountActivity extends OauthAccountActivity {
         inflater.inflate(R.menu.dropbox_list_menu, menu);
         return true;
     }
-    
+
 
     // Return true if the token is valid
     // false if the token is not
@@ -89,7 +89,7 @@ public abstract class DropboxAccountActivity extends OauthAccountActivity {
         HttpResponse response = httpClient.execute(httpGet);
 
         int statusCode = response.getStatusLine().getStatusCode();
-        
+
         if (statusCode == 200){
             Log.i(TAG, "Token verified");
             return true;
@@ -98,5 +98,5 @@ public abstract class DropboxAccountActivity extends OauthAccountActivity {
             return false;
         }
     }
-    
+
 }

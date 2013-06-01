@@ -12,7 +12,7 @@ import org.liberty.android.fantastischmemo.utils.AMZipUtils;
 import com.google.inject.BindingAnnotation;
 
 public class ZipImporter implements Converter {
-    
+
     private static final long serialVersionUID = 8597517392515565023L;
 
     @Override
@@ -25,7 +25,7 @@ public class ZipImporter implements Converter {
     public String getSrcExtension() {
         return "zip";
     }
-    
+
     @Override
     public String getDestExtension() {
         return "db";

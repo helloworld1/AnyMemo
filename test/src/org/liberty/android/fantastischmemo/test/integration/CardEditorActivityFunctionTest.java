@@ -28,7 +28,7 @@ public class CardEditorActivityFunctionTest extends ActivityInstrumentationTestC
         UITestHelper uiTestHelper = new UITestHelper(getInstrumentation());
         uiTestHelper.clearPreferences();
         uiTestHelper.setUpFBPDatabase();
-        
+
         Intent intent = new Intent();
         intent.putExtra(CardEditor.EXTRA_DBPATH, UITestHelper.SAMPLE_DB_PATH);
         intent.putExtra(CardEditor.EXTRA_CARD_ID, 2);
@@ -54,7 +54,7 @@ public class CardEditorActivityFunctionTest extends ActivityInstrumentationTestC
         solo.sleep(300);
         assertTrue(solo.searchText("mycategory"));
         solo.clickOnText(solo.getString(R.string.ok_text));
-        
+
         solo.sleep(1000);
         // Test the UI changed to mycategory as the category edit button
         assertTrue(solo.searchText("mycategory"));
@@ -69,7 +69,7 @@ public class CardEditorActivityFunctionTest extends ActivityInstrumentationTestC
             CategoryDao categoryDao = helper.getCategoryDao();
             Card card2 = cardDao.queryForId(2);
             categoryDao.refresh(card2.getCategory());
-            
+
             // One card skipped ...
             assertEquals("mycategory", card2.getCategory().getName());
         } finally {

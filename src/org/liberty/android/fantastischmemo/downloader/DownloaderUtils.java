@@ -59,9 +59,9 @@ public class DownloaderUtils {
 
 
     @Inject
-    public void setAmFileUtil(AMFileUtil amFileUtil) { 
+    public void setAmFileUtil(AMFileUtil amFileUtil) {
         this.amFileUtil = amFileUtil;
-    }  
+    }
 
     public String downloadJSONString(String url) throws Exception{
         HttpClient httpclient = new DefaultHttpClient();
@@ -76,7 +76,7 @@ public class DownloaderUtils {
         }
 
         InputStream instream = entity.getContent();
-        // Now convert stream to string 
+        // Now convert stream to string
         BufferedReader reader = new BufferedReader(new InputStreamReader(instream));
         StringBuilder sb = new StringBuilder();
         String line = null;
@@ -95,7 +95,7 @@ public class DownloaderUtils {
 
         // Delete and backup if the file exists
         amFileUtil.deleteFileWithBackup(savedPath);
-        
+
         // Create the dir if necessary
         File parentDir = outFile.getParentFile();
         parentDir.mkdirs();
@@ -140,11 +140,11 @@ public class DownloaderUtils {
             BufferedReader in = new BufferedReader(new InputStreamReader(ent.getContent()), 8192);
             String inputLine = null;
             String result = "";
-    
+
             while((inputLine = in.readLine()) != null) {
                 result += inputLine;
             }
-    
+
             response.getEntity().consumeContent();
             return result;
         } else {

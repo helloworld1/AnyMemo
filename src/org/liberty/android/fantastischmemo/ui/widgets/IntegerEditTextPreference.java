@@ -37,7 +37,7 @@ import android.util.AttributeSet;
 public class IntegerEditTextPreference extends EditTextPreference {
 	private int maxIntValue;
 	private int minIntValue;
-	
+
     public IntegerEditTextPreference(Context context) {
         super(context);
     }
@@ -47,19 +47,19 @@ public class IntegerEditTextPreference extends EditTextPreference {
         TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.IntegerEditTextPreference);
         CharSequence maxCharValue = arr.getText(R.styleable.IntegerEditTextPreference_maxIntValue);
         CharSequence minCharValue = arr.getText(R.styleable.IntegerEditTextPreference_minIntValue);
-        
+
         if (maxCharValue != null) {
         	this.maxIntValue = Integer.parseInt(maxCharValue.toString());
         } else {
         	this.maxIntValue = Integer.MAX_VALUE;
         }
-        
+
         if (minCharValue != null) {
         	this.minIntValue = Integer.parseInt(minCharValue.toString());
         } else {
         	this.minIntValue = Integer.MIN_VALUE;
         }
-        
+
     }
 
     public IntegerEditTextPreference(Context context, AttributeSet attrs, int defStyle) {
@@ -74,13 +74,13 @@ public class IntegerEditTextPreference extends EditTextPreference {
     @Override
     protected boolean persistString(String value) {
     	int valueInt = Integer.parseInt(value);
-    	
+
     	valueInt = Math.min(valueInt, maxIntValue);
     	valueInt = Math.max(valueInt, minIntValue);
-    	
+
         return persistInt(valueInt);
     }
-    
-    
+
+
 }
 

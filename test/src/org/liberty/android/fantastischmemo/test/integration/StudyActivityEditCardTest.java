@@ -30,7 +30,7 @@ public class StudyActivityEditCardTest extends ActivityInstrumentationTestCase2<
         UITestHelper uiTestHelper = new UITestHelper(getInstrumentation());
         uiTestHelper.clearPreferences();
         uiTestHelper.setUpFBPDatabase();
-        
+
         Intent intent = new Intent();
         intent.putExtra(StudyActivity.EXTRA_DBPATH, UITestHelper.SAMPLE_DB_PATH);
         setActivityIntent(intent);
@@ -54,15 +54,15 @@ public class StudyActivityEditCardTest extends ActivityInstrumentationTestCase2<
         solo.sleep(300);
 
         getInstrumentation().invokeMenuActionSync(solo.getCurrentActivity(), R.id.save, 0);
-        
+
         solo.waitForActivity("StudyActivity");
         solo.waitForDialogToClose(8000);
         solo.sleep(600);
-        
+
         // After saving, expect to see the same card
         assertTrue(solo.searchText("test"));
     }
-    
+
     public void testSaveCardWithShuffle() {
         // Turn on shuffle option
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mActivity);
@@ -73,7 +73,7 @@ public class StudyActivityEditCardTest extends ActivityInstrumentationTestCase2<
         // Now do the edit test
         getInstrumentation().invokeMenuActionSync(mActivity, R.id.menu_context_edit, 0);
 
-        
+
         solo.waitForDialogToClose(3000);
         solo.sleep(300);
 
@@ -83,15 +83,15 @@ public class StudyActivityEditCardTest extends ActivityInstrumentationTestCase2<
         solo.sleep(300);
 
         getInstrumentation().invokeMenuActionSync(solo.getCurrentActivity(), R.id.save, 0);
-        
+
         solo.waitForActivity("StudyActivity");
         solo.waitForDialogToClose(8000);
         solo.sleep(600);
-        
+
         // After saving, expect to see the same card
         assertTrue(solo.searchText("test"));
     }
-    
+
     public void tearDown() throws Exception {
         try {
             solo.finishOpenedActivities();
@@ -102,5 +102,5 @@ public class StudyActivityEditCardTest extends ActivityInstrumentationTestCase2<
         super.tearDown();
     }
 }
-    
+
 

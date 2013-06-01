@@ -1,23 +1,20 @@
 package org.liberty.android.fantastischmemo.utils;
 
 import java.io.File;
-
 import java.sql.SQLException;
-
 import java.util.List;
-
 import java.util.concurrent.Callable;
 
+import javax.inject.Inject;
+
+import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.dao.SettingDao;
-
 import org.liberty.android.fantastischmemo.domain.Card;
-import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.Setting;
 
 import android.content.Context;
@@ -26,6 +23,7 @@ public class DatabaseUtil {
 
     private Context mContext;
 
+    @Inject
     public DatabaseUtil(Context context) {
         mContext = context;
     }
@@ -34,7 +32,7 @@ public class DatabaseUtil {
         String emptyDbPath = mContext.getApplicationContext().getFilesDir().getAbsolutePath() + "/" + AMEnv.EMPTY_DB_NAME;
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, emptyDbPath);
         try {
-            SettingDao settingDao = helper.getSettingDao(); 
+            SettingDao settingDao = helper.getSettingDao();
             return settingDao.queryForId(1);
         } catch (SQLException e) {
             throw new RuntimeException("Could not read setting from default db", e);
@@ -84,7 +82,7 @@ public class DatabaseUtil {
         }
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, dbPath);
         try {
-            helper.getCardDao(); 
+            helper.getCardDao();
             return true;
         } catch (Exception e) {
             e.printStackTrace();

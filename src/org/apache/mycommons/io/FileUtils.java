@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -148,7 +148,7 @@ public class FileUtils {
     //-----------------------------------------------------------------------
     /**
      * Construct a file from the set of name elements.
-     * 
+     *
      * @param directory the parent directory
      * @param names the name elements
      * @return the file
@@ -170,7 +170,7 @@ public class FileUtils {
 
     /**
      * Construct a file from the set of name elements.
-     * 
+     *
      * @param names the name elements
      * @return the file
      * @since Commons IO 2.1
@@ -192,48 +192,48 @@ public class FileUtils {
 
     /**
      * Returns the path to the system temporary directory.
-     * 
+     *
      * @return the path to the system temporary directory.
-     * 
+     *
      * @since Commons IO 2.0
      */
     public static String getTempDirectoryPath() {
         return System.getProperty("java.io.tmpdir");
     }
-    
+
     /**
      * Returns a {@link File} representing the system temporary directory.
-     * 
-     * @return the system temporary directory. 
-     * 
+     *
+     * @return the system temporary directory.
+     *
      * @since Commons IO 2.0
      */
     public static File getTempDirectory() {
         return new File(getTempDirectoryPath());
     }
-    
+
     /**
      * Returns the path to the user's home directory.
-     * 
+     *
      * @return the path to the user's home directory.
-     * 
+     *
      * @since Commons IO 2.0
      */
     public static String getUserDirectoryPath() {
         return System.getProperty("user.home");
     }
-    
+
     /**
      * Returns a {@link File} representing the user's home directory.
-     * 
+     *
      * @return the user's home directory.
-     * 
+     *
      * @since Commons IO 2.0
      */
     public static File getUserDirectory() {
         return new File(getUserDirectoryPath());
     }
-    
+
     //-----------------------------------------------------------------------
     /**
      * Opens a {@link FileInputStream} for the specified file, providing better
@@ -245,7 +245,7 @@ public class FileUtils {
      * An exception is thrown if the file does not exist.
      * An exception is thrown if the file object exists but is a directory.
      * An exception is thrown if the file exists but cannot be read.
-     * 
+     *
      * @param file  the file to open for input, must not be <code>null</code>
      * @return a new {@link FileInputStream} for the specified file
      * @throws FileNotFoundException if the file does not exist
@@ -280,7 +280,7 @@ public class FileUtils {
      * An exception is thrown if the file object exists but is a directory.
      * An exception is thrown if the file exists but cannot be written to.
      * An exception is thrown if the parent directory cannot be created.
-     * 
+     *
      * @param file  the file to open for output, must not be <code>null</code>
      * @return a new {@link FileOutputStream} for the specified file
      * @throws IOException if the file object is a directory
@@ -304,7 +304,7 @@ public class FileUtils {
      * An exception is thrown if the file object exists but is a directory.
      * An exception is thrown if the file exists but cannot be written to.
      * An exception is thrown if the parent directory cannot be created.
-     * 
+     *
      * @param file  the file to open for output, must not be <code>null</code>
      * @param append if <code>true</code>, then bytes will be added to the
      * end of the file rather than overwriting
@@ -337,10 +337,10 @@ public class FileUtils {
     /**
      * Returns a human-readable version of the file size, where the input
      * represents a specific number of bytes.
-     * 
+     *
      * If the size is over 1GB, the size is returned as the number of whole GB,
      * i.e. the size is rounded down to the nearest GB boundary.
-     * 
+     *
      * Similarly for the 1MB and 1KB boundaries.
      *
      * @param size  the number of bytes
@@ -356,7 +356,7 @@ public class FileUtils {
 //            displaySize = String.valueOf(size / ONE_PB) + " PB";
 //        } else if (size / ONE_TB > 0) {
 //            displaySize = String.valueOf(size / ONE_TB) + " TB";
-//        } else 
+//        } else
         if (size / ONE_GB > 0) {
             displaySize = String.valueOf(size / ONE_GB) + " GB";
         } else if (size / ONE_MB > 0) {
@@ -654,7 +654,7 @@ public class FileUtils {
      * percent-encoded octets and simply pass them literally through to the
      * result string. Except for rare edge cases, this will make unencoded URLs
      * pass through unaltered.
-     * 
+     *
      * @param url  The URL to decode, may be <code>null</code>.
      * @return The decoded URL or <code>null</code> if the input was
      *         <code>null</code>.
@@ -822,10 +822,10 @@ public class FileUtils {
      * modified date/times using {@link File#setLastModified(long)}, however
      * it is not guaranteed that the operation will succeed.
      * If the modification operation fails, no indication is provided.
-     * 
+     *
      * @param srcFile  an existing file to copy, must not be <code>null</code>
      * @param destFile  the new file, must not be <code>null</code>
-     * 
+     *
      * @throws NullPointerException if source or destination is <code>null</code>
      * @throws IOException if source or destination is invalid
      * @throws IOException if an IO error occurs during copying
@@ -893,7 +893,7 @@ public class FileUtils {
      * <p>
      * This method buffers the input internally, so there is no need to use a <code>BufferedInputStream</code>.
      * </p>
-     * 
+     *
      * @param input
      *            the <code>File</code> to read from
      * @param output
@@ -913,10 +913,10 @@ public class FileUtils {
             fis.close();
         }
     }
-    
+
     /**
      * Internal copy file method.
-     * 
+     *
      * @param srcFile  the validated source file, must not be <code>null</code>
      * @param destFile  the validated destination file, must not be <code>null</code>
      * @param preserveFileDate  whether to preserve the file date
@@ -1073,7 +1073,7 @@ public class FileUtils {
      * it is not guaranteed that those operations will succeed.
      * If the modification operation fails, no indication is provided.
      *
-     * <h4>Example: Copy directories only</h4> 
+     * <h4>Example: Copy directories only</h4>
      *  <pre>
      *  // only copy the directory structure
      *  FileUtils.copyDirectory(srcDir, destDir, DirectoryFileFilter.DIRECTORY);
@@ -1123,7 +1123,7 @@ public class FileUtils {
      * not guaranteed that those operations will succeed.
      * If the modification operation fails, no indication is provided.
      *
-     * <h4>Example: Copy directories only</h4> 
+     * <h4>Example: Copy directories only</h4>
      *  <pre>
      *  // only copy the directory structure
      *  FileUtils.copyDirectory(srcDir, destDir, DirectoryFileFilter.DIRECTORY, false);
@@ -1141,7 +1141,7 @@ public class FileUtils {
      *  // Copy using the filter
      *  FileUtils.copyDirectory(srcDir, destDir, filter, false);
      *  </pre>
-     * 
+     *
      * @param srcDir  an existing directory to copy, must not be <code>null</code>
      * @param destDir  the new directory, must not be <code>null</code>
      * @param filter  the filter to apply, null means copy all directories and files
@@ -1188,7 +1188,7 @@ public class FileUtils {
 
     /**
      * Internal copy directory method.
-     * 
+     *
      * @param srcDir  the validated source directory, must not be <code>null</code>
      * @param destDir  the validated destination directory, must not be <code>null</code>
      * @param filter  the filter to apply, null means copy all directories and files
@@ -1270,7 +1270,7 @@ public class FileUtils {
      * @param connectionTimeout the number of milliseconds until this method
      *  will timeout if no connection could be established to the <code>source</code>
      * @param readTimeout the number of milliseconds until this method will
-     *  timeout if no data could be read from the <code>source</code> 
+     *  timeout if no data could be read from the <code>source</code>
      * @throws IOException if <code>source</code> URL cannot be opened
      * @throws IOException if <code>destination</code> is a directory
      * @throws IOException if <code>destination</code> cannot be written
@@ -1317,7 +1317,7 @@ public class FileUtils {
 
     //-----------------------------------------------------------------------
     /**
-     * Deletes a directory recursively. 
+     * Deletes a directory recursively.
      *
      * @param directory  directory to delete
      * @throws IOException in case deletion is unsuccessful
@@ -1463,7 +1463,7 @@ public class FileUtils {
 
 
     /**
-     * Reads the contents of a file into a String using the default encoding for the VM. 
+     * Reads the contents of a file into a String using the default encoding for the VM.
      * The file is always closed.
      *
      * @param file  the file to read, must not be <code>null</code>
@@ -1627,7 +1627,7 @@ public class FileUtils {
 
     /**
      * Writes a String to a file creating the file if it does not exist using the default encoding for the VM.
-     * 
+     *
      * @param file  the file to write
      * @param data  the content to write to the file
      * @throws IOException in case of an I/O error
@@ -1638,7 +1638,7 @@ public class FileUtils {
 
     /**
      * Writes a String to a file creating the file if it does not exist using the default encoding for the VM.
-     * 
+     *
      * @param file  the file to write
      * @param data  the content to write to the file
      * @param append if <code>true</code>, then the String will be added to the
@@ -1652,7 +1652,7 @@ public class FileUtils {
 
     /**
      * Writes a CharSequence to a file creating the file if it does not exist using the default encoding for the VM.
-     * 
+     *
      * @param file  the file to write
      * @param data  the content to write to the file
      * @throws IOException in case of an I/O error
@@ -1664,7 +1664,7 @@ public class FileUtils {
 
     /**
      * Writes a CharSequence to a file creating the file if it does not exist using the default encoding for the VM.
-     * 
+     *
      * @param file  the file to write
      * @param data  the content to write to the file
      * @param append if <code>true</code>, then the data will be added to the
@@ -1792,7 +1792,7 @@ public class FileUtils {
     public static void writeLines(File file, Collection<?> lines) throws IOException {
         writeLines(file, null, lines, null, false);
     }
-    
+
     /**
      * Writes the <code>toString()</code> value of each item in a collection to
      * the specified <code>File</code> line by line.
@@ -2029,21 +2029,21 @@ public class FileUtils {
 
     //-----------------------------------------------------------------------
     /**
-     * Returns the size of the specified file or directory. If the provided 
+     * Returns the size of the specified file or directory. If the provided
      * {@link File} is a regular file, then the file's length is returned.
      * If the argument is a directory, then the size of the directory is
-     * calculated recursively. If a directory or subdirectory is security 
+     * calculated recursively. If a directory or subdirectory is security
      * restricted, its size will not be included.
-     * 
-     * @param file the regular file or directory to return the size 
+     *
+     * @param file the regular file or directory to return the size
      *        of (must not be <code>null</code>).
-     * 
-     * @return the length of the file, or recursive size of the directory, 
+     *
+     * @return the length of the file, or recursive size of the directory,
      *         provided (in bytes).
-     * 
+     *
      * @throws NullPointerException if the file is <code>null</code>
      * @throws IllegalArgumentException if the file does not exist.
-     *         
+     *
      * @since Commons IO 2.0
      */
     public static long sizeOf(File file) {
@@ -2120,7 +2120,7 @@ public class FileUtils {
     /**
      * Tests if the specified <code>File</code> is newer than the specified
      * <code>Date</code>.
-     * 
+     *
      * @param file  the <code>File</code> of which the modification date
      * must be compared, must not be <code>null</code>
      * @param date  the date reference, must not be <code>null</code>
@@ -2187,7 +2187,7 @@ public class FileUtils {
     /**
      * Tests if the specified <code>File</code> is older than the specified
      * <code>Date</code>.
-     * 
+     *
      * @param file  the <code>File</code> of which the modification date
      * must be compared, must not be <code>null</code>
      * @param date  the date reference, must not be <code>null</code>
@@ -2345,7 +2345,7 @@ public class FileUtils {
             throw new IOException("Destination '" + destDir + "' is not a directory");
         }
         moveDirectory(src, new File(destDir, src.getName()));
-    
+
     }
 
     /**
@@ -2430,7 +2430,7 @@ public class FileUtils {
      * When the destination is on another file system, do a "copy and delete".
      *
      * @param src the file or directory to be moved
-     * @param destDir the destination directory 
+     * @param destDir the destination directory
      * @param createDestDir If <code>true</code> create the destination directory,
      * otherwise if <code>false</code> throw an IOException
      * @throws NullPointerException if source or destination is <code>null</code>
@@ -2481,7 +2481,7 @@ public class FileUtils {
             File canonicalDir = file.getParentFile().getCanonicalFile();
             fileInCanonicalDir = new File(canonicalDir, file.getName());
         }
-        
+
         if (fileInCanonicalDir.getCanonicalFile().equals(fileInCanonicalDir.getAbsoluteFile())) {
             return false;
         } else {

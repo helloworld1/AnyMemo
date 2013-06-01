@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout 
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
     android:id="@+id/search_root"
@@ -10,16 +10,16 @@
     android:layout_gravity="bottom">
 
 
-	<ImageButton 
-		android:id="@+id/search_previous_btn" 
+	<ImageButton
+		android:id="@+id/search_previous_btn"
 		android:layout_width="50dip"
-		android:layout_height="50dip" 
+		android:layout_height="50dip"
 		android:layout_below="@+id/search_previous"
 		android:src="@drawable/previous" />
-	<ImageButton 
-		android:id="@+id/search_next_btn" 
+	<ImageButton
+		android:id="@+id/search_next_btn"
 		android:layout_width="50dip"
-		android:layout_height="50dip" 
+		android:layout_height="50dip"
 		android:layout_below="@+id/search_next"
 		android:src="@drawable/next" />
   	<EditText
@@ -28,10 +28,10 @@
         android:layout_height="50dip"
         android:lines="1"
         android:layout_weight="1" />
-	<ImageButton 
-		android:id="@+id/search_close_btn" 
+	<ImageButton
+		android:id="@+id/search_close_btn"
 		android:layout_width="50dip"
-		android:layout_height="50dip" 
+		android:layout_height="50dip"
         android:layout_gravity="right"
 		android:src="@drawable/close" />
 </LinearLayout>

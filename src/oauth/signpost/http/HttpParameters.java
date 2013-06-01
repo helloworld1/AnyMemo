@@ -34,7 +34,7 @@ import oauth.signpost.OAuth;
  * percent-encoded upon insertion. This class has special semantics tailored to
  * being useful for message signing; it's not a general purpose collection class
  * to handle request parameters.
- * 
+ *
  * @author Matthias Kaeppler
  */
 @SuppressWarnings("serial")
@@ -61,7 +61,7 @@ public class HttpParameters implements Map<String, SortedSet<String>>, Serializa
     /**
      * Convenience method to add a single value for the parameter specified by
      * 'key'.
-     * 
+     *
      * @param key
      *        the parameter name
      * @param value
@@ -75,7 +75,7 @@ public class HttpParameters implements Map<String, SortedSet<String>>, Serializa
     /**
      * Convenience method to add a single value for the parameter specified by
      * 'key'.
-     * 
+     *
      * @param key
      *        the parameter name
      * @param value
@@ -102,7 +102,7 @@ public class HttpParameters implements Map<String, SortedSet<String>>, Serializa
     /**
      * Convenience method to allow for storing null values. {@link #put} doesn't
      * allow null values, because that would be ambiguous.
-     * 
+     *
      * @param key
      *        the parameter name
      * @param nullString
@@ -135,7 +135,7 @@ public class HttpParameters implements Map<String, SortedSet<String>>, Serializa
 
     /**
      * Convenience method to merge a Map<String, List<String>>.
-     * 
+     *
      * @param m
      *        the map
      */
@@ -156,7 +156,7 @@ public class HttpParameters implements Map<String, SortedSet<String>>, Serializa
 
     /**
      * Convenience method for {@link #getFirst(key, false)}.
-     * 
+     *
      * @param key
      *        the parameter name (must be percent encoded if it contains unsafe
      *        characters!)
@@ -173,7 +173,7 @@ public class HttpParameters implements Map<String, SortedSet<String>>, Serializa
      * {@link OAuth#percentEncode(String)}, otherwise the lookup will fail
      * (that's because upon storing values in this map, keys get
      * percent-encoded).
-     * 
+     *
      * @param key
      *        the parameter name (must be percent encoded if it contains unsafe
      *        characters!)
@@ -193,7 +193,7 @@ public class HttpParameters implements Map<String, SortedSet<String>>, Serializa
     /**
      * Concatenates all values for the given key to a list of key/value pairs
      * suitable for use in a URL query string.
-     * 
+     *
      * @param key
      *        the parameter name
      * @return the query string

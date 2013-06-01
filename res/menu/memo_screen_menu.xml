@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/menuundo"
   		  android:icon="@drawable/undo_icon"
-          android:showAsAction="ifRoom" 
+          android:showAsAction="ifRoom"
           android:title="@string/undo_text" />
     <item android:id="@+id/menudetail"
   		  android:icon="@android:drawable/ic_menu_edit"
@@ -20,6 +20,6 @@
           android:title="@string/filter_category_text"
   		  android:icon="@android:drawable/ic_menu_search" />
     <item android:id="@+id/menu_memo_help"
-  		  android:icon="@android:drawable/ic_menu_help"  
+  		  android:icon="@android:drawable/ic_menu_help"
           android:title="@string/help_button_text" />
 </menu>

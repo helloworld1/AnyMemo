@@ -87,7 +87,7 @@ public class DownloaderFE extends DownloaderBase{
     private OAuthConsumer oauthConsumer = null;
 
     private DownloaderUtils downloaderUtils;
-    
+
     private RecentListUtil recentListUtil;
 
     @Inject
@@ -109,9 +109,9 @@ public class DownloaderFE extends DownloaderBase{
         Intent intent = getIntent();
         action = intent.getAction();
         if(action.equals(INTENT_ACTION_SEARCH_TAG)){
-        } 
+        }
         else if(action.equals(INTENT_ACTION_SEARCH_USER)){
-        } 
+        }
         else if(action.equals(INTENT_ACTION_SEARCH_PRIVATE)){
         }
         else{
@@ -159,7 +159,7 @@ public class DownloaderFE extends DownloaderBase{
     protected DownloadItem getDownloadItem(int position){
         return dlAdapter.getItem(position);
     }
-    
+
     @Override
     protected void goBack(){
         finish();
@@ -302,7 +302,7 @@ public class DownloaderFE extends DownloaderBase{
             }
             if (StringUtils.isNotEmpty(questionImageUrl)) {
                 String downloadFilename = Uri.parse(questionImageUrl).getLastPathSegment();
-                downloaderUtils.downloadFile(questionImageUrl, imagePath + "q-" + downloadFilename); 
+                downloaderUtils.downloadFile(questionImageUrl, imagePath + "q-" + downloadFilename);
                 question = question + "<br /><img src=\"" + "q-" + downloadFilename + "\" />";
             }
             // Download image file if there is
@@ -312,7 +312,7 @@ public class DownloaderFE extends DownloaderBase{
             }
             if (StringUtils.isNotEmpty(answerImageUrl)) {
                 String downloadFilename = Uri.parse(answerImageUrl).getLastPathSegment();
-                downloaderUtils.downloadFile(answerImageUrl, imagePath + "a-" + downloadFilename); 
+                downloaderUtils.downloadFile(answerImageUrl, imagePath + "a-" + downloadFilename);
                 answer = answer + "<br /><img src=\"" + "a-" + downloadFilename + "\" />";
             }
 
@@ -324,7 +324,7 @@ public class DownloaderFE extends DownloaderBase{
             card.setLearningData(new LearningData());
             cardList.add(card);
         }
-        
+
         String dbpath = AMEnv.DEFAULT_ROOT_PATH;
         String fullpath = dbpath + dbname;
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(DownloaderFE.this, fullpath);

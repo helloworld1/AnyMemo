@@ -81,6 +81,11 @@ public class AnyMemo extends AMActivity {
     private AMFileUtil amFileUtil;
 
     @Inject
+    public void setAmUiUtil(AMUiUtil amUiUtil) {
+        this.amUiUtil = amUiUtil;
+    }
+
+    @Inject
     public void setAmFileUtil(AMFileUtil amFileUtil) {
         this.amFileUtil = amFileUtil;
     }
@@ -90,8 +95,6 @@ public class AnyMemo extends AMActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.main_tabs);
-
-        amUiUtil = new AMUiUtil(this);
 
         mTabHost = (TabHost)findViewById(android.R.id.tabhost);
         mHorizontalScrollView = (HorizontalScrollView) findViewById(R.id.horizontal_scroll_view);
@@ -134,13 +137,13 @@ public class AnyMemo extends AMActivity {
         int width_px = minimal_px;
         if (minimal_dp * widget.getChildCount() < display_width_dp) {
             width_px = display_width_px / widget.getChildCount();
-        } 
+        }
         for (int i = 0; i < widget.getChildCount(); ++i) {
             View v = widget.getChildAt(i);
             v.setMinimumWidth(width_px);
         }
 
-        
+
         settings = PreferenceManager.getDefaultSharedPreferences(this);
 
         prepareStoreage();
@@ -379,11 +382,11 @@ public class AnyMemo extends AMActivity {
             public void onTabChanged(String tabId) {
                 int pos = mTabHost.getCurrentTab();
                 mViewPager.setCurrentItem(pos);
-                
+
             }
         };
 
-    private ViewPager.OnPageChangeListener onPageChangeListener = 
+    private ViewPager.OnPageChangeListener onPageChangeListener =
         new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
@@ -400,8 +403,8 @@ public class AnyMemo extends AMActivity {
                 // Scroll the horizontal scroll bar that wrap the tabwidget
                 // so the current tab title can be visible.
                 View tabView = mTabHost.getTabWidget().getChildAt(position);
-                final int width = mHorizontalScrollView.getWidth(); 
-                int scrollPos = tabView.getLeft() - (width - tabView.getWidth()) / 2; 
+                final int width = mHorizontalScrollView.getWidth();
+                int scrollPos = tabView.getLeft() - (width - tabView.getWidth()) / 2;
 
                 mHorizontalScrollView.scrollTo(scrollPos, 0);
                 mHorizontalScrollView.refreshDrawableState();

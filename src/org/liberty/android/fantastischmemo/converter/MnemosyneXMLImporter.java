@@ -64,7 +64,7 @@ public class MnemosyneXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
     private final String TAG = "org.liberty.android.fantastischmemo.MnemosyneXMLImporter";
     private Card card;
 
-    
+
     @Inject
     public MnemosyneXMLImporter(Context context){
         mContext = context;
@@ -76,7 +76,7 @@ public class MnemosyneXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
         URL mXMLUrl = new URL("file:///" + src);
         cardList = new LinkedList<Card>();
 
-        System.setProperty("org.xml.sax.driver","org.xmlpull.v1.sax2.Driver"); 
+        System.setProperty("org.xml.sax.driver","org.xmlpull.v1.sax2.Driver");
         SAXParserFactory spf = SAXParserFactory.newInstance();
         SAXParser sp = spf.newSAXParser();
 
@@ -182,7 +182,7 @@ public class MnemosyneXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
         }
         characterBuf = new StringBuffer();
     }
-    
+
     public void endElement(String namespaceURI, String localName, String qName) throws SAXException{
         if(localName.equals("item")) {
             cardList.add(card);
@@ -199,20 +199,20 @@ public class MnemosyneXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
         if(localName.equals("A")|| localName.equals("Answer")) {
             card.setAnswer(characterBuf.toString());
         }
-        
+
     }
-    
+
     public void setDocumentLocator(Locator locator){
         mLocator = locator;
     }
-    
+
     public void characters(char ch[], int start, int length){
         characterBuf.append(ch, start, length);
     }
-    
+
     public void startDocument() throws SAXException{
     }
-    
+
     public void endDocument() throws SAXException{
     }
 

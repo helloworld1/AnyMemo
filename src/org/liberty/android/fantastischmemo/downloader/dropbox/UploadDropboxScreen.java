@@ -20,7 +20,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 
 public class UploadDropboxScreen extends DropboxAccountActivity {
-    
+
     private String authToken;
 
     private String authTokenSecret;
@@ -28,13 +28,13 @@ public class UploadDropboxScreen extends DropboxAccountActivity {
     private DropboxUploadHelperFactory uploadHelperFactory;
 
     private DropboxUploadHelper uploadHelper;
-    
+
     @Inject
     public void setUploadHelperFactory(
             DropboxUploadHelperFactory uploadHelperFactory) {
         this.uploadHelperFactory = uploadHelperFactory;
     }
-    
+
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -75,8 +75,8 @@ public class UploadDropboxScreen extends DropboxAccountActivity {
                 }
              }).setNegativeButton(R.string.cancel_text, null).show();
     }
-    
-    
+
+
     private void uploadToDropbox(File file) throws ClientProtocolException, IOException, JSONException {
         uploadHelper.upload(file.getName(), file.getAbsolutePath());
     }
@@ -104,7 +104,7 @@ public class UploadDropboxScreen extends DropboxAccountActivity {
             }
             return null;
         }
-        
+
         @Override
         public void onPostExecute(Exception e){
             if (e == null) {
@@ -116,7 +116,7 @@ public class UploadDropboxScreen extends DropboxAccountActivity {
             } else {
                 AMGUIUtility.displayException(UploadDropboxScreen.this, getString(R.string.error_text), getString(R.string.error_text), e);
             }
-            
+
             progressDialog.dismiss();
         }
     }
