@@ -45,16 +45,19 @@ import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
-import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
-import org.liberty.android.fantastischmemo.tts.AnyMemoTTSImpl;
+import org.liberty.android.fantastischmemo.service.AMTTSService;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 import org.liberty.android.fantastischmemo.utils.AMStringUtils;
 import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
 import org.xml.sax.XMLReader;
 
+import roboguice.util.Ln;
+
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.gesture.Gesture;
 import android.gesture.GestureLibraries;
 import android.gesture.GestureLibrary;
@@ -67,6 +70,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.FragmentTransaction;
 import android.text.ClipboardManager;
 import android.text.Editable;
@@ -122,8 +126,7 @@ public abstract class QACardActivity extends AMActivity {
 
     private TextView smallTitleBar;
 
-    private AnyMemoTTS questionTTS = null;
-    private AnyMemoTTS answerTTS = null;
+    private AMTTSService amTTSService;
 
     private GestureLibrary gestureLibrary;
 
@@ -131,6 +134,11 @@ public abstract class QACardActivity extends AMActivity {
     public void setOption(Option option) {
         this.option = option;
     }
+
+    public AMTTSService getAMTTSService() {
+        return amTTSService;
+    }
+
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -469,9 +477,9 @@ public abstract class QACardActivity extends AMActivity {
                 categoryDao = dbOpenHelper.getCategoryDao();
                 setting = settingDao.queryForId(1);
 
-                // Init of common functions here
-                initTTS();
+                bindServices();
 
+                // Init of common functions here
                 // Call customized init funciton defined in
                 // the subclass
                 onInit();
@@ -522,8 +530,8 @@ public abstract class QACardActivity extends AMActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        unbindServices();
         AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
-        shutdownTTS();
 
         /* Update the widget because StudyActivity can be accessed though widget*/
         Intent myIntent = new Intent(this, AnyMemoService.class);
@@ -642,88 +650,14 @@ public abstract class QACardActivity extends AMActivity {
         }
     };
 
-    protected void initTTS() {
-        String defaultLocation = AMEnv.DEFAULT_AUDIO_PATH;
-        String dbName = getDbName();
-
-        if (setting.isQuestionAudioEnabled()) {
-            String qa = setting.getQuestionAudio();
-            List<String> questionAudioSearchPath = new ArrayList<String>();
-            questionAudioSearchPath.add(setting.getQuestionAudioLocation());
-            questionAudioSearchPath.add(setting.getQuestionAudioLocation()
-                    + "/" + dbName);
-            questionAudioSearchPath.add(defaultLocation + "/" + dbName);
-            questionAudioSearchPath.add(setting.getQuestionAudioLocation());
-            questionTTS = new AnyMemoTTSImpl(this, qa, questionAudioSearchPath);
-        }
-
-        if (setting.isAnswerAudioEnabled()) {
-            String aa = setting.getAnswerAudio();
-            List<String> answerAudioSearchPath = new ArrayList<String>();
-            answerAudioSearchPath.add(setting.getAnswerAudioLocation());
-            answerAudioSearchPath.add(setting.getAnswerAudioLocation() + "/"
-                    + dbName);
-            answerAudioSearchPath.add(defaultLocation + "/" + dbName);
-            answerAudioSearchPath.add(defaultLocation);
-            answerTTS = new AnyMemoTTSImpl(this, aa, answerAudioSearchPath);
-        }
-    }
-
     protected boolean speakQuestion() {
-        return speakQuestion(null);
-    }
-
-    protected boolean speakQuestion(AnyMemoTTS.OnTextToSpeechCompletedListener mListener){
-        stopSpeak();
-
-        if (questionTTS != null && getCurrentCard() != null) {
-            questionTTS.sayText(getCurrentCard().getQuestion(), mListener);
-            return true;
-
-        }
-        return false;
+        amTTSService.speakCardQuestion(getCurrentCard());
+        return true;
     }
 
     protected boolean speakAnswer() {
-        return speakAnswer(null);
-    }
-
-    protected boolean speakAnswer(AnyMemoTTS.OnTextToSpeechCompletedListener mListener) {
-        stopSpeak();
-
-        if (answerTTS != null && getCurrentCard() != null) {
-            answerTTS.sayText(getCurrentCard().getAnswer(), mListener);
-            return true;
-        }
-
-        return false;
-    }
-
-    protected void stopSpeak() {
-        stopAnswerTTS();
-        stopQuestionTTS();
-    }
-
-    private void stopQuestionTTS() {
-        if (questionTTS != null) {
-            questionTTS.stop();
-        }
-    }
-
-    private void stopAnswerTTS() {
-        if (answerTTS != null) {
-            answerTTS.stop();
-        }
-    }
-
-    private void shutdownTTS() {
-        if (questionTTS != null) {
-            questionTTS.destory();
-        }
-
-        if (answerTTS != null) {
-            answerTTS.destory();
-        }
+        amTTSService.speakCardAnswer(getCurrentCard());
+        return true;
     }
 
     private void loadGestures() {
@@ -810,6 +744,32 @@ public abstract class QACardActivity extends AMActivity {
         return super.onKeyUp(keyCode, event);
     }
 
+
+    private ServiceConnection textToSpeechServiceConnection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName className, IBinder binder) {
+            amTTSService = ((AMTTSService.LocalBinder) binder).getService();
+
+            Ln.v("Connected to AMTTSService");
+        }
+
+        public void onServiceDisconnected(ComponentName className) {
+            amTTSService = null;
+            Ln.v("Disconnedted from AMTTSService");
+        }
+    };
+
+    private void bindServices() {
+        Intent intent = new Intent(this, AMTTSService.class);
+        intent.putExtra(AMTTSService.EXTRA_DBPATH, getDbPath());
+        bindService(intent, textToSpeechServiceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    private void unbindServices() {
+        if (textToSpeechServiceConnection != null) {
+            unbindService(textToSpeechServiceConnection);
+        }
+    }
+
     private CardFragment.OnClickListener onQuestionTextClickListener = new CardFragment.OnClickListener() {
 
         @Override
@@ -882,4 +842,5 @@ public abstract class QACardActivity extends AMActivity {
             throw new IllegalArgumentException("The input gesture name is invalid");
         }
     }
+
 }

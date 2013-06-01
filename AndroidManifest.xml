@@ -142,6 +142,9 @@
         <service
             android:name=".AnyMemoService" />
 
+        <service
+            android:name=".service.AMTTSService" />
+
         <provider
                 android:name=".provider.CardProvider"
                 android:authorities="org.liberty.android.fantastischmemo.provider"

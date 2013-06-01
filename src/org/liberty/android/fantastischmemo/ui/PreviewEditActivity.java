@@ -79,6 +79,7 @@ public class PreviewEditActivity extends QACardActivity {
     public static String EXTRA_DBPATH = "dbpath";
     public static String EXTRA_CARD_ID = "id";
     public static String EXTRA_CATEGORY = "category";
+    public static String EXTRA_SHOW_AUTO_SPEAK= "showAutoSpeak";
 
     private static final String TAG = "PreviewEditActivity";
     private static final int MAGIC_FRAME_LAYOUT_ID = 675198655; // A magic id that we used to set frame layout id.
@@ -109,6 +110,8 @@ public class PreviewEditActivity extends QACardActivity {
     // The first card to read and display.
     private int startCardId = 1;
 
+    private boolean showAutoSpeakFragmentOnCreate = false;
+
     @Inject
     public void setShareUtil(ShareUtil shareUtil) {
         this.shareUtil = shareUtil;
@@ -124,11 +127,13 @@ public class PreviewEditActivity extends QACardActivity {
         super.onCreate(savedInstanceState);
 
         Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            dbPath = extras.getString(EXTRA_DBPATH);
-            activeCategoryId = extras.getInt(EXTRA_CATEGORY, -1);
-            startCardId = extras.getInt(EXTRA_CARD_ID, -1);
-        }
+
+        assert extras != null : "Extras for PreviewEditActivity should have at least dbPath!";
+
+        dbPath = extras.getString(EXTRA_DBPATH);
+        activeCategoryId = extras.getInt(EXTRA_CATEGORY, -1);
+        startCardId = extras.getInt(EXTRA_CARD_ID, -1);
+        showAutoSpeakFragmentOnCreate = extras.getBoolean(EXTRA_SHOW_AUTO_SPEAK, false);
 
         /*
          * Currently always set the result to OK
@@ -173,7 +178,6 @@ public class PreviewEditActivity extends QACardActivity {
 
         totalCardCount = cardDao.countOf();
         setCurrentCard(currentCard);
-
     }
 
     @Override
@@ -188,6 +192,10 @@ public class PreviewEditActivity extends QACardActivity {
         /* Double sided card can't use the flip gesture*/
         if(setting.getCardStyle() != Setting.CardStyle.DOUBLE_SIDED){
             gestureDetector= new GestureDetector(PreviewEditActivity.this, gestureListener);
+        }
+
+        if (showAutoSpeakFragmentOnCreate) {
+            showAutoSpeakFragment();
         }
     }
 
@@ -344,18 +352,7 @@ public class PreviewEditActivity extends QACardActivity {
 
             case R.id.menu_auto_speak:
             {
-                if (getCurrentCard() != null) {
-                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                    LinearLayout root = (LinearLayout)findViewById(R.id.root);
-                    FrameLayout fl = new FrameLayout(this);
-
-                    AutoSpeakFragment f = new AutoSpeakFragment();
-
-                    fl.setId(MAGIC_FRAME_LAYOUT_ID);
-                    root.addView(fl);
-                    ft.add(fl.getId(), f);
-                    ft.commit();
-                }
+                showAutoSpeakFragment();
                 return true;
             }
 
@@ -658,6 +655,24 @@ public class PreviewEditActivity extends QACardActivity {
     }
 
     @CheckNullArgs
+    protected void gotoCard(Card card) {
+        Card currentCard = getCurrentCard();
+        if (currentCard.getOrdinal() > card.getOrdinal()) {
+            // This is previoius card
+            setAnimation(R.anim.slide_right_in, R.anim.slide_right_out);
+        } else {
+            setAnimation(R.anim.slide_left_in, R.anim.slide_left_out);
+        }
+        setCurrentCard(card);
+
+        updateCardFrontSide();
+        updateTitle();
+
+        // Set animation back
+        setAnimation(R.anim.slide_left_in, R.anim.slide_left_out);
+    }
+
+    @CheckNullArgs
     private void deleteCard(final Card cardToDelete){
         new AlertDialog.Builder(this)
             .setTitle(getString(R.string.delete_text))
@@ -766,14 +781,14 @@ public class PreviewEditActivity extends QACardActivity {
     private View.OnClickListener prevButtonListener = new View.OnClickListener(){
         public void onClick(View v){
             gotoPrev();
-            stopSpeak();
+            getAMTTSService().stopSpeak();
         }
     };
 
     private View.OnClickListener nextButtonListener = new View.OnClickListener(){
         public void onClick(View v){
             gotoNext();
-            stopSpeak();
+            getAMTTSService().stopSpeak();
         }
     };
 
@@ -952,6 +967,21 @@ public class PreviewEditActivity extends QACardActivity {
         args.putSerializable(GestureSelectionDialogFragment.EXTRA_GESTURE_NAME_DESCRIPTION_MAP, gestureNameDescriptionMap);
         df.setArguments(args);
         df.show(getSupportFragmentManager(), "GestureSelectionDialog");
+    }
+
+    private void showAutoSpeakFragment() {
+        if (getCurrentCard() != null) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            LinearLayout root = (LinearLayout)findViewById(R.id.root);
+            FrameLayout fl = new FrameLayout(this);
+
+            AutoSpeakFragment f = new AutoSpeakFragment();
+
+            fl.setId(MAGIC_FRAME_LAYOUT_ID);
+            root.addView(fl);
+            ft.replace(fl.getId(), f);
+            ft.commit();
+        }
     }
 
     private static enum SearchMethod {

@@ -269,7 +269,7 @@ public class QuizActivity extends QACardActivity {
     @Override
     public void onPostDisplayCard() {
         // When displaying new card, we should stop the TTS reading.
-        stopSpeak();
+        getAMTTSService().stopSpeak();
         if (isAnswerShown()) {
             gradeButtons.show();
         } else {

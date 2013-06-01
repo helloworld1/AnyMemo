@@ -150,28 +150,24 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
         processed_str = processed_str.replaceAll("\\[.*?\\]", "");
         processed_str = processed_str.replaceAll("&.*?;", "");
 
-        if (!myTTS.isSpeaking()) {
-            HashMap<String, String> params = new HashMap<String, String>();
-            params.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "id");
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "id");
 
-            myTTS.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
-                @Override
-                public void onUtteranceCompleted(String utteranceId) {
-                    if (onTextToSpeechCompletedListener != null) {
-                        onTextToSpeechCompletedListener.onTextToSpeechCompleted(s);
-                    }
+        myTTS.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
+            @Override
+            public void onUtteranceCompleted(String utteranceId) {
+                if (onTextToSpeechCompletedListener != null) {
+                    onTextToSpeechCompletedListener.onTextToSpeechCompleted(s);
                 }
-            });
+            }
+        });
 
-            speakLock.lock();
-            myTTS.setLanguage(myLocale);
+        speakLock.lock();
+        myTTS.setLanguage(myLocale);
 
-            Log.i(TAG, "processed_str is \"" + processed_str + "\"");
-            myTTS.speak(processed_str, 0, params);
-            speakLock.unlock();
-        } else {
-            stop();
-        }
+        Log.i(TAG, "processed_str is \"" + processed_str + "\"");
+        myTTS.speak(processed_str, 0, params);
+        speakLock.unlock();
 
     }
 
