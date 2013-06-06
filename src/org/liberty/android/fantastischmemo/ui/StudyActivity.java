@@ -380,7 +380,7 @@ public class StudyActivity extends QACardActivity {
     @Override
     public void onPostDisplayCard() {
         // When displaying new card, we should stop the TTS reading.
-        getAMTTSService().stopSpeak();
+        getCardTTSUtil().stopSpeak();
         if (isAnswerShown()) {
             // Mnemosyne grade button style won't display the interval.
             if (option.getButtonStyle() != Option.ButtonStyle.MNEMOSYNE) {

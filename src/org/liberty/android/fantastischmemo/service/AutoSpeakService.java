@@ -1,17 +1,12 @@
 package org.liberty.android.fantastischmemo.service;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 
-import org.apache.mycommons.io.FilenameUtils;
-import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.aspect.CheckNullArgs;
+import org.liberty.android.fantastischmemo.aspect.LogInvocation;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.domain.Card;
@@ -21,9 +16,9 @@ import org.liberty.android.fantastischmemo.service.autospeak.AutoSpeakContext;
 import org.liberty.android.fantastischmemo.service.autospeak.AutoSpeakEventHandler;
 import org.liberty.android.fantastischmemo.service.autospeak.AutoSpeakMessage;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
-import org.liberty.android.fantastischmemo.tts.AnyMemoTTSImpl;
-import org.liberty.android.fantastischmemo.tts.NullAnyMemoTTS;
 import org.liberty.android.fantastischmemo.ui.PreviewEditActivity;
+import org.liberty.android.fantastischmemo.utils.CardTTSUtil;
+import org.liberty.android.fantastischmemo.utils.CardTTSUtilFactory;
 
 import roboguice.service.RoboService;
 import roboguice.util.Ln;
@@ -37,7 +32,7 @@ import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
-public class AMTTSService extends RoboService {
+public class AutoSpeakService extends RoboService {
 
     public static final String EXTRA_DBPATH = "dbpath";
 
@@ -65,6 +60,10 @@ public class AMTTSService extends RoboService {
 
     private Option option;
 
+    private CardTTSUtil cardTTSUtil;
+
+    private CardTTSUtilFactory cardTTSUtilFactory;
+
     // The context used for autoSpeak state machine.
     private volatile AutoSpeakContext autoSpeakContext = null;
 
@@ -73,33 +72,41 @@ public class AMTTSService extends RoboService {
         this.option = option;
     }
 
+    @Inject
+    public void setCardTTSUtilFactory(CardTTSUtilFactory cardTTSUtilFactory) {
+        this.cardTTSUtilFactory = cardTTSUtilFactory;
+    }
+
     // Note, it is recommended for service binding in a thread different
     // from UI thread. The initialization like DAO creation is quite heavy
     @Override
+    @LogInvocation
     public IBinder onBind(Intent intent) {
-        Ln.v("Bind to AMTTSService using intent: " + intent);
         handler = new Handler();
         Bundle extras = intent.getExtras();
 
         assert extras != null : "dbpath is not passed to AMTTSService.";
 
         dbPath = extras.getString(EXTRA_DBPATH);
-
-        // It is possible the service is started multiple times and reuse
-        // the same instance. So clean up first.
-        cleanUp();
         
+        cardTTSUtil = cardTTSUtilFactory.create(dbPath);
+
         dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(this, dbPath);
 
         cardDao = dbOpenHelper.getCardDao();
         settingDao = dbOpenHelper.getSettingDao();
 
-        initTTS();
-
         return binder;
     }
 
     @Override
+    @LogInvocation
+    public void onRebind(Intent intent) {
+        super.onRebind(intent);
+    }
+
+    @Override
+    @LogInvocation
     public int onStartCommand(Intent intent, int flags, int startId) {
         // We want this service to continue running until it is explicitly
         // stopped, so return sticky.
@@ -107,48 +114,12 @@ public class AMTTSService extends RoboService {
     }
 
     @Override
+    @LogInvocation
     public boolean onUnbind(Intent intent) {
-        Ln.v("Unbind from AMTTSService using intent: " + intent);
-        cleanUp();
         // Always stop service on unbind so the service will not be reused
         // for the next binding.
         stopSelf();
         return false;
-    }
-
-    /* 
-     * This will speak the question of the card and will not
-     * set a callback for speaking completion.
-     */
-    @CheckNullArgs
-    public void speakCardQuestion(Card card) {
-        speakCardQuestion(card, null);
-    }
-
-    @CheckNullArgs(argIndexToCheck = {0})
-    public void speakCardQuestion(Card card, AnyMemoTTS.OnTextToSpeechCompletedListener onTextToSpeechCompletedListener) {
-        stopSpeak();
-        questionTTS.sayText(card.getQuestion(), onTextToSpeechCompletedListener);
-    }
-
-    /* 
-     * This will speak the answer of the card and will not
-     * set a callback for speaking completion.
-     */
-    @CheckNullArgs
-    public void speakCardAnswer(Card card) {
-        speakCardAnswer(card, null);
-    }
-
-    @CheckNullArgs(argIndexToCheck = {0})
-    public void speakCardAnswer(Card card, AnyMemoTTS.OnTextToSpeechCompletedListener onTextToSpeechCompletedListener) {
-        stopSpeak();
-        answerTTS.sayText(card.getAnswer(), onTextToSpeechCompletedListener);
-    }
-
-    public void stopSpeak() {
-        questionTTS.stop();
-        answerTTS.stop();
     }
 
     @CheckNullArgs
@@ -157,7 +128,7 @@ public class AMTTSService extends RoboService {
         // from a clean state.
         autoSpeakContext = new AutoSpeakContext(
                 eventHandler,
-                this,
+                cardTTSUtil,
                 handler,
                 dbOpenHelper,
                 option.getAutoSpeakIntervalBetweenQA(),
@@ -192,60 +163,6 @@ public class AMTTSService extends RoboService {
         } else {
             Ln.i("Call stopPlaying with null autoSpeakContext. Do nothing.");
         }
-    }
-
-    private void initTTS() {
-        try {
-            setting = settingDao.queryForId(1);
-        } catch (SQLException e) {
-            Ln.e(e);
-            throw new RuntimeException(e);
-        }
-
-        String defaultLocation = AMEnv.DEFAULT_AUDIO_PATH;
-        String dbName = FilenameUtils.getName(dbPath);
-
-        if (setting.isQuestionAudioEnabled()) {
-            String qa = setting.getQuestionAudio();
-            List<String> questionAudioSearchPath = new ArrayList<String>();
-            questionAudioSearchPath.add(setting.getQuestionAudioLocation());
-            questionAudioSearchPath.add(setting.getQuestionAudioLocation()
-                    + "/" + dbName);
-            questionAudioSearchPath.add(defaultLocation + "/" + dbName);
-            questionAudioSearchPath.add(setting.getQuestionAudioLocation());
-            questionTTS = new AnyMemoTTSImpl(this, qa, questionAudioSearchPath);
-        } else {
-            questionTTS = new NullAnyMemoTTS();
-        }
-
-        if (setting.isAnswerAudioEnabled()) {
-            String aa = setting.getAnswerAudio();
-            List<String> answerAudioSearchPath = new ArrayList<String>();
-            answerAudioSearchPath.add(setting.getAnswerAudioLocation());
-            answerAudioSearchPath.add(setting.getAnswerAudioLocation() + "/"
-                    + dbName);
-            answerAudioSearchPath.add(defaultLocation + "/" + dbName);
-            answerAudioSearchPath.add(defaultLocation);
-            answerTTS = new AnyMemoTTSImpl(this, aa, answerAudioSearchPath);
-        }  else {
-            answerTTS = new NullAnyMemoTTS();
-        }
-    }
-
-    private void cleanUp() {
-        if (dbOpenHelper != null) {
-            AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
-        }
-
-        if (questionTTS != null) {
-            questionTTS.destory();
-        }
-
-        if (answerTTS != null) {
-            answerTTS.destory();
-        }
-        cardDao = null;
-        settingDao = null;
     }
 
     private void showNotification() {
@@ -290,8 +207,8 @@ public class AMTTSService extends RoboService {
 
     // A local binder that works for local methos call.
     public class LocalBinder extends Binder {
-        public AMTTSService getService() {
-            return AMTTSService.this;
+        public AutoSpeakService getService() {
+            return AutoSpeakService.this;
         }
     }
 

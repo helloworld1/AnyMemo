@@ -29,14 +29,14 @@ public enum AutoSpeakState implements AutoSpeakStateTransition {
         public void transition(AutoSpeakContext context, AutoSpeakMessage message) {
             switch(message) {
             case GO_TO_NEXT:
-                context.getAmTTSService().stopSpeak();
+                context.getCardTTSUtil().stopSpeak();
                 context.setCurrentCard(findNextCard(context));
                 context.setState(PLAYING_QUESTION);
                 playQuestion(context);
 
                 break;
             case GO_TO_PREV:
-                context.getAmTTSService().stopSpeak();
+                context.getCardTTSUtil().stopSpeak();
                 context.setCurrentCard(findPrevCard(context));
                 context.setState(PLAYING_QUESTION);
                 playQuestion(context);
@@ -61,13 +61,13 @@ public enum AutoSpeakState implements AutoSpeakStateTransition {
         public void transition(AutoSpeakContext context, AutoSpeakMessage message) {
             switch(message) {
             case GO_TO_NEXT:
-                context.getAmTTSService().stopSpeak();
+                context.getCardTTSUtil().stopSpeak();
                 context.setCurrentCard(findNextCard(context));
                 context.setState(PLAYING_QUESTION);
                 playQuestion(context);
                 break;
             case GO_TO_PREV:
-                context.getAmTTSService().stopSpeak();
+                context.getCardTTSUtil().stopSpeak();
                 context.setCurrentCard(findPrevCard(context));
                 context.setState(PLAYING_QUESTION);
                 playQuestion(context);
@@ -97,7 +97,7 @@ public enum AutoSpeakState implements AutoSpeakStateTransition {
         // We usually need UI to update first.
         context.getEventHandler().onPlayCard(context.getCurrentCard());
 
-        context.getAmTTSService().speakCardQuestion(context.getCurrentCard(),
+        context.getCardTTSUtil().speakCardQuestion(context.getCurrentCard(),
             new AnyMemoTTS.OnTextToSpeechCompletedListener() {
                 public void onTextToSpeechCompleted(final String text) {
                     // Use UI thread's handler to post call instead of sleeping.
@@ -121,7 +121,7 @@ public enum AutoSpeakState implements AutoSpeakStateTransition {
     private static void playAnswer(final AutoSpeakContext context) {
         Ln.v("Playing Answer: " + context.getCurrentCard().getId());
         context.getEventHandler().onPlayCard(context.getCurrentCard());
-        context.getAmTTSService().speakCardAnswer(context.getCurrentCard(),
+        context.getCardTTSUtil().speakCardAnswer(context.getCurrentCard(),
             new AnyMemoTTS.OnTextToSpeechCompletedListener() {
                 public void onTextToSpeechCompleted(final String text) {
                     context.getAmTTSServiceHandler().postDelayed(new Runnable() {

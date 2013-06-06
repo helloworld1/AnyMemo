@@ -6,13 +6,13 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import org.liberty.android.fantastischmemo.domain.Card;
-import org.liberty.android.fantastischmemo.service.AMTTSService;
 import org.liberty.android.fantastischmemo.service.autospeak.AutoSpeakContext;
 import org.liberty.android.fantastischmemo.service.autospeak.AutoSpeakEventHandler;
 import org.liberty.android.fantastischmemo.service.autospeak.AutoSpeakMessage;
 import org.liberty.android.fantastischmemo.service.autospeak.AutoSpeakState;
 import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
+import org.liberty.android.fantastischmemo.utils.CardTTSUtil;
 
 import android.os.Handler;
 import android.test.suitebuilder.annotation.SmallTest;
@@ -26,7 +26,8 @@ public class AutoSpeakStateTest extends AbstractExistingDBTest {
 
     private AutoSpeakEventHandler mockEventHandler;
 
-    private AMTTSService mockAmTTSService;
+    private CardTTSUtil mockCardTTSUtil;
+
     private Handler mockAmTTSServiceHandler;
 
     private final int delayBeteenQAInSec = 3;
@@ -38,11 +39,11 @@ public class AutoSpeakStateTest extends AbstractExistingDBTest {
     protected void setUp() throws Exception {
         super.setUp();
         mockEventHandler = mock(AutoSpeakEventHandler.class); 
-        mockAmTTSService = mock(AMTTSService.class);
+        mockCardTTSUtil = mock(CardTTSUtil.class);
         mockAmTTSServiceHandler = mock(Handler.class);
         autoSpeakContext = new AutoSpeakContext(
             mockEventHandler,
-            mockAmTTSService,
+            mockCardTTSUtil,
             mockAmTTSServiceHandler,
             helper,
             delayBeteenQAInSec,
@@ -94,7 +95,7 @@ public class AutoSpeakStateTest extends AbstractExistingDBTest {
     public void testPlayingQuestionReceivedPlayQuesetionCompletedShouldPlayAnswer() {
         verifyStateTransition(AutoSpeakState.PLAYING_QUESTION,
                 AutoSpeakMessage.PLAYING_QUESTION_COMPLETED, AutoSpeakState.PLAYING_ANSWER);
-        verify(mockAmTTSService, times(1)).speakCardAnswer(any(Card.class), any(AnyMemoTTS.OnTextToSpeechCompletedListener.class));
+        verify(mockCardTTSUtil, times(1)).speakCardAnswer(any(Card.class), any(AnyMemoTTS.OnTextToSpeechCompletedListener.class));
     }
 
     @SmallTest
@@ -121,7 +122,7 @@ public class AutoSpeakStateTest extends AbstractExistingDBTest {
     public void testPlayingAnswerReceivedPlayAnswerCompletedShouldPlayNextQuestion() {
         verifyStateTransition(AutoSpeakState.PLAYING_ANSWER,
                 AutoSpeakMessage.PLAYING_ANSWER_COMPLETED, AutoSpeakState.PLAYING_QUESTION);
-        verify(mockAmTTSService, times(1)).speakCardQuestion(any(Card.class), any(AnyMemoTTS.OnTextToSpeechCompletedListener.class));
+        verify(mockCardTTSUtil, times(1)).speakCardQuestion(any(Card.class), any(AnyMemoTTS.OnTextToSpeechCompletedListener.class));
         // Also verify the event callback to the fragment.
         verify(mockEventHandler, times(1)).onPlayCard(any(Card.class));
         assertEquals(TEST_CARD_ID + 1, (int)autoSpeakContext.getCurrentCard().getId());

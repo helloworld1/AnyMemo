@@ -23,7 +23,6 @@ package org.liberty.android.fantastischmemo.ui;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -45,19 +44,20 @@ import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
-import org.liberty.android.fantastischmemo.service.AMTTSService;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 import org.liberty.android.fantastischmemo.utils.AMStringUtils;
 import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
+import org.liberty.android.fantastischmemo.utils.CardTTSUtil;
+import org.liberty.android.fantastischmemo.utils.CardTTSUtilFactory;
 import org.xml.sax.XMLReader;
 
-import roboguice.util.Ln;
+import roboguice.RoboGuice;
+import roboguice.inject.ContextScope;
+import roboguice.util.RoboAsyncTask;
 
 import android.app.ProgressDialog;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.gesture.Gesture;
 import android.gesture.GestureLibraries;
 import android.gesture.GestureLibrary;
@@ -70,7 +70,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.v4.app.FragmentTransaction;
 import android.text.ClipboardManager;
 import android.text.Editable;
@@ -126,19 +125,27 @@ public abstract class QACardActivity extends AMActivity {
 
     private TextView smallTitleBar;
 
-    private AMTTSService amTTSService;
+    private CardTTSUtilFactory cardTTSUtilFactory;
+
+    private CardTTSUtil cardTTSUtil;
 
     private GestureLibrary gestureLibrary;
+
+    private volatile boolean initFinished = false;
 
     @Inject
     public void setOption(Option option) {
         this.option = option;
     }
 
-    public AMTTSService getAMTTSService() {
-        return amTTSService;
+    @Inject
+    public void setCardTTSUtilFactory(CardTTSUtilFactory cardTTSUtilFactory) {
+        this.cardTTSUtilFactory = cardTTSUtilFactory;
     }
 
+    public CardTTSUtil getCardTTSUtil() {
+        return cardTTSUtil;
+    }
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -167,7 +174,7 @@ public abstract class QACardActivity extends AMActivity {
         // Load gestures
         loadGestures();
 
-        initTask = new InitTask();
+        initTask = new InitTask(this);
         initTask.execute();
     }
 
@@ -453,62 +460,75 @@ public abstract class QACardActivity extends AMActivity {
         this.animationOutResId = animationOutResId;
     }
 
-    private class InitTask extends AsyncTask<Void, Void, Exception> {
+    private class InitTask extends RoboAsyncTask<Void> {
 
         private ProgressDialog progressDialog;
 
+        private Context context;
+
+        public InitTask(Context context) {
+            super(context);
+            this.context = context;
+        }
+
         @Override
         public void onPreExecute() {
-            progressDialog = new ProgressDialog(QACardActivity.this);
+            progressDialog = new ProgressDialog(context);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.setTitle(getString(R.string.loading_please_wait));
             progressDialog.setMessage(getString(R.string.loading_database));
             progressDialog.setCancelable(false);
             progressDialog.show();
 
+            // Get the context scope in UI thread (Who hold the ThreadLocal context scope
         }
 
         @Override
-        public Exception doInBackground(Void... params) {
-            try {
-                cardDao = dbOpenHelper.getCardDao();
-                learningDataDao = dbOpenHelper.getLearningDataDao();
-                settingDao = dbOpenHelper.getSettingDao();
-                categoryDao = dbOpenHelper.getCategoryDao();
-                setting = settingDao.queryForId(1);
+        public Void call() throws Exception {
+            cardDao = dbOpenHelper.getCardDao();
+            learningDataDao = dbOpenHelper.getLearningDataDao();
+            settingDao = dbOpenHelper.getSettingDao();
+            categoryDao = dbOpenHelper.getCategoryDao();
+            setting = settingDao.queryForId(1);
 
-                bindServices();
+            ContextScope scope = RoboGuice.getInjector(context).getInstance(ContextScope.class);
 
-                // Init of common functions here
-                // Call customized init funciton defined in
-                // the subclass
-                onInit();
-
-                // No Exception.
-                return null;
-            } catch (Exception e) {
-                Log.e(TAG, "Excepting doing in bacground", e);
-                return e;
-            }
-        }
-
-        @Override
-        public void onCancelled() {
-            return;
-        }
-
-        @Override
-        public void onPostExecute(Exception e) {
-            progressDialog.dismiss();
-            if (e != null) {
-                AMGUIUtility.displayError(QACardActivity.this,
-                        getString(R.string.exception_text),
-                        getString(R.string.exception_message), e);
-                return;
+            // Make sure the method is running under the context
+            // The AsyncTask thread does not have the context, so we need
+            // to manually enter the scope.
+            synchronized(ContextScope.class) {
+                scope.enter(context);
+                try {
+                    cardTTSUtil = cardTTSUtilFactory.create(dbPath);
+                    // Init of common functions here
+                    // Call customized init funciton defined in
+                    // the subclass
+                    onInit();
+                } finally {
+                    scope.exit(context);
+                }
             }
 
+            return null;
+        }
+
+        @Override
+        public void onSuccess(Void result) {
             // Call customized method when init completed
             onPostInit();
+        }
+
+        @Override
+        public void onException(Exception e) throws RuntimeException {
+            AMGUIUtility.displayError(QACardActivity.this,
+                    getString(R.string.exception_text),
+                    getString(R.string.exception_message), e);
+        }
+
+        @Override
+        public void onFinally() {
+            progressDialog.dismiss();
+            initFinished = true;
         }
     }
 
@@ -516,9 +536,7 @@ public abstract class QACardActivity extends AMActivity {
     public void onResume() {
         super.onResume();
         // Only if the initTask has been finished and no waitDbTask is waiting.
-        if ((initTask != null && AsyncTask.Status.FINISHED.equals(initTask
-                .getStatus()))
-                && (waitDbTask == null || !AsyncTask.Status.RUNNING
+        if (initFinished && (waitDbTask == null || !AsyncTask.Status.RUNNING
                         .equals(waitDbTask.getStatus()))) {
             waitDbTask = new WaitDbTask();
             waitDbTask.execute((Void) null);
@@ -530,7 +548,6 @@ public abstract class QACardActivity extends AMActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        unbindServices();
         AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
 
         /* Update the widget because StudyActivity can be accessed though widget*/
@@ -651,12 +668,12 @@ public abstract class QACardActivity extends AMActivity {
     };
 
     protected boolean speakQuestion() {
-        amTTSService.speakCardQuestion(getCurrentCard());
+        cardTTSUtil.speakCardQuestion(getCurrentCard());
         return true;
     }
 
     protected boolean speakAnswer() {
-        amTTSService.speakCardAnswer(getCurrentCard());
+        cardTTSUtil.speakCardAnswer(getCurrentCard());
         return true;
     }
 
@@ -744,31 +761,6 @@ public abstract class QACardActivity extends AMActivity {
         return super.onKeyUp(keyCode, event);
     }
 
-
-    private ServiceConnection textToSpeechServiceConnection = new ServiceConnection() {
-        public void onServiceConnected(ComponentName className, IBinder binder) {
-            amTTSService = ((AMTTSService.LocalBinder) binder).getService();
-
-            Ln.v("Connected to AMTTSService");
-        }
-
-        public void onServiceDisconnected(ComponentName className) {
-            amTTSService = null;
-            Ln.v("Disconnedted from AMTTSService");
-        }
-    };
-
-    private void bindServices() {
-        Intent intent = new Intent(this, AMTTSService.class);
-        intent.putExtra(AMTTSService.EXTRA_DBPATH, getDbPath());
-        bindService(intent, textToSpeechServiceConnection, Context.BIND_AUTO_CREATE);
-    }
-
-    private void unbindServices() {
-        if (textToSpeechServiceConnection != null) {
-            unbindService(textToSpeechServiceConnection);
-        }
-    }
 
     private CardFragment.OnClickListener onQuestionTextClickListener = new CardFragment.OnClickListener() {
 

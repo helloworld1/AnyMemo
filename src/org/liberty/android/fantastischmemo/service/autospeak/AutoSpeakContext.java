@@ -2,7 +2,7 @@ package org.liberty.android.fantastischmemo.service.autospeak;
 
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.domain.Card;
-import org.liberty.android.fantastischmemo.service.AMTTSService;
+import org.liberty.android.fantastischmemo.utils.CardTTSUtil;
 
 import android.os.Handler;
 
@@ -11,7 +11,7 @@ public class AutoSpeakContext {
     private volatile Card currentCard;
     
     private final AutoSpeakEventHandler eventHandler;
-    private final AMTTSService amTTSService;
+    private final CardTTSUtil cardTTSUtil;
     private final Handler amTTSServiceHandler;
     private final AnyMemoDBOpenHelper dbOpenHelper;
 
@@ -20,13 +20,13 @@ public class AutoSpeakContext {
 
     public AutoSpeakContext(
             AutoSpeakEventHandler eventHandler,
-            AMTTSService amTTSService,
+            CardTTSUtil cardTTSUtil,
             Handler amTTSServiceHandler,
             AnyMemoDBOpenHelper dbOpenHelper,
             int delayBeteenQAInSec,
             int delayBeteenCardsInSec) {
         this.eventHandler = eventHandler;
-        this.amTTSService = amTTSService;
+        this.cardTTSUtil = cardTTSUtil;
         this.amTTSServiceHandler = amTTSServiceHandler;
         this.dbOpenHelper = dbOpenHelper;
         this.delayBeteenQAInSec = delayBeteenQAInSec;
@@ -53,8 +53,8 @@ public class AutoSpeakContext {
         return eventHandler;
     }
 
-    public AMTTSService getAmTTSService() {
-        return amTTSService;
+    public CardTTSUtil getCardTTSUtil() {
+        return cardTTSUtil;
     }
 
     public Handler getAmTTSServiceHandler() {

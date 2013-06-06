@@ -3,12 +3,16 @@ package org.liberty.android.fantastischmemo.ui;
 
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.service.AutoSpeakService;
 import org.liberty.android.fantastischmemo.service.autospeak.AutoSpeakEventHandler;
 
 import roboguice.fragment.RoboFragment;
 
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,11 +89,11 @@ public class AutoSpeakFragment extends RoboFragment {
                     startPlaying();
                 }
             } else if (v == previousButton) {
-                previewEditActivity.getAMTTSService().skipToPrev();
+                //previewEditActivity.getAMTTSService().skipToPrev();
             } else if (v == nextButton) {
-                previewEditActivity.getAMTTSService().skipToNext();
+                //previewEditActivity.getAMTTSService().skipToNext();
             } else if (v == settingsButton) {
-                displaySettingsDialog();
+                //displaySettingsDialog();
             } else if (v == exitButton) {
                 dismissFragment();
             }
@@ -98,13 +102,13 @@ public class AutoSpeakFragment extends RoboFragment {
 
     private void startPlaying() {
         playButton.setSelected(true);
-        previewEditActivity.getAMTTSService().startPlaying(
-                previewEditActivity.getCurrentCard(), autoSpeakEventHandler);
+        // previewEditActivity.getAMTTSService().startPlaying(
+        //         previewEditActivity.getCurrentCard(), autoSpeakEventHandler);
     }
 
     private void stopPlaying() {
         playButton.setSelected(false);
-        previewEditActivity.getAMTTSService().stopPlaying();
+        //previewEditActivity.getAMTTSService().stopPlaying();
     }
 
     private void displaySettingsDialog() {
@@ -127,6 +131,20 @@ public class AutoSpeakFragment extends RoboFragment {
                     && card.getId() != previewEditActivity.getCurrentCard().getId()) {
                 previewEditActivity.gotoCard(card);
             }
+        }
+    };
+
+    private AutoSpeakService autoSpeakService;
+
+    private ServiceConnection autoSpeakServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder binder) {
+            autoSpeakService = ((AutoSpeakService.LocalBinder) binder).getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName className) {
+            autoSpeakService = null;
         }
     };
 
