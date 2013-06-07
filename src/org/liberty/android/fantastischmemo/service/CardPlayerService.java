@@ -12,9 +12,9 @@ import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
-import org.liberty.android.fantastischmemo.service.autospeak.AutoSpeakContext;
-import org.liberty.android.fantastischmemo.service.autospeak.AutoSpeakEventHandler;
-import org.liberty.android.fantastischmemo.service.autospeak.AutoSpeakMessage;
+import org.liberty.android.fantastischmemo.service.cardplayer.CardPlayerContext;
+import org.liberty.android.fantastischmemo.service.cardplayer.CardPlayerEventHandler;
+import org.liberty.android.fantastischmemo.service.cardplayer.CardPlayerMessage;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
 import org.liberty.android.fantastischmemo.ui.PreviewEditActivity;
 import org.liberty.android.fantastischmemo.utils.CardTTSUtil;
@@ -32,11 +32,11 @@ import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
-public class AutoSpeakService extends RoboService {
+public class CardPlayerService extends RoboService {
 
     public static final String EXTRA_DBPATH = "dbpath";
 
-    // Magic id used for AutoSpeak's notification
+    // Magic id used for Card player's notification
     private static final int NOTIFICATION_ID = 9283372;
 
     // This is the object that receives interactions from clients.
@@ -64,8 +64,8 @@ public class AutoSpeakService extends RoboService {
 
     private CardTTSUtilFactory cardTTSUtilFactory;
 
-    // The context used for autoSpeak state machine.
-    private volatile AutoSpeakContext autoSpeakContext = null;
+    // The context used for card player state machine.
+    private volatile CardPlayerContext cardPlayerContext = null;
 
     @Inject
     public void setOption(Option option) {
@@ -123,45 +123,45 @@ public class AutoSpeakService extends RoboService {
     }
 
     @CheckNullArgs
-    public void startPlaying(Card startCard, AutoSpeakEventHandler eventHandler) {
+    public void startPlaying(Card startCard, CardPlayerEventHandler eventHandler) {
         // Always to create a new context if we start playing to ensure it is playing
         // from a clean state.
-        autoSpeakContext = new AutoSpeakContext(
+        cardPlayerContext = new CardPlayerContext(
                 eventHandler,
                 cardTTSUtil,
                 handler,
                 dbOpenHelper,
-                option.getAutoSpeakIntervalBetweenQA(),
-                option.getAutoSpeakIntervalBetweenCards());
+                option.getCardPlayerIntervalBetweenQA(),
+                option.getCardPlayerIntervalBetweenCards());
 
-        autoSpeakContext.setCurrentCard(startCard);
-        autoSpeakContext.getState().transition(autoSpeakContext, AutoSpeakMessage.START_PLAYING);
+        cardPlayerContext.setCurrentCard(startCard);
+        cardPlayerContext.getState().transition(cardPlayerContext, CardPlayerMessage.START_PLAYING);
         showNotification();
     }
 
     public void skipToNext() {
-        if (autoSpeakContext != null) {
-            autoSpeakContext.getState().transition(autoSpeakContext, AutoSpeakMessage.GO_TO_NEXT);
+        if (cardPlayerContext != null) {
+            cardPlayerContext.getState().transition(cardPlayerContext, CardPlayerMessage.GO_TO_NEXT);
         } else {
-            Ln.i("Call skipToPrev with null autoSpeakContext. Do nothing.");
+            Ln.i("Call skipToPrev with null cardPlayerContext. Do nothing.");
         }
     }
 
     public void skipToPrev() {
-        if (autoSpeakContext != null) {
-            autoSpeakContext.getState().transition(autoSpeakContext, AutoSpeakMessage.GO_TO_PREV);
+        if (cardPlayerContext != null) {
+            cardPlayerContext.getState().transition(cardPlayerContext, CardPlayerMessage.GO_TO_PREV);
         } else {
-            Ln.i("Call skipToPrev with null autoSpeakContext. Do nothing.");
+            Ln.i("Call skipToPrev with null cardPlayerContext. Do nothing.");
         }
     }
 
     public void stopPlaying() {
         Ln.v("Stop playing");
         cancelNotification();
-        if (autoSpeakContext != null) {
-            autoSpeakContext.getState().transition(autoSpeakContext, AutoSpeakMessage.STOP_PLAYING);
+        if (cardPlayerContext != null) {
+            cardPlayerContext.getState().transition(cardPlayerContext, CardPlayerMessage.STOP_PLAYING);
         } else {
-            Ln.i("Call stopPlaying with null autoSpeakContext. Do nothing.");
+            Ln.i("Call stopPlaying with null cardPlayerContext. Do nothing.");
         }
     }
 
@@ -175,11 +175,10 @@ public class AutoSpeakService extends RoboService {
 
         resultIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         resultIntent.putExtra(PreviewEditActivity.EXTRA_DBPATH, dbPath);
-        resultIntent.putExtra(PreviewEditActivity.EXTRA_SHOW_AUTO_SPEAK, true);
-        if (autoSpeakContext != null) {
-            resultIntent.putExtra(PreviewEditActivity.EXTRA_CARD_ID, autoSpeakContext.getCurrentCard().getId());
+        if (cardPlayerContext != null) {
+            resultIntent.putExtra(PreviewEditActivity.EXTRA_CARD_ID, cardPlayerContext.getCurrentCard().getId());
         } else {
-            Ln.w("The notification for AutoSpeak is shown but the autoSpeakContext is null!");
+            Ln.w("The notification for card player is shown but the cardPlayerContext is null!");
         }
 
         stackBuilder.addNextIntent(resultIntent);
@@ -190,8 +189,8 @@ public class AutoSpeakService extends RoboService {
         NotificationCompat.Builder mBuilder =
             new NotificationCompat.Builder(this)
             .setSmallIcon(R.drawable.icon)
-            .setContentTitle(getString(R.string.auto_speak_notification_title))
-            .setContentText(getString(R.string.auto_speak_notification_text))
+            .setContentTitle(getString(R.string.card_player_notification_title))
+            .setContentText(getString(R.string.card_player_notification_text))
             .setContentIntent(resultPendingIntent)
             .setOngoing(true);
 
@@ -207,8 +206,8 @@ public class AutoSpeakService extends RoboService {
 
     // A local binder that works for local methos call.
     public class LocalBinder extends Binder {
-        public AutoSpeakService getService() {
-            return AutoSpeakService.this;
+        public CardPlayerService getService() {
+            return CardPlayerService.this;
         }
     }
 

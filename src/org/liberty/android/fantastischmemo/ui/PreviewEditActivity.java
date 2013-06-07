@@ -41,8 +41,6 @@ import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
 import org.liberty.android.fantastischmemo.utils.ShareUtil;
 
-import roboguice.util.Ln;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -51,18 +49,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -81,10 +75,6 @@ public class PreviewEditActivity extends QACardActivity {
     public static String EXTRA_DBPATH = "dbpath";
     public static String EXTRA_CARD_ID = "id";
     public static String EXTRA_CATEGORY = "category";
-    public static String EXTRA_SHOW_AUTO_SPEAK= "showAutoSpeak";
-
-    private static final String TAG = "PreviewEditActivity";
-    private static final int MAGIC_FRAME_LAYOUT_ID = 675198655; // A magic id that we used to set frame layout id.
 
     private Category currentCategory = null;
     private Integer savedCardId = null;
@@ -107,12 +97,9 @@ public class PreviewEditActivity extends QACardActivity {
     private Setting setting;
     private ShareUtil shareUtil;
     private AMPrefUtil amPrefUtil;
-    private GestureDetector gestureDetector;
 
     // The first card to read and display.
     private int startCardId = 1;
-
-    private boolean showAutoSpeakFragmentOnCreate = false;
 
     @Inject
     public void setShareUtil(ShareUtil shareUtil) {
@@ -135,7 +122,6 @@ public class PreviewEditActivity extends QACardActivity {
         dbPath = extras.getString(EXTRA_DBPATH);
         activeCategoryId = extras.getInt(EXTRA_CATEGORY, -1);
         startCardId = extras.getInt(EXTRA_CARD_ID, -1);
-        showAutoSpeakFragmentOnCreate = extras.getBoolean(EXTRA_SHOW_AUTO_SPEAK, false);
 
         /*
          * Currently always set the result to OK
@@ -191,14 +177,7 @@ public class PreviewEditActivity extends QACardActivity {
             updateCardFrontSide();
             updateTitle();
         }
-        /* Double sided card can't use the flip gesture*/
-        if(setting.getCardStyle() != Setting.CardStyle.DOUBLE_SIDED){
-            gestureDetector= new GestureDetector(PreviewEditActivity.this, gestureListener);
-        }
 
-        if (showAutoSpeakFragmentOnCreate) {
-            showAutoSpeakFragment();
-        }
     }
 
     // Save the card id in onPause
@@ -352,9 +331,8 @@ public class PreviewEditActivity extends QACardActivity {
                 return true;
             }
 
-            case R.id.menu_auto_speak:
+            case R.id.menu_card_player:
             {
-                showAutoSpeakFragment();
                 return true;
             }
 
@@ -830,48 +808,6 @@ public class PreviewEditActivity extends QACardActivity {
         }
     };
 
-    private View.OnTouchListener viewTouchListener = new View.OnTouchListener(){
-        @Override
-        public boolean onTouch(View v, MotionEvent event){
-            return gestureDetector.onTouchEvent(event);
-        }
-    };
-
-
-    private GestureDetector.OnGestureListener gestureListener = new GestureDetector.SimpleOnGestureListener(){
-        private static final int SWIPE_MIN_DISTANCE = 120;
-        private static final int SWIPE_MAX_OFF_PATH = 250;
-        private static final int SWIPE_THRESHOLD_VELOCITY = 200;
-
-        @Override
-        public boolean onDown(MotionEvent e){
-            /* Trick: Prevent the menu to popup twice */
-            return true;
-        }
-        @Override
-        public void onLongPress(MotionEvent e){
-            // TODO: Long press what???
-        }
-
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            try {
-                if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
-                    return false;
-                if(e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                    /* Swipe Right to Left event */
-                    gotoNext();
-                }  else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                    /* Swipe Left to Right event */
-                    gotoPrev();
-                }
-            } catch (Exception e) {
-                Log.e(TAG, "Error handling gesture left/right event", e);
-            }
-            return false;
-        }
-    };
-
     private class DeleteCardTask extends AsyncTask<Void, Void, Void> {
         private ProgressDialog progressDialog;
         @Override
@@ -969,21 +905,6 @@ public class PreviewEditActivity extends QACardActivity {
         args.putSerializable(GestureSelectionDialogFragment.EXTRA_GESTURE_NAME_DESCRIPTION_MAP, gestureNameDescriptionMap);
         df.setArguments(args);
         df.show(getSupportFragmentManager(), "GestureSelectionDialog");
-    }
-
-    private void showAutoSpeakFragment() {
-        if (getCurrentCard() != null) {
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            LinearLayout root = (LinearLayout)findViewById(R.id.root);
-            FrameLayout fl = new FrameLayout(this);
-
-            AutoSpeakFragment f = new AutoSpeakFragment();
-
-            fl.setId(MAGIC_FRAME_LAYOUT_ID);
-            root.addView(fl);
-            ft.replace(fl.getId(), f);
-            ft.commit();
-        }
     }
 
     private static enum SearchMethod {

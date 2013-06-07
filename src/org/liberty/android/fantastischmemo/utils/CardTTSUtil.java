@@ -36,7 +36,7 @@ import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
-import org.liberty.android.fantastischmemo.service.AutoSpeakService.LocalBinder;
+import org.liberty.android.fantastischmemo.service.CardPlayerService.LocalBinder;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTSImpl;
 import org.liberty.android.fantastischmemo.tts.NullAnyMemoTTS;

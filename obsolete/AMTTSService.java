@@ -192,8 +192,8 @@ public class AutoSpeakService extends RoboService {
         NotificationCompat.Builder mBuilder =
             new NotificationCompat.Builder(this)
             .setSmallIcon(R.drawable.icon)
-            .setContentTitle(getString(R.string.auto_speak_notification_title))
-            .setContentText(getString(R.string.auto_speak_notification_text))
+            .setContentTitle(getString(R.string.card_player_notification_title))
+            .setContentText(getString(R.string.card_player_notification_text))
             .setContentIntent(resultPendingIntent)
             .setOngoing(true);
 

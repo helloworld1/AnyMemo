@@ -35,7 +35,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-public class AutoSpeakActivity extends QACardActivity {
+public class CardPlayerActivity extends QACardActivity {
     public static String EXTRA_START_CARD_ID = "start_card_id";
     public static String EXTRA_PLAYING_STATUS = "playing_status";
 
@@ -183,6 +183,21 @@ public class AutoSpeakActivity extends QACardActivity {
                 // buttonsLayout.setBackgroundColor(setting.getAnswerBackgroundColor());
             }
         }
+    }
+
+    private void showAutoSpeakFragment() {
+        //if (getCurrentCard() != null) {
+        //    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        //    LinearLayout root = (LinearLayout)findViewById(R.id.root);
+        //    FrameLayout fl = new FrameLayout(this);
+
+        //    CardPlayerFragment f = new CardPlayerFragment();
+
+        //    fl.setId(MAGIC_FRAME_LAYOUT_ID);
+        //    root.addView(fl);
+        //    ft.replace(fl.getId(), f);
+        //    ft.commit();
+        //}
     }
 }
 

@@ -3,8 +3,8 @@ package org.liberty.android.fantastischmemo.ui;
 
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.domain.Card;
-import org.liberty.android.fantastischmemo.service.AutoSpeakService;
-import org.liberty.android.fantastischmemo.service.autospeak.AutoSpeakEventHandler;
+import org.liberty.android.fantastischmemo.service.CardPlayerService;
+import org.liberty.android.fantastischmemo.service.cardplayer.CardPlayerEventHandler;
 
 import roboguice.fragment.RoboFragment;
 
@@ -18,7 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-public class AutoSpeakFragment extends RoboFragment {
+public class CardPlayerFragment extends RoboFragment {
 
     private ImageButton playButton;
     private ImageButton previousButton;
@@ -48,21 +48,21 @@ public class AutoSpeakFragment extends RoboFragment {
     public View onCreateView(LayoutInflater inflater,
             ViewGroup container,
             Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.auto_speak_layout, container, false);
-        playButton = (ImageButton) v.findViewById(R.id.auto_speak_play_button);
+        View v = inflater.inflate(R.layout.card_player_layout, container, false);
+        playButton = (ImageButton) v.findViewById(R.id.card_player_play_button);
         playButton.setOnClickListener(buttonListener);
         playButton.setSelected(false);
 
-        previousButton = (ImageButton) v.findViewById(R.id.auto_speak_previous_button);
+        previousButton = (ImageButton) v.findViewById(R.id.card_player_previous_button);
         previousButton.setOnClickListener(buttonListener);
 
-        nextButton = (ImageButton) v.findViewById(R.id.auto_speak_next_button);
+        nextButton = (ImageButton) v.findViewById(R.id.card_player_next_button);
         nextButton.setOnClickListener(buttonListener);
 
-        settingsButton = (ImageButton) v.findViewById(R.id.auto_speak_settings_button);
+        settingsButton = (ImageButton) v.findViewById(R.id.card_player_settings_button);
         settingsButton.setOnClickListener(buttonListener);
 
-        exitButton = (ImageButton) v.findViewById(R.id.auto_speak_exit_button);
+        exitButton = (ImageButton) v.findViewById(R.id.card_player_exit_button);
         exitButton.setOnClickListener(buttonListener);
 
         return v;
@@ -103,7 +103,7 @@ public class AutoSpeakFragment extends RoboFragment {
     private void startPlaying() {
         playButton.setSelected(true);
         // previewEditActivity.getAMTTSService().startPlaying(
-        //         previewEditActivity.getCurrentCard(), autoSpeakEventHandler);
+        //         previewEditActivity.getCurrentCard(), cardPlayerEventHandler);
     }
 
     private void stopPlaying() {
@@ -113,7 +113,7 @@ public class AutoSpeakFragment extends RoboFragment {
 
     private void displaySettingsDialog() {
         stopPlaying();
-        AutoSpeakSettingDialogFragment fragment = new AutoSpeakSettingDialogFragment();
+        CardPlayerSettingDialogFragment fragment = new CardPlayerSettingDialogFragment();
         fragment.show(getActivity().getSupportFragmentManager(), "SettingsDialogFragment");
     }
 
@@ -122,7 +122,7 @@ public class AutoSpeakFragment extends RoboFragment {
                 .remove(this).commit();
     }
 
-    private AutoSpeakEventHandler autoSpeakEventHandler = new AutoSpeakEventHandler() {
+    private CardPlayerEventHandler cardPlayerEventHandler = new CardPlayerEventHandler() {
         @Override
         public void onPlayCard(Card card) {
             // 1. Make sure the activity is foreground to update the card.
@@ -134,17 +134,17 @@ public class AutoSpeakFragment extends RoboFragment {
         }
     };
 
-    private AutoSpeakService autoSpeakService;
+    private CardPlayerService cardPlayerService;
 
     private ServiceConnection autoSpeakServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName className, IBinder binder) {
-            autoSpeakService = ((AutoSpeakService.LocalBinder) binder).getService();
+            cardPlayerService = ((CardPlayerService.LocalBinder) binder).getService();
         }
 
         @Override
         public void onServiceDisconnected(ComponentName className) {
-            autoSpeakService = null;
+            cardPlayerService = null;
         }
     };
 
