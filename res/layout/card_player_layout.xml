@@ -35,23 +35,23 @@
             android:src="@drawable/media_forward" />
 
          <ImageButton
-            android:id="@+id/card_player_settings_button"
+            android:id="@+id/card_player_shuffle_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:background="@android:color/transparent"
             android:layout_weight="1"
-            android:src="@drawable/media_setting" />
+            android:src="@drawable/media_shuffle" />
 
         <ImageButton
-            android:id="@+id/card_player_exit_button"
+            android:id="@+id/card_player_repeat_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:background="@android:color/transparent"
             android:layout_weight="1"
-            android:src="@drawable/media_close" />
+            android:src="@drawable/media_repeat" />
 
 </LinearLayout>

@@ -19,7 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import org.apache.mycommons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.aspect.CheckNullArgs;
 import org.liberty.android.fantastischmemo.dao.CardDao;
@@ -31,13 +30,18 @@ import org.liberty.android.fantastischmemo.domain.Setting;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 public class CardPlayerActivity extends QACardActivity {
-    public static String EXTRA_START_CARD_ID = "start_card_id";
-    public static String EXTRA_PLAYING_STATUS = "playing_status";
+    public static final String EXTRA_START_CARD_ID = "start_card_id";
+
+    public static final String EXTRA_PLAYING_STATUS = "playing_status";
+
+    private static final int MAGIC_FRAME_LAYOUT_ID = 338125929;
 
     private CardDao cardDao;
 
@@ -57,6 +61,8 @@ public class CardPlayerActivity extends QACardActivity {
 
         Bundle extras = getIntent().getExtras();
         startCardId = extras.getInt(EXTRA_START_CARD_ID, -1);
+
+        showAutoSpeakFragment();
 
     }
 
@@ -186,18 +192,16 @@ public class CardPlayerActivity extends QACardActivity {
     }
 
     private void showAutoSpeakFragment() {
-        //if (getCurrentCard() != null) {
-        //    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        //    LinearLayout root = (LinearLayout)findViewById(R.id.root);
-        //    FrameLayout fl = new FrameLayout(this);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        LinearLayout root = (LinearLayout)findViewById(R.id.root);
+        FrameLayout cardPlayerView = new FrameLayout(this);
 
-        //    CardPlayerFragment f = new CardPlayerFragment();
+        CardPlayerFragment f = new CardPlayerFragment();
 
-        //    fl.setId(MAGIC_FRAME_LAYOUT_ID);
-        //    root.addView(fl);
-        //    ft.replace(fl.getId(), f);
-        //    ft.commit();
-        //}
+        cardPlayerView.setId(MAGIC_FRAME_LAYOUT_ID);
+        root.addView(cardPlayerView);
+        ft.replace(cardPlayerView.getId(), f);
+        ft.commit();
     }
 }
 

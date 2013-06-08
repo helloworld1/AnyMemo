@@ -7,15 +7,12 @@ import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.aspect.CheckNullArgs;
 import org.liberty.android.fantastischmemo.aspect.LogInvocation;
-import org.liberty.android.fantastischmemo.dao.CardDao;
-import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Option;
-import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.service.cardplayer.CardPlayerContext;
 import org.liberty.android.fantastischmemo.service.cardplayer.CardPlayerEventHandler;
 import org.liberty.android.fantastischmemo.service.cardplayer.CardPlayerMessage;
-import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
+import org.liberty.android.fantastischmemo.ui.CardPlayerActivity;
 import org.liberty.android.fantastischmemo.ui.PreviewEditActivity;
 import org.liberty.android.fantastischmemo.utils.CardTTSUtil;
 import org.liberty.android.fantastischmemo.utils.CardTTSUtilFactory;
@@ -45,16 +42,6 @@ public class CardPlayerService extends RoboService {
     private String dbPath;
 
     private AnyMemoDBOpenHelper dbOpenHelper;
-
-    private CardDao cardDao;
-
-    private SettingDao settingDao;
-
-    private AnyMemoTTS questionTTS;
-
-    private AnyMemoTTS answerTTS;
-
-    private Setting setting;
 
     private Handler handler;
 
@@ -92,9 +79,6 @@ public class CardPlayerService extends RoboService {
         cardTTSUtil = cardTTSUtilFactory.create(dbPath);
 
         dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(this, dbPath);
-
-        cardDao = dbOpenHelper.getCardDao();
-        settingDao = dbOpenHelper.getSettingDao();
 
         return binder;
     }
@@ -167,11 +151,11 @@ public class CardPlayerService extends RoboService {
 
     private void showNotification() {
 
-        Intent resultIntent = new Intent(this, PreviewEditActivity.class);
+        Intent resultIntent = new Intent(this, CardPlayerActivity.class);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
 
-        stackBuilder.addParentStack(PreviewEditActivity.class);
+        stackBuilder.addParentStack(CardPlayerActivity.class);
 
         resultIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         resultIntent.putExtra(PreviewEditActivity.EXTRA_DBPATH, dbPath);
@@ -208,6 +192,14 @@ public class CardPlayerService extends RoboService {
     public class LocalBinder extends Binder {
         public CardPlayerService getService() {
             return CardPlayerService.this;
+        }
+
+        public Card getCurrentPlayingCard() {
+            if (cardPlayerContext != null) {
+                return cardPlayerContext.getCurrentCard();
+            } else {
+                return null;
+            }
         }
     }
 

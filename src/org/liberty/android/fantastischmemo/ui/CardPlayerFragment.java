@@ -10,38 +10,53 @@ import roboguice.fragment.RoboFragment;
 
 import android.app.Activity;
 import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+
+/*
+ * Display the control bar in CardPlayerActivity
+ * Handle the event from CardPlayerService
+ */
 public class CardPlayerFragment extends RoboFragment {
 
     private ImageButton playButton;
     private ImageButton previousButton;
     private ImageButton nextButton;
-    private ImageButton settingsButton;
-    private ImageButton exitButton;
+    private ImageButton shuffleButton;
+    private ImageButton repeatButton;
 
-    private PreviewEditActivity previewEditActivity;
+    private CardPlayerActivity activity;
+
+    private CardPlayerService cardPlayerService;
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+        setHasOptionsMenu(true);
+        bindCardPlayerService();
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onDestroy() {
+        super.onDestroy();
+        unbindCardPlayerService();
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.previewEditActivity = (PreviewEditActivity) activity;
+        this.activity = (CardPlayerActivity) activity;
     }
 
     @Override
@@ -59,11 +74,11 @@ public class CardPlayerFragment extends RoboFragment {
         nextButton = (ImageButton) v.findViewById(R.id.card_player_next_button);
         nextButton.setOnClickListener(buttonListener);
 
-        settingsButton = (ImageButton) v.findViewById(R.id.card_player_settings_button);
-        settingsButton.setOnClickListener(buttonListener);
+        repeatButton = (ImageButton) v.findViewById(R.id.card_player_repeat_button);
+        repeatButton.setOnClickListener(buttonListener);
 
-        exitButton = (ImageButton) v.findViewById(R.id.card_player_exit_button);
-        exitButton.setOnClickListener(buttonListener);
+        shuffleButton = (ImageButton) v.findViewById(R.id.card_player_shuffle_button);
+        shuffleButton.setOnClickListener(buttonListener);
 
         return v;
     }
@@ -75,6 +90,34 @@ public class CardPlayerFragment extends RoboFragment {
         // Make sure stop playing if the fragment is killed.
         stopPlaying();
     }
+
+    public void bindCardPlayerService() {
+        Intent intent = new Intent(activity, CardPlayerService.class);
+        intent.putExtra(CardPlayerService.EXTRA_DBPATH, activity.getDbPath());
+        activity.bindService(intent, cardPlayerServiceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    public void unbindCardPlayerService() {
+        activity.unbindService(cardPlayerServiceConnection);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+        inflater.inflate(R.menu.card_player_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.card_player_settings:
+            displaySettingsDialog();
+            return true;
+
+        default:
+            return false;
+        }
+    }
+
 
     private View.OnClickListener buttonListener = new View.OnClickListener() {
 
@@ -89,26 +132,26 @@ public class CardPlayerFragment extends RoboFragment {
                     startPlaying();
                 }
             } else if (v == previousButton) {
-                //previewEditActivity.getAMTTSService().skipToPrev();
+                cardPlayerService.skipToPrev();
             } else if (v == nextButton) {
-                //previewEditActivity.getAMTTSService().skipToNext();
-            } else if (v == settingsButton) {
-                //displaySettingsDialog();
-            } else if (v == exitButton) {
-                dismissFragment();
+                cardPlayerService.skipToNext();
+            } else if (v == repeatButton) {
+                // TODO: implementation
+            } else if (v == shuffleButton) {
+                // TODO: implementation
             }
         }
     };
 
     private void startPlaying() {
         playButton.setSelected(true);
-        // previewEditActivity.getAMTTSService().startPlaying(
-        //         previewEditActivity.getCurrentCard(), cardPlayerEventHandler);
+        cardPlayerService.startPlaying(activity.getCurrentCard(), cardPlayerEventHandler);
     }
 
     private void stopPlaying() {
         playButton.setSelected(false);
-        //previewEditActivity.getAMTTSService().stopPlaying();
+        cardPlayerService.stopPlaying();
+        
     }
 
     private void displaySettingsDialog() {
@@ -117,29 +160,31 @@ public class CardPlayerFragment extends RoboFragment {
         fragment.show(getActivity().getSupportFragmentManager(), "SettingsDialogFragment");
     }
 
-    private void dismissFragment() {
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .remove(this).commit();
-    }
-
     private CardPlayerEventHandler cardPlayerEventHandler = new CardPlayerEventHandler() {
         @Override
         public void onPlayCard(Card card) {
             // 1. Make sure the activity is foreground to update the card.
             // 2. Only update the card if the card is different.
-            if (previewEditActivity.isActivityForeground()
-                    && card.getId() != previewEditActivity.getCurrentCard().getId()) {
-                previewEditActivity.gotoCard(card);
+            if (activity.isActivityForeground()
+                    && card.getId() != activity.getCurrentCard().getId()) {
+                activity.gotoCard(card);
             }
         }
     };
 
-    private CardPlayerService cardPlayerService;
-
-    private ServiceConnection autoSpeakServiceConnection = new ServiceConnection() {
+    private ServiceConnection cardPlayerServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName className, IBinder binder) {
-            cardPlayerService = ((CardPlayerService.LocalBinder) binder).getService();
+            CardPlayerService.LocalBinder localBinder = (CardPlayerService.LocalBinder) binder;
+
+            cardPlayerService = localBinder.getService();
+
+            Card currentPlayingCard = localBinder.getCurrentPlayingCard();
+
+            // When connecting to an existing service, go to the current playing card
+            if (currentPlayingCard != null) {
+                activity.gotoCard(currentPlayingCard);
+            }
         }
 
         @Override

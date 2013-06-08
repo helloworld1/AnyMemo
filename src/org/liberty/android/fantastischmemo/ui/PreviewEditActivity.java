@@ -333,6 +333,12 @@ public class PreviewEditActivity extends QACardActivity {
 
             case R.id.menu_card_player:
             {
+                Intent intent = new Intent(this, CardPlayerActivity.class);
+                intent.putExtra(CardPlayerActivity.EXTRA_DBPATH, dbPath);
+                if (getCurrentCard() != null) {
+                    intent.putExtra(CardPlayerActivity.EXTRA_START_CARD_ID, getCurrentCard().getId());
+                }
+                startActivity(intent);
                 return true;
             }
 
