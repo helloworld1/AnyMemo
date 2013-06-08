@@ -12,6 +12,7 @@ import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.aspect.CheckNullArgs;
+import org.liberty.android.fantastischmemo.aspect.LogInvocation;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.domain.Card;
@@ -37,7 +38,7 @@ import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
-public class AMTTSService extends RoboService {
+public class AutoSpeakService extends RoboService {
 
     public static final String EXTRA_DBPATH = "dbpath";
 
@@ -76,8 +77,8 @@ public class AMTTSService extends RoboService {
     // Note, it is recommended for service binding in a thread different
     // from UI thread. The initialization like DAO creation is quite heavy
     @Override
+    @LogInvocation
     public IBinder onBind(Intent intent) {
-        Ln.v("Bind to AMTTSService using intent: " + intent);
         handler = new Handler();
         Bundle extras = intent.getExtras();
 
@@ -94,12 +95,19 @@ public class AMTTSService extends RoboService {
         cardDao = dbOpenHelper.getCardDao();
         settingDao = dbOpenHelper.getSettingDao();
 
-        initTTS();
-
         return binder;
     }
 
     @Override
+    @LogInvocation
+    public void onRebind(Intent intent) {
+        super.onRebind(intent);
+    }
+
+
+
+    @Override
+    @LogInvocation
     public int onStartCommand(Intent intent, int flags, int startId) {
         // We want this service to continue running until it is explicitly
         // stopped, so return sticky.
@@ -107,48 +115,13 @@ public class AMTTSService extends RoboService {
     }
 
     @Override
+    @LogInvocation
     public boolean onUnbind(Intent intent) {
-        Ln.v("Unbind from AMTTSService using intent: " + intent);
         cleanUp();
         // Always stop service on unbind so the service will not be reused
         // for the next binding.
         stopSelf();
         return false;
-    }
-
-    /* 
-     * This will speak the question of the card and will not
-     * set a callback for speaking completion.
-     */
-    @CheckNullArgs
-    public void speakCardQuestion(Card card) {
-        speakCardQuestion(card, null);
-    }
-
-    @CheckNullArgs(argIndexToCheck = {0})
-    public void speakCardQuestion(Card card, AnyMemoTTS.OnTextToSpeechCompletedListener onTextToSpeechCompletedListener) {
-        stopSpeak();
-        questionTTS.sayText(card.getQuestion(), onTextToSpeechCompletedListener);
-    }
-
-    /* 
-     * This will speak the answer of the card and will not
-     * set a callback for speaking completion.
-     */
-    @CheckNullArgs
-    public void speakCardAnswer(Card card) {
-        speakCardAnswer(card, null);
-    }
-
-    @CheckNullArgs(argIndexToCheck = {0})
-    public void speakCardAnswer(Card card, AnyMemoTTS.OnTextToSpeechCompletedListener onTextToSpeechCompletedListener) {
-        stopSpeak();
-        answerTTS.sayText(card.getAnswer(), onTextToSpeechCompletedListener);
-    }
-
-    public void stopSpeak() {
-        questionTTS.stop();
-        answerTTS.stop();
     }
 
     @CheckNullArgs
@@ -194,60 +167,6 @@ public class AMTTSService extends RoboService {
         }
     }
 
-    private void initTTS() {
-        try {
-            setting = settingDao.queryForId(1);
-        } catch (SQLException e) {
-            Ln.e(e);
-            throw new RuntimeException(e);
-        }
-
-        String defaultLocation = AMEnv.DEFAULT_AUDIO_PATH;
-        String dbName = FilenameUtils.getName(dbPath);
-
-        if (setting.isQuestionAudioEnabled()) {
-            String qa = setting.getQuestionAudio();
-            List<String> questionAudioSearchPath = new ArrayList<String>();
-            questionAudioSearchPath.add(setting.getQuestionAudioLocation());
-            questionAudioSearchPath.add(setting.getQuestionAudioLocation()
-                    + "/" + dbName);
-            questionAudioSearchPath.add(defaultLocation + "/" + dbName);
-            questionAudioSearchPath.add(setting.getQuestionAudioLocation());
-            questionTTS = new AnyMemoTTSImpl(this, qa, questionAudioSearchPath);
-        } else {
-            questionTTS = new NullAnyMemoTTS();
-        }
-
-        if (setting.isAnswerAudioEnabled()) {
-            String aa = setting.getAnswerAudio();
-            List<String> answerAudioSearchPath = new ArrayList<String>();
-            answerAudioSearchPath.add(setting.getAnswerAudioLocation());
-            answerAudioSearchPath.add(setting.getAnswerAudioLocation() + "/"
-                    + dbName);
-            answerAudioSearchPath.add(defaultLocation + "/" + dbName);
-            answerAudioSearchPath.add(defaultLocation);
-            answerTTS = new AnyMemoTTSImpl(this, aa, answerAudioSearchPath);
-        }  else {
-            answerTTS = new NullAnyMemoTTS();
-        }
-    }
-
-    private void cleanUp() {
-        if (dbOpenHelper != null) {
-            AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
-        }
-
-        if (questionTTS != null) {
-            questionTTS.destory();
-        }
-
-        if (answerTTS != null) {
-            answerTTS.destory();
-        }
-        cardDao = null;
-        settingDao = null;
-    }
-
     private void showNotification() {
 
         Intent resultIntent = new Intent(this, PreviewEditActivity.class);
@@ -273,8 +192,8 @@ public class AMTTSService extends RoboService {
         NotificationCompat.Builder mBuilder =
             new NotificationCompat.Builder(this)
             .setSmallIcon(R.drawable.icon)
-            .setContentTitle(getString(R.string.auto_speak_notification_title))
-            .setContentText(getString(R.string.auto_speak_notification_text))
+            .setContentTitle(getString(R.string.card_player_notification_title))
+            .setContentText(getString(R.string.card_player_notification_text))
             .setContentIntent(resultPendingIntent)
             .setOngoing(true);
 

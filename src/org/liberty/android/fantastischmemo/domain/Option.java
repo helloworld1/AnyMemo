@@ -98,12 +98,12 @@ public class Option {
         editor.commit();
     }
 
-    public int getAutoSpeakIntervalBetweenQA() {
-        return settings.getInt(AMPrefKeys.AUTO_SPEAK_QA_SLEEP_INTERVAL_KEY, 1);
+    public int getCardPlayerIntervalBetweenQA() {
+        return settings.getInt(AMPrefKeys.CARD_PLAYER_QA_SLEEP_INTERVAL_KEY, 1);
     }
 
-    public int getAutoSpeakIntervalBetweenCards() {
-        return settings.getInt(AMPrefKeys.AUTO_SPEAK_CARD_SLEEP_INTERVAL_KEY, 1);
+    public int getCardPlayerIntervalBetweenCards() {
+        return settings.getInt(AMPrefKeys.CARD_PLAYER_CARD_SLEEP_INTERVAL_KEY, 1);
     }
 
     public static enum ButtonStyle {

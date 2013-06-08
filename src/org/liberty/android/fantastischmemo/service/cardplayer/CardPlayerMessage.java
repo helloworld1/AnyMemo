@@ -1,6 +1,6 @@
-package org.liberty.android.fantastischmemo.service.autospeak;
+package org.liberty.android.fantastischmemo.service.cardplayer;
 
-public enum AutoSpeakMessage {
+public enum CardPlayerMessage {
     START_PLAYING,
     STOP_PLAYING,
     GO_TO_NEXT,

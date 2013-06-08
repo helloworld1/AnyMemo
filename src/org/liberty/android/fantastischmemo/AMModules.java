@@ -40,6 +40,7 @@ import org.liberty.android.fantastischmemo.downloader.google.GoogleDriveDownload
 import org.liberty.android.fantastischmemo.downloader.google.GoogleDriveUploadHelperFactory;
 import org.liberty.android.fantastischmemo.scheduler.DefaultScheduler;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
+import org.liberty.android.fantastischmemo.utils.CardTTSUtilFactory;
 
 import android.content.Context;
 
@@ -63,6 +64,9 @@ public class AMModules extends AbstractModule {
 
         install(new FactoryModuleBuilder()
                 .build(DropboxUploadHelperFactory.class));
+
+        install(new FactoryModuleBuilder()
+                .build(CardTTSUtilFactory.class));
 
         bind(Scheduler.class).to(DefaultScheduler.class);
 

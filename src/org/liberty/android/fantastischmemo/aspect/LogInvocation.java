@@ -28,20 +28,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 
 /*
- * The method with this annotation will be checking null arguments first.
- * If any of the argumetns are null, the method execution will be
- * either ignored or throw exception.
+ * The method with this annotation be logged with invocation.
  */
-public @interface CheckNullArgs {
-    /*
-     * If throw is true, the method will throw NullPointerException.
-     * Otherwise the annoated method will return silently.
-     */
-    boolean throwException() default false;
-
-    /*
-     * Only check the index specified for null.
-     */
-    int[] argIndexToCheck() default {};
+public @interface LogInvocation {
 }
+
 

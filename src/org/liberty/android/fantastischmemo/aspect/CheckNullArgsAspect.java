@@ -26,6 +26,8 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 
+import roboguice.util.Ln;
+
 @Aspect
 public class CheckNullArgsAspect {
 
@@ -65,7 +67,7 @@ public class CheckNullArgsAspect {
         messageBuilder.append(")");
 
         if (hasNull == true) {
-            System.err.println(messageBuilder.toString());
+            Ln.w(messageBuilder.toString());
             // For all non void return type, we will throw exception out no matter what throwException
             // annotation argument say.
             if (checkNullAnnotation.throwException() || !signature.getReturnType().equals(Void.TYPE)) {

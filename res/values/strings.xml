@@ -443,14 +443,14 @@
     <string name="share_text">Share</string>
     <string name="center_left_text">Center left</string>
     <string name="center_right_text">Center right</string>
-    <string name="auto_speak_qa_sleep_interval_text">Interval between question and answer is %d sec</string>
-    <string name="auto_speak_card_sleep_interval_text">Interval between each card is %d sec</string>
-    <string name="auto_speak_text">Auto Speak</string>
+    <string name="card_player_qa_sleep_interval_text">Interval between question and answer is %d sec</string>
+    <string name="card_player_card_sleep_interval_text">Interval between each card is %d sec</string>
+    <string name="card_player_text">Card player</string>
     <string name="import_mnemosyne2_cards_text">Import Mnemosyne2 cards</string>
     <string name="export_mnemosyne2_cards_text">Export Mnemosyne2 cards</string>
     <string name="author_text">Author</string>
     <string name="creation_date_text">Creation date</string>
     <string name="card_count_text">Card count</string>
-    <string name="auto_speak_notification_title">AnyMemo AutoSpeak</string>
-    <string name="auto_speak_notification_text">Speaking cards in progress</string>
+    <string name="card_player_notification_title">AnyMemo Card Player</string>
+    <string name="card_player_notification_text">Speaking cards in progress</string>
 </resources>

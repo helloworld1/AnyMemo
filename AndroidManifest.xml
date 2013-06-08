@@ -101,6 +101,9 @@
         <activity 
             android:name=".ui.QuizActivity"
             android:configChanges="orientation|keyboardHidden" />
+        <activity 
+            android:name=".ui.CardPlayerActivity"
+            android:configChanges="orientation|keyboardHidden" />
         <receiver
             android:name=".AlarmReceiver"
             android:process=":remote" />
@@ -143,7 +146,7 @@
             android:name=".AnyMemoService" />
 
         <service
-            android:name=".service.AMTTSService" />
+            android:name=".service.CardPlayerService" />
 
         <provider
                 android:name=".provider.CardProvider"

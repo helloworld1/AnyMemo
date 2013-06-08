@@ -1,43 +1,43 @@
-package org.liberty.android.fantastischmemo.service.autospeak;
+package org.liberty.android.fantastischmemo.service.cardplayer;
 
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.domain.Card;
-import org.liberty.android.fantastischmemo.service.AMTTSService;
+import org.liberty.android.fantastischmemo.utils.CardTTSUtil;
 
 import android.os.Handler;
 
-public class AutoSpeakContext {
-    private volatile AutoSpeakState state = AutoSpeakState.STOPPED;
+public class CardPlayerContext {
+    private volatile CardPlayerState state = CardPlayerState.STOPPED;
     private volatile Card currentCard;
     
-    private final AutoSpeakEventHandler eventHandler;
-    private final AMTTSService amTTSService;
+    private final CardPlayerEventHandler eventHandler;
+    private final CardTTSUtil cardTTSUtil;
     private final Handler amTTSServiceHandler;
     private final AnyMemoDBOpenHelper dbOpenHelper;
 
     private final int delayBeteenQAInSec;
     private final int delayBeteenCardsInSec;
 
-    public AutoSpeakContext(
-            AutoSpeakEventHandler eventHandler,
-            AMTTSService amTTSService,
+    public CardPlayerContext(
+            CardPlayerEventHandler eventHandler,
+            CardTTSUtil cardTTSUtil,
             Handler amTTSServiceHandler,
             AnyMemoDBOpenHelper dbOpenHelper,
             int delayBeteenQAInSec,
             int delayBeteenCardsInSec) {
         this.eventHandler = eventHandler;
-        this.amTTSService = amTTSService;
+        this.cardTTSUtil = cardTTSUtil;
         this.amTTSServiceHandler = amTTSServiceHandler;
         this.dbOpenHelper = dbOpenHelper;
         this.delayBeteenQAInSec = delayBeteenQAInSec;
         this.delayBeteenCardsInSec = delayBeteenCardsInSec;
     }
 
-    public AutoSpeakState getState() {
+    public CardPlayerState getState() {
         return state;
     }
 
-    public void setState(AutoSpeakState state) {
+    public void setState(CardPlayerState state) {
         this.state = state;
     }
 
@@ -49,12 +49,12 @@ public class AutoSpeakContext {
         this.currentCard = currentCard;
     }
 
-    public AutoSpeakEventHandler getEventHandler() {
+    public CardPlayerEventHandler getEventHandler() {
         return eventHandler;
     }
 
-    public AMTTSService getAmTTSService() {
-        return amTTSService;
+    public CardTTSUtil getCardTTSUtil() {
+        return cardTTSUtil;
     }
 
     public Handler getAmTTSServiceHandler() {
