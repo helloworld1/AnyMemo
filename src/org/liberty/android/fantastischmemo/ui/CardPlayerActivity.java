@@ -31,8 +31,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
@@ -96,15 +94,7 @@ public class CardPlayerActivity extends QACardActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        MenuInflater inflater = getMenuInflater();
-        // inflater.inflate(R.menu.quiz_activity_menu, menu);
-        return true;
-    }
-
-    @Override
     public void onPostDisplayCard() {
-        // When displaying new card, we should stop the TTS reading.
         getCardTTSUtil().stopSpeak();
     }
 
@@ -191,6 +181,10 @@ public class CardPlayerActivity extends QACardActivity {
         }
     }
 
+    /*
+     * This method will add append the frame layout to the layout
+     * and use it as a fragment.
+     */
     private void showAutoSpeakFragment() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         LinearLayout root = (LinearLayout)findViewById(R.id.root);
