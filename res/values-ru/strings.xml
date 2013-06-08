@@ -440,10 +440,12 @@
     <string name="center_right_text">Справа по центру</string>
     <string name="card_player_qa_sleep_interval_text">Интервал между вопросом и ответом %d сек</string>
     <string name="card_player_card_sleep_interval_text">Интервал между карточками %d сек</string>
-    <string name="card_player_text">Авто речь</string>
+    <string name="card_player_text">Озвучка карточек</string>
     <string name="import_mnemosyne2_cards_text">Импорт Mnemosyne XML2</string>
     <string name="export_mnemosyne2_cards_text">Экспорт Mnemosyne XML2</string>
     <string name="author_text">Автор</string>
     <string name="creation_date_text">Дата создания</string>
     <string name="card_count_text">Счёт карт</string>
+    <string name="card_player_notification_title">AnyMemo Озвучка Карточек</string>
+    <string name="card_player_notification_text">Озвучка карточек выполняется</string>
 </resources>
