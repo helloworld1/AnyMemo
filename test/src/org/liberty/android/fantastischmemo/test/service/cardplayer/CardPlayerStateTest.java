@@ -1,4 +1,4 @@
-package org.liberty.android.fantastischmemo.test.service.autospeak;
+package org.liberty.android.fantastischmemo.test.service.cardplayer;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;

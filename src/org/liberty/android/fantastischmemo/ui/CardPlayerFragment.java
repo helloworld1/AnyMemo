@@ -7,6 +7,7 @@ import org.liberty.android.fantastischmemo.service.CardPlayerService;
 import org.liberty.android.fantastischmemo.service.cardplayer.CardPlayerEventHandler;
 
 import roboguice.fragment.RoboFragment;
+import roboguice.util.Ln;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -186,6 +187,7 @@ public class CardPlayerFragment extends RoboFragment {
 
             Card currentPlayingCard = localBinder.getCurrentPlayingCard();
 
+            Ln.v("Current playing card when connection to service: " + currentPlayingCard);
             // When connecting to an existing service, go to the current playing card
             if (currentPlayingCard != null) {
                 activity.gotoCard(currentPlayingCard);

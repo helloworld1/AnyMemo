@@ -102,8 +102,13 @@ public class CardPlayerService extends RoboService {
     public boolean onUnbind(Intent intent) {
         // Always stop service on unbind so the service will not be reused
         // for the next binding.
-        stopSelf();
         return false;
+    }
+
+    @Override
+    @LogInvocation
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     @CheckNullArgs
@@ -162,7 +167,7 @@ public class CardPlayerService extends RoboService {
 
         stackBuilder.addParentStack(CardPlayerActivity.class);
 
-        resultIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        resultIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         resultIntent.putExtra(PreviewEditActivity.EXTRA_DBPATH, dbPath);
         if (cardPlayerContext != null) {
             resultIntent.putExtra(PreviewEditActivity.EXTRA_CARD_ID, cardPlayerContext.getCurrentCard().getId());
@@ -191,7 +196,6 @@ public class CardPlayerService extends RoboService {
     private void cancelNotification() {
         stopForeground(true);
     }
-
 
     // A local binder that works for local methos call.
     public class LocalBinder extends Binder {
