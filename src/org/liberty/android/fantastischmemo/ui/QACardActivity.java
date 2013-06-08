@@ -135,7 +135,7 @@ public abstract class QACardActivity extends AMActivity {
 
     @Inject
     public void setOption(Option option) {
-        this.option = option;
+         this.option = option;
     }
 
     @Inject
@@ -169,7 +169,7 @@ public abstract class QACardActivity extends AMActivity {
         // Set teh default animation
         animationInResId = R.anim.slide_left_in;
         animationOutResId = R.anim.slide_left_out;
-
+        imageGetter = new CardImageGetter(this, dbPath);
 
         // Load gestures
         loadGestures();
@@ -608,64 +608,7 @@ public abstract class QACardActivity extends AMActivity {
         // Nothing
     }
 
-    private ImageGetter imageGetter = new ImageGetter() {
-        @Override
-        public Drawable getDrawable(String source) {
-            Log.v(TAG, "Source: " + source);
-            String dbName = FilenameUtils.getName(dbPath);
-            try {
-                String[] paths = {
-                /* Relative path */
-                "" + dbName + "/" + source,
-                /* Try the image in /sdcard/anymemo/images/dbname/myimg.png */
-                AMEnv.DEFAULT_IMAGE_PATH + dbName + "/" + source,
-                /* Try the image in /sdcard/anymemo/images/myimg.png */
-                AMEnv.DEFAULT_IMAGE_PATH + source,
-                /* Just the last part of the name */
-                AMEnv.DEFAULT_IMAGE_PATH + dbName + "/" + FilenameUtils.getName(source),
-                AMEnv.DEFAULT_IMAGE_PATH + FilenameUtils.getName(source)
-                };
-                Bitmap orngBitmap = null;
-                for (String path : paths) {
-                    Log.v(TAG, "Try path: " + path);
-                    if (new File(path).exists()) {
-                        orngBitmap = BitmapFactory.decodeFile(path);
-                        break;
-                    }
-                }
-                /* Try the image from internet */
-                if (orngBitmap == null) {
-                    InputStream is = (InputStream) new URL(source).getContent();
-                    orngBitmap = BitmapFactory.decodeStream(is);
-                }
-
-                int width = orngBitmap.getWidth();
-                int height = orngBitmap.getHeight();
-                int scaledWidth = width;
-                int scaledHeight = height;
-                float scaleFactor = ((float) screenWidth) / width;
-                Matrix matrix = new Matrix();
-                if (scaleFactor < 1.0f) {
-                    matrix.postScale(scaleFactor, scaleFactor);
-                    scaledWidth = (int) (width * scaleFactor);
-                    scaledHeight = (int) (height * scaleFactor);
-                }
-                Bitmap resizedBitmap = Bitmap.createBitmap(orngBitmap, 0, 0,
-                        width, height, matrix, true);
-                BitmapDrawable d = new BitmapDrawable(resizedBitmap);
-                //d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
-                d.setBounds(0, 0, scaledWidth, scaledHeight);
-                return d;
-            } catch (Exception e) {
-                Log.e(TAG, "getDrawable() Image handling error", e);
-            }
-
-            /* Fallback, display default image */
-            Drawable d = getResources().getDrawable(R.drawable.picture);
-            d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
-            return d;
-        }
-    };
+    private ImageGetter imageGetter;
 
     protected boolean speakQuestion() {
         cardTTSUtil.speakCardQuestion(getCurrentCard());
