@@ -149,6 +149,11 @@ public class CardPlayerService extends RoboService {
         }
     }
 
+    /*
+     * A notification is shown if the player is playing.
+     * This also put the service in foreground mode to prevent the service
+     * being terminated.
+     */
     private void showNotification() {
 
         Intent resultIntent = new Intent(this, CardPlayerActivity.class);

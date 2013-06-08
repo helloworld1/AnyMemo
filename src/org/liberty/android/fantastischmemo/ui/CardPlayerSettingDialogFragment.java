@@ -106,11 +106,11 @@ public class CardPlayerSettingDialogFragment extends DialogFragment{
 
     @Override
     public void onDismiss(DialogInterface dialog) {
-        int qa = seekBarQA.getProgress();
-        int card = seekBarCard.getProgress();
+        int qaInterval = seekBarQA.getProgress();
+        int cardInterval = seekBarCard.getProgress();
 
-        editor.putInt(AMPrefKeys.CARD_PLAYER_QA_SLEEP_INTERVAL_KEY, qa);
-        editor.putInt(AMPrefKeys.CARD_PLAYER_CARD_SLEEP_INTERVAL_KEY, card) ;
+        editor.putInt(AMPrefKeys.CARD_PLAYER_QA_SLEEP_INTERVAL_KEY, qaInterval);
+        editor.putInt(AMPrefKeys.CARD_PLAYER_CARD_SLEEP_INTERVAL_KEY, cardInterval) ;
         editor.commit();
         super.onDismiss(dialog);
     }

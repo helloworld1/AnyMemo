@@ -131,7 +131,7 @@ public enum CardPlayerState implements CardPlayerStateTransition {
                                 context.getState().transition(context, CardPlayerMessage.PLAYING_ANSWER_COMPLETED);
                             }
                         }
-                    }, context.getDelayBeteenQAInSec() * DateUtils.MILLIS_PER_SECOND);
+                    }, context.getDelayBeteenCardsInSec() * DateUtils.MILLIS_PER_SECOND);
 
                 }
         });

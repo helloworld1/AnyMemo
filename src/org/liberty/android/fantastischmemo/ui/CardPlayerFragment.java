@@ -88,6 +88,8 @@ public class CardPlayerFragment extends RoboFragment {
         super.onDestroyView();
 
         // Make sure stop playing if the fragment is killed.
+        // TODO: Is this still needed if we want background service
+        // to continue playing?
         stopPlaying();
     }
 
@@ -160,11 +162,14 @@ public class CardPlayerFragment extends RoboFragment {
         fragment.show(getActivity().getSupportFragmentManager(), "SettingsDialogFragment");
     }
 
+    /* This handler is used for callback from the CardPlayerService's startPlaying */
     private CardPlayerEventHandler cardPlayerEventHandler = new CardPlayerEventHandler() {
         @Override
         public void onPlayCard(Card card) {
             // 1. Make sure the activity is foreground to update the card.
             // 2. Only update the card if the card is different.
+            // So the background service will continue to work with this callback
+            // being called.
             if (activity.isActivityForeground()
                     && card.getId() != activity.getCurrentCard().getId()) {
                 activity.gotoCard(card);
