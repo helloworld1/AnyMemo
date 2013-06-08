@@ -132,7 +132,7 @@ public abstract class QACardActivity extends AMActivity {
 
     @Inject
     public void setOption(Option option) {
-        this.option = option;
+         this.option = option;
     }
 
     public AMTTSService getAMTTSService() {
