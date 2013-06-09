@@ -49,6 +49,10 @@ public class CardPlayerFragment extends RoboFragment {
         bindCardPlayerService();
     }
 
+    // Make sure the serviceEventListener broadcast receiver
+    // is registered at onResume and unregistered at onPause
+    // because we do not care about the UI being updated from the
+    // CardPlayerService if it is not visible to the user.
     @Override
     public void onResume() {
         super.onResume();
@@ -200,6 +204,11 @@ public class CardPlayerFragment extends RoboFragment {
         }
     };
 
+    /*
+     * This broadcast receiver receive the ACTION_GO_TO_CARD sent from
+     * CardPlayerService. It will go to a specific card based on the extras
+     * in received intent.
+     */
     private BroadcastReceiver serviceEventListener = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {

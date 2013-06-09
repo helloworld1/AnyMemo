@@ -6,23 +6,19 @@ import java.net.URL;
 
 import org.apache.mycommons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.AMEnv;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
 
+import roboguice.util.Ln;
+
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
+import android.text.Html.ImageGetter;
 import android.view.Display;
 import android.view.WindowManager;
-//import android.util.Ln;
-import roboguice.util.Ln;
-
-import android.os.Bundle;
-import android.text.Html.ImageGetter;
-import android.content.Context;
 
 
 public class CardImageGetter implements ImageGetter {

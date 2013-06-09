@@ -203,7 +203,11 @@ public class CardPlayerService extends RoboService {
         startForeground(NOTIFICATION_ID, mBuilder.build());
     }
 
-    /* This handler is used for callback from the CardPlayerService's startPlaying */
+    /*
+     * This handler is used for callback from the CardPlayerService's startPlaying.
+     * This implementation send broadcast for ACTION_GO_TO_CARD and the 
+     * CardPlayerFragment will register the broadcast receiver in CardPlaeyrActivity.
+     */
     private CardPlayerEventHandler cardPlayerEventHandler = new CardPlayerEventHandler() {
         @Override
         public void onPlayCard(Card card) {
