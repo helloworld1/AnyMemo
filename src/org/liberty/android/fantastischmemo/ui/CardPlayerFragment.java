@@ -2,21 +2,11 @@ package org.liberty.android.fantastischmemo.ui;
 
 
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.domain.Card;
-import org.liberty.android.fantastischmemo.service.CardPlayerService;
 
 import roboguice.fragment.RoboFragment;
-import roboguice.util.Ln;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
