@@ -28,10 +28,20 @@ import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
+import org.liberty.android.fantastischmemo.service.CardPlayerService;
+
+import roboguice.util.Ln;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.FragmentTransaction;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -46,6 +56,8 @@ public class CardPlayerActivity extends QACardActivity {
     private CardDao cardDao;
 
     private SettingDao settingDao;
+
+    private CardPlayerService cardPlayerService;
 
     /* Settings */
     private Option option;
@@ -66,6 +78,30 @@ public class CardPlayerActivity extends QACardActivity {
 
     }
 
+    // Make sure the serviceEventListener broadcast receiver
+    // is registered at onResume and unregistered at onPause
+    // because we do not care about the UI being updated from the
+    // CardPlayerService if it is not visible to the user.
+    @Override
+    public void onResume() {
+        super.onResume();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(CardPlayerService.ACTION_GO_TO_CARD);
+        registerReceiver(serviceEventListener, filter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterReceiver(serviceEventListener);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unbindCardPlayerService();
+    }
+
     @Override
     public void onInit() throws Exception {
         cardDao = getDbOpenHelper().getCardDao();
@@ -82,6 +118,8 @@ public class CardPlayerActivity extends QACardActivity {
         }
 
         totalCardCount = cardDao.countOf();
+
+        bindCardPlayerService();
     }
 
     @Override
@@ -98,6 +136,10 @@ public class CardPlayerActivity extends QACardActivity {
     @Override
     public void onPostDisplayCard() {
         getCardTTSUtil().stopSpeak();
+    }
+
+    public CardPlayerService getCardPlayerService() {
+        return cardPlayerService;
     }
 
     private void updateTitle(){
@@ -209,5 +251,69 @@ public class CardPlayerActivity extends QACardActivity {
         ft.replace(cardPlayerView.getId(), f);
         ft.commit();
     }
+
+    private void bindCardPlayerService() {
+        Intent intent = new Intent(this, CardPlayerService.class);
+        intent.putExtra(CardPlayerService.EXTRA_DBPATH, getDbPath());
+        intent.putExtra(CardPlayerService.EXTRA_CURRENT_CARD_ID, getCurrentCard().getId());
+        bindService(intent, cardPlayerServiceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    private void unbindCardPlayerService() {
+        unbindService(cardPlayerServiceConnection);
+    }
+
+    private ServiceConnection cardPlayerServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder binder) {
+            CardPlayerService.LocalBinder localBinder = (CardPlayerService.LocalBinder) binder;
+
+            cardPlayerService = localBinder.getService();
+
+            Card currentPlayingCard = localBinder.getCurrentPlayingCard();
+
+            Ln.v("Current playing card when connection to service: " + currentPlayingCard);
+
+            // When connecting to an existing service, go to the current playing card
+            if (currentPlayingCard != null) {
+                gotoCard(currentPlayingCard);
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName className) {
+            cardPlayerService = null;
+        }
+    };
+
+    /*
+     * This broadcast receiver receive the ACTION_GO_TO_CARD sent from
+     * CardPlayerService. It will go to a specific card based on the extras
+     * in received intent.
+     */
+    private BroadcastReceiver serviceEventListener = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(CardPlayerService.ACTION_GO_TO_CARD)) {
+                Bundle extras = intent.getExtras();
+                assert extras != null : "The intent received must have card id and playing status"; 
+                int currentCardId = extras.getInt(CardPlayerService.EXTRA_CURRENT_CARD_ID);
+                boolean isPlaying = extras.getBoolean(CardPlayerService.EXTRA_IS_PLAYING);
+
+                // TODO: Need to make playButton working
+                // playButton.setSelected(isPlaying);
+
+                // 1. Make sure the activity is foreground to update the card.
+                // 2. Only update the card if the card is different.
+                // So the background service will continue to work with this callback
+                // being called.
+                if (isActivityForeground() && currentCardId != getCurrentCard().getId()) {
+                    gotoCardId(currentCardId);
+                }
+            }
+        }
+    };
+
 }
 

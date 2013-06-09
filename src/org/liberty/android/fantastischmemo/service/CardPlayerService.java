@@ -1,5 +1,7 @@
 package org.liberty.android.fantastischmemo.service;
 
+import java.sql.SQLException;
+
 import javax.inject.Inject;
 
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
@@ -81,6 +83,8 @@ public class CardPlayerService extends RoboService {
         assert extras != null : "dbpath is not passed to AMTTSService.";
 
         dbPath = extras.getString(EXTRA_DBPATH);
+
+        final int cardId = extras.getInt(EXTRA_CURRENT_CARD_ID);
         
         cardTTSUtil = cardTTSUtilFactory.create(dbPath);
 
@@ -96,6 +100,11 @@ public class CardPlayerService extends RoboService {
                 dbOpenHelper,
                 option.getCardPlayerIntervalBetweenQA(),
                 option.getCardPlayerIntervalBetweenCards());
+        try {
+            cardPlayerContext.setCurrentCard(dbOpenHelper.getCardDao().queryForId(cardId));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
 
         return binder;

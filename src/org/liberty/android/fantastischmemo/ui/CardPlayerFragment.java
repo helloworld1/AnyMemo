@@ -28,7 +28,6 @@ import android.widget.ImageButton;
 
 /*
  * Display the control bar in CardPlayerActivity
- * Handle the event from CardPlayerService
  */
 public class CardPlayerFragment extends RoboFragment {
 
@@ -40,38 +39,12 @@ public class CardPlayerFragment extends RoboFragment {
 
     private CardPlayerActivity activity;
 
-    private CardPlayerService cardPlayerService;
-
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setHasOptionsMenu(true);
-        bindCardPlayerService();
     }
 
-    // Make sure the serviceEventListener broadcast receiver
-    // is registered at onResume and unregistered at onPause
-    // because we do not care about the UI being updated from the
-    // CardPlayerService if it is not visible to the user.
-    @Override
-    public void onResume() {
-        super.onResume();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(CardPlayerService.ACTION_GO_TO_CARD);
-        activity.registerReceiver(serviceEventListener, filter);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        activity.unregisterReceiver(serviceEventListener);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        unbindCardPlayerService();
-    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -113,16 +86,6 @@ public class CardPlayerFragment extends RoboFragment {
         stopPlaying();
     }
 
-    public void bindCardPlayerService() {
-        Intent intent = new Intent(activity, CardPlayerService.class);
-        intent.putExtra(CardPlayerService.EXTRA_DBPATH, activity.getDbPath());
-        activity.bindService(intent, cardPlayerServiceConnection, Context.BIND_AUTO_CREATE);
-    }
-
-    public void unbindCardPlayerService() {
-        activity.unbindService(cardPlayerServiceConnection);
-    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
         inflater.inflate(R.menu.card_player_menu, menu);
@@ -154,9 +117,9 @@ public class CardPlayerFragment extends RoboFragment {
                     startPlaying();
                 }
             } else if (v == previousButton) {
-                cardPlayerService.skipToPrev();
+                activity.getCardPlayerService().skipToPrev();
             } else if (v == nextButton) {
-                cardPlayerService.skipToNext();
+                activity.getCardPlayerService().skipToNext();
             } else if (v == repeatButton) {
                 // TODO: implementation
             } else if (v == shuffleButton) {
@@ -167,13 +130,12 @@ public class CardPlayerFragment extends RoboFragment {
 
     private void startPlaying() {
         playButton.setSelected(true);
-        cardPlayerService.startPlaying(activity.getCurrentCard());
+        activity.getCardPlayerService().startPlaying(activity.getCurrentCard());
     }
 
     private void stopPlaying() {
         playButton.setSelected(false);
-        cardPlayerService.stopPlaying();
-        
+        activity.getCardPlayerService().stopPlaying();
     }
 
     private void displaySettingsDialog() {
@@ -182,54 +144,4 @@ public class CardPlayerFragment extends RoboFragment {
         fragment.show(getActivity().getSupportFragmentManager(), "SettingsDialogFragment");
     }
 
-    private ServiceConnection cardPlayerServiceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName className, IBinder binder) {
-            CardPlayerService.LocalBinder localBinder = (CardPlayerService.LocalBinder) binder;
-
-            cardPlayerService = localBinder.getService();
-
-            Card currentPlayingCard = localBinder.getCurrentPlayingCard();
-
-            Ln.v("Current playing card when connection to service: " + currentPlayingCard);
-            // When connecting to an existing service, go to the current playing card
-            if (currentPlayingCard != null) {
-                activity.gotoCard(currentPlayingCard);
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName className) {
-            cardPlayerService = null;
-        }
-    };
-
-    /*
-     * This broadcast receiver receive the ACTION_GO_TO_CARD sent from
-     * CardPlayerService. It will go to a specific card based on the extras
-     * in received intent.
-     */
-    private BroadcastReceiver serviceEventListener = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action.equals(CardPlayerService.ACTION_GO_TO_CARD)) {
-                Bundle extras = intent.getExtras();
-                assert extras != null : "The intent received must have card id and playing status"; 
-                int currentCardId = extras.getInt(CardPlayerService.EXTRA_CURRENT_CARD_ID);
-                boolean isPlaying = extras.getBoolean(CardPlayerService.EXTRA_IS_PLAYING);
-
-                playButton.setSelected(isPlaying);
-
-                // 1. Make sure the activity is foreground to update the card.
-                // 2. Only update the card if the card is different.
-                // So the background service will continue to work with this callback
-                // being called.
-                if (activity.isActivityForeground()
-                        && currentCardId != activity.getCurrentCard().getId()) {
-                    activity.gotoCardId(currentCardId);
-                }
-            }
-        }
-    };
 }
