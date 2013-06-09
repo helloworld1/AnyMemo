@@ -18,6 +18,16 @@ public enum CardPlayerState implements CardPlayerStateTransition {
                 context.setState(PLAYING_QUESTION);
                 playQuestion(context);
                 break;
+            case GO_TO_NEXT:
+                Card nextCard = findNextCard(context);
+                context.setCurrentCard(nextCard);
+                context.getEventHandler().onPlayCard(context.getCurrentCard());
+                break;
+            case GO_TO_PREV:
+                Card prevCard = findPrevCard(context);
+                context.setCurrentCard(prevCard);
+                context.getEventHandler().onPlayCard(context.getCurrentCard());
+                break;
             default:
                 // Once it is in STOPPED state, no call other than START_PLAYING can go through.
                 break;

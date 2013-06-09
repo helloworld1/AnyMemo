@@ -4,15 +4,16 @@ package org.liberty.android.fantastischmemo.ui;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.service.CardPlayerService;
-import org.liberty.android.fantastischmemo.service.cardplayer.CardPlayerEventHandler;
 
 import roboguice.fragment.RoboFragment;
 import roboguice.util.Ln;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -46,6 +47,20 @@ public class CardPlayerFragment extends RoboFragment {
         super.onCreate(bundle);
         setHasOptionsMenu(true);
         bindCardPlayerService();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(CardPlayerService.ACTION_GO_TO_CARD);
+        activity.registerReceiver(serviceEventListener, filter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        activity.unregisterReceiver(serviceEventListener);
     }
 
     @Override
@@ -148,7 +163,7 @@ public class CardPlayerFragment extends RoboFragment {
 
     private void startPlaying() {
         playButton.setSelected(true);
-        cardPlayerService.startPlaying(activity.getCurrentCard(), cardPlayerEventHandler);
+        cardPlayerService.startPlaying(activity.getCurrentCard());
     }
 
     private void stopPlaying() {
@@ -162,21 +177,6 @@ public class CardPlayerFragment extends RoboFragment {
         CardPlayerSettingDialogFragment fragment = new CardPlayerSettingDialogFragment();
         fragment.show(getActivity().getSupportFragmentManager(), "SettingsDialogFragment");
     }
-
-    /* This handler is used for callback from the CardPlayerService's startPlaying */
-    private CardPlayerEventHandler cardPlayerEventHandler = new CardPlayerEventHandler() {
-        @Override
-        public void onPlayCard(Card card) {
-            // 1. Make sure the activity is foreground to update the card.
-            // 2. Only update the card if the card is different.
-            // So the background service will continue to work with this callback
-            // being called.
-            if (activity.isActivityForeground()
-                    && card.getId() != activity.getCurrentCard().getId()) {
-                activity.gotoCard(card);
-            }
-        }
-    };
 
     private ServiceConnection cardPlayerServiceConnection = new ServiceConnection() {
         @Override
@@ -200,4 +200,27 @@ public class CardPlayerFragment extends RoboFragment {
         }
     };
 
+    private BroadcastReceiver serviceEventListener = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(CardPlayerService.ACTION_GO_TO_CARD)) {
+                Bundle extras = intent.getExtras();
+                assert extras != null : "The intent received must have card id and playing status"; 
+                int currentCardId = extras.getInt(CardPlayerService.EXTRA_CURRENT_CARD_ID);
+                boolean isPlaying = extras.getBoolean(CardPlayerService.EXTRA_IS_PLAYING);
+
+                playButton.setSelected(isPlaying);
+
+                // 1. Make sure the activity is foreground to update the card.
+                // 2. Only update the card if the card is different.
+                // So the background service will continue to work with this callback
+                // being called.
+                if (activity.isActivityForeground()
+                        && currentCardId != activity.getCurrentCard().getId()) {
+                    activity.gotoCardId(currentCardId);
+                }
+            }
+        }
+    };
 }

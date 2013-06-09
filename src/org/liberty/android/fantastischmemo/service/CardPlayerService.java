@@ -33,6 +33,12 @@ public class CardPlayerService extends RoboService {
 
     public static final String EXTRA_DBPATH = "dbpath";
 
+    public static final String EXTRA_CURRENT_CARD_ID = "current_card_id";
+
+    public static final String EXTRA_IS_PLAYING= "is_playing";
+
+    public static final String ACTION_GO_TO_CARD = "org.liberty.android.fantastischmemo.CardPlayerService.ACTION_GO_TO_CARD";
+
     // Magic id used for Card player's notification
     private static final int NOTIFICATION_ID = 9283372;
 
@@ -80,6 +86,18 @@ public class CardPlayerService extends RoboService {
 
         dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(this, dbPath);
 
+        // Assign a value to the cardPlayerContext so we do not need to check
+        // null for every player methods. The initial STOPPED state will help
+        // skipToPrev/skipToNext method to callback the event handler.
+        cardPlayerContext = new CardPlayerContext(
+                cardPlayerEventHandler,
+                cardTTSUtil,
+                handler,
+                dbOpenHelper,
+                option.getCardPlayerIntervalBetweenQA(),
+                option.getCardPlayerIntervalBetweenCards());
+
+
         return binder;
     }
 
@@ -112,11 +130,11 @@ public class CardPlayerService extends RoboService {
     }
 
     @CheckNullArgs
-    public void startPlaying(Card startCard, CardPlayerEventHandler eventHandler) {
+    public void startPlaying(Card startCard) {
         // Always to create a new context if we start playing to ensure it is playing
         // from a clean state.
         cardPlayerContext = new CardPlayerContext(
-                eventHandler,
+                cardPlayerEventHandler,
                 cardTTSUtil,
                 handler,
                 dbOpenHelper,
@@ -129,19 +147,11 @@ public class CardPlayerService extends RoboService {
     }
 
     public void skipToNext() {
-        if (cardPlayerContext != null) {
-            cardPlayerContext.getState().transition(cardPlayerContext, CardPlayerMessage.GO_TO_NEXT);
-        } else {
-            Ln.i("Call skipToPrev with null cardPlayerContext. Do nothing.");
-        }
+        cardPlayerContext.getState().transition(cardPlayerContext, CardPlayerMessage.GO_TO_NEXT);
     }
 
     public void skipToPrev() {
-        if (cardPlayerContext != null) {
-            cardPlayerContext.getState().transition(cardPlayerContext, CardPlayerMessage.GO_TO_PREV);
-        } else {
-            Ln.i("Call skipToPrev with null cardPlayerContext. Do nothing.");
-        }
+        cardPlayerContext.getState().transition(cardPlayerContext, CardPlayerMessage.GO_TO_PREV);
     }
 
     public void stopPlaying() {
@@ -192,6 +202,18 @@ public class CardPlayerService extends RoboService {
         // And the service is less susceptible to be kill by Android system.
         startForeground(NOTIFICATION_ID, mBuilder.build());
     }
+
+    /* This handler is used for callback from the CardPlayerService's startPlaying */
+    private CardPlayerEventHandler cardPlayerEventHandler = new CardPlayerEventHandler() {
+        @Override
+        public void onPlayCard(Card card) {
+            Intent intent = new Intent();
+            intent.setAction(ACTION_GO_TO_CARD);
+            intent.putExtra(EXTRA_CURRENT_CARD_ID, card.getId());
+            intent.putExtra(EXTRA_IS_PLAYING, true);
+            sendBroadcast(intent);
+        }
+    };
 
     private void cancelNotification() {
         stopForeground(true);

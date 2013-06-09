@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
+import java.sql.SQLException;
+
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.aspect.CheckNullArgs;
 import org.liberty.android.fantastischmemo.dao.CardDao;
@@ -160,6 +162,16 @@ public class CardPlayerActivity extends QACardActivity {
 
         // Set animation back
         setAnimation(R.anim.slide_left_in, R.anim.slide_left_out);
+    }
+
+    // Query out the card id and display that card
+    protected void gotoCardId(final int cardId) {
+        try {
+            Card card = cardDao.queryForId(cardId);
+            gotoCard(card);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /*
