@@ -103,6 +103,7 @@
             android:configChanges="orientation|keyboardHidden" />
         <activity 
             android:name=".ui.CardPlayerActivity"
+            android:launchMode="singleTask"
             android:configChanges="orientation|keyboardHidden" />
         <receiver
             android:name=".AlarmReceiver"

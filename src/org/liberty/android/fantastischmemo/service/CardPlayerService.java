@@ -127,6 +127,7 @@ public class CardPlayerService extends RoboService {
     @Override
     @LogInvocation
     public boolean onUnbind(Intent intent) {
+        AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
         // Always stop service on unbind so the service will not be reused
         // for the next binding.
         return false;

@@ -256,7 +256,8 @@ public class CardPlayerActivity extends QACardActivity {
         Intent intent = new Intent(this, CardPlayerService.class);
         intent.putExtra(CardPlayerService.EXTRA_DBPATH, getDbPath());
         intent.putExtra(CardPlayerService.EXTRA_CURRENT_CARD_ID, getCurrentCard().getId());
-        bindService(intent, cardPlayerServiceConnection, Context.BIND_AUTO_CREATE);
+        startService(intent);
+        bindService(intent, cardPlayerServiceConnection, Context.BIND_DEBUG_UNBIND);
     }
 
     private void unbindCardPlayerService() {
