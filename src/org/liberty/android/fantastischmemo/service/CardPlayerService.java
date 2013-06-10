@@ -128,6 +128,8 @@ public class CardPlayerService extends RoboService {
     @LogInvocation
     public boolean onUnbind(Intent intent) {
         AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
+        cardTTSUtil.release();
+
         // Always stop service on unbind so the service will not be reused
         // for the next binding.
         return false;
@@ -167,11 +169,7 @@ public class CardPlayerService extends RoboService {
     public void stopPlaying() {
         Ln.v("Stop playing");
         cancelNotification();
-        if (cardPlayerContext != null) {
-            cardPlayerContext.getState().transition(cardPlayerContext, CardPlayerMessage.STOP_PLAYING);
-        } else {
-            Ln.i("Call stopPlaying with null cardPlayerContext. Do nothing.");
-        }
+        cardPlayerContext.getState().transition(cardPlayerContext, CardPlayerMessage.STOP_PLAYING);
     }
 
     /*
@@ -187,7 +185,7 @@ public class CardPlayerService extends RoboService {
 
         stackBuilder.addParentStack(CardPlayerActivity.class);
 
-        resultIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        resultIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         resultIntent.putExtra(PreviewEditActivity.EXTRA_DBPATH, dbPath);
         if (cardPlayerContext != null) {
             resultIntent.putExtra(PreviewEditActivity.EXTRA_CARD_ID, cardPlayerContext.getCurrentCard().getId());

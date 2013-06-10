@@ -31,21 +31,16 @@ import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.aspect.CheckNullArgs;
-import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.domain.Card;
-import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
-import org.liberty.android.fantastischmemo.service.CardPlayerService.LocalBinder;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTSImpl;
 import org.liberty.android.fantastischmemo.tts.NullAnyMemoTTS;
 
-import roboguice.inject.ContextSingleton;
 import roboguice.util.Ln;
 
 import android.content.Context;
-import android.os.IBinder;
 
 import com.google.inject.assistedinject.Assisted;
 
