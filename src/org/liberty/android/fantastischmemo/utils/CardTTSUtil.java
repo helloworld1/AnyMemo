@@ -31,6 +31,7 @@ import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.aspect.CheckNullArgs;
+import org.liberty.android.fantastischmemo.aspect.LogInvocation;
 import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Setting;
@@ -113,8 +114,22 @@ public class CardTTSUtil {
     /*
      * Release the TTSUtil. This must be called explicitly.
      */
+    @LogInvocation
     public void release() {
-        cleanUp();
+        if (dbOpenHelper != null) {
+            AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
+        }
+
+        if (questionTTS != null) {
+            questionTTS.destory();
+            questionTTS = null;
+        }
+
+        if (answerTTS != null) {
+            answerTTS.destory();
+            answerTTS = null;
+        }
+        settingDao = null;
     }
 
     /*
@@ -167,22 +182,6 @@ public class CardTTSUtil {
         }
     }
 
-    private void cleanUp() {
-        if (dbOpenHelper != null) {
-            AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
-        }
-
-        if (questionTTS != null) {
-            questionTTS.destory();
-            questionTTS = null;
-        }
-
-        if (answerTTS != null) {
-            answerTTS.destory();
-            answerTTS = null;
-        }
-        settingDao = null;
-    }
 }
 
 

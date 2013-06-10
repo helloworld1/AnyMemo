@@ -550,6 +550,8 @@ public abstract class QACardActivity extends AMActivity {
         super.onDestroy();
         AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
 
+        cardTTSUtil.release();
+
         /* Update the widget because StudyActivity can be accessed though widget*/
         Intent myIntent = new Intent(this, AnyMemoService.class);
         myIntent.putExtra("request_code", AnyMemoService.CANCEL_NOTIFICATION
