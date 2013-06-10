@@ -28,6 +28,7 @@ import org.apache.mycommons.lang3.math.NumberUtils;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.aspect.CheckNullArgs;
+import org.liberty.android.fantastischmemo.aspect.LogInvocation;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
@@ -49,7 +50,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -69,6 +69,7 @@ public class PreviewEditActivity extends QACardActivity {
     private final int ACTIVITY_LIST = 16;
     private final int ACTIVITY_MERGE = 17;
     private final int ACTIVITY_DETAIL = 18;
+    private final int ACTIVITY_CARD_PLAYER = 19;
     private final static String WEBSITE_HELP_EDIT = "http://anymemo.org/wiki/index.php?title=Editing_screen";
     private long totalCardCount = 0;
 
@@ -196,6 +197,7 @@ public class PreviewEditActivity extends QACardActivity {
     }
 
     @Override
+    @LogInvocation
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == Activity.RESULT_CANCELED){
@@ -218,6 +220,22 @@ public class PreviewEditActivity extends QACardActivity {
                 restartActivity();
                 break;
             }
+
+            case ACTIVITY_CARD_PLAYER:
+            {
+                Bundle extras = data.getExtras();
+                int cardId = extras.getInt(CardPlayerActivity.EXTRA_RESULT_CARD_ID, 1);
+                try {
+                    Card card = cardDao.queryForId(cardId);
+                    if (card != null) {
+                        gotoCard(card);
+                    }
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+                break;
+            }
+
 
             case ACTIVITY_SETTINGS:
             {
@@ -338,7 +356,7 @@ public class PreviewEditActivity extends QACardActivity {
                 if (getCurrentCard() != null) {
                     intent.putExtra(CardPlayerActivity.EXTRA_START_CARD_ID, getCurrentCard().getId());
                 }
-                startActivity(intent);
+                startActivityForResult(intent, ACTIVITY_CARD_PLAYER);
                 return true;
             }
 

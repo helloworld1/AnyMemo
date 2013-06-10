@@ -137,10 +137,14 @@ public class CardTTSUtil {
      * and release it if not.
      */
     @Override
-    public void finalize() {
-        if (questionTTS != null || answerTTS != null) {
-            Ln.w("release() must be called explicitly to clean up CardTTSUtil.");
-            release();
+    public void finalize() throws Throwable {
+        try {
+            if (questionTTS != null || answerTTS != null) {
+                Ln.w("release() must be called explicitly to clean up CardTTSUtil.");
+                release();
+            }
+        } finally {
+            super.finalize();
         }
     }
 
@@ -183,5 +187,3 @@ public class CardTTSUtil {
     }
 
 }
-
-

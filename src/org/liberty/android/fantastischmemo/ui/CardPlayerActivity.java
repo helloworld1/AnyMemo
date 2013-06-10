@@ -51,6 +51,8 @@ public class CardPlayerActivity extends QACardActivity {
 
     public static final String EXTRA_PLAYING_STATUS = "playing_status";
 
+    public static final String EXTRA_RESULT_CARD_ID = "resultCardId";
+
     private static final int MAGIC_FRAME_LAYOUT_ID = 338125929;
 
     private CardDao cardDao;
@@ -61,6 +63,7 @@ public class CardPlayerActivity extends QACardActivity {
 
     /* Settings */
     private Option option;
+
     private Setting setting;
 
     private int startCardId = 1;
@@ -204,6 +207,14 @@ public class CardPlayerActivity extends QACardActivity {
 
         // Set animation back
         setAnimation(R.anim.slide_left_in, R.anim.slide_left_out);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra(EXTRA_RESULT_CARD_ID, getCurrentCard().getId());
+        setResult(RESULT_OK, resultIntent);
+        finish();
     }
 
     // Query out the card id and display that card
