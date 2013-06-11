@@ -133,7 +133,7 @@ public class CardPlayerActivity extends QACardActivity {
         }
         displayCard(true);
         setSmallTitle(getTitle());
-        setTitle(getDbName());
+        updateTitle();
     }
 
     @Override
@@ -197,8 +197,10 @@ public class CardPlayerActivity extends QACardActivity {
         if (currentCard.getOrdinal() > card.getOrdinal()) {
             // This is previoius card
             setAnimation(R.anim.slide_right_in, R.anim.slide_right_out);
-        } else {
+        } else if (currentCard.getOrdinal() < card.getOrdinal()) {
             setAnimation(R.anim.slide_left_in, R.anim.slide_left_out);
+        } else {
+            // Do nothing if the new card is equal ot the current card id
         }
         setCurrentCard(card);
 
@@ -280,15 +282,6 @@ public class CardPlayerActivity extends QACardActivity {
             CardPlayerService.LocalBinder localBinder = (CardPlayerService.LocalBinder) binder;
 
             cardPlayerService = localBinder.getService();
-
-            Card currentPlayingCard = localBinder.getCurrentPlayingCard();
-
-            Ln.v("Current playing card when connection to service: " + currentPlayingCard);
-
-            // When connecting to an existing service, go to the current playing card
-            if (currentPlayingCard != null) {
-                gotoCard(currentPlayingCard);
-            }
         }
 
         @Override

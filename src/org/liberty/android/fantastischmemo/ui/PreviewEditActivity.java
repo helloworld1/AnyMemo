@@ -644,17 +644,15 @@ public class PreviewEditActivity extends QACardActivity {
 
     protected void gotoNext(){
         if (getCurrentCard() != null) {
-            setCurrentCard(cardDao.queryNextCard(getCurrentCard(), currentCategory));
+            Card nextCard = cardDao.queryNextCard(getCurrentCard(), currentCategory);
             try {
-                categoryDao.refresh(getCurrentCard().getCategory());
-                learningDataDao.refresh(getCurrentCard().getLearningData());
+                categoryDao.refresh(nextCard.getCategory());
+                learningDataDao.refresh(nextCard.getLearningData());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-            assert getCurrentCard() != null : "Next card is null";
-            setAnimation(R.anim.slide_left_in, R.anim.slide_left_out);
-            updateCardFrontSide();
-            updateTitle();
+            assert nextCard != null : "Next card is null";
+            gotoCard(nextCard);
         }
     }
 
@@ -664,8 +662,11 @@ public class PreviewEditActivity extends QACardActivity {
         if (currentCard.getOrdinal() > card.getOrdinal()) {
             // This is previoius card
             setAnimation(R.anim.slide_right_in, R.anim.slide_right_out);
-        } else {
+        } else if (currentCard.getOrdinal() < card.getOrdinal()) {
             setAnimation(R.anim.slide_left_in, R.anim.slide_left_out);
+        } else {
+            // Do not show animation if the same card is shown
+            setAnimation(0, 0);
         }
         setCurrentCard(card);
 
@@ -695,18 +696,15 @@ public class PreviewEditActivity extends QACardActivity {
 
     protected void gotoPrev(){
         if (getCurrentCard() != null) {
-            setCurrentCard(cardDao.queryPrevCard(getCurrentCard(), currentCategory));
+            Card prevCard = cardDao.queryPrevCard(getCurrentCard(), currentCategory);
             try {
-                categoryDao.refresh(getCurrentCard().getCategory());
-                learningDataDao.refresh(getCurrentCard().getLearningData());
+                categoryDao.refresh(prevCard.getCategory());
+                learningDataDao.refresh(prevCard.getLearningData());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-            assert getCurrentCard() != null : "Prev card is null";
-            setAnimation(R.anim.slide_right_in, R.anim.slide_right_out);
-            updateCardFrontSide();
-            // Set it back
-            setAnimation(R.anim.slide_left_in, R.anim.slide_left_out);
+            assert prevCard != null : "Prev card is null";
+            gotoCard(prevCard);
             updateTitle();
         }
     }
