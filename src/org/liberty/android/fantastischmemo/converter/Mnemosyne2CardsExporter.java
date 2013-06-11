@@ -135,7 +135,7 @@ public class Mnemosyne2CardsExporter implements Converter {
 
     }
 
-    private void createXMLFile(String dbPath, File xmlFile) throws SQLException, IOException {
+    private void createXMLFile(String dbPath, File xmlFile) throws IOException {
         AnyMemoDBOpenHelper helper = null;
         PrintWriter outXml = null;
         try {

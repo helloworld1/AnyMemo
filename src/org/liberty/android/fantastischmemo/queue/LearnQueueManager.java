@@ -232,12 +232,8 @@ public class LearnQueueManager implements QueueManager {
         }
 
         Card headCard = null;
-        try {
-            headCard = cardDao.queryForId(cardId);
-            learningDataDao.refresh(headCard.getLearningData());
-        } catch (SQLException e) {
-            throw new RuntimeException("Position a wrong card", e);
-        }
+        headCard = cardDao.queryForId(cardId);
+        learningDataDao.refresh(headCard.getLearningData());
 
         learnQueue.add(0, headCard);
     }

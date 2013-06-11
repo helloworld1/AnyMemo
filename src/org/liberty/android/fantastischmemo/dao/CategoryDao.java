@@ -5,9 +5,7 @@ import java.util.List;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 
-import com.j256.ormlite.dao.Dao;
-
-public interface CategoryDao extends Dao<Category, Integer> {
+public interface CategoryDao extends HelperDao<Category, Integer> {
     Category createOrReturn(String name);
     void removeCategory(Category c);
 

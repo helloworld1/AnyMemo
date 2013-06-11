@@ -263,12 +263,8 @@ public class ListEditScreen extends AMActivity {
             dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(
                     ListEditScreen.this, dbPath);
 
-            try {
-                CardDao cardDao = dbOpenHelper.getCardDao();
-                cards = cardDao.queryForAll();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            CardDao cardDao = dbOpenHelper.getCardDao();
+            cards = cardDao.queryForAll();
 
             return null;
         }

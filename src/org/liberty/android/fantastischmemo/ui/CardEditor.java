@@ -19,8 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import java.sql.SQLException;
-
 import java.io.File;
 
 import org.apache.mycommons.io.FileUtils;
@@ -31,19 +29,14 @@ import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
-
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
-
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
-
 import org.liberty.android.fantastischmemo.ui.AudioRecorderFragment.AudioRecorderResultListener;
-import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment;
 import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
-import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -51,10 +44,11 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -63,8 +57,6 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
-import android.util.Log;
-import android.content.res.Configuration;
 
 public class CardEditor extends AMActivity {
     private final int ACTIVITY_IMAGE_FILE = 1;
@@ -479,38 +471,33 @@ public class CardEditor extends AMActivity {
 
         @Override
         public Void doInBackground(Void... params) {
-            try {
-                helper =
-                    AnyMemoDBOpenHelperManager.getHelper(CardEditor.this, dbPath);
+            helper =
+                AnyMemoDBOpenHelperManager.getHelper(CardEditor.this, dbPath);
 
-                cardDao = helper.getCardDao();
-                categoryDao = helper.getCategoryDao();
-                learningDataDao = helper.getLearningDataDao();
+            cardDao = helper.getCardDao();
+            categoryDao = helper.getCategoryDao();
+            learningDataDao = helper.getLearningDataDao();
 
-                Card prevCard = cardDao.queryForId(currentCardId);
+            Card prevCard = cardDao.queryForId(currentCardId);
 
-                if (prevCard != null) {
-                    prevOrdinal = prevCard.getOrdinal();
-                }
-                if (isEditNew) {
-                    currentCard = new Card();
-                    // Search for "Uncategorized".
-                    Category c = categoryDao.queryForId(1);
-                    currentCard.setCategory(c);
-                    // Save the ordinal to be used when saving.
-                    LearningData ld = new LearningData();
-                    learningDataDao.create(ld);
-                    currentCard.setLearningData(ld);
-                } else {
-                    currentCard = prevCard;
-                }
-                assert currentCard != null : "Try to edit null card!";
-                categoryDao.refresh(currentCard.getCategory());
-
-            } catch (SQLException e) {
-                Log.e(TAG, "Error creating daos", e);
-                throw new RuntimeException("Dao creation error");
+            if (prevCard != null) {
+                prevOrdinal = prevCard.getOrdinal();
             }
+            if (isEditNew) {
+                currentCard = new Card();
+                // Search for "Uncategorized".
+                Category c = categoryDao.queryForId(1);
+                currentCard.setCategory(c);
+                // Save the ordinal to be used when saving.
+                LearningData ld = new LearningData();
+                learningDataDao.create(ld);
+                currentCard.setLearningData(ld);
+            } else {
+                currentCard = prevCard;
+            }
+            assert currentCard != null : "Try to edit null card!";
+            categoryDao.refresh(currentCard.getCategory());
+
             return null;
         }
 
@@ -571,27 +558,23 @@ public class CardEditor extends AMActivity {
 
         @Override
         public Void doInBackground(Void... params) {
-            try {
-                if (prevOrdinal != null && !addBack) {
-                    currentCard.setOrdinal(prevOrdinal);
+            if (prevOrdinal != null && !addBack) {
+                currentCard.setOrdinal(prevOrdinal);
+            } else {
+                Card lastCard = cardDao.queryLastOrdinal();
+                // last card = null means this is the first card to add
+                // We should set ordinal to 1.
+                if (lastCard == null) {
+                    currentCard.setOrdinal(1);
                 } else {
-                    Card lastCard = cardDao.queryLastOrdinal();
-                    // last card = null means this is the first card to add
-                    // We should set ordinal to 1.
-                    if (lastCard == null) {
-                        currentCard.setOrdinal(1);
-                    } else {
-                        int lastOrd = lastCard.getOrdinal();
-                        currentCard.setOrdinal(lastOrd + 1);
-                    }
+                    int lastOrd = lastCard.getOrdinal();
+                    currentCard.setOrdinal(lastOrd + 1);
                 }
-                if (isEditNew) {
-                    cardDao.create(currentCard);
-                } else {
-                    cardDao.update(currentCard);
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+            }
+            if (isEditNew) {
+                cardDao.create(currentCard);
+            } else {
+                cardDao.update(currentCard);
             }
 
             return null;

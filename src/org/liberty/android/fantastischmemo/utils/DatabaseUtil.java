@@ -1,7 +1,6 @@
 package org.liberty.android.fantastischmemo.utils;
 
 import java.io.File;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -31,11 +30,10 @@ public class DatabaseUtil {
     public Setting readDefaultSetting() {
         String emptyDbPath = mContext.getApplicationContext().getFilesDir().getAbsolutePath() + "/" + AMEnv.EMPTY_DB_NAME;
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, emptyDbPath);
+
         try {
             SettingDao settingDao = helper.getSettingDao();
             return settingDao.queryForId(1);
-        } catch (SQLException e) {
-            throw new RuntimeException("Could not read setting from default db", e);
         } finally {
             AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }

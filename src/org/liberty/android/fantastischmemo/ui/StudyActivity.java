@@ -19,7 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -633,16 +632,13 @@ public class StudyActivity extends QACardActivity {
 
             // Save current card as prev card for undo.
             prevCard = getCurrentCard();
-            try {
-                // This was saved to determine the stat info
-                // and the card id for undo
+            // This was saved to determine the stat info
+            // and the card id for undo
 
-                // Save previous learning for Undo
-                // This part is ugly due to muutablity of ORMLite
-                prevLearningData = learningDataDao.queryForId(ld.getId());
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            // Save previous learning for Undo
+            // This part is ugly due to mutablity of ORMLite
+            prevLearningData = learningDataDao.queryForId(ld.getId());
+
             LearningData newLd = scheduler.schedule(ld, grade, true);
 
             // Need to clone the data due to ORMLite restriction on "update()" method.
@@ -819,17 +815,13 @@ public class StudyActivity extends QACardActivity {
 
     private void skipCurrentCard() {
         if(getCurrentCard() != null) {
-            try {
-                LearningData ld = getCurrentCard().getLearningData();
-                ld.setNextLearnDate(new Date(Long.MAX_VALUE));
-                ld.setAcqReps(1);
-                learningDataDao.update(ld);
-                // Do not restart this card
-                setCurrentCard(null);
-                restartActivity();
-            } catch (SQLException e) {
-                Log.e(TAG, "Delete card error", e);
-            }
+            LearningData ld = getCurrentCard().getLearningData();
+            ld.setNextLearnDate(new Date(Long.MAX_VALUE));
+            ld.setAcqReps(1);
+            learningDataDao.update(ld);
+            // Do not restart this card
+            setCurrentCard(null);
+            restartActivity();
         }
     }
 
@@ -866,14 +858,10 @@ public class StudyActivity extends QACardActivity {
             .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
                 public void onClick(DialogInterface arg0, int arg1) {
                     if(getCurrentCard() != null){
-                        try {
-                            cardDao.delete(getCurrentCard());
-                            // Do not restart with this card
-                            setCurrentCard(null);
-                            restartActivity();
-                        } catch (SQLException e) {
-                            Log.e(TAG, "Delete card error", e);
-                        }
+                        cardDao.delete(getCurrentCard());
+                        // Do not restart with this card
+                        setCurrentCard(null);
+                        restartActivity();
                     }
                 }
             })

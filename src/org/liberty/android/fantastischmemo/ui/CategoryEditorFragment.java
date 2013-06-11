@@ -1,6 +1,5 @@
 package org.liberty.android.fantastischmemo.ui;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import org.apache.mycommons.lang3.StringUtils;
@@ -18,7 +17,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -140,15 +138,10 @@ public class CategoryEditorFragment extends RoboDialogFragment implements View.O
         @Override
         public Integer doInBackground(Void... params) {
             Category currentCategory;
-            try {
-                dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(mActivity, dbPath);
-                categoryDao = dbOpenHelper.getCategoryDao();
-                categories = categoryDao.queryForAll();
-                currentCategory = categoryDao.queryForId(currentCategoryId);
-            } catch (SQLException e) {
-                Log.e(TAG, "Error creating daos", e);
-                throw new RuntimeException("Dao creation error");
-            }
+            dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(mActivity, dbPath);
+            categoryDao = dbOpenHelper.getCategoryDao();
+            categories = categoryDao.queryForAll();
+            currentCategory = categoryDao.queryForId(currentCategoryId);
             int categorySize = categories.size();
             Integer position = null;
             if (currentCategory != null) {
@@ -214,13 +207,8 @@ public class CategoryEditorFragment extends RoboDialogFragment implements View.O
         public Void doInBackground(Void... params) {
             assert selectedCategory != null : "Null category is selected. This shouldn't happen";
             assert editText != null : "Category's EditText shouldn't get null";
-            try {
-                selectedCategory.setName(editText);
-                categoryDao.update(selectedCategory);
-            } catch (SQLException e) {
-                Log.e(TAG, "Error updating the category", e);
-                throw new RuntimeException("Error updating the category");
-            }
+            selectedCategory.setName(editText);
+            categoryDao.update(selectedCategory);
             return null;
         }
 
@@ -259,15 +247,10 @@ public class CategoryEditorFragment extends RoboDialogFragment implements View.O
 
         @Override
         public Category doInBackground(Void... params) {
-            try {
-                Category c = new Category();
-                c.setName(editText);
-                categoryDao.create(c);
-                return c;
-            } catch (SQLException e) {
-                Log.e(TAG, "Error updating the category", e);
-                throw new RuntimeException("Error updating the category");
-            }
+            Category c = new Category();
+            c.setName(editText);
+            categoryDao.create(c);
+            return c;
         }
 
         @Override

@@ -100,12 +100,7 @@ public class CardPlayerService extends RoboService {
                 dbOpenHelper,
                 option.getCardPlayerIntervalBetweenQA(),
                 option.getCardPlayerIntervalBetweenCards());
-        try {
-            cardPlayerContext.setCurrentCard(dbOpenHelper.getCardDao().queryForId(cardId));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
+        cardPlayerContext.setCurrentCard(dbOpenHelper.getCardDao().queryForId(cardId));
 
         return binder;
     }

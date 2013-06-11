@@ -20,7 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.utils;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -149,12 +148,7 @@ public class CardTTSUtil {
     }
 
     private void initTTS() {
-        try {
-            setting = settingDao.queryForId(1);
-        } catch (SQLException e) {
-            Ln.e(e);
-            throw new RuntimeException(e);
-        }
+        setting = settingDao.queryForId(1);
 
         String defaultLocation = AMEnv.DEFAULT_AUDIO_PATH;
         String dbName = FilenameUtils.getName(dbPath);

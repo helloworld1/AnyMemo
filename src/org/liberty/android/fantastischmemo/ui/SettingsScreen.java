@@ -21,7 +21,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import java.io.File;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -566,11 +565,7 @@ public class SettingsScreen extends AMActivity {
 
         @Override
         public Void doInBackground(Void... params) {
-            try {
-                settingDao.update(setting);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            settingDao.update(setting);
             return null;
         }
 
@@ -598,13 +593,9 @@ public class SettingsScreen extends AMActivity {
 
         @Override
         public Void doInBackground(Void... params) {
-            try {
-                Setting defaultSetting = databaseUtil.readDefaultSetting();
-                settingDao.replaceSetting(defaultSetting);
-                setting = settingDao.queryForId(1);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            Setting defaultSetting = databaseUtil.readDefaultSetting();
+            settingDao.replaceSetting(defaultSetting);
+            setting = settingDao.queryForId(1);
             return null;
         }
 

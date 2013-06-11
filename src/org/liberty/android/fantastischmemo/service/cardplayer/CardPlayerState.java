@@ -148,26 +148,16 @@ public enum CardPlayerState implements CardPlayerStateTransition {
     }
 
     private static Card findNextCard(final CardPlayerContext context) {
-        try {
-            Card card = context.getDbOpenHelper().getCardDao().queryNextCard(context.getCurrentCard());
-            context.getDbOpenHelper().getLearningDataDao().refresh(card.getLearningData());
-            context.getDbOpenHelper().getCategoryDao().refresh(card.getCategory());
-            return card;
-        } catch (SQLException e) {
-            Ln.e(e);
-            throw new RuntimeException(e);
-        }
+        Card card = context.getDbOpenHelper().getCardDao().queryNextCard(context.getCurrentCard());
+        context.getDbOpenHelper().getLearningDataDao().refresh(card.getLearningData());
+        context.getDbOpenHelper().getCategoryDao().refresh(card.getCategory());
+        return card;
     }
 
     private static Card findPrevCard(final CardPlayerContext context) {
-        try {
-            Card card = context.getDbOpenHelper().getCardDao().queryPrevCard(context.getCurrentCard());
-            context.getDbOpenHelper().getLearningDataDao().refresh(card.getLearningData());
-            context.getDbOpenHelper().getCategoryDao().refresh(card.getCategory());
-            return card;
-        } catch (SQLException e) {
-            Ln.e(e);
-            throw new RuntimeException(e);
-        }
+        Card card = context.getDbOpenHelper().getCardDao().queryPrevCard(context.getCurrentCard());
+        context.getDbOpenHelper().getLearningDataDao().refresh(card.getLearningData());
+        context.getDbOpenHelper().getCategoryDao().refresh(card.getCategory());
+        return card;
     }
 }

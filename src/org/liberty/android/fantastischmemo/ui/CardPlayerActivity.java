@@ -221,12 +221,8 @@ public class CardPlayerActivity extends QACardActivity {
 
     // Query out the card id and display that card
     protected void gotoCardId(final int cardId) {
-        try {
-            Card card = cardDao.queryForId(cardId);
-            gotoCard(card);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        Card card = cardDao.queryForId(cardId);
+        gotoCard(card);
     }
 
     /*

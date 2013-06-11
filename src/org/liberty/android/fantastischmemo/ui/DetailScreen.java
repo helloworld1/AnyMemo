@@ -18,7 +18,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import java.sql.SQLException;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -188,14 +187,9 @@ public class DetailScreen extends AMActivity {
 
     private String saveEntries(){
         String error;
-        try {
-            error = refreshEntries();
-            cardDao.update(currentCard);
-            learningDataDao.update(currentCard.getLearningData());
-        } catch (SQLException e) {
-            Log.e(TAG, "Error saving data!");
-            throw new RuntimeException(e);
-        }
+        error = refreshEntries();
+        cardDao.update(currentCard);
+        learningDataDao.update(currentCard.getLearningData());
 
         return error;
     }
@@ -272,20 +266,14 @@ public class DetailScreen extends AMActivity {
 
         @Override
         public Void doInBackground(Void... params) {
-        	try {
-        		helper = AnyMemoDBOpenHelperManager.getHelper(DetailScreen.this, dbPath);
-        		cardDao = helper.getCardDao();
-        		categoryDao = helper.getCategoryDao();
-        		learningDataDao = helper.getLearningDataDao();
+            helper = AnyMemoDBOpenHelperManager.getHelper(DetailScreen.this, dbPath);
+            cardDao = helper.getCardDao();
+            categoryDao = helper.getCategoryDao();
+            learningDataDao = helper.getLearningDataDao();
 
-            	currentCard = cardDao.queryForId(cardId);
-                categoryDao.refresh(currentCard.getCategory());
-                learningDataDao.refresh(currentCard.getLearningData());
-
-        	} catch (SQLException e) {
-        		Log.e(TAG, "Error creating daos!", e);
-        		throw new RuntimeException("Dao creation error!");
-        	}
+            currentCard = cardDao.queryForId(cardId);
+            categoryDao.refresh(currentCard.getCategory());
+            learningDataDao.refresh(currentCard.getLearningData());
 
             return null;
         }

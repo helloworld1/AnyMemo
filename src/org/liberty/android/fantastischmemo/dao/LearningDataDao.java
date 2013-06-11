@@ -2,9 +2,7 @@ package org.liberty.android.fantastischmemo.dao;
 
 import org.liberty.android.fantastischmemo.domain.LearningData;
 
-import com.j256.ormlite.dao.Dao;
-
-public interface LearningDataDao extends Dao<LearningData, Integer> {
+public interface LearningDataDao extends HelperDao<LearningData, Integer> {
     void updateLearningData(LearningData ld);
     void resetLearningData(LearningData ld);
     void resetAllLearningData();

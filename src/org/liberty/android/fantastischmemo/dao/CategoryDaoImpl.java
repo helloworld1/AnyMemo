@@ -1,24 +1,18 @@
 package org.liberty.android.fantastischmemo.dao;
 
 import java.sql.SQLException;
-
 import java.util.List;
-
 import java.util.concurrent.Callable;
 
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 
-import com.j256.ormlite.dao.BaseDaoImpl;
-
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
-
 import com.j256.ormlite.support.ConnectionSource;
-
 import com.j256.ormlite.table.DatabaseTableConfig;
 
-public class CategoryDaoImpl extends BaseDaoImpl<Category, Integer> implements CategoryDao {
+public class CategoryDaoImpl extends AbstractHelperDaoImpl<Category, Integer> implements CategoryDao {
     public CategoryDaoImpl(ConnectionSource connectionSource, DatabaseTableConfig<Category> tableConfig)
         throws SQLException {
         super(connectionSource, Category.class);

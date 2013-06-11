@@ -19,7 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import java.sql.SQLException;
 import java.util.HashMap;
 
 import javax.inject.Inject;
@@ -209,13 +208,9 @@ public class PreviewEditActivity extends QACardActivity {
             {
                 Bundle extras = data.getExtras();
                 int cardId = extras.getInt(CardEditor.EXTRA_RESULT_CARD_ID, 1);
-                try {
-                    Card card = cardDao.queryForId(cardId);
-                    if (card != null) {
-                        setCurrentCard(card);
-                    }
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
+                Card card = cardDao.queryForId(cardId);
+                if (card != null) {
+                    setCurrentCard(card);
                 }
                 restartActivity();
                 break;
@@ -225,13 +220,9 @@ public class PreviewEditActivity extends QACardActivity {
             {
                 Bundle extras = data.getExtras();
                 int cardId = extras.getInt(CardPlayerActivity.EXTRA_RESULT_CARD_ID, 1);
-                try {
-                    Card card = cardDao.queryForId(cardId);
-                    if (card != null) {
-                        gotoCard(card);
-                    }
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
+                Card card = cardDao.queryForId(cardId);
+                if (card != null) {
+                    gotoCard(card);
                 }
                 break;
             }
@@ -372,17 +363,13 @@ public class PreviewEditActivity extends QACardActivity {
             case R.id.menu_context_paste:
             {
                 if (savedCardId != null && getCurrentCard() != null) {
-                    try {
-                        Card savedCard = cardDao.queryForId(savedCardId);
-                        LearningData ld = new LearningData();
-                        learningDataDao.create(ld);
-                        savedCard.setLearningData(ld);
-                        savedCard.setOrdinal(getCurrentCard().getOrdinal());
-                        cardDao.create(savedCard);
-                        restartActivity();
-                    } catch (SQLException e) {
-                        throw new RuntimeException(e);
-                    }
+                    Card savedCard = cardDao.queryForId(savedCardId);
+                    LearningData ld = new LearningData();
+                    learningDataDao.create(ld);
+                    savedCard.setLearningData(ld);
+                    savedCard.setOrdinal(getCurrentCard().getOrdinal());
+                    cardDao.create(savedCard);
+                    restartActivity();
                 }
 
                 return true;
@@ -645,12 +632,9 @@ public class PreviewEditActivity extends QACardActivity {
     protected void gotoNext(){
         if (getCurrentCard() != null) {
             Card nextCard = cardDao.queryNextCard(getCurrentCard(), currentCategory);
-            try {
-                categoryDao.refresh(nextCard.getCategory());
-                learningDataDao.refresh(nextCard.getLearningData());
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            categoryDao.refresh(nextCard.getCategory());
+            learningDataDao.refresh(nextCard.getLearningData());
+
             assert nextCard != null : "Next card is null";
             gotoCard(nextCard);
         }
@@ -697,12 +681,9 @@ public class PreviewEditActivity extends QACardActivity {
     protected void gotoPrev(){
         if (getCurrentCard() != null) {
             Card prevCard = cardDao.queryPrevCard(getCurrentCard(), currentCategory);
-            try {
-                categoryDao.refresh(prevCard.getCategory());
-                learningDataDao.refresh(prevCard.getLearningData());
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            categoryDao.refresh(prevCard.getCategory());
+            learningDataDao.refresh(prevCard.getLearningData());
+
             assert prevCard != null : "Prev card is null";
             gotoCard(prevCard);
             updateTitle();
@@ -843,13 +824,9 @@ public class PreviewEditActivity extends QACardActivity {
         }
         @Override
         public Void doInBackground(Void... params) {
-            try {
-                Card delCard = getCurrentCard();
-                setCurrentCard(cardDao.queryNextCard(getCurrentCard(), currentCategory));
-                cardDao.delete(delCard);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            Card delCard = getCurrentCard();
+            setCurrentCard(cardDao.queryNextCard(getCurrentCard(), currentCategory));
+            cardDao.delete(delCard);
             return null;
         }
         @Override
@@ -884,22 +861,19 @@ public class PreviewEditActivity extends QACardActivity {
             assert criteria != null : "Pass null criteria to SearchCardTask";
 
             Card foundCard = null;
-            try {
-                if (method == SearchMethod.ID && NumberUtils.isDigits(criteria)) {
-                    foundCard = cardDao.queryForId(Integer.valueOf(criteria));
-                }
 
-                if (method == SearchMethod.TEXT_FORWARD) {
-                    foundCard = cardDao.searchNextCard(criteria, getCurrentCard().getOrdinal());
-                }
-
-                if (method == SearchMethod.TEXT_BACKWARD) {
-                    foundCard = cardDao.searchPrevCard(criteria, getCurrentCard().getOrdinal());
-                }
-
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+            if (method == SearchMethod.ID && NumberUtils.isDigits(criteria)) {
+                foundCard = cardDao.queryForId(Integer.valueOf(criteria));
             }
+
+            if (method == SearchMethod.TEXT_FORWARD) {
+                foundCard = cardDao.searchNextCard(criteria, getCurrentCard().getOrdinal());
+            }
+
+            if (method == SearchMethod.TEXT_BACKWARD) {
+                foundCard = cardDao.searchPrevCard(criteria, getCurrentCard().getOrdinal());
+            }
+
             return foundCard;
         }
 

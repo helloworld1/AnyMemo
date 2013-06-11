@@ -1,20 +1,15 @@
 package org.liberty.android.fantastischmemo.dao;
 
-import java.lang.Exception;
-
 import java.sql.SQLException;
-
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import java.util.concurrent.Callable;
 
 import org.apache.mycommons.lang3.StringUtils;
-
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
@@ -23,9 +18,7 @@ import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.stmt.Where;
-
 import com.j256.ormlite.support.ConnectionSource;
-
 import com.j256.ormlite.table.DatabaseTableConfig;
 
 public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements CardDao {
@@ -259,11 +252,7 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
         String answer = c.getAnswer();
         c.setAnswer(c.getQuestion());
         c.setQuestion(answer);
-        try {
-            update(c);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        update(c);
     }
 
 
@@ -724,8 +713,5 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
             throw new RuntimeException(e);
         }
     }
-
-
-
 }
 
