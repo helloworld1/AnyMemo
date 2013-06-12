@@ -22,7 +22,7 @@ package org.liberty.android.fantastischmemo.ui;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.mycommons.lang3.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;

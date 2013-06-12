@@ -21,7 +21,7 @@ package org.liberty.android.fantastischmemo.ui;
 
 import javax.inject.Inject;
 
-import org.apache.mycommons.lang3.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;

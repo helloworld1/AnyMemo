@@ -143,7 +143,7 @@
             </intent-filter>
         </activity>
         <service
-            android:name=".AnyMemoService" />
+            android:name="org.liberty.android.fantastischmemo.service.AnyMemoService" />
 
         <service
             android:name=".service.CardPlayerService" />

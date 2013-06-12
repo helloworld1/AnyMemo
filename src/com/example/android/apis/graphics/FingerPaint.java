@@ -17,8 +17,8 @@
 package com.example.android.apis.graphics;
 
 
-import org.apache.mycommons.codec.binary.Base64;
-import org.apache.mycommons.io.output.ByteArrayOutputStream;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.liberty.android.fantastischmemo.R;
 
 import android.content.Context;

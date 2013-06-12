@@ -29,7 +29,7 @@ import javax.inject.Inject;
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.basic.DefaultOAuthConsumer;
 
-import org.apache.mycommons.lang3.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.liberty.android.fantastischmemo.AMEnv;

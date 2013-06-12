@@ -3,7 +3,7 @@ package org.liberty.android.fantastischmemo.domain;
 import java.util.Date;
 import java.util.EnumSet;
 
-import org.apache.mycommons.lang3.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.dao.SettingDaoImpl;
 import org.liberty.android.fantastischmemo.utils.AMStringUtils;
 

@@ -2,8 +2,8 @@ package org.liberty.android.fantastischmemo.service.cardplayer;
 
 import java.sql.SQLException;
 
-import org.apache.mycommons.lang3.StringUtils;
-import org.apache.mycommons.lang3.time.DateUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
 

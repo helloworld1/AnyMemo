@@ -21,7 +21,7 @@ package org.liberty.android.fantastischmemo.downloader.oauth;
 
 import java.io.IOException;
 
-import org.apache.mycommons.lang3.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;

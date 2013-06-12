@@ -24,7 +24,7 @@ import java.util.Date;
 
 import javax.inject.Inject;
 
-import org.apache.mycommons.lang3.time.DateUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.liberty.android.fantastischmemo.R;
 
 import android.content.Context;

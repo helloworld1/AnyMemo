@@ -27,8 +27,8 @@ import java.io.InputStream;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.apache.mycommons.io.FileUtils;
-import org.apache.mycommons.io.FilenameUtils;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 
 import android.content.Context;

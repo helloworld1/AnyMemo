@@ -26,7 +26,7 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.apache.mycommons.lang3.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.tts.SpeakWord.OnCompletedListener;
 import org.liberty.android.fantastischmemo.aspect.CheckNullArgs;
 

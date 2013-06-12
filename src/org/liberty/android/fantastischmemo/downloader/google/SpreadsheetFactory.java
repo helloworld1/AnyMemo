@@ -27,7 +27,7 @@ import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import org.apache.mycommons.io.IOUtils;
+import org.apache.commons.io.IOUtils;
 
 import org.xmlpull.v1.XmlPullParserException;
 

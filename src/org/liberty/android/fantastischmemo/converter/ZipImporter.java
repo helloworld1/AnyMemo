@@ -6,7 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.mycommons.io.FilenameUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.utils.AMZipUtils;
 
 import com.google.inject.BindingAnnotation;

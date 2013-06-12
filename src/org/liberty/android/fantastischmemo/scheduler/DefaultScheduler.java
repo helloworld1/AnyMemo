@@ -24,7 +24,7 @@ import java.util.Random;
 
 import javax.inject.Inject;
 
-import org.apache.mycommons.lang3.time.DateUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.domain.SchedulingAlgorithmParameters;
 import org.liberty.android.fantastischmemo.utils.AMDateUtil;

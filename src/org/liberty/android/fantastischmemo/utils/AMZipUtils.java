@@ -14,8 +14,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
-import org.apache.mycommons.io.FileUtils;
-import org.apache.mycommons.io.IOUtils;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.liberty.android.fantastischmemo.AMEnv;
 
 import android.util.Log;
