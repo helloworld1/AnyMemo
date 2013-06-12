@@ -99,7 +99,9 @@ public class CardPlayerService extends RoboService {
                 handler,
                 dbOpenHelper,
                 option.getCardPlayerIntervalBetweenQA(),
-                option.getCardPlayerIntervalBetweenCards());
+                option.getCardPlayerIntervalBetweenCards(),
+                option.getCardPlayerShuffleEnabled(),
+                option.getCardPlayerRepeatEnabled());
         cardPlayerContext.setCurrentCard(dbOpenHelper.getCardDao().queryForId(cardId));
 
         return binder;
@@ -146,7 +148,9 @@ public class CardPlayerService extends RoboService {
                 handler,
                 dbOpenHelper,
                 option.getCardPlayerIntervalBetweenQA(),
-                option.getCardPlayerIntervalBetweenCards());
+                option.getCardPlayerIntervalBetweenCards(),
+                option.getCardPlayerShuffleEnabled(),
+                option.getCardPlayerRepeatEnabled());
 
         cardPlayerContext.setCurrentCard(startCard);
         cardPlayerContext.getState().transition(cardPlayerContext, CardPlayerMessage.START_PLAYING);

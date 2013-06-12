@@ -21,6 +21,10 @@ public class CardPlayerStateTest extends AbstractExistingDBTest {
 
     private final int TEST_CARD_ID = 5;
 
+    private final int TEST_FIRST_CARD_ID = 1;
+
+    private final int TEST_LAST_CARD_ID = 28;
+
     private CardPlayerContext cardPlayerContext;
 
 
@@ -47,7 +51,9 @@ public class CardPlayerStateTest extends AbstractExistingDBTest {
             mockAmTTSServiceHandler,
             helper,
             delayBeteenQAInSec,
-            delayBeteenCardsInSec);
+            delayBeteenCardsInSec,
+            false,
+            true);
         cardPlayerContext.setCurrentCard(helper.getCardDao().queryForId(TEST_CARD_ID));
     }
 
@@ -126,6 +132,141 @@ public class CardPlayerStateTest extends AbstractExistingDBTest {
         // Also verify the event callback to the fragment.
         verify(mockEventHandler, times(1)).onPlayCard(any(Card.class));
         assertEquals(TEST_CARD_ID + 1, (int)cardPlayerContext.getCurrentCard().getId());
+    }
+
+    // With repeat option disabled
+    @SmallTest
+    public void testPlayNextQuestionNoRepeatWithCardInMiddle() {
+        cardPlayerContext = new CardPlayerContext(
+            mockEventHandler,
+            mockCardTTSUtil,
+            mockAmTTSServiceHandler,
+            helper,
+            delayBeteenQAInSec,
+            delayBeteenCardsInSec,
+            false,
+            // No repeat
+            false);
+        cardPlayerContext.setCurrentCard(helper.getCardDao().queryForId(TEST_CARD_ID));
+
+        verifyStateTransition(CardPlayerState.PLAYING_QUESTION,
+                CardPlayerMessage.GO_TO_NEXT, CardPlayerState.PLAYING_QUESTION);
+        assertEquals(TEST_CARD_ID + 1, (int)cardPlayerContext.getCurrentCard().getId());
+    }
+
+    @SmallTest
+    public void testPlayNextQuestionNoRepeatWithCardAtEndShouldStop() {
+        cardPlayerContext = new CardPlayerContext(
+            mockEventHandler,
+            mockCardTTSUtil,
+            mockAmTTSServiceHandler,
+            helper,
+            delayBeteenQAInSec,
+            delayBeteenCardsInSec,
+            false,
+            // No repeat
+            false);
+        cardPlayerContext.setCurrentCard(helper.getCardDao().queryForId(TEST_LAST_CARD_ID));
+
+        verifyStateTransition(CardPlayerState.PLAYING_QUESTION,
+                CardPlayerMessage.GO_TO_NEXT, CardPlayerState.STOPPED);
+    }
+
+    @SmallTest
+    public void testPlayPrevQuestionNoRepeatWithCardInMiddle() {
+        cardPlayerContext = new CardPlayerContext(
+            mockEventHandler,
+            mockCardTTSUtil,
+            mockAmTTSServiceHandler,
+            helper,
+            delayBeteenQAInSec,
+            delayBeteenCardsInSec,
+            false,
+            // No repeat
+            false);
+        cardPlayerContext.setCurrentCard(helper.getCardDao().queryForId(TEST_CARD_ID));
+
+        verifyStateTransition(CardPlayerState.PLAYING_QUESTION,
+                CardPlayerMessage.GO_TO_PREV, CardPlayerState.PLAYING_QUESTION);
+        assertEquals(TEST_CARD_ID - 1, (int)cardPlayerContext.getCurrentCard().getId());
+    }
+
+    @SmallTest
+    public void testPlayPrevQuestionNoRepeatWithFirstCardShouldStop() {
+        cardPlayerContext = new CardPlayerContext(
+            mockEventHandler,
+            mockCardTTSUtil,
+            mockAmTTSServiceHandler,
+            helper,
+            delayBeteenQAInSec,
+            delayBeteenCardsInSec,
+            false,
+            // No repeat
+            false);
+        cardPlayerContext.setCurrentCard(helper.getCardDao().queryForId(TEST_FIRST_CARD_ID));
+
+        verifyStateTransition(CardPlayerState.PLAYING_QUESTION,
+                CardPlayerMessage.GO_TO_PREV, CardPlayerState.STOPPED);
+    }
+
+    // Shuffle test
+    @SmallTest
+    public void testPlayRandomPrevCard() {
+        cardPlayerContext = new CardPlayerContext(
+            mockEventHandler,
+            mockCardTTSUtil,
+            mockAmTTSServiceHandler,
+            helper,
+            delayBeteenQAInSec,
+            delayBeteenCardsInSec,
+            // Shuffle enabled
+            true,
+            true);
+        cardPlayerContext.setCurrentCard(helper.getCardDao().queryForId(TEST_CARD_ID));
+
+        verifyStateTransition(CardPlayerState.PLAYING_QUESTION,
+                CardPlayerMessage.GO_TO_PREV, CardPlayerState.PLAYING_QUESTION);
+    }
+
+    @SmallTest
+    public void testPlayRandomNextCard() {
+        cardPlayerContext = new CardPlayerContext(
+            mockEventHandler,
+            mockCardTTSUtil,
+            mockAmTTSServiceHandler,
+            helper,
+            delayBeteenQAInSec,
+            delayBeteenCardsInSec,
+            // Shuffle enabled
+            true,
+            true);
+        cardPlayerContext.setCurrentCard(helper.getCardDao().queryForId(TEST_CARD_ID));
+
+        verifyStateTransition(CardPlayerState.PLAYING_QUESTION,
+                CardPlayerMessage.GO_TO_NEXT, CardPlayerState.PLAYING_QUESTION);
+    }
+
+    // Shuffle and repeat work together. Shuffle should take precedence
+    // so it alway repeat
+    @SmallTest
+    public void testPlayRandomNextCardWithRepeat() {
+        cardPlayerContext = new CardPlayerContext(
+            mockEventHandler,
+            mockCardTTSUtil,
+            mockAmTTSServiceHandler,
+            helper,
+            delayBeteenQAInSec,
+            delayBeteenCardsInSec,
+            // Shuffle enabled
+            true,
+            // No repeat
+            false);
+
+        // Use last card to test that repeat has no effect
+        cardPlayerContext.setCurrentCard(helper.getCardDao().queryForId(TEST_LAST_CARD_ID));
+
+        verifyStateTransition(CardPlayerState.PLAYING_QUESTION,
+                CardPlayerMessage.GO_TO_NEXT, CardPlayerState.PLAYING_QUESTION);
     }
 
     /* 

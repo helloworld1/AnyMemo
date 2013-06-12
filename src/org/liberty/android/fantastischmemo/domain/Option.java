@@ -121,7 +121,7 @@ public class Option {
         editor.commit();
     }
     public boolean getCardPlayerRepeatEnabled() {
-        return settings.getBoolean(AMPrefKeys.CARD_PLAYER_REPEAT_ENABLED_KEY, false);
+        return settings.getBoolean(AMPrefKeys.CARD_PLAYER_REPEAT_ENABLED_KEY, true);
     }
 
     public static enum ButtonStyle {

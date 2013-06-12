@@ -1,7 +1,5 @@
 package org.liberty.android.fantastischmemo.service.cardplayer;
 
-import java.sql.SQLException;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.liberty.android.fantastischmemo.domain.Card;
@@ -9,7 +7,10 @@ import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
 
 import roboguice.util.Ln;
 
-// State object representing the state of card player 
+// State object representing the state machine of card player 
+// The normal flow is STOPPED -> PLAYING_QUESTION -> PLAYING_ANSWER -> PLAYING_QUESTION ...
+// If START_PLAYING is received, the context will transit to PLAYING_QUESTION
+// If STOP_PLAYING is received, any state of context will transit to STOPPED
 public enum CardPlayerState implements CardPlayerStateTransition {
     STOPPED {
         public void transition(CardPlayerContext context, CardPlayerMessage message) {
@@ -19,12 +20,21 @@ public enum CardPlayerState implements CardPlayerStateTransition {
                 playQuestion(context);
                 break;
             case GO_TO_NEXT:
+                // In STOPPED state, GO_TO_NEXT / GO_TO_PREV message is still handled
+                // because it need to change the current card in the context and callback
+                // the handler so the UI will change card without actually speaking.
                 Card nextCard = findNextCard(context);
+                if (nextCard == null) {
+                    break;
+                }
                 context.setCurrentCard(nextCard);
                 context.getEventHandler().onPlayCard(context.getCurrentCard());
                 break;
             case GO_TO_PREV:
                 Card prevCard = findPrevCard(context);
+                if (prevCard == null) {
+                    break;
+                }
                 context.setCurrentCard(prevCard);
                 context.getEventHandler().onPlayCard(context.getCurrentCard());
                 break;
@@ -40,19 +50,34 @@ public enum CardPlayerState implements CardPlayerStateTransition {
             switch(message) {
             case GO_TO_NEXT:
                 context.getCardTTSUtil().stopSpeak();
-                context.setCurrentCard(findNextCard(context));
+                Card nextCard = findNextCard(context);
+
+                // Always check null card, if it happens it means no card can be played so
+                // it will send STOP_PLAYING message.
+                if (nextCard == null) {
+                    context.getState().transition(context, CardPlayerMessage.STOP_PLAYING);
+                    break;
+                }
+                context.setCurrentCard(nextCard);
+
                 context.setState(PLAYING_QUESTION);
                 playQuestion(context);
 
                 break;
             case GO_TO_PREV:
                 context.getCardTTSUtil().stopSpeak();
-                context.setCurrentCard(findPrevCard(context));
+                Card prevCard = findPrevCard(context);
+                if (prevCard == null) {
+                    context.getState().transition(context, CardPlayerMessage.STOP_PLAYING);
+                    break;
+                }
+                context.setCurrentCard(prevCard);
                 context.setState(PLAYING_QUESTION);
                 playQuestion(context);
                 break;
             case PLAYING_ANSWER_COMPLETED:
                 Ln.w("Wrong state, the question is playing but receive message that answer completed!");
+                assert false : "Wrong state";
                 break;
             case PLAYING_QUESTION_COMPLETED:
                 context.setState(PLAYING_ANSWER);
@@ -72,23 +97,39 @@ public enum CardPlayerState implements CardPlayerStateTransition {
             switch(message) {
             case GO_TO_NEXT:
                 context.getCardTTSUtil().stopSpeak();
-                context.setCurrentCard(findNextCard(context));
+                Card nextCard = findNextCard(context);
+                if (nextCard == null) {
+                    context.getState().transition(context, CardPlayerMessage.STOP_PLAYING);
+                    break;
+                }
+                context.setCurrentCard(nextCard);
                 context.setState(PLAYING_QUESTION);
                 playQuestion(context);
                 break;
             case GO_TO_PREV:
                 context.getCardTTSUtil().stopSpeak();
-                context.setCurrentCard(findPrevCard(context));
+                Card prevCard = findPrevCard(context);
+                if (prevCard == null) {
+                    context.getState().transition(context, CardPlayerMessage.STOP_PLAYING);
+                    break;
+                }
+                context.setCurrentCard(prevCard);
                 context.setState(PLAYING_QUESTION);
                 playQuestion(context);
                 break;
             case PLAYING_ANSWER_COMPLETED:
-                context.setCurrentCard(findNextCard(context));
+                nextCard = findNextCard(context);
+                if (nextCard == null) {
+                    context.getState().transition(context, CardPlayerMessage.STOP_PLAYING);
+                    break;
+                }
+                context.setCurrentCard(nextCard);
                 context.setState(PLAYING_QUESTION);
                 playQuestion(context);
                 break;
             case PLAYING_QUESTION_COMPLETED:
                 Ln.w("Wrong state, the answer is playing but receive message that question completed!");
+                assert false : "Wrong state";
                 break;
             case STOP_PLAYING:
                 context.setState(STOPPED);
@@ -147,15 +188,45 @@ public enum CardPlayerState implements CardPlayerStateTransition {
         });
     }
 
+    /* This method will return null if there is no card to play */
     private static Card findNextCard(final CardPlayerContext context) {
-        Card card = context.getDbOpenHelper().getCardDao().queryNextCard(context.getCurrentCard());
+        Card card;
+        if (context.getShuffle()) {
+            card = context.getDbOpenHelper().getCardDao().getRandomCards(null, 1).get(0);
+        } else {
+            // Get the next ordinal card
+            card = context.getDbOpenHelper().getCardDao().queryNextCard(context.getCurrentCard());
+
+            // Do not repeat from the beginning if the repeat is set
+            if (!context.getRepeat() && card.getOrdinal() <= context.getCurrentCard().getOrdinal()) {
+                return null;
+            }
+        }
+
+        assert card != null : "Next card should not be null";
+
         context.getDbOpenHelper().getLearningDataDao().refresh(card.getLearningData());
         context.getDbOpenHelper().getCategoryDao().refresh(card.getCategory());
         return card;
     }
 
+    /* This method will return null if there is no card to play */
     private static Card findPrevCard(final CardPlayerContext context) {
-        Card card = context.getDbOpenHelper().getCardDao().queryPrevCard(context.getCurrentCard());
+        Card card = null;
+        if (context.getShuffle()) {
+            card = context.getDbOpenHelper().getCardDao().getRandomCards(null, 1).get(0);
+        } else {
+            // Get the next ordinal card
+            card = context.getDbOpenHelper().getCardDao().queryPrevCard(context.getCurrentCard());
+
+            // Do not repeat from the beginning if the repeat is set
+            if (!context.getRepeat() && card.getOrdinal() >= context.getCurrentCard().getOrdinal()) {
+                return null;
+            }
+        }
+
+        assert card != null : "Prev card should not be null";
+
         context.getDbOpenHelper().getLearningDataDao().refresh(card.getLearningData());
         context.getDbOpenHelper().getCategoryDao().refresh(card.getCategory());
         return card;

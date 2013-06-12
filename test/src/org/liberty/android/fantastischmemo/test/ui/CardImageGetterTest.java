@@ -1,4 +1,4 @@
-package org.liberty.andriod.fantastischmemo.test.ui;
+package org.liberty.android.fantastischmemo.test.ui;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.test.AndroidTestCase;

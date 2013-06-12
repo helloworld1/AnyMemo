@@ -18,19 +18,26 @@ public class CardPlayerContext {
     private final int delayBeteenQAInSec;
     private final int delayBeteenCardsInSec;
 
-    public CardPlayerContext(
-            CardPlayerEventHandler eventHandler,
+    private boolean shuffle = false;
+
+    private boolean repeat = false;
+
+    public CardPlayerContext(CardPlayerEventHandler eventHandler,
             CardTTSUtil cardTTSUtil,
             Handler amTTSServiceHandler,
             AnyMemoDBOpenHelper dbOpenHelper,
             int delayBeteenQAInSec,
-            int delayBeteenCardsInSec) {
+            int delayBeteenCardsInSec,
+            boolean shuffle,
+            boolean repeat) {
         this.eventHandler = eventHandler;
         this.cardTTSUtil = cardTTSUtil;
         this.amTTSServiceHandler = amTTSServiceHandler;
         this.dbOpenHelper = dbOpenHelper;
         this.delayBeteenQAInSec = delayBeteenQAInSec;
         this.delayBeteenCardsInSec = delayBeteenCardsInSec;
+        this.shuffle = shuffle;
+        this.repeat = repeat;
     }
 
     public CardPlayerState getState() {
@@ -71,5 +78,21 @@ public class CardPlayerContext {
 
     public int getDelayBeteenCardsInSec() {
         return delayBeteenCardsInSec;
+    }
+
+    public boolean getShuffle() {
+        return shuffle;
+    }
+
+    public void setShuffle(boolean shuffle) {
+        this.shuffle = shuffle;
+    }
+
+    public boolean getRepeat() {
+        return repeat;
+    }
+
+    public void setRepeat(boolean repeat) {
+        this.repeat = repeat;
     }
 }
