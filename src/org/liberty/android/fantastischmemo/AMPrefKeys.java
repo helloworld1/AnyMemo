@@ -126,7 +126,12 @@ public class AMPrefKeys {
 
     // Card player
     public static final String CARD_PLAYER_QA_SLEEP_INTERVAL_KEY = "card_player_qa_sleep_interval";
+
     public static final String CARD_PLAYER_CARD_SLEEP_INTERVAL_KEY = "card_player_card_sleep_interval";
+
+    public static final String CARD_PLAYER_SHUFFLE_ENABLED_KEY = "card_player_shuffle_enabled";
+
+    public static final String CARD_PLAYER_REPEAT_ENABLED_KEY = "card_player_repeat_enabled";
 
     // QA Card Activity
     public static final String CARD_GESTURE_ENABLED = "card_gesture_enabled";

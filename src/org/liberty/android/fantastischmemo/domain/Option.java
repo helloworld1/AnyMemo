@@ -106,6 +106,24 @@ public class Option {
         return settings.getInt(AMPrefKeys.CARD_PLAYER_CARD_SLEEP_INTERVAL_KEY, 1);
     }
 
+
+    public void setCardPlayerShuffleEnabled(boolean enabled) {
+        editor.putBoolean(AMPrefKeys.CARD_PLAYER_SHUFFLE_ENABLED_KEY, enabled);
+        editor.commit();
+    }
+
+    public boolean getCardPlayerShuffleEnabled() {
+        return settings.getBoolean(AMPrefKeys.CARD_PLAYER_SHUFFLE_ENABLED_KEY, false);
+    }
+
+    public void setCardPlayerRepeatEnabled(boolean enabled) {
+        editor.putBoolean(AMPrefKeys.CARD_PLAYER_REPEAT_ENABLED_KEY, enabled);
+        editor.commit();
+    }
+    public boolean getCardPlayerRepeatEnabled() {
+        return settings.getBoolean(AMPrefKeys.CARD_PLAYER_REPEAT_ENABLED_KEY, false);
+    }
+
     public static enum ButtonStyle {
         ANYMEMO,
         MNEMOSYNE,

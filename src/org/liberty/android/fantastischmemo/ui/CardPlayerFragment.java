@@ -1,7 +1,10 @@
 package org.liberty.android.fantastischmemo.ui;
 
 
+import javax.inject.Inject;
+
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.domain.Option;
 
 import roboguice.fragment.RoboFragment;
 
@@ -29,12 +32,18 @@ public class CardPlayerFragment extends RoboFragment {
 
     private CardPlayerActivity activity;
 
+    private Option option;
+
+    @Inject
+    public void setOption(Option option) {
+        this.option = option;
+    }
+
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setHasOptionsMenu(true);
     }
-
 
     @Override
     public void onAttach(Activity activity) {
@@ -59,9 +68,11 @@ public class CardPlayerFragment extends RoboFragment {
 
         repeatButton = (ImageButton) v.findViewById(R.id.card_player_repeat_button);
         repeatButton.setOnClickListener(buttonListener);
+        repeatButton.setSelected(option.getCardPlayerRepeatEnabled());
 
         shuffleButton = (ImageButton) v.findViewById(R.id.card_player_shuffle_button);
         shuffleButton.setOnClickListener(buttonListener);
+        shuffleButton.setSelected(option.getCardPlayerShuffleEnabled());
 
         return v;
     }
@@ -93,7 +104,6 @@ public class CardPlayerFragment extends RoboFragment {
         }
     }
 
-
     private View.OnClickListener buttonListener = new View.OnClickListener() {
 
         @Override
@@ -111,9 +121,21 @@ public class CardPlayerFragment extends RoboFragment {
             } else if (v == nextButton) {
                 activity.getCardPlayerService().skipToNext();
             } else if (v == repeatButton) {
-                // TODO: implementation
+                if (repeatButton.isSelected()) {
+                    repeatButton.setSelected(false);
+                    option.setCardPlayerRepeatEnabled(false);
+                } else {
+                    repeatButton.setSelected(true);
+                    option.setCardPlayerRepeatEnabled(true);
+                }
             } else if (v == shuffleButton) {
-                // TODO: implementation
+                if (shuffleButton.isSelected()) {
+                    shuffleButton.setSelected(false);
+                    option.setCardPlayerShuffleEnabled(false);
+                } else {
+                    shuffleButton.setSelected(true);
+                    option.setCardPlayerShuffleEnabled(true);
+                }
             }
         }
     };

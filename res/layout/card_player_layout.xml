@@ -42,7 +42,7 @@
             android:layout_marginRight="10dp"
             android:background="@android:color/transparent"
             android:layout_weight="1"
-            android:src="@drawable/media_shuffle" />
+            android:src="@drawable/card_player_shuffle_button" />
 
         <ImageButton
             android:id="@+id/card_player_repeat_button"
@@ -52,6 +52,6 @@
             android:layout_marginRight="10dp"
             android:background="@android:color/transparent"
             android:layout_weight="1"
-            android:src="@drawable/media_repeat" />
+            android:src="@drawable/card_player_repeat_button" />
 
 </LinearLayout>
