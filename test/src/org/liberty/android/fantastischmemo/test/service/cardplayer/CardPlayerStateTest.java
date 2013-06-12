@@ -269,6 +269,20 @@ public class CardPlayerStateTest extends AbstractExistingDBTest {
                 CardPlayerMessage.GO_TO_NEXT, CardPlayerState.PLAYING_QUESTION);
     }
 
+    @SmallTest
+    public void testStoppedReceivedGoToNextShouldGotoNextQuestion() {
+        verifyStateTransition(CardPlayerState.STOPPED,
+                CardPlayerMessage.GO_TO_NEXT, CardPlayerState.STOPPED);
+        assertEquals(TEST_CARD_ID + 1, (int)cardPlayerContext.getCurrentCard().getId());
+    }
+
+    @SmallTest
+    public void testStoppedReceivedGoToPrevShouldGotoPrevQuestion() {
+        verifyStateTransition(CardPlayerState.STOPPED,
+                CardPlayerMessage.GO_TO_PREV, CardPlayerState.STOPPED);
+        assertEquals(TEST_CARD_ID - 1, (int)cardPlayerContext.getCurrentCard().getId());
+    }
+
     /* 
      * Helper method that verify the state transition from startState
      * to endStateToVerify if message is received
