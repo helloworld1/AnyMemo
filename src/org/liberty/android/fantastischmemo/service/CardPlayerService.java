@@ -93,15 +93,7 @@ public class CardPlayerService extends RoboService {
         // Assign a value to the cardPlayerContext so we do not need to check
         // null for every player methods. The initial STOPPED state will help
         // skipToPrev/skipToNext method to callback the event handler.
-        cardPlayerContext = new CardPlayerContext(
-                cardPlayerEventHandler,
-                cardTTSUtil,
-                handler,
-                dbOpenHelper,
-                option.getCardPlayerIntervalBetweenQA(),
-                option.getCardPlayerIntervalBetweenCards(),
-                option.getCardPlayerShuffleEnabled(),
-                option.getCardPlayerRepeatEnabled());
+        reset();
         cardPlayerContext.setCurrentCard(dbOpenHelper.getCardDao().queryForId(cardId));
 
         return binder;
@@ -142,15 +134,7 @@ public class CardPlayerService extends RoboService {
     public void startPlaying(Card startCard) {
         // Always to create a new context if we start playing to ensure it is playing
         // from a clean state.
-        cardPlayerContext = new CardPlayerContext(
-                cardPlayerEventHandler,
-                cardTTSUtil,
-                handler,
-                dbOpenHelper,
-                option.getCardPlayerIntervalBetweenQA(),
-                option.getCardPlayerIntervalBetweenCards(),
-                option.getCardPlayerShuffleEnabled(),
-                option.getCardPlayerRepeatEnabled());
+        reset();
 
         cardPlayerContext.setCurrentCard(startCard);
         cardPlayerContext.getState().transition(cardPlayerContext, CardPlayerMessage.START_PLAYING);
@@ -169,6 +153,36 @@ public class CardPlayerService extends RoboService {
         Ln.v("Stop playing");
         cancelNotification();
         cardPlayerContext.getState().transition(cardPlayerContext, CardPlayerMessage.STOP_PLAYING);
+    }
+
+    /*
+     * Stop playing and reset the context
+     */
+    public void reset() {
+        // When we reset, we want to know the current card
+        // to set so the newly created context will have the
+        // current card previously set
+        // If it is null, we will leave it undertermined.
+        Card currentCard = null;
+
+        if (cardPlayerContext != null) {
+            stopPlaying();
+            currentCard = cardPlayerContext.getCurrentCard();
+        }
+
+        cardPlayerContext = new CardPlayerContext(
+                cardPlayerEventHandler,
+                cardTTSUtil,
+                handler,
+                dbOpenHelper,
+                option.getCardPlayerIntervalBetweenQA(),
+                option.getCardPlayerIntervalBetweenCards(),
+                option.getCardPlayerShuffleEnabled(),
+                option.getCardPlayerRepeatEnabled());
+
+        if (currentCard != null) {
+            cardPlayerContext.setCurrentCard(currentCard);
+        }
     }
 
     /*

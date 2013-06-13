@@ -121,6 +121,7 @@ public class CardPlayerFragment extends RoboFragment {
             } else if (v == nextButton) {
                 activity.getCardPlayerService().skipToNext();
             } else if (v == repeatButton) {
+                stopPlaying();
                 if (repeatButton.isSelected()) {
                     repeatButton.setSelected(false);
                     option.setCardPlayerRepeatEnabled(false);
@@ -128,7 +129,11 @@ public class CardPlayerFragment extends RoboFragment {
                     repeatButton.setSelected(true);
                     option.setCardPlayerRepeatEnabled(true);
                 }
+                // Need to reset the service context to pick up
+                // the new config
+                activity.getCardPlayerService().reset();
             } else if (v == shuffleButton) {
+                stopPlaying();
                 if (shuffleButton.isSelected()) {
                     shuffleButton.setSelected(false);
                     option.setCardPlayerShuffleEnabled(false);
@@ -136,6 +141,7 @@ public class CardPlayerFragment extends RoboFragment {
                     shuffleButton.setSelected(true);
                     option.setCardPlayerShuffleEnabled(true);
                 }
+                activity.getCardPlayerService().reset();
             }
         }
     };

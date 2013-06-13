@@ -18,9 +18,9 @@ public class CardPlayerContext {
     private final int delayBeteenQAInSec;
     private final int delayBeteenCardsInSec;
 
-    private boolean shuffle = false;
+    private final boolean shuffle;
 
-    private boolean repeat = false;
+    private final boolean repeat;
 
     public CardPlayerContext(CardPlayerEventHandler eventHandler,
             CardTTSUtil cardTTSUtil,
@@ -84,15 +84,7 @@ public class CardPlayerContext {
         return shuffle;
     }
 
-    public void setShuffle(boolean shuffle) {
-        this.shuffle = shuffle;
-    }
-
     public boolean getRepeat() {
         return repeat;
-    }
-
-    public void setRepeat(boolean repeat) {
-        this.repeat = repeat;
     }
 }
