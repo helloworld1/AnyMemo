@@ -1,19 +1,13 @@
 package org.liberty.android.fantastischmemo.test.utils;
 
-import java.lang.reflect.Method;
-
 import org.liberty.android.fantastischmemo.test.AbstractPreferencesTest;
 import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
 
-import android.content.Context;
-import android.test.ServiceTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
 public class AMPrefUtilTest extends AbstractPreferencesTest {
 
     private AMPrefUtil amPrefUtil;
-
-    private Context testContext;
 
     @Override
     public void setUp() throws Exception {

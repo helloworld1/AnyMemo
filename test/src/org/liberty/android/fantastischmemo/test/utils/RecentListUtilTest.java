@@ -1,6 +1,5 @@
 package org.liberty.android.fantastischmemo.test.utils;
 
-import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.test.AbstractPreferencesTest;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;

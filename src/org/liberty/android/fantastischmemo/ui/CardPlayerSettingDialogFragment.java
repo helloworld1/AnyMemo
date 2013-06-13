@@ -32,14 +32,11 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 public class CardPlayerSettingDialogFragment extends DialogFragment{
-    private static final int MAX_QA_SLEEP_TIME_IN_SEC = 10;
-    private static final int MAX_CARD_SLEEP_TIME_IN_SEC = 10;
     private static final int DEFAULT_QA_SLEEP_TIME_IN_SEC = 1;
     private static final int DEFAULT_CARD_SLEEP_TIME_IN_SEC = 1;
 
@@ -51,8 +48,6 @@ public class CardPlayerSettingDialogFragment extends DialogFragment{
     private int qaSleepTime;
     private int cardSleepTime;
 
-    private Button button;
-    private static final String TAG = "CardPlayerFragment";
     private SharedPreferences settings;
     private SharedPreferences.Editor editor;
     private Activity mActivity;

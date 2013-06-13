@@ -19,18 +19,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import java.sql.SQLException;
-
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.aspect.CheckNullArgs;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.domain.Card;
-import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.service.CardPlayerService;
 
-import roboguice.util.Ln;
 
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -62,8 +58,6 @@ public class CardPlayerActivity extends QACardActivity {
     private CardPlayerService cardPlayerService;
 
     /* Settings */
-    private Option option;
-
     private Setting setting;
 
     private int startCardId = 1;
@@ -110,7 +104,6 @@ public class CardPlayerActivity extends QACardActivity {
         cardDao = getDbOpenHelper().getCardDao();
         settingDao = getDbOpenHelper().getSettingDao();
 
-        option = getOption();
         setting = settingDao.queryForId(1);
 
         /* Run the learnQueue init in a separate thread */
@@ -299,7 +292,7 @@ public class CardPlayerActivity extends QACardActivity {
                 Bundle extras = intent.getExtras();
                 assert extras != null : "The intent received must have card id and playing status"; 
                 int currentCardId = extras.getInt(CardPlayerService.EXTRA_CURRENT_CARD_ID);
-                boolean isPlaying = extras.getBoolean(CardPlayerService.EXTRA_IS_PLAYING);
+                // boolean isPlaying = extras.getBoolean(CardPlayerService.EXTRA_IS_PLAYING);
 
                 // TODO: Need to make playButton working
                 // playButton.setSelected(isPlaying);

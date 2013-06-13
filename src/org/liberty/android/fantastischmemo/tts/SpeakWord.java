@@ -146,34 +146,35 @@ public class SpeakWord {
             }
         });
 
+        final File finalAudioFile = audioFile;
+
         try{
-            final FileInputStream fis = new FileInputStream(audioFile);
             new Thread(){
                 public void run(){
                     try{
                         if(!mp.isPlaying()){
-                            mp.reset();
-                            mp.setDataSource(fis.getFD());
-                            mp.prepare();
-                            mp.start();
+                            FileInputStream fis = null;
+                            try {
+                                fis = new FileInputStream(finalAudioFile);
+                                mp.reset();
+                                mp.setDataSource(fis.getFD());
+                                mp.prepare();
+                                mp.start();
+                            } finally {
+                                if (fis != null) {
+                                    fis.close();
+                                }
+                            }
                         }
-                        else{
-                            stop();
-                        }
-                    }
-
-                    catch(Exception e){
+                    } catch(Exception e){
                         Log.e(TAG, "Error loading audio. Maybe it is race condition", e);
                     }
-
                 }
             }.start();
-        }
-        catch(Exception e){
+        } catch(Exception e){
             Log.e(TAG, "Speak error", e);
             return false;
-        }
-        return true;
+        }        return true;
     }
 
     public void stop(){

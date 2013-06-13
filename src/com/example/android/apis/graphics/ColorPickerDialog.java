@@ -136,6 +136,7 @@ public class ColorPickerDialog extends Dialog {
             return Color.argb(a, r, g, b);
         }
 
+        @SuppressWarnings("unused")
         private int rotateColor(int color, float rad) {
             float deg = rad * 180 / 3.1415927f;
             int r = Color.red(color);

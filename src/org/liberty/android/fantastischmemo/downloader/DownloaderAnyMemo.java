@@ -398,7 +398,7 @@ public class DownloaderAnyMemo extends DownloaderBase{
                 DownloadItem di = new DownloadItem();
                 di.setType(DownloadItem.ItemType.Category);
                 di.setTitle(dbcategory);
-                di.setAddress(WEBSITE_JSON + "?action=getdb&category=" + URLEncoder.encode(dbcategory));
+                di.setAddress(WEBSITE_JSON + "?action=getdb&category=" + URLEncoder.encode(dbcategory, "UTF-8"));
                 categoryList.add(di);
             }
 
@@ -441,13 +441,12 @@ public class DownloaderAnyMemo extends DownloaderBase{
                 JSONObject jsonItem = jsonArray.getJSONObject(i);
                 String dbname = jsonItem.getString("DBName");
                 String dbnote = jsonItem.getString("DBNote");
-                String dbcategory = jsonItem.getString("DBCategory");
                 String filename = jsonItem.getString("FileName");
                 DownloadItem di = new DownloadItem();
                 di.setType(DownloadItem.ItemType.Database);
                 di.setTitle(dbname);
                 di.setDescription(dbnote);
-                di.setAddress(WEBSITE_DOWNLOAD + URLEncoder.encode(filename));
+                di.setAddress(WEBSITE_DOWNLOAD + URLEncoder.encode(filename, "UTF-8"));
                 di.setExtras("filename", filename);
                 databaseList.add(di);
             }
@@ -464,10 +463,6 @@ public class DownloaderAnyMemo extends DownloaderBase{
         dlAdapter.sort(new Comparator<DownloadItem>(){
             public int compare(DownloadItem di1, DownloadItem di2){
                 return (di1.getTitle().toLowerCase()).compareTo(di2.getTitle().toLowerCase());
-            }
-
-            public boolean equals(DownloadItem di1, DownloadItem di2){
-                return di1.getTitle().equals(di2.getTitle());
             }
         });
     }

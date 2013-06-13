@@ -23,9 +23,7 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
-import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
@@ -33,7 +31,6 @@ import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.queue.QuizQueueManager;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
-import org.liberty.android.fantastischmemo.utils.AMStringUtils;
 import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
 
 import android.app.AlertDialog;
@@ -62,8 +59,6 @@ public class QuizActivity extends QACardActivity {
     public static String EXTRA_QUIZ_SIZE = "quiz_size";
     public static String EXTRA_SHUFFLE_CARDS = "shuffle_cards";
 
-    private CardDao cardDao;
-    private LearningDataDao learningDataDao;
     private CategoryDao categoryDao;
 
 
@@ -77,8 +72,6 @@ public class QuizActivity extends QACardActivity {
     /* Utils */
     private DictionaryUtil dictionaryUtil;
 
-    private AMStringUtils amStringUtil;
-
     private QuizQueueManager queueManager;
 
     private Scheduler scheduler;
@@ -89,8 +82,6 @@ public class QuizActivity extends QACardActivity {
     private int quizSize = -1;
 
     private Category filterCategory;
-
-    private boolean initialized = false;
 
     private boolean isNewCardsCompleted = false;
 
@@ -110,8 +101,6 @@ public class QuizActivity extends QACardActivity {
 
     @Override
     public void onInit() throws Exception {
-        cardDao = getDbOpenHelper().getCardDao();
-        learningDataDao = getDbOpenHelper().getLearningDataDao();
         categoryDao = getDbOpenHelper().getCategoryDao();
         setting = getSetting();
         option = getOption();
@@ -141,7 +130,6 @@ public class QuizActivity extends QACardActivity {
         }
         setupGradeButtons();
         displayCard(false);
-        initialized = true;
         setSmallTitle(getActivityTitleString());
         setTitle(getDbName());
     }

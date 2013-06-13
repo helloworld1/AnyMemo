@@ -41,7 +41,6 @@ public class FELauncher extends AMActivity implements OnClickListener{
     private Button loginButton;
     private Button privateButton;
     private Button uploadButton;
-    private static final String TAG = "org.liberty.android.fantastischmemo.downloader.FELauncher";
     private SharedPreferences settings;
     private SharedPreferences.Editor editor;
 

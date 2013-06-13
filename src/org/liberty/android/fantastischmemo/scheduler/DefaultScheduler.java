@@ -29,7 +29,6 @@ import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.domain.SchedulingAlgorithmParameters;
 import org.liberty.android.fantastischmemo.utils.AMDateUtil;
 
-import android.content.Context;
 import android.util.Log;
 
 /*

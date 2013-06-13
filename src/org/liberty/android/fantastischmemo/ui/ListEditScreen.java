@@ -20,7 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo.ui;
 
-import java.sql.SQLException;
 import java.util.Comparator;
 import java.util.List;
 
@@ -58,8 +57,6 @@ import android.widget.TextView;
 
 public class ListEditScreen extends AMActivity {
     private String dbPath;
-
-    private static String TAG = ListEditScreen.class.getCanonicalName();
 
     private CardListAdapter mAdapter;
 

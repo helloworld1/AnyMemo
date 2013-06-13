@@ -28,6 +28,7 @@ class GraphicsActivity extends Activity {
     }
 
     @Override
+    @SuppressWarnings("all")
     public void setContentView(View view) {
         if (false) { // set to true to test Picture
             ViewGroup vg = new PictureLayout(this);

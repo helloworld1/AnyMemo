@@ -30,8 +30,6 @@ import android.appwidget.AppWidgetProvider;
 
 public class AnyMemoWidgetProvider extends AppWidgetProvider{
 
-    private final static String TAG = "org.liberty.android.fantastischmemo.AnyMemoWidgetProvider";
-
     @Override
     public void onEnabled(Context context){
         super.onEnabled(context);

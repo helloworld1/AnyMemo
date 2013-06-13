@@ -32,7 +32,6 @@ public class SetAlarmReceiver extends BroadcastReceiver{
     /* This class contains the static methods to set up the alarm
      * also it is a receiver that can be invoked every boot time.
      */
-    private final static String TAG = "org.liberty.android.fantastischmemo.SetAlarmReceiver";
     private final static int ALARM_REQUEST_CODE = 1548345;
 
     @Override

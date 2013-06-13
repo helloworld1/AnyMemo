@@ -1,7 +1,5 @@
 package org.liberty.android.fantastischmemo.test.integration;
 
-import org.liberty.android.fantastischmemo.R;
-
 import org.liberty.android.fantastischmemo.ui.AnyMemo;
 
 import com.jayway.android.robotium.solo.Solo;
@@ -12,6 +10,8 @@ public class AnyMemoActivityOpenTabTest extends ActivityInstrumentationTestCase2
 
     protected AnyMemo mActivity;
 
+    // Used for compatibility for Android 2.x
+    @SuppressWarnings("deprecation")
     public AnyMemoActivityOpenTabTest() {
         super("org.liberty.android.fantastischmemo", AnyMemo.class);
     }

@@ -118,6 +118,7 @@ public class PictureLayout extends ViewGroup {
     }
 
     @Override
+    @SuppressWarnings("all")
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(mPicture.beginRecording(getWidth(), getHeight()));
         mPicture.endRecording();

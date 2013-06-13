@@ -47,16 +47,13 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -78,8 +75,6 @@ public class DownloaderFE extends DownloaderBase{
     private ListView listView;
     private Handler mHandler;
     private ProgressDialog mProgressDialog;
-    private SharedPreferences settings;
-    private SharedPreferences.Editor editor;
     private String action;
     private String searchCriterion = null;
     private String oauthToken = null;
@@ -102,10 +97,7 @@ public class DownloaderFE extends DownloaderBase{
         dlAdapter = new DownloadListAdapter(this, R.layout.filebrowser_item);
         listView = (ListView)findViewById(R.id.file_list);
         listView.setAdapter(dlAdapter);
-        settings = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = settings.edit();
 
-        final EditText input = new EditText(this);
         Intent intent = getIntent();
         action = intent.getAction();
         if(action.equals(INTENT_ACTION_SEARCH_TAG)){
@@ -223,13 +215,13 @@ public class DownloaderFE extends DownloaderBase{
         List<DownloadItem> diList = new ArrayList<DownloadItem>();
         String url = "";
         if(action.equals(INTENT_ACTION_SEARCH_TAG)){
-            url = FE_API_TAG + URLEncoder.encode(searchCriterion);
+            url = FE_API_TAG + URLEncoder.encode(searchCriterion, "UTF-8");
         }
         else if(action.equals(INTENT_ACTION_SEARCH_USER)){
-            url = FE_API_USER + URLEncoder.encode(searchCriterion);
+            url = FE_API_USER + URLEncoder.encode(searchCriterion, "UTF-8");
         }
         else if(action.equals(INTENT_ACTION_SEARCH_PRIVATE)){
-            url = FE_API_USER + URLEncoder.encode(searchCriterion) + "&private=true&oauth_token_secret=" + oauthTokenSecret+ "&oauth_token=" + oauthToken;
+            url = FE_API_USER + URLEncoder.encode(searchCriterion, "UTF-8") + "&private=true&oauth_token_secret=" + oauthTokenSecret+ "&oauth_token=" + oauthToken;
             Log.i(TAG, "Before signingUrl: " + url);
             url = oauthConsumer.sign(url);
 

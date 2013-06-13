@@ -41,7 +41,6 @@ import android.view.ViewGroup;
  * apps like ColorDict
  */
 public class DownloadTabFragment extends RoboFragment implements View.OnClickListener{
-    private static final String TAG = "org.liberty.android.fantastischmemo.ui.DownloadTabFragment";
     private View amButton;
     private View feButton;
     private View ssButton;

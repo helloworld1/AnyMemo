@@ -28,10 +28,6 @@ import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.AnyMemoWidgetProvider;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.R.drawable;
-import org.liberty.android.fantastischmemo.R.id;
-import org.liberty.android.fantastischmemo.R.layout;
-import org.liberty.android.fantastischmemo.R.string;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.ui.AnyMemo;
 import org.liberty.android.fantastischmemo.ui.StudyActivity;
@@ -148,6 +144,7 @@ public class AnyMemoService extends RoboService{
         }
     }
 
+    @SuppressWarnings("deprecation")
     private void showNotification(){
         try{
             DatabaseInfo dbInfo = new DatabaseInfo(this);
@@ -157,6 +154,7 @@ public class AnyMemoService extends RoboService{
             Intent myIntent = new Intent(this, AnyMemo.class);
             myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             NotificationManager notificationManager = (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
+
             Notification notification = new Notification(R.drawable.icon_notification, getString(R.string.app_name), System.currentTimeMillis());
             notification.flags |= Notification.FLAG_AUTO_CANCEL;
             PendingIntent pIntent = PendingIntent.getActivity(this, NOTIFICATION_REQ, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -203,18 +201,8 @@ public class AnyMemoService extends RoboService{
             }
         }
 
-        public DatabaseInfo(String dbname, String dbpath){
-        }
-
-        public DatabaseInfo(String dbname, String dbpath, int revcount, int newcount){
-        }
-
         public String getDbName(){
             return dbName;
-        }
-
-        public String getDbPath(){
-            return dbPath;
         }
 
         public int getNewCount(){

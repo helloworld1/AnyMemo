@@ -46,8 +46,6 @@ public abstract class OauthAccessCodeRetrievalFragment extends RoboDialogFragmen
 
     private AuthCodeReceiveListener authCodeReceiveListener = null;
 
-    private final static String TAG = "OauthAccessCodeRetrievalFragment";
-
     private WebView webview;
 
     private View loadingText;

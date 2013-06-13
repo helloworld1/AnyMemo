@@ -44,7 +44,7 @@ public class AMApplication extends Application {
 
         // HTTP connection reuse which was buggy pre-froyo
 
-        if (Integer.parseInt(Build.VERSION.SDK) < Build.VERSION_CODES.FROYO) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
             Log.w(TAG, "Using version less than 2.2, disable urlconnection connection pool");
             System.setProperty("http.keepAlive", "false");
         }

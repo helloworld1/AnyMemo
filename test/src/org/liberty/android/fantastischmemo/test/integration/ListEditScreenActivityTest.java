@@ -1,9 +1,7 @@
 package org.liberty.android.fantastischmemo.test.integration;
 
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.ui.AnyMemo;
 import org.liberty.android.fantastischmemo.ui.ListEditScreen;
-import org.liberty.android.fantastischmemo.ui.StudyActivity;
 
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
@@ -14,6 +12,7 @@ public class ListEditScreenActivityTest extends ActivityInstrumentationTestCase2
 
     protected ListEditScreen mActivity;
 
+    @SuppressWarnings("deprecation")
     public ListEditScreenActivityTest() {
         super("org.liberty.android.fantastischmemo", ListEditScreen.class);
     }

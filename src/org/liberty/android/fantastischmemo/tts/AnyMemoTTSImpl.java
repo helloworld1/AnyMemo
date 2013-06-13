@@ -28,7 +28,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.tts.SpeakWord.OnCompletedListener;
-import org.liberty.android.fantastischmemo.aspect.CheckNullArgs;
 
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
@@ -119,6 +118,8 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
         }
     }
 
+    // We need setOnUtteranceCompletedListener for compatibility with Android 2.x
+    @SuppressWarnings("deprecation")
     public void sayText(final String s, final OnTextToSpeechCompletedListener onTextToSpeechCompletedListener){
         /*if there is a user defined audio, speak it and return */
 		if (speakWord.speakWord(s)) {

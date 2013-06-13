@@ -57,8 +57,6 @@ public class GestureSelectionDialogFragment extends RoboDialogFragment {
 
     public static final String EXTRA_GESTURE_NAME_DESCRIPTION_MAP = "gesture_name_description_map";
 
-    private static final String TAG = "GestureSelectionDialogFragment";
-
     private AMActivity mActivity;
 
     private ListView gestureList;

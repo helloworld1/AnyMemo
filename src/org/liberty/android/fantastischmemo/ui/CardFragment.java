@@ -21,7 +21,6 @@ package org.liberty.android.fantastischmemo.ui;
 
 import java.io.File;
 
-import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.domain.Setting;
 
@@ -43,10 +42,6 @@ import android.widget.TextView;
 public class CardFragment extends RoboFragment {
 
     public static final String EXTRA_CARD_TEXT = "cardText";
-
-    private static final String TAG = CardFragment.class.getSimpleName();
-
-    private AMActivity mActivity;
 
     private CharSequence mCardText;
 
@@ -83,7 +78,6 @@ public class CardFragment extends RoboFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mActivity = (AMActivity) activity;
     }
 
     @Override

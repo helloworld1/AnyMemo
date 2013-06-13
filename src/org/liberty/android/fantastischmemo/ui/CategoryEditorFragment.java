@@ -35,7 +35,6 @@ public class CategoryEditorFragment extends RoboDialogFragment implements View.O
     private String dbPath;
     private CategoryDao categoryDao;
     private int currentCategoryId;
-    private static final String TAG = "CategoryEditorFragment";
     private CategoryAdapter categoryAdapter;
     private ListView categoryList;
     private Button okButton;

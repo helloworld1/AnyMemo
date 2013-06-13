@@ -16,6 +16,7 @@ public class DetailScreenActivityTest extends ActivityInstrumentationTestCase2<D
 
     protected DetailScreen mActivity;
 
+    @SuppressWarnings("deprecation")
     public DetailScreenActivityTest() {
         super("org.liberty.android.fantastischmemo", DetailScreen.class);
     }

@@ -26,6 +26,7 @@ import android.view.View;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
+@SuppressWarnings("all")
 public class ColorDialog extends AlertDialog implements OnSeekBarChangeListener, OnClickListener {
 
     public interface OnClickListener {

@@ -40,8 +40,10 @@ public class DownloadItem {
         extras = new HashMap<String, String>();
     }
 
+    @SuppressWarnings("unchecked")
     public DownloadItem clone(){
         DownloadItem newItem = new DownloadItem(this.type, this.title, this.description, this.address);
+
         newItem.extras = (HashMap<String, String>)this.extras.clone();
         return newItem;
     }

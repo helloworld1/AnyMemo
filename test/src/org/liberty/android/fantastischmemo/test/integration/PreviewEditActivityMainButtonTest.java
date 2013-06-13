@@ -12,6 +12,7 @@ public class PreviewEditActivityMainButtonTest extends ActivityInstrumentationTe
 
     protected PreviewEditActivity mActivity;
 
+    @SuppressWarnings("deprecation")
     public PreviewEditActivityMainButtonTest () {
         super("org.liberty.android.fantastischmemo", PreviewEditActivity.class);
     }

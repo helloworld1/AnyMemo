@@ -29,6 +29,7 @@ import android.widget.TextView;
  * Wrapper for Arabic Reshaper Class
  * @author Amr Gawish
  */
+@SuppressWarnings("all")
 public class ArabicUtilities {
 
          /**

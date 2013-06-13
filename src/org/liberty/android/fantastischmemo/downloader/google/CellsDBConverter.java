@@ -21,8 +21,6 @@ package org.liberty.android.fantastischmemo.downloader.google;
 
 import java.io.IOException;
 
-import java.sql.SQLException;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 

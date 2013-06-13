@@ -16,10 +16,9 @@ public class StudyActivityStudyTest extends ActivityInstrumentationTestCase2<Stu
 
     protected StudyActivity mActivity;
 
-    private View questionView;
-
     private View answerView;
 
+    @SuppressWarnings("deprecation")
     public StudyActivityStudyTest () {
         super("org.liberty.android.fantastischmemo", StudyActivity.class);
     }
@@ -36,8 +35,6 @@ public class StudyActivityStudyTest extends ActivityInstrumentationTestCase2<Stu
         setActivityIntent(intent);
 
         mActivity = this.getActivity();
-
-        questionView = mActivity.findViewById(R.id.question);
 
         answerView = mActivity.findViewById(R.id.answer);
 

@@ -20,9 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import java.io.File;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -32,13 +29,9 @@ import org.amr.arabic.ArabicUtilities;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
-import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.dao.CardDao;
-import org.liberty.android.fantastischmemo.dao.CategoryDao;
-import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Option;
@@ -63,29 +56,25 @@ import android.gesture.GestureLibraries;
 import android.gesture.GestureLibrary;
 import android.gesture.GestureOverlayView;
 import android.gesture.Prediction;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+
 import android.text.ClipboardManager;
+
 import android.text.Editable;
 import android.text.Html;
 import android.text.Html.ImageGetter;
 import android.text.Html.TagHandler;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
-import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
+@SuppressWarnings("deprecation")
 public abstract class QACardActivity extends AMActivity {
     public static String EXTRA_DBPATH = "dbpath";
 
@@ -98,17 +87,7 @@ public abstract class QACardActivity extends AMActivity {
     /* DAOs */
     private SettingDao settingDao;
 
-    private CardDao cardDao;
-
-    private LearningDataDao learningDataDao;
-
-    private CategoryDao categoryDao;
-
     private Card currentCard;
-
-    private int screenWidth;
-
-    private int screenHeight;
 
     private int animationInResId = 0;
     private int animationOutResId = 0;
@@ -160,11 +139,6 @@ public abstract class QACardActivity extends AMActivity {
 
         dbPath = extras.getString(EXTRA_DBPATH);
         setContentView(R.layout.qa_card_layout);
-
-        Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE))
-                .getDefaultDisplay();
-        screenWidth = display.getWidth();
-        screenHeight = display.getHeight();
 
         // Set teh default animation
         animationInResId = R.anim.slide_left_in;
@@ -277,9 +251,6 @@ public abstract class QACardActivity extends AMActivity {
             }
 
         }
-
-        int questionAlignValue;
-        int answerAlignValue;
 
         String questionTypefaceValue = null;
         String answerTypefaceValue = null;
@@ -485,10 +456,7 @@ public abstract class QACardActivity extends AMActivity {
 
         @Override
         public Void call() throws Exception {
-            cardDao = dbOpenHelper.getCardDao();
-            learningDataDao = dbOpenHelper.getLearningDataDao();
             settingDao = dbOpenHelper.getSettingDao();
-            categoryDao = dbOpenHelper.getCategoryDao();
             setting = settingDao.queryForId(1);
 
             ContextScope scope = RoboGuice.getInjector(context).getInstance(ContextScope.class);

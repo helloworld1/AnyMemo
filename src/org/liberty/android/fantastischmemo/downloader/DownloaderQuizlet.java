@@ -212,9 +212,9 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
         List<DownloadItem> diList = new ArrayList<DownloadItem>();
         String url = "";
         if(action.equals(INTENT_ACTION_SEARCH_TAG)){
-            url = QUIZLET_API_TAG + URLEncoder.encode(searchCriterion);
+            url = QUIZLET_API_TAG + URLEncoder.encode(searchCriterion, "UTF-8");
         } else if (action.equals(INTENT_ACTION_SEARCH_USER)){
-            url = String.format(QUIZLET_API_USER, URLEncoder.encode(searchCriterion));
+            url = String.format(QUIZLET_API_USER, URLEncoder.encode(searchCriterion, "UTF-8"));
         } else {
             throw new IOException("Incorrect criterion used for this call");
         }

@@ -125,6 +125,7 @@ public class AnyMemo extends AMActivity {
         // tabs scrollable for small screen.
         TabWidget widget = mTabHost.getTabWidget();
 
+        @SuppressWarnings("deprecation")
         int display_width_px = this.getWindowManager().getDefaultDisplay().getWidth();
         int display_width_dp = amUiUtil.convertPxToDp(display_width_px);
 

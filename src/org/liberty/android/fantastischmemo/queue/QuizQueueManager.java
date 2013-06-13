@@ -37,13 +37,9 @@ import org.liberty.android.fantastischmemo.domain.Category;
 
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 
-import android.util.Log;
-
 public class QuizQueueManager implements QueueManager {
 
     private CardDao cardDao;
-
-    private LearningDataDao learningDataDao;
 
     /*
      * The scheduler to determine whether a card should reimain
@@ -57,15 +53,12 @@ public class QuizQueueManager implements QueueManager {
 
     private boolean shuffle;
 
-    private final String TAG = getClass().getSimpleName();
-
     private static final int MAX_QUEUE_SIZE = 500;
 
     private QuizQueueManager(Builder builder) {
         this.shuffle = builder.shuffle;
         this.scheduler = builder.scheduler;
         this.cardDao = builder.cardDao;
-        this.learningDataDao = builder.learningDataDao;
         newCache = new LinkedList<Card>();
         reviewCache = new LinkedList<Card>();
         dirtyCache = new HashSet<Card>();

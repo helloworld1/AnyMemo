@@ -90,7 +90,10 @@ public class FingerPaint extends GraphicsActivity
 
     public class MyView extends View {
 
+        @SuppressWarnings("unused")
         private static final float MINP = 0.25f;
+
+        @SuppressWarnings("unused")
         private static final float MAXP = 0.75f;
 
         private Bitmap  mBitmap;
@@ -263,7 +266,10 @@ public class FingerPaint extends GraphicsActivity
         }
 
         Display display = getWindowManager().getDefaultDisplay();
+        @SuppressWarnings("deprecation")
         int width = display.getWidth();
+
+        @SuppressWarnings("deprecation")
         int height = display.getHeight();
 
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);

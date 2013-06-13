@@ -33,7 +33,6 @@ import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.downloader.oauth.OauthAccessCodeRetrievalFragment;
 
 public final class DropboxOAuthTokenRetrievalDialogFragment extends OauthAccessCodeRetrievalFragment {
-    private final static String TAG = "DropboxOAuthTokenRetrievalDialogFragment";
 
     private static final String REQUEST_TOKEN_URL = "https://api.dropbox.com/1/oauth/request_token";
     private static final String AUTHORIZE_TOKEN_URL = "https://www.dropbox.com/1/oauth/authorize";

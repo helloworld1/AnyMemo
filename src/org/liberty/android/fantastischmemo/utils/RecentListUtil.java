@@ -31,7 +31,6 @@ import android.preference.PreferenceManager;
 
 /* This class handles the operations on recent list */
 public class RecentListUtil {
-    private static final String TAG = "RecentListUtilTag";
     private int recentLength = 7;
 
     private Option option;

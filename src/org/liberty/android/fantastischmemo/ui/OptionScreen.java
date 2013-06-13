@@ -41,6 +41,8 @@ public class OptionScreen extends PreferenceActivity {
     private static final String CUSTOMIZE_SCHEDULING_ALGORITHM_KEY
         = "customize_scheduling_algorithm_key";
 
+    // addPreferencesFromResource is used for compatibility
+    @SuppressWarnings("deprecation")
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.layout.option_screen);

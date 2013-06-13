@@ -22,7 +22,6 @@ package org.liberty.android.fantastischmemo.utils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.R.string;
 
 import android.app.Activity;
 import android.app.AlertDialog;

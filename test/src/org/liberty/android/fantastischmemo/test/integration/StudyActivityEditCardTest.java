@@ -16,6 +16,7 @@ public class StudyActivityEditCardTest extends ActivityInstrumentationTestCase2<
 
     protected StudyActivity mActivity;
 
+    @SuppressWarnings("deprecation")
     public StudyActivityEditCardTest() {
         super("org.liberty.android.fantastischmemo", StudyActivity.class);
     }

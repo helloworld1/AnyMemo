@@ -18,6 +18,7 @@ public class CardEditorActivityFunctionTest extends ActivityInstrumentationTestC
 
     protected CardEditor mActivity;
 
+    @SuppressWarnings("deprecation")
     public CardEditorActivityFunctionTest() {
         super("org.liberty.android.fantastischmemo", CardEditor.class);
     }

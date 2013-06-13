@@ -19,20 +19,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.dropbox;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-
-import org.apache.commons.io.FileUtils;
 import org.liberty.android.fantastischmemo.AMEnv;
 
 
 public class DropboxUtils {
-    private static final String TAG = "DropboxUtils";
 
     public static String buildOAuthAccessHeader(String oauthRequestToken, String oauthRequestTokenSecret){
         String headerValue =

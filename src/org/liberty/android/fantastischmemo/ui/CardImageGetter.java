@@ -28,8 +28,7 @@ public class CardImageGetter implements ImageGetter {
     
     private int screenWidth;
     
-    private int screenHeight;
-	
+    @SuppressWarnings("deprecation")
     public CardImageGetter (Context context, String dbPath) {
         this.context = context;
         this.dbPath = dbPath;
@@ -38,7 +37,6 @@ public class CardImageGetter implements ImageGetter {
                 .getDefaultDisplay();
         
         screenWidth = display.getWidth();
-        screenHeight = display.getHeight();
 	}
 	
     @Override
@@ -94,6 +92,8 @@ public class CardImageGetter implements ImageGetter {
             
             Bitmap resizedBitmap = Bitmap.createBitmap(orngBitmap, 0, 0,
                     width, height, matrix, true);
+
+            @SuppressWarnings("deprecation")
             BitmapDrawable d = new BitmapDrawable(resizedBitmap);
             //d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
             d.setBounds(0, 0, scaledWidth, scaledHeight);
@@ -111,23 +111,17 @@ public class CardImageGetter implements ImageGetter {
     public Bitmap scaleBitmap(Bitmap b) {
         int width = b.getWidth();
         int height = b.getHeight();
-        int scaledWidth = width;
-        int scaledHeight = height;
      
         float scaleFactor = 1.0f;
         Matrix matrix = new Matrix();
         if (width > screenWidth) {
             scaleFactor = ((float) screenWidth) / width;
             matrix.postScale(scaleFactor, scaleFactor);
-            scaledWidth = (int) (width * scaleFactor);
-            scaledHeight = (int) (height * scaleFactor);
         }
 
         if (width > 0.2 * screenWidth && width < 0.6 * screenWidth) {
             scaleFactor = (((float) screenWidth) * 0.6f) / width;
             matrix.postScale(scaleFactor, scaleFactor);
-            scaledWidth = (int) (width * scaleFactor);
-            scaledHeight = (int) (height * scaleFactor);
         }
      
         Bitmap resizedBitmap = Bitmap.createBitmap(b, 0, 0,

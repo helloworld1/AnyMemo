@@ -14,7 +14,6 @@ import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.downloader.oauth.OauthAccessCodeRetrievalFragment;
 import org.liberty.android.fantastischmemo.downloader.oauth.OauthAccountActivity;
 
-import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;

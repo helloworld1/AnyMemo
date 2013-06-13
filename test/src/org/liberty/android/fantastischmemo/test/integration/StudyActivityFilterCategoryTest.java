@@ -19,10 +19,9 @@ public class StudyActivityFilterCategoryTest extends ActivityInstrumentationTest
 
     protected StudyActivity mActivity;
 
-    private View questionView;
-
     private View answerView;
 
+    @SuppressWarnings("deprecation")
     public StudyActivityFilterCategoryTest() {
         super("org.liberty.android.fantastischmemo", StudyActivity.class);
     }
@@ -40,8 +39,6 @@ public class StudyActivityFilterCategoryTest extends ActivityInstrumentationTest
         setActivityIntent(intent);
 
         mActivity = this.getActivity();
-
-        questionView = mActivity.findViewById(R.id.question);
 
         answerView = mActivity.findViewById(R.id.answer);
 

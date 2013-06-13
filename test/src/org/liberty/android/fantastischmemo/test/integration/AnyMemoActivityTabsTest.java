@@ -12,6 +12,7 @@ public class AnyMemoActivityTabsTest extends ActivityInstrumentationTestCase2<An
 
     protected AnyMemo mActivity;
 
+    @SuppressWarnings("deprecation")
     public AnyMemoActivityTabsTest() {
         super("org.liberty.android.fantastischmemo", AnyMemo.class);
     }

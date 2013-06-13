@@ -54,7 +54,6 @@ import android.widget.TextView;
 public abstract class AbstractDownloaderFragment extends RoboFragment {
 
     private static final String TAG = "org.liberty.android.fantastischmemo.downloader.DownloaderBase";
-    private static final int TOAST_MSG_DURATION = 5000;
 
     private Activity mActivity;
 

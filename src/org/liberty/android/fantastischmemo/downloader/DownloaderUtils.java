@@ -47,14 +47,11 @@ import android.util.Log;
 public class DownloaderUtils {
     public static final String TAG = "org.liberty.android.fantastischmemo.downloader.DownloaderUtils";
 
-    private Context mContext;
-
 
     private AMFileUtil amFileUtil;
 
     @Inject
     public DownloaderUtils(Context context) {
-        mContext = context;
     }
 
 

@@ -20,8 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo.ui;
 
-import java.sql.SQLException;
-
 import java.util.Calendar;
 import java.util.Date;
 
@@ -63,8 +61,6 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 
 public class StatisticsScreen extends AMActivity {
-    private static final String TAG = "StatisticsScreen";
-
     public static final String EXTRA_DBPATH = "dbpath";
 
     private AMSpinner typeSelectSpinner;

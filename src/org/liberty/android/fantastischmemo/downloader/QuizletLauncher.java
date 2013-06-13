@@ -34,7 +34,6 @@ import android.app.AlertDialog;
 public class QuizletLauncher extends AMActivity implements OnClickListener{
     private Button searchTagButton;
     private Button searchUserButton;
-    private static final String TAG = "org.liberty.android.fantastischmemo.downloader.QuizletLauncher";
     private SharedPreferences settings;
     private SharedPreferences.Editor editor;
 

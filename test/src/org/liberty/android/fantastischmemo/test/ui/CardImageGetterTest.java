@@ -15,6 +15,7 @@ public class CardImageGetterTest extends AndroidTestCase {
     private CardImageGetter cardImageGetter;
 
     @Override
+    @SuppressWarnings("deprecation")
     public void setUp() {
         Display display = ((WindowManager)getContext().getSystemService(Context.WINDOW_SERVICE))
                 .getDefaultDisplay();

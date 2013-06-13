@@ -34,7 +34,6 @@ import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 
 import org.liberty.android.fantastischmemo.ui.FileBrowserActivity;
-import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 
 import android.os.Bundle;
@@ -90,7 +89,6 @@ public class FEUpload extends AMActivity{
                     if(resultExtras != null){
                         final String dbPath = resultExtras.getString(FileBrowserActivity.EXTRA_RESULT_PATH);
                         AMGUIUtility.doProgressTask(this, R.string.loading_please_wait, R.string.upload_wait, new AMGUIUtility.ProgressTask(){
-                            private String authUrl;
                             public void doHeavyTask() throws Exception{
                                 uploadDB(dbPath);
                             }
@@ -127,8 +125,8 @@ public class FEUpload extends AMActivity{
     }
 
     private int addCardSet(String title, String description) throws Exception{
-        String urlTitle = URLEncoder.encode(title);
-        String urlDescription = URLEncoder.encode(description);
+        String urlTitle = URLEncoder.encode(title, "UTF-8");
+        String urlDescription = URLEncoder.encode(description, "UTF-8");
         String url = FE_API_ADD_CARDSET + "&title="+ urlTitle + "&tags=" + urlTitle + "&description=" + urlDescription + "&private=false&oauth_token_secret=" + oauthTokenSecret+ "&oauth_token=" + oauthToken;
         url = consumer.sign(url);
         String jsonString = downloaderUtils.downloadJSONString(url);
@@ -145,7 +143,7 @@ public class FEUpload extends AMActivity{
     }
 
     private void addCard(int cardSetId, String question, String answer) throws Exception{
-        String url = FE_API_ADD_CARD + "&card_set_id=" + cardSetId + "&question=" + URLEncoder.encode(question) + "&answer=" + URLEncoder.encode(answer) + "&oauth_token_secret=" + oauthTokenSecret + "&oauth_token=" + oauthToken;
+        String url = FE_API_ADD_CARD + "&card_set_id=" + cardSetId + "&question=" + URLEncoder.encode(question, "UTF-8") + "&answer=" + URLEncoder.encode(answer, "UTF-8") + "&oauth_token_secret=" + oauthTokenSecret + "&oauth_token=" + oauthToken;
         Log.v(TAG, "Request url_old: " + url);
         url = consumer.sign(url);
         Log.v(TAG, "Request url_signed: " + url);

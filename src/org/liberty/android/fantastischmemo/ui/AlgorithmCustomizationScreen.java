@@ -21,28 +21,24 @@ package org.liberty.android.fantastischmemo.ui;
 
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
-
 import org.liberty.android.fantastischmemo.domain.SchedulingAlgorithmParameters;
 
-import org.liberty.android.fantastischmemo.ui.OptionScreen;
-
 import android.app.AlertDialog;
-
 import android.content.DialogInterface;
-import android.content.Intent;
-
+import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.content.pm.ActivityInfo;
-import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.content.res.Configuration;
 
 public class AlgorithmCustomizationScreen extends PreferenceActivity {
     private static final String RESET_CUSTOMIZED_ALGORITHM_KEY
         = "reset_customized_scheduling_algorithm";
 
+    // There is no replacement for addPreferencesFromResource
+    @SuppressWarnings("deprecation")
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.layout.algorithm_customization_screen);

@@ -17,6 +17,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
 
     protected SettingsScreen mActivity;
 
+    @SuppressWarnings("deprecation")
     public SettingsScreenActivityTest() {
         super("org.liberty.android.fantastischmemo", SettingsScreen.class);
     }
