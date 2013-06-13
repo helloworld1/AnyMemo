@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Refrence layout file for subclasses of QACardActivity.
+  Copy this file to sub-class's own layout file  -->
 <android.gesture.GestureOverlayView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/gesture_overlay"

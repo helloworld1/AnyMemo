@@ -134,6 +134,11 @@ public class PreviewEditActivity extends QACardActivity {
     }
 
     @Override
+    public int getContentView() {
+        return R.layout.qa_card_layout_preview_edit;
+    }
+
+    @Override
     public void onInit() throws Exception {
         Card currentCard = null;
         cardDao = getDbOpenHelper().getCardDao();
@@ -552,31 +557,11 @@ public class PreviewEditActivity extends QACardActivity {
 
 
     private void composeViews(){
-        LinearLayout rootView= (LinearLayout) findViewById(R.id.root);
-
-        LayoutInflater factory = LayoutInflater.from(this);
-        LinearLayout controlButtonsView = (LinearLayout) factory.inflate(R.layout.preview_edit_activity_buttons, null);
-
-        //LinearLayout controlButtonsView = (LinearLayout)controlButtons.getView();
-        /* This li is make the background of buttons the same as answer */
-        buttonsLayout = new LinearLayout(this);
-        buttonsLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-
-        /*
-         * -1: Match parent -2: Wrap content
-         * This is necessary or the view will not be
-         * stetched
-         */
-        buttonsLayout.addView(controlButtonsView, -1, -2);
-
-        rootView.addView(buttonsLayout, -1, -2);
-        //rootView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1.0f));
-
+        buttonsLayout = (LinearLayout) findViewById(R.id.buttons_root);
         newButton = (Button) findViewById(R.id.new_button);
         editButton = (Button) findViewById(R.id.edit_button);
         prevButton = (Button) findViewById(R.id.prev_button);
         nextButton = (Button) findViewById(R.id.next_button);
-
     }
 
     void setViewListeners(){
@@ -588,7 +573,6 @@ public class PreviewEditActivity extends QACardActivity {
         /* For double sided card, the view can be toggled */
         if(setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED){
             // TODO: Set listeners
-
         }
 
 
