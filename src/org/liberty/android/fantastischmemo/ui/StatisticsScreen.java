@@ -74,6 +74,7 @@ public class StatisticsScreen extends AMActivity {
     private CardDao cardDao;
 
     private AnyMemoDBOpenHelper dbOpenHelper;
+
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);

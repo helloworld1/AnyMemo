@@ -21,6 +21,7 @@
 	<LinearLayout
 		android:id="@+id/horizontalLine"
 		android:layout_width="fill_parent"
+        android:orientation="vertical"
 		android:layout_height="2dip"
 		android:background="#5f5f5f"/>
     <ListView

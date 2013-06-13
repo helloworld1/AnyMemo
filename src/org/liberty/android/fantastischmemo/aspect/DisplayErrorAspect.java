@@ -32,8 +32,8 @@ import roboguice.util.Ln;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.content.DialogInterface;
+import android.support.v4.app.Fragment;
 
 @Aspect
 @DeclarePrecedence("org.liberty.android.roboguiceplayground.DisplayErrorAspect,org.liberty.android.roboguiceplayground.RetryAspect")

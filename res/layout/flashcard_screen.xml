@@ -26,6 +26,7 @@
 
     <LinearLayout
         android:id="@+id/horizontalLine"
+        android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="2dip"
         android:background="#FF909090"/>
