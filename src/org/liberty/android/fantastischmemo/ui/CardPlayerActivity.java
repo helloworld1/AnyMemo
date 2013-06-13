@@ -38,9 +38,6 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.app.FragmentTransaction;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 public class CardPlayerActivity extends QACardActivity {
     public static final String EXTRA_START_CARD_ID = "start_card_id";
@@ -48,8 +45,6 @@ public class CardPlayerActivity extends QACardActivity {
     public static final String EXTRA_PLAYING_STATUS = "playing_status";
 
     public static final String EXTRA_RESULT_CARD_ID = "resultCardId";
-
-    private static final int MAGIC_FRAME_LAYOUT_ID = 338125929;
 
     private CardDao cardDao;
 
@@ -71,8 +66,13 @@ public class CardPlayerActivity extends QACardActivity {
         Bundle extras = getIntent().getExtras();
         startCardId = extras.getInt(EXTRA_START_CARD_ID, -1);
 
-        showAutoSpeakFragment();
+        // showAutoSpeakFragment();
 
+    }
+
+    @Override
+    public int getContentView() {
+        return R.layout.qa_card_layout_card_player;
     }
 
     // Make sure the serviceEventListener broadcast receiver
@@ -235,23 +235,6 @@ public class CardPlayerActivity extends QACardActivity {
                 // buttonsLayout.setBackgroundColor(setting.getAnswerBackgroundColor());
             }
         }
-    }
-
-    /*
-     * This method will add append the frame layout to the layout
-     * and use it as a fragment.
-     */
-    private void showAutoSpeakFragment() {
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        LinearLayout root = (LinearLayout)findViewById(R.id.root);
-        FrameLayout cardPlayerView = new FrameLayout(this);
-
-        CardPlayerFragment f = new CardPlayerFragment();
-
-        cardPlayerView.setId(MAGIC_FRAME_LAYOUT_ID);
-        root.addView(cardPlayerView);
-        ft.replace(cardPlayerView.getId(), f);
-        ft.commit();
     }
 
     private void bindCardPlayerService() {

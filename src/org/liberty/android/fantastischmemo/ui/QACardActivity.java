@@ -138,7 +138,7 @@ public abstract class QACardActivity extends AMActivity {
         dbName = FilenameUtils.getName(dbPath);
 
         dbPath = extras.getString(EXTRA_DBPATH);
-        setContentView(R.layout.qa_card_layout);
+        setContentView(getContentView());
 
         // Set teh default animation
         animationInResId = R.anim.slide_left_in;
@@ -150,6 +150,10 @@ public abstract class QACardActivity extends AMActivity {
 
         initTask = new InitTask(this);
         initTask.execute();
+    }
+
+    public int getContentView() {
+        return R.layout.qa_card_layout;
     }
 
     protected void setCurrentCard(Card card) {
