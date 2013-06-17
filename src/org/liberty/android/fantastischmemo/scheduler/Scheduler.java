@@ -17,4 +17,9 @@ public interface Scheduler {
 	 */
 	boolean isCardLearned(LearningData data);
 
+    /*
+     * Return true if the card is never studied before.
+     */
+    boolean isCardNew(LearningData data);
+
 }

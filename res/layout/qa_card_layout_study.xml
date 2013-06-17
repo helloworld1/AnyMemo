@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Refrence layout file for subclasses of QACardActivity.
+  Copy this file to sub-class's own layout file  -->
 <android.gesture.GestureOverlayView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/gesture_overlay"
@@ -26,7 +28,7 @@
         android:layout_weight="1"/>
     <LinearLayout
         android:id="@+id/horizontal_line"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="2dip"
         android:orientation="vertical"
         android:background="#FF909090"/>
@@ -36,9 +38,8 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_weight="1" />
-    <fragment
-        android:name="org.liberty.android.fantastischmemo.ui.CardPlayerFragment"
-        android:id="@+id/control_button_fragment"
+    <FrameLayout
+        android:id="@+id/grade_buttons_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" />

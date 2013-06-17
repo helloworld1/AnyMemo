@@ -26,6 +26,7 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.aspect.LogInvocation;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
@@ -38,29 +39,29 @@ import org.liberty.android.fantastischmemo.queue.LearnQueueManager;
 import org.liberty.android.fantastischmemo.queue.QueueManager;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
-import org.liberty.android.fantastischmemo.utils.AMDateUtil;
 import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
 import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
 import org.liberty.android.fantastischmemo.utils.ShareUtil;
 
+import roboguice.util.Ln;
+import roboguice.util.RoboAsyncTask;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.Toast;
 
 import com.example.android.apis.graphics.FingerPaint;
@@ -85,7 +86,6 @@ public class StudyActivity extends QACardActivity {
     private Category filterCategory;
     private int startCardId = -1;
 
-    private GradeButtons gradeButtons;
     private QueueManager queueManager;
 
     private CardDao cardDao;
@@ -109,9 +109,9 @@ public class StudyActivity extends QACardActivity {
 
     private DictionaryUtil dictionaryUtil;
 
-    private AMDateUtil amDateUtil;
-
     private ShareUtil shareUtil;
+
+    private GradeButtonsFragment gradeButtonsFragment;
 
     @Inject
     public void setScheduler(Scheduler scheduler) {
@@ -138,6 +138,11 @@ public class StudyActivity extends QACardActivity {
         }
         setTitle(R.string.gestures_text);
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public int getContentView() {
+        return R.layout.qa_card_layout_study;
     }
 
     @Override
@@ -341,7 +346,6 @@ public class StudyActivity extends QACardActivity {
         categoryDao = getDbOpenHelper().getCategoryDao();
         setting = getSetting();
         option = getOption();
-        amDateUtil = new AMDateUtil(this);
 
 
         // The query of filter cateogry should happen before createQueue
@@ -381,17 +385,13 @@ public class StudyActivity extends QACardActivity {
         // When displaying new card, we should stop the TTS reading.
         getCardTTSUtil().stopSpeak();
         if (isAnswerShown()) {
-            // Mnemosyne grade button style won't display the interval.
-            if (option.getButtonStyle() != Option.ButtonStyle.MNEMOSYNE) {
-                setGradeButtonTitle();
-            }
-            gradeButtons.show();
+            gradeButtonsFragment.setVisibility(View.VISIBLE);
         } else {
             // The grade button should be gone for double sided cards.
             if (setting.getCardStyle() ==  Setting.CardStyle.DOUBLE_SIDED) {
-                gradeButtons.hide();
+                gradeButtonsFragment.setVisibility(View.GONE);
             } else {
-                gradeButtons.invisible();
+                gradeButtonsFragment.setVisibility(View.INVISIBLE);
             }
         }
 
@@ -461,7 +461,7 @@ public class StudyActivity extends QACardActivity {
     @Override
     protected boolean onVolumeUpKeyPressed() {
         if (isAnswerShown()) {
-            onGradeButtonClickListener.onGradeButtonClick(0);
+            gradeButtonsFragment.gradeCurrentCard(0);
             Toast.makeText(this, getString(R.string.grade_text) + " 0", Toast.LENGTH_SHORT).show();
         } else {
             displayCard(true);
@@ -473,7 +473,7 @@ public class StudyActivity extends QACardActivity {
     @Override
     protected boolean onVolumeDownKeyPressed() {
         if (isAnswerShown()) {
-            onGradeButtonClickListener.onGradeButtonClick(3);
+            gradeButtonsFragment.gradeCurrentCard(3);
             Toast.makeText(this, getString(R.string.grade_text) + " 3", Toast.LENGTH_SHORT).show();
         } else {
             displayCard(true);
@@ -556,130 +556,16 @@ public class StudyActivity extends QACardActivity {
 
 
 
+    @LogInvocation
     private void setupGradeButtons() {
-        if (option.getButtonStyle() == Option.ButtonStyle.ANKI) {
-            gradeButtons = new GradeButtons(this, R.layout.grade_buttons_anki);
-        } else if (option.getButtonStyle() == Option.ButtonStyle.MNEMOSYNE) {
-            gradeButtons = new GradeButtons(this, R.layout.grade_buttons_mnemosyne);
-        } else {
-            gradeButtons = new GradeButtons(this, R.layout.grade_buttons_anymemo);
-        }
+        gradeButtonsFragment = new GradeButtonsFragment();
 
-        ViewGroup rootView= (ViewGroup)findViewById(R.id.root);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.grade_buttons_fragment, gradeButtonsFragment);
+        ft.commit();
 
-        LinearLayout gradeButtonsView = gradeButtons.getView();
-
-        gradeButtons.setGradeButtonBackground(0, R.drawable.red_button);
-        gradeButtons.setGradeButtonBackground(1, R.drawable.red_button);
-        gradeButtons.setGradeButtonBackground(4, R.drawable.green_button);
-        gradeButtons.setGradeButtonBackground(5, R.drawable.green_button);
-
-        // Set up the background color the same as the color.
-        gradeButtons.setBackgroundColor(setting.getAnswerBackgroundColor());
-
-        // Make sure touching all areas can reveal the card.
-        rootView.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                onClickAnswerView();
-            }
-        });
-        rootView.setOnTouchListener(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                onClickAnswerView();
-                return true ;
-            }
-        });
-
-        gradeButtons.setOnGradeButtonClickListener(onGradeButtonClickListener);
-
-        /* This li is make the background of buttons the same as answer */
-        LinearLayout buttonsLayout = new LinearLayout(this);
-        buttonsLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-
-        /*
-         * -1: Match parent -2: Wrap content
-         * This is necessary or the view will not be
-         * stetched
-         */
-        buttonsLayout.addView(gradeButtonsView, -1, -2);
-        rootView.addView(buttonsLayout, -1, -2);
+        gradeButtonsFragment.setOnCardChangedListener(onCardChangedListener);
     }
-
-
-    /*
-     * Use AsyncTask to update the database and update the statistics
-     * information
-     */
-    private class GradeTask extends AsyncTask<Integer, Void, Card> {
-        private boolean isNewCard = false;
-
-        @Override
-        public void onPreExecute() {
-            super.onPreExecute();
-            setProgressBarIndeterminateVisibility(true);
-        }
-
-        @Override
-        public Card doInBackground(Integer... grades) {
-            assert grades.length == 1 : "Grade more than 1 time";
-            int grade = grades[0];
-            LearningData ld = getCurrentCard().getLearningData();
-            if (ld.getAcqReps() == 0) {
-                isNewCard = true;
-            }
-
-            // Save current card as prev card for undo.
-            prevCard = getCurrentCard();
-            // This was saved to determine the stat info
-            // and the card id for undo
-
-            // Save previous learning for Undo
-            // This part is ugly due to mutablity of ORMLite
-            prevLearningData = learningDataDao.queryForId(ld.getId());
-
-            LearningData newLd = scheduler.schedule(ld, grade, true);
-
-            // Need to clone the data due to ORMLite restriction on "update()" method.
-            ld.cloneFromLearningData(newLd);
-            Card currentCard = getCurrentCard();
-            currentCard.setLearningData(ld);
-            queueManager.update(currentCard);
-            Card nextCard = queueManager.dequeue();
-            return nextCard;
-        }
-
-        @Override
-        public void onCancelled() {
-            return;
-        }
-
-        @Override
-        public void onPostExecute(Card result){
-            super.onPostExecute(result);
-            setProgressBarIndeterminateVisibility(false);
-            if(result == null){
-                showNoItemDialog();
-                return;
-            }
-
-            if (isNewCard) {
-                newCardCount -= 1;
-                if (!scheduler.isCardLearned(prevCard.getLearningData())) {
-                    schedluledCardCount += 1;
-                }
-            } else {
-                if (scheduler.isCardLearned(prevCard.getLearningData())) {
-                    schedluledCardCount -= 1;
-                }
-            }
-            setCurrentCard(result);
-            displayCard(false);
-            setSmallTitle(getActivityTitleString());
-        }
-    }
-
 
     private class WaitDbTask extends AsyncTask<Void, Void, Void> {
         private ProgressDialog progressDialog;
@@ -763,7 +649,34 @@ public class StudyActivity extends QACardActivity {
         }
     }
 
-    Runnable flushDatabaseTask = new Runnable() {
+    // Task to change the card after a card is graded
+    // It needs to update the old card and dequeue the new card
+    // and display it.
+    private class ChangeCardTask extends RoboAsyncTask<Card> {
+
+        private Card updatedCard;
+
+        public ChangeCardTask(Context context, Card updatedCard) {
+            super(context);
+            this.updatedCard = updatedCard;
+        }
+
+        @Override
+        public Card call() throws Exception {
+            queueManager.update(updatedCard);
+
+            Card nextCard = queueManager.dequeue();
+
+            return nextCard;
+        }
+
+        public void onSuccess(Card result) {
+            setCurrentCard(result);
+            displayCard(false);
+        }
+    }
+
+    private Runnable flushDatabaseTask = new Runnable() {
         public void run() {
             queueManager.flush();
         }
@@ -775,32 +688,38 @@ public class StudyActivity extends QACardActivity {
             public void onReceiveCategory(Category c) {
                 assert c != null : "Receive null category";
                 filterCategoryId = c.getId();
+
                 // Do not restart with the current card
                 setCurrentCard(null);
                 restartActivity();
             }
         };
 
-    private void setGradeButtonTitle() {
-        gradeButtons.setButtonDescription(0, ""+ amDateUtil.convertDayIntervalToDisplayString(scheduler.schedule(getCurrentCard().getLearningData(), 0, false).getInterval()));
-        gradeButtons.setButtonDescription(1, ""+ amDateUtil.convertDayIntervalToDisplayString(scheduler.schedule(getCurrentCard().getLearningData(), 1, false).getInterval()));
-        gradeButtons.setButtonDescription(2, ""+ amDateUtil.convertDayIntervalToDisplayString(scheduler.schedule(getCurrentCard().getLearningData(), 2, false).getInterval()));
-        gradeButtons.setButtonDescription(3, ""+ amDateUtil.convertDayIntervalToDisplayString(scheduler.schedule(getCurrentCard().getLearningData(), 3, false).getInterval()));
-        gradeButtons.setButtonDescription(4, ""+ amDateUtil.convertDayIntervalToDisplayString(scheduler.schedule(getCurrentCard().getLearningData(), 4, false).getInterval()));
-        gradeButtons.setButtonDescription(5, ""+ amDateUtil.convertDayIntervalToDisplayString(scheduler.schedule(getCurrentCard().getLearningData(), 5, false).getInterval()));
-    }
+    private GradeButtonsFragment.OnCardChangedListener onCardChangedListener =
+        new GradeButtonsFragment.OnCardChangedListener() {
+            public void onCardChanged(Card prevCard, Card updatedCard) {
+                StudyActivity.this.prevCard = prevCard;
+                gradeButtonsFragment.setVisibility(View.INVISIBLE);
 
+                // Set the stat info in the title
+                if (scheduler.isCardNew(prevCard.getLearningData())) {
+                    newCardCount -= 1;
+                    if (!scheduler.isCardLearned(updatedCard.getLearningData())) {
+                        schedluledCardCount += 1;
+                    }
+                } else {
+                    if (scheduler.isCardLearned(updatedCard.getLearningData())) {
+                        schedluledCardCount -= 1;
+                    }
+                }
+                setSmallTitle(getActivityTitleString());
 
-    private GradeButtons.OnGradeButtonClickListener onGradeButtonClickListener
-        = new GradeButtons.OnGradeButtonClickListener() {
-
-            @Override
-            public void onGradeButtonClick(int grade) {
-                GradeTask gradeTask = new GradeTask();
-                gradeTask.execute(grade);
+                // Run the task to update the updatedCard in the queue
+                // and dequeue the next card 
+                ChangeCardTask task = new ChangeCardTask(StudyActivity.this, updatedCard);
+                task.execute(); 
             }
         };
-
 
     private String getActivityTitleString() {
         StringBuilder sb = new StringBuilder();
