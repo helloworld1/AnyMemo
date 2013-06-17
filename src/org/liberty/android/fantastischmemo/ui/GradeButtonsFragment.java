@@ -35,7 +35,6 @@ import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 import org.liberty.android.fantastischmemo.utils.AMDateUtil;
 
 import roboguice.fragment.RoboFragment;
-import roboguice.util.Ln;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -219,6 +218,7 @@ public class GradeButtonsFragment extends RoboFragment {
         handler.post(new Runnable() {
             public void run() {
                 buttonView.setVisibility(visibility);
+                setGradeButtonTitle();
             }
         });
     }
@@ -277,18 +277,17 @@ public class GradeButtonsFragment extends RoboFragment {
         void onCardChanged(Card prevCard, Card updatedCard);
     }
 
-    // private void setGradeButtonTitle() {
-    //     gradeButtons.setButtonDescription(0, ""+ amDateUtil.convertDayIntervalToDisplayString(scheduler.schedule(getCurrentCard().getLearningData(), 0, false).getInterval()));
-    //     gradeButtons.setButtonDescription(1, ""+ amDateUtil.convertDayIntervalToDisplayString(scheduler.schedule(getCurrentCard().getLearningData(), 1, false).getInterval()));
-    //     gradeButtons.setButtonDescription(2, ""+ amDateUtil.convertDayIntervalToDisplayString(scheduler.schedule(getCurrentCard().getLearningData(), 2, false).getInterval()));
-    //     gradeButtons.setButtonDescription(3, ""+ amDateUtil.convertDayIntervalToDisplayString(scheduler.schedule(getCurrentCard().getLearningData(), 3, false).getInterval()));
-    //     gradeButtons.setButtonDescription(4, ""+ amDateUtil.convertDayIntervalToDisplayString(scheduler.schedule(getCurrentCard().getLearningData(), 4, false).getInterval()));
-    //     gradeButtons.setButtonDescription(5, ""+ amDateUtil.convertDayIntervalToDisplayString(scheduler.schedule(getCurrentCard().getLearningData(), 5, false).getInterval()));
-    //         // Mnemosyne grade button style won't display the interval.
-    //         if (option.getButtonStyle() != Option.ButtonStyle.MNEMOSYNE) {
-    //             setGradeButtonTitle();
-    //         }
-    // }
+    private void setGradeButtonTitle() {
+        // Mnemosyne grade button style won't display the interval.
+        if (option.getButtonStyle() != Option.ButtonStyle.MNEMOSYNE) {
+            setButtonDescription(0, ""+ amDateUtil.convertDayIntervalToDisplayString(scheduler.schedule(activity.getCurrentCard().getLearningData(), 0, false).getInterval()));
+            setButtonDescription(1, ""+ amDateUtil.convertDayIntervalToDisplayString(scheduler.schedule(activity.getCurrentCard().getLearningData(), 1, false).getInterval()));
+            setButtonDescription(2, ""+ amDateUtil.convertDayIntervalToDisplayString(scheduler.schedule(activity.getCurrentCard().getLearningData(), 2, false).getInterval()));
+            setButtonDescription(3, ""+ amDateUtil.convertDayIntervalToDisplayString(scheduler.schedule(activity.getCurrentCard().getLearningData(), 3, false).getInterval()));
+            setButtonDescription(4, ""+ amDateUtil.convertDayIntervalToDisplayString(scheduler.schedule(activity.getCurrentCard().getLearningData(), 4, false).getInterval()));
+            setButtonDescription(5, ""+ amDateUtil.convertDayIntervalToDisplayString(scheduler.schedule(activity.getCurrentCard().getLearningData(), 5, false).getInterval()));
+        }
+    }
 
 
 }

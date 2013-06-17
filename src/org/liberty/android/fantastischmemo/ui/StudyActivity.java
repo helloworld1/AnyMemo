@@ -671,8 +671,12 @@ public class StudyActivity extends QACardActivity {
         }
 
         public void onSuccess(Card result) {
-            setCurrentCard(result);
-            displayCard(false);
+            if (result == null) {
+                showNoItemDialog();
+            } else {
+                setCurrentCard(result);
+                displayCard(false);
+            }
         }
     }
 
