@@ -32,7 +32,6 @@ import org.liberty.android.fantastischmemo.service.cardplayer.CardPlayerContext;
 import org.liberty.android.fantastischmemo.service.cardplayer.CardPlayerEventHandler;
 import org.liberty.android.fantastischmemo.service.cardplayer.CardPlayerMessage;
 import org.liberty.android.fantastischmemo.ui.CardPlayerActivity;
-import org.liberty.android.fantastischmemo.ui.PreviewEditActivity;
 import org.liberty.android.fantastischmemo.utils.CardTTSUtil;
 import org.liberty.android.fantastischmemo.utils.CardTTSUtilFactory;
 
@@ -46,7 +45,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 
 public class CardPlayerService extends RoboService {
 
@@ -208,32 +206,18 @@ public class CardPlayerService extends RoboService {
      * being terminated.
      */
     private void showNotification() {
-
         Intent resultIntent = new Intent(this, CardPlayerActivity.class);
 
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        // Make sure to resume the activity instead of creating a new one.
+        resultIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-        stackBuilder.addParentStack(CardPlayerActivity.class);
-
-        resultIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        resultIntent.putExtra(PreviewEditActivity.EXTRA_DBPATH, dbPath);
-        if (cardPlayerContext != null) {
-            resultIntent.putExtra(PreviewEditActivity.EXTRA_CARD_ID, cardPlayerContext.getCurrentCard().getId());
-        } else {
-            Ln.w("The notification for card player is shown but the cardPlayerContext is null!");
-        }
-
-        stackBuilder.addNextIntent(resultIntent);
-
-        PendingIntent resultPendingIntent =
-            stackBuilder.getPendingIntent( 0, PendingIntent.FLAG_UPDATE_CURRENT );
-
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, resultIntent, 0);
         NotificationCompat.Builder mBuilder =
             new NotificationCompat.Builder(this)
             .setSmallIcon(R.drawable.icon)
             .setContentTitle(getString(R.string.card_player_notification_title))
             .setContentText(getString(R.string.card_player_notification_text))
-            .setContentIntent(resultPendingIntent)
+            .setContentIntent(pendingIntent)
             .setOngoing(true);
 
         // Basically make the service foreground so a notification is shown
