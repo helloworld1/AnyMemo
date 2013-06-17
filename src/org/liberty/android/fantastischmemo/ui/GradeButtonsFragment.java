@@ -190,6 +190,7 @@ public class GradeButtonsFragment extends RoboFragment {
             }
         };
 
+    @SuppressWarnings("unused")
     private void setButtonText(int grade, CharSequence title, CharSequence description) {
         if (StringUtils.isNotEmpty(description)) {
             gradeButtons[grade].setText(Html.fromHtml("<b>" + title + "</b>" +  "<br />" + "<small>" + description + "</small>"));

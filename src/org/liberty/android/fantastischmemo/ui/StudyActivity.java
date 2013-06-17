@@ -43,7 +43,6 @@ import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
 import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
 import org.liberty.android.fantastischmemo.utils.ShareUtil;
 
-import roboguice.util.Ln;
 import roboguice.util.RoboAsyncTask;
 
 import android.app.Activity;
