@@ -191,7 +191,9 @@ public class LearnQueueManager implements QueueManager {
 
 	@Override
 	public synchronized void update(Card card) {
-        learnQueue.remove(card);
+        // Make sure to remove the stale cache first.
+        // Set.add(Object) will not overwrite object.
+        remove(card);
         if (!scheduler.isCardLearned(card.getLearningData())) {
             // Add to the back of the queue
             learnQueue.add(card);

@@ -80,7 +80,6 @@ public class StudyActivity extends QACardActivity {
 
     /* State objects */
     private Card prevCard = null;
-    private LearningData prevLearningData = null;
     private String dbPath = "";
     private int filterCategoryId = -1;
     private Category filterCategory;
@@ -611,13 +610,13 @@ public class StudyActivity extends QACardActivity {
      * this is what to do
      */
     private void undoCard(){
-        if (prevLearningData != null) {
+        if (prevCard != null) {
             // We don't want the queueManager to flush the card
             // instead we update the previous learning data
             // manually.
 
             queueManager.remove(prevCard);
-            learningDataDao.updateLearningData(prevLearningData);
+            queueManager.update(prevCard);
             setCurrentCard(prevCard);
             restartActivity();
         } else {
