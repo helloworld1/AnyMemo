@@ -52,9 +52,9 @@ public class CardPlayerService extends RoboService {
 
     public static final String EXTRA_CURRENT_CARD_ID = "current_card_id";
 
-    public static final String EXTRA_IS_PLAYING= "is_playing";
-
     public static final String ACTION_GO_TO_CARD = "org.liberty.android.fantastischmemo.CardPlayerService.ACTION_GO_TO_CARD";
+
+    public static final String ACTION_PLAYING_STOPPED = "org.liberty.android.fantastischmemo.CardPlayerService.PLAYING_STOPPED";
 
     // Magic id used for Card player's notification
     private static final int NOTIFICATION_ID = 9283372;
@@ -236,7 +236,13 @@ public class CardPlayerService extends RoboService {
             Intent intent = new Intent();
             intent.setAction(ACTION_GO_TO_CARD);
             intent.putExtra(EXTRA_CURRENT_CARD_ID, card.getId());
-            intent.putExtra(EXTRA_IS_PLAYING, true);
+            sendBroadcast(intent);
+        }
+
+        @Override
+        public void onStopPlaying() {
+            Intent intent = new Intent();
+            intent.setAction(ACTION_PLAYING_STOPPED);
             sendBroadcast(intent);
         }
     };

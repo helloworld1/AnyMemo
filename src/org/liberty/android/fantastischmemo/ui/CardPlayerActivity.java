@@ -27,17 +27,15 @@ import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.service.CardPlayerService;
 
-
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.app.FragmentTransaction;
 
 public class CardPlayerActivity extends QACardActivity {
     public static final String EXTRA_START_CARD_ID = "start_card_id";
@@ -66,31 +64,11 @@ public class CardPlayerActivity extends QACardActivity {
         Bundle extras = getIntent().getExtras();
         startCardId = extras.getInt(EXTRA_START_CARD_ID, -1);
 
-        // showAutoSpeakFragment();
-
     }
 
     @Override
     public int getContentView() {
         return R.layout.qa_card_layout_card_player;
-    }
-
-    // Make sure the serviceEventListener broadcast receiver
-    // is registered at onResume and unregistered at onPause
-    // because we do not care about the UI being updated from the
-    // CardPlayerService if it is not visible to the user.
-    @Override
-    public void onResume() {
-        super.onResume();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(CardPlayerService.ACTION_GO_TO_CARD);
-        registerReceiver(serviceEventListener, filter);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        unregisterReceiver(serviceEventListener);
     }
 
     @Override
@@ -124,9 +102,18 @@ public class CardPlayerActivity extends QACardActivity {
             showNoItemDialog();
             return;
         }
+        setupControlButtons();
         displayCard(true);
         setSmallTitle(getTitle());
         updateTitle();
+    }
+
+    private void setupControlButtons() {
+        CardPlayerFragment cardPlayerFragment = new CardPlayerFragment();
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.control_button_fragment, cardPlayerFragment);
+        ft.commit();
     }
 
     @Override
@@ -259,35 +246,6 @@ public class CardPlayerActivity extends QACardActivity {
         @Override
         public void onServiceDisconnected(ComponentName className) {
             cardPlayerService = null;
-        }
-    };
-
-    /*
-     * This broadcast receiver receive the ACTION_GO_TO_CARD sent from
-     * CardPlayerService. It will go to a specific card based on the extras
-     * in received intent.
-     */
-    private BroadcastReceiver serviceEventListener = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action.equals(CardPlayerService.ACTION_GO_TO_CARD)) {
-                Bundle extras = intent.getExtras();
-                assert extras != null : "The intent received must have card id and playing status"; 
-                int currentCardId = extras.getInt(CardPlayerService.EXTRA_CURRENT_CARD_ID);
-                // boolean isPlaying = extras.getBoolean(CardPlayerService.EXTRA_IS_PLAYING);
-
-                // TODO: Need to make playButton working
-                // playButton.setSelected(isPlaying);
-
-                // 1. Make sure the activity is foreground to update the card.
-                // 2. Only update the card if the card is different.
-                // So the background service will continue to work with this callback
-                // being called.
-                if (isActivityForeground() && currentCardId != getCurrentCard().getId()) {
-                    gotoCardId(currentCardId);
-                }
-            }
         }
     };
 

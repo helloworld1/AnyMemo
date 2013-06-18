@@ -105,7 +105,7 @@ public enum CardPlayerState implements CardPlayerStateTransition {
                 playAnswer(context);
                 break;
             case STOP_PLAYING:
-                context.setState(STOPPED);
+                stopPlaying(context);
                 break;
             default:
                 break;
@@ -140,8 +140,8 @@ public enum CardPlayerState implements CardPlayerStateTransition {
                 break;
             case PLAYING_ANSWER_COMPLETED:
                 nextCard = findNextCard(context);
-                if (nextCard == null) {
-                    context.getState().transition(context, CardPlayerMessage.STOP_PLAYING);
+                if (nextCard == null) { 
+                    stopPlaying(context);
                     break;
                 }
                 context.setCurrentCard(nextCard);
@@ -153,7 +153,7 @@ public enum CardPlayerState implements CardPlayerStateTransition {
                 assert false : "Wrong state";
                 break;
             case STOP_PLAYING:
-                context.setState(STOPPED);
+                stopPlaying(context);
                 break;
             default:
                 break;
@@ -251,5 +251,10 @@ public enum CardPlayerState implements CardPlayerStateTransition {
         context.getDbOpenHelper().getLearningDataDao().refresh(card.getLearningData());
         context.getDbOpenHelper().getCategoryDao().refresh(card.getCategory());
         return card;
+    }
+
+    private static void stopPlaying(final CardPlayerContext context) {
+        context.setState(STOPPED);
+        context.getEventHandler().onStopPlaying();
     }
 }

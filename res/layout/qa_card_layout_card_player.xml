@@ -36,8 +36,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_weight="1" />
-    <fragment
-        android:name="org.liberty.android.fantastischmemo.ui.CardPlayerFragment"
+    <FrameLayout
         android:id="@+id/control_button_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

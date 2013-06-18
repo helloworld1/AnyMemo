@@ -27,4 +27,5 @@ import org.liberty.android.fantastischmemo.domain.Card;
  */
 public interface CardPlayerEventHandler {
     void onPlayCard(Card card);
+    void onStopPlaying();
 }

@@ -24,11 +24,19 @@ import javax.inject.Inject;
 
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.domain.Option;
+import org.liberty.android.fantastischmemo.domain.Setting;
+import org.liberty.android.fantastischmemo.service.CardPlayerService;
 
 import roboguice.fragment.RoboFragment;
+import roboguice.util.Ln;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -54,6 +62,10 @@ public class CardPlayerFragment extends RoboFragment {
 
     private Option option;
 
+    private Setting setting;
+
+    private Handler handler;
+
     @Inject
     public void setOption(Option option) {
         this.option = option;
@@ -65,10 +77,30 @@ public class CardPlayerFragment extends RoboFragment {
         setHasOptionsMenu(true);
     }
 
+    // Make sure the serviceEventListener broadcast receiver
+    // is registered at onResume and unregistered at onPause
+    // because we do not care about the UI being updated from the
+    // CardPlayerService if it is not visible to the user.
+    @Override
+    public void onResume() {
+        super.onResume();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(CardPlayerService.ACTION_GO_TO_CARD);
+        filter.addAction(CardPlayerService.ACTION_PLAYING_STOPPED);
+        activity.registerReceiver(serviceEventListener, filter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        activity.unregisterReceiver(serviceEventListener);
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.activity = (CardPlayerActivity) activity;
+        setting = this.activity.getSetting();
     }
 
     @Override
@@ -93,6 +125,8 @@ public class CardPlayerFragment extends RoboFragment {
         shuffleButton = (ImageButton) v.findViewById(R.id.card_player_shuffle_button);
         shuffleButton.setOnClickListener(buttonListener);
         shuffleButton.setSelected(option.getCardPlayerShuffleEnabled());
+
+        v.setBackgroundColor(setting.getAnswerBackgroundColor());
 
         return v;
     }
@@ -181,5 +215,36 @@ public class CardPlayerFragment extends RoboFragment {
         CardPlayerSettingDialogFragment fragment = new CardPlayerSettingDialogFragment();
         fragment.show(getActivity().getSupportFragmentManager(), "SettingsDialogFragment");
     }
+
+    /*
+     * This broadcast receiver receive the ACTION_GO_TO_CARD sent from
+     * CardPlayerService. It will go to a specific card based on the extras
+     * in received intent.
+     */
+    private BroadcastReceiver serviceEventListener = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(CardPlayerService.ACTION_GO_TO_CARD)) {
+                Bundle extras = intent.getExtras();
+                assert extras != null : "The intent received must have card id and playing status"; 
+                int currentCardId = extras.getInt(CardPlayerService.EXTRA_CURRENT_CARD_ID);
+
+                // 1. Make sure the activity is foreground to update the card.
+                // 2. Only update the card if the card is different.
+                // So the background service will continue to work with this callback
+                // being called.
+                if (activity.isActivityForeground() && currentCardId != activity.getCurrentCard().getId()) {
+                    activity.gotoCardId(currentCardId);
+                }
+            }
+
+            if (action.equals(CardPlayerService.ACTION_PLAYING_STOPPED)) {
+                stopPlaying();
+            }
+
+
+        }
+    };
 
 }
