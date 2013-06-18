@@ -30,7 +30,6 @@ import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.domain.Option;
-import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 import org.liberty.android.fantastischmemo.utils.AMDateUtil;
 
@@ -62,8 +61,6 @@ public class GradeButtonsFragment extends RoboFragment {
     private LinearLayout buttonView;
 
     private Option option;
-
-    private Setting setting;
 
     private Button[] gradeButtons = new Button[6];
 
@@ -112,8 +109,6 @@ public class GradeButtonsFragment extends RoboFragment {
 
         learningDataDao = dbOpenHelper.getLearningDataDao();
 
-        setting = this.activity.getSetting();
-
         option = this.activity.getOption();
 
     }
@@ -135,13 +130,11 @@ public class GradeButtonsFragment extends RoboFragment {
         }
 
         if (activity instanceof QuizActivity) {
-                gradeButtonResource = R.layout.grade_buttons_quiz;
+            gradeButtonResource = R.layout.grade_buttons_quiz;
         }
 
         buttonView = (LinearLayout) inflater.inflate(gradeButtonResource, null);
 
-        // Set up the background color the same as the color.
-        buttonView.setBackgroundColor(setting.getAnswerBackgroundColor());
         // Make sure touching all areas can reveal the card.
         buttonView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

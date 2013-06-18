@@ -562,6 +562,9 @@ public class StudyActivity extends QACardActivity {
         ft.replace(R.id.grade_buttons_fragment, gradeButtonsFragment);
         ft.commit();
 
+        // Make sure the background color of grade buttons matches the answer's backgroud color.
+        findViewById(R.id.grade_buttons_fragment).setBackgroundColor(setting.getAnswerBackgroundColor());
+
         gradeButtonsFragment.setOnCardChangedListener(onCardChangedListener);
     }
 
