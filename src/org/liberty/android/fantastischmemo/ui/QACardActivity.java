@@ -298,9 +298,21 @@ public abstract class QACardActivity extends AMActivity {
             if (showAnswer) {
                 findViewById(R.id.question).setVisibility(View.GONE);
                 findViewById(R.id.answer).setVisibility(View.VISIBLE);
+
+                // Also the buttons should match the color.
+                View buttonsView = findViewById(R.id.buttons_root);
+                if (buttonsView != null) {
+                    buttonsView.setBackgroundColor(setting.getAnswerBackgroundColor());
+                }
             } else {
                 findViewById(R.id.question).setVisibility(View.VISIBLE);
                 findViewById(R.id.answer).setVisibility(View.GONE);
+
+                // Also the buttons should match the color.
+                View buttonsView = findViewById(R.id.buttons_root);
+                if (buttonsView != null) {
+                    buttonsView.setBackgroundColor(setting.getQuestionBackgroundColor());
+                }
             }
             findViewById(R.id.horizontal_line).setVisibility(View.GONE);
         }
@@ -486,6 +498,13 @@ public abstract class QACardActivity extends AMActivity {
 
         @Override
         public void onSuccess(Void result) {
+            // Make sure the background color of grade buttons matches the answer's backgroud color.
+            // buttonsView can be null if the layout does not have buttons_root
+            View buttonsView = findViewById(R.id.buttons_root);
+            if (buttonsView != null) {
+                buttonsView.setBackgroundColor(setting.getAnswerBackgroundColor());
+            }
+            
             // Call customized method when init completed
             onPostInit();
         }
@@ -615,21 +634,32 @@ public abstract class QACardActivity extends AMActivity {
         }
     };
 
-    protected void onClickQuestionText() {
-        // Nothing
+    // Default implementation is to handle the double sided card correctly.
+    // Return true if the event is handled, else return false
+    protected boolean onClickQuestionView() {
+        if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED) {
+            displayCard(true);
+            return true;
+        }
+        return false;
     }
 
-    protected void onClickAnswerText() {
-        // Nothing
+    protected boolean onClickAnswerView() {
+        if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED) {
+            displayCard(false);
+            return true;
+        }
+        return false;
     }
 
-    protected void onClickQuestionView() {
-        // Nothing
+    protected boolean onClickQuestionText() {
+        return onClickQuestionView();
     }
 
-    protected void onClickAnswerView() {
-        // Nothing
+    protected boolean onClickAnswerText() {
+        return onClickAnswerView();
     }
+
 
     protected void onGestureDetected(GestureName gestureName) {
         // Nothing

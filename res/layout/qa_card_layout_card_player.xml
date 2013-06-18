@@ -37,7 +37,7 @@
         android:orientation="vertical"
         android:layout_weight="1" />
     <FrameLayout
-        android:id="@+id/control_button_fragment"
+        android:id="@+id/buttons_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" />

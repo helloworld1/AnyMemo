@@ -183,39 +183,43 @@ public class QuizActivity extends QACardActivity {
     }
 
     @Override
-    protected void onClickQuestionText() {
+    protected boolean onClickQuestionText() {
         if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
                 || option.getSpeakingType() == Option.SpeakingType.TAP)) {
             speakQuestion();
         } else {
             onClickQuestionView();
         }
+        return true;
     }
 
     @Override
-    protected void onClickAnswerText() {
+    protected boolean  onClickAnswerText() {
         if (!isAnswerShown()) {
             onClickAnswerView();
         } else if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
                 || option.getSpeakingType() == Option.SpeakingType.TAP)) {
             speakAnswer();
         }
+        return true;
     }
 
     @Override
-    protected void onClickQuestionView() {
+    protected boolean onClickQuestionView() {
         if (!isAnswerShown()) {
             displayCard(true);
         }
+        return true;
     }
 
     @Override
-    protected void onClickAnswerView() {
+    protected boolean onClickAnswerView() {
         if (!isAnswerShown()) {
             displayCard(true);
         } else if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED && isAnswerShown()) {
             displayCard(false);
         }
+        return true;
     }
 
     @Override
@@ -278,11 +282,8 @@ public class QuizActivity extends QACardActivity {
         gradeButtonsFragment = new GradeButtonsFragment();
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.grade_buttons_fragment, gradeButtonsFragment);
+        ft.replace(R.id.buttons_root, gradeButtonsFragment);
         ft.commit();
-
-        // Make sure the background color of grade buttons matches the answer's backgroud color.
-        findViewById(R.id.grade_buttons_fragment).setBackgroundColor(setting.getAnswerBackgroundColor());
 
         gradeButtonsFragment.setOnCardChangedListener(onCardChangedListener);
     }

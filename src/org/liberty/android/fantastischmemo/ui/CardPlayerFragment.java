@@ -126,8 +126,6 @@ public class CardPlayerFragment extends RoboFragment {
         shuffleButton.setOnClickListener(buttonListener);
         shuffleButton.setSelected(option.getCardPlayerShuffleEnabled());
 
-        v.setBackgroundColor(setting.getAnswerBackgroundColor());
-
         return v;
     }
 

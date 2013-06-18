@@ -112,7 +112,7 @@ public class CardPlayerActivity extends QACardActivity {
         CardPlayerFragment cardPlayerFragment = new CardPlayerFragment();
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.control_button_fragment, cardPlayerFragment);
+        ft.replace(R.id.buttons_root, cardPlayerFragment);
         ft.commit();
     }
 
@@ -133,20 +133,6 @@ public class CardPlayerActivity extends QACardActivity {
             sb.append(getString(R.string.ordinal_text_short) + ": " + getCurrentCard().getOrdinal() + " ");
             sb.append(getCurrentCard().getCategory().getName());
             setSmallTitle(sb.toString());
-        }
-    }
-
-    @Override
-    protected void onClickAnswerText() {
-        onClickAnswerView();
-    }
-
-    @Override
-    protected void onClickQuestionView() {
-        if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED) {
-            displayCard(true);
-            // TODO: fragment color
-            //buttonsLayout.setBackgroundColor(setting.getAnswerBackgroundColor());
         }
     }
 
@@ -215,11 +201,9 @@ public class CardPlayerActivity extends QACardActivity {
             if(setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED){
                 /* Double sided card, show front */
                 displayCard(false);
-                // buttonsLayout.setBackgroundColor(setting.getQuestionBackgroundColor());
             } else {
                 /* Single sided, show both answer and questjion. */
                 displayCard(true);
-                // buttonsLayout.setBackgroundColor(setting.getAnswerBackgroundColor());
             }
         }
     }

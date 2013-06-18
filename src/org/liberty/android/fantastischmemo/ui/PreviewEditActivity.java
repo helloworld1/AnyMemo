@@ -495,30 +495,6 @@ public class PreviewEditActivity extends QACardActivity {
         return false;
     }
 
-    // Handle click event for double sided card.
-    protected void onClickAnswerView() {
-        if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED) {
-            displayCard(false);
-            // Also the buttons should match the color.
-            buttonsLayout.setBackgroundColor(setting.getQuestionBackgroundColor());
-        }
-    }
-
-    protected void onClickAnswerText() {
-        onClickAnswerView();
-    }
-
-    protected void onClickQuestionView() {
-        if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED) {
-            displayCard(true);
-            buttonsLayout.setBackgroundColor(setting.getAnswerBackgroundColor());
-        }
-    }
-
-    protected void onClickQuestionText() {
-        onClickQuestionView();
-    }
-
     @Override
     protected void onGestureDetected(GestureName gestureName) {
         switch (gestureName) {
