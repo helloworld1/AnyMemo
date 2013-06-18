@@ -26,27 +26,25 @@ import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
-import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.queue.QuizQueueManager;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
 
+import roboguice.util.RoboAsyncTask;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,7 +61,7 @@ public class QuizActivity extends QACardActivity {
 
 
     /* UI elements */
-    private GradeButtons gradeButtons;
+    private GradeButtonsFragment gradeButtonsFragment;
 
     /* Settings */
     private Setting setting;
@@ -97,6 +95,11 @@ public class QuizActivity extends QACardActivity {
     @Inject
     public void setScheduler(Scheduler scheduler) {
         this.scheduler = scheduler;
+    }
+
+    @Override
+    public int getContentView() {
+        return R.layout.qa_card_layout_study;
     }
 
     @Override
@@ -218,7 +221,7 @@ public class QuizActivity extends QACardActivity {
     @Override
     protected boolean onVolumeUpKeyPressed() {
         if (isAnswerShown()) {
-            onGradeButtonClickListener.onGradeButtonClick(0);
+            gradeButtonsFragment.gradeCurrentCard(0);
             Toast.makeText(this, getString(R.string.grade_text) + " 0", Toast.LENGTH_SHORT).show();
         } else {
             displayCard(true);
@@ -230,7 +233,7 @@ public class QuizActivity extends QACardActivity {
     @Override
     protected boolean onVolumeDownKeyPressed() {
         if (isAnswerShown()) {
-            onGradeButtonClickListener.onGradeButtonClick(3);
+            gradeButtonsFragment.gradeCurrentCard(3);
             Toast.makeText(this, getString(R.string.grade_text) + " 3", Toast.LENGTH_SHORT).show();
         } else {
             displayCard(true);
@@ -258,132 +261,27 @@ public class QuizActivity extends QACardActivity {
     public void onPostDisplayCard() {
         // When displaying new card, we should stop the TTS reading.
         getCardTTSUtil().stopSpeak();
+
         if (isAnswerShown()) {
-            gradeButtons.show();
+            gradeButtonsFragment.setVisibility(View.VISIBLE);
         } else {
-            gradeButtons.hide();
+            // The grade button should be gone for double sided cards.
+            if (setting.getCardStyle() ==  Setting.CardStyle.DOUBLE_SIDED) {
+                gradeButtonsFragment.setVisibility(View.GONE);
+            } else {
+                gradeButtonsFragment.setVisibility(View.INVISIBLE);
+            }
         }
     }
 
     private void setupGradeButtons() {
-        gradeButtons = new GradeButtons(this, R.layout.grade_buttons_anki);
+        gradeButtonsFragment = new GradeButtonsFragment();
 
-        LinearLayout rootView= (LinearLayout)findViewById(R.id.root);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.grade_buttons_fragment, gradeButtonsFragment);
+        ft.commit();
 
-        LinearLayout gradeButtonsView = gradeButtons.getView();
-
-        gradeButtons.setGradeButtonBackground(0, R.drawable.red_button);
-        gradeButtons.setGradeButtonBackground(1, R.drawable.red_button);
-        gradeButtons.setGradeButtonBackground(4, R.drawable.green_button);
-        gradeButtons.setGradeButtonBackground(5, R.drawable.green_button);
-
-        // Make sure touching all areas can reveal the card.
-        rootView.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                onClickAnswerView();
-            }
-        });
-        rootView.setOnTouchListener(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                onClickAnswerView();
-                return true ;
-            }
-        });
-
-        gradeButtons.setOnGradeButtonClickListener(onGradeButtonClickListener);
-
-        /* This li is make the background of buttons the same as answer */
-        LinearLayout li = new LinearLayout(this);
-        li.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-        Integer color = setting.getAnswerBackgroundColor();
-        if (color != null) {
-            li.setBackgroundColor(color);
-        }
-
-        /*
-         * -1: Match parent -2: Wrap content
-         * This is necessary or the view will not be
-         * stetched
-         */
-        li.addView(gradeButtonsView, -1, -2);
-        rootView.addView(li, -1, -2);
-    }
-
-    private GradeButtons.OnGradeButtonClickListener onGradeButtonClickListener
-        = new GradeButtons.OnGradeButtonClickListener() {
-
-            @Override
-            public void onGradeButtonClick(int grade) {
-                GradeTask gradeTask = new GradeTask();
-                gradeTask.execute(grade);
-            }
-        };
-
-    /*
-     * Use AsyncTask to update the database and update the statistics
-     * information
-     */
-    private class GradeTask extends AsyncTask<Integer, Void, Card>{
-
-        private int newQueueSizeBeforeDequeue;
-
-        private int reviewQueueSizeBeforeDequeue;
-
-        @Override
-        public void onPreExecute() {
-            super.onPreExecute();
-            setProgressBarIndeterminateVisibility(true);
-        }
-
-        @Override
-        public Card doInBackground(Integer... grades) {
-            assert grades.length == 1 : "Grade more than 1 time";
-            int grade = grades[0];
-            LearningData ld = getCurrentCard().getLearningData();
-
-            LearningData newLd = scheduler.schedule(ld, grade, true);
-
-            // Need to clone the data due to ORMLite restriction on "update()" method.
-            ld.cloneFromLearningData(newLd);
-            Card currentCard = getCurrentCard();
-            currentCard.setLearningData(ld);
-            queueManager.update(currentCard);
-
-            // Keep track of two values to dermine when to display dialog
-            // to promote the quiz completion
-            newQueueSizeBeforeDequeue = queueManager.getNewQueueSize();
-            reviewQueueSizeBeforeDequeue = queueManager.getReviewQueueSize();
-
-            Card nextCard = queueManager.dequeue();
-            return nextCard;
-        }
-
-        @Override
-        public void onCancelled() {
-            return;
-        }
-
-        @Override
-        public void onPostExecute(Card result) {
-            super.onPostExecute(result);
-            setProgressBarIndeterminateVisibility(false);
-            if(result == null){
-                showCompleteAllDialog();
-                return;
-            }
-
-            if (newQueueSizeBeforeDequeue <= 0 && !isNewCardsCompleted) {
-                showCompleteNewDialog(totalQuizSize - reviewQueueSizeBeforeDequeue);
-                isNewCardsCompleted = true;
-            }
-
-            // Stat data
-            setCurrentCard(result);
-            displayCard(false);
-            setSmallTitle(getActivityTitleString());
-        }
+        gradeButtonsFragment.setOnCardChangedListener(onCardChangedListener);
     }
 
     private CharSequence getActivityTitleString() {
@@ -435,6 +333,67 @@ public class QuizActivity extends QACardActivity {
                 finish();
             }
         };
+
+    private GradeButtonsFragment.OnCardChangedListener onCardChangedListener =
+        new GradeButtonsFragment.OnCardChangedListener() {
+            public void onCardChanged(Card prevCard, Card updatedCard) {
+                gradeButtonsFragment.setVisibility(View.INVISIBLE);
+
+                // Run the task to update the updatedCard in the queue
+                // and dequeue the next card 
+                ChangeCardTask task = new ChangeCardTask(QuizActivity.this, updatedCard);
+                task.execute(); 
+            }
+        };
+
+    // Task to change the card after a card is graded
+    // It needs to update the old card and dequeue the new card
+    // and display it.
+    private class ChangeCardTask extends RoboAsyncTask<Card> {
+
+        private int newQueueSizeBeforeDequeue;
+
+        private int reviewQueueSizeBeforeDequeue;
+
+        private Card updatedCard;
+
+        public ChangeCardTask(Context context, Card updatedCard) {
+            super(context);
+            this.updatedCard = updatedCard;
+        }
+
+        @Override
+        public Card call() throws Exception {
+            // Need to clone the data due to ORMLite restriction on "update()" method.
+            queueManager.update(updatedCard);
+
+            // Keep track of two values to dermine when to display dialog
+            // to promote the quiz completion
+            newQueueSizeBeforeDequeue = queueManager.getNewQueueSize();
+            reviewQueueSizeBeforeDequeue = queueManager.getReviewQueueSize();
+
+            Card nextCard = queueManager.dequeue();
+            return nextCard;
+        }
+
+        public void onSuccess(Card result) {
+            setProgressBarIndeterminateVisibility(false);
+            if(result == null){
+                showCompleteAllDialog();
+                return;
+            }
+
+            if (newQueueSizeBeforeDequeue <= 0 && !isNewCardsCompleted) {
+                showCompleteNewDialog(totalQuizSize - reviewQueueSizeBeforeDequeue);
+                isNewCardsCompleted = true;
+            }
+
+            // Stat data
+            setCurrentCard(result);
+            displayCard(false);
+            setSmallTitle(getActivityTitleString());
+        }
+    }
 
     private void showNoItemDialog(){
         new AlertDialog.Builder(this)

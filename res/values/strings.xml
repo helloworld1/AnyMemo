@@ -453,4 +453,6 @@
     <string name="card_count_text">Card count</string>
     <string name="card_player_notification_title">AnyMemo Card Player</string>
     <string name="card_player_notification_text">Speaking cards in progress</string>
+    <string name="forget_text">Forget</string>
+    <string name="remember_text">Remember</string>
 </resources>

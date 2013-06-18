@@ -134,6 +134,10 @@ public class GradeButtonsFragment extends RoboFragment {
                 gradeButtonResource = R.layout.grade_buttons_anymemo;
         }
 
+        if (activity instanceof QuizActivity) {
+                gradeButtonResource = R.layout.grade_buttons_quiz;
+        }
+
         buttonView = (LinearLayout) inflater.inflate(gradeButtonResource, null);
 
         // Set up the background color the same as the color.
@@ -280,7 +284,8 @@ public class GradeButtonsFragment extends RoboFragment {
 
     private void setGradeButtonTitle() {
         // Mnemosyne grade button style won't display the interval.
-        if (option.getButtonStyle() != Option.ButtonStyle.MNEMOSYNE) {
+        // QuizAcivity does not write to db so it does not make sense to display.
+        if (option.getButtonStyle() != Option.ButtonStyle.MNEMOSYNE && !(activity instanceof QuizActivity)) {
             setButtonDescription(0, ""+ amDateUtil.convertDayIntervalToDisplayString(scheduler.schedule(activity.getCurrentCard().getLearningData(), 0, false).getInterval()));
             setButtonDescription(1, ""+ amDateUtil.convertDayIntervalToDisplayString(scheduler.schedule(activity.getCurrentCard().getLearningData(), 1, false).getInterval()));
             setButtonDescription(2, ""+ amDateUtil.convertDayIntervalToDisplayString(scheduler.schedule(activity.getCurrentCard().getLearningData(), 2, false).getInterval()));
