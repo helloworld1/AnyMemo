@@ -781,5 +781,4 @@ public abstract class QACardActivity extends AMActivity {
             throw new IllegalArgumentException("The input gesture name is invalid");
         }
     }
-
 }

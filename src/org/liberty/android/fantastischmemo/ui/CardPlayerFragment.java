@@ -24,11 +24,9 @@ import javax.inject.Inject;
 
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.domain.Option;
-import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.service.CardPlayerService;
 
 import roboguice.fragment.RoboFragment;
-import roboguice.util.Ln;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -36,7 +34,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -61,10 +58,6 @@ public class CardPlayerFragment extends RoboFragment {
     private CardPlayerActivity activity;
 
     private Option option;
-
-    private Setting setting;
-
-    private Handler handler;
 
     @Inject
     public void setOption(Option option) {
@@ -100,7 +93,6 @@ public class CardPlayerFragment extends RoboFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.activity = (CardPlayerActivity) activity;
-        setting = this.activity.getSetting();
     }
 
     @Override
@@ -134,8 +126,6 @@ public class CardPlayerFragment extends RoboFragment {
         super.onDestroyView();
 
         // Make sure stop playing if the fragment is killed.
-        // TODO: Is this still needed if we want background service
-        // to continue playing?
         stopPlaying();
     }
 
