@@ -448,6 +448,6 @@
     <string name="card_count_text">Счёт карт</string>
     <string name="card_player_notification_title">AnyMemo Озвучка Карточек</string>
     <string name="card_player_notification_text">Озвучка карточек выполняется</string>
-    <string name="forget_text">Забыть</string>
-    <string name="remember_text">Запомнить</string>
+    <string name="forget_text">Забыто</string>
+    <string name="remember_text">Помню</string>
 </resources>
