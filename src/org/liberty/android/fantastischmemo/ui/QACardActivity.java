@@ -408,7 +408,7 @@ public abstract class QACardActivity extends AMActivity {
             ClipboardManager cm = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
             // Some Samsung device doesn't have ClipboardManager. So check
             // the null here to prevent crash.
-            if (cm != null) {
+            if (cm != null && currentCard != null) {
                 cm.setText(currentCard.getQuestion());
             }
         }
