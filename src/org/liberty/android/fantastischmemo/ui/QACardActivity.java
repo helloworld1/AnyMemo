@@ -653,11 +653,17 @@ public abstract class QACardActivity extends AMActivity {
     }
 
     protected boolean onClickQuestionText() {
-        return onClickQuestionView();
+        if (!onClickQuestionView()) {
+            speakQuestion();
+        }
+        return true;
     }
 
     protected boolean onClickAnswerText() {
-        return onClickAnswerView();
+        if (!onClickAnswerView()) {
+            speakAnswer();
+        }
+        return true;
     }
 
 
