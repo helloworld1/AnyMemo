@@ -1,0 +1,64 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.4'
+    }
+}
+apply plugin: 'android'
+sourceCompatibility = 1.6
+
+configurations {
+    ajc
+} dependencies {
+    compile fileTree(dir: 'libs', includes: ['*.jar']) 
+    ajc files('build-tools/aspectjtools.jar', 'libs/aspectjrt.jar')
+}
+
+android {
+    compileSdkVersion 16
+    buildToolsVersion "17"
+
+    defaultConfig {
+        minSdkVersion 8
+        targetSdkVersion 16
+    }
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            resources.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
+        }
+
+        instrumentTest.setRoot('test')
+    }
+}
+
+gradle.projectsEvaluated {
+    // compileJava.doLast {
+    //     tasks.compileAspectJ.execute()
+    // }
+    println 'lalalalala'
+    println android.sourceSets.main
+}
+
+// task compileAspectJ {
+// 
+//     ant.taskdef(resource: "org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties",
+//         classpath: configurations.ajc.asPath)
+//     ant.iajc(source: sourceCompatibility, target: sourceCompatibility,
+//         destDir: "./",
+//         classpath: "./") {
+// 
+//         sourceroots{
+//             android.sourceSets.main.java.srcDirs.each {
+//                 pathelement(location: it.absolutePath)
+//             }
+//         }
+//     }
+// }
