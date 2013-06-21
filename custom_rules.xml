@@ -19,7 +19,7 @@
         <!-- Make sure the woven classes are cleaned up -->
 		<delete dir="${classes.woven.dir}" />
 
-		<!-- weave MonkeyTalk into the app -->
+		<!-- weave aspects into the app -->
 		<iajc destDir="${classes.woven.dir}" showWeaveInfo="true" target="1.5" source="1.5">
 			<inpath>
 				<pathelement location="${out.classes.absolute.dir}" />
