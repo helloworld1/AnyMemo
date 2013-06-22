@@ -17,7 +17,6 @@
 package com.example.android.apis.graphics;
 
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.liberty.android.fantastischmemo.R;
 
@@ -37,6 +36,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Base64;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -259,7 +259,7 @@ public class FingerPaint extends GraphicsActivity
         String previouslyEncodedImage = shre.getString("paint_image_data", "");
 
         if( !previouslyEncodedImage.equalsIgnoreCase("") ){
-            byte[] b = Base64.decodeBase64(previouslyEncodedImage);
+            byte[] b = Base64.decode(previouslyEncodedImage, Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
             Bitmap mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
             return mutableBitmap;
@@ -281,7 +281,7 @@ public class FingerPaint extends GraphicsActivity
         bitmap.compress(Bitmap.CompressFormat.PNG, 0, baos);
         byte[] b = baos.toByteArray();
 
-        String encodedImage = Base64.encodeBase64String(b);
+        String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
 
         SharedPreferences shre = PreferenceManager.getDefaultSharedPreferences(this);
         Editor edit=shre.edit();
