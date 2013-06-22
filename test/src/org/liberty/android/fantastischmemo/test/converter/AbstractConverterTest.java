@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 
 import org.liberty.android.fantastischmemo.converter.Converter;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
+import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
 
 import android.content.Context;
 import android.test.AndroidTestCase;
@@ -41,6 +42,7 @@ public abstract class AbstractConverterTest extends AndroidTestCase {
         destFilePath = "/sdcard/" + getFileNamePrefix() + "." + converter.getDestExtension();
 
         AMFileUtil amFileUtil = new AMFileUtil(testContext);
+        amFileUtil.setAmPrefUtil(new AMPrefUtil(getContext()));
 
         amFileUtil.copyFileFromAsset(srcFileName, new File(srcFilePath));
 

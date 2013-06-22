@@ -47,6 +47,8 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
 
     private LearningDataDao learningDataDao = null;
 
+    private boolean isReleased = false;
+
     @Override
     public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
         Log.v(TAG, "Now we are creating a new database!");
@@ -154,6 +156,7 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
 
     @Override
     public void close() {
+        isReleased = true;
         try {
             DatabaseConnection connection = getConnectionSource().getReadWriteConnection();
             getConnectionSource().releaseConnection(connection);
@@ -235,8 +238,13 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
      */
     @Override
     public void finalize() throws Throwable {
-        Ln.w("AnyMemoDBOpenHelper for db " + dbPath + " is not released before being GCed. This class must be explicitly released! Force releasing now.");
-        AnyMemoDBOpenHelperManager.forceRelease(dbPath);
+        // If the finalize kicked in before the db is released.
+        // force release the helper!
+        // This is usually a bug in program.
+        if (!isReleased) {
+            Ln.w("AnyMemoDBOpenHelper for db " + dbPath + " is not released before being GCed. This class must be explicitly released! Force releasing now.");
+            AnyMemoDBOpenHelperManager.forceRelease(dbPath);
+        }
     }
 
     /* Package private constructor used in Manager. */
