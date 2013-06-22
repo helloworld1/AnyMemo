@@ -86,13 +86,17 @@ public class DownloaderFE extends DownloaderBase{
     private RecentListUtil recentListUtil;
 
     @Inject
+    public void setDownloaderUtils(DownloaderUtils downloaderUtils) {
+        this.downloaderUtils = downloaderUtils;
+    }
+
+    @Inject
     public void setRecentListUtil(RecentListUtil recentListUtil) {
         this.recentListUtil = recentListUtil;
     }
 
     @Override
     protected void initialRetrieve(){
-        downloaderUtils = new DownloaderUtils(this);
         mHandler = new Handler();
         dlAdapter = new DownloadListAdapter(this, R.layout.filebrowser_item);
         listView = (ListView)findViewById(R.id.file_list);

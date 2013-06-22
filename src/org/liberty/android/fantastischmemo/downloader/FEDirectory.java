@@ -19,17 +19,20 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader;
 
-import org.liberty.android.fantastischmemo.*;
-import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
-
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.IOException;
-import android.content.Intent;
-import android.widget.ListView;
-import android.util.Log;
+
+import javax.inject.Inject;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
+
+import android.content.Intent;
+import android.util.Log;
+import android.widget.ListView;
 
 /* Show FlashcardExchange's directory */
 public class FEDirectory extends DownloaderBase{
@@ -40,9 +43,14 @@ public class FEDirectory extends DownloaderBase{
     private static final String FE_API_DIRECTORY = "http://api.flashcardexchange.com/v1/get_directory?api_key=" + FE_API_KEY;
 
     private DownloaderUtils downloaderUtils;
+
+    @Inject
+    public void setDownloaderUtils(DownloaderUtils downloaderUtils) {
+        this.downloaderUtils = downloaderUtils;
+    }
+
     @Override
     protected void initialRetrieve(){
-        downloaderUtils = new DownloaderUtils(this);
         dlAdapter = new DownloadListAdapter(this, R.layout.filebrowser_item);
         ListView listView = (ListView)findViewById(R.id.file_list);
         listView.setAdapter(dlAdapter);
@@ -111,5 +119,6 @@ public class FEDirectory extends DownloaderBase{
         }
         return diList;
     }
+
 
 }

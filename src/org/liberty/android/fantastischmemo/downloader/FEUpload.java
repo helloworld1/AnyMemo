@@ -19,36 +19,32 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader;
 
-import java.util.List;
-import java.net.URLEncoder;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.util.List;
 
+import javax.inject.Inject;
+
+import oauth.signpost.OAuthConsumer;
+import oauth.signpost.basic.DefaultOAuthConsumer;
+
+import org.apache.commons.io.FilenameUtils;
+import org.json.JSONObject;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
-
 import org.liberty.android.fantastischmemo.dao.CardDao;
-
 import org.liberty.android.fantastischmemo.domain.Card;
-
 import org.liberty.android.fantastischmemo.ui.FileBrowserActivity;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 
-import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
-
-import org.apache.commons.io.FilenameUtils;
-import org.json.JSONObject;
-
-import oauth.signpost.OAuthConsumer;
-
-
-import oauth.signpost.basic.DefaultOAuthConsumer;
 
 public class FEUpload extends AMActivity{
     private static final int FILE_BROWSER = 6;
@@ -62,10 +58,14 @@ public class FEUpload extends AMActivity{
 
     private DownloaderUtils downloaderUtils;
 
-	public void onCreate(Bundle savedInstanceState){
+    @Inject
+    public void setDownloaderUtils(DownloaderUtils downloaderUtils) {
+        this.downloaderUtils = downloaderUtils;
+    }
+
+    public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
-        downloaderUtils = new DownloaderUtils(this);
         if(extras != null){
             oauthToken = extras.getString("oauth_token");
             oauthTokenSecret = extras.getString("oauth_token_secret");
@@ -79,7 +79,7 @@ public class FEUpload extends AMActivity{
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data){
-    	super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
         Log.v(TAG, "Result: " + requestCode + " " + resultCode + " " + data);
         if(resultCode == Activity.RESULT_OK){
             switch(requestCode){
@@ -156,4 +156,5 @@ public class FEUpload extends AMActivity{
             throw new IOException("Adding card is not OK. Status: " + status);
         }
     }
+
 }

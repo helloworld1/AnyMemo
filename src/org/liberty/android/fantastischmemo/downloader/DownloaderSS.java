@@ -70,13 +70,17 @@ public class DownloaderSS extends DownloaderBase implements ListView.OnScrollLis
     private RecentListUtil recentListUtil;
 
     @Inject
+    public void setDownloaderUtils(DownloaderUtils downloaderUtils) {
+        this.downloaderUtils = downloaderUtils;
+    }
+
+    @Inject
     public void setRecentListUtil(RecentListUtil recentListUtil) {
         this.recentListUtil = recentListUtil;
     }
 
     @Override
     protected void initialRetrieve(){
-        downloaderUtils = new DownloaderUtils(this);
         dlAdapter = new DownloadListAdapter(this, R.layout.filebrowser_item);
         dlStack = new Stack<List<DownloadItem>>();
         categoryIdStack = new Stack<String>();

@@ -92,6 +92,11 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
     private RecentListUtil recentListUtil;
 
     @Inject
+    public void setDownloaderUtils(DownloaderUtils downloaderUtils) {
+        this.downloaderUtils = downloaderUtils;
+    }
+
+    @Inject
     public void setAmFileUtil(AMFileUtil amFileUtil) {
         this.amFileUtil = amFileUtil;
     }
@@ -103,7 +108,6 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
 
     @Override
     protected void initialRetrieve(){
-        downloaderUtils = new DownloaderUtils(this);
         mHandler = new Handler();
         dlAdapter = new DownloadListAdapter(this, R.layout.filebrowser_item);
         listView = (ListView)findViewById(R.id.file_list);
