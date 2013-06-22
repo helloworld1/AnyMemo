@@ -1,13 +1,15 @@
 package org.liberty.android.fantastischmemo;
 
+import java.lang.ref.WeakReference;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.io.FilenameUtils;
 
+import roboguice.util.Ln;
+
 import android.content.Context;
-import android.util.Log;
 
 import com.j256.ormlite.dao.DaoManager;
 
@@ -15,10 +17,9 @@ import com.j256.ormlite.dao.DaoManager;
  * Keep the reference count of each AnyMemoDBOpenHelper.
  */
 public class AnyMemoDBOpenHelperManager {
-    private static Map<String, AnyMemoDBOpenHelper> helpers = new ConcurrentHashMap<String, AnyMemoDBOpenHelper>();
+    private static Map<String, WeakReference<AnyMemoDBOpenHelper>> helpers = new ConcurrentHashMap<String, WeakReference<AnyMemoDBOpenHelper>>();
     private static Map<String, Integer> refCounts = new ConcurrentHashMap<String, Integer>();
 
-    private static String TAG = "AnyMemoDBOpenHelperManager";
     private static ReentrantLock bigLock = new ReentrantLock();
 
     /* Get a db open helper and return a cached one if it was called before for the same db */
@@ -28,15 +29,15 @@ public class AnyMemoDBOpenHelperManager {
             assert dbpath != null : "dbpath should not be null";
             dbpath = FilenameUtils.normalize(dbpath);
             if (!helpers.containsKey(dbpath)) {
-                Log.i(TAG, "Call get AnyMemoDBOpenHelper for first time.");
+                Ln.i("Call get AnyMemoDBOpenHelper for first time.");
                 AnyMemoDBOpenHelper helper = new AnyMemoDBOpenHelper(context, dbpath);
-                helpers.put(dbpath, helper);
+                helpers.put(dbpath, new WeakReference<AnyMemoDBOpenHelper>(helper));
                 refCounts.put(dbpath, 1);
-                return helpers.get(dbpath);
+                return helpers.get(dbpath).get();
             } else {
-                Log.i(TAG, "Call get AnyMemoDBOpenHelper for " + dbpath + " again, return existing helper.");
+                Ln.i("Call get AnyMemoDBOpenHelper for " + dbpath + " again, return existing helper.");
                 refCounts.put(dbpath, refCounts.get(dbpath) + 1);
-                return helpers.get(dbpath);
+                return helpers.get(dbpath).get();
             }
         } finally {
             bigLock.unlock();
@@ -50,11 +51,11 @@ public class AnyMemoDBOpenHelperManager {
             String dbpath = FilenameUtils.normalize(helper.getDbPath());
 
             if (!helpers.containsKey(dbpath)) {
-                Log.w(TAG, "Release a wrong db path or release an already been released helper!");
+                Ln.w("Release a wrong db path or release an already been released helper!");
                 return;
             }
 
-            Log.i(TAG, "Release AnyMemoDBOpenHelper: " + dbpath + " Ref count: " + refCounts.get(dbpath));
+            Ln.i("Release AnyMemoDBOpenHelper: " + dbpath + " Ref count: " + refCounts.get(dbpath));
 
             refCounts.put(dbpath, refCounts.get(dbpath) - 1);
 
@@ -63,7 +64,7 @@ public class AnyMemoDBOpenHelperManager {
                 DaoManager.clearCache();
                 DaoManager.clearDaoCache();
                 helpers.remove(dbpath);
-                Log.i(TAG, "All connection released. Close helper. DB: " + dbpath);
+                Ln.i("All connection released. Close helper. DB: " + dbpath);
             }
         } finally {
             bigLock.unlock();
@@ -75,15 +76,24 @@ public class AnyMemoDBOpenHelperManager {
         try {
             String dbpath = FilenameUtils.normalize(path);
             if (!helpers.containsKey(dbpath)) {
-                Log.w(TAG, "Force release a file that is not opened yet. Do nothing");
+                Ln.w("Force release a file that is not opened yet. Do nothing");
                 return;
             }
 
-            helpers.get(dbpath).close();
+            AnyMemoDBOpenHelper helper = helpers.get(dbpath).get();
+
+            Ln.i("force releasing " + path + " It contains " + refCounts.get(dbpath) + " refs");
+            // Weak reference can return null, so we must check here.
+            if (helper != null) {
+                helper.close();
+            } else {
+                Ln.w("forceRelease a path that has already been released by GC.");
+            }
             DaoManager.clearCache();
             DaoManager.clearDaoCache();
             helpers.remove(dbpath);
-            Log.i(TAG, "Force release a db file. DB: " + dbpath);
+            refCounts.get(dbpath);
+            Ln.i("Force released a db file. DB: " + dbpath);
         } finally {
             bigLock.unlock();
         }

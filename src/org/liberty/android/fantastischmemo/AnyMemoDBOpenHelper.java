@@ -15,6 +15,8 @@ import org.liberty.android.fantastischmemo.domain.Filter;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.domain.Setting;
 
+import roboguice.util.Ln;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -226,6 +228,15 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /*
+     * Override the finalize in case the helper is not release.
+     */
+    @Override
+    public void finalize() throws Throwable {
+        Ln.w("AnyMemoDBOpenHelper for db " + dbPath + " is not released before being GCed. This class must be explicitly released! Force releasing now.");
+        AnyMemoDBOpenHelperManager.forceRelease(dbPath);
     }
 
     /* Package private constructor used in Manager. */
