@@ -38,7 +38,7 @@ public class CardImageGetter implements ImageGetter {
         
         screenWidth = display.getWidth();
 	}
-	
+    
     @Override
     public Drawable getDrawable(String source) {
         Ln.v("Source: " + source);

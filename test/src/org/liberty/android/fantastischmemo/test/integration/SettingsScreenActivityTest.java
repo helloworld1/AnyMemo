@@ -109,9 +109,11 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
     public void testSaveDisplayRatio() throws Exception {
         solo.clickOnText("50%");
         solo.clickOnText("75%");
+        
         solo.sleep(500);
         getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
         solo.sleep(2000);
+        
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
         try {
             SettingDao settingDao = helper.getSettingDao();
@@ -133,8 +135,8 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
 
         solo.sleep(500);
         getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
-
         solo.sleep(2000);
+
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
         try {
             SettingDao settingDao = helper.getSettingDao();
@@ -171,6 +173,85 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         }
     }
 
+    public void testGoBackWithSettingChangedPressYesButtonShouldSaveSettings() throws Exception {
+        solo.clickOnText("50%");
+        solo.clickOnText("75%");
+
+        solo.sleep(500);
+        solo.goBack();
+
+        solo.sleep(500);
+        solo.clickOnButton(solo.getString(R.string.yes_text));
+        solo.sleep(2000);
+  
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
+        try {
+            SettingDao settingDao = helper.getSettingDao();
+            Setting setting = settingDao.queryForId(1);
+            assertEquals(75, (int)setting.getQaRatio());
+        } finally {
+            AnyMemoDBOpenHelperManager.releaseHelper(helper);
+        }
+    }
+
+    public void testGoBackWithSettingChangedPressNoButtonShouldNotSaveSettings() throws Exception {
+        solo.clickOnText("50%");
+        solo.clickOnText("75%");
+
+        solo.sleep(500);
+        solo.goBack();
+
+        solo.sleep(500);
+        solo.clickOnButton(solo.getString(R.string.no_text));
+        solo.sleep(2000);
+
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
+        try {
+            SettingDao settingDao = helper.getSettingDao();
+            Setting setting = settingDao.queryForId(1);
+            assertEquals(50, (int)setting.getQaRatio());
+        } finally {
+            AnyMemoDBOpenHelperManager.releaseHelper(helper);
+        }        
+    }
+
+    public void testGoBackWithSettingChangedPressCancelButtonShouldStayInCurrentActivity() throws Exception {
+        solo.clickOnText("50%");
+        solo.clickOnText("75%");
+
+        solo.sleep(500);
+        solo.goBack();
+        solo.sleep(500);
+        solo.clickOnButton(solo.getString(R.string.cancel_text));
+        solo.sleep(2000);
+ 
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
+        try {
+            SettingDao settingDao = helper.getSettingDao();
+            Setting setting = settingDao.queryForId(1);
+            assertEquals(50, (int)setting.getQaRatio());
+        } finally {
+            AnyMemoDBOpenHelperManager.releaseHelper(helper);
+        }
+
+        //Is current activity SettingsScreen
+        solo.assertCurrentActivity("Stay", SettingsScreen.class);
+    }
+    
+    public void testGoBackWithNoSettingChangedShouldQuit() throws Exception {
+        solo.sleep(500);
+        solo.goBack(); 
+        solo.sleep(2000);
+
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
+        try {
+            SettingDao settingDao = helper.getSettingDao();
+            Setting setting = settingDao.queryForId(1);
+            assertEquals(50, (int)setting.getQaRatio());
+        } finally {
+            AnyMemoDBOpenHelperManager.releaseHelper(helper);
+        }
+    }
 
     public void tearDown() throws Exception {
         try {
@@ -181,5 +262,4 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         }
         super.tearDown();
     }
-
 }

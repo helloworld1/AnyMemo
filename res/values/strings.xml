@@ -170,7 +170,7 @@
     <string name="merging_summary">Merging databases. Please wait.</string>
     <string name="copy_text">Copy</string>
     <string name="paste_text">Paste</string>
-    <string name="edit_dialog_unsave_warning">The current card is modified but not saved. Are you sure you want to exit?</string>
+    <string name="edit_dialog_unsave_warning">The current card is modified but not saved. Are you sure you want to save and exit?</string>
     <string name="downloader_extract_zip">Extracting... Please wait.</string>
     <string name="allow_orientation_title">Orientation</string>
     <string name="allow_orientation_summary">Automatically change screen orientation. Please restart AnyMemo to take effect.</string>
