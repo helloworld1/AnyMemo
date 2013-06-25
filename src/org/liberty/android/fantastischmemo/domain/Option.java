@@ -46,12 +46,12 @@ public class Option {
         editor.commit();
     }
 
-    public boolean getCopyClipboard() {
-        return settings.getBoolean(AMPrefKeys.COPY_CLIPBOARD_KEY, true);
+    public CopyToClipboard getCopyClipboard() {
+        return CopyToClipboard.valueOf(settings.getString(AMPrefKeys.COPY_CLIPBOARD_KEY, "QUESTION"));
     }
 
-    public void setCopyClipboard(boolean enable) {
-        editor.putBoolean(AMPrefKeys.COPY_CLIPBOARD_KEY, enable);
+    public void setCopyClipboard(CopyToClipboard copyToClipboard) {
+        editor.putString(AMPrefKeys.COPY_CLIPBOARD_KEY, copyToClipboard.toString());
         editor.commit();
     }
 
@@ -180,7 +180,24 @@ public class Option {
                 return TAP;
             }
         }
+    }
 
+    public static enum CopyToClipboard {
+        DISABLED,
+        QUESTION,
+        ANSWER,
+        BOTH;
+        public static CopyToClipboard parse(String a){
+            if(a.equals("DISABLED")){
+                return DISABLED;
+            } else if(a.equals("ANSWER")){
+                return ANSWER;
+            } else if(a.equals("BOTH")){
+                return BOTH;
+            } else{
+                return QUESTION;
+            }
+        }
     }
 
 }

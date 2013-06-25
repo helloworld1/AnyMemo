@@ -103,7 +103,7 @@ public class CardPlayerActivity extends QACardActivity {
             return;
         }
         setupControlButtons();
-        displayCard(true);
+        updateCardFrontSide();
         setSmallTitle(getTitle());
         updateTitle();
     }

@@ -281,4 +281,20 @@
     <item>@string/grade_statistics_text</item>
 </string-array>
 
+<string-array name="copy_to_clipboard_options">
+    <item>@string/disabled_text</item>
+    <item>@string/question_text</item>
+    <item>@string/answer_text</item>
+    <item>@string/both_text</item>
+</string-array>
+
+<string-array name="copy_to_clipboard_options_values">
+    <item>DISABLED</item>
+    <item>QUESTION</item>
+    <item>ANSWER</item>
+    <item>BOTH</item>
+</string-array>
+
+
+
 </resources>

@@ -13,10 +13,12 @@
             android:entries="@array/speech_ctl_list"
             android:entryValues="@array/speech_ctl_list_values"
             android:summary="@string/speech_ctl_summary" />
-        <CheckBoxPreference
-            android:key="copyclipboard"
+        <ListPreference
+            android:key="copy_to_clipboard"
             android:title="@string/copyclipboard"
-            android:defaultValue="true"
+            android:defaultValue="QUESTION"
+            android:entries="@array/copy_to_clipboard_options"
+            android:entryValues="@array/copy_to_clipboard_options_values"
             android:summary="@string/copyclipboard_summary" />
         <CheckBoxPreference
             android:key="enable_volume_key"

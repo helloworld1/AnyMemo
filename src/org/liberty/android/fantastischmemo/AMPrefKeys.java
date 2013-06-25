@@ -56,7 +56,7 @@ public class AMPrefKeys {
 
     public static final String ENABLE_VOLUME_KEY_KEY = "enable_volume_key";
 
-    public static final String COPY_CLIPBOARD_KEY = "copyclipboard";
+    public static final String COPY_CLIPBOARD_KEY = "copy_to_clipboard";
 
     public static final String DICT_APP_KEY = "dict_app";
 

@@ -21,7 +21,7 @@
     <string name="help_button_text">Help</string>
     <string name="edit_button_text">Preview/edit</string>
     <string name="copyclipboard">Copy to clipboard</string>
-    <string name="copyclipboard_summary">The question will be automatically copied to clipboard.</string>
+    <string name="copyclipboard_summary">Automatically copy card content to clipboard.</string>
     <string name="memo_show_answer">\?\nShow answer</string>
     <string name="memo_no_item_title">No item</string>
     <string name="memo_no_item_message">There is no item to learn for now. If you want to cram, you can do quizzes by long clicking a db in the &quot;Recent&quot; tab.</string>
@@ -455,4 +455,5 @@
     <string name="card_player_notification_text">Speaking cards in progress</string>
     <string name="forget_text">Forget</string>
     <string name="remember_text">Remember</string>
+    <string name="both_text">Both</string>
 </resources>

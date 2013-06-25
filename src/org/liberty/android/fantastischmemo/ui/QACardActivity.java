@@ -403,15 +403,7 @@ public abstract class QACardActivity extends AMActivity {
         // if there is no text
         smallTitleBar = (TextView) findViewById(R.id.small_title_bar);
 
-        // Copy the question to clickboard.
-        if (option.getCopyClipboard()) {
-            ClipboardManager cm = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-            // Some Samsung device doesn't have ClipboardManager. So check
-            // the null here to prevent crash.
-            if (cm != null && currentCard != null) {
-                cm.setText(currentCard.getQuestion());
-            }
-        }
+        copyToClipboard();
 
         onPostDisplayCard();
     }
@@ -714,6 +706,31 @@ public abstract class QACardActivity extends AMActivity {
         return super.onKeyUp(keyCode, event);
     }
 
+    // Copy to clipboard
+    protected void copyToClipboard() {
+        String copiedText = "";
+        switch (option.getCopyClipboard()) {
+            case QUESTION:
+                copiedText = "" + currentCard.getQuestion();
+                break;
+            case ANSWER:
+                copiedText = "" + currentCard.getAnswer();
+                break;
+            case BOTH:
+                copiedText = "" + currentCard.getQuestion() + " " + currentCard.getAnswer();
+                break;
+            default:
+                copiedText = "";
+        }
+        if (StringUtils.isNotEmpty(copiedText)) {
+            ClipboardManager cm = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+            // Some Samsung device doesn't have ClipboardManager. So check
+            // the null here to prevent crash.
+            if (cm != null) {
+                cm.setText(copiedText);
+            }
+        }
+    }
 
     private CardFragment.OnClickListener onQuestionTextClickListener = new CardFragment.OnClickListener() {
 

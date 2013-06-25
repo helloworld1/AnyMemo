@@ -41,6 +41,8 @@ import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
 import org.liberty.android.fantastischmemo.utils.ShareUtil;
 
+import roboguice.util.Ln;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -493,6 +495,12 @@ public class PreviewEditActivity extends QACardActivity {
         }
 
         return false;
+    }
+
+    @Override
+    // Disable the copy to clipboard for Preview/Edit activity.
+    protected void copyToClipboard() {
+        Ln.v("Copy to clipboard is disabled for PreviewEditActivity");
     }
 
     @Override
