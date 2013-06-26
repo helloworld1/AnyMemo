@@ -51,7 +51,6 @@ import android.widget.Toast;
 import com.example.android.apis.graphics.FingerPaint;
 
 public class QuizActivity extends QACardActivity {
-    public static String EXTRA_START_CARD_ID = "start_card_id";
     public static String EXTRA_CATEGORY_ID = "category_id";
     public static String EXTRA_START_CARD_ORD = "start_card_ord";
     public static String EXTRA_QUIZ_SIZE = "quiz_size";
