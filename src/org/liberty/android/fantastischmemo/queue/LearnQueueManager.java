@@ -26,20 +26,17 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-
 import java.util.concurrent.Callable;
 
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
-
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
-
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 
-import android.util.Log;
+import roboguice.util.Ln;
 
 public class LearnQueueManager implements QueueManager {
     private CardDao cardDao;
@@ -95,7 +92,7 @@ public class LearnQueueManager implements QueueManager {
         if (!learnQueue.isEmpty()) {
             Card c = learnQueue.get(0);
             learnQueue.remove(0);
-            Log.d(TAG, "Dequeue card: " + c.getId());
+            Ln.d("Dequeue card: " + c.getId());
             return c;
         } else {
             return null;
@@ -110,7 +107,7 @@ public class LearnQueueManager implements QueueManager {
 		if (!learnQueue.isEmpty()) {
             Card c = learnQueue.get(0);
             learnQueue.remove(0);
-            Log.d(TAG, "Dequeue card: " + c.getId());
+            Ln.d("Dequeue card: " + c.getId());
             return c;
         } else {
             return null;
@@ -134,9 +131,9 @@ public class LearnQueueManager implements QueueManager {
             learningDataDao.callBatchTasks (
                 new Callable<Void>() {
                     public Void call() throws Exception {
-                        Log.i(TAG, "Cards to flush: " + dirtyCache.size());
+                        Ln.i("Cards to flush: " + dirtyCache.size());
                         for (Card card : dirtyCache) {
-                            Log.i(TAG, "Flushing: " + card.getLearningData());
+                            Ln.i("Flushing card id: " + card.getId() + " with learning data: " + card.getLearningData());
                             learningDataDao.update(card.getLearningData());
                             cardDao.update(card);
                         }
@@ -145,7 +142,7 @@ public class LearnQueueManager implements QueueManager {
                 });
             dirtyCache.clear();
         } catch (Exception e) {
-            Log.e(TAG, "Error encounter when flushing: ", e);
+            Ln.e(e, "Error encounter when flushing: ");
             throw new RuntimeException("Queue flushing get exception!", e);
         }
 	}
@@ -212,7 +209,7 @@ public class LearnQueueManager implements QueueManager {
             if (c.getId() == cardId) {
                 int index = learnQueue.indexOf(c);
                 learnQueueRotateDistance = -index;
-                Log.i(TAG, "Rotate index: " + index);
+                Ln.i("Rotate index: " + index);
             }
         }
         Collections.rotate(learnQueue, learnQueueRotateDistance);

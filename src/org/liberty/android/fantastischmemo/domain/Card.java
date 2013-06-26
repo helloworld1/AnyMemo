@@ -154,4 +154,9 @@ public class Card {
         Card card2 = (Card)c;
         return this.getId().equals(card2.getId());
     }
+
+    @Override
+    public int hashCode() {
+        return getId();
+    }
 }

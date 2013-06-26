@@ -245,8 +245,7 @@ public class GradeButtonsFragment extends RoboFragment {
             // Save current card as prev card for undo.
             // This was saved to determine the stat info
             // and the card id for undo
-            prevCard = cardDao.queryForId(activity.getCurrentCard().getId());
-            learningDataDao.refresh(prevCard.getLearningData());
+            prevCard = activity.getCurrentCard();
 
             // Save previous learning for Undo
             // This part is ugly due to mutablity of ORMLite
@@ -254,7 +253,7 @@ public class GradeButtonsFragment extends RoboFragment {
             updatedCard = cardDao.queryForId(activity.getCurrentCard().getId());
             learningDataDao.refresh(updatedCard.getLearningData());
 
-            LearningData newLd = scheduler.schedule(updatedCard.getLearningData(), grade, true);
+            LearningData newLd = scheduler.schedule(prevCard.getLearningData(), grade, true);
 
             // Need to clone the data due to ORMLite restriction on "update()" method.
             updatedCard.getLearningData().cloneFromLearningData(newLd);

@@ -126,7 +126,7 @@ public class StudyActivityStudyTest extends ActivityInstrumentationTestCase2<Stu
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
         try {
             CardDao cardDao = helper.getCardDao();
-            // 2 card failed
+            // 1 card failed
             assertEquals(1, cardDao.getScheduledCardCount(null));
             // 28 - 11 = 17
             assertEquals(17, cardDao.getNewCardCount(null));
