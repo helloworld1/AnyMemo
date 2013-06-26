@@ -293,6 +293,19 @@ public abstract class QACardActivity extends AMActivity {
                             LayoutParams.MATCH_PARENT, aRatio));
         }
 
+        // Buttons view can be null if it is not decleared in the layout XML
+        View buttonsView = findViewById(R.id.buttons_root);
+
+        // Make sure the buttons view are also handling the event for the answer view
+        // e. g. clicking on the blank area of the buttons layout to reveal the answer
+        // or flip the card.
+        if (buttonsView != null) {
+            buttonsView.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    onQuestionViewClickListener.onClick(v);
+                }
+            });
+        }
         // Double sided card has no animation and no horizontal line
         if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED) {
             if (showAnswer) {
@@ -300,7 +313,6 @@ public abstract class QACardActivity extends AMActivity {
                 findViewById(R.id.answer).setVisibility(View.VISIBLE);
 
                 // Also the buttons should match the color.
-                View buttonsView = findViewById(R.id.buttons_root);
                 if (buttonsView != null) {
                     buttonsView.setBackgroundColor(setting.getAnswerBackgroundColor());
                 }
@@ -309,7 +321,6 @@ public abstract class QACardActivity extends AMActivity {
                 findViewById(R.id.answer).setVisibility(View.GONE);
 
                 // Also the buttons should match the color.
-                View buttonsView = findViewById(R.id.buttons_root);
                 if (buttonsView != null) {
                     buttonsView.setBackgroundColor(setting.getQuestionBackgroundColor());
                 }
