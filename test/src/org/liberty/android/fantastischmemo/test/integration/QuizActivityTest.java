@@ -1,6 +1,7 @@
 package org.liberty.android.fantastischmemo.test.integration;
 
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.test.TestHelper;
 import org.liberty.android.fantastischmemo.ui.QuizActivity;
 
 import android.content.Intent;
@@ -27,12 +28,12 @@ public class QuizActivityTest extends ActivityInstrumentationTestCase2<QuizActiv
     private Solo solo;
 
     public void setUp() throws Exception{
-        UITestHelper uiTestHelper = new UITestHelper(getInstrumentation());
+        TestHelper uiTestHelper = new TestHelper(getInstrumentation());
         uiTestHelper.clearPreferences();
         uiTestHelper.setUpFBPDatabase();
 
         Intent intent = new Intent();
-        intent.putExtra(QuizActivity.EXTRA_DBPATH, UITestHelper.SAMPLE_DB_PATH);
+        intent.putExtra(QuizActivity.EXTRA_DBPATH, TestHelper.SAMPLE_DB_PATH);
         intent.putExtra(QuizActivity.EXTRA_QUIZ_SIZE, TEST_QUIZ_SIZE);
         intent.putExtra(QuizActivity.EXTRA_START_CARD_ORD, TEST_START_ORD);
         setActivityIntent(intent);

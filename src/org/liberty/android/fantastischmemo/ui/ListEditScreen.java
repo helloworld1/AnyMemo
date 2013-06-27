@@ -33,6 +33,12 @@ import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
+import org.liberty.android.fantastischmemo.utils.CardTextUtil;
+import org.liberty.android.fantastischmemo.utils.CardTextUtilFactory;
+import org.xml.sax.XMLReader;
+
+import roboguice.RoboGuice;
+import roboguice.inject.ContextScope;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -41,6 +47,9 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.text.Editable;
+import android.text.Html.TagHandler;
+import android.text.Spannable;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -66,6 +75,11 @@ public class ListEditScreen extends AMActivity {
 
     private AMPrefUtil amPrefUtil;
 
+
+    private CardTextUtilFactory cardTextUtilFactory;
+
+    private CardTextUtil cardTextUtil;
+
     /* Initial position in the list */
 
     private List<Card> cards;
@@ -75,6 +89,11 @@ public class ListEditScreen extends AMActivity {
     @Inject
     public void setAmPrefUtil(AMPrefUtil amPrefUtil) {
         this.amPrefUtil = amPrefUtil;
+    }
+
+    @Inject
+    public void setCardTextUtilFactory(CardTextUtilFactory cardTextUtilFactory) {
+        this.cardTextUtilFactory = cardTextUtilFactory;
     }
 
     public void onCreate(Bundle savedInstanceState) {
@@ -119,8 +138,11 @@ public class ListEditScreen extends AMActivity {
                     .findViewById(R.id.item_answer);
 
             idView.setText("" + getItem(position).getOrdinal());
-            questionView.setText(getItem(position).getQuestion());
-            answerView.setText(getItem(position).getAnswer());
+
+            // 0 -> question 1-> answer
+            List<Spannable> fields = cardTextUtil.getFieldsToDisplay(getItem(position));
+            questionView.setText(fields.get(0));
+            answerView.setText(fields.get(1));
 
             return convertView;
         }
@@ -263,6 +285,19 @@ public class ListEditScreen extends AMActivity {
             CardDao cardDao = dbOpenHelper.getCardDao();
             cards = cardDao.queryForAll();
 
+            ContextScope scope = RoboGuice.getInjector(ListEditScreen.this).getInstance(ContextScope.class);
+            // Make sure the method is running under the context
+            // The AsyncTask thread does not have the context, so we need
+            // to manually enter the scope.
+            synchronized(ContextScope.class) {
+                scope.enter(ListEditScreen.this);
+                try {
+                    cardTextUtil = cardTextUtilFactory.create(dbPath);
+                } finally {
+                    scope.exit(ListEditScreen.this);
+                }
+            }
+
             return null;
         }
 
@@ -307,5 +342,13 @@ public class ListEditScreen extends AMActivity {
             restartActivity();
         }
     }
+
+    private TagHandler tagHandler = new TagHandler() {
+        @Override
+        public void handleTag(boolean opening, String tag, Editable output,
+                XMLReader xmlReader) {
+            return;
+        }
+    };
 
 }

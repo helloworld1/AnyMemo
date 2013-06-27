@@ -6,6 +6,7 @@ import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.test.TestHelper;
 import org.liberty.android.fantastischmemo.ui.CardEditor;
 
 import android.content.Intent;
@@ -26,12 +27,12 @@ public class CardEditorActivityFunctionTest extends ActivityInstrumentationTestC
     private Solo solo;
 
     public void setUp() throws Exception{
-        UITestHelper uiTestHelper = new UITestHelper(getInstrumentation());
+        TestHelper uiTestHelper = new TestHelper(getInstrumentation());
         uiTestHelper.clearPreferences();
         uiTestHelper.setUpFBPDatabase();
 
         Intent intent = new Intent();
-        intent.putExtra(CardEditor.EXTRA_DBPATH, UITestHelper.SAMPLE_DB_PATH);
+        intent.putExtra(CardEditor.EXTRA_DBPATH, TestHelper.SAMPLE_DB_PATH);
         intent.putExtra(CardEditor.EXTRA_CARD_ID, 2);
         setActivityIntent(intent);
 
@@ -64,7 +65,7 @@ public class CardEditorActivityFunctionTest extends ActivityInstrumentationTestC
         solo.sleep(3000);
 
         // Assert database state
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, TestHelper.SAMPLE_DB_PATH);
         try {
             CardDao cardDao = helper.getCardDao();
             CategoryDao categoryDao = helper.getCategoryDao();

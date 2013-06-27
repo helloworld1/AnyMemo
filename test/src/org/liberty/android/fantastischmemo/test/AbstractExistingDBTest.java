@@ -21,18 +21,18 @@ public class AbstractExistingDBTest extends AndroidTestCase {
         super.setUp();
         Context testContext = getContext();
         InputStream in = testContext.getResources().getAssets().open(AMEnv.DEFAULT_DB_NAME);
-        File outFile = new File("/sdcard/french-body-parts.db");
+        File outFile = new File(TestHelper.SAMPLE_DB_PATH);
         outFile.delete();
 
         FileUtils.copyInputStreamToFile(in, outFile);
         in.close();
-        helper = AnyMemoDBOpenHelperManager.getHelper(testContext, "/sdcard/french-body-parts.db");
+        helper = AnyMemoDBOpenHelperManager.getHelper(testContext, TestHelper.SAMPLE_DB_PATH);
     }
 
     @Override
     protected void tearDown() throws Exception {
         AnyMemoDBOpenHelperManager.releaseHelper(helper);
-        File outFile = new File("/sdcard/french-body-parts.db");
+        File outFile = new File(TestHelper.SAMPLE_DB_PATH);
         outFile.delete();
     }
 }

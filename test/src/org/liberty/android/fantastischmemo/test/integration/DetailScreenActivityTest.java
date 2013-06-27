@@ -5,6 +5,7 @@ import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.test.TestHelper;
 import org.liberty.android.fantastischmemo.ui.DetailScreen;
 
 import android.content.Intent;
@@ -24,12 +25,12 @@ public class DetailScreenActivityTest extends ActivityInstrumentationTestCase2<D
     private Solo solo;
 
     public void setUp() throws Exception {
-        UITestHelper uiTestHelper = new UITestHelper(getInstrumentation());
+        TestHelper uiTestHelper = new TestHelper(getInstrumentation());
         uiTestHelper.clearPreferences();
         uiTestHelper.setUpFBPDatabase();
 
         Intent intent = new Intent();
-        intent.putExtra(DetailScreen.EXTRA_DBPATH, UITestHelper.SAMPLE_DB_PATH);
+        intent.putExtra(DetailScreen.EXTRA_DBPATH, TestHelper.SAMPLE_DB_PATH);
         intent.putExtra(DetailScreen.EXTRA_CARD_ID, 1);
         setActivityIntent(intent);
 
@@ -54,7 +55,7 @@ public class DetailScreenActivityTest extends ActivityInstrumentationTestCase2<D
         solo.clickOnText(solo.getString(R.string.ok_text));
         solo.sleep(4000);
         // asssert db state
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, TestHelper.SAMPLE_DB_PATH);
         try {
             CardDao cardDao = helper.getCardDao();
             Card c1 = cardDao.queryForId(1);

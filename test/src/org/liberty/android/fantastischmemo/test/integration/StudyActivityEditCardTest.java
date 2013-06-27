@@ -2,6 +2,7 @@ package org.liberty.android.fantastischmemo.test.integration;
 
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.test.TestHelper;
 import org.liberty.android.fantastischmemo.ui.StudyActivity;
 
 import android.content.Intent;
@@ -28,12 +29,12 @@ public class StudyActivityEditCardTest extends ActivityInstrumentationTestCase2<
      * @see ActivityInstrumentationTestCase2#setUp()
      */
     public void setUp() throws Exception {
-        UITestHelper uiTestHelper = new UITestHelper(getInstrumentation());
+        TestHelper uiTestHelper = new TestHelper(getInstrumentation());
         uiTestHelper.clearPreferences();
         uiTestHelper.setUpFBPDatabase();
 
         Intent intent = new Intent();
-        intent.putExtra(StudyActivity.EXTRA_DBPATH, UITestHelper.SAMPLE_DB_PATH);
+        intent.putExtra(StudyActivity.EXTRA_DBPATH, TestHelper.SAMPLE_DB_PATH);
         setActivityIntent(intent);
 
         mActivity = this.getActivity();

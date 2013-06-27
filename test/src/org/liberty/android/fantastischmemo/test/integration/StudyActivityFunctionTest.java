@@ -5,6 +5,7 @@ import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
+import org.liberty.android.fantastischmemo.test.TestHelper;
 import org.liberty.android.fantastischmemo.ui.StudyActivity;
 
 import android.content.Intent;
@@ -27,12 +28,12 @@ public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<
     private Solo solo;
 
     public void setUp() throws Exception{
-        UITestHelper uiTestHelper = new UITestHelper(getInstrumentation());
+        TestHelper uiTestHelper = new TestHelper(getInstrumentation());
         uiTestHelper.clearPreferences();
         uiTestHelper.setUpFBPDatabase();
 
         Intent intent = new Intent();
-        intent.putExtra(StudyActivity.EXTRA_DBPATH, UITestHelper.SAMPLE_DB_PATH);
+        intent.putExtra(StudyActivity.EXTRA_DBPATH, TestHelper.SAMPLE_DB_PATH);
         setActivityIntent(intent);
 
         mActivity = this.getActivity();
@@ -78,7 +79,7 @@ public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<
         solo.sleep(600);
 
         // asssert db state
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, TestHelper.SAMPLE_DB_PATH);
         try {
             CardDao cardDao = helper.getCardDao();
             // 2nd card failed
@@ -99,7 +100,7 @@ public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<
         solo.waitForDialogToClose(8000);
 
         // asssert db state
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, TestHelper.SAMPLE_DB_PATH);
         try {
             CardDao cardDao = helper.getCardDao();
             LearningDataDao learningDataDao = helper.getLearningDataDao();
@@ -127,7 +128,7 @@ public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<
 
         solo.sleep(2000);
         // asssert db state
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, TestHelper.SAMPLE_DB_PATH);
         try {
             CardDao cardDao = helper.getCardDao();
             // One card skipped ...

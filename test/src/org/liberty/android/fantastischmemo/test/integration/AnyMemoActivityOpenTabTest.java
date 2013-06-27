@@ -1,5 +1,6 @@
 package org.liberty.android.fantastischmemo.test.integration;
 
+import org.liberty.android.fantastischmemo.test.TestHelper;
 import org.liberty.android.fantastischmemo.ui.AnyMemo;
 
 import com.jayway.android.robotium.solo.Solo;
@@ -20,7 +21,7 @@ public class AnyMemoActivityOpenTabTest extends ActivityInstrumentationTestCase2
 
 
     public void setUp() throws Exception{
-        UITestHelper uiTestHelper = new UITestHelper(getInstrumentation());
+        TestHelper uiTestHelper = new TestHelper(getInstrumentation());
         uiTestHelper.clearPreferences();
         uiTestHelper.markNotFirstTime();
 

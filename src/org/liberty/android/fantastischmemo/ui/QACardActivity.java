@@ -20,12 +20,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import java.util.EnumSet;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import org.amr.arabic.ArabicUtilities;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
@@ -38,11 +36,11 @@ import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.service.AnyMemoService;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
-import org.liberty.android.fantastischmemo.utils.AMStringUtils;
 import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
 import org.liberty.android.fantastischmemo.utils.CardTTSUtil;
 import org.liberty.android.fantastischmemo.utils.CardTTSUtilFactory;
-import org.xml.sax.XMLReader;
+import org.liberty.android.fantastischmemo.utils.CardTextUtil;
+import org.liberty.android.fantastischmemo.utils.CardTextUtilFactory;
 
 import roboguice.RoboGuice;
 import roboguice.inject.ContextScope;
@@ -59,14 +57,8 @@ import android.gesture.Prediction;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-
 import android.text.ClipboardManager;
-
-import android.text.Editable;
-import android.text.Html;
-import android.text.Html.ImageGetter;
-import android.text.Html.TagHandler;
-import android.text.SpannableStringBuilder;
+import android.text.Spannable;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -108,6 +100,10 @@ public abstract class QACardActivity extends AMActivity {
 
     private CardTTSUtil cardTTSUtil;
 
+    private CardTextUtilFactory cardTextUtilFactory;
+
+    private CardTextUtil cardTextUtil;
+
     private GestureLibrary gestureLibrary;
 
     private volatile boolean initFinished = false;
@@ -121,6 +117,12 @@ public abstract class QACardActivity extends AMActivity {
     public void setCardTTSUtilFactory(CardTTSUtilFactory cardTTSUtilFactory) {
         this.cardTTSUtilFactory = cardTTSUtilFactory;
     }
+
+    @Inject
+    public void setCardTextUtilFactory(CardTextUtilFactory cardTextUtilFactory) {
+        this.cardTextUtilFactory = cardTextUtilFactory;
+    }
+
 
     public CardTTSUtil getCardTTSUtil() {
         return cardTTSUtil;
@@ -143,7 +145,6 @@ public abstract class QACardActivity extends AMActivity {
         // Set teh default animation
         animationInResId = R.anim.slide_left_in;
         animationOutResId = R.anim.slide_left_out;
-        imageGetter = new CardImageGetter(this, dbPath);
 
         // Load gestures
         loadGestures();
@@ -182,79 +183,9 @@ public abstract class QACardActivity extends AMActivity {
         String questionTypeface = setting.getQuestionFont();
         String answerTypeface = setting.getAnswerFont();
 
-        boolean enableThirdPartyArabic = option.getEnableArabicEngine();
-
         Setting.Align questionAlign = setting.getQuestionTextAlign();
         Setting.Align answerAlign = setting.getAnswerTextAlign();
 
-        EnumSet<Setting.CardField> htmlDisplay = setting.getDisplayInHTMLEnum();
-
-        String itemQuestion = currentCard.getQuestion();
-        String itemAnswer = currentCard.getAnswer();
-        String itemCategory = currentCard.getCategory().getName();
-        String itemNote = currentCard.getNote();
-
-        if (enableThirdPartyArabic) {
-            itemQuestion = ArabicUtilities.reshape(itemQuestion);
-            itemAnswer = ArabicUtilities.reshape(itemAnswer);
-            itemCategory = ArabicUtilities.reshape(itemCategory);
-            itemNote = ArabicUtilities.reshape(itemNote);
-        }
-
-        // For question field (field1)
-        SpannableStringBuilder sq = new SpannableStringBuilder();
-
-        // For answer field  (field2)
-        SpannableStringBuilder sa = new SpannableStringBuilder();
-        /* Show the field that is enabled in settings */
-        EnumSet<Setting.CardField> field1 = setting.getQuestionFieldEnum();
-        EnumSet<Setting.CardField> field2 = setting.getAnswerFieldEnum();
-
-        /* Iterate all fields */
-        for (Setting.CardField cf : Setting.CardField.values()) {
-            String str = "";
-            if (cf == Setting.CardField.QUESTION) {
-                str = itemQuestion;
-            } else if (cf == Setting.CardField.ANSWER) {
-                str = itemAnswer;
-            } else if (cf == Setting.CardField.NOTE) {
-                str = itemNote;
-            } else {
-                throw new AssertionError(
-                        "This is a bug! New CardField enum has been added but the display field haven't been nupdated");
-            }
-            SpannableStringBuilder buffer = new SpannableStringBuilder();
-
-            /* Automatic check HTML */
-            if (AMStringUtils.isHTML(str) && (htmlDisplay.contains(cf))) {
-                if (setting.getHtmlLineBreakConversion() == true) {
-                    String s = str.replace("\n", "<br />");
-                    buffer.append(Html.fromHtml(s, imageGetter, tagHandler));
-                } else {
-                    buffer.append(Html.fromHtml(str, imageGetter, tagHandler));
-                }
-            } else {
-                if (buffer.length() != 0) {
-                    buffer.append("\n\n");
-                }
-                buffer.append(str);
-            }
-            if (field1.contains(cf)) {
-                if (sq.length() != 0) {
-                    sq.append(Html.fromHtml("<br /><br />", imageGetter,
-                            tagHandler));
-                }
-                sq.append(buffer);
-            }
-            if (field2.contains(cf)) {
-                if (sa.length() != 0) {
-                    sa.append(Html.fromHtml("<br /><br />", imageGetter,
-                            tagHandler));
-                }
-                sa.append(buffer);
-            }
-
-        }
 
         String questionTypefaceValue = null;
         String answerTypefaceValue = null;
@@ -331,6 +262,14 @@ public abstract class QACardActivity extends AMActivity {
         // Set the color of the horizontal line
         View horizontalLine = findViewById(R.id.horizontal_line);
         horizontalLine.setBackgroundColor(setting.getSeparatorColor());
+
+        List<Spannable> spannableFields = cardTextUtil.getFieldsToDisplay(getCurrentCard());
+
+        // Question spannable
+        Spannable sq = spannableFields.get(0);
+
+        // Answer spannable
+        Spannable sa = spannableFields.get(1);
 
         // Finally we generate the fragments
         CardFragment questionFragment = new CardFragment.Builder(sq)
@@ -487,6 +426,7 @@ public abstract class QACardActivity extends AMActivity {
                 scope.enter(context);
                 try {
                     cardTTSUtil = cardTTSUtilFactory.create(dbPath);
+                    cardTextUtil = cardTextUtilFactory.create(dbPath);
                     // Init of common functions here
                     // Call customized init funciton defined in
                     // the subclass
@@ -604,8 +544,6 @@ public abstract class QACardActivity extends AMActivity {
         // Nothing
     }
 
-    private ImageGetter imageGetter;
-
     protected boolean speakQuestion() {
         cardTTSUtil.speakCardQuestion(getCurrentCard());
         return true;
@@ -629,13 +567,6 @@ public abstract class QACardActivity extends AMActivity {
         gestureOverlay.setEnabled(option.getGestureEnabled());
     }
 
-    private TagHandler tagHandler = new TagHandler() {
-        @Override
-        public void handleTag(boolean opening, String tag, Editable output,
-                XMLReader xmlReader) {
-            return;
-        }
-    };
 
     // Default implementation is to handle the double sided card correctly.
     // Return true if the event is handled, else return false

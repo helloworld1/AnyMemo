@@ -1,6 +1,7 @@
 package org.liberty.android.fantastischmemo.test.integration;
 
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.test.TestHelper;
 import org.liberty.android.fantastischmemo.ui.PreviewEditActivity;
 
 import android.content.Intent;
@@ -20,12 +21,12 @@ public class PreviewEditActivityMainButtonTest extends ActivityInstrumentationTe
     private Solo solo;
 
     public void setUp() throws Exception{
-        UITestHelper uiTestHelper = new UITestHelper(getInstrumentation());
+        TestHelper uiTestHelper = new TestHelper(getInstrumentation());
         uiTestHelper.clearPreferences();
         uiTestHelper.setUpFBPDatabase();
 
         Intent intent = new Intent();
-        intent.putExtra(PreviewEditActivity.EXTRA_DBPATH, UITestHelper.SAMPLE_DB_PATH);
+        intent.putExtra(PreviewEditActivity.EXTRA_DBPATH, TestHelper.SAMPLE_DB_PATH);
         setActivityIntent(intent);
         mActivity = this.getActivity();
 

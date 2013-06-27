@@ -6,6 +6,7 @@ import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.domain.Setting;
+import org.liberty.android.fantastischmemo.test.TestHelper;
 import org.liberty.android.fantastischmemo.ui.SettingsScreen;
 
 import android.content.Intent;
@@ -25,12 +26,12 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
     private Solo solo;
 
     public void setUp() throws Exception {
-        UITestHelper uiTestHelper = new UITestHelper(getInstrumentation());
+        TestHelper uiTestHelper = new TestHelper(getInstrumentation());
         uiTestHelper.clearPreferences();
         uiTestHelper.setUpFBPDatabase();
 
         Intent intent = new Intent();
-        intent.putExtra(SettingsScreen.EXTRA_DBPATH, UITestHelper.SAMPLE_DB_PATH);
+        intent.putExtra(SettingsScreen.EXTRA_DBPATH, TestHelper.SAMPLE_DB_PATH);
         setActivityIntent(intent);
 
         mActivity = this.getActivity();
@@ -54,7 +55,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
         solo.sleep(2000);
 
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, TestHelper.SAMPLE_DB_PATH);
         try {
             SettingDao settingDao = helper.getSettingDao();
             Setting setting = settingDao.queryForId(1);
@@ -78,7 +79,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 1);
         solo.sleep(2000);
 
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, TestHelper.SAMPLE_DB_PATH);
         try {
             SettingDao settingDao = helper.getSettingDao();
             Setting setting = settingDao.queryForId(1);
@@ -96,7 +97,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         solo.sleep(500);
         getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
         solo.sleep(2000);
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, TestHelper.SAMPLE_DB_PATH);
         try {
             SettingDao settingDao = helper.getSettingDao();
             Setting setting = settingDao.queryForId(1);
@@ -114,7 +115,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
         solo.sleep(2000);
         
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, TestHelper.SAMPLE_DB_PATH);
         try {
             SettingDao settingDao = helper.getSettingDao();
             Setting setting = settingDao.queryForId(1);
@@ -137,7 +138,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
         solo.sleep(2000);
 
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, TestHelper.SAMPLE_DB_PATH);
         try {
             SettingDao settingDao = helper.getSettingDao();
             Setting setting = settingDao.queryForId(1);
@@ -162,7 +163,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
         solo.sleep(2000);
 
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, TestHelper.SAMPLE_DB_PATH);
         try {
             SettingDao settingDao = helper.getSettingDao();
             Setting setting = settingDao.queryForId(1);
@@ -184,7 +185,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         solo.clickOnButton(solo.getString(R.string.yes_text));
         solo.sleep(2000);
   
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, TestHelper.SAMPLE_DB_PATH);
         try {
             SettingDao settingDao = helper.getSettingDao();
             Setting setting = settingDao.queryForId(1);
@@ -205,7 +206,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         solo.clickOnButton(solo.getString(R.string.no_text));
         solo.sleep(2000);
 
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, TestHelper.SAMPLE_DB_PATH);
         try {
             SettingDao settingDao = helper.getSettingDao();
             Setting setting = settingDao.queryForId(1);
@@ -225,7 +226,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         solo.clickOnButton(solo.getString(R.string.cancel_text));
         solo.sleep(2000);
  
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, TestHelper.SAMPLE_DB_PATH);
         try {
             SettingDao settingDao = helper.getSettingDao();
             Setting setting = settingDao.queryForId(1);
@@ -243,7 +244,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         solo.goBack(); 
         solo.sleep(2000);
 
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, UITestHelper.SAMPLE_DB_PATH);
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, TestHelper.SAMPLE_DB_PATH);
         try {
             SettingDao settingDao = helper.getSettingDao();
             Setting setting = settingDao.queryForId(1);

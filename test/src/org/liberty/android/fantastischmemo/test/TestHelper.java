@@ -1,4 +1,4 @@
-package org.liberty.android.fantastischmemo.test.integration;
+package org.liberty.android.fantastischmemo.test;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,14 +15,14 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
-public class UITestHelper {
+public class TestHelper {
     public static final String SAMPLE_DB_PATH = "/sdcard/anymemo/french-body-parts.db";
     public static final String SAMPLE_DB_NAME= "french-body-parts.db";
 
     private Context mTestContext;;
     private Context mTargetContext;
 
-    public UITestHelper(Instrumentation ins) {
+    public TestHelper(Instrumentation ins) {
         mTestContext = ins.getTargetContext();
         mTargetContext = ins.getTargetContext();
     }

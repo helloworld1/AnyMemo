@@ -2,6 +2,7 @@ package org.liberty.android.fantastischmemo.test.integration;
 
 import org.liberty.android.fantastischmemo.R;
 
+import org.liberty.android.fantastischmemo.test.TestHelper;
 import org.liberty.android.fantastischmemo.ui.AnyMemo;
 
 import com.jayway.android.robotium.solo.Solo;
@@ -23,7 +24,7 @@ public class AnyMemoActivityRecentTabTest extends ActivityInstrumentationTestCas
 
 
     public void setUp() throws Exception{
-        UITestHelper uiTestHelper = new UITestHelper(getInstrumentation());
+        TestHelper uiTestHelper = new TestHelper(getInstrumentation());
         uiTestHelper.clearPreferences();
         uiTestHelper.markNotFirstTime();
 
@@ -31,7 +32,7 @@ public class AnyMemoActivityRecentTabTest extends ActivityInstrumentationTestCas
         solo = new Solo(getInstrumentation(), mActivity);
 
         solo.sleep(1000);
-        solo.clickLongOnText(UITestHelper.SAMPLE_DB_NAME);
+        solo.clickLongOnText(TestHelper.SAMPLE_DB_NAME);
     }
 
 
@@ -78,15 +79,15 @@ public class AnyMemoActivityRecentTabTest extends ActivityInstrumentationTestCas
 
         // The cancel button
         solo.clickOnView(solo.getView(android.R.id.button2));
-        assertTrue(solo.searchText(UITestHelper.SAMPLE_DB_NAME));
+        assertTrue(solo.searchText(TestHelper.SAMPLE_DB_NAME));
 
-        solo.clickLongOnText(UITestHelper.SAMPLE_DB_NAME);
+        solo.clickLongOnText(TestHelper.SAMPLE_DB_NAME);
         // The delete action item
         solo.clickOnView(solo.getView(R.id.delete));
 
         // The delete button
         solo.clickOnView(solo.getView(android.R.id.button1));
-        assertFalse((new File(UITestHelper.SAMPLE_DB_PATH)).exists());
+        assertFalse((new File(TestHelper.SAMPLE_DB_PATH)).exists());
     }
 
     public void tearDown() throws Exception {

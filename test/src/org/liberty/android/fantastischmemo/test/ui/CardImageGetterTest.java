@@ -5,7 +5,7 @@ import android.test.AndroidTestCase;
 import android.view.Display;
 import android.view.WindowManager;
 
-import org.liberty.android.fantastischmemo.test.integration.UITestHelper;
+import org.liberty.android.fantastischmemo.test.TestHelper;
 import org.liberty.android.fantastischmemo.ui.CardImageGetter;
 import android.test.suitebuilder.annotation.SmallTest;
 
@@ -20,7 +20,7 @@ public class CardImageGetterTest extends AndroidTestCase {
         Display display = ((WindowManager)getContext().getSystemService(Context.WINDOW_SERVICE))
                 .getDefaultDisplay();
         screenWidth = display.getWidth();
-        cardImageGetter = new CardImageGetter(getContext(), UITestHelper.SAMPLE_DB_PATH);
+        cardImageGetter = new CardImageGetter(getContext(), TestHelper.SAMPLE_DB_PATH);
     }
 
     @SmallTest

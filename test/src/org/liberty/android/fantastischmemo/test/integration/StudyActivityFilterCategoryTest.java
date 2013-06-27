@@ -7,6 +7,7 @@ import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
+import org.liberty.android.fantastischmemo.test.TestHelper;
 import org.liberty.android.fantastischmemo.ui.StudyActivity;
 
 import android.content.Intent;
@@ -29,13 +30,13 @@ public class StudyActivityFilterCategoryTest extends ActivityInstrumentationTest
     private Solo solo;
 
     public void setUp() throws Exception{
-        UITestHelper uiTestHelper = new UITestHelper(getInstrumentation());
+        TestHelper uiTestHelper = new TestHelper(getInstrumentation());
         uiTestHelper.clearPreferences();
         uiTestHelper.setUpFBPDatabase();
         setUpCategories();
 
         Intent intent = new Intent();
-        intent.putExtra(StudyActivity.EXTRA_DBPATH, UITestHelper.SAMPLE_DB_PATH);
+        intent.putExtra(StudyActivity.EXTRA_DBPATH, TestHelper.SAMPLE_DB_PATH);
         setActivityIntent(intent);
 
         mActivity = this.getActivity();
@@ -49,7 +50,7 @@ public class StudyActivityFilterCategoryTest extends ActivityInstrumentationTest
 
     // Move 2, 5, 8 to category: cat1
     private void setUpCategories() throws Exception {
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(getInstrumentation().getTargetContext(), UITestHelper.SAMPLE_DB_PATH);
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(getInstrumentation().getTargetContext(), TestHelper.SAMPLE_DB_PATH);
         CardDao cardDao = helper.getCardDao();
         CategoryDao categoryDao = helper.getCategoryDao();
         Category cat1 = categoryDao.createOrReturn("cat1");
