@@ -12,6 +12,7 @@ import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
+import org.liberty.android.fantastischmemo.test.TestHelper;
 import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
 
 import android.test.suitebuilder.annotation.SmallTest;
@@ -20,8 +21,6 @@ import android.test.suitebuilder.annotation.SmallTest;
 public class DatabaseUtilsTest extends AbstractExistingDBTest {
 
     DatabaseUtil databaseUtil;
-
-    String dbPath = "/sdcard/french-body-parts.db";
 
     @Override
     protected void setUp() throws Exception {
@@ -111,7 +110,7 @@ public class DatabaseUtilsTest extends AbstractExistingDBTest {
         srcCardDao.createCard(srcCard3);
 
         // Now merge them!
-        databaseUtil.mergeDatabases(dbPath, path2);
+        databaseUtil.mergeDatabases(TestHelper.SAMPLE_DB_PATH, path2);
 
         // Original 28 plus 3 merged cards
         assertEquals(31, destCardDao.queryForAll().size());
