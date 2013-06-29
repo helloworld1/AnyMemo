@@ -18,7 +18,7 @@
     <string name="help_button_text">Помощь</string>
     <string name="edit_button_text">Просмотр/Правка</string>
     <string name="copyclipboard">Копировать в буфер</string>
-    <string name="copyclipboard_summary">Вопрос будет автоматически скопирован в буфер обмена.</string>
+    <string name="copyclipboard_summary">Автоматически копировать содержимое карточки в буфер обмена.</string>
     <string name="memo_show_answer">\?\nПоказать ответ</string>
     <string name="memo_no_item_title">Нет объекта</string>
     <string name="memo_no_item_message">Нет объектов для изучения. Если хотите повторить, выберите Опрос при долгом нажатии на базу в меню &quot;Недавние&quot;.</string>
@@ -166,7 +166,7 @@
     <string name="merging_summary">Объединение баз. Подождите.</string>
     <string name="copy_text">Копировать</string>
     <string name="paste_text">Вставить</string>
-    <string name="edit_dialog_unsave_warning">Текущая карточка изменена но не сохранена. Вы действительно хотите выйти?</string>
+    <string name="edit_dialog_unsave_warning">Текущая карточка изменена но не сохранена. Вы действительно хотите сохранить и выйти?</string>
     <string name="downloader_extract_zip">Извлечение... Ждите.</string>
     <string name="allow_orientation_title">Ориентация экрана</string>
     <string name="allow_orientation_summary">Автоматически менять ориентацию экрана. Требуется перезагрузка.</string>
@@ -450,4 +450,5 @@
     <string name="card_player_notification_text">Озвучка карточек выполняется</string>
     <string name="forget_text">Забыто</string>
     <string name="remember_text">Помню</string>
+    <string name="both_text">Оба</string>
 </resources>
