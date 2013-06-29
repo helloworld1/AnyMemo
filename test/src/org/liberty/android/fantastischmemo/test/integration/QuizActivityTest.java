@@ -116,4 +116,15 @@ public class QuizActivityTest extends ActivityInstrumentationTestCase2<QuizActiv
         solo.clickOnText(solo.getString(R.string.back_menu_text));
     }
 
+    @Override
+    public void tearDown() throws Exception {
+        try {
+            solo.finishOpenedActivities();
+            solo.sleep(2000);
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
+        super.tearDown();
+    }
+
 }

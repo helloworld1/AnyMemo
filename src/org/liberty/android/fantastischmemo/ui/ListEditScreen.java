@@ -342,13 +342,4 @@ public class ListEditScreen extends AMActivity {
             restartActivity();
         }
     }
-
-    private TagHandler tagHandler = new TagHandler() {
-        @Override
-        public void handleTag(boolean opening, String tag, Editable output,
-                XMLReader xmlReader) {
-            return;
-        }
-    };
-
 }
