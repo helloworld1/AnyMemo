@@ -51,7 +51,13 @@ public class LogInvocationAspect{
         messageBuilder.append(")");
 
         Ln.v(messageBuilder.toString());
-        return point.proceed();
+        long startTime = System.nanoTime();
+
+        Object returnValue = point.proceed();
+
+        long duration = (System.nanoTime() - startTime) / 1000000;
+        Ln.v("Method " + signature.toLongString() +  " execution time: " + duration + " ms.");
+        return returnValue;
     }
 
 }

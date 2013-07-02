@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo;
 
+import org.liberty.android.fantastischmemo.aspect.LogInvocation;
 import org.liberty.android.fantastischmemo.converter.CSVExporter;
 import org.liberty.android.fantastischmemo.converter.CSVImporter;
 import org.liberty.android.fantastischmemo.converter.Converter;
@@ -54,6 +55,7 @@ import com.google.inject.assistedinject.FactoryModuleBuilder;
 public class AMModules extends AbstractModule {
 
     @Override
+    @LogInvocation
     protected void configure() {
         install(new FactoryModuleBuilder()
                 .build(GoogleDriveDownloadHelperFactory.class));

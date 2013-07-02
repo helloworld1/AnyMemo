@@ -2,6 +2,7 @@ package org.liberty.android.fantastischmemo;
 
 import java.sql.SQLException;
 
+import org.liberty.android.fantastischmemo.aspect.LogInvocation;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.DeckDao;
@@ -166,6 +167,7 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
         super.close();
     }
 
+    @LogInvocation
     public synchronized CardDao getCardDao() {
         try {
             if (cardDao == null) {
@@ -249,7 +251,9 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
 
     /* Package private constructor used in Manager. */
     AnyMemoDBOpenHelper(Context context, String dbpath) {
-        super(context, dbpath, null, CURRENT_VERSION);
+        // R.raw.ormlite_config is used to accelerate the DAO creation.
+        super(context, dbpath, null, CURRENT_VERSION, R.raw.ormlite_config);
+        //super(context, dbpath, null, CURRENT_VERSION);
         this.dbPath = dbpath;
     }
 
