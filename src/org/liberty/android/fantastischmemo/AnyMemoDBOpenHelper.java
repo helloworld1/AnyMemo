@@ -253,7 +253,6 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
     AnyMemoDBOpenHelper(Context context, String dbpath) {
         // R.raw.ormlite_config is used to accelerate the DAO creation.
         super(context, dbpath, null, CURRENT_VERSION, R.raw.ormlite_config);
-        //super(context, dbpath, null, CURRENT_VERSION);
         this.dbPath = dbpath;
     }
 

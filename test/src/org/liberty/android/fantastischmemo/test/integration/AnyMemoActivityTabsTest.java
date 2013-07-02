@@ -3,14 +3,16 @@ package org.liberty.android.fantastischmemo.test.integration;
 import org.liberty.android.fantastischmemo.ui.AnyMemo;
 
 import android.test.ActivityInstrumentationTestCase2;
-
 import android.view.KeyEvent;
-
 import android.widget.TabHost;
+
+import com.jayway.android.robotium.solo.Solo;
 
 public class AnyMemoActivityTabsTest extends ActivityInstrumentationTestCase2<AnyMemo> {
 
     protected AnyMemo mActivity;
+
+    private Solo solo;
 
     @SuppressWarnings("deprecation")
     public AnyMemoActivityTabsTest() {
@@ -22,6 +24,7 @@ public class AnyMemoActivityTabsTest extends ActivityInstrumentationTestCase2<An
     public void setUp() {
         mActivity = this.getActivity();
         tabHost = (TabHost)mActivity.findViewById(android.R.id.tabhost);
+        solo = new Solo(getInstrumentation(), mActivity);
     }
 
 
@@ -38,5 +41,15 @@ public class AnyMemoActivityTabsTest extends ActivityInstrumentationTestCase2<An
         sendKeys(KeyEvent.KEYCODE_DPAD_LEFT);
         sendKeys(KeyEvent.KEYCODE_DPAD_LEFT);
         sendKeys(KeyEvent.KEYCODE_DPAD_LEFT);
+    }
+
+    public void tearDown() throws Exception {
+        try {
+            solo.finishOpenedActivities();
+            solo.sleep(2000);
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
+        super.tearDown();
     }
 }
