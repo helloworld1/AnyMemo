@@ -35,7 +35,6 @@ import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
 import org.liberty.android.fantastischmemo.utils.CardTextUtil;
 import org.liberty.android.fantastischmemo.utils.CardTextUtilFactory;
-import org.xml.sax.XMLReader;
 
 import roboguice.RoboGuice;
 import roboguice.inject.ContextScope;
@@ -47,8 +46,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.text.Editable;
-import android.text.Html.TagHandler;
 import android.text.Spannable;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;

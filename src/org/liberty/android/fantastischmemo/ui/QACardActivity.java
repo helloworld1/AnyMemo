@@ -719,31 +719,4 @@ public abstract class QACardActivity extends AMActivity {
 
         }
     };
-
-    // The gesture name for known gestures
-    public static enum GestureName {
-        LEFT_SWIPE("left-swipe"),
-        RIGHT_SWIPE("right-swipe"),
-        S_SHAPE("s-shape"),
-        O_SHAPE("o-shape");
-
-        private String gestureName;
-
-        private GestureName(String name) {
-            this.gestureName = name;
-        }
-
-        public String getName() {
-            return gestureName;
-        }
-
-        public static GestureName parse(String name) {
-            for (GestureName gn : GestureName.values()) {
-                if (name.equals(gn.getName())) {
-                    return gn;
-                }
-            }
-            throw new IllegalArgumentException("The input gesture name is invalid");
-        }
-    }
 }

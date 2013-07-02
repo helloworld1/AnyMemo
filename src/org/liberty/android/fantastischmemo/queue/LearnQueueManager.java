@@ -68,8 +68,6 @@ public class LearnQueueManager implements QueueManager {
 
     private boolean shuffle;
 
-    private final String TAG = getClass().getSimpleName();
-
     private LearnQueueManager(Builder builder) {
         this.cardDao = builder.cardDao;
         this.categoryDao = builder.categoryDao;
