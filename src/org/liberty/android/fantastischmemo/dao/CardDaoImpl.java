@@ -681,6 +681,77 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
         }
     }
 
+    /**
+     * Get card by id.
+     * @return card with all foreign fields refreshed.
+     */
+    public Card getById(final int id) {
+        return callBatchTasks(new Callable<Card>() {
+            public Card call() {
+                LearningDataDao learningDataDao = getHelper().getLearningDataDao();
+                CategoryDao categoryDao = getHelper().getCategoryDao();
+                Card card = queryForId(id);
+                if (card == null) {
+                    return null;
+                }
+                learningDataDao.refresh(card.getLearningData());
+                categoryDao.refresh(card.getCategory());
+                return card;
+            }
+        });
+    }
+
+    public List<Card> getAllCards(final Category filterCategory) {
+        final LearningDataDao learningDataDao = getHelper().getLearningDataDao();
+        final CategoryDao categoryDao = getHelper().getCategoryDao();
+        return callBatchTasks(new Callable<List<Card>>() {
+            public List<Card> call() throws SQLException {
+                QueryBuilder<LearningData, Integer> learnQb = learningDataDao.queryBuilder();
+                learnQb.selectColumns("id");
+                QueryBuilder<Card, Integer> cardQb = queryBuilder();
+                Where<Card, Integer> where = cardQb.where().in("learningData_id", learnQb);
+                if (filterCategory != null) {
+                    where.and().eq("category_id", filterCategory.getId());
+                }
+
+                cardQb.setWhere(where);
+                // Return random ordered cards
+                cardQb.orderBy("ordinal", true);
+                List<Card> cs = cardQb.query();
+                for (Card c : cs) {
+                    learningDataDao.refresh(c.getLearningData());
+                    categoryDao.refresh(c.getCategory());
+                }
+                return cs;
+            }
+        });
+    }
+
+    /**
+     * Get card by ord.
+     * @return card with all foreign fields refreshed.
+     */
+    public Card getByOrdinal(final int ord) {
+        return callBatchTasks(new Callable<Card>() {
+            public Card call() throws SQLException {
+                LearningDataDao learningDataDao = getHelper().getLearningDataDao();
+                CategoryDao categoryDao = getHelper().getCategoryDao();
+                List<Card> cards = queryForEq("ordinal", ord);
+                if (cards.size() == 0) {
+                    return null;
+                }
+
+                assert cards.size() < 2 : "Error: Multiple cards with the same ordinal.";
+
+                Card card = cards.get(0);
+
+                learningDataDao.refresh(card.getLearningData());
+                categoryDao.refresh(card.getCategory());
+                return card;
+            }
+        });
+    }
+
     private void maintainOrdinal() throws SQLException {
         executeRaw("CREATE TABLE IF NOT EXISTS tmp_count (id INTEGER PRIMARY KEY AUTOINCREMENT, ordinal INTEGER)");
         executeRaw("INSERT INTO tmp_count(ordinal) SELECT ordinal FROM cards;");

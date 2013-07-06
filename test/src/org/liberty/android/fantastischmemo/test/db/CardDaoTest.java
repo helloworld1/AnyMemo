@@ -366,6 +366,41 @@ public class CardDaoTest extends AbstractExistingDBTest {
         assertEquals(3, cards5.size());
     }
 
+    @SmallTest
+    public void testGetById() {
+        CardDao cardDao = helper.getCardDao();
+        Card card = cardDao.getById(3);
+        assertEquals(3, (int)card.getId());
+    }
+
+    @SmallTest
+    public void testGetByOrdinal() {
+        CardDao cardDao = helper.getCardDao();
+        Card card = cardDao.getByOrdinal(3);
+        assertEquals(3, (int)card.getOrdinal());
+    }
+
+    @SmallTest
+    public void testGetAllCardWithoutFilteringCategory() throws SQLException {
+        setupThreeCategories();
+        CardDao cardDao = helper.getCardDao();
+        List<Card> cards = cardDao.getAllCards(null);
+        assertEquals(28, (int)cards.size());
+    }
+
+    @SmallTest
+    public void testGetAllCardWithFilteringCategory() throws SQLException {
+        setupThreeCategories();
+        CardDao cardDao = helper.getCardDao();
+        CategoryDao categoryDao = helper.getCategoryDao();
+
+        List<Category> cts = categoryDao.queryForEq("name", "My category");
+        Category ct = cts.get(0);
+
+        List<Card> cards = cardDao.getAllCards(ct);
+        assertEquals(3, (int)cards.size());
+    }
+
     /*
      * Card with "My Category" in ID 2, 5, 8
      */

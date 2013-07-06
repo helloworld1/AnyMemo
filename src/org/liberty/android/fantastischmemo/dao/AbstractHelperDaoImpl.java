@@ -2,6 +2,7 @@ package org.liberty.android.fantastischmemo.dao;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 
@@ -39,7 +40,7 @@ public abstract class AbstractHelperDaoImpl<E, T> extends BaseDaoImpl<E, T> {
         }
     }
 
-    /*
+    /**
      * Override so it throws RuntimeException instead of SQLException
      */
     @Override
@@ -52,7 +53,7 @@ public abstract class AbstractHelperDaoImpl<E, T> extends BaseDaoImpl<E, T> {
         }
     }
 
-    /*
+    /**
      * Override so it throws RuntimeException instead of SQLException
      */
     @Override
@@ -65,7 +66,7 @@ public abstract class AbstractHelperDaoImpl<E, T> extends BaseDaoImpl<E, T> {
         }
     }
 
-    /*
+    /**
      * Override so it throws RuntimeException instead of SQLException
      */
     @Override
@@ -78,7 +79,7 @@ public abstract class AbstractHelperDaoImpl<E, T> extends BaseDaoImpl<E, T> {
         }
     }
 
-    /*
+    /**
      * Override so it throws RuntimeException instead of SQLException
      */
     @Override
@@ -91,7 +92,7 @@ public abstract class AbstractHelperDaoImpl<E, T> extends BaseDaoImpl<E, T> {
         }
     }
 
-    /*
+    /**
      * Override so it throws RuntimeException instead of SQLException
      */
     @Override
@@ -104,7 +105,7 @@ public abstract class AbstractHelperDaoImpl<E, T> extends BaseDaoImpl<E, T> {
         }
     }
 
-    /*
+    /**
      * Override so it throws RuntimeException instead of SQLException
      */
     @Override
@@ -117,13 +118,26 @@ public abstract class AbstractHelperDaoImpl<E, T> extends BaseDaoImpl<E, T> {
         }
     }
 
-    /*
+    /**
      * Override so it throws RuntimeException instead of SQLException
      */
     @Override
     public long countOf() {
         try {
             return super.countOf();
+        } catch (SQLException e) {
+            Ln.e(e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Override so it throws RuntimeException instead of SQLException
+     */
+    @Override
+    public <CT> CT callBatchTasks(Callable<CT> ct) {
+        try {
+            return super.callBatchTasks(ct);
         } catch (SQLException e) {
             Ln.e(e);
             throw new RuntimeException(e);

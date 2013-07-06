@@ -68,4 +68,23 @@ public interface CardDao extends HelperDao<Card, Integer> {
 
     /* return a list of card from the startOrd with size "size". */
     List<Card> getCardsByOrdinalAndSize(long startOrd, long size);
+
+    /** 
+     * @param ord the ordinal
+     * @return the card with this ordinal.
+     */
+    Card getByOrdinal(final int ord);
+
+    /** 
+     * @param id the id of the card
+     * @return the card with the id.
+     */
+    Card getById(final int id);
+
+    /**
+     * Get all cards with the category.
+     * @param filterCategory the category to filter. Null for all categories.
+     * @return all cards.
+     */
+    List<Card> getAllCards(Category filterCategory);
 }
