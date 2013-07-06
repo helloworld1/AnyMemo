@@ -59,11 +59,22 @@ public class CardProvider extends ContentProvider {
     private static final int ALL_URI = 6;
 
     static {
+        // Get the count of the cards in the db
         sUriMatcher.addURI(AUTHORITY, "*/count", COUNT_URI);
+
+        // Get a number of random cards
         sUriMatcher.addURI(AUTHORITY, "*/random/#", RANDOM_URI);
+
+        // Get the card with a specific ordinal
         sUriMatcher.addURI(AUTHORITY, "*/ordinal/#", ORD_URI);
+
+        // Get the card with a specific id
         sUriMatcher.addURI(AUTHORITY, "*/id/#", ID_URI);
+
+        // Get a list of cards starting with an ordinal and a specific max count
         sUriMatcher.addURI(AUTHORITY, "*/start_ordinal/#/count/#", START_URI);
+
+        // Get a all cards in a db
         sUriMatcher.addURI(AUTHORITY, "*/all", ALL_URI);
     }
 
