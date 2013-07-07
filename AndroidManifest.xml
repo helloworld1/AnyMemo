@@ -151,6 +151,7 @@
         <provider
                 android:name=".provider.CardProvider"
                 android:authorities="org.liberty.android.fantastischmemo.cardprovider"
+                android:exported="true"
                 android:multiprocess="true" />
 
     </application>
