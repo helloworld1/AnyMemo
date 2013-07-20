@@ -300,7 +300,7 @@ public class ListEditScreen extends AMActivity {
 
         @Override
         public void onPostExecute(Void result) {
-            int initPosition = amPrefUtil.getSavedId(AMPrefKeys.LIST_EDIT_SCREEN_PREFIX, dbPath, 0);
+            int initPosition = amPrefUtil.getSavedInt(AMPrefKeys.LIST_EDIT_SCREEN_PREFIX, dbPath, 0);
             mAdapter = new CardListAdapter(ListEditScreen.this, cards);
 
             listView = (ListView) findViewById(R.id.item_list);
@@ -316,7 +316,7 @@ public class ListEditScreen extends AMActivity {
 
     @Override
     public void onDestroy() {
-        amPrefUtil.setSavedId(AMPrefKeys.LIST_EDIT_SCREEN_PREFIX, dbPath, listView.getFirstVisiblePosition());
+        amPrefUtil.putSavedInt(AMPrefKeys.LIST_EDIT_SCREEN_PREFIX, dbPath, listView.getFirstVisiblePosition());
         AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
         super.onDestroy();
     }

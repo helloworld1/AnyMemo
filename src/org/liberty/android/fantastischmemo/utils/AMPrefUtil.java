@@ -37,16 +37,25 @@ public class AMPrefUtil {
 
     @Inject
     public AMPrefUtil(Context context) {
-    	settings = PreferenceManager.getDefaultSharedPreferences(context);
+        settings = PreferenceManager.getDefaultSharedPreferences(context);
         editor = settings.edit();
     }
 
-    public int getSavedId(String prefix, String key, int defaultValue) {
+    public int getSavedInt(String prefix, String key, int defaultValue) {
         return settings.getInt(prefix + key, defaultValue);
     }
 
-    public void setSavedId(String prefix, String key, int value) {
+    public void putSavedInt(String prefix, String key, int value) {
         editor.putInt(prefix + key, value);
+        editor.commit();
+    }
+
+    public String getSavedString(String prefix, String key, String defaultValue) {
+        return settings.getString(prefix + key, defaultValue);
+    }
+
+    public void putSavedInt(String prefix, String key, String value) {
+        editor.putString(prefix + key, value);
         editor.commit();
     }
 

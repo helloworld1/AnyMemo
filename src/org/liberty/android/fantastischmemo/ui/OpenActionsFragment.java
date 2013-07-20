@@ -142,7 +142,7 @@ public class OpenActionsFragment extends RoboDialogFragment {
                 Intent myIntent = new Intent();
                 myIntent.setClass(mActivity, PreviewEditActivity.class);
                 myIntent.putExtra(PreviewEditActivity.EXTRA_DBPATH, dbPath);
-                int startId = amPrefUtil.getSavedId(AMPrefKeys.PREVIEW_EDIT_START_ID_PREFIX, dbPath, 1);
+                int startId = amPrefUtil.getSavedInt(AMPrefKeys.PREVIEW_EDIT_START_ID_PREFIX, dbPath, 1);
                 myIntent.putExtra(PreviewEditActivity.EXTRA_CARD_ID, startId);
                 startActivity(myIntent);
                 recentListUtil.addToRecentList(dbPath);

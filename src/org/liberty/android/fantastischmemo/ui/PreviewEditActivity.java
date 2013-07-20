@@ -191,7 +191,7 @@ public class PreviewEditActivity extends QACardActivity {
     public void onPause() {
         super.onPause();
         if (getCurrentCard() != null) {
-            amPrefUtil.setSavedId(AMPrefKeys.PREVIEW_EDIT_START_ID_PREFIX, dbPath, getCurrentCard().getId());
+            amPrefUtil.putSavedInt(AMPrefKeys.PREVIEW_EDIT_START_ID_PREFIX, dbPath, getCurrentCard().getId());
         }
 
     }
