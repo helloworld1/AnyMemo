@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:id="@+id/sort" android:title="@string/sort_by_text">
+    <item android:id="@+id/sort" android:title="@string/sort_by_text"/>
     <!--  sort menu  -->
-    <menu>
-        <item android:id="@+id/by_ord" android:title="@string/ordinal_text"/>
-        <item android:id="@+id/by_question" android:title="@string/question_text"/>
-        <item android:id="@+id/by_answer" android:title="@string/answer_text"/>
-    </menu>
-	</item>
 </menu>

@@ -22,7 +22,6 @@ package org.liberty.android.fantastischmemo.ui;
 
 import java.util.Comparator;
 import java.util.List;
-
 import javax.inject.Inject;
 
 import org.liberty.android.fantastischmemo.AMActivity;
@@ -40,14 +39,15 @@ import roboguice.RoboGuice;
 import roboguice.inject.ContextScope;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.Spannable;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -72,6 +72,7 @@ public class ListEditScreen extends AMActivity {
 
     private AMPrefUtil amPrefUtil;
 
+    private enum SortMethod{ORDINAL, QUESTION, ANSWER};
 
     private CardTextUtilFactory cardTextUtilFactory;
 
@@ -105,6 +106,36 @@ public class ListEditScreen extends AMActivity {
         InitTask initTask = new InitTask();
         initTask.execute((Void) null);
 
+    }
+    
+    private void sortList(SortMethod sort) { 
+        switch(sort)
+        {
+          case ORDINAL:
+              mAdapter.sort(new Comparator<Card>(){
+                  @Override
+                  public int compare(Card c1, Card c2) {
+                          return c1.getOrdinal() - c2.getOrdinal();
+                  };
+              });
+              break;
+           case QUESTION:
+               mAdapter.sort(new Comparator<Card>(){
+                   @Override
+                   public int compare(Card c1, Card c2) {
+                           return c1.getQuestion().compareTo(c2.getQuestion());
+                   };
+               });
+               break;
+           case ANSWER:
+               mAdapter.sort(new Comparator<Card>(){
+                   @Override
+                   public int compare(Card c1, Card c2) {
+                           return c1.getAnswer().compareTo(c2.getAnswer());
+                   };
+               });
+               break;
+         }
     }
 
     private class CardListAdapter extends ArrayAdapter<Card> implements
@@ -161,15 +192,6 @@ public class ListEditScreen extends AMActivity {
         }
     }
 
-
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.list_edit_screen_sort_menu, menu);
-        menu.setHeaderTitle(R.string.sort_by_text);
-
-    }
-
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.list_edit_screen_menu, menu);
@@ -180,20 +202,24 @@ public class ListEditScreen extends AMActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.by_ord:
-                new SortListTask().execute("ord");
-                return true;
-            case R.id.by_question:
-                new SortListTask().execute("question");
-                return true;
-            case R.id.by_answer:
-                new SortListTask().execute("answer");
+           case R.id.sort:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setSingleChoiceItems(R.array.sort_by_options, 0, 
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {                              
+                                    String[] items = getResources().getStringArray(R.array.sort_by_options_values);
+                                    ListEditScreen.this.sortList(SortMethod.valueOf(items[which]));  
+                                    dialog.dismiss();
+                            }
+                        })
+                        .show();              
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-
+    
     private OnItemClickListener listItemClickListener = new OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parentView, View childView,
@@ -206,60 +232,6 @@ public class ListEditScreen extends AMActivity {
             df.show(getSupportFragmentManager(), "ListEditActions");
         }
     };
-
-
-    /*
-     * Async task that sort the list based on user input
-     */
-    private class SortListTask extends AsyncTask<String, Void, String> {
-        private ProgressDialog progressDialog;
-
-        @Override
-        public void onPreExecute() {
-            progressDialog = new ProgressDialog(ListEditScreen.this);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setTitle(getString(R.string.loading_please_wait));
-            progressDialog.setMessage(getString(R.string.loading_database));
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-        }
-
-
-        public void onPostExecute(final String sortBy) {
-            if(sortBy.equals("ord")){
-                mAdapter.sort(new Comparator<Card>(){
-                    @Override
-                    public int compare(Card c1, Card c2) {
-                            return c1.getOrdinal() - c2.getOrdinal();
-                    };
-                });
-            }
-            else if(sortBy.equals("question")){
-                mAdapter.sort(new Comparator<Card>(){
-                    @Override
-                    public int compare(Card c1, Card c2) {
-                            return c1.getQuestion().compareTo(c2.getQuestion());
-                    };
-                });
-            } else {
-                mAdapter.sort(new Comparator<Card>(){
-                    @Override
-                    public int compare(Card c1, Card c2) {
-                            return c1.getAnswer().compareTo(c2.getAnswer());
-                    };
-                });
-            }
-
-            progressDialog.dismiss();
-        }
-
-        @Override
-        protected String doInBackground(String... sortBy) {
-            return sortBy[0];
-        }
-
-    }
-
 
     private class InitTask extends AsyncTask<Void, Void, Void> {
         private ProgressDialog progressDialog;
@@ -339,4 +311,5 @@ public class ListEditScreen extends AMActivity {
             restartActivity();
         }
     }
-}
+
+    }
