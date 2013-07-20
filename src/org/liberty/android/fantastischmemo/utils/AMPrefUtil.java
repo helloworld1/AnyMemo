@@ -54,7 +54,7 @@ public class AMPrefUtil {
         return settings.getString(prefix + key, defaultValue);
     }
 
-    public void putSavedInt(String prefix, String key, String value) {
+    public void putSavedString(String prefix, String key, String value) {
         editor.putString(prefix + key, value);
         editor.commit();
     }
