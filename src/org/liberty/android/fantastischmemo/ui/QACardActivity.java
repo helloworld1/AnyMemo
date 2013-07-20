@@ -353,7 +353,12 @@ public abstract class QACardActivity extends AMActivity {
         // if there is no text
         smallTitleBar = (TextView) findViewById(R.id.small_title_bar);
 
-        copyToClipboard();
+        // Only copy to clipboard if answer is show
+        // as a feature request:
+        // http://code.google.com/p/anymemo/issues/detail?id=239
+        if (showAnswer == true) {
+            copyToClipboard();
+        }
 
         onPostDisplayCard();
     }
