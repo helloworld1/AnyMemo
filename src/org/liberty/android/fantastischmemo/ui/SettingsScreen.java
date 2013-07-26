@@ -461,8 +461,8 @@ public class SettingsScreen extends AMActivity {
         // Default to single sided
         styleSpinner.selectItemFromValue(setting.getCardStyle().toString(), 0);
 
-        // Default to 50
-        qaRatioSpinner.selectItemFromValue(setting.getQaRatio().toString(), 0);
+        // Default to 50, the index in the array for value 50 is 5.
+        qaRatioSpinner.selectItemFromValue(setting.getQaRatio().toString(), 5);
 
         colorCheckbox.setChecked(!setting.isDefaultColor());
         if (colorCheckbox.isChecked()) {

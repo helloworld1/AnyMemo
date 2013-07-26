@@ -215,13 +215,10 @@ public abstract class QACardActivity extends AMActivity {
             answerLayout.setLayoutParams(new LayoutParams(
                     LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1.0f));
         } else {
-            float aRatio = 100.0f - qRatio;
-            qRatio /= 50.0;
-            aRatio /= 50.0;
             questionLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
                             LayoutParams.MATCH_PARENT, qRatio));
             answerLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-                            LayoutParams.MATCH_PARENT, aRatio));
+                            LayoutParams.MATCH_PARENT, 100f - qRatio));
         }
 
         // Buttons view can be null if it is not decleared in the layout XML
