@@ -10,6 +10,7 @@ import org.liberty.android.fantastischmemo.ui.StudyActivity;
 
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
 
 import com.jayway.android.robotium.solo.Solo;
@@ -45,7 +46,7 @@ public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<
         solo.sleep(600);
     }
 
-
+    @LargeTest
     public void testUndo() throws Exception {
 
 
@@ -91,6 +92,7 @@ public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<
         }
     }
 
+    @LargeTest
     public void testDeleteCard() throws Exception {
         getInstrumentation().invokeMenuActionSync(mActivity, R.id.menu_context_delete, 0);
         solo.clickOnText(solo.getString(R.string.ok_text));
@@ -113,6 +115,7 @@ public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<
 
     }
 
+    @LargeTest
     public void testSkipCard() throws Exception {
         getInstrumentation().invokeMenuActionSync(mActivity, R.id.menu_context_skip, 0);
         // press skip
@@ -140,6 +143,7 @@ public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<
         }
     }
 
+    @LargeTest
     public void testGotoPreviewScreen() {
         // press skip
         getInstrumentation().invokeMenuActionSync(mActivity, R.id.menu_context_gotoprev, 0);
@@ -147,6 +151,7 @@ public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<
         solo.sleep(1000);
     }
 
+    @LargeTest
     public void testGotoDetailScreen() {
         // The way to click menu item in action bar
         getInstrumentation().invokeMenuActionSync(mActivity, R.id.menudetail, 0);
@@ -154,6 +159,7 @@ public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<
         solo.sleep(1000);
     }
 
+    @LargeTest
     public void testGotoSettingsScreen() {
         getInstrumentation().invokeMenuActionSync(mActivity, R.id.menusettings, 0);
         assertTrue(solo.waitForActivity("SettingsScreen"));

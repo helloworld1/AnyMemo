@@ -11,6 +11,7 @@ import org.liberty.android.fantastischmemo.ui.CardEditor;
 
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
 
 import com.jayway.android.robotium.solo.Solo;
@@ -43,6 +44,7 @@ public class CardEditorActivityFunctionTest extends ActivityInstrumentationTestC
     }
 
 
+    @LargeTest
     public void testNewCatetory() throws Exception {
         View categoryButton = mActivity.findViewById(R.id.edit_dialog_category_button);
         solo.clickOnView(categoryButton);

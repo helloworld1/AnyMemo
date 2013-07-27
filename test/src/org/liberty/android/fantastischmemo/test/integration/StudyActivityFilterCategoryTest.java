@@ -12,6 +12,7 @@ import org.liberty.android.fantastischmemo.ui.StudyActivity;
 
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
 
 import com.jayway.android.robotium.solo.Solo;
@@ -49,6 +50,7 @@ public class StudyActivityFilterCategoryTest extends ActivityInstrumentationTest
     }
 
     // Move 2, 5, 8 to category: cat1
+    @LargeTest
     private void setUpCategories() throws Exception {
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(getInstrumentation().getTargetContext(), TestHelper.SAMPLE_DB_PATH);
         CardDao cardDao = helper.getCardDao();
@@ -68,6 +70,7 @@ public class StudyActivityFilterCategoryTest extends ActivityInstrumentationTest
         AnyMemoDBOpenHelperManager.releaseHelper(helper);
     }
 
+    @LargeTest
     public void testFilterCategory() {
         // Filter category menu item
         getInstrumentation().invokeMenuActionSync(mActivity, R.id.menu_memo_category, 0);

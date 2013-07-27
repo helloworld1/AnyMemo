@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.suitebuilder.annotation.LargeTest;
 
 import com.jayway.android.robotium.solo.Solo;
 
@@ -44,7 +45,7 @@ public class StudyActivityEditCardTest extends ActivityInstrumentationTestCase2<
         solo.sleep(600);
     }
 
-
+    @LargeTest
     public void testSaveCardWithModification() {
         getInstrumentation().invokeMenuActionSync(mActivity, R.id.menu_context_edit, 0);
 
@@ -65,6 +66,7 @@ public class StudyActivityEditCardTest extends ActivityInstrumentationTestCase2<
         assertTrue(solo.searchText("test"));
     }
 
+    @LargeTest
     public void testSaveCardWithShuffle() {
         // Turn on shuffle option
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mActivity);

@@ -1,15 +1,15 @@
 package org.liberty.android.fantastischmemo.test.integration;
 
-import org.liberty.android.fantastischmemo.R;
+import java.io.File;
 
+import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.test.TestHelper;
 import org.liberty.android.fantastischmemo.ui.AnyMemo;
 
-import com.jayway.android.robotium.solo.Solo;
-
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.suitebuilder.annotation.LargeTest;
 
-import java.io.File;
+import com.jayway.android.robotium.solo.Solo;
 
 public class AnyMemoActivityRecentTabTest extends ActivityInstrumentationTestCase2<AnyMemo> {
 
@@ -36,6 +36,7 @@ public class AnyMemoActivityRecentTabTest extends ActivityInstrumentationTestCas
     }
 
 
+    @LargeTest
     public void testActionListStudy() {
         // The study action item
         solo.clickOnView(solo.getView(R.id.study));
@@ -45,6 +46,7 @@ public class AnyMemoActivityRecentTabTest extends ActivityInstrumentationTestCas
         solo.sleep(600);
     }
 
+    @LargeTest
     public void testActionListPrevEdit() {
         // The edit action item
         solo.clickOnView(solo.getView(R.id.edit));
@@ -54,6 +56,7 @@ public class AnyMemoActivityRecentTabTest extends ActivityInstrumentationTestCas
         solo.sleep(600);
     }
 
+    @LargeTest
     public void testActionListCardList() {
         // The list action item
         solo.clickOnView(solo.getView(R.id.list));
@@ -64,6 +67,7 @@ public class AnyMemoActivityRecentTabTest extends ActivityInstrumentationTestCas
     }
 
 
+    @LargeTest
     public void testActionListSettings() {
         // The settings action item
         solo.clickOnView(solo.getView(R.id.settings));
@@ -73,6 +77,7 @@ public class AnyMemoActivityRecentTabTest extends ActivityInstrumentationTestCas
         solo.sleep(600);
     }
 
+    @LargeTest
     public void testActionListDelete() {
         // The delete action item
         solo.clickOnView(solo.getView(R.id.delete));

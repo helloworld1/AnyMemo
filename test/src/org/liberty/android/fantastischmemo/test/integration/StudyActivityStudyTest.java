@@ -9,6 +9,7 @@ import org.liberty.android.fantastischmemo.ui.StudyActivity;
 
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
 
 import com.jayway.android.robotium.solo.Solo;
@@ -44,6 +45,7 @@ public class StudyActivityStudyTest extends ActivityInstrumentationTestCase2<Stu
         solo.sleep(600);
     }
 
+    @LargeTest
     public void testGrade() throws Exception {
         // Success on card #1
         assertTrue(solo.searchText("head"));
@@ -93,6 +95,7 @@ public class StudyActivityStudyTest extends ActivityInstrumentationTestCase2<Stu
 
     // Test forget 1st card and 3rd and learn 9 new card
     // the 1st and 3rd card should reappear.
+    @LargeTest
     public void testFailedCardRepeat() throws Exception {
         for (int i = 0; i < 10; i++) {
             solo.clickOnView(answerView);

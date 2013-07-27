@@ -3,6 +3,7 @@ package org.liberty.android.fantastischmemo.test.integration;
 import org.liberty.android.fantastischmemo.ui.AnyMemo;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.suitebuilder.annotation.LargeTest;
 import android.view.KeyEvent;
 import android.widget.TabHost;
 
@@ -28,6 +29,7 @@ public class AnyMemoActivityTabsTest extends ActivityInstrumentationTestCase2<An
     }
 
 
+    @LargeTest
     public void testCyclingTabs() {
         mActivity.runOnUiThread(new Runnable() {
             public void run() {

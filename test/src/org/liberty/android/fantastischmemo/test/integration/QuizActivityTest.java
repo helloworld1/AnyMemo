@@ -6,6 +6,7 @@ import org.liberty.android.fantastischmemo.ui.QuizActivity;
 
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
 
 import com.jayway.android.robotium.solo.Solo;
@@ -46,6 +47,7 @@ public class QuizActivityTest extends ActivityInstrumentationTestCase2<QuizActiv
         solo.sleep(600);
     }
 
+    @LargeTest
     public void testLearningWithoutFailures() {
         // Card number 5
         assertTrue(solo.searchText("eyes"));
@@ -70,6 +72,7 @@ public class QuizActivityTest extends ActivityInstrumentationTestCase2<QuizActiv
         solo.clickOnText(solo.getString(R.string.back_menu_text));
     }
 
+    @LargeTest
     public void testLearningFailures() {
         // Card number 5
         assertTrue(solo.searchText("eyes"));

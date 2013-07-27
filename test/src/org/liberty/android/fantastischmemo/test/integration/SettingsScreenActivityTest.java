@@ -11,6 +11,7 @@ import org.liberty.android.fantastischmemo.ui.SettingsScreen;
 
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.suitebuilder.annotation.LargeTest;
 
 import com.jayway.android.robotium.solo.Solo;
 
@@ -41,6 +42,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         solo.sleep(600);
     }
 
+    @LargeTest
     public void testSaveFontSize() throws Exception {
         solo.clickOnText("24", 1);
         solo.clickOnText("48");
@@ -66,6 +68,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         }
     }
 
+    @LargeTest
     public void testSaveAlignments() throws Exception {
         // 1st spinner
         solo.clickOnText(solo.getString(R.string.center_text), 1);
@@ -90,6 +93,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         }
     }
 
+    @LargeTest
     public void testSaveCardStyle() throws Exception {
         solo.clickOnText(solo.getString(R.string.card_style_single));
         solo.clickOnText(solo.getString(R.string.card_style_double));
@@ -107,9 +111,10 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         }
     }
 
+    @LargeTest
     public void testSaveDisplayRatio() throws Exception {
         solo.clickOnText("50%");
-        solo.clickOnText("75%");
+        solo.clickOnText("60%");
         
         solo.sleep(500);
         getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
@@ -119,12 +124,13 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         try {
             SettingDao settingDao = helper.getSettingDao();
             Setting setting = settingDao.queryForId(1);
-            assertEquals(75, (int)setting.getQaRatio());
+            assertEquals(60, (int)setting.getQaRatio());
         } finally {
             AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }
     }
 
+    @LargeTest
     public void testTTSAudioLocale() throws Exception {
         // Set Question audio
         solo.clickOnView(mActivity.findViewById((R.id.question_locale_spinner)));
@@ -153,6 +159,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
 
     }
 
+    @LargeTest
     public void testDoubleSidedCard() throws Exception {
         // Set Question audio
         solo.clickOnView(mActivity.findViewById((R.id.card_style_spinner)));
@@ -174,9 +181,10 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         }
     }
 
+    @LargeTest
     public void testGoBackWithSettingChangedPressYesButtonShouldSaveSettings() throws Exception {
         solo.clickOnText("50%");
-        solo.clickOnText("75%");
+        solo.clickOnText("60%");
 
         solo.sleep(500);
         solo.goBack();
@@ -189,15 +197,16 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         try {
             SettingDao settingDao = helper.getSettingDao();
             Setting setting = settingDao.queryForId(1);
-            assertEquals(75, (int)setting.getQaRatio());
+            assertEquals(60, (int)setting.getQaRatio());
         } finally {
             AnyMemoDBOpenHelperManager.releaseHelper(helper);
         }
     }
 
+    @LargeTest
     public void testGoBackWithSettingChangedPressNoButtonShouldNotSaveSettings() throws Exception {
         solo.clickOnText("50%");
-        solo.clickOnText("75%");
+        solo.clickOnText("60%");
 
         solo.sleep(500);
         solo.goBack();
@@ -216,9 +225,10 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         }        
     }
 
+    @LargeTest
     public void testGoBackWithSettingChangedPressCancelButtonShouldStayInCurrentActivity() throws Exception {
         solo.clickOnText("50%");
-        solo.clickOnText("75%");
+        solo.clickOnText("60%");
 
         solo.sleep(500);
         solo.goBack();
@@ -239,6 +249,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         solo.assertCurrentActivity("Stay", SettingsScreen.class);
     }
     
+    @LargeTest
     public void testGoBackWithNoSettingChangedShouldQuit() throws Exception {
         solo.sleep(500);
         solo.goBack(); 

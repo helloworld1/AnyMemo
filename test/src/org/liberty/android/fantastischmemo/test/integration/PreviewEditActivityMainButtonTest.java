@@ -6,6 +6,7 @@ import org.liberty.android.fantastischmemo.ui.PreviewEditActivity;
 
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.suitebuilder.annotation.LargeTest;
 
 import com.jayway.android.robotium.solo.Solo;
 
@@ -36,6 +37,7 @@ public class PreviewEditActivityMainButtonTest extends ActivityInstrumentationTe
     }
 
 
+    @LargeTest
     public void testNavigation() throws Exception {
         // 1st card
         assertTrue(solo.searchText("head"));
@@ -72,6 +74,7 @@ public class PreviewEditActivityMainButtonTest extends ActivityInstrumentationTe
     }
 
     // Test Edit the second card
+    @LargeTest
     public void testEditCard() {
         solo.clickOnText(solo.getString(R.string.add_screen_next));
         solo.clickOnText(solo.getString(R.string.edit_text));

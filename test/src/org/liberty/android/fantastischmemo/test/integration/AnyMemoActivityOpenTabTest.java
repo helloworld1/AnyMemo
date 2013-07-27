@@ -3,9 +3,10 @@ package org.liberty.android.fantastischmemo.test.integration;
 import org.liberty.android.fantastischmemo.test.TestHelper;
 import org.liberty.android.fantastischmemo.ui.AnyMemo;
 
-import com.jayway.android.robotium.solo.Solo;
-
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.suitebuilder.annotation.LargeTest;
+
+import com.jayway.android.robotium.solo.Solo;
 
 public class AnyMemoActivityOpenTabTest extends ActivityInstrumentationTestCase2<AnyMemo> {
 
@@ -36,6 +37,7 @@ public class AnyMemoActivityOpenTabTest extends ActivityInstrumentationTestCase2
     }
 
 
+    @LargeTest
     public void testActionListStudy() {
     }
 

@@ -6,6 +6,7 @@ import org.liberty.android.fantastischmemo.ui.ListEditScreen;
 
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.suitebuilder.annotation.LargeTest;
 
 import com.jayway.android.robotium.solo.Solo;
 
@@ -42,6 +43,7 @@ public class ListEditScreenActivityTest extends ActivityInstrumentationTestCase2
     //    assertTrue(solo.searchText("toe"));
     //}
 
+    @LargeTest
     public void testGoToCardEditor() throws Exception {
         solo.clickOnText("tooth");
         solo.clickOnText(solo.getString(R.string.edit_text));
@@ -50,6 +52,7 @@ public class ListEditScreenActivityTest extends ActivityInstrumentationTestCase2
         assertTrue(solo.searchText("tooth"));
     }
 
+    @LargeTest
     public void testGoToPrevEditor() throws Exception {
         solo.clickOnText("tooth");
         solo.clickOnText(solo.getString(R.string.edit_button_text));
@@ -58,6 +61,7 @@ public class ListEditScreenActivityTest extends ActivityInstrumentationTestCase2
         assertTrue(solo.searchText("tooth"));
     }
 
+    @LargeTest
     public void testGoToDetailScreen() throws Exception {
         solo.clickOnText("tooth");
         solo.clickOnText(solo.getString(R.string.detail_menu_text));

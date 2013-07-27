@@ -10,6 +10,7 @@ import org.liberty.android.fantastischmemo.ui.DetailScreen;
 
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.suitebuilder.annotation.LargeTest;
 
 import com.jayway.android.robotium.solo.Solo;
 
@@ -40,11 +41,13 @@ public class DetailScreenActivityTest extends ActivityInstrumentationTestCase2<D
         solo.sleep(300);
     }
 
+    @LargeTest
     public void testDisplayDetailInfo() throws Exception {
         assertTrue(solo.searchText("head"));
         assertTrue(solo.searchText("2.5"));
     }
 
+    @LargeTest
     public void testSaveChanges() throws Exception {
         solo.sleep(400);
         solo.clearEditText(1);
