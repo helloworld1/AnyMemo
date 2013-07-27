@@ -204,12 +204,13 @@ public class ListEditScreen extends AMActivity {
         switch (item.getItemId()) {
            case R.id.sort:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setSingleChoiceItems(R.array.sort_by_options, 0, 
+                builder.setSingleChoiceItems(R.array.sort_by_options, SortMethod.valueOf(amPrefUtil.getSavedString(AMPrefKeys.LIST_SORT_BY_METHOD_PREFIX, dbPath, getResources().getStringArray(R.array.sort_by_options_values)[0])).ordinal(), 
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {                              
                                     String[] items = getResources().getStringArray(R.array.sort_by_options_values);
                                     ListEditScreen.this.sortList(SortMethod.valueOf(items[which]));  
+                                    amPrefUtil.putSavedString(AMPrefKeys.LIST_SORT_BY_METHOD_PREFIX, dbPath, items[which]);
                                     dialog.dismiss();
                             }
                         })
@@ -279,9 +280,9 @@ public class ListEditScreen extends AMActivity {
             listView.setAdapter(mAdapter);
             listView.setSelection(initPosition);
             listView.setOnItemClickListener(listItemClickListener);
+            
+            ListEditScreen.this.sortList(SortMethod.valueOf(amPrefUtil.getSavedString(AMPrefKeys.LIST_SORT_BY_METHOD_PREFIX, dbPath, getResources().getStringArray(R.array.sort_by_options_values)[0])));
             progressDialog.dismiss();
-
-
         }
 
     }
