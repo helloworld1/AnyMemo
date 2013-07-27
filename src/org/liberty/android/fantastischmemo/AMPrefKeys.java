@@ -142,5 +142,5 @@ public class AMPrefKeys {
     // The prefix for remembered id for preview edit mode.
     public static final String PREVIEW_EDIT_START_ID_PREFIX = "preview_edit_start_id_prefix";
     
-    public static final String LIST_SORT_BY_METHOD_PREFIX = "list_sort_by_method";
+    public static final String LIST_SORT_BY_METHOD_PREFIX = "list_sort_by_method_prefix";
 }

@@ -72,8 +72,6 @@ public class ListEditScreen extends AMActivity {
 
     private AMPrefUtil amPrefUtil;
 
-    private enum SortMethod{ORDINAL, QUESTION, ANSWER};
-
     private CardTextUtilFactory cardTextUtilFactory;
 
     private CardTextUtil cardTextUtil;
@@ -109,6 +107,7 @@ public class ListEditScreen extends AMActivity {
     }
     
     private void sortList(SortMethod sort) { 
+    	//Handle sort method
         switch(sort)
         {
           case ORDINAL:
@@ -135,6 +134,8 @@ public class ListEditScreen extends AMActivity {
                    };
                });
                break;
+            default:
+               throw new AssertionError("This case will not happen! Or the system has carshed.");
          }
     }
 
@@ -200,17 +201,21 @@ public class ListEditScreen extends AMActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
         switch (item.getItemId()) {
+        //show single choice dialog
            case R.id.sort:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setSingleChoiceItems(R.array.sort_by_options, SortMethod.valueOf(amPrefUtil.getSavedString(AMPrefKeys.LIST_SORT_BY_METHOD_PREFIX, dbPath, getResources().getStringArray(R.array.sort_by_options_values)[0])).ordinal(), 
-                        new DialogInterface.OnClickListener() {
+              //items in enum SortMethod and array sort_by_options_values should have the same order
+                String defaultItem =  getResources().getStringArray(R.array.sort_by_options_values)[0];
+                String savedMethod = amPrefUtil.getSavedString(AMPrefKeys.LIST_SORT_BY_METHOD_PREFIX, dbPath, defaultItem);
+                builder.setSingleChoiceItems(R.array.sort_by_options, SortMethod.valueOf(savedMethod).ordinal(), 
+                		new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {                              
                                     String[] items = getResources().getStringArray(R.array.sort_by_options_values);
-                                    ListEditScreen.this.sortList(SortMethod.valueOf(items[which]));  
-                                    amPrefUtil.putSavedString(AMPrefKeys.LIST_SORT_BY_METHOD_PREFIX, dbPath, items[which]);
+                                    sortList(SortMethod.valueOf(items[which]));  
+                                    amPrefUtil.putSavedString(AMPrefKeys.LIST_SORT_BY_METHOD_PREFIX,
+                                    		dbPath, items[which]);
                                     dialog.dismiss();
                             }
                         })
@@ -281,7 +286,10 @@ public class ListEditScreen extends AMActivity {
             listView.setSelection(initPosition);
             listView.setOnItemClickListener(listItemClickListener);
             
-            ListEditScreen.this.sortList(SortMethod.valueOf(amPrefUtil.getSavedString(AMPrefKeys.LIST_SORT_BY_METHOD_PREFIX, dbPath, getResources().getStringArray(R.array.sort_by_options_values)[0])));
+            //Get the sort method from system database and set this method as origin method
+            String defaultItem =  getResources().getStringArray(R.array.sort_by_options_values)[0];
+            String savedMethod = amPrefUtil.getSavedString(AMPrefKeys.LIST_SORT_BY_METHOD_PREFIX, dbPath, defaultItem);
+            sortList(SortMethod.valueOf(savedMethod));
             progressDialog.dismiss();
         }
 
@@ -312,5 +320,7 @@ public class ListEditScreen extends AMActivity {
             restartActivity();
         }
     }
+    private enum SortMethod{ORDINAL, QUESTION, ANSWER};
+}
 
-    }
+

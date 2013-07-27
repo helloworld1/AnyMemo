@@ -294,17 +294,17 @@
     <item>ANSWER</item>
     <item>BOTH</item>
 </string-array>
-<string-array name="sort_by_options_values">
-    <item >ORDINAL</item>
-    <item >QUESTION</item>
-    <item >ANSWER</item>
-</string-array>
+
 <string-array name="sort_by_options">
-    <item >@string/ordinal_text</item>
-    <item >@string/question_text</item>
-    <item >@string/answer_text</item>
+    <item>@string/ordinal_text</item>
+    <item>@string/question_text</item>
+    <item>@string/answer_text</item>
 </string-array>
 
-
+<string-array name="sort_by_options_values">
+    <item>ORDINAL</item>
+    <item>QUESTION</item>
+    <item>ANSWER</item>
+</string-array>
 
 </resources>
