@@ -22,8 +22,6 @@ package org.liberty.android.fantastischmemo;
 
 import java.util.Locale;
 
-import roboguice.activity.RoboFragmentActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -38,7 +36,7 @@ import android.view.WindowManager;
  * class in AnyMemo
  * It contains basic configuration of the Activity
  */
-public abstract class AMActivity extends RoboFragmentActivity{
+public abstract class AMActivity extends RoboActionBarActivity {
     protected String TAG = getClass().getSimpleName();
 
     boolean activityForeground = false;

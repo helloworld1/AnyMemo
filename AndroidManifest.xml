@@ -13,7 +13,9 @@
     <application 
         android:icon="@drawable/icon" 
         android:label="@string/app_name"
-        android:name="AMApplication" >
+        android:name="AMApplication" 
+        android:theme="@style/Theme.AppCompat"
+        >
         <activity 
             android:name=".ui.AnyMemo"
             android:configChanges="orientation|keyboardHidden"

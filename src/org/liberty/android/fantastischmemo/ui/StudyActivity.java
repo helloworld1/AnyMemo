@@ -134,7 +134,6 @@ public class StudyActivity extends QACardActivity {
             filterCategoryId = extras.getInt(EXTRA_CATEGORY_ID, -1);
             startCardId = extras.getInt(EXTRA_START_CARD_ID, -1);
         }
-        setTitle(R.string.gestures_text);
         super.onCreate(savedInstanceState);
     }
 
