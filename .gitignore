@@ -9,3 +9,5 @@ obj/
 .settings/
 .gradle/
 *.xmi
+.project
+.classpath
