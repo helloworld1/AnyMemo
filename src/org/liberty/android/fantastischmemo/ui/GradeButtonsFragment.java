@@ -24,6 +24,7 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
@@ -53,6 +54,8 @@ import android.widget.LinearLayout;
  * of controlling the CardPlayerService.
  */
 public class GradeButtonsFragment extends RoboFragment {
+
+    public static final String EXTRA_DBPATH = "dbpath";
 
     private QACardActivity activity;
 
@@ -96,14 +99,16 @@ public class GradeButtonsFragment extends RoboFragment {
         
     }
 
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-
         this.activity = (QACardActivity) activity;
 
-        dbOpenHelper = this.activity.getDbOpenHelper();
+        Bundle args = getArguments();
+
+        String dbPath = args.getString(EXTRA_DBPATH);
+
+        dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(activity, dbPath);
 
         cardDao = dbOpenHelper.getCardDao();
 
@@ -111,6 +116,12 @@ public class GradeButtonsFragment extends RoboFragment {
 
         option = this.activity.getOption();
 
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
     }
 
     @Override

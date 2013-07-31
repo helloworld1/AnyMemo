@@ -95,8 +95,7 @@
             android:name=".ui.StatisticsScreen"
             android:configChanges="orientation|keyboardHidden" />
         <activity 
-            android:name=".ui.StudyActivity"
-            android:configChanges="orientation|keyboardHidden" />
+            android:name=".ui.StudyActivity" />
         <activity 
             android:name=".ui.PreviewEditActivity"
             android:configChanges="orientation|keyboardHidden" />

@@ -20,7 +20,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -30,12 +32,10 @@ import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.service.AnyMemoService;
-import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
 import org.liberty.android.fantastischmemo.utils.CardTTSUtil;
 import org.liberty.android.fantastischmemo.utils.CardTTSUtilFactory;
@@ -43,8 +43,9 @@ import org.liberty.android.fantastischmemo.utils.CardTextUtil;
 import org.liberty.android.fantastischmemo.utils.CardTextUtilFactory;
 
 import roboguice.RoboGuice;
+import roboguice.content.RoboAsyncTaskLoader;
 import roboguice.inject.ContextScope;
-import roboguice.util.RoboAsyncTask;
+import roboguice.util.Ln;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -56,7 +57,11 @@ import android.gesture.GestureOverlayView;
 import android.gesture.Prediction;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.content.Loader;
 import android.text.ClipboardManager;
 import android.text.Spannable;
 import android.util.Log;
@@ -77,18 +82,16 @@ public abstract class QACardActivity extends AMActivity {
     private AnyMemoDBOpenHelper dbOpenHelper;
 
     /* DAOs */
-    private SettingDao settingDao;
-
     private Card currentCard;
 
     private int animationInResId = 0;
     private int animationOutResId = 0;
 
+    private static final int INIT_LOADER_ID = 0;
+
     private Option option;
 
     private Setting setting;
-
-    private InitTask initTask = null;
 
     private WaitDbTask waitDbTask = null;
 
@@ -96,11 +99,7 @@ public abstract class QACardActivity extends AMActivity {
 
     private TextView smallTitleBar;
 
-    private CardTTSUtilFactory cardTTSUtilFactory;
-
     private CardTTSUtil cardTTSUtil;
-
-    private CardTextUtilFactory cardTextUtilFactory;
 
     private CardTextUtil cardTextUtil;
 
@@ -108,21 +107,22 @@ public abstract class QACardActivity extends AMActivity {
 
     private volatile boolean initFinished = false;
 
+    private ProgressDialog progressDialog;
+
+    private Handler handler = new Handler();
+
+    private Map<Integer, LoaderCallbacks<?>> loaderCallbackMap
+        = new HashMap<Integer, LoaderCallbacks<?>>();
+
+    private Map<Integer, Boolean> loaderReloadOnStartMap
+        = new HashMap<Integer, Boolean>();
+
+    private int runningLoaderCount = 0;
+
     @Inject
     public void setOption(Option option) {
-         this.option = option;
+        this.option = option;
     }
-
-    @Inject
-    public void setCardTTSUtilFactory(CardTTSUtilFactory cardTTSUtilFactory) {
-        this.cardTTSUtilFactory = cardTTSUtilFactory;
-    }
-
-    @Inject
-    public void setCardTextUtilFactory(CardTextUtilFactory cardTextUtilFactory) {
-        this.cardTextUtilFactory = cardTextUtilFactory;
-    }
-
 
     public CardTTSUtil getCardTTSUtil() {
         return cardTTSUtil;
@@ -131,6 +131,9 @@ public abstract class QACardActivity extends AMActivity {
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        if (bundle != null) {
+            initFinished = bundle.getBoolean("initFinished");
+        }
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             dbPath = extras.getString(EXTRA_DBPATH);
@@ -148,9 +151,43 @@ public abstract class QACardActivity extends AMActivity {
 
         // Load gestures
         loadGestures();
+        registerLoaderCallbacks(0, new SettingLoaderCallbacks(), false);
+        registerLoaderCallbacks(1, new CardTTSUtilLoaderCallbacks(), true);
+        registerLoaderCallbacks(2, new CardTextUtilLoaderCallbacks(), true);
+        startLoading();
+    }
 
-        initTask = new InitTask(this);
-        initTask.execute();
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        outState.putBoolean("initFinished", initFinished);
+    }
+
+    
+    protected void registerLoaderCallbacks(int id, LoaderCallbacks<?> callbacks, boolean reloadOnStart) {
+        loaderCallbackMap.put(id, callbacks);
+        loaderReloadOnStartMap.put(id, reloadOnStart);
+    }
+
+    private void startLoading() {
+        progressDialog = new ProgressDialog(QACardActivity.this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setTitle(getString(R.string.loading_please_wait));
+        progressDialog.setMessage(getString(R.string.loading_database));
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        LoaderManager.enableDebugLogging(true);
+        LoaderManager loaderManager = getSupportLoaderManager();
+        for (int id : loaderCallbackMap.keySet()) {
+            if (initFinished && loaderReloadOnStartMap.get(id)) {
+                Ln.v("RRRRRRRRRRRRRRRRRRRRRRRRR " + id);
+                loaderManager.restartLoader(id, null, loaderCallbackMap.get(id));
+            } else {
+                loaderManager.initLoader(id, null, loaderCallbackMap.get(id));
+            }
+        }
+        runningLoaderCount = loaderCallbackMap.size();
     }
 
     public int getContentView() {
@@ -186,7 +223,6 @@ public abstract class QACardActivity extends AMActivity {
         Setting.Align questionAlign = setting.getQuestionTextAlign();
         Setting.Align answerAlign = setting.getAnswerTextAlign();
 
-
         String questionTypefaceValue = null;
         String answerTypefaceValue = null;
         /* Set the typeface of question and answer */
@@ -204,21 +240,31 @@ public abstract class QACardActivity extends AMActivity {
         float qRatio = setting.getQaRatio();
         if (qRatio > 99.0f) {
             answerLayout.setVisibility(View.GONE);
-            questionLayout.setLayoutParams(new LayoutParams(
-                    LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1.0f));
-            answerLayout.setLayoutParams(new LayoutParams(
-                    LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1.0f));
+            questionLayout
+                    .setLayoutParams(new LayoutParams(
+                            LayoutParams.MATCH_PARENT,
+                            LayoutParams.MATCH_PARENT, 1.0f));
+            answerLayout
+                    .setLayoutParams(new LayoutParams(
+                            LayoutParams.MATCH_PARENT,
+                            LayoutParams.MATCH_PARENT, 1.0f));
         } else if (qRatio < 1.0f) {
             questionLayout.setVisibility(View.GONE);
-            questionLayout.setLayoutParams(new LayoutParams(
-                    LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1.0f));
-            answerLayout.setLayoutParams(new LayoutParams(
-                    LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1.0f));
+            questionLayout
+                    .setLayoutParams(new LayoutParams(
+                            LayoutParams.MATCH_PARENT,
+                            LayoutParams.MATCH_PARENT, 1.0f));
+            answerLayout
+                    .setLayoutParams(new LayoutParams(
+                            LayoutParams.MATCH_PARENT,
+                            LayoutParams.MATCH_PARENT, 1.0f));
         } else {
-            questionLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-                            LayoutParams.MATCH_PARENT, qRatio));
-            answerLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-                            LayoutParams.MATCH_PARENT, 100f - qRatio));
+            questionLayout.setLayoutParams(new LayoutParams(
+                    LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT,
+                    qRatio));
+            answerLayout.setLayoutParams(new LayoutParams(
+                    LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT,
+                    100f - qRatio));
         }
 
         // Buttons view can be null if it is not decleared in the layout XML
@@ -242,7 +288,8 @@ public abstract class QACardActivity extends AMActivity {
 
                 // Also the buttons should match the color.
                 if (buttonsView != null) {
-                    buttonsView.setBackgroundColor(setting.getAnswerBackgroundColor());
+                    buttonsView.setBackgroundColor(setting
+                            .getAnswerBackgroundColor());
                 }
             } else {
                 findViewById(R.id.question).setVisibility(View.VISIBLE);
@@ -250,7 +297,8 @@ public abstract class QACardActivity extends AMActivity {
 
                 // Also the buttons should match the color.
                 if (buttonsView != null) {
-                    buttonsView.setBackgroundColor(setting.getQuestionBackgroundColor());
+                    buttonsView.setBackgroundColor(setting
+                            .getQuestionBackgroundColor());
                 }
             }
             findViewById(R.id.horizontal_line).setVisibility(View.GONE);
@@ -260,7 +308,8 @@ public abstract class QACardActivity extends AMActivity {
         View horizontalLine = findViewById(R.id.horizontal_line);
         horizontalLine.setBackgroundColor(setting.getSeparatorColor());
 
-        List<Spannable> spannableFields = cardTextUtil.getFieldsToDisplay(getCurrentCard());
+        List<Spannable> spannableFields = cardTextUtil
+                .getFieldsToDisplay(getCurrentCard());
 
         // Question spannable
         Spannable sq = spannableFields.get(0);
@@ -292,8 +341,7 @@ public abstract class QACardActivity extends AMActivity {
                     .setTextFontSize(setting.getAnswerFontSize())
                     .setTextColor(setting.getAnswerTextColor())
                     .setBackgroundColor(setting.getAnswerBackgroundColor())
-                    .setTypefaceFromFile(setting.getAnswerFont())
-                    .build();
+                    .setTypefaceFromFile(setting.getAnswerFont()).build();
         } else {
             // For "Show answer" text, we do not use the
             // alignment from the settings.
@@ -307,8 +355,7 @@ public abstract class QACardActivity extends AMActivity {
                     .setTextFontSize(setting.getAnswerFontSize())
                     .setTextColor(setting.getAnswerTextColor())
                     .setBackgroundColor(setting.getAnswerBackgroundColor())
-                    .setTypefaceFromFile(setting.getAnswerFont())
-                    .build();
+                    .setTypefaceFromFile(setting.getAnswerFont()).build();
         }
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -341,7 +388,6 @@ public abstract class QACardActivity extends AMActivity {
 
         ft.replace(R.id.answer, answerFragment);
         ft.commit();
-
 
         isAnswerShown = showAnswer;
 
@@ -376,11 +422,20 @@ public abstract class QACardActivity extends AMActivity {
         return option;
     }
 
-    // Call when initializing thing
-    abstract protected void onInit() throws Exception;
-
     // Called when the initalizing finished.
     protected void onPostInit() {
+        View buttonsView = findViewById(R.id.buttons_root);
+        if (buttonsView != null) {
+            buttonsView.setBackgroundColor(setting
+                    .getAnswerBackgroundColor());
+        }
+
+        progressDialog.dismiss();
+        initFinished = true;
+    }
+
+    // Called when the initalizing finished.
+    protected void onInit() throws Exception {
         // Do nothing
 
     }
@@ -391,80 +446,182 @@ public abstract class QACardActivity extends AMActivity {
         this.animationOutResId = animationOutResId;
     }
 
-    private class InitTask extends RoboAsyncTask<Void> {
+    private class SettingLoaderCallbacks implements
+            LoaderManager.LoaderCallbacks<Setting> {
 
-        private ProgressDialog progressDialog;
+        @Override
+        public Loader<Setting> onCreateLoader(int arg0, Bundle arg1) {
+            Loader<Setting> loader = new SettingLoader(QACardActivity.this, dbPath);
+            loader.forceLoad();
+            return loader;
+        }
 
-        private Context context;
+        @Override
+        public void onLoadFinished(Loader<Setting> loader , Setting setting) {
+            QACardActivity.this.setting = setting;
+            checkAllLoadersCompleted();
+        }
 
-        public InitTask(Context context) {
+        @Override
+        public void onLoaderReset(Loader<Setting> arg0) {
+            // Do nothing now
+        }
+    }
+
+    private class CardTTSUtilLoaderCallbacks implements
+            LoaderManager.LoaderCallbacks<CardTTSUtil> {
+        @Override
+        public Loader<CardTTSUtil> onCreateLoader(int arg0, Bundle arg1) {
+            Loader<CardTTSUtil> loader = new CardTTSUtilLoader(QACardActivity.this, dbPath);
+            loader.forceLoad();
+            return loader;
+        }
+
+        @Override
+        public void onLoadFinished(Loader<CardTTSUtil> loader , CardTTSUtil cardTTSUtil) {
+            QACardActivity.this.cardTTSUtil = cardTTSUtil;
+            checkAllLoadersCompleted();
+        }
+
+        @Override
+        public void onLoaderReset(Loader<CardTTSUtil> arg0) {
+            // Do nothing now
+        }
+    }
+
+    private class CardTextUtilLoaderCallbacks implements
+            LoaderManager.LoaderCallbacks<CardTextUtil> {
+        @Override
+        public Loader<CardTextUtil> onCreateLoader(int arg0, Bundle arg1) {
+             Loader<CardTextUtil> loader = new CardTextUtilLoader(QACardActivity.this, dbPath);
+             loader.forceLoad();
+             return loader;
+        }
+
+        @Override
+        public void onLoadFinished(Loader<CardTextUtil> loader , CardTextUtil cardTextUtil) {
+            QACardActivity.this.cardTextUtil = cardTextUtil;
+            checkAllLoadersCompleted();
+        }
+        @Override
+        public void onLoaderReset(Loader<CardTextUtil> arg0) {
+            // Do nothing now
+        }
+    }
+
+    protected synchronized void checkAllLoadersCompleted() {
+        Ln.v("Finished loader");
+        runningLoaderCount--;
+        // The onPostInit is running on UI thread.
+        if (runningLoaderCount <= 0) {
+            handler.post(new Runnable() {
+                public void run() {
+                    onPostInit();
+                }
+            });
+        }
+        initFinished = true;
+    }
+
+    protected static abstract class DBLoader<T> extends RoboAsyncTaskLoader<T> {
+
+        protected String dbPath;
+
+        protected AnyMemoDBOpenHelper dbOpenHelper;
+
+        protected abstract T dbLoadInBackground();
+
+        public DBLoader(Context context, String dbPath) {
             super(context);
-            this.context = context;
+            this.dbPath = dbPath;
         }
 
         @Override
-        public void onPreExecute() {
-            progressDialog = new ProgressDialog(context);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setTitle(getString(R.string.loading_please_wait));
-            progressDialog.setMessage(getString(R.string.loading_database));
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+        public T loadInBackground() {
+            dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(getContext(),
+                    dbPath);
+            try {
+                return dbLoadInBackground();
+            } finally {
+                AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
+            }
+        }
+    }
 
-            // Get the context scope in UI thread (Who hold the ThreadLocal context scope
+    private static class SettingLoader extends DBLoader<Setting> {
+        public SettingLoader(Context context, String dbPath) {
+            super(context, dbPath);
         }
 
         @Override
-        public Void call() throws Exception {
-            settingDao = dbOpenHelper.getSettingDao();
-            setting = settingDao.queryForId(1);
+        protected Setting dbLoadInBackground() {
+            return dbOpenHelper.getSettingDao().queryForId(1);
+        }
+    }
 
-            ContextScope scope = RoboGuice.getInjector(context).getInstance(ContextScope.class);
+    private static class CardTTSUtilLoader extends
+            DBLoader<CardTTSUtil> {
+
+        private CardTTSUtilFactory cardTTSUtilFactory;
+
+        public CardTTSUtilLoader(Context context, String dbPath) {
+            super(context, dbPath);
+        }
+
+        @Inject
+        public void setCardTTSUtilFactory(CardTTSUtilFactory cardTTSUtilFactory) {
+            this.cardTTSUtilFactory = cardTTSUtilFactory;
+        }
+
+        @Override
+        public CardTTSUtil dbLoadInBackground() {
+            ContextScope scope = RoboGuice.getInjector(getContext()).getInstance(ContextScope.class);
 
             // Make sure the method is running under the context
             // The AsyncTask thread does not have the context, so we need
             // to manually enter the scope.
             synchronized(ContextScope.class) {
-                scope.enter(context);
+                scope.enter(getContext());
                 try {
-                    cardTTSUtil = cardTTSUtilFactory.create(dbPath);
-                    cardTextUtil = cardTextUtilFactory.create(dbPath);
-                    // Init of common functions here
-                    // Call customized init funciton defined in
-                    // the subclass
-                    onInit();
+                    CardTTSUtil cardTTSUtil = cardTTSUtilFactory.create(dbPath);
+                    return cardTTSUtil;
                 } finally {
-                    scope.exit(context);
+                    scope.exit(getContext());
                 }
             }
+        }
+    }
 
-            return null;
+    private static class CardTextUtilLoader extends
+            DBLoader<CardTextUtil> {
+
+        private CardTextUtilFactory cardTextUtilFactory;
+
+        public CardTextUtilLoader(Context context, String dbPath) {
+            super(context, dbPath);
+        }
+
+        @Inject
+        public void setCardTextUtilFactory(CardTextUtilFactory cardTextUtilFactory) {
+            this.cardTextUtilFactory = cardTextUtilFactory;
         }
 
         @Override
-        public void onSuccess(Void result) {
-            // Make sure the background color of grade buttons matches the answer's backgroud color.
-            // buttonsView can be null if the layout does not have buttons_root
-            View buttonsView = findViewById(R.id.buttons_root);
-            if (buttonsView != null) {
-                buttonsView.setBackgroundColor(setting.getAnswerBackgroundColor());
+        public CardTextUtil dbLoadInBackground() {
+            ContextScope scope = RoboGuice.getInjector(getContext()).getInstance(ContextScope.class);
+
+            // Make sure the method is running under the context
+            // The AsyncTask thread does not have the context, so we need
+            // to manually enter the scope.
+            synchronized(ContextScope.class) {
+                scope.enter(getContext());
+                try {
+                    CardTextUtil cardTextUtil = cardTextUtilFactory.create(dbPath);
+                    return cardTextUtil;
+                } finally {
+                    scope.exit(getContext());
+                }
             }
-            
-            // Call customized method when init completed
-            onPostInit();
-        }
-
-        @Override
-        public void onException(Exception e) throws RuntimeException {
-            AMGUIUtility.displayError(QACardActivity.this,
-                    getString(R.string.exception_text),
-                    getString(R.string.exception_message), e);
-        }
-
-        @Override
-        public void onFinally() {
-            progressDialog.dismiss();
-            initFinished = true;
         }
     }
 
@@ -472,13 +629,13 @@ public abstract class QACardActivity extends AMActivity {
     public void onResume() {
         super.onResume();
         // Only if the initTask has been finished and no waitDbTask is waiting.
-        if (initFinished && (waitDbTask == null || !AsyncTask.Status.RUNNING
-                        .equals(waitDbTask.getStatus()))) {
-            waitDbTask = new WaitDbTask();
-            waitDbTask.execute((Void) null);
-        } else {
-            Log.i(TAG, "There is another task running. Do not run tasks");
-        }
+        // if (initFinished && (waitDbTask == null || !AsyncTask.Status.RUNNING
+        //                 .equals(waitDbTask.getStatus()))) {
+        //     waitDbTask = new WaitDbTask();
+        //     waitDbTask.execute((Void) null);
+        // } else {
+        //     Log.i(TAG, "There is another task running. Do not run tasks");
+        // }
     }
 
     @Override
@@ -486,7 +643,9 @@ public abstract class QACardActivity extends AMActivity {
         super.onDestroy();
         AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
 
-        cardTTSUtil.release();
+        if (cardTTSUtil != null) {
+            cardTTSUtil.release();
+        }
 
         /* Update the widget because StudyActivity can be accessed though widget*/
         Intent myIntent = new Intent(this, AnyMemoService.class);

@@ -40,4 +40,5 @@ public interface QueueManager {
 
     /* Set the head of the queue to card. */
     Card dequeuePosition(int cardId);
+
 }

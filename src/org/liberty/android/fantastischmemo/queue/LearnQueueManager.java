@@ -29,6 +29,7 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
@@ -38,13 +39,9 @@ import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 
 import roboguice.util.Ln;
 
+import android.content.Context;
+
 public class LearnQueueManager implements QueueManager {
-    private CardDao cardDao;
-
-    private CategoryDao categoryDao;
-
-    private LearningDataDao learningDataDao;
-
     /*
      * The scheduler to determine whether a card should reimain
      * in the learn queue
@@ -68,15 +65,20 @@ public class LearnQueueManager implements QueueManager {
 
     private boolean shuffle;
 
+    private Context context;
+
+    private String dbPath;
+
     private LearnQueueManager(Builder builder) {
-        this.cardDao = builder.cardDao;
-        this.categoryDao = builder.categoryDao;
-        this.learningDataDao = builder.learningDataDao;
         this.filterCategory = builder.filterCategory;
         this.learnQueueSize = builder.learnQueueSize;
         this.cacheSize = builder.cacheSize;
         this.shuffle = builder.shuffle;
         this.scheduler = builder.scheduler;
+        this.context = builder.context;
+        this.dbPath = builder.dbPath;
+
+
         learnQueue = new LinkedList<Card>();
         newCache = new LinkedList<Card>();
         reviewCache = new LinkedList<Card>();
@@ -124,6 +126,9 @@ public class LearnQueueManager implements QueueManager {
 	@Override
 	public synchronized void flush() {
         // Update the queue
+        final AnyMemoDBOpenHelper dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(context, dbPath);
+        final CardDao cardDao = dbOpenHelper.getCardDao();
+        final LearningDataDao learningDataDao = dbOpenHelper.getLearningDataDao();
 
         try {
             learningDataDao.callBatchTasks (
@@ -142,35 +147,44 @@ public class LearnQueueManager implements QueueManager {
         } catch (Exception e) {
             Ln.e(e, "Error encounter when flushing: ");
             throw new RuntimeException("Queue flushing get exception!", e);
+        } finally {
+            AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
         }
 	}
 
     private synchronized void refill() {
-        if (newCache.size() == 0) {
-            List<Card> cs = cardDao.getNewCards(filterCategory, maxNewCacheOrdinal, cacheSize - newCache.size());
-            categoryDao.populateCategory(cs);
-            if (cs.size() > 0) {
-                maxNewCacheOrdinal = cs.get(cs.size() - 1).getOrdinal();
-                newCache.addAll(cs);
+        final AnyMemoDBOpenHelper dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(context, dbPath);
+        final CardDao cardDao = dbOpenHelper.getCardDao();
+        final CategoryDao categoryDao = dbOpenHelper.getCategoryDao();
+        try {
+            if (newCache.size() == 0) {
+                List<Card> cs = cardDao.getNewCards(filterCategory, maxNewCacheOrdinal, cacheSize - newCache.size());
+                categoryDao.populateCategory(cs);
+                if (cs.size() > 0) {
+                    maxNewCacheOrdinal = cs.get(cs.size() - 1).getOrdinal();
+                    newCache.addAll(cs);
+                }
             }
-        }
 
-        if (reviewCache.size() == 0) {
-            List<Card> cs = cardDao.getCardForReview(filterCategory, maxReviewCacheOrdinal, cacheSize - reviewCache.size());
-            categoryDao.populateCategory(cs);
-            if (cs.size() > 0) {
-                maxReviewCacheOrdinal = cs.get(cs.size() - 1).getOrdinal();
-                reviewCache.addAll(cs);
+            if (reviewCache.size() == 0) {
+                List<Card> cs = cardDao.getCardForReview(filterCategory, maxReviewCacheOrdinal, cacheSize - reviewCache.size());
+                categoryDao.populateCategory(cs);
+                if (cs.size() > 0) {
+                    maxReviewCacheOrdinal = cs.get(cs.size() - 1).getOrdinal();
+                    reviewCache.addAll(cs);
+                }
             }
-        }
 
-        while (learnQueue.size() < learnQueueSize && !reviewCache.isEmpty()) {
-            learnQueue.add(reviewCache.get(0));
-            reviewCache.remove(0);
-        }
-        while (learnQueue.size() < learnQueueSize && !newCache.isEmpty()) {
-            learnQueue.add(newCache.get(0));
-            newCache.remove(0);
+            while (learnQueue.size() < learnQueueSize && !reviewCache.isEmpty()) {
+                learnQueue.add(reviewCache.get(0));
+                reviewCache.remove(0);
+            }
+            while (learnQueue.size() < learnQueueSize && !newCache.isEmpty()) {
+                learnQueue.add(newCache.get(0));
+                newCache.remove(0);
+            }
+        } finally {
+            AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
         }
     }
 
@@ -226,23 +240,21 @@ public class LearnQueueManager implements QueueManager {
             }
         }
 
-        Card headCard = null;
-        headCard = cardDao.queryForId(cardId);
-        learningDataDao.refresh(headCard.getLearningData());
+        final AnyMemoDBOpenHelper dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(context, dbPath);
+        final CardDao cardDao = dbOpenHelper.getCardDao();
+        final LearningDataDao learningDataDao = dbOpenHelper.getLearningDataDao();
+        try {
+            Card headCard = null;
+            headCard = cardDao.queryForId(cardId);
+            learningDataDao.refresh(headCard.getLearningData());
 
-        learnQueue.add(0, headCard);
+            learnQueue.add(0, headCard);
+        } finally {
+            AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
+        }
     }
 
     public static class Builder {
-
-        private AnyMemoDBOpenHelper dbOpenHelper;
-
-        private CardDao cardDao;
-
-        private CategoryDao categoryDao;
-
-        private LearningDataDao learningDataDao;
-
         private Scheduler scheduler;
 
         private Category filterCategory;
@@ -253,13 +265,17 @@ public class LearnQueueManager implements QueueManager {
 
         private boolean shuffle = false;
 
-        public Builder setScheduler(Scheduler scheduler) {
-            this.scheduler = scheduler;
-            return this;
+        private String dbPath;
+
+        private Context context;
+
+        public Builder(Context context, String dbPath) {
+            this.dbPath = dbPath;
+            this.context = context;
         }
 
-        public Builder setDbOpenHelper(AnyMemoDBOpenHelper helper) {
-            dbOpenHelper = helper;
+        public Builder setScheduler(Scheduler scheduler) {
+            this.scheduler = scheduler;
             return this;
         }
 
@@ -281,15 +297,6 @@ public class LearnQueueManager implements QueueManager {
         }
 
         public QueueManager build() {
-            cardDao = dbOpenHelper.getCardDao();
-
-            learningDataDao = dbOpenHelper.getLearningDataDao();
-
-            categoryDao = dbOpenHelper.getCategoryDao();
-
-            if (cardDao == null || learningDataDao == null) {
-                throw new AssertionError("cardDao and learningDataDao must set");
-            }
             LearnQueueManager qm = new LearnQueueManager(this);
             qm.refill();
             return qm;

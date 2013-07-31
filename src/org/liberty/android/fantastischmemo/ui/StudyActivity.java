@@ -40,6 +40,7 @@ import org.liberty.android.fantastischmemo.queue.QueueManager;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
 import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
+import org.liberty.android.fantastischmemo.utils.CardTextUtil;
 import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
 import org.liberty.android.fantastischmemo.utils.ShareUtil;
 
@@ -55,6 +56,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -134,7 +137,9 @@ public class StudyActivity extends QACardActivity {
             filterCategoryId = extras.getInt(EXTRA_CATEGORY_ID, -1);
             startCardId = extras.getInt(EXTRA_START_CARD_ID, -1);
         }
+        registerLoaderCallbacks(3, new LearnQueueManagerLoaderCallbacks(), true);
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -314,18 +319,21 @@ public class StudyActivity extends QACardActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (queueManager != null) {
+            queueManager.flush();
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
         // Only if the initTask has been finished and no waitDbTask is waiting.
-        if (initialized && (waitDbTask == null || !AsyncTask.Status.RUNNING.equals(waitDbTask.getStatus()))) {
-            waitDbTask = new WaitDbTask();
-            waitDbTask.execute((Void)null);
-        } else {
-            Log.i(TAG, "There is another task running. Do not run tasks");
-        }
+        // if (initialized && (waitDbTask == null || !AsyncTask.Status.RUNNING.equals(waitDbTask.getStatus()))) {
+        //     waitDbTask = new WaitDbTask();
+        //     waitDbTask.execute((Void)null);
+        // } else {
+        //     Log.i(TAG, "There is another task running. Do not run tasks");
+        // }
     }
 
     @Override
@@ -335,24 +343,14 @@ public class StudyActivity extends QACardActivity {
         task.execute((Void)null);
     }
 
-
     @Override
-    public void onInit() throws Exception {
+    public void onPostInit() {
+        super.onPostInit();
         cardDao = getDbOpenHelper().getCardDao();
         learningDataDao = getDbOpenHelper().getLearningDataDao();
         categoryDao = getDbOpenHelper().getCategoryDao();
         setting = getSetting();
         option = getOption();
-
-
-        // The query of filter cateogry should happen before createQueue
-        // because creatQueue needs to use it.
-        if (filterCategoryId != -1) {
-            filterCategory = categoryDao.queryForId(filterCategoryId);
-            assert filterCategory != null : "Query filter id: " + filterCategoryId +". Get null";
-        }
-
-        createQueue();
 
         /* Run the learnQueue init in a separate thread */
         if (startCardId != -1) {
@@ -361,10 +359,6 @@ public class StudyActivity extends QACardActivity {
             setCurrentCard(queueManager.dequeue());
         }
         refreshStatInfo();
-    }
-
-    @Override
-    public void onPostInit() {
         // If the db does not contain any cards. Show no item dialog.
         if (getCurrentCard() == null) {
             showNoItemDialog();
@@ -503,23 +497,72 @@ public class StudyActivity extends QACardActivity {
             .show();
     }
 
-    /* Create the queue manager. */
-    private void createQueue() {
-        int queueSize = option.getQueueSize();
-        LearnQueueManager.Builder builder = new LearnQueueManager.Builder()
-            .setDbOpenHelper(getDbOpenHelper())
-            .setScheduler(scheduler)
-            .setLearnQueueSize(queueSize)
-            .setCacheSize(50)
-            .setFilterCategory(filterCategory);
-        if (option.getShuffleType() == Option.ShuffleType.LOCAL) {
-            builder.setShuffle(true);
-        } else {
-            builder.setShuffle(false);
+    private class LearnQueueManagerLoaderCallbacks implements
+            LoaderManager.LoaderCallbacks<QueueManager> {
+        @Override
+        public Loader<QueueManager> onCreateLoader(int arg0, Bundle arg1) {
+             Loader<QueueManager> loader = new LearnQueueManagerLoader(getApplicationContext(), dbPath, filterCategoryId);
+             loader.forceLoad();
+             return loader;
         }
-        queueManager = builder.build();
+
+        @Override
+        public void onLoadFinished(Loader<QueueManager> loader , QueueManager queueManager) {
+            StudyActivity.this.queueManager = queueManager;
+            checkAllLoadersCompleted();
+        }
+        @Override
+        public void onLoaderReset(Loader<QueueManager> arg0) {
+            // Do nothing now
+        }
     }
 
+    private static class LearnQueueManagerLoader extends
+            DBLoader<QueueManager> {
+
+        private Option option;
+
+        private Scheduler scheduler;
+
+        private int filterCategoryId = -1;
+
+
+        public LearnQueueManagerLoader(Context context, String dbPath, int filterCategoryId) {
+            super(context, dbPath);
+            this.filterCategoryId = filterCategoryId;
+        }
+
+        @Inject
+        public void setOption(Option option) {
+            this.option = option;
+        }
+
+        @Inject
+        public void setScheduler(Scheduler scheduler) {
+            this.scheduler = scheduler;
+        }
+
+        @Override
+        public QueueManager dbLoadInBackground() {
+            Category filterCategory = null;
+            if (filterCategoryId != -1) {
+                dbOpenHelper.getCategoryDao().queryForId(filterCategoryId);
+            }
+            int queueSize = option.getQueueSize();
+            LearnQueueManager.Builder builder = new LearnQueueManager.Builder(getContext(), dbPath)
+                .setScheduler(scheduler)
+                .setLearnQueueSize(queueSize)
+                .setCacheSize(50)
+                .setFilterCategory(filterCategory);
+            if (option.getShuffleType() == Option.ShuffleType.LOCAL) {
+                builder.setShuffle(true);
+            } else {
+                builder.setShuffle(false);
+            }
+            return builder.build();
+        }
+
+    }
 
     private void autoSpeak() {
         if (getCurrentCard() != null) {
@@ -560,6 +603,9 @@ public class StudyActivity extends QACardActivity {
     @LogInvocation
     private void setupGradeButtons() {
         gradeButtonsFragment = new GradeButtonsFragment();
+        Bundle args = new Bundle();
+        args.putString(GradeButtonsFragment.EXTRA_DBPATH, dbPath);
+        gradeButtonsFragment.setArguments(args);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.buttons_root, gradeButtonsFragment);
