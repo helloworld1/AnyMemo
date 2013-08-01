@@ -83,6 +83,9 @@ public class LearnQueueManager implements QueueManager {
         learnQueue = new LinkedList<Card>();
         newCache = new LinkedList<Card>();
         reviewCache = new LinkedList<Card>();
+
+        // Make sure the dirtyCache is thread safe because multiple threads will access
+        // the set
         dirtyCache = Collections.newSetFromMap(new ConcurrentHashMap<Card, Boolean>());
     }
 
@@ -123,6 +126,8 @@ public class LearnQueueManager implements QueueManager {
 
 	@Override
 	public synchronized void release() {
+        // Make sure the cache is flushed.
+        flushDirtyCache();
         AnyMemoExecutor.waitAllTasks();
 	}
 

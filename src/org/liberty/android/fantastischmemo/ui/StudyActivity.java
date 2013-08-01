@@ -129,9 +129,21 @@ public class StudyActivity extends QACardActivity {
             startCardId = extras.getInt(EXTRA_START_CARD_ID, -1);
         }
 
+        if (savedInstanceState != null) {
+            startCardId = savedInstanceState.getInt(EXTRA_START_CARD_ID, -1);
+        }
+
         registerLoaderCallbacks(3, new LearnQueueManagerLoaderCallbacks(), false);
         super.onCreate(savedInstanceState);
 
+    }
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (getCurrentCard() != null) {
+            outState.putInt(EXTRA_START_CARD_ID, getCurrentCard().getId());
+        }
     }
 
     @Override

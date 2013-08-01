@@ -17,7 +17,6 @@
         android:theme="@style/Theme.AppCompat" >
         <activity 
             android:name=".ui.AnyMemo"
-            android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_full_name" >
             <intent-filter>
                 <action 
@@ -101,8 +100,7 @@
             android:name=".ui.QuizActivity"
             android:configChanges="orientation|keyboardHidden" />
         <activity 
-            android:name=".ui.CardPlayerActivity"
-            android:configChanges="orientation|keyboardHidden" />
+            android:name=".ui.CardPlayerActivity" />
         <receiver
             android:name=".AlarmReceiver"
             android:process=":remote" />
