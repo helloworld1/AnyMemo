@@ -138,7 +138,7 @@ public class StudyActivity extends QACardActivity {
             startCardId = savedInstanceState.getInt(EXTRA_START_CARD_ID, -1);
         }
 
-        registerLoaderCallbacks(3, new LearnQueueManagerLoaderCallbacks(), true);
+        registerLoaderCallbacks(3, new LearnQueueManagerLoaderCallbacks(), false);
         super.onCreate(savedInstanceState);
 
     }
@@ -649,6 +649,7 @@ public class StudyActivity extends QACardActivity {
 
         @Override
         public Card call() throws Exception {
+            queueManager.remove(getCurrentCard());
             queueManager.update(updatedCard);
 
             Card nextCard = queueManager.dequeue();

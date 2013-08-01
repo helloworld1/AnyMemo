@@ -67,39 +67,22 @@ public class QuizQueueManager implements QueueManager {
 	@Override
 	public synchronized Card dequeue() {
         if (newCache.size() > 0) {
-            return newCache.remove(0);
+            return newCache.get(0);
         }
         if (reviewCache.size() > 0) {
-            return reviewCache.remove(0);
+            return reviewCache.get(0);
         }
         return null;
 	}
 
 	@Override
 	public synchronized Card dequeuePosition(int cardId) {
-        Iterator<Card> newIterator = newCache.iterator();
-        while (newIterator.hasNext()) {
-            Card card = newIterator.next();
-            if (card.getId() == card.getId()) {
-                return card;
-            }
-            newIterator.remove();
-        }
-
-        Iterator<Card> reviewIterator = reviewCache.iterator();
-        while (newIterator.hasNext()) {
-            Card card = reviewIterator.next();
-            if (card.getId() == card.getId()) {
-                return card;
-            }
-            reviewIterator.remove();
-        }
-        return null;
+        // TODO: Support correct dequeuePosition.
+        return dequeue();
 	}
 
 	@Override
 	public synchronized void remove(Card card) {
-        dirtyCache.remove(card);
         reviewCache.remove(card);
         newCache.remove(card);
 	}

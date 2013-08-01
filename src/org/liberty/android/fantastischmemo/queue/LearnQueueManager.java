@@ -91,7 +91,6 @@ public class LearnQueueManager implements QueueManager {
         shuffle();
         if (!learnQueue.isEmpty()) {
             Card c = learnQueue.get(0);
-            learnQueue.remove(0);
             Ln.d("Dequeue card: " + c.getId());
             return c;
         } else {
@@ -106,7 +105,6 @@ public class LearnQueueManager implements QueueManager {
 
 		if (!learnQueue.isEmpty()) {
             Card c = learnQueue.get(0);
-            learnQueue.remove(0);
             Ln.d("Dequeue card: " + c.getId());
             return c;
         } else {
@@ -118,7 +116,6 @@ public class LearnQueueManager implements QueueManager {
 	@Override
 	public synchronized void remove(Card card) {
         learnQueue.remove(card);
-        dirtyCache.remove(card);
         reviewCache.remove(card);
         newCache.remove(card);
 	}

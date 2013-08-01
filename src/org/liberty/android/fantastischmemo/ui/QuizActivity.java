@@ -28,6 +28,7 @@ import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
+import org.liberty.android.fantastischmemo.queue.QueueManager;
 import org.liberty.android.fantastischmemo.queue.QuizQueueManager;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
@@ -40,6 +41,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -55,6 +58,7 @@ public class QuizActivity extends QACardActivity {
     public static String EXTRA_START_CARD_ORD = "start_card_ord";
     public static String EXTRA_QUIZ_SIZE = "quiz_size";
     public static String EXTRA_SHUFFLE_CARDS = "shuffle_cards";
+    public static String EXTRA_START_CARD_ID = "start_card_id";
 
     private CategoryDao categoryDao;
 
@@ -71,14 +75,10 @@ public class QuizActivity extends QACardActivity {
 
     private QuizQueueManager queueManager;
 
-    private Scheduler scheduler;
-
     private int startCardId = -1;
     private int categoryId = -1;
     private int startCardOrd = -1;
     private int quizSize = -1;
-
-    private Category filterCategory;
 
     private boolean isNewCardsCompleted = false;
 
@@ -91,25 +91,17 @@ public class QuizActivity extends QACardActivity {
         this.dictionaryUtil = dictionaryUtil;
     }
 
-    @Inject
-    public void setScheduler(Scheduler scheduler) {
-        this.scheduler = scheduler;
-    }
-
     @Override
     public int getContentView() {
         return R.layout.qa_card_layout_study;
     }
 
     @Override
-    public void onInit() throws Exception {
+    public void onPostInit() {
+        super.onPostInit();
         categoryDao = getDbOpenHelper().getCategoryDao();
         setting = getSetting();
         option = getOption();
-        if (categoryId!= -1) {
-            filterCategory = categoryDao.queryForId(categoryId);
-            assert filterCategory != null : "Query filter id: " + categoryId + ". Get null";
-        }
 
         createQueue();
 
@@ -122,10 +114,6 @@ public class QuizActivity extends QACardActivity {
         } else {
             setCurrentCard(queueManager.dequeue());
         }
-    }
-
-    @Override
-    public void onPostInit() {
         if (getCurrentCard() == null) {
             showNoItemDialog();
             return;
@@ -143,8 +131,22 @@ public class QuizActivity extends QACardActivity {
         startCardOrd = extras.getInt(EXTRA_START_CARD_ORD, -1);
         quizSize = extras.getInt(EXTRA_QUIZ_SIZE, -1);
         shuffleCards = extras.getBoolean(EXTRA_SHUFFLE_CARDS, false);
+        if (savedInstanceState != null) {
+            startCardId = savedInstanceState.getInt(EXTRA_START_CARD_ID, -1);
+        }
 
+        registerLoaderCallbacks(3, new QuizQueueManagerLoaderCallbacks(), false);
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+        Card currentCard = getCurrentCard();
+        if (currentCard != null) {
+            outState.putInt(EXTRA_START_CARD_ID, currentCard.getId());
+        }
     }
 
     @Override
@@ -244,20 +246,92 @@ public class QuizActivity extends QACardActivity {
         return true;
     }
 
-    private void createQueue() {
-        QuizQueueManager.Builder builder = new QuizQueueManager.Builder()
-            .setDbOpenHelper(getDbOpenHelper())
-            .setScheduler(scheduler)
-            .setStartCardOrd(startCardOrd)
-            .setFilterCategory(filterCategory)
-            .setShuffle(shuffleCards);
+    private static class QuizQueueManagerLoader extends
+            DBLoader<QueueManager> {
 
-        if (startCardOrd != -1) {
-            builder.setStartCardOrd(startCardOrd)
-                .setQuizSize(quizSize);
+        private Option option;
+
+        private Scheduler scheduler;
+
+        private int filterCategoryId = -1;
+
+        private int startCardOrd = -1;
+
+        private int quizSize = 0;
+
+        private boolean shuffleCards = false;
+
+        public QuizQueueManagerLoader(Context context,
+                String dbPath, int filterCategoryId,
+                int startCardOrd, int quizSize,
+                boolean shuffleCards) {
+            super(context, dbPath);
+
+            this.filterCategoryId = filterCategoryId;
+
+            this.startCardOrd = startCardOrd;
+
+            this.quizSize = quizSize;
+
+            this.shuffleCards = shuffleCards;
+
         }
 
-        queueManager = (QuizQueueManager) builder.build();
+        @Inject
+        public void setOption(Option option) {
+            this.option = option;
+        }
+
+        @Inject
+        public void setScheduler(Scheduler scheduler) {
+            this.scheduler = scheduler;
+        }
+
+        @Override
+        public QueueManager dbLoadInBackground() {
+            Category filterCategory = null;
+            if (filterCategoryId != -1) {
+                dbOpenHelper.getCategoryDao().queryForId(filterCategoryId);
+            }
+            QuizQueueManager.Builder builder = new QuizQueueManager.Builder()
+                .setDbOpenHelper(dbOpenHelper)
+                .setScheduler(scheduler)
+                .setStartCardOrd(startCardOrd)
+                .setFilterCategory(filterCategory)
+                .setShuffle(shuffleCards);
+
+            if (startCardOrd != -1) {
+                builder.setStartCardOrd(startCardOrd)
+                    .setQuizSize(quizSize);
+            }
+
+            return builder.build();
+        }
+
+    }
+
+    private class QuizQueueManagerLoaderCallbacks implements
+            LoaderManager.LoaderCallbacks<QueueManager> {
+        @Override
+        public Loader<QueueManager> onCreateLoader(int arg0, Bundle arg1) {
+             Loader<QueueManager> loader = new QuizQueueManagerLoader(getApplicationContext(), getDbPath(),
+                     categoryId, startCardOrd, quizSize, shuffleCards);
+             loader.forceLoad();
+             return loader;
+        }
+
+        @Override
+        public void onLoadFinished(Loader<QueueManager> loader , QueueManager queueManager) {
+            QuizActivity.this.queueManager = (QuizQueueManager) queueManager;
+            checkAllLoadersCompleted();
+        }
+        @Override
+        public void onLoaderReset(Loader<QueueManager> arg0) {
+            // Do nothing now
+        }
+    }
+
+    private void createQueue() {
     }
 
     @Override
@@ -279,6 +353,10 @@ public class QuizActivity extends QACardActivity {
 
     private void setupGradeButtons() {
         gradeButtonsFragment = new GradeButtonsFragment();
+
+        Bundle args = new Bundle();
+        args.putString(GradeButtonsFragment.EXTRA_DBPATH, getDbPath());
+        gradeButtonsFragment.setArguments(args);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.buttons_root, gradeButtonsFragment);
@@ -367,7 +445,7 @@ public class QuizActivity extends QACardActivity {
 
         @Override
         public Card call() throws Exception {
-            // Need to clone the data due to ORMLite restriction on "update()" method.
+            queueManager.remove(getCurrentCard());
             queueManager.update(updatedCard);
 
             // Keep track of two values to dermine when to display dialog
