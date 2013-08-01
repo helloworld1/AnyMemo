@@ -28,7 +28,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.aspect.LogInvocation;
 import org.liberty.android.fantastischmemo.dao.CardDao;
-import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
@@ -39,7 +38,6 @@ import org.liberty.android.fantastischmemo.queue.LearnQueueManager;
 import org.liberty.android.fantastischmemo.queue.QueueManager;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
-import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
 import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
 import org.liberty.android.fantastischmemo.utils.ShareUtil;
 
@@ -47,17 +45,14 @@ import roboguice.util.RoboAsyncTask;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -134,23 +129,9 @@ public class StudyActivity extends QACardActivity {
             startCardId = extras.getInt(EXTRA_START_CARD_ID, -1);
         }
 
-        if (savedInstanceState != null) {
-            startCardId = savedInstanceState.getInt(EXTRA_START_CARD_ID, -1);
-        }
-
         registerLoaderCallbacks(3, new LearnQueueManagerLoaderCallbacks(), false);
         super.onCreate(savedInstanceState);
 
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState)
-    {
-        super.onSaveInstanceState(outState);
-        Card currentCard = getCurrentCard();
-        if (currentCard != null) {
-            outState.putInt(EXTRA_START_CARD_ID, currentCard.getId());
-        }
     }
 
     @Override

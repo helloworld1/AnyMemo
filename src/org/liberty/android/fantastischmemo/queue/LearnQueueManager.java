@@ -21,12 +21,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.queue;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
@@ -36,6 +36,7 @@ import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
+import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
 
 import roboguice.util.Ln;
 
@@ -82,7 +83,7 @@ public class LearnQueueManager implements QueueManager {
         learnQueue = new LinkedList<Card>();
         newCache = new LinkedList<Card>();
         reviewCache = new LinkedList<Card>();
-        dirtyCache = new HashSet<Card>();
+        dirtyCache = Collections.newSetFromMap(new ConcurrentHashMap<Card, Boolean>());
     }
 
 	@Override
@@ -122,31 +123,7 @@ public class LearnQueueManager implements QueueManager {
 
 	@Override
 	public synchronized void release() {
-        // Update the queue
-        final AnyMemoDBOpenHelper dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(context, dbPath);
-        final CardDao cardDao = dbOpenHelper.getCardDao();
-        final LearningDataDao learningDataDao = dbOpenHelper.getLearningDataDao();
-
-        try {
-            learningDataDao.callBatchTasks (
-                new Callable<Void>() {
-                    public Void call() throws Exception {
-                        Ln.i("Cards to flush: " + dirtyCache.size());
-                        for (Card card : dirtyCache) {
-                            Ln.i("Flushing card id: " + card.getId() + " with learning data: " + card.getLearningData());
-                            learningDataDao.update(card.getLearningData());
-                            cardDao.update(card);
-                        }
-                       return null;
-                    }
-                });
-            dirtyCache.clear();
-        } catch (Exception e) {
-            Ln.e(e, "Error encounter when flushing: ");
-            throw new RuntimeException("Queue flushing get exception!", e);
-        } finally {
-            AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
-        }
+        AnyMemoExecutor.waitAllTasks();
 	}
 
     private synchronized void refill() {
@@ -183,8 +160,8 @@ public class LearnQueueManager implements QueueManager {
         } finally {
             AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
         }
+        flushDirtyCache();
     }
-
 
     private synchronized void shuffle() {
     	// Shuffle all the caches
@@ -249,6 +226,39 @@ public class LearnQueueManager implements QueueManager {
         } finally {
             AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
         }
+    }
+
+    private synchronized void flushDirtyCache() {
+        AnyMemoExecutor.submit(new Runnable() {
+            public void run() {
+                // Update the queue
+                final AnyMemoDBOpenHelper dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(context, dbPath);
+                final CardDao cardDao = dbOpenHelper.getCardDao();
+                final LearningDataDao learningDataDao = dbOpenHelper.getLearningDataDao();
+
+                try {
+                    learningDataDao.callBatchTasks (
+                        new Callable<Void>() {
+                            public Void call() throws Exception {
+                                Ln.i("Flushing dirty cache. # of cards to flush: " + dirtyCache.size());
+                                for (Card card : dirtyCache) {
+                                    Ln.i("Flushing card id: " + card.getId() + " with learning data: " + card.getLearningData());
+                                    learningDataDao.update(card.getLearningData());
+                                    cardDao.update(card);
+                                }
+                                Ln.i("Flushing dirty cache done.");
+                               return null;
+                            }
+                        });
+                    dirtyCache.clear();
+                } catch (Exception e) {
+                    Ln.e(e, "Error encounter when flushing: ");
+                    throw new RuntimeException("Queue flushing get exception!", e);
+                } finally {
+                    AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
+                }
+            }
+        });
     }
 
     public static class Builder {
