@@ -36,30 +36,35 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
      * Get the first card in ordinal.
      */
     public Card queryFirstOrdinal() {
-        try {
-            QueryBuilder<Card, Integer> qb = queryBuilder();
-            PreparedQuery<Card> pq = qb.limit(1L).orderBy("ordinal", true).prepare();
-            return queryForFirst(pq);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        return queryFirstOrdinal(null);
     }
 
     /*
      * Get the first card in ordinal.
      */
-    public Card queryFirstOrdinal(Category c) {
-        if (c == null) {
-            return queryFirstOrdinal();
-        }
-        try {
-            QueryBuilder<Card, Integer> qb = queryBuilder();
-            qb.limit(1L).orderBy("ordinal", true);
-            PreparedQuery<Card> pq = qb.where().eq("category_id", c.getId()).prepare();
-            return queryForFirst(pq);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    public Card queryFirstOrdinal(final Category c) {
+        return callBatchTasks(new Callable<Card>() {
+            public Card call() throws Exception {
+                LearningDataDao learningDataDao = getHelper().getLearningDataDao();
+                CategoryDao categoryDao = getHelper().getCategoryDao();
+
+                QueryBuilder<Card, Integer> qb = queryBuilder();
+                qb.limit(1L).orderBy("ordinal", true);
+                if (c != null) {
+                    qb.setWhere(qb.where().eq("category_id", c.getId()));
+                }
+                PreparedQuery<Card> pq = qb.prepare();
+
+                Card card = queryForFirst(pq);
+                if (card == null) {
+                    return null;
+                }
+                learningDataDao.refresh(card.getLearningData());
+                categoryDao.refresh(card.getCategory());
+                return card;
+            }
+        });
+
     }
 
     /*
@@ -97,92 +102,82 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
      * Query cylic next card in ordinal.
      */
     public Card queryNextCard(final Card c) {
-        Integer currentCardOrdinal = c.getOrdinal();
-        Integer nextOridinal = currentCardOrdinal + 1;
-        QueryBuilder<Card, Integer> qb = queryBuilder();
-        try {
-            PreparedQuery<Card> pq = qb.where().eq("ordinal", nextOridinal).prepare();
-            Card nc = queryForFirst(pq);
-            if (nc == null) {
-                nc = queryFirstOrdinal();
-            }
-            return nc;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        return queryNextCard(c, null);
     }
 
     public Card queryNextCard(final Card c, final Category ct) {
-        try {
-            QueryBuilder<Card, Integer> qb = queryBuilder();
-            qb.limit(1L).orderBy("ordinal", true);
-            PreparedQuery<Card> pq;
-            if (ct != null ) {
-                pq = qb.where()
-                    .eq("category_id", ct.getId())
-                    .and().gt("ordinal", c.getOrdinal())
-                    .prepare();
-            } else {
-                pq = qb.where()
-                    .gt("ordinal", c.getOrdinal())
-                    .prepare();
+        return callBatchTasks(new Callable<Card>() {
+            public Card call() throws Exception {
+                LearningDataDao learningDataDao = getHelper().getLearningDataDao();
+                CategoryDao categoryDao = getHelper().getCategoryDao();
+
+                QueryBuilder<Card, Integer> qb = queryBuilder();
+                qb.limit(1L).orderBy("ordinal", true);
+                PreparedQuery<Card> pq;
+                if (ct != null ) {
+                    pq = qb.where()
+                        .eq("category_id", ct.getId())
+                        .and().gt("ordinal", c.getOrdinal())
+                        .prepare();
+                } else {
+                    pq = qb.where()
+                        .gt("ordinal", c.getOrdinal())
+                        .prepare();
+                }
+                Card nc = queryForFirst(pq);
+                if (nc == null) {
+                    nc = queryFirstOrdinal(ct);
+                }
+
+                if (nc == null) {
+                    return null;
+                }
+                learningDataDao.refresh(nc.getLearningData());
+                categoryDao.refresh(nc.getCategory());
+                return nc;
             }
-            Card nc = queryForFirst(pq);
-            if (nc == null) {
-                nc = queryFirstOrdinal(ct);
-            }
-            return nc;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        });
     }
 
     /*
      * Query cylic previous card in ordinal.
      */
     public Card queryPrevCard(final Card c) {
-        Integer currentCardOrdinal = c.getOrdinal();
-        Integer nextOridinal = currentCardOrdinal - 1;
-        QueryBuilder<Card, Integer> qb = queryBuilder();
-        try {
-            PreparedQuery<Card> pq = qb.where().eq("ordinal", nextOridinal).prepare();
-            Card nc = queryForFirst(pq);
-            if (nc == null) {
-                nc = queryLastOrdinal();
-            }
-            return nc;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        return queryPrevCard(c, null);
     }
 
     /*
      * Query cylic previous card in ordinal for a category.
      */
     public Card queryPrevCard(final Card c, final Category ct) {
-        try {
-            QueryBuilder<Card, Integer> qb = queryBuilder();
-            qb.limit(1L).orderBy("ordinal", false);
-            PreparedQuery<Card> pq;
-            if (ct != null) {
-                pq = qb.where()
-                    .eq("category_id", ct.getId())
-                    .and().lt("ordinal", c.getOrdinal())
-                    .prepare();
-            } else {
-                pq = qb.where()
-                    .lt("ordinal", c.getOrdinal())
-                    .prepare();
-            }
+        return callBatchTasks(new Callable<Card>() {
+            public Card call() throws Exception {
+                LearningDataDao learningDataDao = getHelper().getLearningDataDao();
+                CategoryDao categoryDao = getHelper().getCategoryDao();
 
-            Card nc = queryForFirst(pq);
-            if (nc == null) {
-                nc = queryLastOrdinal(ct);
+                QueryBuilder<Card, Integer> qb = queryBuilder();
+                qb.limit(1L).orderBy("ordinal", false);
+                PreparedQuery<Card> pq;
+                if (ct != null) {
+                    pq = qb.where()
+                        .eq("category_id", ct.getId())
+                        .and().lt("ordinal", c.getOrdinal())
+                        .prepare();
+                } else {
+                    pq = qb.where()
+                        .lt("ordinal", c.getOrdinal())
+                        .prepare();
+                }
+
+                Card nc = queryForFirst(pq);
+                if (nc == null) {
+                    nc = queryLastOrdinal(ct);
+                }
+                learningDataDao.refresh(nc.getLearningData());
+                categoryDao.refresh(nc.getCategory());
+                return nc;
             }
-            return nc;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        });
     }
 
     @Override

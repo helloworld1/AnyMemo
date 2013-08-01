@@ -81,7 +81,6 @@ public class PreviewEditActivity extends QACardActivity {
     private Integer savedCardId = null;
     private String dbPath = "";
     private int activeCategoryId = -1;
-    private SettingDao settingDao;
     private CardDao cardDao;
     private LearningDataDao learningDataDao;
     private CategoryDao categoryDao;
@@ -124,6 +123,10 @@ public class PreviewEditActivity extends QACardActivity {
         activeCategoryId = extras.getInt(EXTRA_CATEGORY, -1);
         startCardId = extras.getInt(EXTRA_CARD_ID, -1);
 
+        if (savedInstanceState != null) {
+            startCardId = savedInstanceState.getInt(EXTRA_CARD_ID, -1);
+        }
+
         /*
          * Currently always set the result to OK
          * to assume there are always some changes.
@@ -135,18 +138,27 @@ public class PreviewEditActivity extends QACardActivity {
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        Card currentCard = getCurrentCard();
+        if (currentCard != null) {
+            outState.putInt(EXTRA_CARD_ID, currentCard.getId());
+        }
+    }
+
+    @Override
     public int getContentView() {
         return R.layout.qa_card_layout_preview_edit;
     }
 
     @Override
-    public void onInit() throws Exception {
+    public void onPostInit() {
+        super.onPostInit();
         Card currentCard = null;
         cardDao = getDbOpenHelper().getCardDao();
         learningDataDao = getDbOpenHelper().getLearningDataDao();
         categoryDao = getDbOpenHelper().getCategoryDao();
-        settingDao = getDbOpenHelper().getSettingDao();
-        setting = settingDao.queryForId(1);
+        setting = getSetting();
 
         // If category is set, it will override the card id.
         if (activeCategoryId != -1) {
@@ -167,15 +179,9 @@ public class PreviewEditActivity extends QACardActivity {
             return;
         }
 
-        categoryDao.refresh(currentCard.getCategory());
-        learningDataDao.refresh(currentCard.getLearningData());
-
         totalCardCount = cardDao.countOf();
         setCurrentCard(currentCard);
-    }
 
-    @Override
-    public void onPostInit() {
         composeViews();
         //currentCard = .getItem(currentId);
         setViewListeners();
@@ -599,8 +605,6 @@ public class PreviewEditActivity extends QACardActivity {
     protected void gotoNext(){
         if (getCurrentCard() != null) {
             Card nextCard = cardDao.queryNextCard(getCurrentCard(), currentCategory);
-            categoryDao.refresh(nextCard.getCategory());
-            learningDataDao.refresh(nextCard.getLearningData());
 
             assert nextCard != null : "Next card is null";
             gotoCard(nextCard);
@@ -648,8 +652,6 @@ public class PreviewEditActivity extends QACardActivity {
     protected void gotoPrev(){
         if (getCurrentCard() != null) {
             Card prevCard = cardDao.queryPrevCard(getCurrentCard(), currentCategory);
-            categoryDao.refresh(prevCard.getCategory());
-            learningDataDao.refresh(prevCard.getLearningData());
 
             assert prevCard != null : "Prev card is null";
             gotoCard(prevCard);

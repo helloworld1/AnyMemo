@@ -36,7 +36,6 @@ import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.service.AnyMemoService;
-import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
 import org.liberty.android.fantastischmemo.utils.CardTTSUtil;
 import org.liberty.android.fantastischmemo.utils.CardTTSUtilFactory;
 import org.liberty.android.fantastischmemo.utils.CardTextUtil;
@@ -55,7 +54,6 @@ import android.gesture.GestureLibraries;
 import android.gesture.GestureLibrary;
 import android.gesture.GestureOverlayView;
 import android.gesture.Prediction;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
@@ -93,8 +91,6 @@ public abstract class QACardActivity extends AMActivity {
 
     private Setting setting;
 
-    private WaitDbTask waitDbTask = null;
-
     private boolean isAnswerShown = true;
 
     private TextView smallTitleBar;
@@ -104,8 +100,6 @@ public abstract class QACardActivity extends AMActivity {
     private CardTextUtil cardTextUtil;
 
     private GestureLibrary gestureLibrary;
-
-    private volatile boolean initFinished = false;
 
     private ProgressDialog progressDialog;
 
@@ -131,9 +125,6 @@ public abstract class QACardActivity extends AMActivity {
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        if (bundle != null) {
-            initFinished = bundle.getBoolean("initFinished");
-        }
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             dbPath = extras.getString(EXTRA_DBPATH);
@@ -156,13 +147,6 @@ public abstract class QACardActivity extends AMActivity {
         registerLoaderCallbacks(2, new CardTextUtilLoaderCallbacks(), true);
         startLoading();
     }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState)
-    {
-        outState.putBoolean("initFinished", initFinished);
-    }
-
     
     protected void registerLoaderCallbacks(int id, LoaderCallbacks<?> callbacks, boolean reloadOnStart) {
         loaderCallbackMap.put(id, callbacks);
@@ -180,8 +164,7 @@ public abstract class QACardActivity extends AMActivity {
         LoaderManager.enableDebugLogging(true);
         LoaderManager loaderManager = getSupportLoaderManager();
         for (int id : loaderCallbackMap.keySet()) {
-            if (initFinished && loaderReloadOnStartMap.get(id)) {
-                Ln.v("RRRRRRRRRRRRRRRRRRRRRRRRR " + id);
+            if (loaderReloadOnStartMap.get(id)) {
                 loaderManager.restartLoader(id, null, loaderCallbackMap.get(id));
             } else {
                 loaderManager.initLoader(id, null, loaderCallbackMap.get(id));
@@ -424,14 +407,13 @@ public abstract class QACardActivity extends AMActivity {
 
     // Called when the initalizing finished.
     protected void onPostInit() {
+        progressDialog.dismiss();
         View buttonsView = findViewById(R.id.buttons_root);
         if (buttonsView != null) {
             buttonsView.setBackgroundColor(setting
                     .getAnswerBackgroundColor());
         }
 
-        progressDialog.dismiss();
-        initFinished = true;
     }
 
     // Called when the initalizing finished.
@@ -520,7 +502,6 @@ public abstract class QACardActivity extends AMActivity {
                 }
             });
         }
-        initFinished = true;
     }
 
     protected static abstract class DBLoader<T> extends RoboAsyncTaskLoader<T> {
@@ -626,19 +607,6 @@ public abstract class QACardActivity extends AMActivity {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        // Only if the initTask has been finished and no waitDbTask is waiting.
-        // if (initFinished && (waitDbTask == null || !AsyncTask.Status.RUNNING
-        //                 .equals(waitDbTask.getStatus()))) {
-        //     waitDbTask = new WaitDbTask();
-        //     waitDbTask.execute((Void) null);
-        // } else {
-        //     Log.i(TAG, "There is another task running. Do not run tasks");
-        // }
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
@@ -663,41 +631,6 @@ public abstract class QACardActivity extends AMActivity {
             smallTitleBar.setVisibility(View.GONE);
         }
 
-    }
-
-    /*
-     * Use AsyncTask to make sure there is no running task for a db
-     */
-    private class WaitDbTask extends AsyncTask<Void, Void, Void> {
-        private ProgressDialog progressDialog;
-
-        @Override
-        public void onPreExecute() {
-            super.onPreExecute();
-            progressDialog = new ProgressDialog(QACardActivity.this);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setTitle(getString(R.string.loading_please_wait));
-            progressDialog.setMessage(getString(R.string.loading_save));
-            progressDialog.setCancelable(true);
-            progressDialog.show();
-        }
-
-        @Override
-        public Void doInBackground(Void... nothing) {
-            AnyMemoExecutor.waitAllTasks();
-            return null;
-        }
-
-        @Override
-        public void onCancelled() {
-            return;
-        }
-
-        @Override
-        public void onPostExecute(Void result) {
-            super.onPostExecute(result);
-            progressDialog.dismiss();
-        }
     }
 
     /* Called when the card is displayed. */

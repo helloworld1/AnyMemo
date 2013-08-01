@@ -97,8 +97,7 @@
         <activity 
             android:name=".ui.StudyActivity" />
         <activity 
-            android:name=".ui.PreviewEditActivity"
-            android:configChanges="orientation|keyboardHidden" />
+            android:name=".ui.PreviewEditActivity" />
         <activity 
             android:name=".ui.QuizActivity"
             android:configChanges="orientation|keyboardHidden" />

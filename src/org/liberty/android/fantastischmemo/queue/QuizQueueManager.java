@@ -105,7 +105,7 @@ public class QuizQueueManager implements QueueManager {
 	}
 
 	@Override
-	public synchronized void flush() {
+	public synchronized void release() {
         // Update the queue
 
         // Current it is not quite functional.

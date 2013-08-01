@@ -124,7 +124,7 @@ public class LearnQueueManager implements QueueManager {
 	}
 
 	@Override
-	public synchronized void flush() {
+	public synchronized void release() {
         // Update the queue
         final AnyMemoDBOpenHelper dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(context, dbPath);
         final CardDao cardDao = dbOpenHelper.getCardDao();

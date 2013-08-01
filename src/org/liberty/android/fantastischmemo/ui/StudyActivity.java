@@ -40,7 +40,6 @@ import org.liberty.android.fantastischmemo.queue.QueueManager;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
 import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
-import org.liberty.android.fantastischmemo.utils.CardTextUtil;
 import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
 import org.liberty.android.fantastischmemo.utils.ShareUtil;
 
@@ -91,7 +90,6 @@ public class StudyActivity extends QACardActivity {
 
     private CardDao cardDao;
     private LearningDataDao learningDataDao;
-    private CategoryDao categoryDao;
 
     private Setting setting;
 
@@ -105,8 +103,6 @@ public class StudyActivity extends QACardActivity {
     private long newCardCount = 0;
 
     boolean initialized = false;
-
-    private WaitDbTask waitDbTask;
 
     private DictionaryUtil dictionaryUtil;
 
@@ -137,9 +133,24 @@ public class StudyActivity extends QACardActivity {
             filterCategoryId = extras.getInt(EXTRA_CATEGORY_ID, -1);
             startCardId = extras.getInt(EXTRA_START_CARD_ID, -1);
         }
+
+        if (savedInstanceState != null) {
+            startCardId = savedInstanceState.getInt(EXTRA_START_CARD_ID, -1);
+        }
+
         registerLoaderCallbacks(3, new LearnQueueManagerLoaderCallbacks(), true);
         super.onCreate(savedInstanceState);
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+        Card currentCard = getCurrentCard();
+        if (currentCard != null) {
+            outState.putInt(EXTRA_START_CARD_ID, currentCard.getId());
+        }
     }
 
     @Override
@@ -304,43 +315,30 @@ public class StudyActivity extends QACardActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        Log.v(TAG, "back button pressed");
-        FinishTask task = new FinishTask();
-        task.execute((Void)null);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        AnyMemoExecutor.submit(flushDatabaseTask);
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         if (queueManager != null) {
-            queueManager.flush();
+            queueManager.release();
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        // Only if the initTask has been finished and no waitDbTask is waiting.
-        // if (initialized && (waitDbTask == null || !AsyncTask.Status.RUNNING.equals(waitDbTask.getStatus()))) {
-        //     waitDbTask = new WaitDbTask();
-        //     waitDbTask.execute((Void)null);
-        // } else {
-        //     Log.i(TAG, "There is another task running. Do not run tasks");
-        // }
     }
 
     @Override
     public void restartActivity(){
+        finish();
+        Intent myIntent = new Intent(StudyActivity.this, StudyActivity.class);
+        myIntent.putExtra(EXTRA_DBPATH, dbPath);
+        myIntent.putExtra(EXTRA_CATEGORY_ID, filterCategoryId);
 
-        RestartTask task = new RestartTask();
-        task.execute((Void)null);
+        if (getCurrentCard() != null ) {
+            myIntent.putExtra(EXTRA_START_CARD_ID, getCurrentCard().getId());
+        }
+
+        startActivity(myIntent);
     }
 
     @Override
@@ -348,7 +346,6 @@ public class StudyActivity extends QACardActivity {
         super.onPostInit();
         cardDao = getDbOpenHelper().getCardDao();
         learningDataDao = getDbOpenHelper().getLearningDataDao();
-        categoryDao = getDbOpenHelper().getCategoryDao();
         setting = getSetting();
         option = getOption();
 
@@ -614,45 +611,6 @@ public class StudyActivity extends QACardActivity {
         gradeButtonsFragment.setOnCardChangedListener(onCardChangedListener);
     }
 
-    private class WaitDbTask extends AsyncTask<Void, Void, Void> {
-        private ProgressDialog progressDialog;
-
-        @Override
-        public void onPreExecute(){
-            super.onPreExecute();
-            progressDialog = new ProgressDialog(StudyActivity.this);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setTitle(getString(R.string.loading_please_wait));
-            progressDialog.setMessage(getString(R.string.loading_save));
-            progressDialog.show();
-        }
-
-        @Override
-        public Void doInBackground(Void... nothing) {
-            AnyMemoExecutor.submit(flushDatabaseTask);
-            AnyMemoExecutor.waitAllTasks();
-            Log.v(TAG, "DB task completed.");
-            return null;
-        }
-
-        @Override
-        public void onPostExecute(Void result){
-            super.onPostExecute(result);
-            if (!isCancelled()) {
-                progressDialog.dismiss();
-            }
-        }
-    }
-
-    private class FinishTask extends WaitDbTask {
-        @Override
-        public void onPostExecute(Void result){
-            super.onPostExecute(result);
-
-            finish();
-        }
-    }
-
     /*
      * When the user select the undo from the menu
      * this is what to do
@@ -674,25 +632,6 @@ public class StudyActivity extends QACardActivity {
                 .setNeutralButton(R.string.ok_text, null)
                 .create()
                 .show();
-        }
-    }
-
-    /* When restarting an activity, we have to flush db first. */
-    private class RestartTask extends WaitDbTask {
-        @Override
-        public void onPostExecute(Void result){
-            super.onPostExecute(result);
-
-            finish();
-            Intent myIntent = new Intent(StudyActivity.this, StudyActivity.class);
-            myIntent.putExtra(EXTRA_DBPATH, dbPath);
-            myIntent.putExtra(EXTRA_CATEGORY_ID, filterCategoryId);
-
-            if (getCurrentCard() != null ) {
-                myIntent.putExtra(EXTRA_START_CARD_ID, getCurrentCard().getId());
-            }
-
-            startActivity(myIntent);
         }
     }
 
@@ -726,12 +665,6 @@ public class StudyActivity extends QACardActivity {
             }
         }
     }
-
-    private Runnable flushDatabaseTask = new Runnable() {
-        public void run() {
-            queueManager.flush();
-        }
-    };
 
     // When a category is selected in category fragment.
     private CategoryEditorResultListener categoryResultListener =

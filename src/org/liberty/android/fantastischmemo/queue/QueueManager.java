@@ -27,7 +27,7 @@ import org.liberty.android.fantastischmemo.domain.Card;
  */
 public interface QueueManager {
     /* Flush the database */
-    void flush();
+    void release();
 
     /* Update one card */
     void update(Card card);
@@ -40,5 +40,4 @@ public interface QueueManager {
 
     /* Set the head of the queue to card. */
     Card dequeuePosition(int cardId);
-
 }
