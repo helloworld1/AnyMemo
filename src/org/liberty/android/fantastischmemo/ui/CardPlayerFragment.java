@@ -27,8 +27,8 @@ import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.service.CardPlayerService;
 
 import roboguice.fragment.RoboFragment;
+import roboguice.util.Ln;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -55,8 +55,6 @@ public class CardPlayerFragment extends RoboFragment {
     private ImageButton shuffleButton;
     private ImageButton repeatButton;
 
-    private CardPlayerActivity activity;
-
     private Option option;
 
     @Inject
@@ -80,19 +78,13 @@ public class CardPlayerFragment extends RoboFragment {
         IntentFilter filter = new IntentFilter();
         filter.addAction(CardPlayerService.ACTION_GO_TO_CARD);
         filter.addAction(CardPlayerService.ACTION_PLAYING_STOPPED);
-        activity.registerReceiver(serviceEventListener, filter);
+        getActivity().registerReceiver(serviceEventListener, filter);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        activity.unregisterReceiver(serviceEventListener);
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        this.activity = (CardPlayerActivity) activity;
+        getActivity().unregisterReceiver(serviceEventListener);
     }
 
     @Override
@@ -150,6 +142,11 @@ public class CardPlayerFragment extends RoboFragment {
 
         @Override
         public void onClick(View v) {
+            CardPlayerActivity activity = (CardPlayerActivity) getActivity();
+            if (activity == null) {
+                Ln.w("Activity is null, do not handle any click events");
+                return;
+            }
             if (v == playButton) {
                 if (playButton.isSelected()) {
                     // Button is currently in "Playing" state 
@@ -190,12 +187,16 @@ public class CardPlayerFragment extends RoboFragment {
 
     private void startPlaying() {
         playButton.setSelected(true);
+        CardPlayerActivity activity = (CardPlayerActivity) getActivity();
         activity.getCardPlayerService().startPlaying(activity.getCurrentCard());
     }
 
     private void stopPlaying() {
         playButton.setSelected(false);
-        activity.getCardPlayerService().stopPlaying();
+        CardPlayerActivity activity = (CardPlayerActivity) getActivity();
+        if (activity != null && activity.getCardPlayerService() != null) {
+            activity.getCardPlayerService().stopPlaying();
+        }
     }
 
     private void displaySettingsDialog() {
@@ -222,6 +223,11 @@ public class CardPlayerFragment extends RoboFragment {
                 // 2. Only update the card if the card is different.
                 // So the background service will continue to work with this callback
                 // being called.
+                CardPlayerActivity activity = (CardPlayerActivity) getActivity();
+                if (activity == null) {
+                    Ln.w("Activity is null, do not handle any click events");
+                    return;
+                }
                 if (activity.isActivityForeground() && currentCardId != activity.getCurrentCard().getId()) {
                     activity.gotoCardId(currentCardId);
                 }

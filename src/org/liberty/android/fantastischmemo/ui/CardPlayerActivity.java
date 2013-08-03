@@ -64,6 +64,18 @@ public class CardPlayerActivity extends QACardActivity {
         Bundle extras = getIntent().getExtras();
         startCardId = extras.getInt(EXTRA_START_CARD_ID, -1);
 
+        if (savedInstanceState != null) {
+            startCardId = savedInstanceState.getInt(EXTRA_START_CARD_ID, -1);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        Card currentCard = getCurrentCard();
+        if (currentCard != null) {
+            outState.putInt(EXTRA_START_CARD_ID, currentCard.getId());
+        }
     }
 
     @Override
@@ -78,7 +90,8 @@ public class CardPlayerActivity extends QACardActivity {
     }
 
     @Override
-    public void onInit() throws Exception {
+    public void onPostInit() {
+        super.onPostInit();
         cardDao = getDbOpenHelper().getCardDao();
         settingDao = getDbOpenHelper().getSettingDao();
 
@@ -94,10 +107,6 @@ public class CardPlayerActivity extends QACardActivity {
         totalCardCount = cardDao.countOf();
 
         bindCardPlayerService();
-    }
-
-    @Override
-    public void onPostInit() {
         if (getCurrentCard() == null) {
             showNoItemDialog();
             return;
