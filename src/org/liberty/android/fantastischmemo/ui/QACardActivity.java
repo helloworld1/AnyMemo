@@ -56,6 +56,8 @@ import android.gesture.GestureOverlayView;
 import android.gesture.Prediction;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
@@ -154,12 +156,8 @@ public abstract class QACardActivity extends AMActivity {
     }
 
     private void startLoading() {
-        progressDialog = new ProgressDialog(QACardActivity.this);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setTitle(getString(R.string.loading_please_wait));
-        progressDialog.setMessage(getString(R.string.loading_database));
-        progressDialog.setCancelable(false);
-        progressDialog.show();
+        DialogFragment df = new LoadingProgressFragment();
+        df.show(getSupportFragmentManager(), LoadingProgressFragment.class.toString());
 
         LoaderManager.enableDebugLogging(true);
         LoaderManager loaderManager = getSupportLoaderManager();
@@ -407,7 +405,11 @@ public abstract class QACardActivity extends AMActivity {
 
     // Called when the initalizing finished.
     protected void onPostInit() {
-        progressDialog.dismiss();
+        DialogFragment df = (DialogFragment) getSupportFragmentManager()
+            .findFragmentByTag(LoadingProgressFragment.class.toString());
+        if (df != null) {
+            df.dismiss();
+        }
         View buttonsView = findViewById(R.id.buttons_root);
         if (buttonsView != null) {
             buttonsView.setBackgroundColor(setting
@@ -496,11 +498,7 @@ public abstract class QACardActivity extends AMActivity {
         runningLoaderCount--;
         // The onPostInit is running on UI thread.
         if (runningLoaderCount <= 0) {
-            handler.post(new Runnable() {
-                public void run() {
-                    onPostInit();
-                }
-            });
+            handler.post(onPostInitRunnable);
         }
     }
 
@@ -614,6 +612,10 @@ public abstract class QACardActivity extends AMActivity {
         if (cardTTSUtil != null) {
             cardTTSUtil.release();
         }
+
+        // The handler needs to remove the callbacks to avoid the race condition
+        // that onPostInitRunnable is running after onDestroy.
+        handler.removeCallbacks(onPostInitRunnable);
 
         /* Update the widget because StudyActivity can be accessed though widget*/
         Intent myIntent = new Intent(this, AnyMemoService.class);
@@ -767,6 +769,12 @@ public abstract class QACardActivity extends AMActivity {
             }
         }
     }
+
+    private Runnable onPostInitRunnable = new Runnable() {
+        public void run() {
+            onPostInit();
+        }
+    };
 
     private CardFragment.OnClickListener onQuestionTextClickListener = new CardFragment.OnClickListener() {
 

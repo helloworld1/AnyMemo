@@ -17,11 +17,11 @@ import com.j256.ormlite.dao.DaoManager;
  * Keep the reference count of each AnyMemoDBOpenHelper.
  */
 public class AnyMemoDBOpenHelperManager {
-    private static Map<String, WeakReference<AnyMemoDBOpenHelper>> helpers = new ConcurrentHashMap<String, WeakReference<AnyMemoDBOpenHelper>>();
-    private static Map<String, Integer> refCounts = new ConcurrentHashMap<String, Integer>();
+    private static volatile Map<String, WeakReference<AnyMemoDBOpenHelper>> helpers = new ConcurrentHashMap<String, WeakReference<AnyMemoDBOpenHelper>>();
+    private static volatile Map<String, Integer> refCounts = new ConcurrentHashMap<String, Integer>();
 
     /* Used to synchronize different method, i. e. creating and releasing helper. */
-    private static ReentrantLock bigLock = new ReentrantLock();
+    private static volatile ReentrantLock bigLock = new ReentrantLock();
 
     /* Get a db open helper and return a cached one if it was called before for the same db */
     public static AnyMemoDBOpenHelper getHelper(Context context, String dbpath) {
