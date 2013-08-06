@@ -81,8 +81,7 @@
             android:name=".ui.FileBrowserActivity"
             android:configChanges="orientation|keyboardHidden" />
         <activity 
-            android:name=".ui.OptionScreen"
-            android:configChanges="orientation|keyboardHidden" />
+            android:name=".ui.OptionScreen" />
         <activity 
             android:name=".ui.AlgorithmCustomizationScreen"
             android:configChanges="orientation|keyboardHidden" />
@@ -97,8 +96,7 @@
         <activity 
             android:name=".ui.PreviewEditActivity" />
         <activity 
-            android:name=".ui.QuizActivity"
-            android:configChanges="orientation|keyboardHidden" />
+            android:name=".ui.QuizActivity" />
         <activity 
             android:name=".ui.CardPlayerActivity" />
         <receiver
