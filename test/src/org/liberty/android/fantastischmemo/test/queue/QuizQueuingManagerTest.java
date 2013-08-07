@@ -41,12 +41,15 @@ public class QuizQueuingManagerTest extends AbstractExistingDBTest {
             .setStartCardOrd(5)
             .build();
         Card card5 = queueManager.dequeue();
+        queueManager.remove(card5);
         assertEquals(5, (int)card5.getOrdinal());
 
         Card card6 = queueManager.dequeue();
+        queueManager.remove(card6);
         assertEquals(6, (int)card6.getOrdinal());
 
         Card card7 = queueManager.dequeue();
+        queueManager.remove(card7);
         assertEquals(7, (int)card7.getOrdinal());
 
         // No cards in the queue
@@ -67,18 +70,21 @@ public class QuizQueuingManagerTest extends AbstractExistingDBTest {
             .build();
 
         Card card5 = queueManager.dequeue();
+        queueManager.remove(card5);
         assertEquals(5, (int)card5.getOrdinal());
         when(mockScheduler.isCardLearned(card5.getLearningData()))
             .thenReturn(true);
         queueManager.update(card5);
 
         Card card6 = queueManager.dequeue();
+        queueManager.remove(card6);
         assertEquals(6, (int)card6.getOrdinal());
         when(mockScheduler.isCardLearned(card6.getLearningData()))
             .thenReturn(false);
         queueManager.update(card6);
 
         Card card7 = queueManager.dequeue();
+        queueManager.remove(card7);
         assertEquals(7, (int)card7.getOrdinal());
         when(mockScheduler.isCardLearned(card7.getLearningData()))
             .thenReturn(true);
@@ -87,6 +93,7 @@ public class QuizQueuingManagerTest extends AbstractExistingDBTest {
         // Now cards in the queue is the card we failed
         // and we succeed this time
         Card card6Again = queueManager.dequeue();
+        queueManager.remove(card6Again);
         assertEquals(6, (int)card6Again.getOrdinal());
         when(mockScheduler.isCardLearned(card6.getLearningData()))
             .thenReturn(true);
