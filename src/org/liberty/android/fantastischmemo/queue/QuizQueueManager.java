@@ -22,19 +22,15 @@ package org.liberty.android.fantastischmemo.queue;
 
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
-
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
-
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
-
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 
 public class QuizQueueManager implements QueueManager {

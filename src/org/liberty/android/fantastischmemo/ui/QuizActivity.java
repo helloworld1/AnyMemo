@@ -23,7 +23,6 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.Option;
@@ -59,9 +58,6 @@ public class QuizActivity extends QACardActivity {
     public static String EXTRA_QUIZ_SIZE = "quiz_size";
     public static String EXTRA_SHUFFLE_CARDS = "shuffle_cards";
     public static String EXTRA_START_CARD_ID = "start_card_id";
-
-    private CategoryDao categoryDao;
-
 
     /* UI elements */
     private GradeButtonsFragment gradeButtonsFragment;
@@ -99,7 +95,6 @@ public class QuizActivity extends QACardActivity {
     @Override
     public void onPostInit() {
         super.onPostInit();
-        categoryDao = getDbOpenHelper().getCategoryDao();
         setting = getSetting();
         option = getOption();
 
@@ -249,8 +244,6 @@ public class QuizActivity extends QACardActivity {
     private static class QuizQueueManagerLoader extends
             DBLoader<QueueManager> {
 
-        private Option option;
-
         private Scheduler scheduler;
 
         private int filterCategoryId = -1;
@@ -275,11 +268,6 @@ public class QuizActivity extends QACardActivity {
 
             this.shuffleCards = shuffleCards;
 
-        }
-
-        @Inject
-        public void setOption(Option option) {
-            this.option = option;
         }
 
         @Inject

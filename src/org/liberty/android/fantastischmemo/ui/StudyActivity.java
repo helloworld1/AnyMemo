@@ -134,6 +134,7 @@ public class StudyActivity extends QACardActivity {
         }
 
         registerLoaderCallbacks(3, new LearnQueueManagerLoaderCallbacks(), false);
+
         super.onCreate(savedInstanceState);
 
     }
@@ -341,6 +342,9 @@ public class StudyActivity extends QACardActivity {
         learningDataDao = getDbOpenHelper().getLearningDataDao();
         setting = getSetting();
         option = getOption();
+        if (filterCategoryId != -1) {
+            filterCategory = getDbOpenHelper().getCategoryDao().queryForId(filterCategoryId);
+        }
 
         /* Run the learnQueue init in a separate thread */
         if (startCardId != -1) {
@@ -514,7 +518,7 @@ public class StudyActivity extends QACardActivity {
 
         private Scheduler scheduler;
 
-        private int filterCategoryId = -1;
+        private final int filterCategoryId;
 
 
         public LearnQueueManagerLoader(Context context, String dbPath, int filterCategoryId) {
@@ -536,7 +540,7 @@ public class StudyActivity extends QACardActivity {
         public QueueManager dbLoadInBackground() {
             Category filterCategory = null;
             if (filterCategoryId != -1) {
-                dbOpenHelper.getCategoryDao().queryForId(filterCategoryId);
+                filterCategory = dbOpenHelper.getCategoryDao().queryForId(filterCategoryId);
             }
             int queueSize = option.getQueueSize();
             LearnQueueManager.Builder builder = new LearnQueueManager.Builder(getContext(), dbPath)

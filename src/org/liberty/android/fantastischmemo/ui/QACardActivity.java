@@ -46,7 +46,6 @@ import roboguice.content.RoboAsyncTaskLoader;
 import roboguice.inject.ContextScope;
 import roboguice.util.Ln;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.gesture.Gesture;
@@ -57,7 +56,6 @@ import android.gesture.Prediction;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
@@ -87,7 +85,13 @@ public abstract class QACardActivity extends AMActivity {
     private int animationInResId = 0;
     private int animationOutResId = 0;
 
-    private static final int INIT_LOADER_ID = 0;
+    private static final int SETTING_LOADER_ID = 0;
+
+    private static final int CARD_TTS_UTIL_LOADER_ID = 1;
+
+    private static final int CARD_TEXT_UTIL_LOADER_ID = 2;
+
+
 
     private Option option;
 
@@ -102,8 +106,6 @@ public abstract class QACardActivity extends AMActivity {
     private CardTextUtil cardTextUtil;
 
     private GestureLibrary gestureLibrary;
-
-    private ProgressDialog progressDialog;
 
     private Handler handler = new Handler();
 
@@ -144,9 +146,10 @@ public abstract class QACardActivity extends AMActivity {
 
         // Load gestures
         loadGestures();
-        registerLoaderCallbacks(0, new SettingLoaderCallbacks(), false);
-        registerLoaderCallbacks(1, new CardTTSUtilLoaderCallbacks(), true);
-        registerLoaderCallbacks(2, new CardTextUtilLoaderCallbacks(), true);
+
+        registerLoaderCallbacks(SETTING_LOADER_ID, new SettingLoaderCallbacks(), false);
+        registerLoaderCallbacks(CARD_TTS_UTIL_LOADER_ID, new CardTTSUtilLoaderCallbacks(), true);
+        registerLoaderCallbacks(CARD_TEXT_UTIL_LOADER_ID, new CardTextUtilLoaderCallbacks(), true);
         startLoading();
     }
     

@@ -134,11 +134,9 @@ public class LearnQueueManager implements QueueManager {
     private synchronized void refill() {
         final AnyMemoDBOpenHelper dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(context, dbPath);
         final CardDao cardDao = dbOpenHelper.getCardDao();
-        final CategoryDao categoryDao = dbOpenHelper.getCategoryDao();
         try {
             if (newCache.size() == 0) {
                 List<Card> cs = cardDao.getNewCards(filterCategory, maxNewCacheOrdinal, cacheSize - newCache.size());
-                categoryDao.populateCategory(cs);
                 if (cs.size() > 0) {
                     maxNewCacheOrdinal = cs.get(cs.size() - 1).getOrdinal();
                     newCache.addAll(cs);
@@ -147,7 +145,6 @@ public class LearnQueueManager implements QueueManager {
 
             if (reviewCache.size() == 0) {
                 List<Card> cs = cardDao.getCardForReview(filterCategory, maxReviewCacheOrdinal, cacheSize - reviewCache.size());
-                categoryDao.populateCategory(cs);
                 if (cs.size() > 0) {
                     maxReviewCacheOrdinal = cs.get(cs.size() - 1).getOrdinal();
                     reviewCache.addAll(cs);
