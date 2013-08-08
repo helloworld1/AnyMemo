@@ -48,7 +48,6 @@ public abstract class AMActivity extends RoboActionBarActivity {
         super.onCreate(savedInstanceState);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         if(settings.getBoolean(AMPrefKeys.FULLSCREEN_MODE_KEY, false)) {
-            requestWindowFeature(Window.FEATURE_NO_TITLE);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
         if(!settings.getBoolean(AMPrefKeys.ALLOW_ORIENTATION_KEY, true)) {
