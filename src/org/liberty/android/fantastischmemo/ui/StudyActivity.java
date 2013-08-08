@@ -348,9 +348,13 @@ public class StudyActivity extends QACardActivity {
 
         /* Run the learnQueue init in a separate thread */
         if (startCardId != -1) {
-            setCurrentCard(queueManager.dequeuePosition(startCardId));
+            Card card = queueManager.dequeuePosition(startCardId);
+            queueManager.remove(card);
+            setCurrentCard(card);
         } else {
-            setCurrentCard(queueManager.dequeue());
+            Card card = queueManager.dequeue();
+            queueManager.remove(card);
+            setCurrentCard(card);
         }
         refreshStatInfo();
         // If the db does not contain any cards. Show no item dialog.
@@ -361,7 +365,6 @@ public class StudyActivity extends QACardActivity {
         setupGradeButtons();
         displayCard(false);
         initialized = true;
-        setSmallTitle(getActivityTitleString());
         setTitle(getDbName());
     }
 
@@ -385,6 +388,7 @@ public class StudyActivity extends QACardActivity {
             || option.getSpeakingType() ==Option.SpeakingType.AUTOTAP) {
             autoSpeak();
         }
+        setSmallTitle(getActivityTitleString());
     }
 
     @Override
@@ -646,10 +650,10 @@ public class StudyActivity extends QACardActivity {
 
         @Override
         public Card call() throws Exception {
-            queueManager.remove(getCurrentCard());
             queueManager.update(updatedCard);
 
             Card nextCard = queueManager.dequeue();
+            queueManager.remove(nextCard);
 
             return nextCard;
         }
@@ -694,7 +698,6 @@ public class StudyActivity extends QACardActivity {
                         schedluledCardCount -= 1;
                     }
                 }
-                setSmallTitle(getActivityTitleString());
 
                 // Run the task to update the updatedCard in the queue
                 // and dequeue the next card 

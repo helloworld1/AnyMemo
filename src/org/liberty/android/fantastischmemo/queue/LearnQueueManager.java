@@ -90,7 +90,6 @@ public class LearnQueueManager implements QueueManager {
 
 	@Override
 	public synchronized Card dequeue() {
-        refill();
         shuffle();
         if (!learnQueue.isEmpty()) {
             Card c = learnQueue.get(0);
@@ -104,7 +103,6 @@ public class LearnQueueManager implements QueueManager {
 	@Override
 	public synchronized Card dequeuePosition(int cardId) {
 		position(cardId);
-		refill();
 
 		if (!learnQueue.isEmpty()) {
             Card c = learnQueue.get(0);
@@ -133,6 +131,7 @@ public class LearnQueueManager implements QueueManager {
     private synchronized void refill() {
         final AnyMemoDBOpenHelper dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(context, dbPath);
         final CardDao cardDao = dbOpenHelper.getCardDao();
+        dumpLearnQueue();
         try {
             if (newCache.size() == 0) {
                 List<Card> cs = cardDao.getNewCards(filterCategory, maxNewCacheOrdinal, cacheSize - newCache.size());
@@ -162,6 +161,7 @@ public class LearnQueueManager implements QueueManager {
             AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
         }
         flushDirtyCache();
+        dumpLearnQueue();
     }
 
     private synchronized void shuffle() {
@@ -181,8 +181,13 @@ public class LearnQueueManager implements QueueManager {
         if (!scheduler.isCardLearned(card.getLearningData())) {
             // Add to the back of the queue
             learnQueue.add(card);
+
+            // Once we update a card that failed, we will also update the maxReviewCacheOrdinal
+            // so it matches the current max review cache
+            maxReviewCacheOrdinal = Math.max(maxReviewCacheOrdinal, card.getOrdinal());
         }
         dirtyCache.add(card);
+        refill();
 	}
 
     private void position(int cardId) {
@@ -260,6 +265,16 @@ public class LearnQueueManager implements QueueManager {
                 }
             }
         });
+    }
+
+    private void dumpLearnQueue() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("LearnQueue: ids [");
+        for (Card c : learnQueue) {
+            sb.append("" + c.getId() + ", ");
+        }
+        sb.append("]");
+        Ln.v(sb.toString());
     }
 
     public static class Builder {

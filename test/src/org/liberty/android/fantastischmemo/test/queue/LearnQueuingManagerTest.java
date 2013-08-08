@@ -60,7 +60,7 @@ public class LearnQueuingManagerTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
-    public void testUpdate() throws Exception {
+    public void testUpdate1() throws Exception {
         Scheduler mockScheduler = mock(Scheduler.class);
 
         QueueManager queueManager = new LearnQueueManager.Builder(getContext(), TestHelper.SAMPLE_DB_PATH)
@@ -120,6 +120,132 @@ public class LearnQueuingManagerTest extends AbstractExistingDBTest {
         queueManager.update(c5);
 
         queueManager.release();
+    }
 
+    @SmallTest
+    public void testUpdate2() throws Exception {
+        Scheduler mockScheduler = mock(Scheduler.class);
+
+        QueueManager queueManager = new LearnQueueManager.Builder(getContext(), TestHelper.SAMPLE_DB_PATH)
+            .setLearnQueueSize(3)
+            .setFilterCategory(null)
+            .setScheduler(mockScheduler)
+            .setCacheSize(50)
+            .build();
+
+        Card c1 = queueManager.dequeue();
+        queueManager.remove(c1);
+        assertEquals(1, (int)c1.getId());
+        when(mockScheduler.isCardLearned(c1.getLearningData()))
+            .thenReturn(false);
+        queueManager.update(c1);
+
+        Card c2 = queueManager.dequeue();
+        queueManager.remove(c2);
+        assertEquals(2, (int)c2.getId());
+        when(mockScheduler.isCardLearned(c2.getLearningData()))
+            .thenReturn(true);
+        queueManager.update(c2);
+
+        Card c3 = queueManager.dequeue();
+        queueManager.remove(c3);
+        assertEquals(3, (int)c3.getId());
+        when(mockScheduler.isCardLearned(c3.getLearningData()))
+            .thenReturn(false);
+        queueManager.update(c3);
+
+        Card c1Again = queueManager.dequeue();
+        queueManager.remove(c1Again);
+        assertEquals(1, (int)c1Again.getId());
+        when(mockScheduler.isCardLearned(c1Again.getLearningData()))
+            .thenReturn(true);
+        queueManager.update(c1Again);
+
+        Card c4 = queueManager.dequeue();
+        queueManager.remove(c4);
+        assertEquals(4, (int)c4.getId());
+        when(mockScheduler.isCardLearned(c4.getLearningData()))
+            .thenReturn(true);
+        queueManager.update(c4);
+
+
+        Card c3Again = queueManager.dequeue();
+        queueManager.remove(c3Again);
+        assertEquals(3, (int)c3Again.getId());
+        when(mockScheduler.isCardLearned(c3Again.getLearningData()))
+            .thenReturn(false);
+        queueManager.update(c3Again);
+
+        Card c5 = queueManager.dequeue();
+        queueManager.remove(c5);
+        assertEquals(5, (int)c5.getId());
+        when(mockScheduler.isCardLearned(c5.getLearningData()))
+            .thenReturn(false);
+        queueManager.update(c5);
+
+        queueManager.release();
+    }
+
+    @SmallTest
+    public void testUpdate3() throws Exception {
+        Scheduler mockScheduler = mock(Scheduler.class);
+
+        QueueManager queueManager = new LearnQueueManager.Builder(getContext(), TestHelper.SAMPLE_DB_PATH)
+            .setLearnQueueSize(10)
+            .setFilterCategory(null)
+            .setScheduler(mockScheduler)
+            .setCacheSize(11)
+            .build();
+
+        for (int i = 1; i <= 10; i++) {
+            Card c = queueManager.dequeue();
+            queueManager.remove(c);
+            assertEquals(i, (int)c.getId());
+            if (i == 1 || i == 3) {
+                when(mockScheduler.isCardLearned(c.getLearningData()))
+                    .thenReturn(false);
+            } else {
+                when(mockScheduler.isCardLearned(c.getLearningData()))
+                    .thenReturn(true);
+            }
+            queueManager.update(c);
+        }
+
+        Card c1 = queueManager.dequeue();
+        queueManager.remove(c1);
+        assertEquals(1, (int)c1.getId());
+        when(mockScheduler.isCardLearned(c1.getLearningData()))
+            .thenReturn(true);
+        queueManager.update(c1);
+
+        Card c11 = queueManager.dequeue();
+        queueManager.remove(c11);
+        assertEquals(11, (int)c11.getId());
+        when(mockScheduler.isCardLearned(c11.getLearningData()))
+            .thenReturn(true);
+        queueManager.update(c11);
+
+        Card c3 = queueManager.dequeue();
+        queueManager.remove(c3);
+        assertEquals(3, (int)c3.getId());
+        when(mockScheduler.isCardLearned(c3.getLearningData()))
+            .thenReturn(false);
+        queueManager.update(c3);
+
+        Card c12 = queueManager.dequeue();
+        queueManager.remove(c12);
+        assertEquals(12, (int)c12.getId());
+        when(mockScheduler.isCardLearned(c12.getLearningData()))
+            .thenReturn(true);
+        queueManager.update(c12);
+
+        Card c13 = queueManager.dequeue();
+        queueManager.remove(c13);
+        assertEquals(13, (int)c13.getId());
+        when(mockScheduler.isCardLearned(c13.getLearningData()))
+            .thenReturn(true);
+        queueManager.update(c13);
+
+        queueManager.release();
     }
 }

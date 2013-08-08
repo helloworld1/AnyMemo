@@ -35,6 +35,7 @@ import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 import org.liberty.android.fantastischmemo.utils.AMDateUtil;
 
 import roboguice.fragment.RoboFragment;
+import roboguice.util.Ln;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -276,6 +277,11 @@ public class GradeButtonsFragment extends RoboFragment {
         public void onPostExecute(Void result){
             super.onPostExecute(result);
             activity.setProgressBarIndeterminateVisibility(false);
+
+            Ln.v("Prev card: " + prevCard);
+            Ln.v("Updated card: " + updatedCard);
+
+
             onCardChangedListener.onCardChanged(prevCard, updatedCard);
 
         }
