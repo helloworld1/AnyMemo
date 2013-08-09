@@ -7,6 +7,8 @@ import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.test.TestHelper;
 import org.liberty.android.fantastischmemo.ui.StudyActivity;
 
+import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
+
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.LargeTest;
@@ -77,8 +79,8 @@ public class StudyActivityStudyTest extends ActivityInstrumentationTestCase2<Stu
         assertTrue(solo.searchText("yeux"));
         solo.clickOnText(solo.getString(R.string.memo_btn3_text));
         solo.goBack();
-        solo.waitForDialogToClose(8000);
-        solo.sleep(5000);
+        AnyMemoExecutor.waitAllTasks();
+        solo.sleep(2000);
 
         // asssert db state
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, TestHelper.SAMPLE_DB_PATH);
@@ -123,7 +125,7 @@ public class StudyActivityStudyTest extends ActivityInstrumentationTestCase2<Stu
         solo.clickOnText(solo.getString(R.string.memo_btn0_text));
         solo.goBack();
 
-        solo.waitForDialogToClose(8000);
+        AnyMemoExecutor.waitAllTasks();
         solo.sleep(2000);
 
         // asssert db state

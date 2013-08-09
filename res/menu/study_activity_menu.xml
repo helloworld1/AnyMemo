@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:anymemo="http://schemas.android.com/apk/res-auto" >
     <item android:id="@+id/menuundo"
             android:icon="@drawable/undo_icon"
             android:title="@string/undo_text" />
@@ -23,7 +24,7 @@
             android:title="@string/help_button_text" />
     <item android:id="@+id/menu_context_edit"
             android:icon="@android:drawable/ic_menu_edit"
-            android:showAsAction="ifRoom"
+            anymemo:showAsAction="ifRoom"
             android:title="@string/edit_text" />
     <item android:id="@+id/menu_share"
             android:title="@string/share_text" />
@@ -34,7 +35,7 @@
     <item android:id="@+id/menu_context_gotoprev"
             android:title="@string/goto_prev_screen" />
     <item android:id="@+id/menu_context_lookup"
-            android:showAsAction="ifRoom"
+            anymemo:showAsAction="ifRoom"
             android:icon="@android:drawable/ic_menu_search"
             android:title="@string/look_up_text" />
     <item android:id="@+id/menu_gestures"

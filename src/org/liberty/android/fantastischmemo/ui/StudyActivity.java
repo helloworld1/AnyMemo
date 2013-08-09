@@ -134,6 +134,7 @@ public class StudyActivity extends QACardActivity {
         }
 
         registerLoaderCallbacks(3, new LearnQueueManagerLoaderCallbacks(), false);
+
         super.onCreate(savedInstanceState);
 
     }
@@ -341,12 +342,19 @@ public class StudyActivity extends QACardActivity {
         learningDataDao = getDbOpenHelper().getLearningDataDao();
         setting = getSetting();
         option = getOption();
+        if (filterCategoryId != -1) {
+            filterCategory = getDbOpenHelper().getCategoryDao().queryForId(filterCategoryId);
+        }
 
         /* Run the learnQueue init in a separate thread */
         if (startCardId != -1) {
-            setCurrentCard(queueManager.dequeuePosition(startCardId));
+            Card card = queueManager.dequeuePosition(startCardId);
+            queueManager.remove(card);
+            setCurrentCard(card);
         } else {
-            setCurrentCard(queueManager.dequeue());
+            Card card = queueManager.dequeue();
+            queueManager.remove(card);
+            setCurrentCard(card);
         }
         refreshStatInfo();
         // If the db does not contain any cards. Show no item dialog.
@@ -357,7 +365,6 @@ public class StudyActivity extends QACardActivity {
         setupGradeButtons();
         displayCard(false);
         initialized = true;
-        setSmallTitle(getActivityTitleString());
         setTitle(getDbName());
     }
 
@@ -381,6 +388,7 @@ public class StudyActivity extends QACardActivity {
             || option.getSpeakingType() ==Option.SpeakingType.AUTOTAP) {
             autoSpeak();
         }
+        setSmallTitle(getActivityTitleString());
     }
 
     @Override
@@ -514,7 +522,7 @@ public class StudyActivity extends QACardActivity {
 
         private Scheduler scheduler;
 
-        private int filterCategoryId = -1;
+        private final int filterCategoryId;
 
 
         public LearnQueueManagerLoader(Context context, String dbPath, int filterCategoryId) {
@@ -536,7 +544,7 @@ public class StudyActivity extends QACardActivity {
         public QueueManager dbLoadInBackground() {
             Category filterCategory = null;
             if (filterCategoryId != -1) {
-                dbOpenHelper.getCategoryDao().queryForId(filterCategoryId);
+                filterCategory = dbOpenHelper.getCategoryDao().queryForId(filterCategoryId);
             }
             int queueSize = option.getQueueSize();
             LearnQueueManager.Builder builder = new LearnQueueManager.Builder(getContext(), dbPath)
@@ -642,10 +650,10 @@ public class StudyActivity extends QACardActivity {
 
         @Override
         public Card call() throws Exception {
-            queueManager.remove(getCurrentCard());
             queueManager.update(updatedCard);
 
             Card nextCard = queueManager.dequeue();
+            queueManager.remove(nextCard);
 
             return nextCard;
         }
@@ -690,7 +698,6 @@ public class StudyActivity extends QACardActivity {
                         schedluledCardCount -= 1;
                     }
                 }
-                setSmallTitle(getActivityTitleString());
 
                 // Run the task to update the updatedCard in the queue
                 // and dequeue the next card 

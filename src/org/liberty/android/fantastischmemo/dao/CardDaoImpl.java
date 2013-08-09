@@ -254,6 +254,7 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
     public List<Card> getCardForReview(Category filterCategory, int maxReviewCacheOrdinal, int limit) {
         try {
             LearningDataDao learningDataDao = getHelper().getLearningDataDao();
+            CategoryDao categoryDao = getHelper().getCategoryDao();
             QueryBuilder<LearningData, Integer> learnQb = learningDataDao.queryBuilder();
             learnQb.selectColumns("id");
             learnQb.where().le("nextLearnDate", Calendar.getInstance().getTime())
@@ -270,6 +271,7 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
             cardQb.limit((long)limit);
             List<Card> cs = cardQb.query();
             for (Card c : cs) {
+                categoryDao.refresh(c.getCategory());
                 learningDataDao.refresh(c.getLearningData());
             }
             return cs;
@@ -282,6 +284,7 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
     public List<Card> getNewCards(Category filterCategory, int maxNewCacheOrdinal, int limit) {
         try {
             LearningDataDao learningDataDao = getHelper().getLearningDataDao();
+            CategoryDao categoryDao = getHelper().getCategoryDao();
             QueryBuilder<LearningData, Integer> learnQb = learningDataDao.queryBuilder();
             learnQb.selectColumns("id");
             learnQb.where().eq("acqReps", "0");
@@ -300,6 +303,7 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
             cardQb.limit((long)limit);
             List<Card> cs = cardQb.query();
             for (Card c : cs) {
+                categoryDao.refresh(c.getCategory());
                 learningDataDao.refresh(c.getLearningData());
             }
             return cs;

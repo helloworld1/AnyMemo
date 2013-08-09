@@ -31,7 +31,6 @@ import org.liberty.android.fantastischmemo.aspect.LogInvocation;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
-import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;

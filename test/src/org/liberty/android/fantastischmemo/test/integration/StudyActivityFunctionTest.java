@@ -7,6 +7,7 @@ import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.test.TestHelper;
 import org.liberty.android.fantastischmemo.ui.StudyActivity;
+import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
 
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
@@ -62,7 +63,7 @@ public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<
         solo.sendKey(Solo.MENU);
         solo.clickOnText(solo.getString(R.string.undo_text));
 
-        solo.waitForDialogToClose(8000);
+        AnyMemoExecutor.waitAllTasks();
         solo.sleep(600);
 
         // 2nd card should be shown
@@ -76,7 +77,7 @@ public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<
 
         solo.goBack();
 
-        solo.waitForDialogToClose(8000);
+        AnyMemoExecutor.waitAllTasks();
         solo.sleep(600);
 
         // asssert db state
@@ -98,8 +99,8 @@ public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<
         solo.clickOnText(solo.getString(R.string.ok_text));
         solo.goBack();
 
+        AnyMemoExecutor.waitAllTasks();
         solo.sleep(2000);
-        solo.waitForDialogToClose(8000);
 
         // asssert db state
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, TestHelper.SAMPLE_DB_PATH);
@@ -122,8 +123,8 @@ public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<
         solo.clickOnText(solo.getString(R.string.skip_text));
         solo.clickOnText(solo.getString(R.string.ok_text));
 
-        solo.waitForDialogToClose(8000);
-        solo.sleep(600);
+        AnyMemoExecutor.waitAllTasks();
+        solo.sleep(2000);
 
         // The card should not be shown
         assertFalse(solo.searchText("head"));

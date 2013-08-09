@@ -9,6 +9,7 @@ import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.test.TestHelper;
 import org.liberty.android.fantastischmemo.ui.StudyActivity;
+import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
 
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
@@ -78,7 +79,7 @@ public class StudyActivityFilterCategoryTest extends ActivityInstrumentationTest
         solo.clickOnText("cat1");
         solo.clickOnText(solo.getString(R.string.ok_text));
         // Wait refersh the activity
-        solo.waitForDialogToClose(8000);
+        AnyMemoExecutor.waitAllTasks();
         solo.sleep(2000);
 
         answerView = solo.getCurrentActivity().findViewById(R.id.answer);

@@ -2,11 +2,11 @@ package org.liberty.android.fantastischmemo.domain;
 
 import java.util.Date;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.liberty.android.fantastischmemo.dao.CardDaoImpl;
 
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
-
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "cards", daoClass = CardDaoImpl.class)
@@ -148,6 +148,15 @@ public class Card {
 	public void setLearningData(LearningData learningData) {
 		this.learningData = learningData;
 	}
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+            .append("id", id)
+            .append("question", question)
+            .append("answer", answer)
+            .build();
+    }
 
     @Override
     public boolean equals(Object c) {

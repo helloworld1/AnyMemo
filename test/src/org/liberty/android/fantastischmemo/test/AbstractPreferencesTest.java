@@ -12,6 +12,8 @@ public class AbstractPreferencesTest extends AndroidTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
+        System.setProperty("dexmaker.dexcache", getContext().getCacheDir().toString());
+
     	settings = PreferenceManager.getDefaultSharedPreferences(getContext());
     	editor = settings.edit();
         editor.clear();

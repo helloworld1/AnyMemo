@@ -19,6 +19,8 @@ public class AbstractExistingDBTest extends AndroidTestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
+        System.setProperty("dexmaker.dexcache", getContext().getCacheDir().toString());
+        
         Context testContext = getContext();
         InputStream in = testContext.getResources().getAssets().open(AMEnv.DEFAULT_DB_NAME);
         File outFile = new File(TestHelper.SAMPLE_DB_PATH);

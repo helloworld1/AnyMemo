@@ -5,7 +5,6 @@ import org.liberty.android.fantastischmemo.ui.AnyMemo;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.view.KeyEvent;
-import android.widget.TabHost;
 
 import com.jayway.android.robotium.solo.Solo;
 
@@ -20,22 +19,14 @@ public class AnyMemoActivityTabsTest extends ActivityInstrumentationTestCase2<An
         super("org.liberty.android.fantastischmemo", AnyMemo.class);
     }
 
-    private TabHost tabHost;
-
     public void setUp() {
         mActivity = this.getActivity();
-        tabHost = (TabHost)mActivity.findViewById(android.R.id.tabhost);
         solo = new Solo(getInstrumentation(), mActivity);
     }
 
 
     @LargeTest
     public void testCyclingTabs() {
-        mActivity.runOnUiThread(new Runnable() {
-            public void run() {
-                tabHost.requestFocus();
-            }
-        });
         sendKeys(KeyEvent.KEYCODE_DPAD_RIGHT);
         sendKeys(KeyEvent.KEYCODE_DPAD_RIGHT);
         sendKeys(KeyEvent.KEYCODE_DPAD_RIGHT);
