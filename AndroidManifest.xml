@@ -149,6 +149,12 @@
                 android:exported="true"
                 android:multiprocess="true" />
 
+        <provider
+                android:name=".provider.DatabasesProvider"
+                android:authorities="org.liberty.android.fantastischmemo.databasesprovider"
+                android:exported="true"
+                android:multiprocess="true" />
+
     </application>
 
     <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="16" />
