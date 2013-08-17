@@ -74,6 +74,8 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
     private RadioButton quizByGroupRadio;
 
     private RadioButton quizByCategoryRadio;
+    
+    private RadioButton quizByRangeRadio;
 
     private TextView quizGroupSizeTitle;
 
@@ -149,6 +151,10 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
         quizGroupSizeEdit = (EditText) v.findViewById(R.id.quiz_group_size);
         // Make sure the text value is sanity and update other information
         // about the group size and etc accordingly.
+        quizByRangeRadio = (RadioButton) v.findViewById(R.id.quiz_by_range_radio);
+        
+        quizByRangeRadio.setOnCheckedChangeListener(onCheckedChangeListener);
+        
         quizGroupSizeEdit.addTextChangedListener(editTextWatcher);
         quizGroupSizeEdit.setOnFocusChangeListener(sanitizeInputListener);
 
@@ -164,7 +170,8 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
         radioButtonSettingsMapping = new HashMap<CompoundButton, View>(2);
         radioButtonSettingsMapping.put(quizByGroupRadio, v.findViewById(R.id.quiz_by_group_settings));
         radioButtonSettingsMapping.put(quizByCategoryRadio, v.findViewById(R.id.quiz_by_category_settings));
-
+        radioButtonSettingsMapping.put(quizByRangeRadio, v.findViewById(R.id.quiz_by_range_settings));
+        
         shuffleCheckbox = (CheckBox) v.findViewById(R.id.shuffle_checkbox);
 
         Rect displayRectangle = new Rect();

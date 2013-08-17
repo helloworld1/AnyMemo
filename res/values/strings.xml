@@ -456,4 +456,7 @@
     <string name="forget_text">Forget</string>
     <string name="remember_text">Remember</string>
     <string name="both_text">Both</string>
+    <string name="quiz_by_range_text">Quiz by range</string>
+    <string name="start_ordianl_text">Start ordinal</string>
+    <string name="end_ordinal_text">End ordinal</string>
 </resources>
