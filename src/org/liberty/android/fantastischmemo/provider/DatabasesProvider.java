@@ -79,10 +79,10 @@ public class DatabasesProvider extends ContentProvider {
     }
 
     private Cursor buildCursorFromDbNames(String[] dbNames) {
-        String[] columnNames = {"dbname"};
+        String[] columnNames = {"_id", "dbname"};
         MatrixCursor cursor = new MatrixCursor(columnNames, dbNames.length);
-        for (String dbName : dbNames) {
-            cursor.addRow(new String[]{dbName});
+        for (int i = 0; i < dbNames.length; i++) {
+            cursor.addRow(new String[] {Integer.toString(i), dbNames[i]});
         }
         return cursor;
     }
