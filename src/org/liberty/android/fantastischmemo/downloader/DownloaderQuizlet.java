@@ -70,7 +70,7 @@ public class DownloaderQuizlet extends DownloaderBase implements ListView.OnScro
 
     private static final String TAG = "org.liberty.android.fantastischmemo.downloader.DownloaderQuizlet";
     private static final int PAGE_SIZE = 50;
-    private static final String QUIZLET_API_KEY = "7bmBY5S2VgPbNpd8";
+    private static final String QUIZLET_API_KEY = "fgFdZShXfG";
     private static final String QUIZLET_API_TAG = "https://api.quizlet.com/2.0/search/sets?client_id=" + QUIZLET_API_KEY+ "&per_page=" + PAGE_SIZE + "&q=";
     private static final String QUIZLET_API_USER = "https://api.quizlet.com/2.0/users/%s/sets?client_id=" + QUIZLET_API_KEY+ "&per_page=" + PAGE_SIZE;
     private static final String QUIZLET_API_GET = "https://api.quizlet.com/2.0/sets/%d?client_id=" + QUIZLET_API_KEY;
