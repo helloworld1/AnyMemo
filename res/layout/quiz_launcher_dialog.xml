@@ -74,6 +74,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/start_ordianl_text" />
             <EditText
+                android:id="@+id/quiz_range_strat_ordinal"
                 android:layout_width="match_parent"
                 android:inputType="number"
                 android:layout_height="wrap_content" />
@@ -81,6 +82,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/end_ordinal_text" />
             <EditText
+                android:id="@+id/quiz_range_end_ordinal"
                 android:layout_width="match_parent"
                 android:inputType="number"
                 android:layout_height="wrap_content" />

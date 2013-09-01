@@ -84,6 +84,10 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
     private TextView quizGroupNumberTitle;
 
     private EditText quizGroupNumberEdit;
+    
+    private EditText quizRangeStartOrdinalEdit;
+    
+    private EditText quizRangeEndOrdinalEdit;
 
     private CheckBox shuffleCheckbox;
 
@@ -163,6 +167,9 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
         quizGroupNumberEdit = (EditText) v.findViewById(R.id.quiz_group_number);
         quizGroupNumberEdit.addTextChangedListener(editTextWatcher);
         quizGroupNumberEdit.setOnFocusChangeListener(sanitizeInputListener);
+        
+        quizRangeStartOrdinalEdit = (EditText) v.findViewById(R.id.quiz_range_strat_ordinal);
+        quizRangeEndOrdinalEdit = (EditText) v.findViewById(R.id.quiz_range_end_ordinal);
 
         categoryButton = (Button) v.findViewById(R.id.category_button);
         categoryButton.setOnClickListener(categoryButtonListener);
@@ -218,7 +225,22 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
                 intent.putExtra(QuizActivity.EXTRA_CATEGORY_ID, categoryId);
                 intent.putExtra(QuizActivity.EXTRA_SHUFFLE_CARDS, shuffleCheckbox.isChecked());
                 startActivity(intent);
-            } else {
+            } 
+            else if(quizByRangeRadio.isChecked()) {
+            	Intent intent = new Intent(mActivity, QuizActivity.class);
+            	
+                int startOrd = Integer.parseInt(quizRangeStartOrdinalEdit.getText().toString());
+                int endOrd = Integer.parseInt(quizRangeEndOrdinalEdit.getText().toString());
+                int size = endOrd - startOrd + 1;
+       
+                intent.putExtra(QuizActivity.EXTRA_DBPATH, dbPath);
+                intent.putExtra(QuizActivity.EXTRA_START_CARD_ORD, startOrd);
+                intent.putExtra(QuizActivity.EXTRA_QUIZ_SIZE, size);
+                intent.putExtra(QuizActivity.EXTRA_SHUFFLE_CARDS, shuffleCheckbox.isChecked());
+                
+                startActivity(intent);
+            }
+            else{
                 Intent intent = new Intent(mActivity, QuizActivity.class);
                 editor.putInt(AMPrefKeys.QUIZ_GROUP_SIZE_KEY, groupSize);
                 editor.putInt(AMPrefKeys.QUIZ_GROUP_NUMBER_KEY, groupNumber);
