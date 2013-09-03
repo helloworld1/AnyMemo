@@ -442,4 +442,9 @@
     <string name="author_text">作者</string>
     <string name="creation_date_text">創建時間</string>
     <string name="card_count_text">卡片數量</string>
+    <string name="card_player_notification_title">AnyMemo卡片播放器</string>
+    <string name="card_player_notification_text">卡片播放中</string>
+    <string name="forget_text">忘記</string>
+    <string name="remember_text">記住</string>
+    <string name="both_text">兩個都</string>
 </resources>

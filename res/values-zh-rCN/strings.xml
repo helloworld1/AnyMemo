@@ -442,4 +442,12 @@
     <string name="author_text">作者</string>
     <string name="creation_date_text">创建时间</string>
     <string name="card_count_text">卡片数量</string>
+    <string name="card_player_text">卡片播放器</string>
+    <string name="card_player_qa_sleep_interval_text">问题和答案的间隔是%d 秒</string>
+    <string name="card_player_card_sleep_interval_text">卡片之间的间隔是%d 秒</string>
+    <string name="card_player_notification_title">AnyMemo卡片播放器</string>
+    <string name="card_player_notification_text">卡片播放中</string>
+    <string name="forget_text">忘记</string>
+    <string name="remember_text">记住</string>
+    <string name="both_text">两个都</string>
 </resources>
