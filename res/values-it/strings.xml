@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     <string name="app_name">AnyMemo</string>
-    <string name="app_full_name">AnyMemo Free</string>
+    <string name="app_full_name">AnyMemo</string>
     <string name="ok_text">OK</string>
     <string name="cancel_text">Annulla</string>
     <string name="yes_text">Sì</string>
@@ -20,7 +20,7 @@
     <string name="help_button_text">Aiuto</string>
     <string name="edit_button_text">Anteprima/Modifica</string>
     <string name="copyclipboard">Copia negli appunti</string>
-    <string name="copyclipboard_summary">La domanda verrà automaticamente copiata negli appunti.</string>
+    <string name="copyclipboard_summary">Copia automaticamente il contenuto della scheda negli appunti.</string>
     <string name="memo_show_answer">\?\nMostra la risposta</string>
     <string name="memo_no_item_title">Nessun elemento</string>
     <string name="memo_no_item_message">Non c\'è nessun elemento da apprendere per ora. Per il ripasso pre-esame premere in maniera prolungata su un DB nel tab &quot;Recenti&quot;.</string>
@@ -169,7 +169,7 @@
     <string name="merging_summary">Fusione dei database. Attendere prego.</string>
     <string name="copy_text">Copia</string>
     <string name="paste_text">Incolla</string>
-    <string name="edit_dialog_unsave_warning">La scheda corrente è stata modificata ma non salvata. Sei sicuro di voler uscire?</string>
+    <string name="edit_dialog_unsave_warning">La scheda corrente è stata modificata ma non salvata. Sei sicuro di voler salvare e uscire?</string>
     <string name="downloader_extract_zip">Estrazione... Attendere prego.</string>
     <string name="allow_orientation_title">Orientamento</string>
     <string name="allow_orientation_summary">Cambia automaticamente l\'orientamento dello schermo. Riavviare AnyMemo perché la modifica abbia effetto.</string>
@@ -398,7 +398,7 @@
     <string name="enable_animation_text">Abilita animazione</string>
     <string name="enable_animation_summary">Abilita l\'animazione nel cambiamento di scheda.</string>
     <string name="quiz_completed_text">Quiz completato</string>
-    <string name="new_cards_completed_summary">Hai completato il quiz. Vuoi ripassare?</string>
+    <string name="new_cards_completed_summary">Hai completato il quiz. Vuoi ripassarlo?</string>
     <string name="review_text">Ripasso</string>
     <string name="quiz_complete_summary">Complimenti, hai completato il quiz"</string>
     <string name="us_english_text">Inglese (USA)</string>
@@ -442,12 +442,17 @@
     <string name="share_text">Condividi</string>
     <string name="center_left_text">Centra allineando a sinistra</string>
     <string name="center_right_text">Centra allineando a destra</string>
-    <string name="card_player_qa_sleep_interval_text">L\'intervallo fra domanda e risposta è di %d secondi</string>
-    <string name="card_player_card_sleep_interval_text">L\'intervallo fra una scheda e l\'altra è di %d secondi</string>
-    <string name="card_player_text">Parla automaticamente</string>
     <string name="import_mnemosyne2_cards_text">Importa schede Mnemosyne2</string>
     <string name="export_mnemosyne2_cards_text">Esporta schede Mnemosyne2</string>
     <string name="author_text">Autore</string>
     <string name="creation_date_text">Data di creazione</string>
     <string name="card_count_text">Numero scheda</string>
+    <string name="card_player_text">Lettore automatico di schede</string>
+    <string name="card_player_qa_sleep_interval_text">L\'intervallo fra domanda e risposta è di %d secondi</string>
+    <string name="card_player_card_sleep_interval_text">L\'intervallo fra una scheda e l\'altra è di %d secondi</string>
+    <string name="card_player_notification_title">Lettore automatico di schede AnyMemo</string>
+    <string name="card_player_notification_text">Lettura automatica in corso</string>
+    <string name="forget_text">Dimentica</string>
+    <string name="remember_text">Ricorda</string>
+    <string name="both_text">Entrambi</string>
 </resources>
