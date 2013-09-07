@@ -36,17 +36,13 @@ import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.service.AnyMemoService;
+import org.liberty.android.fantastischmemo.ui.loader.CardTTSUtilLoader;
+import org.liberty.android.fantastischmemo.ui.loader.CardTextUtilLoader;
+import org.liberty.android.fantastischmemo.ui.loader.SettingLoader;
 import org.liberty.android.fantastischmemo.utils.CardTTSUtil;
-import org.liberty.android.fantastischmemo.utils.CardTTSUtilFactory;
 import org.liberty.android.fantastischmemo.utils.CardTextUtil;
-import org.liberty.android.fantastischmemo.utils.CardTextUtilFactory;
 
-import roboguice.RoboGuice;
-import roboguice.content.RoboAsyncTaskLoader;
-import roboguice.inject.ContextScope;
 import roboguice.util.Ln;
-
-import android.content.Context;
 import android.content.Intent;
 import android.gesture.Gesture;
 import android.gesture.GestureLibraries;
@@ -90,8 +86,6 @@ public abstract class QACardActivity extends AMActivity {
     private static final int CARD_TTS_UTIL_LOADER_ID = 1;
 
     private static final int CARD_TEXT_UTIL_LOADER_ID = 2;
-
-
 
     private Option option;
 
@@ -502,108 +496,6 @@ public abstract class QACardActivity extends AMActivity {
         // The onPostInit is running on UI thread.
         if (runningLoaderCount <= 0) {
             handler.post(onPostInitRunnable);
-        }
-    }
-
-    protected static abstract class DBLoader<T> extends RoboAsyncTaskLoader<T> {
-
-        protected String dbPath;
-
-        protected AnyMemoDBOpenHelper dbOpenHelper;
-
-        protected abstract T dbLoadInBackground();
-
-        public DBLoader(Context context, String dbPath) {
-            super(context);
-            this.dbPath = dbPath;
-        }
-
-        @Override
-        public T loadInBackground() {
-            dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(getContext(),
-                    dbPath);
-            try {
-                return dbLoadInBackground();
-            } finally {
-                AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
-            }
-        }
-    }
-
-    private static class SettingLoader extends DBLoader<Setting> {
-        public SettingLoader(Context context, String dbPath) {
-            super(context, dbPath);
-        }
-
-        @Override
-        protected Setting dbLoadInBackground() {
-            return dbOpenHelper.getSettingDao().queryForId(1);
-        }
-    }
-
-    private static class CardTTSUtilLoader extends
-            DBLoader<CardTTSUtil> {
-
-        private CardTTSUtilFactory cardTTSUtilFactory;
-
-        public CardTTSUtilLoader(Context context, String dbPath) {
-            super(context, dbPath);
-        }
-
-        @Inject
-        public void setCardTTSUtilFactory(CardTTSUtilFactory cardTTSUtilFactory) {
-            this.cardTTSUtilFactory = cardTTSUtilFactory;
-        }
-
-        @Override
-        public CardTTSUtil dbLoadInBackground() {
-            ContextScope scope = RoboGuice.getInjector(getContext()).getInstance(ContextScope.class);
-
-            // Make sure the method is running under the context
-            // The AsyncTask thread does not have the context, so we need
-            // to manually enter the scope.
-            synchronized(ContextScope.class) {
-                scope.enter(getContext());
-                try {
-                    CardTTSUtil cardTTSUtil = cardTTSUtilFactory.create(dbPath);
-                    return cardTTSUtil;
-                } finally {
-                    scope.exit(getContext());
-                }
-            }
-        }
-    }
-
-    private static class CardTextUtilLoader extends
-            DBLoader<CardTextUtil> {
-
-        private CardTextUtilFactory cardTextUtilFactory;
-
-        public CardTextUtilLoader(Context context, String dbPath) {
-            super(context, dbPath);
-        }
-
-        @Inject
-        public void setCardTextUtilFactory(CardTextUtilFactory cardTextUtilFactory) {
-            this.cardTextUtilFactory = cardTextUtilFactory;
-        }
-
-        @Override
-        public CardTextUtil dbLoadInBackground() {
-            ContextScope scope = RoboGuice.getInjector(getContext()).getInstance(ContextScope.class);
-
-            // Make sure the method is running under the context
-            // The AsyncTask thread does not have the context, so we need
-            // to manually enter the scope.
-            synchronized(ContextScope.class) {
-                scope.enter(getContext());
-                try {
-                    CardTextUtil cardTextUtil = cardTextUtilFactory.create(dbPath);
-                    return cardTextUtil;
-                } finally {
-                    scope.exit(getContext());
-                }
-            }
         }
     }
 

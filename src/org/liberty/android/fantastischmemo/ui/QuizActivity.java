@@ -30,10 +30,10 @@ import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.queue.QueueManager;
 import org.liberty.android.fantastischmemo.queue.QuizQueueManager;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
+import org.liberty.android.fantastischmemo.ui.loader.DBLoader;
 import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
 
 import roboguice.util.RoboAsyncTask;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
