@@ -173,11 +173,6 @@ public class PreviewEditActivity extends QACardActivity {
             currentCard = cardDao.queryFirstOrdinal(currentCategory);
         }
 
-        // If all attemp failed. we will return null and let user to create a new card.
-        if (currentCard == null) {
-            return;
-        }
-
         totalCardCount = cardDao.countOf();
         setCurrentCard(currentCard);
 
@@ -353,12 +348,14 @@ public class PreviewEditActivity extends QACardActivity {
 
             case R.id.menu_card_player:
             {
-                Intent intent = new Intent(this, CardPlayerActivity.class);
-                intent.putExtra(CardPlayerActivity.EXTRA_DBPATH, dbPath);
-                if (getCurrentCard() != null) {
-                    intent.putExtra(CardPlayerActivity.EXTRA_START_CARD_ID, getCurrentCard().getId());
+                if (getCurrentCard()!= null){
+                    Intent intent = new Intent(this, CardPlayerActivity.class);
+                    intent.putExtra(CardPlayerActivity.EXTRA_DBPATH, dbPath);
+                    if (getCurrentCard() != null) {
+                        intent.putExtra(CardPlayerActivity.EXTRA_START_CARD_ID, getCurrentCard().getId());
+                    }
+                    startActivityForResult(intent, ACTIVITY_CARD_PLAYER);
                 }
-                startActivityForResult(intent, ACTIVITY_CARD_PLAYER);
                 return true;
             }
 
@@ -558,12 +555,6 @@ public class PreviewEditActivity extends QACardActivity {
         editButton.setOnClickListener(editButtonListener);
         prevButton.setOnClickListener(prevButtonListener);
         nextButton.setOnClickListener(nextButtonListener);
-        /* For double sided card, the view can be toggled */
-        if(setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED){
-            // TODO: Set listeners
-        }
-
-
     }
 
     private View.OnClickListener newButtonListener = new View.OnClickListener(){
