@@ -33,6 +33,10 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 
+/**
+ * This class manages multiple loader and handle the completion of all
+ * of them.
+ */
 public class MultipleLoaderManager {
 
     private int runningLoaderCount = 0;
@@ -56,6 +60,11 @@ public class MultipleLoaderManager {
         this.onAllLoaderCompletedRunnable = onAllLoaderCompletedRunnable;
     }
 
+    /**
+     * @param activity the activity to launch.
+     * @param forceReload if it is true, all loader will be reloaded, if not, the
+     * loader will only be reloadeed if it is registered with reloadOnStart = true.
+     */
     public void startLoading(AMActivity activity, boolean forceReload) {
         DialogFragment df = new LoadingProgressFragment();
         df.show(activity.getSupportFragmentManager(), LoadingProgressFragment.class.toString());
@@ -85,6 +94,9 @@ public class MultipleLoaderManager {
         }
     }
 
+    /**
+     * This method needs to be called in Activity's onDestroy.
+     */
     public void destroy() {
         // The handler needs to remove the callbacks to avoid the race condition
         // that onPostInitRunnable is running after onDestroy.

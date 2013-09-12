@@ -97,6 +97,10 @@ public abstract class QACardActivity extends AMActivity {
 
     private GestureLibrary gestureLibrary;
 
+    /**
+     * This needs to be defined before onCreate so in onCreate, all loaders will
+     * be registered with the right manager.
+     */
     private MultipleLoaderManager multipleLoaderManager = new MultipleLoaderManager();
 
     @Inject
@@ -108,11 +112,18 @@ public abstract class QACardActivity extends AMActivity {
         return cardTTSUtil;
     }
 
+    /**
+     * This is for testing only.
+     */
     public void setMultipleLoaderManager(
             MultipleLoaderManager multipleLoaderManager) {
         this.multipleLoaderManager = multipleLoaderManager;
     }
 
+    /**
+     * Subclasses should call this method instead of creating
+     * a new instance of multipleLoaderManager.
+     */
     public MultipleLoaderManager getMultipleLoaderManager() {
         return multipleLoaderManager;
     }
