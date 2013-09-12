@@ -37,6 +37,8 @@ import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.domain.Setting.CardField;
+import org.liberty.android.fantastischmemo.ui.loader.MultipleLoaderManager;
+import org.liberty.android.fantastischmemo.ui.loader.SettingLoader;
 import org.liberty.android.fantastischmemo.ui.widgets.AMSpinner;
 import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
 
@@ -49,6 +51,9 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -106,6 +111,8 @@ public class SettingsScreen extends AMActivity {
 
     private final static String WEBSITE_HELP_SETTINGS="http://anymemo.org/wiki/index.php?title=Card_styles";
 
+    private MultipleLoaderManager multipleLoaderManager = new MultipleLoaderManager();
+
     @Inject
     public void setDatabaseUtil(DatabaseUtil databaseUtil) {
         this.databaseUtil = databaseUtil;
@@ -115,9 +122,18 @@ public class SettingsScreen extends AMActivity {
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            dbPath = extras.getString(EXTRA_DBPATH);
+        }
+        dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(SettingsScreen.this, dbPath);
+
+        assert dbPath != null : "dbPath shouldn't be null";
         settingsChanged = false;
-        InitTask initTask = new InitTask();
-        initTask.execute((Void) null);
+
+        multipleLoaderManager.registerLoaderCallbacks(1, new SettingLoaderCallbacks(), false);
+        multipleLoaderManager.setOnAllLoaderCompletedRunnable(onPostInitRunnable);
+        multipleLoaderManager.startLoading(this);
     }
 
     @Override
@@ -260,46 +276,18 @@ public class SettingsScreen extends AMActivity {
     /*
      * Load settings from database
      */
-    private class InitTask extends AsyncTask<Void, Void, Void> {
-        private ProgressDialog progressDialog;
-
+    private Runnable onPostInitRunnable = new Runnable() {
         @Override
-        public void onPreExecute() {
-
-            Bundle extras = getIntent().getExtras();
-            if (extras != null) {
-                dbPath = extras.getString(EXTRA_DBPATH);
+        public void run() {
+            // Dismiss the progress dialog
+            DialogFragment df = (DialogFragment) getSupportFragmentManager()
+                .findFragmentByTag(LoadingProgressFragment.class.toString());
+            if (df != null) {
+                df.dismiss();
             }
-            progressDialog = new ProgressDialog(SettingsScreen.this);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setTitle(getString(R.string.loading_please_wait));
-            progressDialog.setMessage(getString(R.string.loading_database));
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-            assert dbPath != null : "dbPath shouldn't be null";
-        }
 
-        @Override
-        public Void doInBackground(Void... params) {
-            try {
-                dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(SettingsScreen.this, dbPath);
+            settingDao = dbOpenHelper.getSettingDao();
 
-                settingDao = dbOpenHelper.getSettingDao();
-                setting = settingDao.queryForId(1);
-                /* Run the learnQueue init in a separate thread */
-                return null;
-            } catch (Exception e) {
-                return null;
-            }
-        }
-
-        @Override
-        public void onCancelled() {
-            return;
-        }
-
-        @Override
-        public void onPostExecute(Void result) {
             setContentView(R.layout.settings_screen);
 
             questionFontSizeSpinner = (AMSpinner)findViewById(R.id.question_font_size_spinner);
@@ -377,9 +365,8 @@ public class SettingsScreen extends AMActivity {
 
             setSpinnerListeners();
 
-            progressDialog.dismiss();
         }
-    }
+    };
 
     private void setSpinnerListeners() {
         // This listener is set to detect if the spinner has been touched.
@@ -426,6 +413,28 @@ public class SettingsScreen extends AMActivity {
             public void onNothingSelected(AdapterView<?> adapterView){
             }
         });
+    }
+
+    private class SettingLoaderCallbacks implements
+            LoaderManager.LoaderCallbacks<Setting> {
+
+        @Override
+        public Loader<Setting> onCreateLoader(int arg0, Bundle arg1) {
+            Loader<Setting> loader = new SettingLoader(SettingsScreen.this, dbPath);
+            loader.forceLoad();
+            return loader;
+        }
+
+        @Override
+        public void onLoadFinished(Loader<Setting> loader , Setting setting) {
+            SettingsScreen.this.setting = setting;
+            multipleLoaderManager.checkAllLoadersCompleted();
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Setting> arg0) {
+            // Do nothing now
+        }
     }
 
     private void updateViews() {
@@ -607,7 +616,9 @@ public class SettingsScreen extends AMActivity {
         @Override
         public void onPostExecute(Void result) {
             progressDialog.dismiss();
-            updateViews();
+
+            // Force reloading
+            multipleLoaderManager.startLoading(SettingsScreen.this, true);
         }
     }
 

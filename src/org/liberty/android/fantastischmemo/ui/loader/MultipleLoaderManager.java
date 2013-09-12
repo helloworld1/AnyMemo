@@ -56,20 +56,24 @@ public class MultipleLoaderManager {
         this.onAllLoaderCompletedRunnable = onAllLoaderCompletedRunnable;
     }
 
-    public void startLoading(AMActivity activity) {
+    public void startLoading(AMActivity activity, boolean forceReload) {
         DialogFragment df = new LoadingProgressFragment();
         df.show(activity.getSupportFragmentManager(), LoadingProgressFragment.class.toString());
 
         LoaderManager.enableDebugLogging(true);
         LoaderManager loaderManager = activity.getSupportLoaderManager();
         for (int id : loaderCallbackMap.keySet()) {
-            if (loaderReloadOnStartMap.get(id)) {
+            if (loaderReloadOnStartMap.get(id) || forceReload) {
                 loaderManager.restartLoader(id, null, loaderCallbackMap.get(id));
             } else {
                 loaderManager.initLoader(id, null, loaderCallbackMap.get(id));
             }
         }
         runningLoaderCount = loaderCallbackMap.size();
+    }
+
+    public void startLoading(AMActivity activity) {
+        startLoading(activity, false);
     }
 
     public synchronized void checkAllLoadersCompleted() {
