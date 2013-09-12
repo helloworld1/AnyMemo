@@ -133,7 +133,7 @@ public class StudyActivity extends QACardActivity {
             startCardId = savedInstanceState.getInt(EXTRA_START_CARD_ID, -1);
         }
 
-        registerLoaderCallbacks(3, new LearnQueueManagerLoaderCallbacks(), false);
+        getMultipleLoaderManager().registerLoaderCallbacks(3, new LearnQueueManagerLoaderCallbacks(), false);
 
         super.onCreate(savedInstanceState);
 
@@ -507,7 +507,7 @@ public class StudyActivity extends QACardActivity {
         @Override
         public void onLoadFinished(Loader<QueueManager> loader , QueueManager queueManager) {
             StudyActivity.this.queueManager = queueManager;
-            checkAllLoadersCompleted();
+            getMultipleLoaderManager().checkAllLoadersCompleted();
         }
         @Override
         public void onLoaderReset(Loader<QueueManager> arg0) {

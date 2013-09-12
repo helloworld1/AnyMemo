@@ -130,7 +130,7 @@ public class QuizActivity extends QACardActivity {
             startCardId = savedInstanceState.getInt(EXTRA_START_CARD_ID, -1);
         }
 
-        registerLoaderCallbacks(3, new QuizQueueManagerLoaderCallbacks(), false);
+        getMultipleLoaderManager().registerLoaderCallbacks(3, new QuizQueueManagerLoaderCallbacks(), false);
         super.onCreate(savedInstanceState);
     }
 
@@ -311,7 +311,7 @@ public class QuizActivity extends QACardActivity {
         @Override
         public void onLoadFinished(Loader<QueueManager> loader , QueueManager queueManager) {
             QuizActivity.this.queueManager = (QuizQueueManager) queueManager;
-            checkAllLoadersCompleted();
+            getMultipleLoaderManager().checkAllLoadersCompleted();
         }
         @Override
         public void onLoaderReset(Loader<QueueManager> arg0) {

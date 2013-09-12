@@ -20,9 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -38,11 +36,11 @@ import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.service.AnyMemoService;
 import org.liberty.android.fantastischmemo.ui.loader.CardTTSUtilLoader;
 import org.liberty.android.fantastischmemo.ui.loader.CardTextUtilLoader;
+import org.liberty.android.fantastischmemo.ui.loader.MultipleLoaderManager;
 import org.liberty.android.fantastischmemo.ui.loader.SettingLoader;
 import org.liberty.android.fantastischmemo.utils.CardTTSUtil;
 import org.liberty.android.fantastischmemo.utils.CardTextUtil;
 
-import roboguice.util.Ln;
 import android.content.Intent;
 import android.gesture.Gesture;
 import android.gesture.GestureLibraries;
@@ -50,11 +48,9 @@ import android.gesture.GestureLibrary;
 import android.gesture.GestureOverlayView;
 import android.gesture.Prediction;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
 import android.text.ClipboardManager;
 import android.text.Spannable;
@@ -101,15 +97,7 @@ public abstract class QACardActivity extends AMActivity {
 
     private GestureLibrary gestureLibrary;
 
-    private Handler handler = new Handler();
-
-    private Map<Integer, LoaderCallbacks<?>> loaderCallbackMap
-        = new HashMap<Integer, LoaderCallbacks<?>>();
-
-    private Map<Integer, Boolean> loaderReloadOnStartMap
-        = new HashMap<Integer, Boolean>();
-
-    private int runningLoaderCount = 0;
+    private MultipleLoaderManager multipleLoaderManager = new MultipleLoaderManager();
 
     @Inject
     public void setOption(Option option) {
@@ -119,6 +107,16 @@ public abstract class QACardActivity extends AMActivity {
     public CardTTSUtil getCardTTSUtil() {
         return cardTTSUtil;
     }
+
+    public void setMultipleLoaderManager(
+            MultipleLoaderManager multipleLoaderManager) {
+        this.multipleLoaderManager = multipleLoaderManager;
+    }
+
+    public MultipleLoaderManager getMultipleLoaderManager() {
+        return multipleLoaderManager;
+    }
+
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -141,33 +139,13 @@ public abstract class QACardActivity extends AMActivity {
         // Load gestures
         loadGestures();
 
-        registerLoaderCallbacks(SETTING_LOADER_ID, new SettingLoaderCallbacks(), false);
-        registerLoaderCallbacks(CARD_TTS_UTIL_LOADER_ID, new CardTTSUtilLoaderCallbacks(), true);
-        registerLoaderCallbacks(CARD_TEXT_UTIL_LOADER_ID, new CardTextUtilLoaderCallbacks(), true);
-        startLoading();
+        multipleLoaderManager.registerLoaderCallbacks(SETTING_LOADER_ID, new SettingLoaderCallbacks(), false);
+        multipleLoaderManager.registerLoaderCallbacks(CARD_TTS_UTIL_LOADER_ID, new CardTTSUtilLoaderCallbacks(), true);
+        multipleLoaderManager.registerLoaderCallbacks(CARD_TEXT_UTIL_LOADER_ID, new CardTextUtilLoaderCallbacks(), true);
+        multipleLoaderManager.setOnAllLoaderCompletedRunnable(onPostInitRunnable);
+        multipleLoaderManager.startLoading(this);
     }
     
-    protected void registerLoaderCallbacks(int id, LoaderCallbacks<?> callbacks, boolean reloadOnStart) {
-        loaderCallbackMap.put(id, callbacks);
-        loaderReloadOnStartMap.put(id, reloadOnStart);
-    }
-
-    private void startLoading() {
-        DialogFragment df = new LoadingProgressFragment();
-        df.show(getSupportFragmentManager(), LoadingProgressFragment.class.toString());
-
-        LoaderManager.enableDebugLogging(true);
-        LoaderManager loaderManager = getSupportLoaderManager();
-        for (int id : loaderCallbackMap.keySet()) {
-            if (loaderReloadOnStartMap.get(id)) {
-                loaderManager.restartLoader(id, null, loaderCallbackMap.get(id));
-            } else {
-                loaderManager.initLoader(id, null, loaderCallbackMap.get(id));
-            }
-        }
-        runningLoaderCount = loaderCallbackMap.size();
-    }
-
     public int getContentView() {
         return R.layout.qa_card_layout;
     }
@@ -440,7 +418,7 @@ public abstract class QACardActivity extends AMActivity {
         @Override
         public void onLoadFinished(Loader<Setting> loader , Setting setting) {
             QACardActivity.this.setting = setting;
-            checkAllLoadersCompleted();
+            multipleLoaderManager.checkAllLoadersCompleted();
         }
 
         @Override
@@ -461,7 +439,7 @@ public abstract class QACardActivity extends AMActivity {
         @Override
         public void onLoadFinished(Loader<CardTTSUtil> loader , CardTTSUtil cardTTSUtil) {
             QACardActivity.this.cardTTSUtil = cardTTSUtil;
-            checkAllLoadersCompleted();
+            multipleLoaderManager.checkAllLoadersCompleted();
         }
 
         @Override
@@ -482,20 +460,11 @@ public abstract class QACardActivity extends AMActivity {
         @Override
         public void onLoadFinished(Loader<CardTextUtil> loader , CardTextUtil cardTextUtil) {
             QACardActivity.this.cardTextUtil = cardTextUtil;
-            checkAllLoadersCompleted();
+            multipleLoaderManager.checkAllLoadersCompleted();
         }
         @Override
         public void onLoaderReset(Loader<CardTextUtil> arg0) {
             // Do nothing now
-        }
-    }
-
-    protected synchronized void checkAllLoadersCompleted() {
-        Ln.v("Finished loader");
-        runningLoaderCount--;
-        // The onPostInit is running on UI thread.
-        if (runningLoaderCount <= 0) {
-            handler.post(onPostInitRunnable);
         }
     }
 
@@ -507,10 +476,8 @@ public abstract class QACardActivity extends AMActivity {
         if (cardTTSUtil != null) {
             cardTTSUtil.release();
         }
-
-        // The handler needs to remove the callbacks to avoid the race condition
-        // that onPostInitRunnable is running after onDestroy.
-        handler.removeCallbacks(onPostInitRunnable);
+        
+        multipleLoaderManager.destroy();
 
         /* Update the widget because StudyActivity can be accessed though widget*/
         Intent myIntent = new Intent(this, AnyMemoService.class);
