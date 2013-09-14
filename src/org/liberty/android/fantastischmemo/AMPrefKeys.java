@@ -104,6 +104,10 @@ public class AMPrefKeys {
     public static final String QUIZ_GROUP_SIZE_KEY = "quiz_group_size";
 
     public static final String QUIZ_GROUP_NUMBER_KEY = "quiz_group_number";
+    
+    public static final String QUIZ_START_ORDINAL_KEY = "quiz_start_ordinal";
+    
+    public static final String QUIZ_END_ORDINAL_KEY = "quiz_end_ordinal";
 
     // Card Editor
     public static final String ADD_BACK_KEY = "add_back";

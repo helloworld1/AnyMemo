@@ -85,7 +85,11 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
 
     private EditText quizGroupNumberEdit;
     
+    private TextView quizRangeStartTitle;
+    
     private EditText quizRangeStartOrdinalEdit;
+    
+    private TextView quizRangeEndTitle;
     
     private EditText quizRangeEndOrdinalEdit;
 
@@ -98,6 +102,10 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
     private int groupSize;
 
     private int groupNumber;
+    
+    private int rangeStartOrdinal;
+    
+    private int rangeEndOrdinal;
 
     // Default category id is "uncategorized".
     private int categoryId = 0;
@@ -159,18 +167,27 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
         
         quizByRangeRadio.setOnCheckedChangeListener(onCheckedChangeListener);
         
-        quizGroupSizeEdit.addTextChangedListener(editTextWatcher);
+        quizGroupSizeEdit.addTextChangedListener(quizByGroupTextWatcher);
         quizGroupSizeEdit.setOnFocusChangeListener(sanitizeInputListener);
 
         quizGroupNumberTitle = (TextView) v.findViewById(R.id.quiz_group_number_title);
 
         quizGroupNumberEdit = (EditText) v.findViewById(R.id.quiz_group_number);
-        quizGroupNumberEdit.addTextChangedListener(editTextWatcher);
+        quizGroupNumberEdit.addTextChangedListener(quizByGroupTextWatcher);
         quizGroupNumberEdit.setOnFocusChangeListener(sanitizeInputListener);
         
+        //For quiz range
+        quizRangeStartTitle = (TextView) v.findViewById(R.id.quiz_range_start_size_title);
+        quizRangeEndTitle = (TextView) v.findViewById(R.id.quiz_range_end_size_title);
+        
         quizRangeStartOrdinalEdit = (EditText) v.findViewById(R.id.quiz_range_strat_ordinal);
+        quizRangeStartOrdinalEdit.addTextChangedListener(quizByRangeTextWatcher);
+        quizRangeStartOrdinalEdit.setOnFocusChangeListener(rangeInputListener);
+        
         quizRangeEndOrdinalEdit = (EditText) v.findViewById(R.id.quiz_range_end_ordinal);
-
+        quizRangeEndOrdinalEdit.addTextChangedListener(quizByRangeTextWatcher);
+        quizRangeEndOrdinalEdit.setOnFocusChangeListener(rangeInputListener);
+        
         categoryButton = (Button) v.findViewById(R.id.category_button);
         categoryButton.setOnClickListener(categoryButtonListener);
 
@@ -228,11 +245,14 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
             } 
             else if(quizByRangeRadio.isChecked()) {
             	Intent intent = new Intent(mActivity, QuizActivity.class);
-            	
                 int startOrd = Integer.parseInt(quizRangeStartOrdinalEdit.getText().toString());
                 int endOrd = Integer.parseInt(quizRangeEndOrdinalEdit.getText().toString());
                 int size = endOrd - startOrd + 1;
        
+                editor.putInt(AMPrefKeys.QUIZ_START_ORDINAL_KEY, rangeStartOrdinal);
+                editor.putInt(AMPrefKeys.QUIZ_END_ORDINAL_KEY, rangeEndOrdinal);
+                editor.commit();
+                
                 intent.putExtra(QuizActivity.EXTRA_DBPATH, dbPath);
                 intent.putExtra(QuizActivity.EXTRA_START_CARD_ORD, startOrd);
                 intent.putExtra(QuizActivity.EXTRA_QUIZ_SIZE, size);
@@ -285,6 +305,17 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
             groupNumber = settings.getInt(AMPrefKeys.QUIZ_GROUP_NUMBER_KEY, 1);
             setGroupSizeText();
             setGroupNumberText();
+            rangeStartOrdinal = settings.getInt(AMPrefKeys.QUIZ_START_ORDINAL_KEY, 1);
+            rangeEndOrdinal = settings.getInt(AMPrefKeys.QUIZ_END_ORDINAL_KEY, 1);
+            
+            quizRangeStartOrdinalEdit.setText("" + rangeStartOrdinal);
+            quizRangeEndOrdinalEdit.setText("" + rangeEndOrdinal);
+            
+            quizRangeStartTitle.setText(getString(R.string.start_ordianl_text)
+                    + " (" + 1 + "-" + totalCardNumber + ")");
+            quizRangeEndTitle.setText(getString(R.string.end_ordinal_text)
+                    + " (" + 1 + "-" + totalCardNumber + ")");
+            
         }
     }
 
@@ -317,7 +348,7 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
         }
     }
 
-    private TextWatcher editTextWatcher = new TextWatcher() {
+    private TextWatcher quizByGroupTextWatcher = new TextWatcher() {
 
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count,
@@ -360,6 +391,74 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
             setGroupSizeText();
         }
     };
+    
+    private TextWatcher quizByRangeTextWatcher = new TextWatcher() {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count,
+                int after) {
+            // Nothing happened
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before,
+                int count) {
+            // Nothing happened
+        }
+        
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (StringUtils.isEmpty(s)) {
+                return;
+            }
+            try {
+            	rangeStartOrdinal = Integer.valueOf(quizRangeStartOrdinalEdit.getText().toString());
+                if (rangeStartOrdinal <= 0) {
+                	rangeStartOrdinal = 1;
+                }
+                if (rangeStartOrdinal > totalCardNumber) {
+                	rangeStartOrdinal = totalCardNumber;
+                }
+
+            } catch (NumberFormatException e) {
+            	rangeStartOrdinal = 1;
+            }
+            try {
+                rangeEndOrdinal = Integer.valueOf(quizRangeEndOrdinalEdit.getText().toString());
+                if (rangeEndOrdinal <= 0) {
+                    rangeEndOrdinal = 1;
+                }
+                //Make EndOrdinal >= StartOrdinal
+                if (rangeEndOrdinal < rangeStartOrdinal) {
+                    rangeEndOrdinal = rangeStartOrdinal;
+                }
+                if (rangeEndOrdinal > totalCardNumber) {
+                    rangeEndOrdinal = totalCardNumber;
+                }
+
+             } catch (NumberFormatException e) {
+                	rangeEndOrdinal = totalCardNumber;
+             }
+               
+            //Set relative TextView
+            quizRangeEndTitle.setText(getString(R.string.end_ordinal_text)
+                + " (" + rangeStartOrdinal + "-" + totalCardNumber + ")");
+            quizRangeStartTitle.setText(getString(R.string.start_ordianl_text)
+                + " (" + 1 + "-" + rangeEndOrdinal + ")");
+        }
+    };
+
+    View.OnFocusChangeListener rangeInputListener =
+            new View.OnFocusChangeListener() {
+    	
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus == false) { 
+                    quizRangeStartOrdinalEdit.setText("" + rangeStartOrdinal);
+                    quizRangeEndOrdinalEdit.setText("" + rangeEndOrdinal);
+                }
+            }
+     };
 
     View.OnFocusChangeListener sanitizeInputListener =
         new View.OnFocusChangeListener() {
