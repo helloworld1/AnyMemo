@@ -81,6 +81,22 @@ public class DetailScreen extends AMActivity {
 
         setContentView(R.layout.detail_screen);
 
+        idEntry = (EditText)findViewById(R.id.entry__id);
+        questionEntry = (EditText)findViewById(R.id.entry_question);
+        answerEntry = (EditText)findViewById(R.id.entry_answer);
+        noteEntry = (EditText)findViewById(R.id.entry_note);
+        categoryEntry = (EditText)findViewById(R.id.entry_category);
+        lastLearnDateEntry = (EditText)findViewById(R.id.entry_last_learn_date);
+        nextLearnDateEntry = (EditText)findViewById(R.id.entry_next_learn_date);
+        gradeEntry = (EditText)findViewById(R.id.entry_grade);
+        easinessEntry = (EditText)findViewById(R.id.entry_easiness);
+        acqRepsEntry = (EditText)findViewById(R.id.entry_acq_reps);
+        retRepsEntry = (EditText)findViewById(R.id.entry_ret_reps);
+        lapsesEntry = (EditText)findViewById(R.id.entry_lapses);
+        acqRepsSinceLapseEntry = (EditText)findViewById(R.id.entry_acq_reps_since_lapse);
+        retRepsSinceLapseEntry = (EditText)findViewById(R.id.entry_ret_reps_since_lapse);
+
+
         initTask = new InitTask();
         initTask.execute((Void) null);
     }
@@ -280,21 +296,6 @@ public class DetailScreen extends AMActivity {
 
         @Override
         public void onPostExecute(Void result) {
-            idEntry = (EditText)findViewById(R.id.entry__id);
-            questionEntry = (EditText)findViewById(R.id.entry_question);
-            answerEntry = (EditText)findViewById(R.id.entry_answer);
-            noteEntry = (EditText)findViewById(R.id.entry_note);
-            categoryEntry = (EditText)findViewById(R.id.entry_category);
-            lastLearnDateEntry = (EditText)findViewById(R.id.entry_last_learn_date);
-            nextLearnDateEntry = (EditText)findViewById(R.id.entry_next_learn_date);
-            gradeEntry = (EditText)findViewById(R.id.entry_grade);
-            easinessEntry = (EditText)findViewById(R.id.entry_easiness);
-            acqRepsEntry = (EditText)findViewById(R.id.entry_acq_reps);
-            retRepsEntry = (EditText)findViewById(R.id.entry_ret_reps);
-            lapsesEntry = (EditText)findViewById(R.id.entry_lapses);
-            acqRepsSinceLapseEntry = (EditText)findViewById(R.id.entry_acq_reps_since_lapse);
-            retRepsSinceLapseEntry = (EditText)findViewById(R.id.entry_ret_reps_since_lapse);
-
             questionEntry.setText(currentCard.getQuestion());
 
             loadEntries();
