@@ -22,6 +22,8 @@ package org.liberty.android.fantastischmemo.ui;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
@@ -30,9 +32,9 @@ import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.domain.Category;
+import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
 
 import roboguice.fragment.RoboDialogFragment;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -66,6 +68,8 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
     private CardDao cardDao;
 
     private String dbPath = null;
+    
+    private AMPrefUtil amPrefUtil;
 
     private AMActivity mActivity;
 
@@ -118,6 +122,11 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
 
     private Map<CompoundButton, View> radioButtonSettingsMapping;
 
+    @Inject
+    public void setAmPrefUtil(AMPrefUtil amPrefUtil) {
+        this.amPrefUtil = amPrefUtil;
+    }
+    
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -249,9 +258,8 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
                 int endOrd = Integer.parseInt(quizRangeEndOrdinalEdit.getText().toString());
                 int size = endOrd - startOrd + 1;
        
-                editor.putInt(AMPrefKeys.QUIZ_START_ORDINAL_KEY, rangeStartOrdinal);
-                editor.putInt(AMPrefKeys.QUIZ_END_ORDINAL_KEY, endOrd);
-                editor.commit();
+                amPrefUtil.putSavedInt(AMPrefKeys.QUIZ_START_ORDINAL_KEY, dbPath, rangeStartOrdinal);
+                amPrefUtil.putSavedInt(AMPrefKeys.QUIZ_END_ORDINAL_KEY, dbPath, rangeEndOrdinal);
                 
                 intent.putExtra(QuizActivity.EXTRA_DBPATH, dbPath);
                 intent.putExtra(QuizActivity.EXTRA_START_CARD_ORD, startOrd);
@@ -262,9 +270,8 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
             }
             else{
                 Intent intent = new Intent(mActivity, QuizActivity.class);
-                editor.putInt(AMPrefKeys.QUIZ_GROUP_SIZE_KEY, groupSize);
-                editor.putInt(AMPrefKeys.QUIZ_GROUP_NUMBER_KEY, groupNumber);
-                editor.commit();
+                amPrefUtil.putSavedInt(AMPrefKeys.QUIZ_GROUP_SIZE_KEY, dbPath, groupSize);
+                amPrefUtil.putSavedInt(AMPrefKeys.QUIZ_GROUP_NUMBER_KEY, dbPath, groupNumber);
 
                 int startOrd = (groupNumber - 1) * groupSize + 1;
                 intent.putExtra(QuizActivity.EXTRA_DBPATH, dbPath);
@@ -301,12 +308,12 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
 
         @Override
         public void onPostExecute(Void nothing) {
-            groupSize = settings.getInt(AMPrefKeys.QUIZ_GROUP_SIZE_KEY, DEFAULT_GROUP_SIZE);
-            groupNumber = settings.getInt(AMPrefKeys.QUIZ_GROUP_NUMBER_KEY, 1);
+            groupSize = amPrefUtil.getSavedInt(AMPrefKeys.QUIZ_GROUP_SIZE_KEY, dbPath, DEFAULT_GROUP_SIZE);
+            groupNumber = amPrefUtil.getSavedInt(AMPrefKeys.QUIZ_GROUP_NUMBER_KEY, dbPath, 1);
             setGroupSizeText();
             setGroupNumberText();
-            rangeStartOrdinal = settings.getInt(AMPrefKeys.QUIZ_START_ORDINAL_KEY, 1);
-            rangeEndOrdinal = settings.getInt(AMPrefKeys.QUIZ_END_ORDINAL_KEY, 1);
+            rangeStartOrdinal = amPrefUtil.getSavedInt(AMPrefKeys.QUIZ_START_ORDINAL_KEY, dbPath, 1);
+            rangeEndOrdinal = amPrefUtil.getSavedInt(AMPrefKeys.QUIZ_END_ORDINAL_KEY, dbPath, 1);
             
             quizRangeStartOrdinalEdit.setText("" + rangeStartOrdinal);
             quizRangeEndOrdinalEdit.setText("" + rangeEndOrdinal);
@@ -485,7 +492,7 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
                 }
 
              } catch (NumberFormatException e) {
-                	rangeEndOrdinal = 1;
+                	rangeEndOrdinal = totalCardNumber;
              }
             //Set relative TextView
             quizRangeStartTitle.setText(getString(R.string.start_ordianl_text)
@@ -500,7 +507,7 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
             public void onFocusChange(View v, boolean hasFocus) {
                 	if (hasFocus == false) {	
                         quizRangeStartOrdinalEdit.setText("" + rangeStartOrdinal);
-                        quizRangeStartOrdinalEdit.setText("" + rangeEndOrdinal);
+                        quizRangeEndOrdinalEdit.setText("" + rangeEndOrdinal);
                 	}
             }
      };
