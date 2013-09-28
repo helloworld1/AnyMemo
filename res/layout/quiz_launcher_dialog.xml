@@ -60,6 +60,35 @@
                     android:layout_height="wrap_content"
                     android:text="@string/select_category_text" />
         </LinearLayout>
+        <RadioButton
+            android:checked="false"
+            android:id="@+id/quiz_by_range_radio"
+            android:text="@string/quiz_by_range_text" />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/quiz_by_range_settings"
+            android:visibility="gone"
+            android:orientation="vertical">
+            <TextView android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/quiz_range_start_size_title"
+                    android:text="@string/start_ordianl_text" />
+            <EditText
+                android:id="@+id/quiz_range_strat_ordinal"
+                android:layout_width="match_parent"
+                android:inputType="number"
+                android:layout_height="wrap_content" />
+            <TextView android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/quiz_range_end_size_title"
+                    android:text="@string/end_ordinal_text" />
+            <EditText
+                android:id="@+id/quiz_range_end_ordinal"
+                android:layout_width="match_parent"
+                android:inputType="number"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
     </RadioGroup>
 
     <CheckBox
