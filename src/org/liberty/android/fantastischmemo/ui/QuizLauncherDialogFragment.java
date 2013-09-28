@@ -251,8 +251,7 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
                 intent.putExtra(QuizActivity.EXTRA_CATEGORY_ID, categoryId);
                 intent.putExtra(QuizActivity.EXTRA_SHUFFLE_CARDS, shuffleCheckbox.isChecked());
                 startActivity(intent);
-            } 
-            else if(quizByRangeRadio.isChecked()) {
+            } else if(quizByRangeRadio.isChecked()) {
             	Intent intent = new Intent(mActivity, QuizActivity.class);
                 int startOrd = Integer.parseInt(quizRangeStartOrdinalEdit.getText().toString());
                 int endOrd = Integer.parseInt(quizRangeEndOrdinalEdit.getText().toString());
@@ -267,8 +266,7 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
                 intent.putExtra(QuizActivity.EXTRA_SHUFFLE_CARDS, shuffleCheckbox.isChecked());
                 
                 startActivity(intent);
-            }
-            else{
+            } else{
                 Intent intent = new Intent(mActivity, QuizActivity.class);
                 amPrefUtil.putSavedInt(AMPrefKeys.QUIZ_GROUP_SIZE_KEY, dbPath, groupSize);
                 amPrefUtil.putSavedInt(AMPrefKeys.QUIZ_GROUP_NUMBER_KEY, dbPath, groupNumber);
@@ -382,7 +380,6 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
                 if (groupSize > MAX_GROUP_SIZE) {
                     groupSize = MAX_GROUP_SIZE;
                 }
-
             } catch (NumberFormatException e) {
                 groupSize = MAX_GROUP_SIZE;
             }
@@ -452,7 +449,6 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
             } catch (NumberFormatException e) {
             	rangeStartOrdinal = 1;
             }
-               
             //Set relative TextView
             quizRangeEndTitle.setText(getString(R.string.end_ordinal_text)
                 + " (" + rangeStartOrdinal + "-" + totalCardNumber + ")");
@@ -490,7 +486,6 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
                 if (rangeEndOrdinal > totalCardNumber) {
                     rangeEndOrdinal = totalCardNumber;
                 }
-
              } catch (NumberFormatException e) {
                 	rangeEndOrdinal = totalCardNumber;
              }
