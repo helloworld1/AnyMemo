@@ -141,7 +141,7 @@
     <string name="export_tab_txt">导出Tab分割的TXT</string>
     <string name="export_csv">导出CSV</string>
     <string name="import_qa_txt">导入QA TXT</string>
-    <string name="import_tab_txt">导出Tab分割的TXT</string>
+    <string name="import_tab_txt">导入Tab分割的TXT</string>
     <string name="import_csv">导入CSV</string>
     <string name="import_supermemo_xml_text">导入SuperMemo PPC XML</string>
     <string name="speech_ctl_title">语音模式</string>
