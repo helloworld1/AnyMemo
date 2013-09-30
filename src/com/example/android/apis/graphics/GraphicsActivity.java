@@ -16,14 +16,15 @@
 
 package com.example.android.apis.graphics;
 
-import android.app.Activity;
+import org.liberty.android.fantastischmemo.AMActivity;
+
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 
-class GraphicsActivity extends Activity {
+class GraphicsActivity extends AMActivity {
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
