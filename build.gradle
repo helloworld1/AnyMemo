@@ -38,27 +38,3 @@ android {
         instrumentTest.setRoot('test')
     }
 }
-
-gradle.projectsEvaluated {
-    // compileJava.doLast {
-    //     tasks.compileAspectJ.execute()
-    // }
-    println 'lalalalala'
-    println android.sourceSets.main
-}
-
-// task compileAspectJ {
-// 
-//     ant.taskdef(resource: "org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties",
-//         classpath: configurations.ajc.asPath)
-//     ant.iajc(source: sourceCompatibility, target: sourceCompatibility,
-//         destDir: "./",
-//         classpath: "./") {
-// 
-//         sourceroots{
-//             android.sourceSets.main.java.srcDirs.each {
-//                 pathelement(location: it.absolutePath)
-//             }
-//         }
-//     }
-// }
