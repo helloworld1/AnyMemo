@@ -141,7 +141,7 @@
     <string name="export_tab_txt">導出Tab分割的TXT</string>
     <string name="export_csv">導出CSV</string>
     <string name="import_qa_txt">導入QA TXT</string>
-    <string name="import_tab_txt">導出Tab分割的TXT</string>
+    <string name="import_tab_txt">導入Tab分割的TXT</string>
     <string name="import_csv">導入CSV</string>
     <string name="import_supermemo_xml_text">導入SuperMemo PPC XML</string>
     <string name="speech_ctl_title">語音模式</string>
@@ -308,7 +308,7 @@
     <string name="uncategorized_text">未分類</string>
     <string name="edit_text">編輯</string>
     <string name="category_dialog_title">請選擇或者創建一個分類</string>
-    <string name="ordinal_text_short">順序</string>
+    <string name="ordinal_text_short">序號</string>
     <string name="total_text">總共</string>
     <string name="review_short_text">復習</string>
     <string name="new_text">新</string>
@@ -329,7 +329,7 @@
     <string name="load_default_warning_text">該操作將讀取您設置的默認設置。</string>
     <string name="default_settings_text">數據庫默認設置</string>
     <string name="remove_dup_message">刪除重復卡片。</string>
-    <string name="ordinal_text">順序</string>
+    <string name="ordinal_text">序號</string>
     <string name="import_zip_text">導入Zip</string>
     <string name="export_zip_text">導出Zip</string>
     <string name="customize_scheduling_algorithm_text">自定義學習算法</string>
@@ -442,9 +442,15 @@
     <string name="author_text">作者</string>
     <string name="creation_date_text">創建時間</string>
     <string name="card_count_text">卡片數量</string>
+    <string name="card_player_text">卡片播放器</string>
+    <string name="card_player_qa_sleep_interval_text">問題和答案的間隔是%d 秒</string>
+    <string name="card_player_card_sleep_interval_text">卡片之間的間隔是%d 秒</string>
     <string name="card_player_notification_title">AnyMemo卡片播放器</string>
     <string name="card_player_notification_text">卡片播放中</string>
     <string name="forget_text">忘記</string>
     <string name="remember_text">記住</string>
     <string name="both_text">兩個都</string>
+    <string name="quiz_by_range_text">按序號範圍測試</string>
+    <string name="start_ordianl_text">開始序號</string>
+    <string name="end_ordinal_text">結束序號</string>
 </resources>

@@ -308,7 +308,7 @@
     <string name="uncategorized_text">未分类</string>
     <string name="edit_text">编辑</string>
     <string name="category_dialog_title">请选择或者创建一个分类</string>
-    <string name="ordinal_text_short">顺序</string>
+    <string name="ordinal_text_short">序号</string>
     <string name="total_text">总共</string>
     <string name="review_short_text">复习</string>
     <string name="new_text">新</string>
@@ -329,7 +329,7 @@
     <string name="load_default_warning_text">该操作将读取您设置的默认设置。</string>
     <string name="default_settings_text">数据库默认设置</string>
     <string name="remove_dup_message">删除重复卡片。</string>
-    <string name="ordinal_text">顺序</string>
+    <string name="ordinal_text">序号</string>
     <string name="import_zip_text">导入Zip</string>
     <string name="export_zip_text">导出Zip</string>
     <string name="customize_scheduling_algorithm_text">自定义学习算法</string>
@@ -450,4 +450,7 @@
     <string name="forget_text">忘记</string>
     <string name="remember_text">记住</string>
     <string name="both_text">两个都</string>
+    <string name="quiz_by_range_text">按序号范围测试</string>
+    <string name="start_ordianl_text">开始序号</string>
+    <string name="end_ordinal_text">结束序号</string>
 </resources>
