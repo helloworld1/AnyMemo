@@ -265,9 +265,10 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
             if (filterCategory != null) {
                 where.and().eq("category_id", filterCategory.getId());
             }
-
+            
             cardQb.setWhere(where);
-            cardQb.orderBy("ordinal", true);
+            cardQb.join(learnQb).orderByRaw("learning_data.easiness,cards.ordinal");
+            //cardQb.orderBy("ordinal", true);
             cardQb.limit((long)limit);
             List<Card> cs = cardQb.query();
             for (Card c : cs) {
