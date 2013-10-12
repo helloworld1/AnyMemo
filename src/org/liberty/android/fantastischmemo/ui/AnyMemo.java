@@ -191,8 +191,7 @@ public class AnyMemo extends AMActivity {
                 String emptyDbPath = getApplicationContext().getFilesDir().getAbsolutePath() + "/" + AMEnv.EMPTY_DB_NAME;
                 FileUtils.copyInputStreamToFile(in2, new File(emptyDbPath));
                 in2.close();
-            }
-            catch(IOException e){
+            } catch(IOException e){
                 Log.e(TAG, "Copy file error", e);
 
             }
