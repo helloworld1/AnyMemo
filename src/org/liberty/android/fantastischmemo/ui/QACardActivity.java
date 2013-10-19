@@ -254,7 +254,9 @@ public abstract class QACardActivity extends AMActivity {
                 findViewById(R.id.answer).setVisibility(View.VISIBLE);
 
                 // Also the buttons should match the color.
-                if (buttonsView != null) {
+                // Do not change color if the color is the default color,
+                // AnyMemo will use the theme's color instead.
+                if (buttonsView != null && !setting.isDefaultColor()) {
                     buttonsView.setBackgroundColor(setting
                             .getAnswerBackgroundColor());
                 }
@@ -263,7 +265,7 @@ public abstract class QACardActivity extends AMActivity {
                 findViewById(R.id.answer).setVisibility(View.GONE);
 
                 // Also the buttons should match the color.
-                if (buttonsView != null) {
+                if (buttonsView != null && !setting.isDefaultColor()) {
                     buttonsView.setBackgroundColor(setting
                             .getQuestionBackgroundColor());
                 }
@@ -285,45 +287,55 @@ public abstract class QACardActivity extends AMActivity {
         Spannable sa = spannableFields.get(1);
 
         // Finally we generate the fragments
-        CardFragment questionFragment = new CardFragment.Builder(sq)
+        CardFragment.Builder questionFragmentBuilder = new CardFragment.Builder(sq)
                 .setTextAlignment(questionAlign)
                 .setTypefaceFromFile(questionTypefaceValue)
                 .setTextOnClickListener(onQuestionTextClickListener)
                 .setCardOnClickListener(onQuestionViewClickListener)
                 .setTextFontSize(setting.getQuestionFontSize())
-                .setTypefaceFromFile(setting.getQuestionFont())
-                .setTextColor(setting.getQuestionTextColor())
-                .setBackgroundColor(setting.getQuestionBackgroundColor())
-                .build();
+                .setTypefaceFromFile(setting.getQuestionFont());
 
-        CardFragment answerFragment = null;
+        // For default card colors, we will use the theme's color
+        // so we do not set the colors here.
+        if (!setting.isDefaultColor()) {
+            questionFragmentBuilder
+                .setTextColor(setting.getQuestionTextColor())
+                .setBackgroundColor(setting.getQuestionBackgroundColor());
+        }
+        CardFragment questionFragment = questionFragmentBuilder.build();
+
+        CardFragment.Builder answerFragmentBuilder = null;
 
         if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED
                 || showAnswer) {
-            answerFragment = new CardFragment.Builder(sa)
+            answerFragmentBuilder = new CardFragment.Builder(sa)
                     .setTextAlignment(answerAlign)
                     .setTypefaceFromFile(answerTypefaceValue)
                     .setTextOnClickListener(onAnswerTextClickListener)
                     .setCardOnClickListener(onAnswerViewClickListener)
                     .setTextFontSize(setting.getAnswerFontSize())
-                    .setTextColor(setting.getAnswerTextColor())
-                    .setBackgroundColor(setting.getAnswerBackgroundColor())
-                    .setTypefaceFromFile(setting.getAnswerFont()).build();
+                    .setTypefaceFromFile(setting.getAnswerFont());
         } else {
             // For "Show answer" text, we do not use the
             // alignment from the settings.
             // It is always center aligned
-            answerFragment = new CardFragment.Builder(
+            answerFragmentBuilder = new CardFragment.Builder(
                     getString(R.string.memo_show_answer))
                     .setTextAlignment(Setting.Align.CENTER)
                     .setTypefaceFromFile(answerTypefaceValue)
                     .setTextOnClickListener(onAnswerTextClickListener)
                     .setCardOnClickListener(onAnswerViewClickListener)
                     .setTextFontSize(setting.getAnswerFontSize())
-                    .setTextColor(setting.getAnswerTextColor())
-                    .setBackgroundColor(setting.getAnswerBackgroundColor())
-                    .setTypefaceFromFile(setting.getAnswerFont()).build();
+                    .setTypefaceFromFile(setting.getAnswerFont());
         }
+
+        if (!setting.isDefaultColor()) {
+            answerFragmentBuilder
+                    .setTextColor(setting.getAnswerTextColor())
+                    .setBackgroundColor(setting.getAnswerBackgroundColor());
+        }
+
+        CardFragment answerFragment = answerFragmentBuilder.build();
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
@@ -397,7 +409,7 @@ public abstract class QACardActivity extends AMActivity {
             df.dismiss();
         }
         View buttonsView = findViewById(R.id.buttons_root);
-        if (buttonsView != null) {
+        if (buttonsView != null && !setting.isDefaultColor()) {
             buttonsView.setBackgroundColor(setting
                     .getAnswerBackgroundColor());
         }

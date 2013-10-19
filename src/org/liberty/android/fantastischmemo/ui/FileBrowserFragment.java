@@ -76,6 +76,7 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
     private String[] fileExtensions;
     private AMActivity mActivity;
     private ListView fbListView;
+    private TextView titleTextView;
     private boolean dismissOnSelect = false;
 
     /* Used when the file is clicked. */
@@ -160,6 +161,7 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
 
         View v = inflater.inflate(R.layout.file_browser, container, false);
         fbListView = (ListView)v.findViewById(R.id.file_list);
+        titleTextView = (TextView) v.findViewById(R.id.file_path_title);
         return v;
     }
 
@@ -173,7 +175,7 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
 
     private void browseTo(final File aDirectory){
         if(aDirectory.isDirectory()){
-            mActivity.setTitle(aDirectory.getPath());
+            titleTextView.setText(aDirectory.getPath());
             this.currentDirectory = aDirectory;
             fill(aDirectory.listFiles());
         }

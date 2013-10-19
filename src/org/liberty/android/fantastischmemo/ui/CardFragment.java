@@ -61,9 +61,9 @@ public class CardFragment extends RoboFragment {
 
     private int fontSize = 24;
 
-    private int textColor = 0xFFBEBEBE;
+    private Integer textColor = null;
 
-    private int backgroundColor = 0xFF000000;
+    private Integer backgroundColor = null;
 
     private Setting.Align textAlignment = Setting.Align.CENTER;
 
@@ -117,9 +117,13 @@ public class CardFragment extends RoboFragment {
             cardTextView.setOnLongClickListener(textOnLongClickListener);
         }
 
-        cardTextView.setTextColor(textColor);
+        if (textColor != null) {
+            cardTextView.setTextColor(textColor);
+        }
 
-        rootView.setBackgroundColor(backgroundColor);
+        if (backgroundColor != null) {
+            rootView.setBackgroundColor(backgroundColor);
+        }
 
         if (fontFile != null && new File(fontFile).exists()) {
             Typeface qt = Typeface.createFromFile(fontFile);
