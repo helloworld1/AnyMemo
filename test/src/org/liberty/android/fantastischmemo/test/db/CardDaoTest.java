@@ -446,6 +446,12 @@ public class CardDaoTest extends AbstractExistingDBTest {
     @SmallTest
     public void testReviewCardsOrderOfAllDifferentEasiness() throws SQLException {
         CardDao cardDao = helper.getCardDao();
+        CategoryDao categoryDao = helper.getCategoryDao();
+        setupThreeCategories();
+        
+        Card c2 = cardDao.queryForId(2);
+        Card c5 = cardDao.queryForId(5);
+        
         Card c13 = cardDao.queryForId(13);
         Card c14 = cardDao.queryForId(14);
         Card c15 = cardDao.queryForId(15);
@@ -473,13 +479,29 @@ public class CardDaoTest extends AbstractExistingDBTest {
         c15Ld.setNextLearnDate(testDate);
         c15Ld.setEasiness((float) 2.8);
         learningDataDao.update(c15Ld);
-         
-        List<Card> cards = cardDao.getCardForReview(null, 0, 50);
         
-        assertEquals(3, cards.size());
-        assertEquals(14, (int)cards.get(0).getOrdinal());
-        assertEquals(13, (int)cards.get(1).getOrdinal());
-        assertEquals(15, (int)cards.get(2).getOrdinal());
+        learningDataDao.refresh(c2.getLearningData());
+        LearningData c2Ld = c2.getLearningData();
+        c2Ld.setAcqReps(1);
+        c2Ld.setNextLearnDate(testDate);
+        c2Ld.setEasiness((float) 3.0);
+        learningDataDao.update(c2Ld);
+        
+        learningDataDao.refresh(c5.getLearningData());
+        LearningData c5Ld = c5.getLearningData();
+        c5Ld.setAcqReps(1);
+        c5Ld.setNextLearnDate(testDate);
+        c5Ld.setEasiness((float) 2.9);
+        learningDataDao.update(c5Ld);
+        
+        List<Category> cts = categoryDao.queryForEq("name", "My category");
+        Category ct = cts.get(0);
+        
+        List<Card> cards = cardDao.getCardForReview(ct, 0, 50);
+        
+        assertEquals(2, cards.size());
+        assertEquals(5, (int)cards.get(0).getOrdinal());
+        assertEquals(2, (int)cards.get(1).getOrdinal());
     }
     
     @SmallTest
