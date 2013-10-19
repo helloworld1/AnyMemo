@@ -268,7 +268,6 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
             
             cardQb.setWhere(where);
             cardQb.join(learnQb).orderByRaw("learning_data.easiness,cards.ordinal");
-            //cardQb.orderBy("ordinal", true);
             cardQb.limit((long)limit);
             List<Card> cs = cardQb.query();
             for (Card c : cs) {
