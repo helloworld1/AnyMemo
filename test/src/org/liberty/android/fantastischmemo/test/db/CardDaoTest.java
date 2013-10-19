@@ -414,28 +414,28 @@ public class CardDaoTest extends AbstractExistingDBTest {
         LearningDataDao learningDataDao = helper.getLearningDataDao();
         Date testDate = new Date((new Date().getTime() - 1));
         
-        LearningData c13Ld = c13.getLearningData();
         learningDataDao.refresh(c13.getLearningData());
+        LearningData c13Ld = c13.getLearningData();
         c13Ld.setAcqReps(1);
         c13Ld.setNextLearnDate(testDate);
         c13Ld.setEasiness((float) 2.7);
         learningDataDao.update(c13Ld);
         
+        learningDataDao.refresh(c14.getLearningData()); 
         LearningData c14Ld = c14.getLearningData();
-        learningDataDao.refresh(c14.getLearningData());   
         c14Ld.setAcqReps(1);
         c14Ld.setNextLearnDate(testDate);
         c14Ld.setEasiness((float) 2.7);  
         learningDataDao.update(c14Ld);
-        
-        LearningData c15Ld = c15.getLearningData();
+       
         learningDataDao.refresh(c15.getLearningData());
+        LearningData c15Ld = c15.getLearningData();
         c15Ld.setAcqReps(1);
         c15Ld.setNextLearnDate(testDate);
         c15Ld.setEasiness((float) 2.7);
         learningDataDao.update(c15Ld);
          
-        List<Card> cards = cardDao.getCardForReview(null,0,50);
+        List<Card> cards = cardDao.getCardForReview(null, 0, 50);
         
         assertEquals(3, cards.size());
         assertEquals(13, (int)cards.get(0).getOrdinal());
@@ -453,28 +453,28 @@ public class CardDaoTest extends AbstractExistingDBTest {
         LearningDataDao learningDataDao = helper.getLearningDataDao();
         Date testDate = new Date((new Date().getTime() - 1));
         
-        LearningData c13Ld = c13.getLearningData();
         learningDataDao.refresh(c13.getLearningData());
+        LearningData c13Ld = c13.getLearningData();
         c13Ld.setAcqReps(1);
         c13Ld.setNextLearnDate(testDate);
         c13Ld.setEasiness((float) 2.7);
         learningDataDao.update(c13Ld);
         
-        LearningData c14Ld = c14.getLearningData();
         learningDataDao.refresh(c14.getLearningData());   
+        LearningData c14Ld = c14.getLearningData();
         c14Ld.setAcqReps(1);
         c14Ld.setNextLearnDate(testDate);
         c14Ld.setEasiness((float) 2.6);  
         learningDataDao.update(c14Ld);
         
-        LearningData c15Ld = c15.getLearningData();
         learningDataDao.refresh(c15.getLearningData());
+        LearningData c15Ld = c15.getLearningData();
         c15Ld.setAcqReps(1);
         c15Ld.setNextLearnDate(testDate);
         c15Ld.setEasiness((float) 2.8);
         learningDataDao.update(c15Ld);
          
-        List<Card> cards = cardDao.getCardForReview(null,0,50);
+        List<Card> cards = cardDao.getCardForReview(null, 0, 50);
         
         assertEquals(3, cards.size());
         assertEquals(14, (int)cards.get(0).getOrdinal());
@@ -492,28 +492,28 @@ public class CardDaoTest extends AbstractExistingDBTest {
         LearningDataDao learningDataDao = helper.getLearningDataDao();
         Date testDate = new Date((new Date().getTime() - 1));
         
-        LearningData c13Ld = c13.getLearningData();
         learningDataDao.refresh(c13.getLearningData());
+        LearningData c13Ld = c13.getLearningData();
         c13Ld.setAcqReps(1);
         c13Ld.setNextLearnDate(testDate);
         c13Ld.setEasiness((float) 2.8);
         learningDataDao.update(c13Ld);
         
-        LearningData c14Ld = c14.getLearningData();
         learningDataDao.refresh(c14.getLearningData());   
+        LearningData c14Ld = c14.getLearningData();
         c14Ld.setAcqReps(1);
         c14Ld.setNextLearnDate(testDate);
         c14Ld.setEasiness((float) 2.6);  
         learningDataDao.update(c14Ld);
         
-        LearningData c15Ld = c15.getLearningData();
         learningDataDao.refresh(c15.getLearningData());
+        LearningData c15Ld = c15.getLearningData();
         c15Ld.setAcqReps(1);
         c15Ld.setNextLearnDate(testDate);
         c15Ld.setEasiness((float) 2.6);
         learningDataDao.update(c15Ld);
          
-        List<Card> cards = cardDao.getCardForReview(null,0,50);
+        List<Card> cards = cardDao.getCardForReview(null, 0, 50);
         
         assertEquals(3, cards.size());
         assertEquals(14, (int)cards.get(0).getOrdinal());
