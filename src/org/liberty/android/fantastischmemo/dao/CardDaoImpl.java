@@ -260,14 +260,13 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
             learnQb.where().le("nextLearnDate", Calendar.getInstance().getTime())
                 .and().gt("acqReps", "0");
             QueryBuilder<Card, Integer> cardQb = this.queryBuilder();
-            Where<Card, Integer> where = cardQb.where().in("learningData_id", learnQb)
-                .and().gt("ordinal", "" + maxReviewCacheOrdinal);
+            Where<Card, Integer> where = cardQb.where().gt("ordinal", "" + maxReviewCacheOrdinal);
             if (filterCategory != null) {
                 where.and().eq("category_id", filterCategory.getId());
             }
-
+            
             cardQb.setWhere(where);
-            cardQb.orderBy("ordinal", true);
+            cardQb.join(learnQb).orderByRaw("learning_data.easiness, cards.ordinal");
             cardQb.limit((long)limit);
             List<Card> cs = cardQb.query();
             for (Card c : cs) {

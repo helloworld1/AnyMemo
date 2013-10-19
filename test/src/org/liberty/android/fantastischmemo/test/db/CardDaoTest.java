@@ -3,8 +3,10 @@ package org.liberty.android.fantastischmemo.test.db;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
+import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
@@ -12,6 +14,7 @@ import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
 
 import android.test.suitebuilder.annotation.SmallTest;
+import android.util.Log;
 
 public class CardDaoTest extends AbstractExistingDBTest {
 
@@ -401,6 +404,145 @@ public class CardDaoTest extends AbstractExistingDBTest {
         assertEquals(3, (int)cards.size());
     }
 
+    @SmallTest
+    public void testReviewCardsOrderOfSameEasiness() throws SQLException {
+        CardDao cardDao = helper.getCardDao();
+        Card c13 = cardDao.queryForId(13);
+        Card c14 = cardDao.queryForId(14);
+        Card c15 = cardDao.queryForId(15);
+
+        LearningDataDao learningDataDao = helper.getLearningDataDao();
+        Date testDate = new Date((new Date().getTime() - 1));
+        
+        learningDataDao.refresh(c13.getLearningData());
+        LearningData c13Ld = c13.getLearningData();
+        c13Ld.setAcqReps(1);
+        c13Ld.setNextLearnDate(testDate);
+        c13Ld.setEasiness((float) 2.7);
+        learningDataDao.update(c13Ld);
+        
+        learningDataDao.refresh(c14.getLearningData()); 
+        LearningData c14Ld = c14.getLearningData();
+        c14Ld.setAcqReps(1);
+        c14Ld.setNextLearnDate(testDate);
+        c14Ld.setEasiness((float) 2.7);  
+        learningDataDao.update(c14Ld);
+       
+        learningDataDao.refresh(c15.getLearningData());
+        LearningData c15Ld = c15.getLearningData();
+        c15Ld.setAcqReps(1);
+        c15Ld.setNextLearnDate(testDate);
+        c15Ld.setEasiness((float) 2.7);
+        learningDataDao.update(c15Ld);
+         
+        List<Card> cards = cardDao.getCardForReview(null, 0, 50);
+        
+        assertEquals(3, cards.size());
+        assertEquals(13, (int)cards.get(0).getOrdinal());
+        assertEquals(14, (int)cards.get(1).getOrdinal());
+        assertEquals(15, (int)cards.get(2).getOrdinal());
+    }
+    
+    @SmallTest
+    public void testReviewCardsOrderOfAllDifferentEasiness() throws SQLException {
+        CardDao cardDao = helper.getCardDao();
+        CategoryDao categoryDao = helper.getCategoryDao();
+        setupThreeCategories();
+        
+        Card c2 = cardDao.queryForId(2);
+        Card c5 = cardDao.queryForId(5);
+        
+        Card c13 = cardDao.queryForId(13);
+        Card c14 = cardDao.queryForId(14);
+        Card c15 = cardDao.queryForId(15);
+
+        LearningDataDao learningDataDao = helper.getLearningDataDao();
+        Date testDate = new Date((new Date().getTime() - 1));
+        
+        learningDataDao.refresh(c13.getLearningData());
+        LearningData c13Ld = c13.getLearningData();
+        c13Ld.setAcqReps(1);
+        c13Ld.setNextLearnDate(testDate);
+        c13Ld.setEasiness((float) 2.7);
+        learningDataDao.update(c13Ld);
+        
+        learningDataDao.refresh(c14.getLearningData());   
+        LearningData c14Ld = c14.getLearningData();
+        c14Ld.setAcqReps(1);
+        c14Ld.setNextLearnDate(testDate);
+        c14Ld.setEasiness((float) 2.6);  
+        learningDataDao.update(c14Ld);
+        
+        learningDataDao.refresh(c15.getLearningData());
+        LearningData c15Ld = c15.getLearningData();
+        c15Ld.setAcqReps(1);
+        c15Ld.setNextLearnDate(testDate);
+        c15Ld.setEasiness((float) 2.8);
+        learningDataDao.update(c15Ld);
+        
+        learningDataDao.refresh(c2.getLearningData());
+        LearningData c2Ld = c2.getLearningData();
+        c2Ld.setAcqReps(1);
+        c2Ld.setNextLearnDate(testDate);
+        c2Ld.setEasiness((float) 3.0);
+        learningDataDao.update(c2Ld);
+        
+        learningDataDao.refresh(c5.getLearningData());
+        LearningData c5Ld = c5.getLearningData();
+        c5Ld.setAcqReps(1);
+        c5Ld.setNextLearnDate(testDate);
+        c5Ld.setEasiness((float) 2.9);
+        learningDataDao.update(c5Ld);
+        
+        List<Category> cts = categoryDao.queryForEq("name", "My category");
+        Category ct = cts.get(0);
+        
+        List<Card> cards = cardDao.getCardForReview(ct, 0, 50);
+        
+        assertEquals(2, cards.size());
+        assertEquals(5, (int)cards.get(0).getOrdinal());
+        assertEquals(2, (int)cards.get(1).getOrdinal());
+    }
+    
+    @SmallTest
+    public void testReviewCardsOrderOfOneDifferentEasiness() throws SQLException {
+        CardDao cardDao = helper.getCardDao();
+        Card c13 = cardDao.queryForId(13);
+        Card c14 = cardDao.queryForId(14);
+        Card c15 = cardDao.queryForId(15);
+
+        LearningDataDao learningDataDao = helper.getLearningDataDao();
+        Date testDate = new Date((new Date().getTime() - 1));
+        
+        learningDataDao.refresh(c13.getLearningData());
+        LearningData c13Ld = c13.getLearningData();
+        c13Ld.setAcqReps(1);
+        c13Ld.setNextLearnDate(testDate);
+        c13Ld.setEasiness((float) 2.8);
+        learningDataDao.update(c13Ld);
+        
+        learningDataDao.refresh(c14.getLearningData());   
+        LearningData c14Ld = c14.getLearningData();
+        c14Ld.setAcqReps(1);
+        c14Ld.setNextLearnDate(testDate);
+        c14Ld.setEasiness((float) 2.6);  
+        learningDataDao.update(c14Ld);
+        
+        learningDataDao.refresh(c15.getLearningData());
+        LearningData c15Ld = c15.getLearningData();
+        c15Ld.setAcqReps(1);
+        c15Ld.setNextLearnDate(testDate);
+        c15Ld.setEasiness((float) 2.6);
+        learningDataDao.update(c15Ld);
+         
+        List<Card> cards = cardDao.getCardForReview(null, 0, 50);
+        
+        assertEquals(3, cards.size());
+        assertEquals(14, (int)cards.get(0).getOrdinal());
+        assertEquals(15, (int)cards.get(1).getOrdinal());
+        assertEquals(13, (int)cards.get(2).getOrdinal());
+    }
+    
     /*
      * Card with "My Category" in ID 2, 5, 8
      */
