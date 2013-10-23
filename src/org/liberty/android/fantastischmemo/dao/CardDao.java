@@ -28,8 +28,23 @@ public interface CardDao extends HelperDao<Card, Integer> {
     /* Remove the cards with the same question */
     void removeDuplicates();
 
-    List<Card> getCardForReview(Category filterCategory, int maxReviewCacheOrdinal, int limit);
-    List<Card> getNewCards(Category filterCategory, int maxNewCacheOrdinal, int limit);
+    /**
+     * Get a list of cards for review.
+     * @param filterCategory only the cards in this category will be queried.
+     * @param exclusion cards in the list will not be queried
+     * @param limit the number of card that can be queried at a time
+     * @return the queried cards.
+     */
+    List<Card> getCardsForReview(Category filterCategory, Iterable<Card> exclusion, int limit);
+
+    /**
+     * Get a list of new cards.
+     * @param filterCategory only the cards in this category will be queried.
+     * @param exclusion cards in the list will not be queried
+     * @param limit the number of card that can be queried at a time
+     * @return the queried cards.
+     */
+    List<Card> getNewCards(Category filterCategory, Iterable<Card> exclusion, int limit);
 
     long getTotalCount(Category filterCategory);
     long getNewCardCount(Category filterCategory);

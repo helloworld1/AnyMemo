@@ -14,7 +14,6 @@ import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
 
 import android.test.suitebuilder.annotation.SmallTest;
-import android.util.Log;
 
 public class CardDaoTest extends AbstractExistingDBTest {
 
@@ -435,7 +434,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
         c15Ld.setEasiness((float) 2.7);
         learningDataDao.update(c15Ld);
          
-        List<Card> cards = cardDao.getCardForReview(null, 0, 50);
+        List<Card> cards = cardDao.getCardsForReview(null, null, 50);
         
         assertEquals(3, cards.size());
         assertEquals(13, (int)cards.get(0).getOrdinal());
@@ -497,7 +496,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
         List<Category> cts = categoryDao.queryForEq("name", "My category");
         Category ct = cts.get(0);
         
-        List<Card> cards = cardDao.getCardForReview(ct, 0, 50);
+        List<Card> cards = cardDao.getCardsForReview(ct, null, 50);
         
         assertEquals(2, cards.size());
         assertEquals(5, (int)cards.get(0).getOrdinal());
@@ -535,12 +534,81 @@ public class CardDaoTest extends AbstractExistingDBTest {
         c15Ld.setEasiness((float) 2.6);
         learningDataDao.update(c15Ld);
          
-        List<Card> cards = cardDao.getCardForReview(null, 0, 50);
+        List<Card> cards = cardDao.getCardsForReview(null, null, 50);
         
         assertEquals(3, cards.size());
         assertEquals(14, (int)cards.get(0).getOrdinal());
         assertEquals(15, (int)cards.get(1).getOrdinal());
         assertEquals(13, (int)cards.get(2).getOrdinal());
+    }
+
+    @SmallTest
+    public void testGetNewCardsWithExclusionList() {
+        CardDao cardDao = helper.getCardDao();
+        Card c2 = cardDao.queryForId(2);
+        Card c5 = cardDao.queryForId(5);
+        Card c8 = cardDao.queryForId(8);
+        List<Card> exclusionList = new ArrayList<Card>();
+        exclusionList.add(c2);
+        exclusionList.add(c5);
+        exclusionList.add(c8);
+        List<Card> cards = cardDao.getNewCards(null, exclusionList, 10);
+        assertEquals(10, cards.size());
+        for (Card c : cards) {
+            if (c.getId() == 2 || c.getId() == 5 || c.getId() == 8) {
+                fail("Get excluded cards: " + c.getId());
+            }
+        }
+
+        List<Card> cards2 = cardDao.getNewCards(null, exclusionList, 50);
+
+        // 3 cards are excluded so only 28 - 3 = 25 cards are there
+        assertEquals(25, cards2.size());
+    }
+
+    @SmallTest
+    public void testGetCardsForReviewExclusionList() {
+        // Setup cards that is schedule for review
+        CardDao cardDao = helper.getCardDao();
+        Card c13 = cardDao.queryForId(13);
+        Card c14 = cardDao.queryForId(14);
+        Card c15 = cardDao.queryForId(15);
+
+        LearningDataDao learningDataDao = helper.getLearningDataDao();
+        Date testDate = new Date((new Date().getTime() - 1));
+        
+        learningDataDao.refresh(c13.getLearningData());
+        LearningData c13Ld = c13.getLearningData();
+        c13Ld.setAcqReps(1);
+        c13Ld.setNextLearnDate(testDate);
+        c13Ld.setEasiness((float) 2.8);
+        learningDataDao.update(c13Ld);
+        
+        learningDataDao.refresh(c14.getLearningData());   
+        LearningData c14Ld = c14.getLearningData();
+        c14Ld.setAcqReps(1);
+        c14Ld.setNextLearnDate(testDate);
+        c14Ld.setEasiness((float) 2.6);  
+        learningDataDao.update(c14Ld);
+        
+        learningDataDao.refresh(c15.getLearningData());
+        LearningData c15Ld = c15.getLearningData();
+        c15Ld.setAcqReps(1);
+        c15Ld.setNextLearnDate(testDate);
+        c15Ld.setEasiness((float) 2.6);
+        learningDataDao.update(c15Ld);
+
+        // Create exclusion list
+        List<Card> exclusionList = new ArrayList<Card>();
+        exclusionList.add(c13);
+        exclusionList.add(c15);
+         
+        List<Card> cards = cardDao.getCardsForReview(null, exclusionList, 50);
+
+        // Only card 14 is there
+        assertEquals(1, cards.size());
+        assertEquals(14, (int) cards.get(0).getId());
+
     }
     
     /*

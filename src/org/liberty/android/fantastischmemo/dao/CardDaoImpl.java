@@ -1,6 +1,7 @@
 package org.liberty.android.fantastischmemo.dao;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -10,6 +11,7 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 import org.apache.commons.lang3.StringUtils;
+import org.liberty.android.fantastischmemo.aspect.LogInvocation;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
@@ -250,8 +252,8 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
         update(c);
     }
 
-
-    public List<Card> getCardForReview(Category filterCategory, int maxReviewCacheOrdinal, int limit) {
+    @LogInvocation
+    public List<Card> getCardsForReview(Category filterCategory, Iterable<Card> exclusion, int limit) {
         try {
             LearningDataDao learningDataDao = getHelper().getLearningDataDao();
             CategoryDao categoryDao = getHelper().getCategoryDao();
@@ -260,14 +262,29 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
             learnQb.where().le("nextLearnDate", Calendar.getInstance().getTime())
                 .and().gt("acqReps", "0");
             QueryBuilder<Card, Integer> cardQb = this.queryBuilder();
-            Where<Card, Integer> where = cardQb.where().gt("ordinal", "" + maxReviewCacheOrdinal);
+
+            // The "isNotNull" statement is dummy so the "and()" can be cascaded
+            // for the following conditions
+            Where<Card, Integer> where = cardQb.where().isNotNull("learningData_id");
+
             if (filterCategory != null) {
                 where.and().eq("category_id", filterCategory.getId());
             }
-            
+
+            if (exclusion != null) {
+                List<Integer> exclusionList = new ArrayList<Integer>();
+                for (Card c : exclusion) {
+                    exclusionList.add(c.getId());
+                }
+                where.and().notIn("id", exclusionList);
+            }
             cardQb.setWhere(where);
-            cardQb.join(learnQb).orderByRaw("learning_data.easiness, cards.ordinal");
-            cardQb.limit((long)limit);
+
+            // Order by easiness so the hard cards (smaller easiness) will be reviewed first.
+            cardQb.join(learnQb)
+                .orderByRaw("learning_data.easiness, cards.ordinal")
+                .limit((long) limit);
+
             List<Card> cs = cardQb.query();
             for (Card c : cs) {
                 categoryDao.refresh(c.getCategory());
@@ -280,7 +297,8 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
         }
     }
 
-    public List<Card> getNewCards(Category filterCategory, int maxNewCacheOrdinal, int limit) {
+    @LogInvocation
+    public List<Card> getNewCards(Category filterCategory, Iterable<Card> exclusion, int limit) {
         try {
             LearningDataDao learningDataDao = getHelper().getLearningDataDao();
             CategoryDao categoryDao = getHelper().getCategoryDao();
@@ -288,18 +306,28 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
             learnQb.selectColumns("id");
             learnQb.where().eq("acqReps", "0");
             QueryBuilder<Card, Integer> cardQb = this.queryBuilder();
-            Where<Card, Integer> where;
+
+            // The "isNotNull" statement is dummy so the "and()" can be cascaded
+            // for the following conditions
+            Where<Card, Integer> where = cardQb.where().isNotNull("learningData_id");
+
             if (filterCategory != null) {
-                where = cardQb.where().in("learningData_id", learnQb)
-                    .and().gt("ordinal", "" + maxNewCacheOrdinal).and().eq("category_id", filterCategory.getId());
-            } else {
-                where = cardQb.where().in("learningData_id", learnQb)
-                    .and().gt("ordinal", "" + maxNewCacheOrdinal);
+                where.and().eq("category_id", filterCategory.getId());
+            }
+
+            if (exclusion != null) {
+                List<Integer> exclusionList = new ArrayList<Integer>();
+                for (Card c : exclusion) {
+                    exclusionList.add(c.getId());
+                }
+                where.and().notIn("id", exclusionList);
             }
 
             cardQb.setWhere(where);
-            cardQb.orderBy("ordinal", true);
-            cardQb.limit((long)limit);
+            cardQb.join(learnQb)
+                .orderByRaw("cards.ordinal") 
+                .limit((long)limit);
+
             List<Card> cs = cardQb.query();
             for (Card c : cs) {
                 categoryDao.refresh(c.getCategory());

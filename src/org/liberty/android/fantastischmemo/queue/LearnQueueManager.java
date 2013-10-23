@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo.queue;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -59,10 +60,6 @@ public class LearnQueueManager implements QueueManager {
 
     private int cacheSize;
 
-    private int maxNewCacheOrdinal = 0;
-
-    private int maxReviewCacheOrdinal = 0;
-
     private boolean shuffle;
 
     private Context context;
@@ -79,9 +76,9 @@ public class LearnQueueManager implements QueueManager {
         this.dbPath = builder.dbPath;
 
 
-        learnQueue = new LinkedList<Card>();
-        newCache = new LinkedList<Card>();
-        reviewCache = new LinkedList<Card>();
+        learnQueue = Collections.synchronizedList(new LinkedList<Card>());
+        newCache = Collections.synchronizedList(new LinkedList<Card>());
+        reviewCache = Collections.synchronizedList(new LinkedList<Card>());
 
         // Make sure the dirtyCache is thread safe because multiple threads will access
         // the set
@@ -132,19 +129,21 @@ public class LearnQueueManager implements QueueManager {
         final AnyMemoDBOpenHelper dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(context, dbPath);
         final CardDao cardDao = dbOpenHelper.getCardDao();
         dumpLearnQueue();
+        List<Card> exclusionList = new ArrayList<Card>(learnQueue.size() + dirtyCache.size());
+        exclusionList.addAll(learnQueue);
+        exclusionList.addAll(dirtyCache);
+
         try {
             if (newCache.size() == 0) {
-                List<Card> cs = cardDao.getNewCards(filterCategory, maxNewCacheOrdinal, cacheSize - newCache.size());
+                List<Card> cs = cardDao.getNewCards(filterCategory, exclusionList, cacheSize);
                 if (cs.size() > 0) {
-                    maxNewCacheOrdinal = cs.get(cs.size() - 1).getOrdinal();
                     newCache.addAll(cs);
                 }
             }
 
             if (reviewCache.size() == 0) {
-                List<Card> cs = cardDao.getCardForReview(filterCategory, maxReviewCacheOrdinal, cacheSize - reviewCache.size());
+                List<Card> cs = cardDao.getCardsForReview(filterCategory, exclusionList, cacheSize);
                 if (cs.size() > 0) {
-                    maxReviewCacheOrdinal = cs.get(cs.size() - 1).getOrdinal();
                     reviewCache.addAll(cs);
                 }
             }
@@ -181,16 +180,12 @@ public class LearnQueueManager implements QueueManager {
         if (!scheduler.isCardLearned(card.getLearningData())) {
             // Add to the back of the queue
             learnQueue.add(card);
-
-            // Once we update a card that failed, we will also update the maxReviewCacheOrdinal
-            // so it matches the current max review cache
-            maxReviewCacheOrdinal = Math.max(maxReviewCacheOrdinal, card.getOrdinal());
         }
         dirtyCache.add(card);
         refill();
 	}
 
-    private void position(int cardId) {
+    private synchronized void position(int cardId) {
         Iterator<Card> learnIterator= learnQueue.iterator();
         Iterator<Card> reviewCacheIterator = reviewCache.iterator();
         Iterator<Card> newCacheIterator = newCache.iterator();

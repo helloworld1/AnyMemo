@@ -3,9 +3,12 @@ package org.liberty.android.fantastischmemo.test.queue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Date;
+
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
+import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.queue.LearnQueueManager;
 import org.liberty.android.fantastischmemo.queue.QueueManager;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
@@ -75,6 +78,7 @@ public class LearnQueuingManagerTest extends AbstractExistingDBTest {
         assertEquals(1, (int)c1.getId());
         when(mockScheduler.isCardLearned(c1.getLearningData()))
             .thenReturn(true);
+        updateSucceedCardLearningData(c1);
         queueManager.update(c1);
 
         Card c2 = queueManager.dequeue();
@@ -82,6 +86,7 @@ public class LearnQueuingManagerTest extends AbstractExistingDBTest {
         assertEquals(2, (int)c2.getId());
         when(mockScheduler.isCardLearned(c2.getLearningData()))
             .thenReturn(false);
+        updateFailureCardLearningData(c2);
         queueManager.update(c2);
 
         Card c3 = queueManager.dequeue();
@@ -89,6 +94,7 @@ public class LearnQueuingManagerTest extends AbstractExistingDBTest {
         assertEquals(3, (int)c3.getId());
         when(mockScheduler.isCardLearned(c3.getLearningData()))
             .thenReturn(false);
+        updateFailureCardLearningData(c3);
         queueManager.update(c3);
 
         Card c4 = queueManager.dequeue();
@@ -96,6 +102,7 @@ public class LearnQueuingManagerTest extends AbstractExistingDBTest {
         assertEquals(4, (int)c4.getId());
         when(mockScheduler.isCardLearned(c4.getLearningData()))
             .thenReturn(true);
+        updateSucceedCardLearningData(c4);
         queueManager.update(c4);
 
         Card c2Again = queueManager.dequeue();
@@ -103,6 +110,7 @@ public class LearnQueuingManagerTest extends AbstractExistingDBTest {
         assertEquals(2, (int)c2Again.getId());
         when(mockScheduler.isCardLearned(c2Again.getLearningData()))
             .thenReturn(true);
+        updateSucceedCardLearningData(c2Again);
         queueManager.update(c2Again);
 
         Card c3Again = queueManager.dequeue();
@@ -110,6 +118,7 @@ public class LearnQueuingManagerTest extends AbstractExistingDBTest {
         assertEquals(3, (int)c3Again.getId());
         when(mockScheduler.isCardLearned(c3Again.getLearningData()))
             .thenReturn(false);
+        updateFailureCardLearningData(c3Again);
         queueManager.update(c3Again);
 
         Card c5 = queueManager.dequeue();
@@ -117,6 +126,7 @@ public class LearnQueuingManagerTest extends AbstractExistingDBTest {
         assertEquals(5, (int)c5.getId());
         when(mockScheduler.isCardLearned(c5.getLearningData()))
             .thenReturn(false);
+        updateFailureCardLearningData(c5);
         queueManager.update(c5);
 
         queueManager.release();
@@ -138,6 +148,7 @@ public class LearnQueuingManagerTest extends AbstractExistingDBTest {
         assertEquals(1, (int)c1.getId());
         when(mockScheduler.isCardLearned(c1.getLearningData()))
             .thenReturn(false);
+        updateFailureCardLearningData(c1);
         queueManager.update(c1);
 
         Card c2 = queueManager.dequeue();
@@ -145,6 +156,7 @@ public class LearnQueuingManagerTest extends AbstractExistingDBTest {
         assertEquals(2, (int)c2.getId());
         when(mockScheduler.isCardLearned(c2.getLearningData()))
             .thenReturn(true);
+        updateSucceedCardLearningData(c2);
         queueManager.update(c2);
 
         Card c3 = queueManager.dequeue();
@@ -152,6 +164,7 @@ public class LearnQueuingManagerTest extends AbstractExistingDBTest {
         assertEquals(3, (int)c3.getId());
         when(mockScheduler.isCardLearned(c3.getLearningData()))
             .thenReturn(false);
+        updateFailureCardLearningData(c3);
         queueManager.update(c3);
 
         Card c1Again = queueManager.dequeue();
@@ -159,6 +172,7 @@ public class LearnQueuingManagerTest extends AbstractExistingDBTest {
         assertEquals(1, (int)c1Again.getId());
         when(mockScheduler.isCardLearned(c1Again.getLearningData()))
             .thenReturn(true);
+        updateSucceedCardLearningData(c1Again);
         queueManager.update(c1Again);
 
         Card c4 = queueManager.dequeue();
@@ -166,6 +180,7 @@ public class LearnQueuingManagerTest extends AbstractExistingDBTest {
         assertEquals(4, (int)c4.getId());
         when(mockScheduler.isCardLearned(c4.getLearningData()))
             .thenReturn(true);
+        updateSucceedCardLearningData(c4);
         queueManager.update(c4);
 
 
@@ -174,6 +189,7 @@ public class LearnQueuingManagerTest extends AbstractExistingDBTest {
         assertEquals(3, (int)c3Again.getId());
         when(mockScheduler.isCardLearned(c3Again.getLearningData()))
             .thenReturn(false);
+        updateFailureCardLearningData(c3Again);
         queueManager.update(c3Again);
 
         Card c5 = queueManager.dequeue();
@@ -181,6 +197,7 @@ public class LearnQueuingManagerTest extends AbstractExistingDBTest {
         assertEquals(5, (int)c5.getId());
         when(mockScheduler.isCardLearned(c5.getLearningData()))
             .thenReturn(false);
+        updateFailureCardLearningData(c5);
         queueManager.update(c5);
 
         queueManager.release();
@@ -204,9 +221,11 @@ public class LearnQueuingManagerTest extends AbstractExistingDBTest {
             if (i == 1 || i == 3) {
                 when(mockScheduler.isCardLearned(c.getLearningData()))
                     .thenReturn(false);
+                updateFailureCardLearningData(c);
             } else {
                 when(mockScheduler.isCardLearned(c.getLearningData()))
                     .thenReturn(true);
+                updateSucceedCardLearningData(c);
             }
             queueManager.update(c);
         }
@@ -216,6 +235,7 @@ public class LearnQueuingManagerTest extends AbstractExistingDBTest {
         assertEquals(1, (int)c1.getId());
         when(mockScheduler.isCardLearned(c1.getLearningData()))
             .thenReturn(true);
+        updateSucceedCardLearningData(c1);
         queueManager.update(c1);
 
         Card c11 = queueManager.dequeue();
@@ -223,6 +243,7 @@ public class LearnQueuingManagerTest extends AbstractExistingDBTest {
         assertEquals(11, (int)c11.getId());
         when(mockScheduler.isCardLearned(c11.getLearningData()))
             .thenReturn(true);
+        updateSucceedCardLearningData(c11);
         queueManager.update(c11);
 
         Card c3 = queueManager.dequeue();
@@ -230,6 +251,7 @@ public class LearnQueuingManagerTest extends AbstractExistingDBTest {
         assertEquals(3, (int)c3.getId());
         when(mockScheduler.isCardLearned(c3.getLearningData()))
             .thenReturn(false);
+        updateFailureCardLearningData(c3);
         queueManager.update(c3);
 
         Card c12 = queueManager.dequeue();
@@ -237,6 +259,7 @@ public class LearnQueuingManagerTest extends AbstractExistingDBTest {
         assertEquals(12, (int)c12.getId());
         when(mockScheduler.isCardLearned(c12.getLearningData()))
             .thenReturn(true);
+        updateSucceedCardLearningData(c12);
         queueManager.update(c12);
 
         Card c13 = queueManager.dequeue();
@@ -244,8 +267,24 @@ public class LearnQueuingManagerTest extends AbstractExistingDBTest {
         assertEquals(13, (int)c13.getId());
         when(mockScheduler.isCardLearned(c13.getLearningData()))
             .thenReturn(true);
+        updateSucceedCardLearningData(c13);
         queueManager.update(c13);
 
         queueManager.release();
+    }
+
+    private void updateSucceedCardLearningData(Card card) {
+        LearningData ld = card.getLearningData();
+        ld.setAcqReps(1);
+        ld.setNextLearnDate(new Date(new Date().getTime() + 100000000));
+        ld.setGrade(5);
+    }
+
+    private void updateFailureCardLearningData(Card card) {
+        LearningData ld = card.getLearningData();
+        ld.setAcqReps(1);
+        // Make sure to review
+        ld.setNextLearnDate(new Date(new Date().getTime() - 1));
+        ld.setGrade(0);
     }
 }
