@@ -41,6 +41,8 @@ import org.liberty.android.fantastischmemo.ui.loader.SettingLoader;
 import org.liberty.android.fantastischmemo.utils.CardTTSUtil;
 import org.liberty.android.fantastischmemo.utils.CardTextUtil;
 
+import roboguice.util.Ln;
+
 import android.content.Intent;
 import android.gesture.Gesture;
 import android.gesture.GestureLibraries;
@@ -650,7 +652,14 @@ public abstract class QACardActivity extends AMActivity {
             // Some Samsung device doesn't have ClipboardManager. So check
             // the null here to prevent crash.
             if (cm != null) {
-                cm.setText(copiedText);
+                try {
+                    cm.setText(copiedText);
+                } catch (NullPointerException npe) {
+                    // This is a Samsung clipboard bug. setPrimaryClip() can throw
+                    // a NullPointerException if Samsung's /data/clipboard directory is full.
+                    // Fortunately, the text is still successfully copied to the clipboard.
+                    Ln.e(npe, "Got null pointer exception when copying text to clipboard");
+                }
             }
         }
     }
