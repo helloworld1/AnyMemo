@@ -44,7 +44,7 @@
     </LinearLayout>
     <FrameLayout
         android:id="@+id/buttons_root"
-        android:layout_width="120dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="vertical" />
 </LinearLayout>

@@ -1,9 +1,9 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/grade_buttons_anki"
-	android:layout_width="fill_parent"
+	android:layout_width="110dp"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:layout_gravity="bottom">
     <Button
         android:id="@+id/grade_button_0"
