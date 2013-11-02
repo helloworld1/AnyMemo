@@ -456,6 +456,6 @@
     <string name="remember_text">Ricorda</string>
     <string name="both_text">Entrambi</string>
     <string name="quiz_by_range_text">Quiz selezionati per intervallo</string>
-    <string name="start_ordianl_text">Numero d'ordine del quiz di partenza</string>
-    <string name="end_ordinal_text">Numero d'ordine del quiz finale</string>
+    <string name="start_ordianl_text">Numero d\'ordine del quiz di partenza</string>
+    <string name="end_ordinal_text">Numero d\'ordine del quiz finale</string>
 </resources>
