@@ -3,25 +3,24 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.4'
+        classpath 'com.android.tools.build:gradle:0.5.+'
     }
 }
+
 apply plugin: 'android'
 sourceCompatibility = 1.6
+targetCompatibility = 1.6
 
-configurations {
-    ajc
-} dependencies {
-    compile fileTree(dir: 'libs', includes: ['*.jar']) 
-    ajc files('build-tools/aspectjtools.jar', 'libs/aspectjrt.jar')
+repositories {
+    mavenCentral()
 }
 
 android {
-    compileSdkVersion 16
-    buildToolsVersion "17"
+    compileSdkVersion 18
+    buildToolsVersion "18.1.0"
 
     defaultConfig {
-        minSdkVersion 8
+        minSdkVersion 9
         targetSdkVersion 16
     }
     sourceSets {
@@ -35,6 +34,59 @@ android {
             assets.srcDirs = ['assets']
         }
 
-        instrumentTest.setRoot('test')
+        // Move the tests to tests/java, tests/res, etc...
+        instrumentTest.setRoot('tests')
+    }
+}
+
+configurations {
+    ajc
+    aspects
+    ajInpath
+}
+
+ext.aspectjVersion = '1.7.3'
+
+dependencies {
+    compile fileTree(dir: 'libs', include: '*.jar')
+
+    ajc "org.aspectj:aspectjtools:${aspectjVersion}"
+    compile "org.aspectj:aspectjrt:${aspectjVersion}"
+    compile 'com.android.support:appcompat-v7:18.0.0'
+}
+
+android.applicationVariants.all { variant ->
+
+    variant.javaCompile.doLast {
+        def androidSdk = android.adbExe.parent + "/../platforms/" + android.compileSdkVersion + "/android.jar"
+	println 'AAAAAAAAAAAAAAAAA: ' + androidSdk
+
+        def iajcClasspath = configurations.compile.asPath + ":" + androidSdk
+        configurations.compile.dependencies.each { dep ->
+            if(dep.hasProperty("dependencyProject")) {
+                iajcClasspath += ":" + dep.dependencyProject.buildDir + "/bundles/release/classes.jar"
+            }
+        }
+	println 'BBBBBBBBBBBBBB : ' + iajcClasspath 
+
+        ant.taskdef( resource:"org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties", classpath: configurations.ajc.asPath)
+        ant.iajc (
+                source:sourceCompatibility,
+                target:targetCompatibility,
+                destDir:"${project.buildDir}/classes/${variant.dirName}",
+                maxmem:"512m",
+                fork:"true",
+                aspectPath:configurations.aspects.asPath,
+                inpath:configurations.ajInpath.asPath,
+                sourceRootCopyFilter:"**/.svn/*,**/*.java",
+                classpath:iajcClasspath
+        ){
+            sourceroots{
+                android.sourceSets.main.java.srcDirs.each{
+                    pathelement(location:it.absolutePath)
+                }
+                pathelement(location:"${project.buildDir}/source/r/${variant.dirName}")
+            }
+        }
     }
 }
