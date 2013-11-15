@@ -452,6 +452,6 @@
     <string name="remember_text">Помню</string>
     <string name="both_text">Оба</string>
     <string name="quiz_by_range_text">Опрос по диапазону</string>
-    <string name="start_ordianl_text">Начало диапазона</string>
+    <string name="start_ordinal_text">Начало диапазона</string>
     <string name="end_ordinal_text">Конец диапазона</string>
 </resources>

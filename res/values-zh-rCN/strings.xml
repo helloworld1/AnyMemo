@@ -451,6 +451,6 @@
     <string name="remember_text">记住</string>
     <string name="both_text">两个都</string>
     <string name="quiz_by_range_text">按序号范围测试</string>
-    <string name="start_ordianl_text">开始序号</string>
+    <string name="start_ordinal_text">开始序号</string>
     <string name="end_ordinal_text">结束序号</string>
 </resources>
