@@ -618,12 +618,18 @@ public class StudyActivity extends QACardActivity {
      */
     private void undoCard(){
         if (prevCard != null) {
-            // We don't want the queueManager to flush the card
-            // instead we update the previous learning data
-            // manually.
 
+            // This is a very hacky solution
+            // It will first release the queue manager so we can manually manipulate the card
             queueManager.remove(prevCard);
-            queueManager.update(prevCard);
+            queueManager.release();
+            queueManager = null;
+
+            // Then copy the correct learning data.
+            LearningData prevCardLearningDataToUpdate = learningDataDao.queryForId(prevCard.getLearningData().getId());
+            prevCardLearningDataToUpdate.cloneFromLearningData(prevCard.getLearningData());
+            learningDataDao.update(prevCardLearningDataToUpdate);
+
             setCurrentCard(prevCard);
             restartActivity();
         } else {
