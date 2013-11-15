@@ -22,11 +22,12 @@ package org.liberty.android.fantastischmemo.utils;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+
+import roboguice.util.Ln;
 
 public class AnyMemoExecutor {
     private static ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -43,9 +44,11 @@ public class AnyMemoExecutor {
             f.get();
             futures.remove(f);
         } catch (InterruptedException e){
-            e.printStackTrace();
+            Ln.e(e);
+            assert false : "Encounter exception when waiting task";
         } catch (ExecutionException e) {
-            e.printStackTrace();
+            Ln.e(e);
+            assert false : "Encounter exception when waiting task";
         }
     }
 
@@ -57,9 +60,11 @@ public class AnyMemoExecutor {
                 f.get();
                 fi.remove();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Ln.e(e);
+                assert false : "Encounter exception when waiting task";
             } catch (ExecutionException e) {
-                e.printStackTrace();
+                Ln.e(e);
+                assert false : "Encounter exception when waiting task";
             }
         }
         assert futures.isEmpty() == true : "After waiting all futures, the future list shoudl be empty";

@@ -244,14 +244,22 @@ public class LearnQueueManager implements QueueManager {
                                 Ln.i("Flushing dirty cache. # of cards to flush: " + dirtyCache.size());
                                 for (Card card : dirtyCache) {
                                     Ln.i("Flushing card id: " + card.getId() + " with learning data: " + card.getLearningData());
-                                    learningDataDao.update(card.getLearningData());
-                                    cardDao.update(card);
+                                    if (learningDataDao.update(card.getLearningData()) == 0) {
+                                        Ln.w("LearningDataDao update failed for : " + card.getLearningData());
+                                        // assert false : "LearnignDataDao update failed!";
+                                        throw new RuntimeException("LearningDataDao update failed!");
+                                    }
+                                    if (cardDao.update(card) == 0) {
+                                        Ln.w("CardDao update failed for : " + card.getLearningData());
+                                        // assert false : "CardDao update failed.";
+                                        throw new RuntimeException("CardDao update failed.");
+                                    }
+                                    dirtyCache.remove(card);
                                 }
                                 Ln.i("Flushing dirty cache done.");
                                return null;
                             }
                         });
-                    dirtyCache.clear();
                 } catch (Exception e) {
                     Ln.e(e, "Error encounter when flushing: ");
                     throw new RuntimeException("Queue flushing get exception!", e);
@@ -264,11 +272,29 @@ public class LearnQueueManager implements QueueManager {
 
     private void dumpLearnQueue() {
         StringBuilder sb = new StringBuilder();
-        sb.append("LearnQueue: ids [");
+        sb.append("LearnQueue : card ids[");
         for (Card c : learnQueue) {
             sb.append("" + c.getId() + ", ");
         }
-        sb.append("]");
+        sb.append("]\n");
+
+        sb.append("LearnQueue: card learning data[");
+        for (Card c : learnQueue) {
+            sb.append("" + c.getLearningData() + "\n ");
+        }
+        sb.append("]\n");
+
+        sb.append("Dirty cache: card ids[");
+        for (Card c : dirtyCache) {
+            sb.append("" + c.getId() + ", ");
+        }
+        sb.append("]\n");
+
+        sb.append("Dirty cache: card learning data[");
+        for (Card c : dirtyCache) {
+            sb.append("" + c.getLearningData() + "\n ");
+        }
+        sb.append("]\n");
         Ln.v(sb.toString());
     }
 
