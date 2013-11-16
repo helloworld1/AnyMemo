@@ -316,7 +316,7 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
             quizRangeStartOrdinalEdit.setText("" + rangeStartOrdinal);
             quizRangeEndOrdinalEdit.setText("" + rangeEndOrdinal);
             
-            quizRangeStartTitle.setText(getString(R.string.start_ordianl_text)
+            quizRangeStartTitle.setText(getString(R.string.start_ordinal_text)
                     + " (" + 1 + "-" + totalCardNumber + ")");
             quizRangeEndTitle.setText(getString(R.string.end_ordinal_text)
                     + " (" + rangeStartOrdinal + "-" + totalCardNumber + ")");
@@ -490,7 +490,7 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
                 	rangeEndOrdinal = totalCardNumber;
              }
             //Set relative TextView
-            quizRangeStartTitle.setText(getString(R.string.start_ordianl_text)
+            quizRangeStartTitle.setText(getString(R.string.start_ordinal_text)
                 + " (" + 1 + "-" + rangeEndOrdinal + ")");
         }
     };
