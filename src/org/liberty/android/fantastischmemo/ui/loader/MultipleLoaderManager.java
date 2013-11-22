@@ -44,6 +44,8 @@ public class MultipleLoaderManager {
     private Handler handler = new Handler();
 
     private Runnable onAllLoaderCompletedRunnable = null;
+
+    private DialogFragment progressDialogFragment = new LoadingProgressFragment();
     
     private Map<Integer, LoaderCallbacks<?>> loaderCallbackMap
         = new HashMap<Integer, LoaderCallbacks<?>>();
@@ -66,8 +68,7 @@ public class MultipleLoaderManager {
      * loader will only be reloadeed if it is registered with reloadOnStart = true.
      */
     public void startLoading(AMActivity activity, boolean forceReload) {
-        DialogFragment df = new LoadingProgressFragment();
-        df.show(activity.getSupportFragmentManager(), LoadingProgressFragment.class.toString());
+        progressDialogFragment.show(activity.getSupportFragmentManager(), LoadingProgressFragment.class.toString());
 
         LoaderManager.enableDebugLogging(true);
         LoaderManager loaderManager = activity.getSupportLoaderManager();
@@ -90,6 +91,9 @@ public class MultipleLoaderManager {
         runningLoaderCount--;
         // The onPostInit is running on UI thread.
         if (runningLoaderCount <= 0 && onAllLoaderCompletedRunnable != null) {
+            if (progressDialogFragment != null) {
+                progressDialogFragment.dismissAllowingStateLoss();
+            }
             handler.post(onAllLoaderCompletedRunnable);
         }
     }
@@ -97,11 +101,15 @@ public class MultipleLoaderManager {
     /**
      * This method needs to be called in Activity's onDestroy.
      */
-    public void destroy() {
+    public void destroy(AMActivity activity) {
         // The handler needs to remove the callbacks to avoid the race condition
         // that onPostInitRunnable is running after onDestroy.
         if (onAllLoaderCompletedRunnable != null) {
             handler.removeCallbacks(onAllLoaderCompletedRunnable);
+        }
+
+        if (progressDialogFragment != null) {
+            activity.getSupportFragmentManager().beginTransaction().remove(progressDialogFragment).commitAllowingStateLoss();
         }
     }
 }

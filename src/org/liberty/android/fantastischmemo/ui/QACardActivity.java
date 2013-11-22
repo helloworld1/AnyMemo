@@ -50,7 +50,6 @@ import android.gesture.GestureLibrary;
 import android.gesture.GestureOverlayView;
 import android.gesture.Prediction;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -405,11 +404,6 @@ public abstract class QACardActivity extends AMActivity {
 
     // Called when the initalizing finished.
     protected void onPostInit() {
-        DialogFragment df = (DialogFragment) getSupportFragmentManager()
-            .findFragmentByTag(LoadingProgressFragment.class.toString());
-        if (df != null) {
-            df.dismiss();
-        }
         View buttonsView = findViewById(R.id.buttons_root);
         if (buttonsView != null && !setting.isDefaultColor()) {
             buttonsView.setBackgroundColor(setting
@@ -495,20 +489,20 @@ public abstract class QACardActivity extends AMActivity {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
 
         if (cardTTSUtil != null) {
             cardTTSUtil.release();
         }
         
-        multipleLoaderManager.destroy();
+        multipleLoaderManager.destroy(this);
 
         /* Update the widget because StudyActivity can be accessed though widget*/
         Intent myIntent = new Intent(this, AnyMemoService.class);
         myIntent.putExtra("request_code", AnyMemoService.CANCEL_NOTIFICATION
                 | AnyMemoService.UPDATE_WIDGET);
         startService(myIntent);
+        super.onDestroy();
     }
 
     // Set the small title to display additional informaiton

@@ -118,12 +118,12 @@ public class RoboActionBarActivity extends ActionBarActivity implements RoboCont
         eventManager.fire(new OnConfigurationChangedEvent(currentConfig, newConfig));
     }
 
-    @Override
-    public void onContentChanged() {
-        super.onContentChanged();
-        RoboGuice.getInjector(this).injectViewMembers(this);
-        eventManager.fire(new OnContentChangedEvent());
-    }
+    //@Override
+    //public void onContentChanged() {
+    //    super.onContentChanged();
+    //    RoboGuice.getInjector(this).injectViewMembers(this);
+    //    eventManager.fire(new OnContentChangedEvent());
+    //}
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

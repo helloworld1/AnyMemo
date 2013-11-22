@@ -34,7 +34,6 @@ public class LoadingProgressFragment extends DialogFragment {
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setTitle(getString(R.string.loading_please_wait));
         progressDialog.setMessage(getString(R.string.loading_database));
-        progressDialog.setCancelable(false);
         return progressDialog;
     }
 
