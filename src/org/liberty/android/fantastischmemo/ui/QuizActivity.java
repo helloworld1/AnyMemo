@@ -121,6 +121,7 @@ public class QuizActivity extends QACardActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
         categoryId = extras.getInt(EXTRA_CATEGORY_ID, -1);
         startCardOrd = extras.getInt(EXTRA_START_CARD_ORD, -1);
@@ -131,7 +132,8 @@ public class QuizActivity extends QACardActivity {
         }
 
         getMultipleLoaderManager().registerLoaderCallbacks(3, new QuizQueueManagerLoaderCallbacks(), false);
-        super.onCreate(savedInstanceState);
+
+        startInit();
     }
 
     @Override

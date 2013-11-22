@@ -111,13 +111,19 @@ public class SettingsScreen extends AMActivity {
 
     private final static String WEBSITE_HELP_SETTINGS="http://anymemo.org/wiki/index.php?title=Card_styles";
 
-    private MultipleLoaderManager multipleLoaderManager = new MultipleLoaderManager();
+    private MultipleLoaderManager multipleLoaderManager;
 
     @Inject
     public void setDatabaseUtil(DatabaseUtil databaseUtil) {
         this.databaseUtil = databaseUtil;
     }
 
+
+    @Inject
+    public void setMultipleLoaderManager(
+            MultipleLoaderManager multipleLoaderManager) {
+        this.multipleLoaderManager = multipleLoaderManager;
+    }
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -133,7 +139,7 @@ public class SettingsScreen extends AMActivity {
 
         multipleLoaderManager.registerLoaderCallbacks(1, new SettingLoaderCallbacks(), false);
         multipleLoaderManager.setOnAllLoaderCompletedRunnable(onPostInitRunnable);
-        multipleLoaderManager.startLoading(this);
+        multipleLoaderManager.startLoading();
     }
 
     @Override
@@ -618,7 +624,7 @@ public class SettingsScreen extends AMActivity {
             progressDialog.dismiss();
 
             // Force reloading
-            multipleLoaderManager.startLoading(SettingsScreen.this, true);
+            multipleLoaderManager.startLoading(true);
         }
     }
 

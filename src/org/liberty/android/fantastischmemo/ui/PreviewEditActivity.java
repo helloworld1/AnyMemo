@@ -134,6 +134,8 @@ public class PreviewEditActivity extends QACardActivity {
          */
         setResult(Activity.RESULT_OK);
 
+        startInit();
+
     }
 
     @Override

@@ -122,6 +122,8 @@ public class StudyActivity extends QACardActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             dbPath = extras.getString(EXTRA_DBPATH);
@@ -135,8 +137,7 @@ public class StudyActivity extends QACardActivity {
 
         getMultipleLoaderManager().registerLoaderCallbacks(3, new LearnQueueManagerLoaderCallbacks(), false);
 
-        super.onCreate(savedInstanceState);
-
+        startInit();
     }
     
     @Override

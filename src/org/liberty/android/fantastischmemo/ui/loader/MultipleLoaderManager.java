@@ -23,11 +23,14 @@ package org.liberty.android.fantastischmemo.ui.loader;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.ui.LoadingProgressFragment;
 
 import roboguice.util.Ln;
 
+import android.app.Activity;
 import android.os.Handler;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.LoaderManager;
@@ -53,6 +56,13 @@ public class MultipleLoaderManager {
     private Map<Integer, Boolean> loaderReloadOnStartMap
         = new HashMap<Integer, Boolean>();
 
+    private AMActivity activity;
+
+    @Inject
+    public MultipleLoaderManager(Activity activity) {
+        this.activity = (AMActivity) activity;
+    }
+
     public void registerLoaderCallbacks(int id, LoaderCallbacks<?> callbacks, boolean reloadOnStart) {
         loaderCallbackMap.put(id, callbacks);
         loaderReloadOnStartMap.put(id, reloadOnStart);
@@ -63,11 +73,10 @@ public class MultipleLoaderManager {
     }
 
     /**
-     * @param activity the activity to launch.
      * @param forceReload if it is true, all loader will be reloaded, if not, the
      * loader will only be reloadeed if it is registered with reloadOnStart = true.
      */
-    public void startLoading(AMActivity activity, boolean forceReload) {
+    public void startLoading(boolean forceReload) {
         progressDialogFragment.show(activity.getSupportFragmentManager(), LoadingProgressFragment.class.toString());
 
         LoaderManager.enableDebugLogging(true);
@@ -82,8 +91,8 @@ public class MultipleLoaderManager {
         runningLoaderCount = loaderCallbackMap.size();
     }
 
-    public void startLoading(AMActivity activity) {
-        startLoading(activity, false);
+    public void startLoading() {
+        startLoading(false);
     }
 
     public synchronized void checkAllLoadersCompleted() {
@@ -92,7 +101,8 @@ public class MultipleLoaderManager {
         // The onPostInit is running on UI thread.
         if (runningLoaderCount <= 0 && onAllLoaderCompletedRunnable != null) {
             if (progressDialogFragment != null) {
-                progressDialogFragment.dismissAllowingStateLoss();
+                Ln.v("Dismiss dialog");
+                activity.getSupportFragmentManager().beginTransaction().remove(progressDialogFragment).commitAllowingStateLoss();
             }
             handler.post(onAllLoaderCompletedRunnable);
         }
@@ -101,7 +111,7 @@ public class MultipleLoaderManager {
     /**
      * This method needs to be called in Activity's onDestroy.
      */
-    public void destroy(AMActivity activity) {
+    public void destroy() {
         // The handler needs to remove the callbacks to avoid the race condition
         // that onPostInitRunnable is running after onDestroy.
         if (onAllLoaderCompletedRunnable != null) {
