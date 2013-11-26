@@ -224,8 +224,9 @@ public class PreviewEditActivity extends QACardActivity {
                 int cardId = extras.getInt(CardPlayerActivity.EXTRA_RESULT_CARD_ID, 1);
                 Card card = getDbOpenHelper().getCardDao().queryForId(cardId);
                 if (card != null) {
-                    gotoCard(card);
+                    setCurrentCard(card);
                 }
+                restartActivity();
                 break;
             }
 
