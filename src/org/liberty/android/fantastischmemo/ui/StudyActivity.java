@@ -27,8 +27,6 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.aspect.LogInvocation;
-import org.liberty.android.fantastischmemo.dao.CardDao;
-import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
@@ -82,13 +80,6 @@ public class StudyActivity extends QACardActivity {
     private int startCardId = -1;
 
     private QueueManager queueManager;
-
-    private CardDao cardDao;
-    private LearningDataDao learningDataDao;
-
-    private Setting setting;
-
-    private Option option;
 
     /* Schedulers */
     private Scheduler scheduler = null;
@@ -339,10 +330,6 @@ public class StudyActivity extends QACardActivity {
     @Override
     public void onPostInit() {
         super.onPostInit();
-        cardDao = getDbOpenHelper().getCardDao();
-        learningDataDao = getDbOpenHelper().getLearningDataDao();
-        setting = getSetting();
-        option = getOption();
         if (filterCategoryId != -1) {
             filterCategory = getDbOpenHelper().getCategoryDao().queryForId(filterCategoryId);
         }
@@ -377,7 +364,7 @@ public class StudyActivity extends QACardActivity {
             gradeButtonsFragment.setVisibility(View.VISIBLE);
         } else {
             // The grade button should be gone for double sided cards.
-            if (setting.getCardStyle() ==  Setting.CardStyle.DOUBLE_SIDED) {
+            if (getSetting().getCardStyle() ==  Setting.CardStyle.DOUBLE_SIDED) {
                 gradeButtonsFragment.setVisibility(View.GONE);
             } else {
                 gradeButtonsFragment.setVisibility(View.INVISIBLE);
@@ -385,8 +372,8 @@ public class StudyActivity extends QACardActivity {
         }
 
         // Auto speak after displaying a card.
-        if (option.getSpeakingType() == Option.SpeakingType.AUTO
-            || option.getSpeakingType() ==Option.SpeakingType.AUTOTAP) {
+        if (getOption().getSpeakingType() == Option.SpeakingType.AUTO
+            || getOption().getSpeakingType() ==Option.SpeakingType.AUTOTAP) {
             autoSpeak();
         }
         setSmallTitle(getActivityTitleString());
@@ -410,8 +397,8 @@ public class StudyActivity extends QACardActivity {
 
     @Override
     protected boolean onClickQuestionText() {
-        if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
-                || option.getSpeakingType() == Option.SpeakingType.TAP)) {
+        if ((getOption().getSpeakingType() == Option.SpeakingType.AUTOTAP
+                || getOption().getSpeakingType() == Option.SpeakingType.TAP)) {
             speakQuestion();
         } else {
             onClickQuestionView();
@@ -424,8 +411,8 @@ public class StudyActivity extends QACardActivity {
         if (!isAnswerShown()) {
             onClickAnswerView();
         } else {
-            if ((option.getSpeakingType() == Option.SpeakingType.AUTOTAP
-                        || option.getSpeakingType() == Option.SpeakingType.TAP)) {
+            if ((getOption().getSpeakingType() == Option.SpeakingType.AUTOTAP
+                        || getOption().getSpeakingType() == Option.SpeakingType.TAP)) {
                 speakAnswer();
             } else {
                 onClickAnswerView();
@@ -446,7 +433,7 @@ public class StudyActivity extends QACardActivity {
     protected boolean onClickAnswerView() {
         if (!isAnswerShown()) {
             displayCard(true);
-        } else if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED && isAnswerShown()) {
+        } else if (getSetting().getCardStyle() == Setting.CardStyle.DOUBLE_SIDED && isAnswerShown()) {
             displayCard(false);
         }
         return true;
@@ -576,8 +563,8 @@ public class StudyActivity extends QACardActivity {
     }
 
     private void refreshStatInfo() {
-       newCardCount = cardDao.getNewCardCount(filterCategory);
-       schedluledCardCount = cardDao.getScheduledCardCount(filterCategory);
+       newCardCount = getDbOpenHelper().getCardDao().getNewCardCount(filterCategory);
+       schedluledCardCount = getDbOpenHelper().getCardDao().getScheduledCardCount(filterCategory);
     }
 
     private void showCategoriesDialog() {
@@ -627,9 +614,9 @@ public class StudyActivity extends QACardActivity {
             queueManager = null;
 
             // Then copy the correct learning data.
-            LearningData prevCardLearningDataToUpdate = learningDataDao.queryForId(prevCard.getLearningData().getId());
+            LearningData prevCardLearningDataToUpdate = getDbOpenHelper().getLearningDataDao().queryForId(prevCard.getLearningData().getId());
             prevCardLearningDataToUpdate.cloneFromLearningData(prevCard.getLearningData());
-            learningDataDao.update(prevCardLearningDataToUpdate);
+            getDbOpenHelper().getLearningDataDao().update(prevCardLearningDataToUpdate);
 
             setCurrentCard(prevCard);
             restartActivity();
@@ -729,7 +716,7 @@ public class StudyActivity extends QACardActivity {
             LearningData ld = getCurrentCard().getLearningData();
             ld.setNextLearnDate(new Date(Long.MAX_VALUE));
             ld.setAcqReps(1);
-            learningDataDao.update(ld);
+            getDbOpenHelper().getLearningDataDao().update(ld);
             // Do not restart this card
             setCurrentCard(null);
             restartActivity();
@@ -769,7 +756,7 @@ public class StudyActivity extends QACardActivity {
             .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
                 public void onClick(DialogInterface arg0, int arg1) {
                     if(getCurrentCard() != null){
-                        cardDao.delete(getCurrentCard());
+                        getDbOpenHelper().getCardDao().delete(getCurrentCard());
                         // Do not restart with this card
                         setCurrentCard(null);
                         restartActivity();

@@ -28,9 +28,6 @@ import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.aspect.CheckNullArgs;
 import org.liberty.android.fantastischmemo.aspect.LogInvocation;
-import org.liberty.android.fantastischmemo.dao.CardDao;
-import org.liberty.android.fantastischmemo.dao.CategoryDao;
-import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
@@ -80,21 +77,20 @@ public class PreviewEditActivity extends QACardActivity {
     private Integer savedCardId = null;
     private String dbPath = "";
     private int activeCategoryId = -1;
-    private CardDao cardDao;
-    private LearningDataDao learningDataDao;
-    private CategoryDao categoryDao;
+
     LinearLayout buttonsLayout;
 
     Button newButton;
     Button editButton;
     Button prevButton;
     Button nextButton;
-    //private ControlButtons controlButtons;
+
     private View searchNextButton;
     private View searchPrevButton;
 
-    private Setting setting;
+    // Injected objects
     private ShareUtil shareUtil;
+
     private AMPrefUtil amPrefUtil;
 
     // The first card to read and display.
@@ -156,26 +152,22 @@ public class PreviewEditActivity extends QACardActivity {
     public void onPostInit() {
         super.onPostInit();
         Card currentCard = null;
-        cardDao = getDbOpenHelper().getCardDao();
-        learningDataDao = getDbOpenHelper().getLearningDataDao();
-        categoryDao = getDbOpenHelper().getCategoryDao();
-        setting = getSetting();
 
         // If category is set, it will override the card id.
         if (activeCategoryId != -1) {
-            currentCategory = categoryDao.queryForId(activeCategoryId);
-            currentCard = cardDao.queryFirstOrdinal(currentCategory);
+            currentCategory = getDbOpenHelper().getCategoryDao().queryForId(activeCategoryId);
+            currentCard = getDbOpenHelper().getCardDao().queryFirstOrdinal(currentCategory);
         } else if (startCardId != -1) {
-            currentCard = cardDao.queryForId(startCardId);
+            currentCard = getDbOpenHelper().getCardDao().queryForId(startCardId);
         }
 
         // If None of category and card is is set, first ordinal is queried
         // Note curretnCategory should be null.
         if (currentCard == null) {
-            currentCard = cardDao.queryFirstOrdinal(currentCategory);
+            currentCard = getDbOpenHelper().getCardDao().queryFirstOrdinal(currentCategory);
         }
 
-        totalCardCount = cardDao.countOf();
+        totalCardCount = getDbOpenHelper().getCardDao().countOf();
         setCurrentCard(currentCard);
 
         composeViews();
@@ -207,16 +199,18 @@ public class PreviewEditActivity extends QACardActivity {
     @LogInvocation
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
+
         if(resultCode == Activity.RESULT_CANCELED){
             return;
         }
+
         /* Refresh the activity according to activities */
         switch(requestCode){
             case ACTIVITY_EDIT:
             {
                 Bundle extras = data.getExtras();
                 int cardId = extras.getInt(CardEditor.EXTRA_RESULT_CARD_ID, 1);
-                Card card = cardDao.queryForId(cardId);
+                Card card = getDbOpenHelper().getCardDao().queryForId(cardId);
                 if (card != null) {
                     setCurrentCard(card);
                 }
@@ -228,7 +222,7 @@ public class PreviewEditActivity extends QACardActivity {
             {
                 Bundle extras = data.getExtras();
                 int cardId = extras.getInt(CardPlayerActivity.EXTRA_RESULT_CARD_ID, 1);
-                Card card = cardDao.queryForId(cardId);
+                Card card = getDbOpenHelper().getCardDao().queryForId(cardId);
                 if (card != null) {
                     gotoCard(card);
                 }
@@ -373,12 +367,12 @@ public class PreviewEditActivity extends QACardActivity {
             case R.id.menu_context_paste:
             {
                 if (savedCardId != null && getCurrentCard() != null) {
-                    Card savedCard = cardDao.queryForId(savedCardId);
+                    Card savedCard = getDbOpenHelper().getCardDao().queryForId(savedCardId);
                     LearningData ld = new LearningData();
-                    learningDataDao.create(ld);
+                    getDbOpenHelper().getLearningDataDao().create(ld);
                     savedCard.setLearningData(ld);
                     savedCard.setOrdinal(getCurrentCard().getOrdinal());
-                    cardDao.create(savedCard);
+                    getDbOpenHelper().getCardDao().create(savedCard);
                     restartActivity();
                 }
 
@@ -386,14 +380,14 @@ public class PreviewEditActivity extends QACardActivity {
             }
             case R.id.menu_context_swap_current:
             {
-                cardDao.swapQA(getCurrentCard());
+                getDbOpenHelper().getCardDao().swapQA(getCurrentCard());
                 restartActivity();
                 return true;
             }
 
             case R.id.menu_context_reset_current:
             {
-                learningDataDao.resetLearningData(getCurrentCard().getLearningData());
+                getDbOpenHelper().getLearningDataDao().resetLearningData(getCurrentCard().getLearningData());
                 return true;
             }
 
@@ -402,7 +396,7 @@ public class PreviewEditActivity extends QACardActivity {
                 AMGUIUtility.doConfirmProgressTask(this, R.string.settings_wipe, R.string.settings_wipe_warning, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask() {
                     @Override
                     public void doHeavyTask() {
-                        learningDataDao.resetAllLearningData();
+                        getDbOpenHelper().getLearningDataDao().resetAllLearningData();
                     }
                     @Override
                     public void doUITask() {/* Do nothing */}
@@ -420,7 +414,7 @@ public class PreviewEditActivity extends QACardActivity {
                         public void onClick(DialogInterface arg0, int arg1){
                             AMGUIUtility.doProgressTask(PreviewEditActivity.this, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask(){
                                 public void doHeavyTask(){
-                                    cardDao.swapAllQA();
+                                    getDbOpenHelper().getCardDao().swapAllQA();
                                 }
                                 public void doUITask(){
                                     restartActivity();
@@ -432,7 +426,7 @@ public class PreviewEditActivity extends QACardActivity {
                     public void onClick(DialogInterface arg0, int arg1){
                         AMGUIUtility.doProgressTask(PreviewEditActivity.this, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask(){
                             public void doHeavyTask(){
-                                cardDao.swapAllQADup();
+                                getDbOpenHelper().getCardDao().swapAllQADup();
                             }
                             public void doUITask(){
                                 restartActivity();
@@ -458,7 +452,7 @@ public class PreviewEditActivity extends QACardActivity {
                 AMGUIUtility.doConfirmProgressTask(this, R.string.remove_dup_text, R.string.remove_dup_message, R.string.removing_dup_title, R.string.removing_dup_warning, new AMGUIUtility.ProgressTask() {
                     @Override
                     public void doHeavyTask() {
-                        cardDao.removeDuplicates();
+                        getDbOpenHelper().getCardDao().removeDuplicates();
                     }
                     @Override
                     public void doUITask() {
@@ -481,7 +475,7 @@ public class PreviewEditActivity extends QACardActivity {
                 AMGUIUtility.doConfirmProgressTask(this, R.string.settings_shuffle, R.string.settings_shuffle_warning, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask() {
                     @Override
                     public void doHeavyTask() {
-                        cardDao.shuffleOrdinals();
+                        getDbOpenHelper().getCardDao().shuffleOrdinals();
                     }
                     @Override
                     public void doUITask() {
@@ -596,7 +590,7 @@ public class PreviewEditActivity extends QACardActivity {
 
     protected void gotoNext(){
         if (getCurrentCard() != null) {
-            Card nextCard = cardDao.queryNextCard(getCurrentCard(), currentCategory);
+            Card nextCard = getDbOpenHelper().getCardDao().queryNextCard(getCurrentCard(), currentCategory);
 
             assert nextCard != null : "Next card is null";
             gotoCard(nextCard);
@@ -643,7 +637,7 @@ public class PreviewEditActivity extends QACardActivity {
 
     protected void gotoPrev(){
         if (getCurrentCard() != null) {
-            Card prevCard = cardDao.queryPrevCard(getCurrentCard(), currentCategory);
+            Card prevCard = getDbOpenHelper().getCardDao().queryPrevCard(getCurrentCard(), currentCategory);
 
             assert prevCard != null : "Prev card is null";
             gotoCard(prevCard);
@@ -658,7 +652,7 @@ public class PreviewEditActivity extends QACardActivity {
      */
     private void updateCardFrontSide(){
         if(getCurrentCard() != null){
-            if(setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED){
+            if(getSetting().getCardStyle() == Setting.CardStyle.DOUBLE_SIDED){
                 /* Double sided card, show front */
                 displayCard(false);
             } else {
@@ -784,8 +778,8 @@ public class PreviewEditActivity extends QACardActivity {
         @Override
         public Void doInBackground(Void... params) {
             Card delCard = getCurrentCard();
-            setCurrentCard(cardDao.queryNextCard(getCurrentCard(), currentCategory));
-            cardDao.delete(delCard);
+            setCurrentCard(getDbOpenHelper().getCardDao().queryNextCard(getCurrentCard(), currentCategory));
+            getDbOpenHelper().getCardDao().delete(delCard);
             return null;
         }
         @Override
@@ -822,15 +816,15 @@ public class PreviewEditActivity extends QACardActivity {
             Card foundCard = null;
 
             if (method == SearchMethod.ID && NumberUtils.isDigits(criteria)) {
-                foundCard = cardDao.queryForId(Integer.valueOf(criteria));
+                foundCard = getDbOpenHelper().getCardDao().queryForId(Integer.valueOf(criteria));
             }
 
             if (method == SearchMethod.TEXT_FORWARD) {
-                foundCard = cardDao.searchNextCard(criteria, getCurrentCard().getOrdinal());
+                foundCard = getDbOpenHelper().getCardDao().searchNextCard(criteria, getCurrentCard().getOrdinal());
             }
 
             if (method == SearchMethod.TEXT_BACKWARD) {
-                foundCard = cardDao.searchPrevCard(criteria, getCurrentCard().getOrdinal());
+                foundCard = getDbOpenHelper().getCardDao().searchPrevCard(criteria, getCurrentCard().getOrdinal());
             }
 
             return foundCard;
