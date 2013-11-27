@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.5.+'
+        classpath 'com.android.tools.build:gradle:0.6.+'
     }
 }
 
@@ -39,6 +39,13 @@ android {
 
         // Move the tests to tests/java, tests/res, etc...
         instrumentTest.setRoot('tests')
+
+        instrumentTest {
+                java.srcDirs = ['test/src']
+                res.srcDirs = ['test/res']
+                assets.srcDirs = ['test/assets']
+                resources.srcDirs = ['test/src']
+        }
     }
 }
 
