@@ -1,3 +1,4 @@
 #!/bin/sh
 trap exit ERR
-ant debug install
+./gradlew installDebug
+adb shell am start -n org.liberty.android.fantastischmemo/org.liberty.android.fantastischmemo.ui.AnyMemo
