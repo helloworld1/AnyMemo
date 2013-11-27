@@ -51,7 +51,6 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.Menu;
@@ -286,11 +285,6 @@ public class SettingsScreen extends AMActivity {
         @Override
         public void run() {
             // Dismiss the progress dialog
-            DialogFragment df = (DialogFragment) getSupportFragmentManager()
-                .findFragmentByTag(LoadingProgressFragment.class.toString());
-            if (df != null) {
-                df.dismiss();
-            }
 
             settingDao = dbOpenHelper.getSettingDao();
 

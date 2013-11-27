@@ -26,13 +26,13 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.liberty.android.fantastischmemo.AMActivity;
-import org.liberty.android.fantastischmemo.ui.LoadingProgressFragment;
+import org.liberty.android.fantastischmemo.R;
 
 import roboguice.util.Ln;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Handler;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 
@@ -42,13 +42,13 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks;
  */
 public class MultipleLoaderManager {
 
-    private int runningLoaderCount = 0;
+    private volatile int runningLoaderCount = 0;
 
     private Handler handler = new Handler();
 
     private Runnable onAllLoaderCompletedRunnable = null;
 
-    private DialogFragment progressDialogFragment = new LoadingProgressFragment();
+    private ProgressDialog progressDialog;
     
     private Map<Integer, LoaderCallbacks<?>> loaderCallbackMap
         = new HashMap<Integer, LoaderCallbacks<?>>();
@@ -77,7 +77,12 @@ public class MultipleLoaderManager {
      * loader will only be reloadeed if it is registered with reloadOnStart = true.
      */
     public void startLoading(boolean forceReload) {
-        progressDialogFragment.show(activity.getSupportFragmentManager(), LoadingProgressFragment.class.toString());
+        progressDialog = new ProgressDialog(activity);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setTitle(R.string.loading_please_wait);
+        progressDialog.setMessage(activity.getString(R.string.loading_database));
+        progressDialog.setCancelable(false);
+        progressDialog.show();
 
         LoaderManager.enableDebugLogging(true);
         LoaderManager loaderManager = activity.getSupportLoaderManager();
@@ -87,8 +92,9 @@ public class MultipleLoaderManager {
             } else {
                 loaderManager.initLoader(id, null, loaderCallbackMap.get(id));
             }
+            runningLoaderCount++;
         }
-        runningLoaderCount = loaderCallbackMap.size();
+        // runningLoaderCount = loaderCallbackMap.size();
     }
 
     public void startLoading() {
@@ -96,14 +102,12 @@ public class MultipleLoaderManager {
     }
 
     public synchronized void checkAllLoadersCompleted() {
-        Ln.v("Finished loader");
         runningLoaderCount--;
+
         // The onPostInit is running on UI thread.
         if (runningLoaderCount <= 0 && onAllLoaderCompletedRunnable != null) {
-            if (progressDialogFragment != null) {
-                Ln.v("Dismiss dialog");
-                activity.getSupportFragmentManager().beginTransaction().remove(progressDialogFragment).commitAllowingStateLoss();
-            }
+            Ln.v("Dismiss dialog");
+            progressDialog.dismiss();
             handler.post(onAllLoaderCompletedRunnable);
         }
     }
@@ -111,15 +115,19 @@ public class MultipleLoaderManager {
     /**
      * This method needs to be called in Activity's onDestroy.
      */
-    public void destroy() {
+    public synchronized void destroy() {
         // The handler needs to remove the callbacks to avoid the race condition
         // that onPostInitRunnable is running after onDestroy.
+
         if (onAllLoaderCompletedRunnable != null) {
             handler.removeCallbacks(onAllLoaderCompletedRunnable);
         }
 
-        if (progressDialogFragment != null) {
-            activity.getSupportFragmentManager().beginTransaction().remove(progressDialogFragment).commitAllowingStateLoss();
+        if (progressDialog != null) {
+            progressDialog.dismiss();
         }
+
+        // Don't keep a reference of activity
+        activity = null;
     }
 }

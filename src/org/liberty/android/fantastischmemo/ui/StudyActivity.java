@@ -41,6 +41,7 @@ import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
 import org.liberty.android.fantastischmemo.utils.ShareUtil;
 
 import roboguice.util.RoboAsyncTask;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -64,12 +65,14 @@ public class StudyActivity extends QACardActivity {
     public static String EXTRA_DBPATH = "dbpath";
     public static String EXTRA_CATEGORY_ID = "category_id";
     public static String EXTRA_START_CARD_ID = "start_card_id";
+    private static final int LEARN_QUEUE_MANAGER_LOADER_ID = 10;
 
     private final int ACTIVITY_FILTER = 10;
     private final int ACTIVITY_EDIT = 11;
     private final int ACTIVITY_GOTO_PREV = 14;
     private final int ACTIVITY_SETTINGS = 15;
     private final int ACTIVITY_DETAIL = 16;
+
     private final static String WEBSITE_HELP_MEMO="http://anymemo.org/wiki/index.php?title=Learning_screen";
 
     /* State objects */
@@ -126,7 +129,7 @@ public class StudyActivity extends QACardActivity {
             startCardId = savedInstanceState.getInt(EXTRA_START_CARD_ID, -1);
         }
 
-        getMultipleLoaderManager().registerLoaderCallbacks(3, new LearnQueueManagerLoaderCallbacks(), false);
+        getMultipleLoaderManager().registerLoaderCallbacks(LEARN_QUEUE_MANAGER_LOADER_ID, new LearnQueueManagerLoaderCallbacks(), false);
 
         startInit();
     }
