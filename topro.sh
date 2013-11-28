@@ -16,6 +16,3 @@ sed -i 's/\"app_name\">AnyMemo/\"app_name\">AnyMemo Pro/g' ./res/values/strings.
 sed -i 's/\"app_full_name\">AnyMemo/\"app_full_name\">AnyMemo Pro/g' ./res/values/strings.xml
 ant clean
 ./generate_ormlite_table_config.sh
-
-
-
