@@ -15,4 +15,4 @@ sed -i 's/android:id="@+id\/misc_donate" android:visibility="visible"/android:id
 sed -i 's/\"app_name\">AnyMemo/\"app_name\">AnyMemo Pro/g' ./res/values/strings.xml
 sed -i 's/\"app_full_name\">AnyMemo/\"app_full_name\">AnyMemo Pro/g' ./res/values/strings.xml
 ant clean
-./generate_ormlite_table_config.sh
+./generate-ormlite-table-config.sh
