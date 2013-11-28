@@ -26,6 +26,7 @@ android {
         testPackageName "org.liberty.android.fantastischmemo.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
     }
+
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -49,6 +50,7 @@ android {
     }
 }
 
+// Add Aspectj support
 configurations {
     ajc
     aspects
@@ -69,6 +71,7 @@ dependencies {
 android.applicationVariants.all { variant ->
 
     variant.javaCompile.doLast {
+        // Find the android.jar and add to iajc classpath
         def androidSdk = android.adbExe.parent + "/../platforms/" + android.compileSdkVersion + "/android.jar"
 	println 'Android SDK android.jar path: ' + androidSdk
 
@@ -78,9 +81,11 @@ android.applicationVariants.all { variant ->
                 iajcClasspath += ":" + dep.dependencyProject.buildDir + "/bundles/release/classes.jar"
             }
         }
+
+        // handle aar dependencies pulled in by gradle (Android support library and etc)
 	tree = fileTree(dir: "${project.buildDir}/exploded-bundles", include: '**/classes.jar')
-	tree.each { i ->
-	    iajcClasspath += ":" + i
+	tree.each { jarFile ->
+	    iajcClasspath += ":" + jarFile
         }
 
 	println 'Classpath for iajc: ' + iajcClasspath 

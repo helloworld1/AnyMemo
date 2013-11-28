@@ -1,3 +1,69 @@
-AnyMemo ReadMe:
+AnyMemo Readme
+==============
+
+What is AnyMemo
+---------------
+
+AnyMemo is a free open-sourced spaced repetition flashcard learning software similar to SuperMemo for Android mobile phones.
+It implements an advanced adaptive scheduling algorithm based on modified Mnemosyne algorithm (Enhanced SuperMemo SM2 algorithm) to maximize the learning efficient.
+
+AnyMemo will help you learn various languages like Arabic, Chinese, English, German, Spanish, French, Japanese, Italian, Korean, Esperanto.
+Also you can learn histories, computer related topics, religion, life styles using AnyMemo too!
 
 See detailed info at http://anymemo.org
+
+Directory structure
+-------------------
+* src: The source files
+* test: The test files
+* libs: Jar libraries
+* obsolete: The useless files for archiving
+* gradle: The gradle wrapper
+* eclipse-deps: The dependencies needed by eclipse if you are using eclipse.
+
+How to compile
+--------------
+
+AnyMemo is built using gradle. You need to make sure the following are installed in
+order to build:
+* Android SDK tools: http://developer.android.com/sdk/index.html
+* JDK: http://www.oracle.com/technetwork/java/javase/downloads/index.html
+
+In Android SDK tools' "Android SDK Manager", you need the following items:
+* Android 4.1.x SDK platform
+* Android SDK tools
+* Andoird SDK Build-tools version 19
+* Android support repository
+* Android support library
+
+Once the dependency is satisfied, you need to set the ANDROID_HOME environment variable
+to the Android SDK installation location. E. g.
+
+$ export ANDROID_HOME=~/android-sdk-linux/
+
+cd to the AnyMemo directory and Use gradle to compile the project
+$ cd anymemo
+$ ./gradlew assembleDebug
+
+The build artifacts are in
+build/apk/
+
+Eclipse users
+-------------
+
+For the eclipse user, the gradle is not supported to build. However you can
+still use eclipse to build the project.
+
+* Import project in eclipse
+* Import the library project in eclipse-deps/appcompat/
+* In AnyMemo project's property, "Java Build Path", add "aspectjrt.jar" in libraries
+
+Known issue:
+The aspectj will not work correctly.
+
+Android studio user
+-------------------
+
+It is easy! Install all the dependencies listed in the "How to compile" section
+and you can import directly into Android studio.
+

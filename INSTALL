@@ -1,6 +1,0 @@
-Use gradle to compile the project
-./compile.sh
-
-or 
-
-./gradlew assembleDebug
