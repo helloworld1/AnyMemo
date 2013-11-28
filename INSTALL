@@ -1,9 +1,6 @@
-Use ant to compile the project
-$ android update project --name AnyMemo --target [YOUR TARGET ID HERE] --path .
-$ ant debug
-Then use 
-$ adb install bin/AnyMemo-debug.apk
+Use gradle to compile the project
+./compile.sh
 
-To get your Target ID:
-$ android list targets
+or 
 
+./gradlew assembleDebug
