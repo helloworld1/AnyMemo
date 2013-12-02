@@ -1,6 +1,14 @@
 package org.liberty.android.fantastischmemo.test.integration;
 
+import java.sql.SQLException;
+
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.dao.CardDao;
+import org.liberty.android.fantastischmemo.dao.CategoryDao;
+import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.test.TestHelper;
 import org.liberty.android.fantastischmemo.ui.QuizActivity;
 
@@ -32,23 +40,11 @@ public class QuizActivityTest extends ActivityInstrumentationTestCase2<QuizActiv
         TestHelper uiTestHelper = new TestHelper(getInstrumentation());
         uiTestHelper.clearPreferences();
         uiTestHelper.setUpFBPDatabase();
-
-        Intent intent = new Intent();
-        intent.putExtra(QuizActivity.EXTRA_DBPATH, TestHelper.SAMPLE_DB_PATH);
-        intent.putExtra(QuizActivity.EXTRA_QUIZ_SIZE, TEST_QUIZ_SIZE);
-        intent.putExtra(QuizActivity.EXTRA_START_CARD_ORD, TEST_START_ORD);
-        setActivityIntent(intent);
-        mActivity = this.getActivity();
-
-        answerView = mActivity.findViewById(R.id.answer);
-
-        solo = new Solo(getInstrumentation(), mActivity);
-        solo.waitForDialogToClose(8000);
-        solo.sleep(600);
     }
 
     @LargeTest
     public void testLearningWithoutFailures() {
+        launchQuizBySize();
         // Card number 5
         assertTrue(solo.searchText("eyes"));
         solo.clickOnView(answerView);
@@ -74,6 +70,7 @@ public class QuizActivityTest extends ActivityInstrumentationTestCase2<QuizActiv
 
     @LargeTest
     public void testLearningFailures() {
+        launchQuizBySize();
         // Card number 5
         assertTrue(solo.searchText("eyes"));
         solo.clickOnView(answerView);
@@ -117,6 +114,93 @@ public class QuizActivityTest extends ActivityInstrumentationTestCase2<QuizActiv
         // The finishing dialog should be poped up
         solo.waitForDialogToOpen(1000);
         solo.clickOnText(solo.getString(R.string.back_menu_text));
+    }
+
+    /**
+     * Set up 1 category with 3 cards and the quiz should only contain these 3 cards.
+     */ 
+    @LargeTest
+    public void testQuizByCategory() {
+        Category category = setupThreeCategories();
+        launchQuizByCategory(category);
+
+        // Card number 2
+        assertTrue(solo.searchText("hair"));
+        solo.clickOnView(answerView);
+        assertTrue(solo.searchText("les cheveux"));
+        solo.clickOnText(solo.getString(R.string.remember_text));
+
+        // Card number 5
+        assertTrue(solo.searchText("eyes"));
+        solo.clickOnView(answerView);
+        assertTrue(solo.searchText("les yeux"));
+        solo.clickOnText(solo.getString(R.string.remember_text));
+
+        // Card number 8
+        assertTrue(solo.searchText("mouth"));
+        solo.clickOnView(answerView);
+        assertTrue(solo.searchText("la bouche"));
+        solo.clickOnText(solo.getString(R.string.remember_text));
+    }
+
+
+    private void launchQuizBySize() {
+        Intent intent = new Intent();
+        intent.putExtra(QuizActivity.EXTRA_DBPATH, TestHelper.SAMPLE_DB_PATH);
+        intent.putExtra(QuizActivity.EXTRA_QUIZ_SIZE, TEST_QUIZ_SIZE);
+        intent.putExtra(QuizActivity.EXTRA_START_CARD_ORD, TEST_START_ORD);
+
+        setActivityIntent(intent);
+        mActivity = this.getActivity();
+
+        answerView = mActivity.findViewById(R.id.answer);
+
+        solo = new Solo(getInstrumentation(), mActivity);
+        solo.waitForDialogToClose(8000);
+        solo.sleep(600);
+    }
+
+    private void launchQuizByCategory(Category category) {
+        Intent intent = new Intent();
+        intent.putExtra(QuizActivity.EXTRA_DBPATH, TestHelper.SAMPLE_DB_PATH);
+        intent.putExtra(QuizActivity.EXTRA_CATEGORY_ID, category.getId());
+
+        setActivityIntent(intent);
+        mActivity = this.getActivity();
+
+        answerView = mActivity.findViewById(R.id.answer);
+
+        solo = new Solo(getInstrumentation(), mActivity);
+        solo.waitForDialogToClose(8000);
+        solo.sleep(600);
+    }
+
+    /*
+     * Card with "My Category" in ID 2, 5, 8
+     */
+    private Category setupThreeCategories() {
+
+        AnyMemoDBOpenHelper dbHelper = AnyMemoDBOpenHelperManager.getHelper(getInstrumentation().getTargetContext(), TestHelper.SAMPLE_DB_PATH);
+
+        try {
+            CardDao cardDao = dbHelper.getCardDao();
+            CategoryDao categoryDao = dbHelper.getCategoryDao();
+            Card c = cardDao.queryForId(2);
+            Category ct = new Category();
+            ct.setName("My category");
+            categoryDao.create(ct);
+            c.setCategory(ct);
+            cardDao.update(c);
+            c = cardDao.queryForId(5);
+            c.setCategory(ct);
+            cardDao.update(c);
+            c = cardDao.queryForId(8);
+            c.setCategory(ct);
+            cardDao.update(c);
+            return ct;
+        } finally {
+            AnyMemoDBOpenHelperManager.releaseHelper(dbHelper);
+        }
     }
 
     @Override

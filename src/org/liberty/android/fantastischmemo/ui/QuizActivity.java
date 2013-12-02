@@ -33,7 +33,9 @@ import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 import org.liberty.android.fantastischmemo.ui.loader.DBLoader;
 import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
 
+import roboguice.util.Ln;
 import roboguice.util.RoboAsyncTask;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -280,9 +282,11 @@ public class QuizActivity extends QACardActivity {
         @Override
         public QueueManager dbLoadInBackground() {
             Category filterCategory = null;
+
             if (filterCategoryId != -1) {
-                dbOpenHelper.getCategoryDao().queryForId(filterCategoryId);
+                filterCategory = dbOpenHelper.getCategoryDao().queryForId(filterCategoryId);
             }
+
             QuizQueueManager.Builder builder = new QuizQueueManager.Builder()
                 .setDbOpenHelper(dbOpenHelper)
                 .setScheduler(scheduler)

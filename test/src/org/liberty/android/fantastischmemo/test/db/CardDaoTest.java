@@ -617,7 +617,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
     private void setupThreeCategories() throws SQLException {
         CardDao cardDao = helper.getCardDao();
         CategoryDao categoryDao = helper.getCategoryDao();
-        Card c =cardDao.queryForId(2);
+        Card c = cardDao.queryForId(2);
         Category ct = new Category();
         ct.setName("My category");
         categoryDao.create(ct);
