@@ -73,10 +73,15 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
             assert myLocale != null;
 
             int result = myTTS.setLanguage(myLocale);
+
             if (result == TextToSpeech.LANG_MISSING_DATA) {
+                Toast.makeText(context, context.getString(R.string.tts_language_data_missing_text) + " " + myLocale, Toast.LENGTH_LONG)
+                    .show();
                 Log.e(TAG, "Missing language data");
             }
             if (result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Toast.makeText(context, context.getString(R.string.unsupported_audio_locale_text) + " " + myLocale, Toast.LENGTH_LONG)
+                    .show();
                 Log.e(TAG, "Language is not supported");
             }
         } else {
@@ -173,16 +178,6 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
 
         speakLock.lock();
 
-        // See the reference
-        // http://developer.android.com/reference/android/speech/tts/TextToSpeech.html#LANG_AVAILABLE
-        // 0, 1, 2 means language availabe
-        // -1 means error or missing data, -2 means language not supported
-        if (myTTS.isLanguageAvailable(myLocale) >= 0) {
-            myTTS.setLanguage(myLocale);
-        } else {
-            Toast.makeText(context, R.string.unsupported_audio_locale_text, Toast.LENGTH_LONG)
-                .show();
-        }
 
         Log.i(TAG, "processed_str is \"" + processed_str + "\"");
         myTTS.speak(processed_str, 0, params);

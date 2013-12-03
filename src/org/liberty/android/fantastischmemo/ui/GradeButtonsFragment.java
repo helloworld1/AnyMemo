@@ -303,6 +303,4 @@ public class GradeButtonsFragment extends RoboFragment {
             setButtonDescription(5, ""+ amDateUtil.convertDayIntervalToDisplayString(scheduler.schedule(activity.getCurrentCard().getLearningData(), 5, false).getInterval()));
         }
     }
-
-
 }

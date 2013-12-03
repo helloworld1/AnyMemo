@@ -462,4 +462,5 @@
     <string name="click_again_to_delete_text">Click again to delete</string>
     <string name="arabic_text">Arabic</string>
     <string name="unsupported_audio_locale_text">Selected audio language is not available for the current TTS engine.</string>
+    <string name="tts_language_data_missing_text">The language data is missing for the current TTS language.</string>
 </resources>
