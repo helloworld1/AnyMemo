@@ -27,17 +27,22 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.lang3.StringUtils;
+
+import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.tts.SpeakWord.OnCompletedListener;
 
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
+import android.widget.Toast;
 
 public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
 
 	private volatile TextToSpeech myTTS;
 	private SpeakWord speakWord;
 	private final Locale myLocale;
+
+    private Context context;
 
     private volatile ReentrantLock initLock = new ReentrantLock();
 
@@ -86,7 +91,10 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
         // Or a null pointer for myTTS is waiting
 
         initLock.lock();
+        this.context = context;
         myLocale = getLocaleForTTS(locale);
+
+
         myTTS = new TextToSpeech(context, this);
         speakWord = new SpeakWord(audioSearchPath);
         initLock.unlock();
@@ -164,7 +172,17 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
         });
 
         speakLock.lock();
-        myTTS.setLanguage(myLocale);
+
+        // See the reference
+        // http://developer.android.com/reference/android/speech/tts/TextToSpeech.html#LANG_AVAILABLE
+        // 0, 1, 2 means language availabe
+        // -1 means error or missing data, -2 means language not supported
+        if (myTTS.isLanguageAvailable(myLocale) >= 0) {
+            myTTS.setLanguage(myLocale);
+        } else {
+            Toast.makeText(context, R.string.unsupported_audio_locale_text, Toast.LENGTH_LONG)
+                .show();
+        }
 
         Log.i(TAG, "processed_str is \"" + processed_str + "\"");
         myTTS.speak(processed_str, 0, params);
