@@ -454,4 +454,7 @@
     <string name="quiz_by_range_text">Опрос по диапазону</string>
     <string name="start_ordinal_text">Начало диапазона</string>
     <string name="end_ordinal_text">Конец диапазона</string>
+    <string name="click_again_to_delete_text">Кликните снова чтобы удалить</string>
+    <string name="arabic_text">Арабский</string>
+    <string name="unsupported_audio_locale_text">Выбранный язык аудио недоступен для текущего TTS движка.</string>
 </resources>
