@@ -63,7 +63,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TableRow;
-import android.widget.Toast;
 
 public class SettingsScreen extends AMActivity {
 
@@ -391,19 +390,6 @@ public class SettingsScreen extends AMActivity {
         questionLocaleSpinner.setOnTouchListener(spinnerOnTouchListener);
         answerLocaleSpinner.setOnTouchListener(spinnerOnTouchListener);
         colorSpinner.setOnTouchListener(spinnerOnTouchListener);
-
-        AdapterView.OnItemSelectedListener localeListener = new AdapterView.OnItemSelectedListener(){
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id){
-                if(position > 7){
-                    Toast.makeText(SettingsScreen.this, getString(R.string.tts_tip_extender), Toast.LENGTH_SHORT).show();
-                }
-            }
-            public void onNothingSelected(AdapterView<?> adapterView){
-                //so far, do nothing
-            }
-        };
-        questionLocaleSpinner.setOnItemSelectedListener(localeListener);
-        answerLocaleSpinner.setOnItemSelectedListener(localeListener);
 
         colorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id){

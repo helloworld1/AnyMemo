@@ -460,4 +460,5 @@
     <string name="start_ordinal_text">Start ordinal</string>
     <string name="end_ordinal_text">End ordinal</string>
     <string name="click_again_to_delete_text">Click again to delete</string>
+    <string name="arabic_text">Arabic</string>
 </resources>

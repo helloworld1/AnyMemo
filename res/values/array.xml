@@ -57,6 +57,7 @@
     <item>@string/italian_text</item>
     <item>@string/spanish_text</item>
     <item>@string/afghanistan_text</item>
+    <item>@string/arabic_text</item>
     <item>@string/bahamas_text</item>
     <item>@string/cyprus_text</item>
     <item>@string/czech_text</item>
@@ -87,6 +88,7 @@
 	<item>IT</item>
 	<item>ES</item>
 	<item>AF</item>
+    <item>AE</item>
 	<item>BS</item>
 	<item>CY</item>
 	<item>CZ</item>
