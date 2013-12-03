@@ -9,5 +9,10 @@
         <attr name="maxIntValue" format="integer" />
         <attr name="minIntValue" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="DoubleClickButton">
+        <attr name="text_on_first_click" format="string" />
+        <attr name="effective_duration_millis" format="integer" />
+    </declare-styleable>
 </resources>
 

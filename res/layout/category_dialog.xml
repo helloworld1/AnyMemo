@@ -2,6 +2,7 @@
 
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:anymemo="http://schemas.android.com/apk/res/org.liberty.android.fantastischmemo"
         android:id="@+id/category_dialog_root"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -63,14 +64,16 @@
                 android:layout_marginLeft="2dip"
                 android:layout_marginRight="2dip" />
 
-        <Button
+        <org.liberty.android.fantastischmemo.ui.widgets.DoubleClickButton
                 android:id="@+id/button_delete"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/delete_text_short"
                 android:layout_marginLeft="2dip"
-                android:layout_marginRight="2dip" />
+                android:layout_marginRight="2dip"
+                anymemo:text_on_first_click="@string/click_again_to_delete_text"
+                anymemo:effective_duration_millis="5000" />
     </LinearLayout>
 </LinearLayout>
 

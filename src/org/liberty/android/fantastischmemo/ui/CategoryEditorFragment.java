@@ -28,7 +28,7 @@ import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ListView;
 
-public class CategoryEditorFragment extends RoboDialogFragment implements View.OnClickListener {
+public class CategoryEditorFragment extends RoboDialogFragment {
     public static String EXTRA_DBPATH = "dbpath";
     public static String EXTRA_CATEGORY_ID = "id";
     private AMActivity mActivity;
@@ -89,35 +89,39 @@ public class CategoryEditorFragment extends RoboDialogFragment implements View.O
         AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
     }
 
+    private View.OnClickListener buttonOnClickListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            if (v == okButton) {
+                mActivity.setProgressBarIndeterminateVisibility(false);
+                int position = categoryList.getCheckedItemPosition();
+                Category selectedCategory;
+                if (position == AdapterView.INVALID_POSITION) {
+                    selectedCategory = null;
+                } else {
+                    selectedCategory = categoryAdapter.getItem(position);
+                }
+                if (resultListener != null) {
+                    resultListener.onReceiveCategory(selectedCategory);
+                }
+                dismiss();
+            }
 
-    public void onClick(View v) {
-        if (v == okButton) {
-            mActivity.setProgressBarIndeterminateVisibility(false);
-            int position = categoryList.getCheckedItemPosition();
-            Category selectedCategory;
-            if (position == AdapterView.INVALID_POSITION) {
-                selectedCategory = null;
-            } else {
-                selectedCategory = categoryAdapter.getItem(position);
+            if (v == newButton) {
+                NewCategoryTask task = new NewCategoryTask();
+                task.execute((Void)null);
             }
-            if (resultListener != null) {
-                resultListener.onReceiveCategory(selectedCategory);
+
+            if (v == editButton) {
+                EditCategoryTask task = new EditCategoryTask();
+                task.execute((Void)null);
             }
-            dismiss();
+
+            if (v == deleteButton) {
+                DeleteCategoryTask task = new DeleteCategoryTask();
+                task.execute((Void)null);
+            }
         }
-        if (v == newButton) {
-            NewCategoryTask task = new NewCategoryTask();
-            task.execute((Void)null);
-        }
-        if (v == editButton) {
-            EditCategoryTask task = new EditCategoryTask();
-            task.execute((Void)null);
-        }
-        if (v == deleteButton) {
-            DeleteCategoryTask task = new DeleteCategoryTask();
-            task.execute((Void)null);
-        }
-    }
+    };
 
     /*
      * This task will mainly populate the categoryList
@@ -272,6 +276,7 @@ public class CategoryEditorFragment extends RoboDialogFragment implements View.O
     }
 
     private class DeleteCategoryTask extends AsyncTask<Void, Void, Void> {
+
         private Category selectedCategory;
 
 		@Override
@@ -355,10 +360,10 @@ public class CategoryEditorFragment extends RoboDialogFragment implements View.O
     };
 
     private void enableListeners() {
-        okButton.setOnClickListener(this);
-        deleteButton.setOnClickListener(this);
-        newButton.setOnClickListener(this);
-        editButton.setOnClickListener(this);
+        okButton.setOnClickListener(buttonOnClickListener);
+        deleteButton.setOnClickListener(buttonOnClickListener);
+        newButton.setOnClickListener(buttonOnClickListener);
+        editButton.setOnClickListener(buttonOnClickListener);
     }
 
     private void disableListeners() {
