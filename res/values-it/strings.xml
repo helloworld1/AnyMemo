@@ -458,4 +458,8 @@
     <string name="quiz_by_range_text">Quiz selezionati per intervallo</string>
     <string name="start_ordinal_text">Numero d\'ordine del quiz di partenza</string>
     <string name="end_ordinal_text">Numero d\'ordine del quiz finale</string>
+    <string name="click_again_to_delete_text">Clicca di nuovo per cancellare</string>
+    <string name="arabic_text">Arabo</string>
+    <string name="unsupported_audio_locale_text">La lingua selezionata per l\'audio non è disponibile per il sintetizzatore vocale (TTS) corrente.</string>
+    <string name="tts_language_data_missing_text">Mancano i dati della lingua selezionata per il sintetizzatore vocale (TTS) corrente.</string>
 </resources>
