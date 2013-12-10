@@ -55,6 +55,8 @@ configurations {
     ajc
     aspects
     ajInpath
+
+    // Fix mockito dependency issue
 }
 
 ext.aspectjVersion = '1.7.3'
@@ -66,6 +68,39 @@ dependencies {
     ajc "org.aspectj:aspectjtools:${aspectjVersion}"
     compile "org.aspectj:aspectjrt:${aspectjVersion}"
     compile 'com.android.support:appcompat-v7:19.0.0'
+    compile 'com.j256.ormlite:ormlite-core:4.47'
+    compile 'com.j256.ormlite:ormlite-android:4.47'
+    compile ('org.roboguice:roboguice:2.0') {
+        exclude module: 'aopalliance'
+        exclude module: 'cglib'
+    }
+    compile ('com.google.inject.extensions:guice-assistedinject:3.0') {
+        exclude module: 'aopalliance'
+        exclude module: 'guice'
+        exclude module: 'cglib'
+    }
+    compile 'oauth.signpost:signpost-core:1.2.1.2'
+    compile('oauth.signpost:signpost-commonshttp4:1.2.1.2') {
+        exclude module: 'httpclient'
+    }
+    compile 'org.apache.commons:commons-lang3:3.1'
+    compile 'commons-io:commons-io:2.4'
+
+    instrumentTestCompile 'com.google.dexmaker:dexmaker:1.0'
+    instrumentTestCompile ('com.google.dexmaker:dexmaker-mockito:1.0') {
+        exclude module: 'hamcrest-core'
+        exclude module: 'objenesis'
+        exclude module: 'mockito-core'
+    }
+    instrumentTestCompile 'org.mockito:mockito-all:1.9.5'
+    instrumentTestCompile 'com.jayway.android.robotium:robotium-solo:4.3.1'
+}
+
+android.applicationVariants.all { variant ->
+    variant.javaCompile.doLast {
+        // Find the android.jar and add to iajc classpath
+        def androidSdk = android.adbExe.parent + "/../platforms/" + android.compileSdkVersion + "/android.jar"
+    }
 }
 
 android.applicationVariants.all { variant ->
