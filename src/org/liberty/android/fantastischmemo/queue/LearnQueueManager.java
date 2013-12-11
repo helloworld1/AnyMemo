@@ -25,9 +25,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
+import java.util.Queue;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
@@ -37,6 +36,7 @@ import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
+import org.liberty.android.fantastischmemo.utils.SynchronizedLinkedHashQueue;
 
 import roboguice.util.Ln;
 
@@ -54,7 +54,7 @@ public class LearnQueueManager implements QueueManager {
     private List<Card> learnQueue;
     private List<Card> newCache;
     private List<Card> reviewCache;
-    private Set<Card> dirtyCache;
+    private Queue<Card> dirtyCache;
 
     private int learnQueueSize;
 
@@ -82,7 +82,7 @@ public class LearnQueueManager implements QueueManager {
 
         // Make sure the dirtyCache is thread safe because multiple threads will access
         // the set
-        dirtyCache = Collections.newSetFromMap(new ConcurrentHashMap<Card, Boolean>());
+        dirtyCache = new SynchronizedLinkedHashQueue<Card>();
     }
 
 	@Override
@@ -242,8 +242,8 @@ public class LearnQueueManager implements QueueManager {
                         new Callable<Void>() {
                             public Void call() throws Exception {
                                 Ln.i("Flushing dirty cache. # of cards to flush: " + dirtyCache.size());
-                                for (Card card : dirtyCache) {
-                                    dirtyCache.remove(card);
+                                while (!dirtyCache.isEmpty()) {
+                                    Card card = dirtyCache.remove();
                                     Ln.i("Flushing card id: " + card.getId() + " with learning data: " + card.getLearningData());
                                     if (learningDataDao.update(card.getLearningData()) == 0) {
                                         Ln.w("LearningDataDao update failed for : " + card.getLearningData());
