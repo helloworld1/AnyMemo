@@ -37,9 +37,11 @@ public class AMApplication extends Application {
 
     private static final String TAG = "AMApplication";
 
-    private static Context currentApplicationContext;
+    private static Context currentApplicationContext = null;
 
     public static Context getCurrentApplicationContext() {
+        assert currentApplicationContext != null : "Null application context!";
+
         return currentApplicationContext;
     }
 
