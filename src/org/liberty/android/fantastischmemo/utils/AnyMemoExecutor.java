@@ -42,13 +42,14 @@ public class AnyMemoExecutor {
     public static synchronized void waitTask(Future<?> f) {
         try {
             f.get();
-            futures.remove(f);
         } catch (InterruptedException e){
             Ln.e(e);
             assert false : "Encounter exception when waiting task";
         } catch (ExecutionException e) {
             Ln.e(e);
             assert false : "Encounter exception when waiting task";
+        } finally {
+            futures.remove(f);
         }
     }
 
@@ -58,13 +59,14 @@ public class AnyMemoExecutor {
             Future<?> f = fi.next();
             try {
                 f.get();
-                fi.remove();
             } catch (InterruptedException e) {
                 Ln.e(e);
                 assert false : "Encounter exception when waiting task";
             } catch (ExecutionException e) {
                 Ln.e(e);
                 assert false : "Encounter exception when waiting task";
+            } finally {
+                fi.remove();
             }
         }
         assert futures.isEmpty() == true : "After waiting all futures, the future list shoudl be empty";

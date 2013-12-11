@@ -25,8 +25,9 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
@@ -36,10 +37,8 @@ import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
-import org.liberty.android.fantastischmemo.utils.SynchronizedLinkedHashQueue;
 
 import roboguice.util.Ln;
-
 import android.content.Context;
 
 public class LearnQueueManager implements QueueManager {
@@ -54,7 +53,7 @@ public class LearnQueueManager implements QueueManager {
     private List<Card> learnQueue;
     private List<Card> newCache;
     private List<Card> reviewCache;
-    private Queue<Card> dirtyCache;
+    private BlockingQueue<Card> dirtyCache;
 
     private int learnQueueSize;
 
@@ -75,18 +74,17 @@ public class LearnQueueManager implements QueueManager {
         this.context = builder.context;
         this.dbPath = builder.dbPath;
 
-
         learnQueue = Collections.synchronizedList(new LinkedList<Card>());
         newCache = Collections.synchronizedList(new LinkedList<Card>());
         reviewCache = Collections.synchronizedList(new LinkedList<Card>());
 
         // Make sure the dirtyCache is thread safe because multiple threads will access
         // the set
-        dirtyCache = new SynchronizedLinkedHashQueue<Card>();
+        dirtyCache = new LinkedBlockingQueue<Card>();
     }
 
-	@Override
-	public synchronized Card dequeue() {
+    @Override
+    public synchronized Card dequeue() {
         shuffle();
         if (!learnQueue.isEmpty()) {
             Card c = learnQueue.get(0);
@@ -95,13 +93,13 @@ public class LearnQueueManager implements QueueManager {
         } else {
             return null;
         }
-	}
+    }
 
-	@Override
-	public synchronized Card dequeuePosition(int cardId) {
-		position(cardId);
+    @Override
+    public synchronized Card dequeuePosition(int cardId) {
+        position(cardId);
 
-		if (!learnQueue.isEmpty()) {
+        if (!learnQueue.isEmpty()) {
             Card c = learnQueue.get(0);
             Ln.d("Dequeue card: " + c.getId());
             return c;
@@ -109,40 +107,44 @@ public class LearnQueueManager implements QueueManager {
             return null;
         }
 
-	}
+    }
 
-	@Override
-	public synchronized void remove(Card card) {
+    @Override
+    public synchronized void remove(Card card) {
         learnQueue.remove(card);
         reviewCache.remove(card);
         newCache.remove(card);
-	}
+    }
 
-	@Override
-	public synchronized void release() {
+    @Override
+    public synchronized void release() {
         // Make sure the cache is flushed.
         flushDirtyCache();
         AnyMemoExecutor.waitAllTasks();
-	}
+    }
 
     private synchronized void refill() {
-        final AnyMemoDBOpenHelper dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(context, dbPath);
+        final AnyMemoDBOpenHelper dbOpenHelper = AnyMemoDBOpenHelperManager
+                .getHelper(context, dbPath);
         final CardDao cardDao = dbOpenHelper.getCardDao();
         dumpLearnQueue();
-        List<Card> exclusionList = new ArrayList<Card>(learnQueue.size() + dirtyCache.size());
+        List<Card> exclusionList = new ArrayList<Card>(learnQueue.size()
+                + dirtyCache.size());
         exclusionList.addAll(learnQueue);
         exclusionList.addAll(dirtyCache);
 
         try {
             if (newCache.size() == 0) {
-                List<Card> cs = cardDao.getNewCards(filterCategory, exclusionList, cacheSize);
+                List<Card> cs = cardDao.getNewCards(filterCategory,
+                        exclusionList, cacheSize);
                 if (cs.size() > 0) {
                     newCache.addAll(cs);
                 }
             }
 
             if (reviewCache.size() == 0) {
-                List<Card> cs = cardDao.getCardsForReview(filterCategory, exclusionList, cacheSize);
+                List<Card> cs = cardDao.getCardsForReview(filterCategory,
+                        exclusionList, cacheSize);
                 if (cs.size() > 0) {
                     reviewCache.addAll(cs);
                 }
@@ -164,16 +166,16 @@ public class LearnQueueManager implements QueueManager {
     }
 
     private synchronized void shuffle() {
-    	// Shuffle all the caches
-    	if (shuffle) {
-    		Collections.shuffle(newCache);
-    		Collections.shuffle(reviewCache);
-    		Collections.shuffle(learnQueue);
-    	}
+        // Shuffle all the caches
+        if (shuffle) {
+            Collections.shuffle(newCache);
+            Collections.shuffle(reviewCache);
+            Collections.shuffle(learnQueue);
+        }
     }
 
-	@Override
-	public synchronized void update(Card card) {
+    @Override
+    public synchronized void update(Card card) {
         // Make sure to remove the stale cache first.
         // Set.add(Object) will not overwrite object.
         remove(card);
@@ -181,9 +183,14 @@ public class LearnQueueManager implements QueueManager {
             // Add to the back of the queue
             learnQueue.add(card);
         }
-        dirtyCache.add(card);
+        try {
+            dirtyCache.put(card);
+        } catch (InterruptedException e) {
+            Ln.e(e, "Updating card is interrupted");
+            assert false : "The update should not be interrupted";
+        }
         refill();
-	}
+    }
 
     private synchronized void position(int cardId) {
         Iterator<Card> learnIterator= learnQueue.iterator();
@@ -243,26 +250,21 @@ public class LearnQueueManager implements QueueManager {
                             public Void call() throws Exception {
                                 Ln.i("Flushing dirty cache. # of cards to flush: " + dirtyCache.size());
                                 while (!dirtyCache.isEmpty()) {
-                                    Card card = dirtyCache.remove();
+                                    Card card = dirtyCache.take();
                                     Ln.i("Flushing card id: " + card.getId() + " with learning data: " + card.getLearningData());
                                     if (learningDataDao.update(card.getLearningData()) == 0) {
                                         Ln.w("LearningDataDao update failed for : " + card.getLearningData());
-                                        // assert false : "LearnignDataDao update failed!";
-                                        throw new RuntimeException("LearningDataDao update failed!");
+                                        throw new RuntimeException("LearningDataDao update failed! LearningData to update: " + card.getLearningData() + " current value: " + learningDataDao.queryForId(card.getLearningData().getId()));
                                     }
                                     if (cardDao.update(card) == 0) {
                                         Ln.w("CardDao update failed for : " + card.getLearningData());
-                                        // assert false : "CardDao update failed.";
-                                        throw new RuntimeException("CardDao update failed.");
+                                        throw new RuntimeException("CardDao update failed. Card to update: " + card);
                                     }
                                 }
                                 Ln.i("Flushing dirty cache done.");
                                 return null;
                             }
                         });
-                } catch (Exception e) {
-                    Ln.e(e, "Error encounter when flushing: ");
-                    throw new RuntimeException("Queue flushing get exception!", e);
                 } finally {
                     AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
                 }
@@ -278,11 +280,11 @@ public class LearnQueueManager implements QueueManager {
         }
         sb.append("]\n");
 
-        sb.append("LearnQueue: card learning data[");
-        for (Card c : learnQueue) {
-            sb.append("" + c.getLearningData() + "\n ");
-        }
-        sb.append("]\n");
+        // sb.append("LearnQueue: card learning data[");
+        // for (Card c : learnQueue) {
+        //     sb.append("" + c.getLearningData() + "\n ");
+        // }
+        // sb.append("]\n");
 
         sb.append("Dirty cache: card ids[");
         for (Card c : dirtyCache) {
@@ -290,11 +292,11 @@ public class LearnQueueManager implements QueueManager {
         }
         sb.append("]\n");
 
-        sb.append("Dirty cache: card learning data[");
-        for (Card c : dirtyCache) {
-            sb.append("" + c.getLearningData() + "\n ");
-        }
-        sb.append("]\n");
+        // sb.append("Dirty cache: card learning data[");
+        // for (Card c : dirtyCache) {
+        //     sb.append("" + c.getLearningData() + "\n ");
+        // }
+        // sb.append("]\n");
         Ln.v(sb.toString());
     }
 
@@ -323,18 +325,18 @@ public class LearnQueueManager implements QueueManager {
             return this;
         }
 
-		public Builder setFilterCategory(Category filterCategory) {
-			this.filterCategory = filterCategory;
+        public Builder setFilterCategory(Category filterCategory) {
+            this.filterCategory = filterCategory;
             return this;
-		}
-		public Builder setLearnQueueSize(int learnQueueSize) {
-			this.learnQueueSize = learnQueueSize;
+        }
+        public Builder setLearnQueueSize(int learnQueueSize) {
+            this.learnQueueSize = learnQueueSize;
             return this;
-		}
-		public Builder setCacheSize(int cacheSize) {
-			this.cacheSize = cacheSize;
+        }
+        public Builder setCacheSize(int cacheSize) {
+            this.cacheSize = cacheSize;
             return this;
-		}
+        }
         public Builder setShuffle(boolean shuffle) {
             this.shuffle = shuffle;
             return this;

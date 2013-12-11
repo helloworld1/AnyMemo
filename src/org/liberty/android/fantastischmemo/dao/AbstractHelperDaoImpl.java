@@ -1,6 +1,7 @@
 package org.liberty.android.fantastischmemo.dao;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -98,6 +99,7 @@ public abstract class AbstractHelperDaoImpl<E, T> extends BaseDaoImpl<E, T> {
     @Override
     public int update(E domain) {
         try {
+            Ln.i("[ " + new Date() + " ] Updating domain obj: "  + domain);
             return super.update(domain);
         } catch (SQLException e) {
             Ln.e(e);
