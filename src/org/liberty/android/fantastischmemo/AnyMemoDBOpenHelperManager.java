@@ -23,6 +23,13 @@ public class AnyMemoDBOpenHelperManager {
     /* Used to synchronize different method, i. e. creating and releasing helper. */
     private static volatile ReentrantLock bigLock = new ReentrantLock();
 
+    /**
+     * Get a DBOpenHelper with application context.
+     */
+    public static AnyMemoDBOpenHelper getHelper(String dbpath) {
+        return getHelper(AMApplication.getCurrentApplicationContext(), dbpath);
+    }
+
     /* Get a db open helper and return a cached one if it was called before for the same db */
     public static AnyMemoDBOpenHelper getHelper(Context context, String dbpath) {
         bigLock.lock();

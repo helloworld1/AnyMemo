@@ -243,6 +243,7 @@ public class LearnQueueManager implements QueueManager {
                             public Void call() throws Exception {
                                 Ln.i("Flushing dirty cache. # of cards to flush: " + dirtyCache.size());
                                 for (Card card : dirtyCache) {
+                                    dirtyCache.remove(card);
                                     Ln.i("Flushing card id: " + card.getId() + " with learning data: " + card.getLearningData());
                                     if (learningDataDao.update(card.getLearningData()) == 0) {
                                         Ln.w("LearningDataDao update failed for : " + card.getLearningData());
@@ -254,10 +255,9 @@ public class LearnQueueManager implements QueueManager {
                                         // assert false : "CardDao update failed.";
                                         throw new RuntimeException("CardDao update failed.");
                                     }
-                                    dirtyCache.remove(card);
                                 }
                                 Ln.i("Flushing dirty cache done.");
-                               return null;
+                                return null;
                             }
                         });
                 } catch (Exception e) {
