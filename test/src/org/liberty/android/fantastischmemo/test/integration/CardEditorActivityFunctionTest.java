@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
+import android.widget.EditText;
 
 import com.jayway.android.robotium.solo.Solo;
 
@@ -50,9 +51,10 @@ public class CardEditorActivityFunctionTest extends ActivityInstrumentationTestC
         solo.clickOnView(categoryButton);
         // First enter and create a category
         solo.waitForText(solo.getString(R.string.category_dialog_title));
-        solo.clearEditText(0);
         solo.sleep(300);
-        solo.enterText(0, "mycategory");
+        solo.clearEditText((EditText) solo.getView(R.id.category_dialog_edit));
+        solo.sleep(300);
+        solo.enterText((EditText) solo.getView(R.id.category_dialog_edit), "mycategory");
         solo.sleep(300);
         solo.clickOnText(solo.getString(R.string.new_text));
         solo.sleep(300);
