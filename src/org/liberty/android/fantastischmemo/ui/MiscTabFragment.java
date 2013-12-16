@@ -361,8 +361,5 @@ public class MiscTabFragment extends RoboFragment implements View.OnClickListene
                 })
                 .show();
         }
-
     }
-
-
 }

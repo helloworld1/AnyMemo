@@ -28,8 +28,6 @@ import java.lang.annotation.Target;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.dao.CardDao;
@@ -48,7 +46,10 @@ public class CSVImporter implements Converter {
     /* Null is for default separator "," */
     private Character separator = null;
 
-    @Inject
+    public CSVImporter() {
+        separator = ',';
+    }
+
     public CSVImporter(Character separator) {
         this.separator = separator;
     }

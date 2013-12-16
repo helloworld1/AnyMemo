@@ -19,13 +19,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.service;
 
+import javax.inject.Inject;
+
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.converter.Converter;
 import org.liberty.android.fantastischmemo.ui.AnyMemo;
-
 import org.liberty.android.fantastischmemo.ui.PreviewEditActivity;
+import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 import roboguice.RoboGuice;
 import roboguice.service.RoboIntentService;
@@ -51,8 +53,15 @@ public class ConvertIntentService extends RoboIntentService {
 
     private NotificationManager notificationManager;
 
+    private RecentListUtil recentListUtil;
+
     public ConvertIntentService() {
         super(ConvertIntentService.class.getName());
+    }
+
+    @Inject
+    public void setRecentListUtil(RecentListUtil recentListUtil) {
+        this.recentListUtil = recentListUtil;
     }
 
     @Override
@@ -126,6 +135,9 @@ public class ConvertIntentService extends RoboIntentService {
         if (FilenameUtils.getExtension(outputFilePath).toLowerCase().equals("db")) {
             resultIntent = new Intent(this, PreviewEditActivity.class);
             resultIntent.putExtra(PreviewEditActivity.EXTRA_DBPATH, outputFilePath);
+
+            // Add to recent list util if it is a db
+            recentListUtil.addToRecentList(outputFilePath);
 
         } else {
             // For other files, open it in AnyMemo main activity

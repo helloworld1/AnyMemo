@@ -46,7 +46,6 @@ import org.liberty.android.fantastischmemo.utils.CardTTSUtilFactory;
 import org.liberty.android.fantastischmemo.utils.CardTextUtilFactory;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 
 /* Define the moduled used in Guice dependency injection. */
@@ -92,6 +91,14 @@ public class AMModules extends AbstractModule {
 
         bind(Converter.class).annotatedWith(QATxtImporter.Type.class).to(QATxtImporter.class);
 
+        bind(Converter.class).annotatedWith(CSVExporter.Type.class).to(CSVExporter.class);
+
+        bind(Converter.class).annotatedWith(CSVImporter.Type.class).to(CSVImporter.class);
+
+        bind(Converter.class).annotatedWith(TabTxtExporter.Type.class).to(TabTxtExporter.class);
+
+        bind(Converter.class).annotatedWith(TabTxtImporter.Type.class).to(TabTxtImporter.class);
+
         bind(Converter.class).annotatedWith(Supermemo2008XMLImporter.Type.class).to(Supermemo2008XMLImporter.class);
 
         bind(Converter.class).annotatedWith(SupermemoXMLImporter.Type.class).to(SupermemoXMLImporter.class);
@@ -99,31 +106,6 @@ public class AMModules extends AbstractModule {
         bind(Converter.class).annotatedWith(ZipExporter.Type.class).to(ZipExporter.class);
 
         bind(Converter.class).annotatedWith(ZipImporter.Type.class).to(ZipImporter.class);
-
-    }
-
-    @Provides
-    @CSVExporter.Type
-    Converter provideCSVExporter() {
-        return new CSVExporter(',');
-    }
-
-    @Provides
-    @CSVImporter.Type
-    Converter provideCSVImprter() {
-        return new CSVImporter(',');
-    }
-
-    @Provides
-    @TabTxtExporter.Type
-    Converter provideTabTxtExporter() {
-        return new TabTxtExporter('\t');
-    }
-
-    @Provides
-    @TabTxtImporter.Type
-    Converter provideTabTxtImprter() {
-        return new TabTxtImporter('\t');
     }
 }
 

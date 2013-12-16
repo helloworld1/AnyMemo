@@ -46,6 +46,10 @@ public class CSVExporter implements Converter {
     /* Null is for default separator "," */
     private Character separator = null;
 
+    public CSVExporter() {
+        separator = ',';
+    }
+
     public CSVExporter(char separator) {
         this.separator = separator;
     }

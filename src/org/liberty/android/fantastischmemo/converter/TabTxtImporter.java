@@ -25,17 +25,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import javax.inject.Inject;
-
 import com.google.inject.BindingAnnotation;
 
 public class TabTxtImporter extends CSVImporter {
 
     private static final long serialVersionUID = 3482178789406005987L;
 
-    @Inject
-    public TabTxtImporter(Character character) {
-        super(character);
+    public TabTxtImporter() {
+        super('\t');
     }
 
     @Override

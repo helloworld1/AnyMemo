@@ -25,17 +25,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import javax.inject.Inject;
-
 import com.google.inject.BindingAnnotation;
 
 public class TabTxtExporter extends CSVExporter {
 
     private static final long serialVersionUID = 6409640721615190795L;
 
-    @Inject
-    public TabTxtExporter(Character separator) {
-        super(separator);
+    public TabTxtExporter() {
+        super('\t');
     }
 
     @Override
