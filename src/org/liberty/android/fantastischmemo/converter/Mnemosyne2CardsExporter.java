@@ -59,22 +59,13 @@ import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.AMStringUtils;
 import org.liberty.android.fantastischmemo.utils.AMZipUtils;
 
-import android.content.Context;
-
 import com.google.inject.BindingAnnotation;
 
 public class Mnemosyne2CardsExporter implements Converter {
 
     private static final long serialVersionUID = -8315483384166979473L;
 
-    private Context mContext;
-
     private AMFileUtil amFileUtil;
-
-    @Inject
-    public Mnemosyne2CardsExporter(Context context) {
-        mContext = context;
-    }
 
     @Inject
     public void setAmFileUtil(AMFileUtil amFileUtil) {
@@ -130,15 +121,13 @@ public class Mnemosyne2CardsExporter implements Converter {
         } finally {
             FileUtils.deleteDirectory(tmpDirectory);
         }
-
-
     }
 
     private void createXMLFile(String dbPath, File xmlFile) throws IOException {
         AnyMemoDBOpenHelper helper = null;
         PrintWriter outXml = null;
         try {
-            helper = AnyMemoDBOpenHelperManager.getHelper(mContext, dbPath);
+            helper = AnyMemoDBOpenHelperManager.getHelper(dbPath);
             CardDao cardDao = helper.getCardDao();
             CategoryDao categoryDao = helper.getCategoryDao();
             LearningDataDao learningDataDao = helper.getLearningDataDao();

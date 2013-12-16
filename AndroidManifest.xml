@@ -91,9 +91,21 @@
             android:name=".ui.StatisticsScreen"
             android:configChanges="orientation|keyboardHidden" />
         <activity 
-            android:name=".ui.StudyActivity" />
+            android:name=".ui.StudyActivity"
+            android:parentActivityName=".ui.AnyMemo">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.AnyMemo" />
+        </activity>
+
         <activity 
-            android:name=".ui.PreviewEditActivity" />
+            android:name=".ui.PreviewEditActivity"
+            android:parentActivityName=".ui.AnyMemo">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.AnyMemo" />
+        </activity>
+
         <activity 
             android:name=".ui.QuizActivity" />
         <activity 
@@ -138,9 +150,10 @@
         </activity>
         <service
             android:name="org.liberty.android.fantastischmemo.service.AnyMemoService" />
-
         <service
             android:name=".service.CardPlayerService" />
+        <service
+            android:name="org.liberty.android.fantastischmemo.service.ConvertIntentService" />
 
         <provider
                 android:name=".provider.CardProvider"

@@ -29,15 +29,11 @@ import java.lang.annotation.Target;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import javax.inject.Inject;
-
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.domain.Card;
-
-import android.content.Context;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
@@ -47,26 +43,18 @@ public class CSVExporter implements Converter {
 
     private static final long serialVersionUID = 1766409315203795426L;
 
-    private Context mContext;
-
     /* Null is for default separator "," */
     private Character separator = null;
 
-    @Inject
-    public CSVExporter(Context context){
-        mContext = context;
-    }
-
-    public CSVExporter(Context context, char separator) {
-        mContext = context;
+    public CSVExporter(char separator) {
         this.separator = separator;
     }
 
     @Override
-    public void convert(String src, String dest) throws Exception{
+    public void convert(String src, String dest) throws Exception {
         new File(dest).delete();
 
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, src);
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(src);
         final CardDao cardDao = helper.getCardDao();
         final CategoryDao categoryDao = helper.getCategoryDao();
 
@@ -93,7 +81,7 @@ public class CSVExporter implements Converter {
                 throw new IOException("Can't retrieve cards for database: " + src);
             }
             String[] entries = new String[4];
-            for(Card card: cardList){
+            for(Card card: cardList) {
                 entries[0] = card.getQuestion();
                 entries[1] = card.getAnswer();
                 entries[2] = card.getCategory().getName();

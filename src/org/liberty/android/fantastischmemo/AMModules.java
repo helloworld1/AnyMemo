@@ -45,8 +45,6 @@ import org.liberty.android.fantastischmemo.ui.CardImageGetterFactory;
 import org.liberty.android.fantastischmemo.utils.CardTTSUtilFactory;
 import org.liberty.android.fantastischmemo.utils.CardTextUtilFactory;
 
-import android.content.Context;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
@@ -106,26 +104,26 @@ public class AMModules extends AbstractModule {
 
     @Provides
     @CSVExporter.Type
-    Converter provideCSVExporter(Context context) {
-        return new CSVExporter(context, ',');
+    Converter provideCSVExporter() {
+        return new CSVExporter(',');
     }
 
     @Provides
     @CSVImporter.Type
-    Converter provideCSVImprter(Context context) {
-        return new CSVImporter(context, ',');
+    Converter provideCSVImprter() {
+        return new CSVImporter(',');
     }
 
     @Provides
     @TabTxtExporter.Type
-    Converter provideTabTxtExporter(Context context) {
-        return new TabTxtExporter(context, '\t');
+    Converter provideTabTxtExporter() {
+        return new TabTxtExporter('\t');
     }
 
     @Provides
     @TabTxtImporter.Type
-    Converter provideTabTxtImprter(Context context) {
-        return new TabTxtImporter(context, '\t');
+    Converter provideTabTxtImprter() {
+        return new TabTxtImporter('\t');
     }
 }
 

@@ -19,13 +19,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import javax.inject.Inject;
-
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.converter.CSVExporter;
 import org.liberty.android.fantastischmemo.converter.CSVImporter;
-import org.liberty.android.fantastischmemo.converter.Converter;
 import org.liberty.android.fantastischmemo.converter.Mnemosyne2CardsExporter;
 import org.liberty.android.fantastischmemo.converter.Mnemosyne2CardsImporter;
 import org.liberty.android.fantastischmemo.converter.MnemosyneXMLExporter;
@@ -87,105 +84,6 @@ public class MiscTabFragment extends RoboFragment implements View.OnClickListene
     private View donateButton;
     private View helpButton;
     private View aboutButton;
-
-    private Converter csvExporter;
-
-    private Converter csvImporter;
-
-    private Converter mnemosyne2CardsExporter;
-
-    private Converter mnemosyne2CardsImporter;
-
-    private Converter mnemosyneXMLExporter;
-
-    private Converter mnemosyneXMLImporter;
-
-    private Converter qaTxtExporter;
-
-    private Converter qaTxtImporter;
-
-    private Converter supermemo2008XMLImporter;
-
-    private Converter supermemoXMLImporter;
-
-    private Converter tabTxtExporter;
-
-    private Converter tabTxtImporter;
-
-    private Converter zipExporter;
-
-    private Converter zipImporter;
-
-    @Inject
-    public void setCsvExporter(@CSVExporter.Type Converter csvExporter) {
-        this.csvExporter = csvExporter;
-    }
-
-    @Inject
-    public void setCsvImporter(@CSVImporter.Type Converter csvImporter) {
-        this.csvImporter = csvImporter;
-    }
-
-    @Inject
-    public void setMnemosyne2CardsExporter(@Mnemosyne2CardsExporter.Type Converter mnemosyne2CardsExporter) {
-        this.mnemosyne2CardsExporter = mnemosyne2CardsExporter;
-    }
-
-    @Inject
-    public void setMnemosyne2CardsImporter(@Mnemosyne2CardsImporter.Type Converter mnemosyne2CardsImporter) {
-        this.mnemosyne2CardsImporter = mnemosyne2CardsImporter;
-    }
-
-    @Inject
-    public void setMnemosyneXMLExporter(@MnemosyneXMLExporter.Type Converter mnemosyneXMLExporter) {
-        this.mnemosyneXMLExporter = mnemosyneXMLExporter;
-    }
-
-    @Inject
-    public void setMnemosyneXMLImporter(@MnemosyneXMLImporter.Type Converter mnemosyneXMLImporter) {
-        this.mnemosyneXMLImporter = mnemosyneXMLImporter;
-    }
-
-    @Inject
-    public void setQaTxtExporter(@QATxtExporter.Type Converter qaTxtExporter) {
-        this.qaTxtExporter = qaTxtExporter;
-    }
-
-    @Inject
-    public void setQaTxtImporter(@QATxtImporter.Type Converter qaTxtImporter) {
-        this.qaTxtImporter = qaTxtImporter;
-    }
-
-    @Inject
-    public void setSupermemo2008XMLImporter(@Supermemo2008XMLImporter.Type Converter supermemo2008xmlImporter) {
-        supermemo2008XMLImporter = supermemo2008xmlImporter;
-    }
-
-    @Inject
-    public void setSupermemoXMLImporter(@SupermemoXMLImporter.Type Converter supermemoXMLImporter) {
-        this.supermemoXMLImporter = supermemoXMLImporter;
-    }
-
-    @Inject
-    public void setTabTxtExporter(@TabTxtExporter.Type Converter tabTxtExporter) {
-        this.tabTxtExporter = tabTxtExporter;
-    }
-
-    @Inject
-    public void setTabTxtImporter(@TabTxtImporter.Type Converter tabTxtImporter) {
-        this.tabTxtImporter = tabTxtImporter;
-    }
-
-    @Inject
-    public void setZipExporter(@ZipExporter.Type Converter zipExporter) {
-        this.zipExporter = zipExporter;
-    }
-
-    @Inject
-    public void setZipImporter(@ZipImporter.Type Converter zipImporter) {
-        this.zipImporter = zipImporter;
-    }
-
 
     @Override
     public void onAttach(Activity activity) {
@@ -276,7 +174,7 @@ public class MiscTabFragment extends RoboFragment implements View.OnClickListene
         if(v == importMnemosyneButton){
             DialogFragment df = new ConverterFragment();
             Bundle b = new Bundle();
-            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, mnemosyneXMLImporter);
+            b.putSerializable(ConverterFragment.EXTRA_CONVERTER_CLASS, MnemosyneXMLImporter.class);
             b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".xml");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportMnemosyne");
@@ -284,7 +182,7 @@ public class MiscTabFragment extends RoboFragment implements View.OnClickListene
         if(v == importSupermemoButton){
             DialogFragment df = new ConverterFragment();
             Bundle b = new Bundle();
-            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, supermemoXMLImporter);
+            b.putSerializable(ConverterFragment.EXTRA_CONVERTER_CLASS, SupermemoXMLImporter.class);
             b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".xml");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportSuperMemo2008");
@@ -292,7 +190,7 @@ public class MiscTabFragment extends RoboFragment implements View.OnClickListene
         if(v == importCSVButton) {
             DialogFragment df = new ConverterFragment();
             Bundle b = new Bundle();
-            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, csvImporter);
+            b.putSerializable(ConverterFragment.EXTRA_CONVERTER_CLASS, CSVImporter.class);
             b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".csv");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportCSV");
@@ -300,7 +198,7 @@ public class MiscTabFragment extends RoboFragment implements View.OnClickListene
         if(v == importZipButton) {
             DialogFragment df = new ConverterFragment();
             Bundle b = new Bundle();
-            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, zipImporter);
+            b.putSerializable(ConverterFragment.EXTRA_CONVERTER_CLASS, ZipImporter.class);
             b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".zip");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportZip");
@@ -308,7 +206,7 @@ public class MiscTabFragment extends RoboFragment implements View.OnClickListene
         if(v == importTabButton){
             DialogFragment df = new ConverterFragment();
             Bundle b = new Bundle();
-            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, tabTxtImporter);
+            b.putSerializable(ConverterFragment.EXTRA_CONVERTER_CLASS, TabTxtImporter.class);
             b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".txt");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportTabTxt");
@@ -316,7 +214,7 @@ public class MiscTabFragment extends RoboFragment implements View.OnClickListene
         if(v == importQAButton){
             DialogFragment df = new ConverterFragment();
             Bundle b = new Bundle();
-            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, qaTxtImporter);
+            b.putSerializable(ConverterFragment.EXTRA_CONVERTER_CLASS, QATxtImporter.class);
             b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".txt");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportCSV");
@@ -324,7 +222,7 @@ public class MiscTabFragment extends RoboFragment implements View.OnClickListene
         if(v == importSupermemo2008Button) {
             DialogFragment df = new ConverterFragment();
             Bundle b = new Bundle();
-            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, supermemo2008XMLImporter);
+            b.putSerializable(ConverterFragment.EXTRA_CONVERTER_CLASS, Supermemo2008XMLImporter.class);
             b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".xml");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportSuperMemo2008");
@@ -332,7 +230,7 @@ public class MiscTabFragment extends RoboFragment implements View.OnClickListene
         if(v == importMnemosyne2CardsButton) {
             DialogFragment df = new ConverterFragment();
             Bundle b = new Bundle();
-            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, mnemosyne2CardsImporter);
+            b.putSerializable(ConverterFragment.EXTRA_CONVERTER_CLASS, Mnemosyne2CardsImporter.class);
             b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".cards");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportMnemosyne2Cards");
@@ -340,7 +238,7 @@ public class MiscTabFragment extends RoboFragment implements View.OnClickListene
         if(v == exportMnemosyneButton){
             DialogFragment df = new ConverterFragment();
             Bundle b = new Bundle();
-            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, mnemosyneXMLExporter);
+            b.putSerializable(ConverterFragment.EXTRA_CONVERTER_CLASS, MnemosyneXMLExporter.class);
             b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".db");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ExportMnemosyne");
@@ -348,7 +246,7 @@ public class MiscTabFragment extends RoboFragment implements View.OnClickListene
         if(v == exportCSVButton){
             DialogFragment df = new ConverterFragment();
             Bundle b = new Bundle();
-            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, csvExporter);
+            b.putSerializable(ConverterFragment.EXTRA_CONVERTER_CLASS, CSVExporter.class);
             b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".db");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ExportCSV");
@@ -356,7 +254,7 @@ public class MiscTabFragment extends RoboFragment implements View.OnClickListene
         if(v == exportTabButton){
             DialogFragment df = new ConverterFragment();
             Bundle b = new Bundle();
-            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, tabTxtExporter);
+            b.putSerializable(ConverterFragment.EXTRA_CONVERTER_CLASS, TabTxtExporter.class);
             b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".db");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ExportTabTxt");
@@ -364,7 +262,7 @@ public class MiscTabFragment extends RoboFragment implements View.OnClickListene
         if(v == exportQAButton){
             DialogFragment df = new ConverterFragment();
             Bundle b = new Bundle();
-            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, qaTxtExporter);
+            b.putSerializable(ConverterFragment.EXTRA_CONVERTER_CLASS, QATxtExporter.class);
             b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".db");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ExportQA");
@@ -372,7 +270,7 @@ public class MiscTabFragment extends RoboFragment implements View.OnClickListene
         if(v == exportZipButton) {
             DialogFragment df = new ConverterFragment();
             Bundle b = new Bundle();
-            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, zipExporter);
+            b.putSerializable(ConverterFragment.EXTRA_CONVERTER_CLASS, ZipExporter.class);
             b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".db");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ExportZip");
@@ -380,7 +278,7 @@ public class MiscTabFragment extends RoboFragment implements View.OnClickListene
         if(v == exportMnemosyne2CardsButton) {
             DialogFragment df = new ConverterFragment();
             Bundle b = new Bundle();
-            b.putSerializable(ConverterFragment.EXTRA_CONVERTER, mnemosyne2CardsExporter);
+            b.putSerializable(ConverterFragment.EXTRA_CONVERTER_CLASS, Mnemosyne2CardsExporter.class);
             b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".db");
             df.setArguments(b);
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ExportMnemosyne2Cards");

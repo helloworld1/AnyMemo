@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.converter;
 
 import java.io.File;
+import java.io.Serializable;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -45,12 +46,11 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.google.inject.BindingAnnotation;
 
-public class MnemosyneXMLImporter extends org.xml.sax.helpers.DefaultHandler implements Converter{
+public class MnemosyneXMLImporter extends org.xml.sax.helpers.DefaultHandler implements Converter, Serializable {
     private static final long serialVersionUID = -7871484468353131221L;
 
     private long timeOfStart = 0L;
@@ -60,14 +60,11 @@ public class MnemosyneXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
     private final long MILLSECS_PER_DAY = 24 * 60 * 60 * 1000;
 
     private StringBuffer characterBuf;
-    private Context mContext;
     private final String TAG = "org.liberty.android.fantastischmemo.MnemosyneXMLImporter";
     private Card card;
 
-
     @Inject
-    public MnemosyneXMLImporter(Context context){
-        mContext = context;
+    public MnemosyneXMLImporter(){
     }
 
     @Override
@@ -83,7 +80,7 @@ public class MnemosyneXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
         XMLReader xr = sp.getXMLReader();
         xr.setContentHandler(this);
         xr.parse(new InputSource(mXMLUrl.openStream()));
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, dest);
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(dest);
         try {
             CardDao cardDao = helper.getCardDao();
             cardDao.createCards(cardList);

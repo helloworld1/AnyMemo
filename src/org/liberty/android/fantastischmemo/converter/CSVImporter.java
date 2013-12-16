@@ -37,32 +37,25 @@ import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 
-import android.content.Context;
-
 import au.com.bytecode.opencsv.CSVReader;
 
 import com.google.inject.BindingAnnotation;
 
 public class CSVImporter implements Converter {
-    /**
-     *
-     */
-    private static final long serialVersionUID = 234745119864085982L;
 
-    private Context mContext;
+    private static final long serialVersionUID = 234745119864085982L;
 
     /* Null is for default separator "," */
     private Character separator = null;
 
     @Inject
-    public CSVImporter(Context context, Character separator) {
-        mContext = context;
+    public CSVImporter(Character separator) {
         this.separator = separator;
     }
 
     public void convert(String src, String dest) throws Exception {
         new File(dest).delete();
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, dest);
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(dest);
         CSVReader reader;
         if (separator == null) {
             reader = new CSVReader(new FileReader(src));

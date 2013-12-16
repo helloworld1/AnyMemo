@@ -30,7 +30,6 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.inject.Inject;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -68,11 +67,6 @@ public class SupermemoXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
 
     private StringBuffer characterBuf;
     private final String TAG = "org.liberty.android.fantastischmemo.SupermemoXMLConverter";
-
-    @Inject
-    public SupermemoXMLImporter(Context context){
-        mContext = context;
-    }
 
     @Override
     public void convert(String src, String dest) throws Exception{

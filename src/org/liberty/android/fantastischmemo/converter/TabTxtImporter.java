@@ -27,8 +27,6 @@ import java.lang.annotation.Target;
 
 import javax.inject.Inject;
 
-import android.content.Context;
-
 import com.google.inject.BindingAnnotation;
 
 public class TabTxtImporter extends CSVImporter {
@@ -36,8 +34,8 @@ public class TabTxtImporter extends CSVImporter {
     private static final long serialVersionUID = 3482178789406005987L;
 
     @Inject
-    public TabTxtImporter(Context context, Character character) {
-        super(context, character);
+    public TabTxtImporter(Character character) {
+        super(character);
     }
 
     @Override

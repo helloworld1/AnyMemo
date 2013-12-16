@@ -28,7 +28,6 @@ import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.inject.Inject;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -44,8 +43,6 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-import android.content.Context;
-
 import com.google.inject.BindingAnnotation;
 
 public class Supermemo2008XMLImporter extends org.xml.sax.helpers.DefaultHandler implements Converter{
@@ -53,17 +50,11 @@ public class Supermemo2008XMLImporter extends org.xml.sax.helpers.DefaultHandler
     private static final long serialVersionUID = 8285843731806571485L;
 
     public Locator mLocator;
-    private Context mContext;
     private List<Card> cardList;
     private Card card;
     private int count = 1;
 
     private StringBuffer characterBuf;
-
-    @Inject
-    public Supermemo2008XMLImporter(Context context){
-        mContext = context;
-    }
 
     @Override
     public void convert(String src, String dest) throws Exception{
@@ -81,7 +72,7 @@ public class Supermemo2008XMLImporter extends org.xml.sax.helpers.DefaultHandler
         xr.setContentHandler(this);
         xr.parse(new InputSource(mXMLUrl.openStream()));
 
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, dest);
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(dest);
         try {
             CardDao cardDao = helper.getCardDao();
             cardDao.createCards(cardList);

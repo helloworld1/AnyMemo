@@ -23,109 +23,52 @@ import java.io.File;
 
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.converter.Converter;
+import org.liberty.android.fantastischmemo.service.ConvertIntentService;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.widget.Toast;
 
 public class ConverterFragment extends FileBrowserFragment {
-    public static final String EXTRA_CONVERTER = "converterObject";
-    private Activity mActivity;
-    private Converter mConverter;
+    public static final String EXTRA_CONVERTER_CLASS = "converterClass";
 
-    private final static String TAG = "ConverterFragment";
+    private Class<Converter> converterClass;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mActivity = activity;
         setOnFileClickListener(fileClickListener);
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
 
         Bundle args = getArguments();
         assert args != null : "Null args in ConverterFragment";
 
-        mConverter = (Converter) args.getSerializable(EXTRA_CONVERTER);
-    }
-
-    /*
-     * input: paths[0]:src, path[1]:dest
-     * result: Error message
-     */
-    private class ConvertTask extends AsyncTask<String, Void, String> {
-        private ProgressDialog progressDialog;
-        private String src;
-        private String dest;
-
-        @Override
-        public void onPreExecute(){
-            super.onPreExecute();
-            progressDialog = new ProgressDialog(mActivity);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setTitle(getString(R.string.loading_please_wait));
-            progressDialog.setMessage(getString(R.string.loading_database));
-            progressDialog.setCancelable(true);
-            progressDialog.show();
-        }
-
-
-        /*
-         * The paths should be passed as 2 argument.
-         * paths[0] is the src, path[1] is the dest
-         */
-        @Override
-        public String doInBackground(String... paths){
-            try {
-                src = paths[0];
-                dest = paths[1];
-                mConverter.convert(src, dest);
-            } catch (Exception e) {
-                Log.e(TAG, "Error converting", e);
-                return e.toString();
-            }
-            return null;
-        }
-
-        @Override
-        public void onCancelled(){
-            return;
-        }
-
-        @Override
-        public void onPostExecute(String error){
-            super.onPostExecute(error);
-            progressDialog.dismiss();
-            dismiss();
-            if (error != null) {
-                new AlertDialog.Builder(mActivity)
-                    .setTitle(R.string.fail_import)
-                    .setMessage(mActivity.getString(R.string.exception_text) +": " + error)
-                    .setPositiveButton(mActivity.getString(R.string.ok_text), null)
-                    .show();
-
-            } else {
-                new AlertDialog.Builder(mActivity)
-                    .setTitle(R.string.success)
-                    .setMessage(mActivity.getString(R.string.convert_success) +": " + dest)
-                    .setPositiveButton(mActivity.getString(R.string.ok_text), null)
-                    .show();
-            }
-        }
+        converterClass = (Class<Converter>) args.getSerializable(EXTRA_CONVERTER_CLASS);
     }
 
     private FileBrowserFragment.OnFileClickListener fileClickListener
         = new FileBrowserFragment.OnFileClickListener() {
             public void onClick(File file) {
                 String fullpath = file.getAbsolutePath();
-                ConvertTask task = new ConvertTask();
-                task.execute(fullpath, fullpath + "." +  mConverter.getDestExtension());
+
+                Intent intent =  new Intent(getActivity(), ConvertIntentService.class);
+                intent.setAction(ConvertIntentService.ACTION_CONVERT);
+                Bundle b = new Bundle();
+                b.putSerializable(ConvertIntentService.EXTRA_CONVERTER_CLASS, converterClass);
+                b.putString(ConvertIntentService.EXTRA_INPUT_FILE_PATH, fullpath);
+                intent.putExtras(b);
+                getActivity().startService(intent);
+                Toast.makeText(getActivity(), R.string.conversion_started_text, Toast.LENGTH_SHORT)
+                    .show();
+                    
+                dismiss();
+
             }
         };
 }

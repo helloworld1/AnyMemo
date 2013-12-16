@@ -30,29 +30,20 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 
-import android.content.Context;
-
 import com.google.inject.BindingAnnotation;
 
 public class QATxtExporter implements Converter {
+
     private static final long serialVersionUID = -3390568891037351618L;
 
-    private Context mContext;
-
-    @Inject
-    public QATxtExporter(Context context){
-        mContext = context;
-    }
     public void convert(String src, String dest) throws Exception{
         new File(dest).delete();
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, src);
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(src);
         try {
             final CardDao cardDao = helper.getCardDao();
             PrintWriter outtxt = new PrintWriter(new BufferedWriter(new FileWriter(dest)));

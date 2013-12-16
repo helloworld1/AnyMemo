@@ -30,8 +30,6 @@ import java.lang.annotation.Target;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import javax.inject.Inject;
-
 import org.apache.commons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
@@ -41,29 +39,21 @@ import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 
-import android.content.Context;
-
 import com.google.inject.BindingAnnotation;
 
 public class MnemosyneXMLExporter implements Converter {
 
     private static final long serialVersionUID = -7419489770698078017L;
 
-    private Context mContext;
-
-    @Inject
-    public MnemosyneXMLExporter(Context context){
-        mContext = context;
-    }
-
     public void convert(String src, String dest) throws Exception {
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, src);
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(src);
         String dbName = FilenameUtils.getName(dest);
         PrintWriter outxml = null;
         try {
             final CardDao cardDao = helper.getCardDao();
             final LearningDataDao learningDataDao = helper.getLearningDataDao();
             final CategoryDao categoryDao = helper.getCategoryDao();
+
             // Populate all category field in a transaction.
             List<Card> cardList = cardDao.callBatchTasks(new Callable<List<Card>>() {
                 public List<Card> call() throws Exception {
