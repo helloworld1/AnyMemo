@@ -9,7 +9,7 @@ public class TabTxtExporterTest extends AbstractConverterTest {
 
     @Override
     protected Converter getConverter() {
-        return new TabTxtExporter(getContext(), '\t');
+        return new TabTxtExporter();
     }
 
     @Override

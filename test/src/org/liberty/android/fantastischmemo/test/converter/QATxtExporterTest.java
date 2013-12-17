@@ -9,7 +9,7 @@ public class QATxtExporterTest extends AbstractConverterTest {
 
     @Override
     protected Converter getConverter() {
-        return new QATxtExporter(getContext());
+        return new QATxtExporter();
     }
 
     @Override

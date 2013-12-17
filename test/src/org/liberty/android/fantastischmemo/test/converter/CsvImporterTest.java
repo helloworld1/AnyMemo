@@ -15,7 +15,7 @@ public class CsvImporterTest extends AbstractConverterTest {
 
     @Override
     protected Converter getConverter() {
-        return new CSVImporter(getContext(), ',');
+        return new CSVImporter(',');
     }
 
     @Override

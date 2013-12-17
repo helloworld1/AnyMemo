@@ -9,7 +9,7 @@ public class CsvExporterTest extends AbstractConverterTest {
 
     @Override
     protected Converter getConverter() {
-        return new CSVExporter(getContext());
+        return new CSVExporter();
     }
 
     @Override

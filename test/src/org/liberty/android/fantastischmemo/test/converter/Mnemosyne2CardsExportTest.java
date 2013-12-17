@@ -10,7 +10,7 @@ public class Mnemosyne2CardsExportTest extends AbstractConverterTest {
 
     @Override
     protected Converter getConverter() {
-        Mnemosyne2CardsExporter exporter = new Mnemosyne2CardsExporter(getContext());
+        Mnemosyne2CardsExporter exporter = new Mnemosyne2CardsExporter();
         exporter.setAmFileUtil(new AMFileUtil(getContext()));
         return exporter;
     }

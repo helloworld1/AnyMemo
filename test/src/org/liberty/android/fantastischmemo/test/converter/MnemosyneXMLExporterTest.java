@@ -9,7 +9,7 @@ public class MnemosyneXMLExporterTest extends AbstractConverterTest {
 
     @Override
     protected Converter getConverter() {
-        return new MnemosyneXMLExporter(getContext());
+        return new MnemosyneXMLExporter();
     }
 
     @Override

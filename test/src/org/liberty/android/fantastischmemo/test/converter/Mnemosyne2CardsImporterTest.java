@@ -17,7 +17,7 @@ public class Mnemosyne2CardsImporterTest extends AbstractConverterTest {
 
     @Override
     protected Converter getConverter() {
-        Mnemosyne2CardsImporter importer = new Mnemosyne2CardsImporter(getContext());
+        Mnemosyne2CardsImporter importer = new Mnemosyne2CardsImporter();
         importer.setAmFileUtil(new AMFileUtil(getContext()));
         return importer;
     }

@@ -13,7 +13,7 @@ public class QATxtImporterTest extends AbstractConverterTest {
 
     @Override
     protected Converter getConverter() {
-        return new QATxtImporter(getContext());
+        return new QATxtImporter();
     }
 
     @Override

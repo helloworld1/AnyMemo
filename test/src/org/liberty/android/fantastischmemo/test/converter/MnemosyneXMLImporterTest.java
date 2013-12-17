@@ -16,7 +16,7 @@ public class MnemosyneXMLImporterTest extends AbstractConverterTest {
 
     @Override
     protected Converter getConverter() {
-        return new MnemosyneXMLImporter(getContext());
+        return new MnemosyneXMLImporter();
     }
 
     @Override

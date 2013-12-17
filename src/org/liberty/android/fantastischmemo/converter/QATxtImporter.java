@@ -29,8 +29,6 @@ import java.lang.annotation.Target;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.dao.CardDao;
@@ -38,23 +36,15 @@ import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 
-import android.content.Context;
-
 import com.google.inject.BindingAnnotation;
 
 public class QATxtImporter implements Converter{
 
     private static final long serialVersionUID = 7934270553043502048L;
-    private Context mContext;
-
-    @Inject
-    public QATxtImporter(Context context){
-        mContext = context;
-    }
 
     public void convert(String src, String dest) throws Exception{
         new File(dest).delete();
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, dest);
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(dest);
         try {
             final CardDao cardDao = helper.getCardDao();
             BufferedReader txtfile = new BufferedReader(new FileReader(src));
