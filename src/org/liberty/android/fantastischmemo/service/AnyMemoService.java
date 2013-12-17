@@ -155,7 +155,7 @@ public class AnyMemoService extends RoboService{
             myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             NotificationManager notificationManager = (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-            Notification notification = new Notification(R.drawable.icon_notification, getString(R.string.app_name), System.currentTimeMillis());
+            Notification notification = new Notification(R.drawable.anymemo_notification_icon, getString(R.string.app_name), System.currentTimeMillis());
             notification.flags |= Notification.FLAG_AUTO_CANCEL;
             PendingIntent pIntent = PendingIntent.getActivity(this, NOTIFICATION_REQ, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
             notification.setLatestEventInfo(this, dbInfo.getDbName(), getString(R.string.stat_scheduled) + " " + dbInfo.getRevCount(), pIntent);

@@ -51,6 +51,7 @@ public class ConvertIntentService extends RoboIntentService {
 
     private static final int CONVERSION_PROGRESS_NOTIFICATION_ID_BASE = 294;
 
+
     private NotificationManager notificationManager;
 
     private RecentListUtil recentListUtil;
@@ -102,12 +103,16 @@ public class ConvertIntentService extends RoboIntentService {
     }
 
     private void showInProgressNotification(int notificationId, String conversionFileInfo) {
+
+        // Dummy intent used for Android 2.3 compatibility
+        PendingIntent dummyPendingIntent= PendingIntent.getActivity(this, 0, new Intent(), Intent.FLAG_ACTIVITY_NEW_TASK);
+
         Notification inProgressNotification = new NotificationCompat.Builder(getApplicationContext())
             .setOngoing(true)
             .setContentTitle(getString(R.string.converting_wait_text))
             .setContentText(conversionFileInfo)
+            .setContentIntent(dummyPendingIntent)
             .setProgress(0, 0, true)
-            //.setSmallIcon(R.drawable.icon_notification)
             .setSmallIcon(android.R.drawable.stat_notify_sync)
             .setAutoCancel(true)
             .build();
@@ -117,13 +122,17 @@ public class ConvertIntentService extends RoboIntentService {
     }
 
     private void showFailureNotification(int notificationId, String conversionFileInfo, Exception exception) {
+        // Dummy intent used for Android 2.3 compatibility
+        PendingIntent dummyPendingIntent= PendingIntent.getActivity(this, 0, new Intent(), Intent.FLAG_ACTIVITY_NEW_TASK);
+
         Notification failureNotification = new NotificationCompat.Builder(getApplicationContext())
             .setOngoing(false)
             .setContentTitle(getString(R.string.converting_failure_text))
             .setContentText(conversionFileInfo)
+            .setContentIntent(dummyPendingIntent)
             .setSubText(exception.toString())
             .setAutoCancel(true)
-            .setSmallIcon(R.drawable.icon_notification)
+            .setSmallIcon(R.drawable.anymemo_notification_icon)
             .build();
         notificationManager.notify(notificationId, failureNotification);
     }
@@ -155,7 +164,7 @@ public class ConvertIntentService extends RoboIntentService {
             .setContentTitle(getString(R.string.converting_success_text))
             .setContentText(FilenameUtils.getName(outputFilePath))
             .setContentIntent(pendingIntent)
-            .setSmallIcon(R.drawable.icon_notification)
+            .setSmallIcon(R.drawable.anymemo_notification_icon)
             .setAutoCancel(true)
             .build();
 
