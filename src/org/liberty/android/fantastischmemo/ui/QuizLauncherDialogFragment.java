@@ -37,11 +37,9 @@ import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
 import roboguice.fragment.RoboDialogFragment;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -113,10 +111,6 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
 
     // Default category id is "uncategorized".
     private int categoryId = 0;
-
-    private SharedPreferences settings;
-
-    private SharedPreferences.Editor editor;
 
     private Category filterCategory;
 
@@ -220,8 +214,6 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
     public void onStart() {
         super.onStart();
         dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(mActivity, dbPath);
-        settings = PreferenceManager.getDefaultSharedPreferences(mActivity);
-        editor = settings.edit();
         InitTask task = new InitTask();
         task.execute((Void)null);
     }

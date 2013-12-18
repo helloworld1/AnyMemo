@@ -21,7 +21,6 @@ import java.util.Map;
 import roboguice.RoboGuice;
 import roboguice.activity.event.OnActivityResultEvent;
 import roboguice.activity.event.OnConfigurationChangedEvent;
-import roboguice.activity.event.OnContentChangedEvent;
 import roboguice.activity.event.OnCreateEvent;
 import roboguice.activity.event.OnDestroyEvent;
 import roboguice.activity.event.OnNewIntentEvent;

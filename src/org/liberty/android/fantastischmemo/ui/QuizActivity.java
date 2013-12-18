@@ -33,7 +33,6 @@ import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 import org.liberty.android.fantastischmemo.ui.loader.DBLoader;
 import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
 
-import roboguice.util.Ln;
 import roboguice.util.RoboAsyncTask;
 
 import android.app.AlertDialog;

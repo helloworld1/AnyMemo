@@ -1,7 +1,5 @@
 package org.liberty.android.fantastischmemo.test.integration;
 
-import java.sql.SQLException;
-
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;

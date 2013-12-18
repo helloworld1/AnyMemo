@@ -178,11 +178,6 @@ public class CardListActivity extends AMActivity {
             return convertView;
         }
 
-        public void updateItem(Card card, int position) {
-            remove(getItem(position));
-            insert(card, position);
-        }
-
         /* Display the quick index when the user is scrolling */
         @Override
         public int getPositionForSection(int section) {
@@ -373,9 +368,11 @@ public class CardListActivity extends AMActivity {
         view.setBackgroundColor(0x4FFFFF00);
     }
 
+    // Need to maintain compatibility with Android 2.3
+    @SuppressWarnings("deprecation")
     private void highlightCardViewAsNew(View view) {
         // The default background saved when the activity is created
-        view.setBackground(defaultBackground);
+        view.setBackgroundDrawable(defaultBackground);
     }
 
     private void showSortListDialog() {
