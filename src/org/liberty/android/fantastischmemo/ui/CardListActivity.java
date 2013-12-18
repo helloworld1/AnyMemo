@@ -20,11 +20,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo.ui;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
@@ -51,7 +53,9 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.SearchView;
 import android.text.Spannable;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -62,6 +66,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
@@ -123,7 +128,6 @@ public class CardListActivity extends AMActivity {
             dbPath = extras.getString(CardListActivity.EXTRA_DBPATH);
         }
 
-
         listView = (ListView) findViewById(R.id.item_list);
         defaultBackground = listView.getBackground();
 
@@ -132,73 +136,10 @@ public class CardListActivity extends AMActivity {
 
     }
 
-    private class CardListAdapter extends ArrayAdapter<Card> implements
-            SectionIndexer {
-        /* quick index sections */
-        private String[] sections;
-
-        public CardListAdapter(Context context, List<Card> cards) {
-            super(context, 0, cards);
-
-            int sectionSize = getCount() / 100;
-            sections = new String[sectionSize];
-            for (int i = 0; i < sectionSize; i++) {
-                sections[i] = String.valueOf(i*100);
-            }
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            Card card = getItem(position);
-            if (convertView == null) {
-                LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = li.inflate(R.layout.card_list_item, null);
-            }
-            TextView idView = (TextView) convertView.findViewById(R.id.item_id);
-            TextView questionView = (TextView) convertView
-                    .findViewById(R.id.item_question);
-            TextView answerView = (TextView) convertView
-                    .findViewById(R.id.item_answer);
-
-            idView.setText("" + card.getOrdinal());
-
-            // 0 -> question 1-> answer
-            List<Spannable> fields = cardTextUtil.getFieldsToDisplay(card);
-            questionView.setText(fields.get(0));
-            answerView.setText(fields.get(1));
-
-            if (scheduler.isCardNew(card.getLearningData())) {
-                highlightCardViewAsNew(convertView);
-            } else if (scheduler.isCardForReview(card.getLearningData())) {
-                highlightCardViewAsForgotten(convertView);
-            } else {
-                highlightCardViewAsLearned(convertView);
-            }
-
-            return convertView;
-        }
-
-        /* Display the quick index when the user is scrolling */
-        @Override
-        public int getPositionForSection(int section) {
-            return section * 100;
-        }
-
-        @Override
-        public int getSectionForPosition(int position) {
-            return 1;
-        }
-
-        @Override
-        public Object[] getSections() {
-            return sections;
-        }
-
-    }
-
     @Override
     public void onDestroy() {
-        amPrefUtil.putSavedInt(AMPrefKeys.LIST_EDIT_SCREEN_PREFIX, dbPath, listView.getFirstVisiblePosition());
+        amPrefUtil.putSavedInt(AMPrefKeys.LIST_EDIT_SCREEN_PREFIX, dbPath,
+                listView.getFirstVisiblePosition());
         AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
         super.onDestroy();
     }
@@ -213,7 +154,7 @@ public class CardListActivity extends AMActivity {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Refresh activity when the data has been changed.
         if (resultCode == Activity.RESULT_CANCELED) {
             return;
@@ -223,11 +164,35 @@ public class CardListActivity extends AMActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.card_list_activity_menu, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat
+                .getActionView(searchItem);
+        searchView.setOnQueryTextListener(onQueryTextChangedListener);
+
         return true;
     }
+
+    SearchView.OnQueryTextListener onQueryTextChangedListener = new SearchView.OnQueryTextListener() {
+
+        @Override
+        public boolean onQueryTextChange(String text) {
+            if (StringUtils.isEmpty(text)) {
+                cardListAdapter.getFilter().filter(text);
+            }
+            return true;
+        }
+
+        @Override
+        public boolean onQueryTextSubmit(String text) {
+            cardListAdapter.getFilter().filter(text);
+            return true;
+        }
+
+    };
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -425,6 +390,127 @@ public class CardListActivity extends AMActivity {
          }
     }
 
+    private class CardListAdapter extends ArrayAdapter<Card> implements
+            SectionIndexer {
+        /* quick index sections */
+        private String[] sections;
+
+        private List<Card> cardList = null;
+        // As soon as filter is used card list this keeps all the origian cards
+        private List<Card> originalCardList = null;
+
+        public CardListAdapter(Context context, List<Card> cards) {
+            super(context, 0, cards);
+            cardList = cards;
+
+            int sectionSize = getCount() / 100;
+            sections = new String[sectionSize];
+            for (int i = 0; i < sectionSize; i++) {
+                sections[i] = String.valueOf(i * 100);
+            }
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            Card card = getItem(position);
+            if (convertView == null) {
+                LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = li.inflate(R.layout.card_list_item, null);
+            }
+            TextView idView = (TextView) convertView.findViewById(R.id.item_id);
+            TextView questionView = (TextView) convertView
+                    .findViewById(R.id.item_question);
+            TextView answerView = (TextView) convertView
+                    .findViewById(R.id.item_answer);
+
+            idView.setText("" + card.getOrdinal());
+
+            // 0 -> question 1-> answer
+            List<Spannable> fields = cardTextUtil.getFieldsToDisplay(card);
+            questionView.setText(fields.get(0));
+            answerView.setText(fields.get(1));
+
+            if (scheduler.isCardNew(card.getLearningData())) {
+                highlightCardViewAsNew(convertView);
+            } else if (scheduler.isCardForReview(card.getLearningData())) {
+                highlightCardViewAsForgotten(convertView);
+            } else {
+                highlightCardViewAsLearned(convertView);
+            }
+
+            return convertView;
+        }
+
+        /* Display the quick index when the user is scrolling */
+        @Override
+        public int getPositionForSection(int section) {
+            return section * 100;
+        }
+
+        @Override
+        public int getSectionForPosition(int position) {
+            return 1;
+        }
+
+        @Override
+        public Object[] getSections() {
+            return sections;
+        }
+
+        // Used to implement the search function for the card list
+        @Override
+        public Filter getFilter() {
+            return new Filter() {
+                @Override
+                protected FilterResults performFiltering(CharSequence searchTerm) {
+                    FilterResults results = new FilterResults();
+
+                    // Back up the original card list when called for the first time
+                    if (originalCardList == null) {
+                        originalCardList = new ArrayList<Card>(cardList);
+                    }
+
+                    // If empty term is gived, restore to the original list
+                    if (StringUtils.isEmpty(searchTerm)) {
+                        List<Card> list = new ArrayList<Card>(originalCardList);
+                        results.values = list;
+                        results.count = list.size();
+                    } else {
+                        List<Card> resultList = new ArrayList<Card>();
+                        
+                        for (Card card : cardList) {
+                            if (card.getQuestion().toLowerCase().contains(searchTerm.toString().toLowerCase())
+                             || card.getAnswer().toLowerCase().contains(searchTerm.toString().toLowerCase())) {
+                                resultList.add(card);
+                            }
+                        }
+
+                        results.values = resultList;
+                        results.count = resultList.size();
+                    }
+
+                    return results;
+                }
+
+                @Override
+                protected void publishResults(CharSequence constraint, FilterResults results) {
+                    //noinspection unchecked
+                    cardList.clear();
+
+                    @SuppressWarnings("unchecked")
+                    List<Card> values = (List<Card>) results.values;
+
+                    cardList.addAll(values);
+                    if (results.count > 0) {
+                        notifyDataSetChanged();
+                    } else {
+                        notifyDataSetInvalidated();
+                    }
+                }
+            };
+        }
+
+    }
 
     private class InitTask extends AsyncTask<Void, Void, Void> {
         private ProgressDialog progressDialog;
@@ -473,6 +559,7 @@ public class CardListActivity extends AMActivity {
             listView.setFastScrollEnabled(true);
             listView.setOnItemClickListener(listItemClickListener);
             listView.setOnItemLongClickListener(listItemLongClickListener);
+            listView.setTextFilterEnabled(true);
             
             //Get the sort method from system database and set this method as origin method
             String defaultItem = getResources().getStringArray(R.array.sort_by_options_values)[0];
