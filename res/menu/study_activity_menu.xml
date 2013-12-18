@@ -30,8 +30,8 @@
             android:title="@string/share_text" />
     <item android:id="@+id/menu_context_delete"
             android:title="@string/delete_text" />
-    <item android:id="@+id/menu_context_skip"
-            android:title="@string/skip_text" />
+    <item android:id="@+id/menu_mark_as_learned_forever"
+            android:title="@string/mark_as_learned_forever_text" />
     <item android:id="@+id/menu_context_gotoprev"
             android:title="@string/goto_prev_screen" />
     <item android:id="@+id/menu_context_lookup"

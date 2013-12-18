@@ -78,7 +78,7 @@
     <string name="detail_back">Back</string>
     <string name="delete_warning">Do you really want to delete this card?</string>
     <string name="skip_text">Skip</string>
-    <string name="skip_warning">This item will never appear for learning. Do you want to skip it?</string>
+    <string name="skip_warning">This item will never appear for learning. Do you want to mark it as learned forever it?</string>
     <string name="stat_total">Total: </string>
     <string name="stat_scheduled">Rev: </string>
     <string name="stat_new">New: </string>
@@ -469,4 +469,7 @@
     <string name="conversion_started_text">Conversion started.</string>
     <string name="mark_as_learned_text">Mark as learned</string>
     <string name="mark_as_forgotten_text">Mark as forgotten</string>
+    <string name="mark_as_new_text">Mark as new</string>
+    <string name="mark_as_learned_forever_text">Mark as learned forever</string>
+    <string name="mark_as_learned_forever_warning_text">This item will never appear for learning. Do you want to mark it as learned forever it?</string>
 </resources>

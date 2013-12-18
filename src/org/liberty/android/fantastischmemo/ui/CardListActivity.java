@@ -32,6 +32,8 @@ import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.domain.LearningData;
+import org.liberty.android.fantastischmemo.domain.SchedulingAlgorithmParameters;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
 import org.liberty.android.fantastischmemo.utils.CardTextUtil;
@@ -79,13 +81,15 @@ public class CardListActivity extends AMActivity {
 
     private CardTextUtil cardTextUtil;
 
-    private Drawable defaultBackground;
-
     private Scheduler scheduler;
+
+    private SchedulingAlgorithmParameters schedulingAlgorithmParameters;
 
     /* Initial position in the list */
 
     private List<Card> cards;
+
+    private Drawable defaultBackground;
 
     public static String EXTRA_DBPATH = "dbpath";
 
@@ -102,6 +106,12 @@ public class CardListActivity extends AMActivity {
     @Inject
     public void setScheduler(Scheduler scheduler) {
         this.scheduler = scheduler;
+    }
+
+    @Inject
+    public void setSchedulingAlgorithmParameters(
+            SchedulingAlgorithmParameters schedulingAlgorithmParameters) {
+        this.schedulingAlgorithmParameters = schedulingAlgorithmParameters;
     }
 
     public void onCreate(Bundle savedInstanceState) {
@@ -168,6 +178,11 @@ public class CardListActivity extends AMActivity {
             return convertView;
         }
 
+        public void updateItem(Card card, int position) {
+            remove(getItem(position));
+            insert(card, position);
+        }
+
         /* Display the quick index when the user is scrolling */
         @Override
         public int getPositionForSection(int section) {
@@ -183,6 +198,7 @@ public class CardListActivity extends AMActivity {
         public Object[] getSections() {
             return sections;
         }
+
     }
 
     @Override
@@ -258,11 +274,15 @@ public class CardListActivity extends AMActivity {
                 switch (menuItem.getItemId()) {
                     case R.id.mark_as_learned_menu:
                         markAsLearned(card);
-                        highlightCardViewAsLearned(childView);
                         break;
                     case R.id.mark_as_forgotten_menu:
                         markAsForgotten(card);
-                        highlightCardViewAsForgotten(childView);
+                        break;
+                    case R.id.mark_as_new_menu:
+                        markAsNew(card);
+                        break;
+                    case R.id.mark_as_learned_forever_menu:
+                        markAsLearnedForever(card);
                         break;
                 }
                 return true;
@@ -320,20 +340,41 @@ public class CardListActivity extends AMActivity {
     }
 
     private void markAsLearned(Card card) {
+        LearningData newLd = scheduler.schedule(card.getLearningData(), 5, schedulingAlgorithmParameters.getEnableNoise());
+        dbOpenHelper.getLearningDataDao().updateLearningData(newLd);
+        card.setLearningData(newLd);
+        cardListAdapter.notifyDataSetChanged();
     }
 
     private void markAsForgotten(Card card) {
+        LearningData newLd = scheduler.schedule(card.getLearningData(), 1, schedulingAlgorithmParameters.getEnableNoise());
+        dbOpenHelper.getLearningDataDao().updateLearningData(newLd);
+        card.setLearningData(newLd);
+        cardListAdapter.notifyDataSetChanged();
+    }
+
+    private void markAsNew(Card card) {
+        dbOpenHelper.getLearningDataDao().resetLearningData(card.getLearningData());
+        cardListAdapter.notifyDataSetChanged();
+    }
+
+    private void markAsLearnedForever(Card card) {
+        dbOpenHelper.getLearningDataDao().markAsLearnedForever(card.getLearningData());
+        cardListAdapter.notifyDataSetChanged();
     }
 
     private void highlightCardViewAsLearned(View view) {
+        // Light green color
         view.setBackgroundColor(0x4F00FF00);
     }
 
     private void highlightCardViewAsForgotten(View view) {
+        // Light yellow color
         view.setBackgroundColor(0x4FFFFF00);
     }
 
     private void highlightCardViewAsNew(View view) {
+        // The default background saved when the activity is created
         view.setBackground(defaultBackground);
     }
 
@@ -428,6 +469,7 @@ public class CardListActivity extends AMActivity {
         @Override
         public void onPostExecute(Void result) {
             cardListAdapter = new CardListAdapter(CardListActivity.this, cards);
+            cardListAdapter.setNotifyOnChange(true);
             int initPosition = amPrefUtil.getSavedInt(AMPrefKeys.LIST_EDIT_SCREEN_PREFIX, dbPath, 0);
             listView.setAdapter(cardListAdapter);
             listView.setSelection(initPosition);

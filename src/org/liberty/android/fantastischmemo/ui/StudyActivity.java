@@ -207,9 +207,9 @@ public class StudyActivity extends QACardActivity {
                 return true;
 
             }
-            case R.id.menu_context_skip:
+            case R.id.menu_mark_as_learned_forever:
             {
-                showSkipDialog();
+                showMarkAsLearnedForeverDialog();
                 return true;
             }
             case R.id.menu_context_gotoprev:
@@ -714,13 +714,12 @@ public class StudyActivity extends QACardActivity {
         return sb.toString();
     }
 
-    private void skipCurrentCard() {
+    private void markCurrentCardAsLearnedForever() {
         if(getCurrentCard() != null) {
-            LearningData ld = getCurrentCard().getLearningData();
-            ld.setNextLearnDate(new Date(Long.MAX_VALUE));
-            ld.setAcqReps(1);
-            getDbOpenHelper().getLearningDataDao().update(ld);
-            // Do not restart this card
+            getDbOpenHelper().getLearningDataDao()
+                .markAsLearnedForever(getCurrentCard().getLearningData());
+
+            // Do not restart on this card
             setCurrentCard(null);
             restartActivity();
         }
@@ -770,13 +769,13 @@ public class StudyActivity extends QACardActivity {
             .show();
     }
 
-    private void showSkipDialog() {
+    private void showMarkAsLearnedForeverDialog() {
         new AlertDialog.Builder(this)
-            .setTitle(R.string.skip_text)
-            .setMessage(R.string.skip_warning)
+            .setTitle(R.string.mark_as_learned_forever_text)
+            .setMessage(R.string.mark_as_learned_forever_warning_text)
             .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener(){
                 public void onClick(DialogInterface arg0, int arg1) {
-                    skipCurrentCard();
+                    markCurrentCardAsLearnedForever();
                 }
             })
         .setNegativeButton(R.string.cancel_text, null)

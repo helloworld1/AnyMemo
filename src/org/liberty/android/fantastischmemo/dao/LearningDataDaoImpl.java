@@ -1,13 +1,12 @@
 package org.liberty.android.fantastischmemo.dao;
 
 import java.sql.SQLException;
-
+import java.util.Date;
 import java.util.concurrent.Callable;
 
 import org.liberty.android.fantastischmemo.domain.LearningData;
 
 import com.j256.ormlite.support.ConnectionSource;
-
 import com.j256.ormlite.table.DatabaseTableConfig;
 
 public class LearningDataDaoImpl extends AbstractHelperDaoImpl<LearningData, Integer>
@@ -53,5 +52,11 @@ public class LearningDataDaoImpl extends AbstractHelperDaoImpl<LearningData, Int
             throw new RuntimeException("Error resetting all learning data", e);
         }
 
+    }
+
+    public void markAsLearnedForever(LearningData ld) {
+        ld.setNextLearnDate(new Date(Long.MAX_VALUE));
+        ld.setAcqReps(1);
+        update(ld);
     }
 }
