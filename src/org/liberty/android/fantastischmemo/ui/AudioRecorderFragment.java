@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.ToggleButton;
 
 public class AudioRecorderFragment extends RoboDialogFragment {
+    public static final String EXTRA_AUDIO_FILENAME = "audioFilename";
 
     private static final String TAG = "AudioRecorderFragment";
 
@@ -87,7 +88,7 @@ public class AudioRecorderFragment extends RoboDialogFragment {
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         Bundle extras =  this.getArguments();
-        mFileName = extras.getString(CardEditor.EXTRA_AUDIO_FILENAME);
+        mFileName = extras.getString(EXTRA_AUDIO_FILENAME);
     }
 
     @Override

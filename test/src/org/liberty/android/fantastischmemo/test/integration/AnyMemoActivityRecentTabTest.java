@@ -61,7 +61,7 @@ public class AnyMemoActivityRecentTabTest extends ActivityInstrumentationTestCas
         // The list action item
         solo.clickOnView(solo.getView(R.id.list));
 
-        assertTrue(solo.waitForActivity("ListEditScreen"));
+        assertTrue(solo.waitForActivity("CardListActivity"));
         solo.waitForDialogToClose(8000);
         solo.sleep(600);
     }

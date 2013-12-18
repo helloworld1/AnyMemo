@@ -150,7 +150,7 @@ public class OpenActionsFragment extends RoboDialogFragment {
 
             if (v == listItem) {
                 Intent myIntent = new Intent();
-                myIntent.setClass(mActivity, ListEditScreen.class);
+                myIntent.setClass(mActivity, CardListActivity.class);
                 myIntent.putExtra(StudyActivity.EXTRA_DBPATH, dbPath);
                 startActivity(myIntent);
                 recentListUtil.addToRecentList(dbPath);

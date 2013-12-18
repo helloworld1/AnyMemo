@@ -116,7 +116,7 @@ public class AMPrefKeys {
     // public static final String
 
     // List edit screen
-    public static final String LIST_EDIT_SCREEN_PREFIX = "ListEditScreen";
+    public static final String LIST_EDIT_SCREEN_PREFIX = "CardListActivity";
 
     // AMActivity
     public static final String INTERFACE_LOCALE_KEY = "interface_locale";

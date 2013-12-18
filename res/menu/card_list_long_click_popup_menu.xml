@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/edit"
+        android:title="@string/edit_text" />
+
+    <item android:id="@+id/detail"
+        android:title="@string/detail_menu_text" />
+
+    <item android:id="@+id/preview_edit"
+        android:title="@string/edit_button_text" />
+</menu>
+

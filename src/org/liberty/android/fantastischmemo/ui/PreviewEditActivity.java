@@ -309,8 +309,8 @@ public class PreviewEditActivity extends QACardActivity {
             {
                 // List edit mode
                 Intent myIntent = new Intent(this, SettingsScreen.class);
-                myIntent.setClass(this, ListEditScreen.class);
-                myIntent.putExtra(ListEditScreen.EXTRA_DBPATH, dbPath);
+                myIntent.setClass(this, CardListActivity.class);
+                myIntent.putExtra(CardListActivity.EXTRA_DBPATH, dbPath);
                 if(getCurrentCard() != null){
                     myIntent.putExtra("openid", getCurrentCard().getId());
                 }

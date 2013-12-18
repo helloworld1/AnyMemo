@@ -155,6 +155,14 @@ public class DefaultScheduler implements Scheduler {
         return data.getAcqReps() == 0;
     }
 
+    @Override
+    public boolean isCardForReview(LearningData data) {
+        if (isCardNew(data)) {
+            return false;
+        }
+        return data.getNextLearnDate().compareTo(new Date()) < 0;
+    }
+
     /*
      * Whether a grade is considered successful not not.
      * Unsuccessful grade should be put in the queue.

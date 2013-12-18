@@ -2,7 +2,7 @@ package org.liberty.android.fantastischmemo.test.integration;
 
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.test.TestHelper;
-import org.liberty.android.fantastischmemo.ui.ListEditScreen;
+import org.liberty.android.fantastischmemo.ui.CardListActivity;
 
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
@@ -10,13 +10,13 @@ import android.test.suitebuilder.annotation.LargeTest;
 
 import com.jayway.android.robotium.solo.Solo;
 
-public class ListEditScreenActivityTest extends ActivityInstrumentationTestCase2<ListEditScreen> {
+public class CardListActivityTest extends ActivityInstrumentationTestCase2<CardListActivity> {
 
-    protected ListEditScreen mActivity;
+    protected CardListActivity mActivity;
 
     @SuppressWarnings("deprecation")
-    public ListEditScreenActivityTest() {
-        super("org.liberty.android.fantastischmemo", ListEditScreen.class);
+    public CardListActivityTest() {
+        super("org.liberty.android.fantastischmemo", CardListActivity.class);
     }
 
     private Solo solo;
@@ -27,7 +27,7 @@ public class ListEditScreenActivityTest extends ActivityInstrumentationTestCase2
         uiTestHelper.setUpFBPDatabase();
 
         Intent intent = new Intent();
-        intent.putExtra(ListEditScreen.EXTRA_DBPATH, TestHelper.SAMPLE_DB_PATH);
+        intent.putExtra(CardListActivity.EXTRA_DBPATH, TestHelper.SAMPLE_DB_PATH);
         setActivityIntent(intent);
 
         mActivity = this.getActivity();
