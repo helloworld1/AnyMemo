@@ -117,10 +117,9 @@ public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<
     }
 
     @LargeTest
-    public void testSkipCard() throws Exception {
-        getInstrumentation().invokeMenuActionSync(mActivity, R.id.menu_context_skip, 0);
-        // press skip
-        solo.clickOnText(solo.getString(R.string.skip_text));
+    public void testMarkCardLearnedForever() throws Exception {
+        getInstrumentation().invokeMenuActionSync(mActivity, R.id.menu_mark_as_learned_forever, 0);
+
         solo.clickOnText(solo.getString(R.string.ok_text));
 
         AnyMemoExecutor.waitAllTasks();
@@ -146,7 +145,6 @@ public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<
 
     @LargeTest
     public void testGotoPreviewScreen() {
-        // press skip
         getInstrumentation().invokeMenuActionSync(mActivity, R.id.menu_context_gotoprev, 0);
         assertTrue(solo.waitForActivity("PreviewEditActivity"));
         solo.sleep(1000);
