@@ -39,8 +39,6 @@ import org.liberty.android.fantastischmemo.ui.loader.DBLoader;
 import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
 import org.liberty.android.fantastischmemo.utils.ShareUtil;
 
-import roboguice.util.RoboAsyncTask;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -632,38 +630,6 @@ public class StudyActivity extends QACardActivity {
         }
     }
 
-    // Task to change the card after a card is graded
-    // It needs to update the old card and dequeue the new card
-    // and display it.
-    private class ChangeCardTask extends RoboAsyncTask<Card> {
-
-        private Card updatedCard;
-
-        public ChangeCardTask(Context context, Card updatedCard) {
-            super(context);
-            this.updatedCard = updatedCard;
-        }
-
-        @Override
-        public Card call() throws Exception {
-            queueManager.update(updatedCard);
-
-            Card nextCard = queueManager.dequeue();
-            queueManager.remove(nextCard);
-
-            return nextCard;
-        }
-
-        public void onSuccess(Card result) {
-            if (result == null) {
-                showNoItemDialog();
-            } else {
-                setCurrentCard(result);
-                displayCard(false);
-            }
-        }
-    }
-
     // When a category is selected in category fragment.
     private CategoryEditorResultListener categoryResultListener =
         new CategoryEditorResultListener() {
@@ -695,10 +661,18 @@ public class StudyActivity extends QACardActivity {
                     }
                 }
 
-                // Run the task to update the updatedCard in the queue
-                // and dequeue the next card 
-                ChangeCardTask task = new ChangeCardTask(StudyActivity.this, updatedCard);
-                task.execute(); 
+                // Dequeue card and update the queue
+                queueManager.update(updatedCard);
+
+                Card nextCard = queueManager.dequeue();
+                queueManager.remove(nextCard);
+
+                if (nextCard == null) {
+                    showNoItemDialog();
+                } else {
+                    setCurrentCard(nextCard);
+                    displayCard(false);
+                }
             }
         };
 
