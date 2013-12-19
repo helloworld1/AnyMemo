@@ -55,7 +55,7 @@ public class LearningDataDaoImpl extends AbstractHelperDaoImpl<LearningData, Int
     }
 
     public void markAsLearnedForever(LearningData ld) {
-        ld.setNextLearnDate(new Date(Long.MAX_VALUE));
+        ld.setNextLearnDate(new Date(Long.MAX_VALUE / 2));
         ld.setAcqReps(1);
         update(ld);
     }
