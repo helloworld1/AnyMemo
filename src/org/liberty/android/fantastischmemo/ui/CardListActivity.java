@@ -22,12 +22,14 @@ package org.liberty.android.fantastischmemo.ui;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
@@ -90,9 +92,9 @@ public class CardListActivity extends AMActivity {
 
     private SchedulingAlgorithmParameters schedulingAlgorithmParameters;
 
-    /* Initial position in the list */
+    private boolean initialAnswerVisible = true;
 
-    private List<Card> cards;
+    /* Initial position in the list */
 
     private Drawable defaultBackground;
 
@@ -127,6 +129,9 @@ public class CardListActivity extends AMActivity {
         if (extras != null) {
             dbPath = extras.getString(CardListActivity.EXTRA_DBPATH);
         }
+
+        initialAnswerVisible = amPrefUtil.getSavedBoolean(
+                AMPrefKeys.LIST_ANSWER_VISIBLE_PREFIX, dbPath, true);
 
         listView = (ListView) findViewById(R.id.item_list);
         defaultBackground = listView.getBackground();
@@ -176,53 +181,6 @@ public class CardListActivity extends AMActivity {
         return true;
     }
 
-    SearchView.OnQueryTextListener onQueryTextChangedListener = new SearchView.OnQueryTextListener() {
-
-        @Override
-        public boolean onQueryTextChange(String text) {
-            if (StringUtils.isEmpty(text)) {
-                cardListAdapter.getFilter().filter(text);
-            }
-            return true;
-        }
-
-        @Override
-        public boolean onQueryTextSubmit(String text) {
-            cardListAdapter.getFilter().filter(text);
-            return true;
-        }
-
-    };
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.sort:
-                showSortListDialog();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-    
-    private OnItemClickListener listItemClickListener = new OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parentView, View childView,
-                int position, long id) {
-            showListItemPopup(childView, cardListAdapter.getItem(position));
-        }
-    };
-
-    private AdapterView.OnItemLongClickListener listItemLongClickListener = new AdapterView.OnItemLongClickListener() {
-
-        @Override
-        public boolean onItemLongClick(AdapterView<?> parent, View view,
-                int position, long id) {
-            showListItemLongClickPopup(view, cardListAdapter.getItem(position));
-            return true;
-        }
-    };
-
     private void showListItemPopup(final View childView, final Card card) {
         View view = childView.findViewById(R.id.item_question);
         PopupMenu popup = new PopupMenu(this, view);
@@ -232,18 +190,18 @@ public class CardListActivity extends AMActivity {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
-                    case R.id.mark_as_learned_menu:
-                        markAsLearned(card);
-                        break;
-                    case R.id.mark_as_forgotten_menu:
-                        markAsForgotten(card);
-                        break;
-                    case R.id.mark_as_new_menu:
-                        markAsNew(card);
-                        break;
-                    case R.id.mark_as_learned_forever_menu:
-                        markAsLearnedForever(card);
-                        break;
+                case R.id.mark_as_learned_menu:
+                    markAsLearned(card);
+                    break;
+                case R.id.mark_as_forgotten_menu:
+                    markAsForgotten(card);
+                    break;
+                case R.id.mark_as_new_menu:
+                    markAsNew(card);
+                    break;
+                case R.id.mark_as_learned_forever_menu:
+                    markAsLearnedForever(card);
+                    break;
                 }
                 return true;
             }
@@ -251,26 +209,28 @@ public class CardListActivity extends AMActivity {
         popup.show();
     }
 
-    private void showListItemLongClickPopup(final View childView, final Card card) {
+    private void showListItemLongClickPopup(final View childView,
+            final Card card) {
         View view = childView.findViewById(R.id.item_question);
         PopupMenu popup = new PopupMenu(this, view);
         MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(R.menu.card_list_long_click_popup_menu, popup.getMenu());
+        inflater.inflate(R.menu.card_list_long_click_popup_menu,
+                popup.getMenu());
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
-                    case R.id.edit:
-                        gotoCardEditorActivity(card);
-                        break;
-                    case R.id.detail:
-                        gotoDetailActivity(card);
-                        break;
+                case R.id.edit:
+                    gotoCardEditorActivity(card);
+                    break;
+                case R.id.detail:
+                    gotoDetailActivity(card);
+                    break;
 
-                    case R.id.preview_edit:
-                        gotoPreviewEditActivity(card);
-                        break;
-                    
+                case R.id.preview_edit:
+                    gotoPreviewEditActivity(card);
+                    break;
+
                 }
                 return true;
             }
@@ -300,26 +260,30 @@ public class CardListActivity extends AMActivity {
     }
 
     private void markAsLearned(Card card) {
-        LearningData newLd = scheduler.schedule(card.getLearningData(), 5, schedulingAlgorithmParameters.getEnableNoise());
+        LearningData newLd = scheduler.schedule(card.getLearningData(), 5,
+                schedulingAlgorithmParameters.getEnableNoise());
         dbOpenHelper.getLearningDataDao().updateLearningData(newLd);
         card.setLearningData(newLd);
         cardListAdapter.notifyDataSetChanged();
     }
 
     private void markAsForgotten(Card card) {
-        LearningData newLd = scheduler.schedule(card.getLearningData(), 1, schedulingAlgorithmParameters.getEnableNoise());
+        LearningData newLd = scheduler.schedule(card.getLearningData(), 1,
+                schedulingAlgorithmParameters.getEnableNoise());
         dbOpenHelper.getLearningDataDao().updateLearningData(newLd);
         card.setLearningData(newLd);
         cardListAdapter.notifyDataSetChanged();
     }
 
     private void markAsNew(Card card) {
-        dbOpenHelper.getLearningDataDao().resetLearningData(card.getLearningData());
+        dbOpenHelper.getLearningDataDao().resetLearningData(
+                card.getLearningData());
         cardListAdapter.notifyDataSetChanged();
     }
 
     private void markAsLearnedForever(Card card) {
-        dbOpenHelper.getLearningDataDao().markAsLearnedForever(card.getLearningData());
+        dbOpenHelper.getLearningDataDao().markAsLearnedForever(
+                card.getLearningData());
         cardListAdapter.notifyDataSetChanged();
     }
 
@@ -340,66 +304,151 @@ public class CardListActivity extends AMActivity {
         view.setBackgroundDrawable(defaultBackground);
     }
 
+    // Toggle the visibility of all the answers
+    private void showHideAnswers() {
+        if (initialAnswerVisible) {
+            for (CardWrapper wrapper : cardListAdapter) {
+                wrapper.setVisible(false);
+            }
+            initialAnswerVisible = false;
+        } else {
+            for (CardWrapper wrapper : cardListAdapter) {
+                wrapper.setVisible(true);
+            }
+            initialAnswerVisible = true;
+        }
+        amPrefUtil.putSavedBoolean(AMPrefKeys.LIST_ANSWER_VISIBLE_PREFIX, dbPath, initialAnswerVisible);
+        cardListAdapter.notifyDataSetChanged();
+    }
+
     private void showSortListDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         //items in enum SortMethod and array sort_by_options_values should have the same order
-        String defaultItem =  getResources().getStringArray(R.array.sort_by_options_values)[0];
-        String savedMethod = amPrefUtil.getSavedString(AMPrefKeys.LIST_SORT_BY_METHOD_PREFIX, dbPath, defaultItem);
-        builder.setSingleChoiceItems(R.array.sort_by_options, SortMethod.valueOf(savedMethod).ordinal(), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {                              
-                String[] items = getResources().getStringArray(R.array.sort_by_options_values);
-                sortList(SortMethod.valueOf(items[which]));  
-                amPrefUtil.putSavedString(AMPrefKeys.LIST_SORT_BY_METHOD_PREFIX,
-                    dbPath, items[which]);
-                dialog.dismiss();
-            }
-        }).show();              
-    }
-    
-    private void sortList(SortMethod sort) { 
-        //Handle sort method
-        switch(sort)
-        {
-          case ORDINAL:
-              cardListAdapter.sort(new Comparator<Card>(){
-                  @Override
-                  public int compare(Card c1, Card c2) {
-                          return c1.getOrdinal() - c2.getOrdinal();
-                  };
-              });
-              break;
-           case QUESTION:
-               cardListAdapter.sort(new Comparator<Card>(){
-                   @Override
-                   public int compare(Card c1, Card c2) {
-                           return c1.getQuestion().compareTo(c2.getQuestion());
-                   };
-               });
-               break;
-           case ANSWER:
-               cardListAdapter.sort(new Comparator<Card>(){
-                   @Override
-                   public int compare(Card c1, Card c2) {
-                           return c1.getAnswer().compareTo(c2.getAnswer());
-                   };
-               });
-               break;
-            default:
-               throw new AssertionError("This case will not happen! Or the system has carshed.");
-         }
+        String defaultItem = getResources().getStringArray(
+                R.array.sort_by_options_values)[0];
+        String savedMethod = amPrefUtil.getSavedString(
+                AMPrefKeys.LIST_SORT_BY_METHOD_PREFIX, dbPath, defaultItem);
+        builder.setSingleChoiceItems(R.array.sort_by_options,
+                SortMethod.valueOf(savedMethod).ordinal(),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String[] items = getResources().getStringArray(
+                                R.array.sort_by_options_values);
+                        sortList(SortMethod.valueOf(items[which]));
+                        amPrefUtil.putSavedString(
+                                AMPrefKeys.LIST_SORT_BY_METHOD_PREFIX, dbPath,
+                                items[which]);
+                        dialog.dismiss();
+                    }
+                }).show();
     }
 
-    private class CardListAdapter extends ArrayAdapter<Card> implements
-            SectionIndexer {
+    private void sortList(SortMethod sort) {
+        //Handle sort method
+        switch (sort) {
+        case ORDINAL:
+            cardListAdapter.sort(new Comparator<CardWrapper>() {
+                @Override
+                public int compare(CardWrapper c1, CardWrapper c2) {
+                    return c1.getCard().getOrdinal()
+                            - c2.getCard().getOrdinal();
+                };
+            });
+            break;
+        case QUESTION:
+            cardListAdapter.sort(new Comparator<CardWrapper>() {
+                @Override
+                public int compare(CardWrapper c1, CardWrapper c2) {
+                    return c1.getCard().getQuestion()
+                            .compareTo(c2.getCard().getQuestion());
+                };
+            });
+            break;
+        case ANSWER:
+            cardListAdapter.sort(new Comparator<CardWrapper>() {
+                @Override
+                public int compare(CardWrapper c1, CardWrapper c2) {
+                    return c1.getCard().getAnswer()
+                            .compareTo(c2.getCard().getAnswer());
+                };
+            });
+            break;
+        default:
+            throw new AssertionError(
+                    "This case will not happen! Or the system has carshed.");
+        }
+    }
+
+    SearchView.OnQueryTextListener onQueryTextChangedListener = new SearchView.OnQueryTextListener() {
+
+        @Override
+        public boolean onQueryTextChange(String text) {
+            // This is used to make sure user can clear the search result
+            // and show all cards easily.
+            if (StringUtils.isEmpty(text)) {
+                cardListAdapter.getFilter().filter(text);
+            }
+            return true;
+        }
+
+        @Override
+        public boolean onQueryTextSubmit(String text) {
+            cardListAdapter.getFilter().filter(text);
+            return true;
+        }
+
+    };
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.sort:
+            showSortListDialog();
+            return true;
+        case R.id.show_hide_answers:
+            showHideAnswers();
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private OnItemClickListener listItemClickListener = new OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parentView, View childView,
+                int position, long id) {
+            showListItemPopup(childView, cardListAdapter.getCardItem(position));
+            CardWrapper cardWrapper = cardListAdapter.getItem(position);
+            if (!cardWrapper.isVisible()) {
+                cardWrapper.setVisible(true);
+                cardListAdapter.notifyDataSetChanged();
+            }
+
+        }
+    };
+
+    private AdapterView.OnItemLongClickListener listItemLongClickListener = new AdapterView.OnItemLongClickListener() {
+
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view,
+                int position, long id) {
+            showListItemLongClickPopup(view,
+                    cardListAdapter.getCardItem(position));
+            return true;
+        }
+    };
+
+    private class CardListAdapter extends ArrayAdapter<CardWrapper> implements
+            SectionIndexer, Iterable<CardWrapper> {
         /* quick index sections */
         private String[] sections;
 
-        private List<Card> cardList = null;
+        private List<CardWrapper> cardList = null;
         // As soon as filter is used card list this keeps all the origian cards
-        private List<Card> originalCardList = null;
+        private List<CardWrapper> originalCardList = null;
 
-        public CardListAdapter(Context context, List<Card> cards) {
+        public CardListAdapter(Context context, List<CardWrapper> cards) {
             super(context, 0, cards);
             cardList = cards;
 
@@ -410,9 +459,14 @@ public class CardListActivity extends AMActivity {
             }
         }
 
+        public Card getCardItem(int position) {
+            return getItem(position).getCard();
+        }
+
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            Card card = getItem(position);
+            CardWrapper cardWrapper = getItem(position);
+            Card card = cardWrapper.getCard();
             if (convertView == null) {
                 LayoutInflater li = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = li.inflate(R.layout.card_list_item, null);
@@ -438,6 +492,11 @@ public class CardListActivity extends AMActivity {
                 highlightCardViewAsLearned(convertView);
             }
 
+            if (cardWrapper.isVisible()) {
+                answerView.setVisibility(View.VISIBLE);
+            } else {
+                answerView.setVisibility(View.INVISIBLE);
+            }
             return convertView;
         }
 
@@ -467,21 +526,23 @@ public class CardListActivity extends AMActivity {
 
                     // Back up the original card list when called for the first time
                     if (originalCardList == null) {
-                        originalCardList = new ArrayList<Card>(cardList);
+                        originalCardList = new ArrayList<CardWrapper>(cardList);
                     }
 
                     // If empty term is gived, restore to the original list
                     if (StringUtils.isEmpty(searchTerm)) {
-                        List<Card> list = new ArrayList<Card>(originalCardList);
+                        List<CardWrapper> list = new ArrayList<CardWrapper>(
+                                originalCardList);
                         results.values = list;
                         results.count = list.size();
                     } else {
-                        List<Card> resultList = new ArrayList<Card>();
-                        
-                        for (Card card : cardList) {
-                            if (card.getQuestion().toLowerCase().contains(searchTerm.toString().toLowerCase())
-                             || card.getAnswer().toLowerCase().contains(searchTerm.toString().toLowerCase())) {
-                                resultList.add(card);
+                        List<CardWrapper> resultList = new ArrayList<CardWrapper>();
+
+                        for (CardWrapper cardWrapper : cardList) {
+                            Card card = cardWrapper.getCard();
+                            if (card.getQuestion().toLowerCase().contains(searchTerm.toString().toLowerCase()) || 
+                                    card.getAnswer() .toLowerCase().contains(searchTerm.toString().toLowerCase())) {
+                                resultList.add(cardWrapper);
                             }
                         }
 
@@ -493,12 +554,13 @@ public class CardListActivity extends AMActivity {
                 }
 
                 @Override
-                protected void publishResults(CharSequence constraint, FilterResults results) {
+                protected void publishResults(CharSequence constraint,
+                        FilterResults results) {
                     //noinspection unchecked
                     cardList.clear();
 
                     @SuppressWarnings("unchecked")
-                    List<Card> values = (List<Card>) results.values;
+                    List<CardWrapper> values = (List<CardWrapper>) results.values;
 
                     cardList.addAll(values);
                     if (results.count > 0) {
@@ -510,9 +572,14 @@ public class CardListActivity extends AMActivity {
             };
         }
 
+        @Override
+        public Iterator<CardWrapper> iterator() {
+            return cardList.iterator();
+        }
+
     }
 
-    private class InitTask extends AsyncTask<Void, Void, Void> {
+    private class InitTask extends AsyncTask<Void, Void, List<CardWrapper>> {
         private ProgressDialog progressDialog;
 
         @Override
@@ -526,12 +593,16 @@ public class CardListActivity extends AMActivity {
         }
 
         @Override
-        protected Void doInBackground(Void... params) {
+        protected List<CardWrapper> doInBackground(Void... params) {
             dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(
                     CardListActivity.this, dbPath);
 
             CardDao cardDao = dbOpenHelper.getCardDao();
-            cards = cardDao.getAllCards(null);
+            List<CardWrapper> cardWrappers = new ArrayList<CardWrapper>((int)cardDao.countOf());
+
+            for (Card card : cardDao.getAllCards(null)) {
+                cardWrappers.add(new CardWrapper(card, initialAnswerVisible));
+            }
 
             ContextScope scope = RoboGuice.getInjector(CardListActivity.this).getInstance(ContextScope.class);
             // Make sure the method is running under the context
@@ -546,12 +617,12 @@ public class CardListActivity extends AMActivity {
                 }
             }
 
-            return null;
+            return cardWrappers;
         }
 
         @Override
-        public void onPostExecute(Void result) {
-            cardListAdapter = new CardListAdapter(CardListActivity.this, cards);
+        public void onPostExecute(List<CardWrapper> result) {
+            cardListAdapter = new CardListAdapter(CardListActivity.this, result);
             cardListAdapter.setNotifyOnChange(true);
             int initPosition = amPrefUtil.getSavedInt(AMPrefKeys.LIST_EDIT_SCREEN_PREFIX, dbPath, 0);
             listView.setAdapter(cardListAdapter);
@@ -567,6 +638,31 @@ public class CardListActivity extends AMActivity {
             sortList(SortMethod.valueOf(savedMethod));
             progressDialog.dismiss();
         }
+    }
+
+    private static class CardWrapper {
+
+        private Card card;
+
+        private boolean visible;
+
+        public CardWrapper(Card card, boolean visible) {
+            this.card = card;
+            this.visible = visible;
+        }
+
+        public Card getCard() {
+            return card;
+        }
+
+        public boolean isVisible() {
+            return visible;
+        }
+
+        public void setVisible(boolean visible) {
+            this.visible = visible;
+        }
+
     }
 
     private enum SortMethod {

@@ -3,10 +3,15 @@
         xmlns:anymemo="http://schemas.android.com/apk/res-auto" >
 
     <item android:id="@+id/action_search"
-            android:title="@string/search_text"
-            android:icon="@android:drawable/ic_menu_search"
-            anymemo:showAsAction="ifRoom|collapseActionView"
-            anymemo:actionViewClass="android.support.v7.widget.SearchView" />
+        android:title="@string/search_text"
+        android:icon="@android:drawable/ic_menu_search"
+        anymemo:showAsAction="ifRoom|collapseActionView"
+        anymemo:actionViewClass="android.support.v7.widget.SearchView" />
 
-    <item android:id="@+id/sort" android:title="@string/sort_by_text"/>
+    <item
+        android:id="@+id/sort"
+        android:title="@string/sort_by_text"/>
+    <item
+        android:id="@+id/show_hide_answers"
+        android:title="@string/show_hide_answers_text"/>
 </menu>

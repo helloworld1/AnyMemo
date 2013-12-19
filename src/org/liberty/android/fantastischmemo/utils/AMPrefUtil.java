@@ -59,6 +59,15 @@ public class AMPrefUtil {
         editor.commit();
     }
 
+    public void putSavedBoolean(String prefix, String key, boolean value) {
+        editor.putBoolean(prefix + key, value);
+        editor.commit();
+    }
+
+    public boolean getSavedBoolean(String prefix, String key, boolean defaultValue) {
+        return settings.getBoolean(prefix + key, defaultValue);
+    }
+
     /* Remove the pref key contain the string keyContains. */
     public void removePrefKeys(String keyContains) {
         Map<String,?> keys = settings.getAll();
