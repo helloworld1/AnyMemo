@@ -2,7 +2,10 @@ package org.liberty.android.fantastischmemo.test.integration;
 
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.test.TestHelper;
+import org.liberty.android.fantastischmemo.ui.CardEditor;
 import org.liberty.android.fantastischmemo.ui.CardListActivity;
+import org.liberty.android.fantastischmemo.ui.DetailScreen;
+import org.liberty.android.fantastischmemo.ui.PreviewEditActivity;
 
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
@@ -45,27 +48,27 @@ public class CardListActivityTest extends ActivityInstrumentationTestCase2<CardL
 
     @LargeTest
     public void testGoToCardEditor() throws Exception {
-        solo.clickOnText("tooth");
+        solo.clickLongOnText("tooth");
         solo.clickOnText(solo.getString(R.string.edit_text));
-        solo.waitForActivity("CardEditor");
+        solo.waitForActivity(CardEditor.class);
         solo.sleep(2000);
         assertTrue(solo.searchText("tooth"));
     }
 
     @LargeTest
     public void testGoToPrevEditor() throws Exception {
-        solo.clickOnText("tooth");
+        solo.clickLongOnText("tooth");
         solo.clickOnText(solo.getString(R.string.edit_button_text));
-        solo.waitForActivity("PreviewEditActivity");
+        solo.waitForActivity(PreviewEditActivity.class);
         solo.sleep(2000);
         assertTrue(solo.searchText("tooth"));
     }
 
     @LargeTest
     public void testGoToDetailScreen() throws Exception {
-        solo.clickOnText("tooth");
+        solo.clickLongOnText("tooth");
         solo.clickOnText(solo.getString(R.string.detail_menu_text));
-        solo.waitForActivity("DetailScreen");
+        solo.waitForActivity(DetailScreen.class);
         solo.sleep(2000);
         assertTrue(solo.searchText("tooth"));
     }
