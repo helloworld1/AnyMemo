@@ -74,8 +74,7 @@
         <activity 
             android:name=".ui.SettingsScreen" />
         <activity
-            android:name=".ui.CardListActivity"
-            android:configChanges="orientation|keyboardHidden" />
+            android:name=".ui.CardListActivity" />
         <activity 
             android:name=".ui.FileBrowserActivity"
             android:configChanges="orientation|keyboardHidden" />

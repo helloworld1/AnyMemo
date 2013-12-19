@@ -29,32 +29,28 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
-import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.domain.SchedulingAlgorithmParameters;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
+import org.liberty.android.fantastischmemo.ui.loader.CardTextUtilLoader;
+import org.liberty.android.fantastischmemo.ui.loader.CardWrapperListLoader;
+import org.liberty.android.fantastischmemo.ui.loader.MultipleLoaderManager;
 import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
 import org.liberty.android.fantastischmemo.utils.CardTextUtil;
-import org.liberty.android.fantastischmemo.utils.CardTextUtilFactory;
-
-import roboguice.RoboGuice;
-import roboguice.inject.ContextScope;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.SearchView;
@@ -74,6 +70,11 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 public class CardListActivity extends AMActivity {
+
+    private static final int CARD_WRAPPER_LOADER_ID = 0;
+
+    private static final int CARD_TEXT_UTIL_LOADER_ID = 1;
+
     private String dbPath;
 
     private CardListAdapter cardListAdapter;
@@ -84,8 +85,6 @@ public class CardListActivity extends AMActivity {
 
     private AMPrefUtil amPrefUtil;
 
-    private CardTextUtilFactory cardTextUtilFactory;
-
     private CardTextUtil cardTextUtil;
 
     private Scheduler scheduler;
@@ -94,20 +93,17 @@ public class CardListActivity extends AMActivity {
 
     private boolean initialAnswerVisible = true;
 
-    /* Initial position in the list */
-
-    private Drawable defaultBackground;
+    /**
+     * This needs to be defined before onCreate so in onCreate, all loaders will
+     * be registered with the right manager.
+     */
+    private MultipleLoaderManager multipleLoaderManager;
 
     public static String EXTRA_DBPATH = "dbpath";
 
     @Inject
     public void setAmPrefUtil(AMPrefUtil amPrefUtil) {
         this.amPrefUtil = amPrefUtil;
-    }
-
-    @Inject
-    public void setCardTextUtilFactory(CardTextUtilFactory cardTextUtilFactory) {
-        this.cardTextUtilFactory = cardTextUtilFactory;
     }
 
     @Inject
@@ -121,6 +117,12 @@ public class CardListActivity extends AMActivity {
         this.schedulingAlgorithmParameters = schedulingAlgorithmParameters;
     }
 
+    @Inject
+    public void setMultipleLoaderManager(
+            MultipleLoaderManager multipleLoaderManager) {
+        this.multipleLoaderManager = multipleLoaderManager;
+    }
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.card_list);
@@ -129,16 +131,19 @@ public class CardListActivity extends AMActivity {
         if (extras != null) {
             dbPath = extras.getString(CardListActivity.EXTRA_DBPATH);
         }
+        dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(
+                CardListActivity.this, dbPath);
 
         initialAnswerVisible = amPrefUtil.getSavedBoolean(
                 AMPrefKeys.LIST_ANSWER_VISIBLE_PREFIX, dbPath, true);
 
         listView = (ListView) findViewById(R.id.item_list);
-        defaultBackground = listView.getBackground();
-
-        InitTask initTask = new InitTask();
-        initTask.execute((Void) null);
-
+        
+        // Use loader to load the cards.
+        multipleLoaderManager.registerLoaderCallbacks(CARD_WRAPPER_LOADER_ID, new CardWrapperLoaderCallbacks(), false);
+        multipleLoaderManager.registerLoaderCallbacks(CARD_TEXT_UTIL_LOADER_ID, new CardTextUtilLoaderCallbacks(), false);
+        multipleLoaderManager.setOnAllLoaderCompletedRunnable(onPostInitRunnable);
+        multipleLoaderManager.startLoading();
     }
 
     @Override
@@ -300,8 +305,8 @@ public class CardListActivity extends AMActivity {
     // Need to maintain compatibility with Android 2.3
     @SuppressWarnings("deprecation")
     private void highlightCardViewAsNew(View view) {
-        // The default background saved when the activity is created
-        view.setBackgroundDrawable(defaultBackground);
+        // The default background color for individual views is the same as the list view's
+        view.setBackgroundDrawable(listView.getBackground());
     }
 
     // Toggle the visibility of all the answers
@@ -579,68 +584,7 @@ public class CardListActivity extends AMActivity {
 
     }
 
-    private class InitTask extends AsyncTask<Void, Void, List<CardWrapper>> {
-        private ProgressDialog progressDialog;
-
-        @Override
-        public void onPreExecute() {
-            progressDialog = new ProgressDialog(CardListActivity.this);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setTitle(getString(R.string.loading_please_wait));
-            progressDialog.setMessage(getString(R.string.loading_database));
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-        }
-
-        @Override
-        protected List<CardWrapper> doInBackground(Void... params) {
-            dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(
-                    CardListActivity.this, dbPath);
-
-            CardDao cardDao = dbOpenHelper.getCardDao();
-            List<CardWrapper> cardWrappers = new ArrayList<CardWrapper>((int)cardDao.countOf());
-
-            for (Card card : cardDao.getAllCards(null)) {
-                cardWrappers.add(new CardWrapper(card, initialAnswerVisible));
-            }
-
-            ContextScope scope = RoboGuice.getInjector(CardListActivity.this).getInstance(ContextScope.class);
-            // Make sure the method is running under the context
-            // The AsyncTask thread does not have the context, so we need
-            // to manually enter the scope.
-            synchronized(ContextScope.class) {
-                scope.enter(CardListActivity.this);
-                try {
-                    cardTextUtil = cardTextUtilFactory.create(dbPath);
-                } finally {
-                    scope.exit(CardListActivity.this);
-                }
-            }
-
-            return cardWrappers;
-        }
-
-        @Override
-        public void onPostExecute(List<CardWrapper> result) {
-            cardListAdapter = new CardListAdapter(CardListActivity.this, result);
-            cardListAdapter.setNotifyOnChange(true);
-            int initPosition = amPrefUtil.getSavedInt(AMPrefKeys.LIST_EDIT_SCREEN_PREFIX, dbPath, 0);
-            listView.setAdapter(cardListAdapter);
-            listView.setSelection(initPosition);
-            listView.setFastScrollEnabled(true);
-            listView.setOnItemClickListener(listItemClickListener);
-            listView.setOnItemLongClickListener(listItemLongClickListener);
-            listView.setTextFilterEnabled(true);
-            
-            //Get the sort method from system database and set this method as origin method
-            String defaultItem = getResources().getStringArray(R.array.sort_by_options_values)[0];
-            String savedMethod = amPrefUtil.getSavedString(AMPrefKeys.LIST_SORT_BY_METHOD_PREFIX, dbPath, defaultItem);
-            sortList(SortMethod.valueOf(savedMethod));
-            progressDialog.dismiss();
-        }
-    }
-
-    private static class CardWrapper {
+    public static class CardWrapper {
 
         private Card card;
 
@@ -664,6 +608,67 @@ public class CardListActivity extends AMActivity {
         }
 
     }
+
+    private class CardTextUtilLoaderCallbacks implements
+            LoaderManager.LoaderCallbacks<CardTextUtil> {
+        @Override
+        public Loader<CardTextUtil> onCreateLoader(int arg0, Bundle arg1) {
+             Loader<CardTextUtil> loader = new CardTextUtilLoader(CardListActivity.this, dbPath);
+             loader.forceLoad();
+             return loader;
+        }
+
+        @Override
+        public void onLoadFinished(Loader<CardTextUtil> loader , CardTextUtil cardTextUtil) {
+            CardListActivity.this.cardTextUtil = cardTextUtil;
+            multipleLoaderManager.checkAllLoadersCompleted();
+        }
+        @Override
+        public void onLoaderReset(Loader<CardTextUtil> arg0) {
+            // Do nothing now
+        }
+    }
+
+    private class CardWrapperLoaderCallbacks implements
+            LoaderManager.LoaderCallbacks<List<CardWrapper>> {
+        @Override
+        public Loader<List<CardWrapper>> onCreateLoader(int arg0, Bundle arg1) {
+             CardWrapperListLoader loader = new CardWrapperListLoader(CardListActivity.this, dbPath, initialAnswerVisible);
+             loader.forceLoad();
+             return loader;
+        }
+
+        @Override
+        public void onLoadFinished(Loader<List<CardWrapper>> loader , List<CardWrapper> result) {
+
+            cardListAdapter = new CardListAdapter(CardListActivity.this, result);
+            cardListAdapter.setNotifyOnChange(true);
+
+            multipleLoaderManager.checkAllLoadersCompleted();
+        }
+        @Override
+        public void onLoaderReset(Loader<List<CardWrapper>> arg0) {
+            // Do nothing now
+        }
+    }
+
+    private Runnable onPostInitRunnable = new Runnable() {
+
+        @Override
+        public void run() {
+            int initPosition = amPrefUtil.getSavedInt(AMPrefKeys.LIST_EDIT_SCREEN_PREFIX, dbPath, 0);
+            listView.setAdapter(cardListAdapter);
+            listView.setSelection(initPosition);
+            listView.setFastScrollEnabled(true);
+            listView.setOnItemClickListener(listItemClickListener);
+            listView.setOnItemLongClickListener(listItemLongClickListener);
+            listView.setTextFilterEnabled(true);
+
+            String savedMethod = amPrefUtil.getSavedString(AMPrefKeys.LIST_SORT_BY_METHOD_PREFIX, dbPath, getResources().getStringArray(R.array.sort_by_options_values)[0]);
+
+            sortList(SortMethod.valueOf(savedMethod));
+        }
+    };
 
     private enum SortMethod {
         ORDINAL,
