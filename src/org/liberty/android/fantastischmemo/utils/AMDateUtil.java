@@ -42,7 +42,7 @@ public class AMDateUtil {
 	public static double diffDate(Date date1, Date date2){
         double date1s = date1.getTime();
         double date2s = date2.getTime();
-        return ((double)(date2s - date1s)) / DateUtils.MILLIS_PER_DAY;
+        return (date2s - date1s) / DateUtils.MILLIS_PER_DAY;
 	}
 
     // Interval: 12.3456 day -> "1.8 week", 4.76 -> "4.8 day"

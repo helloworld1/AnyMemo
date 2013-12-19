@@ -29,7 +29,7 @@ import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.domain.SchedulingAlgorithmParameters;
 import org.liberty.android.fantastischmemo.utils.AMDateUtil;
 
-import android.util.Log;
+import roboguice.util.Ln;
 
 /*
  * Default scheduler read the algorithm parameters
@@ -86,17 +86,17 @@ public class DefaultScheduler implements Scheduler {
             newAcqRepsSinceLapse = 0;
             newRetRepsSinceLapse = 0;
             newInterval = 0;
-        } else if(isGradeSuccessful(oldGrade, false) && isGradeSuccessful(newGrade, false)){
+        } else if (isGradeSuccessful(oldGrade, false) && isGradeSuccessful(newGrade, false)) {
             newRetReps += 1;
             newRetRepsSinceLapse += 1;
-            if(actualInterval >= scheduleInterval){
+            newInterval = 0;
+            if (actualInterval >= scheduleInterval) {
                 newEasiness = oldEasiness + parameters.getEasinessIncremental(newGrade);
 
                 if (newEasiness < parameters.getMinimalEasiness()) {
                     newEasiness =  parameters.getMinimalEasiness();
                 }
 
-                newInterval = 0;
                 if(actualInterval <= scheduleInterval){
                     newInterval = actualInterval * newEasiness;
                     // Fix the cram review scheduling problem by using the larger of scheduled interval
@@ -104,13 +104,17 @@ public class DefaultScheduler implements Scheduler {
                 } else {
                     newInterval = scheduleInterval * newEasiness;
                 }
+            } else {
+                // If learning a card before it is cheduled
+                // The old interval is used.
+                newInterval = scheduleInterval;
+            }
 
-                if (newInterval <= parameters.getMinimalInterval()) {
-                    Log.w(TAG, "Interval " + newInterval + " is less than "
-                            + parameters.getMinimalInterval()
-                            + " for old data: " + oldData);
-                    newInterval = parameters.getMinimalInterval();
-                }
+            if (newInterval <= parameters.getMinimalInterval()) {
+                Ln.w("Interval " + newInterval + " is less than "
+                        + parameters.getMinimalInterval()
+                        + " for old data: " + oldData);
+                newInterval = parameters.getMinimalInterval();
             }
         }
         /*
