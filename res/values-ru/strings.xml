@@ -457,4 +457,15 @@
     <string name="click_again_to_delete_text">Кликните снова чтобы удалить</string>
     <string name="arabic_text">Арабский</string>
     <string name="unsupported_audio_locale_text">Выбранный язык аудио недоступен для текущего TTS движка.</string>
+    <string name="tts_language_data_missing_text">Языковые данные отсутствуют для текущего TTS языка.</string>
+    <string name="converting_wait_text">AnyMemo конвертирует. Ждите &#8230;</string>
+    <string name="converting_success_text">AnyMemo преобразование успешно.</string>
+    <string name="converting_failure_text">AnyMemo преобразование неудачно.</string>
+    <string name="conversion_started_text">Преобразование началось.</string>
+    <string name="mark_as_learned_text">Пометить как выучено</string>
+    <string name="mark_as_forgotten_text">Пометить как забыто</string>
+    <string name="mark_as_new_text">Пометить как новое</string>
+    <string name="mark_as_learned_forever_text">Пометить как выучено навсегда</string>
+    <string name="mark_as_learned_forever_warning_text">Этот объект никогда не появится для обучения. Хотите пометить его как выучено навсегда?</string>
+  <string name="show_hide_answers_text">Показать/спрятать ответы</string>
 </resources>
