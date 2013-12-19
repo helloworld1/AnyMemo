@@ -675,5 +675,3 @@ public class CardListActivity extends AMActivity {
         QUESTION,
         ANSWER};
 }
-
-

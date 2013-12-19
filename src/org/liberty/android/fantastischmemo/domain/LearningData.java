@@ -15,10 +15,10 @@ public class LearningData {
     private Integer id;
 
     @DatabaseField(defaultValue = "2010-01-01 00:00:00.000000", format="yyyy-MM-dd HH:mm:ss.SSSSSS", dataType=DataType.DATE_STRING)
-    private Date lastLearnDate;
+    private Date lastLearnDate = new Date(1262304000000L);
 
     @DatabaseField(defaultValue = "2010-01-01 00:00:00.000000", format="yyyy-MM-dd HH:mm:ss.SSSSSS", dataType=DataType.DATE_STRING)
-    private Date nextLearnDate;
+    private Date nextLearnDate = new Date(1262304000000L);
 
     @DatabaseField
     private Integer grade = 3;
