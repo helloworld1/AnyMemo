@@ -91,8 +91,57 @@ public class DefaultSchedulerTest extends AbstractPreferencesTest {
     }
 
     @SmallTest
-    public void testScheduleFailedCard() {
+    public void testScheduleFailedCardSuccess() {
+        LearningData newLd = defaultScheduler.schedule(failedCardLearningData, 5, false);
+
+        assertFalse(defaultScheduler.isCardForReview(newLd));
+        assertFalse(defaultScheduler.isCardNew(newLd));
+        assertTrue(defaultScheduler.isCardLearned(newLd));
+
+    }
+
+    @SmallTest
+    public void testScheduleFailedCardFailure() {
+        LearningData newLd = defaultScheduler.schedule(failedCardLearningData, 0, false);
+
+        assertTrue(defaultScheduler.isCardForReview(newLd));
+        assertFalse(defaultScheduler.isCardNew(newLd));
+        assertFalse(defaultScheduler.isCardLearned(newLd));
+    }
+
+    @SmallTest
+    public void testScheduleLearnedCardSuccess() {
+        LearningData newLd = defaultScheduler.schedule(learnedCardLearningData, 5, false);
+
+        assertFalse(defaultScheduler.isCardForReview(newLd));
+        assertFalse(defaultScheduler.isCardNew(newLd));
+        assertTrue(defaultScheduler.isCardLearned(newLd));
+    }
+
+    @SmallTest
+    public void testScheduleLearnedCardFailure() {
+        LearningData newLd = defaultScheduler.schedule(learnedCardLearningData, 0, false);
+
+        assertTrue(defaultScheduler.isCardForReview(newLd));
+        assertFalse(defaultScheduler.isCardNew(newLd));
+        assertFalse(defaultScheduler.isCardLearned(newLd));
+    }
+
+    @SmallTest
+    public void testScheduleForReviewardSuccess() {
+        LearningData newLd = defaultScheduler.schedule(forReviewCardLearningData, 5, false);
+
+        assertFalse(defaultScheduler.isCardForReview(newLd));
+        assertFalse(defaultScheduler.isCardNew(newLd));
+        assertTrue(defaultScheduler.isCardLearned(newLd));
+    }
+
+    @SmallTest
+    public void testScheduleForScheduleCardFailure() {
+        LearningData newLd = defaultScheduler.schedule(forReviewCardLearningData, 0, false);
+
+        assertTrue(defaultScheduler.isCardForReview(newLd));
+        assertFalse(defaultScheduler.isCardNew(newLd));
+        assertFalse(defaultScheduler.isCardLearned(newLd));
     }
 }
-
-
