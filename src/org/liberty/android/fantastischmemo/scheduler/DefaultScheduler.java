@@ -147,7 +147,9 @@ public class DefaultScheduler implements Scheduler {
      */
     @Override
     public boolean isCardLearned(LearningData data) {
-        if (data.getGrade() < 2) {
+        if (isCardNew(data)) {
+            return false;
+        } else if (data.getGrade() < 2) {
             return false;
         } else {
             return true;
@@ -164,7 +166,7 @@ public class DefaultScheduler implements Scheduler {
         if (isCardNew(data)) {
             return false;
         }
-        return data.getNextLearnDate().compareTo(new Date()) < 0;
+        return data.getNextLearnDate().compareTo(new Date()) <= 0;
     }
 
     /*
