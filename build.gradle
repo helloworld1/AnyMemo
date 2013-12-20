@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.6.+'
+        classpath 'com.android.tools.build:gradle:0.7.+'
     }
 }
 
@@ -25,6 +25,14 @@ android {
         targetSdkVersion 16
         testPackageName "org.liberty.android.fantastischmemo.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
     }
 
     sourceSets {
