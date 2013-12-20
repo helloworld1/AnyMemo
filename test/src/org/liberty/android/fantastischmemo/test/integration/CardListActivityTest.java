@@ -1,15 +1,23 @@
 package org.liberty.android.fantastischmemo.test.integration;
 
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.dao.LearningDataDao;
+import org.liberty.android.fantastischmemo.domain.LearningData;
+import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 import org.liberty.android.fantastischmemo.test.TestHelper;
 import org.liberty.android.fantastischmemo.ui.CardEditor;
 import org.liberty.android.fantastischmemo.ui.CardListActivity;
 import org.liberty.android.fantastischmemo.ui.DetailScreen;
 import org.liberty.android.fantastischmemo.ui.PreviewEditActivity;
 
+import roboguice.RoboGuice;
+
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.LargeTest;
+import android.widget.ListView;
 
 import com.jayway.android.robotium.solo.Solo;
 
@@ -39,12 +47,12 @@ public class CardListActivityTest extends ActivityInstrumentationTestCase2<CardL
         solo.sleep(2000);
     }
 
-    // TODO: Why it doesn't work?
-    // public void testListCards() throws Exception {
-    //    assertTrue(solo.searchText("head"));
-    //    assertTrue(solo.searchText("arm"));
-    //    assertTrue(solo.searchText("toe"));
-    //}
+    @LargeTest
+    public void testListCards() throws Exception {
+        assertTrue(solo.searchText("head"));
+        assertTrue(solo.searchText("arm"));
+        assertTrue(solo.searchText("toe"));
+    }
 
     @LargeTest
     public void testGoToCardEditor() throws Exception {
@@ -71,6 +79,102 @@ public class CardListActivityTest extends ActivityInstrumentationTestCase2<CardL
         solo.waitForActivity(DetailScreen.class);
         solo.sleep(2000);
         assertTrue(solo.searchText("tooth"));
+    }
+
+    @LargeTest
+    public void testMarkAsLearned() {
+        solo.clickOnText("tooth");
+        solo.clickOnText(solo.getString(R.string.mark_as_learned_text));
+        solo.sleep(2000);
+
+        // asssert db state
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, TestHelper.SAMPLE_DB_PATH);
+        try {
+            Scheduler scheduler = RoboGuice.getInjector(mActivity).getInstance(Scheduler.class);
+            LearningDataDao learningDataDao = helper.getLearningDataDao();
+            LearningData ld = learningDataDao.queryForId(10);
+
+            assertEquals(true, scheduler.isCardLearned(ld));
+        } finally {
+            AnyMemoDBOpenHelperManager.releaseHelper(helper);
+        }
+        assertTrue(solo.searchText("tooth"));
+    }
+
+    @LargeTest
+    public void testMarkAsForgotten() {
+        solo.clickOnText("tooth");
+        solo.clickOnText(solo.getString(R.string.mark_as_forgotten_text));
+        solo.sleep(2000);
+
+        // asssert db state
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, TestHelper.SAMPLE_DB_PATH);
+        try {
+            Scheduler scheduler = RoboGuice.getInjector(mActivity).getInstance(Scheduler.class);
+            LearningDataDao learningDataDao = helper.getLearningDataDao();
+            LearningData ld = learningDataDao.queryForId(10);
+
+            assertEquals(true, scheduler.isCardForReview(ld));
+        } finally {
+            AnyMemoDBOpenHelperManager.releaseHelper(helper);
+        }
+        assertTrue(solo.searchText("tooth"));
+    }
+
+    @LargeTest
+    public void testMarkAsNew() {
+        solo.clickOnText("tooth");
+        solo.clickOnText(solo.getString(R.string.mark_as_forgotten_text));
+        solo.sleep(2000);
+        solo.clickOnText("tooth");
+        solo.clickOnText(solo.getString(R.string.mark_as_new_text));
+        solo.sleep(2000);
+
+        // asssert db state
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, TestHelper.SAMPLE_DB_PATH);
+        try {
+            Scheduler scheduler = RoboGuice.getInjector(mActivity).getInstance(Scheduler.class);
+            LearningDataDao learningDataDao = helper.getLearningDataDao();
+            LearningData ld = learningDataDao.queryForId(10);
+
+            assertEquals(true, scheduler.isCardNew(ld));
+        } finally {
+            AnyMemoDBOpenHelperManager.releaseHelper(helper);
+        }
+        assertTrue(solo.searchText("tooth"));
+    }
+
+    @LargeTest
+    public void testMarkAsLearnedForever() {
+        solo.clickOnText("tooth");
+        solo.clickOnText(solo.getString(R.string.mark_as_learned_forever_text));
+        solo.sleep(2000);
+
+        // asssert db state
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, TestHelper.SAMPLE_DB_PATH);
+        try {
+            Scheduler scheduler = RoboGuice.getInjector(mActivity).getInstance(Scheduler.class);
+            LearningDataDao learningDataDao = helper.getLearningDataDao();
+            LearningData ld = learningDataDao.queryForId(10);
+
+            assertEquals(true, scheduler.isCardLearned(ld));
+        } finally {
+            AnyMemoDBOpenHelperManager.releaseHelper(helper);
+        }
+        assertTrue(solo.searchText("tooth"));
+    }
+
+    @LargeTest
+    public void testShowHideAnswer() throws Exception {
+        assertTrue(solo.searchText("la dent", true));
+        getInstrumentation().invokeMenuActionSync(mActivity, R.id.show_hide_answers, 0);
+        solo.sleep(500);
+        solo.scrollListToTop((ListView) solo.getView(R.id.item_list));
+        assertFalse(solo.searchText("la dent", true));
+        getInstrumentation().invokeMenuActionSync(mActivity, R.id.show_hide_answers, 0);
+        solo.sleep(500);
+        solo.scrollListToTop((ListView) solo.getView(R.id.item_list));
+        assertTrue(solo.searchText("la dent", true));
     }
 
     public void tearDown() throws Exception {
