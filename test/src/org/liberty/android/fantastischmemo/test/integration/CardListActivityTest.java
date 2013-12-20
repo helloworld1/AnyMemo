@@ -167,12 +167,16 @@ public class CardListActivityTest extends ActivityInstrumentationTestCase2<CardL
     @LargeTest
     public void testShowHideAnswer() throws Exception {
         assertTrue(solo.searchText("la dent", true));
+
         getInstrumentation().invokeMenuActionSync(mActivity, R.id.show_hide_answers, 0);
         solo.sleep(500);
+        // Make sure the search come from the top of the list
         solo.scrollListToTop((ListView) solo.getView(R.id.item_list));
         assertFalse(solo.searchText("la dent", true));
+
         getInstrumentation().invokeMenuActionSync(mActivity, R.id.show_hide_answers, 0);
         solo.sleep(500);
+        // Make sure the search come from the top of the list
         solo.scrollListToTop((ListView) solo.getView(R.id.item_list));
         assertTrue(solo.searchText("la dent", true));
     }
