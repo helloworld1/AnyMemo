@@ -86,7 +86,7 @@ public class PreviewEditActivityMainButtonTest extends ActivityInstrumentationTe
         solo.clearEditText(0);
         solo.enterText(0, "myhair");
 
-        getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
+        solo.clickOnActionBarItem(R.id.save);
         solo.sleep(4000);
         assertTrue(solo.searchText("myhair"));
     }

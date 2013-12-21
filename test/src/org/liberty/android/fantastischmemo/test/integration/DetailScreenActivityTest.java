@@ -53,7 +53,7 @@ public class DetailScreenActivityTest extends ActivityInstrumentationTestCase2<D
         solo.clearEditText(1);
         solo.enterText(1, "foot");
 
-        getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
+        solo.clickOnActionBarItem(R.id.save);
 
         solo.clickOnText(solo.getString(R.string.ok_text));
         solo.sleep(4000);

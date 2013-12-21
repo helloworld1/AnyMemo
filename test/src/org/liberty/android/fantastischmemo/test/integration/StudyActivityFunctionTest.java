@@ -95,7 +95,7 @@ public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<
 
     @LargeTest
     public void testDeleteCard() throws Exception {
-        getInstrumentation().invokeMenuActionSync(mActivity, R.id.menu_context_delete, 0);
+        solo.clickOnActionBarItem(R.id.menu_context_delete);
         solo.clickOnText(solo.getString(R.string.ok_text));
         solo.goBack();
 
@@ -118,7 +118,7 @@ public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<
 
     @LargeTest
     public void testMarkCardLearnedForever() throws Exception {
-        getInstrumentation().invokeMenuActionSync(mActivity, R.id.menu_mark_as_learned_forever, 0);
+        solo.clickOnActionBarItem(R.id.menu_mark_as_learned_forever);
 
         solo.clickOnText(solo.getString(R.string.ok_text));
 
@@ -145,7 +145,7 @@ public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<
 
     @LargeTest
     public void testGotoPreviewScreen() {
-        getInstrumentation().invokeMenuActionSync(mActivity, R.id.menu_context_gotoprev, 0);
+        solo.clickOnActionBarItem(R.id.menu_context_gotoprev);
         assertTrue(solo.waitForActivity("PreviewEditActivity"));
         solo.sleep(1000);
     }
@@ -153,14 +153,14 @@ public class StudyActivityFunctionTest extends ActivityInstrumentationTestCase2<
     @LargeTest
     public void testGotoDetailScreen() {
         // The way to click menu item in action bar
-        getInstrumentation().invokeMenuActionSync(mActivity, R.id.menudetail, 0);
+        solo.clickOnActionBarItem(R.id.menudetail);
         assertTrue(solo.waitForActivity("DetailScreen"));
         solo.sleep(1000);
     }
 
     @LargeTest
     public void testGotoSettingsScreen() {
-        getInstrumentation().invokeMenuActionSync(mActivity, R.id.menusettings, 0);
+        solo.clickOnActionBarItem(R.id.menusettings);
         assertTrue(solo.waitForActivity("SettingsScreen"));
         solo.sleep(1000);
     }

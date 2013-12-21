@@ -47,7 +47,7 @@ public class StudyActivityEditCardTest extends ActivityInstrumentationTestCase2<
 
     @LargeTest
     public void testSaveCardWithModification() {
-        getInstrumentation().invokeMenuActionSync(mActivity, R.id.menu_context_edit, 0);
+        solo.clickOnActionBarItem(R.id.menu_context_edit);
 
         solo.waitForDialogToClose(3000);
         solo.sleep(300);
@@ -56,7 +56,7 @@ public class StudyActivityEditCardTest extends ActivityInstrumentationTestCase2<
         solo.enterText(0, "test");
         solo.sleep(300);
 
-        getInstrumentation().invokeMenuActionSync(solo.getCurrentActivity(), R.id.save, 0);
+        solo.clickOnActionBarItem(R.id.save);
 
         solo.waitForActivity("StudyActivity");
         solo.waitForDialogToClose(8000);
@@ -75,7 +75,7 @@ public class StudyActivityEditCardTest extends ActivityInstrumentationTestCase2<
         edit.commit();
 
         // Now do the edit test
-        getInstrumentation().invokeMenuActionSync(mActivity, R.id.menu_context_edit, 0);
+        solo.clickOnActionBarItem(R.id.menu_context_edit);
 
 
         solo.waitForDialogToClose(3000);
@@ -86,7 +86,7 @@ public class StudyActivityEditCardTest extends ActivityInstrumentationTestCase2<
 
         solo.sleep(300);
 
-        getInstrumentation().invokeMenuActionSync(solo.getCurrentActivity(), R.id.save, 0);
+        solo.clickOnActionBarItem(R.id.save);
 
         solo.waitForActivity("StudyActivity");
         solo.waitForDialogToClose(8000);

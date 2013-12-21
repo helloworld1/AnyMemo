@@ -74,7 +74,7 @@ public class StudyActivityFilterCategoryTest extends ActivityInstrumentationTest
     @LargeTest
     public void testFilterCategory() {
         // Filter category menu item
-        getInstrumentation().invokeMenuActionSync(mActivity, R.id.menu_memo_category, 0);
+        solo.clickOnActionBarItem(R.id.menu_memo_category);
 
         solo.clickOnText("cat1");
         solo.clickOnText(solo.getString(R.string.ok_text));

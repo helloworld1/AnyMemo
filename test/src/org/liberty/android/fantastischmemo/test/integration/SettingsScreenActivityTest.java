@@ -54,7 +54,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         assertTrue(solo.searchText("72"));
 
         solo.sleep(500);
-        getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
+        solo.clickOnActionBarItem(R.id.save);
         solo.sleep(2000);
 
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, TestHelper.SAMPLE_DB_PATH);
@@ -79,7 +79,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         solo.clickOnText(solo.getString(R.string.right_text));
 
         solo.sleep(500);
-        getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 1);
+        solo.clickOnActionBarItem(R.id.save);
         solo.sleep(2000);
 
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, TestHelper.SAMPLE_DB_PATH);
@@ -99,7 +99,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         solo.clickOnText(solo.getString(R.string.card_style_double));
 
         solo.sleep(500);
-        getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
+        solo.clickOnActionBarItem(R.id.save);
         solo.sleep(2000);
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, TestHelper.SAMPLE_DB_PATH);
         try {
@@ -117,7 +117,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         solo.clickOnText("60%");
         
         solo.sleep(500);
-        getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
+        solo.clickOnActionBarItem(R.id.save);
         solo.sleep(2000);
         
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, TestHelper.SAMPLE_DB_PATH);
@@ -141,7 +141,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         solo.clickOnText(solo.getString(R.string.italian_text));
 
         solo.sleep(500);
-        getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
+        solo.clickOnActionBarItem(R.id.save);
         solo.sleep(2000);
 
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, TestHelper.SAMPLE_DB_PATH);
@@ -167,7 +167,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
         solo.clickOnText(solo.getString(R.string.card_style_double));
 
         solo.sleep(500);
-        getInstrumentation().invokeMenuActionSync(mActivity, R.id.save, 0);
+        solo.clickOnActionBarItem(R.id.save);
         solo.sleep(2000);
 
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, TestHelper.SAMPLE_DB_PATH);
