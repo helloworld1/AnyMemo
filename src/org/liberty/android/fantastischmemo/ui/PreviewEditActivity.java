@@ -23,7 +23,6 @@ import java.util.HashMap;
 
 import javax.inject.Inject;
 
-import org.apache.commons.lang3.math.NumberUtils;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.aspect.CheckNullArgs;
@@ -47,19 +46,17 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 public class PreviewEditActivity extends QACardActivity {
-    private boolean searchInflated = false;
     private final int ACTIVITY_EDIT = 11;
     private final int ACTIVITY_SETTINGS = 15;
     private final int ACTIVITY_LIST = 16;
@@ -84,9 +81,6 @@ public class PreviewEditActivity extends QACardActivity {
     Button editButton;
     Button prevButton;
     Button nextButton;
-
-    private View searchNextButton;
-    private View searchPrevButton;
 
     // Injected objects
     private ShareUtil shareUtil;
@@ -258,6 +252,11 @@ public class PreviewEditActivity extends QACardActivity {
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.preview_edit_activity_menu, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(onQueryTextChangedListener);
+
         return true;
     }
 
@@ -322,13 +321,6 @@ public class PreviewEditActivity extends QACardActivity {
             {
                 if (getCurrentCard() != null) {
                     showCategoriesDialog();
-                }
-                return true;
-            }
-            case R.id.editmenu_search_id:
-            {
-                if (getCurrentCard() != null) {
-                    createSearchOverlay();
                 }
                 return true;
             }
@@ -546,7 +538,7 @@ public class PreviewEditActivity extends QACardActivity {
         nextButton = (Button) findViewById(R.id.next_button);
     }
 
-    void setViewListeners(){
+    private void setViewListeners(){
         ///* Set button listeners */
         newButton.setOnClickListener(newButtonListener);
         editButton.setOnClickListener(editButtonListener);
@@ -663,34 +655,6 @@ public class PreviewEditActivity extends QACardActivity {
         }
     }
 
-    private void createSearchOverlay(){
-        // Disable the function if there are no cards.
-        if (getCurrentCard() == null) {
-            return;
-        }
-        if(searchInflated == false){
-            LinearLayout root = (LinearLayout)findViewById(R.id.root);
-            LayoutInflater.from(this).inflate(R.layout.search_overlay, root);
-            ImageButton close = (ImageButton)findViewById(R.id.search_close_btn);
-            close.setOnClickListener(closeSearchButtonListener);
-            searchPrevButton = findViewById(R.id.search_previous_btn);
-            searchPrevButton.setOnClickListener(searchButtonListener);
-            searchNextButton = findViewById(R.id.search_next_btn);
-            searchNextButton.setOnClickListener(searchButtonListener);
-
-            EditText editEntry = (EditText)findViewById(R.id.search_entry);
-            editEntry.requestFocus();
-            searchInflated = true;
-
-        }
-        else{
-            LinearLayout layout = (LinearLayout)findViewById(R.id.search_root);
-            layout.setVisibility(View.VISIBLE);
-        }
-
-
-    }
-
     private void showCategoriesDialog() {
         CategoryEditorFragment df = new CategoryEditorFragment();
         df.setResultListener(categoryResultListener);
@@ -708,11 +672,9 @@ public class PreviewEditActivity extends QACardActivity {
         getSupportFragmentManager().findFragmentByTag("CategoryEditDialog");
     }
 
-    private void dismissSearchOverlay(){
-        if(searchInflated == true){
-            LinearLayout layout = (LinearLayout)findViewById(R.id.search_root);
-            layout.setVisibility(View.GONE);
-        }
+    private void searchCard(String text) {
+        SearchCardTask task = new SearchCardTask();
+        task.execute(text);
     }
 
     private View.OnClickListener prevButtonListener = new View.OnClickListener(){
@@ -726,42 +688,6 @@ public class PreviewEditActivity extends QACardActivity {
         public void onClick(View v){
             gotoNext();
             getCardTTSUtil().stopSpeak();
-        }
-    };
-
-    private View.OnClickListener closeSearchButtonListener = new View.OnClickListener(){
-        public void onClick(View v){
-            dismissSearchOverlay();
-        }
-    };
-
-    private View.OnClickListener searchButtonListener = new View.OnClickListener(){
-        public void onClick(View v){
-
-            EditText editEntry = (EditText)findViewById(R.id.search_entry);
-            String text = editEntry.getText().toString();
-            // Search #123 for id 123
-            if (text.startsWith("#")) {
-                SearchCardTask task = new SearchCardTask();
-                task.execute(SearchMethod.ID.toString(), text.substring(1));
-                return;
-            }
-
-            // Search normal text
-            if (!text.contains("*")) {
-                text = "*" + text + "*";
-            }
-            // Convert to SQL wildcard
-            text = text.replace("*", "%");
-            text = text.replace("?", "_");
-            SearchCardTask task = new SearchCardTask();
-            if (v == searchNextButton) {
-                task.execute(SearchMethod.TEXT_FORWARD.toString(), text);
-            }
-
-            if (v == searchPrevButton) {
-                task.execute(SearchMethod.TEXT_BACKWARD.toString(), text);
-            }
         }
     };
 
@@ -790,7 +716,7 @@ public class PreviewEditActivity extends QACardActivity {
     }
 
     /*
-     * params[2] = {Search Method, Search criteria}
+     * params is the queyr text
      * Search Method should be in SearchMethod enum.
      */
     private class SearchCardTask extends AsyncTask<String, Void, Card> {
@@ -809,23 +735,29 @@ public class PreviewEditActivity extends QACardActivity {
 
         @Override
         public Card doInBackground(String... params) {
-            SearchMethod method = SearchMethod.valueOf(params[0]);
-            assert method != null : "Pass null params to SearchCardTask";
-            String criteria = params[1];
-            assert criteria != null : "Pass null criteria to SearchCardTask";
+            String text = params[0];
+            assert text != null : "Pass null criteria to SearchCardTask";
 
             Card foundCard = null;
 
-            if (method == SearchMethod.ID && NumberUtils.isDigits(criteria)) {
-                foundCard = getDbOpenHelper().getCardDao().queryForId(Integer.valueOf(criteria));
+            // Search #123 for id 123
+            if (text.startsWith("#")) {
+                foundCard = getDbOpenHelper().getCardDao().queryForId(Integer.valueOf(text));
             }
 
-            if (method == SearchMethod.TEXT_FORWARD) {
-                foundCard = getDbOpenHelper().getCardDao().searchNextCard(criteria, getCurrentCard().getOrdinal());
+            // Search normal text
+            if (!text.contains("*")) {
+                text = "*" + text + "*";
             }
+            // Convert to SQL wildcard
+            text = text.replace("*", "%");
+            text = text.replace("?", "_");
 
-            if (method == SearchMethod.TEXT_BACKWARD) {
-                foundCard = getDbOpenHelper().getCardDao().searchPrevCard(criteria, getCurrentCard().getOrdinal());
+            // First try to search from the current place
+            foundCard = getDbOpenHelper().getCardDao().searchNextCard(text, getCurrentCard().getOrdinal());
+            // If not found, search from the first card
+            if (foundCard == null) {
+                foundCard = getDbOpenHelper().getCardDao().searchNextCard(text, 1);
             }
 
             return foundCard;
@@ -857,11 +789,21 @@ public class PreviewEditActivity extends QACardActivity {
         df.show(getSupportFragmentManager(), "GestureSelectionDialog");
     }
 
-    private static enum SearchMethod {
-        TEXT_FORWARD,
-        TEXT_BACKWARD,
-        ID
-    }
+    // Invoked when the search action bar is used to search cards
+    SearchView.OnQueryTextListener onQueryTextChangedListener = new SearchView.OnQueryTextListener() {
+
+        @Override
+        public boolean onQueryTextChange(String text) {
+            return true;
+        }
+
+        @Override
+        public boolean onQueryTextSubmit(String text) {
+            searchCard(text);
+            return true;
+        }
+
+    };
 
     // When a category is selected in category fragment.
     private CategoryEditorResultListener categoryResultListener =

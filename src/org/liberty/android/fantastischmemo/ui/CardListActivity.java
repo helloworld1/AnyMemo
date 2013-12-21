@@ -179,8 +179,7 @@ public class CardListActivity extends AMActivity {
         inflater.inflate(R.menu.card_list_activity_menu, menu);
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat
-                .getActionView(searchItem);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setOnQueryTextListener(onQueryTextChangedListener);
 
         return true;
