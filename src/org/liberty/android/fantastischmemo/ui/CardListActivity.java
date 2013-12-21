@@ -422,13 +422,13 @@ public class CardListActivity extends AMActivity {
         @Override
         public void onItemClick(AdapterView<?> parentView, View childView,
                 int position, long id) {
-            showListItemPopup(childView, cardListAdapter.getCardItem(position));
             CardWrapper cardWrapper = cardListAdapter.getItem(position);
             if (!cardWrapper.isVisible()) {
                 cardWrapper.setVisible(true);
                 cardListAdapter.notifyDataSetChanged();
+            } else {
+                showListItemPopup(childView, cardListAdapter.getCardItem(position));
             }
-
         }
     };
 
