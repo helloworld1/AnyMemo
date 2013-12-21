@@ -53,7 +53,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 public class PreviewEditActivity extends QACardActivity {
@@ -75,12 +74,10 @@ public class PreviewEditActivity extends QACardActivity {
     private String dbPath = "";
     private int activeCategoryId = -1;
 
-    LinearLayout buttonsLayout;
-
-    Button newButton;
-    Button editButton;
-    Button prevButton;
-    Button nextButton;
+    private Button newButton;
+    private Button editButton;
+    private Button prevButton;
+    private Button nextButton;
 
     // Injected objects
     private ShareUtil shareUtil;
@@ -529,9 +526,7 @@ public class PreviewEditActivity extends QACardActivity {
         startActivity(myIntent);
     }
 
-
     private void composeViews(){
-        buttonsLayout = (LinearLayout) findViewById(R.id.buttons_root);
         newButton = (Button) findViewById(R.id.new_button);
         editButton = (Button) findViewById(R.id.edit_button);
         prevButton = (Button) findViewById(R.id.prev_button);
@@ -546,30 +541,6 @@ public class PreviewEditActivity extends QACardActivity {
         nextButton.setOnClickListener(nextButtonListener);
     }
 
-    private View.OnClickListener newButtonListener = new View.OnClickListener(){
-        public void onClick(View v){
-                Intent myIntent = new Intent(PreviewEditActivity.this, CardEditor.class);
-                myIntent.putExtra(CardEditor.EXTRA_DBPATH, dbPath);
-                if (getCurrentCard() != null) {
-                    myIntent.putExtra(CardEditor.EXTRA_CARD_ID, getCurrentCard().getId());
-                }
-                myIntent.putExtra(CardEditor.EXTRA_IS_EDIT_NEW, true);
-                startActivityForResult(myIntent, ACTIVITY_EDIT);
-        }
-    };
-
-    private View.OnClickListener editButtonListener = new View.OnClickListener(){
-        public void onClick(View v){
-            if (getCurrentCard() != null) {
-                Intent myIntent = new Intent(PreviewEditActivity.this, CardEditor.class);
-                myIntent.putExtra(CardEditor.EXTRA_DBPATH, dbPath);
-                myIntent.putExtra(CardEditor.EXTRA_CARD_ID, getCurrentCard().getId());
-                myIntent.putExtra(CardEditor.EXTRA_IS_EDIT_NEW, false);
-                startActivityForResult(myIntent, ACTIVITY_EDIT);
-            }
-        }
-    };
-
     private void updateTitle(){
         if (getCurrentCard() != null) {
             StringBuilder sb = new StringBuilder();
@@ -581,7 +552,7 @@ public class PreviewEditActivity extends QACardActivity {
         }
     }
 
-    protected void gotoNext(){
+    private void gotoNext(){
         if (getCurrentCard() != null) {
             Card nextCard = getDbOpenHelper().getCardDao().queryNextCard(getCurrentCard(), currentCategory);
 
@@ -672,6 +643,22 @@ public class PreviewEditActivity extends QACardActivity {
         getSupportFragmentManager().findFragmentByTag("CategoryEditDialog");
     }
 
+    private void showGesturesDialog() {
+        final HashMap<String, String> gestureNameDescriptionMap
+            = new HashMap<String, String>();
+        gestureNameDescriptionMap.put(GestureName.LEFT_SWIPE.getName(), getString(R.string.add_screen_next));
+        gestureNameDescriptionMap.put(GestureName.RIGHT_SWIPE.getName(), getString(R.string.previous_text_short));
+
+
+        GestureSelectionDialogFragment df = new GestureSelectionDialogFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(GestureSelectionDialogFragment.EXTRA_GESTURE_NAME_DESCRIPTION_MAP, gestureNameDescriptionMap);
+        df.setArguments(args);
+        df.show(getSupportFragmentManager(), "GestureSelectionDialog");
+    }
+
+
+    @CheckNullArgs
     private void searchCard(String text) {
         SearchCardTask task = new SearchCardTask();
         task.execute(text);
@@ -690,6 +677,39 @@ public class PreviewEditActivity extends QACardActivity {
             getCardTTSUtil().stopSpeak();
         }
     };
+
+    private View.OnClickListener newButtonListener = new View.OnClickListener(){
+        public void onClick(View v) {
+            Intent myIntent = new Intent(PreviewEditActivity.this, CardEditor.class);
+            myIntent.putExtra(CardEditor.EXTRA_DBPATH, dbPath);
+            if (getCurrentCard() != null) {
+                myIntent.putExtra(CardEditor.EXTRA_CARD_ID, getCurrentCard().getId());
+            }
+            myIntent.putExtra(CardEditor.EXTRA_IS_EDIT_NEW, true);
+            startActivityForResult(myIntent, ACTIVITY_EDIT);
+        }
+    };
+
+    private View.OnClickListener editButtonListener = new View.OnClickListener(){
+        public void onClick(View v){
+            if (getCurrentCard() != null) {
+                Intent myIntent = new Intent(PreviewEditActivity.this, CardEditor.class);
+                myIntent.putExtra(CardEditor.EXTRA_DBPATH, dbPath);
+                myIntent.putExtra(CardEditor.EXTRA_CARD_ID, getCurrentCard().getId());
+                myIntent.putExtra(CardEditor.EXTRA_IS_EDIT_NEW, false);
+                startActivityForResult(myIntent, ACTIVITY_EDIT);
+            }
+        }
+    };
+
+    // When a category is selected in category fragment.
+    private CategoryEditorResultListener categoryResultListener =
+        new CategoryEditorResultListener() {
+            public void onReceiveCategory(Category c) {
+                activeCategoryId = c.getId();
+                restartActivity();
+            }
+        };
 
     private class DeleteCardTask extends AsyncTask<Void, Void, Void> {
         private ProgressDialog progressDialog;
@@ -774,21 +794,6 @@ public class PreviewEditActivity extends QACardActivity {
             updateTitle();
         }
     }
-
-    private void showGesturesDialog() {
-        final HashMap<String, String> gestureNameDescriptionMap
-            = new HashMap<String, String>();
-        gestureNameDescriptionMap.put(GestureName.LEFT_SWIPE.getName(), getString(R.string.add_screen_next));
-        gestureNameDescriptionMap.put(GestureName.RIGHT_SWIPE.getName(), getString(R.string.previous_text_short));
-
-
-        GestureSelectionDialogFragment df = new GestureSelectionDialogFragment();
-        Bundle args = new Bundle();
-        args.putSerializable(GestureSelectionDialogFragment.EXTRA_GESTURE_NAME_DESCRIPTION_MAP, gestureNameDescriptionMap);
-        df.setArguments(args);
-        df.show(getSupportFragmentManager(), "GestureSelectionDialog");
-    }
-
     // Invoked when the search action bar is used to search cards
     SearchView.OnQueryTextListener onQueryTextChangedListener = new SearchView.OnQueryTextListener() {
 
@@ -804,14 +809,4 @@ public class PreviewEditActivity extends QACardActivity {
         }
 
     };
-
-    // When a category is selected in category fragment.
-    private CategoryEditorResultListener categoryResultListener =
-        new CategoryEditorResultListener() {
-            public void onReceiveCategory(Category c) {
-                activeCategoryId = c.getId();
-                restartActivity();
-            }
-        };
-
 }
