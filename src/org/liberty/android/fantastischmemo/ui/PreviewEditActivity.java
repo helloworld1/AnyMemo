@@ -21,6 +21,8 @@ package org.liberty.android.fantastischmemo.ui;
 
 import java.util.HashMap;
 
+import java.util.regex.Pattern;
+
 import javax.inject.Inject;
 
 import org.liberty.android.fantastischmemo.AMPrefKeys;
@@ -68,6 +70,8 @@ public class PreviewEditActivity extends QACardActivity {
     public static String EXTRA_DBPATH = "dbpath";
     public static String EXTRA_CARD_ID = "id";
     public static String EXTRA_CATEGORY = "category";
+
+    private static final String SEARCH_BY_ID_PATTERN = "#\\d+";
 
     private Category currentCategory = null;
     private Integer savedCardId = null;
@@ -761,23 +765,27 @@ public class PreviewEditActivity extends QACardActivity {
             Card foundCard = null;
 
             // Search #123 for id 123
-            if (text.startsWith("#")) {
-                foundCard = getDbOpenHelper().getCardDao().queryForId(Integer.valueOf(text));
+            if (Pattern.matches(SEARCH_BY_ID_PATTERN, text)) {
+                int id = Integer.valueOf(text.substring(1));
+                foundCard = getDbOpenHelper().getCardDao().queryForId(id);
             }
 
-            // Search normal text
-            if (!text.contains("*")) {
-                text = "*" + text + "*";
-            }
-            // Convert to SQL wildcard
-            text = text.replace("*", "%");
-            text = text.replace("?", "_");
+            // Search normal cards
+            if (foundCard == null) {
+                // Search normal text
+                if (!text.contains("*")) {
+                    text = "*" + text + "*";
+                }
+                // Convert to SQL wildcard
+                text = text.replace("*", "%");
+                text = text.replace("?", "_");
 
-            // First try to search from the current place
-            foundCard = getDbOpenHelper().getCardDao().searchNextCard(text, getCurrentCard().getOrdinal());
+                // First try to search from the current place
+                foundCard = getDbOpenHelper().getCardDao().searchNextCard(text, getCurrentCard().getOrdinal());
+            }
             // If not found, search from the first card
             if (foundCard == null) {
-                foundCard = getDbOpenHelper().getCardDao().searchNextCard(text, 1);
+                foundCard = getDbOpenHelper().getCardDao().searchNextCard(text, 0);
             }
 
             return foundCard;
