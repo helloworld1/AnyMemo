@@ -77,7 +77,7 @@
     <string name="detail_back">Indietro</string>
     <string name="delete_warning">Vuoi davvero cancellare questa scheda?</string>
     <string name="skip_text">Salta</string>
-    <string name="skip_warning">Questo elemento non apparirà mai nell\'apprendimento. Sicuro di volerlo saltare?</string>
+    <string name="skip_warning">Questo elemento non apparirà mai nell\'apprendimento. Sicuro di volerlo marcare come imparato per sempre?</string>
     <string name="stat_total">Totale: </string>
     <string name="stat_scheduled">Ripasso: </string>
     <string name="stat_new">Nuove: </string>
@@ -462,4 +462,14 @@
     <string name="arabic_text">Arabo</string>
     <string name="unsupported_audio_locale_text">La lingua selezionata per l\'audio non è disponibile per il sintetizzatore vocale (TTS) corrente.</string>
     <string name="tts_language_data_missing_text">Mancano i dati della lingua selezionata per il sintetizzatore vocale (TTS) corrente.</string>
+    <string name="converting_wait_text">AnyMemo sta convertendo. Attendere prego&#8230;</string>
+    <string name="converting_success_text">La conversione AnyMemo ha avuto successo.</string>
+    <string name="converting_failure_text">La conversione AnyMemo è fallita.</string>
+    <string name="conversion_started_text">Conversione iniziata.</string>
+    <string name="mark_as_learned_text">Marcato come imparato</string>
+    <string name="mark_as_forgotten_text">Marcato come dimenticato</string>
+    <string name="mark_as_new_text">Marcato come nuovo</string>
+    <string name="mark_as_learned_forever_text">Marato come imparato per sempre</string>
+    <string name="mark_as_learned_forever_warning_text">Questo elemento non apparirà mai nell\'apprendimento. Sicuro di volerlo marcare come imparato per sempre?</string>
+    <string name="show_hide_answers_text">Mostra/nascondi le risposte</string>
 </resources>
