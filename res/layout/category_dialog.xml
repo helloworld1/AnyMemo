@@ -29,7 +29,7 @@
                     android:id="@+id/button_new"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/add_screen_new"
+                    android:text="@string/new_text"
                     android:layout_weight="1"
                     android:layout_marginLeft="2dip"
                     android:layout_marginRight="2dip" />

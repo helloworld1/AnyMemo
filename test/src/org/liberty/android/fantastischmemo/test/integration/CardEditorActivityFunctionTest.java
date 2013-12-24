@@ -56,7 +56,7 @@ public class CardEditorActivityFunctionTest extends ActivityInstrumentationTestC
         solo.sleep(300);
         solo.enterText((EditText) solo.getView(R.id.category_dialog_edit), "mycategory");
         solo.sleep(300);
-        solo.clickOnText(solo.getString(R.string.new_text));
+        solo.clickOnButton(solo.getString(R.string.new_text));
         solo.sleep(300);
         assertTrue(solo.searchText("mycategory"));
         solo.clickOnText(solo.getString(R.string.ok_text));

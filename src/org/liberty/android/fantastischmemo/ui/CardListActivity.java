@@ -75,6 +75,9 @@ public class CardListActivity extends AMActivity {
 
     private static final int CARD_TEXT_UTIL_LOADER_ID = 1;
 
+    private static final int LEARNED_CARD_ITEM_COLOR = 0x4F00FF00;
+    private static final int REVIEW_CARD_ITEM_COLOR = 0x4FFFFF00;
+
     private String dbPath;
 
     private CardListAdapter cardListAdapter;
@@ -293,12 +296,12 @@ public class CardListActivity extends AMActivity {
 
     private void highlightCardViewAsLearned(View view) {
         // Light green color
-        view.setBackgroundColor(0x4F00FF00);
+        view.setBackgroundColor(LEARNED_CARD_ITEM_COLOR);
     }
 
     private void highlightCardViewAsForgotten(View view) {
         // Light yellow color
-        view.setBackgroundColor(0x4FFFFF00);
+        view.setBackgroundColor(REVIEW_CARD_ITEM_COLOR);
     }
 
     // Need to maintain compatibility with Android 2.3
@@ -312,12 +315,12 @@ public class CardListActivity extends AMActivity {
     private void showHideAnswers() {
         if (initialAnswerVisible) {
             for (CardWrapper wrapper : cardListAdapter) {
-                wrapper.setVisible(false);
+                wrapper.setAnswerVisible(false);
             }
             initialAnswerVisible = false;
         } else {
             for (CardWrapper wrapper : cardListAdapter) {
-                wrapper.setVisible(true);
+                wrapper.setAnswerVisible(true);
             }
             initialAnswerVisible = true;
         }
@@ -423,8 +426,8 @@ public class CardListActivity extends AMActivity {
         public void onItemClick(AdapterView<?> parentView, View childView,
                 int position, long id) {
             CardWrapper cardWrapper = cardListAdapter.getItem(position);
-            if (!cardWrapper.isVisible()) {
-                cardWrapper.setVisible(true);
+            if (!cardWrapper.isAnswerVisible()) {
+                cardWrapper.setAnswerVisible(true);
                 cardListAdapter.notifyDataSetChanged();
             } else {
                 showListItemPopup(childView, cardListAdapter.getCardItem(position));
@@ -496,7 +499,7 @@ public class CardListActivity extends AMActivity {
                 highlightCardViewAsLearned(convertView);
             }
 
-            if (cardWrapper.isVisible()) {
+            if (cardWrapper.isAnswerVisible()) {
                 answerView.setVisibility(View.VISIBLE);
             } else {
                 answerView.setVisibility(View.INVISIBLE);
@@ -583,27 +586,30 @@ public class CardListActivity extends AMActivity {
 
     }
 
+    /**
+     * Wrap up the card with the answer visibility information.
+     */
     public static class CardWrapper {
 
         private Card card;
 
-        private boolean visible;
+        private boolean answerVisible;
 
         public CardWrapper(Card card, boolean visible) {
             this.card = card;
-            this.visible = visible;
+            this.answerVisible = visible;
         }
 
         public Card getCard() {
             return card;
         }
 
-        public boolean isVisible() {
-            return visible;
+        public boolean isAnswerVisible() {
+            return answerVisible;
         }
 
-        public void setVisible(boolean visible) {
-            this.visible = visible;
+        public void setAnswerVisible(boolean visible) {
+            this.answerVisible = visible;
         }
 
     }
