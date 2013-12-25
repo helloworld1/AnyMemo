@@ -340,7 +340,7 @@
     <string name="export_zip_text">Export Zip</string>
     <string name="customize_scheduling_algorithm_text">Customize scheduling algorithm</string>
     <string name="customize_scheduling_algorithm_summary">Customize the algorithm to schedule the learning interval.</string>
-    <string name="customize_scheduling_algorithm_warning">Algorithm customization is for advanced user only.</string>
+    <string name="customize_scheduling_algorithm_warning">Algorithm customization is for advanced users only.</string>
     <string name="queuing_text">Queuing</string>
     <string name="when_first_grade_text">When grading a card for the first time</string>
     <string name="initial_grading_interval_summary">This is the interval when you first grade a card in days.</string>
@@ -471,6 +471,6 @@
     <string name="mark_as_forgotten_text">Mark as forgotten</string>
     <string name="mark_as_new_text">Mark as new</string>
     <string name="mark_as_learned_forever_text">Mark as learned forever</string>
-    <string name="mark_as_learned_forever_warning_text">This item will never appear for learning. Do you want to mark it as learned forever it?</string>
+    <string name="mark_as_learned_forever_warning_text">This item will never appear for learning. Do you want to mark it as learned forever?</string>
     <string name="show_hide_answers_text">Show/hide answers</string>
 </resources>
