@@ -38,9 +38,6 @@ public class FELauncher extends AMActivity implements OnClickListener{
     private Button directoryButton;
     private Button searchTagButton;
     private Button searchUserButton;
-    private Button loginButton;
-    private Button privateButton;
-    private Button uploadButton;
     private SharedPreferences settings;
     private SharedPreferences.Editor editor;
 
@@ -51,28 +48,11 @@ public class FELauncher extends AMActivity implements OnClickListener{
         directoryButton = (Button)findViewById(R.id.fe_directory);
         searchTagButton = (Button)findViewById(R.id.fe_search_tag);
         searchUserButton = (Button)findViewById(R.id.fe_search_user);
-        loginButton = (Button)findViewById(R.id.fe_login);
-        privateButton = (Button)findViewById(R.id.fe_private_login);
-        uploadButton = (Button)findViewById(R.id.fe_upload);
         directoryButton.setOnClickListener(this);
         searchTagButton.setOnClickListener(this);
         searchUserButton.setOnClickListener(this);
-        loginButton.setOnClickListener(this);
-        privateButton.setOnClickListener(this);
-        uploadButton.setOnClickListener(this);
         settings = PreferenceManager.getDefaultSharedPreferences(this);
         editor = settings.edit();
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
-        String searchText = settings.getString(AMPrefKeys.FE_SAVED_USERNAME_KEY, "");
-        String key = settings.getString(AMPrefKeys.FE_SAVED_OAUTH_TOKEN_KEY, "");
-        String secret = settings.getString(AMPrefKeys.FE_SAVED_OAUTH_TOKEN_SECRET_KEY, "");
-        if(!searchText.equals("") && !key.equals("") && !secret.equals("")){
-            loginButton.setText(getString(R.string.fe_logged_in_text) + ": " + searchText);
-        }
     }
 
     @Override
@@ -87,42 +67,6 @@ public class FELauncher extends AMActivity implements OnClickListener{
         if(v == searchUserButton){
             showSearchUserDialog();
         }
-        if(v == loginButton){
-            Intent myIntent = new Intent(this, FEOauth.class);
-            startActivity(myIntent);
-        }
-        if(v == privateButton){
-            String searchText = settings.getString(AMPrefKeys.FE_SAVED_USERNAME_KEY, "");
-            String key = settings.getString(AMPrefKeys.FE_SAVED_OAUTH_TOKEN_KEY, "");
-            String secret = settings.getString(AMPrefKeys.FE_SAVED_OAUTH_TOKEN_SECRET_KEY, "");
-            if(!searchText.equals("") && !key.equals("") && !secret.equals("")){
-                Intent myIntent = new Intent(FELauncher.this, DownloaderFE.class);
-                myIntent.setAction(DownloaderFE.INTENT_ACTION_SEARCH_PRIVATE);
-                myIntent.putExtra("search_criterion", searchText);
-                myIntent.putExtra("oauth_token", key);
-                myIntent.putExtra("oauth_token_secret", secret);
-                startActivity(myIntent);
-            }
-            else{
-                showNotAuthDialog();
-            }
-        }
-        if(v == uploadButton){
-            String searchText = settings.getString(AMPrefKeys.FE_SAVED_USERNAME_KEY, "");
-            String key = settings.getString(AMPrefKeys.FE_SAVED_OAUTH_TOKEN_KEY, "");
-            String secret = settings.getString(AMPrefKeys.FE_SAVED_OAUTH_TOKEN_SECRET_KEY, "");
-            if(!searchText.equals("") && !key.equals("") && !secret.equals("")){
-                Intent myIntent = new Intent(FELauncher.this, FEUpload.class);
-                myIntent.putExtra("search_criterion", searchText);
-                myIntent.putExtra("oauth_token", key);
-                myIntent.putExtra("oauth_token_secret", secret);
-                startActivity(myIntent);
-            }
-            else{
-                showNotAuthDialog();
-            }
-        }
-
     }
 
     @Override
@@ -146,16 +90,6 @@ public class FELauncher extends AMActivity implements OnClickListener{
 
 	    return false;
 	}
-
-
-    private void showNotAuthDialog(){
-        new AlertDialog.Builder(this)
-            .setTitle(R.string.fe_not_login)
-            .setMessage(R.string.fe_not_login_message)
-            .setPositiveButton(R.string.ok_text, null)
-            .show();
-    }
-
 
     private void showSearchTagDialog(){
         final EditText et = new EditText(this);

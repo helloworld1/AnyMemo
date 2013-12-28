@@ -37,24 +37,6 @@
                 android:layout_weight="1"
                 android:layout_margin="5dp"
                 android:text="@string/search_user" />
-            <Button android:id="@+id/fe_login"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:layout_margin="5dp"
-                android:text="@string/fe_login_text" />
-            <Button android:id="@+id/fe_private_login"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:layout_margin="5dp"
-                android:text="@string/private_login" />
-            <Button android:id="@+id/fe_upload"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:layout_margin="5dp"
-                android:text="@string/upload_db" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

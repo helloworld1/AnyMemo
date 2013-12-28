@@ -42,9 +42,6 @@
             android:name=".downloader.FELauncher"
             android:configChanges="orientation|keyboardHidden" />
         <activity
-            android:name=".downloader.FEUpload"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity
             android:name=".downloader.FEDirectory"
             android:configChanges="orientation|keyboardHidden" />
         <activity

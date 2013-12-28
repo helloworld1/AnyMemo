@@ -26,9 +26,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import oauth.signpost.OAuthConsumer;
-import oauth.signpost.basic.DefaultOAuthConsumer;
-
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -63,7 +60,6 @@ import android.widget.TextView;
 public class DownloaderFE extends DownloaderBase{
     public static final String INTENT_ACTION_SEARCH_TAG = "am.fe.intent.search_tag";
     public static final String INTENT_ACTION_SEARCH_USER = "am.fe.intent.search_user";
-    public static final String INTENT_ACTION_SEARCH_PRIVATE= "am.fe.intent.private";
 
     private static final String TAG = "org.liberty.android.fantastischmemo.downloader.DownloaderFE";
     private static final String FE_API_KEY = "anymemo_android";
@@ -77,9 +73,6 @@ public class DownloaderFE extends DownloaderBase{
     private ProgressDialog mProgressDialog;
     private String action;
     private String searchCriterion = null;
-    private String oauthToken = null;
-    private String oauthTokenSecret = null;
-    private OAuthConsumer oauthConsumer = null;
 
     private DownloaderUtils downloaderUtils;
 
@@ -105,12 +98,8 @@ public class DownloaderFE extends DownloaderBase{
         Intent intent = getIntent();
         action = intent.getAction();
         if(action.equals(INTENT_ACTION_SEARCH_TAG)){
-        }
-        else if(action.equals(INTENT_ACTION_SEARCH_USER)){
-        }
-        else if(action.equals(INTENT_ACTION_SEARCH_PRIVATE)){
-        }
-        else{
+        } else if(action.equals(INTENT_ACTION_SEARCH_USER)){
+        } else{
             Log.e(TAG, "Invalid intent to invoke this activity.");
             finish();
         }
@@ -118,22 +107,8 @@ public class DownloaderFE extends DownloaderBase{
         if(extras  == null){
             Log.e(TAG, "Extras is null.");
             finish();
-        }
-        else{
+        } else {
             searchCriterion = extras.getString("search_criterion");
-            oauthToken= extras.getString("oauth_token");
-            oauthTokenSecret = extras.getString("oauth_token_secret");
-            if(action.equals(INTENT_ACTION_SEARCH_PRIVATE)){
-                if(oauthToken == null || oauthToken == null){
-                    Log.e(TAG, "OAuth key and token are not passed.");
-                    finish();
-                }
-                else{
-
-                    oauthConsumer = new DefaultOAuthConsumer(FEOauth.CONSUMER_KEY, FEOauth.CONSUMER_SECRET);
-                    oauthConsumer.setTokenWithSecret(oauthToken, oauthTokenSecret);
-                }
-            }
         }
         AMGUIUtility.doProgressTask(this, R.string.loading_please_wait, R.string.loading_connect_net, new AMGUIUtility.ProgressTask(){
             private List<DownloadItem> dil;
@@ -224,12 +199,6 @@ public class DownloaderFE extends DownloaderBase{
         else if(action.equals(INTENT_ACTION_SEARCH_USER)){
             url = FE_API_USER + URLEncoder.encode(searchCriterion, "UTF-8");
         }
-        else if(action.equals(INTENT_ACTION_SEARCH_PRIVATE)){
-            url = FE_API_USER + URLEncoder.encode(searchCriterion, "UTF-8") + "&private=true&oauth_token_secret=" + oauthTokenSecret+ "&oauth_token=" + oauthToken;
-            Log.i(TAG, "Before signingUrl: " + url);
-            url = oauthConsumer.sign(url);
-
-        }
         else{
             throw new IOException("Incorrect criterion used for this call");
         }
@@ -255,11 +224,7 @@ public class DownloaderFE extends DownloaderBase{
 
 
             String address = FE_API_CARDSET + cardId;
-            if(action.equals(INTENT_ACTION_SEARCH_PRIVATE)){
-                address = address + "&private=true&oauth_token_secret=" + oauthTokenSecret+ "&oauth_token=" + oauthToken;
-                address = oauthConsumer.sign(address);
 
-            }
             DownloadItem di = new DownloadItem(DownloadItem.ItemType.Database,
                     jsonItem.getString("title"),
                     jsonItem.getString("description"),
