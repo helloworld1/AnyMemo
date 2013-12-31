@@ -67,6 +67,7 @@ public class CardPlayerActivity extends QACardActivity {
         if (savedInstanceState != null) {
             startCardId = savedInstanceState.getInt(EXTRA_START_CARD_ID, -1);
         }
+        startInit();
     }
 
     @Override
