@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -303,12 +304,40 @@ public abstract class QACardActivity extends AMActivity {
         if (setting.getCardStyle() == Setting.CardStyle.SINGLE_SIDED) {
             TwoFieldsCardFragment fragment = new TwoFieldsCardFragment();
             Bundle b = new Bundle();
-            CardFragment.Builder[] builders1 = {questionFragmentBuilder, noteFragmentBuilder};
-            CardFragment.Builder[] builders2 = {showAnswerFragmentBuilder, answerFragmentBuilder};
+            List<CardFragment.Builder> builders1List = new ArrayList<CardFragment.Builder>(4);
+            if (setting.getQuestionFieldEnum().contains(Setting.CardField.QUESTION)) {
+                builders1List.add(questionFragmentBuilder);
+            }
+            if (setting.getQuestionFieldEnum().contains(Setting.CardField.ANSWER)) {
+                builders1List.add(answerFragmentBuilder);
+            }
+            if (setting.getQuestionFieldEnum().contains(Setting.CardField.NOTE)) {
+                builders1List.add(noteFragmentBuilder);
+            }
+
+            List<CardFragment.Builder> builders2List = new ArrayList<CardFragment.Builder>(4);
+            if (!showAnswer) {
+                builders2List.add(showAnswerFragmentBuilder);
+            }
+            if (setting.getAnswerFieldEnum().contains(Setting.CardField.QUESTION)) {
+                builders2List.add(questionFragmentBuilder);
+            }
+            if (setting.getAnswerFieldEnum().contains(Setting.CardField.ANSWER)) {
+                builders2List.add(answerFragmentBuilder);
+            }
+            if (setting.getAnswerFieldEnum().contains(Setting.CardField.NOTE)) {
+                builders2List.add(noteFragmentBuilder);
+            }
+
+            CardFragment.Builder[] builders1 = new CardFragment.Builder[builders1List.size()];
+            builders1List.toArray(builders1);
+            CardFragment.Builder[] builders2 = new CardFragment.Builder[builders2List.size()];
+            builders2List.toArray(builders2);
+
             b.putSerializable(TwoFieldsCardFragment.EXTRA_FIELD1_CARD_FRAGMENT_BUILDERS, builders1);
             b.putSerializable(TwoFieldsCardFragment.EXTRA_FIELD2_CARD_FRAGMENT_BUILDERS, builders2);
             if (showAnswer) {
-                b.putInt(TwoFieldsCardFragment.EXTRA_FIELD2_INITIAL_POSITION, 1);
+                b.putInt(TwoFieldsCardFragment.EXTRA_FIELD2_INITIAL_POSITION, 0);
             } else {
                 b.putInt(TwoFieldsCardFragment.EXTRA_FIELD2_INITIAL_POSITION, 0);
             }
