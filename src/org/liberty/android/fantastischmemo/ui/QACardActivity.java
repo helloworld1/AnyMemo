@@ -50,15 +50,17 @@ import android.gesture.GestureLibrary;
 import android.gesture.GestureOverlayView;
 import android.gesture.Prediction;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.view.ViewPager;
 import android.text.ClipboardManager;
 import android.text.Spannable;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
@@ -130,7 +132,6 @@ public abstract class QACardActivity extends AMActivity {
         return multipleLoaderManager;
     }
 
-
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -160,13 +161,17 @@ public abstract class QACardActivity extends AMActivity {
         // Load gestures
         loadGestures();
 
-        multipleLoaderManager.registerLoaderCallbacks(SETTING_LOADER_ID, new SettingLoaderCallbacks(), false);
-        multipleLoaderManager.registerLoaderCallbacks(CARD_TTS_UTIL_LOADER_ID, new CardTTSUtilLoaderCallbacks(), true);
-        multipleLoaderManager.registerLoaderCallbacks(CARD_TEXT_UTIL_LOADER_ID, new CardTextUtilLoaderCallbacks(), true);
-        multipleLoaderManager.setOnAllLoaderCompletedRunnable(onPostInitRunnable);
+        multipleLoaderManager.registerLoaderCallbacks(SETTING_LOADER_ID,
+                new SettingLoaderCallbacks(), false);
+        multipleLoaderManager.registerLoaderCallbacks(CARD_TTS_UTIL_LOADER_ID,
+                new CardTTSUtilLoaderCallbacks(), true);
+        multipleLoaderManager.registerLoaderCallbacks(CARD_TEXT_UTIL_LOADER_ID,
+                new CardTextUtilLoaderCallbacks(), true);
+        multipleLoaderManager
+                .setOnAllLoaderCompletedRunnable(onPostInitRunnable);
         multipleLoaderManager.startLoading();
     }
-    
+
     public int getContentView() {
         return R.layout.qa_card_layout;
     }
@@ -211,38 +216,6 @@ public abstract class QACardActivity extends AMActivity {
             answerTypefaceValue = answerTypeface;
         }
 
-        // Handle the QA ratio
-        LinearLayout questionLayout = (LinearLayout) findViewById(R.id.question);
-        LinearLayout answerLayout = (LinearLayout) findViewById(R.id.answer);
-        float qRatio = setting.getQaRatio();
-        if (qRatio > 99.0f) {
-            answerLayout.setVisibility(View.GONE);
-            questionLayout
-                    .setLayoutParams(new LayoutParams(
-                            LayoutParams.MATCH_PARENT,
-                            LayoutParams.MATCH_PARENT, 1.0f));
-            answerLayout
-                    .setLayoutParams(new LayoutParams(
-                            LayoutParams.MATCH_PARENT,
-                            LayoutParams.MATCH_PARENT, 1.0f));
-        } else if (qRatio < 1.0f) {
-            questionLayout.setVisibility(View.GONE);
-            questionLayout
-                    .setLayoutParams(new LayoutParams(
-                            LayoutParams.MATCH_PARENT,
-                            LayoutParams.MATCH_PARENT, 1.0f));
-            answerLayout
-                    .setLayoutParams(new LayoutParams(
-                            LayoutParams.MATCH_PARENT,
-                            LayoutParams.MATCH_PARENT, 1.0f));
-        } else {
-            questionLayout.setLayoutParams(new LayoutParams(
-                    LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT,
-                    qRatio));
-            answerLayout.setLayoutParams(new LayoutParams(
-                    LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT,
-                    100f - qRatio));
-        }
 
         // Buttons view can be null if it is not decleared in the layout XML
         View buttonsView = findViewById(R.id.buttons_root);
@@ -258,125 +231,130 @@ public abstract class QACardActivity extends AMActivity {
             });
         }
         // Double sided card has no animation and no horizontal line
-        if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED) {
-            if (showAnswer) {
-                findViewById(R.id.question).setVisibility(View.GONE);
-                findViewById(R.id.answer).setVisibility(View.VISIBLE);
+        // if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED) {
+        //         findViewById(R.id.question).setVisibility(View.GONE);
+        //         findViewById(R.id.answer).setVisibility(View.VISIBLE);
 
-                // Also the buttons should match the color.
-                // Do not change color if the color is the default color,
-                // AnyMemo will use the theme's color instead.
-                if (buttonsView != null && !setting.isDefaultColor()) {
-                    buttonsView.setBackgroundColor(setting
-                            .getAnswerBackgroundColor());
-                }
-            } else {
-                findViewById(R.id.question).setVisibility(View.VISIBLE);
-                findViewById(R.id.answer).setVisibility(View.GONE);
+        //         // Also the buttons should match the color.
+        //         // Do not change color if the color is the default color,
+        //         // AnyMemo will use the theme's color instead.
+        //         if (buttonsView != null && !setting.isDefaultColor()) {
+        //             buttonsView.setBackgroundColor(setting
+        //                     .getAnswerBackgroundColor());
+        //         }
+        // } else {
+        //         findViewById(R.id.question).setVisibility(View.VISIBLE);
+        //         findViewById(R.id.answer).setVisibility(View.GONE);
 
-                // Also the buttons should match the color.
-                if (buttonsView != null && !setting.isDefaultColor()) {
-                    buttonsView.setBackgroundColor(setting
-                            .getQuestionBackgroundColor());
-                }
-            }
-            findViewById(R.id.horizontal_line).setVisibility(View.GONE);
-        }
+        //         // Also the buttons should match the color.
+        //         if (buttonsView != null && !setting.isDefaultColor()) {
+        //             buttonsView.setBackgroundColor(setting
+        //                     .getQuestionBackgroundColor());
+        //         }
+        //     }
+        //     findViewById(R.id.horizontal_line).setVisibility(View.GONE);
+        // }
 
-        // Set the color of the horizontal line
-        View horizontalLine = findViewById(R.id.horizontal_line);
-        horizontalLine.setBackgroundColor(setting.getSeparatorColor());
+        CardFragment.Builder questionFragmentBuilder = new CardFragment.Builder(getCurrentCard().getQuestion())
+            .setTextAlignment(questionAlign)
+            .setTypefaceFromFile(questionTypefaceValue)
+            .setTextOnClickListener(onQuestionTextClickListener)
+            .setCardOnClickListener(onQuestionViewClickListener)
+            .setTextFontSize(setting.getQuestionFontSize())
+            .setTypefaceFromFile(setting.getQuestionFont());
 
-        List<Spannable> spannableFields = cardTextUtil
-                .getFieldsToDisplay(getCurrentCard());
+        CardFragment.Builder answerFragmentBuilder = new CardFragment.Builder(getCurrentCard().getAnswer())
+            .setTextAlignment(answerAlign)
+            .setTypefaceFromFile(answerTypefaceValue)
+            .setTextOnClickListener(onAnswerTextClickListener)
+            .setCardOnClickListener(onAnswerViewClickListener)
+            .setTextFontSize(setting.getAnswerFontSize())
+            .setTypefaceFromFile(setting.getAnswerFont())
+            .setDisplayInHtml(setting.getDisplayInHTMLEnum().contains(Setting.CardField.ANSWER))
+            .setReshapeArabic(option.getEnableArabicEngine());
 
-        // Question spannable
-        Spannable sq = spannableFields.get(0);
-
-        // Answer spannable
-        Spannable sa = spannableFields.get(1);
-
-        // Finally we generate the fragments
-        CardFragment.Builder questionFragmentBuilder = new CardFragment.Builder(sq)
-                .setTextAlignment(questionAlign)
-                .setTypefaceFromFile(questionTypefaceValue)
-                .setTextOnClickListener(onQuestionTextClickListener)
-                .setCardOnClickListener(onQuestionViewClickListener)
-                .setTextFontSize(setting.getQuestionFontSize())
-                .setTypefaceFromFile(setting.getQuestionFont());
+        CardFragment.Builder showAnswerFragmentBuilder = new CardFragment.Builder(getString(R.string.memo_show_answer))
+            .setTextAlignment(Setting.Align.CENTER)
+            .setTypefaceFromFile(answerTypefaceValue)
+            .setTextOnClickListener(onAnswerTextClickListener)
+            .setCardOnClickListener(onAnswerViewClickListener)
+            .setTextFontSize(setting.getAnswerFontSize())
+            .setTypefaceFromFile(setting.getAnswerFont())
+            .setDisplayInHtml(setting.getDisplayInHTMLEnum().contains(Setting.CardField.ANSWER))
+            .setReshapeArabic(option.getEnableArabicEngine());
 
         // For default card colors, we will use the theme's color
         // so we do not set the colors here.
         if (!setting.isDefaultColor()) {
             questionFragmentBuilder
-                .setTextColor(setting.getQuestionTextColor())
-                .setBackgroundColor(setting.getQuestionBackgroundColor());
-        }
-        CardFragment questionFragment = questionFragmentBuilder.build();
-
-        CardFragment.Builder answerFragmentBuilder = null;
-
-        if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED
-                || showAnswer) {
-            answerFragmentBuilder = new CardFragment.Builder(sa)
-                    .setTextAlignment(answerAlign)
-                    .setTypefaceFromFile(answerTypefaceValue)
-                    .setTextOnClickListener(onAnswerTextClickListener)
-                    .setCardOnClickListener(onAnswerViewClickListener)
-                    .setTextFontSize(setting.getAnswerFontSize())
-                    .setTypefaceFromFile(setting.getAnswerFont());
-        } else {
-            // For "Show answer" text, we do not use the
-            // alignment from the settings.
-            // It is always center aligned
-            answerFragmentBuilder = new CardFragment.Builder(
-                    getString(R.string.memo_show_answer))
-                    .setTextAlignment(Setting.Align.CENTER)
-                    .setTypefaceFromFile(answerTypefaceValue)
-                    .setTextOnClickListener(onAnswerTextClickListener)
-                    .setCardOnClickListener(onAnswerViewClickListener)
-                    .setTextFontSize(setting.getAnswerFontSize())
-                    .setTypefaceFromFile(setting.getAnswerFont());
-        }
-
-        if (!setting.isDefaultColor()) {
+                .setTextColor(setting.getAnswerTextColor())
+                .setBackgroundColor(setting.getAnswerBackgroundColor());
             answerFragmentBuilder
-                    .setTextColor(setting.getAnswerTextColor())
-                    .setBackgroundColor(setting.getAnswerBackgroundColor());
+                .setTextColor(setting.getAnswerTextColor())
+                .setBackgroundColor(setting.getAnswerBackgroundColor());
+            showAnswerFragmentBuilder
+                .setTextColor(setting.getAnswerTextColor())
+                .setBackgroundColor(setting.getAnswerBackgroundColor());
         }
 
-        CardFragment answerFragment = answerFragmentBuilder.build();
+        CardFragment.Builder noteFragmentBuilder = new CardFragment.Builder(getCurrentCard().getNote())
+            .setTextAlignment(Setting.Align.CENTER)
+            .setTypefaceFromFile(answerTypefaceValue)
+            .setCardOnClickListener(onAnswerViewClickListener)
+            .setTextFontSize(setting.getAnswerFontSize())
+            .setTypefaceFromFile(setting.getAnswerFont());
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
-        if (setting.getCardStyle() != Setting.CardStyle.DOUBLE_SIDED
-                && option.getEnableAnimation()) {
-            if (isAnswerShown == false && showAnswer == true) {
-                // No animation here.
+        // if (setting.getCardStyle() != Setting.CardStyle.DOUBLE_SIDED
+        //         && option.getEnableAnimation()) {
+        //     if (isAnswerShown == false && showAnswer == true) {
+        //         // No animation here.
+        //     } else {
+        //         ft.setCustomAnimations(animationInResId, animationOutResId);
+        //     }
+        // }
+        // ft.replace(R.id.question, questionFragment);
+        // ft.commit();
+        if (setting.getCardStyle() == Setting.CardStyle.SINGLE_SIDED) {
+            TwoFieldsCardFragment fragment = new TwoFieldsCardFragment();
+            Bundle b = new Bundle();
+            CardFragment.Builder[] builders1 = {questionFragmentBuilder, noteFragmentBuilder};
+            CardFragment.Builder[] builders2 = {showAnswerFragmentBuilder, answerFragmentBuilder};
+            b.putSerializable(TwoFieldsCardFragment.EXTRA_FIELD1_CARD_FRAGMENT_BUILDERS, builders1);
+            b.putSerializable(TwoFieldsCardFragment.EXTRA_FIELD2_CARD_FRAGMENT_BUILDERS, builders2);
+            if (showAnswer) {
+                b.putInt(TwoFieldsCardFragment.EXTRA_FIELD2_INITIAL_POSITION, 1);
             } else {
-                ft.setCustomAnimations(animationInResId, animationOutResId);
+                b.putInt(TwoFieldsCardFragment.EXTRA_FIELD2_INITIAL_POSITION, 0);
             }
-        }
-        ft.replace(R.id.question, questionFragment);
-        ft.commit();
 
-        ft = getSupportFragmentManager().beginTransaction();
-
-        if (option.getEnableAnimation()) {
-            if (setting.getCardStyle() != Setting.CardStyle.DOUBLE_SIDED) {
-                if (isAnswerShown == false && showAnswer == true) {
-                    ft.setCustomAnimations(0, R.anim.slide_down);
-                } else {
+            if (option.getEnableAnimation()) {
+                if (isAnswerShown == true && showAnswer == false) {
                     ft.setCustomAnimations(animationInResId, animationOutResId);
                 }
-            } else {
-                // Animation for double sided cards
-                // Current no animation
             }
+            b.putInt(TwoFieldsCardFragment.EXTRA_QA_RATIO, setting.getQaRatio());
+            b.putInt(TwoFieldsCardFragment.EXTRA_SEPARATOR_COLOR, setting.getSeparatorColor());
+            fragment.setArguments(b);
+            ft.replace(R.id.card_root, fragment);
+            ft.commit();
         }
 
-        ft.replace(R.id.answer, answerFragment);
-        ft.commit();
+        if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED) {
+            FlipableCardFragment fragment = new FlipableCardFragment();
+            Bundle b = new Bundle(1);
+            CardFragment.Builder[] builders = {questionFragmentBuilder, answerFragmentBuilder, noteFragmentBuilder};
+            b.putSerializable(FlipableCardFragment.EXTRA_CARD_FRAGMENT_BUILDERS, builders);
+            if (showAnswer) {
+                b.putInt(FlipableCardFragment.EXTRA_INITIAL_POSITION, 1);
+            } else {
+                b.putInt(FlipableCardFragment.EXTRA_INITIAL_POSITION, 0);
+            }
+            fragment.setArguments(b);
+            ft.replace(R.id.card_root, fragment);
+            ft.commit();
+        }
 
         isAnswerShown = showAnswer;
 

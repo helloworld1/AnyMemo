@@ -1,5 +1,6 @@
 package org.liberty.android.fantastischmemo.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.EnumSet;
 
@@ -12,7 +13,9 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "settings", daoClass = SettingDaoImpl.class)
-public class Setting {
+public class Setting implements Serializable {
+    private static final long serialVersionUID = 9204749417247448509L;
+
     public static final String AUDIO_USER_DEFINED = "User Audio";
 
     public static final Integer DEFAULT_QUESTION_TEXT_COLOR = 0xFFBEBEBE;
@@ -20,6 +23,7 @@ public class Setting {
     public static final Integer DEFAULT_QUESTION_BACKGROUND_COLOR = 0xFF000000;
     public static final Integer DEFAULT_ANSWER_BACKGROUND_COLOR = 0xFF000000;
     public static final Integer DEFAULT_SEPARATOR_COLOR = 0xFF909090;
+    public static final Integer DEFAULT_QA_RATIO = 50;
     @DatabaseField(generatedId = true)
     private Integer id = 1;
 
@@ -45,7 +49,7 @@ public class Setting {
     private CardStyle cardStyle = CardStyle.SINGLE_SIDED;
 
     @DatabaseField(defaultValue = "50")
-    private Integer qaRatio = 50;
+    private Integer qaRatio = DEFAULT_QA_RATIO;
 
     @DatabaseField(defaultValue = "US")
     private String questionAudio = "US";
@@ -127,256 +131,256 @@ public class Setting {
     }
 
 
-	public Integer getId() {
-		return id;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public Integer getQuestionFontSize() {
-		return questionFontSize;
-	}
+    public Integer getQuestionFontSize() {
+        return questionFontSize;
+    }
 
-	public void setQuestionFontSize(Integer questionFontSize) {
-		this.questionFontSize = questionFontSize;
-	}
+    public void setQuestionFontSize(Integer questionFontSize) {
+        this.questionFontSize = questionFontSize;
+    }
 
-	public Integer getAnswerFontSize() {
-		return answerFontSize;
-	}
+    public Integer getAnswerFontSize() {
+        return answerFontSize;
+    }
 
-	public void setAnswerFontSize(Integer answerFontSize) {
-		this.answerFontSize = answerFontSize;
-	}
+    public void setAnswerFontSize(Integer answerFontSize) {
+        this.answerFontSize = answerFontSize;
+    }
 
-	public Align getQuestionTextAlign() {
-		return questionTextAlign;
-	}
+    public Align getQuestionTextAlign() {
+        return questionTextAlign;
+    }
 
-	public void setQuestionTextAlign(Align questionTextAlign) {
-		this.questionTextAlign = questionTextAlign;
-	}
+    public void setQuestionTextAlign(Align questionTextAlign) {
+        this.questionTextAlign = questionTextAlign;
+    }
 
-	public Align getAnswerTextAlign() {
-		return answerTextAlign;
-	}
+    public Align getAnswerTextAlign() {
+        return answerTextAlign;
+    }
 
-	public void setAnswerTextAlign(Align answerTextAlign) {
-		this.answerTextAlign = answerTextAlign;
-	}
+    public void setAnswerTextAlign(Align answerTextAlign) {
+        this.answerTextAlign = answerTextAlign;
+    }
 
-	public CardStyle getCardStyle() {
-		return cardStyle;
-	}
+    public CardStyle getCardStyle() {
+        return cardStyle;
+    }
 
-	public void setCardStyle(CardStyle cardStyle) {
-		this.cardStyle = cardStyle;
-	}
+    public void setCardStyle(CardStyle cardStyle) {
+        this.cardStyle = cardStyle;
+    }
 
-	public Integer getQaRatio() {
-		return qaRatio;
-	}
+    public Integer getQaRatio() {
+        return qaRatio;
+    }
 
-	public void setQaRatio(Integer qaRatio) {
-		this.qaRatio = qaRatio;
-	}
+    public void setQaRatio(Integer qaRatio) {
+        this.qaRatio = qaRatio;
+    }
 
-	public String getQuestionAudio() {
-		return questionAudio;
-	}
+    public String getQuestionAudio() {
+        return questionAudio;
+    }
 
-	public void setQuestionAudio(String questionAudio) {
-		this.questionAudio = questionAudio;
-	}
+    public void setQuestionAudio(String questionAudio) {
+        this.questionAudio = questionAudio;
+    }
 
     public boolean isQuestionAudioEnabled(){
         return !StringUtils.isEmpty(getQuestionAudio());
     }
 
-	public String getAnswerAudio() {
-		return answerAudio;
-	}
+    public String getAnswerAudio() {
+        return answerAudio;
+    }
 
-	public void setAnswerAudio(String answerAudio) {
-		this.answerAudio = answerAudio;
-	}
+    public void setAnswerAudio(String answerAudio) {
+        this.answerAudio = answerAudio;
+    }
 
-	public boolean isAnswerAudioEnabled(){
-		return !StringUtils.isEmpty(getAnswerAudio());
-	}
+    public boolean isAnswerAudioEnabled(){
+        return !StringUtils.isEmpty(getAnswerAudio());
+    }
 
-	public Integer getQuestionTextColor() {
-		return questionTextColor;
-	}
+    public Integer getQuestionTextColor() {
+        return questionTextColor;
+    }
 
-	public void setQuestionTextColor(Integer questionTextColor) {
-		this.questionTextColor = questionTextColor;
-	}
+    public void setQuestionTextColor(Integer questionTextColor) {
+        this.questionTextColor = questionTextColor;
+    }
 
-	public Integer getAnswerTextColor() {
-		return answerTextColor;
-	}
+    public Integer getAnswerTextColor() {
+        return answerTextColor;
+    }
 
-	public void setAnswerTextColor(Integer answerTextColor) {
-		this.answerTextColor = answerTextColor;
-	}
+    public void setAnswerTextColor(Integer answerTextColor) {
+        this.answerTextColor = answerTextColor;
+    }
 
-	public Integer getQuestionBackgroundColor() {
-		return questionBackgroundColor;
-	}
+    public Integer getQuestionBackgroundColor() {
+        return questionBackgroundColor;
+    }
 
-	public void setQuestionBackgroundColor(Integer questionBackgroundColor) {
-		this.questionBackgroundColor = questionBackgroundColor;
-	}
+    public void setQuestionBackgroundColor(Integer questionBackgroundColor) {
+        this.questionBackgroundColor = questionBackgroundColor;
+    }
 
-	public Integer getAnswerBackgroundColor() {
-		return answerBackgroundColor;
-	}
+    public Integer getAnswerBackgroundColor() {
+        return answerBackgroundColor;
+    }
 
-	public void setAnswerBackgroundColor(Integer answerBackgroundColor) {
-		this.answerBackgroundColor = answerBackgroundColor;
-	}
+    public void setAnswerBackgroundColor(Integer answerBackgroundColor) {
+        this.answerBackgroundColor = answerBackgroundColor;
+    }
 
-	public Integer getSeparatorColor() {
-		return separatorColor;
-	}
+    public Integer getSeparatorColor() {
+        return separatorColor;
+    }
 
-	public void setSeparatorColor(Integer separatorColor) {
-		this.separatorColor = separatorColor;
-	}
+    public void setSeparatorColor(Integer separatorColor) {
+        this.separatorColor = separatorColor;
+    }
 
-	public String getDisplayInHTML() {
-		return displayInHTML;
-	}
+    public String getDisplayInHTML() {
+        return displayInHTML;
+    }
 
-	public void setDisplayInHTML(String displayInHTML) {
-		this.displayInHTML = displayInHTML;
-	}
+    public void setDisplayInHTML(String displayInHTML) {
+        this.displayInHTML = displayInHTML;
+    }
 
-	public EnumSet<CardField> getDisplayInHTMLEnum() {
-		return AMStringUtils.getEnumSetFromString(CardField.class, displayInHTML);
-	}
+    public EnumSet<CardField> getDisplayInHTMLEnum() {
+        return AMStringUtils.getEnumSetFromString(CardField.class, displayInHTML);
+    }
 
-	public void setDisplayInHTMLEnum(EnumSet<CardField> displayInHTMLEnum) {
+    public void setDisplayInHTMLEnum(EnumSet<CardField> displayInHTMLEnum) {
         displayInHTML = AMStringUtils.getStringFromEnumSet(displayInHTMLEnum);
-	}
+    }
 
-	public Boolean getHtmlLineBreakConversion() {
-		return htmlLineBreakConversion;
-	}
+    public Boolean getHtmlLineBreakConversion() {
+        return htmlLineBreakConversion;
+    }
 
-	public void setHtmlLineBreakConversion(Boolean htmlLineBreakConversion) {
-		this.htmlLineBreakConversion = htmlLineBreakConversion;
-	}
+    public void setHtmlLineBreakConversion(Boolean htmlLineBreakConversion) {
+        this.htmlLineBreakConversion = htmlLineBreakConversion;
+    }
 
-	public String getQuestionField() {
-		return questionField;
-	}
+    public String getQuestionField() {
+        return questionField;
+    }
 
-	public void setQuestionField(String questionField) {
-		this.questionField = questionField;
-	}
+    public void setQuestionField(String questionField) {
+        this.questionField = questionField;
+    }
 
-	public EnumSet<CardField> getQuestionFieldEnum() {
-		return AMStringUtils.getEnumSetFromString(CardField.class, questionField);
-	}
+    public EnumSet<CardField> getQuestionFieldEnum() {
+        return AMStringUtils.getEnumSetFromString(CardField.class, questionField);
+    }
 
-	public void setQuestionFieldEnum(EnumSet<CardField> questionFieldEnum) {
+    public void setQuestionFieldEnum(EnumSet<CardField> questionFieldEnum) {
         questionField = AMStringUtils.getStringFromEnumSet(questionFieldEnum);
-	}
+    }
 
-	public String getAnswerField() {
-		return answerField;
-	}
+    public String getAnswerField() {
+        return answerField;
+    }
 
-	public void setAnswerField(String answerField) {
-		this.answerField = answerField;
-	}
+    public void setAnswerField(String answerField) {
+        this.answerField = answerField;
+    }
 
-	public void setAnswerFieldEnum(EnumSet<CardField> answerFieldEnum) {
+    public void setAnswerFieldEnum(EnumSet<CardField> answerFieldEnum) {
         answerField = AMStringUtils.getStringFromEnumSet(answerFieldEnum);
-	}
+    }
 
-	public EnumSet<CardField> getAnswerFieldEnum() {
-		return AMStringUtils.getEnumSetFromString(CardField.class, answerField);
-	}
+    public EnumSet<CardField> getAnswerFieldEnum() {
+        return AMStringUtils.getEnumSetFromString(CardField.class, answerField);
+    }
 
-	public void setAnswerEnum(EnumSet<CardField> answerFieldEnum) {
+    public void setAnswerEnum(EnumSet<CardField> answerFieldEnum) {
         answerField = AMStringUtils.getStringFromEnumSet(answerFieldEnum);
-	}
+    }
 
-	public String getQuestionFont() {
-		return questionFont;
-	}
+    public String getQuestionFont() {
+        return questionFont;
+    }
 
-	public void setQuestionFont(String questionFont) {
-		this.questionFont = questionFont;
-	}
+    public void setQuestionFont(String questionFont) {
+        this.questionFont = questionFont;
+    }
 
-	public String getAnswerFont() {
-		return answerFont;
-	}
+    public String getAnswerFont() {
+        return answerFont;
+    }
 
-	public void setAnswerFont(String answerFont) {
-		this.answerFont = answerFont;
-	}
+    public void setAnswerFont(String answerFont) {
+        this.answerFont = answerFont;
+    }
 
 
-	public Date getCreationDate() {
-		return creationDate;
-	}
+    public Date getCreationDate() {
+        return creationDate;
+    }
 
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
-	}
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
 
-	public Date getUpdateDate() {
-		return updateDate;
-	}
+    public Date getUpdateDate() {
+        return updateDate;
+    }
 
-	public void setUpdateDate(Date updateDate) {
-		this.updateDate = updateDate;
-	}
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
+    }
 
-	public String getQuestionAudioLocation() {
-		return questionAudioLocation;
-	}
+    public String getQuestionAudioLocation() {
+        return questionAudioLocation;
+    }
 
-	public void setQuestionAudioLocation(String questionAudioLocation) {
-		this.questionAudioLocation = questionAudioLocation;
-	}
+    public void setQuestionAudioLocation(String questionAudioLocation) {
+        this.questionAudioLocation = questionAudioLocation;
+    }
 
-	public String getAnswerAudioLocation() {
-		return answerAudioLocation;
-	}
+    public String getAnswerAudioLocation() {
+        return answerAudioLocation;
+    }
 
-	public void setAnswerAudioLocation(String answerAudioLocation) {
-		this.answerAudioLocation = answerAudioLocation;
-	}
+    public void setAnswerAudioLocation(String answerAudioLocation) {
+        this.answerAudioLocation = answerAudioLocation;
+    }
 
-	public boolean isDefaultColor() {
-	    return (questionTextColor.equals(DEFAULT_QUESTION_TEXT_COLOR)) &&
-	           (answerTextColor.equals(DEFAULT_ANSWER_TEXT_COLOR)) &&
-	           (questionBackgroundColor.equals(DEFAULT_QUESTION_BACKGROUND_COLOR)) &&
-	           (answerBackgroundColor.equals(DEFAULT_ANSWER_BACKGROUND_COLOR)) &&
-	           (separatorColor.equals(DEFAULT_SEPARATOR_COLOR));
-	}
+    public boolean isDefaultColor() {
+        return (questionTextColor.equals(DEFAULT_QUESTION_TEXT_COLOR)) &&
+               (answerTextColor.equals(DEFAULT_ANSWER_TEXT_COLOR)) &&
+               (questionBackgroundColor.equals(DEFAULT_QUESTION_BACKGROUND_COLOR)) &&
+               (answerBackgroundColor.equals(DEFAULT_ANSWER_BACKGROUND_COLOR)) &&
+               (separatorColor.equals(DEFAULT_SEPARATOR_COLOR));
+    }
 }

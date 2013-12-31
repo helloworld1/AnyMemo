@@ -20,11 +20,10 @@
         android:textSize="14dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/question"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:layout_weight="1"/>
     <LinearLayout
         android:id="@+id/horizontal_line"

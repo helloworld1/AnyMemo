@@ -135,6 +135,4 @@ public class DropboxDownloadHelper {
             throw new IOException("Error Downloading file. Get status code: " + statusCode);
         }
     }
-
-
 }

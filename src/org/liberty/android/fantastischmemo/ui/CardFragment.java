@@ -20,7 +20,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import java.io.File;
+import java.io.Serializable;
 
+import org.amr.arabic.ArabicUtilities;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.domain.Setting;
 
@@ -29,6 +31,7 @@ import roboguice.fragment.RoboFragment;
 import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,6 +70,9 @@ public class CardFragment extends RoboFragment {
 
     private Setting.Align textAlignment = Setting.Align.CENTER;
 
+    private boolean displayInHtml = true;
+
+    private boolean reshapeArabic = false;
 
     // The argument set in the factory will stored in the private variable here.
     @Override
@@ -88,7 +94,18 @@ public class CardFragment extends RoboFragment {
         cardTextView = (TextView) v.findViewById(R.id.card_text_view);
         rootView = (LinearLayout) v.findViewById(R.id.root);
 
-        cardTextView.setText(mCardText);
+
+        CharSequence textToDisplay = mCardText;
+
+        if (reshapeArabic) {
+            textToDisplay = ArabicUtilities.reshape(textToDisplay.toString());
+        }
+
+        if (displayInHtml) {
+            textToDisplay = Html.fromHtml(textToDisplay.toString());
+        }
+
+        cardTextView.setText(textToDisplay);
 
         // Uncomment the line below for the text field to handle links.
         // The line is commented out because it is not well tested.
@@ -177,59 +194,91 @@ public class CardFragment extends RoboFragment {
     }
 
 
-    public static class Builder {
-        CardFragment fragment;
+    public static class Builder implements Serializable {
+
+        private static final long serialVersionUID = -3698059438530591747L;
+
+        private CharSequence text = null;
+
+        private transient OnClickListener cardOnClickListener = null;
+
+        private transient OnLongClickListener cardOnLongClickListener = null;
+
+        private transient OnClickListener textOnClickListener = null;
+
+        private transient OnLongClickListener textOnLongClickListener = null;
+
+        private Integer textColor = null;
+
+        private Integer backgroundColor = null;
+
+        private Integer fontSize = null;
+
+        private String fontFile = null;
+
+        private Setting.Align textAlignment = Setting.Align.CENTER;
+
+        private boolean displayInHtml = true;
+
+        private boolean reshapeArabic = false;
 
         public Builder(CharSequence text) {
-            fragment = new CardFragment();
-            Bundle b = new Bundle(1);
-            b.putCharSequence(EXTRA_CARD_TEXT, text);
-            fragment.setArguments(b);
+            this.text = text;
         }
 
         /* Set the click listener on the card */
         public Builder setCardOnClickListener(OnClickListener l) {
-            fragment.cardOnClickListener = l;
+            this.cardOnClickListener = l;
             return this;
         }
 
         /* Set the click listener on the card text */
         public Builder setCardOnLongClickListener(OnLongClickListener l) {
-            fragment.cardOnLongClickListener = l;
+            this.cardOnLongClickListener = l;
             return this;
         }
 
         /* Set the click listener on the card text */
         public Builder setTextOnClickListener(OnClickListener l) {
-            fragment.textOnClickListener = l;
+            this.textOnClickListener = l;
             return this;
         }
 
         /* Set the long click listener on the card text */
         public Builder setTextOnLongClickListener(OnLongClickListener l) {
-            fragment.textOnLongClickListener = l;
+            this.textOnLongClickListener = l;
             return this;
         }
 
         /* Set the card text's color */
         public Builder setTextColor(int color) {
-            fragment.textColor = color;
+            this.textColor = color;
             return this;
         }
 
         /* Set the font from a font file */
         public Builder setTypefaceFromFile(String fontFile) {
-            fragment.fontFile = fontFile;
+            this.fontFile = fontFile;
             return this;
         }
         /* Set the card background color */
         public Builder setBackgroundColor(int color){
-            fragment.backgroundColor = color;
+            this.backgroundColor = color;
             return this;
         }
 
         public Builder setTextFontSize(int size) {
-            fragment.fontSize = size;
+            this.fontSize = size;
+            return this;
+        }
+
+        public Builder setDisplayInHtml(boolean displayInHtml) {
+            this.displayInHtml = displayInHtml;
+            return this;
+        }
+
+        public Builder setReshapeArabic(boolean reshapeArabic) {
+            this.reshapeArabic = reshapeArabic;
             return this;
         }
 
@@ -238,13 +287,58 @@ public class CardFragment extends RoboFragment {
          * The parameter gravity is from Gravity.*
          */
         public Builder setTextAlignment(Setting.Align align) {
-            fragment.textAlignment = align;
+            this.textAlignment = align;
             return this;
         }
 
         public CardFragment build() {
+            CardFragment fragment = new CardFragment();
+            Bundle b = new Bundle(1);
+            b.putCharSequence(EXTRA_CARD_TEXT, text);
+
+            fragment.setArguments(b);
+
+            if (fontFile != null) {
+                fragment.fontFile = fontFile;
+            }
+
+            if (cardOnClickListener != null) {
+                fragment.cardOnClickListener = cardOnClickListener;
+            }
+
+            if (cardOnLongClickListener != null) {
+                fragment.cardOnLongClickListener = cardOnLongClickListener;
+            }
+
+            if (textOnClickListener != null) {
+                fragment.textOnClickListener = textOnClickListener;
+            }
+
+            if (textOnLongClickListener != null) {
+                fragment.textOnLongClickListener = textOnLongClickListener;
+            }
+
+            if (fontSize != null) {
+                fragment.fontSize = fontSize;
+            }
+
+            if (textColor != null) {
+                fragment.textColor = textColor;
+            }
+
+            if (backgroundColor != null) {
+                fragment.backgroundColor = backgroundColor;
+            }
+
+            if (textAlignment != null) {
+                fragment.textAlignment = textAlignment;
+            }
+
+            fragment.reshapeArabic = reshapeArabic;
+
+            fragment.displayInHtml = displayInHtml;
+
             return fragment;
         }
     }
-
 }
