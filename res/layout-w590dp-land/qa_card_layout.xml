@@ -21,23 +21,10 @@
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    <LinearLayout
-        android:id="@+id/question"
+    <FrameLayout
+        android:id="@+id/card_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:layout_weight="1"/>
-    <LinearLayout
-        android:id="@+id/horizontal_line"
-        android:layout_width="fill_parent"
-        android:layout_height="2dip"
-        android:orientation="vertical"
-        android:background="#FF909090"/>
-    <LinearLayout
-        android:id="@+id/answer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_weight="1" />
 </LinearLayout>
 </android.gesture.GestureOverlayView>

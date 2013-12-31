@@ -58,7 +58,7 @@ public class CardPlayerActivity extends QACardActivity {
     private long totalCardCount = 0;
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Bundle extras = getIntent().getExtras();

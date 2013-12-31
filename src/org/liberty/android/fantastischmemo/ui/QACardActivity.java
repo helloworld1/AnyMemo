@@ -35,11 +35,9 @@ import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.domain.Setting;
 import org.liberty.android.fantastischmemo.service.AnyMemoService;
 import org.liberty.android.fantastischmemo.ui.loader.CardTTSUtilLoader;
-import org.liberty.android.fantastischmemo.ui.loader.CardTextUtilLoader;
 import org.liberty.android.fantastischmemo.ui.loader.MultipleLoaderManager;
 import org.liberty.android.fantastischmemo.ui.loader.SettingLoader;
 import org.liberty.android.fantastischmemo.utils.CardTTSUtil;
-import org.liberty.android.fantastischmemo.utils.CardTextUtil;
 
 import roboguice.util.Ln;
 
@@ -50,18 +48,13 @@ import android.gesture.GestureLibrary;
 import android.gesture.GestureOverlayView;
 import android.gesture.Prediction;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v4.view.ViewPager;
 import android.text.ClipboardManager;
-import android.text.Spannable;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 @SuppressWarnings("deprecation")
@@ -84,8 +77,6 @@ public abstract class QACardActivity extends AMActivity {
 
     private static final int CARD_TTS_UTIL_LOADER_ID = 1;
 
-    private static final int CARD_TEXT_UTIL_LOADER_ID = 2;
-
     private Option option;
 
     private Setting setting;
@@ -95,8 +86,6 @@ public abstract class QACardActivity extends AMActivity {
     private TextView smallTitleBar;
 
     private CardTTSUtil cardTTSUtil;
-
-    private CardTextUtil cardTextUtil;
 
     private GestureLibrary gestureLibrary;
 
@@ -165,8 +154,6 @@ public abstract class QACardActivity extends AMActivity {
                 new SettingLoaderCallbacks(), false);
         multipleLoaderManager.registerLoaderCallbacks(CARD_TTS_UTIL_LOADER_ID,
                 new CardTTSUtilLoaderCallbacks(), true);
-        multipleLoaderManager.registerLoaderCallbacks(CARD_TEXT_UTIL_LOADER_ID,
-                new CardTextUtilLoaderCallbacks(), true);
         multipleLoaderManager
                 .setOnAllLoaderCompletedRunnable(onPostInitRunnable);
         multipleLoaderManager.startLoading();
@@ -216,44 +203,32 @@ public abstract class QACardActivity extends AMActivity {
             answerTypefaceValue = answerTypeface;
         }
 
-
         // Buttons view can be null if it is not decleared in the layout XML
         View buttonsView = findViewById(R.id.buttons_root);
 
-        // Make sure the buttons view are also handling the event for the answer view
-        // e. g. clicking on the blank area of the buttons layout to reveal the answer
-        // or flip the card.
         if (buttonsView != null) {
+            // Make sure the buttons view are also handling the event for the answer view
+            // e. g. clicking on the blank area of the buttons layout to reveal the answer
+            // or flip the card.
             buttonsView.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     onQuestionViewClickListener.onClick(v);
                 }
             });
+
+            // Also the buttons should match the color of the view above.
+            // It could be the question if it is the double sided card with only question shown
+            // or answer view's color.
+            if (!setting.isDefaultColor()) {
+                if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED && !showAnswer) {
+                    buttonsView.setBackgroundColor(setting
+                        .getQuestionBackgroundColor());
+                } else {
+                    buttonsView.setBackgroundColor(setting
+                        .getAnswerBackgroundColor());
+                }
+            }
         }
-        // Double sided card has no animation and no horizontal line
-        // if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED) {
-        //         findViewById(R.id.question).setVisibility(View.GONE);
-        //         findViewById(R.id.answer).setVisibility(View.VISIBLE);
-
-        //         // Also the buttons should match the color.
-        //         // Do not change color if the color is the default color,
-        //         // AnyMemo will use the theme's color instead.
-        //         if (buttonsView != null && !setting.isDefaultColor()) {
-        //             buttonsView.setBackgroundColor(setting
-        //                     .getAnswerBackgroundColor());
-        //         }
-        // } else {
-        //         findViewById(R.id.question).setVisibility(View.VISIBLE);
-        //         findViewById(R.id.answer).setVisibility(View.GONE);
-
-        //         // Also the buttons should match the color.
-        //         if (buttonsView != null && !setting.isDefaultColor()) {
-        //             buttonsView.setBackgroundColor(setting
-        //                     .getQuestionBackgroundColor());
-        //         }
-        //     }
-        //     findViewById(R.id.horizontal_line).setVisibility(View.GONE);
-        // }
 
         CardFragment.Builder questionFragmentBuilder = new CardFragment.Builder(getCurrentCard().getQuestion())
             .setTextAlignment(questionAlign)
@@ -287,8 +262,8 @@ public abstract class QACardActivity extends AMActivity {
         // so we do not set the colors here.
         if (!setting.isDefaultColor()) {
             questionFragmentBuilder
-                .setTextColor(setting.getAnswerTextColor())
-                .setBackgroundColor(setting.getAnswerBackgroundColor());
+                .setTextColor(setting.getQuestionTextColor())
+                .setBackgroundColor(setting.getQuestionBackgroundColor());
             answerFragmentBuilder
                 .setTextColor(setting.getAnswerTextColor())
                 .setBackgroundColor(setting.getAnswerBackgroundColor());
@@ -297,8 +272,9 @@ public abstract class QACardActivity extends AMActivity {
                 .setBackgroundColor(setting.getAnswerBackgroundColor());
         }
 
+        // Note is currently shared some settings with Answer
         CardFragment.Builder noteFragmentBuilder = new CardFragment.Builder(getCurrentCard().getNote())
-            .setTextAlignment(Setting.Align.CENTER)
+            .setTextAlignment(answerAlign)
             .setTypefaceFromFile(answerTypefaceValue)
             .setCardOnClickListener(onAnswerViewClickListener)
             .setTextFontSize(setting.getAnswerFontSize())
@@ -306,16 +282,6 @@ public abstract class QACardActivity extends AMActivity {
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
-        // if (setting.getCardStyle() != Setting.CardStyle.DOUBLE_SIDED
-        //         && option.getEnableAnimation()) {
-        //     if (isAnswerShown == false && showAnswer == true) {
-        //         // No animation here.
-        //     } else {
-        //         ft.setCustomAnimations(animationInResId, animationOutResId);
-        //     }
-        // }
-        // ft.replace(R.id.question, questionFragment);
-        // ft.commit();
         if (setting.getCardStyle() == Setting.CardStyle.SINGLE_SIDED) {
             TwoFieldsCardFragment fragment = new TwoFieldsCardFragment();
             Bundle b = new Bundle();
@@ -339,9 +305,7 @@ public abstract class QACardActivity extends AMActivity {
             fragment.setArguments(b);
             ft.replace(R.id.card_root, fragment);
             ft.commit();
-        }
-
-        if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED) {
+        } else if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED) {
             FlipableCardFragment fragment = new FlipableCardFragment();
             Bundle b = new Bundle(1);
             CardFragment.Builder[] builders = {questionFragmentBuilder, answerFragmentBuilder, noteFragmentBuilder};
@@ -354,6 +318,8 @@ public abstract class QACardActivity extends AMActivity {
             fragment.setArguments(b);
             ft.replace(R.id.card_root, fragment);
             ft.commit();
+        } else {
+            assert false : "Card logic not implemented for style: " + setting.getCardStyle();
         }
 
         isAnswerShown = showAnswer;
@@ -396,12 +362,6 @@ public abstract class QACardActivity extends AMActivity {
             buttonsView.setBackgroundColor(setting
                     .getAnswerBackgroundColor());
         }
-
-    }
-
-    // Called when the initalizing finished.
-    protected void onInit() throws Exception {
-        // Do nothing
 
     }
 
@@ -450,26 +410,6 @@ public abstract class QACardActivity extends AMActivity {
 
         @Override
         public void onLoaderReset(Loader<CardTTSUtil> arg0) {
-            // Do nothing now
-        }
-    }
-
-    private class CardTextUtilLoaderCallbacks implements
-            LoaderManager.LoaderCallbacks<CardTextUtil> {
-        @Override
-        public Loader<CardTextUtil> onCreateLoader(int arg0, Bundle arg1) {
-             Loader<CardTextUtil> loader = new CardTextUtilLoader(QACardActivity.this, dbPath);
-             loader.forceLoad();
-             return loader;
-        }
-
-        @Override
-        public void onLoadFinished(Loader<CardTextUtil> loader , CardTextUtil cardTextUtil) {
-            QACardActivity.this.cardTextUtil = cardTextUtil;
-            multipleLoaderManager.checkAllLoadersCompleted();
-        }
-        @Override
-        public void onLoaderReset(Loader<CardTextUtil> arg0) {
             // Do nothing now
         }
     }
