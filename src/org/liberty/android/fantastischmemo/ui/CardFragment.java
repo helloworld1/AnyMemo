@@ -22,16 +22,19 @@ package org.liberty.android.fantastischmemo.ui;
 import java.io.File;
 import java.io.Serializable;
 
-import org.amr.arabic.ArabicUtilities;
+import javax.inject.Inject;
+
+import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.domain.Setting;
+import org.liberty.android.fantastischmemo.utils.CardTextUtil;
+import org.liberty.android.fantastischmemo.utils.CardTextUtilFactory;
 
 import roboguice.fragment.RoboFragment;
 
 import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,7 +49,7 @@ public class CardFragment extends RoboFragment {
 
     public static final String EXTRA_CARD_TEXT = "cardText";
 
-    private CharSequence mCardText;
+    private String mCardText;
 
     private LinearLayout rootView;
 
@@ -72,13 +75,25 @@ public class CardFragment extends RoboFragment {
 
     private boolean displayInHtml = true;
 
-    private boolean reshapeArabic = false;
+    private boolean htmlLinebreakConversion = false;
+
+    private CardTextUtilFactory cardTextUtilFactory;
+
+    private CardTextUtil cardTextUtil;
+
+    private String[] imageSearchPaths = {AMEnv.DEFAULT_IMAGE_PATH};
+
+    @Inject
+    public void setCardTextUtilFactory(CardTextUtilFactory cardTextUtilFactory) {
+        this.cardTextUtilFactory = cardTextUtilFactory;
+    }
 
     // The argument set in the factory will stored in the private variable here.
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        mCardText = getArguments().getCharSequence(EXTRA_CARD_TEXT);
+        mCardText = getArguments().getString(EXTRA_CARD_TEXT);
+        cardTextUtil = cardTextUtilFactory.create(imageSearchPaths);
     }
 
     @Override
@@ -94,18 +109,7 @@ public class CardFragment extends RoboFragment {
         cardTextView = (TextView) v.findViewById(R.id.card_text_view);
         rootView = (LinearLayout) v.findViewById(R.id.root);
 
-
-        CharSequence textToDisplay = mCardText;
-
-        if (reshapeArabic) {
-            textToDisplay = ArabicUtilities.reshape(textToDisplay.toString());
-        }
-
-        if (displayInHtml) {
-            textToDisplay = Html.fromHtml(textToDisplay.toString());
-        }
-
-        cardTextView.setText(textToDisplay);
+        cardTextView.setText(cardTextUtil.getSpannableText(mCardText, displayInHtml, htmlLinebreakConversion));
 
         // Uncomment the line below for the text field to handle links.
         // The line is commented out because it is not well tested.
@@ -198,7 +202,7 @@ public class CardFragment extends RoboFragment {
 
         private static final long serialVersionUID = -3698059438530591747L;
 
-        private CharSequence text = null;
+        private String text = null;
 
         private transient OnClickListener cardOnClickListener = null;
 
@@ -220,9 +224,11 @@ public class CardFragment extends RoboFragment {
 
         private boolean displayInHtml = true;
 
-        private boolean reshapeArabic = false;
+        private boolean htmlLinebreakConversion = false;
 
-        public Builder(CharSequence text) {
+        private String[] imageSearchPaths = {AMEnv.DEFAULT_IMAGE_PATH};
+
+        public Builder(String text) {
             this.text = text;
         }
 
@@ -277,8 +283,13 @@ public class CardFragment extends RoboFragment {
             return this;
         }
 
-        public Builder setReshapeArabic(boolean reshapeArabic) {
-            this.reshapeArabic = reshapeArabic;
+        public Builder setHtmlLinebreakConversion(boolean htmlLinebreakConversion) {
+            this.htmlLinebreakConversion = htmlLinebreakConversion;
+            return this;
+        }
+
+        public Builder setImageSearchPaths(String[] imageSearchPaths) {
+            this.imageSearchPaths = imageSearchPaths;
             return this;
         }
 
@@ -294,7 +305,7 @@ public class CardFragment extends RoboFragment {
         public CardFragment build() {
             CardFragment fragment = new CardFragment();
             Bundle b = new Bundle(1);
-            b.putCharSequence(EXTRA_CARD_TEXT, text);
+            b.putString(EXTRA_CARD_TEXT, text);
 
             fragment.setArguments(b);
 
@@ -334,9 +345,11 @@ public class CardFragment extends RoboFragment {
                 fragment.textAlignment = textAlignment;
             }
 
-            fragment.reshapeArabic = reshapeArabic;
+            fragment.htmlLinebreakConversion = htmlLinebreakConversion;
 
             fragment.displayInHtml = displayInHtml;
+
+            fragment.imageSearchPaths = imageSearchPaths;
 
             return fragment;
         }

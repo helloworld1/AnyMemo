@@ -21,6 +21,5 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.utils;
 
 public interface CardTextUtilFactory {
-    public CardTextUtil create(String dbPath);
+    public CardTextUtil create(String[] cardImageSearchPaths);
 }
-

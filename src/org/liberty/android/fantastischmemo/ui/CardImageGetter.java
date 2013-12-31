@@ -26,7 +26,6 @@ import java.net.URL;
 import javax.inject.Inject;
 
 import org.apache.commons.io.FilenameUtils;
-import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.R;
 
 import roboguice.util.Ln;
@@ -45,7 +44,7 @@ import com.google.inject.assistedinject.Assisted;
 
 
 public class CardImageGetter implements ImageGetter {
-    private String dbPath;
+    private String[] imageSearchPaths;
     
     private Context context;
     
@@ -53,9 +52,9 @@ public class CardImageGetter implements ImageGetter {
     
     @SuppressWarnings("deprecation")
     @Inject
-    public CardImageGetter (Context context, @Assisted String dbPath) {
+    public CardImageGetter (Context context, @Assisted String[] imageSearchPaths) {
         this.context = context;
-        this.dbPath = dbPath;
+        this.imageSearchPaths = imageSearchPaths;
         
         Display display = ((WindowManager)context.getSystemService(Context.WINDOW_SERVICE))
                 .getDefaultDisplay();
@@ -66,24 +65,19 @@ public class CardImageGetter implements ImageGetter {
     @Override
     public Drawable getDrawable(String source) {
         Ln.v("Source: " + source);
-        String dbName = FilenameUtils.getName(dbPath);
         try {
-            String[] paths = {
-            /* Relative path */
-            "" + dbName + "/" + source,
-            /* Try the image in /sdcard/anymemo/images/dbname/myimg.png */
-            AMEnv.DEFAULT_IMAGE_PATH + dbName + "/" + source,
-            /* Try the image in /sdcard/anymemo/images/myimg.png */
-            AMEnv.DEFAULT_IMAGE_PATH + source,
-            /* Just the last part of the name */
-            AMEnv.DEFAULT_IMAGE_PATH + dbName + "/" + FilenameUtils.getName(source),
-            AMEnv.DEFAULT_IMAGE_PATH + FilenameUtils.getName(source)
-            };
             Bitmap orngBitmap = null;
-            for (String path : paths) {
+
+            for (String path : imageSearchPaths) {
+                String imagePath1 = path + "/" + source;
+                String imagePath2 = path + "/" + FilenameUtils.getName(source);
                 Ln.v("Try path: " + path);
-                if (new File(path).exists()) {
-                    orngBitmap = BitmapFactory.decodeFile(path);
+                if (new File(imagePath1).exists()) {
+                    orngBitmap = BitmapFactory.decodeFile(imagePath1);
+                    break;
+                }
+                if (new File(imagePath2).exists()) {
+                    orngBitmap = BitmapFactory.decodeFile(imagePath2);
                     break;
                 }
             }
@@ -96,8 +90,7 @@ public class CardImageGetter implements ImageGetter {
             int width = orngBitmap.getWidth();
             int height = orngBitmap.getHeight();
             int scaledWidth = width;
-            int scaledHeight = height;
-            
+            int scaledHeight = height; 
             float scaleFactor = 1.0f;
             Matrix matrix = new Matrix();
             if (width > screenWidth) {
@@ -152,4 +145,4 @@ public class CardImageGetter implements ImageGetter {
                 width, height, matrix, true);
         return resizedBitmap;
     }
-};
+}

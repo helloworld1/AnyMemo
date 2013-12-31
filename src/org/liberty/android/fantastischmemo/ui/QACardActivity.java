@@ -27,6 +27,7 @@ import javax.inject.Inject;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
@@ -125,7 +126,6 @@ public abstract class QACardActivity extends AMActivity {
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(getContentView());
-
     }
 
     /**
@@ -139,9 +139,10 @@ public abstract class QACardActivity extends AMActivity {
         }
 
         dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(this, dbPath);
-        dbName = FilenameUtils.getName(dbPath);
 
         dbPath = extras.getString(EXTRA_DBPATH);
+
+        dbName = FilenameUtils.getName(dbPath);
 
         // Set teh default animation
         animationInResId = R.anim.slide_left_in;
@@ -203,6 +204,17 @@ public abstract class QACardActivity extends AMActivity {
             answerTypefaceValue = answerTypeface;
         }
 
+        String[] imageSearchPaths = {
+            /* Relative path */
+            "",
+            /* Relative path with db name */
+            "" + FilenameUtils.getName(dbPath),
+            /* Try the image in /sdcard/anymemo/images/dbname/ */
+            AMEnv.DEFAULT_IMAGE_PATH + FilenameUtils.getName(dbPath),
+            /* Try the image in /sdcard/anymemo/images/ */
+            AMEnv.DEFAULT_IMAGE_PATH,
+        };
+
         // Buttons view can be null if it is not decleared in the layout XML
         View buttonsView = findViewById(R.id.buttons_root);
 
@@ -236,7 +248,11 @@ public abstract class QACardActivity extends AMActivity {
             .setTextOnClickListener(onQuestionTextClickListener)
             .setCardOnClickListener(onQuestionViewClickListener)
             .setTextFontSize(setting.getQuestionFontSize())
-            .setTypefaceFromFile(setting.getQuestionFont());
+            .setTypefaceFromFile(setting.getQuestionFont())
+            .setDisplayInHtml(setting.getDisplayInHTMLEnum().contains(Setting.CardField.QUESTION))
+            .setHtmlLinebreakConversion(setting.getHtmlLineBreakConversion())
+            .setImageSearchPaths(imageSearchPaths);
+
 
         CardFragment.Builder answerFragmentBuilder = new CardFragment.Builder(getCurrentCard().getAnswer())
             .setTextAlignment(answerAlign)
@@ -246,7 +262,8 @@ public abstract class QACardActivity extends AMActivity {
             .setTextFontSize(setting.getAnswerFontSize())
             .setTypefaceFromFile(setting.getAnswerFont())
             .setDisplayInHtml(setting.getDisplayInHTMLEnum().contains(Setting.CardField.ANSWER))
-            .setReshapeArabic(option.getEnableArabicEngine());
+            .setHtmlLinebreakConversion(setting.getHtmlLineBreakConversion())
+            .setImageSearchPaths(imageSearchPaths);
 
         CardFragment.Builder showAnswerFragmentBuilder = new CardFragment.Builder(getString(R.string.memo_show_answer))
             .setTextAlignment(Setting.Align.CENTER)
@@ -254,9 +271,7 @@ public abstract class QACardActivity extends AMActivity {
             .setTextOnClickListener(onAnswerTextClickListener)
             .setCardOnClickListener(onAnswerViewClickListener)
             .setTextFontSize(setting.getAnswerFontSize())
-            .setTypefaceFromFile(setting.getAnswerFont())
-            .setDisplayInHtml(setting.getDisplayInHTMLEnum().contains(Setting.CardField.ANSWER))
-            .setReshapeArabic(option.getEnableArabicEngine());
+            .setTypefaceFromFile(setting.getAnswerFont());
 
         // For default card colors, we will use the theme's color
         // so we do not set the colors here.
@@ -278,7 +293,10 @@ public abstract class QACardActivity extends AMActivity {
             .setTypefaceFromFile(answerTypefaceValue)
             .setCardOnClickListener(onAnswerViewClickListener)
             .setTextFontSize(setting.getAnswerFontSize())
-            .setTypefaceFromFile(setting.getAnswerFont());
+            .setTypefaceFromFile(setting.getAnswerFont())
+            .setDisplayInHtml(setting.getDisplayInHTMLEnum().contains(Setting.CardField.ANSWER))
+            .setHtmlLinebreakConversion(setting.getHtmlLineBreakConversion())
+            .setImageSearchPaths(imageSearchPaths);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 

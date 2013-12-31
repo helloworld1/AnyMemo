@@ -27,8 +27,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
@@ -37,11 +39,11 @@ import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.domain.SchedulingAlgorithmParameters;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
-import org.liberty.android.fantastischmemo.ui.loader.CardTextUtilLoader;
 import org.liberty.android.fantastischmemo.ui.loader.CardWrapperListLoader;
 import org.liberty.android.fantastischmemo.ui.loader.MultipleLoaderManager;
 import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
 import org.liberty.android.fantastischmemo.utils.CardTextUtil;
+import org.liberty.android.fantastischmemo.utils.CardTextUtilFactory;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -54,7 +56,6 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.SearchView;
-import android.text.Spannable;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -73,8 +74,6 @@ public class CardListActivity extends AMActivity {
 
     private static final int CARD_WRAPPER_LOADER_ID = 0;
 
-    private static final int CARD_TEXT_UTIL_LOADER_ID = 1;
-
     private static final int LEARNED_CARD_ITEM_COLOR = 0x4F00FF00;
     private static final int REVIEW_CARD_ITEM_COLOR = 0x4FFFFF00;
 
@@ -88,11 +87,14 @@ public class CardListActivity extends AMActivity {
 
     private AMPrefUtil amPrefUtil;
 
-    private CardTextUtil cardTextUtil;
-
     private Scheduler scheduler;
 
     private SchedulingAlgorithmParameters schedulingAlgorithmParameters;
+
+    private CardTextUtil cardTextUtil;
+
+    private CardTextUtilFactory cardTextUtilFactory;
+
 
     private boolean initialAnswerVisible = true;
 
@@ -121,6 +123,11 @@ public class CardListActivity extends AMActivity {
     }
 
     @Inject
+    public void setCardTextUtilFactory(CardTextUtilFactory cardTextUtilFactory) {
+        this.cardTextUtilFactory = cardTextUtilFactory;
+    }
+
+    @Inject
     public void setMultipleLoaderManager(
             MultipleLoaderManager multipleLoaderManager) {
         this.multipleLoaderManager = multipleLoaderManager;
@@ -141,10 +148,22 @@ public class CardListActivity extends AMActivity {
                 AMPrefKeys.LIST_ANSWER_VISIBLE_PREFIX, dbPath, true);
 
         listView = (ListView) findViewById(R.id.item_list);
+
+
+        String[] imageSearchPaths = {
+            /* Relative path */
+            "",
+            /* Relative path with db name */
+            "" + FilenameUtils.getName(dbPath),
+            /* Try the image in /sdcard/anymemo/images/dbname/ */
+            AMEnv.DEFAULT_IMAGE_PATH + FilenameUtils.getName(dbPath),
+            /* Try the image in /sdcard/anymemo/images/ */
+            AMEnv.DEFAULT_IMAGE_PATH,
+        };
+        cardTextUtil = cardTextUtilFactory.create(imageSearchPaths);
         
         // Use loader to load the cards.
         multipleLoaderManager.registerLoaderCallbacks(CARD_WRAPPER_LOADER_ID, new CardWrapperLoaderCallbacks(), false);
-        multipleLoaderManager.registerLoaderCallbacks(CARD_TEXT_UTIL_LOADER_ID, new CardTextUtilLoaderCallbacks(), false);
         multipleLoaderManager.setOnAllLoaderCompletedRunnable(onPostInitRunnable);
         multipleLoaderManager.startLoading();
     }
@@ -486,10 +505,11 @@ public class CardListActivity extends AMActivity {
 
             idView.setText("" + card.getOrdinal());
 
-            // 0 -> question 1-> answer
-            List<Spannable> fields = cardTextUtil.getFieldsToDisplay(card);
-            questionView.setText(fields.get(0));
-            answerView.setText(fields.get(1));
+            // Display in HTML but do not convert line break for the list view.
+            // Currently not use the setting.
+            questionView.setText(cardTextUtil.getSpannableText(card.getQuestion(), true, false));
+
+            answerView.setText(cardTextUtil.getSpannableText(card.getAnswer(), true, false));
 
             if (scheduler.isCardNew(card.getLearningData())) {
                 highlightCardViewAsNew(convertView);
@@ -612,26 +632,6 @@ public class CardListActivity extends AMActivity {
             this.answerVisible = visible;
         }
 
-    }
-
-    private class CardTextUtilLoaderCallbacks implements
-            LoaderManager.LoaderCallbacks<CardTextUtil> {
-        @Override
-        public Loader<CardTextUtil> onCreateLoader(int arg0, Bundle arg1) {
-             Loader<CardTextUtil> loader = new CardTextUtilLoader(CardListActivity.this, dbPath);
-             loader.forceLoad();
-             return loader;
-        }
-
-        @Override
-        public void onLoadFinished(Loader<CardTextUtil> loader , CardTextUtil cardTextUtil) {
-            CardListActivity.this.cardTextUtil = cardTextUtil;
-            multipleLoaderManager.checkAllLoadersCompleted();
-        }
-        @Override
-        public void onLoaderReset(Loader<CardTextUtil> arg0) {
-            // Do nothing now
-        }
     }
 
     private class CardWrapperLoaderCallbacks implements
