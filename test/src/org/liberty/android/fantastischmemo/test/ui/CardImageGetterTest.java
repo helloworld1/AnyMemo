@@ -1,18 +1,21 @@
 package org.liberty.android.fantastischmemo.test.ui;
+import org.liberty.android.fantastischmemo.AMEnv;
+import org.liberty.android.fantastischmemo.test.TestHelper;
+import org.liberty.android.fantastischmemo.ui.CardImageGetter;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.test.AndroidTestCase;
+import android.test.suitebuilder.annotation.SmallTest;
 import android.view.Display;
 import android.view.WindowManager;
-
-import org.liberty.android.fantastischmemo.test.TestHelper;
-import org.liberty.android.fantastischmemo.ui.CardImageGetter;
-import android.test.suitebuilder.annotation.SmallTest;
 
 public class CardImageGetterTest extends AndroidTestCase {
     private int screenWidth;
 	
     private CardImageGetter cardImageGetter;
+
+    private String[] imageSearchPaths = {AMEnv.DEFAULT_IMAGE_PATH}; 
 
     @Override
     @SuppressWarnings("deprecation")
@@ -20,7 +23,7 @@ public class CardImageGetterTest extends AndroidTestCase {
         Display display = ((WindowManager)getContext().getSystemService(Context.WINDOW_SERVICE))
                 .getDefaultDisplay();
         screenWidth = display.getWidth();
-        cardImageGetter = new CardImageGetter(getContext(), TestHelper.SAMPLE_DB_PATH);
+        cardImageGetter = new CardImageGetter(getContext(), imageSearchPaths);
     }
 
     @SmallTest
