@@ -266,7 +266,7 @@ public abstract class QACardActivity extends AMActivity {
             .setHtmlLinebreakConversion(setting.getHtmlLineBreakConversion())
             .setImageSearchPaths(imageSearchPaths);
 
-        CardFragment.Builder showAnswerFragmentBuilder = new CardFragment.Builder(getString(R.string.memo_show_answer))
+        CardFragment.Builder showAnswerFragmentBuilder = new CardFragment.Builder("?\n" + getString(R.string.memo_show_answer))
             .setTextAlignment(Setting.Align.CENTER)
             .setTypefaceFromFile(answerTypefaceValue)
             .setTextOnClickListener(onAnswerTextClickListener)

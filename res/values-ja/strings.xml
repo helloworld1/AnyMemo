@@ -18,7 +18,7 @@
     <string name="edit_button_text">プレビュー・編集</string>
     <string name="copyclipboard">クリップボードへのコピー</string>
     <string name="copyclipboard_summary">問題が自動でクリップボードへコピーされます。</string>
-    <string name="memo_show_answer">\?\n解答表示</string>
+    <string name="memo_show_answer">解答表示</string>
     <string name="memo_no_item_title">アイテムがありません</string>
     <string name="memo_no_item_message">アイテムがありません。 戻るまたは、詰め込み復習を押してください。</string>
     <string name="memo_btn0_text">0 不正解</string>

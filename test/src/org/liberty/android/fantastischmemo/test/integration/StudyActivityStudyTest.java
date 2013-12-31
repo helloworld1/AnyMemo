@@ -20,8 +20,6 @@ public class StudyActivityStudyTest extends ActivityInstrumentationTestCase2<Stu
 
     protected StudyActivity mActivity;
 
-    private View answerView;
-
     @SuppressWarnings("deprecation")
     public StudyActivityStudyTest () {
         super("org.liberty.android.fantastischmemo", StudyActivity.class);
@@ -40,8 +38,6 @@ public class StudyActivityStudyTest extends ActivityInstrumentationTestCase2<Stu
 
         mActivity = this.getActivity();
 
-        answerView = mActivity.findViewById(R.id.answer);
-
         solo = new Solo(getInstrumentation(), mActivity);
         solo.waitForDialogToClose(8000);
         solo.sleep(600);
@@ -51,31 +47,31 @@ public class StudyActivityStudyTest extends ActivityInstrumentationTestCase2<Stu
     public void testGrade() throws Exception {
         // Success on card #1
         assertTrue(solo.searchText("head"));
-        solo.clickOnView(answerView);
+        solo.clickOnText(solo.getString(R.string.memo_show_answer));
         assertTrue(solo.searchText("la "));
         solo.clickOnText(solo.getString(R.string.memo_btn4_text));
 
         // Success on card #2
         assertTrue(solo.searchText("hair"));
-        solo.clickOnView(answerView);
+        solo.clickOnText(solo.getString(R.string.memo_show_answer));
         assertTrue(solo.searchText("les"));
         solo.clickOnText(solo.getString(R.string.memo_btn5_text));
 
         // Fail on card #3
         assertTrue(solo.searchText("face"));
-        solo.clickOnView(answerView);
+        solo.clickOnText(solo.getString(R.string.memo_show_answer));
         assertTrue(solo.searchText("visage"));
         solo.clickOnText(solo.getString(R.string.memo_btn1_text));
 
         // Fail on card #4
         assertTrue(solo.searchText("eye"));
-        solo.clickOnView(answerView);
+        solo.clickOnText(solo.getString(R.string.memo_show_answer));
         assertTrue(solo.searchText("oeil"));
         solo.clickOnText(solo.getString(R.string.memo_btn0_text));
 
         // Success on card #5
         assertTrue(solo.searchText("eyes"));
-        solo.clickOnView(answerView);
+        solo.clickOnText(solo.getString(R.string.memo_show_answer));
         assertTrue(solo.searchText("yeux"));
         solo.clickOnText(solo.getString(R.string.memo_btn3_text));
         solo.goBack();
@@ -100,7 +96,7 @@ public class StudyActivityStudyTest extends ActivityInstrumentationTestCase2<Stu
     @LargeTest
     public void testFailedCardRepeat() throws Exception {
         for (int i = 0; i < 10; i++) {
-            solo.clickOnView(answerView);
+            solo.clickOnText(solo.getString(R.string.memo_show_answer));
             // Fail 1st and 3rd
             if (i == 0 || i == 2) {
                 solo.clickOnText(solo.getString(R.string.memo_btn1_text));
@@ -111,17 +107,17 @@ public class StudyActivityStudyTest extends ActivityInstrumentationTestCase2<Stu
         }
         // 1st
         assertTrue(solo.searchText("head"));
-        solo.clickOnView(answerView);
+        solo.clickOnText(solo.getString(R.string.memo_show_answer));
         solo.clickOnText(solo.getString(R.string.memo_btn4_text));
 
         // 11th card, new
         assertTrue(solo.searchText("ear"));
-        solo.clickOnView(answerView);
+        solo.clickOnText(solo.getString(R.string.memo_show_answer));
         solo.clickOnText(solo.getString(R.string.memo_btn4_text));
 
         // 3rd
         assertTrue(solo.searchText("face"));
-        solo.clickOnView(answerView);
+        solo.clickOnText(solo.getString(R.string.memo_show_answer));
         solo.clickOnText(solo.getString(R.string.memo_btn0_text));
         solo.goBack();
 

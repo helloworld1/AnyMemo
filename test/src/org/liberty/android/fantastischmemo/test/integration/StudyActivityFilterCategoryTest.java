@@ -14,15 +14,12 @@ import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.LargeTest;
-import android.view.View;
 
 import com.jayway.android.robotium.solo.Solo;
 
 public class StudyActivityFilterCategoryTest extends ActivityInstrumentationTestCase2<StudyActivity> {
 
     protected StudyActivity mActivity;
-
-    private View answerView;
 
     @SuppressWarnings("deprecation")
     public StudyActivityFilterCategoryTest() {
@@ -42,8 +39,6 @@ public class StudyActivityFilterCategoryTest extends ActivityInstrumentationTest
         setActivityIntent(intent);
 
         mActivity = this.getActivity();
-
-        answerView = mActivity.findViewById(R.id.answer);
 
         solo = new Solo(getInstrumentation(), mActivity);
         solo.waitForDialogToClose(8000);
@@ -82,17 +77,17 @@ public class StudyActivityFilterCategoryTest extends ActivityInstrumentationTest
         AnyMemoExecutor.waitAllTasks();
         solo.sleep(2000);
 
-        answerView = solo.getCurrentActivity().findViewById(R.id.answer);
+        solo.clickOnText(solo.getString(R.string.memo_show_answer));
 
         assertTrue(solo.searchText("hair"));
 
-        solo.clickOnView(answerView);
+        solo.clickOnText(solo.getString(R.string.memo_show_answer));
         solo.clickOnText(solo.getString(R.string.memo_btn4_text));
         assertTrue(solo.searchText("eyes"));
-        solo.clickOnView(answerView);
+        solo.clickOnText(solo.getString(R.string.memo_show_answer));
         solo.clickOnText(solo.getString(R.string.memo_btn4_text));
         assertTrue(solo.searchText("mouth"));
-        solo.clickOnView(answerView);
+        solo.clickOnText(solo.getString(R.string.memo_show_answer));
         solo.clickOnText(solo.getString(R.string.memo_btn4_text));
         assertTrue(solo.searchText(solo.getString(R.string.memo_no_item_title)));
     }

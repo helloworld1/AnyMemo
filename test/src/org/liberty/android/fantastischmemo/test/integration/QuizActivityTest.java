@@ -13,7 +13,6 @@ import org.liberty.android.fantastischmemo.ui.QuizActivity;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.LargeTest;
-import android.view.View;
 
 import com.jayway.android.robotium.solo.Solo;
 
@@ -24,8 +23,6 @@ public class QuizActivityTest extends ActivityInstrumentationTestCase2<QuizActiv
     private static final int TEST_QUIZ_SIZE = 3;
 
     private static final int TEST_START_ORD = 5;
-
-    private View answerView;
 
     @SuppressWarnings("deprecation")
     public QuizActivityTest() {
@@ -45,19 +42,19 @@ public class QuizActivityTest extends ActivityInstrumentationTestCase2<QuizActiv
         launchQuizBySize();
         // Card number 5
         assertTrue(solo.searchText("eyes"));
-        solo.clickOnView(answerView);
+        solo.clickOnText(solo.getString(R.string.memo_show_answer));
         assertTrue(solo.searchText("les"));
         solo.clickOnText(solo.getString(R.string.remember_text));
 
         // Card number 6
         assertTrue(solo.searchText("nose"));
-        solo.clickOnView(answerView);
+        solo.clickOnText(solo.getString(R.string.memo_show_answer));
         assertTrue(solo.searchText("nez"));
         solo.clickOnText(solo.getString(R.string.remember_text));
 
         // Card number 7
         assertTrue(solo.searchText("cheek"));
-        solo.clickOnView(answerView);
+        solo.clickOnText(solo.getString(R.string.memo_show_answer));
         assertTrue(solo.searchText("joue"));
         solo.clickOnText(solo.getString(R.string.remember_text));
 
@@ -71,19 +68,19 @@ public class QuizActivityTest extends ActivityInstrumentationTestCase2<QuizActiv
         launchQuizBySize();
         // Card number 5
         assertTrue(solo.searchText("eyes"));
-        solo.clickOnView(answerView);
+        solo.clickOnText(solo.getString(R.string.memo_show_answer));
         assertTrue(solo.searchText("les"));
         solo.clickOnText(solo.getString(R.string.remember_text));
 
         // Card number 6
         assertTrue(solo.searchText("nose"));
-        solo.clickOnView(answerView);
+        solo.clickOnText(solo.getString(R.string.memo_show_answer));
         assertTrue(solo.searchText("nez"));
         solo.clickOnText(solo.getString(R.string.forget_text));
 
         // Card number 7
         assertTrue(solo.searchText("cheek"));
-        solo.clickOnView(answerView);
+        solo.clickOnText(solo.getString(R.string.memo_show_answer));
         assertTrue(solo.searchText("joue"));
         solo.clickOnText(solo.getString(R.string.forget_text));
 
@@ -93,19 +90,19 @@ public class QuizActivityTest extends ActivityInstrumentationTestCase2<QuizActiv
 
         // Card number 6
         assertTrue(solo.searchText("nose"));
-        solo.clickOnView(answerView);
+        solo.clickOnText(solo.getString(R.string.memo_show_answer));
         assertTrue(solo.searchText("nez"));
         solo.clickOnText(solo.getString(R.string.remember_text));
 
         // Card number 7
         assertTrue(solo.searchText("cheek"));
-        solo.clickOnView(answerView);
+        solo.clickOnText(solo.getString(R.string.memo_show_answer));
         assertTrue(solo.searchText("joue"));
         solo.clickOnText(solo.getString(R.string.forget_text));
 
         // Repeat Card number 7
         assertTrue(solo.searchText("cheek"));
-        solo.clickOnView(answerView);
+        solo.clickOnText(solo.getString(R.string.memo_show_answer));
         assertTrue(solo.searchText("joue"));
         solo.clickOnText(solo.getString(R.string.remember_text));
 
@@ -124,19 +121,19 @@ public class QuizActivityTest extends ActivityInstrumentationTestCase2<QuizActiv
 
         // Card number 2
         assertTrue(solo.searchText("hair"));
-        solo.clickOnView(answerView);
+        solo.clickOnText(solo.getString(R.string.memo_show_answer));
         assertTrue(solo.searchText("les cheveux"));
         solo.clickOnText(solo.getString(R.string.remember_text));
 
         // Card number 5
         assertTrue(solo.searchText("eyes"));
-        solo.clickOnView(answerView);
+        solo.clickOnText(solo.getString(R.string.memo_show_answer));
         assertTrue(solo.searchText("les yeux"));
         solo.clickOnText(solo.getString(R.string.remember_text));
 
         // Card number 8
         assertTrue(solo.searchText("mouth"));
-        solo.clickOnView(answerView);
+        solo.clickOnText(solo.getString(R.string.memo_show_answer));
         assertTrue(solo.searchText("la bouche"));
         solo.clickOnText(solo.getString(R.string.remember_text));
     }
@@ -151,8 +148,6 @@ public class QuizActivityTest extends ActivityInstrumentationTestCase2<QuizActiv
         setActivityIntent(intent);
         mActivity = this.getActivity();
 
-        answerView = mActivity.findViewById(R.id.answer);
-
         solo = new Solo(getInstrumentation(), mActivity);
         solo.waitForDialogToClose(8000);
         solo.sleep(600);
@@ -165,8 +160,6 @@ public class QuizActivityTest extends ActivityInstrumentationTestCase2<QuizActiv
 
         setActivityIntent(intent);
         mActivity = this.getActivity();
-
-        answerView = mActivity.findViewById(R.id.answer);
 
         solo = new Solo(getInstrumentation(), mActivity);
         solo.waitForDialogToClose(8000);

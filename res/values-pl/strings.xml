@@ -20,7 +20,7 @@
 
     <string name="copyclipboard">Skopiuj do schowka</string>
     <string name="copyclipboard_summary">Pytanie będzie automatycznie skopiowane do schowka</string>
-    <string name="memo_show_answer">\?\nPokaż odpowiedź</string>
+    <string name="memo_show_answer">Pokaż odpowiedź</string>
     <string name="memo_no_item_title">Brak kart</string>
     <string name="memo_no_item_message">Brak kart do nauki na chwilę obecną. Rekomendowany jest powrót. Użyj opcji Wkuwanie by uczyć się przed czasem.</string>
     <string name="memo_btn0_text">0 Zapomnij</string>

@@ -19,7 +19,7 @@
     <string name="edit_button_text">預覽/編輯數據庫</string>
     <string name="copyclipboard">自動復制到剪切板</string>
     <string name="copyclipboard_summary">問題將自動復制到剪切板</string>
-    <string name="memo_show_answer">\?\n顯示答案</string>
+    <string name="memo_show_answer">顯示答案</string>
     <string name="memo_no_item_title">無卡片</string>
     <string name="memo_no_item_message">目前沒有學習卡片，建議退出。另外還可以強制復習未來將復習的卡片</string>
     <string name="memo_btn0_text">0 忘記</string>

@@ -21,7 +21,7 @@
     <string name="edit_button_text">Visualizar/Editar Banco de Dados</string>
     <string name="copyclipboard">Copiar para a Área de Transferência</string>
     <string name="copyclipboard_summary">A pergunta será automaticamente copiada para a Área de Transferência.</string>
-    <string name="memo_show_answer">\?\nMostrar Resposta</string>
+    <string name="memo_show_answer">Mostrar Resposta</string>
     <string name="memo_no_item_title">Sem Ítens</string>
     <string name="memo_no_item_message">Não existem cartas para aprender por enquanto. Recomendamos voltar. Use a revisão cram para aprender além do tempo.</string>
     <string name="memo_btn0_text">0 Alzheimer</string>

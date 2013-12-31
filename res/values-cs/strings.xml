@@ -19,7 +19,7 @@
     <string name="edit_button_text">Náhled/Úprava databáze</string>
     <string name="copyclipboard">Zkopírovat do schránky</string>
     <string name="copyclipboard_summary">Otázka se automaticky zkopíruje do schránky</string>
-    <string name="memo_show_answer">\?\nUkázat odpověď</string>
+    <string name="memo_show_answer">Ukázat odpověď</string>
     <string name="memo_no_item_title">Žádná položka</string>
     <string name="memo_no_item_message">Už neexistuje žádná položka k učení. Doporučen je návrat zpět. Použijte studijní přehled k dopřednému učení.</string>
     <string name="memo_btn0_text">0 Nevím</string>

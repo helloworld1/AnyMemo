@@ -22,7 +22,7 @@
     <string name="edit_button_text">Preview/edit</string>
     <string name="copyclipboard">Copy to clipboard</string>
     <string name="copyclipboard_summary">Automatically copy card content to clipboard.</string>
-    <string name="memo_show_answer">\?\nShow answer</string>
+    <string name="memo_show_answer">Show answer</string>
     <string name="memo_no_item_title">No item</string>
     <string name="memo_no_item_message">There is no item to learn for now. If you want to cram, you can do quizzes by long clicking a db in the &quot;Recent&quot; tab.</string>
     <string name="memo_btn0_text">0 Forgot</string>

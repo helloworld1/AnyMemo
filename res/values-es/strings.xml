@@ -19,7 +19,7 @@
     <string name="edit_button_text">Previsualizar/editar base de datos</string>
     <string name="copyclipboard">Copiar al portapapeles</string>
     <string name="copyclipboard_summary">Se copiará automáticamente la pregunta al portapapeles</string>
-    <string name="memo_show_answer">\?\nMostrar respuesta</string>
+    <string name="memo_show_answer">Mostrar respuesta</string>
     <string name="memo_no_item_title">Falta de tarjetas</string>
     <string name="memo_no_item_message">No hay tarjetas para aprendar al momento. Se recomienda restrasar. Pulse \'Revisión general\' para revisar.</string>
     <string name="memo_btn0_text">0 Olividado</string>

@@ -21,7 +21,7 @@
     <string name="edit_button_text">Anteprima/Modifica</string>
     <string name="copyclipboard">Copia negli appunti</string>
     <string name="copyclipboard_summary">Copia automaticamente il contenuto della scheda negli appunti.</string>
-    <string name="memo_show_answer">\?\nMostra la risposta</string>
+    <string name="memo_show_answer">Mostra la risposta</string>
     <string name="memo_no_item_title">Nessun elemento</string>
     <string name="memo_no_item_message">Non c\'è nessun elemento da apprendere per ora. Per il ripasso pre-esame premere in maniera prolungata su un DB nel tab &quot;Recenti&quot;.</string>
     <string name="memo_btn0_text">0 Dimenticato</string>

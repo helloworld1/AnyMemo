@@ -22,7 +22,7 @@
 
     <string name="copyclipboard">Copier vers le presse-papier</string>
     <string name="copyclipboard_summary">La question sera automatiquement copiée dans le presse-papier</string>
-    <string name="memo_show_answer">\?\nMontrer la réponse</string>
+    <string name="memo_show_answer">Montrer la réponse</string>
     <string name="memo_no_item_title">Plus de carte</string>
     <string name="memo_no_item_message">Il n\'y a plus aucune carte à réviser pour le moment. Attendez une journée, ou cliquez sur Révision Générale pour réviser.</string>
     <string name="memo_btn0_text">0 Oublié!</string>

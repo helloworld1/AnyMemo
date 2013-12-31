@@ -20,7 +20,7 @@
 
     <string name="copyclipboard">Zwischenablage verwenden</string>
     <string name="copyclipboard_summary">Fragen automatisch in die Zwischenablage kopieren.</string>
-    <string name="memo_show_answer">\?\nAntwort anzeigen</string>
+    <string name="memo_show_answer">Antwort anzeigen</string>
     <string name="memo_no_item_title">Keine weiteren Einträge</string>
     <string name="memo_no_item_message">Es stehen keine weiteren Einträge zum Lernen bereit. Es wird empfohlen zurück zu gehen. Nutzen Sie &quot;Jetzt pauken&quot; um vorzeitig weiter zu lernen</string>
     <string name="memo_btn0_text">0 vergessen</string>
