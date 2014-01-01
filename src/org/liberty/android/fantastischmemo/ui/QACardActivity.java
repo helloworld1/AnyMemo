@@ -79,11 +79,14 @@ public abstract class QACardActivity extends AMActivity {
 
     private AnyMemoDBOpenHelper dbOpenHelper;
 
-    /* DAOs */
     private Card currentCard;
 
-    private int animationInResId = 0;
-    private int animationOutResId = 0;
+    /**
+     * The card may not be displayed immediate after setting.
+     * The currentDisplayedCard stores the current displayed card in the view.
+     * It is used for animation purpose.
+     */
+    private Card currentDisplayedCard = null;
 
     private static final int SETTING_LOADER_ID = 0;
 
@@ -154,10 +157,6 @@ public abstract class QACardActivity extends AMActivity {
         dbPath = extras.getString(EXTRA_DBPATH);
 
         dbName = FilenameUtils.getName(dbPath);
-
-        // Set teh default animation
-        animationInResId = R.anim.slide_left_in;
-        animationOutResId = R.anim.slide_left_out;
 
         // Load gestures
         loadGestures();
@@ -356,15 +355,23 @@ public abstract class QACardActivity extends AMActivity {
             } else {
                 b.putInt(TwoFieldsCardFragment.EXTRA_FIELD2_INITIAL_POSITION, 0);
             }
-
-            if (option.getEnableAnimation()) {
-                if (isAnswerShown == true && showAnswer == false) {
-                    ft.setCustomAnimations(animationInResId, animationOutResId);
-                }
-            }
             b.putInt(TwoFieldsCardFragment.EXTRA_QA_RATIO, setting.getQaRatio());
             b.putInt(TwoFieldsCardFragment.EXTRA_SEPARATOR_COLOR, setting.getSeparatorColor());
             fragment.setArguments(b);
+
+            if (option.getEnableAnimation()) {
+                if (isAnswerShown == true) {
+                    // Make sure the animation is the in the right direction.
+                    if (currentDisplayedCard != null && currentDisplayedCard.getOrdinal() > currentCard.getOrdinal()) {
+                        // Android support library bug prevent the exit animation displayed for nested fragment.
+                        // So the R.anim.slide_right_out is not actaully used.
+                        ft.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
+                    } else {
+                        ft.setCustomAnimations(R.anim.slide_left_in, R.anim.slide_left_out);
+                    }
+                }
+            }
+
             ft.replace(R.id.card_root, fragment);
             ft.commit();
         } else if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED) {
@@ -376,6 +383,17 @@ public abstract class QACardActivity extends AMActivity {
                 b.putInt(FlipableCardFragment.EXTRA_INITIAL_POSITION, 1);
             } else {
                 b.putInt(FlipableCardFragment.EXTRA_INITIAL_POSITION, 0);
+            }
+
+            // Duplicated logic from single sided card
+            if (option.getEnableAnimation()) {
+                if (isAnswerShown == true) {
+                    if (currentDisplayedCard != null && currentDisplayedCard.getOrdinal() > currentCard.getOrdinal()) {
+                    ft.setCustomAnimations(R.anim.slide_right_in, 0);
+                    } else {
+                        ft.setCustomAnimations(R.anim.slide_left_in, 0);
+                    }
+                }
             }
             fragment.setArguments(b);
             ft.replace(R.id.card_root, fragment);
@@ -397,6 +415,8 @@ public abstract class QACardActivity extends AMActivity {
         if (showAnswer == true) {
             copyToClipboard();
         }
+
+        currentDisplayedCard = getCurrentCard();
 
         onPostDisplayCard();
     }
@@ -427,12 +447,6 @@ public abstract class QACardActivity extends AMActivity {
                     .getAnswerBackgroundColor());
         }
 
-    }
-
-    // Set the card animation, 0 = no animation
-    protected void setAnimation(int animationInResId, int animationOutResId) {
-        this.animationInResId = animationInResId;
-        this.animationOutResId = animationOutResId;
     }
 
     private class SettingLoaderCallbacks implements

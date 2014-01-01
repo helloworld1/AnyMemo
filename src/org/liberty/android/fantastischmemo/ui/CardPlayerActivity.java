@@ -169,22 +169,10 @@ public class CardPlayerActivity extends QACardActivity {
 
     @CheckNullArgs
     protected void gotoCard(Card card) {
-        Card currentCard = getCurrentCard();
-        if (currentCard.getOrdinal() > card.getOrdinal()) {
-            // This is previoius card
-            setAnimation(R.anim.slide_right_in, R.anim.slide_right_out);
-        } else if (currentCard.getOrdinal() < card.getOrdinal()) {
-            setAnimation(R.anim.slide_left_in, R.anim.slide_left_out);
-        } else {
-            // Do nothing if the new card is equal ot the current card id
-        }
         setCurrentCard(card);
 
         updateCardFrontSide();
         updateTitle();
-
-        // Set animation back
-        setAnimation(R.anim.slide_left_in, R.anim.slide_left_out);
     }
 
     @Override

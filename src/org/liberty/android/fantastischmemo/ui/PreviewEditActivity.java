@@ -567,23 +567,10 @@ public class PreviewEditActivity extends QACardActivity {
 
     @CheckNullArgs
     protected void gotoCard(Card card) {
-        Card currentCard = getCurrentCard();
-        if (currentCard.getOrdinal() > card.getOrdinal()) {
-            // This is previoius card
-            setAnimation(R.anim.slide_right_in, R.anim.slide_right_out);
-        } else if (currentCard.getOrdinal() < card.getOrdinal()) {
-            setAnimation(R.anim.slide_left_in, R.anim.slide_left_out);
-        } else {
-            // Do not show animation if the same card is shown
-            setAnimation(0, 0);
-        }
         setCurrentCard(card);
 
         updateCardFrontSide();
         updateTitle();
-
-        // Set animation back
-        setAnimation(R.anim.slide_left_in, R.anim.slide_left_out);
     }
 
     @CheckNullArgs
