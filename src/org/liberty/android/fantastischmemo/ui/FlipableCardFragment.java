@@ -31,13 +31,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/*
- * This class display a side of the card and export necessary callbacks.
+/**
+ * This fragment is for a card with mulitple sides and can be flipped to different sides
  */
 public class FlipableCardFragment extends RoboFragment {
 
+    /**
+     * The key for the input a list of CardFragemnt.Builder that is used to build a fragment.
+     * Input type is CardFragment.Builder[]
+     */
     public static final String EXTRA_CARD_FRAGMENT_BUILDERS = "cardFragmentBuilders";
 
+    /**
+     * The initial position of the side in a multi-sided card.
+     * Input type is int.
+     */
     public static final String EXTRA_INITIAL_POSITION = "initialPosition";
 
     private CardFragment.Builder[] cardFragmentBuilders;

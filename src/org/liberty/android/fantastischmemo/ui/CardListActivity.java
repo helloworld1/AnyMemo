@@ -70,6 +70,9 @@ import android.widget.ListView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
+/**
+ * The Card List activity is used for listing all cards in a db or learning in a list mode.
+ */
 public class CardListActivity extends AMActivity {
 
     private static final int CARD_WRAPPER_LOADER_ID = 0;

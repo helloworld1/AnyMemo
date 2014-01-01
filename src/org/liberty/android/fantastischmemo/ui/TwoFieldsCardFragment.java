@@ -33,18 +33,46 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout.LayoutParams;
 
+/**
+ * This fragment is for a card of two fields, field1 is the upper field and filed2
+ * is the lower field with a separator that divide field1 and field2.
+ */
 public class TwoFieldsCardFragment extends RoboFragment {
 
+    /**
+     * The key for the input a list of CardFragemnt.Builder that is used to build field1.
+     * Input type is CardFragment.Builder[]
+     */
     public static final String EXTRA_FIELD1_CARD_FRAGMENT_BUILDERS = "field1CardFragmentBuilders";
 
+    /**
+     * The key for the input a list of CardFragemnt.Builder that is used to build field2.
+     * Input type is CardFragment.Builder[]
+     */
     public static final String EXTRA_FIELD2_CARD_FRAGMENT_BUILDERS = "field2CardFragmentBuilders";
 
+    /**
+     * The initial position of the side in a multi-sided field for field1.
+     * Input type is int.
+     */
     public static final String EXTRA_FIELD1_INITIAL_POSITION = "field1InitialPosition";
 
+    /**
+     * The initial position of the side in a multi-sided field for field2.
+     * Input type is int.
+     */
     public static final String EXTRA_FIELD2_INITIAL_POSITION = "field2InitialPosition";
 
+    /**
+     * The Ratio of the field1 and field2
+     * Input type is int.
+     */
     public static final String EXTRA_QA_RATIO = "qaRatio";
 
+    /**
+     * The color the separator line of field1 and field2.
+     * Input type is int that represent an RGBA color.
+     */
     public static final String EXTRA_SEPARATOR_COLOR= "separatorColor";
 
     private CardFragment.Builder[] field1CardFragmentBuilders;

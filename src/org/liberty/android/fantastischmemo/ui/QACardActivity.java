@@ -59,6 +59,16 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
+/**
+ * The base class for all activities that displays cards.
+ *
+ * To use this class, subclass it and call the startInit() in the onCreate() method.
+ * onPostInit() is used for customized initialization. Additionally, the caller can register
+ * a Loader that needs loading asynchronized. Call getMultipleLoaderManager() and register the loaders
+ * before calling startInit().
+ *
+ * Override getContentView() for loading a customized layout that is compatible with qa_card_layout.
+ */
 @SuppressWarnings("deprecation")
 public abstract class QACardActivity extends AMActivity {
     public static String EXTRA_DBPATH = "dbpath";
@@ -133,7 +143,7 @@ public abstract class QACardActivity extends AMActivity {
      * Call this method to start the initialization process.
      * Must be called in UI thread.
      */
-    public void startInit() {
+    public final void startInit() {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             dbPath = extras.getString(EXTRA_DBPATH);
@@ -161,7 +171,10 @@ public abstract class QACardActivity extends AMActivity {
         multipleLoaderManager.startLoading();
     }
 
-    public int getContentView() {
+    /**
+     * Override to load customized layout.
+     */
+    protected int getContentView() {
         return R.layout.qa_card_layout;
     }
 
@@ -304,6 +317,8 @@ public abstract class QACardActivity extends AMActivity {
         if (setting.getCardStyle() == Setting.CardStyle.SINGLE_SIDED) {
             TwoFieldsCardFragment fragment = new TwoFieldsCardFragment();
             Bundle b = new Bundle();
+
+            // Handle card field setting.
             List<CardFragment.Builder> builders1List = new ArrayList<CardFragment.Builder>(4);
             if (setting.getQuestionFieldEnum().contains(Setting.CardField.QUESTION)) {
                 builders1List.add(questionFragmentBuilder);
@@ -402,7 +417,9 @@ public abstract class QACardActivity extends AMActivity {
         return option;
     }
 
-    // Called when the initalizing finished.
+    /**
+     * Called the loaders are done. Override it for customized initialization
+     */
     protected void onPostInit() {
         View buttonsView = findViewById(R.id.buttons_root);
         if (buttonsView != null && !setting.isDefaultColor()) {

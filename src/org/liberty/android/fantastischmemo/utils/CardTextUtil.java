@@ -23,8 +23,6 @@ package org.liberty.android.fantastischmemo.utils;
 import javax.inject.Inject;
 
 import org.amr.arabic.ArabicUtilities;
-import org.apache.commons.io.FilenameUtils;
-import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.ui.CardImageGetterFactory;
 import org.xml.sax.XMLReader;
@@ -37,8 +35,9 @@ import android.text.Html.TagHandler;
 
 import com.google.inject.assistedinject.Assisted;
 
-/*
- * Utility for TTS of a card
+/**
+ * Utility for displaying the text on a card based on various settings.
+ * It also handle the images in the card.
  */
 public class CardTextUtil {
 
@@ -58,8 +57,11 @@ public class CardTextUtil {
 
     /**
      * Return a list of fields to display.
-     * @param card the card to display
-     * @return a list of spannable fields to display. Usually first one is question
+     * @param text the text to display
+     * @param displayInHtml true if the text is HTML. Note if the card does not have HTML tags.
+     * The card will not be displayed in HTML format.
+     * @param htmlLineBreakConversion convert the \n to HTML br tag.
+     * @return a CharSequence that represent the result spannable text to be displayed in a TextView.
      * and second one is answer.
      */
     public CharSequence getSpannableText(String text, boolean displayInHtml, boolean htmlLineBreakConversion) {

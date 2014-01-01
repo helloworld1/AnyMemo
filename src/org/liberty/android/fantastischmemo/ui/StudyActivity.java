@@ -58,6 +58,9 @@ import android.widget.Toast;
 
 import com.example.android.apis.graphics.FingerPaint;
 
+/**
+ * The StudyActivity is used for the classic way of learning cards.
+ */
 public class StudyActivity extends QACardActivity {
     public static String EXTRA_DBPATH = "dbpath";
     public static String EXTRA_CATEGORY_ID = "category_id";

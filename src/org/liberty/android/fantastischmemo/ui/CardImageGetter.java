@@ -43,6 +43,10 @@ import android.view.WindowManager;
 import com.google.inject.assistedinject.Assisted;
 
 
+/**
+ * This class is used display images in a card.
+ * It will look for the image based on defined imageSearchPaths.
+ */
 public class CardImageGetter implements ImageGetter {
     private String[] imageSearchPaths;
     
@@ -62,6 +66,13 @@ public class CardImageGetter implements ImageGetter {
         screenWidth = display.getWidth();
 	}
     
+    /**
+     * Get the drawable based on the source string
+     * @param source the source string can be simply a.jpg or dir_name/a.jpg
+     * It can also be a URL like http://example.com/example.jpg
+     * getDrawable will handle all the situations.
+     * @return the drawable to display.
+     */
     @Override
     public Drawable getDrawable(String source) {
         Ln.v("Source: " + source);
