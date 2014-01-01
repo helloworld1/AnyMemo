@@ -359,18 +359,7 @@ public abstract class QACardActivity extends AMActivity {
             b.putInt(TwoFieldsCardFragment.EXTRA_SEPARATOR_COLOR, setting.getSeparatorColor());
             fragment.setArguments(b);
 
-            if (option.getEnableAnimation()) {
-                if (isAnswerShown == true) {
-                    // Make sure the animation is the in the right direction.
-                    if (currentDisplayedCard != null && currentDisplayedCard.getOrdinal() > currentCard.getOrdinal()) {
-                        // Android support library bug prevent the exit animation displayed for nested fragment.
-                        // So the R.anim.slide_right_out is not actaully used.
-                        ft.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
-                    } else {
-                        ft.setCustomAnimations(R.anim.slide_left_in, R.anim.slide_left_out);
-                    }
-                }
-            }
+            configCardFragmentTransitionAnimation(ft);
 
             ft.replace(R.id.card_root, fragment);
             ft.commit();
@@ -385,17 +374,10 @@ public abstract class QACardActivity extends AMActivity {
                 b.putInt(FlipableCardFragment.EXTRA_INITIAL_POSITION, 0);
             }
 
-            // Duplicated logic from single sided card
-            if (option.getEnableAnimation()) {
-                if (isAnswerShown == true) {
-                    if (currentDisplayedCard != null && currentDisplayedCard.getOrdinal() > currentCard.getOrdinal()) {
-                    ft.setCustomAnimations(R.anim.slide_right_in, 0);
-                    } else {
-                        ft.setCustomAnimations(R.anim.slide_left_in, 0);
-                    }
-                }
-            }
             fragment.setArguments(b);
+
+            configCardFragmentTransitionAnimation(ft);
+
             ft.replace(R.id.card_root, fragment);
             ft.commit();
         } else {
@@ -668,6 +650,27 @@ public abstract class QACardActivity extends AMActivity {
             onPostInit();
         }
     };
+
+    /**
+     * Configure the animation for the card transition in a fragment transaction.
+     */
+    private void configCardFragmentTransitionAnimation(FragmentTransaction ft) {
+        if (option.getEnableAnimation()) {
+            // The first card to display.
+            if (currentDisplayedCard == null) {
+                // Android support library bug prevent the exit animation displayed for nested fragment.
+                // So the R.anim.slide_right_out is not actaully used.
+                ft.setCustomAnimations(R.anim.slide_left_in, R.anim.slide_left_out);
+            } else if (currentDisplayedCard.getOrdinal() > currentCard.getOrdinal()) {
+                // Make sure the animation is the in the right direction.
+                ft.setCustomAnimations(R.anim.slide_right_in, R.anim.slide_right_out);
+            } else if (currentDisplayedCard.getOrdinal() < currentCard.getOrdinal()){
+                ft.setCustomAnimations(R.anim.slide_left_in, R.anim.slide_left_out);
+            } else {
+                // No animation for not changing the card.
+            }
+        }
+    }
 
     private CardFragment.OnClickListener onQuestionTextClickListener = new CardFragment.OnClickListener() {
 
