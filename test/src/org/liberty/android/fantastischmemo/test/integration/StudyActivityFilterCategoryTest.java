@@ -77,8 +77,6 @@ public class StudyActivityFilterCategoryTest extends ActivityInstrumentationTest
         AnyMemoExecutor.waitAllTasks();
         solo.sleep(2000);
 
-        solo.clickOnText(solo.getString(R.string.memo_show_answer));
-
         assertTrue(solo.searchText("hair"));
 
         solo.clickOnText(solo.getString(R.string.memo_show_answer));

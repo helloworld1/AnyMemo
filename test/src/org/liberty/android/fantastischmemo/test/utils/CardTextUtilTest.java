@@ -67,7 +67,7 @@ public class CardTextUtilTest extends AbstractExistingDBTest {
                 mockCardImageGetterFactory,
                 mockImagePaths);
         CharSequence result = cardTextUtil.getSpannableText("<b>HTML text</b>", true, false);
-        assertEquals("Html text", result.toString());
+        assertEquals("HTML text", result.toString());
     }
 
     @SmallTest
@@ -77,6 +77,6 @@ public class CardTextUtilTest extends AbstractExistingDBTest {
                 mockCardImageGetterFactory,
                 mockImagePaths);
         CharSequence result = cardTextUtil.getSpannableText("<b>HTML text</b>", false, false);
-        assertEquals("<b>Html text</b>", result.toString());
+        assertEquals("<b>HTML text</b>", result.toString());
     }
 }
