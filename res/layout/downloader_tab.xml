@@ -21,7 +21,7 @@
                 android:layout_gravity="center"
                 android:src="@drawable/server" />
             <TextView
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/download_source_anymemo"
@@ -43,7 +43,7 @@
                 android:layout_gravity="center"
                 android:src="@drawable/server" />
             <TextView
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/download_source_fe"
@@ -65,7 +65,7 @@
                 android:layout_gravity="center"
                 android:src="@drawable/server" />
             <TextView
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/download_source_ss"
@@ -87,7 +87,7 @@
                 android:layout_gravity="center"
                 android:src="@drawable/server" />
             <TextView
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/download_source_quizlet"
@@ -109,7 +109,7 @@
                 android:layout_gravity="center"
                 android:src="@drawable/server" />
             <TextView
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/download_source_dropbox"
@@ -131,7 +131,7 @@
                 android:layout_gravity="center"
                 android:src="@drawable/server" />
             <TextView
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/google_drive_spreadsheet_text"

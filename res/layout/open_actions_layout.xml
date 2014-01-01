@@ -20,7 +20,7 @@
                 android:paddingRight="5dp"
                 android:src="@drawable/study" />
             <TextView
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/study_text"
@@ -44,7 +44,7 @@
                 android:paddingRight="5dp"
                 android:src="@drawable/dir" />
             <TextView
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/edit_button_text"
@@ -68,7 +68,7 @@
                 android:paddingRight="5dp"
                 android:src="@drawable/text" />
             <TextView
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/list_mode_text"
@@ -92,7 +92,7 @@
                 android:paddingRight="5dp"
                 android:src="@drawable/cram" />
             <TextView
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/quiz_text"
@@ -116,7 +116,7 @@
                 android:paddingRight="5dp"
                 android:src="@drawable/settings" />
             <TextView
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_menu_text"
@@ -140,7 +140,7 @@
                 android:paddingRight="5dp"
                 android:src="@drawable/statistics" />
             <TextView
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/statistics_text"
@@ -164,7 +164,7 @@
                 android:paddingRight="5dp"
                 android:src="@drawable/share" />
             <TextView
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/share_text"
@@ -188,7 +188,7 @@
                 android:paddingRight="5dp"
                 android:src="@drawable/close" />
             <TextView
-                android:layout_width="fill_parent"
+                android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/delete_text"
