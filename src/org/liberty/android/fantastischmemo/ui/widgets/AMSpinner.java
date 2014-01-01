@@ -64,6 +64,7 @@ public class AMSpinner extends Spinner {
         mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         valueList = (List<CharSequence>) Arrays.asList(valueArray);
         this.setAdapter(mAdapter);
+        arr.recycle();
     }
 
     public String getSelectedItemValue() {

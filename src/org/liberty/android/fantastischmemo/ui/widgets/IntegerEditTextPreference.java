@@ -47,6 +47,7 @@ public class IntegerEditTextPreference extends EditTextPreference {
         TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.IntegerEditTextPreference);
         CharSequence maxCharValue = arr.getText(R.styleable.IntegerEditTextPreference_maxIntValue);
         CharSequence minCharValue = arr.getText(R.styleable.IntegerEditTextPreference_minIntValue);
+        arr.recycle();
 
         if (maxCharValue != null) {
         	this.maxIntValue = Integer.parseInt(maxCharValue.toString());

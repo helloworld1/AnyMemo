@@ -73,6 +73,7 @@ public class DoubleClickButton extends Button {
         TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.DoubleClickButton);
         textOnFirstClick = arr.getText(R.styleable.DoubleClickButton_text_on_first_click).toString();
         effectiveDurationMillis = arr.getInt(R.styleable.DoubleClickButton_effective_duration_millis, DEFAULT_EFFECTIVE_DURATION_MILLIS);
+        arr.recycle();
     }
 
     @Override
