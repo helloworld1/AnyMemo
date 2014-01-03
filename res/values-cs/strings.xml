@@ -66,17 +66,13 @@
     <string name="settings_shuffle">Zamíchat karty</string>
     <string name="settings_inverse">Prohodit ? a = karet</string>
     <string name="settings_save">Uložit</string>
-    <string name="settings_discard">Vyřadit</string>
     <string name="warning_text">Varování</string>
     <string name="settings_wipe_warning">VŠECHNY pokroky v učení budou smazány po kliknutí na Uložit!</string>
     <string name="settings_shuffle_warning">Tato operace zamíchá všechny karty a nemůže být vzata zpět. Rozmyslete se, než zapíšete změny.</string>
     <string name="settings_inverse_warning">Tato operace prohodí otázky a odpovědi VŠECH karet.</string>
-    <string name="detail_update">Zapsat změny</string>
-    <string name="detail_back">Zpět</string>
     <string name="delete_text">Smazat</string>
     <string name="delete_warning">Skutečně chcete smazat tuto kartu?</string>
     <string name="skip_text">Přeskočit</string>
-    <string name="skip_warning">Tato položka se již nikdy neobjeví při učení. Chcete ji přeskočit?</string>
     <string name="stat_total">Celkem: </string>
     <string name="stat_scheduled">Plánováno: </string>
     <string name="stat_new">Nové: </string>
@@ -84,13 +80,9 @@
     <string name="clear_all_pref">Nulovat všechny volby</string>
     <string name="clear_recent_list">Nulovat poslední seznam</string>
     <string name="export_xml">Export Mnemosyne XML</string>
-    <string name="add_screen_id">ID</string>
     <string name="add_screen_question">Otázka</string>
     <string name="add_screen_answer">Odpověď</string>
     <string name="add_screen_new">Nová</string>
-    <string name="add_screen_edit">Uložit</string>
-    <string name="add_screen_gotoid">Jdi na ID</string>
-    <string name="add_screen_back">Zpět</string>
     <string name="add_screen_next">Další</string>
     <string name="add_screen_previous">Předchozí</string>
     <string name="search_text">Hledat</string>
@@ -108,7 +100,6 @@
     <string name="loading_database">Nahrávám databázi...</string>
     <string name="success">Úspěšně</string>
     <string name="fail">Chybně</string>
-    <string name="fail_import">Chyba při konverzi </string>
     <string name="loading_save">Ukládání změn...</string>
     <string name="loading_connect_net">Obnova seznamu z internetu...\nStiskněte tlačítko Zpět ke zrušení.</string>
     <string name="loading_downloading">Stahování... To může chvíli trvat.</string>
@@ -158,7 +149,6 @@
     <string name="fullscreen_summary">Zobrazí karty přes celý displej.</string>
     <string name="edit_dialog_category">Kategorie</string>
     <string name="settings_audio_location_title">Nastavení umístění audia</string>
-    <string name="tts_tip_extender">Prosím stáhněte si Text-to-Speech Extended a vyberte engine pro eSpeak. Nezapomeňte také povolit opci v AnyMemo.</string>
     <string name="what_is_new_message">K prohlédnutí grafické příručky nových funkcí prosím klikněte na tlačítko Historie verzí nebo navštivte oficiální web:&lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt;&lt;br /&gt;</string>
     <string name="list_mode_text">Seznamový mód</string>
     <string name="merge_db_text">Sloučení DB</string>

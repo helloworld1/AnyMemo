@@ -69,17 +69,13 @@
     <string name="settings_shuffle">Mélanger les cartes</string>
     <string name="settings_inverse">Intervertir questions et réponses</string>
     <string name="settings_save">Enregistrer</string>
-    <string name="settings_discard">Annuler</string>
     <string name="warning_text">Attention</string>
     <string name="settings_wipe_warning">Tout l\'avancement de l\'apprentissage de cette pile de cartes sera effacé!</string>
     <string name="settings_shuffle_warning">Cette opération mélangera toutes les cartes, et ne peut pas être annulée.</string>
     <string name="settings_inverse_warning">Cette opération inversera la question et la réponse de chaque carte de la pile.</string>
-    <string name="detail_update">Enregistrer les modifications</string>
-    <string name="detail_back">Retour</string>
     <string name="delete_text">Supprimer</string>
     <string name="delete_warning">Voulez-vous vraiment supprimer cette carte?</string>
     <string name="skip_text">Passer</string>
-    <string name="skip_warning">Cette carte ne vous sera plus jamais présentée. Voulez-vous la passer?</string>
     <string name="stat_total">Total: </string>
     <string name="stat_scheduled">À réviser: </string>
     <string name="stat_new">Nouvelles: </string>
@@ -87,13 +83,9 @@
     <string name="clear_all_pref">Réinitialiser toutes les préférences</string>
     <string name="clear_recent_list">Effacer la liste des dernières piles</string>
     <string name="export_xml">Exporter vers Mnemosyne XML</string>
-    <string name="add_screen_id">ID</string>
     <string name="add_screen_question">Question</string>
     <string name="add_screen_answer">Réponse</string>
     <string name="add_screen_new">Nouveau</string>
-    <string name="add_screen_edit">Enregistrer</string>
-    <string name="add_screen_gotoid">Aller vers ID</string>
-    <string name="add_screen_back">Revenir</string>
     <string name="add_screen_next">Suivant</string>
     <string name="add_screen_previous">Préc.</string>
     <string name="search_text">Chercher</string>
@@ -111,7 +103,6 @@
     <string name="loading_database">Chargement d\'une pile de cartes...</string>
     <string name="success">Réussi</string>
     <string name="fail">Echec</string>
-    <string name="fail_import">Echec de la conversion</string>
     <string name="loading_save">Sauvegarde des changements...</string>
     <string name="loading_connect_net">Téléchargement de la liste depuis Internet...\nAppuyer sur Précédent pour annuler.</string>
     <string name="loading_downloading">Téléchargement. Cette opération peut être longue.</string>
@@ -161,7 +152,6 @@
     <string name="fullscreen_summary">Afficher les cartes en plein écran.</string>
     <string name="edit_dialog_category">Catégorie</string>
     <string name="settings_audio_location_title">Répertoire contenant les fichiers audio personnalisés</string>
-    <string name="tts_tip_extender">Merci d\'installer eSpeak engine pour Android 2.2 et plus, et de choisir eSpeak comme moteur de synthèse vocale.</string>
     <string name="what_is_new_message">Pour voir la liste des nouveautés, cliquez sur Historique des versions, ou consultez le site officiel:&lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt;&lt;br /&gt;</string>
     <string name="list_mode_text">Liste</string>
     <string name="merge_db_text">Fusionner piles</string>

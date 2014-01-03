@@ -67,17 +67,13 @@
     <string name="settings_shuffle">Karteikarten mischen</string>
     <string name="settings_inverse">Global: Fragen/Antworten vertauschen</string>
     <string name="settings_save">Speichern</string>
-    <string name="settings_discard">Verwerfen</string>
     <string name="warning_text">Achtung</string>
     <string name="settings_wipe_warning">Beim Drücken auf &quot;Speichern&quot; wird der Lernfortschritt endgültig zurückgesetzt!</string>
     <string name="settings_shuffle_warning">Dieser Vorgang wird alle Karteikarten mischen und kann nicht rückgängig gemacht werden.</string>
     <string name="settings_inverse_warning">Dieser Vorgang wird die Positionen der Fragen und Antworten vertauschen. Mit &quot;Duplizieren+Vertauschen&quot; ersetzen die vertauschten Karteikarten nicht das Original, sondern werden als Kopien dem Ende des Stapels hinzugefügt.</string>
-    <string name="detail_update">Änderungen speichern</string>
-    <string name="detail_back">Zurück</string>
     <string name="delete_text">Löschen</string>
     <string name="delete_warning">Wollen Sie diese Karteikarte wirklich löschen?</string>
     <string name="skip_text">Überspringen</string>
-    <string name="skip_warning">Das Wiedervorlagedatum dieser Karte wird auf unendlich gesetzt. Möchten Sie dies tun?</string>
     <string name="stat_total">Gesamt: </string>
     <string name="stat_scheduled">Rev: </string>
     <string name="stat_new">Neu: </string>
@@ -85,13 +81,9 @@
     <string name="clear_all_pref">Alle Einstellungen zurücksetzen</string>
     <string name="clear_recent_list">Liste der zuletzt verwendeten Datenbanken leeren</string>
     <string name="export_xml">Mnemosyne XML</string>
-    <string name="add_screen_id">ID:</string>
     <string name="add_screen_question">Frage</string>
     <string name="add_screen_answer">Antwort</string>
     <string name="add_screen_new">Neu</string>
-    <string name="add_screen_edit">Speichern</string>
-    <string name="add_screen_gotoid">Zu ID springen</string>
-    <string name="add_screen_back">Zurück</string>
     <string name="add_screen_next">Weiter</string>
     <string name="add_screen_previous">Zurück</string>
     <string name="search_text">Suchen</string>
@@ -109,7 +101,6 @@
     <string name="loading_database">Datenbank wird geladen...</string>
     <string name="success">Erfolgreich abgeschlossen!</string>
     <string name="fail">Prozess fehlgeschlagen!</string>
-    <string name="fail_import">Konvertierung fehlgeschlagen </string>
     <string name="loading_save">Änderungen werden gespeichert,,,</string>
     <string name="loading_connect_net">Liste wird laut Onlineangaben aktualisiert...\nDrücken Sie auf die Zurück-Taste um den Prozess abzubrechen.</string>
     <string name="loading_downloading">Wird heruntergeladen... Dies kann einige Zeit dauern.</string>
@@ -158,7 +149,6 @@
     <string name="fullscreen_summary">Karteikarten im Vollbildschirmmodus anzeigen.</string>
     <string name="edit_dialog_category">Kategorie</string>
     <string name="settings_audio_location_title">Benutzer-Audio Speicherort auswählen</string>
-    <string name="tts_tip_extender">Bitte laden Sie das &quot;Text-to-Speech Extend&quot;-Modul herunter und wählen sie &quot;eSpeak&quot; als Engine aus. Vergessen Sie auch nicht die Funktionalität in AnyMemo einzuschalten.</string>
     <string name="what_is_new_message">Um eine grafische Anleitung zu neuen Funktionen anzusehen, drücken Sie auf &quot;Versionsverlauf&quot; oder besuchen sie die offizielle Webseite: &lt;a href=&quot;http://anymemo.org&quot;&gt;http://anymemo.org&lt;/a&gt;&lt;br /&gt;</string>
     <string name="list_mode_text">Listenmodus</string>
     <string name="merge_db_text">Datenbanken zusammenfügen</string>

@@ -67,17 +67,13 @@
     <string name="settings_shuffle">암기카드 섞기</string>
     <string name="settings_inverse">문제와 정답을 교환</string>
     <string name="settings_save">저장</string>
-    <string name="settings_discard">무시</string>
     <string name="warning_text">경고</string>
     <string name="settings_wipe_warning">모든 학습 진도가 초기화됩니다!</string>
     <string name="settings_shuffle_warning">학습카드를 섞습니다. 취소할 수 없습니다.</string>
     <string name="settings_inverse_warning">문제와 정답을 교환합니다. 교환&amp;복사는 마지막에 바뀐 카드를 추가합니다.</string>
-    <string name="detail_update">변경 저장</string>
-    <string name="detail_back">이전</string>
     <string name="delete_text">삭제</string>
     <string name="delete_warning">정말 삭제하시겠습니까?</string>
     <string name="skip_text">학습제외</string>
-    <string name="skip_warning">이 카드를 다시는 학습하지 않습니다. 제외할까요?</string>
     <string name="stat_total">전체: </string>
     <string name="stat_scheduled">Rev: </string>
     <string name="stat_new">New: </string>
@@ -85,13 +81,9 @@
     <string name="clear_all_pref">모든 설정 초기화</string>
     <string name="clear_recent_list">최근 학습장 목록 지우기</string>
     <string name="export_xml">Mnemosyne XML 파일</string>
-    <string name="add_screen_id">ID:</string>
     <string name="add_screen_question">문제</string>
     <string name="add_screen_answer">정답</string>
     <string name="add_screen_new">추가</string>
-    <string name="add_screen_edit">저장</string>
-    <string name="add_screen_gotoid">Go to ID</string>
-    <string name="add_screen_back">이전</string>
     <string name="add_screen_next">다음</string>
     <string name="add_screen_previous">이전</string>
     <string name="search_text">검색</string>
@@ -109,7 +101,6 @@
     <string name="loading_database">학습장 읽는중...</string>
     <string name="success">성공!</string>
     <string name="fail">실패!</string>
-    <string name="fail_import">변환 실패</string>
     <string name="loading_save">변경사항 저장중...</string>
     <string name="loading_connect_net">인터넷으로부터 목록 갱신중...\n취소하려면 back 키를 누르세요</string>
     <string name="loading_downloading">내려받기중... 약간 시간이 걸립니다</string>
@@ -158,7 +149,6 @@
     <string name="fullscreen_summary">전체화면 모드로 표시합니다</string>
     <string name="edit_dialog_category">카테고리</string>
     <string name="settings_audio_location_title">음성 설정</string>
-    <string name="tts_tip_extender">음성 재생을 위해 eSpeak engine for Android 2.2 이상을 설치하고 음성엔진을 선택하세요</string>
     <string name="what_is_new_message">도움말을 보려면 "판올림 정보"를 보거나 홈페이지 &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt;&lt;br /&gt;를 방문하세요</string>
     <string name="list_mode_text">목록 모드</string>
     <string name="merge_db_text">학습장 병합</string>

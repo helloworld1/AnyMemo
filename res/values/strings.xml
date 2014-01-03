@@ -69,16 +69,12 @@
     <string name="settings_shuffle">Shuffle all cards</string>
     <string name="settings_inverse">Swap the Q/A of all cards</string>
     <string name="settings_save">Save</string>
-    <string name="settings_discard">Discard</string>
     <string name="warning_text">Warning</string>
     <string name="settings_wipe_warning">ALL learning progress will be reset!</string>
     <string name="settings_shuffle_warning">This operation will shuffle all cards and can NOT be undone.</string>
     <string name="settings_inverse_warning">This operation will swap the location of question and answer. Swap&amp;dup will add all swapped cards to the back of current database instead of replacing.</string>
-    <string name="detail_update">Write changes</string>
-    <string name="detail_back">Back</string>
     <string name="delete_warning">Do you really want to delete this card?</string>
     <string name="skip_text">Skip</string>
-    <string name="skip_warning">This item will never appear for learning. Do you want to mark it as learned forever it?</string>
     <string name="stat_total">Total: </string>
     <string name="stat_scheduled">Rev: </string>
     <string name="stat_new">New: </string>
@@ -88,11 +84,7 @@
     <string name="export_xml">Export Mnemosyne1 XML</string>
     <string name="add_screen_question">Question</string>
     <string name="add_screen_new">New</string>
-    <string name="add_screen_id">ID</string>
     <string name="add_screen_answer">Answer</string>
-    <string name="add_screen_edit">Save</string>
-    <string name="add_screen_gotoid">Go to ID</string>
-    <string name="add_screen_back">Back</string>
     <string name="add_screen_next">Next</string>
     <string name="add_screen_previous">Previous</string>
     <string name="search_text">Search</string>
@@ -110,7 +102,6 @@
     <string name="loading_database">Loading database...</string>
     <string name="success">Success</string>
     <string name="fail">Failed</string>
-    <string name="fail_import">Fail to convert </string>
     <string name="loading_save">Saving changes...</string>
     <string name="loading_connect_net">Refreshing list from internet...</string>
     <string name="loading_downloading">Downloading... It may take a while.</string>
@@ -160,7 +151,6 @@
     <string name="fullscreen_summary">Display cards in fullscreen mode.</string>
     <string name="edit_dialog_category">Category</string>
     <string name="settings_audio_location_title">Set user audio location</string>
-    <string name="tts_tip_extender">Please download eSpeak engine for Android 2.2 and above and select the engine to eSpeak.</string>
     <string name="what_is_new_message">See graphical guide of new features, please click version history button. or visit official website:&lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt;&lt;br /&gt;</string>
     <string name="list_mode_text">Card list</string>
     <string name="merge_db_text">Merge DB</string>
@@ -256,17 +246,10 @@
     <string name="flashcardexchange_text">FlashcardExchange</string>
     <string name="search_tag">Search by tag</string>
     <string name="search_user">Search by user</string>
-    <string name="private_login">Access private cards</string>
-    <string name="upload_db">Upload database (slow and unstable)</string>
     <string name="upload_wait">Uploading... please wait. It may take several minutes for a large db.</string>
-    <string name="upload_finish">Upload finished</string>
-    <string name="upload_finish_message">has been successfully uploaded.</string>
-    <string name="access_authorization_text">Accessing authorization token. Please wait...</string>
     <string name="fe_directory_text">Browser directories</string>
     <string name="fe_search_tag_message">Please enter a tag to search,\ne.g. Spanish, math etc.</string>
     <string name="fe_search_user_message">Please enter user email to login,\ne.g. yourname@example.com</string>
-    <string name="fe_private_login">Access private data</string>
-    <string name="fe_private_login_message">Please re-enter the email from the previous screen,\ne.g. yourname@example.com</string>
     <string name="card_style">Card style</string>
     <string name="card_style_double">Double sided</string>
     <string name="card_style_single">Single sided</string>
@@ -279,13 +262,8 @@
     <string name="open_tab_text">Open</string>
     <string name="download_tab_text">Download</string>
     <string name="misc_tab_text">Misc</string>
-    <string name="convert_success">Successfully converted and saved to</string>
     <string name="reset_all_pref_warning">This operation will restore all global settings to default. Your learning progress will NOT be deleted. </string>
-    <string name="fe_login_text">Login</string>
     <string name="fe_logout_text">Logout</string>
-    <string name="fe_logged_in_text">Logged in</string>
-    <string name="fe_not_login">Login needed</string>
-    <string name="fe_not_login_message">Please press login button to log in first.</string>
     <string name="linebreak_conversion">HTML linebreak conversion</string>
     <string name="locale_japanese_text">Japanese</string>
     <string name="locale_spanish_text">Spanish</string>
@@ -305,10 +283,7 @@
     <string name="dropbox_login_text">Login using Dropbox account</string>
     <string name="dropbox_download_text">Download from Dropbox</string>
     <string name="dropbox_upload_text">Upload %s to Dropbox</string>
-    <string name="user_name_text">User name:</string>
-    <string name="password_text">Password:</string>
     <string name="download_source_dropbox">Dropbox.com</string>
-    <string name="dropbox_login_message">Please enter your dropbox user name (Mostly email address) and password.</string>
     <string name="import_supermemo_2008_xml_text">Import SuperMemo 2008 XML</string>
     <string name="uncategorized_text">Uncategorized</string>
     <string name="edit_text">Edit</string>
@@ -330,7 +305,6 @@
     <string name="exit_text">Exit</string>
     <string name="sdcard_not_available_warning_title">SD card not available</string>
     <string name="sdcard_not_available_warning_message">Please insert SD card and run again!</string>
-    <string name="help_advanced_operations">More database operations like swapping Q/A, shuffling card, removing duplicates are available in preview/edit screen when you long press the card.</string>
     <string name="load_default_text">Load default</string>
     <string name="load_default_warning_text">This will load the default settings you set in "Default settings" and you will lose the current settings.</string>
     <string name="default_settings_text">DB default settings</string>
@@ -394,7 +368,6 @@
     <string name="quiz_group_size_text">Quiz group size</string>
     <string name="quiz_group_number_text">Quiz group number</string>
     <string name="start_quiz_text">Start quiz</string>
-    <string name="edit_audio_text">Edit audio</string>
     <string name="override_audio_warning_text">Are you sure you want to override current audio?</string>
     <string name="enable_animation_text">Enable animation</string>
     <string name="enable_animation_summary">Enable the animation for card transition.</string>
@@ -439,7 +412,6 @@
     <string name="enable_gestures_text">Enable gestures</string>
     <string name="select_category_text">Select category</string>
     <string name="dropbox_successfully_uploaded_message">Successfully uploaded the file to your dropbox AnyMemo directory</string>
-    <string name="upload_dropbox_message">Do you want to upload %s to your Dropbox\'s AnyMemo folder? It may take several minutes if you have more than 1000 cards.</string>
     <string name="share_text">Share</string>
     <string name="center_left_text">Center left</string>
     <string name="center_right_text">Center right</string>

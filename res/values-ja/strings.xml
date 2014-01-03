@@ -65,17 +65,13 @@
     <string name="settings_shuffle">カードのシャッフル</string>
     <string name="settings_inverse">QAの入れ替え</string>
     <string name="settings_save">保存</string>
-    <string name="settings_discard">破棄</string>
     <string name="warning_text">注意</string>
     <string name="settings_wipe_warning">全ての学習進歩がリセットされます。</string>
     <string name="settings_shuffle_warning">カードがシャッフルされます。元に戻すことはできません。</string>
     <string name="settings_inverse_warning">Q&amp;Aが入れ替わります。入れ替わったカードは現在のセットの最後尾に付け足されオリジナルカードは残ります。</string>
-    <string name="detail_update">更新</string>
-    <string name="detail_back">戻る</string>
     <string name="delete_text">削除</string>
     <string name="delete_warning">カードを削除します。</string>
     <string name="skip_text">スキップ</string>
-    <string name="skip_warning">今後このカードは表示されません。スキップしますか？</string>
     <string name="stat_total">合計　</string>
     <string name="stat_scheduled">復習</string>
     <string name="stat_new">新規</string>
@@ -83,13 +79,9 @@
     <string name="clear_all_pref">全ての設定をリセット</string>
     <string name="clear_recent_list">最近のリストをクリア</string>
     <string name="export_xml">XMLをエクスポート</string>
-    <string name="add_screen_id">ID</string>
     <string name="add_screen_question">問題</string>
     <string name="add_screen_answer">解答</string>
     <string name="add_screen_new">新規</string>
-    <string name="add_screen_edit">保存</string>
-    <string name="add_screen_gotoid">ID番号へ移動</string>
-    <string name="add_screen_back">戻る</string>
     <string name="add_screen_next">次へ</string>
     <string name="add_screen_previous">前へ</string>
     <string name="search_text">検索</string>
@@ -107,7 +99,6 @@
     <string name="loading_database">データーベースをロード中</string>
     <string name="success">成功</string>
     <string name="fail">失敗</string>
-    <string name="fail_import">変換に失敗しました。 </string>
     <string name="loading_save">セーブ中…</string>
     <string name="loading_connect_net">インターネットからデータを取得中\nキャンセルするには戻るを押してください。</string>
     <string name="loading_downloading">ダウンロード中…　数分かかることがあります。</string>
@@ -157,7 +148,6 @@
     <string name="fullscreen_summary">フルスクリーンでカードを表示します。</string>
     <string name="edit_dialog_category">カテゴリー</string>
     <string name="settings_audio_location_title">オーディオファイルの場所</string>
-    <string name="tts_tip_extender">eSpeak engineをAndroid 2.2以上の場合はダウンロードしてください。</string>
     <string name="what_is_new_message">新機能はバージョン履歴または、オフィシャルウェブサイト:&lt;a href=&quot;http://anymemo.org&quot;&gt;http://anymemo.org&lt;/a&gt;で確認してください。&lt;br /&gt;</string>
     <string name="list_mode_text">リスト形式</string>
     <string name="merge_db_text">データベースの結合</string>
@@ -253,17 +243,10 @@
     <string name="flashcardexchange_text">FlashcardExchange</string>
     <string name="search_tag">タグ検索</string>
     <string name="search_user">ユーザー検索</string>
-    <string name="private_login">プライベートカードのアクセス</string>
-    <string name="upload_db">データベースのアップロード（不安定）</string>
     <string name="upload_wait">アップロード中…しばらくお待ちください。</string>
-    <string name="upload_finish">アップロード完了</string>
-    <string name="upload_finish_message">のアップロードに成功しました。</string>
-    <string name="access_authorization_text">承認トークンを取得中　しばらくお待ちください…</string>
     <string name="fe_directory_text">ディレクトリー閲覧</string>
     <string name="fe_search_tag_message">検索するタグをいれてください。, e.g. Spanish, math and etc.</string>
     <string name="fe_search_user_message">ログインアカウントをいれてください。 例） yourname@example.com.</string>
-    <string name="fe_private_login">プライベートデータへのアクセス</string>
-    <string name="fe_private_login_message">ただいま入れたメールアドレスをもう一度いれてください。, e.g. yourname@example.com.</string>
     <string name="card_style">カードスタイル</string>
     <string name="card_style_double">両面</string>
     <string name="card_style_single">片面</string>
@@ -276,13 +259,8 @@
     <string name="open_tab_text">開く</string>
     <string name="download_tab_text">ダウンロード</string>
     <string name="misc_tab_text">その他</string>
-    <string name="convert_success">変換に成功しました。</string>
     <string name="reset_all_pref_warning">全てのグローバル設定を初期に戻します。学習データは削除されません。</string>
-    <string name="fe_login_text">ログイン</string>
     <string name="fe_logout_text">ログアウト</string>
-    <string name="fe_logged_in_text">ログインしました。</string>
-    <string name="fe_not_login">ログインしてください。</string>
-    <string name="fe_not_login_message">ログインボタンを押してログインしてください。</string>
     <string name="linebreak_conversion">改行をHTML形式に自動変換</string>
     <string name="locale_japanese_text">日本語</string>
 </resources>

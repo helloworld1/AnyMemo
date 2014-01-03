@@ -68,16 +68,12 @@
     <string name="settings_shuffle">Mischia tutte le schede</string>
     <string name="settings_inverse">Scambia le D/R di ogni scheda</string>
     <string name="settings_save">Salva</string>
-    <string name="settings_discard">Scarta</string>
     <string name="warning_text">Attenzione</string>
     <string name="settings_wipe_warning">TUTTI i progressi nell\'apprendimento verranno cancellati!</string>
     <string name="settings_shuffle_warning">Questa operazione mischierà tutte le schede e NON può essere annullata.</string>
     <string name="settings_inverse_warning">Questa operazione scambierà domande e risposte. Con Scambia+Duplica verranno aggiunte tutte le schede scambiate in coda al database corrente (invece di sostituirle).</string>
-    <string name="detail_update">Scrivi le modifiche</string>
-    <string name="detail_back">Indietro</string>
     <string name="delete_warning">Vuoi davvero cancellare questa scheda?</string>
     <string name="skip_text">Salta</string>
-    <string name="skip_warning">Questo elemento non apparirà mai nell\'apprendimento. Sicuro di volerlo marcare come imparato per sempre?</string>
     <string name="stat_total">Totale: </string>
     <string name="stat_scheduled">Ripasso: </string>
     <string name="stat_new">Nuove: </string>
@@ -87,11 +83,7 @@
     <string name="export_xml">Esporta Mnemosyne1 XML</string>
     <string name="add_screen_question">Domanda</string>
     <string name="add_screen_new">Nuova</string>
-    <string name="add_screen_id">ID</string>
     <string name="add_screen_answer">Risposta</string>
-    <string name="add_screen_edit">Salva</string>
-    <string name="add_screen_gotoid">Vai a ID</string>
-    <string name="add_screen_back">Indietro</string>
     <string name="add_screen_next">⇒</string>
     <string name="add_screen_previous">⇐</string>
     <string name="search_text">Cerca</string>
@@ -109,7 +101,6 @@
     <string name="loading_database">Caricamento del database...</string>
     <string name="success">Successo</string>
     <string name="fail">Errore</string>
-    <string name="fail_import">Errore nella conversione </string>
     <string name="loading_save">Salvataggio delle modifiche...</string>
     <string name="loading_connect_net">Aggiornamento della lista da internet...</string>
     <string name="loading_downloading">Scaricamento... Potrebbe metterci parecchio.</string>
@@ -159,7 +150,6 @@
     <string name="fullscreen_summary">Mostra le schede a tutto schermo.</string>
     <string name="edit_dialog_category">Categoria</string>
     <string name="settings_audio_location_title">Imposta il percorso dei file audio</string>
-    <string name="tts_tip_extender">Scarica eSpeak per Android 2.2 e superiori e seleziona eSpeak.</string>
     <string name="what_is_new_message">Vedi la guida grafica delle nuove funzionalità, clicca sull\'elenco delle novità o visita:&lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt;&lt;br /&gt;</string>
     <string name="list_mode_text">Lista delle schede</string>
     <string name="merge_db_text">Fusione DB</string>
@@ -255,17 +245,10 @@
     <string name="flashcardexchange_text">FlashcardExchange</string>
     <string name="search_tag">Ricerca per tag</string>
     <string name="search_user">Ricerca per username</string>
-    <string name="private_login">Accedi alle schede private</string>
-    <string name="upload_db">Carica in rete un database (lento e instabile)</string>
     <string name="upload_wait">Caricamento... Attendere prego. Potrebbe metterci parecchio con un DB grosso.</string>
-    <string name="upload_finish">Caricamento completato</string>
-    <string name="upload_finish_message">è stato caricato correttamente.</string>
-    <string name="access_authorization_text">Accesso al token di autorizzazione. Attendere prego...</string>
     <string name="fe_directory_text">Sfoglia le cartelle</string>
     <string name="fe_search_tag_message">Inserire un tag da cercare,\np.es. Italian, math ecc.</string>
     <string name="fe_search_user_message">Inserire un\'e-mail come login,\np.es. yourname@example.com</string>
-    <string name="fe_private_login">Accedi ai dati privati</string>
-    <string name="fe_private_login_message">Inserisci di nuovo l\'e-mail precedente,\np.es. yourname@example.com</string>
     <string name="card_style">Stile schede</string>
     <string name="card_style_double">A doppia faccia</string>
     <string name="card_style_single">A faccia singola</string>
@@ -278,13 +261,8 @@
     <string name="open_tab_text">Apri</string>
     <string name="download_tab_text">Scarica</string>
     <string name="misc_tab_text">Altro</string>
-    <string name="convert_success">Conversione avvenuta con successo e salvata in</string>
     <string name="reset_all_pref_warning">Questa operazione ripristinerà tutte le preferenze globali ai valori di default. I dati sull\'apprendimento NON verranno cancellati. </string>
-    <string name="fe_login_text">Login</string>
     <string name="fe_logout_text">Logout</string>
-    <string name="fe_logged_in_text">Connesso</string>
-    <string name="fe_not_login">Necessario login</string>
-    <string name="fe_not_login_message">Usare il pulsante di login prima di iniziare.</string>
     <string name="linebreak_conversion">Conversione degli a capo HTML</string>
     <string name="locale_japanese_text">Giapponese</string>
     <string name="locale_spanish_text">Spagnolo</string>
@@ -304,10 +282,7 @@
     <string name="dropbox_login_text">Login con account Dropbox</string>
     <string name="dropbox_download_text">Scarica da Dropbox</string>
     <string name="dropbox_upload_text">Carica %s su Dropbox</string>
-    <string name="user_name_text">Username:</string>
-    <string name="password_text">Password:</string>
     <string name="download_source_dropbox">Dropbox.com</string>
-    <string name="dropbox_login_message">Inserire la username Dropbox (Probabilmente un\'e-mail) e la password.</string>
     <string name="import_supermemo_2008_xml_text">Importa SuperMemo 2008 XML</string>
     <string name="uncategorized_text">Senza categoria</string>
     <string name="edit_text">Mod.</string>
@@ -329,7 +304,6 @@
     <string name="exit_text">Uscita</string>
     <string name="sdcard_not_available_warning_title">Scheda SD non disponibile</string>
     <string name="sdcard_not_available_warning_message">Inserire la scheda SD e riprovare!</string>
-    <string name="help_advanced_operations">Altre operazioni come scambiare D/R, mischiare le schede, cancellare i duplicati appaiono nella schermata Anteprima/Modifica premendo a lungo su di una scheda.</string>
     <string name="load_default_text">Carica default</string>
     <string name="load_default_warning_text">Carica i valori di default delle "Impostazioni di default" e le impostazioni correnti verrano perse.</string>
     <string name="default_settings_text">Impostazioni di default DB</string>
@@ -393,7 +367,6 @@
     <string name="quiz_group_size_text">Dimensione del gruppo di quiz</string>
     <string name="quiz_group_number_text">Numero del gruppo di quiz</string>
     <string name="start_quiz_text">Inizia quiz</string>
-    <string name="edit_audio_text">Modifica audio</string>
     <string name="override_audio_warning_text">Sei sicuro di voler sostituire l\'audio corrente?</string>
     <string name="enable_animation_text">Abilita animazione</string>
     <string name="enable_animation_summary">Abilita l\'animazione nel cambiamento di scheda.</string>
@@ -438,7 +411,6 @@
     <string name="enable_gestures_text">Abilita gestualità</string>
     <string name="select_category_text">Seleziona categoria</string>
     <string name="dropbox_successfully_uploaded_message">Il file è stato correttamente caricato nella tua cartella Dropbox AnyMemo</string>
-    <string name="upload_dropbox_message">Vuoi caricare %s nella tua cartella Dropbox AnyMemo? Potrebbe metterci parecchio se ci sono più di 1000 schede.</string>
     <string name="share_text">Condividi</string>
     <string name="center_left_text">Centra allineando a sinistra</string>
     <string name="center_right_text">Centra allineando a destra</string>

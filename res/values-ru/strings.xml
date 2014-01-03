@@ -66,16 +66,12 @@
     <string name="settings_shuffle">Перемешать карточки</string>
     <string name="settings_inverse">Поменять ВО всех карточек</string>
     <string name="settings_save">Сохр</string>
-    <string name="settings_discard">Отказаться</string>
     <string name="warning_text">Предупреждение</string>
     <string name="settings_wipe_warning">ВЕСЬ прогресс изучения будет сброшен!</string>
     <string name="settings_shuffle_warning">Эта операция перемешает все карточки и её НЕЛЬЗЯ будет отменить.</string>
     <string name="settings_inverse_warning">Эта операция поменяет местами вопросы и ответы. Обм&amp;Коп добавит все инвертированные карточки в конец текущей базы вместо замены.</string>
-    <string name="detail_update">Внести измения</string>
-    <string name="detail_back">Назад</string>
     <string name="delete_warning">Вы действительно хотите удалить эту карточку?</string>
     <string name="skip_text">Пропустить</string>
-    <string name="skip_warning">Этот объект больше не появится для изучения. Вы хотите пропустить его навсегда?</string>
     <string name="stat_total">Всего: </string>
     <string name="stat_scheduled">Повтор: </string>
     <string name="stat_new">Новые: </string>
@@ -85,11 +81,7 @@
     <string name="export_xml">Эспорт Mnemosyne XML1</string>
     <string name="add_screen_question">Вопрос</string>
     <string name="add_screen_new">Нов</string>
-    <string name="add_screen_id">ID</string>
     <string name="add_screen_answer">Ответ</string>
-    <string name="add_screen_edit">Сохранить</string>
-    <string name="add_screen_gotoid">Идти к ID</string>
-    <string name="add_screen_back">Назад</string>
     <string name="add_screen_next">След</string>
     <string name="add_screen_previous">Назад</string>
     <string name="search_text">Поиск</string>
@@ -107,7 +99,6 @@
     <string name="loading_database">Загрузка базы...</string>
     <string name="success">Успех</string>
     <string name="fail">Не удалось</string>
-    <string name="fail_import">Не удалось конвертировать </string>
     <string name="loading_save">Сохранение изменений...</string>
     <string name="loading_connect_net">Идёт обновление списка через интернет...</string>
     <string name="loading_downloading">Загрузка... Это может занять некоторое время.</string>
@@ -156,7 +147,6 @@
     <string name="fullscreen_summary">Показывать карточки в полноэкранном режиме.</string>
     <string name="edit_dialog_category">Категория</string>
     <string name="settings_audio_location_title">Установка расположения аудио пользователя</string>
-    <string name="tts_tip_extender">Загрузите Text-to-Speech Extended и выберите движок eSpeak. Также включите голосовые опции в AnyMemo.</string>
     <string name="what_is_new_message">Чтобы посмотреть илюстрированный обзор новых возможностей программы, нажмите кнопку История версий. Или посетите официальный вебсайт: &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt;&lt;br /&gt;</string>
     <string name="list_mode_text">Список карточек</string>
     <string name="merge_db_text">Объединить</string>
@@ -251,17 +241,10 @@
     <string name="flashcardexchange_text">FlashcardExchange</string>
     <string name="search_tag">Поиск по тегам</string>
     <string name="search_user">Поиск по пользователям</string>
-    <string name="private_login">Доступ к личным картам</string>
-    <string name="upload_db">Залить базы (медленно и нестабильно)</string>
     <string name="upload_wait">Заливка... ждите. Может занять несколько минут для больших баз.</string>
-    <string name="upload_finish">Заливка закончена</string>
-    <string name="upload_finish_message">успешно залита.</string>
-    <string name="access_authorization_text">Получение авторизованного доступа. Ждите...</string>
     <string name="fe_directory_text">Обозреватель каталогов</string>
     <string name="fe_search_tag_message">Введите тег поиска, напр. Spanish, math и пр.</string>
     <string name="fe_search_user_message">Введите email пользователя чтобы залогиниться, напр.  yourname@example.com.</string>
-    <string name="fe_private_login">Доступ к личным данным</string>
-    <string name="fe_private_login_message">Введите email, который вы ввели в предыдущем экране, напр. yourname@example.com.</string>
     <string name="card_style">Стиль карточек</string>
     <string name="card_style_double">Двухсторонний</string>
     <string name="card_style_single">Односторонний</string>
@@ -274,13 +257,8 @@
     <string name="open_tab_text">Открыть</string>
     <string name="download_tab_text">Загрузить</string>
     <string name="misc_tab_text">Разное</string>
-    <string name="convert_success">Успешно конвертировано и сохранено в</string>
     <string name="reset_all_pref_warning">Эта операция восстановит все общие настройки по умолчанию. Ваш прогресс изучения НЕ будет удалён.</string>
-    <string name="fe_login_text">Вход</string>
     <string name="fe_logout_text">Выход</string>
-    <string name="fe_logged_in_text">Вход выполнен</string>
-    <string name="fe_not_login">Нужен логин</string>
-    <string name="fe_not_login_message">Сначала нажмите кнопку Вход чтобы залогиниться</string>
     <string name="linebreak_conversion">Привести разрывы строк к HTML</string>
     <string name="locale_japanese_text">Японский</string>
     <string name="locale_spanish_text">Испанский</string>
@@ -300,10 +278,7 @@
     <string name="dropbox_login_text">Войти, используя аккаунт Dropbox</string>
     <string name="dropbox_download_text">Загрузить из Dropbox</string>
     <string name="dropbox_upload_text">Залить %s в Dropbox</string>
-    <string name="user_name_text">Имя пользователя:</string>
-    <string name="password_text">Пароль:</string>
     <string name="download_source_dropbox">Dropbox.com</string>
-    <string name="dropbox_login_message">Введите имя пользователя Dropbox (обычно email) и пароль.</string>
     <string name="import_supermemo_2008_xml_text">Импорт SuperMemo 2008 XML</string>
     <string name="uncategorized_text">Нет категории</string>
     <string name="edit_text">Правка</string>
@@ -325,7 +300,6 @@
     <string name="exit_text">Выход</string>
     <string name="sdcard_not_available_warning_title">SD карта недоступна</string>
     <string name="sdcard_not_available_warning_message">Вставьте SD карту и запустите снова!</string>
-    <string name="help_advanced_operations">Большинство операций с базами (такие как обмен местами В и О, перемешивание карточек, удаление дубликатов) доступны из экрана Просмотр/Правка по длинному нажатию на карту.</string>
     <string name="load_default_text">Загр умолч</string>
     <string name="load_default_warning_text">Будут загружены настройки, установленные вами в настройках баз по умолчанию, текущие настройки не будут сохранены.</string>
     <string name="default_settings_text">Настройки баз по умолчанию</string>
@@ -389,7 +363,6 @@
     <string name="quiz_group_size_text">Размер группы опроса</string>
     <string name="quiz_group_number_text">Номер группы опроса</string>
     <string name="start_quiz_text">Начать опрос</string>
-    <string name="edit_audio_text">Правка звука</string>
     <string name="override_audio_warning_text">Вы действительно хотите заменить текущий звук?</string>
     <string name="enable_animation_text">Разрешить анимацию</string>
     <string name="enable_animation_summary">Разрешить анимацию при смене карточки.</string>
@@ -434,7 +407,6 @@
     <string name="enable_gestures_text">Разрешить жесты</string>
     <string name="select_category_text">Выбрать категорию</string>
     <string name="dropbox_successfully_uploaded_message">Файл успешно залит в ваш Dropbox AnyMemo каталог</string>
-    <string name="upload_dropbox_message">Хотите залить %s в ваш Dropbox AnyMemo каталог? Это может занять несколько минут, если карточек более 1000.</string>
     <string name="share_text">Передать</string>
     <string name="center_left_text">Слева по центру</string>
     <string name="center_right_text">Справа по центру</string>

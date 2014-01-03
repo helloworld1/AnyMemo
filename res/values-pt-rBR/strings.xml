@@ -68,17 +68,13 @@
     <string name="settings_shuffle">Embaralhar Todas Cartas</string>
     <string name="settings_inverse">Trocar as P/R de todas as cartas</string>
     <string name="settings_save">Salvar</string>
-    <string name="settings_discard">Descartar</string>
     <string name="warning_text">Aviso</string>
     <string name="settings_wipe_warning">TODOS os dados de aprendizagem serão apagados!</string>
     <string name="settings_shuffle_warning">Esta operação irá embaralhar todas as cartas e não poderá ser desfeita.</string>
     <string name="settings_inverse_warning">Esta operação irá trocar o local das perguntas e respostas. Trocar&amp;dup irá adicionar todas as cartas trocadas no fm do Banco de Dados em vez de substituir.</string>
-    <string name="detail_update">Salvar Mudanças</string>
-    <string name="detail_back">Voltar</string>
     <string name="delete_text">Apagar</string>
     <string name="delete_warning">Você realmente quer apagar estas cartas?</string>
     <string name="skip_text">Pular</string>
-    <string name="skip_warning">Este ítem nunca mais irá aparecer para aprendizado. Você realmente quer ignorá-lo?</string>
     <string name="stat_total">Total: </string>
     <string name="stat_scheduled">Agendadas: </string>
     <string name="stat_new">Novas: </string>
@@ -86,13 +82,9 @@
     <string name="clear_all_pref">Resetar Todas Preferencias</string>
     <string name="clear_recent_list">Limpar a Lista Recente</string>
     <string name="export_xml">Exportar para Mnemosyne XML</string>
-    <string name="add_screen_id">ID</string>
     <string name="add_screen_question">Pergunta</string>
     <string name="add_screen_answer">Resposta</string>
     <string name="add_screen_new">Novo</string>
-    <string name="add_screen_edit">Salvar</string>
-    <string name="add_screen_gotoid">Ir para ID</string>
-    <string name="add_screen_back">Voltar</string>
     <string name="add_screen_next">Avançar</string>
     <string name="add_screen_previous">Voltar</string>
     <string name="search_text">Procurar</string>
@@ -110,7 +102,6 @@
     <string name="loading_database">Carregando Banco de Dados...</string>
     <string name="success">Completado com Sucesso</string>
     <string name="fail">Falhou</string>
-    <string name="fail_import">Falha ao converter </string>
     <string name="loading_save">Salvando mudanças...</string>
     <string name="loading_connect_net">Atualizando lista da Internet...\nAperte a tecla Voltar para Cancelar.</string>
     <string name="loading_downloading">Fazendo download... Isso pode demorar.</string>
@@ -159,7 +150,6 @@
     <string name="fullscreen_summary">Mostrar flashcards no Modo Tela Cheia.</string>
     <string name="edit_dialog_category">Categoria</string>
     <string name="settings_audio_location_title">Configurar a linguagem do áudio</string>
-    <string name="tts_tip_extender">Faça o download do eSpeak engine para Android 2.2 e selecione acima o engine como eSpeak.</string>
     <string name="what_is_new_message">Para visualizar as novas features, clique no botão histórico da versão, ou, visite nosso site:&lt;a href=" http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt;&lt;br>/&gt;</string>
     <string name="list_mode_text">Modo Lista</string>
     <string name="merge_db_text">Mesclar DB</string>

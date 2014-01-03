@@ -67,17 +67,13 @@
     <string name="settings_shuffle">Przetasuj karty</string>
     <string name="settings_inverse">Zamień pytania z odpowiedziami</string>
     <string name="settings_save">Zapisz</string>
-    <string name="settings_discard">Anuluj</string>
     <string name="warning_text">Uwaga</string>
     <string name="settings_wipe_warning">CAŁY postęp nauki zostanie usunięty jeśli wybierzesz Zapisz!</string>
     <string name="settings_shuffle_warning">Ta operacja przetasuje wszystkie karty i jest NIEODWRACALNA. Upewnij się zanim zapiszesz zmiany.</string>
     <string name="settings_inverse_warning">Ta operacja zamieni pytania z odpowiedziami na WSZYSTKICH kartach.</string>
-    <string name="detail_update">Zapisz zmiany</string>
-    <string name="detail_back">Wstecz</string>
     <string name="delete_text">Usuń</string>
     <string name="delete_warning">Czy na pewno chcesz usunąć tę kartę?</string>
     <string name="skip_text">Pomiń</string>
-    <string name="skip_warning">Ta karta nigdy się nie pojawi do nauki. Czy na pewno chcesz ją pominąć?</string>
     <string name="stat_total">Wszystkich: </string>
     <string name="stat_scheduled">Zaplanowanych: </string>
     <string name="stat_new">Nowych: </string>
@@ -85,13 +81,9 @@
     <string name="clear_all_pref">Przywróć ustawienia domyślne</string>
     <string name="clear_recent_list">Wyczyść listę ostatnio używanych baz danych</string>
     <string name="export_xml">Eksportuj plik Mnemosyne XML</string>
-    <string name="add_screen_id">ID</string>
     <string name="add_screen_question">Pytanie</string>
     <string name="add_screen_answer">Odpowiedź</string>
     <string name="add_screen_new">Nowa</string>
-    <string name="add_screen_edit">Zapisz</string>
-    <string name="add_screen_gotoid">Przejdź do ID</string>
-    <string name="add_screen_back">Wstecz</string>
     <string name="add_screen_next">Następna</string>
     <string name="add_screen_previous">Poprzednia</string>
     <string name="search_text">Wyszukaj</string>
@@ -109,7 +101,6 @@
     <string name="loading_database">Ładowanie bazy danych...</string>
     <string name="success">Powiodło się</string>
     <string name="fail">Nie powiodło się</string>
-    <string name="fail_import">Nie udało się przekonwertować </string>
     <string name="loading_save">Zapisywanie zmian...</string>
     <string name="loading_connect_net">Odświeżanie listy z internetu...\nNaciśnij przycisk Wstecz żeby anulować.</string>
     <string name="loading_downloading">Pobieranie... To może chwilę potrwać.</string>
@@ -159,7 +150,6 @@
     <string name="fullscreen_summary">Wyświetl karty w trybie pełnoekranowym.</string>
     <string name="edit_dialog_category">Kategoria</string>
     <string name="settings_audio_location_title">Ustaw lokację wymowy użytkownika</string>
-    <string name="tts_tip_extender">Pobierz Text-to-Speech Extended i wybierz engine eSpeak. Pamiętaj także by zmienić opcję w AnyMemo.</string>
     <string name="what_is_new_message">Zobacz graficzny przewodnik po nowych funkcjach, kliknij na przycisk historia zmian. Możesz także odwiedzić oficjalną stronę:&lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt;&lt;br /&gt;</string>
     <string name="list_mode_text">Tryb listy</string>
     <string name="merge_db_text">Scal bazy danych</string>
