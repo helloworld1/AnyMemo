@@ -10,12 +10,12 @@
     android:eventsInterceptionEnabled="true">
 <LinearLayout
     android:id="@+id/root"
-	android:layout_width="0dp"
+	android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:layout_weight="1" android:baselineAligned="false">
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="vertical">
