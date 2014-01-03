@@ -143,20 +143,15 @@
             android:name=".service.CardPlayerService" />
         <service
             android:name="org.liberty.android.fantastischmemo.service.ConvertIntentService" />
-
         <provider
                 android:name=".provider.CardProvider"
                 android:authorities="org.liberty.android.fantastischmemo.cardprovider"
                 android:exported="true"
                 android:multiprocess="true" />
-
         <provider
                 android:name=".provider.DatabasesProvider"
                 android:authorities="org.liberty.android.fantastischmemo.databasesprovider"
                 android:exported="true"
                 android:multiprocess="true" />
-
-
-
     </application>
 </manifest> 

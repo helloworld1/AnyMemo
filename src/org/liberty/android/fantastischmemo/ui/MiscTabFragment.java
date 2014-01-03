@@ -43,6 +43,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -341,13 +342,22 @@ public class MiscTabFragment extends RoboFragment implements View.OnClickListene
             startActivity(myIntent);
         }
         if(v == aboutButton){
+            // Get the version defined in the AndroidManifest.
+            String versionName = "";
+            try {
+                versionName = getActivity().getPackageManager()
+                    .getPackageInfo(getActivity().getPackageName(), 0).versionName;
+            } catch (PackageManager.NameNotFoundException e) {
+                versionName = "1.0";
+            }
+
             View alertView = View.inflate(mActivity, R.layout.link_alert, null);
             TextView textView = (TextView)alertView.findViewById(R.id.link_alert_message);
             textView.setText(Html.fromHtml(getString(R.string.about_text)));
             textView.setMovementMethod(LinkMovementMethod.getInstance());
             new AlertDialog.Builder(mActivity)
                 .setView(alertView)
-                .setTitle(getString(R.string.about_title) + " " + getString(R.string.app_full_name) + " " + getString(R.string.app_version))
+                .setTitle(getString(R.string.about_title) + " " + getString(R.string.app_full_name) + " " + versionName)
                 .setPositiveButton(getString(R.string.ok_text), null)
                 .setNegativeButton(getString(R.string.about_version), new DialogInterface.OnClickListener(){
                     @Override

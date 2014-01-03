@@ -48,6 +48,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 
 /*
@@ -171,7 +172,7 @@ public class GradeButtonsFragment extends RoboFragment {
 
         for (int i = 0; i < 6; i++) {
             setButtonOnClickListener(gradeButtons[i], i);
-            // setButtonOnLongClickListener(gradeButtons[i], i);
+            setButtonOnLongClickListener(gradeButtons[i], i);
             defaultGradeButtonTitles[i] = gradeButtons[i].getText();
             gradeButtons[i].setText(Html.fromHtml("<b>" + gradeButtons[i].getText() + "</b>"));
         }
@@ -187,6 +188,24 @@ public class GradeButtonsFragment extends RoboFragment {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 onGradeButtonClickListener.onGradeButtonClick(grade);
+            }
+        });
+    }
+
+    private void setButtonOnLongClickListener(final Button button, final int grade) {
+        button.setOnLongClickListener(new View.OnLongClickListener() {
+            public boolean onLongClick(View v) {
+                int[] helpText = {
+                    R.string.memo_btn0_help_text,
+                    R.string.memo_btn1_help_text,
+                    R.string.memo_btn2_help_text,
+                    R.string.memo_btn3_help_text,
+                    R.string.memo_btn4_help_text,
+                    R.string.memo_btn5_help_text
+                };
+                Toast.makeText(getActivity(), helpText[grade], Toast.LENGTH_LONG)
+                    .show();
+                return true;
             }
         });
     }
