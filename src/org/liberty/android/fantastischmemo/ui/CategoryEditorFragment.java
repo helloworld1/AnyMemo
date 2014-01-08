@@ -1,5 +1,6 @@
 package org.liberty.android.fantastischmemo.ui;
 
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -58,6 +59,7 @@ public class CategoryEditorFragment extends RoboDialogFragment {
         Bundle args = this.getArguments();
         dbPath = args.getString(EXTRA_DBPATH);
         currentCategoryId = args.getInt(EXTRA_CATEGORY_ID, 1);
+        dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(mActivity, dbPath);
         setStyle(DialogFragment.STYLE_NO_TITLE, 0);
     }
 
@@ -126,10 +128,10 @@ public class CategoryEditorFragment extends RoboDialogFragment {
     /*
      * This task will mainly populate the categoryList
      */
-    private class InitTask extends AsyncTask<Void, Void, Integer> {
+    private class InitTask extends AsyncTask<Void, Void, Category> {
         private List<Category> categories;
 
-		@Override
+        @Override
         public void onPreExecute() {
             mActivity.setProgressBarIndeterminateVisibility(true);
             categoryAdapter = new CategoryAdapter(mActivity, android.R.layout.simple_list_item_single_choice);
@@ -139,36 +141,32 @@ public class CategoryEditorFragment extends RoboDialogFragment {
         }
 
         @Override
-        public Integer doInBackground(Void... params) {
+        public Category doInBackground(Void... params) {
             Category currentCategory;
-            dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(mActivity, dbPath);
             categoryDao = dbOpenHelper.getCategoryDao();
             categories = categoryDao.queryForAll();
             currentCategory = categoryDao.queryForId(currentCategoryId);
-            int categorySize = categories.size();
-            Integer position = null;
-            if (currentCategory != null) {
-                for (int i = 0; i < categorySize; i++) {
-                    if (categories.get(i).getName().equals(currentCategory.getName())) {
-                        position = i;
-                        break;
-                    }
-                }
-            } else {
-                position = 0;
-            }
-            assert position != null : "The card has no category. This shouldn't happen.";
-            return position;
+            return currentCategory;
         }
 
         @Override
-        public void onPostExecute(Integer pos){
+        public void onPostExecute(Category currentCategory){
             categoryAdapter.addAll(categories);
-            categoryList.setItemChecked(pos, true);
-            // This is needed to scroll to checked position
-            categoryList.setSelection(pos);
+            categoryAdapter.sort();
 
-            categoryEdit.setText(categoryAdapter.getItem(pos).getName());
+            // This is needed to scroll to checked position
+            int position = 0;
+            if (currentCategory != null) {
+                position = categoryAdapter.indexOf(currentCategory);
+            }
+
+            assert position != AdapterView.INVALID_POSITION: "The card has no category. This shouldn't happen.";
+
+            categoryList.setItemChecked(position, true);
+            categoryList.setSelection(position);
+
+            categoryEdit.setText(categoryAdapter.getItem(position).getName());
+
             enableListeners();
             mActivity.setProgressBarIndeterminateVisibility(false);
         }
@@ -181,7 +179,7 @@ public class CategoryEditorFragment extends RoboDialogFragment {
         private Category selectedCategory;
         private String editText;
 
-		@Override
+        @Override
         public void onPreExecute() {
             disableListeners();
             mActivity.setProgressBarIndeterminateVisibility(true);
@@ -222,7 +220,15 @@ public class CategoryEditorFragment extends RoboDialogFragment {
 
         @Override
         public void onPostExecute(Void result){
+            categoryAdapter.sort();
             categoryAdapter.notifyDataSetChanged();
+
+            // After sorting, we need to find position of edited category 
+            // to select in the list.
+            int position = categoryAdapter.indexOf(selectedCategory);
+            categoryList.setItemChecked(position, true);
+            categoryList.setSelection(position);
+
             mActivity.setProgressBarIndeterminateVisibility(false);
             enableListeners();
         }
@@ -231,45 +237,42 @@ public class CategoryEditorFragment extends RoboDialogFragment {
     private class NewCategoryTask extends AsyncTask<Void, Void, Category> {
         private String editText;
 
-		@Override
+        @Override
         public void onPreExecute() {
             disableListeners();
             mActivity.setProgressBarIndeterminateVisibility(true);
             editText = categoryEdit.getText().toString();
-            int categorySize = categoryAdapter.getCount();
-            for (int i = 0; i < categorySize; i++) {
-                if (categoryAdapter.getItem(i).getName().equals(editText)) {
-                    categoryList.setItemChecked(i, true);
-                    categoryList.setSelection(i);
-                    cancel(true);
-                    return;
-                }
-            }
             assert editText != null : "Category's EditText shouldn't get null";
         }
 
         @Override
         public Category doInBackground(Void... params) {
-            Category c = new Category();
-            c.setName(editText);
-            categoryDao.create(c);
-            return c;
+            return categoryDao.createOrReturn(editText);
         }
 
         @Override
         public void onCancelled(){
-            enableListeners();
         }
 
         @Override
         public void onPostExecute(Category result){
-            categoryAdapter.add(result);
-            categoryAdapter.notifyDataSetChanged();
+            assert result != null : "The result should never be null here";
+
+            if (!categoryAdapter.hasItem(result)) {
+                categoryAdapter.add(result);
+            }
+
+            categoryAdapter.sort();
+
+            int position = categoryAdapter.indexOf(result);
 
             // Select and scroll to newly created category
-            int lastPos = categoryAdapter.getCount() - 1;
-            categoryList.setItemChecked(lastPos, true);
-            categoryList.setSelection(lastPos);
+            categoryList.setItemChecked(position, true);
+            categoryList.setSelection(position);
+
+            categoryAdapter.notifyDataSetChanged();
+            categoryAdapter.sort();
+
             mActivity.setProgressBarIndeterminateVisibility(false);
             enableListeners();
         }
@@ -279,7 +282,7 @@ public class CategoryEditorFragment extends RoboDialogFragment {
 
         private Category selectedCategory;
 
-		@Override
+        @Override
         public void onPreExecute() {
             int position = categoryList.getCheckedItemPosition();
             if (position == AdapterView.INVALID_POSITION) {
@@ -310,6 +313,7 @@ public class CategoryEditorFragment extends RoboDialogFragment {
             if (StringUtils.isNotEmpty(selectedCategory.getName())) {
                 categoryAdapter.remove(selectedCategory);
             }
+            categoryAdapter.sort();
             categoryAdapter.notifyDataSetChanged();
 
             // Move to first category (Uncategorized)
@@ -333,6 +337,32 @@ public class CategoryEditorFragment extends RoboDialogFragment {
             }
         }
 
+
+        public void sort() {
+            sort(categoryComparator);
+        }
+
+        /**
+         * @return true if the adapter has the category with the same name.
+         */
+        public boolean hasItem(Category category) {
+            return indexOf(category) != AdapterView.INVALID_POSITION;
+        }
+
+        /**
+         * Get the index of the category of the same name.
+         * @param category the category
+         * @return the index or AdapterView.INVALID_POSITION if the category is not found.
+         */
+        public int indexOf(Category category) {
+            for (int i = 0; i < getCount(); i++) {
+                if (categoryAdapter.getItem(i).getName().equals(category.getName())) {
+                    return i;
+                }
+            }
+            return AdapterView.INVALID_POSITION;
+        }
+
         @Override
         public View getView(int position, View convertView, ViewGroup parent){
             CheckedTextView v = (CheckedTextView)convertView;
@@ -349,6 +379,26 @@ public class CategoryEditorFragment extends RoboDialogFragment {
             }
             return v;
         }
+
+        /**
+         * This comparator compares the category based on the following logic:
+         * "Uncategorized" (id = 0) is always the top.
+         * Other category are sorted in the lexicographical order.
+         */
+        private Comparator<Category> categoryComparator = new Comparator<Category>() {
+            @Override
+            public int compare(Category lhs, Category rhs) {
+                if (lhs.getId() == 0 && rhs.getId() != 0) {
+                    return -1;
+                }
+
+                if (lhs.getId() != 0 && rhs.getId() == 0) {
+                    return 1;
+                }
+
+                return lhs.getName().compareTo(rhs.getName());
+            }
+        };
     }
 
     private OnItemClickListener listItemClickListener = new OnItemClickListener() {
