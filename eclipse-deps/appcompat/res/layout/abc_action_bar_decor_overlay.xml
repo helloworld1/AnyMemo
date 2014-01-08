@@ -25,7 +25,6 @@
     <LinearLayout android:id="@+id/top_action_bar"
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
-                  android:orientation="vertical"
                   android:layout_gravity="top">
         <android.support.v7.internal.widget.ActionBarContainer android:id="@+id/action_bar_container"
                                                              android:layout_width="fill_parent"
