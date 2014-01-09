@@ -230,6 +230,16 @@ public class Mnemosyne2CardsImporter implements Converter {
 
                     // and also find out the corresponding tag for card's category
                     Category category = categoryOidMAP.get(tagOid);
+                    if (tagOid.contains(",")) {
+                        // If the card has multiple category, select only the first category.
+                        String firstOid = tagOid.split(",")[0];
+                        category = categoryOidMAP.get(firstOid);
+                    } else {
+                        category = categoryOidMAP.get(tagOid);
+                    }
+                    if (category == null) {
+                        category = new Category();
+                    }
 
                     card.setLearningData(ld);
                     card.setCategory(category);
