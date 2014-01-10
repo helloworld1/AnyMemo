@@ -19,6 +19,7 @@ package com.example.android.apis.graphics;
 import org.liberty.android.fantastischmemo.AMActivity;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -36,6 +37,11 @@ class GraphicsActivity extends AMActivity {
             vg.addView(view);
             view = vg;
         }
+
+        // Do not overlap the existing title
+        ActionBar ab = getSupportActionBar(); 
+        ab.setDisplayShowTitleEnabled(false); 
+        ab.setDisplayShowHomeEnabled(false);
 
         super.setContentView(view);
     }
