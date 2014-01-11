@@ -94,8 +94,24 @@ public class TwoFieldsCardFragment extends RoboFragment {
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        field1CardFragmentBuilders = (CardFragment.Builder[]) getArguments().getSerializable(EXTRA_FIELD1_CARD_FRAGMENT_BUILDERS);
-        field2CardFragmentBuilders = (CardFragment.Builder[]) getArguments().getSerializable(EXTRA_FIELD2_CARD_FRAGMENT_BUILDERS);
+
+        // Need to convert the array type to Serializable to CardFragment.Builder
+        Object[] array1 = (Object[]) getArguments().getSerializable(EXTRA_FIELD1_CARD_FRAGMENT_BUILDERS);
+        Object[] array2 = (Object[]) getArguments().getSerializable(EXTRA_FIELD2_CARD_FRAGMENT_BUILDERS);
+
+        field1CardFragmentBuilders = new CardFragment.Builder[array1.length];
+        field2CardFragmentBuilders = new CardFragment.Builder[array2.length];
+
+        for (int i = 0; i < array1.length;  i++) {
+            field1CardFragmentBuilders[i] = (CardFragment.Builder) array1[i];
+
+        }
+
+        for (int i = 0; i < array2.length;  i++) {
+            field2CardFragmentBuilders[i] = (CardFragment.Builder) array2[i];
+
+        }
+
         qaRatio = getArguments().getInt(EXTRA_QA_RATIO, Setting.DEFAULT_QA_RATIO);
 
         separatorColor = getArguments().getInt(EXTRA_SEPARATOR_COLOR, Setting.DEFAULT_SEPARATOR_COLOR);

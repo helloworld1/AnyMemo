@@ -57,7 +57,14 @@ public class FlipableCardFragment extends RoboFragment {
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        cardFragmentBuilders = (CardFragment.Builder[]) getArguments().getSerializable(EXTRA_CARD_FRAGMENT_BUILDERS);
+
+        // Need to convert the array type to Serializable to CardFragment.Builder
+        Object[] array1 = (Object[]) getArguments().getSerializable(EXTRA_CARD_FRAGMENT_BUILDERS);
+        cardFragmentBuilders = new CardFragment.Builder[array1.length];
+        for (int i = 0; i < array1.length;  i++) {
+            cardFragmentBuilders[i] = (CardFragment.Builder) array1[i];
+        }
+
         initialPosition = getArguments().getInt(EXTRA_INITIAL_POSITION, 0);
     }
 
