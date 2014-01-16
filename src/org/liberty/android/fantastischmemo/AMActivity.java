@@ -128,6 +128,8 @@ public abstract class AMActivity extends RoboActionBarActivity {
             locale = new Locale("ES");
         } else if (localeSetting.equals("IT")) {
             locale = Locale.ITALIAN;
+        } else if (localeSetting.equals("FI")) {
+            locale = new Locale("FI");
         } else {
             locale = Locale.getDefault();
         }

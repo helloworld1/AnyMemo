@@ -445,4 +445,5 @@
     <string name="mark_as_learned_forever_text">Mark as learned forever</string>
     <string name="mark_as_learned_forever_warning_text">This item will never appear for learning. Do you want to mark it as learned forever?</string>
     <string name="show_hide_answers_text">Show/hide answers</string>
+    <string name="locale_finnish_text">Finnish</string>
 </resources>
