@@ -127,15 +127,20 @@ public class CardEditor extends AMActivity {
                 .setMessage(R.string.edit_dialog_unsave_warning)
                 .setPositiveButton(R.string.yes_text, new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface  d, int which){
-                        Intent resultIntent = new Intent();
-                        setResult(Activity.RESULT_CANCELED, resultIntent);
-                        finish();
-
+                        SaveCardTask task = new SaveCardTask();
+                        task.execute((Void)null);
                     }
                 })
-            .setNegativeButton(R.string.no_text, null)
-                .create()
-                .show();
+            .setNeutralButton(R.string.no_text, new DialogInterface.OnClickListener(){
+                public void onClick(DialogInterface  d, int which){
+                    Intent resultIntent = new Intent();
+                    setResult(Activity.RESULT_CANCELED, resultIntent);
+                    finish();
+                }
+            })
+            .setNegativeButton(R.string.cancel_text, null)
+            .create()
+            .show();
 
         }
         else{

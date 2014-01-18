@@ -216,9 +216,8 @@ public class SettingsScreen extends AMActivity {
                 }
             })
             .setNegativeButton(R.string.cancel_text, null)
-                .create()
-                .show();
-
+            .create()
+            .show();
         } else {
             Intent resultIntent = new Intent();
             setResult(Activity.RESULT_CANCELED, resultIntent);
