@@ -40,6 +40,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -164,7 +165,13 @@ public class AnyMemo extends AMActivity {
         File sdPath = new File(AMEnv.DEFAULT_ROOT_PATH);
         //Check the version, if it is updated from an older version it will show a dialog
         String savedVersion = settings.getString(AMPrefKeys.SAVED_VERSION_KEY, "");
-        String thisVersion = getResources().getString(R.string.app_version);
+
+        String thisVersion; 
+        try {
+            thisVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            thisVersion = "";
+        }
 
         boolean firstTime = settings.getBoolean(AMPrefKeys.FIRST_TIME_KEY, true);
 
