@@ -83,7 +83,7 @@
     <string name="export_xml">Vie Mnemosyne XML</string>
     <string name="add_screen_question">Kysymys</string>
     <string name="add_screen_new">Uusi</string>
-	  <string name="add_screen_answer">Vastaus</string>
+    <string name="add_screen_answer">Vastaus</string>
     <string name="add_screen_next">Seuraava</string>
     <string name="add_screen_previous">Edellinen</string>
     <string name="search_text">Etsi</string>
@@ -96,7 +96,7 @@
     <string name="fb_fail_to_clone">Tiedoston kopiointi epäonnistui.</string>
     <string name="fb_rename">Nimeä uudestaan</string>
     <string name="fb_rename_message">Anna nimi</string>
-	  <string name="fb_rename_fail">Uudelleen nimeäminen epäonnistui.</string>
+    <string name="fb_rename_fail">Uudelleen nimeäminen epäonnistui.</string>
     <string name="loading_please_wait">Odota hetki...</string>
     <string name="loading_database">Lataa tietokantaa...</string>
     <string name="success">Onnistui</string>
@@ -124,7 +124,7 @@
     <string name="settings_typeface_answer">Käyttäjän valitsema fontti vastauksiin (TTF)</string>
     <string name="learn_ahead">Opiskele pänttäämällä</string>
     <string name="menu_text">Valikko</string>
-	  <string name="filter_text">Suodatin</string>
+    <string name="filter_text">Suodatin</string>
     <string name="import_text">Tuo</string>
     <string name="export_text">Vie</string>
     <string name="clear_filter_text">Poista</string>
@@ -134,7 +134,7 @@
     <string name="export_csv">Vie CSV</string>
     <string name="import_qa_txt">Tuo QA TXT</string>
     <string name="import_tab_txt">Tuo Tab-erotettu TXT</string>
-	  <string name="import_csv">Tuo CSV</string>
+    <string name="import_csv">Tuo CSV</string>
     <string name="import_supermemo_xml_text">Tuo SuperMemo PPC XML</string>
     <string name="speech_ctl_title">Automaattinen puhe</string>
     <string name="speech_ctl_summary">Valitse puheen aktivoimistapa</string>
@@ -146,7 +146,7 @@
     <string name="color_h">Sävy</string>
     <string name="color_s">Kyllästyneisyys</string>
     <string name="color_v">Arvo</string>
-	  <string name="fullscreen_title">Kokonäyttötila</string>
+    <string name="fullscreen_title">Kokonäyttötila</string>
     <string name="fullscreen_summary">Näytä kortteja kokonäyttötilassa.</string>
     <string name="edit_dialog_category">Kategoria</string>
     <string name="settings_audio_location_title">Aseta käyttäjän äänen sijainti</string>
@@ -176,7 +176,7 @@
     <string name="removing_dup_title">Poistetaan kaksoiskappaleet</string>
     <string name="removing_dup_warning">Kaksoiskappaleiden poistaminen voi kestää hyvin pitkään riippuen tietokannan koosta. Prosessin keskeyttäminen voi johtaa tietokannan vioittumiseen!</string>
     <string name="detail_reset">Nollaa oppimisdata</string>
-	  <string name="anymemo_widget_name">AnyMemo Widget</string>
+    <string name="anymemo_widget_name">AnyMemo Widget</string>
     <string name="db_text">DB</string>
     <string name="widget_fail_fetch">Tietokantavirhe</string>
     <string name="notification_text">Ilmoitus</string>
@@ -444,5 +444,5 @@
     <string name="mark_as_learned_forever_text">Merkitse muistetuksi</string>
     <string name="mark_as_learned_forever_warning_text">Tämä kortti ei enää koskaan ilmesty kiertoon. Halutko merkitä sen opituksi ikiajoiksi?</string>
     <string name="show_hide_answers_text">Näytä/piilota vastaukset</string>
-	  <string name="locale_finnish_text">Suomi</string>
+    <string name="locale_finnish_text">Suomi</string>
 </resources>
