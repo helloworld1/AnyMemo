@@ -2,8 +2,7 @@
 <resources>
     <string name="app_name">AnyMemo</string>
     <string name="app_full_name">AnyMemo</string>
-    <string name="app_version">10.3.992</string>
-	<string name="ok_text">OK</string>
+	  <string name="ok_text">OK</string>
     <string name="cancel_text">Peruuta</string>
     <string name="yes_text">Kyllä</string>
     <string name="no_text">Ei</string>
@@ -84,7 +83,7 @@
     <string name="export_xml">Vie Mnemosyne XML</string>
     <string name="add_screen_question">Kysymys</string>
     <string name="add_screen_new">Uusi</string>
-	<string name="add_screen_answer">Vastaus</string>
+	  <string name="add_screen_answer">Vastaus</string>
     <string name="add_screen_next">Seuraava</string>
     <string name="add_screen_previous">Edellinen</string>
     <string name="search_text">Etsi</string>
@@ -97,7 +96,7 @@
     <string name="fb_fail_to_clone">Tiedoston kopiointi epäonnistui.</string>
     <string name="fb_rename">Nimeä uudestaan</string>
     <string name="fb_rename_message">Anna nimi</string>
-	<string name="fb_rename_fail">Uudelleen nimeäminen epäonnistui.</string>
+	  <string name="fb_rename_fail">Uudelleen nimeäminen epäonnistui.</string>
     <string name="loading_please_wait">Odota hetki...</string>
     <string name="loading_database">Lataa tietokantaa...</string>
     <string name="success">Onnistui</string>
@@ -114,7 +113,7 @@
     <string name="downloader_download_alert">Lataukset:</string>
     <string name="downloader_download_alert_message">Lisätiedot:</string>
     <string name="about_title">Tietoja sovelluksesta</string>
-    <string name="about_text">Edistyksellinen aikavälikertausta oppimismetodina käyttävä kysymyskorttiapplikaatio.&lt;br />&lt;br />Tekijät: Haowen Ning, Qi Wang&lt;br />&lt;br />Sivusto: &lt;a href=http://anymemo.org>http://anymemo.org&lt;/a> &lt;br />&lt;br />Kiitokset: Piotr Bazan, pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br />&lt;br />Käännökset: Ladislav, jim4ever, paw3lk, Alexander Gomenyuk, Maksym Grinenko, Kim hyun-ho, Thomas Tempé, Alex Wirz Vieira, Neil Barry, Mattia Monga</string>
+    <string name="about_text">Edistyksellinen aikavälikertausta oppimismetodina käyttävä kysymyskorttiapplikaatio.&lt;br />&lt;br />Tekijät: Haowen Ning, Qi Wang&lt;br />&lt;br />Sivusto: &lt;a href=http://anymemo.org>http://anymemo.org&lt;/a> &lt;br />&lt;br />Kiitokset: Piotr Bazan, pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br />&lt;br />Käännökset: Ladislav, jim4ever, paw3lk, Alexander Gomenyuk, Maksym Grinenko, Kim hyun-ho, Thomas Tempé, Alex Wirz Vieira, Neil Barry, Mattia Monga, Ilari Tyni</string>
     <string name="about_version">Versiohistoria</string>
     <string name="what_is_new">Uusi versio on asennettuna</string>
     <string name="downloader_categories">Kategoria</string>
@@ -125,7 +124,7 @@
     <string name="settings_typeface_answer">Käyttäjän valitsema fontti vastauksiin (TTF)</string>
     <string name="learn_ahead">Opiskele pänttäämällä</string>
     <string name="menu_text">Valikko</string>
-	<string name="filter_text">Suodatin</string>
+	  <string name="filter_text">Suodatin</string>
     <string name="import_text">Tuo</string>
     <string name="export_text">Vie</string>
     <string name="clear_filter_text">Poista</string>
@@ -135,11 +134,11 @@
     <string name="export_csv">Vie CSV</string>
     <string name="import_qa_txt">Tuo QA TXT</string>
     <string name="import_tab_txt">Tuo Tab-erotettu TXT</string>
-	<string name="import_csv">Tuo CSV</string>
+	  <string name="import_csv">Tuo CSV</string>
     <string name="import_supermemo_xml_text">Tuo SuperMemo PPC XML</string>
     <string name="speech_ctl_title">Automaattinen puhe</string>
-    <string name="speech_ctl_summary">Kuinka tuoda puhe mukaan oppimiseen</string>
-    <string name="button_style_title">Oppimisen arvioimisen painikkeen tyyli</string>
+    <string name="speech_ctl_summary">Valitse puheen aktivoimistapa</string>
+    <string name="button_style_title">Arvioimispainikkeen tyyli</string>
     <string name="button_style_summary">Muuta oppimisen arvioimiseen käytetyn painikkeen tyyliä.</string>
     <string name="settings_customize_color">Muokkaa värejä</string>
     <string name="color_button_text">Valitse väri</string>
@@ -147,7 +146,7 @@
     <string name="color_h">Sävy</string>
     <string name="color_s">Kyllästyneisyys</string>
     <string name="color_v">Arvo</string>
-	<string name="fullscreen_title">Kokonäyttötila</string>
+	  <string name="fullscreen_title">Kokonäyttötila</string>
     <string name="fullscreen_summary">Näytä kortteja kokonäyttötilassa.</string>
     <string name="edit_dialog_category">Kategoria</string>
     <string name="settings_audio_location_title">Aseta käyttäjän äänen sijainti</string>
@@ -177,19 +176,19 @@
     <string name="removing_dup_title">Poistetaan kaksoiskappaleet</string>
     <string name="removing_dup_warning">Kaksoiskappaleiden poistaminen voi kestää hyvin pitkään riippuen tietokannan koosta. Prosessin keskeyttäminen voi johtaa tietokannan vioittumiseen!</string>
     <string name="detail_reset">Nollaa oppimisdata</string>
-	<string name="anymemo_widget_name">AnyMemo Widget</string>
+	  <string name="anymemo_widget_name">AnyMemo Widget</string>
     <string name="db_text">DB</string>
     <string name="widget_fail_fetch">Tietokantavirhe</string>
     <string name="notification_text">Ilmoitus</string>
-    <string name="notification_summary">Tietojen katseleminen ilmoitusalueella, kun AnyMemo ei ole auki.</string>
+    <string name="notification_summary">Säädä kuinka usein androidin ilmoituspalkissa ilmoitetaan kertaamisesta, kun AnyMemo ei ole auki.</string>
     <string name="edit_menu_br_text">Lisää br tunniste</string>
     <string name="edit_menu_image_text">Lisää kuva</string>
     <string name="widget_no_review">Ei kortteja opiskelua varten.</string>
     <string name="grade_text">Luokka</string>
-    <string name="enable_volume_key_text">Aktivoi pikänäppäin</string>
+    <string name="enable_volume_key_text">Aktivoi pikanäppäin</string>
     <string name="enable_volume_key_summary">Käytä äänenvoimakkuuden säädintä arvioidaksesi kortteja opiskelun aikana.</string>
-	<string name="enable_third_party_arabic_title">Käytä kolmannen osapuolen sovellusta Arabian-kielen tukemiseen</string>
-    <string name="enable_third_party_arabic_summary">Ota agawish käyttöön Better-Arabic-Reshaper-koneisto.</string>
+    <string name="enable_third_party_arabic_title">Arabian-kielen tuki</string>
+    <string name="enable_third_party_arabic_summary">Ota käyttöön kolmannen osapuolen sovellus (agawish Better-Arabic-Reshaper-koneisto).</string>
     <string name="donate_text">Lahjoita</string>
     <string name="buy_pro_text">Osta Pro versio</string>
     <string name="donate_summary">Voit lahjoittaa AnyMemo projektille ostamalla Pro version google playsta tai lahjoittamalla AnyMemon omien sivujen kautta	&lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt; Kiitoksia tuestasi.</string>
@@ -236,7 +235,7 @@
     <string name="locale_korean_text">Korea</string>
     <string name="locale_french_text">Ranska</string>
     <string name="locale_portuguese_text">Portugali (Brasilia)</string>
-    <string name="note_text">Huomautus</string>
+    <string name="note_text">Muistiinpanot</string>
     <string name="add_in_place">Lisää kortti tähän</string>
     <string name="add_back">Lisää kortti taakse</string>
     <string name="look_up_text">Katso sanakirjasta</string>
@@ -248,8 +247,8 @@
     <string name="search_user">Etsi käyttäjällä</string>
     <string name="upload_wait">Lähetetään.. ole hyvä ja odota. Suuren tietokannan lähettäminen voi kestää useita minuutteja.</string>
     <string name="fe_directory_text">Selaa hakemistoja</string>
-    <string name="fe_search_tag_message">Ole hyvä ja lisää tagi etsiäksesi, \Espanja, matematiikka jne.</string>
-    <string name="fe_search_user_message">Ole hyvä ja laita sähköpostiosoite kirjautuaksesi,\sinunosoitteesi@esimerkki.fi</string>
+    <string name="fe_search_tag_message">Ole hyvä ja lisää tagi etsiäksesi, esim. Spanish, Math jne.</string>
+    <string name="fe_search_user_message">Ole hyvä ja kirjoita sähköpostiosoite kirjautuaksesi, sinunosoitteesi@esimerkki.fi</string>
     <string name="card_style">Kortin tyyli</string>
     <string name="card_style_double">Kaksipuolinen</string>
     <string name="card_style_single">Yksipuolinen</string>
@@ -277,8 +276,8 @@
     <string name="quizlet_search_tag">Etsi kysymyskorttipakkoja tagien avulla</string>
     <string name="quizlet_search_user">Etsi käyttäjänimellä</string>
     <string name="download_source_quizlet">Quizlet.com\n(kokeellinen)</string>
-    <string name="quizlet_search_tag_message">Ole hyvä ja sijoita kysymyskorttipakan nimi hakuun.</string>
-    <string name="quizlet_search_user_message">Ole hyvä ja sijoita käyttäjätunnus hakuun.</string>
+    <string name="quizlet_search_tag_message">Ole hyvä ja kirjoita kysymyskorttipakan nimi hakuun.</string>
+    <string name="quizlet_search_user_message">Ole hyvä ja kirjoita käyttäjätunnus hakuun.</string>
     <string name="dropbox_text">Dropbox.com</string>
     <string name="dropbox_login_text">Kirjaudu sisään käyttäen dropbox-tiliä</string>
     <string name="dropbox_download_text">Lataa dropboxista</string>
@@ -343,7 +342,7 @@
     <string name="statistics_type_text">Tilasto tyyppi</string>
     <string name="cards_to_review_text">Kuukauden ajalle suunnitellut kortit</string>
     <string name="number_of_cards_scheduled_in_a_day_text">Yhdelle päivälle suunniteltujen korttien lukumäärä</string>
-    <string name="grade_statistics_text">Arvosanatilasto</string>
+    <string name="grade_statistics_text">Arvosanajakauma</string>
     <string name="accumulative_cards_scheduled_text">Kertyviä kortteja ajoitettu</string>
     <string name="google_drive_spreadsheet_text">Google Drive taulukkolaskentasovellus</string>
     <string name="upload_text">Lähetä</string>
@@ -445,5 +444,5 @@
     <string name="mark_as_learned_forever_text">Merkitse muistetuksi</string>
     <string name="mark_as_learned_forever_warning_text">Tämä kortti ei enää koskaan ilmesty kiertoon. Halutko merkitä sen opituksi ikiajoiksi?</string>
     <string name="show_hide_answers_text">Näytä/piilota vastaukset</string>
-	<string name="locale_finnish_text">Suomi</string>
+	  <string name="locale_finnish_text">Suomi</string>
 </resources>
