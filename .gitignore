@@ -13,6 +13,9 @@ obj/
 .classpath
 build/
 
+# This contains secrets and should not be checked in!
+AMSecrets.java
+
 # IntelliJ Idea/Android Studio files
 *.iml
 *.ipr

@@ -20,6 +20,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo;
 
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
+
+import roboguice.util.Ln;
+
 import android.os.Environment;
 
 /*
@@ -37,17 +43,52 @@ public class AMEnv {
     public final static String DEFAULT_TMP_PATH = DEFAULT_ROOT_PATH + DEFAULT_TMP_POSTFIX;
     public final static String DEFAULT_DB_NAME= "french-body-parts.db";
     public final static String EMPTY_DB_NAME= "empty.db";
-    public final static String GOOGLE_CLIENT_ID = "45533559525.apps.googleusercontent.com";
-    public final static String GOOGLE_CLIENT_SECRET = "74rz27lrTr9mWNnipgxXwtEd";
+
+    // Defined in AMSecrets.java
+    public final static String GOOGLE_CLIENT_ID;
+    public final static String GOOGLE_CLIENT_SECRET;
+
     public final static String GOOGLE_REDIRECT_URI = "http://localhost";
     public final static String GDRIVE_SCOPE ="https://docs.google.com/feeds/ https://docs.googleusercontent.com/ https://spreadsheets.google.com/feeds/";
 
 
     // Dropbox oauth constants
     public final static String DROPBOX_REDIRECT_URI = "https://localhost";
-    public final static String DROPBOX_CONSUMER_KEY = "q2rclqr44ux8pe7";
-    public final static String DROPBOX_CONSUMER_SECRET = "bmgikjefor073dh";
+
+    // Defined in AMSecrets.java
+    public final static String DROPBOX_CONSUMER_KEY;
+    public final static String DROPBOX_CONSUMER_SECRET;
+
     public final static String DROPBOX_OAUTH_VERSION = "1.0";
     public final static String DROPBOX_OAUTH_SIGNATURE_METHOD="PLAINTEXT";
+
+
+    // Load values from AMSecrets.
+    static {
+        Map<String, String> secretValuesMap = new HashMap<String, String>(5);
+
+        try {
+            Class<?> secretClass = Class.forName("org.liberty.android.fantastischmemo.AMSecrets");
+            for (Field f : secretClass.getFields()) {
+                secretValuesMap.put(f.getName(), (String) f.get(null));
+            }
+        } catch (ClassNotFoundException e) {
+            Ln.e("AMSecrets class is not found. Please provide your own credentials and create AMSecrets file.", e);
+            assert false;
+        } catch (IllegalAccessException e) {
+            Ln.e("AMSecrets can not be accessed.", e);
+            assert false;
+        }
+
+        DROPBOX_CONSUMER_KEY = secretValuesMap.get("DROPBOX_CONSUMER_KEY");
+        DROPBOX_CONSUMER_SECRET = secretValuesMap.get("DROPBOX_CONSUMER_SECRET");
+        GOOGLE_CLIENT_ID = secretValuesMap.get("GOOGLE_CLIENT_ID");
+        GOOGLE_CLIENT_SECRET = secretValuesMap.get("GOOGLE_CLIENT_SECRET");
+
+        assert DROPBOX_CONSUMER_KEY != null;
+        assert DROPBOX_CONSUMER_SECRET != null;
+        assert GOOGLE_CLIENT_ID != null;
+        assert GOOGLE_CLIENT_SECRET != null;
+    }
 
 }
