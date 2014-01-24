@@ -7,30 +7,28 @@ import java.io.InputStream;
 import org.apache.commons.io.FileUtils;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
-import org.liberty.android.fantastischmemo.R;
 
 import android.app.Instrumentation;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 
 public class TestHelper {
     public static final String SAMPLE_DB_PATH = "/sdcard/anymemo/french-body-parts.db";
     public static final String SAMPLE_DB_NAME= "french-body-parts.db";
 
-    private Context mTestContext;;
     private Context mTargetContext;
 
     public TestHelper(Instrumentation ins) {
-        mTestContext = ins.getTargetContext();
         mTargetContext = ins.getTargetContext();
     }
 
     /* Set up the french-body-parts database */
     public void setUpFBPDatabase() {
         try {
-            InputStream in = mTestContext.getResources().getAssets().open(AMEnv.DEFAULT_DB_NAME);
+            InputStream in = mTargetContext.getResources().getAssets().open(AMEnv.DEFAULT_DB_NAME);
             File outFile = new File(SAMPLE_DB_PATH);
             outFile.delete();
 
@@ -52,9 +50,16 @@ public class TestHelper {
     // Mark the preference that it is not the first time to use the app.
     public void markNotFirstTime() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mTargetContext);
-        Editor editor = settings.edit();
-        editor.putBoolean(AMPrefKeys.FIRST_TIME_KEY, true);
-        editor.putString(AMPrefKeys.SAVED_VERSION_CODE_KEY, mTestContext.getString(R.string.app_version));
-        editor.commit();
+        try {
+            int currentVersionCode = mTargetContext.getPackageManager()
+                .getPackageInfo(mTargetContext.getPackageName(), 0).versionCode;
+            Editor editor = settings.edit();
+            editor.putBoolean(AMPrefKeys.FIRST_TIME_KEY, true);
+            editor.putInt(AMPrefKeys.SAVED_VERSION_CODE_KEY, currentVersionCode);
+            editor.commit();
+        } catch (PackageManager.NameNotFoundException e) {
+            // This is a coding error
+            throw new AssertionError(e);
+        }
     }
 }

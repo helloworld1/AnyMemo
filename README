@@ -19,9 +19,11 @@ Directory structure
 * src-flavors: Specific source files for free/pro flavor
 * test: The test files
 * libs: Jar libraries
-* obsolete: The useless files for archiving
+* res: Android resources
+* assets: The Android assets
 * gradle: The gradle wrapper
 * eclipse-deps: The dependencies needed by eclipse if you are using eclipse.
+* scripts: The scripts that automate some tasks
 
 How to compile
 --------------
@@ -62,11 +64,11 @@ Eclipse users
 -------------
 
 For the eclipse user, the gradle is not supported to build. However you can
-still use eclipse to build the project.
+still use eclipse to edit the project with auto completion fully working.
 
+* mv eclipse-deps/classpath-template .classpath
+* mv eclipse-deps/project-template .project
 * Import project in eclipse
-* Import the library project in eclipse-deps/appcompat/
-* In AnyMemo project's property, "Java Build Path", add "aspectjrt.jar" in libraries
 
 Known issue:
 The aspectj will not work correctly.
