@@ -357,7 +357,7 @@ public class MiscTabFragment extends RoboFragment implements View.OnClickListene
             textView.setMovementMethod(LinkMovementMethod.getInstance());
             new AlertDialog.Builder(mActivity)
                 .setView(alertView)
-                .setTitle(getString(R.string.about_title) + " " + getString(R.string.app_full_name) + " " + versionName)
+                .setTitle(getString(R.string.app_full_name) + " " + versionName)
                 .setPositiveButton(getString(R.string.ok_text), null)
                 .setNegativeButton(getString(R.string.about_version), new DialogInterface.OnClickListener(){
                     @Override

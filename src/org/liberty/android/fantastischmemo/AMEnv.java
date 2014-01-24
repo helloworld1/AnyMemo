@@ -90,5 +90,4 @@ public class AMEnv {
         assert GOOGLE_CLIENT_ID != null;
         assert GOOGLE_CLIENT_SECRET != null;
     }
-
 }

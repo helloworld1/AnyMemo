@@ -96,7 +96,7 @@ public class AMPrefKeys {
         return "recentdbpath" + ord;
     }
 
-    public static final String SAVED_VERSION_KEY = "saved_version";
+    public static final String SAVED_VERSION_CODE_KEY = "saved_version_code";
 
     public static final String SAVED_FILEBROWSER_PATH_KEY = "saved_fb_path";
 

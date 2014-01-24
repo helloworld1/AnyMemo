@@ -164,19 +164,20 @@ public class AnyMemo extends AMActivity {
     private void prepareFirstTimeRun() {
         File sdPath = new File(AMEnv.DEFAULT_ROOT_PATH);
         //Check the version, if it is updated from an older version it will show a dialog
-        String savedVersion = settings.getString(AMPrefKeys.SAVED_VERSION_KEY, "");
+        int savedVersionCode = settings.getInt(AMPrefKeys.SAVED_VERSION_CODE_KEY, 1);
 
-        String thisVersion; 
+        int thisVersionCode; 
         try {
-            thisVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+            thisVersionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
         } catch (PackageManager.NameNotFoundException e) {
-            thisVersion = "";
+            thisVersionCode = 0;
+            assert false : "The version code can not be retrieved. Is it defined in build.gradle?";
         }
 
         boolean firstTime = settings.getBoolean(AMPrefKeys.FIRST_TIME_KEY, true);
 
         // Force clean preference for non-compstible versions.
-        if ((!savedVersion.startsWith(thisVersion.substring(0,1)) || savedVersion.equals("9.0"))) {
+        if (savedVersionCode < 154) { // Version 9.0.4
             firstTime = true;
             SharedPreferences.Editor editor = settings.edit();
             editor.clear();
@@ -204,10 +205,10 @@ public class AnyMemo extends AMActivity {
             }
         }
         /* Detect an update */
-        if(!savedVersion.equals(thisVersion)){
+        if (savedVersionCode != thisVersionCode) {
             SharedPreferences.Editor editor = settings.edit();
             /* save new version number */
-            editor.putString(AMPrefKeys.SAVED_VERSION_KEY, thisVersion);
+            editor.putInt(AMPrefKeys.SAVED_VERSION_CODE_KEY, thisVersionCode);
             editor.commit();
 
             View alertView = View.inflate(this, R.layout.link_alert, null);
