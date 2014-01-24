@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.7.+'
+        classpath 'com.android.tools.build:gradle:0.8.+'
     }
 }
 
@@ -33,7 +33,7 @@ android {
             packageName "org.liberty.android.fantastischmemo"
         }
         pro {
-            packageName "org.liberty.android.fantastischmemopro1"
+            packageName "org.liberty.android.fantastischmemopro"
         }
     }
 
@@ -57,8 +57,11 @@ android {
         }
 
         free {
-            java.srcDirs = ['src-flavors/free/java']
             res.srcDirs = ['src-flavors/free/res']
+        }
+
+        pro {
+            res.srcDirs = ['src-flavors/pro/res']
         }
 
         // Move the tests to tests/java, tests/res, etc...
@@ -120,13 +123,6 @@ dependencies {
 }
 
 android.applicationVariants.all { variant ->
-    variant.javaCompile.doLast {
-        // Find the android.jar and add to iajc classpath
-        def androidSdk = android.adbExe.parent + "/../platforms/" + android.compileSdkVersion + "/android.jar"
-    }
-}
-
-android.applicationVariants.all { variant ->
 
     variant.javaCompile.doLast {
         // Find the android.jar and add to iajc classpath
@@ -164,6 +160,10 @@ android.applicationVariants.all { variant ->
                 android.sourceSets.main.java.srcDirs.each{
                     pathelement(location:it.absolutePath)
                 }
+                // Build config file
+                pathelement(location:"${project.buildDir}/source/buildConfig/${variant.dirName}")
+
+                // Android resources R.***
                 pathelement(location:"${project.buildDir}/source/r/${variant.dirName}")
             }
         }
