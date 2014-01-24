@@ -16,6 +16,7 @@ Directory structure
 -------------------
 
 * src: The source files
+* src-flavors: Specific source files for free/pro flavor
 * test: The test files
 * libs: Jar libraries
 * obsolete: The useless files for archiving
@@ -50,7 +51,9 @@ Provide the values to the fields in AMSecrets.java.
 
 Them compile using gradle:
 $ cd anymemo
-$ ./gradlew assembleDebug
+$ ./gradlew assembleFreeDebug
+To build pro version, use
+$ ./gradlew assembleProDebug
 
 The build artifacts are in
 build/apk/

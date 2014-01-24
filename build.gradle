@@ -22,12 +22,19 @@ android {
 
     defaultConfig {
         versionCode 197
-        versionName "10.3.992-${getBuildString()}"
+        versionName "10.3.992"
         minSdkVersion 9
         targetSdkVersion 16
         testPackageName "org.liberty.android.fantastischmemo.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
     }
+
+    buildTypes {
+        debug {
+            versionNameSuffix "-${getBuildString()}"
+        }
+    }
+
     productFlavors {
         free {
             packageName "org.liberty.android.fantastischmemo"
@@ -89,7 +96,6 @@ ext.aspectjVersion = '1.7.3'
 
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
-    instrumentTestCompile  fileTree(dir: 'test/libs', include: '*.jar')
 
     ajc "org.aspectj:aspectjtools:${aspectjVersion}"
     compile "org.aspectj:aspectjrt:${aspectjVersion}"
@@ -172,6 +178,6 @@ android.applicationVariants.all { variant ->
 
 def getBuildString () {
     def date = new Date()
-    def formattedDate = date.format('yyyyMMdd')
-    return "build" + formattedDate
+    def formattedDate = date.format('yyMMdd')
+    return "b" + formattedDate
 }
