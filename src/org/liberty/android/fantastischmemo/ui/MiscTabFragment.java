@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
+import org.liberty.android.fantastischmemo.AMBuildConfig;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.converter.CSVExporter;
@@ -142,6 +143,12 @@ public class MiscTabFragment extends RoboFragment implements View.OnClickListene
 
         donateButton = v.findViewById(R.id.misc_donate);
         donateButton.setOnClickListener(this);
+
+        // Pro version doesn't have donate button
+        if (AMBuildConfig.FLAVOR == AMBuildConfig.Flavor.Pro) {
+            donateButton.setVisibility(View.GONE);
+        }
+
         helpButton = v.findViewById(R.id.misc_help);
         helpButton.setOnClickListener(this);
         aboutButton = v.findViewById(R.id.misc_about);

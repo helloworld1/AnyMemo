@@ -54,7 +54,7 @@ public class TestHelper {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mTargetContext);
         Editor editor = settings.edit();
         editor.putBoolean(AMPrefKeys.FIRST_TIME_KEY, true);
-        editor.putString(AMPrefKeys.SAVED_VERSION_KEY, mTestContext.getString(R.string.app_version));
+        editor.putString(AMPrefKeys.SAVED_VERSION_CODE_KEY, mTestContext.getString(R.string.app_version));
         editor.commit();
     }
 }

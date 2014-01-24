@@ -28,6 +28,14 @@ android {
         testPackageName "org.liberty.android.fantastischmemo.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
     }
+    productFlavors {
+        free {
+            packageName "org.liberty.android.fantastischmemo"
+        }
+        pro {
+            packageName "org.liberty.android.fantastischmemopro1"
+        }
+    }
 
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
@@ -46,6 +54,11 @@ android {
             renderscript.srcDirs = ['src']
             res.srcDirs = ['res']
             assets.srcDirs = ['assets']
+        }
+
+        free {
+            java.srcDirs = ['src-flavors/free/java']
+            res.srcDirs = ['src-flavors/free/res']
         }
 
         // Move the tests to tests/java, tests/res, etc...

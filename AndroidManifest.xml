@@ -134,11 +134,11 @@
             </intent-filter>
         </activity>
         <service
-            android:name="org.liberty.android.fantastischmemo.service.AnyMemoService" />
+            android:name=".service.AnyMemoService" />
         <service
             android:name=".service.CardPlayerService" />
         <service
-            android:name="org.liberty.android.fantastischmemo.service.ConvertIntentService" />
+            android:name=".service.ConvertIntentService" />
         <provider
                 android:name=".provider.CardProvider"
                 android:authorities="org.liberty.android.fantastischmemo.cardprovider"
