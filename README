@@ -81,7 +81,8 @@ still use eclipse to edit the project with auto completion fully working.
 * Build the project using gradle
 * mv eclipse-deps/classpath-template .classpath
 * mv eclipse-deps/project-template .project
-* Import project in eclipse
+* Import project in eclipse as "Java Project". Do not import as Android project.
+  ADT is not needed at all!
 
 Known issue:
 The aspectj will not work correctly.

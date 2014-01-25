@@ -155,8 +155,6 @@ android.applicationVariants.all { variant ->
                 source:sourceCompatibility,
                 target:targetCompatibility,
                 destDir:"${project.buildDir}/classes/${variant.dirName}",
-                maxmem:"512m",
-                fork:"true",
                 aspectPath:configurations.aspects.asPath,
                 inpath:configurations.ajInpath.asPath,
                 sourceRootCopyFilter:"**/.svn/*,**/*.java",
