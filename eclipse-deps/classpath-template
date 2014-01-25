@@ -16,11 +16,11 @@
 	<classpathentry kind="lib" path="eclipse-deps/libs/roboguice-2.0.jar"/>
 	<classpathentry kind="lib" path="eclipse-deps/libs/signpost-commonshttp4-1.2.1.2.jar"/>
 	<classpathentry kind="lib" path="eclipse-deps/libs/signpost-core-1.2.1.2.jar"/>
+    <classpathentry kind="lib" path="eclipse-deps/libs/android.jar"/>
 	<classpathentry kind="lib" path="eclipse-deps/testlibs/dexmaker-1.0.jar"/>
 	<classpathentry kind="lib" path="eclipse-deps/testlibs/dexmaker-mockito-1.0.jar"/>
 	<classpathentry kind="lib" path="eclipse-deps/testlibs/mockito-all-1.9.5.jar"/>
 	<classpathentry kind="lib" path="eclipse-deps/testlibs/robotium-solo-4.3.1.jar"/>
-	<classpathentry kind="lib" path="/opt/android-sdk-linux_86/platforms/android-16/android.jar"/>
 	<classpathentry kind="lib" path="eclipse-deps/libs/android-support-v4.jar"/>
 	<classpathentry kind="lib" path="eclipse-deps/libs/android-support-v7-appcompat.jar"/>
 	<classpathentry kind="lib" path="libs/achartengine-1.0.0.jar"/>
