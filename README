@@ -60,6 +60,18 @@ $ ./gradlew assembleProDebug
 The build artifacts are in
 build/apk/
 
+Instrumentation tests
+---------------------
+There are hundreds of intrumentation tests that ensure the basic funciton of
+AnyMemo. To run these tests against free version, you need to run:
+$ ./gradlew installFreeDebugTest
+$ ./gradlew connectedInstrumentTestFreeDebug
+
+To run against pro version:
+$ ./gradlew installProDebugTest
+$ ./gradlew connectedInstrumentTestProDebug
+
+
 Eclipse users
 -------------
 
