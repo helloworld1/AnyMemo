@@ -196,9 +196,9 @@
 </string-array>
 
 <string-array name="button_style_list">
-    <item>AnyMemo</item>
-    <item>Mnemosyne</item>
-    <item>Anki</item>
+    <item>@string/button_style_anymemo</item>
+    <item>@string/button_style_mnemosyne</item>
+    <item>@string/button_style_anki</item>
 </string-array>
 
 <string-array name="button_style_list_values">

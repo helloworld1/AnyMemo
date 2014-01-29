@@ -447,4 +447,7 @@
     <string name="locale_finnish_text">Finnish</string>
     <string name="conversion_merge_text">Convert and merge</string>
     <string name="conversion_merge_message">The %1$s already exists. Do you want to merge the %2$s into %3$s?</string>
+    <string name="button_style_anki">3 normal buttons</string>
+    <string name="button_style_mnemosyne">6 small buttons</string>
+    <string name="button_style_anymemo">6 normal buttons</string>
 </resources>
