@@ -138,6 +138,11 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
         }
         if(defaultRoot == null){
             defaultRoot = settings.getString(AMPrefKeys.SAVED_FILEBROWSER_PATH_KEY, null);
+
+            // Make sure the path exists.
+            if (!new File(defaultRoot).exists()) {
+                defaultRoot = null;
+            }
         }
 
         if(StringUtils.isEmpty(defaultRoot)){
