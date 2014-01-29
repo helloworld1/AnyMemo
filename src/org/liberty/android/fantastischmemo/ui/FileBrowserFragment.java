@@ -318,9 +318,8 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
                                                     amFileUtil.deleteDbSafe(clickedFile.getAbsolutePath());
                                                     File dir = new File(clickedFile.getParent());
                                                     Log.v(TAG, "DIR: " + dir.toString());
-                                                    browseTo(dir);
                                                     /* Refresh the list */
-                                                    mActivity.restartActivity();
+                                                    browseTo(dir);
                                                 }
                                             })
                                             .setNegativeButton(getString(R.string.cancel_text), null)
@@ -376,7 +375,6 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
                                                 }
 
                                                 browseTo(currentDirectory);
-
                                             }
                                         })
                                         .setNegativeButton(getString(R.string.cancel_text), null)
