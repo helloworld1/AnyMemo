@@ -54,8 +54,12 @@ public abstract class AbstractConverterTest extends AndroidTestCase {
 
     @Override
     public void tearDown() {
-        (new File(srcFilePath)).delete();
-        (new File(destFilePath)).delete();
+        if (srcFilePath != null) {
+            new File(srcFilePath).delete();
+        }
+        if (destFilePath != null) {
+            new File(destFilePath).delete();
+        }
     }
 
 }

@@ -55,7 +55,6 @@ public class CSVImporter implements Converter {
     }
 
     public void convert(String src, String dest) throws Exception {
-        new File(dest).delete();
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(dest);
         CSVReader reader;
         if (separator == null) {
@@ -88,7 +87,6 @@ public class CSVImporter implements Converter {
                 LearningData ld = new LearningData();
                 cat.setName(category);
 
-                card.setOrdinal(count);
                 card.setCategory(cat);
                 card.setLearningData(ld);
                 card.setQuestion(nextLine[0]);

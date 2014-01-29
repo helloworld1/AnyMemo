@@ -20,7 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.converter;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -28,6 +27,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.LinkedList;
 import java.util.List;
+
 
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
@@ -43,7 +43,6 @@ public class QATxtImporter implements Converter{
     private static final long serialVersionUID = 7934270553043502048L;
 
     public void convert(String src, String dest) throws Exception{
-        new File(dest).delete();
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(dest);
         try {
             final CardDao cardDao = helper.getCardDao();
@@ -78,7 +77,6 @@ public class QATxtImporter implements Converter{
                             Card card = new Card();
                             card.setQuestion(qBuf.toString());
                             card.setAnswer(aBuf.toString());
-                            card.setOrdinal(count);
                             card.setCategory(new Category());
                             card.setLearningData(new LearningData());
                             cardList.add(card);
@@ -112,7 +110,6 @@ public class QATxtImporter implements Converter{
             Card card = new Card();
             card.setQuestion(qBuf.toString());
             card.setAnswer(aBuf.toString());
-            card.setOrdinal(count);
             card.setCategory(new Category());
             card.setLearningData(new LearningData());
             cardList.add(card);

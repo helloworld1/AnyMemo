@@ -58,5 +58,4 @@ public class CsvImporterTest extends AbstractConverterTest {
             helper.close();
         }
     }
-
 }

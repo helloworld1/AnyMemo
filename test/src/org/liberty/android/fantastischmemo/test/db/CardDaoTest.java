@@ -207,6 +207,9 @@ public class CardDaoTest extends AbstractExistingDBTest {
         cardDao.createCard(c);
         // Should create a new card
         assertEquals(29, cardDao.countOf());
+        // The new card's id and ordinal should be correct
+        assertEquals(29, (int) c.getId());
+        assertEquals(29, (int) c.getOrdinal());
     }
 
     @SmallTest
@@ -229,6 +232,12 @@ public class CardDaoTest extends AbstractExistingDBTest {
         cardDao.createCards(cards);
         // Should create two new card
         assertEquals(30, cardDao.countOf());
+
+        // The new card's id and ordinal should be correct
+        assertEquals(29, (int) c.getId());
+        assertEquals(29, (int) c.getOrdinal());
+        assertEquals(30, (int) c2.getId());
+        assertEquals(30, (int) c2.getOrdinal());
     }
 
     @SmallTest

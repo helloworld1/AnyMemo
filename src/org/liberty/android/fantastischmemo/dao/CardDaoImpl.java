@@ -468,7 +468,20 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
                             categoryMap.put(c.getName(), c);
                         }
                     }
-                    for (Card card : cardList) {
+
+                    // Set the oridinal to be right after the last ordinal
+                    // The "createCard" method can also set the correct ordinal
+                    // however it query the last ordinal each time it is called.
+                    // So we set the ordinal here for performance optimization.
+                    Card lastCard = queryLastOrdinal();
+                    int startOrdinal = 1;
+                    // If it is a new db the last oridinal will be null.
+                    if (lastCard != null) {
+                        startOrdinal = lastCard.getOrdinal() + 1;
+                    }
+
+                    for (int i = 0; i < cardList.size(); i++) {
+                        Card card = cardList.get(i);
                         assert card.getCategory() != null : "Card's category must be populated";
                         assert card.getLearningData() != null : "Card's learningData must be populated";
                         String currentCategoryName = card.getCategory().getName();
@@ -482,6 +495,9 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
                             categoryMap.put(currentCategoryName, card.getCategory());
                         }
                         learningDataDao.create(card.getLearningData());
+
+                        card.setOrdinal(startOrdinal + i);
+
                         create(card);
                     }
                     return null;

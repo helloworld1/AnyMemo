@@ -69,7 +69,6 @@ public class MnemosyneXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
 
     @Override
     public void convert(String src, String dest) throws Exception {
-        new File(dest).delete();
         URL mXMLUrl = new URL("file:///" + src);
         cardList = new LinkedList<Card>();
 

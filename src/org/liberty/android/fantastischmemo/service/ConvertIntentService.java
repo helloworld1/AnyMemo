@@ -47,6 +47,8 @@ public class ConvertIntentService extends RoboIntentService {
 
     public static final String EXTRA_INPUT_FILE_PATH = "inputFilePath";
 
+    public static final String EXTRA_OUTPUT_FILE_PATH = "outputFilePath";
+
     public static final String EXTRA_CONVERTER_CLASS = "converterClass";
 
     private static final int CONVERSION_PROGRESS_NOTIFICATION_ID_BASE = 294;
@@ -79,12 +81,14 @@ public class ConvertIntentService extends RoboIntentService {
         String inputFilePath = intent.getStringExtra(EXTRA_INPUT_FILE_PATH);
         assert inputFilePath != null : "Input file path should not be null";
 
+        String outputFilePath = intent.getStringExtra(EXTRA_OUTPUT_FILE_PATH);
+        assert outputFilePath != null : "Output file path should not be null";
+
         @SuppressWarnings("unchecked")
         Class<Converter> conveterClass = (Class<Converter>) intent.getSerializableExtra(EXTRA_CONVERTER_CLASS);
         Converter converter = RoboGuice.getInjector(getApplication()).getInstance(conveterClass);
 
-        String outputFilePath = inputFilePath + "." + converter.getDestExtension();
-        assert outputFilePath != null : "Output file path should not be null";
+        // Replace the extension of the file: file.xml -> file.db
 
         String conversionFileInfo = "" + FilenameUtils.getName(inputFilePath) + " -> " + FilenameUtils.getName(outputFilePath);
 

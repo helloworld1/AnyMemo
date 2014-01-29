@@ -31,9 +31,13 @@ public class QATxtImporterTest extends AbstractConverterTest {
             assertEquals(2, cards.size());
             assertEquals("This is question1", cards.get(0).getQuestion());
             assertEquals("Answer1", cards.get(0).getAnswer());
+            assertEquals(1, (int) cards.get(0).getOrdinal());
+            assertEquals(1, (int) cards.get(0).getId());
 
             assertEquals("Question2", cards.get(1).getQuestion());
             assertEquals("Answer2", cards.get(1).getAnswer());
+            assertEquals(2, (int) cards.get(1).getOrdinal());
+            assertEquals(2, (int) cards.get(1).getId());
         } finally {
             helper.close();
         }

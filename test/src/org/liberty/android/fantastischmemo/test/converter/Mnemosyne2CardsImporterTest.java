@@ -11,14 +11,12 @@ import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
-import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
 public class Mnemosyne2CardsImporterTest extends AbstractConverterTest {
 
     @Override
     protected Converter getConverter() {
         Mnemosyne2CardsImporter importer = new Mnemosyne2CardsImporter();
-        importer.setAmFileUtil(new AMFileUtil(getContext()));
         return importer;
     }
 
