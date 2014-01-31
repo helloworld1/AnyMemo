@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.inject.Inject;
 
@@ -30,6 +31,7 @@ import org.liberty.android.fantastischmemo.service.ConvertIntentService;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
 import roboguice.RoboGuice;
+import roboguice.util.Ln;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -100,8 +102,15 @@ public class ConverterFragment extends FileBrowserFragment {
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface arg0, int arg1) {
-                            amFileUtil.deleteDbSafe(outputPath);
-                            invokeConverterService(inputPath, outputPath);
+                            try {
+                                amFileUtil.deleteFileWithBackup(outputPath);
+                                invokeConverterService(inputPath, outputPath);
+                            } catch (IOException e) {
+                                Ln.e("Faield to deleteWithBackup: " + outputPath, e);
+                                Toast.makeText(getActivity(),
+                                    getString(R.string.fail) + ": " + e.toString(), Toast.LENGTH_LONG)
+                                    .show();
+                            }
                         }
                     })
                 .setNegativeButton(R.string.cancel_text, null)
