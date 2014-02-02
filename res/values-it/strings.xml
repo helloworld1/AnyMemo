@@ -313,7 +313,7 @@
     <string name="export_zip_text">Esporta Zip</string>
     <string name="customize_scheduling_algorithm_text">Personalizza l\'algoritmo di scheduling</string>
     <string name="customize_scheduling_algorithm_summary">Personalizza l\'algoritmo di scheduling con gli intervalli fra le domande.</string>
-    <string name="customize_scheduling_algorithm_warning">La personalizzazione dell\'algoritmo è solo per gli utenti evoluti.</string>
+    <string name="customize_scheduling_algorithm_warning">La personalizzazione dell\'algoritmo è solo per l\'utenza evoluta.</string>
     <string name="queuing_text">Accodamento</string>
     <string name="when_first_grade_text">Quando si dà il punteggio a una scheda per la prima volta</string>
     <string name="initial_grading_interval_summary">Questo è l\'intervallo (in giorni) dopo il primo punteggio.</string>
@@ -441,7 +441,13 @@
     <string name="mark_as_learned_text">Marcato come imparato</string>
     <string name="mark_as_forgotten_text">Marcato come dimenticato</string>
     <string name="mark_as_new_text">Marcato come nuovo</string>
-    <string name="mark_as_learned_forever_text">Marato come imparato per sempre</string>
+    <string name="mark_as_learned_forever_text">Marcato come imparato per sempre</string>
     <string name="mark_as_learned_forever_warning_text">Questo elemento non apparirà mai nell\'apprendimento. Sicuro di volerlo marcare come imparato per sempre?</string>
     <string name="show_hide_answers_text">Mostra/nascondi le risposte</string>
+    <string name="locale_finnish_text">Finlandese</string>
+    <string name="conversion_merge_text">Converti e unisci</string>
+    <string name="conversion_merge_message">%1$s esiste già. Vuoi unire %2$s e %3$s?</string>
+    <string name="button_style_anki">3 pulsanti normali</string>
+    <string name="button_style_mnemosyne">6 pulsanti piccoli</string>
+    <string name="button_style_anymemo">6 pulsanti normali</string>
 </resources>
