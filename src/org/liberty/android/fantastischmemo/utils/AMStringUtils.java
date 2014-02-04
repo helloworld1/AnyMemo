@@ -19,7 +19,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.utils;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,14 +31,14 @@ public class AMStringUtils {
 
     // Strip the HTML from the text and return plain text
     public static String stripHTML(String htmlText) {
-		// Replace break
-		String processed_str = htmlText.replaceAll("\\<br\\>", "" );
-		// Remove HTML
-		processed_str = processed_str.replaceAll("\\<.*?>", "");
-		// Remove () [] and their content
-		processed_str = processed_str.replaceAll("\\[.*?\\]", "");
+        // Replace break
+        String processed_str = htmlText.replaceAll("\\<br\\>", "" );
+        // Remove HTML
+        processed_str = processed_str.replaceAll("\\<.*?>", "");
+        // Remove () [] and their content
+        processed_str = processed_str.replaceAll("\\[.*?\\]", "");
         // Remove the XML special character
-		processed_str = processed_str.replaceAll("\\[.*?\\]", "");
+        processed_str = processed_str.replaceAll("\\[.*?\\]", "");
         return processed_str.trim();
     }
 
@@ -92,6 +94,39 @@ public class AMStringUtils {
         outText = outText.replaceAll("'", "&apos;");
         outText = outText.replaceAll("\"", "&quot;");
         return outText;
+    }
+
+    public static List<String> findFileInCardText(String cardText, String[] fileExtensions){
+
+        List<String> filesFound = new ArrayList<String>();
+        if (fileExtensions == null || fileExtensions.length == 0) {
+            assert false : "fileExtensions should never be empty or null";
+            return filesFound;
+        }
+
+        StringBuilder extensionPatternBuilder = new StringBuilder();
+
+        // File name pattern
+        extensionPatternBuilder.append("[A-Za-z0-9_-]+");
+
+        // extension pattern
+        extensionPatternBuilder.append("\\.(");
+        for (int i = 0; i < fileExtensions.length; i++) {
+            if (i == 0) {
+                extensionPatternBuilder.append(fileExtensions[i]);
+            } else {
+                extensionPatternBuilder.append("|" + fileExtensions[i]);
+            }
+        }
+        extensionPatternBuilder.append(")");
+
+        // The regex here should match the file types in SUPPORTED_AUDIO_FILE_TYPE
+        Pattern p = Pattern.compile(extensionPatternBuilder.toString());
+        Matcher m = p.matcher(cardText);
+        while (m.find()){
+            filesFound.add(m.group());
+        }
+        return filesFound;
     }
 
 }
