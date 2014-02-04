@@ -450,6 +450,4 @@
     <string name="button_style_anki">3 normal buttons</string>
     <string name="button_style_mnemosyne">6 small buttons</string>
     <string name="button_style_anymemo">6 normal buttons</string>
-    <string name="long_click_card_view_image_text">Long click card to view image</string>
-    <string name="long_click_card_view_image_summary">Enable long clicking on a card with an image to view the image in an image viewer</string>
 </resources>

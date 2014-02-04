@@ -69,8 +69,6 @@ public class AMPrefKeys {
 
     public static final String ENABLE_ANIMATION_KEY = "enable_animation";
 
-    public static final String LONG_CLICK_VIEW_IMAGE_KEY = "long_click_view_image_key";
-
     // Dropbox
     public static final String DROPBOX_USERNAME_KEY = "dropbox_username";
 

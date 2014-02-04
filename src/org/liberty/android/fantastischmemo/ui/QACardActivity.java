@@ -324,12 +324,10 @@ public abstract class QACardActivity extends AMActivity {
             .setImageSearchPaths(imageSearchPaths);
 
         // Long click to launch image viewer if the card has an image
-        if (option.getLongClickViewImageEnabled()) {
-            questionFragmentBuilder.setTextOnLongClickListener(
-                    generateImageOnLongClickListener(getCurrentCard().getQuestion(), imageSearchPaths));
-            answerFragmentBuilder.setTextOnLongClickListener(
-                    generateImageOnLongClickListener(getCurrentCard().getAnswer(), imageSearchPaths));
-        }
+        questionFragmentBuilder.setTextOnLongClickListener(
+                generateImageOnLongClickListener(getCurrentCard().getQuestion(), imageSearchPaths));
+        answerFragmentBuilder.setTextOnLongClickListener(
+                generateImageOnLongClickListener(getCurrentCard().getAnswer(), imageSearchPaths));
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
