@@ -23,6 +23,8 @@ package org.liberty.android.fantastischmemo.utils;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -86,5 +88,25 @@ public class AMFileUtil {
                 in.close();
             }
         }
+    }
+
+    /**
+     * Find file in candidateDirs
+     * @param candidateDirs, an array of dirs that could contain the file.
+     * @return files found
+     */
+    public List<File> findFileInPaths(String fileName, String[] candidateDirs) {
+        List<File> filesFound = new ArrayList<File>();
+        for (String path : candidateDirs) {
+            File file1 = new File(path + "/" + fileName);
+            if (file1.exists()) {
+                filesFound.add(file1);
+            }
+            File file2 = new File(path + "/" + FilenameUtils.getName(fileName));
+            if (file2.exists()) {
+                filesFound.add(file2);
+            }
+        }
+        return filesFound;
     }
 }
