@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +40,8 @@ import org.liberty.android.fantastischmemo.service.AnyMemoService;
 import org.liberty.android.fantastischmemo.ui.loader.CardTTSUtilLoader;
 import org.liberty.android.fantastischmemo.ui.loader.MultipleLoaderManager;
 import org.liberty.android.fantastischmemo.ui.loader.SettingLoader;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
+import org.liberty.android.fantastischmemo.utils.AMStringUtils;
 import org.liberty.android.fantastischmemo.utils.CardTTSUtil;
 
 import roboguice.util.Ln;
@@ -49,6 +52,7 @@ import android.gesture.GestureLibraries;
 import android.gesture.GestureLibrary;
 import android.gesture.GestureOverlayView;
 import android.gesture.Prediction;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
@@ -102,6 +106,8 @@ public abstract class QACardActivity extends AMActivity {
 
     private CardTTSUtil cardTTSUtil;
 
+    private AMFileUtil amFileUtil;
+
     private GestureLibrary gestureLibrary;
 
     /**
@@ -121,12 +127,18 @@ public abstract class QACardActivity extends AMActivity {
         this.multipleLoaderManager = multipleLoaderManager;
     }
 
+    @Inject
+    public void setAmFileUtil(AMFileUtil amFileUtil) {
+        this.amFileUtil = amFileUtil;
+    }
+
     /**
      * This is for testing only.
      */
     public CardTTSUtil getCardTTSUtil() {
         return cardTTSUtil;
     }
+
 
     /**
      * Subclasses should call this method instead of creating
@@ -217,7 +229,7 @@ public abstract class QACardActivity extends AMActivity {
             answerTypefaceValue = answerTypeface;
         }
 
-        String[] imageSearchPaths = {
+        final String[] imageSearchPaths = {
             /* Relative path */
             "",
             /* Relative path with db name */
@@ -310,6 +322,14 @@ public abstract class QACardActivity extends AMActivity {
             .setDisplayInHtml(setting.getDisplayInHTMLEnum().contains(Setting.CardField.ANSWER))
             .setHtmlLinebreakConversion(setting.getHtmlLineBreakConversion())
             .setImageSearchPaths(imageSearchPaths);
+
+        // Long click to launch image viewer if the card has an image
+        if (option.getLongClickViewImageEnabled()) {
+            questionFragmentBuilder.setTextOnLongClickListener(
+                    generateImageOnLongClickListener(getCurrentCard().getQuestion(), imageSearchPaths));
+            answerFragmentBuilder.setTextOnLongClickListener(
+                    generateImageOnLongClickListener(getCurrentCard().getAnswer(), imageSearchPaths));
+        }
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
@@ -670,6 +690,43 @@ public abstract class QACardActivity extends AMActivity {
                 // No animation for not changing the card.
             }
         }
+    }
+
+    /**
+     * Generate the OnLongClickListener on the card fragment
+     * @param cardText the text on the card.
+     * @param imageSearchPaths the paths to search image
+     * @return the OnLongClickListener.
+     */
+    private CardFragment.OnLongClickListener generateImageOnLongClickListener(final String cardText, final String[] imageSearchPaths) {
+        return new CardFragment.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View arg0) {
+                // Find the files in the card field
+                List<String> filesFound = AMStringUtils.findFileInCardText(cardText,
+                    new String[]{"jpg", "png","bmp", "gif"});
+
+                if (filesFound.size() == 0) {
+                    Ln.v("No Images found for: " + cardText);
+                    return false;
+                }
+
+                // Search the image file path for the file name found
+                // Only the first image is used.
+                List<File> imageFiles = amFileUtil.findFileInPaths(filesFound.get(0), imageSearchPaths);
+                if (imageFiles.size() == 0) {
+                    Ln.w("Image: " + filesFound.get(0) + "  not found for search paths.");
+                    return false;
+                }
+
+                // Display the image in an image viewer
+                Uri uri = Uri.parse("file://" + imageFiles.get(0).getAbsolutePath());
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(uri, "image/*");
+                startActivity(intent);
+                return true;
+            }
+        };
     }
 
     private CardFragment.OnClickListener onQuestionTextClickListener = new CardFragment.OnClickListener() {

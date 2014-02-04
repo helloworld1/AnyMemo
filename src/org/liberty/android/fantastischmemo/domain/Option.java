@@ -116,6 +116,14 @@ public class Option {
         return settings.getBoolean(AMPrefKeys.CARD_PLAYER_SHUFFLE_ENABLED_KEY, false);
     }
 
+    /**
+     * The option for long click to view image in an image view.
+     * @return true if the option is enabled..
+     */
+    public boolean getLongClickViewImageEnabled() {
+        return settings.getBoolean(AMPrefKeys.LONG_CLICK_VIEW_IMAGE_KEY, true);
+    }
+
     public void setCardPlayerRepeatEnabled(boolean enabled) {
         editor.putBoolean(AMPrefKeys.CARD_PLAYER_REPEAT_ENABLED_KEY, enabled);
         editor.commit();

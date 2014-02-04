@@ -25,6 +25,11 @@
             android:title="@string/enable_volume_key_text"
             android:defaultValue="false"
             android:summary="@string/enable_volume_key_summary" />
+        <CheckBoxPreference
+            android:key="long_click_view_image_key"
+            android:title="@string/long_click_card_view_image_text"
+            android:defaultValue="true"
+            android:summary="@string/long_click_card_view_image_summary" />
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/learning_category">

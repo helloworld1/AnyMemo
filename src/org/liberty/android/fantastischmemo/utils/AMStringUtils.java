@@ -112,6 +112,8 @@ public class AMStringUtils {
         // extension pattern
         extensionPatternBuilder.append("\\.(");
         for (int i = 0; i < fileExtensions.length; i++) {
+            // The format is ext1|ext2|ext3 so the first occurance
+            // does not have a |.
             if (i == 0) {
                 extensionPatternBuilder.append(fileExtensions[i]);
             } else {
