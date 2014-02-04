@@ -22,11 +22,12 @@ package org.liberty.android.fantastischmemo.ui;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.commons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
 import roboguice.util.Ln;
 
@@ -53,6 +54,8 @@ public class CardImageGetter implements ImageGetter {
     private Context context;
     
     private int screenWidth;
+
+    private AMFileUtil amFileUtil;
     
     @SuppressWarnings("deprecation")
     @Inject
@@ -65,6 +68,11 @@ public class CardImageGetter implements ImageGetter {
         
         screenWidth = display.getWidth();
 	}
+
+    @Inject
+    public void setAmFileUtil(AMFileUtil amFileUtil) {
+        this.amFileUtil = amFileUtil;
+    }
     
     /**
      * Get the drawable based on the source string
@@ -79,19 +87,11 @@ public class CardImageGetter implements ImageGetter {
         try {
             Bitmap orngBitmap = null;
 
-            for (String path : imageSearchPaths) {
-                String imagePath1 = path + "/" + source;
-                String imagePath2 = path + "/" + FilenameUtils.getName(source);
-                Ln.v("Try path: " + path);
-                if (new File(imagePath1).exists()) {
-                    orngBitmap = BitmapFactory.decodeFile(imagePath1);
-                    break;
-                }
-                if (new File(imagePath2).exists()) {
-                    orngBitmap = BitmapFactory.decodeFile(imagePath2);
-                    break;
-                }
+            List<File> filesFound = amFileUtil.findFileInPaths(source, imageSearchPaths);
+            if (filesFound.size() > 0) {
+                orngBitmap = BitmapFactory.decodeFile(filesFound.get(0).getAbsolutePath());
             }
+
             /* Try the image from internet */
             if (orngBitmap == null) {
                 InputStream is = (InputStream) new URL(source).getContent();
