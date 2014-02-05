@@ -46,7 +46,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="@string/download_source_fe"
+                android:text="@string/download_source_cram"
                 android:textSize="24dp"
                 android:clickable="false"
                 android:focusable="false"

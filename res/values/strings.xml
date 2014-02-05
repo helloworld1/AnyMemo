@@ -228,7 +228,7 @@
     <string name="notification_24hr_text">One day</string>
     <string name="download_source_anymemo">anymemo.org\n(default)</string>
     <string name="download_source_fe">FlashcardExchange\n(experimental)</string>
-    <string name="download_source_ss">studystack.com\n(experimental)</string>
+    <string name="download_source_ss">StudyStack</string>
     <string name="swap_text">Swap</string>
     <string name="swapdup_text">Swap&amp;Dup</string>
     <string name="locale_german_text">German</string>
@@ -275,14 +275,14 @@
     <string name="quizlet_text">Quizlet.com</string>
     <string name="quizlet_search_tag">Search flashcard sets by tag</string>
     <string name="quizlet_search_user">Search by username</string>
-    <string name="download_source_quizlet">Quizlet.com\n(experimental)</string>
+    <string name="download_source_quizlet">Quizlet</string>
     <string name="quizlet_search_tag_message">Please enter flashcard set name to search.</string>
     <string name="quizlet_search_user_message">Please enter the user name to search.</string>
-    <string name="dropbox_text">Dropbox.com</string>
+    <string name="dropbox_text">Dropbox</string>
     <string name="dropbox_login_text">Login using Dropbox account</string>
     <string name="dropbox_download_text">Download from Dropbox</string>
     <string name="dropbox_upload_text">Upload %s to Dropbox</string>
-    <string name="download_source_dropbox">Dropbox.com</string>
+    <string name="download_source_dropbox">Dropbox</string>
     <string name="import_supermemo_2008_xml_text">Import SuperMemo 2008 XML</string>
     <string name="uncategorized_text">Uncategorized</string>
     <string name="edit_text">Edit</string>
@@ -450,4 +450,5 @@
     <string name="button_style_anki">3 normal buttons</string>
     <string name="button_style_mnemosyne">6 small buttons</string>
     <string name="button_style_anymemo">6 normal buttons</string>
+    <string name="download_source_cram">Cram</string>
 </resources>
