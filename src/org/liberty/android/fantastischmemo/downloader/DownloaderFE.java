@@ -63,9 +63,9 @@ public class DownloaderFE extends DownloaderBase{
 
     private static final String TAG = "org.liberty.android.fantastischmemo.downloader.DownloaderFE";
     private static final String FE_API_KEY = "anymemo_android";
-    private static final String FE_API_TAG= "http://api.flashcardexchange.com/v1/get_tag?api_key=" + FE_API_KEY+ "&tag=";
-    private static final String FE_API_USER = "http://api.flashcardexchange.com/v1/get_user?api_key=" + FE_API_KEY+ "&dataset=3&user_login=";
-    private static final String FE_API_CARDSET = "http://api.flashcardexchange.com/v1/get_card_set?api_key=" + FE_API_KEY+ "&card_set_id=";
+    private static final String FE_API_TAG= "http://api.cram.com/v1/get_tag?api_key=" + FE_API_KEY+ "&tag=";
+    private static final String FE_API_USER = "http://api.cram.com/v1/get_user?api_key=" + FE_API_KEY+ "&dataset=3&user_login=";
+    private static final String FE_API_CARDSET = "http://api.cram.com/v1/get_card_set?api_key=" + FE_API_KEY+ "&card_set_id=";
     private DownloadListAdapter dlAdapter;
 
     private ListView listView;

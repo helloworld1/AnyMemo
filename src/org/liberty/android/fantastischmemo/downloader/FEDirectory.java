@@ -40,7 +40,7 @@ public class FEDirectory extends DownloaderBase{
     private static final String TAG = "org.liberty.android.fantastischmemo.downloader.DownloaderFE";
     private static final String FE_API_KEY = "anymemo_android";
 
-    private static final String FE_API_DIRECTORY = "http://api.flashcardexchange.com/v1/get_directory?api_key=" + FE_API_KEY;
+    private static final String FE_API_DIRECTORY = "http://api.cram.com/v1/get_directory?api_key=" + FE_API_KEY;
 
     private DownloaderUtils downloaderUtils;
 
