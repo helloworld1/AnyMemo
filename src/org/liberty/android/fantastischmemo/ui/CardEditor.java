@@ -426,16 +426,10 @@ public class CardEditor extends AMActivity {
         }
     }
 
-    void updateViews() {
-        /* Retain the last category when editing new */
-        String categoryName = currentCard.getCategory().getName();
-        if (categoryName.equals("")) {
-            categoryButton.setText(R.string.uncategorized_text);
-        } else {
-            categoryButton.setText(categoryName);
-        }
-        /* Prefill the note if it is empty */
+    private void updateViews() {
+        updateCategoryView();
 
+        /* Prefill the note if it is empty */
         if(isEditNew){
             /* Use this one or the one below ?*/
             noteEdit.setText(currentCard.getNote());
@@ -447,6 +441,16 @@ public class CardEditor extends AMActivity {
             questionEdit.setText(originalQuestion);
             answerEdit.setText(originalAnswer);
             noteEdit.setText(originalNote);
+        }
+    }
+
+    private void updateCategoryView() {
+        /* Retain the last category when editing new */
+        String categoryName = currentCard.getCategory().getName();
+        if (categoryName.equals("")) {
+            categoryButton.setText(R.string.uncategorized_text);
+        } else {
+            categoryButton.setText(categoryName);
         }
     }
 
@@ -599,7 +603,7 @@ public class CardEditor extends AMActivity {
         new CategoryEditorResultListener() {
             public void onReceiveCategory(Category c) {
                 currentCard.setCategory(c);
-                updateViews();
+                updateCategoryView();
             }
         };
 }
