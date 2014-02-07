@@ -19,20 +19,24 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader;
 
-import org.liberty.android.fantastischmemo.*;
+import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.AMPrefKeys;
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.downloader.cram.CramPublicUserCardSetActivity;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.view.View.OnClickListener;
-import android.preference.PreferenceManager;
-import android.content.Intent;
-import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.app.AlertDialog;
 
 public class FELauncher extends AMActivity implements OnClickListener{
     private Button directoryButton;
@@ -65,7 +69,8 @@ public class FELauncher extends AMActivity implements OnClickListener{
             showSearchTagDialog();
         }
         if(v == searchUserButton){
-            showSearchUserDialog();
+            Intent intent = new Intent(this, CramPublicUserCardSetActivity.class);
+            startActivity(intent);
         }
     }
 
@@ -113,29 +118,5 @@ public class FELauncher extends AMActivity implements OnClickListener{
             .create()
             .show();
     }
-
-    private void showSearchUserDialog(){
-        final EditText et = new EditText(this);
-        et.setText(settings.getString(AMPrefKeys.FE_SAVED_USER_KEY, ""));
-        new AlertDialog.Builder(this)
-            .setTitle(R.string.search_tag)
-            .setMessage(R.string.fe_search_user_message)
-            .setView(et)
-            .setPositiveButton(R.string.search_text, new DialogInterface.OnClickListener(){
-                public void onClick(DialogInterface dialog, int which){
-                    String searchText = et.getText().toString();
-                    editor.putString(AMPrefKeys.FE_SAVED_USER_KEY, searchText);
-                    editor.commit();
-                    Intent myIntent = new Intent(FELauncher.this, DownloaderFE.class);
-                    myIntent.setAction(DownloaderFE.INTENT_ACTION_SEARCH_USER);
-                    myIntent.putExtra("search_criterion", searchText);
-                    startActivity(myIntent);
-                }
-            })
-            .setNegativeButton(R.string.cancel_text, null)
-            .create()
-            .show();
-    }
-
 }
 
