@@ -34,15 +34,22 @@ import android.os.Bundle;
  *
  * If the authToken is passed in, the private cards will be shown and can be downloaded.
  */
-public class CramUserCardSetListFragment extends AbstractDownloaderFragment {
+public class CramCardSetListFragment extends AbstractDownloaderFragment {
 
     public static final String EXTRA_AUTH_TOKEN = "authToken";
 
-    public static final String EXTRA_USER_NAME= "userName";
+    public static final String EXTRA_SEARCH_TERM= "searchTerm";
+
+    /**
+     * The passed value must be SearchMethod.[Value].toString()
+     */
+    public static final String EXTRA_SEARCH_METHOD = "searchMethod";
 
     private String authToken = null;
     
-    private String userName = null;
+    private String searchTerm = null;
+
+    private SearchMethod searchMethod;
 
     private CramDownloadHelper cramDownloadHelper;
 
@@ -55,20 +62,29 @@ public class CramUserCardSetListFragment extends AbstractDownloaderFragment {
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         Bundle args = getArguments();
-        assert args != null : "The EXTRA_USER_NAME must be passed to SpreadsheetListFragment";
+        assert args != null : "The EXTRA_SEARCH_TERM and EXTRA_SEARCH_METHOD  must be passed to SpreadsheetListFragment";
 
         // authTOken can be empty to indicate accessing public cards only
         this.authToken = args.getString(EXTRA_AUTH_TOKEN);
 
-        this.userName = args.getString(EXTRA_USER_NAME);
+        this.searchTerm = args.getString(EXTRA_SEARCH_TERM);
 
-        assert StringUtils.isNotEmpty(userName) : "User name should not be empty";
+        this.searchMethod = SearchMethod.valueOf(args.getString(EXTRA_SEARCH_METHOD));
+
+        assert StringUtils.isNotEmpty(searchTerm) : "Search term should not be empty";
 
     }
 
     @Override
     protected List<DownloadItem> initialRetrieve() throws Exception {
-        return cramDownloadHelper.getCardSetList(authToken, userName);
+        if (this.searchMethod == SearchMethod.ByUserName) {
+            return cramDownloadHelper.getCardSetListByUserName(authToken, searchTerm);
+        } else if (this.searchMethod == SearchMethod.ByTitle) {
+            return cramDownloadHelper.getCardListByTitle(authToken, searchTerm);
+        } else {
+            throw new IllegalArgumentException("initialRetrieve does not know how to handle search method: " + this.searchMethod);
+        }
+
     }
 
     @Override
@@ -86,6 +102,11 @@ public class CramUserCardSetListFragment extends AbstractDownloaderFragment {
         String id = di.getAddress();
         return cramDownloadHelper.downloadCardSet(authToken, id);
     }
+
+    public enum SearchMethod {
+        ByUserName,
+        ByTitle
+    };
 }
 
 

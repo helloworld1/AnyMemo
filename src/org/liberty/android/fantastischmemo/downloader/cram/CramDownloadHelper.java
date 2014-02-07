@@ -78,39 +78,51 @@ public class CramDownloadHelper {
 
     /**
      * Get a list of card sets for a user.
+     *
      * @param authToken the oauth token. If it is null, the call will only be able to access public sets.
      * @param userName the name of the user. Usually it is email address.
      * @return a list of download items.
      */
-    public List<DownloadItem> getCardSetList(String authToken, String userName) throws IOException {
+    public List<DownloadItem> getCardSetListByUserName(String authToken, String userName) throws IOException {
         String urlString = AMEnv.CRAM_API_ENDPOINT + "/users/"
             + URLEncoder.encode(userName, "UTF-8") + "/sets?client_id=" + AMEnv.CRAM_CLIENT_ID;
         URL url = new URL(urlString);
 
         String responseString = getResponseString(url, authToken);
-
         try {
             JSONObject jsonObject = new JSONObject(responseString);
             JSONArray setsArray = jsonObject.getJSONArray("sets");
-            List<DownloadItem> itemList = new ArrayList<DownloadItem>(setsArray.length());
-            for (int i = 0; i < setsArray.length(); i++) {
-                JSONObject setObject = setsArray.getJSONObject(i);
-                DownloadItem downloadItem = new DownloadItem();
-                downloadItem.setTitle(setObject.getString("title"));
-                downloadItem.setDescription(setObject.getString("description"));
-                downloadItem.setType(DownloadItem.ItemType.Database);
-                downloadItem.setAddress(setObject.getString("set_id"));
-                itemList.add(downloadItem);
-            }
-            return itemList;
-        } catch (JSONException e) {
-            Ln.e(e, "Error parsing response string: " + responseString);
+            return parseSetsJSONArray(setsArray);
+        } catch(JSONException e) {
+            throw new IOException(e);
+        }
+    }
+
+    /**
+     * Get a list of card sets for a user.
+     * 
+     * @param authToken the oauth token. If it is null, the call will only be able to access public sets.
+     * @param title the title to search
+     * @return a list of download items.
+     */
+    public List<DownloadItem> getCardListByTitle(String authToken, String title) throws IOException {
+        String urlString = AMEnv.CRAM_API_ENDPOINT + "/search/sets?qstr="
+            + URLEncoder.encode(title, "UTF-8") + "&limit=100&sortby=most_studied&client_id=" + AMEnv.CRAM_CLIENT_ID;
+        URL url = new URL(urlString);
+
+        String responseString = getResponseString(url, authToken);
+        try {
+            JSONObject jsonObject = new JSONObject(responseString);
+            JSONArray setsArray = jsonObject.getJSONArray("results");
+            return parseSetsJSONArray(setsArray);
+        } catch(JSONException e) {
             throw new IOException(e);
         }
     }
 
     /**
      * Download a cardset from Cram
+     *
      * @param authToken the oauth token. If it is null, the call will only be able to access public sets.
      * @param cardSetId the card set id
      * @return  the path of saved db.
@@ -215,4 +227,32 @@ public class CramDownloadHelper {
         return new String(IOUtils.toByteArray(conn.getInputStream()), "UTF-8");
 
     } 
+
+    /**
+     * Helper method to parse the response of set list class
+     *
+     * @param setsArray A JSON array of sets
+     * @return a list of download items
+     */
+    private List<DownloadItem> parseSetsJSONArray(JSONArray setsArray) throws IOException {
+        try {
+            List<DownloadItem> itemList = new ArrayList<DownloadItem>(
+                    setsArray.length());
+            for (int i = 0; i < setsArray.length(); i++) {
+                JSONObject setObject = setsArray.getJSONObject(i);
+                DownloadItem downloadItem = new DownloadItem();
+                downloadItem.setTitle(setObject.getString("title"));
+                downloadItem.setType(DownloadItem.ItemType.Database);
+                downloadItem.setAddress(setObject.getString("set_id"));
+
+                if (setObject.has("description") && !setObject.isNull("description")) {
+                    downloadItem.setDescription(setObject.getString("description"));
+                }
+                itemList.add(downloadItem);
+            }
+            return itemList;
+        } catch (JSONException e) {
+            throw new IOException(e);
+        }
+    }
 }

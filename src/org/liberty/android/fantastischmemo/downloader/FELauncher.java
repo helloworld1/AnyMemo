@@ -20,30 +20,20 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.downloader;
 
 import org.liberty.android.fantastischmemo.AMActivity;
-import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.downloader.cram.CramPublicUserCardSetActivity;
+import org.liberty.android.fantastischmemo.downloader.cram.CramSearchPublicCardSetActivity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.EditText;
 
 public class FELauncher extends AMActivity implements OnClickListener{
     private Button directoryButton;
     private Button searchTagButton;
     private Button searchUserButton;
-    private SharedPreferences settings;
-    private SharedPreferences.Editor editor;
 
     @Override
 	public void onCreate(Bundle savedInstanceState){
@@ -55,8 +45,6 @@ public class FELauncher extends AMActivity implements OnClickListener{
         directoryButton.setOnClickListener(this);
         searchTagButton.setOnClickListener(this);
         searchUserButton.setOnClickListener(this);
-        settings = PreferenceManager.getDefaultSharedPreferences(this);
-        editor = settings.edit();
     }
 
     @Override
@@ -66,57 +54,13 @@ public class FELauncher extends AMActivity implements OnClickListener{
             startActivity(myIntent);
         }
         if(v == searchTagButton){
-            showSearchTagDialog();
+            Intent intent = new Intent(this, CramSearchPublicCardSetActivity.class);
+            startActivity(intent);
         }
         if(v == searchUserButton){
             Intent intent = new Intent(this, CramPublicUserCardSetActivity.class);
             startActivity(intent);
         }
-    }
-
-    @Override
-	public boolean onCreateOptionsMenu(Menu menu){
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.fe_menu, menu);
-		return true;
-	}
-
-	public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {
-	    case R.id.fe_logout:
-            editor.putString(AMPrefKeys.FE_SAVED_USERNAME_KEY, "");
-            editor.putString(AMPrefKeys.FE_SAVED_OAUTH_TOKEN_KEY, "");
-            editor.putString(AMPrefKeys.FE_SAVED_OAUTH_TOKEN_SECRET_KEY, "");
-            editor.commit();
-            restartActivity();
-			return true;
-
-	    }
-
-	    return false;
-	}
-
-    private void showSearchTagDialog(){
-        final EditText et = new EditText(this);
-        et.setText(settings.getString(AMPrefKeys.FE_SAVED_SEARCH_KEY, ""));
-        new AlertDialog.Builder(this)
-            .setTitle(R.string.search_tag)
-            .setMessage(R.string.fe_search_tag_message)
-            .setView(et)
-            .setPositiveButton(R.string.search_text, new DialogInterface.OnClickListener(){
-                public void onClick(DialogInterface dialog, int which){
-                    String searchText = et.getText().toString();
-                    editor.putString(AMPrefKeys.FE_SAVED_SEARCH_KEY, searchText);
-                    editor.commit();
-                    Intent myIntent = new Intent(FELauncher.this, DownloaderFE.class);
-                    myIntent.setAction(DownloaderFE.INTENT_ACTION_SEARCH_TAG);
-                    myIntent.putExtra("search_criterion", searchText);
-                    startActivity(myIntent);
-                }
-            })
-            .setNegativeButton(R.string.cancel_text, null)
-            .create()
-            .show();
     }
 }
 
