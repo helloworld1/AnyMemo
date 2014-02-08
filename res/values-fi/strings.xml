@@ -58,9 +58,9 @@
     <string name="settings_question_align_prompt">Tasaa teksti</string>
     <string name="settings_answer_align">Vastaustekstin tasaus</string>
     <string name="settings_answer_align_prompt">Tekstin tasaus</string>
-    <string name="settings_question_locale">Kysymyksen ääni</string>
+    <string name="settings_question_locale">Kysymyksen ääntäminen</string>
     <string name="settings_question_locale_prompt">Paikallinen</string>
-    <string name="settings_answer_locale">Vastauksen ääni</string>
+    <string name="settings_answer_locale">Vastauksen ääntäminen</string>
     <string name="settings_answer_locale_prompt">Paikallinen</string>
     <string name="settings_html_display">Näytetään HTML-muodossa</string>
     <string name="settings_ratio">Kysymys/vastaus suhde</string>
@@ -213,11 +213,11 @@
     <string name="locale_russian_text">Venäjä</string>
     <string name="study_text">Opiskele</string>
     <string name="option_manual_speak">0. manuaalisesti</string>
-    <string name="option_tap_speak">1. napauta kuullaksesti puhe</string>
+    <string name="option_tap_speak">1. napauta kuullaksesi puhe</string>
     <string name="option_auto_speak">2. automaattinen puhe</string>
     <string name="option_autotap_speak">3. sekä 1 ja 2</string>
-    <string name="settings_color_question_text">Kysymys teksti</string>
-    <string name="settings_color_answer_text">Vastaus teksti</string>
+    <string name="settings_color_question_text">Kysymysteksti</string>
+    <string name="settings_color_answer_text">Vastausteksti</string>
     <string name="settings_color_question_bg">Kysymyksen tausta</string>
     <string name="settings_color_answer_bg">Vastauksen tausta</string>
     <string name="settings_color_separator">Erottaja</string>
