@@ -51,6 +51,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+/**
+ * The abstract class for an acitvity that displays a list of card sets
+ * to download.
+ */
 public abstract class AbstractDownloaderFragment extends RoboFragment {
 
     private static final String TAG = "org.liberty.android.fantastischmemo.downloader.DownloaderBase";
@@ -63,34 +67,61 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
 
     private RecentListUtil recentListUtil;
 
-    /*
-     * Retrieve the data when the user first open the
-     * Downloader
+    private View loadMoreFooter;
+
+    private View loadingProgressFooter;
+
+    /**
+     * Retrieve the DownloadItem for the first time.
+     * @return a list of download item.
+     * @throws Exception exceptions
      */
     abstract protected List<DownloadItem> initialRetrieve() throws Exception;
 
-    /*
+    /**
+     * Retrieve more DownloadItem
+     * @return a list of download item.
+     * @throws Exception exceptions
+     */
+    abstract protected List<DownloadItem> loadMore() throws Exception;
+
+    /**
+     * Return if there are more cards to load. 
+     *
+     * This is called after any loading
+     *
+     * @return true if there are more download item to retrieve
+     */
+    abstract protected boolean hasMore();
+
+    /**
      * Retrieve the data when the user has clicked a category
      */
     abstract protected void openCategory(DownloadItem di);
 
-    /*
+    /**
      * Go back to the previous list
      */
     abstract protected void goBack();
 
-    /*
+    /**
      * Download the database based on the info
      */
     abstract protected String fetchDatabase(DownloadItem di) throws Exception;
 
-    /*
+    /**
      * Get specific item from the Adapter or else
+     * @param position the posotion of the item in the list
+     * @return the downloaditem at that position
      */
     protected DownloadItem getDownloadItem(int position) {
         return dlAdapter.getItem(position);
     };
 
+    /**
+     * Get the count of the download items
+     * @return the download item count.
+     */
     protected int getDownloadItemCount() {
         return dlAdapter.getCount();
     }
@@ -117,8 +148,19 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
 
         listView = (ListView)v.findViewById(R.id.file_list);
         listView.setOnItemClickListener(itemClickListener);
+
+        // Initial two footers that is displayed in the bottom of the list
+        loadMoreFooter =  ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.list_load_more_footer, null, false);
+        loadingProgressFooter =  ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.list_loading_progress_footer, null, false);
+
+        loadMoreFooter.setOnClickListener(loadMoreOnClickListener);
+        // Must nullify the onclick listener on loadingProgressFooter
+        // Or it will be treated a list item and cause index out of bount exception.
+        loadingProgressFooter.setOnClickListener(null);
+
         dlAdapter = new DownloadListAdapter(mActivity, R.layout.filebrowser_item);
         listView.setAdapter(dlAdapter);
+
         InitRetrieveTask task = new InitRetrieveTask();
         task.execute();
         return v;
@@ -137,6 +179,8 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
             progressDialog.setMessage(getString(R.string.loading_connect_net));
             progressDialog.setCancelable(false);
             progressDialog.show();
+
+            listView.addFooterView(loadingProgressFooter);
         }
 
         @Override
@@ -152,6 +196,7 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
 
         @Override
         public void onPostExecute(Exception e){
+            listView.removeFooterView(loadingProgressFooter);
             progressDialog.dismiss();
             if (e != null) {
                 AMGUIUtility.displayError(mActivity, getString(R.string.downloader_connection_error), getString(R.string.downloader_connection_error_message), e);
@@ -159,8 +204,49 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
             }
 
             dlAdapter.addList(downloadItems);
+            if (hasMore()) {
+                listView.addFooterView(loadMoreFooter);
+            }
+        }
+    }
+
+    private class LoadMoreTask extends AsyncTask<Void, Void, Exception> {
+        private List<DownloadItem> downloadItems;
+
+        @Override
+        public void onPreExecute() {
+            super.onPreExecute();
+            listView.removeFooterView(loadMoreFooter);
+            listView.addFooterView(loadingProgressFooter);
         }
 
+        @Override
+        public Exception doInBackground(Void... nothing) {
+            try {
+                downloadItems = loadMore();
+            } catch (Exception e) {
+                return e;
+            }
+            return null;
+        }
+
+
+        @Override
+        public void onPostExecute(Exception e){
+            // Always remove the progress footer
+            listView.removeFooterView(loadingProgressFooter);
+            if (e != null) {
+                AMGUIUtility.displayException(mActivity, getString(R.string.downloader_connection_error), getString(R.string.downloader_connection_error_message), e);
+                return;
+            }
+
+            dlAdapter.addList(downloadItems);
+
+            // Add the "loadMoreFooter" only if we successfully retrieve the list
+            if (hasMore()) {
+                listView.addFooterView(loadMoreFooter);
+            }
+        }
     }
 
     protected void showFetchDatabaseDialog(final DownloadItem item) {
@@ -233,7 +319,7 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
 
     }
 
-    OnItemClickListener itemClickListener = new OnItemClickListener() {
+    private OnItemClickListener itemClickListener = new OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parentView, View childView, int position, long id){
             DownloadItem di = getDownloadItem(position);
@@ -248,6 +334,16 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
             } else {
                 showFetchDatabaseDialog(di);
             }
+        }
+    };
+
+    private View.OnClickListener loadMoreOnClickListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            LoadMoreTask task = new LoadMoreTask();
+            task.execute();
+
         }
     };
 

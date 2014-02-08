@@ -53,6 +53,13 @@ public class CramCardSetListFragment extends AbstractDownloaderFragment {
 
     private CramDownloadHelper cramDownloadHelper;
 
+    /**
+     * Keep track of the next page to load.
+     */
+    private int nextPage = 1;
+
+    private boolean isLastPage = true;
+
     @Inject
     public void setCramDownloadHelper(CramDownloadHelper cramDownloadHelper) {
         this.cramDownloadHelper = cramDownloadHelper;
@@ -77,14 +84,7 @@ public class CramCardSetListFragment extends AbstractDownloaderFragment {
 
     @Override
     protected List<DownloadItem> initialRetrieve() throws Exception {
-        if (this.searchMethod == SearchMethod.ByUserName) {
-            return cramDownloadHelper.getCardSetListByUserName(authToken, searchTerm);
-        } else if (this.searchMethod == SearchMethod.ByTitle) {
-            return cramDownloadHelper.getCardListByTitle(authToken, searchTerm);
-        } else {
-            throw new IllegalArgumentException("initialRetrieve does not know how to handle search method: " + this.searchMethod);
-        }
-
+        return loadMore();
     }
 
     @Override
@@ -103,10 +103,41 @@ public class CramCardSetListFragment extends AbstractDownloaderFragment {
         return cramDownloadHelper.downloadCardSet(authToken, id);
     }
 
+    @Override
+    protected List<DownloadItem> loadMore() throws Exception {
+        if (this.searchMethod == SearchMethod.ByUserName) {
+            return cramDownloadHelper.getCardSetListByUserName(authToken, searchTerm);
+        } else if (this.searchMethod == SearchMethod.ByTitle) {
+            List<DownloadItem> result = cramDownloadHelper.getCardListByTitle(authToken, searchTerm, nextPage);
+
+            // Keep track if this is the last page
+            if (result.size() != 0) {
+                nextPage++;
+                isLastPage = false ;
+            } else {
+                isLastPage = true;
+            }
+            return result;
+        } else {
+            throw new IllegalArgumentException("initialRetrieve does not know how to handle search method: " + this.searchMethod);
+        }
+    }
+
+    @Override
+    protected boolean hasMore() {
+        // API user search does not paginate
+        if (searchMethod == SearchMethod.ByUserName) {
+            return false;
+        } else {
+            return !isLastPage;
+        }
+    };
+
     public enum SearchMethod {
         ByUserName,
         ByTitle
-    };
+    }
+
 }
 
 

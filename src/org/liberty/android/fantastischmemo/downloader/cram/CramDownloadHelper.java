@@ -105,9 +105,12 @@ public class CramDownloadHelper {
      * @param title the title to search
      * @return a list of download items.
      */
-    public List<DownloadItem> getCardListByTitle(String authToken, String title) throws IOException {
-        String urlString = AMEnv.CRAM_API_ENDPOINT + "/search/sets?qstr="
-            + URLEncoder.encode(title, "UTF-8") + "&limit=100&sortby=most_studied&client_id=" + AMEnv.CRAM_CLIENT_ID;
+    public List<DownloadItem> getCardListByTitle(String authToken, String title, int page) throws IOException {
+        String urlString = String.format(AMEnv.CRAM_API_ENDPOINT + "/search/sets?qstr=%1$s&sortedby=most_studied&page=%2$d&limit=100&client_id=%3$s",
+            URLEncoder.encode(title, "UTF-8"),
+            page,
+            AMEnv.CRAM_CLIENT_ID);
+
         URL url = new URL(urlString);
 
         String responseString = getResponseString(url, authToken);

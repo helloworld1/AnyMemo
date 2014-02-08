@@ -77,5 +77,14 @@ public class DownloadDBFileListFragment extends AbstractDownloaderFragment {
         return downloadHelper.downloadDBFromDropbox(di);
     }
 
+    @Override
+    protected List<DownloadItem> loadMore() throws Exception {
+        return null;
+    }
+
+    @Override
+    protected boolean hasMore() {
+        return false;
+    }
 
 }

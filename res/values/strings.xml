@@ -451,4 +451,5 @@
     <string name="button_style_mnemosyne">6 small buttons</string>
     <string name="button_style_anymemo">6 normal buttons</string>
     <string name="download_source_cram">Cram</string>
+    <string name="load_more_text">Load more</string>
 </resources>

@@ -55,30 +55,30 @@ public class SpreadsheetListFragment extends AbstractDownloaderFragment {
         downloadHelper = downloadHelperFactory.create(authToken);
     }
 
-	@Override
-	protected List<DownloadItem> initialRetrieve() throws Exception {
+    @Override
+    protected List<DownloadItem> initialRetrieve() throws Exception {
         List<Spreadsheet> spreadsheetList = downloadHelper.getListSpreadsheets();
         List<DownloadItem> downloadItemList = new ArrayList<DownloadItem>(50);
         for (Spreadsheet spreadsheet : spreadsheetList) {
             downloadItemList.add(convertSpreadsheetToDownloadItem(spreadsheet));
         }
         return downloadItemList;
-	}
+    }
 
-	@Override
-	protected void openCategory(DownloadItem di) {
+    @Override
+    protected void openCategory(DownloadItem di) {
         // Do nothing
-	}
+    }
 
-	@Override
-	protected void goBack() {
+    @Override
+    protected void goBack() {
         // Do nothing
-	}
+    }
 
-	@Override
-	protected String fetchDatabase(DownloadItem di) throws Exception {
+    @Override
+    protected String fetchDatabase(DownloadItem di) throws Exception {
         return downloadHelper.downloadSpreadsheetToDB(convertDownloadItemToSpreadsheet(di));
-	}
+    }
 
     private DownloadItem convertSpreadsheetToDownloadItem(Spreadsheet spreadsheet) {
         DownloadItem di = new DownloadItem();
@@ -94,6 +94,16 @@ public class SpreadsheetListFragment extends AbstractDownloaderFragment {
         sp.setId(di.getAddress());
         sp.setUpdateDate(new Date());
         return sp;
+    }
+
+    @Override
+    protected List<DownloadItem> loadMore() throws Exception {
+        return null;
+    }
+
+    @Override
+    protected boolean hasMore() {
+        return false;
     }
 
 }
