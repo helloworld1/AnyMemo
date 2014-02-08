@@ -46,8 +46,8 @@ public class CramSearchPublicCardSetActivity extends AMActivity {
         final EditText et = new EditText(this);
         et.setText(settings.getString(AMPrefKeys.FE_SAVED_SEARCH_KEY, ""));
         new AlertDialog.Builder(this)
-            .setTitle(R.string.search_tag)
-            .setMessage(R.string.fe_search_tag_message)
+            .setTitle(R.string.search_by_title_text)
+            .setMessage(R.string.search_by_title_message)
             .setView(et)
             .setPositiveButton(R.string.search_text, new DialogInterface.OnClickListener(){
                 public void onClick(DialogInterface dialog, int which){
