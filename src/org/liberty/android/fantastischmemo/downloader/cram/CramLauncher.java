@@ -17,12 +17,11 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-package org.liberty.android.fantastischmemo.downloader;
+package org.liberty.android.fantastischmemo.downloader.cram;
 
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.downloader.cram.CramPublicUserCardSetActivity;
-import org.liberty.android.fantastischmemo.downloader.cram.CramSearchPublicCardSetActivity;
+import org.liberty.android.fantastischmemo.downloader.FEDirectory;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,7 +29,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class FELauncher extends AMActivity implements OnClickListener{
+public class CramLauncher extends AMActivity implements OnClickListener{
     private Button directoryButton;
     private Button searchTagButton;
     private Button searchUserButton;
@@ -38,7 +37,7 @@ public class FELauncher extends AMActivity implements OnClickListener{
     @Override
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fe_launcher);
+        setContentView(R.layout.cram_launcher);
         directoryButton = (Button)findViewById(R.id.fe_directory);
         searchTagButton = (Button)findViewById(R.id.fe_search_tag);
         searchUserButton = (Button)findViewById(R.id.fe_search_user);

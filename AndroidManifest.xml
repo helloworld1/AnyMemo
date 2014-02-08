@@ -38,8 +38,7 @@
             android:configChanges="orientation|keyboardHidden"
             android:theme="@style/PaintStyle" />
         <activity
-            android:name=".downloader.FELauncher"
-            android:configChanges="orientation|keyboardHidden" />
+            android:name=".downloader.cram.CramLauncher"/>
         <activity
             android:name=".downloader.FEDirectory"
             android:configChanges="orientation|keyboardHidden" />

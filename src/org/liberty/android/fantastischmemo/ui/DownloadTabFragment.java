@@ -22,13 +22,12 @@ package org.liberty.android.fantastischmemo.ui;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.downloader.DownloaderAnyMemo;
 import org.liberty.android.fantastischmemo.downloader.DownloaderSS;
-import org.liberty.android.fantastischmemo.downloader.FELauncher;
 import org.liberty.android.fantastischmemo.downloader.QuizletLauncher;
+import org.liberty.android.fantastischmemo.downloader.cram.CramLauncher;
 import org.liberty.android.fantastischmemo.downloader.dropbox.DropboxDBListActivity;
 import org.liberty.android.fantastischmemo.downloader.google.SpreadsheetListScreen;
 
 import roboguice.fragment.RoboFragment;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -79,7 +78,7 @@ public class DownloadTabFragment extends RoboFragment implements View.OnClickLis
             startActivity(new Intent(mActivity, DownloaderAnyMemo.class));
         }
         if (v == feButton){
-            startActivity(new Intent(mActivity, FELauncher.class));
+            startActivity(new Intent(mActivity, CramLauncher.class));
         }
         if (v == ssButton){
             startActivity(new Intent(mActivity, DownloaderSS.class));
