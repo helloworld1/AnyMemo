@@ -228,7 +228,7 @@
     <string name="notification_24hr_text">Un giorno</string>
     <string name="download_source_anymemo">anymemo.org\n(default)</string>
     <string name="download_source_fe">FlashcardExchange\n(sperimentale)</string>
-    <string name="download_source_ss">studystack.com\n(sperimentale)</string>
+    <string name="download_source_ss">StudyStack</string>
     <string name="swap_text">Scambia</string>
     <string name="swapdup_text">Scambia+Duplica</string>
     <string name="locale_german_text">Tedesco</string>
@@ -275,14 +275,14 @@
     <string name="quizlet_text">Quizlet.com</string>
     <string name="quizlet_search_tag">Ricerca insiemi di schede per tag</string>
     <string name="quizlet_search_user">Ricerca per username</string>
-    <string name="download_source_quizlet">Quizlet.com\n(sperimentale)</string>
+    <string name="download_source_quizlet">Quizlet</string>
     <string name="quizlet_search_tag_message">Inserire un tag da cercare.</string>
     <string name="quizlet_search_user_message">Inserire una username da cercare.</string>
-    <string name="dropbox_text">Dropbox.com</string>
+    <string name="dropbox_text">Dropbox</string>
     <string name="dropbox_login_text">Login con account Dropbox</string>
     <string name="dropbox_download_text">Scarica da Dropbox</string>
     <string name="dropbox_upload_text">Carica %s su Dropbox</string>
-    <string name="download_source_dropbox">Dropbox.com</string>
+    <string name="download_source_dropbox">Dropbox</string>
     <string name="import_supermemo_2008_xml_text">Importa SuperMemo 2008 XML</string>
     <string name="uncategorized_text">Senza categoria</string>
     <string name="edit_text">Mod.</string>
@@ -450,4 +450,8 @@
     <string name="button_style_anki">3 pulsanti normali</string>
     <string name="button_style_mnemosyne">6 pulsanti piccoli</string>
     <string name="button_style_anymemo">6 pulsanti normali</string>
+    <string name="download_source_cram">Cram</string>
+    <string name="load_more_text">Caricane ancora</string>
+    <string name="search_by_title_text">Cerca per titolo</string>
+    <string name="search_by_title_message">Inserisci un titolo o una descrizione da cercare,\np.es. spagnolo, matematica ecc.</string>
 </resources>
