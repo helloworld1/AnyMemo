@@ -443,10 +443,10 @@
     <string name="locale_finnish_text">Финский</string>
     <string name="conversion_merge_text">Конвертировать и объединить</string>
     <string name="conversion_merge_message">%1$s уже существует. Вы хотите объединить %2$s в %3$s?</string>
-    <string name="button_style_anki">3 нормальных кнопки</string>
-    <string name="button_style_mnemosyne">6 маленьких кнопок</string>
-    <string name="button_style_anymemo">6 нормальных кнопок</string>
-    <string name="download_source_cram">Зубрить</string>
+    <string name="button_style_anki">3 обычных</string>
+    <string name="button_style_mnemosyne">6 маленьких</string>
+    <string name="button_style_anymemo">6 обычных</string>
+    <string name="download_source_cram">Cram</string>
     <string name="load_more_text">Загрузить больше</string>
     <string name="search_by_title_text">Поиск по названиям</string>
 </resources>
