@@ -159,7 +159,12 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
         loadingProgressFooter.setOnClickListener(null);
 
         dlAdapter = new DownloadListAdapter(mActivity, R.layout.filebrowser_item);
+
+        // This is for android 2.3 compatibility. The addFooterView needs to be called
+        // before setAdapter.
+        listView.addFooterView(loadMoreFooter);
         listView.setAdapter(dlAdapter);
+        listView.removeFooterView(loadMoreFooter);
 
         InitRetrieveTask task = new InitRetrieveTask();
         task.execute();
