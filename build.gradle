@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.8.+'
+        classpath 'com.android.tools.build:gradle:0.9.+'
     }
 }
 
@@ -76,9 +76,9 @@ android {
         }
 
         // Move the tests to tests/java, tests/res, etc...
-        instrumentTest.setRoot('tests')
+        androidTest.setRoot('tests')
 
-        instrumentTest {
+        androidTest {
             java.srcDirs = ['test/src']
             res.srcDirs = ['test/res']
             assets.srcDirs = ['test/assets']
@@ -122,14 +122,14 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.1'
     compile 'commons-io:commons-io:2.4'
 
-    instrumentTestCompile 'com.google.dexmaker:dexmaker:1.0'
-    instrumentTestCompile ('com.google.dexmaker:dexmaker-mockito:1.0') {
+    androidTestCompile 'com.google.dexmaker:dexmaker:1.0'
+    androidTestCompile ('com.google.dexmaker:dexmaker-mockito:1.0') {
         exclude module: 'hamcrest-core'
         exclude module: 'objenesis'
         exclude module: 'mockito-core'
     }
-    instrumentTestCompile 'org.mockito:mockito-all:1.9.5'
-    instrumentTestCompile 'com.jayway.android.robotium:robotium-solo:4.3.1'
+    androidTestCompile 'org.mockito:mockito-all:1.9.5'
+    androidTestCompile 'com.jayway.android.robotium:robotium-solo:4.3.1'
 }
 
 android.applicationVariants.all { variant ->
