@@ -189,6 +189,7 @@ public class CardListActivityTest extends ActivityInstrumentationTestCase2<CardL
             t.printStackTrace();
         }
         super.tearDown();
+        solo = null;
     }
 
 }

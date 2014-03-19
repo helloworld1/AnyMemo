@@ -77,6 +77,7 @@ public class DetailScreenActivityTest extends ActivityInstrumentationTestCase2<D
             t.printStackTrace();
         }
         super.tearDown();
+        solo = null;
     }
 
 }

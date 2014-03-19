@@ -15,7 +15,6 @@ public class AbstractExistingDBTest extends AndroidTestCase {
 
     protected AnyMemoDBOpenHelper helper;
 
-
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -34,6 +33,7 @@ public class AbstractExistingDBTest extends AndroidTestCase {
     @Override
     protected void tearDown() throws Exception {
         AnyMemoDBOpenHelperManager.releaseHelper(helper);
+        helper = null;
         File outFile = new File(TestHelper.SAMPLE_DB_PATH);
         outFile.delete();
     }

@@ -145,6 +145,7 @@ public class StudyActivityStudyTest extends ActivityInstrumentationTestCase2<Stu
             t.printStackTrace();
         }
         super.tearDown();
+        solo = null;
     }
 
 }

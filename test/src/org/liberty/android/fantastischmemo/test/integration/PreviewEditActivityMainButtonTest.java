@@ -99,6 +99,7 @@ public class PreviewEditActivityMainButtonTest extends ActivityInstrumentationTe
             t.printStackTrace();
         }
         super.tearDown();
+        solo = null;
     }
 
 }

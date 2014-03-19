@@ -41,8 +41,8 @@ public class PreviewEditActivityFunctionTest extends ActivityInstrumentationTest
     public void testSearchTextForward() throws Exception {
         solo.clickOnActionBarItem(R.id.action_search);
         solo.enterText(0, "ac");
+        solo.sleep(300);
         solo.sendKey(Solo.ENTER);
-
         solo.sleep(1000);
         assertTrue(solo.searchText("face"));
 
@@ -91,6 +91,7 @@ public class PreviewEditActivityFunctionTest extends ActivityInstrumentationTest
             t.printStackTrace();
         }
         super.tearDown();
+        solo = null;
     }
 
 }

@@ -107,6 +107,7 @@ public class AnyMemoActivityRecentTabTest extends ActivityInstrumentationTestCas
             t.printStackTrace();
         }
         super.tearDown();
+        solo = null;
     }
 
 }

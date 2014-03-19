@@ -44,5 +44,6 @@ public class AnyMemoActivityTabsTest extends ActivityInstrumentationTestCase2<An
             t.printStackTrace();
         }
         super.tearDown();
+        solo = null;
     }
 }

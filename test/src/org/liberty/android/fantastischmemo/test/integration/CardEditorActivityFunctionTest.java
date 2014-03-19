@@ -91,6 +91,7 @@ public class CardEditorActivityFunctionTest extends ActivityInstrumentationTestC
             t.printStackTrace();
         }
         super.tearDown();
+        solo = null;
     }
 
 }

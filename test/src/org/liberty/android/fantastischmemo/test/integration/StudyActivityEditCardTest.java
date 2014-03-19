@@ -104,6 +104,7 @@ public class StudyActivityEditCardTest extends ActivityInstrumentationTestCase2<
             t.printStackTrace();
         }
         super.tearDown();
+        solo = null;
     }
 }
 

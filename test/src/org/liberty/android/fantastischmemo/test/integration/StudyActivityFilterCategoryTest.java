@@ -99,5 +99,6 @@ public class StudyActivityFilterCategoryTest extends ActivityInstrumentationTest
             t.printStackTrace();
         }
         super.tearDown();
+        solo = null;
     }
 }

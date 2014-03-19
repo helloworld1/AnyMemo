@@ -203,6 +203,7 @@ public class QuizActivityTest extends ActivityInstrumentationTestCase2<QuizActiv
             t.printStackTrace();
         }
         super.tearDown();
+        solo = null;
     }
 
 }

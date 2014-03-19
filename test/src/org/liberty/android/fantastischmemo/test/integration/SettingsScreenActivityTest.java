@@ -256,5 +256,6 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
             t.printStackTrace();
         }
         super.tearDown();
+        solo = null;
     }
 }
