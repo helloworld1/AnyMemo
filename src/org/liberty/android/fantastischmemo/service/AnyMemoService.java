@@ -50,6 +50,8 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import com.google.common.base.Strings;
+
 public class AnyMemoService extends RoboService{
     public static int UPDATE_WIDGET = 1;
     public static int UPDATE_NOTIFICATION = 2;
@@ -191,13 +193,15 @@ public class AnyMemoService extends RoboService{
             dbPath = settings.getString(AMPrefKeys.getRecentPathKey(0), "");
             dbName = FilenameUtils.getName(dbPath);
 
-            AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(AnyMemoService.this, dbPath);
-            try {
-                final CardDao cardDao = helper.getCardDao();
-                revCount = (int)cardDao.getScheduledCardCount(null);
-                newCount = (int)cardDao.getNewCardCount(null);
-            } finally {
-                AnyMemoDBOpenHelperManager.releaseHelper(helper);
+            if (!Strings.isNullOrEmpty(dbPath)) {
+                AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(AnyMemoService.this, dbPath);
+                try {
+                    final CardDao cardDao = helper.getCardDao();
+                    revCount = (int)cardDao.getScheduledCardCount(null);
+                    newCount = (int)cardDao.getNewCardCount(null);
+                } finally {
+                    AnyMemoDBOpenHelperManager.releaseHelper(helper);
+                }
             }
         }
 
