@@ -84,14 +84,18 @@ public class AnyMemoActivityRecentTabTest extends ActivityInstrumentationTestCas
 
         // The cancel button
         solo.clickOnView(solo.getView(android.R.id.button2));
+        solo.sleep(600);
         assertTrue(solo.searchText(TestHelper.SAMPLE_DB_NAME));
 
         solo.clickLongOnText(TestHelper.SAMPLE_DB_NAME);
+        solo.sleep(600);
         // The delete action item
         solo.clickOnView(solo.getView(R.id.delete));
+        solo.sleep(600);
 
         // The delete button
         solo.clickOnView(solo.getView(android.R.id.button1));
+        solo.sleep(600);
         assertFalse((new File(TestHelper.SAMPLE_DB_PATH)).exists());
     }
 

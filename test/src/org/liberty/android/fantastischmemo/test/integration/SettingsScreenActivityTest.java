@@ -44,11 +44,10 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
 
     @LargeTest
     public void testSaveFontSize() throws Exception {
-        solo.clickOnText("24", 1);
-        solo.clickOnText("48");
-
-        solo.clickOnText("24", 1);
-        solo.clickOnText("72");
+        solo.pressSpinnerItem(0 /* Question font size spinner*/ , 4 /* 48 */);
+        solo.sleep(300);
+        solo.pressSpinnerItem(2 /* Answer font size spinner*/ , 6 /* 72 */);
+        solo.sleep(300);
 
         assertTrue(solo.searchText("48"));
         assertTrue(solo.searchText("72"));
@@ -71,14 +70,11 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
     @LargeTest
     public void testSaveAlignments() throws Exception {
         // 1st spinner
-        solo.clickOnText(solo.getString(R.string.center_text), 1);
-        solo.clickOnText(solo.getString(R.string.left_text));
+        solo.pressSpinnerItem(1 /* Question text alignment */ , -1  /* Left */);
+        solo.sleep(300);
+        solo.pressSpinnerItem(3 /* Question text alignment */ , 1  /* Right */);
+        solo.sleep(300);
 
-        // 2nd spinner
-        solo.clickOnText(solo.getString(R.string.center_text), 1);
-        solo.clickOnText(solo.getString(R.string.right_text));
-
-        solo.sleep(500);
         solo.clickOnActionBarItem(R.id.save);
         solo.sleep(2000);
 
@@ -95,8 +91,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
 
     @LargeTest
     public void testSaveCardStyle() throws Exception {
-        solo.clickOnText(solo.getString(R.string.card_style_single));
-        solo.clickOnText(solo.getString(R.string.card_style_double));
+        solo.pressSpinnerItem(4 /* Card style */ , 1  /* Double sided */);
 
         solo.sleep(500);
         solo.clickOnActionBarItem(R.id.save);
@@ -113,10 +108,9 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
 
     @LargeTest
     public void testSaveDisplayRatio() throws Exception {
-        solo.clickOnText("50%");
-        solo.clickOnText("60%");
-        
+        solo.pressSpinnerItem(5 /* Q/A ratio */ , 1  /* 60% */);
         solo.sleep(500);
+
         solo.clickOnActionBarItem(R.id.save);
         solo.sleep(2000);
         
@@ -132,15 +126,12 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
 
     @LargeTest
     public void testTTSAudioLocale() throws Exception {
-        // Set Question audio
-        solo.clickOnView(mActivity.findViewById((R.id.question_locale_spinner)));
-        solo.clickOnText(solo.getString(R.string.german_text));
+        solo.pressSpinnerItem(6 /* Question audio spinner */, 3 /* German */);
+        solo.sleep(300);
 
-        // Set Answer audio
-        solo.clickOnView(mActivity.findViewById((R.id.answer_locale_spinner)));
-        solo.clickOnText(solo.getString(R.string.italian_text));
+        solo.pressSpinnerItem(7 /* Answer audio spinner */, 2 /* Italian */);
+        solo.sleep(300);
 
-        solo.sleep(500);
         solo.clickOnActionBarItem(R.id.save);
         solo.sleep(2000);
 
@@ -161,10 +152,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
 
     @LargeTest
     public void testDoubleSidedCard() throws Exception {
-        // Set Question audio
-        solo.clickOnView(mActivity.findViewById((R.id.card_style_spinner)));
-
-        solo.clickOnText(solo.getString(R.string.card_style_double));
+        solo.pressSpinnerItem(4 /* Card style */ , 1  /* Double sided */);
 
         solo.sleep(500);
         solo.clickOnActionBarItem(R.id.save);
@@ -183,9 +171,7 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
 
     @LargeTest
     public void testGoBackWithSettingChangedPressYesButtonShouldSaveSettings() throws Exception {
-        solo.clickOnText("50%");
-        solo.clickOnText("60%");
-
+        solo.pressSpinnerItem(5 /* Q/A ratio */ , 1  /* 60% */);
         solo.sleep(500);
         solo.goBack();
 
@@ -205,10 +191,9 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
 
     @LargeTest
     public void testGoBackWithSettingChangedPressNoButtonShouldNotSaveSettings() throws Exception {
-        solo.clickOnText("50%");
-        solo.clickOnText("60%");
-
+        solo.pressSpinnerItem(5 /* Q/A ratio */ , 1  /* 60% */);
         solo.sleep(500);
+
         solo.goBack();
 
         solo.sleep(500);
@@ -227,10 +212,9 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
 
     @LargeTest
     public void testGoBackWithSettingChangedPressCancelButtonShouldStayInCurrentActivity() throws Exception {
-        solo.clickOnText("50%");
-        solo.clickOnText("60%");
-
+        solo.pressSpinnerItem(5 /* Q/A ratio */ , 1  /* 60% */);
         solo.sleep(500);
+
         solo.goBack();
         solo.sleep(500);
         solo.clickOnButton(solo.getString(R.string.cancel_text));
@@ -251,7 +235,6 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
     
     @LargeTest
     public void testGoBackWithNoSettingChangedShouldQuit() throws Exception {
-        solo.sleep(500);
         solo.goBack(); 
         solo.sleep(2000);
 

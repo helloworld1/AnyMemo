@@ -147,7 +147,7 @@ android.applicationVariants.all { variant ->
         }
 
         // handle aar dependencies pulled in by gradle (Android support library and etc)
-	tree = fileTree(dir: "${project.buildDir}/exploded-bundles", include: '**/classes.jar')
+	tree = fileTree(dir: "${project.buildDir}/exploded-aar", include: '**/classes.jar')
 	tree.each { jarFile ->
 	    iajcClasspath += ":" + jarFile
         }
