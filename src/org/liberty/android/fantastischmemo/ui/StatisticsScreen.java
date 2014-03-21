@@ -159,6 +159,16 @@ public class StatisticsScreen extends AMActivity {
 
     }
 
+    private Date truncateDate(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return new Date(cal.getTimeInMillis());
+    }
+
     private class CardToReviewTask extends ChartTask {
         @Override
         public AbstractChart doInBackground(Void... params) {
@@ -168,7 +178,7 @@ public class StatisticsScreen extends AMActivity {
             XYSeries series = new XYSeries((getString(R.string.number_of_cards_scheduled_in_a_day_text)));
             Date now = new Date();
             for (int i = 0; i < 30; i++) {
-                Date startDate = new Date(now.getTime() + i * 60 * 60 * 24 * 1000);
+                Date startDate = truncateDate(new Date(now.getTime() + i * 60 * 60 * 24 * 1000));
                 Date endDate = new Date(startDate.getTime() + 1 * 60 * 60 * 24 * 1000);
                 series.add(i, (int)cardDao.getScheduledCardCount(null, startDate, endDate));
 

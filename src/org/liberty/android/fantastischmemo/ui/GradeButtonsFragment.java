@@ -229,7 +229,7 @@ public class GradeButtonsFragment extends RoboFragment {
     }
 
     private void setButtonDescription(int grade, CharSequence description) {
-        if (description != null && Strings.isNullOrEmpty(description.toString())) {
+        if (description != null && !Strings.isNullOrEmpty(description.toString())) {
             gradeButtons[grade].setText(Html.fromHtml("<b>" + defaultGradeButtonTitles[grade] + "</b>" +  "<br />" + "<small>" + description + "</small>"));
         }
     }
