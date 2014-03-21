@@ -24,7 +24,6 @@ import java.util.Random;
 
 import javax.inject.Inject;
 
-import org.apache.commons.lang3.time.DateUtils;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.domain.SchedulingAlgorithmParameters;
 import org.liberty.android.fantastischmemo.utils.AMDateUtil;
@@ -211,7 +210,7 @@ public class DefaultScheduler implements Scheduler {
     }
 
     private Date afterDays(Date date, double days) {
-        long time = date.getTime() + Math.round(days * DateUtils.MILLIS_PER_DAY);
+        long time = date.getTime() + Math.round(days * 1 * 60 * 60 * 24 * 1000 /* 1 day */);
         return new Date(time);
     }
 

@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.StringUtils;
+import com.google.common.base.Strings;
 
 public class AMStringUtils {
 
@@ -65,7 +65,7 @@ public class AMStringUtils {
     public static <E extends Enum<E>> EnumSet<E> getEnumSetFromString(Class<E> enumType, String enumString) {
         EnumSet<E> es = EnumSet.noneOf(enumType);
 
-        if (StringUtils.isNotEmpty(enumString)) {
+        if (!Strings.isNullOrEmpty(enumString)) {
             String[] split = enumString.split(",");
             for (String s : split) {
                 es.add(Enum.valueOf(enumType, s));

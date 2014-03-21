@@ -22,7 +22,6 @@ package org.liberty.android.fantastischmemo.service;
 import javax.inject.Inject;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.converter.Converter;
 import org.liberty.android.fantastischmemo.ui.AnyMemo;
@@ -40,6 +39,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+
+import com.google.common.base.Objects;
 
 public class ConvertIntentService extends RoboIntentService {
 
@@ -75,7 +76,7 @@ public class ConvertIntentService extends RoboIntentService {
 
     @Override
     public void onHandleIntent(Intent intent) {
-        if (!StringUtils.equals(intent.getAction(), ACTION_CONVERT)) {
+        if (!Objects.equal(intent.getAction(), ACTION_CONVERT)) {
             throw new IllegalArgumentException("The Action is wrong");
         }
         String inputFilePath = intent.getStringExtra(EXTRA_INPUT_FILE_PATH);

@@ -33,7 +33,6 @@ import java.util.List;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.commons.lang3.time.DateUtils;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.dao.CardDao;
@@ -118,7 +117,8 @@ public class SupermemoXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
             //  Otherwise, we will caluculate it here.
             if (ld.getLastLearnDate() != null) {
                 // Calculate the next learning date from interval
-                ld.setNextLearnDate(DateUtils.addDays(ld.getLastLearnDate(), interval));
+                Date nextLearningDate = new Date(ld.getLastLearnDate().getTime() + interval * 24 * 60 * 60 * 1000); // Add days
+                ld.setNextLearnDate(nextLearningDate);
             }
 
             // If an old card get interval 0, then we assume the last grade is 0 as failure card.

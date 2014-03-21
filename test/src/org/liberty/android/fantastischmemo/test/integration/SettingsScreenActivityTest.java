@@ -1,6 +1,5 @@
 package org.liberty.android.fantastischmemo.test.integration;
 
-import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
@@ -13,6 +12,7 @@ import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.LargeTest;
 
+import com.google.common.base.Strings;
 import com.robotium.solo.Solo;
 
 public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2<SettingsScreen> {
@@ -141,8 +141,8 @@ public class SettingsScreenActivityTest extends ActivityInstrumentationTestCase2
             Setting setting = settingDao.queryForId(1);
             assertEquals("DE", setting.getQuestionAudio());
             assertEquals("IT", setting.getAnswerAudio());
-            assertTrue(StringUtils.isEmpty(setting.getQuestionAudioLocation()));
-            assertTrue(StringUtils.isEmpty(setting.getAnswerAudioLocation()));
+            assertTrue(Strings.isNullOrEmpty(setting.getQuestionAudioLocation()));
+            assertTrue(Strings.isNullOrEmpty(setting.getAnswerAudioLocation()));
 
         } finally {
             AnyMemoDBOpenHelperManager.releaseHelper(helper);

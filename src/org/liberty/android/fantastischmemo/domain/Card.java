@@ -2,9 +2,9 @@ package org.liberty.android.fantastischmemo.domain;
 
 import java.util.Date;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.liberty.android.fantastischmemo.dao.CardDaoImpl;
 
+import com.google.common.base.Objects;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -151,11 +151,11 @@ public class Card {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-            .append("id", id)
-            .append("question", question)
-            .append("answer", answer)
-            .build();
+        return Objects.toStringHelper(this)
+            .add("id", id)
+            .add("question", question)
+            .add("answer", answer)
+            .toString();
     }
 
     @Override

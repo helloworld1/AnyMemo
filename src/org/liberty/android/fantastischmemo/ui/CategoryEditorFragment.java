@@ -3,7 +3,6 @@ package org.liberty.android.fantastischmemo.ui;
 import java.util.Comparator;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
@@ -28,6 +27,8 @@ import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ListView;
+
+import com.google.common.base.Strings;
 
 public class CategoryEditorFragment extends RoboDialogFragment {
     public static String EXTRA_DBPATH = "dbpath";
@@ -296,7 +297,7 @@ public class CategoryEditorFragment extends RoboDialogFragment {
         @Override
         public Void doInBackground(Void... params) {
             // We don't want to remove the "Uncategorized"
-            if (StringUtils.isEmpty(selectedCategory.getName())) {
+            if (Strings.isNullOrEmpty(selectedCategory.getName())) {
                 return null;
             }
             categoryDao.removeCategory(selectedCategory);
@@ -310,7 +311,7 @@ public class CategoryEditorFragment extends RoboDialogFragment {
 
         @Override
         public void onPostExecute(Void result){
-            if (StringUtils.isNotEmpty(selectedCategory.getName())) {
+            if (!Strings.isNullOrEmpty(selectedCategory.getName())) {
                 categoryAdapter.remove(selectedCategory);
             }
             categoryAdapter.sort();

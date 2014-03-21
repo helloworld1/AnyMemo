@@ -27,7 +27,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.commons.lang3.StringUtils;
 import org.color.ColorDialog;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
@@ -63,6 +62,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TableRow;
+
+import com.google.common.base.Strings;
 
 public class SettingsScreen extends AMActivity {
 
@@ -307,15 +308,15 @@ public class SettingsScreen extends AMActivity {
             audioLocationEdit = (EditText) findViewById(R.id.settings_audio_location);
 
             // If we got no text, we will use the default location.
-            if (StringUtils.isNotEmpty(setting.getQuestionAudio())) {
+            if (!Strings.isNullOrEmpty(setting.getQuestionAudio())) {
                 audioLocationEdit.setText(setting.getQuestionAudioLocation());
             }
 
-            if (StringUtils.isNotEmpty(setting.getAnswerAudio())) {
+            if (!Strings.isNullOrEmpty(setting.getAnswerAudio())) {
                 audioLocationEdit.setText(setting.getAnswerAudioLocation());
             }
 
-            if (StringUtils.isEmpty(audioLocationEdit.getText())) {
+            if (Strings.isNullOrEmpty(audioLocationEdit.getText().toString())) {
                 audioLocationEdit.setText(AMEnv.DEFAULT_AUDIO_PATH);
             }
 
@@ -435,18 +436,18 @@ public class SettingsScreen extends AMActivity {
         questionLocaleSpinner.selectItemFromValue(setting.getQuestionAudio(), 2);
         answerLocaleSpinner.selectItemFromValue(setting.getAnswerAudio(), 2);
 
-        if (StringUtils.isNotEmpty(setting.getQuestionAudioLocation())) {
+        if (!Strings.isNullOrEmpty(setting.getQuestionAudioLocation())) {
             // User audio
             questionLocaleSpinner.setSelection(1);
-        } else if (StringUtils.isEmpty(setting.getQuestionAudio())) {
+        } else if (Strings.isNullOrEmpty(setting.getQuestionAudio())) {
             // Disabled
             questionLocaleSpinner.setSelection(0);
         }
 
-        if (StringUtils.isNotEmpty(setting.getAnswerAudioLocation())) {
+        if (!Strings.isNullOrEmpty(setting.getAnswerAudioLocation())) {
             // User audio
             answerLocaleSpinner.setSelection(1);
-        } else if (StringUtils.isEmpty(setting.getAnswerAudio())) {
+        } else if (Strings.isNullOrEmpty(setting.getAnswerAudio())) {
             // Disabled
             answerLocaleSpinner.setSelection(0);
         }
@@ -466,7 +467,7 @@ public class SettingsScreen extends AMActivity {
         }
         colorButton.setTextColor(colors.get(colorSpinner.getSelectedItemPosition()));
 
-        qTypefaceCheckbox.setChecked(StringUtils.isNotEmpty(setting.getQuestionFont()));
+        qTypefaceCheckbox.setChecked(!Strings.isNullOrEmpty(setting.getQuestionFont()));
         if (qTypefaceCheckbox.isChecked()) {
             qTypefaceEdit.setVisibility(View.VISIBLE);
             qTypefaceEdit.setText(setting.getQuestionFont());
@@ -474,7 +475,7 @@ public class SettingsScreen extends AMActivity {
             qTypefaceEdit.setVisibility(View.GONE);
         }
 
-        aTypefaceCheckbox.setChecked(StringUtils.isNotEmpty(setting.getAnswerFont()));
+        aTypefaceCheckbox.setChecked(!Strings.isNullOrEmpty(setting.getAnswerFont()));
         if (aTypefaceCheckbox.isChecked()) {
             aTypefaceEdit.setVisibility(View.VISIBLE);
             aTypefaceEdit.setText(setting.getAnswerFont());

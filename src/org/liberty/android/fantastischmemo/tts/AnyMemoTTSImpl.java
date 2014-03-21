@@ -26,8 +26,6 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.apache.commons.lang3.StringUtils;
-
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.tts.SpeakWord.OnCompletedListener;
 
@@ -35,6 +33,8 @@ import android.content.Context;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.google.common.base.Strings;
 
 public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
 
@@ -186,7 +186,7 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
     }
 
     private Locale getLocaleForTTS(String loc) {
-        if (StringUtils.isEmpty(loc)) {
+        if (Strings.isNullOrEmpty(loc)) {
             return Locale.US;
         }
 

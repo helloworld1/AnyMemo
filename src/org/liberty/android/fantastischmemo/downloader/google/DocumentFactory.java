@@ -21,19 +21,16 @@ package org.liberty.android.fantastischmemo.downloader.google;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-
 import java.net.URL;
 import java.net.URLEncoder;
-
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringEscapeUtils;
-
-
 import org.xmlpull.v1.XmlPullParserException;
+
+import com.google.common.xml.XmlEscapers;
 
 public class DocumentFactory {
     private DocumentFactory() {
@@ -47,7 +44,7 @@ public class DocumentFactory {
             "<entry xmlns='http://www.w3.org/2005/Atom'>"+
             "<category scheme='http://schemas.google.com/g/2005#kind'"+
             " term='http://schemas.google.com/docs/2007#spreadsheet'/>"+
-            "<title>"+ StringEscapeUtils.escapeXml(title) +"</title>"+
+            "<title>"+ XmlEscapers.xmlAttributeEscaper().escape(title) +"</title>"+
             "</entry>";
 
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();

@@ -29,7 +29,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
@@ -62,6 +61,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
+
+import com.google.common.base.Strings;
 
 public class FileBrowserFragment extends RoboDialogFragment implements OnItemClickListener, OnItemLongClickListener {
     public final static String EXTRA_DEFAULT_ROOT = "default_root";
@@ -140,12 +141,12 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
             defaultRoot = settings.getString(AMPrefKeys.SAVED_FILEBROWSER_PATH_KEY, null);
 
             // Make sure the path exists.
-            if (StringUtils.isNotEmpty(defaultRoot) && !new File(defaultRoot).exists()) {
+            if (!Strings.isNullOrEmpty(defaultRoot) && !new File(defaultRoot).exists()) {
                 defaultRoot = null;
             }
         }
 
-        if (StringUtils.isEmpty(defaultRoot)) {
+        if (Strings.isNullOrEmpty(defaultRoot)) {
             File sdPath = new File(AMEnv.DEFAULT_ROOT_PATH);
             sdPath.mkdir();
 

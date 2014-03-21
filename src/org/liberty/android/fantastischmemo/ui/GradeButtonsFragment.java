@@ -22,7 +22,6 @@ package org.liberty.android.fantastischmemo.ui;
 
 import javax.inject.Inject;
 
-import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
@@ -49,6 +48,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.google.common.base.Strings;
 
 
 /*
@@ -220,7 +221,7 @@ public class GradeButtonsFragment extends RoboFragment {
 
     @SuppressWarnings("unused")
     private void setButtonText(int grade, CharSequence title, CharSequence description) {
-        if (StringUtils.isNotEmpty(description)) {
+        if (description != null && !Strings.isNullOrEmpty(description.toString())) {
             gradeButtons[grade].setText(Html.fromHtml("<b>" + title + "</b>" +  "<br />" + "<small>" + description + "</small>"));
         } else {
             gradeButtons[grade].setText(Html.fromHtml("<b>" + title + "</b>"));
@@ -228,7 +229,7 @@ public class GradeButtonsFragment extends RoboFragment {
     }
 
     private void setButtonDescription(int grade, CharSequence description) {
-        if (StringUtils.isNotEmpty(description)) {
+        if (description != null && Strings.isNullOrEmpty(description.toString())) {
             gradeButtons[grade].setText(Html.fromHtml("<b>" + defaultGradeButtonTitles[grade] + "</b>" +  "<br />" + "<small>" + description + "</small>"));
         }
     }

@@ -19,12 +19,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.service.cardplayer;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateUtils;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
 
 import roboguice.util.Ln;
+
+import android.text.format.DateUtils;
+
+import com.google.common.base.Objects;
 
 /*
  * State object representing the state machine of card player 
@@ -179,12 +181,12 @@ public enum CardPlayerState implements CardPlayerStateTransition {
                             // Make sure the card is still current.
                             // If the card changed, it is most likely the fast foward / backward
                             // function is needed.
-                            if (StringUtils.equals(context.getCurrentCard().getQuestion(), text)) {
+                            if (Objects.equal(context.getCurrentCard().getQuestion(), text)) {
                                 Ln.v("Playing question completed for id " + context.getCurrentCard().getId());
                                 context.getState().transition(context, CardPlayerMessage.PLAYING_QUESTION_COMPLETED);
                             }
                         }
-                    }, context.getDelayBeteenQAInSec() * DateUtils.MILLIS_PER_SECOND);
+                    }, context.getDelayBeteenQAInSec() * 1000);
 
                 }
         });
@@ -198,12 +200,12 @@ public enum CardPlayerState implements CardPlayerStateTransition {
                 public void onTextToSpeechCompleted(final String text) {
                     context.getAmTTSServiceHandler().postDelayed(new Runnable() {
                         public void run() {
-                            if (StringUtils.equals(context.getCurrentCard().getAnswer(), text)) {
+                            if (Objects.equal(context.getCurrentCard().getAnswer(), text)) {
                                 Ln.v("Playing answer completed for id " + context.getCurrentCard().getId());
                                 context.getState().transition(context, CardPlayerMessage.PLAYING_ANSWER_COMPLETED);
                             }
                         }
-                    }, context.getDelayBeteenCardsInSec() * DateUtils.MILLIS_PER_SECOND);
+                    }, context.getDelayBeteenCardsInSec() * 1000);
 
                 }
         });

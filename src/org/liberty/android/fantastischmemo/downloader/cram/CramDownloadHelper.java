@@ -31,7 +31,6 @@ import javax.inject.Inject;
 import javax.net.ssl.HttpsURLConnection;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,6 +48,8 @@ import roboguice.util.Ln;
 
 import android.content.Context;
 import android.net.Uri;
+
+import com.google.common.base.Strings;
 
 /**
  * Helper class for downloading using Cram API.
@@ -217,7 +218,7 @@ public class CramDownloadHelper {
      * @return the response in string.
      */
     private String getResponseString(URL url, String authToken) throws IOException {
-        if (StringUtils.isNotEmpty(authToken)) {
+        if (!Strings.isNullOrEmpty(authToken)) {
             // TODO: Add oauth here
         }
 

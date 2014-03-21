@@ -21,7 +21,6 @@ package org.liberty.android.fantastischmemo.downloader.oauth;
 
 import java.io.IOException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
@@ -36,6 +35,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+
+import com.google.common.base.Joiner;
 
 public abstract class OauthAccountActivity extends AMActivity {
 
@@ -192,7 +193,7 @@ public abstract class OauthAccountActivity extends AMActivity {
                 return;
         	}
 
-            editor.putString(oauthAccessTokenPrefKey, StringUtils.join(accessTokens, ","));
+            editor.putString(oauthAccessTokenPrefKey, Joiner.on(",").join(accessTokens, ","));
             editor.commit();
 
             if (accessTokens == null) {

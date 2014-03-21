@@ -26,7 +26,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.liberty.android.fantastischmemo.AMEnv;
@@ -53,6 +52,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.google.common.base.Strings;
 
 /*
  * Download from FlashcardExchange using its web api
@@ -261,7 +262,7 @@ public class DownloaderFE extends DownloaderBase{
             if (!jsonItem.isNull("question_image_url")) {
                 questionImageUrl = jsonItem.getString("question_image_url");
             }
-            if (StringUtils.isNotEmpty(questionImageUrl)) {
+            if (!Strings.isNullOrEmpty(questionImageUrl)) {
                 String downloadFilename = Uri.parse(questionImageUrl).getLastPathSegment();
                 downloaderUtils.downloadFile(questionImageUrl, imagePath + "q-" + downloadFilename);
                 question = question + "<br /><img src=\"" + "q-" + downloadFilename + "\" />";
@@ -271,7 +272,7 @@ public class DownloaderFE extends DownloaderBase{
             if (!jsonItem.isNull("answer_image_url")) {
                 answerImageUrl = jsonItem.getString("answer_image_url");
             }
-            if (StringUtils.isNotEmpty(answerImageUrl)) {
+            if (!Strings.isNullOrEmpty(answerImageUrl)) {
                 String downloadFilename = Uri.parse(answerImageUrl).getLastPathSegment();
                 downloaderUtils.downloadFile(answerImageUrl, imagePath + "a-" + downloadFilename);
                 answer = answer + "<br /><img src=\"" + "a-" + downloadFilename + "\" />";

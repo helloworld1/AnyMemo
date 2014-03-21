@@ -21,19 +21,16 @@ package org.liberty.android.fantastischmemo.downloader.google;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-
 import java.net.URL;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringEscapeUtils;
-
-
 import org.xmlpull.v1.XmlPullParserException;
+
+import com.google.common.xml.XmlEscapers;
 
 public class FolderFactory {
     private FolderFactory() {
@@ -81,7 +78,7 @@ public class FolderFactory {
             "<entry xmlns='http://www.w3.org/2005/Atom'>"+
             "<category scheme='http://schemas.google.com/g/2005#kind'"+
             " term='http://schemas.google.com/docs/2007#folder'/>"+
-            "<title>"+ StringEscapeUtils.escapeXml(title) +"</title>"+
+            "<title>"+ XmlEscapers.xmlAttributeEscaper().escape(title) +"</title>"+
             "</entry>";
 
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
@@ -113,7 +110,7 @@ public class FolderFactory {
 
         String payload = "<?xml version='1.0' encoding='UTF-8'?>" +
             "<entry xmlns='http://www.w3.org/2005/Atom'>"+
-            "<id>"+ StringEscapeUtils.escapeXml("https://docs.google.com/feeds/default/private/full/" + document.getId()) +"</id>" +
+            "<id>"+ XmlEscapers.xmlAttributeEscaper().escape("https://docs.google.com/feeds/default/private/full/" + document.getId()) +"</id>" +
             "</entry>";
 
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();

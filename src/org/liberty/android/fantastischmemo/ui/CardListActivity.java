@@ -28,7 +28,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
@@ -69,6 +68,8 @@ import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
+
+import com.google.common.base.Strings;
 
 /**
  * The Card List activity is used for listing all cards in a db or learning in a list mode.
@@ -415,7 +416,7 @@ public class CardListActivity extends AMActivity {
         public boolean onQueryTextChange(String text) {
             // This is used to make sure user can clear the search result
             // and show all cards easily.
-            if (StringUtils.isEmpty(text)) {
+            if (Strings.isNullOrEmpty(text)) {
                 cardListAdapter.getFilter().filter(text);
             }
             return true;
@@ -560,7 +561,7 @@ public class CardListActivity extends AMActivity {
                     }
 
                     // If empty term is gived, restore to the original list
-                    if (StringUtils.isEmpty(searchTerm)) {
+                    if (searchTerm == null || Strings.isNullOrEmpty(searchTerm.toString())) {
                         List<CardWrapper> list = new ArrayList<CardWrapper>(
                                 originalCardList);
                         results.values = list;

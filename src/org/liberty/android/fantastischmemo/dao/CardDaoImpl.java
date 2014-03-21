@@ -10,12 +10,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.aspect.LogInvocation;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
 
+import com.google.common.base.Strings;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.UpdateBuilder;
@@ -490,7 +490,7 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
 
                         // Becuase the empty category is created by default
                         // We do not
-                        } else if (StringUtils.isNotEmpty(currentCategoryName)) {
+                        } else if (!Strings.isNullOrEmpty(currentCategoryName)) {
                             categoryDao.create(card.getCategory());
                             categoryMap.put(currentCategoryName, card.getCategory());
                         }

@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.EnumSet;
 
-import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.dao.SettingDaoImpl;
 import org.liberty.android.fantastischmemo.utils.AMStringUtils;
 
+import com.google.common.base.Strings;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -212,7 +212,7 @@ public class Setting implements Serializable {
     }
 
     public boolean isQuestionAudioEnabled(){
-        return !StringUtils.isEmpty(getQuestionAudio());
+        return !Strings.isNullOrEmpty(getQuestionAudio());
     }
 
     public String getAnswerAudio() {
@@ -224,7 +224,7 @@ public class Setting implements Serializable {
     }
 
     public boolean isAnswerAudioEnabled(){
-        return !StringUtils.isEmpty(getAnswerAudio());
+        return !Strings.isNullOrEmpty(getAnswerAudio());
     }
 
     public Integer getQuestionTextColor() {

@@ -36,6 +36,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -44,8 +46,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOCase;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
@@ -59,11 +59,14 @@ import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.AMStringUtils;
 import org.liberty.android.fantastischmemo.utils.AMZipUtils;
 
+import com.google.common.base.Strings;
 import com.google.inject.BindingAnnotation;
 
 public class Mnemosyne2CardsExporter implements Converter {
 
     private static final long serialVersionUID = -8315483384166979473L;
+
+    private final Random random = new Random();
 
     private AMFileUtil amFileUtil;
 
@@ -143,8 +146,8 @@ public class Mnemosyne2CardsExporter implements Converter {
             while (categoryIterator.hasNext()) {
                 Category category = categoryIterator.next();
                 String tagName = "__UNTAGGED__";
-                String oId = RandomStringUtils.randomAlphanumeric(20);
-                if (StringUtils.isNotEmpty(category.getName())) {
+                String oId = generateOid();
+                if (!Strings.isNullOrEmpty(category.getName())) {
                     tagName = category.getName();
                 }
                 categoryOidMap.put(tagName, oId);
@@ -158,7 +161,7 @@ public class Mnemosyne2CardsExporter implements Converter {
                 Card card = cardIterator.next();
                 String front = card.getQuestion();
                 String back = card.getAnswer();
-                String oId = RandomStringUtils.randomAlphanumeric(20);
+                String oId = generateOid();
                 cardIdOidMap.put(card.getId(), oId);
                 outXml.printf("<log type=\"16\" o_id=\"%s\"><b>%s</b><f>%s</f></log>\n"
                         , oId
@@ -175,11 +178,11 @@ public class Mnemosyne2CardsExporter implements Converter {
                 learningDataDao.refresh(card.getLearningData());
                 String fact = cardIdOidMap.get(card.getId());
                 String category = card.getCategory().getName();
-                if (StringUtils.isEmpty(category)) {
+                if (Strings.isNullOrEmpty(category)) {
                     category = "__UNTAGGED__";
                 }
                 String tags = categoryOidMap.get(category);
-                String oId = RandomStringUtils.randomAlphanumeric(20);
+                String oId = generateOid();
 
                 // Needs to converter to unix time
                 LearningData learningData = card.getLearningData();
@@ -238,6 +241,17 @@ public class Mnemosyne2CardsExporter implements Converter {
     @Override
     public String getDestExtension() {
         return "cards";
+    }
+
+    /**
+     * Generate a random id for a card.
+     *
+     * @return random id.
+     */
+    private String generateOid() {
+        String uuid = UUID.randomUUID().toString();
+        String randomString = (uuid).replaceAll("-", "");
+        return randomString.substring(0, 20);
     }
 
     @BindingAnnotation

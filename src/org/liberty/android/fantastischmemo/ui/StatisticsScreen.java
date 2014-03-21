@@ -37,8 +37,6 @@ import org.achartengine.renderer.DefaultRenderer;
 import org.achartengine.renderer.SimpleSeriesRenderer;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 
-import org.apache.commons.lang3.time.DateUtils;
-
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
@@ -170,9 +168,8 @@ public class StatisticsScreen extends AMActivity {
             XYSeries series = new XYSeries((getString(R.string.number_of_cards_scheduled_in_a_day_text)));
             Date now = new Date();
             for (int i = 0; i < 30; i++) {
-                Date startDate = DateUtils.addDays(now, i);
-                DateUtils.truncate(startDate, Calendar.DAY_OF_MONTH);
-                Date endDate = DateUtils.addDays(startDate, 1);
+                Date startDate = new Date(now.getTime() + i * 60 * 60 * 24 * 1000);
+                Date endDate = new Date(startDate.getTime() + 1 * 60 * 60 * 24 * 1000);
                 series.add(i, (int)cardDao.getScheduledCardCount(null, startDate, endDate));
 
             }
@@ -191,7 +188,7 @@ public class StatisticsScreen extends AMActivity {
             Date now = new Date();
             Date startDate = new Date(0);
             for (int i = 0; i < 30; i++) {
-                Date endDate = DateUtils.addDays(now, i);
+                Date endDate = new Date(now.getTime() + i * 60 * 60 * 24 * 1000);
                 series.add(i, (int)cardDao.getScheduledCardCount(null, startDate, endDate));
 
             }

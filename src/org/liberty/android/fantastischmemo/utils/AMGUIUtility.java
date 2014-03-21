@@ -19,8 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.utils;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
-
+import org.apache.http.util.ExceptionUtils;
 import org.liberty.android.fantastischmemo.R;
 
 import android.app.Activity;
@@ -29,6 +28,8 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Handler;
 import android.util.Log;
+
+import com.google.common.base.Throwables;
 
 /*
  * This utility class provides some useful static rucurring GUI methods
@@ -45,7 +46,7 @@ public class AMGUIUtility{
         Log.e(TAG, "displayError", e);
         new AlertDialog.Builder(activity)
             .setTitle(title)
-            .setMessage(text + "\n" + activity.getString(R.string.exception_text) +": " + ExceptionUtils.getRootCauseMessage(e) + "\n" + ExceptionUtils.getStackTrace(e))
+            .setMessage(text + "\n" + activity.getString(R.string.exception_text) +": " + Throwables.getRootCause(e) + "\n" + Throwables.getStackTraceAsString(e))
             .setPositiveButton(activity.getString(R.string.back_menu_text), new DialogInterface.OnClickListener(){
                 public void onClick(DialogInterface arg0, int arg1){
                     activity.finish();
@@ -64,7 +65,7 @@ public class AMGUIUtility{
         Log.e(TAG, "displayException", e);
         new AlertDialog.Builder(activity)
             .setTitle(title)
-            .setMessage(text + "\n" + activity.getString(R.string.exception_text) +": " + ExceptionUtils.getRootCauseMessage(e) + "\n" + ExceptionUtils.getStackTrace(e))
+            .setMessage(text + "\n" + activity.getString(R.string.exception_text) +": " + Throwables.getRootCause(e) + "\n" + Throwables.getStackTraceAsString(e))
             .setNeutralButton(R.string.back_menu_text, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {

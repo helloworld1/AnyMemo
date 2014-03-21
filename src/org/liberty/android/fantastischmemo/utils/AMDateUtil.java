@@ -24,7 +24,6 @@ import java.util.Date;
 
 import javax.inject.Inject;
 
-import org.apache.commons.lang3.time.DateUtils;
 import org.liberty.android.fantastischmemo.R;
 
 import android.content.Context;
@@ -42,7 +41,7 @@ public class AMDateUtil {
 	public static double diffDate(Date date1, Date date2){
         double date1s = date1.getTime();
         double date2s = date2.getTime();
-        return (date2s - date1s) / DateUtils.MILLIS_PER_DAY;
+        return (date2s - date1s) / (60 * 60 * 24 * 1000);
 	}
 
     // Interval: 12.3456 day -> "1.8 week", 4.76 -> "4.8 day"

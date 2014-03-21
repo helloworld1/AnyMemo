@@ -27,7 +27,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
@@ -62,6 +61,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
+
+import com.google.common.base.Strings;
 
 /**
  * The base class for all activities that displays cards.
@@ -221,11 +222,11 @@ public abstract class QACardActivity extends AMActivity {
         String questionTypefaceValue = null;
         String answerTypefaceValue = null;
         /* Set the typeface of question and answer */
-        if (StringUtils.isNotEmpty(questionTypeface)) {
+        if (!Strings.isNullOrEmpty(questionTypeface)) {
             questionTypefaceValue = questionTypeface;
 
         }
-        if (StringUtils.isNotEmpty(answerTypeface)) {
+        if (!Strings.isNullOrEmpty(answerTypeface)) {
             answerTypefaceValue = answerTypeface;
         }
 
@@ -512,7 +513,7 @@ public abstract class QACardActivity extends AMActivity {
 
     // Set the small title to display additional informaiton
     public void setSmallTitle(CharSequence text) {
-        if (StringUtils.isNotEmpty(text)) {
+        if (text != null && !Strings.isNullOrEmpty(text.toString())) {
             smallTitleBar.setText(text);
             smallTitleBar.setVisibility(View.VISIBLE);
         } else {
@@ -646,7 +647,7 @@ public abstract class QACardActivity extends AMActivity {
             default:
                 copiedText = "";
         }
-        if (StringUtils.isNotEmpty(copiedText)) {
+        if (!Strings.isNullOrEmpty(copiedText)) {
             ClipboardManager cm = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
             // Some Samsung device doesn't have ClipboardManager. So check
             // the null here to prevent crash.

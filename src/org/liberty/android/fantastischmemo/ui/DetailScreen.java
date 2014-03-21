@@ -23,7 +23,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import org.apache.commons.lang3.time.DateUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
@@ -40,6 +39,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.format.DateFormat;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -75,6 +76,8 @@ public class DetailScreen extends AMActivity {
 
 	public static String EXTRA_DBPATH = "dbpath";
 	public static String EXTRA_CARD_ID = "card_id";
+
+    private static final SimpleDateFormat ISO_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -160,9 +163,8 @@ public class DetailScreen extends AMActivity {
 		answerEntry.setText(currentCard.getAnswer());
 		noteEntry.setText(currentCard.getNote());
 	   	categoryEntry.setText(currentCard.getCategory().getName());
-        Format formatter = new SimpleDateFormat("yyyy/MM/dd");
-		lastLearnDateEntry.setText(formatter.format(currentCard.getLearningData().getLastLearnDate()));
-		nextLearnDateEntry.setText(formatter.format(currentCard.getLearningData().getNextLearnDate()));
+		lastLearnDateEntry.setText(ISO_TIME_FORMAT.format(currentCard.getLearningData().getLastLearnDate()));
+		nextLearnDateEntry.setText(ISO_TIME_FORMAT.format(currentCard.getLearningData().getNextLearnDate()));
 		gradeEntry.setText("" + currentCard.getLearningData().getGrade());
 		easinessEntry.setText("" + currentCard.getLearningData().getEasiness());
 
@@ -180,10 +182,8 @@ public class DetailScreen extends AMActivity {
             currentCard.setAnswer(answerEntry.getText().toString());
             currentCard.setNote(noteEntry.getText().toString());
 
-            String[] parsers = {"yyyy/MM/dd"};
-            currentCard.getLearningData().setLastLearnDate(DateUtils.parseDateStrictly(lastLearnDateEntry.getText().toString(), parsers));
-            currentCard.getLearningData().setNextLearnDate(DateUtils.parseDateStrictly(nextLearnDateEntry.getText().toString(), parsers));
-
+            currentCard.getLearningData().setLastLearnDate(ISO_TIME_FORMAT.parse(lastLearnDateEntry.getText().toString()));
+            currentCard.getLearningData().setLastLearnDate(ISO_TIME_FORMAT.parse(nextLearnDateEntry.getText().toString()));
             currentCard.getLearningData().setGrade(Integer.parseInt(gradeEntry.getText().toString()));
             currentCard.getLearningData().setEasiness(Float.parseFloat(easinessEntry.getText().toString()));
             currentCard.getLearningData().setAcqReps(Integer.parseInt(acqRepsEntry.getText().toString()));

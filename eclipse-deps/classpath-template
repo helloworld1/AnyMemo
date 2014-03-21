@@ -7,7 +7,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="eclipse-deps/libs/aspectjrt.jar"/>
 	<classpathentry kind="lib" path="eclipse-deps/libs/commons-io-stripped.jar"/>
-	<classpathentry kind="lib" path="eclipse-deps/libs/commons-lang3-stripped.jar"/>
 	<classpathentry kind="lib" path="eclipse-deps/libs/guice-3.0-no_aop.jar"/>
 	<classpathentry kind="lib" path="eclipse-deps/libs/guice-assistedinject-3.0.jar"/>
 	<classpathentry kind="lib" path="eclipse-deps/libs/javax.inject.jar"/>

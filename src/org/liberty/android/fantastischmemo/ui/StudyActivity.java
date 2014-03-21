@@ -23,7 +23,6 @@ import java.util.HashMap;
 
 import javax.inject.Inject;
 
-import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.aspect.LogInvocation;
 import org.liberty.android.fantastischmemo.domain.Card;
@@ -57,6 +56,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.android.apis.graphics.FingerPaint;
+import com.google.common.base.Strings;
 
 /**
  * The StudyActivity is used for the classic way of learning cards.
@@ -684,7 +684,7 @@ public class StudyActivity extends QACardActivity {
         sb.append(getString(R.string.new_text) + ": " + newCardCount + " ");
         sb.append(getString(R.string.review_short_text) + ": " + schedluledCardCount + " ");
         sb.append(getString(R.string.id_text) + ": " + getCurrentCard().getId() + " ");
-        if (StringUtils.isNotEmpty(getCurrentCard().getCategory().getName())) {
+        if (!Strings.isNullOrEmpty(getCurrentCard().getCategory().getName())) {
             sb.append(getString(R.string.category_short_text) + ": " + getCurrentCard().getCategory().getName());
         }
         return sb.toString();

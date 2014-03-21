@@ -24,7 +24,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
@@ -35,6 +34,7 @@ import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
 
 import roboguice.fragment.RoboDialogFragment;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Rect;
@@ -52,6 +52,8 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
+
+import com.google.common.base.Strings;
 
 public class QuizLauncherDialogFragment extends RoboDialogFragment {
 
@@ -325,7 +327,7 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
         //  If maxGroupNumberis 0, Math.min(maxGroupSize, 1) will display 0
         quizGroupSizeTitle.setText(getString(R.string.quiz_group_size_text)
                 + " (" + Math.min(maxGroupSize, 1) + "-" + maxGroupSize + ")");
-        if (StringUtils.isEmpty(quizGroupSizeEdit.getText())) {
+        if (Strings.isNullOrEmpty(quizGroupSizeEdit.getText().toString())) {
             quizGroupSizeEdit.setText("" + groupSize);
         }
     }
@@ -340,7 +342,7 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
         //  If maxGroupNumberis 0, Math.min(maxGroupNumber, 1) will display 0
         quizGroupNumberTitle.setText(getString(R.string.quiz_group_number_text)
                 + " (" + Math.min(maxGroupNumber, 1) + "-" + maxGroupNumber + ")");
-        if (StringUtils.isEmpty(quizGroupNumberEdit.getText())) {
+        if (Strings.isNullOrEmpty(quizGroupNumberEdit.getText().toString())) {
             quizGroupNumberEdit.setText("" + groupNumber);
         }
     }
@@ -361,7 +363,7 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
 
         @Override
         public void afterTextChanged(Editable s) {
-            if (StringUtils.isEmpty(s)) {
+            if (s == null || Strings.isNullOrEmpty(s.toString())) {
                 return;
             }
             try {
@@ -395,7 +397,7 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
 
         @Override
         public void afterTextChanged(Editable s) {
-            if (StringUtils.isEmpty(s)) {
+            if (s == null || Strings.isNullOrEmpty(s.toString())) {
                 return;
             }
             try {
@@ -426,7 +428,7 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
         
         @Override
         public void afterTextChanged(Editable s) {
-            if (StringUtils.isEmpty(s)) {
+            if (s == null || Strings.isNullOrEmpty(s.toString())) {
                 return;
             }
             try {
@@ -463,7 +465,7 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
         
         @Override
         public void afterTextChanged(Editable s) {
-            if (StringUtils.isEmpty(s)) {
+            if (s == null || Strings.isNullOrEmpty(s.toString())) {
                 return;
             }
             try {
@@ -528,7 +530,7 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
             public void onReceiveCategory(Category c) {
                 assert c != null : "The category got shouldn't be null.";
                 categoryId = c.getId();
-                if (StringUtils.isEmpty(c.getName())) {
+                if (Strings.isNullOrEmpty(c.getName())) {
                     categoryButton.setText(R.string.uncategorized_text);
                 } else {
                     categoryButton.setText(c.getName());

@@ -19,7 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.aspect;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -34,6 +33,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
+
+import com.google.common.base.Throwables;
 
 @Aspect
 @DeclarePrecedence("org.liberty.android.roboguiceplayground.DisplayErrorAspect,org.liberty.android.roboguiceplayground.RetryAspect")
@@ -76,7 +77,7 @@ public class DisplayErrorAspect {
 
         new AlertDialog.Builder(activity)
             .setTitle(R.string.exception_text)
-            .setMessage(activity.getString(R.string.exception_text) +": " + ExceptionUtils.getRootCauseMessage(e) + "\n" + ExceptionUtils.getStackTrace(e))
+            .setMessage(activity.getString(R.string.exception_text) +": " + Throwables.getRootCause(e) + "\n" + Throwables.getStackTraceAsString(e))
             .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     if (finishActivity) {

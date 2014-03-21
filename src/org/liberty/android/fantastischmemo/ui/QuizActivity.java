@@ -21,7 +21,6 @@ package org.liberty.android.fantastischmemo.ui;
 
 import javax.inject.Inject;
 
-import org.apache.commons.lang3.StringUtils;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
@@ -52,6 +51,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.apis.graphics.FingerPaint;
+import com.google.common.base.Strings;
 
 public class QuizActivity extends QACardActivity {
     public static String EXTRA_CATEGORY_ID = "category_id";
@@ -363,7 +363,7 @@ public class QuizActivity extends QACardActivity {
         sb.append(getString(R.string.quiz_text) + ": " + (totalQuizSize - queueManager.getNewQueueSize()) + "/" + totalQuizSize + " ");
         sb.append(getString(R.string.review_short_text) + ": " + queueManager.getReviewQueueSize()+ " ");
         sb.append(getString(R.string.id_text) + ": " + getCurrentCard().getId() + " ");
-        if (StringUtils.isNotEmpty(getCurrentCard().getCategory().getName())) {
+        if (!Strings.isNullOrEmpty(getCurrentCard().getCategory().getName())) {
             sb.append(getString(R.string.category_short_text) + ": " + getCurrentCard().getCategory().getName());
         }
         return sb.toString();

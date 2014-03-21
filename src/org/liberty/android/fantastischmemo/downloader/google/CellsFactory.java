@@ -23,22 +23,19 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-
 import java.net.URL;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.commons.lang3.StringUtils;
-
-
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
+
+import com.google.common.base.Strings;
+import com.google.common.xml.XmlEscapers;
 
 public class CellsFactory {
 
@@ -88,7 +85,7 @@ public class CellsFactory {
                 if(lastTag.equals("cell")) {
                     cells.addCell(currentRow, currentCol, xpp.getText());
                 }
-                if(lastTag.equals("title") && StringUtils.isEmpty(cells.getWorksheetName())) {
+                if(lastTag.equals("title") && Strings.isNullOrEmpty(cells.getWorksheetName())) {
                     cells.setWorksheetName(xpp.getText());
                 }
             }
@@ -143,7 +140,7 @@ public class CellsFactory {
         payloadBuilder.append("<batch:operation type=\"update\"/>");
         payloadBuilder.append("<id>"+ urlPrefix + "/R" + row + "C" + col + "</id>");
         payloadBuilder.append("<link rel=\"edit\" type=\"application/atom+xml\" href=\"" + urlPrefix + "/R" + row + "C" + col + "\"/>");
-        payloadBuilder.append("<gs:cell row=\"" + row + "\" col=\"" + col + "\" inputValue=\"" + StringEscapeUtils.escapeXml(value) + "\"/>");
+        payloadBuilder.append("<gs:cell row=\"" + row + "\" col=\"" + col + "\" inputValue=\"" + XmlEscapers.xmlAttributeEscaper().escape(value) + "\"/>");
         payloadBuilder.append("</entry>");
         String ret = payloadBuilder.toString();
         payloadBuilder = null;
