@@ -193,7 +193,7 @@ public abstract class OauthAccountActivity extends AMActivity {
                 return;
         	}
 
-            editor.putString(oauthAccessTokenPrefKey, Joiner.on(",").join(accessTokens, ","));
+            editor.putString(oauthAccessTokenPrefKey, Joiner.on(",").join(accessTokens));
             editor.commit();
 
             if (accessTokens == null) {
