@@ -65,7 +65,6 @@
   			android:padding="3dip"/>
         <EditText
             android:id="@+id/entry_last_learn_date"
-            android:inputType="date"
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
             />
