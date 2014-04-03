@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- the theme applied to the application or activity -->
+    <!-- Dark theme based on holo -->
+    <!-- All item name are defined in attrs.xml -->
+    <style name="AnyMemo.Theme.Dark"
+            parent="@style/Theme.AppCompat">
+        <item name="star_theme_dependent_icon" >@drawable/star_dark</item>
+        <item name="gear_theme_dependent_icon" >@drawable/gear_dark</item>
+        <item name="cabinet_theme_dependent_icon" >@drawable/cabinet_dark</item>
+        <item name="download_tab_theme_dependent_icon" >@drawable/download_tab_dark</item>
+        <item name="clock_theme_dependent_icon" >@drawable/clock_dark</item>
+    </style>
+
+    <!-- Light theme based on holo -->
+    <style name="AnyMemo.Theme.Light"
+            parent="@style/Theme.AppCompat.Light">
+        <item name="star_theme_dependent_icon" >@drawable/star_light</item>
+        <item name="gear_theme_dependent_icon" >@drawable/gear_light</item>
+        <item name="cabinet_theme_dependent_icon" >@drawable/cabinet_light</item>
+        <item name="clock_theme_dependent_icon" >@drawable/clock_light</item>
+    </style>
+</resources>

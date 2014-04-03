@@ -28,6 +28,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.TypedValue;
 import android.view.WindowManager;
 
 /*
@@ -95,6 +96,18 @@ public abstract class AMActivity extends RoboActionBarActivity {
 
     public boolean isActivityCreated() {
         return activityCreated;
+    }
+
+    /**
+     * Resolve the attribute of the current theme.
+     *
+     * @param attr the attribute id
+     * @return  the resource id
+     */
+    public int resolveThemeResource(int attr) {
+        TypedValue typedvalueattr = new TypedValue();
+        getTheme().resolveAttribute(attr, typedvalueattr, true);
+        return typedvalueattr.resourceId;
     }
 
     private void updateInterfaceLanguage() {

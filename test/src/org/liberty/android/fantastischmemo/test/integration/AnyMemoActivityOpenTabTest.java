@@ -20,7 +20,6 @@ public class AnyMemoActivityOpenTabTest extends ActivityInstrumentationTestCase2
 
     private Solo solo;
 
-
     public void setUp() throws Exception{
         TestHelper uiTestHelper = new TestHelper(getInstrumentation());
         uiTestHelper.clearPreferences();
@@ -31,14 +30,12 @@ public class AnyMemoActivityOpenTabTest extends ActivityInstrumentationTestCase2
 
         solo.sleep(1000);
         //solo.clickOnText(solo.getString(R.string.open_tab_text));
-
-        solo.clickOnText("Download");
-        solo.clickOnText("Misc");
     }
 
 
     @LargeTest
-    public void testActionListStudy() {
+    public void testTabs() {
+        // No working tests for now.
     }
 
 

@@ -100,19 +100,19 @@ public class AnyMemo extends AMActivity {
         actionBar = getSupportActionBar();
 
         recentTab = actionBar.newTab()
-                .setText(R.string.recent_tab_text)
+                .setIcon(resolveThemeResource(R.attr.clock_theme_dependent_icon))
                 .setTabListener(tabListener);
 
         openTab = actionBar.newTab()
-                .setText(R.string.open_tab_text)
+                .setIcon(resolveThemeResource(R.attr.cabinet_theme_dependent_icon))
                 .setTabListener(tabListener);
 
         downloadTab = actionBar.newTab()
-                .setText(R.string.download_tab_text)
+                .setIcon(resolveThemeResource(R.attr.download_tab_theme_dependent_icon))
                 .setTabListener(tabListener);
 
         miscTab = actionBar.newTab()
-                .setText(R.string.misc_tab_text)
+                .setIcon(resolveThemeResource(R.attr.gear_theme_dependent_icon))
                 .setTabListener(tabListener);
 
         fragments.add(Fragment.instantiate(this, RecentListFragment.class.getName()));

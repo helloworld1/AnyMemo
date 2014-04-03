@@ -22,7 +22,7 @@ android {
 
     defaultConfig {
         versionCode 200
-        versionName "10.4"
+        versionName "10.4.991"
         minSdkVersion 9
         targetSdkVersion 16
         testPackageName "org.liberty.android.fantastischmemo.test"
