@@ -22,10 +22,10 @@ package org.liberty.android.fantastischmemo.ui;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.downloader.DownloaderAnyMemo;
 import org.liberty.android.fantastischmemo.downloader.DownloaderSS;
-import org.liberty.android.fantastischmemo.downloader.QuizletLauncher;
 import org.liberty.android.fantastischmemo.downloader.cram.CramLauncher;
 import org.liberty.android.fantastischmemo.downloader.dropbox.DropboxDBListActivity;
 import org.liberty.android.fantastischmemo.downloader.google.SpreadsheetListScreen;
+import org.liberty.android.fantastischmemo.downloader.quizlet.QuizletLauncher;
 
 import roboguice.fragment.RoboFragment;
 import android.app.Activity;

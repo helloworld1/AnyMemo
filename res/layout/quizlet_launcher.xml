@@ -31,6 +31,12 @@
                 android:layout_weight="1"
                 android:layout_margin="5dp"
                 android:text="@string/quizlet_search_user" />
+            <Button android:id="@+id/quizlet_private_cards"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:layout_margin="5dp"
+                android:text="@string/quizlet_private_cards" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

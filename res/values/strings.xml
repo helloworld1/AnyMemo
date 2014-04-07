@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     <string name="app_name">AnyMemo</string>
     <string name="app_full_name">AnyMemo</string>
@@ -352,7 +352,7 @@
     <string name="loading_auth_text">Authenticating with the server. Please wait...</string>
     <string name="auth_error_text">Authenticate error.</string>
     <string name="locale_italian_text">Italian</string>
-    <string name="upload_gdrive_message">Do you want to upload %s to your Google Drive\'s AnyMemo folder? It may take several minutes if you have more than 1000 cards.</string>
+    <string name="upload_gdrive_messagupload_gdrive_message">Do you want to upload %s to your Google Drive\'s AnyMemo folder? It may take several minutes if you have more than 1000 cards.</string>
     <string name="record_your_memo_text">Record your memo</string>
     <string name="max_recent_list_size_text">Max recent list size</string>
     <string name="recent_summary">Setup the max number of DBs to display in the recent list.</string>
@@ -430,6 +430,8 @@
     <string name="quiz_by_range_text">Quiz by range</string>
     <string name="start_ordinal_text">Start ordinal</string>
     <string name="end_ordinal_text">End ordinal</string>
+    <string name="quizlet_private_cards">User private cards</string>
+
     <string name="click_again_to_delete_text">Click again to delete</string>
     <string name="arabic_text">Arabic</string>
     <string name="unsupported_audio_locale_text">Selected audio language is not available for the current TTS engine.</string>
@@ -445,6 +447,8 @@
     <string name="mark_as_learned_forever_warning_text">This item will never appear for learning. Do you want to mark it as learned forever?</string>
     <string name="show_hide_answers_text">Show/hide answers</string>
     <string name="locale_finnish_text">Finnish</string>
+    <string name="upload_quizlet_message">Do you want to upload %s to your Quizlet account?</string>
+    <string name="quizlet_successfully_uploaded_message">Successfully uploaded to your Quizlet account!</string>
     <string name="conversion_merge_text">Convert and merge</string>
     <string name="conversion_merge_message">The %1$s already exists. Do you want to merge the %2$s into %3$s?</string>
     <string name="button_style_anki">3 normal buttons</string>
