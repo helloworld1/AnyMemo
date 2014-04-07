@@ -12,17 +12,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.widget.EditText;
 
+/**
+ * Input title to search and display card set list.
+ */
 public class QuizletSearchByTitleActivity extends QuizletAccountActivity {
-    private SharedPreferences settings;
-
-    private SharedPreferences.Editor editor;
 
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.cardsets_list_screen);
-        settings = PreferenceManager.getDefaultSharedPreferences(this);
-        editor = settings.edit();
         showSearchTagDialog();
     }
 
@@ -33,21 +31,26 @@ public class QuizletSearchByTitleActivity extends QuizletAccountActivity {
         final EditText et = new EditText(this);
         et.setText(settings.getString(AMPrefKeys.QUIZLET_SAVED_SEARCH, ""));
         new AlertDialog.Builder(this)
-                .setTitle(R.string.search_tag)
-                .setMessage(R.string.quizlet_search_tag_message)
-                .setView(et)
-                .setPositiveButton(R.string.search_text,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,
-                                    int which) {
-                                String title = et.getText().toString();
-                                editor.putString(
-                                        AMPrefKeys.QUIZLET_SAVED_SEARCH, title);
-                                editor.commit();
-                                displaySearchTagFragment(title);
-                            }
-                        }).setNegativeButton(R.string.cancel_text, null)
-                .create().show();
+            .setTitle(R.string.search_tag)
+            .setMessage(R.string.quizlet_search_tag_message)
+            .setView(et)
+            .setPositiveButton(R.string.search_text, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog,
+                    int which) {
+                    String title = et.getText().toString();
+                    editor.putString(AMPrefKeys.QUIZLET_SAVED_SEARCH, title);
+                    editor.commit();
+                    displaySearchTagFragment(title);
+                }
+            })
+            .setNegativeButton(R.string.cancel_text, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog,
+                    int which) {
+                    finish();
+                }
+            })
+            .setCancelable(false)
+            .show();
     }
 
     private void displaySearchTagFragment(String title) {
