@@ -1,5 +1,6 @@
 package org.liberty.android.fantastischmemo.downloader.quizlet;
 
+import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
 
@@ -15,7 +16,10 @@ import android.widget.EditText;
 /**
  * Input title to search and display card set list.
  */
-public class QuizletSearchByTitleActivity extends QuizletAccountActivity {
+public class QuizletSearchByTitleActivity extends AMActivity {
+    private SharedPreferences settings;
+
+    private SharedPreferences.Editor editor;
 
     @Override
     public void onCreate(Bundle bundle) {
