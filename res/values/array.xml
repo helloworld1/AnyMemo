@@ -318,4 +318,11 @@
     <item>QUESTION</item>
     <item>ANSWER</item>
 </string-array>
+
+<string-array name="main_drawer_list_values">
+    <item>@string/recent_tab_text</item>
+    <item>@string/open_tab_text</item>
+    <item>@string/download_tab_text</item>
+    <item>@string/misc_tab_text</item>
+</string-array>
 </resources>

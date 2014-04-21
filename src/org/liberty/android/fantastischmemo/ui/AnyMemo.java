@@ -41,20 +41,27 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class AnyMemo extends AMActivity {
@@ -79,6 +86,8 @@ public class AnyMemo extends AMActivity {
     private Tab downloadTab;
 
     private Tab miscTab;
+
+    private ActionBarDrawerToggle drawerToggle;
 
     // Used to enable fast lookup from index of tab to Tab.
     private List<Tab> tabs = new ArrayList<Tab>(4);
@@ -130,6 +139,8 @@ public class AnyMemo extends AMActivity {
         // to achieve smooth animation.
         initViewPager();
 
+        initDrawer();
+
         actionBar.addTab(recentTab);
         actionBar.addTab(openTab);
         actionBar.addTab(downloadTab);
@@ -141,7 +152,59 @@ public class AnyMemo extends AMActivity {
         prepareStoreage();
         prepareFirstTimeRun();
         prepareNotification();
+    }
 
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the drawer toggle state after onRestoreInstanceState has occurred.
+        drawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Pass any configuration change to the drawer toggles
+        drawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    /**
+     * Initialize the Navigation drawer UI.
+     */
+    private void initDrawer() {
+        String[] actionList = getResources().getStringArray(R.array.main_drawer_list_values);
+        final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ListView drawerList = (ListView) findViewById(R.id.left_drawer);
+
+        // Set the adapter for the list view
+        drawerList.setAdapter(new ArrayAdapter<String>(this,
+                R.layout.drawer_list_item, actionList));
+        // Set the list's click listener
+        drawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mViewPager.setCurrentItem(position);
+                drawerLayout.closeDrawers();
+            }
+        });
+
+        drawerToggle = new ActionBarDrawerToggle(this,
+                drawerLayout,
+                resolveThemeResource(R.attr.drawer_theme_dependent_icon),
+                R.string.open_text,
+                R.string.close_text) {
+            public void onDrawerClosed(View view) {
+                invalidateOptionsMenu();
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                invalidateOptionsMenu();
+            }
+        };
+        drawerLayout.setDrawerListener(drawerToggle);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
     }
 
     private void prepareStoreage() {
@@ -259,6 +322,18 @@ public class AnyMemo extends AMActivity {
         startActivity(intent);
         finish();
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // The action bar home/up action should open or close the drawer.
+        // ActionBarDrawerToggle will take care of this.
+        if (drawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+
+    }
+
 
     public class PagerAdapter extends FragmentPagerAdapter {
 

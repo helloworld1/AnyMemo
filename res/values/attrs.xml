@@ -22,5 +22,6 @@
     <attr name="cabinet_theme_dependent_icon" format="reference"/>
     <attr name="download_tab_theme_dependent_icon" format="reference"/>
     <attr name="clock_theme_dependent_icon" format="reference"/>
+    <attr name="drawer_theme_dependent_icon" format="reference"/>
 </resources>
 

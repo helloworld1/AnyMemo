@@ -458,4 +458,6 @@
     <string name="load_more_text">Load more</string>
     <string name="search_by_title_text">Search by title</string>
     <string name="search_by_title_message">Please enter a title or description to search,\ne.g. Spanish, math etc.</string>
+    <string name="open_text">Open</string>
+    <string name="close_text">Close</string>
 </resources>
