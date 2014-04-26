@@ -19,6 +19,7 @@
         <item name="star_theme_dependent_icon" >@drawable/star_light</item>
         <item name="gear_theme_dependent_icon" >@drawable/gear_light</item>
         <item name="cabinet_theme_dependent_icon" >@drawable/cabinet_light</item>
+        <item name="download_tab_theme_dependent_icon" >@drawable/download_tab_light</item>
         <item name="clock_theme_dependent_icon" >@drawable/clock_light</item>
         <item name="drawer_theme_dependent_icon" >@drawable/drawer_light</item>
     </style>

@@ -194,11 +194,11 @@ public class AnyMemo extends AMActivity {
                 R.string.open_text,
                 R.string.close_text) {
             public void onDrawerClosed(View view) {
-                invalidateOptionsMenu();
+                supportInvalidateOptionsMenu();
             }
 
             public void onDrawerOpened(View drawerView) {
-                invalidateOptionsMenu();
+                supportInvalidateOptionsMenu();
             }
         };
         drawerLayout.setDrawerListener(drawerToggle);
