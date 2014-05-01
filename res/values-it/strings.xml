@@ -227,7 +227,6 @@
     <string name="notification_12hr_text">12 ore</string>
     <string name="notification_24hr_text">Un giorno</string>
     <string name="download_source_anymemo">anymemo.org\n(default)</string>
-    <string name="download_source_fe">FlashcardExchange\n(sperimentale)</string>
     <string name="download_source_ss">StudyStack</string>
     <string name="swap_text">Scambia</string>
     <string name="swapdup_text">Scambia+Duplica</string>
@@ -242,12 +241,10 @@
     <string name="db_name_text">Nome database</string>
     <string name="save_prev_text">Salva+Precedente</string>
     <string name="paint_text">Disegna</string>
-    <string name="flashcardexchange_text">FlashcardExchange</string>
     <string name="search_tag">Ricerca per tag</string>
     <string name="search_user">Ricerca per username</string>
     <string name="upload_wait">Caricamento... Attendere prego. Potrebbe metterci parecchio con un DB grosso.</string>
     <string name="fe_directory_text">Sfoglia le cartelle</string>
-    <string name="fe_search_tag_message">Inserire un tag da cercare,\np.es. Italian, math ecc.</string>
     <string name="fe_search_user_message">Inserire un\'e-mail come login,\np.es. yourname@example.com</string>
     <string name="card_style">Stile schede</string>
     <string name="card_style_double">A doppia faccia</string>
@@ -416,9 +413,6 @@
     <string name="center_right_text">Centra allineando a destra</string>
     <string name="import_mnemosyne2_cards_text">Importa schede Mnemosyne2</string>
     <string name="export_mnemosyne2_cards_text">Esporta schede Mnemosyne2</string>
-    <string name="author_text">Autore</string>
-    <string name="creation_date_text">Data di creazione</string>
-    <string name="card_count_text">Numero scheda</string>
     <string name="card_player_text">Lettore automatico di schede</string>
     <string name="card_player_qa_sleep_interval_text">L\'intervallo fra domanda e risposta è di %d secondi</string>
     <string name="card_player_card_sleep_interval_text">L\'intervallo fra una scheda e l\'altra è di %d secondi</string>

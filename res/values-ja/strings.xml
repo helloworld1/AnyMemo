@@ -225,7 +225,6 @@
     <string name="notification_12hr_text">12時間</string>
     <string name="notification_24hr_text">1日</string>
     <string name="download_source_anymemo">http://anymemo.org (default)</string>
-    <string name="download_source_fe">http://flashcardexchange.com (experimental)</string>
     <string name="download_source_ss">http://studystack.com (experimental)</string>
     <string name="swap_text">交換</string>
     <string name="swapdup_text">交換して複製</string>
@@ -240,12 +239,10 @@
     <string name="db_name_text">データベース名</string>
     <string name="save_prev_text">保存＆前歴</string>
     <string name="paint_text">ペイント</string>
-    <string name="flashcardexchange_text">FlashcardExchange</string>
     <string name="search_tag">タグ検索</string>
     <string name="search_user">ユーザー検索</string>
     <string name="upload_wait">アップロード中…しばらくお待ちください。</string>
     <string name="fe_directory_text">ディレクトリー閲覧</string>
-    <string name="fe_search_tag_message">検索するタグをいれてください。, e.g. Spanish, math and etc.</string>
     <string name="fe_search_user_message">ログインアカウントをいれてください。 例） yourname@example.com.</string>
     <string name="card_style">カードスタイル</string>
     <string name="card_style_double">両面</string>

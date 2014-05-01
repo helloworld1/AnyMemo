@@ -227,7 +227,6 @@
     <string name="notification_12hr_text">12 hours</string>
     <string name="notification_24hr_text">One day</string>
     <string name="download_source_anymemo">anymemo.org\n(default)</string>
-    <string name="download_source_fe">FlashcardExchange\n(experimental)</string>
     <string name="download_source_ss">StudyStack</string>
     <string name="swap_text">Swap</string>
     <string name="swapdup_text">Swap&amp;Dup</string>
@@ -242,12 +241,10 @@
     <string name="db_name_text">Database name</string>
     <string name="save_prev_text">Save&amp;prev</string>
     <string name="paint_text">Paint</string>
-    <string name="flashcardexchange_text">FlashcardExchange</string>
     <string name="search_tag">Search by tag</string>
     <string name="search_user">Search by user</string>
     <string name="upload_wait">Uploading... please wait. It may take several minutes for a large db.</string>
     <string name="fe_directory_text">Browser directories</string>
-    <string name="fe_search_tag_message">Please enter a tag to search,\ne.g. Spanish, math etc.</string>
     <string name="fe_search_user_message">Please enter user email to login,\ne.g. yourname@example.com</string>
     <string name="card_style">Card style</string>
     <string name="card_style_double">Double sided</string>
@@ -352,7 +349,6 @@
     <string name="loading_auth_text">Authenticating with the server. Please wait...</string>
     <string name="auth_error_text">Authenticate error.</string>
     <string name="locale_italian_text">Italian</string>
-    <string name="upload_gdrive_messagupload_gdrive_message">Do you want to upload %s to your Google Drive\'s AnyMemo folder? It may take several minutes if you have more than 1000 cards.</string>
     <string name="record_your_memo_text">Record your memo</string>
     <string name="max_recent_list_size_text">Max recent list size</string>
     <string name="recent_summary">Setup the max number of DBs to display in the recent list.</string>
@@ -416,9 +412,6 @@
     <string name="center_right_text">Center right</string>
     <string name="import_mnemosyne2_cards_text">Import Mnemosyne2 cards</string>
     <string name="export_mnemosyne2_cards_text">Export Mnemosyne2 cards</string>
-    <string name="author_text">Author</string>
-    <string name="creation_date_text">Creation date</string>
-    <string name="card_count_text">Card count</string>
     <string name="card_player_text">Card player</string>
     <string name="card_player_qa_sleep_interval_text">Interval between question and answer is %d sec</string>
     <string name="card_player_card_sleep_interval_text">Interval between each card is %d sec</string>

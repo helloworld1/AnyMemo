@@ -226,7 +226,6 @@
     <string name="notification_12hr_text">12 시간</string>
     <string name="notification_24hr_text">하루</string>
     <string name="download_source_anymemo">http://anymemo.org (default)</string>
-    <string name="download_source_fe">http://flashcardexchange.com (experimental)</string>
     <string name="download_source_ss">http://studystack.com (experimental)</string>
     <string name="swap_text">교환</string>
     <string name="swapdup_text">교환&amp;복사</string>

@@ -224,7 +224,6 @@
     <string name="notification_12hr_text">半天</string>
     <string name="notification_24hr_text">一天</string>
     <string name="download_source_anymemo">http://anymemo.org (默认)</string>
-    <string name="download_source_fe">http://flashcardexchange.com (实验)</string>
     <string name="download_source_ss">http://studystack.com (实验)</string>
     <string name="swap_text">交换</string>
     <string name="swapdup_text">交换且复制</string>
@@ -243,7 +242,6 @@
     <string name="search_user">用户登陆</string>
     <string name="upload_wait">正在上传请稍候。</string>
     <string name="fe_directory_text">浏览目录</string>
-    <string name="fe_search_tag_message">请输入搜索的标签, 比如. Spanish, math.</string>
     <string name="fe_search_user_message">请输入用户email来登陆, 比如yourname@example.com.</string>
     <string name="card_style">卡片样式</string>
     <string name="card_style_double">双面卡片</string>
@@ -411,9 +409,6 @@
     <string name="center_right_text">右中</string>
     <string name="import_mnemosyne2_cards_text">导入Mnemosyne2 cards</string>
     <string name="export_mnemosyne2_cards_text">导出Mnemosyne2 cards</string>
-    <string name="author_text">作者</string>
-    <string name="creation_date_text">创建时间</string>
-    <string name="card_count_text">卡片数量</string>
     <string name="card_player_text">卡片播放器</string>
     <string name="card_player_qa_sleep_interval_text">问题和答案的间隔是%d 秒</string>
     <string name="card_player_card_sleep_interval_text">卡片之间的间隔是%d 秒</string>

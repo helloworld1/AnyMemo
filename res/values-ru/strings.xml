@@ -223,7 +223,6 @@
     <string name="notification_12hr_text">12 часов</string>
     <string name="notification_24hr_text">24 часа</string>
     <string name="download_source_anymemo">anymemo.org\n(по умолчанию)</string>
-    <string name="download_source_fe">FlashcardExchange.com\n(экспериментально)</string>
     <string name="download_source_ss">studystack.com\n(экспериментально)</string>
     <string name="swap_text">Обмен</string>
     <string name="swapdup_text">Обм&amp;Коп</string>
@@ -238,12 +237,10 @@
     <string name="db_name_text">Имя базы</string>
     <string name="save_prev_text">Сохр&amp;См</string>
     <string name="paint_text">Рисовать</string>
-    <string name="flashcardexchange_text">FlashcardExchange</string>
     <string name="search_tag">Поиск по тегам</string>
     <string name="search_user">Поиск по пользователям</string>
     <string name="upload_wait">Заливка... ждите. Может занять несколько минут для больших баз.</string>
     <string name="fe_directory_text">Обозреватель каталогов</string>
-    <string name="fe_search_tag_message">Введите тег поиска, напр. Spanish, math и пр.</string>
     <string name="fe_search_user_message">Введите email пользователя чтобы залогиниться, напр.  yourname@example.com.</string>
     <string name="card_style">Стиль карточек</string>
     <string name="card_style_double">Двухсторонний</string>
@@ -415,9 +412,6 @@
     <string name="card_player_text">Озвучка карточек</string>
     <string name="import_mnemosyne2_cards_text">Импорт Mnemosyne XML2</string>
     <string name="export_mnemosyne2_cards_text">Экспорт Mnemosyne XML2</string>
-    <string name="author_text">Автор</string>
-    <string name="creation_date_text">Дата создания</string>
-    <string name="card_count_text">Счёт карт</string>
     <string name="card_player_notification_title">AnyMemo Озвучка Карточек</string>
     <string name="card_player_notification_text">Озвучка карточек выполняется</string>
     <string name="forget_text">Забыто</string>

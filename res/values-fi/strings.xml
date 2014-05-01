@@ -227,7 +227,6 @@
     <string name="notification_12hr_text">12 tuntia</string>
     <string name="notification_24hr_text">Yksi päivä</string>
     <string name="download_source_anymemo">anymemo.org\n(oletusarvo)</string>
-    <string name="download_source_fe">FlashcardExchange\n(kokeellinen)</string>
     <string name="download_source_ss">studystack.com\n(kokeellinen)</string>
     <string name="swap_text">Vaihda</string>
     <string name="swapdup_text">Vaihda&amp;monista</string>
@@ -242,12 +241,10 @@
     <string name="db_name_text">Tietokannan nimi</string>
     <string name="save_prev_text">Tallenna&amp;edellinen</string>
     <string name="paint_text">Maalaa</string>
-    <string name="flashcardexchange_text">FlashcardExchange</string>
     <string name="search_tag">Etsi tagilla</string>
     <string name="search_user">Etsi käyttäjällä</string>
     <string name="upload_wait">Lähetetään.. ole hyvä ja odota. Suuren tietokannan lähettäminen voi kestää useita minuutteja.</string>
     <string name="fe_directory_text">Selaa hakemistoja</string>
-    <string name="fe_search_tag_message">Ole hyvä ja lisää tagi etsiäksesi, esim. Spanish, Math jne.</string>
     <string name="fe_search_user_message">Ole hyvä ja kirjoita sähköpostiosoite kirjautuaksesi, sinunosoitteesi@esimerkki.fi</string>
     <string name="card_style">Kortin tyyli</string>
     <string name="card_style_double">Kaksipuolinen</string>
@@ -416,9 +413,6 @@
     <string name="center_right_text">Keskitä oikealle</string>
     <string name="import_mnemosyne2_cards_text">Tuo Mnemosyne2 cards</string>
     <string name="export_mnemosyne2_cards_text">Vie Mnemosyne2 cards</string>
-    <string name="author_text">Tekijä</string>
-    <string name="creation_date_text">Luomispäivämäärä</string>
-    <string name="card_count_text">Korttien lukumäärä</string>
     <string name="card_player_text">Korttien "player"</string>
     <string name="card_player_qa_sleep_interval_text">Aikaväli kysymyksen ja vastauksen välillä on %d sekuntia</string>
     <string name="card_player_card_sleep_interval_text">Aikaväli korttien välillä on %d sekuntia</string>

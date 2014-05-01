@@ -232,7 +232,6 @@
     <string name="notification_12hr_text">12 Heures</string>
     <string name="notification_24hr_text">Un jour</string>
     <string name="download_source_anymemo">http://anymemo.org (défault)</string>
-    <string name="download_source_fe">http://flashcardexchange.com (expérimental)</string>
     <string name="download_source_ss">http://studystack.com (expérimental)</string>
     <string name="swap_text">Intervertir</string>
     <string name="swapdup_text">Copier et intervertir</string>

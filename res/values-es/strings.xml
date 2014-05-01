@@ -225,7 +225,6 @@
     <string name="notification_12hr_text">12 horas</string>
     <string name="notification_24hr_text">Un día</string>
     <string name="download_source_anymemo">anymemo.org\n(predeterminado)</string>
-    <string name="download_source_fe">FlashcardExchange\n(experimental)</string>
     <string name="download_source_ss">studystack.com\n(experimental)</string>
     <string name="swap_text">Cambiar</string>
     <string name="swapdup_text">Cambiar&amp;Dup</string>
@@ -240,12 +239,10 @@
     <string name="db_name_text">Nombre de base de datos</string>
     <string name="save_prev_text">Guardar y Ver</string>
     <string name="paint_text">Pintar</string>
-    <string name="flashcardexchange_text">FlashcardExchange</string>
     <string name="search_tag">Buscar por etiqueta</string>
     <string name="search_user">Buscar por usuario</string>
     <string name="upload_wait">Subiendo... Espere, por favor.</string>
     <string name="fe_directory_text">Navegar directorios</string>
-    <string name="fe_search_tag_message">Por favor, escriba una etiqueta para buscar, p.ej. inglés, matemáticas etc.</string>
     <string name="fe_search_user_message">Por favor, escriba su correo electrónico para entrar, p.ej. sunombre@ejemplo.es</string>
     <string name="card_style">Estilo de tarjeta</string>
     <string name="card_style_double">Dos caras</string>
