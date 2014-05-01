@@ -3,9 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.liberty.android.fantastischmemo"
     android:installLocation="auto">
+    <uses-sdk
+        android:minSdkVersion="9"
+        android:targetSdkVersion="16" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
     
     <supports-screens android:anyDensity="true"/>
 
@@ -148,12 +153,12 @@
             android:name=".service.ConvertIntentService" />
         <provider
             android:name=".provider.CardProvider"
-            android:authorities="org.liberty.android.fantastischmemo.cardprovider"
+            android:authorities="${packageName}.cardprovider"
             android:exported="true"
             android:multiprocess="true" />
         <provider
             android:name=".provider.DatabasesProvider"
-            android:authorities="org.liberty.android.fantastischmemo.databasesprovider"
+            android:authorities="${packageName}.databasesprovider"
             android:exported="true"
             android:multiprocess="true" />
     </application>

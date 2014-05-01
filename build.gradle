@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.9.+'
+        classpath 'com.android.tools.build:gradle:0.10.+'
     }
 }
 
@@ -19,12 +19,11 @@ repositories {
 android {
     compileSdkVersion 16
     buildToolsVersion "19.0.0"
+    useOldManifestMerger false
 
     defaultConfig {
         versionCode 202
         versionName "10.4.991"
-        minSdkVersion 9
-        targetSdkVersion 16
         testPackageName "org.liberty.android.fantastischmemo.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
     }
