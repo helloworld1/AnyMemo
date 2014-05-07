@@ -29,8 +29,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.aspect.CheckNullArgs;
-import org.liberty.android.fantastischmemo.aspect.LogInvocation;
 import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Setting;
@@ -42,6 +40,7 @@ import roboguice.util.Ln;
 
 import android.content.Context;
 
+import com.google.common.base.Preconditions;
 import com.google.inject.assistedinject.Assisted;
 
 /*
@@ -79,13 +78,13 @@ public class CardTTSUtil {
      * This will speak the question of the card and will not
      * set a callback for speaking completion.
      */
-    @CheckNullArgs
     public void speakCardQuestion(Card card) {
+        Preconditions.checkNotNull(card);
         speakCardQuestion(card, null);
     }
 
-    @CheckNullArgs(argIndexToCheck = {0})
     public void speakCardQuestion(Card card, AnyMemoTTS.OnTextToSpeechCompletedListener onTextToSpeechCompletedListener) {
+        Preconditions.checkNotNull(card);
         stopSpeak();
         questionTTS.sayText(card.getQuestion(), onTextToSpeechCompletedListener);
     }
@@ -94,13 +93,13 @@ public class CardTTSUtil {
      * This will speak the answer of the card and will not
      * set a callback for speaking completion.
      */
-    @CheckNullArgs
     public void speakCardAnswer(Card card) {
+        Preconditions.checkNotNull(card);
         speakCardAnswer(card, null);
     }
 
-    @CheckNullArgs(argIndexToCheck = {0})
     public void speakCardAnswer(Card card, AnyMemoTTS.OnTextToSpeechCompletedListener onTextToSpeechCompletedListener) {
+        Preconditions.checkNotNull(card);
         stopSpeak();
         answerTTS.sayText(card.getAnswer(), onTextToSpeechCompletedListener);
     }
@@ -113,7 +112,6 @@ public class CardTTSUtil {
     /*
      * Release the TTSUtil. This must be called explicitly.
      */
-    @LogInvocation
     public void release() {
         if (dbOpenHelper != null) {
             AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);

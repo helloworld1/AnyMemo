@@ -24,8 +24,6 @@ import javax.inject.Inject;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.aspect.CheckNullArgs;
-import org.liberty.android.fantastischmemo.aspect.LogInvocation;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.service.cardplayer.CardPlayerContext;
@@ -45,6 +43,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
+
+import com.google.common.base.Preconditions;
 
 public class CardPlayerService extends RoboService {
 
@@ -90,7 +90,6 @@ public class CardPlayerService extends RoboService {
     // Note, it is recommended for service binding in a thread different
     // from UI thread. The initialization like DAO creation is quite heavy
     @Override
-    @LogInvocation
     public IBinder onBind(Intent intent) {
         handler = new Handler();
         Bundle extras = intent.getExtras();
@@ -115,13 +114,11 @@ public class CardPlayerService extends RoboService {
     }
 
     @Override
-    @LogInvocation
     public void onRebind(Intent intent) {
         super.onRebind(intent);
     }
 
     @Override
-    @LogInvocation
     public int onStartCommand(Intent intent, int flags, int startId) {
         // We want this service to continue running until it is explicitly
         // stopped, so return sticky.
@@ -129,7 +126,6 @@ public class CardPlayerService extends RoboService {
     }
 
     @Override
-    @LogInvocation
     public boolean onUnbind(Intent intent) {
         AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
         cardTTSUtil.release();
@@ -140,13 +136,12 @@ public class CardPlayerService extends RoboService {
     }
 
     @Override
-    @LogInvocation
     public void onDestroy() {
         super.onDestroy();
     }
 
-    @CheckNullArgs
     public void startPlaying(Card startCard) {
+        Preconditions.checkNotNull(startCard);
         // Always to create a new context if we start playing to ensure it is playing
         // from a clean state.
         reset();

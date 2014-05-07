@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-import org.liberty.android.fantastischmemo.aspect.LogInvocation;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
@@ -252,7 +251,6 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
         update(c);
     }
 
-    @LogInvocation
     public List<Card> getCardsForReview(Category filterCategory, Iterable<Card> exclusion, int limit) {
         try {
             LearningDataDao learningDataDao = getHelper().getLearningDataDao();
@@ -297,7 +295,6 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
         }
     }
 
-    @LogInvocation
     public List<Card> getNewCards(Category filterCategory, Iterable<Card> exclusion, int limit) {
         try {
             LearningDataDao learningDataDao = getHelper().getLearningDataDao();

@@ -20,15 +20,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import java.util.HashMap;
-
 import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.aspect.CheckNullArgs;
-import org.liberty.android.fantastischmemo.aspect.LogInvocation;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
@@ -56,6 +53,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.google.common.base.Preconditions;
 
 public class PreviewEditActivity extends QACardActivity {
     private final int ACTIVITY_EDIT = 11;
@@ -191,7 +190,6 @@ public class PreviewEditActivity extends QACardActivity {
     }
 
     @Override
-    @LogInvocation
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -565,16 +563,17 @@ public class PreviewEditActivity extends QACardActivity {
         }
     }
 
-    @CheckNullArgs
     protected void gotoCard(Card card) {
+        Preconditions.checkNotNull(card);
+
         setCurrentCard(card);
 
         updateCardFrontSide();
         updateTitle();
     }
 
-    @CheckNullArgs
     private void deleteCard(final Card cardToDelete){
+        Preconditions.checkNotNull(cardToDelete);
         new AlertDialog.Builder(this)
             .setTitle(getString(R.string.delete_text))
             .setMessage(getString(R.string.delete_warning))
@@ -649,8 +648,8 @@ public class PreviewEditActivity extends QACardActivity {
     }
 
 
-    @CheckNullArgs
     private void searchCard(String text) {
+        Preconditions.checkNotNull(text);
         SearchCardTask task = new SearchCardTask();
         task.execute(text);
     }

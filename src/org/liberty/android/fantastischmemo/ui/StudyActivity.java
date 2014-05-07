@@ -24,7 +24,6 @@ import java.util.HashMap;
 import javax.inject.Inject;
 
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.aspect.LogInvocation;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
@@ -587,9 +586,6 @@ public class StudyActivity extends QACardActivity {
         getSupportFragmentManager().findFragmentByTag("CategoryEditDialog");
     }
 
-
-
-    @LogInvocation
     private void setupGradeButtons() {
         gradeButtonsFragment = new GradeButtonsFragment();
         Bundle args = new Bundle();

@@ -97,7 +97,10 @@ configurations {
     ajInpath
 }
 
-ext.aspectjVersion = '1.7.4'
+ext {
+    aspectjVersion = '1.7.4'
+    enableAspects = false
+}
 
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
@@ -137,6 +140,11 @@ dependencies {
 android.applicationVariants.all { variant ->
 
     variant.javaCompile.doLast {
+        // Check whether ext.enableAspects is true
+        if (!enableAspects) {
+            logger.info('Aspects are disabled in the build')
+            return;
+        }
         // Find the android.jar and add to iajc classpath
         def androidSdk = android.adbExe.parent + "/../platforms/" + android.compileSdkVersion + "/android.jar"
 	println 'Android SDK android.jar path: ' + androidSdk

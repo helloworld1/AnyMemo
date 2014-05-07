@@ -20,7 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.aspect.CheckNullArgs;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.domain.Card;
@@ -36,6 +35,8 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.FragmentTransaction;
+
+import com.google.common.base.Preconditions;
 
 public class CardPlayerActivity extends QACardActivity {
     public static final String EXTRA_START_CARD_ID = "start_card_id";
@@ -167,8 +168,8 @@ public class CardPlayerActivity extends QACardActivity {
             .show();
     }
 
-    @CheckNullArgs
     protected void gotoCard(Card card) {
+        Preconditions.checkNotNull(card);
         setCurrentCard(card);
 
         updateCardFrontSide();
