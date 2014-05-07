@@ -62,8 +62,9 @@ public abstract class QuizletAccountActivity extends OauthAccountActivity {
         conn.addRequestProperty("Content-Type",
                 "application/x-www-form-urlencoded; charset=UTF-8");
         // Add the Basic Authorization item
-        conn.addRequestProperty("Authorization", "Basic "
-                + encodedClientIdAndSecret);
+        conn.setRequestProperty("Authorization", "Basic " + encodedClientIdAndSecret);
+        conn.setRequestProperty("Accept-Encoding", "identity");
+
         conn.setRequestMethod("POST");
         conn.setDoInput(true);
         conn.setDoOutput(true);
@@ -76,7 +77,8 @@ public abstract class QuizletAccountActivity extends OauthAccountActivity {
         out.close();
 
         if (conn.getResponseCode() / 100 >= 3) {
-            Ln.v("Error response for: " + url1 + " is "
+            Ln.e("Http response code: " + conn.getResponseCode() + " response message: " + conn.getResponseMessage());
+            Ln.e("Error response for: " + url1 + " is "
                     + new String(IOUtils.toByteArray(conn.getErrorStream())));
             throw new IOException("Response code: " + conn.getResponseCode());
         }

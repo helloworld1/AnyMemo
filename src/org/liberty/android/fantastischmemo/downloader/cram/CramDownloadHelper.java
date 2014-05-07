@@ -95,7 +95,7 @@ public class CramDownloadHelper {
             JSONArray setsArray = jsonObject.getJSONArray("sets");
             return parseSetsJSONArray(setsArray);
         } catch(JSONException e) {
-            throw new IOException(e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -120,7 +120,7 @@ public class CramDownloadHelper {
             JSONArray setsArray = jsonObject.getJSONArray("results");
             return parseSetsJSONArray(setsArray);
         } catch(JSONException e) {
-            throw new IOException(e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -206,7 +206,7 @@ public class CramDownloadHelper {
             }
         } catch (JSONException e) {
             Ln.e(e, "Error parsing response string: " + responseString);
-            throw new IOException(e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -256,7 +256,7 @@ public class CramDownloadHelper {
             }
             return itemList;
         } catch (JSONException e) {
-            throw new IOException(e);
+            throw new RuntimeException(e);
         }
     }
 }

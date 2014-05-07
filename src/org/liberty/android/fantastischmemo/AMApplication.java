@@ -50,9 +50,6 @@ public class AMApplication extends Application {
         super.onCreate();
         currentApplicationContext = this;
 
-        // The following line triggers the initialization of ACRA
-        //ACRA.init(this);
-
         // HTTP connection reuse which was buggy pre-froyo
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {

@@ -240,7 +240,7 @@ class QuizletDownloadHelper {
             JSONArray setsArray = jsonObject.getJSONArray("sets");
             return parseSetsJSONArray(setsArray);
         } catch (JSONException e) {
-            throw new IOException(e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -271,7 +271,7 @@ class QuizletDownloadHelper {
             JSONArray setsArray = jsonObject.getJSONArray("sets");
             return parseSetsJSONArray(setsArray);
         } catch (JSONException e) {
-            throw new IOException(e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -307,7 +307,7 @@ class QuizletDownloadHelper {
             }
             return itemList;
         } catch (JSONException e) {
-            throw new IOException(e);
+            throw new RuntimeException(e);
         }
     }
 
