@@ -61,9 +61,9 @@ public abstract class QuizletAccountActivity extends OauthAccountActivity {
         HttpsURLConnection conn = (HttpsURLConnection) url1.openConnection();
         conn.addRequestProperty("Content-Type",
                 "application/x-www-form-urlencoded; charset=UTF-8");
+
         // Add the Basic Authorization item
-        conn.setRequestProperty("Authorization", "Basic " + encodedClientIdAndSecret);
-        conn.setRequestProperty("Accept-Encoding", "identity");
+        conn.addRequestProperty("Authorization", "Basic " + encodedClientIdAndSecret);
 
         conn.setRequestMethod("POST");
         conn.setDoInput(true);
