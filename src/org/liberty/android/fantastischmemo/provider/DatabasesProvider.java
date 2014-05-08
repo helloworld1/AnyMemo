@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 
 import org.liberty.android.fantastischmemo.AMEnv;
+import org.liberty.android.fantastischmemo.BuildConfig;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -37,7 +38,7 @@ import android.net.Uri;
  */
 public class DatabasesProvider extends ContentProvider {
 
-    public static final String AUTHORITY = "org.liberty.android.fantastischmemo.databasesprovider";
+    public static final String AUTHORITY = BuildConfig.PACKAGE_NAME + ".databasesprovider";
 
     @Override
     public int delete(Uri arg0, String arg1, String[] arg2) {

@@ -27,6 +27,7 @@ import java.util.List;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.BuildConfig;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 
@@ -40,7 +41,7 @@ import android.util.Log;
 
 public class CardProvider extends ContentProvider {
 
-    public static final String AUTHORITY = "org.liberty.android.fantastischmemo.cardprovider";
+    public static final String AUTHORITY = BuildConfig.PACKAGE_NAME + ".cardprovider";
 
     private static final String TAG = CardProvider.class.getName();
 
