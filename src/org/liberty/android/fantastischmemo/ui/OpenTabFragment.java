@@ -31,6 +31,8 @@ import android.support.v4.app.FragmentActivity;
 public class OpenTabFragment extends FileBrowserFragment {
     Activity mActivity;
 
+    public OpenTabFragment() { }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);

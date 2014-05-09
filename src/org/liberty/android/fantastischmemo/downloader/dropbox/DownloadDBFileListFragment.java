@@ -41,6 +41,8 @@ public class DownloadDBFileListFragment extends AbstractDownloaderFragment {
 
     public static final String EXTRA_AUTH_TOKEN_SECRET = "autoTokenSecret";
 
+    public DownloadDBFileListFragment() { }
+
     @Inject
     public void setDownloadHelperFactory(
             DropboxDownloadHelperFactory downloadHelperFactory) {

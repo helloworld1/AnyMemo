@@ -64,6 +64,8 @@ public class OpenActionsFragment extends RoboDialogFragment {
 
     private RecentListUtil recentListUtil;
 
+    public OpenActionsFragment() { }
+
     @Inject
     public void setShareUtil(ShareUtil shareUtil) {
         this.shareUtil = shareUtil;

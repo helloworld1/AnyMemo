@@ -46,6 +46,8 @@ public class ConverterFragment extends FileBrowserFragment {
 
     private AMFileUtil amFileUtil;
 
+    public ConverterFragment() { }
+
     @Inject
     public void setAmFileUtil(AMFileUtil amFileUtil) {
         this.amFileUtil = amFileUtil;

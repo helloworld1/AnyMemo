@@ -118,6 +118,8 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
 
     private Map<CompoundButton, View> radioButtonSettingsMapping;
 
+    public QuizLauncherDialogFragment() { }
+
     @Inject
     public void setAmPrefUtil(AMPrefUtil amPrefUtil) {
         this.amPrefUtil = amPrefUtil;

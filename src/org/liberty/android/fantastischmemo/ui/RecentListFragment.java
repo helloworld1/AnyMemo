@@ -68,6 +68,8 @@ public class RecentListFragment extends RoboFragment {
 
     private DatabaseUtil databaseUtil;
 
+    public RecentListFragment() { }
+
     @Inject
     public void setRecentListUtil(RecentListUtil recentListUtil) {
         this.recentListUtil = recentListUtil;

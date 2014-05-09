@@ -73,6 +73,8 @@ public class GestureSelectionDialogFragment extends RoboDialogFragment {
 
     private Map<String, String> gestureNameDescriptionMap = Collections.emptyMap();
 
+    public GestureSelectionDialogFragment() { }
+
     @Inject
     public void setAmUiUtil(AMUiUtil amUiUtil) {
         this.amUiUtil = amUiUtil;

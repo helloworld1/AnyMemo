@@ -40,6 +40,8 @@ public class AudioRecorderFragment extends RoboDialogFragment {
 
     private AudioRecorderResultListener audioRecorderResultListener;
 
+    public AudioRecorderFragment() { }
+
     private View.OnClickListener buttonListener = new View.OnClickListener(){
         public void onClick(View v) {
             if (v == mRecordButton) {

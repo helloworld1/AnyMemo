@@ -97,6 +97,8 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
 
     private RecentListUtil recentListUtil;
 
+    public FileBrowserFragment() { }
+
     @Inject
     public void setAmFileUtil(AMFileUtil amFileUtil) {
         this.amFileUtil = amFileUtil;

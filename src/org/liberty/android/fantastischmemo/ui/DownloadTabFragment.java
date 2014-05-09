@@ -48,6 +48,8 @@ public class DownloadTabFragment extends RoboFragment implements View.OnClickLis
     private View googleButton;
     private Activity mActivity;
 
+    public DownloadTabFragment() { }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);

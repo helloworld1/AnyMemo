@@ -83,6 +83,8 @@ public class CardFragment extends RoboFragment {
 
     private String[] imageSearchPaths = {AMEnv.DEFAULT_IMAGE_PATH};
 
+    public CardFragment() { }
+
     @Inject
     public void setCardTextUtilFactory(CardTextUtilFactory cardTextUtilFactory) {
         this.cardTextUtilFactory = cardTextUtilFactory;

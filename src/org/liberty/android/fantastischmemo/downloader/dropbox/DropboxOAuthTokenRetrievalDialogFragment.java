@@ -41,6 +41,10 @@ public final class DropboxOAuthTokenRetrievalDialogFragment extends OauthAccessC
 
     private String oauthTokenSecret = null;
 
+    public DropboxOAuthTokenRetrievalDialogFragment() {
+
+    }
+
     @Override
     protected void requestToken() throws IOException {
         HttpClient httpClient = new DefaultHttpClient();

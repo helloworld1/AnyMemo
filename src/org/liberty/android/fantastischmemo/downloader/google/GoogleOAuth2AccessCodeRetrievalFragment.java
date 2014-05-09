@@ -32,6 +32,8 @@ public final class GoogleOAuth2AccessCodeRetrievalFragment extends OauthAccessCo
 
     private final static String TAG = "GoogleAuthFragment";
 
+    public GoogleOAuth2AccessCodeRetrievalFragment() { }
+
     @Override
     protected void requestToken() throws IOException {
         // Do nothing.

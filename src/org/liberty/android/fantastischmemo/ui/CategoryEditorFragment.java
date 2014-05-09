@@ -47,6 +47,7 @@ public class CategoryEditorFragment extends RoboDialogFragment {
     private CategoryEditorResultListener resultListener;
     private AnyMemoDBOpenHelper dbOpenHelper;
 
+    public CategoryEditorFragment() { }
 
     @Override
     public void onAttach(Activity activity) {

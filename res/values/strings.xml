@@ -346,6 +346,7 @@
     <string name="logout_text">Logout</string>
     <string name="successfully_uploaded_text">Successfully uploaded</string>
     <string name="gdrive_successfully_uploaded_message">Successfully uploaded to AnyMemo folder in your Google Drive</string>
+    <string name="upload_gdrive_message">Do you want to upload %s to your Google Drive\'s AnyMemo folder? It may take several minutes if you have more than 1000 cards.</string>
     <string name="loading_auth_text">Authenticating with the server. Please wait...</string>
     <string name="auth_error_text">Authenticate error.</string>
     <string name="locale_italian_text">Italian</string>

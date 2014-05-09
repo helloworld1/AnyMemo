@@ -57,6 +57,8 @@ public class CardPlayerFragment extends RoboFragment {
 
     private Option option;
 
+    public CardPlayerFragment() { }
+
     @Inject
     public void setOption(Option option) {
         this.option = option;

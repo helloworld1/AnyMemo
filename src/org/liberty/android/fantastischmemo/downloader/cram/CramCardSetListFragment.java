@@ -61,6 +61,8 @@ public class CramCardSetListFragment extends AbstractDownloaderFragment {
 
     private boolean isLastPage = true;
 
+    public CramCardSetListFragment() { }
+
     @Inject
     public void setCramDownloadHelper(CramDownloadHelper cramDownloadHelper) {
         this.cramDownloadHelper = cramDownloadHelper;

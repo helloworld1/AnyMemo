@@ -87,6 +87,8 @@ public class MiscTabFragment extends RoboFragment implements View.OnClickListene
     private View helpButton;
     private View aboutButton;
 
+    public MiscTabFragment() { }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);

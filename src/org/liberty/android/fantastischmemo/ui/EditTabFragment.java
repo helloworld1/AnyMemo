@@ -27,9 +27,12 @@ import android.app.Activity;
 import android.content.Intent;
 
 public class EditTabFragment extends FileBrowserFragment {
+
     Activity mActivity;
 
     private RecentListUtil recentListUtil;
+
+    public EditTabFragment() { }
 
     @Inject
     public void setRecentListUtil(RecentListUtil recentListUtil) {

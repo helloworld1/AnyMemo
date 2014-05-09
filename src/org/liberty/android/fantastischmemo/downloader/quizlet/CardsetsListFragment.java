@@ -39,6 +39,8 @@ public class CardsetsListFragment extends AbstractDownloaderFragment {
 
     private boolean isLastPage = true;
 
+    public CardsetsListFragment() { }
+
     @Inject
     public void setQuizletDownloadHelper(
             QuizletDownloadHelper quizletDownloadHelper) {

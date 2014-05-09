@@ -54,6 +54,8 @@ public class FlipableCardFragment extends RoboFragment {
 
     private ViewPager cardPager;
 
+    public FlipableCardFragment() { }
+
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);

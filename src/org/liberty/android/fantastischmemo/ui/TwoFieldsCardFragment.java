@@ -91,6 +91,8 @@ public class TwoFieldsCardFragment extends RoboFragment {
 
     private int field2InitialPosition = 0;
 
+    public TwoFieldsCardFragment() { }
+
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);

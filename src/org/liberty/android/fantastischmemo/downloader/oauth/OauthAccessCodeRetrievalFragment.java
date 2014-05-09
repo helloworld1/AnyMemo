@@ -54,6 +54,8 @@ public abstract class OauthAccessCodeRetrievalFragment extends RoboDialogFragmen
 
     private LinearLayout rootView;
 
+    public OauthAccessCodeRetrievalFragment() { }
+
     // Return the URL that show the web login
     protected abstract String getLoginUrl();
 

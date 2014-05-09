@@ -40,6 +40,8 @@ public class SpreadsheetListFragment extends AbstractDownloaderFragment {
 
     private GoogleDriveDownloadHelper downloadHelper;
 
+    public SpreadsheetListFragment() { }
+
     @Inject
     public void setDownloadHelperFactory(
             GoogleDriveDownloadHelperFactory downloadHelperFactory) {

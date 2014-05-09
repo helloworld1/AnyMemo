@@ -86,6 +86,8 @@ public class GradeButtonsFragment extends RoboFragment {
     // The default button titles from the string
     private CharSequence[] defaultGradeButtonTitles = new CharSequence[6];
 
+    public GradeButtonsFragment() { }
+
     @Inject
     public void setScheduler(Scheduler scheduler) {
         this.scheduler = scheduler;

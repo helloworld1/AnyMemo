@@ -40,7 +40,6 @@ public class CardPlayerSettingDialogFragment extends DialogFragment{
     private static final int DEFAULT_QA_SLEEP_TIME_IN_SEC = 1;
     private static final int DEFAULT_CARD_SLEEP_TIME_IN_SEC = 1;
 
-
     private SeekBar seekBarQA;
     private TextView textViewQA;
     private SeekBar seekBarCard;
@@ -51,6 +50,8 @@ public class CardPlayerSettingDialogFragment extends DialogFragment{
     private SharedPreferences settings;
     private SharedPreferences.Editor editor;
     private Activity mActivity;
+
+    public CardPlayerSettingDialogFragment() { }
 
     public static CardPlayerSettingDialogFragment newInstance(int title) {
         CardPlayerSettingDialogFragment frag = new CardPlayerSettingDialogFragment();
