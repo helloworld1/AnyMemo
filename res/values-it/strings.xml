@@ -424,6 +424,7 @@
     <string name="quiz_by_range_text">Quiz selezionati per intervallo</string>
     <string name="start_ordinal_text">Numero d\'ordine del quiz di partenza</string>
     <string name="end_ordinal_text">Numero d\'ordine del quiz finale</string>
+    <string name="quizlet_private_cards">Schede private</string>
     <string name="click_again_to_delete_text">Clicca di nuovo per cancellare</string>
     <string name="arabic_text">Arabo</string>
     <string name="unsupported_audio_locale_text">La lingua selezionata per l\'audio non è disponibile per il sintetizzatore vocale (TTS) corrente.</string>
@@ -439,6 +440,8 @@
     <string name="mark_as_learned_forever_warning_text">Questo elemento non apparirà mai nell\'apprendimento. Sicuro di volerlo marcare come imparato per sempre?</string>
     <string name="show_hide_answers_text">Mostra/nascondi le risposte</string>
     <string name="locale_finnish_text">Finlandese</string>
+    <string name="upload_quizlet_message">Vuoi caricare %s nel tuo account Quizlet?</string>
+    <string name="quizlet_successfully_uploaded_message">Caricato correttamente nel tuo account Quizlet!</string>
     <string name="conversion_merge_text">Converti e unisci</string>
     <string name="conversion_merge_message">%1$s esiste già. Vuoi unire %2$s e %3$s?</string>
     <string name="button_style_anki">3 pulsanti normali</string>
@@ -448,4 +451,6 @@
     <string name="load_more_text">Caricane ancora</string>
     <string name="search_by_title_text">Cerca per titolo</string>
     <string name="search_by_title_message">Inserisci un titolo o una descrizione da cercare,\np.es. spagnolo, matematica ecc.</string>
+    <string name="open_text">Apri</string>
+    <string name="close_text">Chiudi</string>
 </resources>
