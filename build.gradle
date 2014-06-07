@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.10.+'
+        classpath 'com.android.tools.build:gradle:0.11.+'
         classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.10.+'
     }
 }
@@ -28,7 +28,7 @@ android {
         versionName "10.4.991"
         minSdkVersion 8
         targetSdkVersion 19
-        testPackageName "org.liberty.android.fantastischmemo.test"
+        testApplicationId "org.liberty.android.fantastischmemo.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
     }
 
@@ -40,10 +40,10 @@ android {
 
     productFlavors {
         free {
-            packageName "org.liberty.android.fantastischmemo"
+            applicationId "org.liberty.android.fantastischmemo"
         }
         pro {
-            packageName "org.liberty.android.fantastischmemopro"
+            applicationId "org.liberty.android.fantastischmemopro"
         }
     }
 
