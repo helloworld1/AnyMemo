@@ -24,7 +24,7 @@ android {
     useOldManifestMerger false
 
     defaultConfig {
-        versionCode 202
+        versionCode 203
         versionName "10.4.991"
         minSdkVersion 8
         targetSdkVersion 19
@@ -125,7 +125,7 @@ dependencies {
     }
     compile 'commons-io:commons-io:2.4'
 
-    compile 'com.google.guava:guava:16.0.1'
+    compile 'com.google.guava:guava:17.0'
 
     androidTestCompile 'com.google.dexmaker:dexmaker:1.0'
     androidTestCompile ('com.google.dexmaker:dexmaker-mockito:1.0') {
