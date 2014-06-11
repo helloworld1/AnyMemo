@@ -115,6 +115,7 @@
     <string name="about_version">История версий</string>
     <string name="what_is_new">Установлена новая версия</string>
     <string name="downloader_categories">Категории</string>
+
     <string name="interface_locale_title">Язык интерфейса</string>
     <string name="interface_locale_summary">Выбор языка интерфейса. Требуется перезагрузка.</string>
     <string name="settings_typeface_question">Собственный шрифт вопроса (TTF)</string>
@@ -421,6 +422,7 @@
     <string name="start_ordinal_text">Начало диапазона</string>
     <string name="end_ordinal_text">Конец диапазона</string>
     <string name="quizlet_private_cards">Личные карты пользователя</string>
+    
     <string name="click_again_to_delete_text">Кликните снова чтобы удалить</string>
     <string name="arabic_text">Арабский</string>
     <string name="unsupported_audio_locale_text">Выбранный язык аудио недоступен для текущего TTS движка.</string>
@@ -443,7 +445,7 @@
     <string name="button_style_anki">3 обычных</string>
     <string name="button_style_mnemosyne">6 маленьких</string>
     <string name="button_style_anymemo">6 обычных</string>
-    <string name="download_source_cram">Cram</string>
+    <string name="download_source_cram">Зубрёжка</string>
     <string name="load_more_text">Загрузить больше</string>
     <string name="search_by_title_text">Поиск по названиям</string>
     <string name="search_by_title_message">Введите название или описание для поиска,\nнапример Испанский, математика и т.д.</string>
