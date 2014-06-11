@@ -342,10 +342,10 @@
     <string name="logout_text">Выход</string>
     <string name="successfully_uploaded_text">Залито успешно</string>
     <string name="gdrive_successfully_uploaded_message">Успешно залито в AnyMemo каталог в вашем Google Drive</string>
+    <string name="upload_gdrive_message">Хотите залить %s в ваш AnyMemo каталог в Google Drive? Может занять несколько минут, если карточек более 1000.</string>
     <string name="loading_auth_text">Авторизация на сервере. Ждите...</string>
     <string name="auth_error_text">Ошибка авторизации.</string>
     <string name="locale_italian_text">Итальянский</string>
-    <string name="upload_gdrive_message">Хотите залить %s в ваш AnyMemo каталог в Google Drive? Может занять несколько минут, если карточек более 1000.</string>
     <string name="record_your_memo_text">Запись звука</string>
     <string name="max_recent_list_size_text">Размер списка Недавние</string>
     <string name="recent_summary">Задать максимальное количество баз в списке Недавние.</string>
@@ -407,11 +407,11 @@
     <string name="share_text">Передать</string>
     <string name="center_left_text">Слева по центру</string>
     <string name="center_right_text">Справа по центру</string>
-    <string name="card_player_qa_sleep_interval_text">Интервал между вопросом и ответом %d сек</string>
-    <string name="card_player_card_sleep_interval_text">Интервал между карточками %d сек</string>
-    <string name="card_player_text">Озвучка карточек</string>
     <string name="import_mnemosyne2_cards_text">Импорт Mnemosyne XML2</string>
     <string name="export_mnemosyne2_cards_text">Экспорт Mnemosyne XML2</string>
+    <string name="card_player_text">Озвучка карточек</string>
+    <string name="card_player_qa_sleep_interval_text">Интервал между вопросом и ответом %d сек</string>
+    <string name="card_player_card_sleep_interval_text">Интервал между карточками %d сек</string>
     <string name="card_player_notification_title">AnyMemo Озвучка Карточек</string>
     <string name="card_player_notification_text">Озвучка карточек выполняется</string>
     <string name="forget_text">Забыто</string>
@@ -420,6 +420,7 @@
     <string name="quiz_by_range_text">Опрос по диапазону</string>
     <string name="start_ordinal_text">Начало диапазона</string>
     <string name="end_ordinal_text">Конец диапазона</string>
+    <string name="quizlet_private_cards">Личные карты пользователя</string>
     <string name="click_again_to_delete_text">Кликните снова чтобы удалить</string>
     <string name="arabic_text">Арабский</string>
     <string name="unsupported_audio_locale_text">Выбранный язык аудио недоступен для текущего TTS движка.</string>
@@ -435,6 +436,8 @@
     <string name="mark_as_learned_forever_warning_text">Этот объект никогда не появится для обучения. Хотите пометить его как выучено навсегда?</string>
     <string name="show_hide_answers_text">Показать/спрятать ответы</string>
     <string name="locale_finnish_text">Финский</string>
+    <string name="upload_quizlet_message">Хотите залить %s в ваш Quizlet аккаунт?</string>
+    <string name="quizlet_successfully_uploaded_message">Успешно залито в ваш Quizlet аккаунт!</string>
     <string name="conversion_merge_text">Конвертировать и объединить</string>
     <string name="conversion_merge_message">%1$s уже существует. Вы хотите объединить %2$s в %3$s?</string>
     <string name="button_style_anki">3 обычных</string>
@@ -443,4 +446,7 @@
     <string name="download_source_cram">Cram</string>
     <string name="load_more_text">Загрузить больше</string>
     <string name="search_by_title_text">Поиск по названиям</string>
+    <string name="search_by_title_message">Введите название или описание для поиска,\nнапример Испанский, математика и т.д.</string>
+    <string name="open_text">Открыть</string>
+    <string name="close_text">Закрыть</string>
 </resources>
