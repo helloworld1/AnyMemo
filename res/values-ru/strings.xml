@@ -62,7 +62,7 @@
     <string name="settings_answer_locale_prompt">Язык</string>
     <string name="settings_html_display">Показывать в HTML</string>
     <string name="settings_ratio">Соотношение экрана В/О</string>
-    <string name="settings_wipe">Сбросить весь прогресс изучения</string>
+    <string name="settings_wipe">Сбросить весь прогресс</string>
     <string name="settings_shuffle">Перемешать карточки</string>
     <string name="settings_inverse">Поменять ВО всех карточек</string>
     <string name="settings_save">Сохр</string>
@@ -434,7 +434,7 @@
     <string name="mark_as_learned_text">Пометить как выучено</string>
     <string name="mark_as_forgotten_text">Пометить как забыто</string>
     <string name="mark_as_new_text">Пометить как новое</string>
-    <string name="mark_as_learned_forever_text">Пометить как выучено навсегда</string>
+    <string name="mark_as_learned_forever_text">Пометить как выученное</string>
     <string name="mark_as_learned_forever_warning_text">Этот объект никогда не появится для обучения. Хотите пометить его как выучено навсегда?</string>
     <string name="show_hide_answers_text">Показать/спрятать ответы</string>
     <string name="locale_finnish_text">Финский</string>
