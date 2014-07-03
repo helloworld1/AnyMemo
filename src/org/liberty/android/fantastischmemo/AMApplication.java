@@ -40,7 +40,9 @@ public class AMApplication extends Application {
     private static Context currentApplicationContext = null;
 
     public static Context getCurrentApplicationContext() {
-        assert currentApplicationContext != null : "Null application context!";
+        if (currentApplicationContext == null) {
+            throw new NullPointerException("Null application context");
+        }
 
         return currentApplicationContext;
     }

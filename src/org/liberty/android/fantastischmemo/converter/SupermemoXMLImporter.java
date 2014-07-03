@@ -45,7 +45,6 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.google.inject.BindingAnnotation;
@@ -55,7 +54,6 @@ public class SupermemoXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
     private static final long serialVersionUID = 8958250001470549241L;
 
     public Locator mLocator;
-    private Context mContext;
     private List<Card> cardList;
     private Card card;
     private LearningData ld;
@@ -76,11 +74,12 @@ public class SupermemoXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
 
         SAXParserFactory spf = SAXParserFactory.newInstance();
         SAXParser sp = spf.newSAXParser();
+
         XMLReader xr = sp.getXMLReader();
         xr.setContentHandler(this);
         xr.parse(new InputSource(mXMLUrl.openStream()));
 
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, dest);
+        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(dest);
         try {
             CardDao cardDao = helper.getCardDao();
             cardDao.createCards(cardList);

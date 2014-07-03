@@ -51,7 +51,7 @@ public class AnyMemoDBOpenHelperManager {
         try {
             assert dbpath != null : "dbpath should not be null";
             if (!helpers.containsKey(dbpath)) {
-                Ln.i("Call get AnyMemoDBOpenHelper for first time.");
+                Ln.i("Call get AnyMemoDBOpenHelper for first time for db: " + dbpath);
                 AnyMemoDBOpenHelper helper = new AnyMemoDBOpenHelper(context, dbpath);
                 helpers.put(dbpath, new WeakReference<AnyMemoDBOpenHelper>(helper));
                 refCounts.put(dbpath, 1);
