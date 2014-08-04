@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.converter;
 
+import java.io.File;
 import java.io.Serializable;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -39,6 +40,7 @@ import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
@@ -62,8 +64,11 @@ public class MnemosyneXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
     private final String TAG = "org.liberty.android.fantastischmemo.MnemosyneXMLImporter";
     private Card card;
 
+    private AMFileUtil amFileUtil;
+
     @Inject
-    public MnemosyneXMLImporter(){
+    public MnemosyneXMLImporter(AMFileUtil amFileUtil){
+        this.amFileUtil = amFileUtil;
     }
 
     @Override
@@ -78,7 +83,12 @@ public class MnemosyneXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
         XMLReader xr = sp.getXMLReader();
         xr.setContentHandler(this);
         xr.parse(new InputSource(mXMLUrl.openStream()));
+
+        if (!new File(dest).exists()) {
+            amFileUtil.createDbFileWithDefaultSettings(new File(dest));
+        }
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(dest);
+
         try {
             CardDao cardDao = helper.getCardDao();
             cardDao.createCards(cardList);

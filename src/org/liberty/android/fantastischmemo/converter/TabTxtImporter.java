@@ -25,14 +25,20 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import javax.inject.Inject;
+
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
+
 import com.google.inject.BindingAnnotation;
 
 public class TabTxtImporter extends CSVImporter {
 
     private static final long serialVersionUID = 3482178789406005987L;
 
-    public TabTxtImporter() {
-        super('\t');
+    @Inject
+    public TabTxtImporter(AMFileUtil amFileUtil) {
+        super(amFileUtil);
+        setSeparator('\t');
     }
 
     @Override

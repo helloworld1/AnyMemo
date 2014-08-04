@@ -27,8 +27,15 @@ public abstract class AbstractConverterTest extends AndroidTestCase {
 
     protected abstract void verify(String destFilePath) throws Exception;
 
+    protected AMFileUtil amFileUtil;
+
     @Override
     public void setUp() throws Exception {
+
+        // Set up necessary dependencies first
+        amFileUtil = new AMFileUtil(getContext());
+        amFileUtil.setAmPrefUtil(new AMPrefUtil(getContext()));
+
         // Reflect out the test context
         Method getTestContext = ServiceTestCase.class.getMethod("getTestContext");
         testContext = (Context) getTestContext.invoke(this);
@@ -40,10 +47,11 @@ public abstract class AbstractConverterTest extends AndroidTestCase {
         srcFilePath = "/sdcard/" + getFileNamePrefix() + "." + converter.getSrcExtension();
         destFilePath = "/sdcard/" + getFileNamePrefix() + "." + converter.getDestExtension();
 
-        AMFileUtil amFileUtil = new AMFileUtil(testContext);
-        amFileUtil.setAmPrefUtil(new AMPrefUtil(getContext()));
-        amFileUtil.copyFileFromAsset(srcFileName, new File(srcFilePath));
-
+        // This amFileUtil is used on the test package so it can copy the 
+        // asset file from the test package.
+        AMFileUtil amFileUtilForTest = new AMFileUtil(testContext);
+        amFileUtilForTest.setAmPrefUtil(new AMPrefUtil(getContext()));
+        amFileUtilForTest.copyFileFromAsset(srcFileName, new File(srcFilePath));
     }
 
     @SmallTest

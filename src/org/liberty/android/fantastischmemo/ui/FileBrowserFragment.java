@@ -432,8 +432,7 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
                             value += ".db";
                         }
                         try {
-                            String emptyDbPath = mActivity.getApplicationContext().getFilesDir().getAbsolutePath() + "/" + AMEnv.EMPTY_DB_NAME;
-                            FileUtils.copyFile(new File(emptyDbPath), new File(currentDirectory.getAbsolutePath() + "/" + value));
+                            amFileUtil.createDbFileWithDefaultSettings(new File(currentDirectory.getAbsolutePath() + "/" + value));
                         } catch(IOException e){
                             Log.e(TAG, "Fail to create file", e);
                         }

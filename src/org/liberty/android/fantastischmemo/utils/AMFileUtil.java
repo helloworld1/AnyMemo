@@ -31,6 +31,7 @@ import javax.inject.Singleton;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 
 import android.content.Context;
@@ -108,5 +109,16 @@ public class AMFileUtil {
             }
         }
         return filesFound;
+    }
+
+    /**
+     * Create a new database with the default settings set.
+     *
+     * @param newDbFile the new database file
+     */
+    public void createDbFileWithDefaultSettings(File newDbFile) throws IOException {
+        String emptyDbPath = mContext.getApplicationContext().getFilesDir().getAbsolutePath() + "/" + AMEnv.EMPTY_DB_NAME;
+        FileUtils.copyFile(new File(emptyDbPath), newDbFile);
+
     }
 }

@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.converter;
 
+import java.io.File;
 import java.io.FileReader;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -27,12 +28,15 @@ import java.lang.annotation.Target;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
 import au.com.bytecode.opencsv.CSVReader;
 
@@ -45,16 +49,25 @@ public class CSVImporter implements Converter {
     /* Null is for default separator "," */
     private Character separator = null;
 
-    public CSVImporter() {
+    private AMFileUtil amFileUtil;
+
+    @Inject
+    public CSVImporter(AMFileUtil amFileUtil) {
+        this.amFileUtil = amFileUtil;
         separator = ',';
     }
 
-    public CSVImporter(Character separator) {
+    public void setSeparator(Character separator) {
         this.separator = separator;
     }
 
     public void convert(String src, String dest) throws Exception {
+        if (!new File(dest).exists()) {
+            amFileUtil.createDbFileWithDefaultSettings(new File(dest));
+        }
+
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(dest);
+
         CSVReader reader;
         if (separator == null) {
             reader = new CSVReader(new FileReader(src));

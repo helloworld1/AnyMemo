@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.converter;
 
+import java.io.File;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -30,6 +31,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -39,6 +41,7 @@ import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
@@ -65,6 +68,13 @@ public class SupermemoXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
     private StringBuffer characterBuf;
     private final String TAG = "org.liberty.android.fantastischmemo.SupermemoXMLConverter";
 
+    private AMFileUtil amFileUtil;
+
+    @Inject
+    public SupermemoXMLImporter(AMFileUtil amFileUtil) {
+        this.amFileUtil = amFileUtil;
+    }
+
     @Override
     public void convert(String src, String dest) throws Exception{
         URL mXMLUrl = new URL("file:///" + src);
@@ -79,6 +89,9 @@ public class SupermemoXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
         xr.setContentHandler(this);
         xr.parse(new InputSource(mXMLUrl.openStream()));
 
+        if (!new File(dest).exists()) {
+            amFileUtil.createDbFileWithDefaultSettings(new File(dest));
+        }
         AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(dest);
         try {
             CardDao cardDao = helper.getCardDao();

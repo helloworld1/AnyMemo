@@ -80,7 +80,7 @@ public class ImportMergingTest extends AndroidTestCase {
         // Now convert the csv-test.csv into csv-test.db which will be merged
         // into existing csv-test.db
         amFileUtil.copyFileFromAsset("csv-test.csv", new File(srcFilePath));
-        Converter converter = new CSVImporter(',');
+        Converter converter = new CSVImporter(amFileUtil);
         converter.convert(srcFilePath, destFilePath);
             
         // verify the content of csv-test has merged cards
@@ -133,7 +133,7 @@ public class ImportMergingTest extends AndroidTestCase {
         }
 
         amFileUtil.copyFileFromAsset("qa-text-test.txt", new File(srcFilePath));
-        Converter converter = new QATxtImporter();
+        Converter converter = new QATxtImporter(amFileUtil);
         converter.convert(srcFilePath, destFilePath);
 
         helper = AnyMemoDBOpenHelperManager.getHelper(getContext(), destFilePath);

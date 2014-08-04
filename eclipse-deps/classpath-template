@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="build/source/buildConfig/free/debug"/>
-	<classpathentry kind="src" path="build/source/r/free/debug"/>
+	<classpathentry kind="src" path="build/generated/source/buildConfig/free/debug"/>
+	<classpathentry kind="src" path="build/generated/source/r/free/debug"/>
+	<classpathentry kind="src" path="build/generated/source/rs/free/debug"/>
 	<classpathentry kind="src" path="test/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="eclipse-deps/libs/aspectjrt.jar"/>
@@ -15,7 +16,7 @@
 	<classpathentry kind="lib" path="eclipse-deps/libs/roboguice-2.0.jar"/>
 	<classpathentry kind="lib" path="eclipse-deps/libs/signpost-commonshttp4-1.2.1.2.jar"/>
 	<classpathentry kind="lib" path="eclipse-deps/libs/signpost-core-1.2.1.2.jar"/>
-    <classpathentry kind="lib" path="eclipse-deps/libs/android.jar"/>
+	<classpathentry kind="lib" path="eclipse-deps/libs/android.jar"/>
 	<classpathentry kind="lib" path="eclipse-deps/testlibs/dexmaker-1.0.jar"/>
 	<classpathentry kind="lib" path="eclipse-deps/testlibs/dexmaker-mockito-1.0.jar"/>
 	<classpathentry kind="lib" path="eclipse-deps/testlibs/mockito-all-1.9.5.jar"/>

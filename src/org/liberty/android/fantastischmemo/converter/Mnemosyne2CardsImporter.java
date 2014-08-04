@@ -36,6 +36,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOCase;
@@ -48,6 +50,7 @@ import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.AMZipUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -64,6 +67,13 @@ public class Mnemosyne2CardsImporter implements Converter {
     private static final int QA_FIELD_TYPE = 16;
 
     private static final int LEARNING_DATA_FIELD_TYPE = 6;
+
+    private AMFileUtil amFileUtil;
+
+    @Inject
+    public Mnemosyne2CardsImporter(AMFileUtil amFileUtil) {
+        this.amFileUtil = amFileUtil;
+    }
 
     @Override
     public void convert(String src, String dest) throws Exception {
@@ -90,6 +100,9 @@ public class Mnemosyne2CardsImporter implements Converter {
 
             List<Card> cardList = xmlToCards(xmlFile);
 
+            if (!new File(dest).exists()) {
+                amFileUtil.createDbFileWithDefaultSettings(new File(dest));
+            }
             helper = AnyMemoDBOpenHelperManager.getHelper(dest);
             CardDao cardDao = helper.getCardDao();
             cardDao.createCards(cardList);
