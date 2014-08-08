@@ -26,10 +26,10 @@
     <string name="memo_no_item_message">Tällä hetkellä ei ole kortteja opiskeltavaksi, jos kuitenkin haluat opiskella niin valitse haluttu tietokanta pitkällä painalluksella viimeaikaiset osioista.</string>
     <string name="memo_btn0_text">0 En tiedä</string>
     <string name="memo_btn1_text">1 En tiedä</string>
-    <string name="memo_btn2_text">2 Tosi Vaikea</string>
+    <string name="memo_btn2_text">2 Vaikea</string>
     <string name="memo_btn3_text">3 Vaikea</string>
     <string name="memo_btn4_text">4 Helppo</string>
-    <string name="memo_btn5_text">5 Tosi helppo</string>
+    <string name="memo_btn5_text">5 Helppo</string>
     <string name="memo_btn0_help_text">Olen unohtanut kortin täysin.</string>
     <string name="memo_btn1_help_text">Olen unohtanut kortin täysin.</string>
     <string name="memo_btn2_help_text">Melkein oikea vastaus. Aikaväli oli liian pitkä.</string>
@@ -42,12 +42,12 @@
     <string name="memo_btn3_brief_text">3</string>
     <string name="memo_btn4_brief_text">4</string>
     <string name="memo_btn5_brief_text">5</string>
-    <string name="memo_btn0_anki_text">En osaa vielä</string>
-    <string name="memo_btn1_anki_text">En osaa vielä</string>
-    <string name="memo_btn2_anki_text">Tosi Vaikea</string>
+    <string name="memo_btn0_anki_text">En osaa</string>
+    <string name="memo_btn1_anki_text">En osaa</string>
+    <string name="memo_btn2_anki_text">Vaikea</string>
     <string name="memo_btn3_anki_text">Vaikea</string>
     <string name="memo_btn4_anki_text">Helppo</string>
-    <string name="memo_btn5_anki_text">Tosi helppo</string>
+    <string name="memo_btn5_anki_text">Helppo</string>
     <string name="memo_edit_dialog_title">Muokkaa</string>
     <string name="global_settings">Yleisasetukset</string>
     <string name="settings_question_font_size">Kysymyksen fonttikoko</string>
@@ -424,6 +424,8 @@
     <string name="quiz_by_range_text">Visaa valitsemalla alueella</string>
     <string name="start_ordinal_text">Aloittavan kortin numero</string>
     <string name="end_ordinal_text">Lopettavan kortin numero</string>
+    <string name="quizlet_private_cards">Käyttäjän privaatit kortit</string>
+
     <string name="click_again_to_delete_text">Paina uudestaan poistaaksesi</string>
     <string name="arabic_text">Arabia</string>
     <string name="unsupported_audio_locale_text">Valittu puhekieli ei ole avoinna nykyisessä TTS-systeemissä.</string>
@@ -439,4 +441,17 @@
     <string name="mark_as_learned_forever_warning_text">Tämä kortti ei enää koskaan ilmesty kiertoon. Halutko merkitä sen opituksi ikiajoiksi?</string>
     <string name="show_hide_answers_text">Näytä/piilota vastaukset</string>
     <string name="locale_finnish_text">Suomi</string>
+    <string name="upload_quizlet_message">Haluatko ladata %s Quizlet tilillesi?</string>
+    <string name="quizlet_successfully_uploaded_message">Onnistuneesti ladattu Quizlet tilillesi!</string>
+    <string name="conversion_merge_text">Muunna ja yhdistä</string>
+    <string name="conversion_merge_message">%1$s on jo olemassa. Haluatko yhdistää %2$s %3$s?</string>
+    <string name="button_style_anki">3 normaalia painiketta</string>
+    <string name="button_style_mnemosyne">6 pientä painiketta</string>
+    <string name="button_style_anymemo">6 normaalia painiketta</string>
+    <string name="download_source_cram">Cram</string>
+    <string name="load_more_text">Lataa lisää</string>
+    <string name="search_by_title_text">Etsi nimikkeellä</string>
+    <string name="search_by_title_message">Ole hyvä ja kirjoita nimike tai kuvaus etsiäksesi,\esim. Espanja, spanish jne.</string>
+    <string name="open_text">Avaa</string>
+    <string name="close_text">Sulje</string>
 </resources>
