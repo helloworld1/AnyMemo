@@ -22,7 +22,7 @@
     <string name="copyclipboard">Kopioi leikepöydälle</string>
     <string name="copyclipboard_summary">Kysymys kopioidaan automaattisesti leikepöydälle</string>
     <string name="memo_show_answer">Näytä vastaus</string>
-    <string name="memo_no_item_title">Ei tietoja</string>
+    <string name="memo_no_item_title">Ei opiskeltavaa</string>
     <string name="memo_no_item_message">Tällä hetkellä ei ole kortteja opiskeltavaksi, jos kuitenkin haluat opiskella niin valitse haluttu tietokanta pitkällä painalluksella viimeaikaiset osioista.</string>
     <string name="memo_btn0_text">0 En tiedä</string>
     <string name="memo_btn1_text">1 En tiedä</string>
@@ -346,7 +346,7 @@
     <string name="logout_text">Kirjaudu ulos</string>
     <string name="successfully_uploaded_text">Onnistuneesti lähetetty</string>
     <string name="gdrive_successfully_uploaded_message">Onnistuneesti lähetetty Google Driven AnyMemo kansioon</string>
-    <string name="loading_auth_text">Tunnistaudutaan palvelimesse. Ole hyvä ja odota...</string>
+    <string name="loading_auth_text">Tunnistaudutaan palvelimessa. Ole hyvä ja odota...</string>
     <string name="auth_error_text">Todennusvirhe.</string>
     <string name="locale_italian_text">Italia</string>
     <string name="upload_gdrive_message">Haluatko lähettää %s sinun Google Driven AnyMemo kansioon? Se voi kestää useita minuutteja, jos sinulla on yli 1000 korttia.</string>
