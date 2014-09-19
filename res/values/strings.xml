@@ -454,4 +454,5 @@
     <string name="search_by_title_message">Please enter a title or description to search,\ne.g. Spanish, math etc.</string>
     <string name="open_text">Open</string>
     <string name="close_text">Close</string>
+    <string name="greek_text">Greek</string>
 </resources>

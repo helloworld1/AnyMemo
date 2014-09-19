@@ -77,6 +77,7 @@
     <item>@string/japanese_text</item>
     <item>@string/korean_text</item>
     <item>@string/thai_text</item>
+    <item>@string/greek_text</item>
 </string-array>
 
 <string-array name="locale_list_values">
@@ -108,6 +109,7 @@
 	<item>JA</item>
 	<item>KR</item>
 	<item>TH</item>
+	<item>el_GR</item>
 </string-array>
 
 <string-array name="ratio_list">
