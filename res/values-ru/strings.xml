@@ -451,4 +451,5 @@
     <string name="search_by_title_message">Введите название или описание для поиска,\nнапример Испанский, математика и т.д.</string>
     <string name="open_text">Открыть</string>
     <string name="close_text">Закрыть</string>
+    <string name="greek_text">Греческий</string>
 </resources>
