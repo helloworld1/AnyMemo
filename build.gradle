@@ -24,8 +24,8 @@ android {
     useOldManifestMerger false
 
     defaultConfig {
-        versionCode 203
-        versionName "10.4.991"
+        versionCode 204
+        versionName "10.5"
         minSdkVersion 8
         targetSdkVersion 19
         testApplicationId "org.liberty.android.fantastischmemo.test"
