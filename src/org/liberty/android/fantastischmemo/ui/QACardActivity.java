@@ -703,7 +703,7 @@ public abstract class QACardActivity extends AMActivity {
             public boolean onLongClick(View arg0) {
                 // Find the files in the card field
                 List<String> filesFound = AMStringUtils.findFileInCardText(cardText,
-                    new String[]{"jpg", "png","bmp", "gif"});
+                    new String[]{"jpg", "png","bmp", "gif", "jpeg"});
 
                 if (filesFound.size() == 0) {
                     Ln.v("No Images found for: " + cardText);

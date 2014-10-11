@@ -110,7 +110,7 @@ public class Mnemosyne2CardsExporter implements Converter {
                 // Copy all the images to the tmp directory
                 Collection<File> imageFiles = FileUtils.listFiles(
                     imageDir,
-                    new SuffixFileFilter(new String[] {"jpg", "png", "bmp"}, IOCase.INSENSITIVE),
+                    new SuffixFileFilter(new String[] {"jpg", "png", "bmp", "jpeg"}, IOCase.INSENSITIVE),
                     DirectoryFileFilter.DIRECTORY);
 
                 for (File f : imageFiles) {

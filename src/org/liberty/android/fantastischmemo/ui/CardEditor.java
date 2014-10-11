@@ -176,7 +176,7 @@ public class CardEditor extends AMActivity {
             case R.id.editor_menu_image:
                 if(focusView == questionEdit || focusView ==answerEdit || focusView == noteEdit){
                     Intent myIntent = new Intent(this, FileBrowserActivity.class);
-                    myIntent.putExtra(FileBrowserActivity.EXTRA_FILE_EXTENSIONS, ".png,.jpg,.tif,.bmp");
+                    myIntent.putExtra(FileBrowserActivity.EXTRA_FILE_EXTENSIONS, ".png,.jpg,.tif,.bmp,.jpeg");
                     startActivityForResult(myIntent, ACTIVITY_IMAGE_FILE);
                 }
                 return true;
