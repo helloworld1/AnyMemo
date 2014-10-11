@@ -46,11 +46,14 @@ public class AMDateUtil {
 
     // Interval: 12.3456 day -> "1.8 week", 4.76 -> "4.8 day"
     public String convertDayIntervalToDisplayString(double intervalInDay) {
-        double[] dividers = {365, 30, 7, 1};
+        double[] dividers = {365, 30, 7, 1, 0.0416, 0.00069444};
         String[] unitName = {context.getString(R.string.year_text),
             context.getString(R.string.month_text),
             context.getString(R.string.week_text),
-            context.getString(R.string.day_text)};
+            context.getString(R.string.day_text),
+            context.getString(R.string.hour_text),
+            context.getString(R.string.minute_text)
+        };
 
         for (int i = 0; i < dividers.length; i++) {
             double divider = dividers[i];

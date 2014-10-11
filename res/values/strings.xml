@@ -455,4 +455,6 @@
     <string name="open_text">Open</string>
     <string name="close_text">Close</string>
     <string name="greek_text">Greek</string>
+    <string name="hour_text">hr</string>
+    <string name="minute_text">min</string>
 </resources>
