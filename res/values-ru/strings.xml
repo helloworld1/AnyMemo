@@ -452,4 +452,6 @@
     <string name="open_text">Открыть</string>
     <string name="close_text">Закрыть</string>
     <string name="greek_text">Греческий</string>
+    <string name="hour_text">ч</string>
+    <string name="minute_text">мин</string>
 </resources>
