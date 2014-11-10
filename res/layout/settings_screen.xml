@@ -23,9 +23,9 @@
         />
         <org.liberty.android.fantastischmemo.ui.widgets.AMSpinner
             android:id="@+id/question_font_size_spinner"
+            android:spinnerMode="dialog"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:drawSelectorOnTop="true"
             android:prompt="@string/settings_question_font_size_prompt"
             anymemo:display_array="@array/font_size_list"
             android:layout_weight="1"
@@ -45,9 +45,9 @@
                 android:text="@string/settings_question_align" />
         <org.liberty.android.fantastischmemo.ui.widgets.AMSpinner
             android:id="@+id/question_align_spinner"
+            android:spinnerMode="dialog"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:drawSelectorOnTop="true"
             android:prompt="@string/settings_question_align_prompt"
             anymemo:display_array="@array/align_list"
             android:layout_weight="1"
@@ -68,9 +68,9 @@
         />
         <org.liberty.android.fantastischmemo.ui.widgets.AMSpinner
             android:id="@+id/answer_font_size_spinner"
+            android:spinnerMode="dialog"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:drawSelectorOnTop="true"
             android:prompt="@string/settings_answer_font_size_prompt"
             anymemo:display_array="@array/font_size_list"
             android:layout_weight="1"
@@ -89,9 +89,9 @@
             android:text="@string/settings_answer_align" />
         <org.liberty.android.fantastischmemo.ui.widgets.AMSpinner
             android:id="@+id/answer_align_spinner"
+            android:spinnerMode="dialog"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:drawSelectorOnTop="true"
             android:layout_weight="1"
             android:prompt="@string/settings_answer_align_prompt"
             anymemo:display_array="@array/align_list"
@@ -111,9 +111,9 @@
             android:text="@string/card_style" />
         <org.liberty.android.fantastischmemo.ui.widgets.AMSpinner
             android:id="@+id/card_style_spinner"
+            android:spinnerMode="dialog"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:drawSelectorOnTop="true"
             android:layout_weight="1"
             android:prompt="@string/card_style"
             anymemo:display_array="@array/card_style_list"
@@ -132,9 +132,9 @@
             android:text="@string/settings_ratio" />
         <org.liberty.android.fantastischmemo.ui.widgets.AMSpinner
             android:id="@+id/ratio_spinner"
+            android:spinnerMode="dialog"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:drawSelectorOnTop="true"
             android:layout_weight="1"
             android:prompt="@string/settings_ratio"
             anymemo:display_array="@array/ratio_list"
@@ -153,9 +153,9 @@
             android:text="@string/settings_question_locale" />
         <org.liberty.android.fantastischmemo.ui.widgets.AMSpinner
             android:id="@+id/question_locale_spinner"
+            android:spinnerMode="dialog"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:drawSelectorOnTop="true"
             android:layout_weight="1"
             android:prompt="@string/settings_question_locale_prompt"
             anymemo:display_array="@array/locale_list"
@@ -174,10 +174,10 @@
             android:text="@string/settings_answer_locale" />
         <org.liberty.android.fantastischmemo.ui.widgets.AMSpinner
             android:id="@+id/answer_locale_spinner"
+            android:spinnerMode="dialog"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawSelectorOnTop="true"
             android:prompt="@string/settings_answer_locale_prompt"
             anymemo:display_array="@array/locale_list"
             anymemo:value_array="@array/locale_list_values" />
@@ -218,9 +218,9 @@
             android:id="@+id/color_row">
             <org.liberty.android.fantastischmemo.ui.widgets.AMSpinner
                 android:id="@+id/color_item_spinner"
+                android:spinnerMode="dialog"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:drawSelectorOnTop="true"
                 android:prompt="@string/settings_customize_color"
                 anymemo:display_array="@array/color_item_list"
                 anymemo:value_array="@array/color_item_list" />

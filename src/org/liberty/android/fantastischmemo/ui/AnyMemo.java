@@ -45,7 +45,7 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -190,7 +190,6 @@ public class AnyMemo extends AMActivity {
 
         drawerToggle = new ActionBarDrawerToggle(this,
                 drawerLayout,
-                resolveThemeResource(R.attr.drawer_theme_dependent_icon),
                 R.string.open_text,
                 R.string.close_text) {
             public void onDrawerClosed(View view) {

@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.13.+'
+        classpath 'com.android.tools.build:gradle:0.14.+'
         classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.+'
     }
 }
@@ -19,15 +19,14 @@ repositories {
 }
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion "19.1"
-    useOldManifestMerger false
+    compileSdkVersion 21
+    buildToolsVersion "21.1.1"
 
     defaultConfig {
         versionCode 205
         versionName "10.5.991"
-        minSdkVersion 8
-        targetSdkVersion 19
+        minSdkVersion 11
+        targetSdkVersion 21
         testApplicationId "org.liberty.android.fantastischmemo.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
     }
@@ -107,7 +106,7 @@ dependencies {
 
     ajc "org.aspectj:aspectjtools:${aspectjVersion}"
     compile "org.aspectj:aspectjrt:${aspectjVersion}"
-    compile 'com.android.support:appcompat-v7:20.+'
+    compile 'com.android.support:appcompat-v7:21.+'
     compile 'com.j256.ormlite:ormlite-core:4.48'
     compile 'com.j256.ormlite:ormlite-android:4.48'
     compile ('org.roboguice:roboguice:2.0') {
@@ -134,7 +133,7 @@ dependencies {
         exclude module: 'mockito-core'
     }
     androidTestCompile 'org.mockito:mockito-all:1.9.5'
-    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.1'
+    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.2.1'
 }
 
 android.applicationVariants.all { variant ->

@@ -10,7 +10,6 @@
         <item name="cabinet_theme_dependent_icon" >@drawable/cabinet_dark</item>
         <item name="download_tab_theme_dependent_icon" >@drawable/download_tab_dark</item>
         <item name="clock_theme_dependent_icon" >@drawable/clock_dark</item>
-        <item name="drawer_theme_dependent_icon" >@drawable/drawer_dark</item>
     </style>
 
     <!-- Light theme based on holo -->
@@ -21,6 +20,5 @@
         <item name="cabinet_theme_dependent_icon" >@drawable/cabinet_light</item>
         <item name="download_tab_theme_dependent_icon" >@drawable/download_tab_light</item>
         <item name="clock_theme_dependent_icon" >@drawable/clock_light</item>
-        <item name="drawer_theme_dependent_icon" >@drawable/drawer_light</item>
     </style>
 </resources>
