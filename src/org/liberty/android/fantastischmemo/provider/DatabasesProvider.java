@@ -38,7 +38,7 @@ import android.net.Uri;
  */
 public class DatabasesProvider extends ContentProvider {
 
-    public static final String AUTHORITY = BuildConfig.PACKAGE_NAME + ".databasesprovider";
+    public static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".databasesprovider";
 
     @Override
     public int delete(Uri arg0, String arg1, String[] arg2) {

@@ -41,7 +41,7 @@ public class LearningData {
     @DatabaseField
     private Integer retRepsSinceLapse = 0;
 
-    @DatabaseField(version = true, format="yyyy-MM-dd HH:mm:ss.SSSSSS", dataType=DataType.DATE_STRING)
+    @DatabaseField(format="yyyy-MM-dd HH:mm:ss.SSSSSS", dataType=DataType.DATE_STRING)
     private Date updateDate;
 
     public LearningData() {}

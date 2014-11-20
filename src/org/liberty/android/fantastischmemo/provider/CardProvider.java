@@ -41,7 +41,7 @@ import android.util.Log;
 
 public class CardProvider extends ContentProvider {
 
-    public static final String AUTHORITY = BuildConfig.PACKAGE_NAME + ".cardprovider";
+    public static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".cardprovider";
 
     private static final String TAG = CardProvider.class.getName();
 

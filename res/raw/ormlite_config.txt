@@ -1,5 +1,5 @@
 #
-# generated on 2014/07/02 08:45:55
+# generated on 2014/11/20 11:08:15
 #
 # --table-start--
 dataClass=org.liberty.android.fantastischmemo.domain.Category
@@ -103,111 +103,6 @@ fieldName=newInterval
 # --field-end--
 # --field-start--
 fieldName=oldInterval
-# --field-end--
-# --field-start--
-fieldName=updateDate
-dataPersister=DATE_STRING
-format=yyyy-MM-dd HH:mm:ss.SSSSSS
-version=true
-# --field-end--
-# --table-fields-end--
-# --table-end--
-#################################
-# --table-start--
-dataClass=org.liberty.android.fantastischmemo.domain.LearningData
-tableName=learning_data
-# --table-fields-start--
-# --field-start--
-fieldName=id
-generatedId=true
-# --field-end--
-# --field-start--
-fieldName=lastLearnDate
-dataPersister=DATE_STRING
-defaultValue=2010-01-01 00:00:00.000000
-format=yyyy-MM-dd HH:mm:ss.SSSSSS
-# --field-end--
-# --field-start--
-fieldName=nextLearnDate
-dataPersister=DATE_STRING
-defaultValue=2010-01-01 00:00:00.000000
-format=yyyy-MM-dd HH:mm:ss.SSSSSS
-# --field-end--
-# --field-start--
-fieldName=grade
-# --field-end--
-# --field-start--
-fieldName=easiness
-defaultValue=2.5
-# --field-end--
-# --field-start--
-fieldName=acqReps
-# --field-end--
-# --field-start--
-fieldName=retReps
-# --field-end--
-# --field-start--
-fieldName=lapses
-# --field-end--
-# --field-start--
-fieldName=acqRepsSinceLapse
-# --field-end--
-# --field-start--
-fieldName=retRepsSinceLapse
-# --field-end--
-# --field-start--
-fieldName=updateDate
-dataPersister=DATE_STRING
-format=yyyy-MM-dd HH:mm:ss.SSSSSS
-version=true
-# --field-end--
-# --table-fields-end--
-# --table-end--
-#################################
-# --table-start--
-dataClass=org.liberty.android.fantastischmemo.domain.Card
-tableName=cards
-# --table-fields-start--
-# --field-start--
-fieldName=id
-generatedId=true
-# --field-end--
-# --field-start--
-fieldName=ordinal
-indexName=cards_ordinal_idx
-# --field-end--
-# --field-start--
-fieldName=question
-defaultValue=
-width=8192
-# --field-end--
-# --field-start--
-fieldName=answer
-defaultValue=
-width=8192
-# --field-end--
-# --field-start--
-fieldName=note
-defaultValue=
-width=8192
-# --field-end--
-# --field-start--
-fieldName=category
-foreign=true
-indexName=cards_category_idx
-# --field-end--
-# --field-start--
-fieldName=learningData
-foreign=true
-# --field-end--
-# --field-start--
-fieldName=cardType
-defaultValue=0
-# --field-end--
-# --field-start--
-fieldName=creationDate
-dataPersister=DATE_STRING
-format=yyyy-MM-dd HH:mm:ss.SSSSSS
 # --field-end--
 # --field-start--
 fieldName=updateDate
@@ -329,7 +224,109 @@ format=yyyy-MM-dd HH:mm:ss.SSSSSS
 fieldName=updateDate
 dataPersister=DATE_STRING
 format=yyyy-MM-dd HH:mm:ss.SSSSSS
-version=true
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=org.liberty.android.fantastischmemo.domain.Card
+tableName=cards
+# --table-fields-start--
+# --field-start--
+fieldName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=ordinal
+indexName=cards_ordinal_idx
+# --field-end--
+# --field-start--
+fieldName=question
+defaultValue=
+width=8192
+# --field-end--
+# --field-start--
+fieldName=answer
+defaultValue=
+width=8192
+# --field-end--
+# --field-start--
+fieldName=note
+defaultValue=
+width=8192
+# --field-end--
+# --field-start--
+fieldName=category
+foreign=true
+indexName=cards_category_idx
+# --field-end--
+# --field-start--
+fieldName=learningData
+foreign=true
+# --field-end--
+# --field-start--
+fieldName=cardType
+defaultValue=0
+# --field-end--
+# --field-start--
+fieldName=creationDate
+dataPersister=DATE_STRING
+format=yyyy-MM-dd HH:mm:ss.SSSSSS
+# --field-end--
+# --field-start--
+fieldName=updateDate
+dataPersister=DATE_STRING
+format=yyyy-MM-dd HH:mm:ss.SSSSSS
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=org.liberty.android.fantastischmemo.domain.LearningData
+tableName=learning_data
+# --table-fields-start--
+# --field-start--
+fieldName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=lastLearnDate
+dataPersister=DATE_STRING
+defaultValue=2010-01-01 00:00:00.000000
+format=yyyy-MM-dd HH:mm:ss.SSSSSS
+# --field-end--
+# --field-start--
+fieldName=nextLearnDate
+dataPersister=DATE_STRING
+defaultValue=2010-01-01 00:00:00.000000
+format=yyyy-MM-dd HH:mm:ss.SSSSSS
+# --field-end--
+# --field-start--
+fieldName=grade
+# --field-end--
+# --field-start--
+fieldName=easiness
+defaultValue=2.5
+# --field-end--
+# --field-start--
+fieldName=acqReps
+# --field-end--
+# --field-start--
+fieldName=retReps
+# --field-end--
+# --field-start--
+fieldName=lapses
+# --field-end--
+# --field-start--
+fieldName=acqRepsSinceLapse
+# --field-end--
+# --field-start--
+fieldName=retRepsSinceLapse
+# --field-end--
+# --field-start--
+fieldName=updateDate
+dataPersister=DATE_STRING
+format=yyyy-MM-dd HH:mm:ss.SSSSSS
 # --field-end--
 # --table-fields-end--
 # --table-end--

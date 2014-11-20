@@ -41,6 +41,8 @@ import org.liberty.android.fantastischmemo.ui.loader.SettingLoader;
 import org.liberty.android.fantastischmemo.ui.widgets.AMSpinner;
 import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
 
+import roboguice.util.Ln;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -560,7 +562,6 @@ public class SettingsScreen extends AMActivity {
             setting.setHtmlLineBreakConversion(linebreakCheckbox.isChecked());
             setting.setQuestionFieldEnum(questionFields);
             setting.setAnswerEnum(answerFields);
-
         }
 
         @Override
