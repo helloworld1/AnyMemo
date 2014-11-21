@@ -13,7 +13,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "settings", daoClass = SettingDaoImpl.class)
-public class Setting implements Serializable {
+public class Setting implements Serializable, VersionableDomainObject {
     private static final long serialVersionUID = 9204749417247448509L;
 
     public static final String AUDIO_USER_DEFINED = "User Audio";

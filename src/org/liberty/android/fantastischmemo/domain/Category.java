@@ -9,7 +9,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "categories", daoClass = CategoryDaoImpl.class)
-public class Category {
+public class Category implements VersionableDomainObject {
     @DatabaseField(generatedId = true)
     private Integer id = 1;
 
@@ -18,6 +18,11 @@ public class Category {
 
     @DatabaseField(version = true, format="yyyy-MM-dd HH:mm:ss.SSSSSS", dataType=DataType.DATE_STRING)
     private Date updateDate;
+
+    /**
+     * TODO: Implement it.
+     */
+    private Date creationDate;
 
     public Category() {}
 
@@ -43,6 +48,20 @@ public class Category {
 
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
+    }
+
+    /**
+     * @return the creationDate
+     */
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    /**
+     * @param creationDate the creationDate to set
+     */
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
     @Override

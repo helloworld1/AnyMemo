@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.domain.VersionableDomainObject;
 
 import roboguice.util.Ln;
 
@@ -100,6 +101,9 @@ public abstract class AbstractHelperDaoImpl<E, T> extends BaseDaoImpl<E, T> {
     public int update(E domain) {
         try {
             Ln.i("[ " + new Date() + " ] Updating domain obj: "  + domain);
+            if (domain instanceof VersionableDomainObject) {
+                ((VersionableDomainObject) domain).setUpdateDate(new Date());
+            }
             return super.update(domain);
         } catch (SQLException e) {
             Ln.e(e);
@@ -113,6 +117,10 @@ public abstract class AbstractHelperDaoImpl<E, T> extends BaseDaoImpl<E, T> {
     @Override
     public int create(E domain) {
         try {
+            if (domain instanceof VersionableDomainObject) {
+                ((VersionableDomainObject) domain).setCreationDate(new Date());
+                ((VersionableDomainObject) domain).setUpdateDate(new Date());
+            }
             return super.create(domain);
         } catch (SQLException e) {
             Ln.e(e);

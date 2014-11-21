@@ -1,11 +1,11 @@
 package org.liberty.android.fantastischmemo.dao;
 
 import java.sql.SQLException;
+import java.util.Date;
 
 import org.liberty.android.fantastischmemo.domain.Setting;
 
 import com.j256.ormlite.support.ConnectionSource;
-
 import com.j256.ormlite.table.DatabaseTableConfig;
 
 public class SettingDaoImpl extends AbstractHelperDaoImpl<Setting, Integer> implements SettingDao {
@@ -28,6 +28,5 @@ public class SettingDaoImpl extends AbstractHelperDaoImpl<Setting, Integer> impl
             throw new RuntimeException("Error replacing settings", e);
         }
     }
-
 }
 
