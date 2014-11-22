@@ -24,7 +24,7 @@ android {
 
     defaultConfig {
         versionCode 205
-        versionName "10.5.991"
+        versionName "10.5.992"
         minSdkVersion 11
         targetSdkVersion 21
         testApplicationId "org.liberty.android.fantastischmemo.test"
