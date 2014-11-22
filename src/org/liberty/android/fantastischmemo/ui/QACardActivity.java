@@ -42,6 +42,7 @@ import org.liberty.android.fantastischmemo.ui.loader.SettingLoader;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.AMStringUtils;
 import org.liberty.android.fantastischmemo.utils.CardTTSUtil;
+import org.liberty.android.fantastischmemo.widget.AnyMemoWidgetProvider;
 
 import roboguice.util.Ln;
 
@@ -505,9 +506,10 @@ public abstract class QACardActivity extends AMActivity {
 
         /* Update the widget because StudyActivity can be accessed though widget*/
         Intent myIntent = new Intent(this, AnyMemoService.class);
-        myIntent.putExtra("request_code", AnyMemoService.CANCEL_NOTIFICATION
-                | AnyMemoService.UPDATE_WIDGET);
+        myIntent.putExtra("request_code", AnyMemoService.CANCEL_NOTIFICATION);
         startService(myIntent);
+
+        AnyMemoWidgetProvider.updateWidget(this);
         super.onDestroy();
     }
 

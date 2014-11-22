@@ -63,6 +63,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
+import org.liberty.android.fantastischmemo.widget.AnyMemoWidgetProvider;
+
 
 public class AnyMemo extends AMActivity {
     private static final String WEBSITE_VERSION="http://anymemo.org/index.php?page=version";
@@ -309,8 +313,9 @@ public class AnyMemo extends AMActivity {
     public void onDestroy() {
         super.onDestroy();
         // Update the widget and cancel the notification.
+        AnyMemoWidgetProvider.updateWidget(this);
         Intent myIntent = new Intent(this, AnyMemoService.class);
-        myIntent.putExtra("request_code", AnyMemoService.CANCEL_NOTIFICATION | AnyMemoService.UPDATE_WIDGET);
+        myIntent.putExtra("request_code", AnyMemoService.CANCEL_NOTIFICATION);
         startService(myIntent);
     }
 

@@ -125,7 +125,7 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".AnyMemoWidgetProvider" >
+            android:name=".widget.AnyMemoWidgetProvider" >
             <intent-filter>
                 <action
                     android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -143,11 +143,15 @@
             </intent-filter>
         </activity>
         <service
+            android:name=".widget.UpdateWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+        <service
             android:name=".service.AnyMemoService" />
         <service
             android:name=".service.CardPlayerService" />
         <service
             android:name=".service.ConvertIntentService" />
+
         <provider
             android:name=".provider.CardProvider"
             android:authorities="${packageName}.cardprovider"

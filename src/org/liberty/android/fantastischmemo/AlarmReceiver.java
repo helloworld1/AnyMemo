@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo;
 
 import org.liberty.android.fantastischmemo.service.AnyMemoService;
+import org.liberty.android.fantastischmemo.widget.AnyMemoWidgetProvider;
 
 import android.content.Intent;
 import android.content.Context;
@@ -50,9 +51,7 @@ public class AlarmReceiver extends BroadcastReceiver{
 
         if((alarmReq & ALARM_WIDGET) != 0){
             Log.v(TAG, "ALARM WIDGET");
-            Intent myIntent = new Intent(context, AnyMemoService.class);
-            myIntent.putExtra("request_code", AnyMemoService.UPDATE_WIDGET);
-            context.startService(myIntent);
+            AnyMemoWidgetProvider.updateWidget(context);
         }
     }
 }

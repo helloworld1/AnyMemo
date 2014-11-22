@@ -1,39 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/widget_layout"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:background="@drawable/am_widget_frame"
-    android:paddingTop="11dp"
-    android:paddingBottom="11dp"
-    android:paddingLeft="15dp"
-    android:paddingRight="15dp"
-    android:layout_height="fill_parent" >
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#000000"
-        android:textStyle="bold"
-    	android:text="@string/anymemo_widget_name" />
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#000000"
-        android:singleLine="true"
-        android:id="@+id/widget_db_name" />
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/widget_review_count"
-        android:singleLine="true"
-        android:textColor="#000000" />
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/widget_new_count"
-        android:singleLine="true"
-        android:textColor="#000000" />
-</LinearLayout>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/widget_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#212121"
+        android:textSize="16sp"
+        android:paddingLeft="15dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:text="@string/app_name"/>
+
+    <LinearLayout
+        android:id="@+id/widget_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#303030"
+        android:orientation="vertical"
+        android:paddingBottom="11dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="11dp">
+
+        <ListView
+            android:id="@+id/widget_list"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</LinearLayout>

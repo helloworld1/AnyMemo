@@ -26,7 +26,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.AnyMemoWidgetProvider;
+import org.liberty.android.fantastischmemo.widget.AnyMemoWidgetProvider;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.ui.AnyMemo;
@@ -53,7 +53,6 @@ import android.widget.RemoteViews;
 import com.google.common.base.Strings;
 
 public class AnyMemoService extends RoboService{
-    public static int UPDATE_WIDGET = 1;
     public static int UPDATE_NOTIFICATION = 2;
     public static int CANCEL_NOTIFICATION = 4;
     private final int NOTIFICATION_ID = 4829352;
@@ -78,9 +77,7 @@ public class AnyMemoService extends RoboService{
             Log.v(TAG, "Service now!");
 
         int serviceReq = extras.getInt("request_code", 0);
-        if((serviceReq & UPDATE_WIDGET) != 0){
-            updateWidget();
-        }
+
         if((serviceReq & UPDATE_NOTIFICATION) != 0){
             showNotification();
         }
@@ -97,54 +94,6 @@ public class AnyMemoService extends RoboService{
         return null;
     }
 
-    private void updateWidget(){
-        RemoteViews updateViews = new RemoteViews(getPackageName(), R.layout.widget);
-        ComponentName thisWidget = new ComponentName(this, AnyMemoWidgetProvider.class);
-        AppWidgetManager manager = AppWidgetManager.getInstance(this);
-        try{
-            DatabaseInfo dbInfo = new DatabaseInfo(this);
-            updateViews.setTextViewText(R.id.widget_db_name, dbInfo.getDbName());
-            int revCount = dbInfo.getRevCount();
-            /* Display different colors for different review number*/
-            updateViews.setTextViewText(R.id.widget_new_count, getString(R.string.stat_new) + " " + dbInfo.getNewCount());
-            if(revCount == 0){
-                updateViews.setTextViewText(R.id.widget_review_count, getString(R.string.widget_no_review));
-                /* Dark green color */
-                updateViews.setTextColor(R.id.widget_review_count, 0xFF008100);
-            }
-            else{
-                updateViews.setTextViewText(R.id.widget_review_count, getString(R.string.stat_scheduled) + " " + dbInfo.getRevCount());
-                if(revCount <= 10){
-                    updateViews.setTextColor(R.id.widget_review_count, 0xFF008100);
-                }
-                else if(revCount <= 50){
-                    updateViews.setTextColor(R.id.widget_review_count, Color.BLACK);
-                }
-                else if(revCount <= 100){
-                    updateViews.setTextColor(R.id.widget_review_count, Color.MAGENTA);
-                }
-                else{
-                    updateViews.setTextColor(R.id.widget_review_count, Color.RED);
-                }
-            }
-
-        }
-        catch(Exception e){
-            Log.e(TAG, "Update widget error", e);
-            updateViews.setTextViewText(R.id.widget_db_name, getString(R.string.widget_fail_fetch));
-            updateViews.setTextViewText(R.id.widget_review_count, "");
-            updateViews.setTextViewText(R.id.widget_new_count, "");
-        }
-        finally{
-            /* Set on click event */
-            Intent intent = new Intent(this, StudyActivity.class);
-            intent.putExtra("dbpath", recentListUtil.getRecentDBPath());
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, WIDGET_REQ, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-            updateViews.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);
-            manager.updateAppWidget(thisWidget, updateViews);
-        }
-    }
 
     @SuppressWarnings("deprecation")
     private void showNotification(){
