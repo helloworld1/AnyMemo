@@ -89,23 +89,8 @@ android {
     }
 }
 
-// Add Aspectj support
-configurations {
-    ajc
-    aspects
-    ajInpath
-}
-
-ext {
-    aspectjVersion = '1.7.4'
-    enableAspects = false
-}
-
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
-
-    ajc "org.aspectj:aspectjtools:${aspectjVersion}"
-    compile "org.aspectj:aspectjrt:${aspectjVersion}"
     compile 'com.android.support:appcompat-v7:21.0.2'
     compile 'com.j256.ormlite:ormlite-core:4.48'
     compile 'com.j256.ormlite:ormlite-android:4.48'
@@ -134,57 +119,6 @@ dependencies {
     }
     androidTestCompile 'org.mockito:mockito-all:1.9.5'
     androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.2.1'
-}
-
-android.applicationVariants.all { variant ->
-
-    variant.javaCompile.doLast {
-        // Check whether ext.enableAspects is true
-        if (!enableAspects) {
-            logger.info('Aspects are disabled in the build')
-            return;
-        }
-        // Find the android.jar and add to iajc classpath
-        def androidSdk = android.adbExe.parent + "/../platforms/" + android.compileSdkVersion + "/android.jar"
-	println 'Android SDK android.jar path: ' + androidSdk
-
-        def iajcClasspath = androidSdk + ":" + configurations.compile.asPath 
-        configurations.compile.dependencies.each { dep ->
-            if(dep.hasProperty("dependencyProject")) {
-                iajcClasspath += ":" + dep.dependencyProject.buildDir + "/bundles/release/classes.jar"
-            }
-        }
-
-        // handle aar dependencies pulled in by gradle (Android support library and etc)
-	tree = fileTree(dir: "${project.buildDir}/exploded-aar", include: '**/classes.jar')
-	tree.each { jarFile ->
-	    iajcClasspath += ":" + jarFile
-        }
-
-	println 'Classpath for iajc: ' + iajcClasspath 
-
-        ant.taskdef( resource:"org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties", classpath: configurations.ajc.asPath)
-        ant.iajc (
-                source:sourceCompatibility,
-                target:targetCompatibility,
-                destDir:"${project.buildDir}/classes/${variant.dirName}",
-                aspectPath:configurations.aspects.asPath,
-                inpath:configurations.ajInpath.asPath,
-                sourceRootCopyFilter:"**/.svn/*,**/*.java",
-                classpath:iajcClasspath
-        ){
-            sourceroots{
-                android.sourceSets.main.java.srcDirs.each{
-                    pathelement(location:it.absolutePath)
-                }
-                // Build config file
-                pathelement(location:"${project.buildDir}/source/buildConfig/${variant.dirName}")
-
-                // Android resources R.***
-                pathelement(location:"${project.buildDir}/source/r/${variant.dirName}")
-            }
-        }
-    }
 }
 
 def getBuildString () {
