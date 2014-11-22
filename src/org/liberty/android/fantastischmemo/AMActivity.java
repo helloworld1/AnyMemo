@@ -22,6 +22,8 @@ package org.liberty.android.fantastischmemo;
 
 import java.util.Locale;
 
+import roboguice.activity.RoboActionBarActivity;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;

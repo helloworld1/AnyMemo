@@ -44,11 +44,16 @@ import org.liberty.android.fantastischmemo.ui.CardImageGetterFactory;
 import org.liberty.android.fantastischmemo.utils.CardTTSUtilFactory;
 import org.liberty.android.fantastischmemo.utils.CardTextUtilFactory;
 
+import android.app.Application;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 
 /* Define the moduled used in Guice dependency injection. */
 public class AMModules extends AbstractModule {
+
+    public AMModules(Application application) {
+    }
 
     @Override
     protected void configure() {

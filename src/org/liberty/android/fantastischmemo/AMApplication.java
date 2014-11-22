@@ -58,9 +58,6 @@ public class AMApplication extends Application {
             Log.w(TAG, "Using version less than 2.2, disable urlconnection connection pool");
             System.setProperty("http.keepAlive", "false");
         }
-
-        // Handle customized module binding
-        RoboGuice.setBaseApplicationInjector(this, RoboGuice.DEFAULT_STAGE,
-                RoboGuice.newDefaultRoboModule(this), new AMModules());
+        RoboGuice.setUseAnnotationDatabases(false);
     }
 }

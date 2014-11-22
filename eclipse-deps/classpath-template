@@ -13,7 +13,7 @@
 	<classpathentry kind="lib" path="eclipse-deps/libs/javax.inject.jar"/>
 	<classpathentry kind="lib" path="eclipse-deps/libs/ormlite-android-4.45.jar"/>
 	<classpathentry kind="lib" path="eclipse-deps/libs/ormlite-core-4.45.jar"/>
-	<classpathentry kind="lib" path="eclipse-deps/libs/roboguice-2.0.jar"/>
+	<classpathentry kind="lib" path="eclipse-deps/libs/roboguice-3.0.1.jar"/>
 	<classpathentry kind="lib" path="eclipse-deps/libs/signpost-commonshttp4-1.2.1.2.jar"/>
 	<classpathentry kind="lib" path="eclipse-deps/libs/signpost-core-1.2.1.2.jar"/>
 	<classpathentry kind="lib" path="eclipse-deps/libs/android.jar"/>

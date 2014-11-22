@@ -109,11 +109,11 @@ dependencies {
     compile 'com.android.support:appcompat-v7:21.0.2'
     compile 'com.j256.ormlite:ormlite-core:4.48'
     compile 'com.j256.ormlite:ormlite-android:4.48'
-    compile ('org.roboguice:roboguice:2.0') {
+    compile ('org.roboguice:roboguice:3.0.1') {
         exclude module: 'aopalliance'
         exclude module: 'cglib'
     }
-    compile ('com.google.inject.extensions:guice-assistedinject:3.0') {
+    compile ('com.google.inject.extensions:guice-assistedinject:4.0-beta5') {
         exclude module: 'aopalliance'
         exclude module: 'guice'
         exclude module: 'cglib'
