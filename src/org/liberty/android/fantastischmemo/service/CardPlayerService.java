@@ -209,7 +209,7 @@ public class CardPlayerService extends RoboService {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, resultIntent, 0);
         NotificationCompat.Builder mBuilder =
             new NotificationCompat.Builder(this)
-            .setSmallIcon(R.drawable.icon)
+            .setSmallIcon(R.drawable.ic_launcher)
             .setContentTitle(getString(R.string.card_player_notification_title))
             .setContentText(getString(R.string.card_player_notification_text))
             .setContentIntent(pendingIntent)
