@@ -468,7 +468,7 @@ public class StudyActivity extends QACardActivity {
         new AlertDialog.Builder(this)
             .setTitle(this.getString(R.string.memo_no_item_title))
             .setMessage(this.getString(R.string.memo_no_item_message))
-            .setNeutralButton(getString(R.string.back_menu_text), new DialogInterface.OnClickListener() {
+            .setPositiveButton(getString(R.string.back_menu_text), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface arg0, int arg1) {
                     /* Finish the current activity and go back to the last activity.
