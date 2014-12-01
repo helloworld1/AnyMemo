@@ -8,6 +8,7 @@
 
     <org.liberty.android.fantastischmemo.ui.widgets.AMSpinner
         android:id="@+id/statistics_type_spinner"
+        android:spinnerMode="dialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawSelectorOnTop="true"
