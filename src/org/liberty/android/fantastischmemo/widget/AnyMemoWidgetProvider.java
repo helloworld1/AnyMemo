@@ -75,7 +75,7 @@ public class AnyMemoWidgetProvider extends AppWidgetProvider{
             RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget);
 
             Intent widgetIntent = new Intent(context, StudyActivity.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(context,WIDGET_REQUEST_ID,widgetIntent,PendingIntent.FLAG_CANCEL_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context,WIDGET_REQUEST_ID + i,widgetIntent,PendingIntent.FLAG_CANCEL_CURRENT);
             rv.setPendingIntentTemplate(R.id.widget_list, pendingIntent);
             rv.setRemoteAdapter(appWidgetIds[i], R.id.widget_list, intent);
 
