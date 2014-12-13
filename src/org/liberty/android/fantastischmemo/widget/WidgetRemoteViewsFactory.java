@@ -89,7 +89,7 @@ class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory 
             long newCount = dao.getNewCardCount(null);
 
             String detail = mContext.getString(R.string.stat_total) + totalCount + " "
-                + mContext.getString(R.string.new_text) + newCount + " "
+                + mContext.getString(R.string.stat_new) + newCount + " "
                 + mContext.getString(R.string.stat_scheduled) + revCount;
             rv.setTextViewText(R.id.widget_db_name, dbName);
             rv.setTextViewText(R.id.widget_db_detail, detail);
