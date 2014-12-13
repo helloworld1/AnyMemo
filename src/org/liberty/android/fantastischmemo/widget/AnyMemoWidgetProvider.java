@@ -37,6 +37,8 @@ import org.liberty.android.fantastischmemo.ui.StudyActivity;
 import android.net.Uri;
 import android.annotation.TargetApi;
 
+import roboguice.util.Ln;
+
 
 public class AnyMemoWidgetProvider extends AppWidgetProvider{
     private static final int WIDGET_REQUEST_ID = 23452435;
@@ -44,20 +46,11 @@ public class AnyMemoWidgetProvider extends AppWidgetProvider{
     public static void updateWidget(Context context)
     {
         Intent intent = new Intent();
-        //int[] widgetId = {WIDGET_REQUEST_ID};
         AppWidgetManager manager = AppWidgetManager.getInstance(context);
-        int[] widgetId = manager.getAppWidgetIds(new ComponentName(context, AnyMemoWidgetProvider.class));
+        int[] widgetIds = manager.getAppWidgetIds(new ComponentName(context, AnyMemoWidgetProvider.class));
         intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetId);
-        context.sendBroadcast(intent);
-
-//        AppWidgetManager man = AppWidgetManager.getInstance(this);
-//        int[] ids = man.getAppWidgetIds(new ComponentName(this,AnyMemoWidgetProvider.class));
-//        Intent myIntent = new Intent();
-//        myIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-//        myIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-//        this.sendBroadcast(myIntent);
-
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetIds);
+        manager.notifyAppWidgetViewDataChanged(widgetIds, R.id.widget_list);
     }
 
     @Override

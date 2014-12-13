@@ -1,7 +1,6 @@
 <appwidget-provider
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:minWidth="146dp"
-    android:minHeight="72dp"
-    android:updatePeriodMillis="0"
-    android:initialLayout="@layout/widget" />
+    android:minWidth="110dp"
+    android:minHeight="110dp"
+    android:updatePeriodMillis="0" />
     <!-- android:configure="org.liberty.android.AnyMemo" > -->
