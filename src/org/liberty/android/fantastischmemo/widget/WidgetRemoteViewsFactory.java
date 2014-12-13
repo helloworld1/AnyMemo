@@ -21,7 +21,6 @@ import javax.inject.Inject;
 import roboguice.RoboGuice;
 import roboguice.util.Ln;
 
-
 @TargetApi(11)
 class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
@@ -85,11 +84,15 @@ class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory 
             AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, allPath[position]);
             CardDao dao = helper.getCardDao();
             String dbName = FilenameUtils.getName(allPath[position]);
-            long totalNum = dao.getTotalCount(null);
-            long revNum = dao.getScheduledCardCount(null);
-            String viewNumber = mContext.getString(R.string.stat_total) + totalNum + " " + mContext.getString(R.string.stat_scheduled) + revNum;
-            rv.setTextViewText(R.id.widget_item_name, dbName);
-            rv.setTextViewText(R.id.widget_item_number, viewNumber);
+            long totalCount = dao.getTotalCount(null);
+            long revCount = dao.getScheduledCardCount(null);
+            long newCount = dao.getNewCardCount(null);
+
+            String detail = mContext.getString(R.string.stat_total) + totalCount + " "
+                + mContext.getString(R.string.new_text) + newCount + " "
+                + mContext.getString(R.string.stat_scheduled) + revCount;
+            rv.setTextViewText(R.id.widget_db_name, dbName);
+            rv.setTextViewText(R.id.widget_db_detail, detail);
             Intent fillInIntent = new Intent();
             fillInIntent.putExtra(StudyActivity.EXTRA_DBPATH,allPath[position]);
             rv.setOnClickFillInIntent(R.id.widget_item,fillInIntent);
