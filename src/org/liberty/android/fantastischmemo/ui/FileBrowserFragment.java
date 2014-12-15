@@ -431,8 +431,13 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
                         if(!value.endsWith(".db")){
                             value += ".db";
                         }
+                        File newDbFile = new File(currentDirectory.getAbsolutePath() + "/" + value);
                         try {
-                            amFileUtil.createDbFileWithDefaultSettings(new File(currentDirectory.getAbsolutePath() + "/" + value));
+                            if (newDbFile.exists()) {
+                                amFileUtil.deleteFileWithBackup(newDbFile.getAbsolutePath());
+                            }
+
+                            amFileUtil.createDbFileWithDefaultSettings(newDbFile);
                         } catch(IOException e){
                             Log.e(TAG, "Fail to create file", e);
                         }
