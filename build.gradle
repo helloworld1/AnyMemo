@@ -35,6 +35,10 @@ android {
         debug {
             versionNameSuffix "-${getBuildString()}"
         }
+        release {
+            minifyEnabled true
+            proguardFile 'proguard.cfg'
+        }
     }
 
     productFlavors {
