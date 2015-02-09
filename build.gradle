@@ -23,8 +23,8 @@ android {
     buildToolsVersion "21.1.1"
 
     defaultConfig {
-        versionCode 209
-        versionName "10.6.2"
+        versionCode 211
+        versionName "10.6.3"
         minSdkVersion 11
         targetSdkVersion 21
         testApplicationId "org.liberty.android.fantastischmemo.test"
