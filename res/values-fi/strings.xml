@@ -150,7 +150,7 @@
     <string name="fullscreen_summary">Näytä kortteja kokonäyttötilassa.</string>
     <string name="edit_dialog_category">Kategoria</string>
     <string name="settings_audio_location_title">Aseta käyttäjän äänen sijainti</string>
-    <string name="what_is_new_message">Katso graafinen opas uusista toiminnoista, klikkaamalla versiohistoria painiketta tai käymällä virallisilla nettisivuillamme:&lt;a href=http://anymemo.org>http://anymemo.org&lt;/a>&lt;br /></string>
+    <string name="what_is_new_message">Katso graafinen opas uusista toiminnoista, klikkaamalla versiohistoria-painiketta tai käymällä virallisilla nettisivuillamme:&lt;a href=http://anymemo.org>http://anymemo.org&lt;/a>&lt;br /></string>
     <string name="list_mode_text">Lista korteista</string>
     <string name="merge_db_text">Yhdistä tietokannat</string>
     <string name="merge_success_title">Yhdistäminen onnistui</string>
@@ -190,8 +190,8 @@
     <string name="enable_third_party_arabic_title">Arabian-kielen tuki</string>
     <string name="enable_third_party_arabic_summary">Ota käyttöön kolmannen osapuolen sovellus (agawish Better-Arabic-Reshaper-koneisto).</string>
     <string name="donate_text">Lahjoita</string>
-    <string name="buy_pro_text">Osta Pro versio</string>
-    <string name="donate_summary">Voit lahjoittaa AnyMemo projektille ostamalla Pro version google playsta tai lahjoittamalla AnyMemon omien sivujen kautta	&lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt; Kiitoksia tuestasi.</string>
+    <string name="buy_pro_text">Osta Pro-versio</string>
+    <string name="donate_summary">Voit lahjoittaa AnyMemo-projektille ostamalla Pro-version Google Playsta tai lahjoittamalla AnyMemon omien sivujen kautta	&lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt; Kiitoksia tuestasi.</string>
     <string name="anymemo_pro_link">market://search?q=pname:org.liberty.android.fantastischmemopro</string>
     <string name="goto_prev_screen">Esikatselu/muokkaustila</string>
     <string name="exception_text">Poikkeus</string>
