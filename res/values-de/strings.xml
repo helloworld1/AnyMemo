@@ -19,7 +19,6 @@
     <string name="about_button_text">Über dieses Programm</string>
     <string name="help_button_text">Hilfe</string>
     <string name="edit_button_text">Datenbankvorschau/Bearbeiten</string>
-
     <string name="copyclipboard">Zwischenablage verwenden</string>
     <string name="copyclipboard_summary">Fragen automatisch in die Zwischenablage kopieren.</string>
     <string name="memo_show_answer">Antwort anzeigen</string>
