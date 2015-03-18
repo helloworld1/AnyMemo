@@ -435,7 +435,7 @@
     <string name="converting_failure_text">AnyMemo muuntaminen epäonnistui.</string>
     <string name="conversion_started_text">Muuntaminen aloitettu.</string>
     <string name="mark_as_learned_text">Merkitse opituksi</string>
-    <string name="mark_as_forgotten_text">Merkise unohtuneeksi</string>
+    <string name="mark_as_forgotten_text">Merkitse unohtuneeksi</string>
     <string name="mark_as_new_text">Merkitse uudeksi</string>
     <string name="mark_as_learned_forever_text">Merkitse muistetuksi</string>
     <string name="mark_as_learned_forever_warning_text">Tämä kortti ei enää koskaan ilmesty kiertoon. Halutko merkitä sen opituksi ikiajoiksi?</string>
