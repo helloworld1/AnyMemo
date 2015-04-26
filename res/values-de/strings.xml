@@ -292,7 +292,6 @@
     <string name="entry_last_learn_date">zuletzt gelernt am</string>
     <string name="entry_next_learn_date">nächstes Mal lernen am</string>
     <string name="filter_category_text">Kategorien-Filter</string>
-    <string name="delete_text">Löschen</string>
     <string name="delete_text_short">Del</string>
     <string name="sort_by_text">Sortieren nach</string>
     <string name="question_text">Frage</string>
