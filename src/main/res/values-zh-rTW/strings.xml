@@ -182,8 +182,6 @@
     <string name="grade_text">評分：</string>
     <string name="enable_volume_key_text">使用鍵盤來評分</string>
     <string name="enable_volume_key_summary">記憶卡片時可以用音量鍵來對當前卡片打分。</string>
-    <string name="enable_third_party_arabic_title">啟用第三方阿拉伯語引擎</string>
-    <string name="enable_third_party_arabic_summary">使用agawish的Better-Arabic-Reshaper阿拉伯語引擎(測試版)</string>
     <string name="donate_text">捐款</string>
     <string name="buy_pro_text">購買Pro版</string>
     <string name="donate_summary">您可以購買Pro版，或者到&lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;點擊捐款鏈接連支持本軟件。謝謝!</string>

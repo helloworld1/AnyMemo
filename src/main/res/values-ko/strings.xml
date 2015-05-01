@@ -183,8 +183,6 @@
     <string name="grade_text">등급</string>
     <string name="enable_volume_key_text">단축키 활성화</string>
     <string name="enable_volume_key_summary">학습중에 볼륨 up/down 키로 카드 등급을 조절할 수 있습니다</string>
-    <string name="enable_third_party_arabic_title">3rd-party Arabic 엔진 사용</string>
-    <string name="enable_third_party_arabic_summary">Enable agawish Better-Arabic-Reshaper engine (alpha quality)</string>
     <string name="donate_text">기부</string>
     <string name="buy_pro_text">프로버전 구매</string>
     <string name="donate_summary">프로버전을 안드로이드 마켓에서 구매하거나 &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;를 통해 기부할 수 있습니다. 고맙습니다.</string>

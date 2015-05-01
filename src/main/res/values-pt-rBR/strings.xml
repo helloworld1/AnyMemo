@@ -184,8 +184,6 @@
     <string name="grade_text">Avaliar</string>
     <string name="enable_volume_key_text">Habilitar atalho</string>
     <string name="enable_volume_key_summary">Usar a tecla de volume cima/baixo para avaliar as cartas.</string>
-    <string name="enable_third_party_arabic_title">Usar 3rd-party Arabic Engine.</string>
-    <string name="enable_third_party_arabic_summary">Habilitar agawish Better-Arabic-Reshaper engine (alpha quality)</string>
     <string name="donate_text">Doações</string>
     <string name="buy_pro_text">Comprar a versão Pró</string>
     <string name="donate_summary">Você pode fazer doações para o Projeto AnyMemo comprando a versão Pró no Mercado Android ou pelo site &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt; Obrigado pela ajuda.</string>

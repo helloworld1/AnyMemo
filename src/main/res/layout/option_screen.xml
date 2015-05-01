@@ -91,12 +91,4 @@
             anymemo:minIntValue="1"
             android:summary="@string/recent_summary" />
     </PreferenceCategory>
-    <PreferenceCategory
-        android:title="@string/misc_category">
-        <CheckBoxPreference
-            android:key="enable_third_party_arabic"
-            android:title="@string/enable_third_party_arabic_title"
-            android:defaultValue="true"
-            android:summary="@string/enable_third_party_arabic_summary" />
-    </PreferenceCategory>
 </PreferenceScreen>

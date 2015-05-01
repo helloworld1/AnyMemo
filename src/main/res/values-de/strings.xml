@@ -184,8 +184,6 @@
     <string name="grade_text">Note</string>
     <string name="enable_volume_key_text">Tastenkürzel aktivieren</string>
     <string name="enable_volume_key_summary">Verwendung der Lautstärke-Knöpfe zur Bewertung der Fragen.</string>
-    <string name="enable_third_party_arabic_title">Arabisch-Engine aktivieren</string>
-    <string name="enable_third_party_arabic_summary">Verwendet die agawish Better-Arabic-Reshaper Engine (gerade im Alpha-Stadium)</string>
     <string name="donate_text">Spenden</string>
     <string name="buy_pro_text">Pro Version kaufen</string>
     <string name="donate_summary">Sie können dem AnyMemo Project spenden, indem Sie die Pro Version über Android Marketplace kaufen oder online auf &lt;a href=&quot;http://anymemo.org&quot;&gt;http://anymemo.org&lt;/a&gt;. &lt;br /&gt; Wir danken Ihnen für Ihre Unterstützung.</string>

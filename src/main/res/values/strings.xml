@@ -184,8 +184,6 @@
     <string name="grade_text">Grade</string>
     <string name="enable_volume_key_text">Enable key shortcut</string>
     <string name="enable_volume_key_summary">Use volume up/down key to grade cards when learning.</string>
-    <string name="enable_third_party_arabic_title">Use 3rd-party Arabic Engine</string>
-    <string name="enable_third_party_arabic_summary">Enable agawish Better-Arabic-Reshaper engine (alpha quality).</string>
     <string name="donate_text">Donate</string>
     <string name="buy_pro_text">Buy Pro version</string>
     <string name="donate_summary">You can donate AnyMemo project by buying the Pro version on Android Market or pledge online at &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt; Thank you for your support.</string>

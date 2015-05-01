@@ -22,7 +22,6 @@ package org.liberty.android.fantastischmemo.utils;
 
 import javax.inject.Inject;
 
-import org.amr.arabic.ArabicUtilities;
 import org.liberty.android.fantastischmemo.domain.Option;
 import org.liberty.android.fantastischmemo.ui.CardImageGetterFactory;
 import org.xml.sax.XMLReader;
@@ -65,12 +64,6 @@ public class CardTextUtil {
      * and second one is answer.
      */
     public CharSequence getSpannableText(String text, boolean displayInHtml, boolean htmlLineBreakConversion) {
-        boolean enableThirdPartyArabic = option.getEnableArabicEngine();
-
-        if (enableThirdPartyArabic) {
-            text = ArabicUtilities.reshape(text);
-        }
-
         /* Automatic check HTML */
         if (AMStringUtils.isHTML(text) && displayInHtml) {
             if (htmlLineBreakConversion == true) {

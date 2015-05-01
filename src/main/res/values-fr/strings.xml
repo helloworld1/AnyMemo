@@ -186,8 +186,6 @@
     <string name="grade_text">Noter</string>
     <string name="enable_volume_key_text">Activer les raccourcis</string>
     <string name="enable_volume_key_summary">Utiliser les boutons de réglage du volume pour noter la difficulté pendant l\'apprentissage.</string>
-    <string name="enable_third_party_arabic_title">Moteur tiers pour l\'arabe.</string>
-    <string name="enable_third_party_arabic_summary">Activer le moteur Agawish Better-Arabic-Reshaper (en développement)</string>
     <string name="donate_text">Faire un don</string>
     <string name="buy_pro_text">Achetez la version Pro</string>
     <string name="donate_summary">Vous pouvez faire un don au projet AnyMemo en achetant la version Pro sur Android Market, ou en vous rendant sur  &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt; Merci pour votre soutien.</string>
