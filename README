@@ -15,9 +15,7 @@ See detailed info at http://anymemo.org
 Directory structure
 -------------------
 
-* src: The source files
-* src-flavors: Specific source files for free/pro flavor
-* test: The test files
+* src: The standard gradle folder structure
 * libs: Jar libraries
 * res: Android resources
 * assets: The Android assets

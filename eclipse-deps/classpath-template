@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
+    <classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="build/generated/source/buildConfig/free/debug"/>
 	<classpathentry kind="src" path="build/generated/source/r/free/debug"/>
 	<classpathentry kind="src" path="build/generated/source/rs/free/debug"/>
-	<classpathentry kind="src" path="test/src"/>
+    <classpathentry kind="src" path="src/androidTest/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="eclipse-deps/libs/aspectjrt.jar"/>
 	<classpathentry kind="lib" path="eclipse-deps/libs/commons-io-stripped.jar"/>

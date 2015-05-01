@@ -66,36 +66,6 @@ android {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
     }
-
-    sourceSets {
-        main {
-            manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = ['src']
-            resources.srcDirs = ['src']
-            aidl.srcDirs = ['src']
-            renderscript.srcDirs = ['src']
-            res.srcDirs = ['res']
-            assets.srcDirs = ['assets']
-        }
-
-        free {
-            res.srcDirs = ['src-flavors/free/res']
-        }
-
-        pro {
-            res.srcDirs = ['src-flavors/pro/res']
-        }
-
-        // Move the tests to tests/java, tests/res, etc...
-        androidTest.setRoot('tests')
-
-        androidTest {
-            java.srcDirs = ['test/src']
-            res.srcDirs = ['test/res']
-            assets.srcDirs = ['test/assets']
-            resources.srcDirs = ['test/src']
-        }
-    }
 }
 
 dependencies {
