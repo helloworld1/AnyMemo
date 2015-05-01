@@ -174,14 +174,11 @@
     <string name="removing_dup_title">重複データの削除</string>
     <string name="removing_dup_warning">重複データの削除にはファイルのサイズによってかなり時間がかかることがあります。途中で止めるとファイルの破損のおそれがあります。</string>
     <string name="detail_reset">学習データのリセット</string>
-    <string name="anymemo_widget_name">AnyMemo Widget</string>
     <string name="db_text">DB</string>
-    <string name="widget_fail_fetch">データベースがありません。</string>
     <string name="notification_text">通知</string>
     <string name="notification_summary">AnyMemoが閉じている時でも、インフォメーションを通知表示エリアに表示します。</string>
     <string name="edit_menu_br_text">タグの追加</string>
 
-    <string name="widget_no_review">復習するカードがありません。</string>
     <string name="grade_text">評価</string>
     <string name="enable_volume_key_text">ショートカットキー有効</string>
     <string name="enable_volume_key_summary">ボリュームキーを使い評価できます。</string>
@@ -225,7 +222,6 @@
     <string name="notification_12hr_text">12時間</string>
     <string name="notification_24hr_text">1日</string>
     <string name="download_source_anymemo">http://anymemo.org (default)</string>
-    <string name="download_source_ss">http://studystack.com (experimental)</string>
     <string name="swap_text">交換</string>
     <string name="swapdup_text">交換して複製</string>
     <string name="locale_german_text">ドイツ語</string>
@@ -243,7 +239,6 @@
     <string name="search_user">ユーザー検索</string>
     <string name="upload_wait">アップロード中…しばらくお待ちください。</string>
     <string name="fe_directory_text">ディレクトリー閲覧</string>
-    <string name="fe_search_user_message">ログインアカウントをいれてください。 例） yourname@example.com.</string>
     <string name="card_style">カードスタイル</string>
     <string name="card_style_double">両面</string>
     <string name="card_style_single">片面</string>

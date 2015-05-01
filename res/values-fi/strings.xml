@@ -176,14 +176,11 @@
     <string name="removing_dup_title">Poistetaan kaksoiskappaleet</string>
     <string name="removing_dup_warning">Kaksoiskappaleiden poistaminen voi kestää hyvin pitkään riippuen tietokannan koosta. Prosessin keskeyttäminen voi johtaa tietokannan vioittumiseen!</string>
     <string name="detail_reset">Nollaa oppimisdata</string>
-    <string name="anymemo_widget_name">AnyMemo Widget</string>
     <string name="db_text">DB</string>
-    <string name="widget_fail_fetch">Tietokantavirhe</string>
     <string name="notification_text">Ilmoitus</string>
     <string name="notification_summary">Säädä kuinka usein androidin ilmoituspalkissa ilmoitetaan kertaamisesta, kun AnyMemo ei ole auki.</string>
     <string name="edit_menu_br_text">Lisää br tunniste</string>
     <string name="edit_menu_image_text">Lisää kuva</string>
-    <string name="widget_no_review">Ei kortteja opiskelua varten.</string>
     <string name="grade_text">Luokka</string>
     <string name="enable_volume_key_text">Aktivoi pikanäppäin</string>
     <string name="enable_volume_key_summary">Käytä äänenvoimakkuuden säädintä arvioidaksesi kortteja opiskelun aikana.</string>
@@ -227,7 +224,6 @@
     <string name="notification_12hr_text">12 tuntia</string>
     <string name="notification_24hr_text">Yksi päivä</string>
     <string name="download_source_anymemo">anymemo.org\n(oletusarvo)</string>
-    <string name="download_source_ss">studystack.com\n(kokeellinen)</string>
     <string name="swap_text">Vaihda</string>
     <string name="swapdup_text">Vaihda&amp;monista</string>
     <string name="locale_german_text">Saksa</string>
@@ -245,7 +241,6 @@
     <string name="search_user">Etsi käyttäjällä</string>
     <string name="upload_wait">Lähetetään.. ole hyvä ja odota. Suuren tietokannan lähettäminen voi kestää useita minuutteja.</string>
     <string name="fe_directory_text">Selaa hakemistoja</string>
-    <string name="fe_search_user_message">Ole hyvä ja kirjoita sähköpostiosoite kirjautuaksesi, sinunosoitteesi@esimerkki.fi</string>
     <string name="card_style">Kortin tyyli</string>
     <string name="card_style_double">Kaksipuolinen</string>
     <string name="card_style_single">Yksipuolinen</string>
@@ -451,7 +446,6 @@
     <string name="download_source_cram">Cram</string>
     <string name="load_more_text">Lataa lisää</string>
     <string name="search_by_title_text">Etsi nimikkeellä</string>
-    <string name="search_by_title_message">Ole hyvä ja kirjoita nimike tai kuvaus etsiäksesi,\esim. Espanja, spanish jne.</string>
     <string name="open_text">Avaa</string>
     <string name="close_text">Sulje</string>
 </resources>

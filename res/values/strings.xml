@@ -176,14 +176,11 @@
     <string name="removing_dup_title">Removing duplicates</string>
     <string name="removing_dup_warning">Removing duplicate cards will take a very long time depending on the database size. Interrupting the process will result in a corrupted database!</string>
     <string name="detail_reset">Reset learning data</string>
-    <string name="anymemo_widget_name">AnyMemo Widget</string>
     <string name="db_text">DB</string>
-    <string name="widget_fail_fetch">No database.</string>
     <string name="notification_text">Notification</string>
     <string name="notification_summary">Display information on the notification area even when AnyMemo is not opened.</string>
     <string name="edit_menu_br_text">Add br tag</string>
     <string name="edit_menu_image_text">Add image</string>
-    <string name="widget_no_review">No card to review.</string>
     <string name="grade_text">Grade</string>
     <string name="enable_volume_key_text">Enable key shortcut</string>
     <string name="enable_volume_key_summary">Use volume up/down key to grade cards when learning.</string>
@@ -227,7 +224,6 @@
     <string name="notification_12hr_text">12 hours</string>
     <string name="notification_24hr_text">One day</string>
     <string name="download_source_anymemo">AnyMemo.org</string>
-    <string name="download_source_ss">StudyStack</string>
     <string name="swap_text">Swap</string>
     <string name="swapdup_text">Swap&amp;Dup</string>
     <string name="locale_german_text">German</string>
@@ -245,7 +241,6 @@
     <string name="search_user">Search by user</string>
     <string name="upload_wait">Uploading... please wait. It may take several minutes for a large db.</string>
     <string name="fe_directory_text">Browser directories</string>
-    <string name="fe_search_user_message">Please enter user email to login,\ne.g. yourname@example.com</string>
     <string name="card_style">Card style</string>
     <string name="card_style_double">Double sided</string>
     <string name="card_style_single">Single sided</string>
@@ -451,7 +446,6 @@
     <string name="download_source_cram">Cram</string>
     <string name="load_more_text">Load more</string>
     <string name="search_by_title_text">Search by title</string>
-    <string name="search_by_title_message">Please enter a title or description to search,\ne.g. Spanish, math etc.</string>
     <string name="open_text">Open</string>
     <string name="close_text">Close</string>
     <string name="greek_text">Greek</string>

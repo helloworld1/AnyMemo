@@ -175,14 +175,11 @@
     <string name="removing_dup_title">중복 제거 중...</string>
     <string name="removing_dup_warning">중복 제거는 학습장의 크기에 따라 오랜 시간이 걸릴 수도 있습니다. 중간에 멈추면 학습장이 망가질 수 있습니다</string>
     <string name="detail_reset">학습 기록 초기화</string>
-    <string name="anymemo_widget_name">AnyMemo Widget</string>
     <string name="db_text">학습장</string>
-    <string name="widget_fail_fetch">학습장이 없습니다.</string>
     <string name="notification_text">알림</string>
     <string name="notification_summary">알림영역에 정보표시. AnyMemo가 열리지 않았을 때도 표시.</string>
     <string name="edit_menu_br_text">br-Tag 추가</string>
     <string name="edit_menu_image_text">이미지 추가</string>
-    <string name="widget_no_review">리뷰할 카드가 없습니다</string>
     <string name="grade_text">등급</string>
     <string name="enable_volume_key_text">단축키 활성화</string>
     <string name="enable_volume_key_summary">학습중에 볼륨 up/down 키로 카드 등급을 조절할 수 있습니다</string>
@@ -226,7 +223,6 @@
     <string name="notification_12hr_text">12 시간</string>
     <string name="notification_24hr_text">하루</string>
     <string name="download_source_anymemo">http://anymemo.org (default)</string>
-    <string name="download_source_ss">http://studystack.com (experimental)</string>
     <string name="swap_text">교환</string>
     <string name="swapdup_text">교환&amp;복사</string>
     <string name="locale_german_text">German</string>

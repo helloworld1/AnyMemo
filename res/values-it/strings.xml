@@ -176,14 +176,11 @@
     <string name="removing_dup_title">Cancellazione duplicati</string>
     <string name="removing_dup_warning">La cancellazione dei duplicati può essere un processo molto lungo a seconda della dimensione del database. Un\'interruzione provoca malfunzionamenti nel database!</string>
     <string name="detail_reset">Azzeramento dei dati di apprendimento</string>
-    <string name="anymemo_widget_name">AnyMemo Widget</string>
     <string name="db_text">DB</string>
-    <string name="widget_fail_fetch">Nessun database.</string>
     <string name="notification_text">Notifiche</string>
     <string name="notification_summary">Mostra notifiche di AnyMemo anche se l\'applicazione non è aperta.</string>
     <string name="edit_menu_br_text">Aggiungi tag br</string>
     <string name="edit_menu_image_text">Aggiungi immagine</string>
-    <string name="widget_no_review">Nessun ripasso.</string>
     <string name="grade_text">Punteggio</string>
     <string name="enable_volume_key_text">Abilita i tasti scorciatoia</string>
     <string name="enable_volume_key_summary">Usa il volume alza/abbassa per dare i punteggi durante l\'apprendimento.</string>
@@ -227,7 +224,6 @@
     <string name="notification_12hr_text">12 ore</string>
     <string name="notification_24hr_text">Un giorno</string>
     <string name="download_source_anymemo">anymemo.org\n(default)</string>
-    <string name="download_source_ss">StudyStack</string>
     <string name="swap_text">Scambia</string>
     <string name="swapdup_text">Scambia+Duplica</string>
     <string name="locale_german_text">Tedesco</string>
@@ -245,7 +241,6 @@
     <string name="search_user">Ricerca per username</string>
     <string name="upload_wait">Caricamento... Attendere prego. Potrebbe metterci parecchio con un DB grosso.</string>
     <string name="fe_directory_text">Sfoglia le cartelle</string>
-    <string name="fe_search_user_message">Inserire un\'e-mail come login,\np.es. yourname@example.com</string>
     <string name="card_style">Stile schede</string>
     <string name="card_style_double">A doppia faccia</string>
     <string name="card_style_single">A faccia singola</string>
@@ -450,7 +445,6 @@
     <string name="download_source_cram">Cram</string>
     <string name="load_more_text">Caricane ancora</string>
     <string name="search_by_title_text">Cerca per titolo</string>
-    <string name="search_by_title_message">Inserisci un titolo o una descrizione da cercare,\np.es. spagnolo, matematica ecc.</string>
     <string name="open_text">Apri</string>
     <string name="close_text">Chiudi</string>
 </resources>

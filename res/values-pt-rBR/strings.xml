@@ -176,14 +176,11 @@
     <string name="removing_dup_title">Removendo duplicados</string>
     <string name="removing_dup_warning">Remover cartas duplicadas pode demorar muito tempo dependendo do tamanho do Banco de Dados. Interromper o processo irá corromper o Banco de Dados!</string>
     <string name="detail_reset">Resetar os dados de aprendizagem</string>
-    <string name="anymemo_widget_name">Widget AnyMemo</string>
     <string name="db_text">DB</string>
-    <string name="widget_fail_fetch">Nenhum banco de dados.</string>
     <string name="notification_text">Notificação</string>
     <string name="notification_summary">Mostrar informações na área de notificação mesmo que o AnyMemo não esteja aberto</string>
     <string name="edit_menu_br_text">Adicionar br tag</string>
     <string name="edit_menu_image_text">Adicionar imagem</string>
-    <string name="widget_no_review">Sem cartas para revisar.</string>
     <string name="grade_text">Avaliar</string>
     <string name="enable_volume_key_text">Habilitar atalho</string>
     <string name="enable_volume_key_summary">Usar a tecla de volume cima/baixo para avaliar as cartas.</string>
@@ -227,7 +224,6 @@
     <string name="notification_12hr_text">12 horas</string>
     <string name="notification_24hr_text">Um Dia</string>
     <string name="download_source_anymemo">http://anymemo.org (padrão)</string>
-    <string name="download_source_ss">http://studystack.com(experimental)</string>
     <string name="swap_text">Trocar</string>
     <string name="swapdup_text">Trocar&amp;Dup</string>
     <string name="locale_german_text">Alemão</string>

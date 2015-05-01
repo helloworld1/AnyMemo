@@ -174,14 +174,11 @@
     <string name="removing_dup_title">去除重復卡片</string>
     <string name="removing_dup_warning">去除重復卡片會花較長時間，過程不能中斷，否則會損壞數據庫!</string>
     <string name="detail_reset">重置學習信息</string>
-    <string name="anymemo_widget_name">AnyMemo桌面工具</string>
     <string name="db_text">數據庫</string>
-    <string name="widget_fail_fetch">沒有數據庫</string>
     <string name="notification_text">定時提醒</string>
     <string name="notification_summary">設定定時提醒的時間間隔。</string>
     <string name="edit_menu_br_text">加入換行符</string>
     <string name="edit_menu_image_text">添加圖片</string>
-    <string name="widget_no_review">今天沒有要復習的卡片。</string>
     <string name="grade_text">評分：</string>
     <string name="enable_volume_key_text">使用鍵盤來評分</string>
     <string name="enable_volume_key_summary">記憶卡片時可以用音量鍵來對當前卡片打分。</string>
@@ -224,7 +221,6 @@
     <string name="notification_12hr_text">半天</string>
     <string name="notification_24hr_text">一天</string>
     <string name="download_source_anymemo">http://anymemo.org (默認)</string>
-    <string name="download_source_ss">http://studystack.com (實驗)</string>
     <string name="swap_text">交換</string>
     <string name="swapdup_text">交換且復制</string>
     <string name="locale_german_text">德語</string>
@@ -242,7 +238,6 @@
     <string name="search_user">用戶登陸</string>
     <string name="upload_wait">正在上傳請稍候。</string>
     <string name="fe_directory_text">瀏覽目錄</string>
-    <string name="fe_search_user_message">請輸入用戶email來登陸, 比如yourname@example.com.</string>
     <string name="card_style">卡片樣式</string>
     <string name="card_style_double">雙面卡片</string>
     <string name="card_style_single">單面卡片</string>
@@ -443,5 +438,4 @@
     <string name="download_source_cram">Cram</string>
     <string name="load_more_text">載入更多</string>
     <string name="search_by_title_text">按標題搜索</string>
-    <string name="search_by_title_message">請輸入要搜索的標題,\n比如Spanish, math etc.</string>
 </resources>

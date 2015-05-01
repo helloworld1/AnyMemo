@@ -176,14 +176,11 @@
     <string name="removing_dup_title">Duplikate werden entfernt...</string>
     <string name="removing_dup_warning">Das entfernen der Duplikate, abhängig von der Größe der Datenbank, kann eine sehr lange Zeit dauern. Das Unterbrechen des Prozesses wird die Datenbank beschädigen!</string>
     <string name="detail_reset">Lernfortschritt zurücksetzen (1x)</string>
-    <string name="anymemo_widget_name">AnyMemo Widget</string>
     <string name="db_text">Datenbank</string>
-    <string name="widget_fail_fetch">Keine Datenbank vorhanden.</string>
     <string name="notification_text">Erinnerungen</string>
     <string name="notification_summary">Zeigt Erinnerungsmeldungen in der Taskleiste an. Funktioniert auch wenn AnyMemo geschlossen ist.</string>
     <string name="edit_menu_br_text">br-Tag hinzufügen</string>
     <string name="edit_menu_image_text">Grafik hinzufügen</string>
-    <string name="widget_no_review">Es stehen keine Karteikarten zur Wiederhollung bereit.</string>
     <string name="grade_text">Note</string>
     <string name="enable_volume_key_text">Tastenkürzel aktivieren</string>
     <string name="enable_volume_key_summary">Verwendung der Lautstärke-Knöpfe zur Bewertung der Fragen.</string>
@@ -226,7 +223,6 @@
     <string name="notification_12hr_text">12 Stunden</string>
     <string name="notification_24hr_text">täglich</string>
     <string name="download_source_anymemo">http://anymemo.org\n(Standard)</string>
-    <string name="download_source_ss">http://studystack.com</string>
     <string name="swap_text">Vertauschen</string>
     <string name="swapdup_text">Duplizieren+Vertauschen</string>
     <string name="locale_german_text">Deutsch</string>
@@ -244,7 +240,6 @@
     <string name="search_user">Nach Benutzer suchen</string>
     <string name="upload_wait">Upload läuft... Bitte warten. Bei großen Datenbanken kann dieser Vorgang einige Zeit in Anspruch nehmen.</string>
     <string name="fe_directory_text">Verzeichnisse durchsuchen</string>
-    <string name="fe_search_user_message">Bitte E-Mail_Adresse zum Einloggen angeben,\nz.B. ihrname@beispiel.de</string>
     <string name="card_style">Karteikarten-Stil</string>
     <string name="card_style_double">Zweiseitig</string>
     <string name="card_style_single">Einseitig</string>
@@ -448,7 +443,6 @@
     <string name="download_source_cram">Cram</string>
     <string name="load_more_text">Mehr laden</string>
     <string name="search_by_title_text">Nach Titel suchen</string>
-    <string name="search_by_title_message">Bitte geben Sie einen Titel oder eine Bschreiebung zum suchen ein,\nz.B. Spanisch, Mathematik etc.</string>
     <string name="open_text">Öffnen</string>
     <string name="close_text">Schließen</string>
     <string name="greek_text">Griechisch</string>

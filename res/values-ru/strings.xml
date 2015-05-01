@@ -174,14 +174,11 @@
     <string name="removing_dup_title">Удаление дубликатов</string>
     <string name="removing_dup_warning">Удаление дубликатов карточек займёт много времени в зависимости от размера базы. Прерывание процесса повредит базу!</string>
     <string name="detail_reset">Сбросить прогресс</string>
-    <string name="anymemo_widget_name">AnyMemo виджет</string>
     <string name="db_text">DB</string>
-    <string name="widget_fail_fetch">Нет базы.</string>
     <string name="notification_text">Уведомления</string>
     <string name="notification_summary">Показывать напоминания в области уведомлений.</string>
     <string name="edit_menu_br_text">Доб. br тег</string>
     <string name="edit_menu_image_text">Доб. рисунок</string>
-    <string name="widget_no_review">Нет повторов.</string>
     <string name="grade_text">Оценка</string>
     <string name="enable_volume_key_text">Горячие клавиши</string>
     <string name="enable_volume_key_summary">Использовать клавиши громкости для выставления оценок.</string>
@@ -224,7 +221,6 @@
     <string name="notification_12hr_text">12 часов</string>
     <string name="notification_24hr_text">24 часа</string>
     <string name="download_source_anymemo">anymemo.org\n(по умолчанию)</string>
-    <string name="download_source_ss">studystack.com\n(экспериментально)</string>
     <string name="swap_text">Обмен</string>
     <string name="swapdup_text">Обм&amp;Коп</string>
     <string name="locale_german_text">Немецкий</string>
@@ -242,7 +238,6 @@
     <string name="search_user">Поиск по пользователям</string>
     <string name="upload_wait">Заливка... ждите. Может занять несколько минут для больших баз.</string>
     <string name="fe_directory_text">Обозреватель каталогов</string>
-    <string name="fe_search_user_message">Введите email пользователя чтобы залогиниться, напр.  yourname@example.com.</string>
     <string name="card_style">Стиль карточек</string>
     <string name="card_style_double">Двухсторонний</string>
     <string name="card_style_single">Односторонний</string>
@@ -448,7 +443,6 @@
     <string name="download_source_cram">Зубрёжка</string>
     <string name="load_more_text">Загрузить больше</string>
     <string name="search_by_title_text">Поиск по названиям</string>
-    <string name="search_by_title_message">Введите название или описание для поиска,\nнапример Испанский, математика и т.д.</string>
     <string name="open_text">Открыть</string>
     <string name="close_text">Закрыть</string>
     <string name="greek_text">Греческий</string>

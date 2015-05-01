@@ -176,14 +176,11 @@
     <string name="removing_dup_title">Usuwanie duplikatów</string>
     <string name="removing_dup_warning">Usuwanie duplikatów to czasochłonny proces w zależności od rozmiaru bazy danych. Przerwanie tego procesu spowoduje uszkodzenie bazy!</string>
     <string name="detail_reset">Skasuj dane postępu nauki</string>
-    <string name="anymemo_widget_name">AnyMemo Widget</string>
     <string name="db_text">BD</string>
-    <string name="widget_fail_fetch">Brak bazy danych.</string>
     <string name="notification_text">Powiadomienie</string>
     <string name="notification_summary">Wyświetl informację na pasku powiadomień nawet jeśli AnyMemo nie jest uruchomione.</string>
     <string name="edit_menu_br_text">Dodaj tag br</string>
     <string name="edit_menu_image_text">Dodaj obraz</string>
-    <string name="widget_no_review">Brak kart do powtórki.</string>
     <string name="grade_text">Ocena</string>
     <string name="enable_volume_key_text">Włącz przyciski sprzętowe</string>
     <string name="enable_volume_key_summary">Użyj przycisków Głośniej/Ciszej by oceniać karty podczas nauki.</string>
@@ -227,7 +224,6 @@
     <string name="notification_12hr_text">12 godzin</string>
     <string name="notification_24hr_text">Dzień</string>
     <string name="download_source_anymemo">http://anymemo.org (domyślny)</string>
-    <string name="download_source_ss">http://studystack.com (eksperymentalny)</string>
     <string name="swap_text">Zamień</string>
     <string name="swapdup_text">Zamień i zduplikuj</string>
     <string name="locale_german_text">Niemiecki</string>

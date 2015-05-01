@@ -174,14 +174,11 @@
     <string name="remove_dup_text">Odstranění duplikátů</string>
     <string name="removing_dup_title">Odstraňuji duplikáty</string>
     <string name="removing_dup_warning">Odstranění duplicitních karet může trvat velmi dlouhou dobu, v závislosti na velikosti databáze. Přerušení procesu může mít za následek porušení databáze!</string>
-    <string name="anymemo_widget_name">AnyMemo Widget</string>
     <string name="db_text">DB</string>
-    <string name="widget_fail_fetch">Chybí databáze.</string>
     <string name="notification_text">Oznámení</string>
     <string name="notification_summary">Zobrazení informací v oznamovací oblastiani AnyMemo nejsou otevřeny</string>
     <string name="edit_menu_br_text">Přidat br značku</string>
     <string name="edit_menu_image_text">Přidat obrázek</string>
-    <string name="widget_no_review">Žádná karta k prohlížení.</string>
     <string name="grade_text">Stupeň</string>
     <string name="enable_volume_key_text">Povolit klávesovou zkratku</string>
     <string name="enable_volume_key_summary">Použijte tlačítka hlasitosti pro odstupňování karet při učení.</string>

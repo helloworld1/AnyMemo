@@ -178,14 +178,11 @@
     <string name="removing_dup_title">Suppression des doublons</string>
     <string name="removing_dup_warning">La suppression des doublon peut prendre beaucoup de temps s\'il y a beaucoup de cartes. Si vous interrompez le processus, le fichier sera corrompu!</string>
     <string name="detail_reset">Oublier les données d\'apprentissage</string>
-    <string name="anymemo_widget_name">Widget AnyMemo</string>
     <string name="db_text">Pile</string>
-    <string name="widget_fail_fetch">Pas de pile.</string>
     <string name="notification_text">Notification</string>
     <string name="notification_summary">Affiche des rappels de révision même si AnyMemo n\'est pas ouvert.</string>
     <string name="edit_menu_br_text">Ajouter tag br</string>
     <string name="edit_menu_image_text">Ajouter image</string>
-    <string name="widget_no_review">Rien à réviser.</string>
     <string name="grade_text">Noter</string>
     <string name="enable_volume_key_text">Activer les raccourcis</string>
     <string name="enable_volume_key_summary">Utiliser les boutons de réglage du volume pour noter la difficulté pendant l\'apprentissage.</string>
@@ -232,7 +229,6 @@
     <string name="notification_12hr_text">12 Heures</string>
     <string name="notification_24hr_text">Un jour</string>
     <string name="download_source_anymemo">http://anymemo.org (défault)</string>
-    <string name="download_source_ss">http://studystack.com (expérimental)</string>
     <string name="swap_text">Intervertir</string>
     <string name="swapdup_text">Copier et intervertir</string>
 </resources>
