@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.downloader.google;
 
 import java.text.SimpleDateFormat;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -32,6 +33,8 @@ import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.LearningData;
+
+import roboguice.util.Ln;
 
 import android.content.Context;
 
@@ -77,8 +80,6 @@ public class GoogleDriveUploadHelper {
         // Find the spreadsheets to delete after the process is done
         List<Document> spreadsheetsToDelete = DocumentFactory.findDocuments(title, authToken);
 
-
-
         // Create the AnyMemo folder if needed
         Folder folder = FolderFactory.createOrReturnFolder("AnyMemo", authToken);
 
@@ -89,6 +90,34 @@ public class GoogleDriveUploadHelper {
 
         // Create worksheets
         List<Worksheet> worksheetsToDelete = WorksheetFactory.getWorksheets(newSpreadsheet, authToken);
+        // Delete the worksheets with the duplicated name
+        // First create a dummy worksheet so we have at least one worksheet
+        boolean needsToCreateDummy = true;
+        for (Worksheet ws: worksheetsToDelete) {
+            if (ws.getTitle().equals("dummy")) {
+                needsToCreateDummy = false;
+                break;
+            }
+        }
+
+        // Dummy worksheet will be deleted at the last step
+        if (needsToCreateDummy) {
+            Worksheet dummyWorksheet = WorksheetFactory.createWorksheet(newSpreadsheet, "dummy", 1, 1, authToken);
+            worksheetsToDelete.add(dummyWorksheet);
+        }
+
+        Iterator<Worksheet> worksheetToDeleteIterator = worksheetsToDelete.iterator();
+        while (worksheetToDeleteIterator.hasNext()) {
+            Worksheet ws = worksheetToDeleteIterator.next();
+            if (ws.getTitle().equals("cards")) {
+                WorksheetFactory.deleteWorksheet(newSpreadsheet, ws, authToken);
+                worksheetToDeleteIterator.remove();
+            }
+            if (ws.getTitle().equals("learning_data")) {
+                WorksheetFactory.deleteWorksheet(newSpreadsheet, ws, authToken);
+                worksheetToDeleteIterator.remove();
+            }
+        }
 
         // setting up the worksheet size is critical.
         Worksheet cardsWorksheet = WorksheetFactory.createWorksheet(newSpreadsheet, "cards", cardList.size() + 1, 4, authToken);
@@ -155,6 +184,7 @@ public class GoogleDriveUploadHelper {
         for (Worksheet ws : worksheetsToDelete) {
             WorksheetFactory.deleteWorksheet(newSpreadsheet, ws, authToken);
         }
+
         // ... And spreadsheets with duplicated names.
         for (Document ss : spreadsheetsToDelete) {
             DocumentFactory.deleteDocument(ss, authToken);

@@ -30,8 +30,6 @@ import javax.net.ssl.HttpsURLConnection;
 import org.apache.commons.io.IOUtils;
 import org.xmlpull.v1.XmlPullParserException;
 
-import com.google.common.xml.XmlEscapers;
-
 public class FolderFactory {
     private FolderFactory() {
         throw new AssertionError("Don't call constructor");
@@ -49,16 +47,15 @@ public class FolderFactory {
     }
 
     public static List<Folder> getFolders(String authToken) throws XmlPullParserException, IOException {
-        URL url = new URL("https://docs.google.com/feeds/default/private/full/-/folder?access_token="+authToken);
+        URL url = new URL("https://www.googleapis.com/drive/v2/files?mimeType=application/vnd.google-apps.folder");
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-        conn.addRequestProperty("GData-Version", "3.0");
-        conn.addRequestProperty("If-Match", "*");
+        conn.setRequestProperty("Authorization", "Bearer " + authToken);
         if (conn.getResponseCode() / 100 >= 3) {
             String s = new String(IOUtils.toByteArray(conn.getErrorStream()));
             throw new IOException(s);
         }
 
-        List<Folder> folderList = EntryFactory.getEntries(Folder.class, conn.getInputStream());
+        List<Folder> folderList = EntryFactory.getEntriesFromDriveApi(Folder.class, conn.getInputStream());
 
         return folderList;
     }
@@ -72,65 +69,52 @@ public class FolderFactory {
     }
 
     public static Folder createFolder(String title, String authToken) throws XmlPullParserException, IOException {
-        URL url = new URL("https://docs.google.com/feeds/default/private/full?access_token=" + authToken);
-
-        String payload = "<?xml version='1.0' encoding='UTF-8'?>" +
-            "<entry xmlns='http://www.w3.org/2005/Atom'>"+
-            "<category scheme='http://schemas.google.com/g/2005#kind'"+
-            " term='http://schemas.google.com/docs/2007#folder'/>"+
-            "<title>"+ XmlEscapers.xmlAttributeEscaper().escape(title) +"</title>"+
-            "</entry>";
+        URL url = new URL("https://www.googleapis.com/drive/v2/files");
 
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
         conn.setDoInput(true);
         conn.setDoOutput(true);
-        //conn.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
-        conn.addRequestProperty("GData-Version", "3.0");
-        conn.addRequestProperty("Content-Type", "application/atom+xml");
-        conn.setRequestProperty("Content-Length", Integer.toString(payload.getBytes("UTF-8").length));
+        conn.setRequestProperty("Authorization", "Bearer " + authToken);
+        conn.setRequestProperty("Content-Type", "application/json");
 
+        // Used to calculate the content length of the multi part
+        String payload = "{\"title\":\"" + title + "\",\"mimeType\":\"application/vnd.google-apps.folder\"}";
+        conn.setRequestProperty("Content-Length", "" + payload.length());
 
-        OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
-        out.write(payload);
-        out.close();
+        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(conn.getOutputStream());
+        outputStreamWriter.write(payload);
+        outputStreamWriter.close();
 
         if (conn.getResponseCode() / 100 >= 3) {
             String s = new String(IOUtils.toByteArray(conn.getErrorStream()));
             throw new RuntimeException(s);
         }
 
-        List<Folder> folderList= EntryFactory.getEntries(Folder.class, conn.getInputStream());
-
-        return folderList.get(0);
+        return EntryFactory.getEntryFromDriveApi(Folder.class, conn.getInputStream());
     }
 
     public static void addDocumentToFolder(Document document, Folder folder, String authToken) throws XmlPullParserException, IOException {
-        URL url = new URL("https://docs.google.com/feeds/default/private/full/" + folder.getId() + "/contents?access_token=" + authToken);
-
-        String payload = "<?xml version='1.0' encoding='UTF-8'?>" +
-            "<entry xmlns='http://www.w3.org/2005/Atom'>"+
-            "<id>"+ XmlEscapers.xmlAttributeEscaper().escape("https://docs.google.com/feeds/default/private/full/" + document.getId()) +"</id>" +
-            "</entry>";
+        URL url = new URL("https://www.googleapis.com/drive/v2/files/" + document.getId() + "/parents");
 
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
         conn.setDoInput(true);
         conn.setDoOutput(true);
-        //conn.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
-        conn.addRequestProperty("GData-Version", "3.0");
-        conn.addRequestProperty("Content-Type", "application/atom+xml");
-        conn.setRequestProperty("Content-Length", Integer.toString(payload.getBytes("UTF-8").length));
+        conn.setRequestProperty("Authorization", "Bearer " + authToken);
+        conn.setRequestProperty("Content-Type", "application/json");
 
+        String payload = "{\"id\":\"" + folder.getId() + "\"}";
+        conn.setRequestProperty("Content-Length", "" + payload.length());
 
-        OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
-        out.write(payload);
-        out.close();
+        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(conn.getOutputStream());
+        outputStreamWriter.write(payload);
+        outputStreamWriter.close();
+        
 
         if (conn.getResponseCode() / 100 >= 3) {
             String s = new String(IOUtils.toByteArray(conn.getErrorStream()));
             throw new RuntimeException(s);
         }
-
     }
 }

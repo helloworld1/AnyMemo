@@ -30,52 +30,41 @@ import javax.net.ssl.HttpsURLConnection;
 import org.apache.commons.io.IOUtils;
 import org.xmlpull.v1.XmlPullParserException;
 
-import com.google.common.xml.XmlEscapers;
-
 public class DocumentFactory {
     private DocumentFactory() {
         throw new AssertionError("Don't call constructor");
     }
 
     public static Document createSpreadsheet(String title, String authToken) throws XmlPullParserException, IOException {
-        URL url = new URL("https://docs.google.com/feeds/default/private/full?access_token=" + authToken);
-
-        String payload = "<?xml version='1.0' encoding='UTF-8'?>" +
-            "<entry xmlns='http://www.w3.org/2005/Atom'>"+
-            "<category scheme='http://schemas.google.com/g/2005#kind'"+
-            " term='http://schemas.google.com/docs/2007#spreadsheet'/>"+
-            "<title>"+ XmlEscapers.xmlAttributeEscaper().escape(title) +"</title>"+
-            "</entry>";
+        URL url = new URL("https://www.googleapis.com/drive/v2/files");
 
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
         conn.setDoInput(true);
         conn.setDoOutput(true);
-        //conn.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
-        conn.addRequestProperty("GData-Version", "3.0");
-        conn.addRequestProperty("Content-Type", "application/atom+xml");
-        conn.setRequestProperty("Content-Length", Integer.toString(payload.getBytes("UTF-8").length));
+        conn.setRequestProperty("Authorization", "Bearer " + authToken);
+        conn.setRequestProperty("Content-Type", "application/json");
 
 
-        OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
-        out.write(payload);
-        out.close();
+        String payload = "{\"title\":\"" + title + "\",\"mimeType\":\"application/vnd.google-apps.spreadsheet\"}";
+        conn.setRequestProperty("Content-Length", "" + payload.length());
+
+        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(conn.getOutputStream());
+        outputStreamWriter.write(payload);
+        outputStreamWriter.close();
 
         if (conn.getResponseCode() / 100 >= 3) {
             String s = new String(IOUtils.toByteArray(conn.getErrorStream()));
             throw new RuntimeException(s);
         }
 
-        List<Document> documentList = EntryFactory.getEntries(Document.class, conn.getInputStream());
-
-        return documentList.get(0);
+        return EntryFactory.getEntryFromDriveApi(Document.class, conn.getInputStream());
     }
 
     public static void deleteDocument(Document document, String authToken) throws IOException {
-        URL url = new URL("https://docs.google.com/feeds/default/private/full/" + document.getId() + "?access_token=" + authToken);
+        URL url = new URL("https://www.googleapis.com/drive/v2/files/" + document.getId());
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-        conn.addRequestProperty("GData-Version", "3.0");
-        conn.addRequestProperty("If-Match", "*");
+        conn.setRequestProperty("Authorization", "Bearer " + authToken);
 
         conn.setRequestMethod("DELETE");
 
@@ -86,18 +75,17 @@ public class DocumentFactory {
     }
 
     public static List<Document> findDocuments(String title, String authToken) throws Exception {
-        URL url = new URL("https://docs.google.com/feeds/default/private/full?title=" + URLEncoder.encode(title, "UTF-8") + "&title-exact=true&access_token=" + authToken);
+        URL url = new URL("https://www.googleapis.com/drive/v2/files?q=" + URLEncoder.encode("title = '" + title + "'", "UTF-8"));
 
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-        conn.addRequestProperty("Authorization", "GoogleLogin auth=" + authToken);
-        conn.addRequestProperty("GData-Version", "3.0");
+        conn.setRequestProperty("Authorization", "Bearer " + authToken);
 
-        if (conn.getResponseCode() / 100 >= 3) {
+        if (conn.getResponseCode() >= 300) {
             String s = new String(IOUtils.toByteArray(conn.getErrorStream()));
             throw new RuntimeException(s);
         }
 
-        List<Document> documentList = EntryFactory.getEntries(Document.class, conn.getInputStream());
+        List<Document> documentList = EntryFactory.getEntriesFromDriveApi(Document.class, conn.getInputStream());
         return documentList;
     }
 }
