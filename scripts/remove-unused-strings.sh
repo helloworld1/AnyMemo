@@ -1,8 +1,8 @@
 #!/bin/bash
 
-srcDir='src' 
-resDir='res'
-stringsFile='res/values/strings.xml'
+srcDir='src/main/java' 
+resDir='src/main/res'
+stringsFile='src/main/res/values/strings.xml'
 
 deleteLine ()
 {
