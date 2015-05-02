@@ -11,9 +11,6 @@ buildscript {
 apply plugin: 'android-sdk-manager'
 apply plugin: 'android'
 
-sourceCompatibility = 1.6
-targetCompatibility = 1.6
-
 repositories {
     mavenCentral()
 }
@@ -24,7 +21,7 @@ android {
 
     defaultConfig {
         versionCode 212
-        versionName "10.6.991"
+        versionName "10.7"
         minSdkVersion 11
         targetSdkVersion 21
         testApplicationId "org.liberty.android.fantastischmemo.test"
