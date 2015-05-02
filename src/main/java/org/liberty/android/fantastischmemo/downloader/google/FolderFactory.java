@@ -22,6 +22,7 @@ package org.liberty.android.fantastischmemo.downloader.google;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class FolderFactory {
     }
 
     public static List<Folder> getFolders(String authToken) throws XmlPullParserException, IOException {
-        URL url = new URL("https://www.googleapis.com/drive/v2/files?mimeType=application/vnd.google-apps.folder");
+        URL url = new URL("https://www.googleapis.com/drive/v2/files?q=" + URLEncoder.encode("mimeType = 'application/vnd.google-apps.folder'", "UTF-8"));
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
         conn.setRequestProperty("Authorization", "Bearer " + authToken);
         if (conn.getResponseCode() / 100 >= 3) {
