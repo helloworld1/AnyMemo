@@ -347,10 +347,10 @@
     <string name="max_recent_list_size_text">Viimeaikaisten tietokantojen lista</string>
     <string name="recent_summary">Määritä suurin määrä näytettäviä tietokantoja, jotka näytetään viimeaikaiset tietokannat listassa.</string>
     <string name="previous_text_short">Edel</string>
-    <string name="year_text">Vuotta</string>
-    <string name="month_text">Kuukautta</string>
-    <string name="week_text">Viikkoa</string>
-    <string name="day_text">Päivää</string>
+    <string name="year_text">a</string>
+    <string name="month_text">Kk</string>
+    <string name="week_text">Vk</string>
+    <string name="day_text">Vrk</string>
     <string name="quiz_text">Visa</string>
     <string name="quiz_by_group_text">Visa ryhmittäin</string>
     <string name="quiz_by_category_text">Visa kategorioittain</string>
@@ -446,4 +446,7 @@
     <string name="search_by_title_text">Etsi nimikkeellä</string>
     <string name="open_text">Avaa</string>
     <string name="close_text">Sulje</string>
+    <string name="greek_text">Kreikka</string>
+    <string name="hour_text">h</string>
+    <string name="minute_text">min</string> 
 </resources>
