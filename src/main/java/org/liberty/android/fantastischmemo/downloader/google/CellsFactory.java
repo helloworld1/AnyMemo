@@ -140,7 +140,7 @@ public class CellsFactory {
         payloadBuilder.append("<batch:operation type=\"update\"/>");
         payloadBuilder.append("<id>"+ urlPrefix + "/R" + row + "C" + col + "</id>");
         payloadBuilder.append("<link rel=\"edit\" type=\"application/atom+xml\" href=\"" + urlPrefix + "/R" + row + "C" + col + "\"/>");
-        payloadBuilder.append("<gs:cell row=\"" + row + "\" col=\"" + col + "\" inputValue=\"" + XmlEscapers.xmlAttributeEscaper().escape(value) + "\"/>");
+        payloadBuilder.append("<gs:cell row=\"" + row + "\" col=\"" + col + "\" inputValue=\"'" + XmlEscapers.xmlAttributeEscaper().escape(value) + "\"/>");
         payloadBuilder.append("</entry>");
         String ret = payloadBuilder.toString();
         payloadBuilder = null;
