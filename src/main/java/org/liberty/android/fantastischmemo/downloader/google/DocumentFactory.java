@@ -47,9 +47,8 @@ public class DocumentFactory {
 
 
         String payload = "{\"title\":\"" + title + "\",\"mimeType\":\"application/vnd.google-apps.spreadsheet\"}";
-        conn.setRequestProperty("Content-Length", "" + payload.length());
 
-        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(conn.getOutputStream());
+        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(conn.getOutputStream(), "UTF-8");
         outputStreamWriter.write(payload);
         outputStreamWriter.close();
 
