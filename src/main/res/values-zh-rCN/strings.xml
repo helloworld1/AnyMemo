@@ -21,7 +21,7 @@
     <string name="copyclipboard_summary">问题将自动复制到剪切板</string>
     <string name="memo_show_answer">显示答案</string>
     <string name="memo_no_item_title">无卡片</string>
-    <string name="memo_no_item_message">目前没有学习卡片，建议退出。另外还可以强制复习未来将复习的卡片</string>
+    <string name="memo_no_item_message">目前没有学习卡片。</string>
     <string name="memo_btn0_text">0 忘记</string>
     <string name="memo_btn1_text">1 忘记</string>
     <string name="memo_btn2_text">2 太困难</string>

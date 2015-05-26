@@ -21,7 +21,7 @@
     <string name="copyclipboard_summary">問題將自動復制到剪切板</string>
     <string name="memo_show_answer">顯示答案</string>
     <string name="memo_no_item_title">無卡片</string>
-    <string name="memo_no_item_message">目前沒有學習卡片，建議退出。另外還可以強制復習未來將復習的卡片</string>
+    <string name="memo_no_item_message">目前沒有學習卡片。</string>
     <string name="memo_btn0_text">0 忘記</string>
     <string name="memo_btn1_text">1 忘記</string>
     <string name="memo_btn2_text">2 太困難</string>
