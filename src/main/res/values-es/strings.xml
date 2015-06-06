@@ -14,7 +14,7 @@
     <string name="undo_fail_message">Sólo se puede deshacer una tarjeta.</string>
     <string name="recent_databases">Bases de datos más recientes</string>
     <string name="option_button_text">Opciones</string>
-    <string name="about_button_text">Acera de</string>
+    <string name="about_button_text">Acerca de</string>
     <string name="help_button_text">Ayuda</string>
     <string name="edit_button_text">Previsualizar/editar base de datos</string>
     <string name="copyclipboard">Copiar al portapapeles</string>
@@ -22,8 +22,8 @@
     <string name="memo_show_answer">Mostrar respuesta</string>
     <string name="memo_no_item_title">Falta de tarjetas</string>
     <string name="memo_no_item_message">No hay tarjetas para aprendar al momento. Se recomienda restrasar. Pulse \'Revisión general\' para revisar.</string>
-    <string name="memo_btn0_text">0 Olividado</string>
-    <string name="memo_btn1_text">1 Olividado</string>
+    <string name="memo_btn0_text">0 Olvidado</string>
+    <string name="memo_btn1_text">1 Olvidado</string>
     <string name="memo_btn2_text">2 Muy Difícil</string>
     <string name="memo_btn3_text">3 Difícil</string>
     <string name="memo_btn4_text">4 Fácil</string>
@@ -83,12 +83,12 @@
     <string name="add_screen_question">Pregunta</string>
     <string name="add_screen_answer">Respuesta</string>
     <string name="add_screen_new">Nuevo</string>
-    <string name="add_screen_next">Próximo</string>
+    <string name="add_screen_next">Siguiente</string>
     <string name="add_screen_previous">Anterior</string>
     <string name="search_text">Buscar</string>
-    <string name="fb_create_db">Crear nuevo base de datos</string>
+    <string name="fb_create_db">Crear nueva base de datos</string>
     <string name="fb_create_dir">Crear nueva carpeta</string>
-    <string name="fb_create_db_message">Escriba el nombre del nuevo base de datos.</string>
+    <string name="fb_create_db_message">Escriba el nombre de la nueva base de datos.</string>
     <string name="fb_create_dir_message">Escriba el nombre de la nueva carpeta.</string>
     <string name="fb_delete_message">¿Seguro que quiere borrar este archivo?</string>
     <string name="fb_edit_dialog_title">Editar</string>
@@ -106,9 +106,9 @@
     <string name="downloader_connection_error">Error de conexión</string>
     <string name="downloader_connection_error_message">No se pudo conectar con el servidor. Verifique la conexión al internet.</string>
     <string name="downloader_download_success">Se descargó con éxito</string>
-    <string name="downloader_download_success_message">Se guardó el base de datos en: </string>
+    <string name="downloader_download_success_message">Se guardó la base de datos en: </string>
     <string name="downloader_download_fail">No se pudo descargar</string>
-    <string name="downloader_download_fail_message">No se pudo descargar este base de datos. Mensaje de error:</string>
+    <string name="downloader_download_fail_message">No se pudo descargar esta base de datos. Mensaje de error:</string>
     <string name="downloader_download_alert">Descargar: </string>
     <string name="downloader_download_alert_message">Detalles: </string>
     <string name="about_title">Acerca de</string>
@@ -152,9 +152,9 @@
     <string name="list_mode_text">Modo de lista</string>
     <string name="merge_db_text">Fusionar BD</string>
     <string name="merge_success_title">La fusión tuvo éxito</string>
-    <string name="merge_success_message">Los bases de datos se fusionaron con éxito.</string>
+    <string name="merge_success_message">Las bases de datos se fusionaron con éxito.</string>
     <string name="merging_title">Fusionando...</string>
-    <string name="merging_summary">Fusionando los bases de datos. Espere, poo favor...</string>
+    <string name="merging_summary">Fusionando las bases de datos. Espere, poo favor...</string>
     <string name="copy_text">Copiar</string>
     <string name="paste_text">Pegar</string>
     <string name="edit_dialog_unsave_warning">La actual tarjeta ha sido modificado sin guardar. ¿Seguro que quiere salir?</string>
@@ -172,7 +172,7 @@
     <string name="swap_qa_text">Cambiar P. por R.</string>
     <string name="remove_dup_text">Borrar duplicadas</string>
     <string name="removing_dup_title">Borrando duplacadas</string>
-    <string name="removing_dup_warning">Borrar duplicadas puede llevar mucho tiempo, eso depende del tamaño del base de datos. Interrumpir el proceso corromperá el base de datos.</string>
+    <string name="removing_dup_warning">Borrar duplicadas puede llevar mucho tiempo, eso depende del tamaño de la base de datos. Interrumpir el proceso corromperá la base de datos.</string>
     <string name="detail_reset">Restablecer datos de apredizaje</string>
     <string name="db_text">BD</string>
     <string name="notification_text">Notificación</string>
@@ -190,7 +190,7 @@
     <string name="exception_text">Excepción</string>
     <string name="advanced_setting_text">Avanzado...</string>
     <string name="db_merger_title">Fusionar BD</string>
-    <string name="db_merger_explaination">Fusionar el base de datos fuente con el base de datos destino</string>    <!-- Merge the Source Database into the Target Database -->
+    <string name="db_merger_explaination">Fusionar la base de datos fuente con la base de datos destino</string>    <!-- Merge the Source Database into the Target Database -->
     <string name="target_db_text">Base de datos destino (pulse dos veces para navegar)</string>
     <string name="source_db_text">Base de datos fuente (pulse dos veces para navegar)</string>
     <string name="exception_message">Ha ocurrido una excepción durante la operación.</string>

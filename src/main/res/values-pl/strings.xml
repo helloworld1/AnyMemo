@@ -160,7 +160,7 @@
     <string name="copy_text">Kopiuj</string>
     <string name="paste_text">Wklej</string>
     <string name="edit_dialog_unsave_warning">Bieżąca karta została zmieniona ale zmiany nie zostały zapisane. Czy na pewno chcesz wyjść?</string>
-    <string name="downloader_extract_zip">Rozpakowanie... Proszę czekać.</string>
+    <string name="downloader_extract_zip">Rozpakowywanie… Proszę czekać.</string>
     <string name="allow_orientation_title">Orientacja ekranu</string>
     <string name="allow_orientation_summary">Automatyczna zmiana orientacji ekranu. Wymagany będzie restart programu.</string>
     <string name="learn_queue_size_title">Rozmiar kolejki nauki</string>
@@ -188,7 +188,7 @@
     <string name="buy_pro_text">Kup wersję Pro</string>
     <string name="donate_summary">Możesz złożyć darowiznę twórcom projektu AnyMemo kupując wersję Pro z Marketu Android bądź na stronie anymemo.org. Podziękowania za wsparcie.</string>
     <string name="goto_prev_screen">Idź do ekranu podglądu/edycji</string>
-    <string name="exception_text">Wyjąek</string>
+    <string name="exception_text">Wyjątek</string>
     <string name="advanced_setting_text">Zaawansowane</string>
     <string name="db_merger_title">Scalanie baz danych</string>
     <string name="db_merger_explaination">Scal źródłową bazę danych z bazą docelową</string>
