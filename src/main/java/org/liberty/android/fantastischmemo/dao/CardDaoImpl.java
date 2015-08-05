@@ -21,6 +21,7 @@ import com.j256.ormlite.stmt.UpdateBuilder;
 import com.j256.ormlite.stmt.Where;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.DatabaseTableConfig;
+import org.liberty.android.fantastischmemo.domain.ReviewOrdering;
 
 public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements CardDao {
     public CardDaoImpl(ConnectionSource connectionSource, DatabaseTableConfig<Card> config)
@@ -115,15 +116,15 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
                 QueryBuilder<Card, Integer> qb = queryBuilder();
                 qb.limit(1L).orderBy("ordinal", true);
                 PreparedQuery<Card> pq;
-                if (ct != null ) {
+                if (ct != null) {
                     pq = qb.where()
-                        .eq("category_id", ct.getId())
-                        .and().gt("ordinal", c.getOrdinal())
-                        .prepare();
+                            .eq("category_id", ct.getId())
+                            .and().gt("ordinal", c.getOrdinal())
+                            .prepare();
                 } else {
                     pq = qb.where()
-                        .gt("ordinal", c.getOrdinal())
-                        .prepare();
+                            .gt("ordinal", c.getOrdinal())
+                            .prepare();
                 }
                 Card nc = queryForFirst(pq);
                 if (nc == null) {
@@ -161,13 +162,13 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
                 PreparedQuery<Card> pq;
                 if (ct != null) {
                     pq = qb.where()
-                        .eq("category_id", ct.getId())
-                        .and().lt("ordinal", c.getOrdinal())
-                        .prepare();
+                            .eq("category_id", ct.getId())
+                            .and().lt("ordinal", c.getOrdinal())
+                            .prepare();
                 } else {
                     pq = qb.where()
-                        .lt("ordinal", c.getOrdinal())
-                        .prepare();
+                            .lt("ordinal", c.getOrdinal())
+                            .prepare();
                 }
 
                 Card nc = queryForFirst(pq);
@@ -251,7 +252,7 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
         update(c);
     }
 
-    public List<Card> getCardsForReview(Category filterCategory, Iterable<Card> exclusion, int limit) {
+    public List<Card> getCardsForReview(Category filterCategory, Iterable<Card> exclusion, int limit, ReviewOrdering reviewOrdering) {
         try {
             LearningDataDao learningDataDao = getHelper().getLearningDataDao();
             CategoryDao categoryDao = getHelper().getCategoryDao();
@@ -279,9 +280,16 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
             cardQb.setWhere(where);
 
             // Order by easiness so the hard cards (smaller easiness) will be reviewed first.
+            String orderByClause = "learning_data.easiness, cards.ordinal";
+
+            // If randomized, it is order by random
+            if (reviewOrdering == ReviewOrdering.Random) {
+                orderByClause = "random()";
+            }
+
             cardQb.join(learnQb)
-                .orderByRaw("learning_data.easiness, cards.ordinal")
-                .limit((long) limit);
+                    .orderByRaw(orderByClause)
+                    .limit((long) limit);
 
             List<Card> cs = cardQb.query();
             for (Card c : cs) {

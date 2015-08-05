@@ -24,11 +24,7 @@ import java.util.HashMap;
 import javax.inject.Inject;
 
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.domain.Card;
-import org.liberty.android.fantastischmemo.domain.Category;
-import org.liberty.android.fantastischmemo.domain.LearningData;
-import org.liberty.android.fantastischmemo.domain.Option;
-import org.liberty.android.fantastischmemo.domain.Setting;
+import org.liberty.android.fantastischmemo.domain.*;
 import org.liberty.android.fantastischmemo.queue.LearnQueueManager;
 import org.liberty.android.fantastischmemo.queue.QueueManager;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
@@ -97,6 +93,7 @@ public class StudyActivity extends QACardActivity {
     private ShareUtil shareUtil;
 
     private GradeButtonsFragment gradeButtonsFragment;
+
 
     @Inject
     public void setScheduler(Scheduler scheduler) {
@@ -514,6 +511,7 @@ public class StudyActivity extends QACardActivity {
 
         private final int filterCategoryId;
 
+        private SchedulingAlgorithmParameters schedulingAlgorithmParameters;
 
         public LearnQueueManagerLoader(Context context, String dbPath, int filterCategoryId) {
             super(context, dbPath);
@@ -530,6 +528,12 @@ public class StudyActivity extends QACardActivity {
             this.scheduler = scheduler;
         }
 
+        @Inject
+        public void setSchedulingAlgorithmParameters(SchedulingAlgorithmParameters schedulingAlgorithmParameters) {
+            this.schedulingAlgorithmParameters = schedulingAlgorithmParameters;
+        }
+
+
         @Override
         public QueueManager dbLoadInBackground() {
             Category filterCategory = null;
@@ -541,7 +545,8 @@ public class StudyActivity extends QACardActivity {
                 .setScheduler(scheduler)
                 .setLearnQueueSize(queueSize)
                 .setCacheSize(50)
-                .setFilterCategory(filterCategory);
+                .setFilterCategory(filterCategory)
+                .setReviewOrdering(this.schedulingAlgorithmParameters.getReviewOrdering());
             if (option.getShuffleType() == Option.ShuffleType.LOCAL) {
                 builder.setShuffle(true);
             } else {

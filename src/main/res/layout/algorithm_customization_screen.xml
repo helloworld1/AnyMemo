@@ -2,7 +2,9 @@
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:key="algorithm_customization"
-    android:title="@string/customize_scheduling_algorithm_text">
+    android:title="@string/customize_scheduling_algorithm_text"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent">
     <PreferenceCategory
         android:title="@string/queuing_text">
         <EditTextPreference
@@ -10,6 +12,13 @@
             android:inputType="number"
             android:title="@string/learn_queue_size_title"
             android:summary="@string/learn_queue_size_summary" />
+        <ListPreference
+                android:key="review_ordering"
+                android:title="@string/review_ordering_text"
+                android:defaultValue="HardestFirst"
+                android:entries="@array/review_ordering_option"
+                android:entryValues="@array/review_ordering_option_values"
+                android:summary="@string/review_ordering_summary" />
     </PreferenceCategory>
     <PreferenceCategory
             android:title="@string/when_first_grade_text">

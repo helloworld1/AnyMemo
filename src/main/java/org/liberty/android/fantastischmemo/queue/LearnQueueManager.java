@@ -35,6 +35,7 @@ import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
+import org.liberty.android.fantastischmemo.domain.ReviewOrdering;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
 
@@ -61,6 +62,8 @@ public class LearnQueueManager implements QueueManager {
 
     private boolean shuffle;
 
+    private ReviewOrdering reviewOrdering;
+
     private Context context;
 
     private String dbPath;
@@ -73,6 +76,7 @@ public class LearnQueueManager implements QueueManager {
         this.scheduler = builder.scheduler;
         this.context = builder.context;
         this.dbPath = builder.dbPath;
+        this.reviewOrdering = builder.reviewOrdering;
 
         learnQueue = Collections.synchronizedList(new LinkedList<Card>());
         newCache = Collections.synchronizedList(new LinkedList<Card>());
@@ -144,7 +148,8 @@ public class LearnQueueManager implements QueueManager {
 
             if (reviewCache.size() == 0) {
                 List<Card> cs = cardDao.getCardsForReview(filterCategory,
-                        exclusionList, cacheSize);
+                        exclusionList, cacheSize, reviewOrdering);
+
                 if (cs.size() > 0) {
                     reviewCache.addAll(cs);
                 }
@@ -315,6 +320,8 @@ public class LearnQueueManager implements QueueManager {
 
         private Context context;
 
+        private ReviewOrdering reviewOrdering;
+
         public Builder(Context context, String dbPath) {
             this.dbPath = dbPath;
             this.context = context;
@@ -339,6 +346,11 @@ public class LearnQueueManager implements QueueManager {
         }
         public Builder setShuffle(boolean shuffle) {
             this.shuffle = shuffle;
+            return this;
+        }
+
+        public Builder setReviewOrdering(ReviewOrdering reviewOrdering) {
+            this.reviewOrdering = reviewOrdering;
             return this;
         }
 

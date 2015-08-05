@@ -449,4 +449,8 @@
     <string name="greek_text">Greek</string>
     <string name="hour_text">hr</string>
     <string name="minute_text">min</string>
+    <string name="review_ordering_text">Review ordering</string>
+    <string name="review_ordering_summary">The order of cards for reviewing</string>
+    <string name="hardest_first_text">Hardest first</string>
+    <string name="random_text">Random</string>
 </resources>

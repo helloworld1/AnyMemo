@@ -44,6 +44,7 @@ public class DefaultScheduler implements Scheduler {
     public DefaultScheduler(SchedulingAlgorithmParameters parameters) {
         this.parameters = parameters;
     }
+
     /*
      * Return the interval of the after schedule the new card
      */

@@ -65,6 +65,14 @@ public class SchedulingAlgorithmParameters {
         return settings.getBoolean(AMPrefKeys.ENABLE_NOISE_KEY, defaultEnableNoise);
     }
 
+    /**
+     * Get the review ordering
+     * @return the review ordering
+     */
+    public ReviewOrdering getReviewOrdering() {
+        return ReviewOrdering.valueOf(settings.getString("review_ordering", "HardestFirst"));
+    }
+
     /*
      * Reset all the scheduling algorithm parameters to default.
      */

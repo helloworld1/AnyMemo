@@ -12,6 +12,7 @@ obj/
 .project
 .classpath
 build/
+out/
 
 # This contains secrets and should not be checked in!
 AMSecrets.java

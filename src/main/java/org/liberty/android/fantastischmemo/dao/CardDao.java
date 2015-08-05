@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
+import org.liberty.android.fantastischmemo.domain.ReviewOrdering;
 
 public interface CardDao extends HelperDao<Card, Integer> {
     Card queryFirstOrdinal();
@@ -33,9 +34,10 @@ public interface CardDao extends HelperDao<Card, Integer> {
      * @param filterCategory only the cards in this category will be queried.
      * @param exclusion cards in the list will not be queried
      * @param limit the number of card that can be queried at a time
+     * @param reviewOrdering the review ordering
      * @return the queried cards.
      */
-    List<Card> getCardsForReview(Category filterCategory, Iterable<Card> exclusion, int limit);
+    List<Card> getCardsForReview(Category filterCategory, Iterable<Card> exclusion, int limit, ReviewOrdering reviewOrdering);
 
     /**
      * Get a list of new cards.
