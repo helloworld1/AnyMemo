@@ -11,6 +11,7 @@ import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.domain.Card;
 import org.liberty.android.fantastischmemo.domain.Category;
 import org.liberty.android.fantastischmemo.domain.LearningData;
+import org.liberty.android.fantastischmemo.domain.ReviewOrdering;
 import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
 
 import android.test.suitebuilder.annotation.SmallTest;
@@ -443,7 +444,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
         c15Ld.setEasiness((float) 2.7);
         learningDataDao.update(c15Ld);
          
-        List<Card> cards = cardDao.getCardsForReview(null, null, 50);
+        List<Card> cards = cardDao.getCardsForReview(null, null, 50, ReviewOrdering.HardestFirst);
         
         assertEquals(3, cards.size());
         assertEquals(13, (int)cards.get(0).getOrdinal());
@@ -505,7 +506,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
         List<Category> cts = categoryDao.queryForEq("name", "My category");
         Category ct = cts.get(0);
         
-        List<Card> cards = cardDao.getCardsForReview(ct, null, 50);
+        List<Card> cards = cardDao.getCardsForReview(ct, null, 50, ReviewOrdering.HardestFirst);
         
         assertEquals(2, cards.size());
         assertEquals(5, (int)cards.get(0).getOrdinal());
@@ -543,7 +544,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
         c15Ld.setEasiness((float) 2.6);
         learningDataDao.update(c15Ld);
          
-        List<Card> cards = cardDao.getCardsForReview(null, null, 50);
+        List<Card> cards = cardDao.getCardsForReview(null, null, 50, ReviewOrdering.HardestFirst);
         
         assertEquals(3, cards.size());
         assertEquals(14, (int)cards.get(0).getOrdinal());
@@ -612,7 +613,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
         exclusionList.add(c13);
         exclusionList.add(c15);
          
-        List<Card> cards = cardDao.getCardsForReview(null, exclusionList, 50);
+        List<Card> cards = cardDao.getCardsForReview(null, exclusionList, 50, ReviewOrdering.HardestFirst);
 
         // Only card 14 is there
         assertEquals(1, cards.size());
