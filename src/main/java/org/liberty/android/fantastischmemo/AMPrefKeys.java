@@ -48,6 +48,8 @@ public class AMPrefKeys {
 
     public static final String LEARN_QUEUE_SIZE_KEY = "learning_queue_size";
 
+    public static final String REVIEW_ORDERING_KEY = "review_ordering";
+
     // Keys for Options
 
     public static final String ENABLE_THIRD_PARTY_ARABIC_KEY = "enable_third_party_arabic";

@@ -28,6 +28,8 @@ public class SchedulingAlgorithmParameters {
 
     private static boolean defaultEnableNoise = true;
 
+    private static String defaultReviewOrdering = "HardestFirst";
+
     @Inject
     public SchedulingAlgorithmParameters(Context context) {
     	settings = PreferenceManager.getDefaultSharedPreferences(context);
@@ -87,6 +89,7 @@ public class SchedulingAlgorithmParameters {
         editor.putFloat(AMPrefKeys.MINIMAL_INTERVAL_KEY, defaultMinimalInterval);
         editor.putFloat(AMPrefKeys.INITIAL_EASINESS_KEY, defaultInitialEasiness);
         editor.putFloat(AMPrefKeys.MINIMAL_EASINESS_KEY, defaultMinimalEasiness);
+        editor.putString(AMPrefKeys.REVIEW_ORDERING_KEY, defaultReviewOrdering);
         editor.putString(AMPrefKeys.LEARN_QUEUE_SIZE_KEY, "10");
 
         editor.commit();
