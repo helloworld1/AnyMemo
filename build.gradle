@@ -87,6 +87,7 @@ dependencies {
     compile 'commons-io:commons-io:2.4'
 
     compile 'com.google.guava:guava:17.0'
+    compile 'com.opencsv:opencsv:3.4'
 
     androidTestCompile 'com.google.dexmaker:dexmaker:1.0'
     androidTestCompile ('com.google.dexmaker:dexmaker-mockito:1.0') {
