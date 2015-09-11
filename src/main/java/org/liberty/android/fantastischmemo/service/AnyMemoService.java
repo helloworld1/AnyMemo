@@ -22,6 +22,7 @@ package org.liberty.android.fantastischmemo.service;
 
 import javax.inject.Inject;
 
+import android.support.v7.app.NotificationCompat;
 import org.apache.commons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
@@ -58,7 +59,7 @@ public class AnyMemoService extends RoboService{
     private final int NOTIFICATION_ID = 4829352;
     private final int NOTIFICATION_REQ = 17239203;
     private final int WIDGET_REQ = 23579234;
-    private final static String TAG = "org.liberty.android.fantastischmemo.AnyMemoService";
+    private final static String TAG = "AnyMemoService";
 
     private RecentListUtil recentListUtil;
 
@@ -106,10 +107,18 @@ public class AnyMemoService extends RoboService{
             myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             NotificationManager notificationManager = (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-            Notification notification = new Notification(R.drawable.anymemo_notification_icon, getString(R.string.app_name), System.currentTimeMillis());
-            notification.flags |= Notification.FLAG_AUTO_CANCEL;
             PendingIntent pIntent = PendingIntent.getActivity(this, NOTIFICATION_REQ, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-            notification.setLatestEventInfo(this, dbInfo.getDbName(), getString(R.string.stat_scheduled) + " " + dbInfo.getRevCount(), pIntent);
+
+            Notification notification = new NotificationCompat.Builder(this)
+                    .setTicker("AnyMemo")
+                    .setWhen(System.currentTimeMillis())
+                    .setSmallIcon(R.drawable.anymemo_notification_icon)
+                    .setContentTitle(dbInfo.getDbName())
+                    .setContentText(getString(R.string.stat_scheduled) + " " + dbInfo.getRevCount())
+                    .setContentIntent(pIntent)
+                    .build();
+
+            notification.flags = notification.flags | Notification.FLAG_AUTO_CANCEL;
 
             notificationManager.notify(NOTIFICATION_ID, notification);
             Log.v(TAG, "Notification Invoked!");

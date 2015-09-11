@@ -4,11 +4,9 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.3.+'
-        classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.+'
     }
 }
 
-apply plugin: 'android-sdk-manager'
 apply plugin: 'android'
 
 repositories {
@@ -16,14 +14,16 @@ repositories {
 }
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
+
+    useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
         versionCode 214
         versionName "10.7.991"
         minSdkVersion 11
-        targetSdkVersion 21
+        targetSdkVersion 23
         testApplicationId "org.liberty.android.fantastischmemo.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
     }
@@ -67,8 +67,8 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
-    compile 'com.android.support:appcompat-v7:22.2.1'
-    compile 'com.android.support:cardview-v7:22.2.1'
+    compile 'com.android.support:appcompat-v7:23.0.+'
+    compile 'com.android.support:cardview-v7:23.0.+'
     compile 'com.j256.ormlite:ormlite-core:4.48'
     compile 'com.j256.ormlite:ormlite-android:4.48'
     compile ('org.roboguice:roboguice:3.0.1') {
