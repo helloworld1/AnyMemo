@@ -83,7 +83,7 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
     /* Used when the file is clicked. */
     private OnFileClickListener onFileClickListener;
 
-    private final static String TAG = "AbstractFileBrowserFragment";
+    private final static String TAG = "FileBrowserFragment";
     private final static String UP_ONE_LEVEL_DIR = "..";
     private final static String CURRENT_DIR = ".";
     private SharedPreferences settings;
@@ -274,9 +274,6 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
                 }
             }
         }
-
-
-
     }
 
 
