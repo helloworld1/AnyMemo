@@ -27,6 +27,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import android.Manifest;
+import android.support.v4.app.*;
+import android.support.v4.content.ContextCompat;
 import org.apache.commons.io.FileUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
@@ -46,10 +49,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -99,6 +98,8 @@ public class AnyMemo extends AMActivity {
     // Used to enable fast lookup from index of fragment to Fragment.
     private List<Fragment> fragments = new ArrayList<Fragment>(4);
 
+    private static final int PERMISSION_REQUEST_EXTERNAL_STORAGE = 1;
+
     @Inject
     public void setAmFileUtil(AMFileUtil amFileUtil) {
         this.amFileUtil = amFileUtil;
@@ -110,6 +111,54 @@ public class AnyMemo extends AMActivity {
 
         setContentView(R.layout.main_tabs);
 
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    PERMISSION_REQUEST_EXTERNAL_STORAGE);
+        } else {
+            loadUiComponents();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    loadUiComponents();
+                } else {
+                    finish();
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the drawer toggle state after onRestoreInstanceState has occurred.
+        if  (drawerToggle != null) {
+            drawerToggle.syncState();
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Pass any configuration change to the drawer toggles
+        drawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    private void loadUiComponents() {
         actionBar = getSupportActionBar();
 
         recentTab = actionBar.newTab()
@@ -156,20 +205,6 @@ public class AnyMemo extends AMActivity {
         prepareStoreage();
         prepareFirstTimeRun();
         prepareNotification();
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        // Sync the drawer toggle state after onRestoreInstanceState has occurred.
-        drawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        // Pass any configuration change to the drawer toggles
-        drawerToggle.onConfigurationChanged(newConfig);
     }
 
     /**
