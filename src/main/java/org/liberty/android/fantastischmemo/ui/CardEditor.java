@@ -19,8 +19,29 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import java.io.File;
-
+import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
@@ -38,30 +59,16 @@ import org.liberty.android.fantastischmemo.domain.LearningData;
 import org.liberty.android.fantastischmemo.ui.AudioRecorderFragment.AudioRecorderResultListener;
 import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RadioGroup;
+import java.io.File;
 
 public class CardEditor extends AMActivity {
     private final int ACTIVITY_IMAGE_FILE = 1;
     private final int ACTIVITY_AUDIO_FILE = 2;
+
+    private static final int PERMISSION_REQUEST_RECORD_AUDIO = 1;
+
     Card currentCard = null;
+
     Card prevCard = null;
     private Integer prevOrdinal = null;
     private Integer currentCardId;
@@ -202,6 +209,24 @@ public class CardEditor extends AMActivity {
         return false;
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_RECORD_AUDIO: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    startAudioRecorder();
+                } else {
+                    Toast.makeText(this, R.string.record_audio_permission_denied_message, Toast.LENGTH_LONG)
+                            .show();
+                }
+                return;
+            }
+        }
+    }
+
     private boolean isViewEligibleToEditAudio(){
         View focusView = getCurrentFocus();
         if(focusView == questionEdit || focusView == answerEdit){
@@ -246,12 +271,12 @@ public class CardEditor extends AMActivity {
              //if there is audio previously defined,show alert
              DialogInterface.OnClickListener positiveClickListener = new DialogInterface.OnClickListener() {
                  public void onClick(DialogInterface dialog, int which) {
-                     startAudioRecorder();
+                     startAudioRecorderWithPermissionCheck();
                  }
              };
              showConfirmDialog(getString(R.string.override_audio_warning_text), positiveClickListener);
          } else {
-             startAudioRecorder();
+             startAudioRecorderWithPermissionCheck();
          }
     }
 
@@ -273,6 +298,18 @@ public class CardEditor extends AMActivity {
         Intent myIntent = new Intent(this, FileBrowserActivity.class);
         myIntent.putExtra(FileBrowserActivity.EXTRA_FILE_EXTENSIONS, ".3gp,.ogg,.mp3,.wav,.amr");
         startActivityForResult(myIntent, ACTIVITY_AUDIO_FILE);
+    }
+
+    private void startAudioRecorderWithPermissionCheck() {
+        // Request record permission
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.RECORD_AUDIO},
+                    PERMISSION_REQUEST_RECORD_AUDIO);
+        } else {
+            startAudioRecorder();
+        }
     }
 
     private void startAudioRecorder(){
@@ -302,7 +339,9 @@ public class CardEditor extends AMActivity {
              }
          });
          recorder.setArguments(b);
-         recorder.show(getSupportFragmentManager(), "AudioRecorderDialog");
+        getSupportFragmentManager().beginTransaction()
+                .add(recorder, "AudioRecorderDialog")
+                .commitAllowingStateLoss();
     }
 
     private void addTextToView(EditText v, String text){

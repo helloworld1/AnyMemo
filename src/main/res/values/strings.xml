@@ -453,4 +453,6 @@
     <string name="review_ordering_summary">The order of cards for reviewing</string>
     <string name="hardest_first_text">Hardest first</string>
     <string name="random_text">Random</string>
+    <string name="record_audio_permission_denied_message">AnyMemo could not get permission to record audio.</string>
+    <string name="write_storage_permission_denied_message">AnyMemo could not get permission to write db file on external storage.</string>
 </resources>

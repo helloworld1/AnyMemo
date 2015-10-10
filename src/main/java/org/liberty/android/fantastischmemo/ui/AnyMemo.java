@@ -19,26 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
 import android.Manifest;
-import android.support.v4.app.*;
-import android.support.v4.content.ContextCompat;
-import org.apache.commons.io.FileUtils;
-import org.liberty.android.fantastischmemo.AMActivity;
-import org.liberty.android.fantastischmemo.AMEnv;
-import org.liberty.android.fantastischmemo.AMPrefKeys;
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.SetAlarmReceiver;
-import org.liberty.android.fantastischmemo.service.AnyMemoService;
-import org.liberty.android.fantastischmemo.utils.AMFileUtil;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -48,11 +29,17 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
@@ -62,9 +49,23 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
+import android.widget.Toast;
+import org.apache.commons.io.FileUtils;
+import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.AMEnv;
+import org.liberty.android.fantastischmemo.AMPrefKeys;
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.SetAlarmReceiver;
+import org.liberty.android.fantastischmemo.service.AnyMemoService;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.widget.AnyMemoWidgetProvider;
+
+import javax.inject.Inject;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class AnyMemo extends AMActivity {
@@ -111,7 +112,7 @@ public class AnyMemo extends AMActivity {
 
         setContentView(R.layout.main_tabs);
 
-
+        // Request storage permission
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
@@ -132,13 +133,12 @@ public class AnyMemo extends AMActivity {
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     loadUiComponents();
                 } else {
+                    Toast.makeText(this, R.string.write_storage_permission_denied_message, Toast.LENGTH_LONG)
+                            .show();
                     finish();
                 }
                 return;
             }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
         }
     }
 
