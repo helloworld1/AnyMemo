@@ -76,7 +76,7 @@
     <string name="delete_warning">Wollen Sie diese Karteikarte wirklich löschen?</string>
     <string name="skip_text">Überspringen</string>
     <string name="stat_total">Gesamt: </string>
-    <string name="stat_scheduled">Rev: </string>
+    <string name="stat_scheduled">Wdh: </string>
     <string name="stat_new">Neu: </string>
     <string name="open_open_new_db">Vorhandene Datenbank öffnen</string>
     <string name="clear_all_pref">Alle Einstellungen zurücksetzen</string>
@@ -329,7 +329,7 @@
     <string name="statistics_text">Statistik</string>
     <string name="statistics_type_text">Art der Statistik</string>
     <string name="cards_to_review_text">Geplante Karteikarten / Monat</string>
-    <string name="number_of_cards_scheduled_in_a_day_text">Anzahl der Karten / Tag</string>
+    <string name="number_of_cards_scheduled_in_a_day_text">Anzahl der geplanten Karteikarten / Tag</string>
     <string name="grade_statistics_text">Bewertungsstatistiken</string>
     <string name="accumulative_cards_scheduled_text">Gesamtzahl der geplanten Karteikarten</string>
     <string name="google_drive_spreadsheet_text">Google Drive Tabellendokument</string>
