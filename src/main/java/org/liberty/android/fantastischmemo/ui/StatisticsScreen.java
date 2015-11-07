@@ -22,18 +22,19 @@ package org.liberty.android.fantastischmemo.ui;
 
 import android.app.ProgressDialog;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.*;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.ObjectArrays;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
@@ -73,9 +74,6 @@ public class StatisticsScreen extends AMActivity {
 
         dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(this, dbPath);
         typeSelectSpinner.setOnItemSelectedListener(typeSelectSpinnerListener);
-
-        //typeSelectSpinnerListener.onItemSelected(null, null, 0, 0);
-
     }
 
     private AdapterView.OnItemSelectedListener typeSelectSpinnerListener =
@@ -161,12 +159,17 @@ public class StatisticsScreen extends AMActivity {
 
             BarDataSet dataSet = new BarDataSet(yVals, getString(R.string.number_of_cards_scheduled_in_a_day_text));
             BarData data = new BarData(xVals, dataSet);
+            data.setValueTextColor(Color.WHITE);
+
             return data;
+
         }
 
         @Override
         public Chart generateChart(BarData data) {
             BarChart chart = new BarChart(StatisticsScreen.this);
+            chart.setDrawGridBackground(false);
+            chart.getLegend().setTextColor(Color.WHITE);
             chart.setData(data);
             chart.setDescription("");
             return chart;
@@ -189,12 +192,16 @@ public class StatisticsScreen extends AMActivity {
 
             BarDataSet dataSet = new BarDataSet(yVals, getString(R.string.accumulative_cards_scheduled_text));
             BarData data = new BarData(xVals, dataSet);
+            data.setValueTextColor(Color.WHITE);
+
             return data;
         }
 
         @Override
         public Chart generateChart(BarData data) {
             BarChart chart = new BarChart(StatisticsScreen.this);
+            chart.setDrawGridBackground(false);
+            chart.getLegend().setTextColor(Color.WHITE);
             chart.setData(data);
             chart.setDescription("");
             return chart;
@@ -236,6 +243,7 @@ public class StatisticsScreen extends AMActivity {
         @Override
         public Chart generateChart(PieData data) {
             PieChart chart = new PieChart(StatisticsScreen.this);
+            chart.getLegend().setTextColor(Color.WHITE);
             chart.setData(data);
             chart.setDescription("");
 
