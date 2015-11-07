@@ -124,8 +124,7 @@ public class AnyMemo extends AMActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case PERMISSION_REQUEST_EXTERNAL_STORAGE: {
                 // If request is cancelled, the result arrays are empty.

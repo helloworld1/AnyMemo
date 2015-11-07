@@ -21,26 +21,31 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import android.app.ProgressDialog;
+import android.content.res.Configuration;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.data.*;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.CardDao;
-import org.liberty.android.fantastischmemo.ui.widgets.AMSpinner;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,7 +55,6 @@ import java.util.List;
 public class StatisticsScreen extends AMActivity {
     public static final String EXTRA_DBPATH = "dbpath";
 
-    private AMSpinner typeSelectSpinner;
     private FrameLayout statisticsGraphFrame;
     private String dbPath;
 
@@ -58,11 +62,16 @@ public class StatisticsScreen extends AMActivity {
 
     private AnyMemoDBOpenHelper dbOpenHelper;
 
+    private ActionBarDrawerToggle drawerToggle;
+
+    private NavigationView navigationView;
+
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.statistics_screen);
-        typeSelectSpinner = (AMSpinner)findViewById(R.id.statistics_type_spinner);
+        setTitle(R.string.statistics_text);
+
         statisticsGraphFrame = (FrameLayout)findViewById(R.id.statistics_graph_frame);
 
         Bundle extras = getIntent().getExtras();
@@ -73,33 +82,84 @@ public class StatisticsScreen extends AMActivity {
         assert dbPath != null : "dbPath shouldn't be null";
 
         dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(this, dbPath);
-        typeSelectSpinner.setOnItemSelectedListener(typeSelectSpinnerListener);
+
+        initDrawer();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setHomeButtonEnabled(true);
+
+        // For the first execution to display default statistics info
+        new CardToReviewTask().execute((Void)null);
     }
 
-    private AdapterView.OnItemSelectedListener typeSelectSpinnerListener =
-        new AdapterView.OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parent , View view,
-					int position, long id) {
-                String selectedValue = typeSelectSpinner.getItemValueForPosition(position);
-                if(selectedValue.equals("CARDS_TO_REVIEW")) {
-                    CardToReviewTask task = new CardToReviewTask();
-                    task.execute((Void)null);
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the drawer toggle state after onRestoreInstanceState has occurred.
+        if  (drawerToggle != null) {
+            drawerToggle.syncState();
+        }
+    }
 
-                } else if(selectedValue.equals("GRADE_STATISTICS")) {
-                    GradeStatisticsTask task = new GradeStatisticsTask();
-                    task.execute((Void)null);
-                } else if(selectedValue.equals("ACCUMULATIVE_CARDS_TO_REVIEW")) {
-                    AccumulativeCardsToReviewTask task = new AccumulativeCardsToReviewTask();
-                    task.execute((Void)null);
-                }
-			}
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Pass any configuration change to the drawer toggles
+        drawerToggle.onConfigurationChanged(newConfig);
+    }
 
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-                // Do nothing
-			}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // The action bar home/up action should open or close the drawer.
+        // ActionBarDrawerToggle will take care of this.
+        if (drawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+
+    }
+
+    private void initDrawer() {
+        final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        drawerToggle = new ActionBarDrawerToggle(this,
+                drawerLayout,
+                R.string.open_text,
+                R.string.close_text) {
+            public void onDrawerClosed(View view) {
+                supportInvalidateOptionsMenu();
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                supportInvalidateOptionsMenu();
+            }
         };
+
+        drawerLayout.setDrawerListener(drawerToggle);
+
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+                 @Override
+                 public boolean onNavigationItemSelected(MenuItem menuItem) {
+                     switch (menuItem.getItemId()) {
+                         case R.id.cards_scheduled_in_a_month_menu:
+                             new CardToReviewTask().execute((Void)null);
+                             break;
+                         case R.id.accumulative_cards_scheduled_menu:
+                             new AccumulativeCardsToReviewTask()
+                                     .execute((Void) null);
+                             break;
+                         case R.id.grade_statistics_menu:
+                             new GradeStatisticsTask().execute((Void)null);
+                             break;
+                     }
+                     drawerLayout.closeDrawers();
+                     return true;
+                 }
+             }
+        );
+
+    }
 
     @Override
     public void onDestroy() {

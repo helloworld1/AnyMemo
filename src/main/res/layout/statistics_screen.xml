@@ -1,25 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:anymemo="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
 
-    <org.liberty.android.fantastischmemo.ui.widgets.AMSpinner
-        android:id="@+id/statistics_type_spinner"
-        android:spinnerMode="dialog"
+<android.support.v4.widget.DrawerLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:drawSelectorOnTop="true"
-        android:prompt="@string/statistics_type_text"
-        anymemo:display_array="@array/statistics_types_values"
-        anymemo:value_array="@array/statistics_types" />
+        android:layout_height="match_parent"
+        android:id="@+id/drawer_layout"
+        android:fitsSystemWindows="true">
+
     <FrameLayout
         android:id="@+id/statistics_graph_frame"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-    />
+        android:layout_height="0dp" />
 
-</LinearLayout>
+    <android.support.design.widget.NavigationView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:id="@+id/navigation_view"
+            app:menu="@menu/statistics_screen_menu"/>
+</android.support.v4.widget.DrawerLayout>
