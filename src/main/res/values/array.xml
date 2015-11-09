@@ -283,18 +283,6 @@
         <item>BLUEDICT</item>
     </string-array>
 
-    <string-array name="statistics_types">
-        <item>CARDS_TO_REVIEW</item>
-        <item>ACCUMULATIVE_CARDS_TO_REVIEW</item>
-        <item>GRADE_STATISTICS</item>
-    </string-array>
-
-    <string-array name="statistics_types_values">
-        <item>@string/cards_to_review_text</item>
-        <item>@string/accumulative_cards_scheduled_text</item>
-        <item>@string/grade_statistics_text</item>
-    </string-array>
-
     <string-array name="copy_to_clipboard_options">
         <item>@string/disabled_text</item>
         <item>@string/question_text</item>
@@ -319,13 +307,6 @@
         <item>ORDINAL</item>
         <item>QUESTION</item>
         <item>ANSWER</item>
-    </string-array>
-
-    <string-array name="main_drawer_list_values">
-        <item>@string/recent_tab_text</item>
-        <item>@string/open_tab_text</item>
-        <item>@string/download_tab_text</item>
-        <item>@string/misc_tab_text</item>
     </string-array>
 
     <string-array name="review_ordering_option">

@@ -18,7 +18,8 @@
         <meta-data android:name="roboguice.modules" android:value="org.liberty.android.fantastischmemo.AMModules"/>
         <activity 
             android:name=".ui.AnyMemo"
-            android:label="@string/app_full_name" >
+            android:label="@string/app_full_name"
+            android:theme="@style/AnyMemo.Theme.Dark.NoActionBar" >
             <intent-filter>
                 <action 
                     android:name="android.intent.action.MAIN" />
@@ -30,24 +31,9 @@
             android:name=".downloader.DownloaderAnyMemo"
             android:configChanges="orientation|keyboardHidden" />
         <activity
-            android:name=".downloader.DownloaderFE"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity
-            android:name=".downloader.DownloaderSS"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity
             android:name="com.example.android.apis.graphics.FingerPaint" 
             android:configChanges="orientation|keyboardHidden"
             android:theme="@style/PaintStyle" />
-        <activity
-            android:name=".downloader.cram.CramLauncher"/>
-        <activity
-            android:name=".downloader.FEDirectory"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity
-            android:name=".downloader.cram.CramPublicUserCardSetActivity" />
-        <activity
-            android:name=".downloader.cram.CramSearchPublicCardSetActivity" />
         <activity
             android:name=".downloader.quizlet.QuizletLauncher" />
         <activity

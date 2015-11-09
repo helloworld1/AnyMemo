@@ -21,33 +21,31 @@ package org.liberty.android.fantastischmemo.ui;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBar.Tab;
-import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import org.apache.commons.io.FileUtils;
@@ -64,8 +62,6 @@ import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class AnyMemo extends AMActivity {
@@ -73,31 +69,15 @@ public class AnyMemo extends AMActivity {
 
     public static final String EXTRA_INITIAL_TAB = "initial_tab";
 
-    private ViewPager mViewPager;
+    private DrawerLayout drawerLayout;
 
-    private PagerAdapter mPagerAdapter;
+    private ViewPager viewPager;
 
     private ActionBar actionBar;
 
     private SharedPreferences settings;
 
     private AMFileUtil amFileUtil;
-
-    private Tab recentTab;
-
-    private Tab openTab;
-
-    private Tab downloadTab;
-
-    private Tab miscTab;
-
-    private ActionBarDrawerToggle drawerToggle;
-
-    // Used to enable fast lookup from index of tab to Tab.
-    private List<Tab> tabs = new ArrayList<Tab>(4);
-
-    // Used to enable fast lookup from index of fragment to Fragment.
-    private List<Fragment> fragments = new ArrayList<Fragment>(4);
 
     private static final int PERMISSION_REQUEST_EXTERNAL_STORAGE = 1;
 
@@ -141,65 +121,12 @@ public class AnyMemo extends AMActivity {
         }
     }
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        // Sync the drawer toggle state after onRestoreInstanceState has occurred.
-        if  (drawerToggle != null) {
-            drawerToggle.syncState();
-        }
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        // Pass any configuration change to the drawer toggles
-        drawerToggle.onConfigurationChanged(newConfig);
-    }
-
     private void loadUiComponents() {
+        settings = PreferenceManager.getDefaultSharedPreferences(this);
         actionBar = getSupportActionBar();
-
-        recentTab = actionBar.newTab()
-                .setIcon(resolveThemeResource(R.attr.clock_theme_dependent_icon))
-                .setTabListener(tabListener);
-
-        openTab = actionBar.newTab()
-                .setIcon(resolveThemeResource(R.attr.cabinet_theme_dependent_icon))
-                .setTabListener(tabListener);
-
-        downloadTab = actionBar.newTab()
-                .setIcon(resolveThemeResource(R.attr.download_tab_theme_dependent_icon))
-                .setTabListener(tabListener);
-
-        miscTab = actionBar.newTab()
-                .setIcon(resolveThemeResource(R.attr.gear_theme_dependent_icon))
-                .setTabListener(tabListener);
-
-        fragments.add(Fragment.instantiate(this, RecentListFragment.class.getName()));
-        fragments.add(Fragment.instantiate(this, OpenTabFragment.class.getName()));
-        fragments.add(Fragment.instantiate(this, DownloadTabFragment.class.getName()));
-        fragments.add(Fragment.instantiate(this, MiscTabFragment.class.getName()));
-
-        tabs.add(recentTab);
-        tabs.add(openTab);
-        tabs.add(downloadTab);
-        tabs.add(miscTab);
-
-        // Initial ViewPager before action bar because
-        // the action bar's tab will use ViewPager to select
-        // to achieve smooth animation.
-        initViewPager();
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         initDrawer();
-
-        actionBar.addTab(recentTab);
-        actionBar.addTab(openTab);
-        actionBar.addTab(downloadTab);
-        actionBar.addTab(miscTab);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-        settings = PreferenceManager.getDefaultSharedPreferences(this);
 
         prepareStoreage();
         prepareFirstTimeRun();
@@ -210,38 +137,71 @@ public class AnyMemo extends AMActivity {
      * Initialize the Navigation drawer UI.
      */
     private void initDrawer() {
-        String[] actionList = getResources().getStringArray(R.array.main_drawer_list_values);
-        final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ListView drawerList = (ListView) findViewById(R.id.left_drawer);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        // Set the adapter for the list view
-        drawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.drawer_list_item, actionList));
-        // Set the list's click listener
-        drawerList.setOnItemClickListener(new ListView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mViewPager.setCurrentItem(position);
-                drawerLayout.closeDrawers();
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        FragmentPagerAdapter adapter = new MainPagerAdapter(getSupportFragmentManager(), this);
+        viewPager.setAdapter(adapter);
+
+        final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.getTabAt(0).setIcon(R.drawable.clock_dark);
+        tabLayout.getTabAt(1).setIcon(R.drawable.cabinet_dark);
+        tabLayout.getTabAt(2).setIcon(R.drawable.download_tab_dark);
+        tabLayout.getTabAt(3).setIcon(R.drawable.gear_dark);
+
+
+        final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+        navigationView.setNavigationItemSelectedListener(
+            new NavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(MenuItem menuItem) {
+                    switch (menuItem.getItemId()) {
+                        case R.id.recent_tab_menu:
+                            tabLayout.getTabAt(0).select();
+                            break;
+                        case R.id.open_tab_menu:
+                            tabLayout.getTabAt(1).select();
+                            break;
+                        case R.id.download_tab_menu:
+                            tabLayout.getTabAt(2).select();
+                            break;
+                        case R.id.misc_tab_menu:
+                            tabLayout.getTabAt(2).select();
+                            break;
+                    }
+                    menuItem.setChecked(true);
+                    drawerLayout.closeDrawers();
+                    return true;
+                }
             }
-        });
+        );
 
-        drawerToggle = new ActionBarDrawerToggle(this,
-                drawerLayout,
-                R.string.open_text,
-                R.string.close_text) {
-            public void onDrawerClosed(View view) {
-                supportInvalidateOptionsMenu();
-            }
+        // Change the selected navigation view
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+              @Override
+              public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                  // Nothing
+              }
 
-            public void onDrawerOpened(View drawerView) {
-                supportInvalidateOptionsMenu();
-            }
-        };
-        drawerLayout.setDrawerListener(drawerToggle);
+              @Override
+              public void onPageSelected(int position) {
+                  navigationView.getMenu().getItem(position).setChecked(true);
+              }
 
+              @Override
+              public void onPageScrollStateChanged(int state) {
+                  // Nothing
+              }
+          }
+        );
+
+
+
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
     }
 
     private void prepareStoreage() {
@@ -339,11 +299,6 @@ public class AnyMemo extends AMActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         // Update the widget and cancel the notification.
@@ -363,79 +318,45 @@ public class AnyMemo extends AMActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // The action bar home/up action should open or close the drawer.
-        // ActionBarDrawerToggle will take care of this.
-        if (drawerToggle.onOptionsItemSelected(item)) {
+        if (item.getItemId() == android.R.id.home) {
+            drawerLayout.openDrawer(GravityCompat.START);
             return true;
         }
+
         return super.onOptionsItemSelected(item);
 
     }
 
+    private static class MainPagerAdapter extends FragmentPagerAdapter {
 
-    public class PagerAdapter extends FragmentPagerAdapter {
+        private Context context;
 
-        private List<Fragment> fragments;
+        private Fragment[] fragments = new Fragment[]{
+                new RecentListFragment(),
+                new OpenTabFragment(),
+                new DownloadTabFragment(),
+                new MiscTabFragment()
+        };
 
-        public PagerAdapter(FragmentManager fm, List<Fragment> fragments) {
+        public MainPagerAdapter(FragmentManager fm, Context context) {
             super(fm);
-            this.fragments = fragments;
+            this.context = context;
         }
 
         @Override
         public Fragment getItem(int position) {
-            return this.fragments.get(position);
+            return fragments[position];
         }
 
         @Override
         public int getCount() {
-            return this.fragments.size();
-        }
-    }
-
-    private void initViewPager() {
-        mPagerAdapter  = new PagerAdapter(super.getSupportFragmentManager(), fragments);
-        mViewPager = (ViewPager)super.findViewById(R.id.viewpager);
-        mViewPager.setAdapter(this.mPagerAdapter);
-        mViewPager.setOnPageChangeListener(onPageChangeListener);
-    }
-
-    private ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() {
-        @Override
-        public void onPageSelected(int position) {
-            actionBar.selectTab(tabs.get(position));
+            return fragments.length;
         }
 
         @Override
-        public void onPageScrollStateChanged(int arg0) {
-            // Do nothing
+        public CharSequence getPageTitle(int position) {
+            // Display icon only
+            return null;
         }
-
-        @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            // Do nothing
-
-        }
-
     };
-
-    private ActionBar.TabListener tabListener = new ActionBar.TabListener() {
-
-        @Override
-        public void onTabSelected(Tab tab, FragmentTransaction ft) {
-            mViewPager.setCurrentItem(tabs.indexOf(tab));
-        }
-
-        @Override
-        public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-            // Do nothing
-        }
-
-        @Override
-        public void onTabReselected(Tab tab, FragmentTransaction ft) {
-            // Do nothing
-        }
-
-    };
-
 }
