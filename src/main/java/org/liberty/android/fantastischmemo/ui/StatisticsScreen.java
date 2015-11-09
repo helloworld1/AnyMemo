@@ -70,7 +70,6 @@ public class StatisticsScreen extends AMActivity {
         setContentView(R.layout.statistics_screen);
         setTitle(R.string.statistics_text);
 
-
         Bundle extras = getIntent().getExtras();
         assert extras != null : "Open StatisticsScreen without extras";
 
@@ -91,6 +90,7 @@ public class StatisticsScreen extends AMActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // For the first execution to display default statistics info
+        setTitle(R.string.number_of_cards_scheduled_in_a_day_text);
         new CardToReviewTask().execute((Void)null);
     }
 
@@ -111,14 +111,17 @@ public class StatisticsScreen extends AMActivity {
                  public boolean onNavigationItemSelected(MenuItem menuItem) {
                  switch (menuItem.getItemId()) {
                      case R.id.cards_scheduled_in_a_month_menu:
+                         setTitle(R.string.number_of_cards_scheduled_in_a_day_text);
                          new CardToReviewTask()
                                  .execute((Void)null);
                          break;
                      case R.id.accumulative_cards_scheduled_menu:
+                         setTitle(R.string.accumulative_cards_scheduled_text);
                          new AccumulativeCardsToReviewTask()
                                  .execute((Void) null);
                          break;
                      case R.id.grade_statistics_menu:
+                         setTitle(R.string.grade_statistics_text);
                          new GradeStatisticsTask()
                                  .execute((Void)null);
                          break;
@@ -203,6 +206,10 @@ public class StatisticsScreen extends AMActivity {
             BarChart chart = new BarChart(StatisticsScreen.this);
             chart.setDrawGridBackground(false);
             chart.getLegend().setTextColor(Color.WHITE);
+            chart.getXAxis().setTextColor(Color.WHITE);
+            chart.getAxisLeft().setTextColor(Color.WHITE);
+            chart.getAxisRight().setTextColor(Color.WHITE);
+
             chart.setData(data);
             chart.setDescription("");
             return chart;
@@ -235,6 +242,10 @@ public class StatisticsScreen extends AMActivity {
             BarChart chart = new BarChart(StatisticsScreen.this);
             chart.setDrawGridBackground(false);
             chart.getLegend().setTextColor(Color.WHITE);
+            chart.getXAxis().setTextColor(Color.WHITE);
+            chart.getAxisLeft().setTextColor(Color.WHITE);
+            chart.getAxisRight().setTextColor(Color.WHITE);
+
             chart.setData(data);
             chart.setDescription("");
             return chart;
