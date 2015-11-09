@@ -19,21 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import org.apache.commons.io.FilenameUtils;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.dao.CardDao;
-import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
-import org.liberty.android.fantastischmemo.utils.RecentListUtil;
-
-import roboguice.fragment.RoboFragment;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -41,6 +26,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -48,21 +35,30 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
+import org.apache.commons.io.FilenameUtils;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.dao.CardDao;
+import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
+import org.liberty.android.fantastischmemo.utils.RecentListUtil;
+import roboguice.fragment.RoboFragment;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RecentListFragment extends RoboFragment {
 
-    private ListView recentListView;
+    private RecyclerView recentListRecyclerView;
     private RecentListAdapter recentListAdapter;
 
     private Handler mHandler;
     private Thread updateRecentListThread;
     private RecentListUtil recentListUtil;
 
-    private final static String TAG = "org.liberty.android.fantastischmemo.OpenScreen";
+    private final static String TAG = RecentListFragment.class.getName();
 
     private Activity mActivity;
 
@@ -81,9 +77,9 @@ public class RecentListFragment extends RoboFragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Context activity) {
         super.onAttach(activity);
-        mActivity = activity;
+        mActivity = (Activity) activity;
         setHasOptionsMenu(true);
     }
 
@@ -92,16 +88,17 @@ public class RecentListFragment extends RoboFragment {
             Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.recent_list, container, false);
         mHandler = new Handler();
-        recentListView = (ListView)v.findViewById(R.id.recent_open_list);
-        recentListView.setOnItemClickListener(listItemClickListener);
-        recentListView.setOnItemLongClickListener(listItemLongClickListener);
+        recentListRecyclerView = (RecyclerView) v.findViewById(R.id.recent_open_list);
+
+        recentListRecyclerView.setLayoutManager(new LinearLayoutManager(recentListRecyclerView.getContext()));
+
         /* pre loading stat */
-        recentListAdapter = new RecentListAdapter(mActivity, R.layout.open_screen_recent_item);
-        recentListView.setAdapter(recentListAdapter);
+        recentListAdapter = new RecentListAdapter(mActivity, recentListUtil);
+
+        recentListRecyclerView.setAdapter(recentListAdapter);
+
         return v;
     }
-
-
 
     @Override
     public void onResume(){
@@ -134,7 +131,7 @@ public class RecentListFragment extends RoboFragment {
                         public void run(){
                             recentListAdapter.clear();
                             for(RecentItem ri : ril)
-                        recentListAdapter.insert(ri, ri.index);
+                        recentListAdapter.insert(ri.index, ri);
                         }
                     });
                     /* This will update the detailed statistic info */
@@ -154,7 +151,7 @@ public class RecentListFragment extends RoboFragment {
                         public void run(){
                             recentListAdapter.clear();
                             for(RecentItem ri : ril)
-                                recentListAdapter.insert(ri, ri.index);
+                                recentListAdapter.insert(ri.index, ri);
                         }
                     });
                 } catch(InterruptedException e){
@@ -187,68 +184,104 @@ public class RecentListFragment extends RoboFragment {
             recentListUtil.clearRecentList();
             onResume();
             return true;
-
         }
 
         return false;
     }
 
-    private AdapterView.OnItemClickListener listItemClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parentView, View childView, int position, long id) {
-            Intent myIntent = new Intent();
-            myIntent.setClass(mActivity, StudyActivity.class);
-            String dbPath = recentListAdapter.getItem(position).dbPath;
-            myIntent.putExtra(StudyActivity.EXTRA_DBPATH, dbPath);
-            recentListUtil.addToRecentList(dbPath);
-            startActivity(myIntent);
-        }
-    };
-
-    private AdapterView.OnItemLongClickListener listItemLongClickListener = new AdapterView.OnItemLongClickListener() {
-        @Override
-        public boolean onItemLongClick(AdapterView<?> parentView, View childView, int position, long id) {
-            String dbPath = recentListAdapter.getItem(position).dbPath;
-            DialogFragment df = new OpenActionsFragment();
-            Bundle b = new Bundle();
-            b.putString(OpenActionsFragment.EXTRA_DBPATH, dbPath);
-            df.setArguments(b);
-            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "OpenActions");
-            return true;
-        }
-    };
-
-    /* Aux class to store data */
-    private class RecentItem {
+    /** Aux class to store data */
+    private static class RecentItem {
         public String dbName;
         public String dbPath;
         public String dbInfo;
         public int index;
     }
 
-    private class RecentListAdapter extends ArrayAdapter<RecentItem>{
+    /**
+     *  The recent list adapter to handle the actual recycler view logic
+     */
+    private static class RecentListAdapter extends RecyclerView.Adapter<RecentListAdapter.ViewHolder> {
 
-        public RecentListAdapter(Context context, int textViewResourceId){
-            super(context, textViewResourceId);
+        private final Context context;
+
+        private final List<RecentItem> items = new ArrayList<>();
+
+        private final RecentListUtil recentListUtil;
+
+        public static class ViewHolder extends RecyclerView.ViewHolder {
+            private TextView filenameView;
+            private TextView infoView;
+
+            public ViewHolder(View view) {
+                super(view);
+                filenameView = (TextView)view.findViewById(R.id.recent_item_filename);
+                infoView = (TextView)view.findViewById(R.id.recent_item_info);
+            }
+
+            public void setItem(RecentItem item) {
+                filenameView.setText(item.dbName);
+                infoView.setText(item.dbInfo);
+            }
+        }
+
+        public RecentListAdapter(Context context, RecentListUtil recentListUtil) {
+            this.context = context;
+            this.recentListUtil = recentListUtil;
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent){
-            View v = convertView;
-            if(v == null){
-                LayoutInflater li = (LayoutInflater)mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                v = li.inflate(R.layout.open_screen_recent_item, null);
-            }
-            RecentItem recentItem = getItem(position);
-            if(recentItem != null){
-                TextView filenameView = (TextView)v.findViewById(R.id.recent_item_filename);
-                TextView infoView = (TextView)v.findViewById(R.id.recent_item_info);
-                filenameView.setText(recentItem.dbName);
-                infoView.setText(recentItem.dbInfo);
-            }
-            return v;
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+            LayoutInflater li = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View v = li.inflate(R.layout.open_screen_recent_item, parent, false);
+
+            return new ViewHolder(v);
+        }
+
+        @Override
+        public void onBindViewHolder(final ViewHolder holder, final int position) {
+            final RecentItem currentItem = items.get(position);
+            holder.setItem(currentItem);
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent myIntent = new Intent();
+                    myIntent.setClass(context, StudyActivity.class);
+                    String dbPath = currentItem.dbPath;
+                    myIntent.putExtra(StudyActivity.EXTRA_DBPATH, dbPath);
+                    recentListUtil.addToRecentList(dbPath);
+                    context.startActivity(myIntent);
+                }
+            });
+
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    String dbPath = currentItem.dbPath;
+                    DialogFragment df = new OpenActionsFragment();
+                    Bundle b = new Bundle();
+                    b.putString(OpenActionsFragment.EXTRA_DBPATH, dbPath);
+                    df.setArguments(b);
+                    df.show(((FragmentActivity)context).getSupportFragmentManager(), "OpenActions");
+                    return true;
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return items.size();
+        }
+
+        public void insert(int index, RecentItem item) {
+            items.add(index, item);
+            this.notifyDataSetChanged();
+        }
+
+        public void clear() {
+            items.clear();
+            this.notifyDataSetChanged();
         }
     }
-
-
 }
