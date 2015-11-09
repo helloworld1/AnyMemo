@@ -21,15 +21,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import android.app.ProgressDialog;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.FrameLayout;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.Chart;
@@ -56,13 +55,12 @@ public class StatisticsScreen extends AMActivity {
     public static final String EXTRA_DBPATH = "dbpath";
 
     private FrameLayout statisticsGraphFrame;
-    private String dbPath;
 
     private CardDao cardDao;
 
     private AnyMemoDBOpenHelper dbOpenHelper;
 
-    private ActionBarDrawerToggle drawerToggle;
+    private DrawerLayout drawerLayout;
 
     private NavigationView navigationView;
 
@@ -72,89 +70,64 @@ public class StatisticsScreen extends AMActivity {
         setContentView(R.layout.statistics_screen);
         setTitle(R.string.statistics_text);
 
-        statisticsGraphFrame = (FrameLayout)findViewById(R.id.statistics_graph_frame);
 
         Bundle extras = getIntent().getExtras();
         assert extras != null : "Open StatisticsScreen without extras";
 
-        dbPath = extras.getString(EXTRA_DBPATH);
-
+        String dbPath = extras.getString(EXTRA_DBPATH);
         assert dbPath != null : "dbPath shouldn't be null";
 
         dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(this, dbPath);
 
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        statisticsGraphFrame = (FrameLayout) findViewById(R.id.statistics_graph_frame);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         initDrawer();
 
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //getSupportActionBar().setHomeButtonEnabled(true);
 
         // For the first execution to display default statistics info
         new CardToReviewTask().execute((Void)null);
     }
 
     @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        // Sync the drawer toggle state after onRestoreInstanceState has occurred.
-        if  (drawerToggle != null) {
-            drawerToggle.syncState();
-        }
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        // Pass any configuration change to the drawer toggles
-        drawerToggle.onConfigurationChanged(newConfig);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // The action bar home/up action should open or close the drawer.
-        // ActionBarDrawerToggle will take care of this.
-        if (drawerToggle.onOptionsItemSelected(item)) {
+        if (item.getItemId() == android.R.id.home) {
+            drawerLayout.openDrawer(GravityCompat.START);
             return true;
         }
-        return super.onOptionsItemSelected(item);
 
+        return super.onOptionsItemSelected(item);
     }
 
     private void initDrawer() {
-        final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        drawerToggle = new ActionBarDrawerToggle(this,
-                drawerLayout,
-                R.string.open_text,
-                R.string.close_text) {
-            public void onDrawerClosed(View view) {
-                supportInvalidateOptionsMenu();
-            }
-
-            public void onDrawerOpened(View drawerView) {
-                supportInvalidateOptionsMenu();
-            }
-        };
-
-        drawerLayout.setDrawerListener(drawerToggle);
-
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
                  @Override
                  public boolean onNavigationItemSelected(MenuItem menuItem) {
-                     switch (menuItem.getItemId()) {
-                         case R.id.cards_scheduled_in_a_month_menu:
-                             new CardToReviewTask().execute((Void)null);
-                             break;
-                         case R.id.accumulative_cards_scheduled_menu:
-                             new AccumulativeCardsToReviewTask()
-                                     .execute((Void) null);
-                             break;
-                         case R.id.grade_statistics_menu:
-                             new GradeStatisticsTask().execute((Void)null);
-                             break;
-                     }
-                     drawerLayout.closeDrawers();
-                     return true;
+                 switch (menuItem.getItemId()) {
+                     case R.id.cards_scheduled_in_a_month_menu:
+                         new CardToReviewTask()
+                                 .execute((Void)null);
+                         break;
+                     case R.id.accumulative_cards_scheduled_menu:
+                         new AccumulativeCardsToReviewTask()
+                                 .execute((Void) null);
+                         break;
+                     case R.id.grade_statistics_menu:
+                         new GradeStatisticsTask()
+                                 .execute((Void)null);
+                         break;
+                 }
+
+                 menuItem.setChecked(true);
+                 drawerLayout.closeDrawers();
+
+                 return true;
                  }
              }
         );

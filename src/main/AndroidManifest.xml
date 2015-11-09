@@ -93,8 +93,9 @@
             android:configChanges="orientation|keyboardHidden" />
         <activity 
             android:name=".ui.StatisticsScreen"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity 
+            android:theme="@style/AnyMemo.Theme.Dark.NoActionBar" />
+
+        <activity
             android:name=".ui.StudyActivity"
             android:parentActivityName=".ui.AnyMemo">
             <meta-data
