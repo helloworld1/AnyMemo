@@ -20,9 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo.widget;
 
-import org.liberty.android.fantastischmemo.SetAlarmReceiver;
-import org.liberty.android.fantastischmemo.service.AnyMemoService;
-
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -31,13 +28,10 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.widget.RemoteViews;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.ui.AnyMemo;
 import org.liberty.android.fantastischmemo.ui.StudyActivity;
 
 import android.net.Uri;
 import android.annotation.TargetApi;
-
-import roboguice.util.Ln;
 
 
 public class AnyMemoWidgetProvider extends AppWidgetProvider{

@@ -102,10 +102,10 @@
         <activity 
             android:name=".ui.CardPlayerActivity" />
         <receiver
-            android:name=".AlarmReceiver"
+            android:name=".receiver.AlarmReceiver"
             android:process=":remote" />
         <receiver
-            android:name=".SetAlarmReceiver" >
+            android:name=".receiver.SetAlarmReceiver" >
             <intent-filter>
                 <action
                     android:name="android.intent.action.BOOT_COMPLETED" />

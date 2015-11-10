@@ -17,7 +17,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-package org.liberty.android.fantastischmemo;
+package org.liberty.android.fantastischmemo.receiver;
 
 import org.liberty.android.fantastischmemo.service.AnyMemoService;
 import org.liberty.android.fantastischmemo.widget.AnyMemoWidgetProvider;
@@ -32,7 +32,7 @@ import android.util.Log;
 public class AlarmReceiver extends BroadcastReceiver{
     public static int ALARM_NOTIFICATION = 1;
     public static int ALARM_WIDGET = 2;
-    private final static String TAG = "org.liberty.android.fantastischmemo.AlarmReceiver";
+    private final static String TAG = AlarmReceiver.class.getSimpleName();
     @Override
     public void onReceive(Context context, Intent intent){
         Bundle extras = intent.getExtras();

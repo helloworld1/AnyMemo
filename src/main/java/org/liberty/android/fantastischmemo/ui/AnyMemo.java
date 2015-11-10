@@ -53,7 +53,7 @@ import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.SetAlarmReceiver;
+import org.liberty.android.fantastischmemo.receiver.SetAlarmReceiver;
 import org.liberty.android.fantastischmemo.service.AnyMemoService;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.widget.AnyMemoWidgetProvider;
