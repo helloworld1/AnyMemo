@@ -105,10 +105,12 @@ public class MultipleLoaderManager {
         runningLoaderCount--;
 
         // The onPostInit is running on UI thread.
-        if (runningLoaderCount <= 0 && onAllLoaderCompletedRunnable != null) {
+        if (runningLoaderCount <= 0) {
             Ln.v("Dismiss dialog");
             progressDialog.dismiss();
-            handler.post(onAllLoaderCompletedRunnable);
+            if (onAllLoaderCompletedRunnable != null) {
+                handler.post(onAllLoaderCompletedRunnable);
+            }
         }
     }
 

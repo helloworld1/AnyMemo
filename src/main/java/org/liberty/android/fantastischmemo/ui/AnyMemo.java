@@ -21,9 +21,11 @@ package org.liberty.android.fantastischmemo.ui;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -35,7 +37,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.Loader;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -48,6 +53,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.common.base.Objects;
+import com.google.common.base.Strings;
 import org.apache.commons.io.FileUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
@@ -55,7 +62,9 @@ import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.receiver.SetAlarmReceiver;
 import org.liberty.android.fantastischmemo.service.AnyMemoService;
+import org.liberty.android.fantastischmemo.ui.loader.MultipleLoaderManager;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
+import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 import org.liberty.android.fantastischmemo.widget.AnyMemoWidgetProvider;
 
 import javax.inject.Inject;
@@ -79,11 +88,25 @@ public class AnyMemo extends AMActivity {
 
     private AMFileUtil amFileUtil;
 
+    private RecentListUtil recentListUtil;
+
+    private MultipleLoaderManager multipleLoaderManager;
+
     private static final int PERMISSION_REQUEST_EXTERNAL_STORAGE = 1;
 
     @Inject
     public void setAmFileUtil(AMFileUtil amFileUtil) {
         this.amFileUtil = amFileUtil;
+    }
+
+    @Inject
+    public void setRecentListUtil(RecentListUtil recentListUtil) {
+        this.recentListUtil = recentListUtil;
+    }
+
+    @Inject
+    public void setMultipleLoaderManager(MultipleLoaderManager multipleLoaderManager) {
+        this.multipleLoaderManager = multipleLoaderManager;
     }
 
     @Override
@@ -131,6 +154,14 @@ public class AnyMemo extends AMActivity {
         prepareStoreage();
         prepareFirstTimeRun();
         prepareNotification();
+
+        if (getIntent() != null && Objects.equal(getIntent().getAction(), Intent.ACTION_VIEW)) {
+            handleOpenIntent();
+
+            // Set the action null when the intent is handled to prevent the logic being executed
+            // again when the screen is rotated
+            getIntent().setAction(null);
+        }
     }
 
     /**
@@ -298,6 +329,14 @@ public class AnyMemo extends AMActivity {
         SetAlarmReceiver.setNotificationAlarm(this);
     }
 
+    /**
+     * Handle the "VIEW" action for other app to open a db
+     */
+    private void handleOpenIntent() {
+        multipleLoaderManager.registerLoaderCallbacks(1, new HandleOpenIntentLoaderCallbacks(getIntent().getData()), false);
+        multipleLoaderManager.startLoading();
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -306,14 +345,10 @@ public class AnyMemo extends AMActivity {
         Intent myIntent = new Intent(this, AnyMemoService.class);
         myIntent.putExtra("request_code", AnyMemoService.CANCEL_NOTIFICATION);
         startService(myIntent);
-    }
 
-    @Override
-    public void restartActivity() {
-        // The restart activity remember the current tab.
-        Intent intent = new Intent(this, this.getClass());
-        startActivity(intent);
-        finish();
+        if (multipleLoaderManager != null) {
+            multipleLoaderManager.destroy();
+        }
     }
 
     @Override
@@ -326,6 +361,63 @@ public class AnyMemo extends AMActivity {
         return super.onOptionsItemSelected(item);
 
     }
+
+    /**
+     * The loader to copy the db from temporary location to AnyMemo folder
+     */
+    private class HandleOpenIntentLoaderCallbacks implements LoaderManager.LoaderCallbacks<File> {
+
+        private final Uri contentUri;
+
+        public HandleOpenIntentLoaderCallbacks(Uri contentUri) {
+            this.contentUri = contentUri;
+        }
+
+        @Override
+        public Loader<File> onCreateLoader(int id, Bundle args) {
+            Loader<File> loader = new AsyncTaskLoader<File>(AnyMemo.this) {
+                @Override
+                public File loadInBackground() {
+                    String[] splittedUri = contentUri.toString().split("/");
+                    String newFileName = splittedUri[splittedUri.length - 1];
+                    if (!newFileName.endsWith(".db")) {
+                        newFileName += ".db";
+                    }
+                    File newFile = new File(AMEnv.DEFAULT_ROOT_PATH + "/" + newFileName);
+
+                    InputStream inputStream;
+                    try {
+                        inputStream = AnyMemo.this.getContentResolver().openInputStream(contentUri);
+                        FileUtils.copyInputStreamToFile(inputStream, newFile);
+                        return newFile;
+                    } catch (IOException e) {
+                        Log.e(TAG, "Error opening file from intent", e);
+                    }
+
+                    return null;
+                }
+            };
+            loader.forceLoad();
+            return loader;
+        }
+
+        @Override
+        public void onLoadFinished(Loader<File> loader, File newFile) {
+            recentListUtil.addToRecentList(newFile.getAbsolutePath());
+
+            Intent intent = new Intent();
+            intent.setClass(AnyMemo.this, PreviewEditActivity.class);
+            intent.putExtra(PreviewEditActivity.EXTRA_DBPATH, newFile.getAbsolutePath());
+            startActivity(intent);
+            multipleLoaderManager.checkAllLoadersCompleted();
+        }
+
+        @Override
+        public void onLoaderReset(Loader<File> loader) {
+            // Nothing
+        }
+    }
+
 
     private static class MainPagerAdapter extends FragmentPagerAdapter {
 
