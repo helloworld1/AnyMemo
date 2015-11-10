@@ -341,6 +341,12 @@ public class AnyMemo extends AMActivity {
         public MainPagerAdapter(FragmentManager fm, Context context) {
             super(fm);
             this.context = context;
+
+            // Set arguments for the OpenTabFragment fragment
+            // to show the create action
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(FileBrowserFragment.EXTRA_SHOW_CREATE_DB_BUTTON, true);
+            fragments[1].setArguments(bundle);
         }
 
         @Override

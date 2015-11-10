@@ -19,32 +19,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import org.apache.commons.io.FileUtils;
-import org.liberty.android.fantastischmemo.AMActivity;
-import org.liberty.android.fantastischmemo.AMEnv;
-import org.liberty.android.fantastischmemo.AMPrefKeys;
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.utils.AMFileUtil;
-import org.liberty.android.fantastischmemo.utils.RecentListUtil;
-
-import roboguice.fragment.RoboDialogFragment;
-
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -52,22 +35,32 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.SectionIndexer;
 import android.widget.TextView;
-
 import com.google.common.base.Strings;
+import org.apache.commons.io.FileUtils;
+import org.liberty.android.fantastischmemo.AMActivity;
+import org.liberty.android.fantastischmemo.AMEnv;
+import org.liberty.android.fantastischmemo.AMPrefKeys;
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
+import org.liberty.android.fantastischmemo.utils.RecentListUtil;
+import roboguice.fragment.RoboDialogFragment;
 
-public class FileBrowserFragment extends RoboDialogFragment implements OnItemClickListener, OnItemLongClickListener {
+import javax.inject.Inject;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+public class FileBrowserFragment extends RoboDialogFragment {
     public final static String EXTRA_DEFAULT_ROOT = "default_root";
     public final static String EXTRA_FILE_EXTENSIONS = "file_extension";
     public final static String EXTRA_DISMISS_ON_SELECT = "dismiss_on_select";
+    public final static String EXTRA_SHOW_CREATE_DB_BUTTON = "show_create_db_button";
 
     private enum DISPLAYMODE{ABSOLUTE, RELATIVE;}
     private final DISPLAYMODE displayMode = DISPLAYMODE.RELATIVE;
@@ -76,14 +69,19 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
     private String defaultRoot;
     private String[] fileExtensions;
     private AMActivity mActivity;
-    private ListView fbListView;
+
+    private RecyclerView filesListRecyclerView;
+    private FileBrowserAdapter fileListAdapter;
+    private FloatingActionButton addDbButton;
+
     private TextView titleTextView;
     private boolean dismissOnSelect = false;
+    private boolean showCreateDbButton = false;
 
     /* Used when the file is clicked. */
     private OnFileClickListener onFileClickListener;
 
-    private final static String TAG = "FileBrowserFragment";
+    private final static String TAG = FileBrowserFragment.class.getSimpleName();
     private final static String UP_ONE_LEVEL_DIR = "..";
     private final static String CURRENT_DIR = ".";
     private SharedPreferences settings;
@@ -110,13 +108,12 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Context activity) {
         super.onAttach(activity);
         mActivity = (AMActivity)activity;
         settings = PreferenceManager.getDefaultSharedPreferences(mActivity);
         editor = settings.edit();
     }
-
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -128,18 +125,18 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
             // Default do not dismiss the dialog
             dismissOnSelect = args.getBoolean(EXTRA_DISMISS_ON_SELECT, false);
 
+            showCreateDbButton = args.getBoolean(EXTRA_SHOW_CREATE_DB_BUTTON, false);
+
             if (ext != null) {
                 fileExtensions = ext.split(",");
             }
             else {
                 fileExtensions = new String[]{".db"};
             }
-        }
-        else {
+        } else {
             fileExtensions = new String[]{".db"};
             defaultRoot = null;
-        }
-        if(defaultRoot == null){
+        } if(defaultRoot == null){
             defaultRoot = settings.getString(AMPrefKeys.SAVED_FILEBROWSER_PATH_KEY, null);
 
             // Make sure the path exists.
@@ -166,18 +163,33 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
             Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.file_browser, container, false);
-        fbListView = (ListView)v.findViewById(R.id.file_list);
+        filesListRecyclerView = (RecyclerView)v.findViewById(R.id.file_list);
+        filesListRecyclerView.setLayoutManager(new LinearLayoutManager(filesListRecyclerView.getContext()));
         titleTextView = (TextView) v.findViewById(R.id.file_path_title);
+
+        fileListAdapter = new FileBrowserAdapter(this);
+        filesListRecyclerView.setAdapter(fileListAdapter);
+
+        addDbButton = (FloatingActionButton) v.findViewById(R.id.add_db_fab);
+        addDbButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCreateDbDialog();
+            }
+        });
+
+        if (!showCreateDbButton) {
+            addDbButton.hide();
+        }
+
         return v;
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         browseTo(currentDirectory);
     }
-
-
 
     private void browseTo(final File aDirectory){
         if(aDirectory.isDirectory()){
@@ -216,10 +228,7 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
             }
         }
 
-        FileBrowserAdapter directoryList = new FileBrowserAdapter(mActivity, R.layout.filebrowser_item, directoryEntries);
-        fbListView.setAdapter(directoryList);
-        fbListView.setOnItemClickListener(this);
-        fbListView.setOnItemLongClickListener(this);
+        this.fileListAdapter.setItems(directoryEntries);
     }
 
 
@@ -230,25 +239,44 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parentView, View childView, int position, long id){
-        String selectedFileString = this.directoryEntries.get(position);
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.file_browser_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.file_browser_createdb:{
+                showCreateDbDialog();
+                return true;
+            }
+
+            case R.id.file_browser_createdirectory:{
+                showCreateFolderDialog();
+                return true;
+
+            }
+        }
+        return false;
+    }
+
+    private void openFile(final String selectedFileString) {
         if(selectedFileString.equals(CURRENT_DIR)){
             this.browseTo(this.currentDirectory);
-        }
-        else if(selectedFileString.equals(UP_ONE_LEVEL_DIR)) {
+        } else if(selectedFileString.equals(UP_ONE_LEVEL_DIR)) {
             this.upOneLevel();
-        }
-        else{
+        } else {
             File clickedFile = null;
             switch(this.displayMode){
-            case RELATIVE:
-                clickedFile = new File(this.currentDirectory.getAbsolutePath() + this.directoryEntries.get(position));
-                break;
-            case ABSOLUTE:
-                clickedFile = new File(this.directoryEntries.get(position));
-                break;
+                case RELATIVE:
+                    clickedFile = new File(this.currentDirectory.getAbsolutePath() + selectedFileString);
+                    break;
+                case ABSOLUTE:
+                    clickedFile = new File(selectedFileString);
+                    break;
             }
-            if(clickedFile != null){
+            if(clickedFile != null) {
                 try{
                     if(clickedFile.isDirectory()){
                         this.browseTo(clickedFile);
@@ -276,320 +304,287 @@ public class FileBrowserFragment extends RoboDialogFragment implements OnItemCli
         }
     }
 
-
-    @Override
-    public boolean onItemLongClick(AdapterView<?>  parent, View  view, int position, long id){
-        String selectedFileString = this.directoryEntries.get(position);
-        if(selectedFileString.equals(CURRENT_DIR)){
-            /* Do nothing */
-        }
-        else if(selectedFileString.equals(UP_ONE_LEVEL_DIR)){
-            /* Do nithing */
-        }
-        else{
-            final File clickedFile;
-            switch(this.displayMode){
-            case RELATIVE:
-                clickedFile = new File(this.currentDirectory.getAbsolutePath() + this.directoryEntries.get(position));
-                break;
-            case ABSOLUTE:
-                clickedFile = new File(this.directoryEntries.get(position));
-                break;
-            default:
-                /* Since clickedFile is final, it have to be initiated */
-                clickedFile = new File(this.currentDirectory.getAbsolutePath() + this.directoryEntries.get(position));
-            }
-            if(clickedFile != null){
-                try{
-                    if(clickedFile.isDirectory()){
-                        this.browseTo(clickedFile);
+    private void showCreateDbDialog() {
+        final EditText input = new EditText(mActivity);
+        new AlertDialog.Builder(mActivity)
+            .setTitle(mActivity.getString(R.string.fb_create_db))
+            .setMessage(mActivity.getString(R.string.fb_create_db_message))
+            .setView(input)
+            .setPositiveButton(mActivity.getString(R.string.ok_text), new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialog, int which ){
+                    String value = input.getText().toString();
+                    if(!value.endsWith(".db")){
+                        value += ".db";
                     }
-                    else if(clickedFile.isFile()){
-                        new AlertDialog.Builder(mActivity)
-                            .setTitle(getString(R.string.fb_edit_dialog_title))
-                            .setItems(R.array.fb_dialog_list, new DialogInterface.OnClickListener(){
-                                @Override
-                                public void onClick(DialogInterface dialog, int which){
-                                    if(which == 0){
-                                        /* Delete */
-                                        new AlertDialog.Builder(mActivity)
-                                            .setTitle(getString(R.string.delete_text))
-                                            .setMessage(getString(R.string.fb_delete_message))
-                                            .setPositiveButton(getString(R.string.delete_text), new DialogInterface.OnClickListener(){
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which ){
-                                                    amFileUtil.deleteDbSafe(clickedFile.getAbsolutePath());
-                                                    File dir = new File(clickedFile.getParent());
-                                                    Log.v(TAG, "DIR: " + dir.toString());
-                                                    /* Refresh the list */
-                                                    browseTo(dir);
-                                                }
-                                            })
-                                            .setNegativeButton(getString(R.string.cancel_text), null)
-                                            .create()
-                                            .show();
+                    File newDbFile = new File(currentDirectory.getAbsolutePath() + "/" + value);
+                    try {
+                        if (newDbFile.exists()) {
+                            amFileUtil.deleteFileWithBackup(newDbFile.getAbsolutePath());
+                        }
 
-                                    }
-                                    else if(which == 1){
-                                        /* Clone */
-                                        String srcDir = clickedFile.getAbsolutePath();
-                                        String destDir = srcDir.replaceAll(".db", ".clone.db");
-                                        try {
-                                            FileUtils.copyFile(new File(srcDir), new File(destDir));
-                                        }
-                                        catch(IOException e){
-                                            new AlertDialog.Builder(mActivity)
-                                                .setTitle(getString(R.string.fail))
-                                                .setMessage(getString(R.string.fb_fail_to_clone) + "\nError: " + e.toString())
-                                                .setNeutralButton(getString(R.string.ok_text), null)
-                                                .create()
-                                                .show();
-                                        }
-
-                                        browseTo(new File(clickedFile.getParent()));
-                                    }
-                                    else if(which == 2){
-                                        /* rename card */
-                                        final EditText input = new EditText(mActivity);
-                                        input.setText(clickedFile.getAbsolutePath());
-                                        new AlertDialog.Builder(mActivity)
-                                            .setTitle(getString(R.string.fb_rename))
-                                            .setMessage(getString(R.string.fb_rename_message))
-                                            .setView(input)
-                                            .setPositiveButton(getString(R.string.ok_text), new DialogInterface.OnClickListener(){
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which ){
-                                                String value = input.getText().toString();
-                                                if(!value.equals(clickedFile.getAbsolutePath())){
-                                                    try {
-                                                        FileUtils.copyFile(clickedFile, new File(value));
-                                                        amFileUtil.deleteDbSafe(clickedFile.getAbsolutePath());
-                                                        recentListUtil.deleteFromRecentList(clickedFile.getAbsolutePath());
-
-                                                    } catch (IOException e) {
-                                                        new AlertDialog.Builder(mActivity)
-                                                            .setTitle(getString(R.string.fail))
-                                                            .setMessage(getString(R.string.fb_rename_fail) + "\nError: " + e.toString())
-                                                            .setNeutralButton(getString(R.string.ok_text), null)
-                                                            .create()
-                                                            .show();
-                                                    }
-
-                                                }
-
-                                                browseTo(currentDirectory);
-                                            }
-                                        })
-                                        .setNegativeButton(getString(R.string.cancel_text), null)
-                                        .create()
-                                        .show();
-                                    }
-
-
-
-                                }
-                            })
-                            .create()
-                            .show();
-
+                        amFileUtil.createDbFileWithDefaultSettings(newDbFile);
+                    } catch(IOException e){
+                        Log.e(TAG, "Fail to create file", e);
                     }
-                }
+                    browseTo(currentDirectory);
 
-                catch(Exception e){
-                    new AlertDialog.Builder(mActivity).setMessage(e.toString()).show();
-                    browseTo(new File("/"));
                 }
-            }
-        }
-        return true;
-
+            })
+            .setNegativeButton(this.getString(R.string.cancel_text), null)
+            .create()
+            .show();
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.file_browser_menu, menu);
+    private void showCreateFolderDialog() {
+        final EditText input = new EditText(mActivity);
+        new AlertDialog.Builder(mActivity)
+            .setTitle(R.string.fb_create_dir)
+            .setMessage(R.string.fb_create_dir_message)
+            .setView(input)
+            .setPositiveButton(this.getString(R.string.ok_text), new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialog, int which ){
+                    String value = input.getText().toString();
+                    File newDir = new File(currentDirectory + "/" + value);
+                    newDir.mkdir();
+                    browseTo(currentDirectory);
+
+                }
+            })
+            .setNegativeButton(this.getString(R.string.cancel_text), null)
+            .create()
+            .show();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.file_browser_createdb:{
-                /* Create a new DB */
-                final EditText input = new EditText(mActivity);
-                new AlertDialog.Builder(mActivity)
-                    .setTitle(mActivity.getString(R.string.fb_create_db))
-                    .setMessage(mActivity.getString(R.string.fb_create_db_message))
-                    .setView(input)
-                    .setPositiveButton(mActivity.getString(R.string.ok_text), new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialog, int which ){
-                        String value = input.getText().toString();
-                        if(!value.endsWith(".db")){
-                            value += ".db";
-                        }
-                        File newDbFile = new File(currentDirectory.getAbsolutePath() + "/" + value);
-                        try {
-                            if (newDbFile.exists()) {
-                                amFileUtil.deleteFileWithBackup(newDbFile.getAbsolutePath());
-                            }
-
-                            amFileUtil.createDbFileWithDefaultSettings(newDbFile);
-                        } catch(IOException e){
-                            Log.e(TAG, "Fail to create file", e);
-                        }
-                        browseTo(currentDirectory);
-
-                    }
-                })
-                .setNegativeButton(this.getString(R.string.cancel_text), null)
-                .create()
-                .show();
-                return true;
-            }
-
-            case R.id.file_browser_createdirectory:{
-                final EditText input = new EditText(mActivity);
-                new AlertDialog.Builder(mActivity)
-                    .setTitle(R.string.fb_create_dir)
-                    .setMessage(R.string.fb_create_dir_message)
-                    .setView(input)
-                    .setPositiveButton(this.getString(R.string.ok_text), new DialogInterface.OnClickListener(){
-                    @Override
-                        public void onClick(DialogInterface dialog, int which ){
-                            String value = input.getText().toString();
-                            File newDir = new File(currentDirectory + "/" + value);
-                            newDir.mkdir();
-                            browseTo(currentDirectory);
-
-                        }
-                    })
-                    .setNegativeButton(this.getString(R.string.cancel_text), null)
+    private void showCloneDbDialog(final File clickedFile) {
+        /* Clone */
+        String srcDir = clickedFile.getAbsolutePath();
+        String destDir = srcDir.replaceAll(".db", ".clone.db");
+        try {
+            FileUtils.copyFile(new File(srcDir), new File(destDir));
+        } catch(IOException e){
+            new AlertDialog.Builder(mActivity)
+                    .setTitle(getString(R.string.fail))
+                    .setMessage(getString(R.string.fb_fail_to_clone) + "\nError: " + e.toString())
+                    .setNeutralButton(getString(R.string.ok_text), null)
                     .create()
                     .show();
-                return true;
-
-            }
         }
-        return false;
+
+        browseTo(new File(clickedFile.getParent()));
+
     }
 
-    private class FileBrowserAdapter extends ArrayAdapter<String> implements SectionIndexer{
-        /* quick index sections */
-        private String[] sections;
+    private void showDeleteDbDialog(final File clickedFile) {
+        new AlertDialog.Builder(mActivity)
+            .setTitle(getString(R.string.delete_text))
+            .setMessage(getString(R.string.fb_delete_message))
+            .setPositiveButton(getString(R.string.delete_text), new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialog, int which ){
+                    amFileUtil.deleteDbSafe(clickedFile.getAbsolutePath());
+                    File dir = new File(clickedFile.getParent());
+                    Log.v(TAG, "DIR: " + dir.toString());
+                    /* Refresh the list */
+                    browseTo(dir);
+                }
+            })
+            .setNegativeButton(getString(R.string.cancel_text), null)
+            .create()
+            .show();
+    }
 
-        HashMap<String, Integer> alphaIndexer = new HashMap<String, Integer>();
+    private void showRenameDbDialog(final File clickedFile) {
+        final EditText input = new EditText(mActivity);
+        input.setText(clickedFile.getAbsolutePath());
+        new AlertDialog.Builder(mActivity)
+            .setTitle(getString(R.string.fb_rename))
+            .setMessage(getString(R.string.fb_rename_message))
+            .setView(input)
+            .setPositiveButton(getString(R.string.ok_text), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    String value = input.getText().toString();
+                    if (!value.equals(clickedFile.getAbsolutePath())) {
+                        try {
+                            FileUtils.copyFile(clickedFile, new File(value));
+                            amFileUtil.deleteDbSafe(clickedFile.getAbsolutePath());
+                            recentListUtil.deleteFromRecentList(clickedFile.getAbsolutePath());
 
-        public FileBrowserAdapter(Context context, int textViewResourceId, ArrayList<String> items){
-            super(context, textViewResourceId, items);
-            sort(new Comparator<String>() {
+                        } catch (IOException e) {
+                            new AlertDialog.Builder(mActivity)
+                                    .setTitle(getString(R.string.fail))
+                                    .setMessage(getString(R.string.fb_rename_fail) + "\nError: " + e.toString())
+                                    .setNeutralButton(getString(R.string.ok_text), null)
+                                    .create()
+                                    .show();
+                        }
+
+                    }
+
+                    browseTo(currentDirectory);
+                }
+            })
+            .show();
+    }
+
+    private static class FileBrowserAdapter extends RecyclerView.Adapter<FileBrowserAdapter.ViewHolder> {
+        private final FileBrowserFragment fragment;
+
+        private final List<String> items = new ArrayList<String>();
+
+        public FileBrowserAdapter(FileBrowserFragment fragment) {
+            this.fragment = fragment;
+        }
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater li = (LayoutInflater)fragment.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View v = li.inflate(R.layout.filebrowser_item, parent, false);
+            return new ViewHolder(v);
+        }
+
+        @Override
+        public void onBindViewHolder(ViewHolder holder, final int position) {
+            final String selectedFileName = items.get(position);
+
+            if (Strings.isNullOrEmpty(selectedFileName)) {
+                return;
+            }
+
+            String displayFileName = selectedFileName;
+
+            if(selectedFileName.endsWith("/")){
+                holder.setImage(R.drawable.dir);
+                displayFileName = displayFileName.substring(0, selectedFileName.length() - 1);
+
+            } else if(selectedFileName.equals("..")){
+                holder.setImage(R.drawable.back);
+            } else if(selectedFileName.endsWith(".png") || selectedFileName.endsWith(".jpg") || selectedFileName.endsWith(".tif") || selectedFileName.endsWith(".bmp")){
+                holder.setImage(R.drawable.picture);
+            } else if(selectedFileName.endsWith(".ogg") || selectedFileName.endsWith(".mp3") || selectedFileName.endsWith(".wav") || selectedFileName.endsWith(".amr")){
+                holder.setImage(R.drawable.audio);
+            } else if(selectedFileName.endsWith(".txt") || selectedFileName.endsWith(".csv") || selectedFileName.endsWith(".xml")){
+                holder.setImage(R.drawable.text);
+            } else if(selectedFileName.endsWith(".zip")){
+                holder.setImage(R.drawable.zip);
+            } else{
+                holder.setImage(R.drawable.database);
+            }
+
+            if (displayFileName.charAt(0) == '/'){
+                displayFileName = displayFileName.substring(1, displayFileName.length());
+            }
+
+            holder.setText(displayFileName);
+
+            // Set click listeners
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    fragment.openFile(selectedFileName);
+                }
+            });
+
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if(selectedFileName.equals(CURRENT_DIR)){
+                        /* Do nothing */
+                    } else if(selectedFileName.equals(UP_ONE_LEVEL_DIR)){
+                        /* Do nithing */
+                    } else {
+                        final File clickedFile;
+                        switch(fragment.displayMode){
+                            case RELATIVE:
+                                clickedFile = new File(fragment.currentDirectory.getAbsolutePath() + selectedFileName);
+                                break;
+                            case ABSOLUTE:
+                                clickedFile = new File(selectedFileName);
+                                break;
+                            default:
+                                clickedFile = new File(fragment.currentDirectory.getAbsolutePath() + selectedFileName);
+                        }
+                        if (clickedFile != null){
+                            if(clickedFile.isDirectory()) {
+                                fragment.browseTo(clickedFile);
+                            } else if (clickedFile.isFile()){
+                                new AlertDialog.Builder(fragment.getContext())
+                                    .setTitle(fragment.getContext().getString(R.string.fb_edit_dialog_title))
+                                    .setItems(R.array.fb_dialog_list, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            if (which == 0) {
+                                                fragment.showDeleteDbDialog(clickedFile);
+                                            } else if (which == 1) {
+                                                fragment.showCloneDbDialog(clickedFile);
+                                            } else if (which == 2) {
+                                                fragment.showRenameDbDialog(clickedFile);
+                                            }
+                                        }
+                                    })
+                                    .create()
+                                    .show();
+                            }
+                        }
+                    }
+                    return true;
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return items.size();
+        }
+
+        public void setItems(List<String> items) {
+            this.items.clear();
+            this.items.addAll(items);
+
+            Collections.sort(this.items, new Comparator<String>() {
                 @Override
                 public int compare(String s1, String s2){
-                    if(s1.equals("..")){
+                    if (s1.equals("..")) {
                         return -1;
-                    }
-                    else if(s2.equals("..")){
+                    } else if (s2.equals("..")){
                         return 1;
-                    }
-                    else if(s1.endsWith("/") && !s2.endsWith("/")){
+                    } else if (s1.endsWith("/") && !s2.endsWith("/")){
                         return -1;
-                    }
-                    else if(s2.endsWith("/") && !s1.endsWith("/")){
+                    } else if (s2.endsWith("/") && !s1.endsWith("/")){
                         return 1;
-                    }
-                    else{
+                    } else {
                         return (s1.toLowerCase()).compareTo(s2.toLowerCase());
                     }
                 }
             });
-            List<String> sectionList = new ArrayList<String>();
-            String cur = "";
-            for(int i = 0; i < getCount(); i++) {
-                String item = getItem(i);
-                if (item.length() >= 2) {
-                    String index;
-                    if(item.endsWith("/")) {
-                        index = item.substring(0, 2).toLowerCase() + item.substring(item.length() - 1);
-                    }
-                    else {
-                        index = item.substring(0, 2).toLowerCase();
-                    }
-                    if (index != null && !index.equals(cur)){
-                        alphaIndexer.put(index, i);
-                        sectionList.add(index);
-                        cur = index;
-                    }
-                }
+            this.notifyDataSetChanged();
+        }
+
+        public static class ViewHolder extends RecyclerView.ViewHolder {
+            private final TextView textView;
+
+            private final ImageView imageView;
+
+            public ViewHolder(View view) {
+                super(view);
+                textView  = (TextView)view.findViewById(R.id.file_name);
+                imageView = (ImageView)view.findViewById(R.id.file_icon);
+
             }
-            sections = new String[sectionList.size()];
-            sectionList.toArray(sections);
-        }
 
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent){
-            View v = convertView;
-            if(v == null){
-                LayoutInflater li = (LayoutInflater)mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                v = li.inflate(R.layout.filebrowser_item, null);
+            public void setText(String text) {
+                textView.setText(text);
             }
-            String name = getItem(position);
-            if (name != null) {
-                TextView tv = (TextView)v.findViewById(R.id.file_name);
-                ImageView iv = (ImageView)v.findViewById(R.id.file_icon);
-                if(name.endsWith("/")){
-                    iv.setImageResource(R.drawable.dir);
-                    name = name.substring(0, name.length() - 1);
 
-                }
-                else if(name.equals("..")){
-                    iv.setImageResource(R.drawable.back);
-                }
-                else if(name.endsWith(".png") || name.endsWith(".jpg") || name.endsWith(".tif") || name.endsWith(".bmp")){
-                    iv.setImageResource(R.drawable.picture);
-                }
-                else if(name.endsWith(".ogg") || name.endsWith(".mp3") || name.endsWith(".wav") || name.endsWith(".amr")){
-                    iv.setImageResource(R.drawable.audio);
-                }
-                else if(name.endsWith(".txt") || name.endsWith(".csv") || name.endsWith(".xml")){
-                    iv.setImageResource(R.drawable.text);
-                }
-                else if(name.endsWith(".zip")){
-                    iv.setImageResource(R.drawable.zip);
-                }
-                else{
-                    iv.setImageResource(R.drawable.database);
-                }
-
-                if(name.charAt(0) == '/'){
-                    name = name.substring(1, name.length());
-                }
-
-                tv.setText(name);
+            public void setImage(int imageResource) {
+                imageView.setImageResource(imageResource);
             }
-            return v;
-        }
-
-        /* Display the quick index when the user is scrolling */
-
-        @Override
-        public int getPositionForSection(int section){
-            String letters = sections[section];
-            return alphaIndexer.get(letters);
-        }
-
-        @Override
-        public int getSectionForPosition(int position){
-            /* Not used */
-            return 0;
-        }
-
-        @Override
-        public Object[] getSections(){
-            return sections;
         }
     }
 
-    public static interface OnFileClickListener {
+    public interface OnFileClickListener {
         void onClick(File file);
     }
 }

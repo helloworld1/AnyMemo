@@ -77,7 +77,7 @@ public abstract class DownloaderBase extends AMActivity implements OnItemClickLi
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         /* The file browser's is reused here because they are similar*/
-        setContentView(R.layout.file_browser);
+        setContentView(R.layout.file_list);
         ListView listView = (ListView)findViewById(R.id.file_list);
         listView.setOnItemClickListener(this);
         initialRetrieve();

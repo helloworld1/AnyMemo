@@ -58,7 +58,7 @@ public class RecentListFragment extends RoboFragment {
     private Thread updateRecentListThread;
     private RecentListUtil recentListUtil;
 
-    private final static String TAG = RecentListFragment.class.getName();
+    private final static String TAG = RecentListFragment.class.getSimpleName();
 
     private Activity mActivity;
 

@@ -144,7 +144,7 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
         super.onCreate(savedInstanceState);
 
         // The file browser's is reused here because they are similar
-        View v = inflater.inflate(R.layout.file_browser, container, false);
+        View v = inflater.inflate(R.layout.file_list, container, false);
 
         listView = (ListView)v.findViewById(R.id.file_list);
         listView.setOnItemClickListener(itemClickListener);
