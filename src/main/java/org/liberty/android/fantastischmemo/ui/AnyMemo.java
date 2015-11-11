@@ -32,6 +32,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -59,11 +60,13 @@ import org.apache.commons.io.FileUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.receiver.SetAlarmReceiver;
 import org.liberty.android.fantastischmemo.service.AnyMemoService;
 import org.liberty.android.fantastischmemo.ui.loader.MultipleLoaderManager;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
+import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 import org.liberty.android.fantastischmemo.widget.AnyMemoWidgetProvider;
 
@@ -89,6 +92,8 @@ public class AnyMemo extends AMActivity {
     private AMFileUtil amFileUtil;
 
     private RecentListUtil recentListUtil;
+
+    private DatabaseUtil databaseUtil;
 
     private MultipleLoaderManager multipleLoaderManager;
 
@@ -172,7 +177,7 @@ public class AnyMemo extends AMActivity {
         setSupportActionBar(toolbar);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        FragmentPagerAdapter adapter = new MainPagerAdapter(getSupportFragmentManager(), this);
+        FragmentPagerAdapter adapter = new MainPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
 
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -252,6 +257,7 @@ public class AnyMemo extends AMActivity {
                 .show();
         }
     }
+
     private void prepareFirstTimeRun() {
         File sdPath = new File(AMEnv.DEFAULT_ROOT_PATH);
         //Check the version, if it is updated from an older version it will show a dialog
@@ -362,6 +368,11 @@ public class AnyMemo extends AMActivity {
 
     }
 
+    @Inject
+    public void setDatabaseUtil(DatabaseUtil databaseUtil) {
+        this.databaseUtil = databaseUtil;
+    }
+
     /**
      * The loader to copy the db from temporary location to AnyMemo folder
      */
@@ -383,18 +394,33 @@ public class AnyMemo extends AMActivity {
                     if (!newFileName.endsWith(".db")) {
                         newFileName += ".db";
                     }
+
                     File newFile = new File(AMEnv.DEFAULT_ROOT_PATH + "/" + newFileName);
+                    // First detect if the db with the same name exists.
+                    // And back kup the db if
+                    try {
+                        amFileUtil.deleteFileWithBackup(newFile.getAbsolutePath());
+                    } catch (IOException e) {
+                        Log.e(TAG, "Failed to delete the exisitng db with backup", e);
+                    }
 
                     InputStream inputStream;
+
                     try {
                         inputStream = AnyMemo.this.getContentResolver().openInputStream(contentUri);
                         FileUtils.copyInputStreamToFile(inputStream, newFile);
-                        return newFile;
                     } catch (IOException e) {
                         Log.e(TAG, "Error opening file from intent", e);
+                        return null;
                     }
 
-                    return null;
+                    if (!databaseUtil.checkDatabase(newFile.getAbsolutePath())) {
+                        Log.e(TAG, "Database is corrupted: " + newFile.getAbsolutePath());
+                        newFile.delete();
+                        return null;
+                    };
+
+                    return newFile;
                 }
             };
             loader.forceLoad();
@@ -403,6 +429,13 @@ public class AnyMemo extends AMActivity {
 
         @Override
         public void onLoadFinished(Loader<File> loader, File newFile) {
+            if (newFile == null) {
+                Snackbar.make(drawerLayout, R.string.db_file_is_corrupted_text, Snackbar.LENGTH_LONG)
+                        .show(); // Don’t forget to show!
+                Log.e(TAG, "Could not load db from intent");
+                return;
+            }
+
             recentListUtil.addToRecentList(newFile.getAbsolutePath());
 
             Intent intent = new Intent();
@@ -420,9 +453,6 @@ public class AnyMemo extends AMActivity {
 
 
     private static class MainPagerAdapter extends FragmentPagerAdapter {
-
-        private Context context;
-
         private Fragment[] fragments = new Fragment[]{
                 new RecentListFragment(),
                 new OpenTabFragment(),
@@ -430,9 +460,8 @@ public class AnyMemo extends AMActivity {
                 new MiscTabFragment()
         };
 
-        public MainPagerAdapter(FragmentManager fm, Context context) {
+        public MainPagerAdapter(FragmentManager fm) {
             super(fm);
-            this.context = context;
 
             // Set arguments for the OpenTabFragment fragment
             // to show the create action

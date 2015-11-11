@@ -455,4 +455,5 @@
     <string name="random_text">Random</string>
     <string name="record_audio_permission_denied_message">AnyMemo could not get permission to record audio.</string>
     <string name="write_storage_permission_denied_message">AnyMemo could not get permission to write db file on external storage.</string>
+    <string name="db_file_is_corrupted_text">DB file is corrupted</string>
 </resources>

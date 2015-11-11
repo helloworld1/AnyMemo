@@ -78,15 +78,18 @@ public class DatabaseUtil {
         if (!(new File(dbPath)).exists()) {
             return false;
         }
-        AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mContext, dbPath);
+        AnyMemoDBOpenHelper helper = null;
         try {
-            helper.getCardDao();
+            helper = AnyMemoDBOpenHelperManager.getHelper(mContext, dbPath);
+            helper.getCardDao().getTotalCount(null);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         } finally {
-            AnyMemoDBOpenHelperManager.releaseHelper(helper);
+            if (helper != null) {
+                AnyMemoDBOpenHelperManager.releaseHelper(helper);
+            }
         }
     }
 }

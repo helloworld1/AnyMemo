@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="org.liberty.android.fantastischmemo"
     android:installLocation="auto">
     <uses-permission android:name="android.permission.INTERNET" />
@@ -30,9 +31,13 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+                <!-- The android:host does not work correctly with * wildcard.
+                     Ignore the android:host for now -->
                 <data
-                    android:mimeType="*/*"
-                    android:pathPattern="/.*\\.db" />
+                    android:scheme="content"
+                    android:mimeType="application/octet-stream"
+                    android:pathPattern="/.*\\.db"
+                    tools:ignore="AppIndexingApiError" />
             </intent-filter>
         </activity>
         <activity
