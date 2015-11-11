@@ -124,14 +124,13 @@ public class RecentListFragment extends RoboFragment {
                         ril.add(ri);
                         ri.dbPath = allPath[i];
                         ri.dbName = FilenameUtils.getName(allPath[i]);
-                        /* In order to add interrupted exception */
-                        Thread.sleep(5);
                     }
                     mHandler.post(new Runnable(){
                         public void run(){
                             recentListAdapter.clear();
-                            for(RecentItem ri : ril)
-                        recentListAdapter.insert(ri.index, ri);
+                            for(RecentItem ri : ril) {
+                                recentListAdapter.insert(ri.index, ri);
+                            }
                         }
                     });
                     /* This will update the detailed statistic info */
@@ -145,7 +144,6 @@ public class RecentListFragment extends RoboFragment {
                         } catch (Exception e) {
                             Log.e(TAG, "Recent list throws exception (Usually can be safely ignored)", e);
                         }
-                        Thread.sleep(5);
                     }
                     mHandler.post(new Runnable(){
                         public void run(){
@@ -154,22 +152,12 @@ public class RecentListFragment extends RoboFragment {
                                 recentListAdapter.insert(ri.index, ri);
                         }
                     });
-                } catch(InterruptedException e){
-                    Log.e(TAG, "Interrupted", e);
                 } catch(Exception e) {
                     Log.e(TAG, "Exception Maybe caused by race condition. Ignored.", e);
                 }
             }
         };
         updateRecentListThread.start();
-    }
-
-    @Override
-    public void onPause(){
-        super.onPause();
-        if(updateRecentListThread != null && updateRecentListThread.isAlive()){
-            updateRecentListThread.interrupt();
-        }
     }
 
     @Override
