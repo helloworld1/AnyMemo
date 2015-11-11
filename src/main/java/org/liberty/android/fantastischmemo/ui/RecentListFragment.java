@@ -26,6 +26,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -101,63 +104,9 @@ public class RecentListFragment extends RoboFragment {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
-        updateRecentListThread = new Thread(){
-            public void run(){
-                String[] allPath = recentListUtil.getAllRecentDBPath();
-                final List<RecentItem> ril = new ArrayList<RecentItem>();
-                /* Quick list */
-                int index = 0;
-                try {
-                    for(int i = 0; i < allPath.length; i++){
-                        if(allPath[i] == null){
-                            continue;
-                        }
-                        final RecentItem ri = new RecentItem();
-                        if (!databaseUtil.checkDatabase(allPath[i])) {
-                            recentListUtil.deleteFromRecentList(allPath[i]);
-                            continue;
-                        }
-                        ri.dbInfo = getString(R.string.loading_database);
-                        ri.index = index++;
-                        ril.add(ri);
-                        ri.dbPath = allPath[i];
-                        ri.dbName = FilenameUtils.getName(allPath[i]);
-                    }
-                    mHandler.post(new Runnable(){
-                        public void run(){
-                            recentListAdapter.clear();
-                            for(RecentItem ri : ril) {
-                                recentListAdapter.insert(ri.index, ri);
-                            }
-                        }
-                    });
-                    /* This will update the detailed statistic info */
-                    for(final RecentItem ri : ril){
-                        try {
-                            AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, ri.dbPath);
-                            CardDao dao = helper.getCardDao();
-                            ri.dbInfo = getString(R.string.stat_total) + dao.getTotalCount(null) + " " + getString(R.string.stat_new) + dao.getNewCardCount(null) + " " + getString(R.string.stat_scheduled)+ dao.getScheduledCardCount(null);
-                            ril.set(ri.index, ri);
-                            AnyMemoDBOpenHelperManager.releaseHelper(helper);
-                        } catch (Exception e) {
-                            Log.e(TAG, "Recent list throws exception (Usually can be safely ignored)", e);
-                        }
-                    }
-                    mHandler.post(new Runnable(){
-                        public void run(){
-                            recentListAdapter.clear();
-                            for(RecentItem ri : ril)
-                                recentListAdapter.insert(ri.index, ri);
-                        }
-                    });
-                } catch(Exception e) {
-                    Log.e(TAG, "Exception Maybe caused by race condition. Ignored.", e);
-                }
-            }
-        };
-        updateRecentListThread.start();
+        getLoaderManager().restartLoader(1, null, new RecentListLoaderCallbacks());
     }
 
     @Override
@@ -183,6 +132,99 @@ public class RecentListFragment extends RoboFragment {
         public String dbPath;
         public String dbInfo;
         public int index;
+    }
+
+
+    /**
+     * The loader to load recent list
+     */
+    private class RecentListLoaderCallbacks implements LoaderManager.LoaderCallbacks<List<RecentItem>> {
+        @Override
+        public Loader<List<RecentItem>> onCreateLoader(int id, Bundle args) {
+            Loader<List<RecentItem>> loader = new AsyncTaskLoader<List<RecentItem>>(getContext()) {
+                @Override
+                public List<RecentItem> loadInBackground() {
+                    String[] allPath = recentListUtil.getAllRecentDBPath();
+                    final List<RecentItem> ril = new ArrayList<RecentItem>();
+                    int index = 0;
+                    for(int i = 0; i < allPath.length; i++){
+                        if(allPath[i] == null){
+                            continue;
+                        }
+                        final RecentItem ri = new RecentItem();
+                        if (!databaseUtil.checkDatabase(allPath[i])) {
+                            recentListUtil.deleteFromRecentList(allPath[i]);
+                            continue;
+                        }
+
+                        ri.dbInfo = getContext().getString(R.string.loading_database);
+                        ri.index = index++;
+                        ril.add(ri);
+                        ri.dbPath = allPath[i];
+                        ri.dbName = FilenameUtils.getName(allPath[i]);
+                    }
+                    return ril;
+                }
+            };
+            loader.forceLoad();
+            return loader;
+        }
+
+        @Override
+        public void onLoadFinished(Loader<List<RecentItem>> loader, List<RecentItem> ril) {
+            recentListAdapter.clear();
+            for(RecentItem ri : ril) {
+                recentListAdapter.insert(ri.index, ri);
+            }
+            getLoaderManager().restartLoader(2, null, new RecentListDetailLoaderCallbacks());
+        }
+
+        @Override
+        public void onLoaderReset(Loader<List<RecentItem>> loader) {
+            // Nothing
+        }
+    }
+
+    private class RecentListDetailLoaderCallbacks implements LoaderManager.LoaderCallbacks<List<RecentItem>> {
+        @Override
+        public Loader<List<RecentItem>> onCreateLoader(int id, Bundle args) {
+            Loader<List<RecentItem>> loader = new AsyncTaskLoader<List<RecentItem>>(getContext()) {
+                @Override
+                public List<RecentItem> loadInBackground() {
+                    final List<RecentItem> ril = recentListAdapter.getList();
+                    for(final RecentItem ri : ril){
+                        try {
+                            AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, ri.dbPath);
+                            CardDao dao = helper.getCardDao();
+                            ri.dbInfo = getContext().getString(R.string.stat_total) + dao.getTotalCount(null) + " " +
+                                    getContext().getString(R.string.stat_new) + dao.getNewCardCount(null) + " " +
+                                    getContext().getString(R.string.stat_scheduled)+ dao.getScheduledCardCount(null);
+                            ril.set(ri.index, ri);
+                            AnyMemoDBOpenHelperManager.releaseHelper(helper);
+                        } catch (Exception e) {
+                            Log.e(TAG, "Recent list throws exception (Usually can be safely ignored)", e);
+                        }
+                    }
+
+                    return ril;
+                }
+            };
+            loader.forceLoad();
+            return loader;
+        }
+
+        @Override
+        public void onLoadFinished(Loader<List<RecentItem>> loader, List<RecentItem> ril) {
+            recentListAdapter.clear();
+            for(RecentItem ri : ril) {
+                recentListAdapter.insert(ri.index, ri);
+            }
+        }
+
+        @Override
+        public void onLoaderReset(Loader<List<RecentItem>> loader) {
+            // Nothing
+        }
     }
 
     /**
@@ -260,6 +302,10 @@ public class RecentListFragment extends RoboFragment {
         @Override
         public int getItemCount() {
             return items.size();
+        }
+
+        public List<RecentItem> getList() {
+            return new ArrayList<RecentItem>(items);
         }
 
         public void insert(int index, RecentItem item) {
