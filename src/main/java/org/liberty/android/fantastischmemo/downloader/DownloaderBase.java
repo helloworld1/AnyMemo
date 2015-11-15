@@ -28,8 +28,6 @@ import android.os.Bundle;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.widget.ArrayAdapter;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.ListView;
 import android.widget.ImageView;
@@ -40,7 +38,7 @@ import android.view.ViewGroup;
 import android.view.KeyEvent;
 
 
-public abstract class DownloaderBase extends AMActivity implements OnItemClickListener{
+public abstract class DownloaderBase extends AMActivity {
 
     private static final String TAG = "org.liberty.android.fantastischmemo.downloader.DownloaderBase";
 
@@ -79,34 +77,12 @@ public abstract class DownloaderBase extends AMActivity implements OnItemClickLi
         /* The file browser's is reused here because they are similar*/
         setContentView(R.layout.file_list);
         ListView listView = (ListView)findViewById(R.id.file_list);
-        listView.setOnItemClickListener(this);
         initialRetrieve();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-    }
-
-
-
-
-    @Override
-	public void onItemClick(AdapterView<?> parentView, View childView, int position, long id){
-        DownloadItem di = getDownloadItem(position);
-        if(di == null){
-            Log.e(TAG, "NULL Download Item");
-            return;
-        }
-        if(di.getType() == DownloadItem.ItemType.Category) {
-            openCategory(di);
-        }
-        else if(di.getType() == DownloadItem.ItemType.Back) {
-            goBack();
-        }
-        else if(di.getType() == DownloadItem.ItemType.Database) {
-            fetchDatabase(di);
-        }
     }
 
     /*
@@ -152,7 +128,7 @@ public abstract class DownloaderBase extends AMActivity implements OnItemClickLi
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent){
+        public View getView(final int position, View convertView, ViewGroup parent){
             View v = convertView;
             if(v == null){
                 LayoutInflater li = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -174,6 +150,29 @@ public abstract class DownloaderBase extends AMActivity implements OnItemClickLi
                 }
                 tv.setText(item.getTitle());
             }
+
+            v.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    DownloadItem di = getDownloadItem(position);
+                    if(di == null){
+                        Log.e(TAG, "NULL Download Item");
+                        return;
+                    }
+                    if(di.getType() == DownloadItem.ItemType.Category) {
+                        openCategory(di);
+                    }
+                    else if(di.getType() == DownloadItem.ItemType.Back) {
+                        goBack();
+                    }
+                    else if(di.getType() == DownloadItem.ItemType.Database) {
+                        fetchDatabase(di);
+                    }
+
+                }
+            });
+
             return v;
         }
 

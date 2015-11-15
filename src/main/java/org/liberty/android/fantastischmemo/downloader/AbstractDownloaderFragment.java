@@ -44,8 +44,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -57,7 +55,7 @@ import android.widget.TextView;
  */
 public abstract class AbstractDownloaderFragment extends RoboFragment {
 
-    private static final String TAG = "org.liberty.android.fantastischmemo.downloader.DownloaderBase";
+    private static final String TAG = AbstractDownloaderFragment.class.getSimpleName();
 
     private Activity mActivity;
 
@@ -133,7 +131,7 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
 
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Context activity) {
         super.onAttach(activity);
         mActivity = (AMActivity)activity;
     }
@@ -147,7 +145,6 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
         View v = inflater.inflate(R.layout.file_list, container, false);
 
         listView = (ListView)v.findViewById(R.id.file_list);
-        listView.setOnItemClickListener(itemClickListener);
 
         // Initial two footers that is displayed in the bottom of the list
         loadMoreFooter =  ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.list_load_more_footer, null, false);
@@ -324,24 +321,6 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
 
     }
 
-    private OnItemClickListener itemClickListener = new OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parentView, View childView, int position, long id){
-            DownloadItem di = getDownloadItem(position);
-            if(di == null){
-                Log.e(TAG, "NULL Download Item");
-                return;
-            }
-            if(di.getType() == DownloadItem.ItemType.Category){
-                openCategory(di);
-            } else if(di.getType() == DownloadItem.ItemType.Back){
-                goBack();
-            } else {
-                showFetchDatabaseDialog(di);
-            }
-        }
-    };
-
     private View.OnClickListener loadMoreOnClickListener = new View.OnClickListener() {
 
         @Override
@@ -382,7 +361,7 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent){
+        public View getView(final int position, View convertView, ViewGroup parent){
             View v = convertView;
             if (v == null){
                 LayoutInflater li = (LayoutInflater)mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -404,6 +383,27 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
                 }
                 tv.setText(item.getTitle());
             }
+
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DownloadItem di = getDownloadItem(position);
+                    if(di == null){
+                        Log.e(TAG, "NULL Download Item");
+                        return;
+                    }
+                    if(di.getType() == DownloadItem.ItemType.Category){
+                        openCategory(di);
+                    } else if(di.getType() == DownloadItem.ItemType.Back){
+                        goBack();
+                    } else {
+                        showFetchDatabaseDialog(di);
+                    }
+
+                }
+            });
+
+
             return v;
         }
 
