@@ -21,8 +21,8 @@ android {
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
-        versionCode 214
-        versionName "10.7.991"
+        versionCode 216
+        versionName "10.8"
         minSdkVersion 11
         targetSdkVersion 23
         testApplicationId "org.liberty.android.fantastischmemo.test"
