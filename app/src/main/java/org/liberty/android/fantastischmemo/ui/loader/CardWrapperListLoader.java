@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
-import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.entity.Card;
 import org.liberty.android.fantastischmemo.ui.CardListActivity.CardWrapper;
 
 import android.content.Context;

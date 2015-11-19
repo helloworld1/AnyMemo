@@ -21,7 +21,7 @@ package org.liberty.android.fantastischmemo.ui;
 
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.domain.SchedulingAlgorithmParameters;
+import org.liberty.android.fantastischmemo.entity.SchedulingAlgorithmParameters;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;

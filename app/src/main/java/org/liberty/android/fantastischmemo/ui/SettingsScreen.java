@@ -34,14 +34,12 @@ import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.SettingDao;
-import org.liberty.android.fantastischmemo.domain.Setting;
-import org.liberty.android.fantastischmemo.domain.Setting.CardField;
+import org.liberty.android.fantastischmemo.entity.Setting;
+import org.liberty.android.fantastischmemo.entity.Setting.CardField;
 import org.liberty.android.fantastischmemo.ui.loader.MultipleLoaderManager;
 import org.liberty.android.fantastischmemo.ui.loader.SettingLoader;
 import org.liberty.android.fantastischmemo.ui.widgets.AMSpinner;
 import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
-
-import roboguice.util.Ln;
 
 import android.app.Activity;
 import android.app.AlertDialog;

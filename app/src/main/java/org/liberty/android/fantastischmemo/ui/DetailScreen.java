@@ -29,7 +29,7 @@ import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
-import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.entity.Card;
 
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 

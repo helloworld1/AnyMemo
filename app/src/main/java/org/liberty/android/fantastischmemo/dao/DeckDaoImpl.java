@@ -2,7 +2,7 @@ package org.liberty.android.fantastischmemo.dao;
 
 import java.sql.SQLException;
 
-import org.liberty.android.fantastischmemo.domain.Deck;
+import org.liberty.android.fantastischmemo.entity.Deck;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
 

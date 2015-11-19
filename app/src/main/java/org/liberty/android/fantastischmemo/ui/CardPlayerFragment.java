@@ -23,7 +23,7 @@ package org.liberty.android.fantastischmemo.ui;
 import javax.inject.Inject;
 
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.domain.Option;
+import org.liberty.android.fantastischmemo.entity.Option;
 import org.liberty.android.fantastischmemo.service.CardPlayerService;
 
 import roboguice.fragment.RoboFragment;

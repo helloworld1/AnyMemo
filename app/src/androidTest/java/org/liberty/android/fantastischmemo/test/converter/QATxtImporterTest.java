@@ -7,7 +7,7 @@ import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.converter.Converter;
 import org.liberty.android.fantastischmemo.converter.QATxtImporter;
 import org.liberty.android.fantastischmemo.dao.CardDao;
-import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.entity.Card;
 
 public class QATxtImporterTest extends AbstractConverterTest {
 

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
-import org.liberty.android.fantastischmemo.domain.VersionableDomainObject;
+import org.liberty.android.fantastischmemo.entity.VersionableDomainObject;
 
 import roboguice.util.Ln;
 

@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.EnumSet;
 
 import org.liberty.android.fantastischmemo.dao.SettingDao;
-import org.liberty.android.fantastischmemo.domain.Setting;
+import org.liberty.android.fantastischmemo.entity.Setting;
 import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
 
 import android.graphics.Color;

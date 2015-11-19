@@ -1,6 +1,6 @@
 package org.liberty.android.fantastischmemo.ui.loader;
 
-import org.liberty.android.fantastischmemo.domain.Setting;
+import org.liberty.android.fantastischmemo.entity.Setting;
 
 import android.content.Context;
 

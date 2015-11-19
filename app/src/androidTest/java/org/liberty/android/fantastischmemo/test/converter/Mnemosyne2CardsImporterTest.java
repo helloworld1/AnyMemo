@@ -9,8 +9,8 @@ import org.liberty.android.fantastischmemo.converter.Mnemosyne2CardsImporter;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
-import org.liberty.android.fantastischmemo.domain.Card;
-import org.liberty.android.fantastischmemo.domain.Category;
+import org.liberty.android.fantastischmemo.entity.Card;
+import org.liberty.android.fantastischmemo.entity.Category;
 
 public class Mnemosyne2CardsImporterTest extends AbstractConverterTest {
 

@@ -26,7 +26,7 @@ import javax.inject.Inject;
 
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.domain.Setting;
+import org.liberty.android.fantastischmemo.entity.Setting;
 import org.liberty.android.fantastischmemo.utils.CardTextUtil;
 import org.liberty.android.fantastischmemo.utils.CardTextUtilFactory;
 

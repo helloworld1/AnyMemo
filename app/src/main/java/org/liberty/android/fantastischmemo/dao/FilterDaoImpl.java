@@ -4,7 +4,7 @@ import java.sql.SQLException;
 
 import java.util.List;
 
-import org.liberty.android.fantastischmemo.domain.Filter;
+import org.liberty.android.fantastischmemo.entity.Filter;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
 

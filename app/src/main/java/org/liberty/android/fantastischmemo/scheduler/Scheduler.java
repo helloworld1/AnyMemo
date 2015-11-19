@@ -1,6 +1,6 @@
 package org.liberty.android.fantastischmemo.scheduler;
 
-import org.liberty.android.fantastischmemo.domain.LearningData;
+import org.liberty.android.fantastischmemo.entity.LearningData;
 
 public interface Scheduler {
 

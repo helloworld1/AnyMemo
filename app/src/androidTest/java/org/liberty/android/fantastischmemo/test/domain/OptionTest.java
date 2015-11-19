@@ -1,7 +1,7 @@
 package org.liberty.android.fantastischmemo.test.domain;
 
 import org.liberty.android.fantastischmemo.AMPrefKeys;
-import org.liberty.android.fantastischmemo.domain.Option;
+import org.liberty.android.fantastischmemo.entity.Option;
 import org.liberty.android.fantastischmemo.test.AbstractPreferencesTest;
 
 import android.test.suitebuilder.annotation.SmallTest;

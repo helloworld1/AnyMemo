@@ -1,6 +1,6 @@
 package org.liberty.android.fantastischmemo.dao;
 
-import org.liberty.android.fantastischmemo.domain.Stat;
+import org.liberty.android.fantastischmemo.entity.Stat;
 
 import com.j256.ormlite.dao.Dao;
 

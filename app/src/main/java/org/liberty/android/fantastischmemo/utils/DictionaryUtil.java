@@ -25,7 +25,7 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.domain.Option;
+import org.liberty.android.fantastischmemo.entity.Option;
 
 import android.app.Activity;
 import android.app.AlertDialog;

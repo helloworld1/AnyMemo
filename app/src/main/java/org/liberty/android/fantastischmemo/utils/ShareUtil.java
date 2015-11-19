@@ -4,7 +4,7 @@ import javax.inject.Inject;
 
 import org.apache.commons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.entity.Card;
 
 import android.content.Context;
 import android.content.Intent;

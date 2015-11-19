@@ -19,12 +19,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.service.cardplayer;
 
-import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.entity.Card;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
 
 import roboguice.util.Ln;
-
-import android.text.format.DateUtils;
 
 import com.google.common.base.Objects;
 

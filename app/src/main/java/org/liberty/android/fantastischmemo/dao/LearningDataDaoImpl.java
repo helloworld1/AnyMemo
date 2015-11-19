@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.concurrent.Callable;
 
-import org.liberty.android.fantastischmemo.domain.LearningData;
+import org.liberty.android.fantastischmemo.entity.LearningData;
 
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.DatabaseTableConfig;

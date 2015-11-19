@@ -5,7 +5,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.entity.Card;
 import org.liberty.android.fantastischmemo.service.cardplayer.CardPlayerContext;
 import org.liberty.android.fantastischmemo.service.cardplayer.CardPlayerEventHandler;
 import org.liberty.android.fantastischmemo.service.cardplayer.CardPlayerMessage;

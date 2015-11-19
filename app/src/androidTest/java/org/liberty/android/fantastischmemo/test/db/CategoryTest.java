@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
-import org.liberty.android.fantastischmemo.domain.Card;
-import org.liberty.android.fantastischmemo.domain.Category;
+import org.liberty.android.fantastischmemo.entity.Card;
+import org.liberty.android.fantastischmemo.entity.Category;
 import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
 
 import android.test.suitebuilder.annotation.SmallTest;

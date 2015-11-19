@@ -22,8 +22,8 @@ package org.liberty.android.fantastischmemo.ui;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.SettingDao;
-import org.liberty.android.fantastischmemo.domain.Card;
-import org.liberty.android.fantastischmemo.domain.Setting;
+import org.liberty.android.fantastischmemo.entity.Card;
+import org.liberty.android.fantastischmemo.entity.Setting;
 import org.liberty.android.fantastischmemo.service.CardPlayerService;
 
 import android.app.AlertDialog;

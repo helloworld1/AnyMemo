@@ -1,4 +1,4 @@
-package org.liberty.android.fantastischmemo.domain;
+package org.liberty.android.fantastischmemo.entity;
 
 import java.io.Serializable;
 import java.util.Date;

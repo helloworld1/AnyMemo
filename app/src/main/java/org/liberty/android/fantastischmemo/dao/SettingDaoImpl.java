@@ -1,9 +1,8 @@
 package org.liberty.android.fantastischmemo.dao;
 
 import java.sql.SQLException;
-import java.util.Date;
 
-import org.liberty.android.fantastischmemo.domain.Setting;
+import org.liberty.android.fantastischmemo.entity.Setting;
 
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.DatabaseTableConfig;

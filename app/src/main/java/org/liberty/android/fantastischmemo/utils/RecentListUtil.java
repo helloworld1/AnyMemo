@@ -23,7 +23,7 @@ import javax.inject.Inject;
 
 import org.apache.commons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
-import org.liberty.android.fantastischmemo.domain.Option;
+import org.liberty.android.fantastischmemo.entity.Option;
 
 import android.content.Context;
 import android.content.SharedPreferences;

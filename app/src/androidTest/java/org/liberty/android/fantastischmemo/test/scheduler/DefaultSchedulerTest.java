@@ -2,8 +2,8 @@ package org.liberty.android.fantastischmemo.test.scheduler;
 
 import java.util.Date;
 
-import org.liberty.android.fantastischmemo.domain.LearningData;
-import org.liberty.android.fantastischmemo.domain.SchedulingAlgorithmParameters;
+import org.liberty.android.fantastischmemo.entity.LearningData;
+import org.liberty.android.fantastischmemo.entity.SchedulingAlgorithmParameters;
 import org.liberty.android.fantastischmemo.scheduler.DefaultScheduler;
 import org.liberty.android.fantastischmemo.test.AbstractPreferencesTest;
 

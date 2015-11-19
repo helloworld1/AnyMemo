@@ -8,7 +8,7 @@ import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
-import org.liberty.android.fantastischmemo.domain.Category;
+import org.liberty.android.fantastischmemo.entity.Category;
 
 import roboguice.fragment.RoboDialogFragment;
 

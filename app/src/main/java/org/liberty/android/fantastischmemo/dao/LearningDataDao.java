@@ -1,6 +1,6 @@
 package org.liberty.android.fantastischmemo.dao;
 
-import org.liberty.android.fantastischmemo.domain.LearningData;
+import org.liberty.android.fantastischmemo.entity.LearningData;
 
 public interface LearningDataDao extends HelperDao<LearningData, Integer> {
     void updateLearningData(LearningData ld);

@@ -27,7 +27,7 @@ import javax.inject.Inject;
 
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.domain.Option;
+import org.liberty.android.fantastischmemo.entity.Option;
 import org.liberty.android.fantastischmemo.utils.AMUiUtil;
 
 import roboguice.fragment.RoboDialogFragment;

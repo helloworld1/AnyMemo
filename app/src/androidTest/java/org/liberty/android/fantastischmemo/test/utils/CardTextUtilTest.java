@@ -1,7 +1,7 @@
 package org.liberty.android.fantastischmemo.test.utils;
 
 import org.liberty.android.fantastischmemo.AMEnv;
-import org.liberty.android.fantastischmemo.domain.Option;
+import org.liberty.android.fantastischmemo.entity.Option;
 import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
 import org.liberty.android.fantastischmemo.ui.CardImageGetter;
 import org.liberty.android.fantastischmemo.ui.CardImageGetterFactory;

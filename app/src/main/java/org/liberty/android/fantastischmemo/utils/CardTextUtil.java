@@ -22,7 +22,7 @@ package org.liberty.android.fantastischmemo.utils;
 
 import javax.inject.Inject;
 
-import org.liberty.android.fantastischmemo.domain.Option;
+import org.liberty.android.fantastischmemo.entity.Option;
 import org.liberty.android.fantastischmemo.ui.CardImageGetterFactory;
 import org.xml.sax.XMLReader;
 

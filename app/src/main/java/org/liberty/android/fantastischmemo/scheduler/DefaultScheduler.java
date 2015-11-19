@@ -24,8 +24,8 @@ import java.util.Random;
 
 import javax.inject.Inject;
 
-import org.liberty.android.fantastischmemo.domain.LearningData;
-import org.liberty.android.fantastischmemo.domain.SchedulingAlgorithmParameters;
+import org.liberty.android.fantastischmemo.entity.LearningData;
+import org.liberty.android.fantastischmemo.entity.SchedulingAlgorithmParameters;
 import org.liberty.android.fantastischmemo.utils.AMDateUtil;
 
 import roboguice.util.Ln;

@@ -5,7 +5,7 @@ import java.io.File;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.dao.CardDao;
-import org.liberty.android.fantastischmemo.domain.Card;
+import org.liberty.android.fantastischmemo.entity.Card;
 import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
 
 import android.test.suitebuilder.annotation.SmallTest;

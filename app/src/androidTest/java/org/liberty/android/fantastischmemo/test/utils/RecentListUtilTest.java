@@ -1,6 +1,6 @@
 package org.liberty.android.fantastischmemo.test.utils;
 
-import org.liberty.android.fantastischmemo.domain.Option;
+import org.liberty.android.fantastischmemo.entity.Option;
 import org.liberty.android.fantastischmemo.test.AbstractPreferencesTest;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 import static org.mockito.Mockito.mock;
