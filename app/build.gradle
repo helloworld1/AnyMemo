@@ -10,7 +10,7 @@ android {
     buildToolsVersion "23.0.1"
 
     useLibrary 'org.apache.http.legacy'
-defaultConfig {
+    defaultConfig {
         versionCode 216
         versionName "10.8"
         minSdkVersion 11
