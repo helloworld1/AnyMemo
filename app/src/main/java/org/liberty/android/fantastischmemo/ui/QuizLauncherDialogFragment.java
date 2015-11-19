@@ -205,12 +205,6 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
         
         shuffleCheckbox = (CheckBox) v.findViewById(R.id.shuffle_checkbox);
 
-        Rect displayRectangle = new Rect();
-        Window window = mActivity.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
-
-        v.setMinimumWidth((int)(displayRectangle.width() * 0.9f));
-
         return v;
     }
 
