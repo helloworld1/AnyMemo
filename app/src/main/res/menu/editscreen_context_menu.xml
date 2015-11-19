@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_context_copy"
+        android:title="@string/copy_text" />
+    <item
+        android:id="@+id/menu_context_paste"
+        android:title="@string/paste_text" />
+    <item
+        android:id="@+id/menu_context_swap_current"
+        android:title="@string/swap_qa_text" />
+    <item
+        android:id="@+id/menu_context_reset_current"
+        android:title="@string/detail_reset" />
+    <item
+        android:title = "@string/advanced_setting_text" >
+        <menu>
+            <item
+                android:id="@+id/menu_context_wipe"
+                android:title="@string/settings_wipe" />
+            <item
+                android:id="@+id/menu_context_swap"
+                android:title="@string/settings_inverse" />
+            <item
+                android:id="@+id/menu_context_remove_dup"
+                android:title="@string/remove_dup_text" />
+            <item
+                android:id="@+id/menu_context_merge_db"
+                android:title="@string/merge_db_text" />
+            <item
+                android:id="@+id/menu_context_shuffle"
+                android:title="@string/settings_shuffle" />
+        </menu>
+    </item>
+</menu>

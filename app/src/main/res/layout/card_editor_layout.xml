@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/edit_dialog_root"
+    android:orientation="vertical">
+    <ScrollView
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:layout_width="fill_parent">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+            <TextView
+                android:text="@string/add_screen_question"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dip"/>
+            <EditText
+                android:id="@+id/edit_dialog_question_entry"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:inputType="textMultiLine"
+                android:minLines="3"
+                android:gravity="top"
+                android:layout_weight="1" />
+            <TextView
+                android:text="@string/add_screen_answer"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dip"/>
+            <EditText
+                android:id="@+id/edit_dialog_answer_entry"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:inputType="textMultiLine"
+                android:gravity="top"
+                android:minLines="3"
+                android:layout_weight="1" />
+            <TextView
+                android:text="@string/note_text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dip"/>
+            <EditText
+                android:id="@+id/edit_dialog_note_entry"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:inputType="textMultiLine"
+                android:gravity="top"
+                android:minLines="1"
+                android:layout_weight="1" />
+            <TextView
+                android:text="@string/edit_dialog_category"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dip"/>
+            <Button
+                android:id="@+id/edit_dialog_category_button"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" />
+            <RadioGroup
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/add_radio"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/add_here_radio"
+                    android:text="@string/add_in_place" />
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/add_back_radio"
+                    android:text="@string/add_back" />
+            </RadioGroup>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

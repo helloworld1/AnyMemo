@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/mark_as_learned_menu"
+        android:title="@string/mark_as_learned_text" />
+    <item android:id="@+id/mark_as_forgotten_menu"
+        android:title="@string/mark_as_forgotten_text" />
+    <item android:id="@+id/mark_as_new_menu"
+        android:title="@string/mark_as_new_text" />
+    <item android:id="@+id/mark_as_learned_forever_menu"
+        android:title="@string/mark_as_learned_forever_text" />
+</menu>
+

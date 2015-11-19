@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <string name="app_name">AnyMemo Pro</string>
+    <string name="app_full_name">AnyMemo Pro</string>
+</resources>
+

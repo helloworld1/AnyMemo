@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/context_study"
+        android:title="@string/study_text"/>
+    <item
+        android:id="@+id/context_list"
+        android:title="@string/list_mode_text"/>
+    <item
+        android:id="@+id/context_cram"
+        android:title="@string/learn_ahead"/>
+    <item
+        android:id="@+id/context_edit"
+        android:title="@string/edit_button_text"/>
+    <item
+        android:id="@+id/context_settings"
+        android:title="@string/settings_menu_text"/>
+    <item
+        android:id="@+id/context_delete"
+        android:title="@string/delete_text"/>
+</menu>

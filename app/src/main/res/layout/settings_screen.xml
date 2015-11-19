@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:anymemo="http://schemas.android.com/apk/res-auto"
+    android:scrollbars="vertical"
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent">
+<LinearLayout
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
+            android:layout_weight="1"
+            android:text="@string/settings_question_font_size"
+
+        />
+        <org.liberty.android.fantastischmemo.ui.widgets.AMSpinner
+            android:id="@+id/question_font_size_spinner"
+            android:spinnerMode="dialog"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:prompt="@string/settings_question_font_size_prompt"
+            anymemo:display_array="@array/font_size_list"
+            android:layout_weight="1"
+            anymemo:value_array="@array/font_size_list_values" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:orientation="horizontal">
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dip"
+                android:layout_weight="1"
+                android:text="@string/settings_question_align" />
+        <org.liberty.android.fantastischmemo.ui.widgets.AMSpinner
+            android:id="@+id/question_align_spinner"
+            android:spinnerMode="dialog"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:prompt="@string/settings_question_align_prompt"
+            anymemo:display_array="@array/align_list"
+            android:layout_weight="1"
+            anymemo:value_array="@array/align_list_values" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
+            android:layout_weight="1"
+            android:text="@string/settings_answer_font_size"
+
+        />
+        <org.liberty.android.fantastischmemo.ui.widgets.AMSpinner
+            android:id="@+id/answer_font_size_spinner"
+            android:spinnerMode="dialog"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:prompt="@string/settings_answer_font_size_prompt"
+            anymemo:display_array="@array/font_size_list"
+            android:layout_weight="1"
+            anymemo:value_array="@array/font_size_list_values" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
+            android:layout_weight="1"
+            android:text="@string/settings_answer_align" />
+        <org.liberty.android.fantastischmemo.ui.widgets.AMSpinner
+            android:id="@+id/answer_align_spinner"
+            android:spinnerMode="dialog"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:prompt="@string/settings_answer_align_prompt"
+            anymemo:display_array="@array/align_list"
+            anymemo:value_array="@array/align_list_values" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="3dip"
+            android:text="@string/card_style" />
+        <org.liberty.android.fantastischmemo.ui.widgets.AMSpinner
+            android:id="@+id/card_style_spinner"
+            android:spinnerMode="dialog"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:prompt="@string/card_style"
+            anymemo:display_array="@array/card_style_list"
+            anymemo:value_array="@array/card_style_list_values" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
+            android:layout_weight="1"
+            android:text="@string/settings_ratio" />
+        <org.liberty.android.fantastischmemo.ui.widgets.AMSpinner
+            android:id="@+id/ratio_spinner"
+            android:spinnerMode="dialog"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:prompt="@string/settings_ratio"
+            anymemo:display_array="@array/ratio_list"
+            anymemo:value_array="@array/ratio_list_values" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
+            android:layout_weight="1"
+            android:text="@string/settings_question_locale" />
+        <org.liberty.android.fantastischmemo.ui.widgets.AMSpinner
+            android:id="@+id/question_locale_spinner"
+            android:spinnerMode="dialog"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:prompt="@string/settings_question_locale_prompt"
+            anymemo:display_array="@array/locale_list"
+            anymemo:value_array="@array/locale_list_values" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="3dip"
+            android:text="@string/settings_answer_locale" />
+        <org.liberty.android.fantastischmemo.ui.widgets.AMSpinner
+            android:id="@+id/answer_locale_spinner"
+            android:spinnerMode="dialog"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:prompt="@string/settings_answer_locale_prompt"
+            anymemo:display_array="@array/locale_list"
+            anymemo:value_array="@array/locale_list_values" />
+        </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/settings_audio_location_view"
+        android:orientation="vertical" >
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
+            android:text="@string/settings_audio_location_title" />
+        <EditText
+            android:id="@+id/settings_audio_location"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dip"
+        android:background="#FF909090" />
+    <CheckBox
+        android:id="@+id/checkbox_customize_color"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/settings_customize_color" />
+    <TableLayout
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:orientation="vertical"
+        android:stretchColumns="1">
+        <TableRow
+            android:id="@+id/color_row">
+            <org.liberty.android.fantastischmemo.ui.widgets.AMSpinner
+                android:id="@+id/color_item_spinner"
+                android:spinnerMode="dialog"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:prompt="@string/settings_customize_color"
+                anymemo:display_array="@array/color_item_list"
+                anymemo:value_array="@array/color_item_list" />
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/settings_color_button"
+                android:text="@string/color_button_text" />
+        </TableRow>
+
+    </TableLayout>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dip"
+        android:background="#FF909090" />
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+            <CheckBox
+                android:id="@+id/checkbox_typeface_question"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_typeface_question" />
+            <EditText
+                android:id="@+id/edit_typeface_question"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+            <CheckBox
+                android:id="@+id/checkbox_typeface_answer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_typeface_answer" />
+            <EditText
+                android:id="@+id/edit_typeface_answer"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dip"
+        android:background="#FF909090" />
+
+    <CheckBox android:id="@+id/display_html"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="@string/settings_html_display" />
+
+
+    <CheckBox android:id="@+id/linebreak_conversion"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="@string/linebreak_conversion" />
+    <CheckBox android:id="@+id/checkbox_field1"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="@string/settings_field1" />
+
+    <CheckBox android:id="@+id/checkbox_field2"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="@string/settings_field2" />
+</LinearLayout>
+</ScrollView>
+
+

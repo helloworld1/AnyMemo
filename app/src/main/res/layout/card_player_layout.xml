@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+        <ImageButton
+            android:id="@+id/card_player_play_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@android:color/transparent"
+            android:layout_weight="1"
+            android:src="@drawable/card_player_play_button" />
+
+        <ImageButton
+            android:id="@+id/card_player_previous_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@android:color/transparent"
+            android:layout_weight="1"
+            android:src="@drawable/media_backward" />
+
+        <ImageButton
+            android:id="@+id/card_player_next_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@android:color/transparent"
+            android:layout_weight="1"
+            android:src="@drawable/media_forward" />
+
+         <ImageButton
+            android:id="@+id/card_player_shuffle_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@android:color/transparent"
+            android:layout_weight="1"
+            android:src="@drawable/card_player_shuffle_button" />
+
+        <ImageButton
+            android:id="@+id/card_player_repeat_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@android:color/transparent"
+            android:layout_weight="1"
+            android:src="@drawable/card_player_repeat_button" />
+
+</LinearLayout>

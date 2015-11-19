@@ -1,0 +1,6 @@
+<appwidget-provider
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="110dp"
+    android:minHeight="110dp"
+    android:updatePeriodMillis="0" />
+    <!-- android:configure="org.liberty.android.AnyMemo" > -->

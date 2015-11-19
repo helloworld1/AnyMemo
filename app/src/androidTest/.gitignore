@@ -1,0 +1,8 @@
+.DS_Store
+*.sw*
+*.properties
+build.xml
+gen/
+bin/
+libs/armeabi
+obj/

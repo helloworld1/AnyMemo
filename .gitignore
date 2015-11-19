@@ -12,6 +12,7 @@ obj/
 .project
 .classpath
 build/
+app/build/
 out/
 
 # This contains secrets and should not be checked in!

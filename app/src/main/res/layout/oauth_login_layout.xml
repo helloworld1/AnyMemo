@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:id="@+id/ll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <!-- These views show the loading progress test
+      and spinner.
+    -->
+    <ProgressBar android:layout_gravity="center"
+            android:id="@+id/auth_page_load_progress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    <TextView android:layout_gravity="center"
+            android:id="@+id/auth_page_load_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="32dp"
+            android:text="@string/loading_please_wait" />
+
+    <!-- This page was initially invisible,
+      when it get loaded, the code should set it to visible.
+      This view should not be "none" because a big in Android 2.x
+      failed to calculate the correct size of the view after
+      changing from "none" to "visible"
+    -->
+    <WebView android:id="@+id/login_page"
+            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="0dp"/>
+</LinearLayout>
+

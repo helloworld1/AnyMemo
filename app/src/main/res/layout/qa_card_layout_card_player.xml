@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.gesture.GestureOverlayView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/gesture_overlay"
+	android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:uncertainGestureColor="#7FFF0000"
+    android:eventsInterceptionEnabled="true"
+    android:orientation="vertical" >
+<LinearLayout
+    android:id="@+id/root"
+	android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_weight="1">
+    <TextView android:id="@+id/small_title_bar"
+        android:textSize="14dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <FrameLayout
+        android:id="@+id/card_root"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+    <FrameLayout
+        android:id="@+id/buttons_root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom" />
+</LinearLayout>
+</android.gesture.GestureOverlayView>

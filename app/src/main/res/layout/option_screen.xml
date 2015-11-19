@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:anymemo="http://schemas.android.com/apk/res-auto"
+    android:key="FantastischMemoPrefs"
+    android:title="@string/global_settings"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <PreferenceCategory
+        android:title="@string/actions_category">
+        <ListPreference
+            android:key="speech_ctl"
+            android:title="@string/speech_ctl_title"
+            android:defaultValue="TAP"
+            android:entries="@array/speech_ctl_list"
+            android:entryValues="@array/speech_ctl_list_values"
+            android:summary="@string/speech_ctl_summary" />
+        <ListPreference
+            android:key="copy_to_clipboard"
+            android:title="@string/copyclipboard"
+            android:defaultValue="QUESTION"
+            android:entries="@array/copy_to_clipboard_options"
+            android:entryValues="@array/copy_to_clipboard_options_values"
+            android:summary="@string/copyclipboard_summary" />
+        <CheckBoxPreference
+            android:key="enable_volume_key"
+            android:title="@string/enable_volume_key_text"
+            android:defaultValue="false"
+            android:summary="@string/enable_volume_key_summary" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/learning_category">
+        <ListPreference
+            android:key="button_style"
+            android:title="@string/button_style_title"
+            android:defaultValue="ANYMEMO"
+            android:entries="@array/button_style_list"
+            android:entryValues="@array/button_style_list_values"
+            android:summary="@string/button_style_summary" />
+        <Preference
+            android:key="customize_scheduling_algorithm_key"
+            android:title="@string/customize_scheduling_algorithm_text"
+            android:summary="@string/customize_scheduling_algorithm_summary" />
+        <CheckBoxPreference
+            android:key="shuffling_cards"
+            android:title="@string/shuffling_cards_title"
+            android:defaultValue="false"
+            android:summary="@string/shuffling_cards_summary" />
+        <ListPreference
+            android:key="dict_app"
+            android:title="@string/dict_app"
+            android:defaultValue="COLORDICT"
+            android:entries="@array/dict_list"
+            android:entryValues="@array/dict_list_values"
+            android:summary="@string/dict_app_summary" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/interface_category">
+        <ListPreference
+            android:key="interface_locale"
+            android:title="@string/interface_locale_title"
+            android:defaultValue="AUTO"
+            android:entries="@array/interface_locale_list"
+            android:entryValues="@array/interface_locale_list_values"
+            android:summary="@string/interface_locale_summary" />
+        <CheckBoxPreference android:key="fullscreen_mode"
+            android:title="@string/fullscreen_title"
+            android:defaultValue="false"
+            android:summary="@string/fullscreen_summary" />
+        <CheckBoxPreference
+            android:key="allow_orientation"
+            android:title="@string/allow_orientation_title"
+            android:defaultValue="true"
+            android:summary="@string/allow_orientation_summary" />
+        <CheckBoxPreference
+            android:key="enable_animation"
+            android:title="@string/enable_animation_text"
+            android:defaultValue="true"
+            android:summary="@string/enable_animation_summary" />
+        <ListPreference
+            android:key="notification_interval"
+            android:title="@string/notification_text"
+            android:defaultValue="24"
+            android:entries="@array/notification_interval_list"
+            android:entryValues="@array/notification_interval_list_values"
+            android:summary="@string/notification_summary" />
+        <org.liberty.android.fantastischmemo.ui.widgets.IntegerEditTextPreference
+            android:key="recent_count"
+            android:title="@string/max_recent_list_size_text"
+            android:defaultValue="7"
+            android:inputType="number"
+            anymemo:maxIntValue="50"
+            anymemo:minIntValue="1"
+            android:summary="@string/recent_summary" />
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/filter_dialog_root"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_height="0dp"
+        android:layout_width="fill_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <EditText
+            android:id="@+id/filter_dialog_edit"
+            android:layout_width="fill_parent"
+            android:textSize="22.5sp"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/editbox_background"/>
+        <TextView
+            android:text="@string/recent_tab_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+        <ListView
+            android:id="@+id/filter_list"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/filter_button_filter"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/filter_text"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip" />
+        <Button
+            android:id="@+id/filter_button_clear"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/clear_filter_text"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip" />
+        <Button
+            android:id="@+id/filter_button_cancel"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cancel_text"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip" />
+    </LinearLayout>
+</LinearLayout>
+

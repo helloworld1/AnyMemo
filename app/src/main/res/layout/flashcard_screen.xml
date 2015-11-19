@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/flashcard_screen"
+	android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:layout_weight="1">
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/layout_question"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        >
+        <ScrollView
+            android:id="@+id/scroll_question"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+            <TextView
+                android:id="@+id/question"
+                android:textSize="16pt"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"/>
+        </ScrollView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/horizontalLine"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="2dip"
+        android:background="#FF909090"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:id="@+id/layout_answer">
+        <ScrollView
+            android:id="@+id/scroll_answer"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+            <TextView android:id="@+id/answer"
+                android:textSize="16pt"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+        </ScrollView>
+    </LinearLayout>
+</LinearLayout>

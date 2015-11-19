@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="fill_parent"
+    android:layout_weight="4"
+    android:orientation="horizontal" >
+    <TextView
+        android:id="@+id/item_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dip"
+        android:layout_marginRight="5dip"
+        android:textSize="16sp"
+        android:maxLines="9"
+    />
+    <TextView
+        android:id="@+id/item_question"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginTop="3dip"
+        android:textSize="16sp"
+        android:maxLines="9"
+    />
+    <TextView
+        android:id="@+id/item_answer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginTop="3dip"
+        android:textSize="16sp"
+        android:maxLines="9"
+    />
+</LinearLayout>

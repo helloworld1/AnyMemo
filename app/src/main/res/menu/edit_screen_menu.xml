@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/editmenu_search_id"
+  	    android:icon="@android:drawable/ic_menu_search"
+        android:title="@string/search_text" />
+    <item
+        android:id="@+id/editmenu_delete_id"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:title="@string/delete_text" />
+    <item
+        android:id="@+id/editmenu_list_id"
+        android:icon="@android:drawable/ic_menu_view"
+        android:title="@string/list_mode_text" />
+    <item android:id="@+id/menuspeakquestion"
+  		  android:icon="@drawable/speak_q_48"
+          android:title="@string/speak_question_menu_text" />
+    <item android:id="@+id/menuspeakanswer"
+  		  android:icon="@drawable/speak_a_48"
+          android:title="@string/speak_answer_menu_text" />
+    <item android:id="@+id/editmenu_settings_id"
+  		  android:icon="@android:drawable/ic_menu_preferences"
+  		  android:title="@string/settings_menu_text" />
+    <item android:id="@+id/editmenu_detail_id"
+  		  android:icon="@android:drawable/ic_menu_edit"
+          android:title="@string/detail_menu_text" />
+    <item android:id="@+id/menu_edit_categories"
+          android:title="@string/filter_category_text"
+  		  android:icon="@android:drawable/ic_menu_search" />
+    <item android:id="@+id/editmenu_help"
+  		  android:icon="@android:drawable/ic_menu_help"
+          android:title="@string/help_button_text" />
+</menu>

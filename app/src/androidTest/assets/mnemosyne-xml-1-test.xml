@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mnemosyne core_version="1" time_of_start="1274576400" >
+<category active="1">
+ <name>&lt;Standard&gt;</name>
+</category>
+<item id="269a21ca" u="0" gr="5" e="2.500" ac_rp="9" rt_rp="0" lps="0" ac_rp_l="9" rt_rp_l="0" l_rp="0" n_rp="2">
+ <cat>&lt;Standard&gt;</cat>
+ <Q>q1</Q>
+ <A>a1</A>
+</item>
+<item id="956987a5" u="0" gr="5" e="2.500" ac_rp="4" rt_rp="0" lps="0" ac_rp_l="4" rt_rp_l="0" l_rp="0" n_rp="1">
+ <cat>&lt;Standard&gt;</cat>
+ <Q>q2</Q>
+ <A>a2</A>
+</item>
+<item id="e433a491" u="0" gr="5" e="2.500" ac_rp="3" rt_rp="0" lps="0" ac_rp_l="3" rt_rp_l="0" l_rp="0" n_rp="2">
+ <cat>&lt;Standard&gt;</cat>
+ <Q>q3</Q>
+ <A>a3</A>
+</item>
+<item id="06420785" u="1" gr="5" e="2.500" ac_rp="1" rt_rp="0" lps="0" ac_rp_l="1" rt_rp_l="0" l_rp="0" n_rp="6">
+ <cat>&lt;Standard&gt;</cat>
+ <Q>q4 with line brake
+bla1
+bla2
+
+blat4</Q>
+ <A>a4 with line brake
+bla1
+bla2
+
+bla3</A>
+</item>
+<item id="e9e19829" u="0" gr="5" e="2.500" ac_rp="3" rt_rp="0" lps="0" ac_rp_l="3" rt_rp_l="0" l_rp="0" n_rp="2">
+ <cat>&lt;Standard&gt;</cat>
+ <Q>q5
+
+bla
+bla
+bla
+
+empty afterwards
+</Q>
+ <A>a5
+
+bla
+bla
+
+empty afterwards
+</A>
+</item>
+<item id="180f32b7" u="0" gr="0" e="2.500" ac_rp="4" rt_rp="0" lps="0" ac_rp_l="4" rt_rp_l="0" l_rp="0" n_rp="0">
+ <cat>&lt;Standard&gt;</cat>
+ <Q>1
+
+2
+</Q>
+ <A>1
+
+
+2</A>
+</item>
+<item id="184439ae" u="1" gr="0" e="2.500" ac_rp="1" rt_rp="0" lps="0" ac_rp_l="1" rt_rp_l="0" l_rp="0" n_rp="0">
+ <cat>&lt;Standard&gt;</cat>
+ <Q>2
+
+
+3
+</Q>
+ <A>3
+
+
+4
+</A>
+</item>
+<item id="5d2c3008" u="0" gr="0" e="2.500" ac_rp="4" rt_rp="0" lps="0" ac_rp_l="4" rt_rp_l="0" l_rp="0" n_rp="0">
+ <cat>&lt;Standard&gt;</cat>
+ <Q>3
+
+
+4
+</Q>
+ <A>5
+
+
+6
+</A>
+</item>
+<item id="3cb39da7" u="0" gr="0" e="2.500" ac_rp="2" rt_rp="0" lps="0" ac_rp_l="2" rt_rp_l="0" l_rp="0" n_rp="0">
+ <cat>&lt;Standard&gt;</cat>
+ <Q>6
+
+
+6
+</Q>
+ <A>7
+
+
+7
+</A>
+</item>
+<item id="990f41cb" u="0" gr="5" e="2.500" ac_rp="2" rt_rp="0" lps="0" ac_rp_l="2" rt_rp_l="0" l_rp="0" n_rp="1">
+ <cat>&lt;Standard&gt;</cat>
+ <Q>8
+
+
+8
+</Q>
+ <A>9
+
+
+9
+</A>
+</item>
+<item id="4fec3140" u="0" gr="5" e="2.500" ac_rp="2" rt_rp="0" lps="0" ac_rp_l="2" rt_rp_l="0" l_rp="0" n_rp="2">
+ <cat>&lt;Standard&gt;</cat>
+ <Q>3
+
+
+3
+</Q>
+ <A>7
+
+
+7
+</A>
+</item>
+</mnemosyne>

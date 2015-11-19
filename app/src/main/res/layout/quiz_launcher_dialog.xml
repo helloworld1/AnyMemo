@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:scrollbars="vertical"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    <RadioGroup android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+        <RadioButton
+            android:checked="true"
+            android:id="@+id/quiz_by_group_radio"
+            android:text="@string/quiz_by_group_text" />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/quiz_by_group_settings"
+            android:visibility="visible"
+            android:orientation="vertical">
+            <TextView android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/quiz_group_size_title"
+                    android:text="@string/quiz_group_size_text" />
+            <EditText
+                android:id="@+id/quiz_group_size"
+                android:layout_width="match_parent"
+                android:inputType="number"
+                android:layout_height="wrap_content" />
+            <TextView android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/quiz_group_number_title"
+                    android:text="@string/quiz_group_number_text" />
+            <EditText
+                android:id="@+id/quiz_group_number"
+                android:layout_width="match_parent"
+                android:inputType="number"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <RadioButton
+            android:checked="false"
+            android:text="@string/quiz_by_category_text"
+            android:id="@+id/quiz_by_category_radio" />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/quiz_by_category_settings"
+            android:visibility="gone"
+            android:orientation="vertical">
+            <TextView
+                    android:text="@string/edit_dialog_category"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="3dip"/>
+            <Button
+                    android:id="@+id/category_button"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/select_category_text" />
+        </LinearLayout>
+        <RadioButton
+            android:checked="false"
+            android:id="@+id/quiz_by_range_radio"
+            android:text="@string/quiz_by_range_text" />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/quiz_by_range_settings"
+            android:visibility="gone"
+            android:orientation="vertical">
+            <TextView android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/quiz_range_start_size_title"
+                    android:text="@string/start_ordinal_text" />
+            <EditText
+                android:id="@+id/quiz_range_strat_ordinal"
+                android:layout_width="match_parent"
+                android:inputType="number"
+                android:layout_height="wrap_content" />
+            <TextView android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/quiz_range_end_size_title"
+                    android:text="@string/end_ordinal_text" />
+            <EditText
+                android:id="@+id/quiz_range_end_ordinal"
+                android:layout_width="match_parent"
+                android:inputType="number"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </RadioGroup>
+
+    <CheckBox
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/shuffle_checkbox"
+        android:text="@string/shuffling_cards_title" />
+
+    <Button android:id="@+id/start_quiz_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/start_quiz_text" />
+</LinearLayout>
+</ScrollView>

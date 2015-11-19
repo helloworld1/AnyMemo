@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+    <ScrollView
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_width="fill_parent">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+            <TextView
+                android:text="@string/db_name_text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dip"/>
+            <EditText
+                android:id="@+id/share_db_name_entry"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:inputType="textMultiLine"
+                android:gravity="top"
+                android:layout_weight="1" />
+            <TextView
+                android:text="@string/add_screen_question"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dip"/>
+            <EditText
+                android:id="@+id/share_question_entry"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:inputType="textMultiLine"
+                android:gravity="top"
+                android:minLines="3"
+                android:layout_weight="1" />
+            <TextView
+                android:text="@string/add_screen_answer"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dip"/>
+            <EditText
+                android:id="@+id/share_answer_entry"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:inputType="textMultiLine"
+                android:gravity="top"
+                android:minLines="3"
+                android:layout_weight="1" />
+            <TextView
+                android:text="@string/note_text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dip"/>
+            <EditText
+                android:id="@+id/share_note_entry"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:inputType="textMultiLine"
+                android:gravity="top"
+                android:minLines="1"
+                android:layout_weight="1" />
+        </LinearLayout>
+    </ScrollView>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/share_button_save"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_save"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dip"
+            android:layout_marginRight="5dip" />
+        <Button
+            android:id="@+id/share_button_saveprev"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/save_prev_text"
+            android:layout_weight="0.9"
+            android:layout_marginLeft="5dip"
+            android:layout_marginRight="5dip" />
+        <Button
+            android:id="@+id/share_button_cancel"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cancel_text"
+            android:layout_marginLeft="5dip"
+            android:layout_marginRight="5dip" />
+    </LinearLayout>
+</LinearLayout>

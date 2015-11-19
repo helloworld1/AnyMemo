@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="org.liberty.android.fantastischmemo"
+    android:installLocation="auto">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    
+    <supports-screens android:anyDensity="true"/>
+
+    <application 
+        android:icon="@drawable/ic_launcher" 
+        android:label="@string/app_name"
+        android:name="AMApplication" 
+        android:theme="@style/AnyMemo.Theme.Dark">
+        <meta-data android:name="roboguice.modules" android:value="org.liberty.android.fantastischmemo.AMModules"/>
+        <activity 
+            android:name=".ui.AnyMemo"
+            android:label="@string/app_full_name"
+            android:theme="@style/AnyMemo.Theme.Dark.NoActionBar" >
+            <intent-filter>
+                <action 
+                    android:name="android.intent.action.MAIN" />
+                <category 
+                    android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- The android:host does not work correctly with * wildcard.
+                     Ignore the android:host for now -->
+                <data
+                    android:scheme="content"
+                    android:mimeType="application/octet-stream"
+                    android:pathPattern="/.*\\.db"
+                    tools:ignore="AppIndexingApiError" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".downloader.DownloaderAnyMemo"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity
+            android:name="com.example.android.apis.graphics.FingerPaint" 
+            android:configChanges="orientation|keyboardHidden"
+            android:theme="@style/PaintStyle" />
+        <activity
+            android:name=".downloader.quizlet.QuizletLauncher" />
+        <activity
+            android:name=".downloader.dropbox.DropboxDBListActivity"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity
+            android:name=".downloader.google.SpreadsheetListScreen"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity
+            android:name=".downloader.google.UploadGoogleDriveScreen"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity
+            android:name=".downloader.dropbox.UploadDropboxScreen"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity
+            android:name=".downloader.quizlet.QuizletUserPrivateActivity" />
+        <activity
+            android:name=".downloader.quizlet.QuizletUploadActivity" />
+        <activity
+            android:name=".downloader.quizlet.QuizletSearchByTitleActivity" />
+        <activity
+            android:name=".downloader.quizlet.QuizletSearchByUsernameActivity" />
+        <activity 
+            android:name=".ui.CardEditor"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity 
+            android:name=".ui.DetailScreen"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity 
+            android:name=".ui.SettingsScreen" />
+        <activity
+            android:name=".ui.CardListActivity" />
+        <activity 
+            android:name=".ui.FileBrowserActivity"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity 
+            android:name=".ui.OptionScreen" />
+        <activity 
+            android:name=".ui.AlgorithmCustomizationScreen"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity 
+            android:name=".ui.DatabaseMerger"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity 
+            android:name=".ui.StatisticsScreen"
+            android:theme="@style/AnyMemo.Theme.Dark.NoActionBar" />
+
+        <activity
+            android:name=".ui.StudyActivity"
+            android:parentActivityName=".ui.AnyMemo">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.AnyMemo" />
+        </activity>
+
+        <activity 
+            android:name=".ui.PreviewEditActivity"
+            android:parentActivityName=".ui.AnyMemo">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.AnyMemo" />
+        </activity>
+
+        <activity 
+            android:name=".ui.QuizActivity" />
+        <activity 
+            android:name=".ui.CardPlayerActivity" />
+        <receiver
+            android:name=".receiver.AlarmReceiver"
+            android:process=":remote" />
+        <receiver
+            android:name=".receiver.SetAlarmReceiver" >
+            <intent-filter>
+                <action
+                    android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".widget.AnyMemoWidgetProvider" >
+            <intent-filter>
+                <action
+                    android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                    android:name="android.appwidget.provider"
+                    android:resource="@xml/widget_info" />
+        </receiver>
+        <activity
+            android:name=".ui.ShareScreen" >
+            <intent-filter>
+                    <action android:name="android.intent.action.SEND" />
+                    <category android:name="android.intent.category.DEFAULT" />
+                    <data android:mimeType="text/*" />
+            </intent-filter>
+        </activity>
+        <service
+            android:name=".widget.UpdateWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+        <service
+            android:name=".service.AnyMemoService" />
+        <service
+            android:name=".service.CardPlayerService" />
+        <service
+            android:name=".service.ConvertIntentService" />
+
+        <provider
+            android:name=".provider.CardProvider"
+            android:authorities="${packageName}.cardprovider"
+            android:exported="true"
+            android:multiprocess="true" />
+        <provider
+            android:name=".provider.DatabasesProvider"
+            android:authorities="${packageName}.databasesprovider"
+            android:exported="true"
+            android:multiprocess="true" />
+    </application>
+</manifest> 

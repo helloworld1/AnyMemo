@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:anymemo="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/category_dialog_root"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+    <LinearLayout
+            android:layout_height="0dp"
+            android:layout_width="fill_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+        <TextView
+                android:text="@string/category_dialog_title"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+        <EditText
+                android:id="@+id/category_dialog_edit"
+                android:layout_width="fill_parent"
+                android:textSize="22.5sp"
+                android:layout_height="wrap_content" />
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+            <Button
+                    android:id="@+id/button_new"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/new_text"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="2dip"
+                    android:layout_marginRight="2dip" />
+            <Button
+                    android:id="@+id/button_edit"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/edit_text"
+                    android:layout_marginLeft="2dip"
+                    android:layout_marginRight="2dip" />
+        </LinearLayout>
+        <TextView
+                android:text="@string/downloader_categories"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+        <ListView
+                android:id="@+id/category_list"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+        <Button
+                android:id="@+id/button_ok"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/ok_text"
+                android:layout_marginLeft="2dip"
+                android:layout_marginRight="2dip" />
+
+        <org.liberty.android.fantastischmemo.ui.widgets.DoubleClickButton
+                android:id="@+id/button_delete"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/delete_text_short"
+                android:layout_marginLeft="2dip"
+                android:layout_marginRight="2dip"
+                anymemo:text_on_first_click="@string/click_again_to_delete_text"
+                anymemo:effective_duration_millis="5000" />
+    </LinearLayout>
+</LinearLayout>
+

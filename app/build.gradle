@@ -1,0 +1,115 @@
+apply plugin: 'android'
+
+repositories {
+    jcenter()
+    maven { url "https://jitpack.io" }
+}
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
+
+    useLibrary 'org.apache.http.legacy'
+defaultConfig {
+        versionCode 216
+        versionName "10.8"
+        minSdkVersion 11
+        targetSdkVersion 23
+        testApplicationId "org.liberty.android.fantastischmemo.test"
+        testInstrumentationRunner "android.test.InstrumentationTestRunner"
+        archivesBaseName = "AnyMemo"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    buildTypes {
+        debug {
+            versionNameSuffix "-${getBuildString()}"
+        }
+        release {
+            minifyEnabled true
+            proguardFile 'proguard.cfg'
+        }
+    }
+
+    productFlavors {
+        free {
+            applicationId "org.liberty.android.fantastischmemo"
+        }
+        pro {
+            applicationId "org.liberty.android.fantastischmemopro"
+        }
+    }
+
+    lintOptions {
+        disable 'MissingTranslation'
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+}
+
+dependencies {
+    compile 'com.android.support:appcompat-v7:23.1.+'
+    compile 'com.android.support:cardview-v7:23.1.+'
+    compile 'com.android.support:design:23.1.+'
+    compile 'com.j256.ormlite:ormlite-core:4.48'
+    compile 'com.j256.ormlite:ormlite-android:4.48'
+    compile ('org.roboguice:roboguice:3.0.1') {
+        exclude module: 'aopalliance'
+        exclude module: 'cglib'
+    }
+    compile ('com.google.inject.extensions:guice-assistedinject:4.0-beta5') {
+        exclude module: 'aopalliance'
+        exclude module: 'guice'
+        exclude module: 'cglib'
+    }
+    compile 'oauth.signpost:signpost-core:1.2.1.2'
+    compile('oauth.signpost:signpost-commonshttp4:1.2.1.2') {
+        exclude module: 'httpclient'
+    }
+    compile 'commons-io:commons-io:2.4'
+
+    compile 'com.google.guava:guava:17.0'
+    compile 'com.opencsv:opencsv:3.4'
+    compile 'com.github.PhilJay:MPAndroidChart:v2.1.6'
+
+    androidTestCompile 'com.crittercism.dexmaker:dexmaker:1.4'
+    androidTestCompile 'com.crittercism.dexmaker:dexmaker-dx:1.4'
+    androidTestCompile ('com.crittercism.dexmaker:dexmaker-mockito:1.4') {
+        exclude module: 'hamcrest-core'
+        exclude module: 'objenesis'
+        exclude module: 'mockito-core'
+    }
+    androidTestCompile 'org.mockito:mockito-core:1.10.19'
+    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.5.2'
+}
+
+def getBuildString () {
+    def date = new Date()
+    def formattedDate = date.format('yyMMdd')
+    return "b" + formattedDate
+}
+
+task copyAMSecretsIfNotExists << {
+    if (!file('src/main/java/org/liberty/android/fantastischmemo/AMSecrets.java').exists()) {
+        logger.warning('Empty AMSecrets.java is created from AMSecrets.java.template. Please fill in the values.')
+        copy {
+            from "src/main/java/org/liberty/android/fantastischmemo/"
+            into "src/main/java/org/liberty/android/fantastischmemo/"
+            rename "AMSecrets.java.template", "AMSecrets.java"
+            include "AMSecrets.java.template"
+        }
+    } else {
+    }
+}
+
+preBuild.dependsOn copyAMSecretsIfNotExists 

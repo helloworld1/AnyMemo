@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:anymemo="http://schemas.android.com/apk/res-auto" >
+    <item android:id="@+id/action_search"
+        android:title="@string/search_text"
+        android:icon="@android:drawable/ic_menu_search"
+        anymemo:showAsAction="ifRoom|collapseActionView"
+        anymemo:actionViewClass="android.support.v7.widget.SearchView" />
+    <item
+        android:id="@+id/editmenu_delete_id"
+        android:icon="@android:drawable/ic_menu_delete"
+        anymemo:showAsAction="ifRoom"
+        android:title="@string/delete_text" />
+    <item
+        android:id="@+id/editmenu_list_id"
+        android:icon="@android:drawable/ic_menu_view"
+        android:title="@string/list_mode_text" />
+    <item android:id="@+id/menuspeakquestion"
+  		  android:icon="@drawable/speak_q_48"
+          android:title="@string/speak_question_menu_text" />
+    <item android:id="@+id/menuspeakanswer"
+  		  android:icon="@drawable/speak_a_48"
+          android:title="@string/speak_answer_menu_text" />
+    <item android:id="@+id/editmenu_settings_id"
+  		  android:icon="@android:drawable/ic_menu_preferences"
+  		  android:title="@string/settings_menu_text" />
+    <item android:id="@+id/editmenu_detail_id"
+  		  android:icon="@android:drawable/ic_menu_edit"
+          android:title="@string/detail_menu_text" />
+    <item android:id="@+id/menu_edit_categories"
+          android:title="@string/filter_category_text"
+  		  android:icon="@android:drawable/ic_menu_search" />
+    <item android:id="@+id/menu_card_player"
+          android:title="@string/card_player_text" />
+    <item
+        android:id="@+id/menu_context_copy"
+        android:title="@string/copy_text" />
+    <item
+        android:id="@+id/menu_context_paste"
+        android:title="@string/paste_text" />
+    <item
+        android:id="@+id/menu_context_swap_current"
+        android:title="@string/swap_qa_text" />
+    <item
+        android:id="@+id/menu_context_reset_current"
+        android:title="@string/detail_reset" />
+    <item android:id="@+id/menu_share"
+            android:title="@string/share_text" />
+    <item android:id="@+id/menu_gestures"
+            android:title="@string/gestures_text" />
+    <item
+        android:title = "@string/advanced_setting_text" >
+        <menu>
+            <item
+                android:id="@+id/menu_context_wipe"
+                android:title="@string/settings_wipe" />
+            <item
+                android:id="@+id/menu_context_swap"
+                android:title="@string/settings_inverse" />
+            <item
+                android:id="@+id/menu_context_remove_dup"
+                android:title="@string/remove_dup_text" />
+            <item
+                android:id="@+id/menu_context_merge_db"
+                android:title="@string/merge_db_text" />
+            <item
+                android:id="@+id/menu_context_shuffle"
+                android:title="@string/settings_shuffle" />
+        </menu>
+    </item>
+    <item android:id="@+id/editmenu_help"
+  		  android:icon="@android:drawable/ic_menu_help"
+          android:title="@string/help_button_text" />
+</menu>

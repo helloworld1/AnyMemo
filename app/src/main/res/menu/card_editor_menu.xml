@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:anymemo="http://schemas.android.com/apk/res-auto" >
+    <item android:id="@+id/save"
+            android:icon="@android:drawable/ic_menu_save"
+            anymemo:showAsAction="ifRoom"
+            android:title="@string/settings_save" />
+    <item
+            android:id="@+id/editor_menu_br"
+            android:title="@string/edit_menu_br_text" />
+    <item
+            android:id="@+id/editor_menu_image"
+            android:title="@string/edit_menu_image_text" />
+    <item
+            android:id="@+id/add_existing_audio"
+            android:title="@string/add_existing_audio_text" />
+    <item
+            android:id="@+id/add_new_audio"
+            android:title="@string/add_new_audio_text" />
+    <item
+            android:id="@+id/remove_audio"
+            android:title="@string/remove_audio_text" />
+</menu>

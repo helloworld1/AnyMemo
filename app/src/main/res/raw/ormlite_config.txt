@@ -1,0 +1,333 @@
+#
+# generated on 2014/11/20 11:08:15
+#
+# --table-start--
+dataClass=org.liberty.android.fantastischmemo.domain.Category
+tableName=categories
+# --table-fields-start--
+# --field-start--
+fieldName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=name
+defaultValue=
+width=8192
+# --field-end--
+# --field-start--
+fieldName=updateDate
+dataPersister=DATE_STRING
+format=yyyy-MM-dd HH:mm:ss.SSSSSS
+version=true
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=org.liberty.android.fantastischmemo.domain.Deck
+tableName=decks
+# --table-fields-start--
+# --field-start--
+fieldName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=name
+defaultValue=
+width=8192
+# --field-end--
+# --field-start--
+fieldName=description
+defaultValue=
+width=8192
+# --field-end--
+# --field-start--
+fieldName=creationDate
+dataPersister=DATE_STRING
+format=yyyy-MM-dd HH:mm:ss.SSSSSS
+# --field-end--
+# --field-start--
+fieldName=updateDate
+dataPersister=DATE_STRING
+format=yyyy-MM-dd HH:mm:ss.SSSSSS
+version=true
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=org.liberty.android.fantastischmemo.domain.Filter
+tableName=filters
+# --table-fields-start--
+# --field-start--
+fieldName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=name
+defaultValue=
+width=8192
+# --field-end--
+# --field-start--
+fieldName=expression
+defaultValue=
+width=8192
+# --field-end--
+# --field-start--
+fieldName=isActive
+defaultValue=0
+# --field-end--
+# --field-start--
+fieldName=updateDate
+version=true
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=org.liberty.android.fantastischmemo.domain.Stat
+tableName=stats
+# --table-fields-start--
+# --field-start--
+fieldName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=newGrade
+# --field-end--
+# --field-start--
+fieldName=oldGrade
+# --field-end--
+# --field-start--
+fieldName=newInterval
+# --field-end--
+# --field-start--
+fieldName=oldInterval
+# --field-end--
+# --field-start--
+fieldName=updateDate
+dataPersister=DATE_STRING
+format=yyyy-MM-dd HH:mm:ss.SSSSSS
+version=true
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=org.liberty.android.fantastischmemo.domain.Setting
+tableName=settings
+# --table-fields-start--
+# --field-start--
+fieldName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=name
+defaultValue=default
+width=8192
+# --field-end--
+# --field-start--
+fieldName=description
+defaultValue=default description.
+width=8192
+# --field-end--
+# --field-start--
+fieldName=questionFontSize
+defaultValue=24
+# --field-end--
+# --field-start--
+fieldName=answerFontSize
+defaultValue=24
+# --field-end--
+# --field-start--
+fieldName=questionTextAlign
+defaultValue=CENTER
+# --field-end--
+# --field-start--
+fieldName=answerTextAlign
+defaultValue=CENTER
+# --field-end--
+# --field-start--
+fieldName=cardStyle
+defaultValue=SINGLE_SIDED
+# --field-end--
+# --field-start--
+fieldName=qaRatio
+defaultValue=50
+# --field-end--
+# --field-start--
+fieldName=questionAudio
+defaultValue=US
+# --field-end--
+# --field-start--
+fieldName=answerAudio
+defaultValue=US
+# --field-end--
+# --field-start--
+fieldName=questionTextColor
+defaultValue=-4276546
+# --field-end--
+# --field-start--
+fieldName=answerTextColor
+defaultValue=-4276546
+# --field-end--
+# --field-start--
+fieldName=questionBackgroundColor
+defaultValue=-16777216
+# --field-end--
+# --field-start--
+fieldName=answerBackgroundColor
+defaultValue=-16777216
+# --field-end--
+# --field-start--
+fieldName=separatorColor
+defaultValue=-7303024
+# --field-end--
+# --field-start--
+fieldName=displayInHTML
+defaultValue=QUESTION,ANSWER,NOTE
+# --field-end--
+# --field-start--
+fieldName=htmlLineBreakConversion
+defaultValue=false
+# --field-end--
+# --field-start--
+fieldName=questionField
+defaultValue=QUESTION
+# --field-end--
+# --field-start--
+fieldName=answerField
+defaultValue=ANSWER
+# --field-end--
+# --field-start--
+fieldName=questionFont
+defaultValue=
+# --field-end--
+# --field-start--
+fieldName=answerFont
+defaultValue=
+# --field-end--
+# --field-start--
+fieldName=questionAudioLocation
+defaultValue=
+# --field-end--
+# --field-start--
+fieldName=answerAudioLocation
+defaultValue=
+# --field-end--
+# --field-start--
+fieldName=creationDate
+dataPersister=DATE_STRING
+format=yyyy-MM-dd HH:mm:ss.SSSSSS
+# --field-end--
+# --field-start--
+fieldName=updateDate
+dataPersister=DATE_STRING
+format=yyyy-MM-dd HH:mm:ss.SSSSSS
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=org.liberty.android.fantastischmemo.domain.Card
+tableName=cards
+# --table-fields-start--
+# --field-start--
+fieldName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=ordinal
+indexName=cards_ordinal_idx
+# --field-end--
+# --field-start--
+fieldName=question
+defaultValue=
+width=8192
+# --field-end--
+# --field-start--
+fieldName=answer
+defaultValue=
+width=8192
+# --field-end--
+# --field-start--
+fieldName=note
+defaultValue=
+width=8192
+# --field-end--
+# --field-start--
+fieldName=category
+foreign=true
+indexName=cards_category_idx
+# --field-end--
+# --field-start--
+fieldName=learningData
+foreign=true
+# --field-end--
+# --field-start--
+fieldName=cardType
+defaultValue=0
+# --field-end--
+# --field-start--
+fieldName=creationDate
+dataPersister=DATE_STRING
+format=yyyy-MM-dd HH:mm:ss.SSSSSS
+# --field-end--
+# --field-start--
+fieldName=updateDate
+dataPersister=DATE_STRING
+format=yyyy-MM-dd HH:mm:ss.SSSSSS
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
+# --table-start--
+dataClass=org.liberty.android.fantastischmemo.domain.LearningData
+tableName=learning_data
+# --table-fields-start--
+# --field-start--
+fieldName=id
+generatedId=true
+# --field-end--
+# --field-start--
+fieldName=lastLearnDate
+dataPersister=DATE_STRING
+defaultValue=2010-01-01 00:00:00.000000
+format=yyyy-MM-dd HH:mm:ss.SSSSSS
+# --field-end--
+# --field-start--
+fieldName=nextLearnDate
+dataPersister=DATE_STRING
+defaultValue=2010-01-01 00:00:00.000000
+format=yyyy-MM-dd HH:mm:ss.SSSSSS
+# --field-end--
+# --field-start--
+fieldName=grade
+# --field-end--
+# --field-start--
+fieldName=easiness
+defaultValue=2.5
+# --field-end--
+# --field-start--
+fieldName=acqReps
+# --field-end--
+# --field-start--
+fieldName=retReps
+# --field-end--
+# --field-start--
+fieldName=lapses
+# --field-end--
+# --field-start--
+fieldName=acqRepsSinceLapse
+# --field-end--
+# --field-start--
+fieldName=retRepsSinceLapse
+# --field-end--
+# --field-start--
+fieldName=updateDate
+dataPersister=DATE_STRING
+format=yyyy-MM-dd HH:mm:ss.SSSSSS
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################

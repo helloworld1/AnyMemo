@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="AMSpinner">
+        <attr name="display_array" format="integer" />
+        <attr name="value_array" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="IntegerEditTextPreference">
+        <attr name="maxIntValue" format="integer" />
+        <attr name="minIntValue" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="DoubleClickButton">
+        <attr name="text_on_first_click" format="string" />
+        <attr name="effective_duration_millis" format="integer" />
+    </declare-styleable>
+
+    <!-- Theme dependent icons. The drawable dependend on if the theme is light or dard -->
+    <!-- Also need to update themes.xml to define these values for each teme -->
+    <attr name="star_theme_dependent_icon" format="reference"/>
+    <attr name="gear_theme_dependent_icon" format="reference"/>
+    <attr name="cabinet_theme_dependent_icon" format="reference"/>
+    <attr name="download_tab_theme_dependent_icon" format="reference"/>
+    <attr name="clock_theme_dependent_icon" format="reference"/>
+    <attr name="drawer_theme_dependent_icon" format="reference"/>
+</resources>
+
