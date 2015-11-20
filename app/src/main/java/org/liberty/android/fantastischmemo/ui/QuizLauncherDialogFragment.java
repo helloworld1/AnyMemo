@@ -24,6 +24,8 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import android.app.Dialog;
+import android.support.v7.app.AlertDialog;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
@@ -147,11 +149,8 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-        getDialog().setCanceledOnTouchOutside(true);
-        getDialog().setTitle(R.string.quiz_text);
-        View v = inflater.inflate(R.layout.quiz_launcher_dialog, container, false);
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        View v = getActivity().getLayoutInflater().inflate(R.layout.quiz_launcher_dialog, null, false);
 
         startQuizButton = (Button) v.findViewById(R.id.start_quiz_button);
 
@@ -171,9 +170,9 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
         // Make sure the text value is sanity and update other information
         // about the group size and etc accordingly.
         quizByRangeRadio = (RadioButton) v.findViewById(R.id.quiz_by_range_radio);
-        
+
         quizByRangeRadio.setOnCheckedChangeListener(onCheckedChangeListener);
-        
+
         quizGroupSizeEdit.addTextChangedListener(quizByGroupSizeTextWatcher);
         quizGroupSizeEdit.setOnFocusChangeListener(sanitizeInputListener);
 
@@ -182,19 +181,19 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
         quizGroupNumberEdit = (EditText) v.findViewById(R.id.quiz_group_number);
         quizGroupNumberEdit.addTextChangedListener(quizByGroupNumberTextWatcher);
         quizGroupNumberEdit.setOnFocusChangeListener(sanitizeInputListener);
-        
+
         //For quiz range
         quizRangeStartTitle = (TextView) v.findViewById(R.id.quiz_range_start_size_title);
         quizRangeEndTitle = (TextView) v.findViewById(R.id.quiz_range_end_size_title);
-        
+
         quizRangeStartOrdinalEdit = (EditText) v.findViewById(R.id.quiz_range_strat_ordinal);
         quizRangeStartOrdinalEdit.addTextChangedListener(quizByRangeStartTextWatcher);
         quizRangeStartOrdinalEdit.setOnFocusChangeListener(rangeInputListener);
-        
+
         quizRangeEndOrdinalEdit = (EditText) v.findViewById(R.id.quiz_range_end_ordinal);
         quizRangeEndOrdinalEdit.addTextChangedListener(quizByRangeEndTextWatcher);
         quizRangeEndOrdinalEdit.setOnFocusChangeListener(rangeInputListener);
-        
+
         categoryButton = (Button) v.findViewById(R.id.category_button);
         categoryButton.setOnClickListener(categoryButtonListener);
 
@@ -202,10 +201,14 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
         radioButtonSettingsMapping.put(quizByGroupRadio, v.findViewById(R.id.quiz_by_group_settings));
         radioButtonSettingsMapping.put(quizByCategoryRadio, v.findViewById(R.id.quiz_by_category_settings));
         radioButtonSettingsMapping.put(quizByRangeRadio, v.findViewById(R.id.quiz_by_range_settings));
-        
+
         shuffleCheckbox = (CheckBox) v.findViewById(R.id.shuffle_checkbox);
 
-        return v;
+        return new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.quiz_text)
+                .setView(v)
+                .create();
+
     }
 
     @Override
