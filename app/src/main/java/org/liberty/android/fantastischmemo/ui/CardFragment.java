@@ -24,6 +24,8 @@ import java.io.Serializable;
 
 import javax.inject.Inject;
 
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.entity.Setting;
@@ -82,6 +84,15 @@ public class CardFragment extends RoboFragment {
     private CardTextUtil cardTextUtil;
 
     private String[] imageSearchPaths = {AMEnv.DEFAULT_IMAGE_PATH};
+
+    // The dummy animation is used to handle the nested fragment animation disappearing bug
+    // See solution here:
+    // http://stackoverflow.com/questions/14900738/nested-fragments-disappear-during-transition-animation
+    private static final Animation dummyAnimation = new AlphaAnimation(1,1);
+
+    static {
+        dummyAnimation.setDuration(500);
+    }
 
     public CardFragment() { }
 
@@ -189,6 +200,17 @@ public class CardFragment extends RoboFragment {
         }
 
         return v;
+    }
+
+    @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        // Override onCreateAnimation to work around the nested fragment disappearing issue
+        // See solution here:
+        // http://stackoverflow.com/questions/14900738/nested-fragments-disappear-during-transition-animation
+        if(!enter && getParentFragment() != null){
+            return dummyAnimation;
+        }
+        return super.onCreateAnimation(transit, enter, nextAnim);
     }
 
     public static interface OnClickListener extends View.OnClickListener {
