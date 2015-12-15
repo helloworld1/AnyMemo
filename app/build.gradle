@@ -7,12 +7,12 @@ repositories {
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    buildToolsVersion "23.0.2"
 
     useLibrary 'org.apache.http.legacy'
     defaultConfig {
-        versionCode 216
-        versionName "10.8"
+        versionCode 217
+        versionName "10.8.991"
         minSdkVersion 11
         targetSdkVersion 23
         testApplicationId "org.liberty.android.fantastischmemo.test"
