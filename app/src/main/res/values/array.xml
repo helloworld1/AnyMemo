@@ -217,22 +217,6 @@
         <item>@string/settings_color_separator</item>
     </string-array>
 
-    <integer-array name="default_color_list">
-        <item>0xFFBEBEBE</item>
-        <item>0xFFBEBEBE</item>
-        <item>0xFF000000</item>
-        <item>0xFF000000</item>
-        <item>0xFF909090</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-        <item>0</item>
-    </integer-array>
-
     <string-array name="notification_interval_list">
         <item>@string/disabled_text</item>
         <item>@string/notification_1hr_text</item>

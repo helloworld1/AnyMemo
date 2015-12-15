@@ -81,6 +81,7 @@ dependencies {
     compile 'com.google.guava:guava:17.0'
     compile 'com.opencsv:opencsv:3.4'
     compile 'com.github.PhilJay:MPAndroidChart:v2.1.6'
+    compile 'com.rarepebble:colorpicker:1.5.1'
 
     androidTestCompile 'com.crittercism.dexmaker:dexmaker:1.4'
     androidTestCompile 'com.crittercism.dexmaker:dexmaker-dx:1.4'

@@ -27,7 +27,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.color.ColorDialog;
+import android.support.v4.content.ContextCompat;
+import com.rarepebble.colorpicker.ColorPickerView;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
@@ -68,6 +69,12 @@ import com.google.common.base.Strings;
 public class SettingsScreen extends AMActivity {
 
     public static final String EXTRA_DBPATH = "dbpath";
+
+    private static final int QUESTION_TEXT_SPINNER_POS = 0;
+    private static final int ANSWER_TEXT_SPINNER_POS = 1;
+    private static final int QUESTION_BACKGROUND_SPINNER_POS = 2;
+    private static final int ANSWER_BACKGROUND_SPINNER_POS = 3;
+
     private String dbPath;
     private SettingDao settingDao;
     private Setting setting;
@@ -101,6 +108,7 @@ public class SettingsScreen extends AMActivity {
     private CheckBox field2Checkbox;
     private EnumSet<CardField> questionFields;
     private EnumSet<CardField> answerFields;
+
 
     private AnyMemoDBOpenHelper dbOpenHelper;
 
@@ -227,18 +235,9 @@ public class SettingsScreen extends AMActivity {
         }
     }
 
-    private ColorDialog.OnClickListener colorDialogOnClickListener = new ColorDialog.OnClickListener() {
-        public void onClick(View view, int color){
-            int pos = colorSpinner.getSelectedItemPosition();
-            colorButton.setTextColor(color);
-            colors.set(pos, color);
-        }
-    };
-
     private void resetToDefaultColors() {
-        int[] defaultColors = getResources().getIntArray(R.array.default_color_list);
-        for (int i=0; i < colors.size() && i < defaultColors.length; i++) {
-            colors.set(i, defaultColors[i]);
+        for (int i=0; i < colors.size(); i++) {
+            colors.set(i, null);
         }
     }
 
@@ -393,8 +392,13 @@ public class SettingsScreen extends AMActivity {
 
         colorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id){
-                colorButton.setTextColor(colors.get(position));
-
+                Integer color = colors.get(position);
+                if (color != null) {
+                    colorButton.setTextColor(color);
+                } else {
+                    final int defaultTextColor = ContextCompat.getColor(SettingsScreen.this, android.R.color.primary_text_dark);
+                    colorButton.setTextColor(defaultTextColor);
+                }
             }
             public void onNothingSelected(AdapterView<?> adapterView){
             }
@@ -465,7 +469,14 @@ public class SettingsScreen extends AMActivity {
         } else {
             colorRow.setVisibility(View.GONE);
         }
-        colorButton.setTextColor(colors.get(colorSpinner.getSelectedItemPosition()));
+
+        Integer colorButtonTextColor = colorSpinner.getSelectedItemPosition();
+        if (colorButtonTextColor != null) {
+            colorButton.setTextColor(colorButtonTextColor);
+        } else {
+            final int defaultTextColor = ContextCompat.getColor(this, android.R.color.primary_text_dark);
+            colorButton.setText(defaultTextColor);
+        }
 
         qTypefaceCheckbox.setChecked(!Strings.isNullOrEmpty(setting.getQuestionFont()));
         if (qTypefaceCheckbox.isChecked()) {
@@ -607,6 +618,39 @@ public class SettingsScreen extends AMActivity {
         }
     }
 
+    private void showColorPickerDialog() {
+        final int spinnerPos = colorSpinner.getSelectedItemPosition();
+        Integer currentColor = colors.get(spinnerPos);
+
+        final int defaultTextColor = ContextCompat.getColor(this, android.R.color.primary_text_dark);
+        final int defaultBackgroundColor = ContextCompat.getColor(this, android.R.color.background_dark);
+
+        final ColorPickerView colorPickerView = new ColorPickerView(this);
+
+        colorPickerView.showAlpha(false);
+
+        if (currentColor != null) {
+            colorPickerView.setColor(currentColor);
+        } else if (spinnerPos == QUESTION_TEXT_SPINNER_POS || spinnerPos == ANSWER_TEXT_SPINNER_POS) {
+            colorPickerView.setColor(defaultTextColor);
+        } else if (spinnerPos == QUESTION_BACKGROUND_SPINNER_POS|| spinnerPos == ANSWER_BACKGROUND_SPINNER_POS) {
+            colorPickerView.setColor(defaultBackgroundColor);
+        }
+
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.color_button_text)
+                .setView(colorPickerView)
+                .setPositiveButton(R.string.ok_text, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        colorButton.setTextColor(colorPickerView.getColor());
+                        colors.set(spinnerPos, colorPickerView.getColor());
+                    }
+                })
+                .create()
+                .show();
+    }
+
     private View.OnClickListener settingFieldOnClickListener = new View.OnClickListener() {
         public void onClick(View v) {
             // If the user click on these fields, then we assume user has changed some settings.
@@ -622,9 +666,7 @@ public class SettingsScreen extends AMActivity {
             }
 
             if (v == colorButton) {
-                int pos = colorSpinner.getSelectedItemPosition();
-                ColorDialog dialog = new ColorDialog(SettingsScreen.this, colorButton, colors.get(pos), colorDialogOnClickListener);
-                dialog.show();
+                showColorPickerDialog();
             }
 
             if (v == qTypefaceCheckbox) {

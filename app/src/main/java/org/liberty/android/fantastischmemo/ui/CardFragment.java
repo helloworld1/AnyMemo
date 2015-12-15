@@ -281,7 +281,7 @@ public class CardFragment extends RoboFragment {
         }
 
         /* Set the card text's color */
-        public Builder setTextColor(int color) {
+        public Builder setTextColor(Integer color) {
             this.textColor = color;
             return this;
         }
@@ -292,7 +292,7 @@ public class CardFragment extends RoboFragment {
             return this;
         }
         /* Set the card background color */
-        public Builder setBackgroundColor(int color){
+        public Builder setBackgroundColor(Integer color){
             this.backgroundColor = color;
             return this;
         }

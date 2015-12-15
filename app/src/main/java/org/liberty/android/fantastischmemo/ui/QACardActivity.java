@@ -259,12 +259,11 @@ public abstract class QACardActivity extends AMActivity {
             // It could be the question if it is the double sided card with only question shown
             // or answer view's color.
             if (!setting.isDefaultColor()) {
-                if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED && !showAnswer) {
-                    buttonsView.setBackgroundColor(setting
-                        .getQuestionBackgroundColor());
-                } else {
-                    buttonsView.setBackgroundColor(setting
-                        .getAnswerBackgroundColor());
+                if (setting.getCardStyle() == Setting.CardStyle.DOUBLE_SIDED && !showAnswer &&
+                        setting.getQuestionBackgroundColor() != null) {
+                    buttonsView.setBackgroundColor(setting.getQuestionBackgroundColor());
+                } else if (setting.getAnswerBackgroundColor() != null) {
+                    buttonsView.setBackgroundColor(setting.getAnswerBackgroundColor());
                 }
             }
         }
@@ -300,19 +299,18 @@ public abstract class QACardActivity extends AMActivity {
             .setTextFontSize(setting.getAnswerFontSize())
             .setTypefaceFromFile(setting.getAnswerFont());
 
-        // For default card colors, we will use the theme's color
-        // so we do not set the colors here.
-        if (!setting.isDefaultColor()) {
             questionFragmentBuilder
-                .setTextColor(setting.getQuestionTextColor())
-                .setBackgroundColor(setting.getQuestionBackgroundColor());
+                    .setTextColor(setting.getQuestionTextColor())
+                    .setBackgroundColor(setting.getQuestionBackgroundColor());
+
             answerFragmentBuilder
-                .setTextColor(setting.getAnswerTextColor())
-                .setBackgroundColor(setting.getAnswerBackgroundColor());
+                    .setBackgroundColor(setting.getAnswerBackgroundColor())
+                    .setTextColor(setting.getAnswerTextColor());
+
             showAnswerFragmentBuilder
-                .setTextColor(setting.getAnswerTextColor())
-                .setBackgroundColor(setting.getAnswerBackgroundColor());
-        }
+                    .setTextColor(setting.getAnswerTextColor())
+                    .setBackgroundColor(setting.getAnswerBackgroundColor());
+
 
         // Note is currently shared some settings with Answer
         CardFragment.Builder noteFragmentBuilder = new CardFragment.Builder(getCurrentCard().getNote())
@@ -444,11 +442,9 @@ public abstract class QACardActivity extends AMActivity {
      */
     protected void onPostInit() {
         View buttonsView = findViewById(R.id.buttons_root);
-        if (buttonsView != null && !setting.isDefaultColor()) {
-            buttonsView.setBackgroundColor(setting
-                    .getAnswerBackgroundColor());
+        if (buttonsView != null && !setting.isDefaultColor() && setting.getAnswerBackgroundColor() != null) {
+            buttonsView.setBackgroundColor(setting.getAnswerBackgroundColor());
         }
-
     }
 
     private class SettingLoaderCallbacks implements

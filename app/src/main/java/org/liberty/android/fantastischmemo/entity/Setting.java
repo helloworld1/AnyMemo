@@ -18,11 +18,8 @@ public class Setting implements Serializable, VersionableDomainObject {
 
     public static final String AUDIO_USER_DEFINED = "User Audio";
 
-    public static final Integer DEFAULT_QUESTION_TEXT_COLOR = 0xFFBEBEBE;
-    public static final Integer DEFAULT_ANSWER_TEXT_COLOR = 0xFFBEBEBE;
-    public static final Integer DEFAULT_QUESTION_BACKGROUND_COLOR = 0xFF000000;
-    public static final Integer DEFAULT_ANSWER_BACKGROUND_COLOR = 0xFF000000;
     public static final Integer DEFAULT_SEPARATOR_COLOR = 0xFF909090;
+
     public static final Integer DEFAULT_QA_RATIO = 50;
     @DatabaseField(generatedId = true)
     private Integer id = 1;
@@ -57,19 +54,17 @@ public class Setting implements Serializable, VersionableDomainObject {
     @DatabaseField(defaultValue = "US")
     private String answerAudio = "US";
 
-    // 0xFFBEBEBE
-    @DatabaseField(defaultValue = "-4276546")
-    private Integer questionTextColor = DEFAULT_QUESTION_TEXT_COLOR;
+    @DatabaseField
+    private Integer questionTextColor = null;
 
-    @DatabaseField(defaultValue = "-4276546")
-    private Integer answerTextColor = DEFAULT_ANSWER_TEXT_COLOR;
+    @DatabaseField
+    private Integer answerTextColor = null;
 
-    //0xFF0000000
-    @DatabaseField(defaultValue = "-16777216")
-    private Integer questionBackgroundColor = DEFAULT_QUESTION_BACKGROUND_COLOR;
+    @DatabaseField
+    private Integer questionBackgroundColor = null;
 
-    @DatabaseField(defaultValue = "-16777216")
-    private Integer answerBackgroundColor = DEFAULT_ANSWER_BACKGROUND_COLOR;
+    @DatabaseField
+    private Integer answerBackgroundColor = null;
 
     @DatabaseField(defaultValue = "-7303024")
     private Integer separatorColor = DEFAULT_SEPARATOR_COLOR;
@@ -228,7 +223,7 @@ public class Setting implements Serializable, VersionableDomainObject {
     }
 
     public Integer getQuestionTextColor() {
-        return questionTextColor;
+        return this.questionTextColor;
     }
 
     public void setQuestionTextColor(Integer questionTextColor) {
@@ -377,10 +372,10 @@ public class Setting implements Serializable, VersionableDomainObject {
     }
 
     public boolean isDefaultColor() {
-        return (questionTextColor.equals(DEFAULT_QUESTION_TEXT_COLOR)) &&
-               (answerTextColor.equals(DEFAULT_ANSWER_TEXT_COLOR)) &&
-               (questionBackgroundColor.equals(DEFAULT_QUESTION_BACKGROUND_COLOR)) &&
-               (answerBackgroundColor.equals(DEFAULT_ANSWER_BACKGROUND_COLOR)) &&
-               (separatorColor.equals(DEFAULT_SEPARATOR_COLOR));
+        return questionTextColor == null &&
+               answerTextColor == null &&
+               questionBackgroundColor == null &&
+               answerBackgroundColor == null &&
+               separatorColor.equals(DEFAULT_SEPARATOR_COLOR);
     }
 }
