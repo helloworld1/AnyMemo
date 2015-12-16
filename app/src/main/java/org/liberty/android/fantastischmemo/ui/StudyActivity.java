@@ -23,6 +23,7 @@ import java.util.HashMap;
 
 import javax.inject.Inject;
 
+import android.graphics.Paint;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.entity.*;
 import org.liberty.android.fantastischmemo.queue.LearnQueueManager;
@@ -50,7 +51,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.android.apis.graphics.FingerPaint;
 import com.google.common.base.Strings;
 
 /**
@@ -771,7 +771,7 @@ public class StudyActivity extends QACardActivity {
     }
 
     private void gotoPaint() {
-        Intent myIntent = new Intent(this, FingerPaint.class);
+        Intent myIntent = new Intent(this, PaintActivity.class);
         startActivity(myIntent);
     }
 

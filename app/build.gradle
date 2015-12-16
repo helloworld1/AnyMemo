@@ -13,7 +13,7 @@ android {
     defaultConfig {
         versionCode 217
         versionName "10.8.991"
-        minSdkVersion 11
+        minSdkVersion 14
         targetSdkVersion 23
         testApplicationId "org.liberty.android.fantastischmemo.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
@@ -82,6 +82,7 @@ dependencies {
     compile 'com.opencsv:opencsv:3.4'
     compile 'com.github.PhilJay:MPAndroidChart:v2.1.6'
     compile 'com.rarepebble:colorpicker:1.5.1'
+    compile 'com.simplify:ink:0.2.1'
 
     androidTestCompile 'com.crittercism.dexmaker:dexmaker:1.4'
     androidTestCompile 'com.crittercism.dexmaker:dexmaker-dx:1.4'

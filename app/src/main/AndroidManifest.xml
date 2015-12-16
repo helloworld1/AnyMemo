@@ -44,8 +44,7 @@
             android:name=".downloader.DownloaderAnyMemo"
             android:configChanges="orientation|keyboardHidden" />
         <activity
-            android:name="com.example.android.apis.graphics.FingerPaint" 
-            android:configChanges="orientation|keyboardHidden"
+            android:name=".ui.PaintActivity"
             android:theme="@style/PaintStyle" />
         <activity
             android:name=".downloader.quizlet.QuizletLauncher" />

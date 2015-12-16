@@ -50,7 +50,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.android.apis.graphics.FingerPaint;
 import com.google.common.base.Strings;
 
 public class QuizActivity extends QACardActivity {
@@ -174,7 +173,7 @@ public class QuizActivity extends QACardActivity {
             }
             case R.id.menu_paint:
             {
-                Intent myIntent = new Intent(this, FingerPaint.class);
+                Intent myIntent = new Intent(this, StudyActivity.class);
                 startActivity(myIntent);
             }
         }
