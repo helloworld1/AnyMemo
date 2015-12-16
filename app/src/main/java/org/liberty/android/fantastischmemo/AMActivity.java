@@ -22,6 +22,8 @@ package org.liberty.android.fantastischmemo;
 
 import java.util.Locale;
 
+import android.os.Handler;
+import android.view.View;
 import roboguice.activity.RoboActionBarActivity;
 
 import android.content.Intent;
@@ -45,12 +47,14 @@ public abstract class AMActivity extends RoboActionBarActivity {
 
     boolean activityCreated = false;
 
+    private Handler handler = new Handler();
+
     @Override
 	public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         if(settings.getBoolean(AMPrefKeys.FULLSCREEN_MODE_KEY, false)) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            enableImmersiveMode();
         }
         if(!settings.getBoolean(AMPrefKeys.ALLOW_ORIENTATION_KEY, true)) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -152,5 +156,42 @@ public abstract class AMActivity extends RoboActionBarActivity {
         config.locale = locale;
         getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
     }
-}
 
+    private void enableImmersiveMode() {
+        // First enter immersive mode
+        // Do not use SYSTEM_UI_FLAG_IMMERSIVE_STICKY since the action bar will not be shown for QACardActivity
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
+
+
+        // When the user swipe the bottom of the screen to exit immerisve view, restore the immersive mode after
+        // a small delay
+        getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+            @Override
+            public void onSystemUiVisibilityChange(final int visibility) {
+                // Note that system bars will only be "visible" if none of the
+                // LOW_PROFILE, HIDE_NAVIGATION, or FULLSCREEN flags are set.
+                if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            getWindow().getDecorView().setSystemUiVisibility(
+                                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                            | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+                                            | View.SYSTEM_UI_FLAG_IMMERSIVE);
+                        }
+                    }, 2000);
+                }
+            }
+        });
+
+    }
+}
