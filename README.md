@@ -15,12 +15,8 @@ See detailed info at http://anymemo.org
 Directory structure
 -------------------
 
-* src: The standard gradle folder structure
-* libs: Jar libraries
-* res: Android resources
-* assets: The Android assets
+* app: The app source
 * gradle: The gradle wrapper
-* eclipse-deps: The dependencies needed by eclipse if you are using eclipse.
 * scripts: The scripts that automate some tasks
 
 How to compile
@@ -32,9 +28,9 @@ order to build:
 * JDK: http://www.oracle.com/technetwork/java/javase/downloads/index.html
 
 In Android SDK tools' "Android SDK Manager", you need the following items:
-* Android 4.1.x SDK platform
+* Android 6.0 SDK platform
 * Android SDK tools
-* Andoird SDK Build-tools version 19
+* Andoird SDK Build-tools version 23
 * Android support repository
 * Android support library
 
@@ -73,17 +69,7 @@ $ ./gradlew connectedInstrumentTestProDebug
 Eclipse users
 -------------
 
-For the eclipse user, the gradle is not supported to build. However you can
-still use eclipse to edit the project with auto completion fully working.
-
-* Build the project using gradle
-* mv eclipse-deps/classpath-template .classpath
-* mv eclipse-deps/project-template .project
-* Import project in eclipse as "Java Project". Do not import as Android project.
-  ADT is not needed at all!
-
-Known issue:
-The aspectj will not work correctly.
+Sorry, the support of Eclipse ended since Google does not support it well.
 
 Android studio user
 -------------------
