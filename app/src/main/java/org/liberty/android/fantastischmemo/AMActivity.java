@@ -43,9 +43,9 @@ import android.view.WindowManager;
 public abstract class AMActivity extends RoboActionBarActivity {
     protected String TAG = getClass().getSimpleName();
 
-    boolean activityForeground = false;
+    private boolean activityForeground = false;
 
-    boolean activityCreated = false;
+    private boolean activityCreated = false;
 
     private Handler handler = new Handler();
 
