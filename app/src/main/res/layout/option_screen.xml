@@ -33,7 +33,7 @@
         <ListPreference
             android:key="button_style"
             android:title="@string/button_style_title"
-            android:defaultValue="ANYMEMO"
+            android:defaultValue="ANKI"
             android:entries="@array/button_style_list"
             android:entryValues="@array/button_style_list_values"
             android:summary="@string/button_style_summary" />

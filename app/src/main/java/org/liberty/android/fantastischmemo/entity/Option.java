@@ -29,7 +29,7 @@ public class Option {
     }
 
     public ButtonStyle getButtonStyle() {
-        return ButtonStyle.parse(settings.getString(AMPrefKeys.BUTTON_STYLE_KEY, "ANYMEMO"));
+        return ButtonStyle.parse(settings.getString(AMPrefKeys.BUTTON_STYLE_KEY, "ANKI"));
     }
 
     public void setButtonStyle(ButtonStyle style) {
@@ -133,11 +133,11 @@ public class Option {
             if(a.equals("MNEMOSYNE")){
                 return MNEMOSYNE;
             }
-            else if(a.equals("ANKI")){
-                return ANKI;
+            else if(a.equals("ANYMEMO")){
+                return ANYMEMO;
             }
             else{
-                return ANYMEMO;
+                return ANKI;
             }
         }
     }
