@@ -105,6 +105,30 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
+            android:id="@+id/card_player"
+            style="@style/list_button"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:paddingRight="5dp"
+                android:src="@drawable/audio" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/card_player_text"
+                android:textSize="24dp"
+                android:clickable="false"
+                android:focusable="false"
+                android:layout_gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
             android:id="@+id/settings"
             style="@style/list_button"
             android:layout_height="wrap_content">

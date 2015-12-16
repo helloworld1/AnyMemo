@@ -55,6 +55,7 @@ public class OpenActionsFragment extends RoboDialogFragment {
     private View editItem;
     private View listItem;
     private View quizItem;
+    private View cardPlayerItem;
     private View settingsItem;
     private View statisticsItem;
     private View shareItem;
@@ -126,6 +127,9 @@ public class OpenActionsFragment extends RoboDialogFragment {
 
         shareItem = v.findViewById(R.id.share);
         shareItem.setOnClickListener(buttonClickListener);
+
+        cardPlayerItem = v.findViewById(R.id.card_player);
+        cardPlayerItem.setOnClickListener(buttonClickListener);
 
         return v;
     }
@@ -202,6 +206,14 @@ public class OpenActionsFragment extends RoboDialogFragment {
                     .create()
                     .show();
             }
+
+            if (v == cardPlayerItem) {
+                Intent myIntent = new Intent();
+                myIntent.setClass(mActivity, CardPlayerActivity.class);
+                myIntent.putExtra(CardPlayerActivity.EXTRA_DBPATH, dbPath);
+                startActivity(myIntent);
+            }
+
             dismiss();
         }
     };
