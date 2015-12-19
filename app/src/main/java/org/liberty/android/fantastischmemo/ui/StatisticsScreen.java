@@ -143,16 +143,6 @@ public class StatisticsScreen extends AMActivity {
         AnyMemoDBOpenHelperManager.releaseHelper(dbOpenHelper);
     }
 
-    private Date truncateDate(Date date) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        return new Date(cal.getTimeInMillis());
-    }
-
     private abstract class ChartTask<T, K, ResultT>  extends AsyncTask<T, K, ResultT> {
         private ProgressDialog progressDialog;
 
@@ -186,7 +176,7 @@ public class StatisticsScreen extends AMActivity {
             List<BarEntry> yVals = new ArrayList<BarEntry>(30);
             Date now = new Date();
             for (int i = 0; i < 30; i++) {
-                Date startDate = truncateDate(new Date(now.getTime() + i * 60 * 60 * 24 * 1000));
+                Date startDate = new Date(now.getTime() + i * 60 * 60 * 24 * 1000);
                 Date endDate = new Date(startDate.getTime() + 1 * 60 * 60 * 24 * 1000);
                 xVals.add("" + i);
                 yVals.add(new BarEntry((float)cardDao.getScheduledCardCount(null, startDate, endDate), i));
@@ -224,7 +214,7 @@ public class StatisticsScreen extends AMActivity {
 
             Date now = new Date();
             Date startDate = new Date(0);
-            for (int i = 0; i < 30; i++) {
+            for (int i = 0; i < 31; i++) {
                 Date endDate = new Date(now.getTime() + i * 60 * 60 * 24 * 1000);
                 xVals.add("" + i);
                 yVals.add(new BarEntry((float)cardDao.getScheduledCardCount(null, startDate, endDate), i));
