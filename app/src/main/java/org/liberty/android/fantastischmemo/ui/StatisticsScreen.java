@@ -215,7 +215,7 @@ public class StatisticsScreen extends AMActivity {
             Date now = new Date();
             Date startDate = new Date(0);
             for (int i = 0; i < 30; i++) {
-                Date endDate = new Date(now.getTime() + i * 60 * 60 * 24 * 1000);
+                Date endDate = new Date(now.getTime() + (i + 1) * 60 * 60 * 24 * 1000);
                 xVals.add("" + i);
                 yVals.add(new BarEntry((float)cardDao.getScheduledCardCount(null, startDate, endDate), i));
             }
