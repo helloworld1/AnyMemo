@@ -160,6 +160,11 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
         }
     }
 
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        Log.w(TAG, String.format("Downgrading database from version %1$d to %2$d", oldVersion, newVersion));
+    }
+
     /**
      * Do not call this method directly, use AnyMemoDBOpenHelperManager instead.
      */
