@@ -26,7 +26,6 @@
         android:layout_gravity="bottom|right"
         android:src="@drawable/ic_add"
         android:layout_margin="16dp"
-        app:layout_anchor="@id/main_content"
         app:layout_anchorGravity="bottom|right"
         android:clickable="true"/>
 
