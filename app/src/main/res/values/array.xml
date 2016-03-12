@@ -52,6 +52,7 @@
         <item>@string/disabled_text</item>
         <item>@string/us_english_text</item>
         <item>@string/uk_english_text</item>
+        <item>@string/au_english_text</item>
         <item>@string/french_text</item>
         <item>@string/german_text</item>
         <item>@string/italian_text</item>
@@ -84,6 +85,7 @@
         <item>Disabled</item>
         <item>US</item>
         <item>UK</item>
+        <item>en_AU</item>
         <item>FR</item>
         <item>DE</item>
         <item>IT</item>
@@ -302,4 +304,5 @@
         <item>Random</item>
         <item>HardestFirst</item>
     </string-array>
+    <string name="au_english_text">English (AU)</string>
 </resources>
