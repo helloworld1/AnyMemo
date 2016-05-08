@@ -23,3 +23,5 @@ AMSecrets.java
 *.ipr
 *.iws
 .idea/
+
+gradle.properties
