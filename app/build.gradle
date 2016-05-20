@@ -60,9 +60,9 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:23.2.+'
-    compile 'com.android.support:cardview-v7:23.2.+'
-    compile 'com.android.support:design:23.2.+'
+    compile 'com.android.support:appcompat-v7:23.3.+'
+    compile 'com.android.support:cardview-v7:23.3.+'
+    compile 'com.android.support:design:23.3.+'
     compile 'com.j256.ormlite:ormlite-core:4.48'
     compile 'com.j256.ormlite:ormlite-android:4.48'
     compile ('org.roboguice:roboguice:3.0.1') {
