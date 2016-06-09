@@ -25,14 +25,9 @@ import roboguice.RoboGuice;
 import android.app.Application;
 import android.content.Context;
 import android.os.Build;
+import android.support.multidex.MultiDex;
 import android.util.Log;
 
-//import org.acra.ACRA;
-
-//import org.acra.annotation.ReportsCrashes;
-
-
-//@ReportsCrashes(formKey = "dGhuTDRGUVY1WjA3RG9NNEFmSTFEaXc6MQ")
 public class AMApplication extends Application {
 
     private static final String TAG = "AMApplication";
@@ -45,6 +40,12 @@ public class AMApplication extends Application {
         }
 
         return currentApplicationContext;
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
     @Override

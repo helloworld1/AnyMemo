@@ -1,0 +1,6 @@
+<defaultsMap>
+    <entry>
+        <key>anymemo_web_service_endpoint</key>
+        <value>https://anymemo.org</value>
+    </entry>
+</defaultsMap>

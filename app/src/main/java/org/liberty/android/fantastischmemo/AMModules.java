@@ -44,15 +44,27 @@ import org.liberty.android.fantastischmemo.ui.CardImageGetterFactory;
 import org.liberty.android.fantastischmemo.utils.CardTTSUtilFactory;
 import org.liberty.android.fantastischmemo.utils.CardTextUtilFactory;
 
+import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
+
+import javax.inject.Inject;
 
 /* Define the moduled used in Guice dependency injection. */
 public class AMModules extends AbstractModule {
 
+    private final Application application;
+
     public AMModules(Application application) {
+        this.application = application;
     }
 
     @Override
@@ -110,5 +122,26 @@ public class AMModules extends AbstractModule {
 
         bind(Converter.class).annotatedWith(ZipImporter.Type.class).to(ZipImporter.class);
     }
+
+    @Singleton
+    @Provides
+    FirebaseRemoteConfig providesFirebaseRemoteConfig() {
+        FirebaseRemoteConfig firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+        FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
+                .setDeveloperModeEnabled(BuildConfig.DEBUG)
+                .build();
+        firebaseRemoteConfig.setConfigSettings(configSettings);
+        firebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults);
+        return firebaseRemoteConfig;
+
+    }
+
+    @Provides
+    FirebaseAnalytics providesFirebaseAnalytics(Activity context) {
+        FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(context);
+        return firebaseAnalytics;
+    }
+
+
 }
 

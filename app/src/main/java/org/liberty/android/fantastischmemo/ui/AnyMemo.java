@@ -31,6 +31,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -54,8 +55,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.crash.FirebaseCrash;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+
 import org.apache.commons.io.FileUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
@@ -85,8 +93,6 @@ public class AnyMemo extends AMActivity {
 
     private ViewPager viewPager;
 
-    private ActionBar actionBar;
-
     private SharedPreferences settings;
 
     private AMFileUtil amFileUtil;
@@ -97,7 +103,14 @@ public class AnyMemo extends AMActivity {
 
     private MultipleLoaderManager multipleLoaderManager;
 
+    private FirebaseRemoteConfig firebaseRemoteConfig;
+
+    private FirebaseAnalytics firebaseAnalytics;
+
     private static final int PERMISSION_REQUEST_EXTERNAL_STORAGE = 1;
+
+    private boolean firebaseFetchSucceeded = false;
+
 
     @Inject
     public void setAmFileUtil(AMFileUtil amFileUtil) {
@@ -114,11 +127,41 @@ public class AnyMemo extends AMActivity {
         this.multipleLoaderManager = multipleLoaderManager;
     }
 
+    @Inject
+    public void setDatabaseUtil(DatabaseUtil databaseUtil) {
+        this.databaseUtil = databaseUtil;
+    }
+
+    @Inject
+    public void setFirebaseRemoteConfig(FirebaseRemoteConfig firebaseRemoteConfig) {
+        this.firebaseRemoteConfig = firebaseRemoteConfig;
+    }
+
+    @Inject
+    public void setFirebaseAnalytics(FirebaseAnalytics firebaseAnalytics) {
+        this.firebaseAnalytics = firebaseAnalytics;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.main_tabs);
+
+        firebaseRemoteConfig.fetch().addOnCompleteListener(new OnCompleteListener<Void>() {
+               @Override
+               public void onComplete(@NonNull Task<Void> task) {
+                   if (task.isSuccessful()) {
+                       FirebaseCrash.logcat(Log.VERBOSE, TAG, "Firebase remote config fetch succeeded");
+                       firebaseFetchSucceeded = true;
+                   } else {
+                       FirebaseCrash.logcat(Log.WARN, TAG, "Firebase remote config fetch failed");
+                       FirebaseCrash.report(task.getException());
+                   }
+               }
+           });
+
+
 
         // Request storage permission
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -150,8 +193,12 @@ public class AnyMemo extends AMActivity {
     }
 
     private void loadUiComponents() {
+        if (firebaseFetchSucceeded) {
+            Log.i(TAG, "Firebase remote config activated before loading UI component");
+            firebaseRemoteConfig.activateFetched();
+        }
+
         settings = PreferenceManager.getDefaultSharedPreferences(this);
-        actionBar = getSupportActionBar();
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         initDrawer();
@@ -352,6 +399,11 @@ public class AnyMemo extends AMActivity {
         myIntent.putExtra("request_code", AnyMemoService.CANCEL_NOTIFICATION);
         startService(myIntent);
 
+        if (firebaseFetchSucceeded) {
+            Log.i(TAG, "Firebase remote config activated onDestroy");
+            firebaseRemoteConfig.activateFetched();
+        }
+
         if (multipleLoaderManager != null) {
             multipleLoaderManager.destroy();
         }
@@ -366,11 +418,6 @@ public class AnyMemo extends AMActivity {
 
         return super.onOptionsItemSelected(item);
 
-    }
-
-    @Inject
-    public void setDatabaseUtil(DatabaseUtil databaseUtil) {
-        this.databaseUtil = databaseUtil;
     }
 
     /**
