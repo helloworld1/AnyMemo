@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
 
 repositories {
     jcenter()
@@ -112,7 +111,7 @@ def getBuildString () {
     return "b" + formattedDate
 }
 
-task copyAMSecretsIfNotExists << {
+task copySecretsIfNotExists << {
     if (!file('src/main/java/org/liberty/android/fantastischmemo/AMSecrets.java').exists()) {
         logger.warn('Empty AMSecrets.java is created from AMSecrets.java.template. Please fill in the values.')
         copy {
@@ -121,8 +120,19 @@ task copyAMSecretsIfNotExists << {
             rename "AMSecrets.java.template", "AMSecrets.java"
             include "AMSecrets.java.template"
         }
-    } else {
+    }
+    if (!file('google-services.json').exists()) {
+        logger.warn('google-services.json is not found .Created from templateservices.json. Please use your own version instead!')
+        copy {
+            from "./"
+            into "./"
+            rename "templateservices.json", "google-services.json"
+            include "templateservices.json"
+        }
     }
 }
 
-preBuild.dependsOn copyAMSecretsIfNotExists 
+preBuild.dependsOn copySecretsIfNotExists 
+
+// Needs to be at the bottom to have all dependencies ready
+apply plugin: 'com.google.gms.google-services'
