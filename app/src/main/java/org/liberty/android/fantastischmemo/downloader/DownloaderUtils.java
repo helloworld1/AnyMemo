@@ -45,8 +45,7 @@ import android.content.Context;
 import android.util.Log;
 
 public class DownloaderUtils {
-    public static final String TAG = "org.liberty.android.fantastischmemo.downloader.DownloaderUtils";
-
+    public static final String TAG = DownloaderUtils.class.getSimpleName();
 
     private AMFileUtil amFileUtil;
 

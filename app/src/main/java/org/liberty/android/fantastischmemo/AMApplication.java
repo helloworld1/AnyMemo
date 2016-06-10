@@ -53,12 +53,6 @@ public class AMApplication extends Application {
         super.onCreate();
         currentApplicationContext = this;
 
-        // HTTP connection reuse which was buggy pre-froyo
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
-            Log.w(TAG, "Using version less than 2.2, disable urlconnection connection pool");
-            System.setProperty("http.keepAlive", "false");
-        }
         RoboGuice.setUseAnnotationDatabases(false);
     }
 }

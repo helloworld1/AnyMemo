@@ -195,7 +195,8 @@ public class AnyMemo extends AMActivity {
     private void loadUiComponents() {
         if (firebaseFetchSucceeded) {
             Log.i(TAG, "Firebase remote config activated before loading UI component");
-            firebaseRemoteConfig.activateFetched();
+        } else {
+            Log.i(TAG, "Firebase remote config haven't been fetched successfully when loading ui component");
         }
 
         settings = PreferenceManager.getDefaultSharedPreferences(this);
@@ -399,10 +400,7 @@ public class AnyMemo extends AMActivity {
         myIntent.putExtra("request_code", AnyMemoService.CANCEL_NOTIFICATION);
         startService(myIntent);
 
-        if (firebaseFetchSucceeded) {
-            Log.i(TAG, "Firebase remote config activated onDestroy");
-            firebaseRemoteConfig.activateFetched();
-        }
+        firebaseRemoteConfig.activateFetched();
 
         if (multipleLoaderManager != null) {
             multipleLoaderManager.destroy();

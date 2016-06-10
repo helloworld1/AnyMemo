@@ -20,6 +20,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.downloader.google;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -68,13 +70,13 @@ public class SpreadsheetListFragment extends AbstractDownloaderFragment {
     }
 
     @Override
-    protected void openCategory(DownloadItem di) {
-        // Do nothing
+    protected List<DownloadItem> openCategory(DownloadItem di) {
+        return Collections.emptyList();
     }
 
     @Override
-    protected void goBack() {
-        // Do nothing
+    protected List<DownloadItem> goBack() {
+        return Collections.emptyList();
     }
 
     @Override

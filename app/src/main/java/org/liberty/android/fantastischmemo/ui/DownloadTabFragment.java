@@ -20,7 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.downloader.DownloaderAnyMemo;
+import org.liberty.android.fantastischmemo.downloader.anymemo.AnyMemoDownloaderActivity;
 import org.liberty.android.fantastischmemo.downloader.dropbox.DropboxDBListActivity;
 import org.liberty.android.fantastischmemo.downloader.google.SpreadsheetListScreen;
 import org.liberty.android.fantastischmemo.downloader.quizlet.QuizletLauncher;
@@ -69,7 +69,7 @@ public class DownloadTabFragment extends RoboFragment implements View.OnClickLis
     @Override
     public void onClick(View v){
         if (v == amButton){
-            startActivity(new Intent(mActivity, DownloaderAnyMemo.class));
+            startActivity(new Intent(mActivity, AnyMemoDownloaderActivity.class));
         }
         if (v == quizletButton){
             startActivity(new Intent(mActivity, QuizletLauncher.class));
@@ -81,5 +81,4 @@ public class DownloadTabFragment extends RoboFragment implements View.OnClickLis
             startActivity(new Intent(mActivity, SpreadsheetListScreen.class));
         }
     }
-
 }

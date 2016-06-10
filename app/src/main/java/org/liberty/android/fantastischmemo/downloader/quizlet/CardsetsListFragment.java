@@ -1,5 +1,6 @@
 package org.liberty.android.fantastischmemo.downloader.quizlet;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -76,13 +77,13 @@ public class CardsetsListFragment extends AbstractDownloaderFragment {
     }
 
     @Override
-    protected void openCategory(DownloadItem di) {
-        // Do nothing
+    protected List<DownloadItem> openCategory(DownloadItem di) {
+        return Collections.emptyList();
     }
 
     @Override
-    protected void goBack() {
-        // Do nothing
+    protected List<DownloadItem> goBack() {
+        return Collections.emptyList();
     }
 
     @Override

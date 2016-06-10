@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.downloader.dropbox;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -65,13 +66,13 @@ public class DownloadDBFileListFragment extends AbstractDownloaderFragment {
     }
 
     @Override
-    protected void openCategory(DownloadItem di) {
-        // Do nothing
+    protected List<DownloadItem> openCategory(DownloadItem di) {
+        return Collections.emptyList();
     }
 
     @Override
-    protected void goBack() {
-        // Do nothing
+    protected List<DownloadItem> goBack() {
+        return Collections.emptyList();
     }
 
     @Override

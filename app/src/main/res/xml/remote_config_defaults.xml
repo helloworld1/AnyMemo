@@ -1,6 +1,6 @@
 <defaultsMap>
     <entry>
         <key>anymemo_web_service_endpoint</key>
-        <value>https://anymemo.org</value>
+        <value>http://192.168.245.240:26000</value>
     </entry>
 </defaultsMap>

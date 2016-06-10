@@ -21,6 +21,7 @@ package org.liberty.android.fantastischmemo.downloader;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
@@ -95,12 +96,12 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
     /**
      * Retrieve the data when the user has clicked a category
      */
-    abstract protected void openCategory(DownloadItem di);
+    abstract protected List<DownloadItem> openCategory(DownloadItem di);
 
     /**
      * Go back to the previous list
      */
-    abstract protected void goBack();
+    abstract protected List<DownloadItem> goBack();
 
     /**
      * Download the database based on the info
@@ -164,13 +165,18 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
         listView.removeFooterView(loadMoreFooter);
 
         InitRetrieveTask task = new InitRetrieveTask();
-        task.execute();
+        task.execute(new Callable<List<DownloadItem>>() {
+            @Override
+            public List<DownloadItem> call() throws Exception {
+                return initialRetrieve();
+            }
+        });
         return v;
     }
 
-    private class InitRetrieveTask extends AsyncTask<Void, Void, Exception> {
+    private class InitRetrieveTask extends AsyncTask<Callable<List<DownloadItem>>, Void, Exception> {
         private ProgressDialog progressDialog;
-        private List<DownloadItem> downloadItems;
+        private List<DownloadItem> downloadItems = new ArrayList<>();
 
         @Override
         public void onPreExecute() {
@@ -186,9 +192,11 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
         }
 
         @Override
-        public Exception doInBackground(Void... nothing) {
+        public Exception doInBackground(Callable<List<DownloadItem>>... tasks) {
             try {
-                downloadItems = initialRetrieve();
+                for (Callable<List<DownloadItem>> task : tasks) {
+                    downloadItems.addAll(task.call());
+                }
             } catch (Exception e) {
                 return e;
             }
@@ -205,6 +213,7 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
                 return;
             }
 
+            dlAdapter.clear();
             dlAdapter.addList(downloadItems);
             if (hasMore()) {
                 listView.addFooterView(loadMoreFooter);
@@ -387,15 +396,27 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    DownloadItem di = getDownloadItem(position);
+                    final DownloadItem di = getDownloadItem(position);
                     if(di == null){
                         Log.e(TAG, "NULL Download Item");
                         return;
                     }
                     if(di.getType() == DownloadItem.ItemType.Category){
-                        openCategory(di);
+                        InitRetrieveTask task = new InitRetrieveTask();
+                        task.execute(new Callable<List<DownloadItem>>() {
+                            @Override
+                            public List<DownloadItem> call() throws Exception {
+                                return openCategory(di);
+                            }
+                        });
                     } else if(di.getType() == DownloadItem.ItemType.Back){
-                        goBack();
+                        InitRetrieveTask task = new InitRetrieveTask();
+                        task.execute(new Callable<List<DownloadItem>>() {
+                            @Override
+                            public List<DownloadItem> call() throws Exception {
+                                return goBack();
+                            }
+                        });
                     } else {
                         showFetchDatabaseDialog(di);
                     }

@@ -41,11 +41,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".downloader.DownloaderAnyMemo"
-            android:configChanges="orientation|keyboardHidden" />
-        <activity
             android:name=".ui.PaintActivity"
             android:theme="@style/PaintStyle" />
+        <activity
+            android:name=".downloader.anymemo.AnyMemoDownloaderActivity" />
         <activity
             android:name=".downloader.quizlet.QuizletLauncher" />
         <activity
