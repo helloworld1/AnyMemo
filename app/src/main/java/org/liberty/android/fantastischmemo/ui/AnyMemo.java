@@ -21,17 +21,13 @@ package org.liberty.android.fantastischmemo.ui;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -46,7 +42,6 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -56,19 +51,13 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.common.base.Objects;
-import com.google.common.base.Strings;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.crash.FirebaseCrash;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
 import org.apache.commons.io.FileUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.receiver.SetAlarmReceiver;
 import org.liberty.android.fantastischmemo.service.AnyMemoService;
@@ -78,10 +67,11 @@ import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 import org.liberty.android.fantastischmemo.widget.AnyMemoWidgetProvider;
 
-import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+
+import javax.inject.Inject;
 
 
 public class AnyMemo extends AMActivity {
@@ -102,8 +92,6 @@ public class AnyMemo extends AMActivity {
     private DatabaseUtil databaseUtil;
 
     private MultipleLoaderManager multipleLoaderManager;
-
-    private FirebaseRemoteConfig firebaseRemoteConfig;
 
     private FirebaseAnalytics firebaseAnalytics;
 
@@ -133,11 +121,6 @@ public class AnyMemo extends AMActivity {
     }
 
     @Inject
-    public void setFirebaseRemoteConfig(FirebaseRemoteConfig firebaseRemoteConfig) {
-        this.firebaseRemoteConfig = firebaseRemoteConfig;
-    }
-
-    @Inject
     public void setFirebaseAnalytics(FirebaseAnalytics firebaseAnalytics) {
         this.firebaseAnalytics = firebaseAnalytics;
     }
@@ -147,21 +130,6 @@ public class AnyMemo extends AMActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.main_tabs);
-
-        firebaseRemoteConfig.fetch().addOnCompleteListener(new OnCompleteListener<Void>() {
-               @Override
-               public void onComplete(@NonNull Task<Void> task) {
-                   if (task.isSuccessful()) {
-                       FirebaseCrash.logcat(Log.VERBOSE, TAG, "Firebase remote config fetch succeeded");
-                       firebaseFetchSucceeded = true;
-                   } else {
-                       FirebaseCrash.logcat(Log.WARN, TAG, "Firebase remote config fetch failed");
-                       FirebaseCrash.report(task.getException());
-                   }
-               }
-           });
-
-
 
         // Request storage permission
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -399,8 +367,6 @@ public class AnyMemo extends AMActivity {
         Intent myIntent = new Intent(this, AnyMemoService.class);
         myIntent.putExtra("request_code", AnyMemoService.CANCEL_NOTIFICATION);
         startService(myIntent);
-
-        firebaseRemoteConfig.activateFetched();
 
         if (multipleLoaderManager != null) {
             multipleLoaderManager.destroy();

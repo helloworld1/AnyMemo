@@ -6,7 +6,6 @@ import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.downloader.AbstractDownloaderFragment;
 import org.liberty.android.fantastischmemo.downloader.DownloadItem;
 import org.liberty.android.fantastischmemo.downloader.DownloaderUtils;
-import org.liberty.android.fantastischmemo.entity.RemoteConfiguration;
 import org.liberty.android.fantastischmemo.utils.AMZipUtils;
 
 import java.io.File;
@@ -26,16 +25,9 @@ public class AnyMemoDownloaderFragment extends AbstractDownloaderFragment {
 
     private static final String DOWNLOAD_DATABASE_PATH = "/api/legacy_database/download";
 
-    private RemoteConfiguration remoteConfiguration;
-
     private DownloaderUtils downloaderUtils;
 
     private Map<String, List<DownloadItem>> categoryDatabasesMap;
-
-    @Inject
-    public void setRemoteConfiguration(RemoteConfiguration remoteConfiguration) {
-        this.remoteConfiguration = remoteConfiguration;
-    }
 
     @Inject
     public void setDownloaderUtils(DownloaderUtils downloaderUtils) {
@@ -99,7 +91,7 @@ public class AnyMemoDownloaderFragment extends AbstractDownloaderFragment {
     private void retrieveAllDatabases() throws Exception {
         categoryDatabasesMap = new HashMap<>();
         String jsonString = downloaderUtils.downloadJSONString(String.format("%s%s",
-                remoteConfiguration.getAnyMemoWebServiceEndpoint(),
+                AMEnv.ANYMEMO_SERVICE_ENDPOINT,
                 LIST_DATABASES_PATH));
 
         JSONArray jsonArray = new JSONArray(jsonString);
@@ -111,7 +103,7 @@ public class AnyMemoDownloaderFragment extends AbstractDownloaderFragment {
             downloadItem.setTitle(jsonObject.getString("title"));
             downloadItem.setDescription(jsonObject.getString("description"));
             downloadItem.setAddress(String.format("%s%s/%s",
-                    remoteConfiguration.getAnyMemoWebServiceEndpoint(),
+                    AMEnv.ANYMEMO_SERVICE_ENDPOINT,
                     DOWNLOAD_DATABASE_PATH,
                     jsonObject.get("name")));
 
