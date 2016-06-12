@@ -50,6 +50,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.firebase.crash.FirebaseCrash;
+
 /**
  * The abstract class for an acitvity that displays a list of card sets
  * to download.
@@ -164,7 +166,7 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
         listView.setAdapter(dlAdapter);
         listView.removeFooterView(loadMoreFooter);
 
-        InitRetrieveTask task = new InitRetrieveTask();
+        RetrieveTask task = new RetrieveTask();
         task.execute(new Callable<List<DownloadItem>>() {
             @Override
             public List<DownloadItem> call() throws Exception {
@@ -174,7 +176,7 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
         return v;
     }
 
-    private class InitRetrieveTask extends AsyncTask<Callable<List<DownloadItem>>, Void, Exception> {
+    private class RetrieveTask extends AsyncTask<Callable<List<DownloadItem>>, Void, Exception> {
         private ProgressDialog progressDialog;
         private List<DownloadItem> downloadItems = new ArrayList<>();
 
@@ -210,6 +212,8 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
             progressDialog.dismiss();
             if (e != null) {
                 AMGUIUtility.displayError(mActivity, getString(R.string.downloader_connection_error), getString(R.string.downloader_connection_error_message), e);
+                FirebaseCrash.log("Retrieve task got exception");
+                FirebaseCrash.report(e);
                 return;
             }
 
@@ -402,7 +406,7 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
                         return;
                     }
                     if(di.getType() == DownloadItem.ItemType.Category){
-                        InitRetrieveTask task = new InitRetrieveTask();
+                        RetrieveTask task = new RetrieveTask();
                         task.execute(new Callable<List<DownloadItem>>() {
                             @Override
                             public List<DownloadItem> call() throws Exception {
@@ -410,7 +414,7 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
                             }
                         });
                     } else if(di.getType() == DownloadItem.ItemType.Back){
-                        InitRetrieveTask task = new InitRetrieveTask();
+                        RetrieveTask task = new RetrieveTask();
                         task.execute(new Callable<List<DownloadItem>>() {
                             @Override
                             public List<DownloadItem> call() throws Exception {

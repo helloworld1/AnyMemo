@@ -63,7 +63,7 @@ public class PreviewEditActivity extends QACardActivity {
     private final int ACTIVITY_MERGE = 17;
     private final int ACTIVITY_DETAIL = 18;
     private final int ACTIVITY_CARD_PLAYER = 19;
-    private final static String WEBSITE_HELP_EDIT = "http://anymemo.org/wiki/index.php?title=Editing_screen";
+    private final static String WEBSITE_HELP_EDIT = "https://anymemo.org/";
     private long totalCardCount = 0;
 
     public static String EXTRA_DBPATH = "dbpath";

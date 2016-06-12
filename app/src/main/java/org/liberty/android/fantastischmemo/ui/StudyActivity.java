@@ -68,7 +68,7 @@ public class StudyActivity extends QACardActivity {
     private final int ACTIVITY_SETTINGS = 15;
     private final int ACTIVITY_DETAIL = 16;
 
-    private final static String WEBSITE_HELP_MEMO="http://anymemo.org/wiki/index.php?title=Learning_screen";
+    private final static String WEBSITE_HELP_MEMO="https://anymemo.org";
 
     /* State objects */
     private Card prevCard = null;

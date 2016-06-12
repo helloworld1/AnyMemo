@@ -116,7 +116,7 @@ public class SettingsScreen extends AMActivity {
 
     private boolean settingsChanged = false;
 
-    private final static String WEBSITE_HELP_SETTINGS="http://anymemo.org/wiki/index.php?title=Card_styles";
+    private final static String WEBSITE_HELP_SETTINGS="https://anymemo.org";
 
     private MultipleLoaderManager multipleLoaderManager;
 

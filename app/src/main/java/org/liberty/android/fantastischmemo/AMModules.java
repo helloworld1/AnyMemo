@@ -122,7 +122,5 @@ public class AMModules extends AbstractModule {
         FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(context);
         return firebaseAnalytics;
     }
-
-
 }
 

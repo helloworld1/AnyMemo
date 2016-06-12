@@ -75,7 +75,7 @@ import javax.inject.Inject;
 
 
 public class AnyMemo extends AMActivity {
-    private static final String WEBSITE_VERSION="http://anymemo.org/index.php?page=version";
+    private static final String WEBSITE_VERSION="https://anymemo.org/versions-view";
 
     public static final String EXTRA_INITIAL_TAB = "initial_tab";
 
@@ -96,9 +96,6 @@ public class AnyMemo extends AMActivity {
     private FirebaseAnalytics firebaseAnalytics;
 
     private static final int PERMISSION_REQUEST_EXTERNAL_STORAGE = 1;
-
-    private boolean firebaseFetchSucceeded = false;
-
 
     @Inject
     public void setAmFileUtil(AMFileUtil amFileUtil) {
@@ -161,12 +158,6 @@ public class AnyMemo extends AMActivity {
     }
 
     private void loadUiComponents() {
-        if (firebaseFetchSucceeded) {
-            Log.i(TAG, "Firebase remote config activated before loading UI component");
-        } else {
-            Log.i(TAG, "Firebase remote config haven't been fetched successfully when loading ui component");
-        }
-
         settings = PreferenceManager.getDefaultSharedPreferences(this);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 

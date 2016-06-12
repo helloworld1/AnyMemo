@@ -58,7 +58,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class MiscTabFragment extends RoboFragment implements View.OnClickListener {
-    private static final String WEBSITE_VERSION="http://anymemo.org/index.php?page=version";
+    private static final String WEBSITE_VERSION="https://anymemo.org/versions-view";
     private Activity mActivity;
     private View optionButton;
     private View importButton;
