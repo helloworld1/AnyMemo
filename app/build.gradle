@@ -120,11 +120,11 @@ task copySecretsIfNotExists << {
             include "AMSecrets.java.template"
         }
     }
-    if (!file('app/src/free/google-services.json').exists()) {
+    if (!file('src/free/google-services.json').exists()) {
         logger.warn('google-services.json is not found .Created from templateservices.json. Please use your own version instead!')
         copy {
-            from "app/src/free"
-            into "app/src/free"
+            from "src/free"
+            into "./"
             rename "templateservices.json", "google-services.json"
             include "templateservices.json"
         }
