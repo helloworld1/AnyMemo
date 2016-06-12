@@ -11,8 +11,8 @@ android {
 
     useLibrary 'org.apache.http.legacy'
     defaultConfig {
-        versionCode 219
-        versionName "10.9"
+        versionCode 220
+        versionName "10.9.1"
         minSdkVersion 14
         targetSdkVersion 23
         testApplicationId "org.liberty.android.fantastischmemo.test"
@@ -120,11 +120,11 @@ task copySecretsIfNotExists << {
             include "AMSecrets.java.template"
         }
     }
-    if (!file('google-services.json').exists()) {
+    if (!file('app/src/free/google-services.json').exists()) {
         logger.warn('google-services.json is not found .Created from templateservices.json. Please use your own version instead!')
         copy {
-            from "./"
-            into "./"
+            from "app/src/free"
+            into "app/src/free"
             rename "templateservices.json", "google-services.json"
             include "templateservices.json"
         }

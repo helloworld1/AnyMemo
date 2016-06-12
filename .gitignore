@@ -25,4 +25,4 @@ AMSecrets.java
 .idea/
 
 gradle.properties
-app/google-services.json
+google-services.json
