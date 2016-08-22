@@ -28,42 +28,53 @@ order to build:
 * JDK: http://www.oracle.com/technetwork/java/javase/downloads/index.html
 
 In Android SDK tools' "Android SDK Manager", you need the following items:
-* Android 6.0 SDK platform
+* Android 7.0 SDK platform
 * Android SDK tools
-* Andoird SDK Build-tools version 23
+* Andoird SDK Build-tools version 24
 * Android support repository
 * Android support library
 
 Once the dependency is satisfied, you need to set the ANDROID_HOME environment variable
 to the Android SDK installation location. E. g.
-
-$ export ANDROID_HOME=~/android-sdk-linux/
+```
+export ANDROID_HOME=~/android-sdk-linux/
+```
 
 
 cd to the AnyMemo directory and Use gradle to compile the project
 
-Move AMSecrets.java.template in src/org/liberty/android/fantastischmemo to AMSecrets.
+Move AMSecrets.java.template in `src/org/liberty/android/fantastischmemo` to AMSecrets.
 Provide the values to the fields in AMSecrets.java.
 
 Them compile using gradle:
-$ cd anymemo
-$ ./gradlew assembleFreeDebug
+```
+cd AnyMemo
+./gradlew assembleFreeDebug
+```
 To build pro version, use
-$ ./gradlew assembleProDebug
+```
+./gradlew assembleProDebug
+```
 
 The build artifacts are in
+```
 build/apk/
+```
 
 Instrumentation tests
 ---------------------
 There are hundreds of intrumentation tests that ensure the basic funciton of
 AnyMemo. To run these tests against free version, you need to run:
-$ ./gradlew installFreeDebugTest
-$ ./gradlew connectedInstrumentTestFreeDebug
+```
+./gradlew installFreeDebugTest
+./gradlew connectedInstrumentTestFreeDebug
+```
 
 To run against pro version:
-$ ./gradlew installProDebugTest
-$ ./gradlew connectedInstrumentTestProDebug
+```
+./gradlew installProDebugTest
+./gradlew connectedInstrumentTestProDebug
+```
 
 
 Eclipse users
