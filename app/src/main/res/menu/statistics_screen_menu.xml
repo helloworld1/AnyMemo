@@ -9,6 +9,9 @@
             android:id="@+id/accumulative_cards_scheduled_menu"
             android:title="@string/accumulative_cards_scheduled_text"/>
         <item
+            android:id="@+id/new_cards_learned_in_the_past_month_menu"
+            android:title="@string/number_of_new_cards_learned_in_a_day_text"/>
+        <item
             android:id="@+id/grade_statistics_menu"
             android:title="@string/grade_statistics_text"/>
     </group>

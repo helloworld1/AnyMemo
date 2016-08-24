@@ -62,6 +62,7 @@ public class DefaultScheduler implements Scheduler {
         int newAcqRepsSinceLapse = oldData.getAcqRepsSinceLapse();
         int newRetRepsSinceLapse = oldData.getRetRepsSinceLapse();
         float newEasiness = oldData.getEasiness();
+        Date newFirstLearnDate = oldData.getFirstLearnDate();
 
         if(actualInterval <= parameters.getMinimalInterval()){
             actualInterval = parameters.getMinimalInterval();
@@ -126,6 +127,10 @@ public class DefaultScheduler implements Scheduler {
             newInterval = newInterval + calculateIntervalNoise(newInterval);
         }
 
+        if (this.isCardNew(oldData)) {
+            newFirstLearnDate = new Date();
+        }
+
         LearningData newData = new LearningData();
         newData.setId(oldData.getId());
         newData.setAcqReps(newAcqReps);
@@ -137,6 +142,7 @@ public class DefaultScheduler implements Scheduler {
         newData.setNextLearnDate(afterDays(currentDate, newInterval));
         newData.setRetReps(newRetReps);
         newData.setRetRepsSinceLapse(newRetRepsSinceLapse);
+        newData.setFirstLearnDate(newFirstLearnDate);
         return newData;
     }
 

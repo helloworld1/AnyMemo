@@ -332,6 +332,7 @@
     <string name="statistics_type_text">Statistics type</string>
     <string name="cards_to_review_text">Cards scheduled in a month</string>
     <string name="number_of_cards_scheduled_in_a_day_text">Number of cards scheduled in a day</string>
+        <string name="number_of_new_cards_learned_in_a_day_text">Number of new cards learned in a day</string>
     <string name="grade_statistics_text">Grade statistics</string>
     <string name="accumulative_cards_scheduled_text">Accumulative cards scheduled</string>
     <string name="google_drive_spreadsheet_text">Google Drive spreadsheet</string>
