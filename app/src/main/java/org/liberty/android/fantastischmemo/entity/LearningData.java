@@ -44,6 +44,9 @@ public class LearningData {
     @DatabaseField(format="yyyy-MM-dd HH:mm:ss.SSSSSS", dataType=DataType.DATE_STRING)
     private Date updateDate;
 
+    @DatabaseField(defaultValue = "2010-01-01 00:00:00.000000", format="yyyy-MM-dd HH:mm:ss.SSSSSS", dataType=DataType.DATE_STRING)
+    private Date firstLearnDate = new Date(1262304000000L);
+
     public LearningData() {}
 
 	public Integer getId() {
@@ -134,6 +137,14 @@ public class LearningData {
 		this.updateDate = updateDate;
 	}
 
+	public Date getFirstLearnDate() {
+		return firstLearnDate;
+	}
+
+	public void setFirstLearnDate(Date firstLearnDate) {
+		this.firstLearnDate = firstLearnDate;
+	}
+
     public void cloneFromLearningData(LearningData ld) {
         setAcqReps(ld.getAcqReps());
         setAcqRepsSinceLapse(ld.getAcqRepsSinceLapse());
@@ -144,6 +155,7 @@ public class LearningData {
         setNextLearnDate(ld.getNextLearnDate());
         setRetReps(ld.getRetReps());
         setRetRepsSinceLapse(ld.getRetRepsSinceLapse());
+        setFirstLearnDate(ld.getFirstLearnDate());
     }
 
     public double getInterval() {
@@ -158,6 +170,6 @@ public class LearningData {
 				+ ", retReps=" + retReps + ", lapses=" + lapses
 				+ ", acqRepsSinceLapse=" + acqRepsSinceLapse
 				+ ", retRepsSinceLapse=" + retRepsSinceLapse + ", updateDate="
-				+ updateDate + "]";
+				+ updateDate + ", firstLearnDate=" + firstLearnDate + "]";
 	}
 }

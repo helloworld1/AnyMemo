@@ -33,7 +33,7 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
 
     private final String dbPath;
 
-    private static final int CURRENT_VERSION = 4;
+    private static final int CURRENT_VERSION = 5;
 
     private CardDao cardDao = null;
 
@@ -157,6 +157,10 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
             database.execSQL("update settings set answerTextColor = ? where answerTextColor = ?", new Object[] {null, 0xFFBEBEBE} );
             database.execSQL("update settings set questionBackgroundColor = ? where questionBackgroundColor = ?", new Object[] {null, 0xFF000000});
             database.execSQL("update settings set answerBackgroundColor = ? where answerBackgroundColor = ?", new Object[] {null, 0xFF000000});
+        }
+        if (oldVersion <= 4) {
+            database.execSQL("alter table learning_data add column firstLearnDate VARCHAR");
+            database.execSQL("update learning_data set firstLearnDate='2010-01-01 00:00:00.000000'");
         }
     }
 

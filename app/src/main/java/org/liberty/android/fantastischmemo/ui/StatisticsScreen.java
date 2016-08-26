@@ -120,6 +120,10 @@ public class StatisticsScreen extends AMActivity {
                          new AccumulativeCardsToReviewTask()
                                  .execute((Void) null);
                          break;
+                     case R.id.new_cards_learned_in_the_past_month_menu:
+                         setTitle(R.string.number_of_new_cards_learned_in_a_day_text);
+                         new NewCardTask().execute((Void) null);
+                         break;
                      case R.id.grade_statistics_menu:
                          setTitle(R.string.grade_statistics_text);
                          new GradeStatisticsTask()
@@ -165,6 +169,49 @@ public class StatisticsScreen extends AMActivity {
             statisticsGraphFrame.removeAllViews();
             statisticsGraphFrame.addView(chart);
             progressDialog.dismiss();
+        }
+    }
+
+    private class NewCardTask extends ChartTask<Void, Void, BarData> {
+
+        private static final int INITIAL_CAPACITY = 30;
+        private static final int MILLISECONDS_PER_DAY = 60 * 60 * 24 * 1000;
+
+        @Override
+        public BarData doInBackground(Void... params) {
+            cardDao = dbOpenHelper.getCardDao();
+            List<String> xVals = new ArrayList<String>(INITIAL_CAPACITY);
+            List<BarEntry> yVals = new ArrayList<BarEntry>(INITIAL_CAPACITY);
+            Date now = new Date();
+            for (int i = -INITIAL_CAPACITY; i < 1; i++) {
+                Date endDate = new Date(now.getTime() + i * MILLISECONDS_PER_DAY);
+                Date startDate = new Date(endDate.getTime() - MILLISECONDS_PER_DAY);
+                xVals.add("" + i);
+                yVals.add(new BarEntry((float)cardDao.getNewLearnedCardCount(null, startDate, endDate),
+                                       INITIAL_CAPACITY + i)); // the order has to be nonnegative
+
+            }
+
+            BarDataSet dataSet = new BarDataSet(yVals, getString(R.string.number_of_new_cards_learned_in_a_day_text));
+            BarData data = new BarData(xVals, dataSet);
+            data.setValueTextColor(Color.WHITE);
+
+            return data;
+
+        }
+
+        @Override
+        public Chart generateChart(BarData data) {
+            BarChart chart = new BarChart(StatisticsScreen.this);
+            chart.setDrawGridBackground(false);
+            chart.getLegend().setTextColor(Color.WHITE);
+            chart.getXAxis().setTextColor(Color.WHITE);
+            chart.getAxisLeft().setTextColor(Color.WHITE);
+            chart.getAxisRight().setTextColor(Color.WHITE);
+
+            chart.setData(data);
+            chart.setDescription("");
+            return chart;
         }
     }
 
