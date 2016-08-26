@@ -174,15 +174,14 @@ public class StatisticsScreen extends AMActivity {
 
     private class NewCardTask extends ChartTask<Void, Void, BarData> {
 
-        public static final int INITIAL_CAPACITY = 30;
+        private static final int INITIAL_CAPACITY = 30;
+        private static final int MILLISECONDS_PER_DAY = 60 * 60 * 24 * 1000;
 
         @Override
         public BarData doInBackground(Void... params) {
             cardDao = dbOpenHelper.getCardDao();
-            Integer DAYS = 30;
             List<String> xVals = new ArrayList<String>(INITIAL_CAPACITY);
             List<BarEntry> yVals = new ArrayList<BarEntry>(INITIAL_CAPACITY);
-            Integer MILLISECONDS_PER_DAY = 60 * 60 * 24 * 1000;
             Date now = new Date();
             for (int i = -INITIAL_CAPACITY; i < 1; i++) {
                 Date endDate = new Date(now.getTime() + i * MILLISECONDS_PER_DAY);

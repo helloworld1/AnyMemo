@@ -340,7 +340,6 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
             }
             return cs;
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
