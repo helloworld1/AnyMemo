@@ -459,4 +459,5 @@
     <string name="db_file_is_corrupted_text">DB file is corrupted</string>
     <string name="clear_text">Clear</string>
     <string name="change_directory_permission_denied_message">AnyMemo could not get permission to change to the directory.</string>
+    <string name="directory_empty_text">(Empty directory)</string>
 </resources>
