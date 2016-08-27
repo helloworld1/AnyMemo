@@ -212,7 +212,7 @@ public class AnyMemo extends AMActivity {
                             tabLayout.getTabAt(2).select();
                             break;
                         case R.id.misc_tab_menu:
-                            tabLayout.getTabAt(2).select();
+                            tabLayout.getTabAt(3).select();
                             break;
                     }
                     menuItem.setChecked(true);
