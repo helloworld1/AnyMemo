@@ -38,6 +38,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.common.base.Strings;
 import org.apache.commons.io.FileUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
@@ -193,9 +195,16 @@ public class FileBrowserFragment extends RoboDialogFragment {
 
     private void browseTo(final File aDirectory){
         if(aDirectory.isDirectory()){
-            titleTextView.setText(aDirectory.getPath());
-            this.currentDirectory = aDirectory;
-            fill(aDirectory.listFiles());
+            File[] listedFiles = aDirectory.listFiles();
+            if (listedFiles != null) {
+                titleTextView.setText(aDirectory.getPath());
+                this.currentDirectory = aDirectory;
+                fill(listedFiles);
+            } else {
+                Toast.makeText(filesListRecyclerView.getContext(),
+                               R.string.change_directory_permission_denied_message,
+                               Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -493,7 +502,7 @@ public class FileBrowserFragment extends RoboDialogFragment {
                     if(selectedFileName.equals(CURRENT_DIR)){
                         /* Do nothing */
                     } else if(selectedFileName.equals(UP_ONE_LEVEL_DIR)){
-                        /* Do nithing */
+                        /* Do nothing */
                     } else {
                         final File clickedFile;
                         switch(fragment.displayMode){
