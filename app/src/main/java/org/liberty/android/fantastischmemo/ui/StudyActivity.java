@@ -85,6 +85,7 @@ public class StudyActivity extends QACardActivity {
     /* current states */
     private long scheduledCardCount = 0;
     private long newCardCount = 0;
+    private long newCardLearnedTodayCount = 0;
 
     boolean initialized = false;
 
@@ -572,6 +573,7 @@ public class StudyActivity extends QACardActivity {
     private void refreshStatInfo() {
        newCardCount = getDbOpenHelper().getCardDao().getNewCardCount(filterCategory);
        scheduledCardCount = getDbOpenHelper().getCardDao().getScheduledCardCount(filterCategory);
+       newCardLearnedTodayCount = getDbOpenHelper().getCardDao().getNewLearnedCardCount(filterCategory);
     }
 
     private void showCategoriesDialog() {
@@ -656,6 +658,7 @@ public class StudyActivity extends QACardActivity {
                 // Set the stat info in the title
                 if (scheduler.isCardNew(prevCard.getLearningData())) {
                     newCardCount -= 1;
+                    newCardLearnedTodayCount += 1;
                     if (!scheduler.isCardLearned(updatedCard.getLearningData())) {
                         scheduledCardCount += 1;
                     }
@@ -682,6 +685,7 @@ public class StudyActivity extends QACardActivity {
 
     private String getActivityTitleString() {
         StringBuilder sb = new StringBuilder();
+        sb.append(getString(R.string.today_text) + ": " + newCardLearnedTodayCount + " ");
         sb.append(getString(R.string.new_text) + ": " + newCardCount + " ");
         sb.append(getString(R.string.review_short_text) + ": " + scheduledCardCount + " ");
         sb.append(getString(R.string.id_text) + ": " + getCurrentCard().getId() + " ");

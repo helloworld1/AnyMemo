@@ -449,4 +449,5 @@
     <string name="number_of_new_cards_learned_in_a_day_text">Anzahl der neu erlernten Karteikarten / Tag</string> 
     <string name="change_directory_permission_denied_message">AnyMemo hat kein Zugriffsrecht auf den Ordner.</string>
     <string name="directory_empty_text">(Leeres Verzeichnis)</string>
+    <string name="today_text">Heute</string> 
 </resources>

@@ -245,7 +245,7 @@
     <string name="left_text">左</string>
     <string name="center_text">中央</string>
     <string name="right_text">右</string>
-     <string name="recent_tab_text">最近</string>
+    <string name="recent_tab_text">最近</string>
     <string name="open_tab_text">開く</string>
     <string name="download_tab_text">ダウンロード</string>
     <string name="misc_tab_text">その他</string>
@@ -254,4 +254,5 @@
     <string name="linebreak_conversion">改行をHTML形式に自動変換</string>
     <string name="locale_japanese_text">日本語</string>
     <string name="directory_empty_text">（空ディレクトリ）</string>
+    <string name="today_text">今日</string>
 </resources>
