@@ -69,7 +69,6 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
                 convertOldDatabase(database);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new RuntimeException("Database creation error: " + e.toString());
         }
     }
