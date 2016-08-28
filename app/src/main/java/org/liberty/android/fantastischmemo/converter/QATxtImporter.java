@@ -39,8 +39,6 @@ import org.liberty.android.fantastischmemo.entity.Category;
 import org.liberty.android.fantastischmemo.entity.LearningData;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
-import com.google.inject.BindingAnnotation;
-
 public class QATxtImporter implements Converter{
 
     private static final long serialVersionUID = 7934270553043502048L;
@@ -145,10 +143,5 @@ public class QATxtImporter implements Converter{
     public String getDestExtension() {
         return "db";
     }
-
-    @BindingAnnotation
-    @Target({ ElementType. FIELD, ElementType.PARAMETER, ElementType.METHOD })
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface Type {};
 }
 

@@ -39,10 +39,11 @@ import org.liberty.android.fantastischmemo.entity.ReviewOrdering;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 import org.liberty.android.fantastischmemo.utils.AnyMemoExecutor;
 
-import roboguice.util.Ln;
 import android.content.Context;
+import android.util.Log;
 
 public class LearnQueueManager implements QueueManager {
+    private static final String TAG = LearnQueueManager.class.getSimpleName();
     /*
      * The scheduler to determine whether a card should reimain
      * in the learn queue
@@ -92,7 +93,7 @@ public class LearnQueueManager implements QueueManager {
         shuffle();
         if (!learnQueue.isEmpty()) {
             Card c = learnQueue.get(0);
-            Ln.d("Dequeue card: " + c.getId());
+            Log.d(TAG, "Dequeue card: " + c.getId());
             return c;
         } else {
             return null;
@@ -105,7 +106,7 @@ public class LearnQueueManager implements QueueManager {
 
         if (!learnQueue.isEmpty()) {
             Card c = learnQueue.get(0);
-            Ln.d("Dequeue card: " + c.getId());
+            Log.d(TAG, "Dequeue card: " + c.getId());
             return c;
         } else {
             return null;
@@ -191,7 +192,7 @@ public class LearnQueueManager implements QueueManager {
         try {
             dirtyCache.put(card);
         } catch (InterruptedException e) {
-            Ln.e(e, "Updating card is interrupted");
+            Log.e(TAG, "Updating card is interrupted", e);
             assert false : "The update should not be interrupted";
         }
         refill();
@@ -208,7 +209,7 @@ public class LearnQueueManager implements QueueManager {
             if (c.getId() == cardId) {
                 int index = learnQueue.indexOf(c);
                 learnQueueRotateDistance = -index;
-                Ln.i("Rotate index: " + index);
+                Log.i(TAG, "Rotate index: " + index);
             }
         }
         Collections.rotate(learnQueue, learnQueueRotateDistance);
@@ -253,20 +254,20 @@ public class LearnQueueManager implements QueueManager {
                     learningDataDao.callBatchTasks (
                         new Callable<Void>() {
                             public Void call() throws Exception {
-                                Ln.i("Flushing dirty cache. # of cards to flush: " + dirtyCache.size());
+                                Log.i(TAG, "Flushing dirty cache. # of cards to flush: " + dirtyCache.size());
                                 while (!dirtyCache.isEmpty()) {
                                     Card card = dirtyCache.take();
-                                    Ln.i("Flushing card id: " + card.getId() + " with learning data: " + card.getLearningData());
+                                    Log.i(TAG, "Flushing card id: " + card.getId() + " with learning data: " + card.getLearningData());
                                     if (learningDataDao.update(card.getLearningData()) == 0) {
-                                        Ln.w("LearningDataDao update failed for : " + card.getLearningData());
+                                        Log.w(TAG, "LearningDataDao update failed for : " + card.getLearningData());
                                         throw new RuntimeException("LearningDataDao update failed! LearningData to update: " + card.getLearningData() + " current value: " + learningDataDao.queryForId(card.getLearningData().getId()));
                                     }
                                     if (cardDao.update(card) == 0) {
-                                        Ln.w("CardDao update failed for : " + card.getLearningData());
+                                        Log.w(TAG, "CardDao update failed for : " + card.getLearningData());
                                         throw new RuntimeException("CardDao update failed. Card to update: " + card);
                                     }
                                 }
-                                Ln.i("Flushing dirty cache done.");
+                                Log.i(TAG, "Flushing dirty cache done.");
                                 return null;
                             }
                         });
@@ -302,7 +303,7 @@ public class LearnQueueManager implements QueueManager {
         //     sb.append("" + c.getLearningData() + "\n ");
         // }
         // sb.append("]\n");
-        Ln.v(sb.toString());
+        Log.v(TAG, sb.toString());
     }
 
     public static class Builder {

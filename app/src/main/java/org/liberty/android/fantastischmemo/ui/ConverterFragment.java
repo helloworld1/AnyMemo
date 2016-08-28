@@ -19,10 +19,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import java.io.File;
-import java.io.IOException;
-
-import javax.inject.Inject;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 import org.apache.commons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.R;
@@ -30,33 +32,30 @@ import org.liberty.android.fantastischmemo.converter.Converter;
 import org.liberty.android.fantastischmemo.service.ConvertIntentService;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
-import roboguice.RoboGuice;
-import roboguice.util.Ln;
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
-import android.widget.Toast;
+import javax.inject.Inject;
 
 public class ConverterFragment extends FileBrowserFragment {
+    private static final String TAG = ConverterFragment.class.getSimpleName();
+
     public static final String EXTRA_CONVERTER_CLASS = "converterClass";
 
     private Class<Converter> converterClass;
 
-    private AMFileUtil amFileUtil;
+    @Inject Map<Class<?>, Converter> converterMap;
+
+    @Inject AMFileUtil amFileUtil;
 
     public ConverterFragment() { }
-
-    @Inject
-    public void setAmFileUtil(AMFileUtil amFileUtil) {
-        this.amFileUtil = amFileUtil;
-    }
 
     @Override
     @SuppressWarnings("unchecked")
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        fragmentComponents().inject(this);
 
         Bundle args = getArguments();
         assert args != null : "Null args in ConverterFragment";
@@ -80,7 +79,7 @@ public class ConverterFragment extends FileBrowserFragment {
         final String inputPath = file.getAbsolutePath();
 
         // Get the converter instance so we can get the dest file path
-        Converter converter = RoboGuice.getInjector(getActivity()).getInstance(converterClass);
+        Converter converter = converterMap.get(converterClass);
 
         final String outputPath = FilenameUtils.removeExtension(inputPath) + "." + converter.getDestExtension();
 
@@ -108,7 +107,7 @@ public class ConverterFragment extends FileBrowserFragment {
                                 amFileUtil.deleteFileWithBackup(outputPath);
                                 invokeConverterService(inputPath, outputPath);
                             } catch (IOException e) {
-                                Ln.e("Faield to deleteWithBackup: " + outputPath, e);
+                                Log.e(TAG, "Faield to deleteWithBackup: " + outputPath, e);
                                 Toast.makeText(getActivity(),
                                     getString(R.string.fail) + ": " + e.toString(), Toast.LENGTH_LONG)
                                     .show();

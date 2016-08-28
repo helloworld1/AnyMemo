@@ -27,11 +27,11 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.commons.io.FilenameUtils;
-import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseActivity;
 import org.liberty.android.fantastischmemo.entity.Card;
 import org.liberty.android.fantastischmemo.entity.Option;
 import org.liberty.android.fantastischmemo.entity.Setting;
@@ -43,8 +43,6 @@ import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.AMStringUtils;
 import org.liberty.android.fantastischmemo.utils.CardTTSUtil;
 import org.liberty.android.fantastischmemo.widget.AnyMemoWidgetProvider;
-
-import roboguice.util.Ln;
 
 import android.content.Intent;
 import android.gesture.Gesture;
@@ -75,8 +73,7 @@ import com.google.common.base.Strings;
  *
  * Override getContentView() for loading a customized layout that is compatible with qa_card_layout.
  */
-@SuppressWarnings("deprecation")
-public abstract class QACardActivity extends AMActivity {
+public abstract class QACardActivity extends BaseActivity {
     public static String EXTRA_DBPATH = "dbpath";
 
     private String dbPath;
@@ -98,8 +95,6 @@ public abstract class QACardActivity extends AMActivity {
 
     private static final int CARD_TTS_UTIL_LOADER_ID = 1;
 
-    private Option option;
-
     private Setting setting;
 
     private boolean isAnswerShown = true;
@@ -108,31 +103,17 @@ public abstract class QACardActivity extends AMActivity {
 
     private CardTTSUtil cardTTSUtil;
 
-    private AMFileUtil amFileUtil;
-
     private GestureLibrary gestureLibrary;
 
     /**
      * This needs to be defined before onCreate so in onCreate, all loaders will
      * be registered with the right manager.
      */
-    private MultipleLoaderManager multipleLoaderManager;
+    @Inject MultipleLoaderManager multipleLoaderManager;
 
-    @Inject
-    public void setOption(Option option) {
-        this.option = option;
-    }
+    @Inject AMFileUtil amFileUtil;
 
-    @Inject
-    public void setMultipleLoaderManager(
-            MultipleLoaderManager multipleLoaderManager) {
-        this.multipleLoaderManager = multipleLoaderManager;
-    }
-
-    @Inject
-    public void setAmFileUtil(AMFileUtil amFileUtil) {
-        this.amFileUtil = amFileUtil;
-    }
+    @Inject Option option;
 
     /**
      * This is for testing only.
@@ -140,7 +121,6 @@ public abstract class QACardActivity extends AMActivity {
     public CardTTSUtil getCardTTSUtil() {
         return cardTTSUtil;
     }
-
 
     /**
      * Subclasses should call this method instead of creating
@@ -153,6 +133,7 @@ public abstract class QACardActivity extends AMActivity {
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        activityComponents().inject(this);
         setContentView(getContentView());
     }
 
@@ -656,7 +637,7 @@ public abstract class QACardActivity extends AMActivity {
                     // This is a Samsung clipboard bug. setPrimaryClip() can throw
                     // a NullPointerException if Samsung's /data/clipboard directory is full.
                     // Fortunately, the text is still successfully copied to the clipboard.
-                    Ln.e(npe, "Got null pointer exception when copying text to clipboard");
+                    Log.e(TAG, "Got null pointer exception when copying text to clipboard");
                 }
             }
         }
@@ -704,7 +685,7 @@ public abstract class QACardActivity extends AMActivity {
                     new String[]{"jpg", "png","bmp", "gif", "jpeg"});
 
                 if (filesFound.size() == 0) {
-                    Ln.v("No Images found for: " + cardText);
+                    Log.v(TAG, "No Images found for: " + cardText);
                     return false;
                 }
 
@@ -712,7 +693,7 @@ public abstract class QACardActivity extends AMActivity {
                 // Only the first image is used.
                 List<File> imageFiles = amFileUtil.findFileInPaths(filesFound.get(0), imageSearchPaths);
                 if (imageFiles.size() == 0) {
-                    Ln.w("Image: " + filesFound.get(0) + "  not found for search paths.");
+                    Log.w(TAG, "Image: " + filesFound.get(0) + "  not found for search paths.");
                     return false;
                 }
 

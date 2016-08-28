@@ -9,8 +9,6 @@ import java.lang.annotation.Target;
 import org.apache.commons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.utils.AMZipUtils;
 
-import com.google.inject.BindingAnnotation;
-
 public class ZipImporter implements Converter {
 
     private static final long serialVersionUID = 8597517392515565023L;
@@ -30,10 +28,4 @@ public class ZipImporter implements Converter {
     public String getDestExtension() {
         return "db";
     }
-
-    @BindingAnnotation
-    @Target({ ElementType. FIELD, ElementType.PARAMETER, ElementType.METHOD })
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface Type {};
-
 }

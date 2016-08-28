@@ -19,35 +19,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.inject.Inject;
-
 import android.app.Dialog;
-import android.support.v7.app.AlertDialog;
-import org.liberty.android.fantastischmemo.AMActivity;
-import org.liberty.android.fantastischmemo.AMPrefKeys;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.dao.CardDao;
-import org.liberty.android.fantastischmemo.entity.Category;
-import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
-
-import roboguice.fragment.RoboDialogFragment;
-
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -57,7 +37,22 @@ import android.widget.TextView;
 
 import com.google.common.base.Strings;
 
-public class QuizLauncherDialogFragment extends RoboDialogFragment {
+import org.liberty.android.fantastischmemo.AMPrefKeys;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseActivity;
+import org.liberty.android.fantastischmemo.common.BaseDialogFragment;
+import org.liberty.android.fantastischmemo.dao.CardDao;
+import org.liberty.android.fantastischmemo.entity.Category;
+import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.inject.Inject;
+
+public class QuizLauncherDialogFragment extends BaseDialogFragment {
 
     public static final String EXTRA_DBPATH = "dbpath";
 
@@ -71,9 +66,7 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
 
     private String dbPath = null;
     
-    private AMPrefUtil amPrefUtil;
-
-    private AMActivity mActivity;
+    private BaseActivity mActivity;
 
     private Button startQuizButton;
 
@@ -120,16 +113,16 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
 
     private Map<CompoundButton, View> radioButtonSettingsMapping;
 
-    public QuizLauncherDialogFragment() { }
+    @Inject AMPrefUtil amPrefUtil;
 
-    @Inject
-    public void setAmPrefUtil(AMPrefUtil amPrefUtil) {
-        this.amPrefUtil = amPrefUtil;
-    }
-    
+    public QuizLauncherDialogFragment() {}
+
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+
+        fragmentComponents().inject(this);
+
         Bundle extras = getArguments();
         if (extras != null) {
             dbPath = extras.getString(EXTRA_DBPATH);
@@ -143,9 +136,9 @@ public class QuizLauncherDialogFragment extends RoboDialogFragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (AMActivity) activity;
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mActivity = (BaseActivity) context;
     }
 
     @Override

@@ -39,8 +39,6 @@ import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.entity.Card;
 import org.liberty.android.fantastischmemo.entity.LearningData;
 
-import com.google.inject.BindingAnnotation;
-
 public class MnemosyneXMLExporter implements Converter {
 
     private static final long serialVersionUID = -7419489770698078017L;
@@ -177,9 +175,4 @@ public class MnemosyneXMLExporter implements Converter {
     public String getDestExtension() {
         return "xml";
     }
-
-    @BindingAnnotation
-    @Target({ ElementType. FIELD, ElementType.PARAMETER, ElementType.METHOD })
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface Type {};
 }

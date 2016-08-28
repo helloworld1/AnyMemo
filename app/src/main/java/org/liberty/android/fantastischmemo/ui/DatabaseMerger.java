@@ -19,13 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import javax.inject.Inject;
-
-import org.liberty.android.fantastischmemo.AMActivity;
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
-import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -36,9 +29,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class DatabaseMerger extends AMActivity implements View.OnClickListener{
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseActivity;
+import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
+import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
+
+import javax.inject.Inject;
+
+public class DatabaseMerger extends BaseActivity implements View.OnClickListener{
     public static final String EXTRA_SRC_PATH = "src_path";
-    private final static String TAG = "org.liberty.android.fantastischmemo.ui.DatabaseMerger";
+    private final static String TAG = DatabaseMerger.class.getSimpleName();
 
     private final int ACTIVITY_FB_TARGET = 1;
     private final int ACTIVITY_FB_SOURCE = 2;
@@ -47,16 +47,12 @@ public class DatabaseMerger extends AMActivity implements View.OnClickListener{
     private Button mergeButton;
     private Button cancelButton;
 
-    private DatabaseUtil databaseUtil;
-
-    @Inject
-    public void setDatabaseUtil(DatabaseUtil databaseUtil) {
-        this.databaseUtil = databaseUtil;
-    }
+    @Inject DatabaseUtil databaseUtil;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        activityComponents().inject(this);
         setContentView(R.layout.merge_layout);
         Bundle extras = getIntent().getExtras();
         String dbPath = "";
@@ -97,7 +93,6 @@ public class DatabaseMerger extends AMActivity implements View.OnClickListener{
                 sourceEdit.setText(dbPath);
                 break;
             }
-
         }
     }
 

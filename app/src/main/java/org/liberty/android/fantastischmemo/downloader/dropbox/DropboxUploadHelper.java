@@ -20,8 +20,6 @@ import org.json.JSONObject;
 
 import android.content.Context;
 
-import com.google.inject.assistedinject.Assisted;
-
 public class DropboxUploadHelper {
 
     private final String authToken;
@@ -30,7 +28,7 @@ public class DropboxUploadHelper {
     private static final String FILE_UPLOAD_URL="https://api-content.dropbox.com/1/files_put/dropbox/AnyMemo/";
 
     @Inject
-    public DropboxUploadHelper(Context context, @Assisted("authToken") String authToken, @Assisted("authTokenSecret") String authTokenSecret) {
+    public DropboxUploadHelper(Context context, String authToken, String authTokenSecret) {
         this.authToken = authToken;
         this.authTokenSecret = authTokenSecret;
     }

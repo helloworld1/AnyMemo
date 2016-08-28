@@ -25,8 +25,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.google.inject.BindingAnnotation;
-
 public class TabTxtExporter extends CSVExporter {
 
     private static final long serialVersionUID = 6409640721615190795L;
@@ -39,9 +37,4 @@ public class TabTxtExporter extends CSVExporter {
     public String getDestExtension() {
         return "txt";
     }
-
-    @BindingAnnotation
-    @Target({ ElementType. FIELD, ElementType.PARAMETER, ElementType.METHOD })
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface Type {};
 }

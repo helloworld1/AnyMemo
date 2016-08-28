@@ -20,26 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo.converter;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import java.text.Format;
-import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
-
-import javax.inject.Inject;
+import com.google.common.base.Strings;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -59,8 +40,24 @@ import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.AMStringUtils;
 import org.liberty.android.fantastischmemo.utils.AMZipUtils;
 
-import com.google.common.base.Strings;
-import com.google.inject.BindingAnnotation;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
 
 public class Mnemosyne2CardsExporter implements Converter {
 
@@ -70,8 +67,7 @@ public class Mnemosyne2CardsExporter implements Converter {
 
     private AMFileUtil amFileUtil;
 
-    @Inject
-    public void setAmFileUtil(AMFileUtil amFileUtil) {
+    public Mnemosyne2CardsExporter(AMFileUtil amFileUtil) {
         this.amFileUtil = amFileUtil;
     }
 
@@ -253,12 +249,6 @@ public class Mnemosyne2CardsExporter implements Converter {
         String randomString = (uuid).replaceAll("-", "");
         return randomString.substring(0, 20);
     }
-
-    @BindingAnnotation
-    @Target({ ElementType. FIELD, ElementType.PARAMETER, ElementType.METHOD })
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface Type {};
-
 }
 
 

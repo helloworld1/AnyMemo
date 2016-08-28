@@ -1,5 +1,7 @@
 package org.liberty.android.fantastischmemo.dao;
 
+import android.util.Log;
+
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
@@ -8,13 +10,12 @@ import java.util.concurrent.Callable;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.entity.VersionableDomainObject;
 
-import roboguice.util.Ln;
-
 import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.DatabaseTableConfig;
 
 public abstract class AbstractHelperDaoImpl<E, T> extends BaseDaoImpl<E, T> {
+    private static final String TAG = AbstractHelperDaoImpl.class.getSimpleName();
     private AnyMemoDBOpenHelper helper = null;
 
     protected AbstractHelperDaoImpl(ConnectionSource connectionSource, DatabaseTableConfig<E> config)
@@ -50,7 +51,7 @@ public abstract class AbstractHelperDaoImpl<E, T> extends BaseDaoImpl<E, T> {
         try {
             return super.refresh(domain);
         } catch (SQLException e) {
-            Ln.e(e);
+            Log.e(TAG, "", e);
             throw new RuntimeException(e);
         }
     }
@@ -63,7 +64,7 @@ public abstract class AbstractHelperDaoImpl<E, T> extends BaseDaoImpl<E, T> {
         try {
             return super.queryForId(id);
         } catch (SQLException e) {
-            Ln.e(e);
+            Log.e(TAG, "", e);
             throw new RuntimeException(e);
         }
     }
@@ -76,7 +77,7 @@ public abstract class AbstractHelperDaoImpl<E, T> extends BaseDaoImpl<E, T> {
         try {
             return super.queryForAll();
         } catch (SQLException e) {
-            Ln.e(e);
+            Log.e(TAG, "", e);
             throw new RuntimeException(e);
         }
     }
@@ -89,7 +90,7 @@ public abstract class AbstractHelperDaoImpl<E, T> extends BaseDaoImpl<E, T> {
         try {
             return super.delete(domain);
         } catch (SQLException e) {
-            Ln.e(e);
+            Log.e(TAG, "", e);
             throw new RuntimeException(e);
         }
     }
@@ -100,13 +101,13 @@ public abstract class AbstractHelperDaoImpl<E, T> extends BaseDaoImpl<E, T> {
     @Override
     public int update(E domain) {
         try {
-            Ln.i("[ " + new Date() + " ] Updating domain obj: "  + domain);
+            Log.i(TAG, "[ " + new Date() + " ] Updating domain obj: "  + domain);
             if (domain instanceof VersionableDomainObject) {
                 ((VersionableDomainObject) domain).setUpdateDate(new Date());
             }
             return super.update(domain);
         } catch (SQLException e) {
-            Ln.e(e);
+            Log.e(TAG, "", e);
             throw new RuntimeException(e);
         }
     }
@@ -123,7 +124,7 @@ public abstract class AbstractHelperDaoImpl<E, T> extends BaseDaoImpl<E, T> {
             }
             return super.create(domain);
         } catch (SQLException e) {
-            Ln.e(e);
+            Log.e(TAG, "", e);
             throw new RuntimeException(e);
         }
     }
@@ -136,7 +137,7 @@ public abstract class AbstractHelperDaoImpl<E, T> extends BaseDaoImpl<E, T> {
         try {
             return super.countOf();
         } catch (SQLException e) {
-            Ln.e(e);
+            Log.e(TAG, "", e);
             throw new RuntimeException(e);
         }
     }
@@ -149,7 +150,7 @@ public abstract class AbstractHelperDaoImpl<E, T> extends BaseDaoImpl<E, T> {
         try {
             return super.callBatchTasks(ct);
         } catch (SQLException e) {
-            Ln.e(e);
+            Log.e(TAG, "", e);
             throw new RuntimeException(e);
         }
     }

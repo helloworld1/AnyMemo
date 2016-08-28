@@ -19,23 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.service;
 
-import javax.inject.Inject;
-
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.entity.Card;
-import org.liberty.android.fantastischmemo.entity.Option;
-import org.liberty.android.fantastischmemo.service.cardplayer.CardPlayerContext;
-import org.liberty.android.fantastischmemo.service.cardplayer.CardPlayerEventHandler;
-import org.liberty.android.fantastischmemo.service.cardplayer.CardPlayerMessage;
-import org.liberty.android.fantastischmemo.ui.CardPlayerActivity;
-import org.liberty.android.fantastischmemo.utils.CardTTSUtil;
-import org.liberty.android.fantastischmemo.utils.CardTTSUtilFactory;
-
-import roboguice.service.RoboService;
-import roboguice.util.Ln;
-
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Binder;
@@ -43,11 +26,25 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.google.common.base.Preconditions;
 
-public class CardPlayerService extends RoboService {
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseService;
+import org.liberty.android.fantastischmemo.entity.Card;
+import org.liberty.android.fantastischmemo.entity.Option;
+import org.liberty.android.fantastischmemo.service.cardplayer.CardPlayerContext;
+import org.liberty.android.fantastischmemo.service.cardplayer.CardPlayerEventHandler;
+import org.liberty.android.fantastischmemo.service.cardplayer.CardPlayerMessage;
+import org.liberty.android.fantastischmemo.ui.CardPlayerActivity;
+import org.liberty.android.fantastischmemo.utils.CardTTSUtil;
 
+import javax.inject.Inject;
+
+public class CardPlayerService extends BaseService {
     public static final String EXTRA_DBPATH = "dbpath";
 
     public static final String EXTRA_CURRENT_CARD_ID = "current_card_id";
@@ -55,6 +52,8 @@ public class CardPlayerService extends RoboService {
     public static final String ACTION_GO_TO_CARD = "org.liberty.android.fantastischmemo.CardPlayerService.ACTION_GO_TO_CARD";
 
     public static final String ACTION_PLAYING_STOPPED = "org.liberty.android.fantastischmemo.CardPlayerService.PLAYING_STOPPED";
+
+    private static final String TAG = CardPlayerService.class.getSimpleName();
 
     // Magic id used for Card player's notification
     private static final int NOTIFICATION_ID = 9283372;
@@ -68,23 +67,17 @@ public class CardPlayerService extends RoboService {
 
     private Handler handler;
 
-    private Option option;
-
     private CardTTSUtil cardTTSUtil;
 
-    private CardTTSUtilFactory cardTTSUtilFactory;
+    @Inject Option option;
 
     // The context used for card player state machine.
     private volatile CardPlayerContext cardPlayerContext = null;
 
-    @Inject
-    public void setOption(Option option) {
-        this.option = option;
-    }
-
-    @Inject
-    public void setCardTTSUtilFactory(CardTTSUtilFactory cardTTSUtilFactory) {
-        this.cardTTSUtilFactory = cardTTSUtilFactory;
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        appComponents().inject(this);
     }
 
     // Note, it is recommended for service binding in a thread different
@@ -100,7 +93,7 @@ public class CardPlayerService extends RoboService {
 
         final int cardId = extras.getInt(EXTRA_CURRENT_CARD_ID);
         
-        cardTTSUtil = cardTTSUtilFactory.create(dbPath);
+        cardTTSUtil = new CardTTSUtil(appComponents().applicationContext(), dbPath);
 
         dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(this, dbPath);
 
@@ -160,7 +153,7 @@ public class CardPlayerService extends RoboService {
     }
 
     public void stopPlaying() {
-        Ln.v("Stop playing");
+        Log.v(TAG, "Stop playing");
         cancelNotification();
         cardPlayerContext.getState().transition(cardPlayerContext, CardPlayerMessage.STOP_PLAYING);
     }

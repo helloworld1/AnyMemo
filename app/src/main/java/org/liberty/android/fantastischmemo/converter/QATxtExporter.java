@@ -35,8 +35,6 @@ import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.entity.Card;
 
-import com.google.inject.BindingAnnotation;
-
 public class QATxtExporter implements Converter {
 
     private static final long serialVersionUID = -3390568891037351618L;
@@ -73,11 +71,6 @@ public class QATxtExporter implements Converter {
     public String getDestExtension() {
         return "txt";
     }
-
-    @BindingAnnotation
-    @Target({ ElementType. FIELD, ElementType.PARAMETER, ElementType.METHOD })
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface Type {};
 }
 
 

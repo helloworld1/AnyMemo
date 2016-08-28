@@ -28,8 +28,6 @@ import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
 import android.content.Context;
 
-import com.google.inject.assistedinject.Assisted;
-
 public class GoogleDriveDownloadHelper {
 
     private Context mContext;
@@ -39,7 +37,7 @@ public class GoogleDriveDownloadHelper {
     private AMFileUtil amFileUtil;
 
     @Inject
-    public GoogleDriveDownloadHelper(Context context, @Assisted String authToken) {
+    public GoogleDriveDownloadHelper(Context context, String authToken) {
         this.authToken = authToken;
         mContext = context;
     }

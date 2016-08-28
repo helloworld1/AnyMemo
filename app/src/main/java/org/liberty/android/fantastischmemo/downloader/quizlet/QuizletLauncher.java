@@ -19,16 +19,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 package org.liberty.android.fantastischmemo.downloader.quizlet;
 
-import org.liberty.android.fantastischmemo.AMActivity;
-import org.liberty.android.fantastischmemo.R;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class QuizletLauncher extends AMActivity implements OnClickListener {
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseActivity;
+
+public class QuizletLauncher extends BaseActivity implements OnClickListener {
     private Button searchTagButton;
 
     private Button searchUserButton;

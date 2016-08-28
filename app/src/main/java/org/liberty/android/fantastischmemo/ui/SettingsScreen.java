@@ -20,28 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo.ui;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import android.support.v4.content.ContextCompat;
-import com.rarepebble.colorpicker.ColorPickerView;
-import org.liberty.android.fantastischmemo.AMActivity;
-import org.liberty.android.fantastischmemo.AMEnv;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.dao.SettingDao;
-import org.liberty.android.fantastischmemo.entity.Setting;
-import org.liberty.android.fantastischmemo.entity.Setting.CardField;
-import org.liberty.android.fantastischmemo.ui.loader.MultipleLoaderManager;
-import org.liberty.android.fantastischmemo.ui.loader.SettingLoader;
-import org.liberty.android.fantastischmemo.ui.widgets.AMSpinner;
-import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -52,6 +30,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -65,8 +44,29 @@ import android.widget.EditText;
 import android.widget.TableRow;
 
 import com.google.common.base.Strings;
+import com.rarepebble.colorpicker.ColorPickerView;
 
-public class SettingsScreen extends AMActivity {
+import org.liberty.android.fantastischmemo.AMEnv;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseActivity;
+import org.liberty.android.fantastischmemo.dao.SettingDao;
+import org.liberty.android.fantastischmemo.entity.Setting;
+import org.liberty.android.fantastischmemo.entity.Setting.CardField;
+import org.liberty.android.fantastischmemo.ui.loader.MultipleLoaderManager;
+import org.liberty.android.fantastischmemo.ui.loader.SettingLoader;
+import org.liberty.android.fantastischmemo.ui.widgets.AMSpinner;
+import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+
+import javax.inject.Inject;
+
+public class SettingsScreen extends BaseActivity {
 
     public static final String EXTRA_DBPATH = "dbpath";
 
@@ -112,29 +112,19 @@ public class SettingsScreen extends AMActivity {
 
     private AnyMemoDBOpenHelper dbOpenHelper;
 
-    private DatabaseUtil databaseUtil;
 
     private boolean settingsChanged = false;
 
     private final static String WEBSITE_HELP_SETTINGS="https://anymemo.org";
 
-    private MultipleLoaderManager multipleLoaderManager;
+    @Inject DatabaseUtil databaseUtil;
 
-    @Inject
-    public void setDatabaseUtil(DatabaseUtil databaseUtil) {
-        this.databaseUtil = databaseUtil;
-    }
-
-
-    @Inject
-    public void setMultipleLoaderManager(
-            MultipleLoaderManager multipleLoaderManager) {
-        this.multipleLoaderManager = multipleLoaderManager;
-    }
+    @Inject MultipleLoaderManager multipleLoaderManager;
 
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        activityComponents().inject(this);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             dbPath = extras.getString(EXTRA_DBPATH);

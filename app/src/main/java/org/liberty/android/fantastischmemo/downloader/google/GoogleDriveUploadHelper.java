@@ -36,8 +36,6 @@ import org.liberty.android.fantastischmemo.entity.LearningData;
 
 import android.content.Context;
 
-import com.google.inject.assistedinject.Assisted;
-
 public class GoogleDriveUploadHelper {
     private Context mContext;
 
@@ -46,7 +44,7 @@ public class GoogleDriveUploadHelper {
     private static SimpleDateFormat ISO8601_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
     @Inject
-    public GoogleDriveUploadHelper(Context context, @Assisted String authToken) {
+    public GoogleDriveUploadHelper(Context context, String authToken) {
         this.authToken = authToken;
         mContext = context;
     }

@@ -1,9 +1,5 @@
 package org.liberty.android.fantastischmemo.downloader.quizlet;
 
-import org.liberty.android.fantastischmemo.AMActivity;
-import org.liberty.android.fantastischmemo.AMPrefKeys;
-import org.liberty.android.fantastischmemo.R;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -13,10 +9,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.widget.EditText;
 
+import org.liberty.android.fantastischmemo.AMPrefKeys;
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseActivity;
+
 /**
  * Input user name to search and display card set list.
  */
-public class QuizletSearchByUsernameActivity extends AMActivity {
+public class QuizletSearchByUsernameActivity extends BaseActivity {
     private SharedPreferences settings;
 
     private SharedPreferences.Editor editor;

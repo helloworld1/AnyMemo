@@ -20,12 +20,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseFragment;
 import org.liberty.android.fantastischmemo.downloader.anymemo.AnyMemoDownloaderActivity;
 import org.liberty.android.fantastischmemo.downloader.dropbox.DropboxDBListActivity;
 import org.liberty.android.fantastischmemo.downloader.google.SpreadsheetListScreen;
 import org.liberty.android.fantastischmemo.downloader.quizlet.QuizletLauncher;
 
-import roboguice.fragment.RoboFragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -37,7 +37,7 @@ import android.view.ViewGroup;
  * This class is invoked when the user share the card from other
  * apps like ColorDict
  */
-public class DownloadTabFragment extends RoboFragment implements View.OnClickListener{
+public class DownloadTabFragment extends BaseFragment implements View.OnClickListener{
     private View amButton;
     private View quizletButton;
     private View dropboxButton;

@@ -27,33 +27,26 @@ import org.apache.commons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.widget.AnyMemoWidgetProvider;
+import org.liberty.android.fantastischmemo.common.BaseService;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.ui.AnyMemo;
-import org.liberty.android.fantastischmemo.ui.StudyActivity;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
-
-import roboguice.service.RoboService;
 
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.widget.RemoteViews;
 
 import com.google.common.base.Strings;
 
-public class AnyMemoService extends RoboService{
+public class AnyMemoService extends BaseService {
     public static int UPDATE_NOTIFICATION = 2;
     public static int CANCEL_NOTIFICATION = 4;
     private final int NOTIFICATION_ID = 4829352;
@@ -61,11 +54,12 @@ public class AnyMemoService extends RoboService{
     private final int WIDGET_REQ = 23579234;
     private final static String TAG = "AnyMemoService";
 
-    private RecentListUtil recentListUtil;
+    @Inject RecentListUtil recentListUtil;
 
-    @Inject
-    public void setRecentListUtil(RecentListUtil recentListUtil) {
-        this.recentListUtil = recentListUtil;
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        appComponents().inject(this);
     }
 
     @Override

@@ -22,6 +22,7 @@ package org.liberty.android.fantastischmemo.ui;
 import org.liberty.android.fantastischmemo.BuildConfig;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseFragment;
 import org.liberty.android.fantastischmemo.converter.CSVExporter;
 import org.liberty.android.fantastischmemo.converter.CSVImporter;
 import org.liberty.android.fantastischmemo.converter.Mnemosyne2CardsExporter;
@@ -36,8 +37,6 @@ import org.liberty.android.fantastischmemo.converter.TabTxtExporter;
 import org.liberty.android.fantastischmemo.converter.TabTxtImporter;
 import org.liberty.android.fantastischmemo.converter.ZipExporter;
 import org.liberty.android.fantastischmemo.converter.ZipImporter;
-
-import roboguice.fragment.RoboFragment;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -57,7 +56,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class MiscTabFragment extends RoboFragment implements View.OnClickListener {
+public class MiscTabFragment extends BaseFragment implements View.OnClickListener {
     private static final String WEBSITE_VERSION="https://anymemo.org/versions-view";
     private Activity mActivity;
     private View optionButton;

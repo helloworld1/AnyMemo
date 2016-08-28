@@ -34,8 +34,6 @@ import android.os.Bundle;
 
 public class DownloadDBFileListFragment extends AbstractDownloaderFragment {
 
-    private DropboxDownloadHelperFactory downloadHelperFactory;
-
     private DropboxDownloadHelper downloadHelper;
 
     public static final String EXTRA_AUTH_TOKEN = "authToken";
@@ -44,19 +42,13 @@ public class DownloadDBFileListFragment extends AbstractDownloaderFragment {
 
     public DownloadDBFileListFragment() { }
 
-    @Inject
-    public void setDownloadHelperFactory(
-            DropboxDownloadHelperFactory downloadHelperFactory) {
-        this.downloadHelperFactory = downloadHelperFactory;
-    }
-
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         Bundle args = getArguments();
         assert args != null : "The DownloadDBFileListFragment must have authToken and autoTokenSecret";
         String authToken = args.getString(EXTRA_AUTH_TOKEN);
         String authTokenSecret = args.getString(EXTRA_AUTH_TOKEN_SECRET);
-        downloadHelper = downloadHelperFactory.create(authToken, authTokenSecret);
+        downloadHelper = new DropboxDownloadHelper(getContext(), appComponents().recenetListUtil(), authToken, authTokenSecret);
     }
 
     @Override

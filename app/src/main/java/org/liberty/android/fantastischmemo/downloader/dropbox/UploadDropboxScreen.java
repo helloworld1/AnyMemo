@@ -25,15 +25,7 @@ public class UploadDropboxScreen extends DropboxAccountActivity {
 
     private String authTokenSecret;
 
-    private DropboxUploadHelperFactory uploadHelperFactory;
-
     private DropboxUploadHelper uploadHelper;
-
-    @Inject
-    public void setUploadHelperFactory(
-            DropboxUploadHelperFactory uploadHelperFactory) {
-        this.uploadHelperFactory = uploadHelperFactory;
-    }
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -46,7 +38,7 @@ public class UploadDropboxScreen extends DropboxAccountActivity {
         this.authToken = accessTokens[0];
         this.authTokenSecret = accessTokens[1];
 
-        uploadHelper = uploadHelperFactory.create(authToken, authTokenSecret);
+        uploadHelper = new DropboxUploadHelper(this, authToken, authTokenSecret);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         FileBrowserFragment fragment = new FileBrowserFragment();

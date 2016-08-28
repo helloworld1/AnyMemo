@@ -20,20 +20,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 
-import javax.inject.Inject;
-
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.entity.Option;
-import org.liberty.android.fantastischmemo.service.CardPlayerService;
-
-import roboguice.fragment.RoboFragment;
-import roboguice.util.Ln;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -42,12 +34,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseFragment;
+import org.liberty.android.fantastischmemo.entity.Option;
+import org.liberty.android.fantastischmemo.service.CardPlayerService;
+
+import javax.inject.Inject;
 
 /*
  * Display the control bar in CardPlayerActivity. Handle the logic
  * of controlling the CardPlayerService.
  */
-public class CardPlayerFragment extends RoboFragment {
+public class CardPlayerFragment extends BaseFragment {
+    private static final String TAG = CardPlayerFragment.class.getSimpleName();
 
     private ImageButton playButton;
     private ImageButton previousButton;
@@ -55,18 +54,15 @@ public class CardPlayerFragment extends RoboFragment {
     private ImageButton shuffleButton;
     private ImageButton repeatButton;
 
-    private Option option;
+    @Inject Option option;
 
-    public CardPlayerFragment() { }
 
-    @Inject
-    public void setOption(Option option) {
-        this.option = option;
-    }
+    public CardPlayerFragment() {}
 
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        fragmentComponents().inject(this);
         setHasOptionsMenu(true);
     }
 
@@ -146,7 +142,7 @@ public class CardPlayerFragment extends RoboFragment {
         public void onClick(View v) {
             CardPlayerActivity activity = (CardPlayerActivity) getActivity();
             if (activity == null) {
-                Ln.w("Activity is null, do not handle any click events");
+                Log.w(TAG, "Activity is null, do not handle any click events");
                 return;
             }
             if (v == playButton) {
@@ -227,7 +223,7 @@ public class CardPlayerFragment extends RoboFragment {
                 // being called.
                 CardPlayerActivity activity = (CardPlayerActivity) getActivity();
                 if (activity == null) {
-                    Ln.w("Activity is null, do not handle any click events");
+                    Log.w(TAG, "Activity is null, do not handle any click events");
                     return;
                 }
                 if (activity.isActivityForeground() && currentCardId != activity.getCurrentCard().getId()) {

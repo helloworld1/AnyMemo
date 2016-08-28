@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseFragment;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.entity.Card;
@@ -33,14 +34,13 @@ import org.liberty.android.fantastischmemo.entity.Option;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 import org.liberty.android.fantastischmemo.utils.AMDateUtil;
 
-import roboguice.fragment.RoboFragment;
-import roboguice.util.Ln;
-
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -56,7 +56,9 @@ import com.google.common.base.Strings;
  * Display the control bar in CardPlayerActivity. Handle the logic
  * of controlling the CardPlayerService.
  */
-public class GradeButtonsFragment extends RoboFragment {
+public class GradeButtonsFragment extends BaseFragment {
+
+    private static final String TAG = GradeButtonsFragment.class.getSimpleName();
 
     public static final String EXTRA_DBPATH = "dbpath";
 
@@ -74,34 +76,29 @@ public class GradeButtonsFragment extends RoboFragment {
 
     private LearningDataDao learningDataDao;
 
-    private Scheduler scheduler = null;
-
     private OnCardChangedListener onCardChangedListener;
-
-    private AMDateUtil amDateUtil;
 
     private Handler handler = new Handler();
 
+    @Inject Scheduler scheduler;
+
+    @Inject AMDateUtil amDateUtil;
 
     // The default button titles from the string
     private CharSequence[] defaultGradeButtonTitles = new CharSequence[6];
 
     public GradeButtonsFragment() { }
 
-    @Inject
-    public void setScheduler(Scheduler scheduler) {
-        this.scheduler = scheduler;
-    }
-
-    @Inject
-    public void setAmDateUtil(AMDateUtil amDateUtil) {
-        this.amDateUtil = amDateUtil;
-    }
-
     public void setOnCardChangedListener(
             OnCardChangedListener onCardChangedListener) {
         this.onCardChangedListener = onCardChangedListener;
         
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        fragmentComponents().inject(this);
     }
 
     @Override
@@ -300,8 +297,8 @@ public class GradeButtonsFragment extends RoboFragment {
             super.onPostExecute(result);
             activity.setProgressBarIndeterminateVisibility(false);
 
-            Ln.v("Prev card: " + prevCard);
-            Ln.v("Updated card: " + updatedCard);
+            Log.v(TAG, "Prev card: " + prevCard);
+            Log.v(TAG, "Updated card: " + updatedCard);
 
 
             onCardChangedListener.onCardChanged(prevCard, updatedCard);

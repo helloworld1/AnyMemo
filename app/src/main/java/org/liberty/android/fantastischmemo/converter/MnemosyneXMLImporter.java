@@ -49,8 +49,6 @@ import org.xml.sax.XMLReader;
 
 import android.util.Log;
 
-import com.google.inject.BindingAnnotation;
-
 public class MnemosyneXMLImporter extends org.xml.sax.helpers.DefaultHandler implements Converter, Serializable {
     private static final long serialVersionUID = -7871484468353131221L;
 
@@ -230,9 +228,4 @@ public class MnemosyneXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
     public String getDestExtension() {
         return "db";
     }
-
-    @BindingAnnotation
-    @Target({ ElementType. FIELD, ElementType.PARAMETER, ElementType.METHOD })
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface Type {};
 }

@@ -20,9 +20,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseFragment;
 import org.liberty.android.fantastischmemo.entity.Setting;
-
-import roboguice.fragment.RoboFragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -37,7 +36,7 @@ import android.widget.LinearLayout.LayoutParams;
  * This fragment is for a card of two fields, field1 is the upper field and filed2
  * is the lower field with a separator that divide field1 and field2.
  */
-public class TwoFieldsCardFragment extends RoboFragment {
+public class TwoFieldsCardFragment extends BaseFragment {
 
     /**
      * The key for the input a list of CardFragemnt.Builder that is used to build field1.

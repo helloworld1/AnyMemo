@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.utils;
 
+import android.util.Log;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,9 +29,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import roboguice.util.Ln;
-
 public class AnyMemoExecutor {
+    private static final String TAG = AnyMemoExecutor.class.getSimpleName();
     private static ExecutorService executor = Executors.newSingleThreadExecutor();
     private static List<Future<?>> futures = new LinkedList<Future<?>>();
 
@@ -43,11 +44,9 @@ public class AnyMemoExecutor {
         try {
             f.get();
         } catch (InterruptedException e){
-            Ln.e(e);
-            assert false : "Encounter exception when waiting task";
+            Log.e(TAG, "", e);
         } catch (ExecutionException e) {
-            Ln.e(e);
-            assert false : "Encounter exception when waiting task";
+            Log.e(TAG, "", e);
         } finally {
             futures.remove(f);
         }
@@ -60,10 +59,10 @@ public class AnyMemoExecutor {
             try {
                 f.get();
             } catch (InterruptedException e) {
-                Ln.e(e);
+                Log.e(TAG, "", e);
                 assert false : "Encounter exception when waiting task";
             } catch (ExecutionException e) {
-                Ln.e(e);
+                Log.e(TAG, "", e);
                 assert false : "Encounter exception when waiting task";
             } finally {
                 fi.remove();

@@ -56,8 +56,6 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-import com.google.inject.BindingAnnotation;
-
 public class Mnemosyne2CardsImporter implements Converter {
 
     private static final long serialVersionUID = 3472937456L;
@@ -302,12 +300,6 @@ public class Mnemosyne2CardsImporter implements Converter {
         CARD_FRONT,
         CARD_BACK;
     }
-
-    @BindingAnnotation
-    @Target({ ElementType. FIELD, ElementType.PARAMETER, ElementType.METHOD })
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface Type {};
-
 }
 
 

@@ -26,17 +26,16 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.modules.ForApplication;
 
 import android.content.Context;
 
-@Singleton
+import javax.inject.Inject;
+
 public class AMFileUtil {
 
     private Context mContext;
@@ -44,12 +43,8 @@ public class AMFileUtil {
     private AMPrefUtil amPrefUtil;
 
     @Inject
-    public AMFileUtil(Context context) {
+    public AMFileUtil(@ForApplication Context context, AMPrefUtil amPrefUtil) {
         mContext = context;
-    }
-
-    @Inject
-    public void setAmPrefUtil(AMPrefUtil amPrefUtil) {
         this.amPrefUtil = amPrefUtil;
     }
 

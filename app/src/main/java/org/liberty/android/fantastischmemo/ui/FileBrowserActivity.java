@@ -19,22 +19,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import java.io.File;
-
-import org.liberty.android.fantastischmemo.AMActivity;
-import org.liberty.android.fantastischmemo.R;
-
-import org.liberty.android.fantastischmemo.ui.FileBrowserFragment;
-
 import android.app.Activity;
-
 import android.content.Intent;
-
 import android.os.Bundle;
-
 import android.support.v4.app.FragmentTransaction;
 
-public class FileBrowserActivity extends AMActivity {
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseActivity;
+
+import java.io.File;
+
+public class FileBrowserActivity extends BaseActivity {
     public final static String EXTRA_RESULT_PATH = "result_path";
     public final static String EXTRA_DEFAULT_ROOT = "default_root";
     public final static String EXTRA_FILE_EXTENSIONS = "file_extension";

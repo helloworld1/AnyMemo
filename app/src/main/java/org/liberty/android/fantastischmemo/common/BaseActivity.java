@@ -1,56 +1,41 @@
-/*
-Copyright (C) 2010 Haowen Ning
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-
-*/
-
-package org.liberty.android.fantastischmemo;
-
-import java.util.Locale;
-
-import android.os.Handler;
-import android.view.View;
-import roboguice.activity.RoboActionBarActivity;
+package org.liberty.android.fantastischmemo.common;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
-import android.view.WindowManager;
+import android.view.View;
 
-/*
- * This class is the base class for all screen type
- * class in AnyMemo
- * It contains basic configuration of the Activity
+import org.liberty.android.fantastischmemo.AMApplication;
+import org.liberty.android.fantastischmemo.AMPrefKeys;
+import org.liberty.android.fantastischmemo.modules.ActivityComponents;
+import org.liberty.android.fantastischmemo.modules.ActivityModules;
+import org.liberty.android.fantastischmemo.modules.AppComponents;
+import org.liberty.android.fantastischmemo.modules.DaggerActivityComponents;
+
+import java.util.Locale;
+
+/**
+ * Created by liberty on 8/28/16.
  */
-public abstract class AMActivity extends RoboActionBarActivity {
+public class BaseActivity extends AppCompatActivity {
     protected String TAG = getClass().getSimpleName();
 
     private boolean activityForeground = false;
 
     private boolean activityCreated = false;
 
+    private ActivityComponents activityComponents;
+
     private Handler handler = new Handler();
 
     @Override
-	public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         if(settings.getBoolean(AMPrefKeys.FULLSCREEN_MODE_KEY, false)) {
@@ -90,6 +75,19 @@ public abstract class AMActivity extends RoboActionBarActivity {
         updateInterfaceLanguage();
     }
 
+    public AppComponents appComponents() {
+        return ((AMApplication) getApplication()).appComponents();
+    }
+
+    public ActivityComponents activityComponents() {
+        if (activityComponents == null) {
+            activityComponents = DaggerActivityComponents.builder()
+                    .appComponents(appComponents())
+                    .activityModules(new ActivityModules(this))
+                    .build();
+        }
+        return activityComponents;
+    }
 
     public void restartActivity(){
         startActivity(new Intent(this, this.getClass()));
@@ -102,18 +100,6 @@ public abstract class AMActivity extends RoboActionBarActivity {
 
     public boolean isActivityCreated() {
         return activityCreated;
-    }
-
-    /**
-     * Resolve the attribute of the current theme.
-     *
-     * @param attr the attribute id
-     * @return  the resource id
-     */
-    public int resolveThemeResource(int attr) {
-        TypedValue typedvalueattr = new TypedValue();
-        getTheme().resolveAttribute(attr, typedvalueattr, true);
-        return typedvalueattr.resourceId;
     }
 
     private void updateInterfaceLanguage() {

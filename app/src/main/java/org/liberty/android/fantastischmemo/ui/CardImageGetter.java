@@ -27,9 +27,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.modules.AppComponents;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
-
-import roboguice.util.Ln;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -38,42 +37,38 @@ import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.Html.ImageGetter;
+import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
-
-import com.google.inject.assistedinject.Assisted;
-
 
 /**
  * This class is used display images in a card.
  * It will look for the image based on defined imageSearchPaths.
  */
 public class CardImageGetter implements ImageGetter {
+    private static final String TAG = CardImageGetter.class.getSimpleName();
+
     private String[] imageSearchPaths;
-    
-    private Context context;
     
     private int screenWidth;
 
     private AMFileUtil amFileUtil;
+
+    private Context context;
     
-    @SuppressWarnings("deprecation")
-    @Inject
-    public CardImageGetter (Context context, @Assisted String[] imageSearchPaths) {
-        this.context = context;
+    public CardImageGetter (AppComponents appComponents, String[] imageSearchPaths) {
         this.imageSearchPaths = imageSearchPaths;
-        
-        Display display = ((WindowManager)context.getSystemService(Context.WINDOW_SERVICE))
+
+        context = appComponents.applicationContext();
+
+        amFileUtil = appComponents.amFileUtil();
+
+        Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE))
                 .getDefaultDisplay();
-        
+
         screenWidth = display.getWidth();
 	}
 
-    @Inject
-    public void setAmFileUtil(AMFileUtil amFileUtil) {
-        this.amFileUtil = amFileUtil;
-    }
-    
     /**
      * Get the drawable based on the source string
      * @param source the source string can be simply a.jpg or dir_name/a.jpg
@@ -83,7 +78,7 @@ public class CardImageGetter implements ImageGetter {
      */
     @Override
     public Drawable getDrawable(String source) {
-        Ln.v("Source: " + source);
+        Log.v(TAG, "Source: " + source);
         try {
             Bitmap orngBitmap = null;
 
@@ -127,7 +122,7 @@ public class CardImageGetter implements ImageGetter {
             d.setBounds(0, 0, scaledWidth, scaledHeight);
             return d;
         } catch (Exception e) {
-            Ln.e("getDrawable() Image handling error", e);
+            Log.e(TAG, "getDrawable() Image handling error", e);
         }
 
         /* Fallback, display default image */

@@ -9,8 +9,8 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.commons.io.FilenameUtils;
 
-import roboguice.util.Ln;
 import android.content.Context;
+import android.util.Log;
 
 import com.j256.ormlite.dao.DaoManager;
 
@@ -18,6 +18,7 @@ import com.j256.ormlite.dao.DaoManager;
  * Keep the reference count of each AnyMemoDBOpenHelper.
  */
 public class AnyMemoDBOpenHelperManager {
+    private static final String TAG = AnyMemoDBOpenHelperManager.class.getSimpleName();
 
     // Comparator for determining if two files are the same
     private static Comparator<String> filenameComparator = new Comparator<String>() {
@@ -51,13 +52,13 @@ public class AnyMemoDBOpenHelperManager {
         try {
             assert dbpath != null : "dbpath should not be null";
             if (!helpers.containsKey(dbpath)) {
-                Ln.i("Call get AnyMemoDBOpenHelper for first time for db: " + dbpath);
+                Log.i(TAG, "Call get AnyMemoDBOpenHelper for first time for db: " + dbpath);
                 AnyMemoDBOpenHelper helper = new AnyMemoDBOpenHelper(context, dbpath);
                 helpers.put(dbpath, new WeakReference<AnyMemoDBOpenHelper>(helper));
                 refCounts.put(dbpath, 1);
                 return helpers.get(dbpath).get();
             } else {
-                Ln.i("Call get AnyMemoDBOpenHelper for " + dbpath + " again, return existing helper.");
+                Log.i(TAG, "Call get AnyMemoDBOpenHelper for " + dbpath + " again, return existing helper.");
                 refCounts.put(dbpath, refCounts.get(dbpath) + 1);
                 return helpers.get(dbpath).get();
             }
@@ -72,11 +73,11 @@ public class AnyMemoDBOpenHelperManager {
         try {
             String dbpath = helper.getDbPath();
             if (!helpers.containsKey(dbpath)) {
-                Ln.w("Release a wrong db path or release an already been released helper!");
+                Log.w(TAG, "Release a wrong db path or release an already been released helper!");
                 return;
             }
 
-            Ln.i("Release AnyMemoDBOpenHelper: " + dbpath + " Ref count: " + refCounts.get(dbpath));
+            Log.i(TAG, "Release AnyMemoDBOpenHelper: " + dbpath + " Ref count: " + refCounts.get(dbpath));
 
             refCounts.put(dbpath, refCounts.get(dbpath) - 1);
 
@@ -85,7 +86,7 @@ public class AnyMemoDBOpenHelperManager {
                 DaoManager.clearCache();
                 DaoManager.clearDaoCache();
                 helpers.remove(dbpath);
-                Ln.i("All connection released. Close helper. DB: " + dbpath);
+                Log.i(TAG, "All connection released. Close helper. DB: " + dbpath);
             }
         } finally {
             bigLock.unlock();
@@ -96,24 +97,24 @@ public class AnyMemoDBOpenHelperManager {
         bigLock.lock();
         try {
             if (!helpers.containsKey(dbpath)) {
-                Ln.w("Force release a file that is not opened yet. Do nothing");
+                Log.w(TAG, "Force release a file that is not opened yet. Do nothing");
                 return;
             }
 
             AnyMemoDBOpenHelper helper = helpers.get(dbpath).get();
 
-            Ln.i("force releasing " + dbpath + " It contains " + refCounts.get(dbpath) + " refs");
+            Log.i(TAG, "force releasing " + dbpath + " It contains " + refCounts.get(dbpath) + " refs");
             // Weak reference can return null, so we must check here.
             if (helper != null) {
                 helper.close();
             } else {
-                Ln.w("forceRelease a path that has already been released by GC.");
+                Log.w(TAG, "forceRelease a path that has already been released by GC.");
             }
             DaoManager.clearCache();
             DaoManager.clearDaoCache();
             helpers.remove(dbpath);
             refCounts.get(dbpath);
-            Ln.i("Force released a db file. DB: " + dbpath);
+            Log.i(TAG, "Force released a db file. DB: " + dbpath);
         } finally {
             bigLock.unlock();
         }

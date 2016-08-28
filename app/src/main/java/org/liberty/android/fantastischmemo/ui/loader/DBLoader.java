@@ -22,10 +22,10 @@ package org.liberty.android.fantastischmemo.ui.loader;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 
-import roboguice.content.RoboAsyncTaskLoader;
 import android.content.Context;
+import android.support.v4.content.AsyncTaskLoader;
 
-public abstract class DBLoader<T> extends RoboAsyncTaskLoader<T> {
+public abstract class DBLoader<T> extends AsyncTaskLoader<T> {
 
     protected String dbPath;
 

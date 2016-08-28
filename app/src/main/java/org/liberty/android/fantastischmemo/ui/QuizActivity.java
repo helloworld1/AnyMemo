@@ -26,18 +26,18 @@ import org.liberty.android.fantastischmemo.entity.Card;
 import org.liberty.android.fantastischmemo.entity.Category;
 import org.liberty.android.fantastischmemo.entity.Option;
 import org.liberty.android.fantastischmemo.entity.Setting;
+import org.liberty.android.fantastischmemo.modules.AppComponents;
 import org.liberty.android.fantastischmemo.queue.QueueManager;
 import org.liberty.android.fantastischmemo.queue.QuizQueueManager;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 import org.liberty.android.fantastischmemo.ui.loader.DBLoader;
 import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
 
-import roboguice.util.RoboAsyncTask;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
@@ -67,7 +67,7 @@ public class QuizActivity extends QACardActivity {
     private Option option;
 
     /* Utils */
-    private DictionaryUtil dictionaryUtil;
+    @Inject DictionaryUtil dictionaryUtil;
 
     private QuizQueueManager queueManager;
 
@@ -81,11 +81,6 @@ public class QuizActivity extends QACardActivity {
     private boolean shuffleCards = false;
 
     private int totalQuizSize = -1;
-
-    @Inject
-    public void setDictionaryUtil(DictionaryUtil dictionaryUtil) {
-        this.dictionaryUtil = dictionaryUtil;
-    }
 
     @Override
     public int getContentView() {
@@ -243,10 +238,8 @@ public class QuizActivity extends QACardActivity {
         return true;
     }
 
-    private static class QuizQueueManagerLoader extends
+    public static class QuizQueueManagerLoader extends
             DBLoader<QueueManager> {
-
-        private Scheduler scheduler;
 
         private int filterCategoryId = -1;
 
@@ -256,11 +249,14 @@ public class QuizActivity extends QACardActivity {
 
         private boolean shuffleCards = false;
 
-        public QuizQueueManagerLoader(Context context,
+        @Inject Scheduler scheduler;
+
+        public QuizQueueManagerLoader(AppComponents appComponents,
                 String dbPath, int filterCategoryId,
                 int startCardOrd, int quizSize,
                 boolean shuffleCards) {
-            super(context, dbPath);
+            super(appComponents.applicationContext(), dbPath);
+            appComponents.inject(this);
 
             this.filterCategoryId = filterCategoryId;
 
@@ -270,11 +266,6 @@ public class QuizActivity extends QACardActivity {
 
             this.shuffleCards = shuffleCards;
 
-        }
-
-        @Inject
-        public void setScheduler(Scheduler scheduler) {
-            this.scheduler = scheduler;
         }
 
         @Override
@@ -306,7 +297,7 @@ public class QuizActivity extends QACardActivity {
             LoaderManager.LoaderCallbacks<QueueManager> {
         @Override
         public Loader<QueueManager> onCreateLoader(int arg0, Bundle arg1) {
-             Loader<QueueManager> loader = new QuizQueueManagerLoader(getApplicationContext(), getDbPath(),
+             Loader<QueueManager> loader = new QuizQueueManagerLoader(appComponents(), getDbPath(),
                      categoryId, startCardOrd, quizSize, shuffleCards);
              loader.forceLoad();
              return loader;
@@ -422,7 +413,7 @@ public class QuizActivity extends QACardActivity {
     // Task to change the card after a card is graded
     // It needs to update the old card and dequeue the new card
     // and display it.
-    private class ChangeCardTask extends RoboAsyncTask<Card> {
+    private class ChangeCardTask extends AsyncTask<Void, Void, Card> {
 
         private int newQueueSizeBeforeDequeue;
 
@@ -431,12 +422,11 @@ public class QuizActivity extends QACardActivity {
         private Card updatedCard;
 
         public ChangeCardTask(Context context, Card updatedCard) {
-            super(context);
             this.updatedCard = updatedCard;
         }
 
         @Override
-        public Card call() throws Exception {
+        protected Card doInBackground(Void... voids) {
             queueManager.remove(getCurrentCard());
             queueManager.update(updatedCard);
 
@@ -449,7 +439,8 @@ public class QuizActivity extends QACardActivity {
             return nextCard;
         }
 
-        public void onSuccess(Card result) {
+        @Override
+        protected void onPostExecute(Card result) {
             setProgressBarIndeterminateVisibility(false);
             if(result == null){
                 showCompleteAllDialog();

@@ -19,19 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Callable;
-
-import javax.inject.Inject;
-
-import org.liberty.android.fantastischmemo.AMActivity;
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
-import org.liberty.android.fantastischmemo.utils.RecentListUtil;
-
-import roboguice.fragment.RoboFragment;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -39,6 +26,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
@@ -52,11 +40,22 @@ import android.widget.TextView;
 
 import com.google.firebase.crash.FirebaseCrash;
 
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseFragment;
+import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
+import org.liberty.android.fantastischmemo.utils.RecentListUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+
+import javax.inject.Inject;
+
 /**
  * The abstract class for an acitvity that displays a list of card sets
  * to download.
  */
-public abstract class AbstractDownloaderFragment extends RoboFragment {
+public abstract class AbstractDownloaderFragment extends BaseFragment {
 
     private static final String TAG = AbstractDownloaderFragment.class.getSimpleName();
 
@@ -66,11 +65,11 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
 
     private DownloadListAdapter dlAdapter;
 
-    private RecentListUtil recentListUtil;
-
     private View loadMoreFooter;
 
     private View loadingProgressFooter;
+
+    @Inject RecentListUtil recentListUtil;
 
     /**
      * Retrieve the DownloadItem for the first time.
@@ -127,22 +126,22 @@ public abstract class AbstractDownloaderFragment extends RoboFragment {
         return dlAdapter.getCount();
     }
 
-    @Inject
-    public void setRecentListUtil(RecentListUtil recentListUtil) {
-        this.recentListUtil = recentListUtil;
-    }
-
-
     @Override
     public void onAttach(Context activity) {
         super.onAttach(activity);
-        mActivity = (AMActivity)activity;
+        mActivity = (Activity) activity;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        fragmentComponents().inject(this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreateView(inflater, container, savedInstanceState);
 
         // The file browser's is reused here because they are similar
         View v = inflater.inflate(R.layout.file_list, container, false);

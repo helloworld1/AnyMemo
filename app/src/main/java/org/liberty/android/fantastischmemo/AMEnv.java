@@ -24,14 +24,15 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-import roboguice.util.Ln;
-
 import android.os.Environment;
+import android.util.Log;
 
 /*
  * Class that defines the constants that is used in AnyMemo.
  */
 public class AMEnv {
+    private static final String TAG = AMEnv.class.getSimpleName();
+
     public static final String EXTERNAL_STORAGE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
     private final static String DEFAULT_POSTFIX= "/anymemo/";
     private final static String DEFAULT_AUDIO_POSTFIX = "voice/";
@@ -86,10 +87,10 @@ public class AMEnv {
                 secretValuesMap.put(f.getName(), (String) f.get(null));
             }
         } catch (ClassNotFoundException e) {
-            Ln.e("AMSecrets class is not found. Please provide your own credentials and create AMSecrets file.", e);
+            Log.e(TAG, "AMSecrets class is not found. Please provide your own credentials and create AMSecrets file.", e);
             assert false;
         } catch (IllegalAccessException e) {
-            Ln.e("AMSecrets can not be accessed.", e);
+            Log.e(TAG, "AMSecrets can not be accessed.", e);
             assert false;
         }
 

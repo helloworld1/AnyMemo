@@ -20,27 +20,27 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo.ui.loader;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.os.Handler;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.util.Log;
+
+import org.liberty.android.fantastischmemo.R;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Inject;
-
-import org.liberty.android.fantastischmemo.AMActivity;
-import org.liberty.android.fantastischmemo.R;
-
-import roboguice.util.Ln;
-
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.os.Handler;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.app.LoaderManager.LoaderCallbacks;
 
 /**
  * This class manages multiple loader and handle the completion of all
  * of them.
  */
 public class MultipleLoaderManager {
+    private static final String TAG = MultipleLoaderManager.class.getSimpleName();
 
     private volatile int runningLoaderCount = 0;
 
@@ -56,11 +56,11 @@ public class MultipleLoaderManager {
     private Map<Integer, Boolean> loaderReloadOnStartMap
         = new HashMap<Integer, Boolean>();
 
-    private AMActivity activity;
+    private FragmentActivity activity;
 
     @Inject
     public MultipleLoaderManager(Activity activity) {
-        this.activity = (AMActivity) activity;
+        this.activity = (FragmentActivity) activity;
     }
 
     public void registerLoaderCallbacks(int id, LoaderCallbacks<?> callbacks, boolean reloadOnStart) {
@@ -106,7 +106,7 @@ public class MultipleLoaderManager {
 
         // The onPostInit is running on UI thread.
         if (runningLoaderCount <= 0) {
-            Ln.v("Dismiss dialog");
+            Log.v(TAG, "Dismiss dialog");
             progressDialog.dismiss();
             if (onAllLoaderCompletedRunnable != null) {
                 handler.post(onAllLoaderCompletedRunnable);

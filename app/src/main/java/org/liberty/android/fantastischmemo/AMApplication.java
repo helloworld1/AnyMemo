@@ -20,19 +20,21 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo;
 
-import roboguice.RoboGuice;
-
 import android.app.Application;
 import android.content.Context;
-import android.os.Build;
 import android.support.multidex.MultiDex;
-import android.util.Log;
+
+import org.liberty.android.fantastischmemo.modules.AppComponents;
+import org.liberty.android.fantastischmemo.modules.AppModules;
+import org.liberty.android.fantastischmemo.modules.DaggerAppComponents;
 
 public class AMApplication extends Application {
 
     private static final String TAG = "AMApplication";
 
     private static Context currentApplicationContext = null;
+
+    private AppComponents appComponents;
 
     public static Context getCurrentApplicationContext() {
         if (currentApplicationContext == null) {
@@ -53,6 +55,12 @@ public class AMApplication extends Application {
         super.onCreate();
         currentApplicationContext = this;
 
-        RoboGuice.setUseAnnotationDatabases(false);
+        appComponents = DaggerAppComponents.builder()
+                .appModules(new AppModules(this))
+                .build();
+    }
+
+    public AppComponents appComponents() {
+        return appComponents;
     }
 }

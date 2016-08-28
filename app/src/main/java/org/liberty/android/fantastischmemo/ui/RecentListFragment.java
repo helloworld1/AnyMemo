@@ -23,6 +23,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
@@ -42,22 +43,21 @@ import org.apache.commons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseFragment;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
-import roboguice.fragment.RoboFragment;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class RecentListFragment extends RoboFragment {
+public class RecentListFragment extends BaseFragment {
 
     private RecyclerView recentListRecyclerView;
     private RecentListAdapter recentListAdapter;
 
-    private RecentListUtil recentListUtil;
 
     // The version of recent list to synchronize multiple loader who writes the adapter
     private final AtomicInteger recentListVersion = new AtomicInteger(0);
@@ -66,18 +66,16 @@ public class RecentListFragment extends RoboFragment {
 
     private Activity mActivity;
 
-    private DatabaseUtil databaseUtil;
+    @Inject RecentListUtil recentListUtil;
 
-    public RecentListFragment() { }
+    @Inject DatabaseUtil databaseUtil;
 
-    @Inject
-    public void setRecentListUtil(RecentListUtil recentListUtil) {
-        this.recentListUtil = recentListUtil;
-    }
+    public RecentListFragment() {}
 
-    @Inject
-    public void setDatabaseUtil(DatabaseUtil databaseUtil) {
-        this.databaseUtil = databaseUtil;
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        fragmentComponents().inject(this);
     }
 
     @Override

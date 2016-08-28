@@ -22,17 +22,13 @@ package org.liberty.android.fantastischmemo.ui;
 import java.io.File;
 import java.io.Serializable;
 
-import javax.inject.Inject;
-
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseFragment;
 import org.liberty.android.fantastischmemo.entity.Setting;
 import org.liberty.android.fantastischmemo.utils.CardTextUtil;
-import org.liberty.android.fantastischmemo.utils.CardTextUtilFactory;
-
-import roboguice.fragment.RoboFragment;
 
 import android.app.Activity;
 import android.graphics.Typeface;
@@ -47,7 +43,7 @@ import android.widget.TextView;
 /*
  * This class display a side of the card and export necessary callbacks.
  */
-public class CardFragment extends RoboFragment {
+public class CardFragment extends BaseFragment {
 
     public static final String EXTRA_CARD_TEXT = "cardText";
 
@@ -79,8 +75,6 @@ public class CardFragment extends RoboFragment {
 
     private boolean htmlLinebreakConversion = false;
 
-    private CardTextUtilFactory cardTextUtilFactory;
-
     private CardTextUtil cardTextUtil;
 
     private String[] imageSearchPaths = {AMEnv.DEFAULT_IMAGE_PATH};
@@ -96,17 +90,12 @@ public class CardFragment extends RoboFragment {
 
     public CardFragment() { }
 
-    @Inject
-    public void setCardTextUtilFactory(CardTextUtilFactory cardTextUtilFactory) {
-        this.cardTextUtilFactory = cardTextUtilFactory;
-    }
-
     // The argument set in the factory will stored in the private variable here.
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         mCardText = getArguments().getString(EXTRA_CARD_TEXT);
-        cardTextUtil = cardTextUtilFactory.create(imageSearchPaths);
+        cardTextUtil = new CardTextUtil(appComponents(), imageSearchPaths);
     }
 
     @Override

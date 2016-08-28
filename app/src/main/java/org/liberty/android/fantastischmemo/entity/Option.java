@@ -3,6 +3,7 @@ package org.liberty.android.fantastischmemo.entity;
 import javax.inject.Inject;
 
 import org.liberty.android.fantastischmemo.AMPrefKeys;
+import org.liberty.android.fantastischmemo.modules.ForApplication;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -14,7 +15,7 @@ public class Option {
     private SharedPreferences.Editor editor;
 
     @Inject
-    public Option (Context context) {
+    public Option (@ForApplication Context context) {
     	settings = PreferenceManager.getDefaultSharedPreferences(context);
         editor = settings.edit();
     }

@@ -19,20 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import javax.inject.Inject;
-
-import org.liberty.android.fantastischmemo.AMActivity;
-import org.liberty.android.fantastischmemo.AMPrefKeys;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.dao.CardDao;
-import org.liberty.android.fantastischmemo.entity.Card;
-import org.liberty.android.fantastischmemo.entity.Category;
-import org.liberty.android.fantastischmemo.entity.LearningData;
-import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
-import org.liberty.android.fantastischmemo.utils.RecentListUtil;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -43,11 +29,25 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.liberty.android.fantastischmemo.AMPrefKeys;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseActivity;
+import org.liberty.android.fantastischmemo.dao.CardDao;
+import org.liberty.android.fantastischmemo.entity.Card;
+import org.liberty.android.fantastischmemo.entity.Category;
+import org.liberty.android.fantastischmemo.entity.LearningData;
+import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
+import org.liberty.android.fantastischmemo.utils.RecentListUtil;
+
+import javax.inject.Inject;
+
 /*
  * This class is invoked when the user share the card from other
  * apps like ColorDict
  */
-public class ShareScreen extends AMActivity implements View.OnClickListener{
+public class ShareScreen extends BaseActivity implements View.OnClickListener{
     private TextView dbnameView;
     private TextView questionView;
     private TextView answerView;
@@ -58,16 +58,13 @@ public class ShareScreen extends AMActivity implements View.OnClickListener{
     private SharedPreferences settings;
     private final int ACTIVITY_FB = 1;
 
-    private RecentListUtil recentListUtil;
-
-    @Inject
-    public void setRecentListUtil(RecentListUtil recentListUtil) {
-        this.recentListUtil = recentListUtil;
-    }
+    @Inject RecentListUtil recentListUtil;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activityComponents().inject(this);
+
         setContentView(R.layout.share_screen);
         dbnameView = (TextView)findViewById(R.id.share_db_name_entry);
         questionView = (TextView)findViewById(R.id.share_question_entry);

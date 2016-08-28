@@ -32,8 +32,6 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-import roboguice.util.Ln;
-
 import android.net.Uri;
 import android.util.JsonReader;
 import android.util.JsonToken;

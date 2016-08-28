@@ -46,13 +46,8 @@ public class DictionaryUtil {
     private Option option;
 
     @Inject
-    public DictionaryUtil(Activity activity) {
+    public DictionaryUtil(Activity activity, Option option) {
         mActivity = activity;
-    }
-
-
-    @Inject
-    public void setOption(Option option) {
         this.option = option;
     }
 

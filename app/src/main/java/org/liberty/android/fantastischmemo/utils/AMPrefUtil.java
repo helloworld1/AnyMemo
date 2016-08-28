@@ -28,7 +28,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-@Singleton
+import org.liberty.android.fantastischmemo.modules.ForApplication;
+
 public class AMPrefUtil {
 
     private SharedPreferences settings;
@@ -36,7 +37,7 @@ public class AMPrefUtil {
     private SharedPreferences.Editor editor;
 
     @Inject
-    public AMPrefUtil(Context context) {
+    public AMPrefUtil(@ForApplication Context context) {
         settings = PreferenceManager.getDefaultSharedPreferences(context);
         editor = settings.edit();
     }

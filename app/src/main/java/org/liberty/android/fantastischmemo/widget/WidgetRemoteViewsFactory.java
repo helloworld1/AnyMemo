@@ -1,11 +1,14 @@
 package org.liberty.android.fantastischmemo.widget;
 
+import android.annotation.TargetApi;
 import android.appwidget.AppWidgetManager;
-import android.widget.RemoteViewsService;
-import android.widget.RemoteViews;
 import android.content.Context;
+import android.content.Intent;
+import android.widget.RemoteViews;
+import android.widget.RemoteViewsService;
 
 import org.apache.commons.io.FilenameUtils;
+import org.liberty.android.fantastischmemo.AMApplication;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
@@ -13,18 +16,11 @@ import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.ui.StudyActivity;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
-import android.content.Intent;
-import android.annotation.TargetApi;
-
 import javax.inject.Inject;
 
-import roboguice.RoboGuice;
-import roboguice.util.Ln;
-
 @TargetApi(11)
-class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
+public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
-    private RecentListUtil recentListUtil;
 
     private Context mContext;
 
@@ -32,16 +28,13 @@ class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory 
 
     private int mAppWidgetId;
 
-    @Inject
-    public void setRecentListUtil(RecentListUtil recentListUtil) {
-        this.recentListUtil = recentListUtil;
-    }
+    @Inject RecentListUtil recentListUtil;
 
     public WidgetRemoteViewsFactory(Context context, Intent intent) {
         mContext = context;
         mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                 AppWidgetManager.INVALID_APPWIDGET_ID);
-        RoboGuice.getInjector(context.getApplicationContext()).injectMembers(this);
+        ((AMApplication) context.getApplicationContext()).appComponents().inject(this);
     }
 
     public void onCreate() {

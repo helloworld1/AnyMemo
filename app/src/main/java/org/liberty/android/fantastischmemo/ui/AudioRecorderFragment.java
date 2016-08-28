@@ -13,11 +13,11 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ToggleButton;
 import org.liberty.android.fantastischmemo.R;
-import roboguice.fragment.RoboDialogFragment;
+import org.liberty.android.fantastischmemo.common.BaseDialogFragment;
 
 import java.io.IOException;
 
-public class AudioRecorderFragment extends RoboDialogFragment {
+public class AudioRecorderFragment extends BaseDialogFragment {
     public static final String EXTRA_AUDIO_FILENAME = "audioFilename";
 
     private static final String TAG = "AudioRecorderFragment";

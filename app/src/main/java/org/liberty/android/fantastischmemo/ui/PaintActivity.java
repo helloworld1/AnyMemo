@@ -23,7 +23,6 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -32,13 +31,15 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
 import com.simplify.ink.InkView;
-import org.liberty.android.fantastischmemo.AMActivity;
+
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseActivity;
 
 import java.io.ByteArrayOutputStream;
 
-public class PaintActivity extends AMActivity{
+public class PaintActivity extends BaseActivity {
 
     private InkView inkView;
 

@@ -55,10 +55,10 @@ import com.google.common.base.Objects;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.apache.commons.io.FileUtils;
-import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseActivity;
 import org.liberty.android.fantastischmemo.receiver.SetAlarmReceiver;
 import org.liberty.android.fantastischmemo.service.AnyMemoService;
 import org.liberty.android.fantastischmemo.ui.loader.MultipleLoaderManager;
@@ -74,7 +74,7 @@ import java.io.InputStream;
 import javax.inject.Inject;
 
 
-public class AnyMemo extends AMActivity {
+public class AnyMemo extends BaseActivity {
     private static final String WEBSITE_VERSION="https://anymemo.org/versions-view";
 
     public static final String EXTRA_INITIAL_TAB = "initial_tab";
@@ -85,46 +85,22 @@ public class AnyMemo extends AMActivity {
 
     private SharedPreferences settings;
 
-    private AMFileUtil amFileUtil;
+    @Inject AMFileUtil amFileUtil;
 
-    private RecentListUtil recentListUtil;
+    @Inject RecentListUtil recentListUtil;
 
-    private DatabaseUtil databaseUtil;
+    @Inject DatabaseUtil databaseUtil;
 
-    private MultipleLoaderManager multipleLoaderManager;
+    @Inject MultipleLoaderManager multipleLoaderManager;
 
-    private FirebaseAnalytics firebaseAnalytics;
+    @Inject FirebaseAnalytics firebaseAnalytics;
 
     private static final int PERMISSION_REQUEST_EXTERNAL_STORAGE = 1;
-
-    @Inject
-    public void setAmFileUtil(AMFileUtil amFileUtil) {
-        this.amFileUtil = amFileUtil;
-    }
-
-    @Inject
-    public void setRecentListUtil(RecentListUtil recentListUtil) {
-        this.recentListUtil = recentListUtil;
-    }
-
-    @Inject
-    public void setMultipleLoaderManager(MultipleLoaderManager multipleLoaderManager) {
-        this.multipleLoaderManager = multipleLoaderManager;
-    }
-
-    @Inject
-    public void setDatabaseUtil(DatabaseUtil databaseUtil) {
-        this.databaseUtil = databaseUtil;
-    }
-
-    @Inject
-    public void setFirebaseAnalytics(FirebaseAnalytics firebaseAnalytics) {
-        this.firebaseAnalytics = firebaseAnalytics;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activityComponents().inject(this);
 
         setContentView(R.layout.main_tabs);
 

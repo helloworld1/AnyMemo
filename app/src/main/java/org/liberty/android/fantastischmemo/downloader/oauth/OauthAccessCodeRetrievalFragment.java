@@ -19,15 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.oauth;
 
-import java.io.IOException;
-
-import org.liberty.android.fantastischmemo.AMActivity;
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
-
-import roboguice.fragment.RoboDialogFragment;
-
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Rect;
 import android.os.AsyncTask;
@@ -41,7 +34,13 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 
-public abstract class OauthAccessCodeRetrievalFragment extends RoboDialogFragment {
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseDialogFragment;
+import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
+
+import java.io.IOException;
+
+public abstract class OauthAccessCodeRetrievalFragment extends BaseDialogFragment {
     private Activity mActivity;
 
     private AuthCodeReceiveListener authCodeReceiveListener = null;
@@ -69,9 +68,9 @@ public abstract class OauthAccessCodeRetrievalFragment extends RoboDialogFragmen
     protected abstract boolean processCallbackUrl(String url);
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (AMActivity)activity;
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mActivity = (Activity) context;
     }
 
     @Override

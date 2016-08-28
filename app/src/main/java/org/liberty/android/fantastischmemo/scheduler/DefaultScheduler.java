@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.scheduler;
 
+import android.util.Log;
+
 import java.util.Date;
 import java.util.Random;
 
@@ -27,8 +29,6 @@ import javax.inject.Inject;
 import org.liberty.android.fantastischmemo.entity.LearningData;
 import org.liberty.android.fantastischmemo.entity.SchedulingAlgorithmParameters;
 import org.liberty.android.fantastischmemo.utils.AMDateUtil;
-
-import roboguice.util.Ln;
 
 /*
  * Default scheduler read the algorithm parameters
@@ -112,7 +112,7 @@ public class DefaultScheduler implements Scheduler {
             }
 
             if (newInterval <= parameters.getMinimalInterval()) {
-                Ln.w("Interval " + newInterval + " is less than "
+                Log.w(TAG, "Interval " + newInterval + " is less than "
                         + parameters.getMinimalInterval()
                         + " for old data: " + oldData);
                 newInterval = parameters.getMinimalInterval();

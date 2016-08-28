@@ -45,7 +45,6 @@ import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 import android.content.Context;
 
-import com.google.inject.assistedinject.Assisted;
 public class DropboxDownloadHelper {
 
     private final String authToken;
@@ -59,8 +58,7 @@ public class DropboxDownloadHelper {
     private AMFileUtil amFileUtil;
 
     @Inject
-    public DropboxDownloadHelper(Context context, RecentListUtil recentListUtil,
-            @Assisted("authToken") String authToken, @Assisted("authTokenSecret") String authTokenSecret) {
+    public DropboxDownloadHelper(Context context, RecentListUtil recentListUtil, String authToken, String authTokenSecret) {
         this.authToken = authToken;
         this.authTokenSecret = authTokenSecret;
         this.recentListUtil = recentListUtil;

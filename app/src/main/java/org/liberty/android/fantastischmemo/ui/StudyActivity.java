@@ -23,9 +23,9 @@ import java.util.HashMap;
 
 import javax.inject.Inject;
 
-import android.graphics.Paint;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.entity.*;
+import org.liberty.android.fantastischmemo.modules.AppComponents;
 import org.liberty.android.fantastischmemo.queue.LearnQueueManager;
 import org.liberty.android.fantastischmemo.queue.QueueManager;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
@@ -44,6 +44,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -79,40 +80,24 @@ public class StudyActivity extends QACardActivity {
 
     private QueueManager queueManager;
 
-    /* Schedulers */
-    private Scheduler scheduler = null;
-
     /* current states */
     private long scheduledCardCount = 0;
     private long newCardCount = 0;
 
     boolean initialized = false;
 
-    private DictionaryUtil dictionaryUtil;
+    @Inject Scheduler scheduler;
 
-    private ShareUtil shareUtil;
+    @Inject DictionaryUtil dictionaryUtil;
+
+    @Inject ShareUtil shareUtil;
 
     private GradeButtonsFragment gradeButtonsFragment;
-
-
-    @Inject
-    public void setScheduler(Scheduler scheduler) {
-        this.scheduler = scheduler;
-    }
-
-    @Inject
-    public void setDictionaryUtil(DictionaryUtil dictionaryUtil) {
-        this.dictionaryUtil = dictionaryUtil;
-    }
-
-    @Inject
-    public void setShareUtil(ShareUtil shareUtil) {
-        this.shareUtil = shareUtil;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        activityComponents().inject(this);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -486,7 +471,7 @@ public class StudyActivity extends QACardActivity {
             LoaderManager.LoaderCallbacks<QueueManager> {
         @Override
         public Loader<QueueManager> onCreateLoader(int arg0, Bundle arg1) {
-             Loader<QueueManager> loader = new LearnQueueManagerLoader(getApplicationContext(), dbPath, filterCategoryId);
+             Loader<QueueManager> loader = new LearnQueueManagerLoader(appComponents(), dbPath, filterCategoryId);
              loader.forceLoad();
              return loader;
         }
@@ -502,37 +487,22 @@ public class StudyActivity extends QACardActivity {
         }
     }
 
-    private static class LearnQueueManagerLoader extends
+    public static class LearnQueueManagerLoader extends
             DBLoader<QueueManager> {
 
-        private Option option;
+        @Inject Option option;
 
-        private Scheduler scheduler;
+        @Inject Scheduler scheduler;
+
+        @Inject SchedulingAlgorithmParameters schedulingAlgorithmParameters;
 
         private final int filterCategoryId;
 
-        private SchedulingAlgorithmParameters schedulingAlgorithmParameters;
-
-        public LearnQueueManagerLoader(Context context, String dbPath, int filterCategoryId) {
-            super(context, dbPath);
+        public LearnQueueManagerLoader(AppComponents appComponents, String dbPath, int filterCategoryId) {
+            super(appComponents.applicationContext(), dbPath);
+            appComponents.inject(this);
             this.filterCategoryId = filterCategoryId;
         }
-
-        @Inject
-        public void setOption(Option option) {
-            this.option = option;
-        }
-
-        @Inject
-        public void setScheduler(Scheduler scheduler) {
-            this.scheduler = scheduler;
-        }
-
-        @Inject
-        public void setSchedulingAlgorithmParameters(SchedulingAlgorithmParameters schedulingAlgorithmParameters) {
-            this.schedulingAlgorithmParameters = schedulingAlgorithmParameters;
-        }
-
 
         @Override
         public QueueManager dbLoadInBackground() {

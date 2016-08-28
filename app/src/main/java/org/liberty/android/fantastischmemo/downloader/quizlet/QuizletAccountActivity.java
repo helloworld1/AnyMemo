@@ -11,11 +11,9 @@ import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.liberty.android.fantastischmemo.AMEnv;
-import org.liberty.android.fantastischmemo.downloader.quizlet.QuizletOAuth2AccessCodeRetrievalFragment;
 import org.liberty.android.fantastischmemo.downloader.oauth.OauthAccessCodeRetrievalFragment;
 import org.liberty.android.fantastischmemo.downloader.oauth.OauthAccountActivity;
 
-import roboguice.util.Ln;
 import android.util.Log;
 import android.util.Base64;
 
@@ -77,8 +75,8 @@ public abstract class QuizletAccountActivity extends OauthAccountActivity {
         out.close();
 
         if (conn.getResponseCode() / 100 >= 3) {
-            Ln.e("Http response code: " + conn.getResponseCode() + " response message: " + conn.getResponseMessage());
-            Ln.e("Error response for: " + url1 + " is "
+            Log.e(TAG, "Http response code: " + conn.getResponseCode() + " response message: " + conn.getResponseMessage());
+            Log.e(TAG, "Error response for: " + url1 + " is "
                     + new String(IOUtils.toByteArray(conn.getErrorStream())));
             throw new IOException("Response code: " + conn.getResponseCode());
         }

@@ -19,10 +19,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.service.cardplayer;
 
+import android.util.Log;
+
 import org.liberty.android.fantastischmemo.entity.Card;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
-
-import roboguice.util.Ln;
 
 import com.google.common.base.Objects;
 
@@ -97,7 +97,7 @@ public enum CardPlayerState implements CardPlayerStateTransition {
                 playQuestion(context);
                 break;
             case PLAYING_ANSWER_COMPLETED:
-                Ln.w("Wrong state, the question is playing but receive message that answer completed!");
+                Log.w("CardPlayerState", "Wrong state, the question is playing but receive message that answer completed!");
                 assert false : "Wrong state";
                 break;
             case PLAYING_QUESTION_COMPLETED:
@@ -149,7 +149,7 @@ public enum CardPlayerState implements CardPlayerStateTransition {
                 playQuestion(context);
                 break;
             case PLAYING_QUESTION_COMPLETED:
-                Ln.w("Wrong state, the answer is playing but receive message that question completed!");
+                Log.w("CardPlayerState", "Wrong state, the answer is playing but receive message that question completed!");
                 assert false : "Wrong state";
                 break;
             case STOP_PLAYING:
@@ -163,7 +163,7 @@ public enum CardPlayerState implements CardPlayerStateTransition {
     };
 
     private static void playQuestion(final CardPlayerContext context) {
-        Ln.v("Playing Question: " + context.getCurrentCard().getId());
+        Log.v("CardPlayerState", "Playing Question: " + context.getCurrentCard().getId());
 
         // Callback to the handler first since the actual TTS call would take some time.
         // We usually need UI to update first.
@@ -180,7 +180,7 @@ public enum CardPlayerState implements CardPlayerStateTransition {
                             // If the card changed, it is most likely the fast foward / backward
                             // function is needed.
                             if (Objects.equal(context.getCurrentCard().getQuestion(), text)) {
-                                Ln.v("Playing question completed for id " + context.getCurrentCard().getId());
+                                Log.v("CardPlayerState", "Playing question completed for id " + context.getCurrentCard().getId());
                                 context.getState().transition(context, CardPlayerMessage.PLAYING_QUESTION_COMPLETED);
                             }
                         }
@@ -191,7 +191,7 @@ public enum CardPlayerState implements CardPlayerStateTransition {
     }
 
     private static void playAnswer(final CardPlayerContext context) {
-        Ln.v("Playing Answer: " + context.getCurrentCard().getId());
+        Log.v("CardPlayerState", "Playing Answer: " + context.getCurrentCard().getId());
         context.getEventHandler().onPlayCard(context.getCurrentCard());
         context.getCardTTSUtil().speakCardAnswer(context.getCurrentCard(),
             new AnyMemoTTS.OnTextToSpeechCompletedListener() {
@@ -199,7 +199,7 @@ public enum CardPlayerState implements CardPlayerStateTransition {
                     context.getAmTTSServiceHandler().postDelayed(new Runnable() {
                         public void run() {
                             if (Objects.equal(context.getCurrentCard().getAnswer(), text)) {
-                                Ln.v("Playing answer completed for id " + context.getCurrentCard().getId());
+                                Log.v("CardPlayerState", "Playing answer completed for id " + context.getCurrentCard().getId());
                                 context.getState().transition(context, CardPlayerMessage.PLAYING_ANSWER_COMPLETED);
                             }
                         }

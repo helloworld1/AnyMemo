@@ -20,38 +20,24 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.utils;
 
-import javax.inject.Inject;
-
-import org.liberty.android.fantastischmemo.entity.Option;
-import org.liberty.android.fantastischmemo.ui.CardImageGetterFactory;
+import org.liberty.android.fantastischmemo.modules.AppComponents;
+import org.liberty.android.fantastischmemo.ui.CardImageGetter;
 import org.xml.sax.XMLReader;
 
-import android.content.Context;
 import android.text.Editable;
 import android.text.Html;
 import android.text.Html.ImageGetter;
 import android.text.Html.TagHandler;
-
-import com.google.inject.assistedinject.Assisted;
 
 /**
  * Utility for displaying the text on a card based on various settings.
  * It also handle the images in the card.
  */
 public class CardTextUtil {
-
-    private Option option;
-
     private ImageGetter imageGetter;
 
-    @Inject
-    public CardTextUtil(Context context,
-            Option option,
-            CardImageGetterFactory cardImageGetterFactory,
-            @Assisted String[] imageSearchPaths) {
-        this.option = option;
-
-        imageGetter = cardImageGetterFactory.create(imageSearchPaths);
+    public CardTextUtil(AppComponents appComponents, String[] imageSearchPaths) {
+        imageGetter = new CardImageGetter(appComponents, imageSearchPaths);
     }
 
     /**

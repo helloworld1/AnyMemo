@@ -19,13 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.oauth;
 
-import java.io.IOException;
-
-import org.liberty.android.fantastischmemo.AMActivity;
-import org.liberty.android.fantastischmemo.AMPrefKeys;
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
-
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -38,7 +31,14 @@ import android.util.Log;
 
 import com.google.common.base.Joiner;
 
-public abstract class OauthAccountActivity extends AMActivity {
+import org.liberty.android.fantastischmemo.AMPrefKeys;
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseActivity;
+import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
+
+import java.io.IOException;
+
+public abstract class OauthAccountActivity extends BaseActivity {
 
     SharedPreferences settings;
 

@@ -19,19 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.service;
 
-import javax.inject.Inject;
-
-import org.apache.commons.io.FilenameUtils;
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.converter.Converter;
-import org.liberty.android.fantastischmemo.ui.AnyMemo;
-import org.liberty.android.fantastischmemo.ui.PreviewEditActivity;
-import org.liberty.android.fantastischmemo.utils.RecentListUtil;
-
-import roboguice.RoboGuice;
-import roboguice.service.RoboIntentService;
-import roboguice.util.Ln;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -39,10 +26,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 
 import com.google.common.base.Objects;
 
-public class ConvertIntentService extends RoboIntentService {
+import org.apache.commons.io.FilenameUtils;
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseIntentService;
+import org.liberty.android.fantastischmemo.converter.Converter;
+import org.liberty.android.fantastischmemo.ui.AnyMemo;
+import org.liberty.android.fantastischmemo.ui.PreviewEditActivity;
+import org.liberty.android.fantastischmemo.utils.RecentListUtil;
+
+import java.util.Map;
+
+import javax.inject.Inject;
+
+public class ConvertIntentService extends BaseIntentService {
 
     public static final String ACTION_CONVERT = "convert";
 
@@ -52,25 +52,25 @@ public class ConvertIntentService extends RoboIntentService {
 
     public static final String EXTRA_CONVERTER_CLASS = "converterClass";
 
-    private static final int CONVERSION_PROGRESS_NOTIFICATION_ID_BASE = 294;
+    public static final String TAG = ConvertIntentService.class.getSimpleName();
 
+    private static final int CONVERSION_PROGRESS_NOTIFICATION_ID_BASE = 294;
 
     private NotificationManager notificationManager;
 
-    private RecentListUtil recentListUtil;
+    @Inject RecentListUtil recentListUtil;
+
+    @Inject Map<Class<?>, Converter> converterMap;
 
     public ConvertIntentService() {
         super(ConvertIntentService.class.getName());
     }
 
-    @Inject
-    public void setRecentListUtil(RecentListUtil recentListUtil) {
-        this.recentListUtil = recentListUtil;
-    }
-
     @Override
     public void onCreate() {
         super.onCreate();
+        appComponents().inject(this);
+
         notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
@@ -86,8 +86,9 @@ public class ConvertIntentService extends RoboIntentService {
         assert outputFilePath != null : "Output file path should not be null";
 
         @SuppressWarnings("unchecked")
-        Class<Converter> conveterClass = (Class<Converter>) intent.getSerializableExtra(EXTRA_CONVERTER_CLASS);
-        Converter converter = RoboGuice.getInjector(getApplication()).getInstance(conveterClass);
+        Class<Converter> converterClass = (Class<Converter>) intent.getSerializableExtra(EXTRA_CONVERTER_CLASS);
+
+        Converter converter = converterMap.get(converterClass);
 
         // Replace the extension of the file: file.xml -> file.db
 
@@ -102,7 +103,7 @@ public class ConvertIntentService extends RoboIntentService {
             showSuccessNotification(notificationId, outputFilePath);
 
         } catch (Exception e) {
-            Ln.e(e, "Error while converting");
+            Log.e(TAG, "Error while converting", e);
             showFailureNotification(notificationId, conversionFileInfo, e);
         }
     }
@@ -123,7 +124,6 @@ public class ConvertIntentService extends RoboIntentService {
             .build();
 
         notificationManager.notify(notificationId, inProgressNotification);
-            
     }
 
     private void showFailureNotification(int notificationId, String conversionFileInfo, Exception exception) {

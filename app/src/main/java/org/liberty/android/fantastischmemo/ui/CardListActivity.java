@@ -28,12 +28,12 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.apache.commons.io.FilenameUtils;
-import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseActivity;
 import org.liberty.android.fantastischmemo.entity.Card;
 import org.liberty.android.fantastischmemo.entity.LearningData;
 import org.liberty.android.fantastischmemo.entity.SchedulingAlgorithmParameters;
@@ -74,7 +74,9 @@ import com.google.common.base.Strings;
 /**
  * The Card List activity is used for listing all cards in a db or learning in a list mode.
  */
-public class CardListActivity extends AMActivity {
+public class CardListActivity extends BaseActivity {
+
+    public static String EXTRA_DBPATH = "dbpath";
 
     private static final int CARD_WRAPPER_LOADER_ID = 0;
 
@@ -89,12 +91,6 @@ public class CardListActivity extends AMActivity {
 
     private ListView listView;
 
-    private AMPrefUtil amPrefUtil;
-
-    private Scheduler scheduler;
-
-    private SchedulingAlgorithmParameters schedulingAlgorithmParameters;
-
     private CardTextUtil cardTextUtil;
 
     private CardTextUtilFactory cardTextUtilFactory;
@@ -106,39 +102,18 @@ public class CardListActivity extends AMActivity {
      * This needs to be defined before onCreate so in onCreate, all loaders will
      * be registered with the right manager.
      */
-    private MultipleLoaderManager multipleLoaderManager;
+    @Inject MultipleLoaderManager multipleLoaderManager;
 
-    public static String EXTRA_DBPATH = "dbpath";
+    @Inject Scheduler scheduler;
 
-    @Inject
-    public void setAmPrefUtil(AMPrefUtil amPrefUtil) {
-        this.amPrefUtil = amPrefUtil;
-    }
+    @Inject AMPrefUtil amPrefUtil;
 
-    @Inject
-    public void setScheduler(Scheduler scheduler) {
-        this.scheduler = scheduler;
-    }
-
-    @Inject
-    public void setSchedulingAlgorithmParameters(
-            SchedulingAlgorithmParameters schedulingAlgorithmParameters) {
-        this.schedulingAlgorithmParameters = schedulingAlgorithmParameters;
-    }
-
-    @Inject
-    public void setCardTextUtilFactory(CardTextUtilFactory cardTextUtilFactory) {
-        this.cardTextUtilFactory = cardTextUtilFactory;
-    }
-
-    @Inject
-    public void setMultipleLoaderManager(
-            MultipleLoaderManager multipleLoaderManager) {
-        this.multipleLoaderManager = multipleLoaderManager;
-    }
+    @Inject SchedulingAlgorithmParameters schedulingAlgorithmParameters;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activityComponents().inject(this);
+
         setContentView(R.layout.card_list);
 
         Bundle extras = getIntent().getExtras();
@@ -153,7 +128,6 @@ public class CardListActivity extends AMActivity {
 
         listView = (ListView) findViewById(R.id.item_list);
 
-
         String[] imageSearchPaths = {
             /* Relative path */
             "",
@@ -164,8 +138,9 @@ public class CardListActivity extends AMActivity {
             /* Try the image in /sdcard/anymemo/images/ */
             AMEnv.DEFAULT_IMAGE_PATH,
         };
-        cardTextUtil = cardTextUtilFactory.create(imageSearchPaths);
-        
+
+        cardTextUtil = new CardTextUtil(appComponents(), imageSearchPaths);
+
         // Use loader to load the cards.
         multipleLoaderManager.registerLoaderCallbacks(CARD_WRAPPER_LOADER_ID, new CardWrapperLoaderCallbacks(), false);
         multipleLoaderManager.setOnAllLoaderCompletedRunnable(onPostInitRunnable);

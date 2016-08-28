@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
 
 repositories {
     jcenter()
@@ -74,16 +75,6 @@ dependencies {
     compile 'com.google.firebase:firebase-core:9.0.2'
     compile 'com.google.firebase:firebase-crash:9.0.2'
 
-    compile ('org.roboguice:roboguice:3.0.1') {
-        exclude module: 'aopalliance'
-        exclude module: 'cglib'
-    }
-
-    compile ('com.google.inject.extensions:guice-assistedinject:4.0') {
-        exclude module: 'aopalliance'
-        exclude module: 'guice'
-        exclude module: 'cglib'
-    }
     compile 'oauth.signpost:signpost-core:1.2.1.2'
     compile('oauth.signpost:signpost-commonshttp4:1.2.1.2') {
         exclude module: 'httpclient'
@@ -93,8 +84,10 @@ dependencies {
     compile 'com.google.guava:guava:19.0'
     compile 'com.opencsv:opencsv:3.4'
     compile 'com.github.PhilJay:MPAndroidChart:v2.1.6'
-    compile 'com.rarepebble:colorpicker:1.5.1'
+    compile 'com.rarepebble:colorpicker:2.0.0'
     compile 'com.simplify:ink:0.2.1'
+    compile('com.google.dagger:dagger:2.6.1')
+    provided 'javax.annotation:jsr250-api:1.0'
 
     androidTestCompile 'com.crittercism.dexmaker:dexmaker:1.4'
     androidTestCompile 'com.crittercism.dexmaker:dexmaker-dx:1.4'
@@ -105,6 +98,8 @@ dependencies {
     }
     androidTestCompile 'org.mockito:mockito-core:1.10.19'
     androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.5.2'
+
+    apt 'com.google.dagger:dagger-compiler:2.6.1'
 }
 
 def getBuildString () {

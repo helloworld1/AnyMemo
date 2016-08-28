@@ -23,8 +23,6 @@ package org.liberty.android.fantastischmemo.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import org.apache.commons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
@@ -36,17 +34,17 @@ import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTSImpl;
 import org.liberty.android.fantastischmemo.tts.NullAnyMemoTTS;
 
-import roboguice.util.Ln;
-
 import android.content.Context;
+import android.util.Log;
 
 import com.google.common.base.Preconditions;
-import com.google.inject.assistedinject.Assisted;
 
 /*
  * Utility for TTS of a card
  */
 public class CardTTSUtil {
+
+    private static final String TAG = CardTTSUtil.class.getSimpleName();
 
     private String dbPath;
 
@@ -62,8 +60,7 @@ public class CardTTSUtil {
 
     private Context context;
 
-    @Inject
-    public CardTTSUtil(Context context, @Assisted String dbPath) {
+    public CardTTSUtil(Context context, String dbPath) {
         this.context = context;
 
         this.dbPath = dbPath;
@@ -137,7 +134,7 @@ public class CardTTSUtil {
     public void finalize() throws Throwable {
         try {
             if (questionTTS != null || answerTTS != null) {
-                Ln.w("release() must be called explicitly to clean up CardTTSUtil.");
+                Log.w(TAG, "release() must be called explicitly to clean up CardTTSUtil.");
                 release();
             }
         } finally {

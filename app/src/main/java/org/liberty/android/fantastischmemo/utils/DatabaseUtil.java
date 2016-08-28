@@ -15,6 +15,7 @@ import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.entity.Card;
 import org.liberty.android.fantastischmemo.entity.Setting;
+import org.liberty.android.fantastischmemo.modules.ForApplication;
 
 import android.content.Context;
 
@@ -23,7 +24,7 @@ public class DatabaseUtil {
     private Context mContext;
 
     @Inject
-    public DatabaseUtil(Context context) {
+    public DatabaseUtil(@ForApplication Context context) {
         mContext = context;
     }
 

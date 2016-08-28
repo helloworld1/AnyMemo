@@ -1,5 +1,7 @@
 package org.liberty.android.fantastischmemo.downloader.quizlet;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -7,9 +9,8 @@ import java.net.URLEncoder;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.downloader.oauth.OauthAccessCodeRetrievalFragment;
 
-import roboguice.util.Ln;
-
 public final class QuizletOAuth2AccessCodeRetrievalFragment extends OauthAccessCodeRetrievalFragment {
+    private static final String TAG = QuizletOAuth2AccessCodeRetrievalFragment.class.getSimpleName();
 
     public QuizletOAuth2AccessCodeRetrievalFragment() { }
 
@@ -29,18 +30,18 @@ public final class QuizletOAuth2AccessCodeRetrievalFragment extends OauthAccessC
                     URLEncoder.encode("login", "UTF-8"),
                     URLEncoder.encode(AMEnv.QUIZLET_REDIRECT_URI,
                         "UTF-8"));
-            Ln.i("Oauth request uri is " + uri);
+            Log.i(TAG, "Oauth request uri is " + uri);
             return uri;
         } catch (UnsupportedEncodingException e) {
             // This is unlikely to happen
-            Ln.e(e, "The URL encodeing UTF-8 is not supported ");
+            Log.e(TAG, "The URL encodeing UTF-8 is not supported ", e);
             return null;
         }
     }
 
     @Override
     protected boolean processCallbackUrl(String url) {
-        Ln.i("Callback url is " + url);
+        Log.i(TAG, "Callback url is " + url);
 
         if (!url.startsWith(AMEnv.QUIZLET_REDIRECT_URI)) {
             return false;

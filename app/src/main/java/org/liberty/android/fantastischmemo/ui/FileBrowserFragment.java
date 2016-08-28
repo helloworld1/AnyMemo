@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -41,16 +42,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.common.base.Strings;
+
 import org.apache.commons.io.FileUtils;
-import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseDialogFragment;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
-import roboguice.fragment.RoboDialogFragment;
 
-import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -58,7 +58,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class FileBrowserFragment extends RoboDialogFragment {
+import javax.inject.Inject;
+
+public class FileBrowserFragment extends BaseDialogFragment {
     public final static String EXTRA_DEFAULT_ROOT = "default_root";
     public final static String EXTRA_FILE_EXTENSIONS = "file_extension";
     public final static String EXTRA_DISMISS_ON_SELECT = "dismiss_on_select";
@@ -70,7 +72,7 @@ public class FileBrowserFragment extends RoboDialogFragment {
     private File currentDirectory = new File("/");
     private String defaultRoot;
     private String[] fileExtensions;
-    private AMActivity mActivity;
+    private Activity mActivity;
 
     private RecyclerView filesListRecyclerView;
     private FileBrowserAdapter fileListAdapter;
@@ -94,26 +96,16 @@ public class FileBrowserFragment extends RoboDialogFragment {
         this.onFileClickListener = listener;
     }
 
-    private AMFileUtil amFileUtil;
+    @Inject AMFileUtil amFileUtil;
 
-    private RecentListUtil recentListUtil;
+    @Inject RecentListUtil recentListUtil;
 
     public FileBrowserFragment() { }
-
-    @Inject
-    public void setAmFileUtil(AMFileUtil amFileUtil) {
-        this.amFileUtil = amFileUtil;
-    }
-
-    @Inject
-    public void setRecentListUtil(RecentListUtil recentListUtil) {
-        this.recentListUtil = recentListUtil;
-    }
 
     @Override
     public void onAttach(Context activity) {
         super.onAttach(activity);
-        mActivity = (AMActivity)activity;
+        mActivity = (Activity) activity;
         settings = PreferenceManager.getDefaultSharedPreferences(mActivity);
         editor = settings.edit();
     }
@@ -121,6 +113,7 @@ public class FileBrowserFragment extends RoboDialogFragment {
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        fragmentComponents().inject(this);
         Bundle args = this.getArguments();
         if(args != null) {
             defaultRoot = args.getString(EXTRA_DEFAULT_ROOT);

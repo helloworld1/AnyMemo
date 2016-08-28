@@ -20,8 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import org.liberty.android.fantastischmemo.R;
-
-import roboguice.fragment.RoboFragment;
+import org.liberty.android.fantastischmemo.common.BaseFragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -34,7 +33,7 @@ import android.view.ViewGroup;
 /**
  * This fragment is for a card with mulitple sides and can be flipped to different sides
  */
-public class FlipableCardFragment extends RoboFragment {
+public class FlipableCardFragment extends BaseFragment {
 
     /**
      * The key for the input a list of CardFragemnt.Builder that is used to build a fragment.

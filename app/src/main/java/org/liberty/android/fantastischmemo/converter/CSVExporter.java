@@ -37,8 +37,6 @@ import org.liberty.android.fantastischmemo.entity.Card;
 
 import com.opencsv.CSVWriter;
 
-import com.google.inject.BindingAnnotation;
-
 public class CSVExporter implements Converter {
 
     private static final long serialVersionUID = 1766409315203795426L;
@@ -106,9 +104,4 @@ public class CSVExporter implements Converter {
     public String getDestExtension() {
         return "csv";
     }
-
-    @BindingAnnotation
-    @Target({ ElementType. FIELD, ElementType.PARAMETER, ElementType.METHOD })
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface Type {};
 }

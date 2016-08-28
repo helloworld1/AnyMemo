@@ -50,8 +50,6 @@ import org.xml.sax.XMLReader;
 
 import android.util.Log;
 
-import com.google.inject.BindingAnnotation;
-
 public class SupermemoXMLImporter extends org.xml.sax.helpers.DefaultHandler implements Converter{
 
     private static final long serialVersionUID = 8958250001470549241L;
@@ -207,10 +205,4 @@ public class SupermemoXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
     public String getDestExtension() {
         return "db";
     }
-
-    @BindingAnnotation
-    @Target({ ElementType. FIELD, ElementType.PARAMETER, ElementType.METHOD })
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface Type {};
-
 }

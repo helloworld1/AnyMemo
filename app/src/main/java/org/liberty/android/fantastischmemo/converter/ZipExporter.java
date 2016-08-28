@@ -27,8 +27,6 @@ import java.lang.annotation.Target;
 
 import org.liberty.android.fantastischmemo.utils.AMZipUtils;
 
-import com.google.inject.BindingAnnotation;
-
 public class ZipExporter implements Converter {
 
     private static final long serialVersionUID = -7316554160292269944L;
@@ -52,9 +50,4 @@ public class ZipExporter implements Converter {
     public String getDestExtension() {
         return "zip";
     }
-
-    @BindingAnnotation
-    @Target({ ElementType. FIELD, ElementType.PARAMETER, ElementType.METHOD })
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface Type {};
 }

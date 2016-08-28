@@ -20,19 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo.ui;
 
-import java.util.Collections;
-import java.util.Map;
-
-import javax.inject.Inject;
-
-import org.liberty.android.fantastischmemo.AMActivity;
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.entity.Option;
-import org.liberty.android.fantastischmemo.utils.AMUiUtil;
-
-import roboguice.fragment.RoboDialogFragment;
-
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.gesture.Gesture;
@@ -53,11 +40,22 @@ import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class GestureSelectionDialogFragment extends RoboDialogFragment {
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseActivity;
+import org.liberty.android.fantastischmemo.common.BaseDialogFragment;
+import org.liberty.android.fantastischmemo.entity.Option;
+import org.liberty.android.fantastischmemo.utils.AMUiUtil;
+
+import java.util.Collections;
+import java.util.Map;
+
+import javax.inject.Inject;
+
+public class GestureSelectionDialogFragment extends BaseDialogFragment {
 
     public static final String EXTRA_GESTURE_NAME_DESCRIPTION_MAP = "gesture_name_description_map";
 
-    private AMActivity mActivity;
+    private BaseActivity mActivity;
 
     private ListView gestureList;
 
@@ -65,36 +63,28 @@ public class GestureSelectionDialogFragment extends RoboDialogFragment {
 
     private GesturesAdapter gestureAdapter;
 
-    private AMUiUtil amUiUtil;
-
-    private Option option;
-
     private boolean isOptionChanged = false;
 
     private Map<String, String> gestureNameDescriptionMap = Collections.emptyMap();
 
     public GestureSelectionDialogFragment() { }
 
-    @Inject
-    public void setAmUiUtil(AMUiUtil amUiUtil) {
-        this.amUiUtil = amUiUtil;
-    }
+    @Inject AMUiUtil amUiUtil;
 
-    @Inject
-    public void setOption(Option option) {
-        this.option = option;
-    }
+    @Inject Option option;
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (AMActivity) activity;
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mActivity = (BaseActivity) context;
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        fragmentComponents().inject(this);
+
         Bundle args = getArguments();
         assert args != null : "The gesture_name_description_map must be passed in";
         gestureNameDescriptionMap = (Map<String, String>) args.getSerializable(EXTRA_GESTURE_NAME_DESCRIPTION_MAP);

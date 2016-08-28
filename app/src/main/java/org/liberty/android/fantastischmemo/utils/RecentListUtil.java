@@ -24,6 +24,7 @@ import javax.inject.Inject;
 import org.apache.commons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.entity.Option;
+import org.liberty.android.fantastischmemo.modules.ForApplication;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -39,7 +40,7 @@ public class RecentListUtil {
     private SharedPreferences.Editor editor;
 
     @Inject
-    public RecentListUtil(Context context, Option option) {
+    public RecentListUtil(@ForApplication Context context, Option option) {
         settings = PreferenceManager.getDefaultSharedPreferences(context);
         editor = settings.edit();
         recentLength = option.getRecentCount();

@@ -1,17 +1,5 @@
 package org.liberty.android.fantastischmemo.ui;
 
-import java.util.Comparator;
-import java.util.List;
-
-import org.liberty.android.fantastischmemo.AMActivity;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.dao.CategoryDao;
-import org.liberty.android.fantastischmemo.entity.Category;
-
-import roboguice.fragment.RoboDialogFragment;
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -30,10 +18,20 @@ import android.widget.ListView;
 
 import com.google.common.base.Strings;
 
-public class CategoryEditorFragment extends RoboDialogFragment {
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseDialogFragment;
+import org.liberty.android.fantastischmemo.dao.CategoryDao;
+import org.liberty.android.fantastischmemo.entity.Category;
+
+import java.util.Comparator;
+import java.util.List;
+
+public class CategoryEditorFragment extends BaseDialogFragment {
     public static String EXTRA_DBPATH = "dbpath";
     public static String EXTRA_CATEGORY_ID = "id";
-    private AMActivity mActivity;
+    private Activity mActivity;
     private String dbPath;
     private CategoryDao categoryDao;
     private int currentCategoryId;
@@ -50,9 +48,9 @@ public class CategoryEditorFragment extends RoboDialogFragment {
     public CategoryEditorFragment() { }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (AMActivity)activity;
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mActivity = (Activity) context;
     }
 
     @Override

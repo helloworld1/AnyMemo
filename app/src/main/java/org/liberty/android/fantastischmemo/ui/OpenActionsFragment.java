@@ -19,20 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import javax.inject.Inject;
-
-import org.liberty.android.fantastischmemo.AMActivity;
-import org.liberty.android.fantastischmemo.AMPrefKeys;
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.utils.AMFileUtil;
-import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
-import org.liberty.android.fantastischmemo.utils.RecentListUtil;
-import org.liberty.android.fantastischmemo.utils.ShareUtil;
-
-import roboguice.fragment.RoboDialogFragment;
-
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -41,13 +29,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class OpenActionsFragment extends RoboDialogFragment {
+import org.liberty.android.fantastischmemo.AMPrefKeys;
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseActivity;
+import org.liberty.android.fantastischmemo.common.BaseDialogFragment;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
+import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
+import org.liberty.android.fantastischmemo.utils.RecentListUtil;
+import org.liberty.android.fantastischmemo.utils.ShareUtil;
+
+import javax.inject.Inject;
+
+public class OpenActionsFragment extends BaseDialogFragment {
     public static String EXTRA_DBPATH = "dbpath";
-    private AMActivity mActivity;
-
-    private ShareUtil shareUtil;
-
-    private AMPrefUtil amPrefUtil;
+    private BaseActivity mActivity;
 
     private String dbPath;
 
@@ -61,39 +56,26 @@ public class OpenActionsFragment extends RoboDialogFragment {
     private View shareItem;
     private View deleteItem;
 
-    private AMFileUtil amFileUtil;
+    @Inject AMFileUtil amFileUtil;
 
-    private RecentListUtil recentListUtil;
+    @Inject RecentListUtil recentListUtil;
+
+    @Inject ShareUtil shareUtil;
+
+    @Inject AMPrefUtil amPrefUtil;
+
 
     public OpenActionsFragment() { }
 
-    @Inject
-    public void setShareUtil(ShareUtil shareUtil) {
-        this.shareUtil = shareUtil;
-    }
-    @Inject
-    public void setAmPrefUtil(AMPrefUtil amPrefUtil) {
-        this.amPrefUtil = amPrefUtil;
-    }
-
-    @Inject
-    public void setAmFileUtil(AMFileUtil amFileUtil) {
-        this.amFileUtil = amFileUtil;
-    }
-
-    @Inject
-    public void setRecentListUtil(RecentListUtil recentListUtil) {
-        this.recentListUtil = recentListUtil;
-    }
-
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mActivity = (AMActivity)activity;
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mActivity = (BaseActivity) context;
     }
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        fragmentComponents().inject(this);
         Bundle args = this.getArguments();
         dbPath = args.getString(EXTRA_DBPATH);
         setStyle(DialogFragment.STYLE_NO_TITLE, 0);

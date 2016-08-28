@@ -29,8 +29,6 @@ import javax.inject.Inject;
 
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
-import com.google.inject.BindingAnnotation;
-
 public class TabTxtImporter extends CSVImporter {
 
     private static final long serialVersionUID = 3482178789406005987L;
@@ -45,9 +43,4 @@ public class TabTxtImporter extends CSVImporter {
     public String getSrcExtension() {
         return "txt";
     }
-
-    @BindingAnnotation
-    @Target({ ElementType. FIELD, ElementType.PARAMETER, ElementType.METHOD })
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface Type {};
 }

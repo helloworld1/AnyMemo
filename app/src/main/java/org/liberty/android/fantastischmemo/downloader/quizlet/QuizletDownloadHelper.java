@@ -27,10 +27,11 @@ import org.liberty.android.fantastischmemo.downloader.DownloadItem;
 import org.liberty.android.fantastischmemo.downloader.DownloaderUtils;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
-import roboguice.util.Ln;
 import android.net.Uri;
+import android.util.Log;
 
-class QuizletDownloadHelper {
+public class QuizletDownloadHelper {
+    private static final String TAG = QuizletDownloadHelper.class.getSimpleName();
 
     private DownloaderUtils downloaderUtils;
 
@@ -150,7 +151,7 @@ class QuizletDownloadHelper {
                     answer += "<br /><img src=\"" + downloadFilename + "\"/>";
                 }
             } catch (Exception e) {
-                Ln.e("Error downloading image.", e);
+                Log.e(TAG, "Error downloading image.", e);
             }
             Card card = new Card();
             card.setQuestion(question);

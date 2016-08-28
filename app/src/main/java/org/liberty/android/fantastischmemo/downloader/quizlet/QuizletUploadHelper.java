@@ -1,5 +1,7 @@
 package org.liberty.android.fantastischmemo.downloader.quizlet;
 
+import android.util.Log;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -15,9 +17,8 @@ import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.entity.Card;
 
-import roboguice.util.Ln;
-
 class QuizletUploadHelper {
+    private static final String TAG = QuizletUploadHelper.class.getSimpleName();
 
     /**
      * Upload cardsets list to Quizlet from a db file
@@ -99,8 +100,8 @@ class QuizletUploadHelper {
             writer.close();
 
             if (conn.getResponseCode() / 100 >= 3) {
-                Ln.v("Post content is: " + content);
-                Ln.v("Error string is: "
+                Log.v(TAG, "Post content is: " + content);
+                Log.v(TAG, "Error string is: "
                         + new String(IOUtils.toByteArray(conn.getErrorStream())));
                 throw new IOException("Response code: "
                         + conn.getResponseCode() + " URL is: " + url);

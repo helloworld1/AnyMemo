@@ -42,8 +42,6 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-import com.google.inject.BindingAnnotation;
-
 public class Supermemo2008XMLImporter extends org.xml.sax.helpers.DefaultHandler implements Converter{
 
     private static final long serialVersionUID = 8285843731806571485L;
@@ -125,9 +123,4 @@ public class Supermemo2008XMLImporter extends org.xml.sax.helpers.DefaultHandler
     public String getDestExtension() {
         return "db";
     }
-
-    @BindingAnnotation
-    @Target({ ElementType. FIELD, ElementType.PARAMETER, ElementType.METHOD })
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface Type {};
 }

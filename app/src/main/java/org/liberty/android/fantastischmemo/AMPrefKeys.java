@@ -120,7 +120,7 @@ public class AMPrefKeys {
     // List edit screen
     public static final String LIST_EDIT_SCREEN_PREFIX = "CardListActivity";
 
-    // AMActivity
+    // BaseActivity
     public static final String INTERFACE_LOCALE_KEY = "interface_locale";
 
     public static final String FULLSCREEN_MODE_KEY = "fullscreen_mode";

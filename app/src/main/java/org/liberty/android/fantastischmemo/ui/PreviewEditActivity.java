@@ -35,8 +35,6 @@ import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
 import org.liberty.android.fantastischmemo.utils.ShareUtil;
 
-import roboguice.util.Ln;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -47,6 +45,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -83,26 +82,17 @@ public class PreviewEditActivity extends QACardActivity {
     private Button nextButton;
 
     // Injected objects
-    private ShareUtil shareUtil;
+    @Inject ShareUtil shareUtil;
 
-    private AMPrefUtil amPrefUtil;
+    @Inject AMPrefUtil amPrefUtil;
 
     // The first card to read and display.
     private int startCardId = 1;
 
-    @Inject
-    public void setShareUtil(ShareUtil shareUtil) {
-        this.shareUtil = shareUtil;
-    }
-
-    @Inject
-    public void setAmPrefUtil(AMPrefUtil amPrefUtil) {
-        this.amPrefUtil = amPrefUtil;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        activityComponents().inject(this);
 
         Bundle extras = getIntent().getExtras();
 
@@ -490,7 +480,7 @@ public class PreviewEditActivity extends QACardActivity {
     @Override
     // Disable the copy to clipboard for Preview/Edit activity.
     protected void copyToClipboard() {
-        Ln.v("Copy to clipboard is disabled for PreviewEditActivity");
+        Log.v(TAG, "Copy to clipboard is disabled for PreviewEditActivity");
     }
 
     @Override

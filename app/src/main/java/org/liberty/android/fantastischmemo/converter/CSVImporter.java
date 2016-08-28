@@ -40,8 +40,6 @@ import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
 import com.opencsv.CSVReader;
 
-import com.google.inject.BindingAnnotation;
-
 public class CSVImporter implements Converter {
 
     private static final long serialVersionUID = 234745119864085982L;
@@ -121,10 +119,5 @@ public class CSVImporter implements Converter {
     public String getDestExtension() {
         return "db";
     }
-
-    @BindingAnnotation
-    @Target({ ElementType. FIELD, ElementType.PARAMETER, ElementType.METHOD })
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface Type {};
 }
 

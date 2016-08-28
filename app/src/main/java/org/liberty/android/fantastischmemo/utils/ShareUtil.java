@@ -6,16 +6,16 @@ import org.apache.commons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.entity.Card;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 
 public class ShareUtil {
 
-    private Context mContext;
+    private Activity mContext;
 
     @Inject
-    public ShareUtil(Context context) {
+    public ShareUtil(Activity context) {
         mContext = context;
     }
 
