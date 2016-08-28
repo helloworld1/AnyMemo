@@ -351,11 +351,7 @@ public class StatisticsScreen extends AMActivity {
     }
 
     private static final class ChartValueFormatter implements ValueFormatter {
-        private final DecimalFormat formatter;
-
-        public ChartValueFormatter() {
-            formatter = new DecimalFormat("###,###,##0"); // as integer (rounding)
-        }
+        private static final DecimalFormat formatter = new DecimalFormat("###,###,##0");
 
         public String getFormattedValue(float value, Entry entry, int dataSetIndex,
                                         ViewPortHandler viewPortHandler) {
@@ -364,11 +360,7 @@ public class StatisticsScreen extends AMActivity {
     }
 
     private static final class ChartYAxisValueFormatter implements YAxisValueFormatter {
-        private final DecimalFormat formatter;
-
-        public ChartYAxisValueFormatter() {
-            formatter = new DecimalFormat("###,###,##0"); // as integer (rounding)
-        }
+        private static final DecimalFormat formatter = new DecimalFormat("###,###,##0");
 
         public String getFormattedValue(float value, YAxis yAxis) {
             return formatter.format(value);
