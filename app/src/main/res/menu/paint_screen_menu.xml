@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto" >
     <item android:id="@+id/clear_menu_item"
         app:showAsAction="ifRoom"
-        android:icon="@android:drawable/ic_menu_delete"
+        android:icon="@drawable/ic_menu_delete"
         android:title="@string/clear_text" />
 </menu>
 

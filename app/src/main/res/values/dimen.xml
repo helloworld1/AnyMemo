@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="tab_icon_size">40dp</dimen>
+    <dimen name="player_main_icon_size">50dp</dimen>
+    <dimen name="browser_icon_size">35dp</dimen>
+</resources>

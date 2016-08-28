@@ -18,8 +18,8 @@
             style="@style/list_button"
             android:layout_height="wrap_content">
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="@dimen/tab_icon_size"
+                android:layout_height="@dimen/tab_icon_size"
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:paddingRight="5dp"
@@ -41,8 +41,8 @@
             style="@style/list_button"
             android:layout_height="wrap_content">
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="@dimen/tab_icon_size"
+                android:layout_height="@dimen/tab_icon_size"
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:paddingRight="5dp"
@@ -201,8 +201,8 @@
             style="@style/list_button"
             android:layout_height="wrap_content">
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="@dimen/tab_icon_size"
+                android:layout_height="@dimen/tab_icon_size"
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:paddingRight="5dp"
@@ -330,12 +330,12 @@
             style="@style/list_button"
             android:layout_height="wrap_content">
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="@dimen/tab_icon_size"
+                android:layout_height="@dimen/tab_icon_size"
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:paddingRight="5dp"
-                android:src="@drawable/settings" />
+                android:src="@drawable/db_settings" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -353,8 +353,8 @@
             style="@style/list_button"
             android:layout_height="wrap_content">
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="@dimen/tab_icon_size"
+                android:layout_height="@dimen/tab_icon_size"
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:paddingRight="5dp"
@@ -376,12 +376,12 @@
             style="@style/list_button"
             android:layout_height="wrap_content">
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="@dimen/tab_icon_size"
+                android:layout_height="@dimen/tab_icon_size"
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:paddingRight="5dp"
-                android:src="@drawable/trash" />
+                android:src="@drawable/reset" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -399,8 +399,8 @@
             style="@style/list_button"
             android:layout_height="wrap_content">
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="@dimen/tab_icon_size"
+                android:layout_height="@dimen/tab_icon_size"
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:paddingRight="5dp"
@@ -422,8 +422,8 @@
             style="@style/list_button"
             android:layout_height="wrap_content">
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="@dimen/tab_icon_size"
+                android:layout_height="@dimen/tab_icon_size"
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:paddingRight="5dp"
@@ -445,8 +445,8 @@
             style="@style/list_button"
             android:layout_height="wrap_content">
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="@dimen/tab_icon_size"
+                android:layout_height="@dimen/tab_icon_size"
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:paddingRight="5dp"

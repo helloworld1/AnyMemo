@@ -8,10 +8,10 @@
     android:layout_height="wrap_content" >
     <ImageView
         android:id="@+id/file_icon"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/browser_icon_size"
+        android:layout_height="@dimen/browser_icon_size"
         android:adjustViewBounds="true"
-        android:scaleType="centerInside"
-        android:layout_height="fill_parent" />
+        android:scaleType="fitCenter" />
     <TextView
         android:id="@+id/file_name"
         android:layout_width="wrap_content"
