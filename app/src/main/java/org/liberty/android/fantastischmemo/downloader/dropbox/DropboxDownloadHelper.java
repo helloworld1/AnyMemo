@@ -57,14 +57,12 @@ public class DropboxDownloadHelper {
 
     private AMFileUtil amFileUtil;
 
-    @Inject
-    public DropboxDownloadHelper(Context context, RecentListUtil recentListUtil, String authToken, String authTokenSecret) {
+    public DropboxDownloadHelper(Context context, RecentListUtil recentListUtil, String authToken) {
         this.authToken = authToken;
         this.authTokenSecret = authTokenSecret;
         this.recentListUtil = recentListUtil;
     }
 
-    @Inject
     public void setAmFileUtil(AMFileUtil amFileUtil) {
         this.amFileUtil = amFileUtil;
     }

@@ -56,7 +56,7 @@ public class AMEnv {
 
 
     // Dropbox oauth constants
-    public final static String DROPBOX_REDIRECT_URI = "https://localhost";
+    public final static String DROPBOX_REDIRECT_URI = "anymemo-dropbox://oauth";
 
     // Defined in AMSecrets.java
     public final static String DROPBOX_CONSUMER_KEY;
