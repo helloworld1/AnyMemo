@@ -253,4 +253,5 @@
     <string name="fe_logout_text">ログアウト</string>
     <string name="linebreak_conversion">改行をHTML形式に自動変換</string>
     <string name="locale_japanese_text">日本語</string>
+    <string name="directory_empty_text">（空ディレクトリ）</string>
 </resources>

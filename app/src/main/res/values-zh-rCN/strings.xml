@@ -437,4 +437,6 @@
     <string name="load_more_text">载入更多</string>
     <string name="search_by_title_text">按标题搜索</string>
     <string name="number_of_new_cards_learned_in_a_day_text">每天新词数</string>
+    <string name="change_directory_permission_denied_message">AnyMemo没有读取该文件夹的权限。</string>
+    <string name="directory_empty_text">（文件夹为空）</string>
 </resources>

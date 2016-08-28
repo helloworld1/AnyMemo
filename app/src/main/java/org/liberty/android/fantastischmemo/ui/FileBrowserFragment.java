@@ -38,6 +38,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.common.base.Strings;
 import org.apache.commons.io.FileUtils;
 import org.liberty.android.fantastischmemo.AMActivity;
@@ -73,6 +75,7 @@ public class FileBrowserFragment extends RoboDialogFragment {
     private RecyclerView filesListRecyclerView;
     private FileBrowserAdapter fileListAdapter;
     private FloatingActionButton addDbButton;
+    private TextView filesListEmptyView;
 
     private TextView titleTextView;
     private boolean dismissOnSelect = false;
@@ -167,6 +170,9 @@ public class FileBrowserFragment extends RoboDialogFragment {
         filesListRecyclerView.setLayoutManager(new LinearLayoutManager(filesListRecyclerView.getContext()));
         titleTextView = (TextView) v.findViewById(R.id.file_path_title);
 
+        filesListEmptyView = (TextView) v.findViewById(R.id.empty_text_view);
+        filesListEmptyView.setText(R.string.directory_empty_text);
+
         fileListAdapter = new FileBrowserAdapter(this);
         filesListRecyclerView.setAdapter(fileListAdapter);
 
@@ -193,9 +199,16 @@ public class FileBrowserFragment extends RoboDialogFragment {
 
     private void browseTo(final File aDirectory){
         if(aDirectory.isDirectory()){
-            titleTextView.setText(aDirectory.getPath());
-            this.currentDirectory = aDirectory;
-            fill(aDirectory.listFiles());
+            File[] listedFiles = aDirectory.listFiles();
+            if (listedFiles != null) {
+                titleTextView.setText(aDirectory.getPath());
+                this.currentDirectory = aDirectory;
+                fill(listedFiles);
+            } else {
+                Toast.makeText(filesListRecyclerView.getContext(),
+                               R.string.change_directory_permission_denied_message,
+                               Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -226,6 +239,12 @@ public class FileBrowserFragment extends RoboDialogFragment {
                 }
 
             }
+        }
+
+        if (files.length > 0) {
+            this.filesListEmptyView.setVisibility(View.INVISIBLE);
+        } else {
+            this.filesListEmptyView.setVisibility(View.VISIBLE);
         }
 
         this.fileListAdapter.setItems(directoryEntries);
@@ -493,7 +512,7 @@ public class FileBrowserFragment extends RoboDialogFragment {
                     if(selectedFileName.equals(CURRENT_DIR)){
                         /* Do nothing */
                     } else if(selectedFileName.equals(UP_ONE_LEVEL_DIR)){
-                        /* Do nithing */
+                        /* Do nothing */
                     } else {
                         final File clickedFile;
                         switch(fragment.displayMode){
