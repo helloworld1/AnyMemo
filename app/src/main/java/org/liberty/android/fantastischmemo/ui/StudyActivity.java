@@ -83,7 +83,7 @@ public class StudyActivity extends QACardActivity {
     private Scheduler scheduler = null;
 
     /* current states */
-    private long schedluledCardCount = 0;
+    private long scheduledCardCount = 0;
     private long newCardCount = 0;
 
     boolean initialized = false;
@@ -571,7 +571,7 @@ public class StudyActivity extends QACardActivity {
 
     private void refreshStatInfo() {
        newCardCount = getDbOpenHelper().getCardDao().getNewCardCount(filterCategory);
-       schedluledCardCount = getDbOpenHelper().getCardDao().getScheduledCardCount(filterCategory);
+       scheduledCardCount = getDbOpenHelper().getCardDao().getScheduledCardCount(filterCategory);
     }
 
     private void showCategoriesDialog() {
@@ -657,11 +657,11 @@ public class StudyActivity extends QACardActivity {
                 if (scheduler.isCardNew(prevCard.getLearningData())) {
                     newCardCount -= 1;
                     if (!scheduler.isCardLearned(updatedCard.getLearningData())) {
-                        schedluledCardCount += 1;
+                        scheduledCardCount += 1;
                     }
                 } else {
                     if (scheduler.isCardLearned(updatedCard.getLearningData())) {
-                        schedluledCardCount -= 1;
+                        scheduledCardCount -= 1;
                     }
                 }
 
@@ -683,7 +683,7 @@ public class StudyActivity extends QACardActivity {
     private String getActivityTitleString() {
         StringBuilder sb = new StringBuilder();
         sb.append(getString(R.string.new_text) + ": " + newCardCount + " ");
-        sb.append(getString(R.string.review_short_text) + ": " + schedluledCardCount + " ");
+        sb.append(getString(R.string.review_short_text) + ": " + scheduledCardCount + " ");
         sb.append(getString(R.string.id_text) + ": " + getCurrentCard().getId() + " ");
         if (!Strings.isNullOrEmpty(getCurrentCard().getCategory().getName())) {
             sb.append(getString(R.string.category_short_text) + ": " + getCurrentCard().getCategory().getName());
