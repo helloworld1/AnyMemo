@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2012 Haowen Ning
+CYAxisopyright (C) 2012 Haowen Ning
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -33,19 +33,26 @@ import android.widget.FrameLayout;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.formatter.YAxisValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.utils.ViewPortHandler;
+
 import org.liberty.android.fantastischmemo.AMActivity;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -63,6 +70,10 @@ public class StatisticsScreen extends AMActivity {
     private DrawerLayout drawerLayout;
 
     private NavigationView navigationView;
+
+    private static final ValueFormatter valueFormatter = new ChartValueFormatter();
+
+    private static final YAxisValueFormatter yAxisValueFormatter = new ChartYAxisValueFormatter();
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -195,6 +206,7 @@ public class StatisticsScreen extends AMActivity {
             BarDataSet dataSet = new BarDataSet(yVals, getString(R.string.number_of_new_cards_learned_in_a_day_text));
             BarData data = new BarData(xVals, dataSet);
             data.setValueTextColor(Color.WHITE);
+            data.setValueFormatter(valueFormatter);
 
             return data;
 
@@ -208,6 +220,8 @@ public class StatisticsScreen extends AMActivity {
             chart.getXAxis().setTextColor(Color.WHITE);
             chart.getAxisLeft().setTextColor(Color.WHITE);
             chart.getAxisRight().setTextColor(Color.WHITE);
+            chart.getAxisLeft().setValueFormatter(yAxisValueFormatter);
+            chart.getAxisRight().setValueFormatter(yAxisValueFormatter);
 
             chart.setData(data);
             chart.setDescription("");
@@ -233,6 +247,7 @@ public class StatisticsScreen extends AMActivity {
             BarDataSet dataSet = new BarDataSet(yVals, getString(R.string.number_of_cards_scheduled_in_a_day_text));
             BarData data = new BarData(xVals, dataSet);
             data.setValueTextColor(Color.WHITE);
+            data.setValueFormatter(valueFormatter);
 
             return data;
 
@@ -246,6 +261,8 @@ public class StatisticsScreen extends AMActivity {
             chart.getXAxis().setTextColor(Color.WHITE);
             chart.getAxisLeft().setTextColor(Color.WHITE);
             chart.getAxisRight().setTextColor(Color.WHITE);
+            chart.getAxisLeft().setValueFormatter(yAxisValueFormatter);
+            chart.getAxisRight().setValueFormatter(yAxisValueFormatter);
 
             chart.setData(data);
             chart.setDescription("");
@@ -254,7 +271,8 @@ public class StatisticsScreen extends AMActivity {
     }
 
     private class AccumulativeCardsToReviewTask extends ChartTask<Void, Void, BarData> {
-        @Override public BarData doInBackground(Void... params) {
+        @Override
+        public BarData doInBackground(Void... params) {
             cardDao = dbOpenHelper.getCardDao();
             List<String> xVals = new ArrayList<String>(30);
             List<BarEntry> yVals = new ArrayList<BarEntry>(30);
@@ -270,6 +288,7 @@ public class StatisticsScreen extends AMActivity {
             BarDataSet dataSet = new BarDataSet(yVals, getString(R.string.accumulative_cards_scheduled_text));
             BarData data = new BarData(xVals, dataSet);
             data.setValueTextColor(Color.WHITE);
+            data.setValueFormatter(valueFormatter);
 
             return data;
         }
@@ -282,6 +301,8 @@ public class StatisticsScreen extends AMActivity {
             chart.getXAxis().setTextColor(Color.WHITE);
             chart.getAxisLeft().setTextColor(Color.WHITE);
             chart.getAxisRight().setTextColor(Color.WHITE);
+            chart.getAxisLeft().setValueFormatter(yAxisValueFormatter);
+            chart.getAxisRight().setValueFormatter(yAxisValueFormatter);
 
             chart.setData(data);
             chart.setDescription("");
@@ -317,6 +338,7 @@ public class StatisticsScreen extends AMActivity {
             dataSet.setSelectionShift(5f);
 
             PieData data = new PieData(xVals, dataSet);
+            data.setValueFormatter(valueFormatter);
 
             return data;
         }
@@ -331,4 +353,22 @@ public class StatisticsScreen extends AMActivity {
             return chart;
         }
     }
+
+    private static final class ChartValueFormatter implements ValueFormatter {
+        private static final DecimalFormat formatter = new DecimalFormat("###,###,##0");
+
+        public String getFormattedValue(float value, Entry entry, int dataSetIndex,
+                                        ViewPortHandler viewPortHandler) {
+            return formatter.format(value);
+        }
+    }
+
+    private static final class ChartYAxisValueFormatter implements YAxisValueFormatter {
+        private static final DecimalFormat formatter = new DecimalFormat("###,###,##0");
+
+        public String getFormattedValue(float value, YAxis yAxis) {
+            return formatter.format(value);
+        }
+    }
+
 }
