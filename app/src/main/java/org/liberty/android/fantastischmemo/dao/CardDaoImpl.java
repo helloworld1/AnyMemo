@@ -298,7 +298,6 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
             }
             return cs;
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -370,7 +369,6 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
             }
             return countOf(pq);
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -394,7 +392,6 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
 
             return countOf(cardQb.prepare());
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -425,7 +422,6 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
 
             return countOf(cardQb.prepare());
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -451,7 +447,6 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
 
             return countOf(cardQb.prepare());
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -473,7 +468,6 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
 
             return countOf(cardQb.prepare());
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -604,7 +598,6 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
             }
             return cs;
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -632,7 +625,6 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
             }
             return cs;
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -852,7 +844,6 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
             }
             return cs;
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
