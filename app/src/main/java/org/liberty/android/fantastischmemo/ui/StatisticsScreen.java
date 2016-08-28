@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2012 Haowen Ning
+CYAxisopyright (C) 2012 Haowen Ning
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -70,6 +70,10 @@ public class StatisticsScreen extends AMActivity {
     private DrawerLayout drawerLayout;
 
     private NavigationView navigationView;
+
+    private static final ValueFormatter valueFormatter = new ChartValueFormatter();
+
+    private static final YAxisValueFormatter yAxisValueFormatter = new ChartYAxisValueFormatter();
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -202,7 +206,7 @@ public class StatisticsScreen extends AMActivity {
             BarDataSet dataSet = new BarDataSet(yVals, getString(R.string.number_of_new_cards_learned_in_a_day_text));
             BarData data = new BarData(xVals, dataSet);
             data.setValueTextColor(Color.WHITE);
-            data.setValueFormatter(new ChartValueFormatter());
+            data.setValueFormatter(valueFormatter);
 
             return data;
 
@@ -216,8 +220,8 @@ public class StatisticsScreen extends AMActivity {
             chart.getXAxis().setTextColor(Color.WHITE);
             chart.getAxisLeft().setTextColor(Color.WHITE);
             chart.getAxisRight().setTextColor(Color.WHITE);
-            chart.getAxisLeft().setValueFormatter(new ChartYAxisValueFormatter());
-            chart.getAxisRight().setValueFormatter(new ChartYAxisValueFormatter());
+            chart.getAxisLeft().setValueFormatter(yAxisValueFormatter);
+            chart.getAxisRight().setValueFormatter(yAxisValueFormatter);
 
             chart.setData(data);
             chart.setDescription("");
@@ -243,7 +247,7 @@ public class StatisticsScreen extends AMActivity {
             BarDataSet dataSet = new BarDataSet(yVals, getString(R.string.number_of_cards_scheduled_in_a_day_text));
             BarData data = new BarData(xVals, dataSet);
             data.setValueTextColor(Color.WHITE);
-            data.setValueFormatter(new ChartValueFormatter());
+            data.setValueFormatter(valueFormatter);
 
             return data;
 
@@ -257,8 +261,8 @@ public class StatisticsScreen extends AMActivity {
             chart.getXAxis().setTextColor(Color.WHITE);
             chart.getAxisLeft().setTextColor(Color.WHITE);
             chart.getAxisRight().setTextColor(Color.WHITE);
-            chart.getAxisLeft().setValueFormatter(new ChartYAxisValueFormatter());
-            chart.getAxisRight().setValueFormatter(new ChartYAxisValueFormatter());
+            chart.getAxisLeft().setValueFormatter(yAxisValueFormatter);
+            chart.getAxisRight().setValueFormatter(yAxisValueFormatter);
 
             chart.setData(data);
             chart.setDescription("");
@@ -284,7 +288,7 @@ public class StatisticsScreen extends AMActivity {
             BarDataSet dataSet = new BarDataSet(yVals, getString(R.string.accumulative_cards_scheduled_text));
             BarData data = new BarData(xVals, dataSet);
             data.setValueTextColor(Color.WHITE);
-            data.setValueFormatter(new ChartValueFormatter());
+            data.setValueFormatter(valueFormatter);
 
             return data;
         }
@@ -297,8 +301,8 @@ public class StatisticsScreen extends AMActivity {
             chart.getXAxis().setTextColor(Color.WHITE);
             chart.getAxisLeft().setTextColor(Color.WHITE);
             chart.getAxisRight().setTextColor(Color.WHITE);
-            chart.getAxisLeft().setValueFormatter(new ChartYAxisValueFormatter());
-            chart.getAxisRight().setValueFormatter(new ChartYAxisValueFormatter());
+            chart.getAxisLeft().setValueFormatter(yAxisValueFormatter);
+            chart.getAxisRight().setValueFormatter(yAxisValueFormatter);
 
             chart.setData(data);
             chart.setDescription("");
@@ -334,7 +338,7 @@ public class StatisticsScreen extends AMActivity {
             dataSet.setSelectionShift(5f);
 
             PieData data = new PieData(xVals, dataSet);
-            data.setValueFormatter(new ChartValueFormatter());
+            data.setValueFormatter(valueFormatter);
 
             return data;
         }
