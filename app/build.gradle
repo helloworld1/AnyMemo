@@ -12,8 +12,8 @@ android {
 
     useLibrary 'org.apache.http.legacy'
     defaultConfig {
-        versionCode 220
-        versionName "10.9.1"
+        versionCode 221
+        versionName "10.9.991"
         minSdkVersion 14
         targetSdkVersion 23
         testApplicationId "org.liberty.android.fantastischmemo.test"
@@ -72,8 +72,8 @@ dependencies {
     compile 'com.j256.ormlite:ormlite-core:4.48'
     compile 'com.j256.ormlite:ormlite-android:4.48'
 
-    compile 'com.google.firebase:firebase-core:9.0.2'
-    compile 'com.google.firebase:firebase-crash:9.0.2'
+    compile 'com.google.firebase:firebase-core:9.4.0'
+    compile 'com.google.firebase:firebase-crash:9.4.0'
 
     compile 'oauth.signpost:signpost-core:1.2.1.2'
     compile('oauth.signpost:signpost-commonshttp4:1.2.1.2') {
