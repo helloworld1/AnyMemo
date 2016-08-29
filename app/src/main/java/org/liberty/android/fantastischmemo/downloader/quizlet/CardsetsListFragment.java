@@ -31,8 +31,6 @@ public class CardsetsListFragment extends AbstractDownloaderFragment {
 
     private SearchMethod searchMethod;
 
-    private QuizletDownloadHelper quizletDownloadHelper;
-
     /**
      * Keep track of the next page to load.
      */
@@ -40,17 +38,14 @@ public class CardsetsListFragment extends AbstractDownloaderFragment {
 
     private boolean isLastPage = true;
 
-    public CardsetsListFragment() { }
+    @Inject QuizletDownloadHelper quizletDownloadHelper;
 
-    @Inject
-    public void setQuizletDownloadHelper(
-            QuizletDownloadHelper quizletDownloadHelper) {
-        this.quizletDownloadHelper = quizletDownloadHelper;
-    }
+    public CardsetsListFragment() { }
 
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        fragmentComponents().inject(this);
         Bundle args = getArguments();
 
         // authToken and userId can be empty to indicate accessing public cards

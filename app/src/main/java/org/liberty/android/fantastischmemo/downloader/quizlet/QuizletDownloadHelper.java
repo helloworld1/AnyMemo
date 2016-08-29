@@ -25,11 +25,13 @@ import org.liberty.android.fantastischmemo.entity.Category;
 import org.liberty.android.fantastischmemo.entity.LearningData;
 import org.liberty.android.fantastischmemo.downloader.DownloadItem;
 import org.liberty.android.fantastischmemo.downloader.DownloaderUtils;
+import org.liberty.android.fantastischmemo.modules.PerApplication;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
 import android.net.Uri;
 import android.util.Log;
 
+@PerApplication
 public class QuizletDownloadHelper {
     private static final String TAG = QuizletDownloadHelper.class.getSimpleName();
 
@@ -38,12 +40,8 @@ public class QuizletDownloadHelper {
     private AMFileUtil amFileUtil;
 
     @Inject
-    public void setDownloaderUtils(DownloaderUtils downloaderUtils) {
+    public QuizletDownloadHelper(DownloaderUtils downloaderUtils, AMFileUtil amFileUtil) {
         this.downloaderUtils = downloaderUtils;
-    }
-
-    @Inject
-    public void setAmFileUtil(AMFileUtil amFileUtil) {
         this.amFileUtil = amFileUtil;
     }
 
