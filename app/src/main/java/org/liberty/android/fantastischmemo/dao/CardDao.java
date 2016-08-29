@@ -56,6 +56,9 @@ public interface CardDao extends HelperDao<Card, Integer> {
     /* get the number cards that scheduled between startDate and endDate */
     long getScheduledCardCount(Category filterCategory, Date startDate, Date endDate);
 
+    /* get the number cards which was newly learned between at this calendar day*/
+    long getTodayNewLearnedCardCount(Category filterCategory);
+
     /* get the number cards which was newly learned between startDate and endDate */
     long getNewLearnedCardCount(Category filterCategory, Date startDate, Date endDate);
 

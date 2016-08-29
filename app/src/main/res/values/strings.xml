@@ -281,6 +281,7 @@
     <string name="total_text">Total</string>
     <string name="review_short_text">Rev</string>
     <string name="category_short_text">C</string>
+    <string name="today_text">Today</string>
     <string name="new_text">New</string>
     <string name="id_text">ID</string>
     <string name="entry_last_learn_date">last_learn_date</string>
