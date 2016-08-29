@@ -111,8 +111,8 @@ public class AppModules {
 
     @Provides
     @PerApplication
-    DownloaderUtils providesDownloaderUtils(AMApplication context) {
-        return new DownloaderUtils(context);
+    DownloaderUtils providesDownloaderUtils(AMFileUtil amFileUtil) {
+        return new DownloaderUtils(amFileUtil);
     }
 
     @Provides

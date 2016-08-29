@@ -50,12 +50,7 @@ public class DownloaderUtils {
     private AMFileUtil amFileUtil;
 
     @Inject
-    public DownloaderUtils(Context context) {
-    }
-
-
-    @Inject
-    public void setAmFileUtil(AMFileUtil amFileUtil) {
+    public DownloaderUtils(AMFileUtil amFileUtil) {
         this.amFileUtil = amFileUtil;
     }
 
