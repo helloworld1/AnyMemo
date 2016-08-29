@@ -6,6 +6,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.liberty.android.fantastischmemo.AMApplication;
 import org.liberty.android.fantastischmemo.converter.Converter;
+import org.liberty.android.fantastischmemo.downloader.DownloaderUtils;
 import org.liberty.android.fantastischmemo.entity.Option;
 import org.liberty.android.fantastischmemo.entity.SchedulingAlgorithmParameters;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
@@ -37,6 +38,7 @@ public interface AppComponents {
     AMUiUtil amUiUtil();
     RecentListUtil recenetListUtil();
     SchedulingAlgorithmParameters schedulingAlgorithmParameters();
+    DownloaderUtils downloaderUtils();
     Map<Class<?>, Converter> converterMap();
     Option option();
 

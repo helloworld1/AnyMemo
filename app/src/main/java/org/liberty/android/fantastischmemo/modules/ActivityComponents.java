@@ -4,6 +4,7 @@ import android.content.Context;
 
 import org.liberty.android.fantastischmemo.common.BaseActivity;
 import org.liberty.android.fantastischmemo.converter.Converter;
+import org.liberty.android.fantastischmemo.downloader.DownloaderUtils;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 import org.liberty.android.fantastischmemo.ui.AnyMemo;
 import org.liberty.android.fantastischmemo.ui.CardEditor;
@@ -35,6 +36,8 @@ public interface ActivityComponents {
     ShareUtil shareUtil();
 
     AMUiUtil amUiUtil();
+
+    DownloaderUtils downloaderUtils();
 
     Map<Class<?>, Converter> converterMap();
 

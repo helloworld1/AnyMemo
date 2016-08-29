@@ -20,6 +20,7 @@ import org.liberty.android.fantastischmemo.converter.TabTxtExporter;
 import org.liberty.android.fantastischmemo.converter.TabTxtImporter;
 import org.liberty.android.fantastischmemo.converter.ZipExporter;
 import org.liberty.android.fantastischmemo.converter.ZipImporter;
+import org.liberty.android.fantastischmemo.downloader.DownloaderUtils;
 import org.liberty.android.fantastischmemo.entity.Option;
 import org.liberty.android.fantastischmemo.entity.SchedulingAlgorithmParameters;
 import org.liberty.android.fantastischmemo.scheduler.DefaultScheduler;
@@ -106,6 +107,12 @@ public class AppModules {
     FirebaseAnalytics providesFirebaseAnalytics(AMApplication context) {
         FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(context);
         return firebaseAnalytics;
+    }
+
+    @Provides
+    @PerApplication
+    DownloaderUtils providesDownloaderUtils(AMApplication context) {
+        return new DownloaderUtils(context);
     }
 
     @Provides

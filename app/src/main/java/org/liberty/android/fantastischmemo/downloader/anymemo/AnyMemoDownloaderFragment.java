@@ -1,5 +1,8 @@
 package org.liberty.android.fantastischmemo.downloader.anymemo;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.liberty.android.fantastischmemo.AMEnv;
@@ -25,13 +28,14 @@ public class AnyMemoDownloaderFragment extends AbstractDownloaderFragment {
 
     private static final String DOWNLOAD_DATABASE_PATH = "/api/legacy_database/download";
 
-    private DownloaderUtils downloaderUtils;
-
     private Map<String, List<DownloadItem>> categoryDatabasesMap;
 
-    @Inject
-    public void setDownloaderUtils(DownloaderUtils downloaderUtils) {
-        this.downloaderUtils = downloaderUtils;
+    @Inject DownloaderUtils downloaderUtils;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        fragmentComponents().inject(this);
     }
 
     @Override
