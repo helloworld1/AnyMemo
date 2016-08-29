@@ -427,7 +427,7 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
         }
     }
 
-    public long getNewLearnedCardCount(Category filterCategory) {
+    public long getTodayNewLearnedCardCount(Category filterCategory) {
         Calendar calendar = new GregorianCalendar();
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);

@@ -23,7 +23,6 @@ import java.util.HashMap;
 
 import javax.inject.Inject;
 
-import android.graphics.Paint;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.entity.*;
 import org.liberty.android.fantastischmemo.queue.LearnQueueManager;
@@ -573,7 +572,7 @@ public class StudyActivity extends QACardActivity {
     private void refreshStatInfo() {
        newCardCount = getDbOpenHelper().getCardDao().getNewCardCount(filterCategory);
        scheduledCardCount = getDbOpenHelper().getCardDao().getScheduledCardCount(filterCategory);
-       newCardLearnedTodayCount = getDbOpenHelper().getCardDao().getNewLearnedCardCount(filterCategory);
+       newCardLearnedTodayCount = getDbOpenHelper().getCardDao().getTodayNewLearnedCardCount(filterCategory);
     }
 
     private void showCategoriesDialog() {
