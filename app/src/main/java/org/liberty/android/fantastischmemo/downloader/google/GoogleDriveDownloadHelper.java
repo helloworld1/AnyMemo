@@ -24,6 +24,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.liberty.android.fantastischmemo.AMEnv;
+import org.liberty.android.fantastischmemo.modules.AppComponents;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
 import android.content.Context;
@@ -34,12 +35,13 @@ public class GoogleDriveDownloadHelper {
 
     private final String authToken;
 
-    private AMFileUtil amFileUtil;
+    @Inject AMFileUtil amFileUtil;
 
     @Inject
-    public GoogleDriveDownloadHelper(Context context, String authToken) {
+    public GoogleDriveDownloadHelper(AppComponents appComponents, String authToken) {
+        appComponents.inject(this);
+        mContext = appComponents.applicationContext();
         this.authToken = authToken;
-        mContext = context;
     }
 
     @Inject

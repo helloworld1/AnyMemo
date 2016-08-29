@@ -42,15 +42,7 @@ public class UploadGoogleDriveScreen extends GoogleAccountActivity {
 
     private String authToken = null;
 
-    private GoogleDriveUploadHelperFactory uploadHelperFactory;
-
     private GoogleDriveUploadHelper uploadHelper;
-
-    @Inject
-    public void setUploadHelperFactory(
-            GoogleDriveUploadHelperFactory uploadHelperFactory) {
-        this.uploadHelperFactory = uploadHelperFactory;
-    }
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -63,7 +55,7 @@ public class UploadGoogleDriveScreen extends GoogleAccountActivity {
 
         this.authToken = authTokens[0];
 
-        uploadHelper = uploadHelperFactory.create(authToken);
+        uploadHelper = new GoogleDriveUploadHelper(this, authToken);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         FileBrowserFragment fragment = new FileBrowserFragment();

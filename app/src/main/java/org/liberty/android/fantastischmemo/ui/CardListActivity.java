@@ -42,7 +42,6 @@ import org.liberty.android.fantastischmemo.ui.loader.CardWrapperListLoader;
 import org.liberty.android.fantastischmemo.ui.loader.MultipleLoaderManager;
 import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
 import org.liberty.android.fantastischmemo.utils.CardTextUtil;
-import org.liberty.android.fantastischmemo.utils.CardTextUtilFactory;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -92,9 +91,6 @@ public class CardListActivity extends BaseActivity {
     private ListView listView;
 
     private CardTextUtil cardTextUtil;
-
-    private CardTextUtilFactory cardTextUtilFactory;
-
 
     private boolean initialAnswerVisible = true;
 

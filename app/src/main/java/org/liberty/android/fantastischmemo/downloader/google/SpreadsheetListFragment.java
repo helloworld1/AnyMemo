@@ -38,25 +38,16 @@ public class SpreadsheetListFragment extends AbstractDownloaderFragment {
 
     private String authToken = null;
 
-    private GoogleDriveDownloadHelperFactory downloadHelperFactory;
-
     private GoogleDriveDownloadHelper downloadHelper;
 
     public SpreadsheetListFragment() { }
-
-    @Inject
-    public void setDownloadHelperFactory(
-            GoogleDriveDownloadHelperFactory downloadHelperFactory) {
-        this.downloadHelperFactory = downloadHelperFactory;
-    }
 
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         Bundle args = getArguments();
-        assert args != null : "The EXTRA_AUTH_TOKEN must be passed to SpreadsheetListFragment";
         this.authToken = args.getString(EXTRA_AUTH_TOKEN);
-        downloadHelper = downloadHelperFactory.create(authToken);
+        downloadHelper = new GoogleDriveDownloadHelper(appComponents(), authToken);
     }
 
     @Override

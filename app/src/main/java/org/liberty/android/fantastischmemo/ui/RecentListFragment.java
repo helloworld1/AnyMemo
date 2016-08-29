@@ -226,9 +226,13 @@ public class RecentListFragment extends BaseFragment {
         final List<RecentItem> ril = loadRecentItemsWithName();
         for (final RecentItem ri : ril){
             try {
+                Context context = getContext();
+                if (context == null) {
+                    break;
+                }
                 AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, ri.dbPath);
                 CardDao dao = helper.getCardDao();
-                ri.dbInfo = getContext().getString(R.string.stat_total) + dao.getTotalCount(null) + " " +
+                ri.dbInfo = context.getString(R.string.stat_total) + dao.getTotalCount(null) + " " +
                         getContext().getString(R.string.stat_new) + dao.getNewCardCount(null) + " " +
                         getContext().getString(R.string.stat_scheduled)+ dao.getScheduledCardCount(null);
                 ril.set(ri.index, ri);

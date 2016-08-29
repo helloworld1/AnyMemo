@@ -7,6 +7,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import org.liberty.android.fantastischmemo.AMApplication;
 import org.liberty.android.fantastischmemo.converter.Converter;
 import org.liberty.android.fantastischmemo.downloader.DownloaderUtils;
+import org.liberty.android.fantastischmemo.downloader.google.GoogleDriveDownloadHelper;
 import org.liberty.android.fantastischmemo.entity.Option;
 import org.liberty.android.fantastischmemo.entity.SchedulingAlgorithmParameters;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
@@ -55,4 +56,6 @@ public interface AppComponents {
     void inject(ConvertIntentService service);
 
     void inject(WidgetRemoteViewsFactory factory);
+
+    void inject(GoogleDriveDownloadHelper helper);
 }
