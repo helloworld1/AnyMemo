@@ -1,9 +1,11 @@
 package org.liberty.android.fantastischmemo.test.converter;
 
-import java.io.File;
-
 import org.liberty.android.fantastischmemo.converter.Converter;
 import org.liberty.android.fantastischmemo.converter.TabTxtExporter;
+
+import java.io.File;
+
+import static org.junit.Assert.assertTrue;
 
 public class TabTxtExporterTest extends AbstractConverterTest {
 

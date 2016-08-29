@@ -1,12 +1,13 @@
 package org.liberty.android.fantastischmemo.test.utils;
 
+import android.support.test.filters.SmallTest;
+
+import org.junit.Test;
 import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
 import org.liberty.android.fantastischmemo.test.TestHelper;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
 import org.mockito.Mockito;
-
-import android.test.suitebuilder.annotation.SmallTest;
 
 public class AMFileUtilTest extends AbstractExistingDBTest {
 
@@ -14,6 +15,7 @@ public class AMFileUtilTest extends AbstractExistingDBTest {
         super.setUp();
     }
     @SmallTest
+    @Test
     public void testDeleteDbSafe() {
         AMPrefUtil mockPrefUtil = Mockito.mock(AMPrefUtil.class);
         AMFileUtil amFileUtil = new AMFileUtil(getContext(), mockPrefUtil);

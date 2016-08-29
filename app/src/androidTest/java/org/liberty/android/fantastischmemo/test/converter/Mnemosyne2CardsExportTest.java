@@ -1,11 +1,13 @@
 package org.liberty.android.fantastischmemo.test.converter;
 
-import java.io.File;
-
 import org.liberty.android.fantastischmemo.converter.Converter;
 import org.liberty.android.fantastischmemo.converter.Mnemosyne2CardsExporter;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
+
+import java.io.File;
+
+import static org.junit.Assert.assertTrue;
 
 public class Mnemosyne2CardsExportTest extends AbstractConverterTest {
 

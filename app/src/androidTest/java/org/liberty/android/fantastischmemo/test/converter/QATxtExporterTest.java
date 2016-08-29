@@ -1,9 +1,11 @@
 package org.liberty.android.fantastischmemo.test.converter;
 
-import java.io.File;
-
 import org.liberty.android.fantastischmemo.converter.Converter;
 import org.liberty.android.fantastischmemo.converter.QATxtExporter;
+
+import java.io.File;
+
+import static org.junit.Assert.assertTrue;
 
 public class QATxtExporterTest extends AbstractConverterTest {
 

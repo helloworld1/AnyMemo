@@ -1,24 +1,30 @@
 package org.liberty.android.fantastischmemo.test.db;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Date;
+import android.support.test.filters.SmallTest;
 
+import org.junit.Test;
 import org.liberty.android.fantastischmemo.dao.CardDao;
-import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
+import org.liberty.android.fantastischmemo.dao.LearningDataDao;
 import org.liberty.android.fantastischmemo.entity.Card;
 import org.liberty.android.fantastischmemo.entity.Category;
 import org.liberty.android.fantastischmemo.entity.LearningData;
 import org.liberty.android.fantastischmemo.entity.ReviewOrdering;
 import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
 
-import android.test.suitebuilder.annotation.SmallTest;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 public class CardDaoTest extends AbstractExistingDBTest {
 
     @SmallTest
+    @Test
     public void testDeleteCardMaintainOrdinal() throws Exception {
         CardDao cardDao = helper.getCardDao();
         Card c13 = cardDao.queryForId(13);
@@ -35,6 +41,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testCreateCardMaintainOrdinal() throws Exception {
         CardDao cardDao = helper.getCardDao();
         // Create card has null ordinal, append to the end
@@ -58,6 +65,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testSwapQA() throws Exception {
         CardDao cardDao = helper.getCardDao();
         Card c14 = cardDao.queryForId(14);
@@ -70,6 +78,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testRemoveDuplicates() throws Exception {
         CardDao cardDao = helper.getCardDao();
         long originalSize = cardDao.countOf();
@@ -92,6 +101,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testSearchFirstOrdinalWithcategoryIfExists() throws Exception {
         setupThreeCategories();
         CardDao cardDao = helper.getCardDao();
@@ -103,6 +113,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testSearchLastOrdinalWithcategoryIfExists() throws Exception {
         setupThreeCategories();
         CardDao cardDao = helper.getCardDao();
@@ -115,6 +126,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
 
 
     @SmallTest
+    @Test
     public void testQueryNextCardWithoutCategory() throws Exception {
         setupThreeCategories();
         CardDao cardDao = helper.getCardDao();
@@ -126,6 +138,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testQueryPrevCardWithoutCategory() throws Exception {
         setupThreeCategories();
         CardDao cardDao = helper.getCardDao();
@@ -137,6 +150,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testQueryNextCardWithCategory() throws Exception {
         setupThreeCategories();
         CardDao cardDao = helper.getCardDao();
@@ -152,6 +166,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testQueryPrevCardWithCategory() throws Exception {
         setupThreeCategories();
         CardDao cardDao = helper.getCardDao();
@@ -166,6 +181,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testShuffleOrdinals() throws Exception {
         CardDao cardDao = helper.getCardDao();
         cardDao.shuffleOrdinals();
@@ -173,6 +189,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testSwapAllQA() throws Exception {
         CardDao cardDao = helper.getCardDao();
         // Randomly sample 2 cards
@@ -193,6 +210,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testGetRandomReviewedCards() throws Exception {
         CardDao cardDao = helper.getCardDao();
         List<Card> cards = cardDao.getRandomReviewedCards(null, 10);
@@ -200,6 +218,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testCreateCard() throws Exception {
         CardDao cardDao = helper.getCardDao();
         Card c = new Card();
@@ -214,6 +233,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testCreateCards() throws Exception {
         CardDao cardDao = helper.getCardDao();
         Card c = new Card();
@@ -242,6 +262,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testGetNewCardCount() throws Exception {
         CardDao cardDao = helper.getCardDao();
         assertEquals(28L, cardDao.getNewCardCount(null));
@@ -254,6 +275,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testGetScheduledCardCount() throws Exception {
         CardDao cardDao = helper.getCardDao();
         assertEquals(0L, cardDao.getScheduledCardCount(null));
@@ -266,6 +288,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testSearchNextCard() throws Exception {
         CardDao cardDao = helper.getCardDao();
         Card c = cardDao.searchNextCard("mouth", 1);
@@ -282,6 +305,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testSearchPrevCard() throws Exception {
         CardDao cardDao = helper.getCardDao();
         Card c = cardDao.searchPrevCard("mouth", 10);
@@ -298,6 +322,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testGetRandomCardsWithoutCategory() throws Exception {
         CardDao cardDao = helper.getCardDao();
 
@@ -311,6 +336,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testGetRandomCardsWithCategory() throws Exception {
         CardDao cardDao = helper.getCardDao();
         CategoryDao categoryDao = helper.getCategoryDao();
@@ -327,6 +353,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testGetCardsByOrdinalAndSize() throws Exception {
         CardDao cardDao = helper.getCardDao();
 
@@ -350,6 +377,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testGetCardsByCategory() throws Exception {
         CardDao cardDao = helper.getCardDao();
         CategoryDao categoryDao = helper.getCategoryDao();
@@ -379,6 +407,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testGetById() {
         CardDao cardDao = helper.getCardDao();
         Card card = cardDao.getById(3);
@@ -386,6 +415,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testGetByOrdinal() {
         CardDao cardDao = helper.getCardDao();
         Card card = cardDao.getByOrdinal(3);
@@ -393,6 +423,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testGetAllCardWithoutFilteringCategory() throws SQLException {
         setupThreeCategories();
         CardDao cardDao = helper.getCardDao();
@@ -401,6 +432,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testGetAllCardWithFilteringCategory() throws SQLException {
         setupThreeCategories();
         CardDao cardDao = helper.getCardDao();
@@ -414,6 +446,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testReviewCardsOrderOfSameEasiness() throws SQLException {
         CardDao cardDao = helper.getCardDao();
         Card c13 = cardDao.queryForId(13);
@@ -422,98 +455,100 @@ public class CardDaoTest extends AbstractExistingDBTest {
 
         LearningDataDao learningDataDao = helper.getLearningDataDao();
         Date testDate = new Date((new Date().getTime() - 1));
-        
+
         learningDataDao.refresh(c13.getLearningData());
         LearningData c13Ld = c13.getLearningData();
         c13Ld.setAcqReps(1);
         c13Ld.setNextLearnDate(testDate);
         c13Ld.setEasiness((float) 2.7);
         learningDataDao.update(c13Ld);
-        
-        learningDataDao.refresh(c14.getLearningData()); 
+
+        learningDataDao.refresh(c14.getLearningData());
         LearningData c14Ld = c14.getLearningData();
         c14Ld.setAcqReps(1);
         c14Ld.setNextLearnDate(testDate);
-        c14Ld.setEasiness((float) 2.7);  
+        c14Ld.setEasiness((float) 2.7);
         learningDataDao.update(c14Ld);
-       
+
         learningDataDao.refresh(c15.getLearningData());
         LearningData c15Ld = c15.getLearningData();
         c15Ld.setAcqReps(1);
         c15Ld.setNextLearnDate(testDate);
         c15Ld.setEasiness((float) 2.7);
         learningDataDao.update(c15Ld);
-         
+
         List<Card> cards = cardDao.getCardsForReview(null, null, 50, ReviewOrdering.HardestFirst);
-        
+
         assertEquals(3, cards.size());
         assertEquals(13, (int)cards.get(0).getOrdinal());
         assertEquals(14, (int)cards.get(1).getOrdinal());
         assertEquals(15, (int)cards.get(2).getOrdinal());
     }
-    
+
     @SmallTest
+    @Test
     public void testReviewCardsOrderOfAllDifferentEasiness() throws SQLException {
         CardDao cardDao = helper.getCardDao();
         CategoryDao categoryDao = helper.getCategoryDao();
         setupThreeCategories();
-        
+
         Card c2 = cardDao.queryForId(2);
         Card c5 = cardDao.queryForId(5);
-        
+
         Card c13 = cardDao.queryForId(13);
         Card c14 = cardDao.queryForId(14);
         Card c15 = cardDao.queryForId(15);
 
         LearningDataDao learningDataDao = helper.getLearningDataDao();
         Date testDate = new Date((new Date().getTime() - 1));
-        
+
         learningDataDao.refresh(c13.getLearningData());
         LearningData c13Ld = c13.getLearningData();
         c13Ld.setAcqReps(1);
         c13Ld.setNextLearnDate(testDate);
         c13Ld.setEasiness((float) 2.7);
         learningDataDao.update(c13Ld);
-        
-        learningDataDao.refresh(c14.getLearningData());   
+
+        learningDataDao.refresh(c14.getLearningData());
         LearningData c14Ld = c14.getLearningData();
         c14Ld.setAcqReps(1);
         c14Ld.setNextLearnDate(testDate);
-        c14Ld.setEasiness((float) 2.6);  
+        c14Ld.setEasiness((float) 2.6);
         learningDataDao.update(c14Ld);
-        
+
         learningDataDao.refresh(c15.getLearningData());
         LearningData c15Ld = c15.getLearningData();
         c15Ld.setAcqReps(1);
         c15Ld.setNextLearnDate(testDate);
         c15Ld.setEasiness((float) 2.8);
         learningDataDao.update(c15Ld);
-        
+
         learningDataDao.refresh(c2.getLearningData());
         LearningData c2Ld = c2.getLearningData();
         c2Ld.setAcqReps(1);
         c2Ld.setNextLearnDate(testDate);
         c2Ld.setEasiness((float) 3.0);
         learningDataDao.update(c2Ld);
-        
+
         learningDataDao.refresh(c5.getLearningData());
         LearningData c5Ld = c5.getLearningData();
         c5Ld.setAcqReps(1);
         c5Ld.setNextLearnDate(testDate);
         c5Ld.setEasiness((float) 2.9);
         learningDataDao.update(c5Ld);
-        
+
         List<Category> cts = categoryDao.queryForEq("name", "My category");
         Category ct = cts.get(0);
-        
+
         List<Card> cards = cardDao.getCardsForReview(ct, null, 50, ReviewOrdering.HardestFirst);
-        
+
         assertEquals(2, cards.size());
         assertEquals(5, (int)cards.get(0).getOrdinal());
         assertEquals(2, (int)cards.get(1).getOrdinal());
     }
-    
+
     @SmallTest
+    @Test
     public void testReviewCardsOrderOfOneDifferentEasiness() throws SQLException {
         CardDao cardDao = helper.getCardDao();
         Card c13 = cardDao.queryForId(13);
@@ -522,30 +557,30 @@ public class CardDaoTest extends AbstractExistingDBTest {
 
         LearningDataDao learningDataDao = helper.getLearningDataDao();
         Date testDate = new Date((new Date().getTime() - 1));
-        
+
         learningDataDao.refresh(c13.getLearningData());
         LearningData c13Ld = c13.getLearningData();
         c13Ld.setAcqReps(1);
         c13Ld.setNextLearnDate(testDate);
         c13Ld.setEasiness((float) 2.8);
         learningDataDao.update(c13Ld);
-        
-        learningDataDao.refresh(c14.getLearningData());   
+
+        learningDataDao.refresh(c14.getLearningData());
         LearningData c14Ld = c14.getLearningData();
         c14Ld.setAcqReps(1);
         c14Ld.setNextLearnDate(testDate);
-        c14Ld.setEasiness((float) 2.6);  
+        c14Ld.setEasiness((float) 2.6);
         learningDataDao.update(c14Ld);
-        
+
         learningDataDao.refresh(c15.getLearningData());
         LearningData c15Ld = c15.getLearningData();
         c15Ld.setAcqReps(1);
         c15Ld.setNextLearnDate(testDate);
         c15Ld.setEasiness((float) 2.6);
         learningDataDao.update(c15Ld);
-         
+
         List<Card> cards = cardDao.getCardsForReview(null, null, 50, ReviewOrdering.HardestFirst);
-        
+
         assertEquals(3, cards.size());
         assertEquals(14, (int)cards.get(0).getOrdinal());
         assertEquals(15, (int)cards.get(1).getOrdinal());
@@ -553,6 +588,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testGetNewCardsWithExclusionList() {
         CardDao cardDao = helper.getCardDao();
         Card c2 = cardDao.queryForId(2);
@@ -577,6 +613,7 @@ public class CardDaoTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testGetCardsForReviewExclusionList() {
         // Setup cards that is schedule for review
         CardDao cardDao = helper.getCardDao();

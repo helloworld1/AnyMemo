@@ -1,15 +1,17 @@
 package org.liberty.android.fantastischmemo.test.converter;
 
-import java.util.List;
-
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.converter.Converter;
 import org.liberty.android.fantastischmemo.converter.CSVImporter;
+import org.liberty.android.fantastischmemo.converter.Converter;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.entity.Card;
 import org.liberty.android.fantastischmemo.entity.Category;
+
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class CsvImporterTest extends AbstractConverterTest {
 

@@ -2,27 +2,25 @@ package org.liberty.android.fantastischmemo.test;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.test.AndroidTestCase;
 
-public class AbstractPreferencesTest extends AndroidTestCase {
+import org.junit.After;
+import org.junit.Before;
+
+public class AbstractPreferencesTest extends BaseTest {
     protected SharedPreferences settings;
 
     protected SharedPreferences.Editor editor;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        System.setProperty("dexmaker.dexcache", getContext().getCacheDir().toString());
-
+    @Before
+    public void setUp() throws Exception {
     	settings = PreferenceManager.getDefaultSharedPreferences(getContext());
     	editor = settings.edit();
         editor.clear();
         editor.commit();
     }
 
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
+    @After
+    public void tearDown() throws Exception {
         editor.clear();
         editor.commit();
     }

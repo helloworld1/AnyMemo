@@ -114,6 +114,5 @@ public class AMFileUtil {
     public void createDbFileWithDefaultSettings(File newDbFile) throws IOException {
         String emptyDbPath = mContext.getApplicationContext().getFilesDir().getAbsolutePath() + "/" + AMEnv.EMPTY_DB_NAME;
         FileUtils.copyFile(new File(emptyDbPath), newDbFile);
-
     }
 }

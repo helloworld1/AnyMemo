@@ -1,18 +1,23 @@
 package org.liberty.android.fantastischmemo.test.db;
 
-import java.util.List;
+import android.support.test.filters.SmallTest;
 
+import org.junit.Test;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.entity.Card;
 import org.liberty.android.fantastischmemo.entity.Category;
 import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
 
-import android.test.suitebuilder.annotation.SmallTest;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class CategoryTest extends AbstractExistingDBTest {
 
     @SmallTest
+    @Test
     public void testAddCategories() throws Exception {
         CategoryDao categoryDao = helper.getCategoryDao();
         List<Category> categories = categoryDao.queryForAll();
@@ -28,6 +33,7 @@ public class CategoryTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testRemoveCategories() throws Exception {
         CardDao cardDao = helper.getCardDao();
         CategoryDao categoryDao = helper.getCategoryDao();

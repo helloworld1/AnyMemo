@@ -1,25 +1,23 @@
 package org.liberty.android.fantastischmemo.test;
 
-import java.io.File;
-import java.io.InputStream;
+import android.content.Context;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.After;
+import org.junit.Before;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 
-import android.content.Context;
-import android.test.AndroidTestCase;
+import java.io.File;
+import java.io.InputStream;
 
-public class AbstractExistingDBTest extends AndroidTestCase {
+public class AbstractExistingDBTest extends BaseTest {
 
     protected AnyMemoDBOpenHelper helper;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        System.setProperty("dexmaker.dexcache", getContext().getCacheDir().toString());
-        
+    @Before
+    public void setUp() throws Exception {
         Context testContext = getContext();
         InputStream in = testContext.getResources().getAssets().open(AMEnv.DEFAULT_DB_NAME);
         File outFile = new File(TestHelper.SAMPLE_DB_PATH);
@@ -30,8 +28,8 @@ public class AbstractExistingDBTest extends AndroidTestCase {
         helper = AnyMemoDBOpenHelperManager.getHelper(testContext, TestHelper.SAMPLE_DB_PATH);
     }
 
-    @Override
-    protected void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         AnyMemoDBOpenHelperManager.releaseHelper(helper);
         helper = null;
         File outFile = new File(TestHelper.SAMPLE_DB_PATH);

@@ -1,10 +1,8 @@
 package org.liberty.android.fantastischmemo.test.queue;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import android.support.test.filters.SmallTest;
 
-import java.util.Date;
-
+import org.junit.Test;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.entity.Card;
 import org.liberty.android.fantastischmemo.entity.Category;
@@ -15,11 +13,17 @@ import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
 import org.liberty.android.fantastischmemo.test.TestHelper;
 
-import android.test.suitebuilder.annotation.SmallTest;
+import java.util.Date;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class LearnQueuingManagerTest extends AbstractExistingDBTest {
 
     @SmallTest
+    @Test
     public void testGetNewCardQueuingWithCategory() throws Exception {
         CardDao cardDao = helper.getCardDao();
         Card c10 = cardDao.queryForId(10);
@@ -39,6 +43,7 @@ public class LearnQueuingManagerTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testGetNewCardQueuingWithoutCategory() throws Exception {
         QueueManager queueManager = new LearnQueueManager.Builder(getContext(), TestHelper.SAMPLE_DB_PATH)
             .setLearnQueueSize(10)
@@ -51,6 +56,7 @@ public class LearnQueuingManagerTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testQueuingPosition() throws Exception {
         QueueManager queueManager = new LearnQueueManager.Builder(getContext(), TestHelper.SAMPLE_DB_PATH)
             .setLearnQueueSize(10)
@@ -63,6 +69,7 @@ public class LearnQueuingManagerTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testUpdate1() throws Exception {
         Scheduler mockScheduler = mock(Scheduler.class);
 
@@ -133,6 +140,7 @@ public class LearnQueuingManagerTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testUpdate2() throws Exception {
         Scheduler mockScheduler = mock(Scheduler.class);
 
@@ -204,6 +212,7 @@ public class LearnQueuingManagerTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testUpdate3() throws Exception {
         Scheduler mockScheduler = mock(Scheduler.class);
 

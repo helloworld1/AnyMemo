@@ -1,10 +1,11 @@
 package org.liberty.android.fantastischmemo.test.converter;
 
-import java.io.File;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
+import android.content.Context;
+import android.support.test.filters.SmallTest;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
@@ -14,19 +15,21 @@ import org.liberty.android.fantastischmemo.converter.QATxtImporter;
 import org.liberty.android.fantastischmemo.entity.Card;
 import org.liberty.android.fantastischmemo.entity.Category;
 import org.liberty.android.fantastischmemo.entity.LearningData;
+import org.liberty.android.fantastischmemo.test.BaseTest;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
 
-import android.content.Context;
-import android.test.AndroidTestCase;
-import android.test.ServiceTestCase;
-import android.test.suitebuilder.annotation.SmallTest;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 
 /**
  * Test the import ability to merge into the database with the same name.
  */
-public class ImportMergingTest extends AndroidTestCase {
+public class ImportMergingTest extends BaseTest {
 
     private Context testContext;
 
@@ -38,11 +41,10 @@ public class ImportMergingTest extends AndroidTestCase {
 
     private List<Card> newDbCardList;
 
-    @Override
+    @Before
     public void setUp() throws Exception {
         // Reflect out the test context
-        Method getTestContext = ServiceTestCase.class.getMethod("getTestContext");
-        testContext = (Context) getTestContext.invoke(this);
+        testContext = getContext();
 
         amFileUtil = new AMFileUtil(testContext, new AMPrefUtil(getContext()));
 
@@ -62,6 +64,7 @@ public class ImportMergingTest extends AndroidTestCase {
     }
 
     @SmallTest
+    @Test
     public void testMergeCsvIntoDb() throws Exception {
         srcFilePath = AMEnv.DEFAULT_ROOT_PATH + "/" + "csv-test.csv";
         destFilePath = AMEnv.DEFAULT_ROOT_PATH + "/" + "csv-test.db";
@@ -117,6 +120,7 @@ public class ImportMergingTest extends AndroidTestCase {
     }
 
     @SmallTest
+    @Test
     public void testMergeQATxtIntoDb() throws Exception {
         srcFilePath = AMEnv.DEFAULT_ROOT_PATH + "/" + "qa-text-test.txt";
         destFilePath = AMEnv.DEFAULT_ROOT_PATH + "/" + "qa-text-test.db";
@@ -164,7 +168,7 @@ public class ImportMergingTest extends AndroidTestCase {
         }
     }
 
-    @Override
+    @After
     public void tearDown() {
         if (srcFilePath != null) {
             new File(srcFilePath).delete();

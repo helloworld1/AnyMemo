@@ -1,9 +1,11 @@
 package org.liberty.android.fantastischmemo.test.converter;
 
+import org.liberty.android.fantastischmemo.converter.CSVExporter;
+import org.liberty.android.fantastischmemo.converter.Converter;
+
 import java.io.File;
 
-import org.liberty.android.fantastischmemo.converter.Converter;
-import org.liberty.android.fantastischmemo.converter.CSVExporter;
+import static org.junit.Assert.assertTrue;
 
 public class CsvExporterTest extends AbstractConverterTest {
 

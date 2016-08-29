@@ -1,14 +1,18 @@
 package org.liberty.android.fantastischmemo.test.domain;
 
+import android.support.test.filters.SmallTest;
+
+import org.junit.Test;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.entity.Option;
 import org.liberty.android.fantastischmemo.test.AbstractPreferencesTest;
 
-import android.test.suitebuilder.annotation.SmallTest;
+import static org.junit.Assert.assertEquals;
 
 public class OptionTest extends AbstractPreferencesTest {
 
     @SmallTest
+    @Test
     public void testGetDictApp() {
         Option option = new Option(getContext());
         editor.putString(AMPrefKeys.DICT_APP_KEY, "COLORDICT");
@@ -25,6 +29,7 @@ public class OptionTest extends AbstractPreferencesTest {
     }
 
     @SmallTest
+    @Test
     public void testGetButtonStyle() {
         Option option = new Option(getContext());
         editor.putString(AMPrefKeys.BUTTON_STYLE_KEY, "ANYMEMO");
@@ -42,6 +47,7 @@ public class OptionTest extends AbstractPreferencesTest {
     }
 
     @SmallTest
+    @Test
     public void testGetShuffleType() {
         Option option = new Option(getContext());
         editor.putBoolean(AMPrefKeys.SHUFFLING_CARDS_KEY, true);
@@ -55,6 +61,7 @@ public class OptionTest extends AbstractPreferencesTest {
     }
 
     @SmallTest
+    @Test
     public void testGetSpeakingType() {
         Option option = new Option(getContext());
         editor.putString(AMPrefKeys.SPEECH_CONTROL_KEY, "TAP");

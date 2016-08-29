@@ -1,19 +1,19 @@
 package org.liberty.android.fantastischmemo.test;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-
-import org.apache.commons.io.FileUtils;
-import org.liberty.android.fantastischmemo.AMEnv;
-import org.liberty.android.fantastischmemo.AMPrefKeys;
-
 import android.app.Instrumentation;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
+
+import org.apache.commons.io.FileUtils;
+import org.liberty.android.fantastischmemo.AMEnv;
+import org.liberty.android.fantastischmemo.AMPrefKeys;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class TestHelper {
     public static final String SAMPLE_DB_PATH = "/sdcard/anymemo/french-body-parts.db";

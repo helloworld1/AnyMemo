@@ -1,18 +1,24 @@
 package org.liberty.android.fantastischmemo.test.provider;
 
-import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
-import org.liberty.android.fantastischmemo.test.TestHelper;
-
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
-import android.test.suitebuilder.annotation.SmallTest;
+import android.support.test.filters.SmallTest;
+
+import org.junit.Test;
+import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
+import org.liberty.android.fantastischmemo.test.TestHelper;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class CardProviderTest extends AbstractExistingDBTest {
 
     private static String AUTHORITY = "org.liberty.android.fantastischmemo.cardprovider";
 
     @SmallTest
+    @Test
     public void testNonExistingDbShouldReturnNullCursor() {
         ContentResolver cr = getContext().getContentResolver();
         Cursor cursor = cr.query(Uri.parse("content://" + AUTHORITY + "/" + "No_such_db_exists.db"+ "/count"),null, null, null, null);
@@ -20,6 +26,7 @@ public class CardProviderTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testCardCount() {
         ContentResolver cr = getContext().getContentResolver();
         Cursor cursor = cr.query(Uri.parse("content://" + AUTHORITY + "/" + TestHelper.SAMPLE_DB_NAME + "/count"),null, null, null, null);
@@ -29,6 +36,7 @@ public class CardProviderTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testGetRandomCards() {
         ContentResolver cr = getContext().getContentResolver();
         Cursor cursor = cr.query(Uri.parse("content://" + AUTHORITY + "/" + TestHelper.SAMPLE_DB_NAME + "/random/10"),null, null, null, null);
@@ -36,6 +44,7 @@ public class CardProviderTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testGetByOrdinal() {
         ContentResolver cr = getContext().getContentResolver();
         Cursor cursor = cr.query(Uri.parse("content://" + AUTHORITY + "/" + TestHelper.SAMPLE_DB_NAME + "/ordinal/3"),null, null, null, null);
@@ -47,6 +56,7 @@ public class CardProviderTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testGetById() {
         ContentResolver cr = getContext().getContentResolver();
         Cursor cursor = cr.query(Uri.parse("content://" + AUTHORITY + "/" + TestHelper.SAMPLE_DB_NAME + "/id/3"),null, null, null, null);
@@ -58,6 +68,7 @@ public class CardProviderTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testGetCardWithStartOrdinalAndCount() {
         ContentResolver cr = getContext().getContentResolver();
         Cursor cursor = cr.query(Uri.parse("content://" + AUTHORITY + "/" + TestHelper.SAMPLE_DB_NAME + "/start_ordinal/3/count/5"),null, null, null, null);
@@ -71,6 +82,7 @@ public class CardProviderTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testGetAllCards() {
         ContentResolver cr = getContext().getContentResolver();
         Cursor cursor = cr.query(Uri.parse("content://" + AUTHORITY + "/" + TestHelper.SAMPLE_DB_NAME + "/all"),null, null, null, null);

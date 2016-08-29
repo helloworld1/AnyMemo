@@ -1,7 +1,8 @@
 package org.liberty.android.fantastischmemo.test.db;
 
-import java.io.File;
+import android.support.test.filters.SmallTest;
 
+import org.junit.Test;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.dao.CardDao;
@@ -15,7 +16,10 @@ import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
 import org.liberty.android.fantastischmemo.test.TestHelper;
 import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
 
-import android.test.suitebuilder.annotation.SmallTest;
+import java.io.File;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 
 public class DatabaseUtilsTest extends AbstractExistingDBTest {
@@ -23,18 +27,20 @@ public class DatabaseUtilsTest extends AbstractExistingDBTest {
     DatabaseUtil databaseUtil;
 
     @Override
-    protected void setUp() throws Exception {
+    public void setUp() throws Exception {
         super.setUp();
-        databaseUtil = new DatabaseUtil(getContext());
+        databaseUtil = new DatabaseUtil(getTargetContext());
     }
 
     @SmallTest
+    @Test
     public void testGetDefaultSetting() throws Exception {
         Setting setting = databaseUtil.readDefaultSetting();
         assertNotNull(setting);
     }
 
     @SmallTest
+    @Test
     @SuppressWarnings("unused")
     public void testMergeDatabase() throws Exception {
         // Create testing DB to merge

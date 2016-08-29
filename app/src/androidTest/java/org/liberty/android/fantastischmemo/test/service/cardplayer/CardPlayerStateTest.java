@@ -1,10 +1,9 @@
 package org.liberty.android.fantastischmemo.test.service.cardplayer;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import android.os.Handler;
+import android.support.test.filters.SmallTest;
 
+import org.junit.Test;
 import org.liberty.android.fantastischmemo.entity.Card;
 import org.liberty.android.fantastischmemo.service.cardplayer.CardPlayerContext;
 import org.liberty.android.fantastischmemo.service.cardplayer.CardPlayerEventHandler;
@@ -14,8 +13,11 @@ import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
 import org.liberty.android.fantastischmemo.utils.CardTTSUtil;
 
-import android.os.Handler;
-import android.test.suitebuilder.annotation.SmallTest;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 public class CardPlayerStateTest extends AbstractExistingDBTest {
 
@@ -40,7 +42,7 @@ public class CardPlayerStateTest extends AbstractExistingDBTest {
 
 
     @Override
-    protected void setUp() throws Exception {
+    public void setUp() throws Exception {
         super.setUp();
         mockEventHandler = mock(CardPlayerEventHandler.class); 
         mockCardTTSUtil = mock(CardTTSUtil.class);
@@ -58,12 +60,14 @@ public class CardPlayerStateTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testStoppedStateReceiveStartPlayingShouldGoToPlayQuestion() {
         verifyStateTransition(CardPlayerState.STOPPED,
                 CardPlayerMessage.START_PLAYING, CardPlayerState.PLAYING_QUESTION);
     }
 
     @SmallTest
+    @Test
     public void testStoppedStateReceiveOtherMessagesShouldDoNothing() {
         verifyStateTransition(CardPlayerState.STOPPED,
                 CardPlayerMessage.GO_TO_NEXT, CardPlayerState.STOPPED);
@@ -78,12 +82,14 @@ public class CardPlayerStateTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testPlayingQuestionReceivedStopPlayingShouldStop() {
         verifyStateTransition(CardPlayerState.PLAYING_QUESTION,
                 CardPlayerMessage.STOP_PLAYING, CardPlayerState.STOPPED);
     }
 
     @SmallTest
+    @Test
     public void testPlayingQuestionReceivedGoToNextShouldPlayNextQuestion() {
         verifyStateTransition(CardPlayerState.PLAYING_QUESTION,
                 CardPlayerMessage.GO_TO_NEXT, CardPlayerState.PLAYING_QUESTION);
@@ -91,6 +97,7 @@ public class CardPlayerStateTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testPlayingQuestionReceivedGoToPrevShouldPlayPrevQuestion() {
         verifyStateTransition(CardPlayerState.PLAYING_QUESTION,
                 CardPlayerMessage.GO_TO_PREV, CardPlayerState.PLAYING_QUESTION);
@@ -98,6 +105,7 @@ public class CardPlayerStateTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testPlayingQuestionReceivedPlayQuesetionCompletedShouldPlayAnswer() {
         verifyStateTransition(CardPlayerState.PLAYING_QUESTION,
                 CardPlayerMessage.PLAYING_QUESTION_COMPLETED, CardPlayerState.PLAYING_ANSWER);
@@ -105,12 +113,14 @@ public class CardPlayerStateTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testPlayingAnswerReceivedStopPlayingShouldStop() {
         verifyStateTransition(CardPlayerState.PLAYING_ANSWER,
                 CardPlayerMessage.STOP_PLAYING, CardPlayerState.STOPPED);
     }
 
     @SmallTest
+    @Test
     public void testPlayingAnswerReceivedGoToNextShouldPlayNextQuestion() {
         verifyStateTransition(CardPlayerState.PLAYING_ANSWER,
                 CardPlayerMessage.GO_TO_NEXT, CardPlayerState.PLAYING_QUESTION);
@@ -118,6 +128,7 @@ public class CardPlayerStateTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testPlayingAnswerReceivedGoToPrevShouldPlayPrevQuestion() {
         verifyStateTransition(CardPlayerState.PLAYING_QUESTION,
                 CardPlayerMessage.GO_TO_PREV, CardPlayerState.PLAYING_QUESTION);
@@ -125,6 +136,7 @@ public class CardPlayerStateTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testPlayingAnswerReceivedPlayAnswerCompletedShouldPlayNextQuestion() {
         verifyStateTransition(CardPlayerState.PLAYING_ANSWER,
                 CardPlayerMessage.PLAYING_ANSWER_COMPLETED, CardPlayerState.PLAYING_QUESTION);
@@ -136,6 +148,7 @@ public class CardPlayerStateTest extends AbstractExistingDBTest {
 
     // With repeat option disabled
     @SmallTest
+    @Test
     public void testPlayNextQuestionNoRepeatWithCardInMiddle() {
         cardPlayerContext = new CardPlayerContext(
             mockEventHandler,
@@ -155,6 +168,7 @@ public class CardPlayerStateTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testPlayNextQuestionNoRepeatWithCardAtEndShouldStop() {
         cardPlayerContext = new CardPlayerContext(
             mockEventHandler,
@@ -173,6 +187,7 @@ public class CardPlayerStateTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testPlayPrevQuestionNoRepeatWithCardInMiddle() {
         cardPlayerContext = new CardPlayerContext(
             mockEventHandler,
@@ -192,6 +207,7 @@ public class CardPlayerStateTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testPlayPrevQuestionNoRepeatWithFirstCardShouldStop() {
         cardPlayerContext = new CardPlayerContext(
             mockEventHandler,
@@ -211,6 +227,7 @@ public class CardPlayerStateTest extends AbstractExistingDBTest {
 
     // Shuffle test
     @SmallTest
+    @Test
     public void testPlayRandomPrevCard() {
         cardPlayerContext = new CardPlayerContext(
             mockEventHandler,
@@ -229,6 +246,7 @@ public class CardPlayerStateTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testPlayRandomNextCard() {
         cardPlayerContext = new CardPlayerContext(
             mockEventHandler,
@@ -249,6 +267,7 @@ public class CardPlayerStateTest extends AbstractExistingDBTest {
     // Shuffle and repeat work together. Shuffle should take precedence
     // so it alway repeat
     @SmallTest
+    @Test
     public void testPlayRandomNextCardWithRepeat() {
         cardPlayerContext = new CardPlayerContext(
             mockEventHandler,
@@ -270,6 +289,7 @@ public class CardPlayerStateTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testStoppedReceivedGoToNextShouldGotoNextQuestion() {
         verifyStateTransition(CardPlayerState.STOPPED,
                 CardPlayerMessage.GO_TO_NEXT, CardPlayerState.STOPPED);
@@ -277,6 +297,7 @@ public class CardPlayerStateTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testStoppedReceivedGoToPrevShouldGotoPrevQuestion() {
         verifyStateTransition(CardPlayerState.STOPPED,
                 CardPlayerMessage.GO_TO_PREV, CardPlayerState.STOPPED);

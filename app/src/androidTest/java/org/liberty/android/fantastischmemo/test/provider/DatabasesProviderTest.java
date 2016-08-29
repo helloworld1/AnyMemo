@@ -1,18 +1,22 @@
 package org.liberty.android.fantastischmemo.test.provider;
 
-import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
-import org.liberty.android.fantastischmemo.test.TestHelper;
-
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
-import android.test.suitebuilder.annotation.SmallTest;
+import android.support.test.filters.SmallTest;
+
+import org.junit.Test;
+import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
+import org.liberty.android.fantastischmemo.test.TestHelper;
+
+import static org.junit.Assert.assertTrue;
 
 public class DatabasesProviderTest extends AbstractExistingDBTest {
 
     private static String AUTHORITY = "org.liberty.android.fantastischmemo.databasesprovider";
 
     @SmallTest
+    @Test
     public void testReturnSampleDb() {
         ContentResolver cr = getContext().getContentResolver();
         Cursor cursor = cr.query(Uri.parse("content://" + AUTHORITY),null, null, null, null);

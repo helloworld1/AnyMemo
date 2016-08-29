@@ -1,13 +1,18 @@
 package org.liberty.android.fantastischmemo.test.scheduler;
 
-import java.util.Date;
+import android.support.test.filters.SmallTest;
 
+import org.junit.Test;
 import org.liberty.android.fantastischmemo.entity.LearningData;
 import org.liberty.android.fantastischmemo.entity.SchedulingAlgorithmParameters;
 import org.liberty.android.fantastischmemo.scheduler.DefaultScheduler;
 import org.liberty.android.fantastischmemo.test.AbstractPreferencesTest;
 
-import android.test.suitebuilder.annotation.SmallTest;
+import java.util.Date;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class DefaultSchedulerTest extends AbstractPreferencesTest {
 
@@ -45,6 +50,7 @@ public class DefaultSchedulerTest extends AbstractPreferencesTest {
     }
 
     @SmallTest
+    @Test
     public void testIsNew() {
         assertTrue(defaultScheduler.isCardNew(newCardLearningData));
         assertFalse(defaultScheduler.isCardNew(failedCardLearningData));
@@ -53,6 +59,7 @@ public class DefaultSchedulerTest extends AbstractPreferencesTest {
     }
 
     @SmallTest
+    @Test
     public void testIsCardLearned() {
         assertFalse(defaultScheduler.isCardLearned(newCardLearningData));
         assertFalse(defaultScheduler.isCardLearned(failedCardLearningData));
@@ -61,6 +68,7 @@ public class DefaultSchedulerTest extends AbstractPreferencesTest {
     }
 
     @SmallTest
+    @Test
     public void testIsCardForReview() {
         assertFalse(defaultScheduler.isCardForReview(newCardLearningData));
         assertTrue(defaultScheduler.isCardForReview(failedCardLearningData));
@@ -69,6 +77,7 @@ public class DefaultSchedulerTest extends AbstractPreferencesTest {
     }
 
     @SmallTest
+    @Test
     public void testScheduleNewCardSuccess() {
         LearningData ld = new LearningData();
         LearningData newLd = defaultScheduler.schedule(ld, 3, false);
@@ -80,6 +89,7 @@ public class DefaultSchedulerTest extends AbstractPreferencesTest {
     }
 
     @SmallTest
+    @Test
     public void testScheduleNewCardFailure() {
         LearningData newLd = defaultScheduler.schedule(newCardLearningData, 0, false);
 
@@ -91,6 +101,7 @@ public class DefaultSchedulerTest extends AbstractPreferencesTest {
     }
 
     @SmallTest
+    @Test
     public void testScheduleFailedCardSuccess() {
         LearningData newLd = defaultScheduler.schedule(failedCardLearningData, 5, false);
 
@@ -101,6 +112,7 @@ public class DefaultSchedulerTest extends AbstractPreferencesTest {
     }
 
     @SmallTest
+    @Test
     public void testScheduleFailedCardFailure() {
         LearningData newLd = defaultScheduler.schedule(failedCardLearningData, 0, false);
 
@@ -110,6 +122,7 @@ public class DefaultSchedulerTest extends AbstractPreferencesTest {
     }
 
     @SmallTest
+    @Test
     public void testScheduleLearnedCardSuccess() {
         LearningData newLd = defaultScheduler.schedule(learnedCardLearningData, 5, false);
 
@@ -119,6 +132,7 @@ public class DefaultSchedulerTest extends AbstractPreferencesTest {
     }
 
     @SmallTest
+    @Test
     public void testScheduleLearnedCardFailure() {
         LearningData newLd = defaultScheduler.schedule(learnedCardLearningData, 0, false);
 
@@ -128,6 +142,7 @@ public class DefaultSchedulerTest extends AbstractPreferencesTest {
     }
 
     @SmallTest
+    @Test
     public void testScheduleForReviewardSuccess() {
         LearningData newLd = defaultScheduler.schedule(forReviewCardLearningData, 5, false);
 
@@ -137,6 +152,7 @@ public class DefaultSchedulerTest extends AbstractPreferencesTest {
     }
 
     @SmallTest
+    @Test
     public void testScheduleForScheduleCardFailure() {
         LearningData newLd = defaultScheduler.schedule(forReviewCardLearningData, 0, false);
 

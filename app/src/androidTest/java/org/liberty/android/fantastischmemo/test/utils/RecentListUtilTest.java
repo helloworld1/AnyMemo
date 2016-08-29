@@ -1,16 +1,21 @@
 package org.liberty.android.fantastischmemo.test.utils;
 
+import android.support.test.filters.SmallTest;
+
+import org.junit.Test;
 import org.liberty.android.fantastischmemo.entity.Option;
 import org.liberty.android.fantastischmemo.test.AbstractPreferencesTest;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
-import android.test.suitebuilder.annotation.SmallTest;
 
 public class RecentListUtilTest extends AbstractPreferencesTest {
 
     @SmallTest
+    @Test
     public void testAddRecentListWithinLimit() {
         Option mockOption = mock(Option.class);
         when(mockOption.getRecentCount())
@@ -26,6 +31,7 @@ public class RecentListUtilTest extends AbstractPreferencesTest {
     }
 
     @SmallTest
+    @Test
     public void testAddRecentListLargerThanLimit() {
         // Mock recent count limit to 3.
         Option mockOption = mock(Option.class);
@@ -49,6 +55,7 @@ public class RecentListUtilTest extends AbstractPreferencesTest {
     }
 
     @SmallTest
+    @Test
     public void testDeleteRecentItem() {
         Option mockOption = mock(Option.class);
         when(mockOption.getRecentCount())
@@ -74,6 +81,7 @@ public class RecentListUtilTest extends AbstractPreferencesTest {
     }
 
     @SmallTest
+    @Test
     public void testAddEquivalentPath() {
         Option mockOption = mock(Option.class);
         when(mockOption.getRecentCount())
@@ -93,6 +101,7 @@ public class RecentListUtilTest extends AbstractPreferencesTest {
     }
 
     @SmallTest
+    @Test
     public void testClearRecentList() {
         Option mockOption = mock(Option.class);
         when(mockOption.getRecentCount())

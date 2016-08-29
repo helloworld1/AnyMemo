@@ -1,9 +1,12 @@
 package org.liberty.android.fantastischmemo.test.utils;
 
+import android.support.test.filters.SmallTest;
+
+import org.junit.Test;
 import org.liberty.android.fantastischmemo.test.AbstractPreferencesTest;
 import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
 
-import android.test.suitebuilder.annotation.SmallTest;
+import static org.junit.Assert.assertEquals;
 
 public class AMPrefUtilTest extends AbstractPreferencesTest {
 
@@ -16,17 +19,20 @@ public class AMPrefUtilTest extends AbstractPreferencesTest {
     }
 
     @SmallTest
+    @Test
     public void testSavedIdAndGetId() {
         amPrefUtil.putSavedInt("Prefix", "key", 12345);
         assertEquals(12345, amPrefUtil.getSavedInt("Prefix", "key", 0));
     }
 
     @SmallTest
+    @Test
     public void testGetIdUsingDefaultValue() {
         assertEquals(54321, amPrefUtil.getSavedInt("Prefix", "key", 54321));
     }
 
     @SmallTest
+    @Test
     public void testRemovePrefKeys() {
         amPrefUtil.putSavedInt("Prefix", "key1", 10);
         amPrefUtil.putSavedInt("Prefix", "key2", 20);

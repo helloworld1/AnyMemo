@@ -1,21 +1,25 @@
 package org.liberty.android.fantastischmemo.test.db;
 
-import java.io.File;
+import android.support.test.filters.SmallTest;
 
+import org.junit.Test;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.entity.Card;
 import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
 
-import android.test.suitebuilder.annotation.SmallTest;
+import java.io.File;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class NewDbTest extends AbstractExistingDBTest {
     AnyMemoDBOpenHelper newDbHelper;
     public static final String dbPath = "/sdcard/newtestdb.db";
 
     @Override
-    protected void setUp() throws Exception {
+    public void setUp() throws Exception {
         super.setUp();
         File newdbFile = new File(dbPath);
         newdbFile.delete();
@@ -23,7 +27,7 @@ public class NewDbTest extends AbstractExistingDBTest {
     }
 
     @Override
-    protected void tearDown() throws Exception {
+    public void tearDown() throws Exception {
         super.tearDown();
         AnyMemoDBOpenHelperManager.releaseHelper(newDbHelper);
         File newdbFile = new File(dbPath);
@@ -31,6 +35,7 @@ public class NewDbTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testCreateFirstCardWithCorrectOrdinal() throws Exception {
         CardDao cardDao = newDbHelper.getCardDao();
         // Create card has null ordinal, append to the end

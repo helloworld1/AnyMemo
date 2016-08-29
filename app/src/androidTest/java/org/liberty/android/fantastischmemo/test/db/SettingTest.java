@@ -1,18 +1,22 @@
 package org.liberty.android.fantastischmemo.test.db;
 
-import java.sql.SQLException;
-import java.util.EnumSet;
+import android.graphics.Color;
+import android.support.test.filters.SmallTest;
 
+import org.junit.Test;
 import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.entity.Setting;
 import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
 
-import android.graphics.Color;
-import android.test.suitebuilder.annotation.SmallTest;
+import java.sql.SQLException;
+import java.util.EnumSet;
+
+import static org.junit.Assert.assertEquals;
 
 public class SettingTest extends AbstractExistingDBTest {
 
     @SmallTest
+    @Test
     public void testQuestionFontSize() throws Exception {
         Setting setting = getCurrentSetting();
         setting.setQuestionFontSize(50);
@@ -21,6 +25,7 @@ public class SettingTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testAnswerFontSize() throws Exception {
         Setting setting = getCurrentSetting();
         setting.setAnswerFontSize(60);
@@ -29,6 +34,7 @@ public class SettingTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testQuestionTextAlign() throws Exception {
         Setting setting = getCurrentSetting();
         setting.setQuestionTextAlign(Setting.Align.RIGHT);
@@ -37,6 +43,7 @@ public class SettingTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testAnswerTextAlign() throws Exception {
         Setting setting = getCurrentSetting();
         setting.setAnswerTextAlign(Setting.Align.CENTER_LEFT);
@@ -45,6 +52,7 @@ public class SettingTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testCardStyle() throws Exception {
         Setting setting = getCurrentSetting();
         setting.setCardStyle(Setting.CardStyle.DOUBLE_SIDED);
@@ -53,6 +61,7 @@ public class SettingTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testQARatio() throws Exception {
         Setting setting = getCurrentSetting();
         setting.setQaRatio(70);
@@ -61,6 +70,7 @@ public class SettingTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testQuestionAudio() throws Exception {
         Setting setting = getCurrentSetting();
         setting.setQuestionAudio("DE");
@@ -69,6 +79,7 @@ public class SettingTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testAnswerAudio() throws Exception {
         Setting setting = getCurrentSetting();
         setting.setAnswerAudio("DE");
@@ -77,6 +88,7 @@ public class SettingTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testQuestionTextColor() throws Exception {
         Setting setting = getCurrentSetting();
         setting.setQuestionTextColor(Color.RED);
@@ -85,6 +97,7 @@ public class SettingTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testAnswerTextColor() throws Exception {
         Setting setting = getCurrentSetting();
         setting.setAnswerTextColor(Color.RED);
@@ -93,6 +106,7 @@ public class SettingTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testQuestionBackgroundColor() throws Exception {
         Setting setting = getCurrentSetting();
         setting.setQuestionBackgroundColor(Color.RED);
@@ -101,6 +115,7 @@ public class SettingTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testAnswerBackgroundColor() throws Exception {
         Setting setting = getCurrentSetting();
         setting.setAnswerBackgroundColor(Color.RED);
@@ -109,6 +124,7 @@ public class SettingTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testSeparatorColor() throws Exception {
         Setting setting = getCurrentSetting();
         setting.setSeparatorColor(Color.RED);
@@ -117,6 +133,7 @@ public class SettingTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testDisplayInHTML() throws Exception {
         Setting setting = getCurrentSetting();
         setting.setDisplayInHTMLEnum(EnumSet.of(Setting.CardField.NOTE, Setting.CardField.ANSWER));
@@ -125,6 +142,7 @@ public class SettingTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testQuestionField() throws Exception {
         Setting setting = getCurrentSetting();
         setting.setQuestionFieldEnum(EnumSet.of(Setting.CardField.NOTE, Setting.CardField.ANSWER));
@@ -133,6 +151,7 @@ public class SettingTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testAnswerField() throws Exception {
         Setting setting = getCurrentSetting();
         setting.setAnswerFieldEnum(EnumSet.of(Setting.CardField.NOTE, Setting.CardField.ANSWER));
@@ -141,6 +160,7 @@ public class SettingTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testQuestionFont() throws Exception {
         Setting setting = getCurrentSetting();
         setting.setQuestionFont("/sdcard/font1.ttf");
@@ -149,6 +169,7 @@ public class SettingTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testAnswerFont() throws Exception {
         Setting setting = getCurrentSetting();
         setting.setAnswerFont("/sdcard/font1.ttf");
@@ -157,6 +178,7 @@ public class SettingTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testQuestionAudioLocation() throws Exception {
         Setting setting = getCurrentSetting();
         setting.setQuestionAudioLocation("/sdcard/");
@@ -165,6 +187,7 @@ public class SettingTest extends AbstractExistingDBTest {
     }
 
     @SmallTest
+    @Test
     public void testAnswerAudioLocation() throws Exception {
         Setting setting = getCurrentSetting();
         setting.setAnswerAudioLocation("/sdcard/");

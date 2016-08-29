@@ -1,25 +1,24 @@
 package org.liberty.android.fantastischmemo.test.converter;
 
-import java.io.File;
-import java.lang.reflect.Method;
+import android.support.test.filters.SmallTest;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.liberty.android.fantastischmemo.converter.Converter;
+import org.liberty.android.fantastischmemo.test.BaseTest;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
-import android.content.Context;
-import android.test.AndroidTestCase;
-import android.test.ServiceTestCase;
-import android.test.suitebuilder.annotation.SmallTest;
 
-public abstract class AbstractConverterTest extends AndroidTestCase {
+import java.io.File;
+
+public abstract class AbstractConverterTest extends BaseTest {
 
     private Converter converter;
 
     private String srcFilePath;
 
     private String destFilePath;
-
-    private Context testContext;
 
     protected abstract Converter getConverter();
 
@@ -29,15 +28,10 @@ public abstract class AbstractConverterTest extends AndroidTestCase {
 
     protected AMFileUtil amFileUtil;
 
-    @Override
+    @Before
     public void setUp() throws Exception {
-
         // Set up necessary dependencies first
-        amFileUtil = new AMFileUtil(getContext(), new AMPrefUtil(getContext()));
-
-        // Reflect out the test context
-        Method getTestContext = ServiceTestCase.class.getMethod("getTestContext");
-        testContext = (Context) getTestContext.invoke(this);
+        amFileUtil = new AMFileUtil(getTargetContext(), new AMPrefUtil(getTargetContext()));
 
         converter = getConverter();
 
@@ -48,17 +42,18 @@ public abstract class AbstractConverterTest extends AndroidTestCase {
 
         // This amFileUtil is used on the test package so it can copy the 
         // asset file from the test package.
-        AMFileUtil amFileUtilForTest = new AMFileUtil(testContext, new AMPrefUtil(getContext()));
+        AMFileUtil amFileUtilForTest = new AMFileUtil(getContext(), new AMPrefUtil(getContext()));
         amFileUtilForTest.copyFileFromAsset(srcFileName, new File(srcFilePath));
     }
 
     @SmallTest
+    @Test
     public void testConvert() throws Exception {
         converter.convert(srcFilePath, destFilePath);
         verify(destFilePath);
     }
 
-    @Override
+    @After
     public void tearDown() {
         if (srcFilePath != null) {
             new File(srcFilePath).delete();
@@ -67,5 +62,4 @@ public abstract class AbstractConverterTest extends AndroidTestCase {
             new File(destFilePath).delete();
         }
     }
-
 }

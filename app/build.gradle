@@ -20,6 +20,7 @@ android {
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
         multiDexEnabled true
         archivesBaseName = "AnyMemo"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         jackOptions {
             enabled false
         }
