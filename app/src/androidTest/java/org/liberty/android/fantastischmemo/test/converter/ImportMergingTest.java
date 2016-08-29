@@ -44,8 +44,7 @@ public class ImportMergingTest extends AndroidTestCase {
         Method getTestContext = ServiceTestCase.class.getMethod("getTestContext");
         testContext = (Context) getTestContext.invoke(this);
 
-        amFileUtil = new AMFileUtil(testContext);
-        amFileUtil.setAmPrefUtil(new AMPrefUtil(getContext()));
+        amFileUtil = new AMFileUtil(testContext, new AMPrefUtil(getContext()));
 
         newDbCardList = new ArrayList<Card>();
         Card c1 = new Card();

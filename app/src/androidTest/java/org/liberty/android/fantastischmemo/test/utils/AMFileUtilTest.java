@@ -10,16 +10,13 @@ import android.test.suitebuilder.annotation.SmallTest;
 
 public class AMFileUtilTest extends AbstractExistingDBTest {
 
-    AMFileUtil amFileUtil;
-
     public void setUp() throws Exception {
         super.setUp();
-        amFileUtil = new AMFileUtil(getContext());
     }
     @SmallTest
     public void testDeleteDbSafe() {
         AMPrefUtil mockPrefUtil = Mockito.mock(AMPrefUtil.class);
-        amFileUtil.setAmPrefUtil(mockPrefUtil);
+        AMFileUtil amFileUtil = new AMFileUtil(getContext(), mockPrefUtil);
         amFileUtil.deleteDbSafe(TestHelper.SAMPLE_DB_PATH);
         Mockito.verify(mockPrefUtil).removePrefKeys(TestHelper.SAMPLE_DB_PATH);
     }

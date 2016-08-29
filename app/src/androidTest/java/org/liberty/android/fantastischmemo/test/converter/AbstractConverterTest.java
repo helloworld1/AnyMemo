@@ -33,8 +33,7 @@ public abstract class AbstractConverterTest extends AndroidTestCase {
     public void setUp() throws Exception {
 
         // Set up necessary dependencies first
-        amFileUtil = new AMFileUtil(getContext());
-        amFileUtil.setAmPrefUtil(new AMPrefUtil(getContext()));
+        amFileUtil = new AMFileUtil(getContext(), new AMPrefUtil(getContext()));
 
         // Reflect out the test context
         Method getTestContext = ServiceTestCase.class.getMethod("getTestContext");
@@ -49,8 +48,7 @@ public abstract class AbstractConverterTest extends AndroidTestCase {
 
         // This amFileUtil is used on the test package so it can copy the 
         // asset file from the test package.
-        AMFileUtil amFileUtilForTest = new AMFileUtil(testContext);
-        amFileUtilForTest.setAmPrefUtil(new AMPrefUtil(getContext()));
+        AMFileUtil amFileUtilForTest = new AMFileUtil(testContext, new AMPrefUtil(getContext()));
         amFileUtilForTest.copyFileFromAsset(srcFileName, new File(srcFilePath));
     }
 
