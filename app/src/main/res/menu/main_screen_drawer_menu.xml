@@ -4,19 +4,19 @@
         <item
             android:id="@+id/recent_tab_menu"
             android:checked="true"
-            android:icon="@drawable/clock_dark"
+            android:icon="@drawable/clock"
             android:title="@string/recent_tab_text"/>
         <item
             android:id="@+id/open_tab_menu"
-            android:icon="@drawable/cabinet_dark"
+            android:icon="@drawable/cabinet"
             android:title="@string/open_tab_text"/>
         <item
             android:id="@+id/download_tab_menu"
-            android:icon="@drawable/download_tab_dark"
+            android:icon="@drawable/download_tab"
             android:title="@string/download_tab_text"/>
         <item
             android:id="@+id/misc_tab_menu"
-            android:icon="@drawable/gear_dark"
+            android:icon="@drawable/gear"
             android:title="@string/misc_tab_text"/>
     </group>
 </menu>

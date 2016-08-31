@@ -5,30 +5,36 @@
     <!-- All item name are defined in attrs.xml -->
     <style name="AnyMemo.Theme.Dark"
             parent="@style/Theme.AppCompat">
-        <item name="star_theme_dependent_icon" >@drawable/star_dark</item>
-        <item name="gear_theme_dependent_icon" >@drawable/gear_dark</item>
-        <item name="cabinet_theme_dependent_icon" >@drawable/cabinet_dark</item>
-        <item name="download_tab_theme_dependent_icon" >@drawable/download_tab_dark</item>
-        <item name="clock_theme_dependent_icon" >@drawable/clock_dark</item>
-    </style>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:windowBackground">@color/background</item>
 
-    <!-- Light theme based on holo -->
-    <style name="AnyMemo.Theme.Light"
-            parent="@style/Theme.AppCompat.Light">
-        <item name="star_theme_dependent_icon" >@drawable/star_light</item>
-        <item name="gear_theme_dependent_icon" >@drawable/gear_light</item>
-        <item name="cabinet_theme_dependent_icon" >@drawable/cabinet_light</item>
-        <item name="download_tab_theme_dependent_icon" >@drawable/download_tab_light</item>
-        <item name="clock_theme_dependent_icon" >@drawable/clock_light</item>
+        <item name="android:textColor">@color/primary_text_light</item>
+        <item name="android:editTextColor">@color/secondary_text_light</item>
+        <item name="android:textColorPrimary">@color/primary_text_light</item>
+        <item name="android:textColorSecondary">@color/secondary_text_light</item>
+        <item name="android:textColorTertiary">@color/secondary_text_light</item>
+        <item name="android:textColorPrimaryInverse">@color/primary_text_dark</item>
+        <item name="android:textColorSecondaryInverse">@color/secondary_text_dark</item>
+        <item name="android:textColorTertiaryInverse">@color/disabled_text_dark</item>
     </style>
 
     <!-- Dark theme without ActionBar based -->
     <style name="AnyMemo.Theme.Dark.NoActionBar"
         parent="@style/Theme.AppCompat.NoActionBar">
-        <item name="star_theme_dependent_icon" >@drawable/star_dark</item>
-        <item name="gear_theme_dependent_icon" >@drawable/gear_dark</item>
-        <item name="cabinet_theme_dependent_icon" >@drawable/cabinet_dark</item>
-        <item name="download_tab_theme_dependent_icon" >@drawable/download_tab_dark</item>
-        <item name="clock_theme_dependent_icon" >@drawable/clock_dark</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="android:windowBackground">@color/background</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+
+        <item name="android:textColor">@color/primary_text_light</item>
+        <item name="android:editTextColor">@color/secondary_text_light</item>
+        <item name="android:textColorPrimary">@color/primary_text_light</item>
+        <item name="android:textColorSecondary">@color/secondary_text_light</item>
+        <item name="android:textColorTertiary">@color/disabled_text_light</item>
+        <item name="android:textColorPrimaryInverse">@color/primary_text_dark</item>
+        <item name="android:textColorSecondaryInverse">@color/secondary_text_dark</item>
+        <item name="android:textColorTertiaryInverse">@color/disabled_text_dark</item>
     </style>
 </resources>

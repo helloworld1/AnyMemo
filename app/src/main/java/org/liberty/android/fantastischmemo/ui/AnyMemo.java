@@ -165,10 +165,10 @@ public class AnyMemo extends BaseActivity {
 
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-        tabLayout.getTabAt(0).setIcon(R.drawable.clock_dark);
-        tabLayout.getTabAt(1).setIcon(R.drawable.cabinet_dark);
-        tabLayout.getTabAt(2).setIcon(R.drawable.download_tab_dark);
-        tabLayout.getTabAt(3).setIcon(R.drawable.gear_dark);
+        tabLayout.getTabAt(0).setIcon(R.drawable.clock);
+        tabLayout.getTabAt(1).setIcon(R.drawable.cabinet);
+        tabLayout.getTabAt(2).setIcon(R.drawable.download_tab);
+        tabLayout.getTabAt(3).setIcon(R.drawable.gear);
 
 
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);

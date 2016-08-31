@@ -4,7 +4,7 @@
     android:id="@+id/gesture_overlay"
 	android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:uncertainGestureColor="#7FFF0000"
+    android:uncertainGestureColor="?attr/colorAccent"
     android:eventsInterceptionEnabled="true"
     android:orientation="vertical" >
 <LinearLayout

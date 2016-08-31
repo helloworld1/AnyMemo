@@ -3,13 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:anymemo="http://schemas.android.com/apk/res-auto" >
     <item android:id="@+id/save"
-	    android:icon="@android:drawable/ic_menu_save"
+	    android:icon="@drawable/ic_menu_save"
         anymemo:showAsAction="ifRoom"
   		android:title="@string/settings_save" />
     <item android:id="@+id/load_default"
-	    android:icon="@android:drawable/ic_menu_rotate"
+	    android:icon="@drawable/reset"
   		android:title="@string/load_default_text" />
     <item android:id="@+id/settingsmenu_help"
-	    android:icon="@android:drawable/ic_menu_help"
+	    android:icon="@drawable/help"
   		android:title="@string/help_button_text" />
 </menu>

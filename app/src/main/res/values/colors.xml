@@ -1,3 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
+    <color name="primary_text_light">#FFFFFF</color>
+    <color name="secondary_text_light">#B2FFFFFF</color>
+    <color name="disabled_text_light">#7FFFFFFF</color>
+    <color name="dividers_light">#1EFFFFFF</color>
+
+    <color name="primary_text_dark">#DD000000</color>
+    <color name="secondary_text_dark">#89000000</color>
+    <color name="disabled_text_dark">#60000000</color>
+    <color name="dividers_dark">#1E000000</color>
+
+    <color name="primary">#303f9f</color>
+    <color name="primary_dark">#1A237E</color>
+    <color name="accent">#ffc400</color>
+    <color name="background">#303030</color>
+    <color name="cards_dialog">#424242</color>
 </resources>
