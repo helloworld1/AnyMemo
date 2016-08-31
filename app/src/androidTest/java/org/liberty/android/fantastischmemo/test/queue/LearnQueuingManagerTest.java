@@ -7,11 +7,11 @@ import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.entity.Card;
 import org.liberty.android.fantastischmemo.entity.Category;
 import org.liberty.android.fantastischmemo.entity.LearningData;
+import org.liberty.android.fantastischmemo.integrationtest.TestHelper;
 import org.liberty.android.fantastischmemo.queue.LearnQueueManager;
 import org.liberty.android.fantastischmemo.queue.QueueManager;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
-import org.liberty.android.fantastischmemo.test.TestHelper;
 
 import java.util.Date;
 

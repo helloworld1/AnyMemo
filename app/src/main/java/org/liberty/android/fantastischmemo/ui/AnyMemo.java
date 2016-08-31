@@ -170,7 +170,6 @@ public class AnyMemo extends BaseActivity {
         tabLayout.getTabAt(2).setIcon(R.drawable.download_tab);
         tabLayout.getTabAt(3).setIcon(R.drawable.gear);
 
-
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 
         navigationView.setNavigationItemSelectedListener(

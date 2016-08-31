@@ -1,4 +1,4 @@
-package org.liberty.android.fantastischmemo.test;
+package org.liberty.android.fantastischmemo.integrationtest;
 
 import android.app.Instrumentation;
 import android.content.Context;

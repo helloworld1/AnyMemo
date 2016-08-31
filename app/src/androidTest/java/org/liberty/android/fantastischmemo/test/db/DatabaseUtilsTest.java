@@ -12,8 +12,8 @@ import org.liberty.android.fantastischmemo.entity.Card;
 import org.liberty.android.fantastischmemo.entity.Category;
 import org.liberty.android.fantastischmemo.entity.LearningData;
 import org.liberty.android.fantastischmemo.entity.Setting;
+import org.liberty.android.fantastischmemo.integrationtest.TestHelper;
 import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
-import org.liberty.android.fantastischmemo.test.TestHelper;
 import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
 
 import java.io.File;

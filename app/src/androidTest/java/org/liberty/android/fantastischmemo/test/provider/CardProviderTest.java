@@ -6,8 +6,8 @@ import android.net.Uri;
 import android.support.test.filters.SmallTest;
 
 import org.junit.Test;
+import org.liberty.android.fantastischmemo.integrationtest.TestHelper;
 import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
-import org.liberty.android.fantastischmemo.test.TestHelper;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;

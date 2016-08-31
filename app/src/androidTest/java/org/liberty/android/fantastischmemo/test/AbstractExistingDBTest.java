@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.integrationtest.TestHelper;
 
 import java.io.File;
 import java.io.InputStream;
