@@ -23,7 +23,7 @@
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:paddingRight="5dp"
-                android:src="@drawable/options" />
+                app:srcCompat="@drawable/options" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -46,7 +46,7 @@
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:paddingRight="5dp"
-                android:src="@drawable/import_icon" />
+                app:srcCompat="@drawable/import_icon" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -206,7 +206,7 @@
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:paddingRight="5dp"
-                android:src="@drawable/export_icon" />
+                app:srcCompat="@drawable/export_icon" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -335,7 +335,7 @@
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:paddingRight="5dp"
-                android:src="@drawable/db_settings" />
+                app:srcCompat="@drawable/db_settings" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -358,7 +358,7 @@
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:paddingRight="5dp"
-                android:src="@drawable/merge" />
+                app:srcCompat="@drawable/merge" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -381,7 +381,7 @@
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:paddingRight="5dp"
-                android:src="@drawable/reset" />
+                app:srcCompat="@drawable/reset" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -404,7 +404,7 @@
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:paddingRight="5dp"
-                android:src="@drawable/donate" />
+                app:srcCompat="@drawable/donate" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -427,7 +427,7 @@
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:paddingRight="5dp"
-                android:src="@drawable/help" />
+                app:srcCompat="@drawable/help" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -450,7 +450,7 @@
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:paddingRight="5dp"
-                android:src="@drawable/about" />
+                app:srcCompat="@drawable/about" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"

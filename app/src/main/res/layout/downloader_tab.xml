@@ -21,7 +21,7 @@
                 android:layout_height="@dimen/tab_icon_size"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:src="@drawable/server" />
+                app:srcCompat="@drawable/server" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -43,7 +43,7 @@
                 android:layout_height="@dimen/tab_icon_size"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:src="@drawable/server" />
+                app:srcCompat="@drawable/server" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -65,7 +65,7 @@
                 android:layout_height="@dimen/tab_icon_size"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:src="@drawable/server" />
+                app:srcCompat="@drawable/server" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -87,7 +87,7 @@
                 android:layout_height="@dimen/tab_icon_size"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:src="@drawable/server" />
+                app:srcCompat="@drawable/server" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"

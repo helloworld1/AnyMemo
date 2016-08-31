@@ -46,8 +46,8 @@
         android:layout_width="wrap_content"
         android:layout_gravity="start"
         android:background="?attr/colorPrimary"
-        app:itemIconTint="@drawable/navigation_text_color"
-        app:itemTextColor="@drawable/navigation_text_color"
+        app:itemIconTint="?android:attr/textColor"
+        app:itemTextColor="?android:attr/textColor"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/main_navigation_view_header"
         app:menu="@menu/main_screen_drawer_menu"/>

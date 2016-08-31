@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:scrollbars="vertical" android:layout_height="fill_parent" android:layout_width="fill_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:scrollbars="vertical"
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent">
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
@@ -18,7 +21,7 @@
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:paddingRight="5dp"
-                android:src="@drawable/study" />
+                app:srcCompat="@drawable/study" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -42,7 +45,7 @@
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:paddingRight="5dp"
-                android:src="@drawable/preview_edit" />
+                app:srcCompat="@drawable/preview_edit" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -66,7 +69,7 @@
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:paddingRight="5dp"
-                android:src="@drawable/card_list" />
+                app:srcCompat="@drawable/card_list" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -90,7 +93,7 @@
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:paddingRight="5dp"
-                android:src="@drawable/quiz" />
+                app:srcCompat="@drawable/quiz" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -114,7 +117,7 @@
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:paddingRight="5dp"
-                android:src="@drawable/card_player" />
+                app:srcCompat="@drawable/card_player" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -138,7 +141,7 @@
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:paddingRight="5dp"
-                android:src="@drawable/db_settings" />
+                app:srcCompat="@drawable/db_settings" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -162,7 +165,7 @@
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:paddingRight="5dp"
-                android:src="@drawable/statistics" />
+                app:srcCompat="@drawable/statistics" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -186,7 +189,7 @@
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:paddingRight="5dp"
-                android:src="@drawable/share" />
+                app:srcCompat="@drawable/share" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -210,7 +213,7 @@
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:paddingRight="5dp"
-                android:src="@drawable/delete_forever" />
+                app:srcCompat="@drawable/delete_forever" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"

@@ -6,5 +6,5 @@
     <path
         android:pathData="M0,0h180v60h-180z"
         android:fillAlpha="1"
-        android:fillColor="?android:attr/colorPrimary"/>
+        android:fillColor="?attr/colorPrimary"/>
 </vector>
