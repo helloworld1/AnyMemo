@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
-    <color name="primary_text_light">#FFFFFF</color>
+    <color name="primary_text_light">#FFFFff</color>
     <color name="secondary_text_light">#B2FFFFFF</color>
     <color name="disabled_text_light">#7FFFFFFF</color>
     <color name="dividers_light">#1EFFFFFF</color>
@@ -12,7 +12,7 @@
 
     <color name="primary">#607D8B</color>
     <color name="primary_dark">#455A64</color>
-    <color name="accent">#448AFF</color>
+    <color name="accent">#FF4081</color>
     <color name="background">#303030</color>
     <color name="cards_dialog">#424242</color>
 

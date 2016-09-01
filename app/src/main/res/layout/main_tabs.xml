@@ -45,10 +45,8 @@
         android:layout_height="match_parent"
         android:layout_width="wrap_content"
         android:layout_gravity="start"
-        android:background="@color/drawer_background"
         app:itemIconTint="?android:attr/textColor"
         app:itemTextColor="?android:attr/textColor"
-        android:fitsSystemWindows="true"
         app:headerLayout="@layout/main_navigation_view_header"
         app:menu="@menu/main_screen_drawer_menu"/>
 
