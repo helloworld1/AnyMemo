@@ -4,5 +4,6 @@
     <dimen name="player_main_icon_size">50dp</dimen>
     <dimen name="browser_icon_size">35dp</dimen>
     <dimen name="navigation_view_header">192dp</dimen>
-    <dimen name="margin_1">16dp</dimen>
+    <dimen name="navigation_view_text_size">24sp</dimen>
+    <dimen name="space_2">16dp</dimen>
 </resources>
