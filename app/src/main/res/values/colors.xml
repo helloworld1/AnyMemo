@@ -10,9 +10,11 @@
     <color name="disabled_text_dark">#60000000</color>
     <color name="dividers_dark">#1E000000</color>
 
-    <color name="primary">#303f9f</color>
-    <color name="primary_dark">#1A237E</color>
-    <color name="accent">#ffc400</color>
+    <color name="primary">#607D8B</color>
+    <color name="primary_dark">#455A64</color>
+    <color name="accent">#448AFF</color>
     <color name="background">#303030</color>
     <color name="cards_dialog">#424242</color>
+
+    <color name="drawer_background">#424242</color>
 </resources>
