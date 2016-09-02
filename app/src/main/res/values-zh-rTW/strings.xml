@@ -440,4 +440,5 @@
     <string name="change_directory_permission_denied_message">AnyMemo沒有讀取該資料夾的權限。</string>
     <string name="directory_empty_text">（資料夾為空）</string>
     <string name="today_text">今天</string>
+    <string name="more_text">更多模式</string>
 </resources>

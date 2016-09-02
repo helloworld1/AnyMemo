@@ -22,12 +22,16 @@ package org.liberty.android.fantastischmemo.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,6 +42,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import org.apache.commons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
@@ -90,6 +95,8 @@ public class RecentListFragment extends BaseFragment {
             Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.recent_list, container, false);
         recentListRecyclerView = (RecyclerView) v.findViewById(R.id.recent_open_list);
+        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(v.getContext());
+        recentListRecyclerView.addItemDecoration(dividerItemDecoration);
 
         recentListRecyclerView.setLayoutManager(new LinearLayoutManager(recentListRecyclerView.getContext()));
 
@@ -259,11 +266,13 @@ public class RecentListFragment extends BaseFragment {
         public static class ViewHolder extends RecyclerView.ViewHolder {
             private TextView filenameView;
             private TextView infoView;
+            private Button moreButton;
 
             public ViewHolder(View view) {
                 super(view);
                 filenameView = (TextView)view.findViewById(R.id.recent_item_filename);
                 infoView = (TextView)view.findViewById(R.id.recent_item_info);
+                moreButton = (Button)view.findViewById(R.id.recent_item_more_button);
             }
 
             public void setItem(RecentItem item) {
@@ -315,6 +324,18 @@ public class RecentListFragment extends BaseFragment {
                     return true;
                 }
             });
+
+            holder.moreButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String dbPath = currentItem.dbPath;
+                    DialogFragment df = new OpenActionsFragment();
+                    Bundle b = new Bundle();
+                    b.putString(OpenActionsFragment.EXTRA_DBPATH, dbPath);
+                    df.setArguments(b);
+                    df.show(((FragmentActivity) context).getSupportFragmentManager(), "OpenActions");
+                }
+            });
         }
 
         @Override
@@ -332,4 +353,41 @@ public class RecentListFragment extends BaseFragment {
             this.notifyDataSetChanged();
         }
     }
+
+    // simplified and updated DividerItemDecoration.java from android extras
+    private static class DividerItemDecoration extends RecyclerView.ItemDecoration {
+
+        private Drawable mDivider;
+
+        public DividerItemDecoration(Context context) {
+            mDivider = ContextCompat.getDrawable(context, R.drawable.divider);
+        }
+
+        @Override
+        public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+            drawVertical(c, parent);
+        }
+
+        public void drawVertical(Canvas c, RecyclerView parent) {
+            final int left = parent.getPaddingLeft();
+            final int right = parent.getWidth() - parent.getPaddingRight();
+            final int childCount = parent.getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                final View child = parent.getChildAt(i);
+                final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
+                        .getLayoutParams();
+                final int top = child.getBottom() + params.bottomMargin;
+                final int bottom = top + mDivider.getIntrinsicHeight();
+                mDivider.setBounds(left, top, right, bottom);
+                mDivider.draw(c);
+            }
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
+                                   RecyclerView.State state) {
+            outRect.set(0, 0, 0, mDivider.getIntrinsicHeight());
+        }
+    }
+
 }
