@@ -21,6 +21,7 @@ import org.liberty.android.fantastischmemo.utils.AMDateUtil;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
 import org.liberty.android.fantastischmemo.utils.AMUiUtil;
+import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 import org.liberty.android.fantastischmemo.widget.WidgetRemoteViewsFactory;
 
@@ -41,6 +42,7 @@ public interface AppComponents {
     RecentListUtil recenetListUtil();
     SchedulingAlgorithmParameters schedulingAlgorithmParameters();
     DownloaderUtils downloaderUtils();
+    DatabaseUtil databaseUtil();
     QuizletDownloadHelper quizletDownloadHelper();
     Map<Class<?>, Converter> converterMap();
     Option option();

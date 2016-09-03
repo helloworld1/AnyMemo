@@ -6,6 +6,7 @@ import org.liberty.android.fantastischmemo.common.BaseActivity;
 import org.liberty.android.fantastischmemo.converter.Converter;
 import org.liberty.android.fantastischmemo.downloader.DownloaderUtils;
 import org.liberty.android.fantastischmemo.downloader.quizlet.QuizletDownloadHelper;
+import org.liberty.android.fantastischmemo.entity.Option;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 import org.liberty.android.fantastischmemo.ui.AnyMemo;
 import org.liberty.android.fantastischmemo.ui.CardEditor;
@@ -18,7 +19,11 @@ import org.liberty.android.fantastischmemo.ui.SettingsScreen;
 import org.liberty.android.fantastischmemo.ui.ShareScreen;
 import org.liberty.android.fantastischmemo.ui.StudyActivity;
 import org.liberty.android.fantastischmemo.utils.AMDateUtil;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
+import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
 import org.liberty.android.fantastischmemo.utils.AMUiUtil;
+import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
+import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 import org.liberty.android.fantastischmemo.utils.ShareUtil;
 
 import java.util.Map;
@@ -40,7 +45,17 @@ public interface ActivityComponents {
 
     DownloaderUtils downloaderUtils();
 
+    DatabaseUtil databaseUtil();
+
     QuizletDownloadHelper quizletDownloadHelper();
+
+    Option option();
+
+    RecentListUtil recentListUtil();
+
+    AMPrefUtil amPrefUtil();
+
+    AMFileUtil amFileUtil();
 
     Map<Class<?>, Converter> converterMap();
 

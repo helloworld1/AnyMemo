@@ -20,17 +20,9 @@ import org.liberty.android.fantastischmemo.converter.TabTxtExporter;
 import org.liberty.android.fantastischmemo.converter.TabTxtImporter;
 import org.liberty.android.fantastischmemo.converter.ZipExporter;
 import org.liberty.android.fantastischmemo.converter.ZipImporter;
-import org.liberty.android.fantastischmemo.downloader.DownloaderUtils;
-import org.liberty.android.fantastischmemo.entity.Option;
-import org.liberty.android.fantastischmemo.entity.SchedulingAlgorithmParameters;
 import org.liberty.android.fantastischmemo.scheduler.DefaultScheduler;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
-import org.liberty.android.fantastischmemo.utils.AMDateUtil;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
-import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
-import org.liberty.android.fantastischmemo.utils.AMUiUtil;
-import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
-import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 import dagger.Module;
 import dagger.Provides;
@@ -38,6 +30,7 @@ import dagger.multibindings.ClassKey;
 import dagger.multibindings.IntoMap;
 
 @Module
+@PerApplication
 public class AppModules {
 
     private AMApplication application;
@@ -62,44 +55,8 @@ public class AppModules {
 
     @Provides
     @PerApplication
-    Scheduler providesScheduler(SchedulingAlgorithmParameters parameters) {
-        return new DefaultScheduler(parameters);
-    }
-
-    @Provides
-    @PerApplication
-    SchedulingAlgorithmParameters providesSchedulingAlgorithmParameters(AMApplication context) {
-        return new SchedulingAlgorithmParameters(context);
-    }
-
-    @Provides
-    @PerApplication
-    AMFileUtil providesAMFileUtil(AMApplication context, AMPrefUtil amPrefUtil) {
-        return new AMFileUtil(context, amPrefUtil);
-    }
-
-    @Provides
-    @PerApplication
-    AMPrefUtil providesAMPrefUtil(AMApplication context) {
-        return new AMPrefUtil(context);
-    }
-
-    @Provides
-    @PerApplication
-    Option providesOption(AMApplication context) {
-        return new Option(context);
-    }
-
-    @Provides
-    @PerApplication
-    RecentListUtil providesRecentListUtil(AMApplication context, Option option) {
-        return new RecentListUtil(context, option);
-    }
-
-    @Provides
-    @PerApplication
-    DatabaseUtil providesDatabaseUtil(AMApplication context) {
-        return new DatabaseUtil(context);
+    Scheduler providesScheduler(DefaultScheduler scheduler) {
+        return scheduler;
     }
 
     @Provides
@@ -107,24 +64,6 @@ public class AppModules {
     FirebaseAnalytics providesFirebaseAnalytics(AMApplication context) {
         FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(context);
         return firebaseAnalytics;
-    }
-
-    @Provides
-    @PerApplication
-    DownloaderUtils providesDownloaderUtils(AMFileUtil amFileUtil) {
-        return new DownloaderUtils(amFileUtil);
-    }
-
-    @Provides
-    @PerApplication
-    AMDateUtil providesAMDateUtil(AMApplication context) {
-        return new AMDateUtil(context);
-    }
-
-    @Provides
-    @PerApplication
-    AMUiUtil providesAMUiUtil(AMApplication context) {
-        return new AMUiUtil(context);
     }
 
     @Provides

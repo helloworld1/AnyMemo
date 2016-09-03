@@ -31,11 +31,13 @@ import org.apache.commons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.modules.ForApplication;
+import org.liberty.android.fantastischmemo.modules.PerApplication;
 
 import android.content.Context;
 
 import javax.inject.Inject;
 
+@PerApplication
 public class AMFileUtil {
 
     private Context mContext;

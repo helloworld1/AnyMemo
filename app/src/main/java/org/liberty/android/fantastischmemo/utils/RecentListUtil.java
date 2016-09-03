@@ -25,12 +25,15 @@ import org.apache.commons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.entity.Option;
 import org.liberty.android.fantastischmemo.modules.ForApplication;
+import org.liberty.android.fantastischmemo.modules.PerActivity;
+import org.liberty.android.fantastischmemo.modules.PerApplication;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 /* This class handles the operations on recent list */
+@PerApplication
 public class RecentListUtil {
     private int recentLength = 7;
 

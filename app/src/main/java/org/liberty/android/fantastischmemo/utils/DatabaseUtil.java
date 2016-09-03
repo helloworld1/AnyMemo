@@ -16,9 +16,11 @@ import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.entity.Card;
 import org.liberty.android.fantastischmemo.entity.Setting;
 import org.liberty.android.fantastischmemo.modules.ForApplication;
+import org.liberty.android.fantastischmemo.modules.PerApplication;
 
 import android.content.Context;
 
+@PerApplication
 public class DatabaseUtil {
 
     private Context mContext;

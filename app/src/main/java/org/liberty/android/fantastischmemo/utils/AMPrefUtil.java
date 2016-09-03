@@ -29,7 +29,9 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import org.liberty.android.fantastischmemo.modules.ForApplication;
+import org.liberty.android.fantastischmemo.modules.PerApplication;
 
+@PerApplication
 public class AMPrefUtil {
 
     private SharedPreferences settings;

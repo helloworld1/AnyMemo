@@ -39,11 +39,12 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.liberty.android.fantastischmemo.modules.PerApplication;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
-import android.content.Context;
 import android.util.Log;
 
+@PerApplication
 public class DownloaderUtils {
     public static final String TAG = DownloaderUtils.class.getSimpleName();
 

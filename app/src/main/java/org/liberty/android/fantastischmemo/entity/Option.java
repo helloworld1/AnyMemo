@@ -4,11 +4,13 @@ import javax.inject.Inject;
 
 import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.modules.ForApplication;
+import org.liberty.android.fantastischmemo.modules.PerApplication;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+@PerApplication
 public class Option {
 
     private SharedPreferences settings;

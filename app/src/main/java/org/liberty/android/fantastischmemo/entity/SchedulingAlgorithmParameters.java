@@ -3,11 +3,14 @@ package org.liberty.android.fantastischmemo.entity;
 import javax.inject.Inject;
 
 import org.liberty.android.fantastischmemo.AMPrefKeys;
+import org.liberty.android.fantastischmemo.modules.ForApplication;
+import org.liberty.android.fantastischmemo.modules.PerApplication;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+@PerApplication
 public class SchedulingAlgorithmParameters {
 
     private SharedPreferences settings;
@@ -31,7 +34,7 @@ public class SchedulingAlgorithmParameters {
     private static String defaultReviewOrdering = "HardestFirst";
 
     @Inject
-    public SchedulingAlgorithmParameters(Context context) {
+    public SchedulingAlgorithmParameters(@ForApplication Context context) {
     	settings = PreferenceManager.getDefaultSharedPreferences(context);
         editor = settings.edit();
     }

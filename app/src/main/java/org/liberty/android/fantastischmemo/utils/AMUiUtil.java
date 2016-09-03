@@ -24,15 +24,19 @@ import javax.inject.Inject;
 import android.content.Context;
 import android.util.TypedValue;
 
+import org.liberty.android.fantastischmemo.modules.ForApplication;
+import org.liberty.android.fantastischmemo.modules.PerApplication;
+
 /*
  * Util that is related to user interface.
  */
+@ForApplication
 public class AMUiUtil {
 
     private Context mContext;
 
     @Inject
-    public AMUiUtil(Context context) {
+    public AMUiUtil(@ForApplication Context context) {
         mContext = context;
     }
 

@@ -25,15 +25,18 @@ import java.util.Date;
 import javax.inject.Inject;
 
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.modules.ForApplication;
+import org.liberty.android.fantastischmemo.modules.PerApplication;
 
 import android.content.Context;
 
+@PerApplication
 public class AMDateUtil {
 
     private Context context;
 
     @Inject
-    public AMDateUtil(Context context) {
+    public AMDateUtil(@ForApplication Context context) {
         this.context = context;
     }
 

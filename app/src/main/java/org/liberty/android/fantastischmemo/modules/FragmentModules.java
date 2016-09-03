@@ -6,6 +6,7 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
+@PerFragment
 public class FragmentModules {
     private final Fragment fragment;
     public FragmentModules(Fragment fragment) {

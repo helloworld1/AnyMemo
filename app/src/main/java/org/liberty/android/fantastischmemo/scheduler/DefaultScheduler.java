@@ -28,6 +28,7 @@ import javax.inject.Inject;
 
 import org.liberty.android.fantastischmemo.entity.LearningData;
 import org.liberty.android.fantastischmemo.entity.SchedulingAlgorithmParameters;
+import org.liberty.android.fantastischmemo.modules.ForApplication;
 import org.liberty.android.fantastischmemo.utils.AMDateUtil;
 
 /*
@@ -35,6 +36,7 @@ import org.liberty.android.fantastischmemo.utils.AMDateUtil;
  * from the preferences and schedul card based on
  * modified mnemosyne algorithm.
  */
+@ForApplication
 public class DefaultScheduler implements Scheduler {
     private final static String TAG = "DefaultScheduler";
 
