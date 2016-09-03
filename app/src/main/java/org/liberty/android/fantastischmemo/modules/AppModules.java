@@ -30,7 +30,6 @@ import dagger.multibindings.ClassKey;
 import dagger.multibindings.IntoMap;
 
 @Module
-@PerApplication
 public class AppModules {
 
     private AMApplication application;

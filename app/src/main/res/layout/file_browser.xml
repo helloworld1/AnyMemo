@@ -14,7 +14,7 @@
         android:orientation="vertical">
 
         <TextView android:id="@+id/file_path_title"
-            android:textSize="14dp"
+            android:textSize="@dimen/text_size_14"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -22,7 +22,6 @@
             android:id="@+id/file_list"
             android:scrollbars="vertical"
             android:fadeScrollbars="true"
-            android:layout_below="@+id/file_path_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true"
@@ -34,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin"
             android:gravity="center"
-            android:textSize="20dp"
+            android:textSize="@dimen/text_size_20"
             android:visibility="gone" />
     </LinearLayout>
 

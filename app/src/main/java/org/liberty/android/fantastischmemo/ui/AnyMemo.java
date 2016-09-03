@@ -73,15 +73,10 @@ import java.io.InputStream;
 
 import javax.inject.Inject;
 
-
 public class AnyMemo extends BaseActivity {
     private static final String WEBSITE_VERSION="https://anymemo.org/versions-view";
 
-    public static final String EXTRA_INITIAL_TAB = "initial_tab";
-
     private DrawerLayout drawerLayout;
-
-    private ViewPager viewPager;
 
     private SharedPreferences settings;
 
@@ -128,7 +123,6 @@ public class AnyMemo extends BaseActivity {
                             .show();
                     finish();
                 }
-                return;
             }
         }
     }

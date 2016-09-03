@@ -5,6 +5,7 @@
     <dimen name="browser_icon_size">35dp</dimen>
     <dimen name="navigation_view_header">192dp</dimen>
     <dimen name="navigation_view_text_size">24sp</dimen>
-    <dimen name="recent_tab_context_menu_button">30dp</dimen>
+    <dimen name="text_size_14">14sp</dimen>
+    <dimen name="text_size_20">20sp</dimen>
     <dimen name="space_2">16dp</dimen>
 </resources>

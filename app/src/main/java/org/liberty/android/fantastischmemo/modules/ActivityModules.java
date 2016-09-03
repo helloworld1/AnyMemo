@@ -13,7 +13,6 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-@PerActivity
 public class ActivityModules {
     private final BaseActivity activity;
 
