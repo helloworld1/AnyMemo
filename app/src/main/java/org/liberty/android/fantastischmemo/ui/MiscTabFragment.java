@@ -37,6 +37,7 @@ import org.liberty.android.fantastischmemo.converter.TabTxtExporter;
 import org.liberty.android.fantastischmemo.converter.TabTxtImporter;
 import org.liberty.android.fantastischmemo.converter.ZipExporter;
 import org.liberty.android.fantastischmemo.converter.ZipImporter;
+import org.liberty.android.fantastischmemo.utils.AboutUtil;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -56,8 +57,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import javax.inject.Inject;
+
 public class MiscTabFragment extends BaseFragment implements View.OnClickListener {
-    private static final String WEBSITE_VERSION="https://anymemo.org/versions-view";
     private Activity mActivity;
     private View optionButton;
     private View importButton;
@@ -86,6 +88,8 @@ public class MiscTabFragment extends BaseFragment implements View.OnClickListene
     private View helpButton;
     private View aboutButton;
 
+    @Inject AboutUtil aboutUtil;
+
     public MiscTabFragment() { }
 
     @Override
@@ -93,6 +97,13 @@ public class MiscTabFragment extends BaseFragment implements View.OnClickListene
         super.onAttach(activity);
         mActivity = activity;
     }
+
+    @Override
+    public void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+        fragmentComponents().inject(this);
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -346,38 +357,12 @@ public class MiscTabFragment extends BaseFragment implements View.OnClickListene
             Intent myIntent = new Intent();
             myIntent.setAction(Intent.ACTION_VIEW);
             myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
-            myIntent.setData(Uri.parse(WEBSITE_VERSION));
+            myIntent.setData(Uri.parse(getString(R.string.website_versions_view)));
             startActivity(myIntent);
         }
         if(v == aboutButton){
-            // Get the version defined in the AndroidManifest.
-            String versionName = "";
-            try {
-                versionName = getActivity().getPackageManager()
-                    .getPackageInfo(getActivity().getPackageName(), 0).versionName;
-            } catch (PackageManager.NameNotFoundException e) {
-                versionName = "1.0";
-            }
-
-            View alertView = View.inflate(mActivity, R.layout.link_alert, null);
-            TextView textView = (TextView)alertView.findViewById(R.id.link_alert_message);
-            textView.setText(Html.fromHtml(getString(R.string.about_text)));
-            textView.setMovementMethod(LinkMovementMethod.getInstance());
-            new AlertDialog.Builder(mActivity)
-                .setView(alertView)
-                .setTitle(getString(R.string.app_full_name) + " " + versionName)
-                .setPositiveButton(getString(R.string.ok_text), null)
-                .setNegativeButton(getString(R.string.about_version), new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1){
-                        Intent myIntent = new Intent();
-                        myIntent.setAction(Intent.ACTION_VIEW);
-                        myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
-                        myIntent.setData(Uri.parse(WEBSITE_VERSION));
-                        startActivity(myIntent);
-                    }
-                })
-                .show();
+            aboutUtil.createAboutDialog();
         }
     }
+
 }

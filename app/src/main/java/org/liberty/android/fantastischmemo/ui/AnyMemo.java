@@ -63,6 +63,7 @@ import org.liberty.android.fantastischmemo.receiver.SetAlarmReceiver;
 import org.liberty.android.fantastischmemo.service.AnyMemoService;
 import org.liberty.android.fantastischmemo.ui.loader.MultipleLoaderManager;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
+import org.liberty.android.fantastischmemo.utils.AboutUtil;
 import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 import org.liberty.android.fantastischmemo.widget.AnyMemoWidgetProvider;
@@ -87,6 +88,8 @@ public class AnyMemo extends BaseActivity {
     @Inject DatabaseUtil databaseUtil;
 
     @Inject MultipleLoaderManager multipleLoaderManager;
+
+    @Inject AboutUtil aboutUtil;
 
     @Inject FirebaseAnalytics firebaseAnalytics;
 
@@ -162,7 +165,7 @@ public class AnyMemo extends BaseActivity {
         tabLayout.getTabAt(0).setIcon(R.drawable.clock);
         tabLayout.getTabAt(1).setIcon(R.drawable.cabinet);
         tabLayout.getTabAt(2).setIcon(R.drawable.download_tab);
-        tabLayout.getTabAt(3).setIcon(R.drawable.gear);
+        tabLayout.getTabAt(3).setIcon(R.drawable.misc);
 
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 
@@ -182,6 +185,12 @@ public class AnyMemo extends BaseActivity {
                             break;
                         case R.id.misc_tab_menu:
                             tabLayout.getTabAt(3).select();
+                            break;
+                        case R.id.option_tab_menu:
+                            startActivity(new Intent(tabLayout.getContext(), OptionScreen.class));
+                            break;
+                        case R.id.about_tab_menu:
+                            aboutUtil.createAboutDialog();
                             break;
                     }
                     menuItem.setChecked(true);
