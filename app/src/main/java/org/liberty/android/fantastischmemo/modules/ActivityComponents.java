@@ -24,6 +24,7 @@ import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
 import org.liberty.android.fantastischmemo.utils.AMUiUtil;
 import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
+import org.liberty.android.fantastischmemo.utils.AboutUtil;
 import org.liberty.android.fantastischmemo.utils.ShareUtil;
 
 import java.util.Map;
@@ -42,6 +43,8 @@ public interface ActivityComponents {
     ShareUtil shareUtil();
 
     AMUiUtil amUiUtil();
+
+    AboutUtil aboutUtil();
 
     DownloaderUtils downloaderUtils();
 

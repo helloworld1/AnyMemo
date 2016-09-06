@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:checkableBehavior="single">
+    <group android:id="@+id/main_tabs_group"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/recent_tab_menu"
             android:checked="true"
@@ -16,7 +17,19 @@
             android:title="@string/download_tab_text"/>
         <item
             android:id="@+id/misc_tab_menu"
-            android:icon="@drawable/gear"
+            android:icon="@drawable/misc"
             android:title="@string/misc_tab_text"/>
+    </group>
+    <group android:id="@+id/option_tabs_group"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/option_tab_menu"
+            android:icon="@drawable/options"
+            android:title="@string/option_button_text"/>
+
+        <item
+            android:id="@+id/about_tab_menu"
+            android:icon="@drawable/about"
+            android:title="@string/about_button_text"/>
     </group>
 </menu>

@@ -3,7 +3,7 @@
     <dimen name="tab_icon_size">40dp</dimen>
     <dimen name="player_main_icon_size">50dp</dimen>
     <dimen name="browser_icon_size">35dp</dimen>
-    <dimen name="navigation_view_header">192dp</dimen>
+    <dimen name="navigation_view_header">128dp</dimen>
     <dimen name="navigation_view_text_size">24sp</dimen>
     <dimen name="text_size_14">14sp</dimen>
     <dimen name="text_size_20">20sp</dimen>
