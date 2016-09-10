@@ -114,7 +114,7 @@
     <string name="downloader_download_alert">Download: </string>
     <string name="downloader_download_alert_message">Details: </string>
     <string name="about_title">Über dieses Programm</string>
-    <string name="about_text">Karteikarten-Lernprogramm mit Zeitabstand regelndem Algorithmus.&lt;br /&gt;&lt;br /&gt;Autoren: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;Webseite: &lt;a href=&quot;http://anymemo.org&quot;&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Besonderer Dank gebührt: pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;Übersetzer: Ladislav, jim4ever, paw3lk, Александр Гоменюк, Maksym Grinenko</string>
+    <string name="about_text">Karteikarten-Lernprogramm mit Zeitabstand regelndem Algorithmus.&lt;br /&gt;&lt;br /&gt;Autoren: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;Webseite: &lt;a href=&quot;http://anymemo.org&quot;&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Besonderer Dank gebührt: pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler, Dongping Xie&lt;br /&gt;&lt;br /&gt;Übersetzer: Ladislav, jim4ever, paw3lk, Александр Гоменюк, Maksym Grinenko</string>
     <string name="about_version">Versionsverlauf</string>
     <string name="what_is_new">Neue Version installiert</string>
     <string name="downloader_categories">Kategorien</string>
