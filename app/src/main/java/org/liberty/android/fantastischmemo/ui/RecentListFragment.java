@@ -20,8 +20,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -33,6 +35,8 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -50,6 +54,7 @@ import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.BaseFragment;
 import org.liberty.android.fantastischmemo.dao.CardDao;
+import org.liberty.android.fantastischmemo.ui.helper.SelectableAdapter;
 import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
@@ -75,6 +80,20 @@ public class RecentListFragment extends BaseFragment {
 
     @Inject DatabaseUtil databaseUtil;
 
+    private BroadcastReceiver mRemoveSelectedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            recentListAdapter.removeSelected();
+        }
+    };
+
+    private BroadcastReceiver mClearSelectionReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            recentListAdapter.clearSelection();
+        }
+    };
+
     public RecentListFragment() {}
 
     @Override
@@ -88,6 +107,26 @@ public class RecentListFragment extends BaseFragment {
         super.onAttach(activity);
         mActivity = (Activity) activity;
         setHasOptionsMenu(true);
+        LocalBroadcastManager.getInstance(mActivity).registerReceiver(mClearSelectionReceiver,
+                new IntentFilter("recent-list-clear-selection"));
+        LocalBroadcastManager.getInstance(mActivity).registerReceiver(mRemoveSelectedReceiver,
+                new IntentFilter("recent-list-remove-selected"));
+    }
+
+    @Override
+    public void onDetach() {
+        LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(mClearSelectionReceiver);
+        LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(mRemoveSelectedReceiver);
+        super.onDetach();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if (recentListAdapter != null && !isVisibleToUser) {
+            recentListAdapter.stopActionMode();
+        }
     }
 
     @Override
@@ -255,7 +294,7 @@ public class RecentListFragment extends BaseFragment {
     /**
      *  The recent list adapter to handle the actual recycler view logic
      */
-    private static class RecentListAdapter extends RecyclerView.Adapter<RecentListAdapter.ViewHolder> {
+    private static class RecentListAdapter extends SelectableAdapter<RecentListAdapter.ViewHolder> {
 
         private final Context context;
 
@@ -263,16 +302,20 @@ public class RecentListFragment extends BaseFragment {
 
         private final RecentListUtil recentListUtil;
 
+        private ActionMode actionMode;
+
         public static class ViewHolder extends RecyclerView.ViewHolder {
             private TextView filenameView;
             private TextView infoView;
             private Button moreButton;
+            private View selectedOverlay;
 
             public ViewHolder(View view) {
                 super(view);
                 filenameView = (TextView)view.findViewById(R.id.recent_item_filename);
                 infoView = (TextView)view.findViewById(R.id.recent_item_info);
                 moreButton = (Button)view.findViewById(R.id.recent_item_more_button);
+                selectedOverlay = (View) view.findViewById(R.id.selected_overlay);
             }
 
             public void setItem(RecentItem item) {
@@ -292,6 +335,7 @@ public class RecentListFragment extends BaseFragment {
             LayoutInflater li = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View v = li.inflate(R.layout.open_screen_recent_item, parent, false);
 
+
             return new ViewHolder(v);
         }
 
@@ -303,24 +347,29 @@ public class RecentListFragment extends BaseFragment {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent myIntent = new Intent();
-                    myIntent.setClass(context, StudyActivity.class);
-                    String dbPath = currentItem.dbPath;
-                    myIntent.putExtra(StudyActivity.EXTRA_DBPATH, dbPath);
-                    recentListUtil.addToRecentList(dbPath);
-                    context.startActivity(myIntent);
+                    if (getSelectedItemCount() == 0) {
+                        Intent myIntent = new Intent();
+                        myIntent.setClass(context, StudyActivity.class);
+                        String dbPath = currentItem.dbPath;
+                        myIntent.putExtra(StudyActivity.EXTRA_DBPATH, dbPath);
+                        recentListUtil.addToRecentList(dbPath);
+                        context.startActivity(myIntent);
+                    } else {
+                        toggleSelection(position);
+                    }
+                    updateActionMode();
                 }
             });
 
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    String dbPath = currentItem.dbPath;
-                    DialogFragment df = new OpenActionsFragment();
-                    Bundle b = new Bundle();
-                    b.putString(OpenActionsFragment.EXTRA_DBPATH, dbPath);
-                    df.setArguments(b);
-                    df.show(((FragmentActivity)context).getSupportFragmentManager(), "OpenActions");
+                    if (getSelectedItemCount() == 0) {
+                        Intent intent = new Intent("recent-list-start-action-mode");
+                        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                    }
+                    toggleSelection(position);
+                    updateActionMode();
                     return true;
                 }
             });
@@ -336,10 +385,10 @@ public class RecentListFragment extends BaseFragment {
                     df.show(((FragmentActivity) context).getSupportFragmentManager(), "OpenActions");
                 }
             });
-        }
 
-        @Override
-        public int getItemCount() {
+            holder.selectedOverlay.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
+        }
+        @Override public int getItemCount() {
             return items.size();
         }
 
@@ -352,6 +401,31 @@ public class RecentListFragment extends BaseFragment {
             this.items.addAll(items);
             this.notifyDataSetChanged();
         }
+
+        private void updateActionMode() {
+            Intent intent = new Intent("recent-list-update-action-mode");
+            intent.putExtra("selectedItemCount", getSelectedItemCount());
+            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        }
+
+        public void stopActionMode() {
+            Intent intent = new Intent("recent-list-stop-action-mode");
+            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        }
+
+        public void removeSelected() {
+            final List<Integer> indices = getSelectedItems();
+            final List<RecentItem> itemsToRemove = new ArrayList<>();
+            for (Integer i:indices) {
+                final RecentItem currentItem = this.items.get(i);
+                recentListUtil.deleteFromRecentList(currentItem.dbPath);
+                itemsToRemove.add(currentItem);
+            }
+            this.items.removeAll(itemsToRemove);
+
+            this.notifyDataSetChanged();
+        }
+
     }
 
     // simplified and updated DividerItemDecoration.java from android extras
@@ -389,5 +463,6 @@ public class RecentListFragment extends BaseFragment {
             outRect.set(0, 0, 0, mDivider.getIntrinsicHeight());
         }
     }
+
 
 }

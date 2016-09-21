@@ -64,6 +64,7 @@ import org.liberty.android.fantastischmemo.ui.loader.MultipleLoaderManager;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.AboutUtil;
 import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
+import org.liberty.android.fantastischmemo.utils.RecentListActionModeUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 import org.liberty.android.fantastischmemo.widget.AnyMemoWidgetProvider;
 
@@ -90,7 +91,10 @@ public class AnyMemo extends BaseActivity {
 
     @Inject AboutUtil aboutUtil;
 
+    @Inject RecentListActionModeUtil recentListActionModeUtil;
+
     private static final int PERMISSION_REQUEST_EXTERNAL_STORAGE = 1;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -108,6 +112,7 @@ public class AnyMemo extends BaseActivity {
         } else {
             loadUiComponents();
         }
+        recentListActionModeUtil.register();
     }
 
     @Override
@@ -327,6 +332,8 @@ public class AnyMemo extends BaseActivity {
 
     @Override
     public void onDestroy() {
+        recentListActionModeUtil.deregister();
+
         super.onDestroy();
         // Update the widget and cancel the notification.
         AnyMemoWidgetProvider.updateWidget(this);
@@ -463,4 +470,5 @@ public class AnyMemo extends BaseActivity {
             return null;
         }
     };
+
 }

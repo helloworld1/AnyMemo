@@ -5,6 +5,7 @@
     <!-- All item name are defined in attrs.xml -->
     <style name="AnyMemo.Theme.Dark"
             parent="@style/Theme.AppCompat">
+        <item name="windowActionModeOverlay">true</item>
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
@@ -23,6 +24,7 @@
     <!-- Dark theme without ActionBar based -->
     <style name="AnyMemo.Theme.Dark.NoActionBar"
         parent="@style/Theme.AppCompat.NoActionBar">
+        <item name="windowActionModeOverlay">true</item>
         <item name="colorPrimary">@color/primary</item>
         <item name="android:windowBackground">@color/background</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
