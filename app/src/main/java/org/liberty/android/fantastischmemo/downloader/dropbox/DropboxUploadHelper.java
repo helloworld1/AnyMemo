@@ -35,25 +35,7 @@ public class DropboxUploadHelper {
 
     // Return true if upload succeeded. false if something goes wrong.
     public boolean upload(String fileName, String filePath) throws ClientProtocolException, IOException, JSONException{
-
-        HttpClient httpclient = new DefaultHttpClient();
-        String headerValue = DropboxUtils.getFileExchangeAuthHeader(authToken, authTokenSecret);
-
-        // See related encoding change in DropboxDownloadHelper.
-        String url = FILE_UPLOAD_URL + URLEncoder.encode(fileName, "UTF-8").replace("+", "%20");
-        HttpPost httppost = new HttpPost(url);
-        httppost.addHeader("Authorization", headerValue);
-        httppost.setEntity(new FileEntity(new File(filePath), "application/x-sqlite3"));
-        HttpResponse response = httpclient.execute(httppost);
-        HttpEntity resEntity = response.getEntity();
-        if(response.getStatusLine().getStatusCode() == 200 && resEntity != null){
-            InputStream is = resEntity.getContent();
-            JSONObject jsonResponse = new JSONObject(IOUtils.toString(is));
-            if(jsonResponse.getString("modified") != null){
-                is.close();
-                return true;
-            }
-        }
+        // Todo: Stub
         return false;
     };
 

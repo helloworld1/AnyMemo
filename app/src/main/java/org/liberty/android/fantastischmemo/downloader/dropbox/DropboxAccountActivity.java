@@ -30,41 +30,14 @@ public abstract class DropboxAccountActivity extends OauthAccountActivity {
 
     @Override
     protected boolean verifyAccessToken(final String[] accessTokens) throws IOException {
-        return verifyToken(accessTokens[0], accessTokens[1]);
+        // TODO: Stub
+        return false;
     }
 
     @Override
     protected String[] getAccessTokens(final String[] requests) throws IOException {
-        // requestTokenSecret should be a two elements array containing request token and secret
-        if (requests.length != 2){
-            throw new AssertionError("Error fetching request token and secret");
-        }
-
-        BufferedReader reader = null;
-        HttpClient httpClient = new DefaultHttpClient();
-        HttpPost httpPost = new HttpPost(ACCESS_TOKEN_URL);
-        httpPost.setHeader("Authorization", DropboxUtils.buildOAuthAccessHeader(requests[0], requests[1]));
-
-        try {
-            HttpResponse response = httpClient.execute(httpPost);
-            int statusCode = response.getStatusLine().getStatusCode();
-
-            if (statusCode == 200){
-                HttpEntity entity = response.getEntity();
-                reader = new BufferedReader(new InputStreamReader(entity.getContent()));
-                String[] parsedResult = reader.readLine().split("&");
-                oauthAccessTokenSecret = parsedResult[0].split("=")[1];
-                oauthAccessToken = parsedResult[1].split("=")[1];
-                return new String[] {oauthAccessToken, oauthAccessTokenSecret};
-            } else {
-                throw new IOException("Fetching access token request returns error code: " + statusCode);
-            }
-
-        } finally {
-            if (reader != null) {
-                reader.close();
-            }
-        }
+        // todo
+        return null;
     }
 
     protected OauthAccessCodeRetrievalFragment getOauthRequestFragment() {
@@ -77,25 +50,4 @@ public abstract class DropboxAccountActivity extends OauthAccountActivity {
         inflater.inflate(R.menu.dropbox_list_menu, menu);
         return true;
     }
-
-
-    // Return true if the token is valid
-    // false if the token is not
-    private boolean verifyToken(String oauthToken, String oauthTokenSecret) throws IOException {
-        HttpClient httpClient = new DefaultHttpClient();
-        HttpGet httpGet = new HttpGet(ACCOUNT_INFO_URL);
-        httpGet.setHeader("Authorization", DropboxUtils.getFileExchangeAuthHeader(oauthToken, oauthTokenSecret));
-        HttpResponse response = httpClient.execute(httpGet);
-
-        int statusCode = response.getStatusLine().getStatusCode();
-
-        if (statusCode == 200){
-            Log.i(TAG, "Token verified");
-            return true;
-        } else {
-            Log.w(TAG, "Call " + ACCOUNT_INFO_URL + " Status code: " + statusCode);
-            return false;
-        }
-    }
-
 }

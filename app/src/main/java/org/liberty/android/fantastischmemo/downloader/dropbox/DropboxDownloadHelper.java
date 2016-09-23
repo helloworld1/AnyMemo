@@ -48,7 +48,6 @@ import android.content.Context;
 public class DropboxDownloadHelper {
 
     private final String authToken;
-    private final String authTokenSecret;
 
     private static final String METADATA_ACCESS_URL = "https://api.dropbox.com/1/metadata/dropbox/anymemo?list=true";
     private static final String DOWNLOAD_URL = "https://api-content.dropbox.com/1/files/dropbox/anymemo/";
@@ -59,7 +58,6 @@ public class DropboxDownloadHelper {
 
     public DropboxDownloadHelper(Context context, RecentListUtil recentListUtil, String authToken) {
         this.authToken = authToken;
-        this.authTokenSecret = authTokenSecret;
         this.recentListUtil = recentListUtil;
     }
 
@@ -71,64 +69,15 @@ public class DropboxDownloadHelper {
     public List<DownloadItem> fetchDBFileList() throws ClientProtocolException, IOException, JSONException {
         List<DownloadItem> dbFileList = new ArrayList<DownloadItem>();
 
-        HttpClient httpClient = new DefaultHttpClient();
-        HttpGet httpGet = new HttpGet(METADATA_ACCESS_URL);
-        httpGet.setHeader("Authorization", DropboxUtils.getFileExchangeAuthHeader(authToken, authTokenSecret));
-        HttpResponse response = httpClient.execute(httpGet);
-        int statusCode = response.getStatusLine().getStatusCode();
-
-        if(statusCode == 200 ){
-            InputStream is = response.getEntity().getContent();
-            JSONObject jsonResponse = new JSONObject(IOUtils.toString(is));
-            JSONArray fileList = jsonResponse.getJSONArray("contents");
-            JSONObject file;
-            File filePath;
-            for(int i = 0 ; i < fileList.length(); i++){
-                file = fileList.getJSONObject(i);
-                if(file.getString("path").endsWith(".db")){
-                    filePath = new File(file.getString("path"));
-                    dbFileList.add(new DownloadItem(DownloadItem.ItemType.Database, filePath.getName(), file.getString("modified"),  ""));
-                }
-            }
-            is.close();
-        } else {
-            throw new IOException("Error fetching file list. Get status code: " + statusCode);
-        }
+        // TODO: Stub
 
         return dbFileList;
     }
 
 
     public String downloadDBFromDropbox(DownloadItem di) throws ClientProtocolException, IOException  {
-        String saveDBPath = AMEnv.DEFAULT_ROOT_PATH  + new File(di.getTitle()).getName();
+        // TODO: Stub
 
-        // Back up and delete db if it exists.
-        if (new File(saveDBPath).exists()) {
-            amFileUtil.deleteFileWithBackup(saveDBPath);
-        }
-
-        // Make sure the space is translated correctly.
-        // application/x-www-form-urlencoded specified that
-        // The space character " " is converted into a plus sign "+".
-        // However dropbox need %20.
-        String url = DOWNLOAD_URL + URLEncoder.encode(di.getTitle(), "UTF-8").replace("+", "%20");
-
-        HttpClient httpClient = new DefaultHttpClient();
-        HttpGet httpGet = new HttpGet(url);
-        httpGet.setHeader("Authorization", DropboxUtils.getFileExchangeAuthHeader(authToken, authTokenSecret));
-        HttpResponse response = httpClient.execute(httpGet);
-        int statusCode = response.getStatusLine().getStatusCode();
-
-        if (statusCode == 200) {
-            InputStream is = response.getEntity().getContent();
-            FileUtils.copyInputStreamToFile(is, new File(saveDBPath));
-            recentListUtil.addToRecentList(saveDBPath);
-            is.close();
-            return saveDBPath;
-        } if (statusCode == 404) {
-            throw new IOException("Could not found requested file. Get status code: " + statusCode);
-        } else {
-            throw new IOException("Error Downloading file. Get status code: " + statusCode);
-        }
+        return null;
     }
 }

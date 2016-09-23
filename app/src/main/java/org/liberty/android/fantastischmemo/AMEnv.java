@@ -69,7 +69,7 @@ public class AMEnv {
     public final static String QUIZLET_CLIENT_ID;
     public final static String QUIZLET_CLIENT_SECRET;
     public final static String QUIZLET_REDIRECT_URI = "anymemo-quizlet://oauth";
-    public final static  String QUIZLET_API_ENDPOINT = "https://api.quizlet.com/2.0";
+    public final static String QUIZLET_API_ENDPOINT = "https://api.quizlet.com/2.0";
 
     // Cram (Formally FlashcardExchange)
     public final static String CRAM_API_ENDPOINT = "https://api.cram.com/v2";

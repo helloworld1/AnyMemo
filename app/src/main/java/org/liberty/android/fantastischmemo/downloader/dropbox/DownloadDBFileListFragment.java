@@ -48,7 +48,7 @@ public class DownloadDBFileListFragment extends AbstractDownloaderFragment {
         assert args != null : "The DownloadDBFileListFragment must have authToken and autoTokenSecret";
         String authToken = args.getString(EXTRA_AUTH_TOKEN);
         String authTokenSecret = args.getString(EXTRA_AUTH_TOKEN_SECRET);
-        downloadHelper = new DropboxDownloadHelper(getContext(), appComponents().recenetListUtil(), authToken, authTokenSecret);
+        downloadHelper = new DropboxDownloadHelper(getContext(), appComponents().recenetListUtil(), authToken);
     }
 
     @Override
