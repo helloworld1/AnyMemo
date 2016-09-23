@@ -28,6 +28,7 @@ import dagger.Module;
 import dagger.Provides;
 import dagger.multibindings.ClassKey;
 import dagger.multibindings.IntoMap;
+import okhttp3.OkHttpClient;
 
 @Module
 public class AppModules {
@@ -63,6 +64,12 @@ public class AppModules {
     FirebaseAnalytics providesFirebaseAnalytics(AMApplication context) {
         FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(context);
         return firebaseAnalytics;
+    }
+
+    @Provides
+    @PerApplication
+    OkHttpClient providesOkHttpClient() {
+        return new OkHttpClient();
     }
 
     @Provides

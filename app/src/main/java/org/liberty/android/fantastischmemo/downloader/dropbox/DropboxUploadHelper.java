@@ -1,24 +1,12 @@
 package org.liberty.android.fantastischmemo.downloader.dropbox;
 
-import java.io.File;
+import android.content.Context;
+
+import org.json.JSONException;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URLEncoder;
 
 import javax.inject.Inject;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.FileEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.content.Context;
 
 public class DropboxUploadHelper {
 
@@ -34,7 +22,7 @@ public class DropboxUploadHelper {
     }
 
     // Return true if upload succeeded. false if something goes wrong.
-    public boolean upload(String fileName, String filePath) throws ClientProtocolException, IOException, JSONException{
+    public boolean upload(String fileName, String filePath) throws IOException, JSONException{
         // Todo: Stub
         return false;
     };

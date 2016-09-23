@@ -10,7 +10,6 @@ android {
     compileSdkVersion 24
     buildToolsVersion "24.0.0"
 
-    useLibrary 'org.apache.http.legacy'
     defaultConfig {
         versionCode 221
         versionName "10.9.991"

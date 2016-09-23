@@ -19,13 +19,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader;
 
+import android.util.Log;
+
+import org.liberty.android.fantastischmemo.modules.PerApplication;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
+
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
@@ -34,51 +37,31 @@ import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.liberty.android.fantastischmemo.modules.PerApplication;
-import org.liberty.android.fantastischmemo.utils.AMFileUtil;
-
-import android.util.Log;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 @PerApplication
 public class DownloaderUtils {
     public static final String TAG = DownloaderUtils.class.getSimpleName();
 
-    private AMFileUtil amFileUtil;
+    private final OkHttpClient httpClient;
+
+    private final AMFileUtil amFileUtil;
 
     @Inject
-    public DownloaderUtils(AMFileUtil amFileUtil) {
+    public DownloaderUtils(OkHttpClient httpClient, AMFileUtil amFileUtil) {
+        this.httpClient = httpClient;
         this.amFileUtil = amFileUtil;
     }
 
     public String downloadJSONString(String url) throws Exception{
-        HttpClient httpclient = new DefaultHttpClient();
-        HttpGet httpget = new HttpGet(url);
-        HttpResponse response;
-        response = httpclient.execute(httpget);
-        Log.i(TAG, "Response: " + response.getStatusLine().toString());
-        HttpEntity entity = response.getEntity();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        Response response = httpClient.newCall(request).execute();
 
-        if(entity == null){
-            throw new NullPointerException("Null entity error");
-        }
-
-        InputStream instream = entity.getContent();
-        // Now convert stream to string
-        BufferedReader reader = new BufferedReader(new InputStreamReader(instream));
-        StringBuilder sb = new StringBuilder();
-        String line = null;
-        String result = null;
-        while((line = reader.readLine()) != null){
-            sb.append(line + "\n");
-        }
-        result = sb.toString();
-
-        return result;
+        return response.body().string();
     }
 
     public File downloadFile(String url, String savedPath) throws IOException{
@@ -121,27 +104,6 @@ public class DownloaderUtils {
     public String validateDBName(String orngName){
         String s1 = orngName.replaceAll("[/:|]", "_");
         return s1;
-    }
-
-    /*
-     * Read the HTTPResponse, return the string content
-     */
-    public String readResponse(HttpResponse response) throws IOException {
-        HttpEntity ent = response.getEntity();
-        if (ent != null) {
-            BufferedReader in = new BufferedReader(new InputStreamReader(ent.getContent()), 8192);
-            String inputLine = null;
-            String result = "";
-
-            while((inputLine = in.readLine()) != null) {
-                result += inputLine;
-            }
-
-            response.getEntity().consumeContent();
-            return result;
-        } else {
-            return "";
-        }
     }
 
     /* https://spreadsheets.google.com/feeds/list/key/worksheetId/private/full/rowId -> rowId */

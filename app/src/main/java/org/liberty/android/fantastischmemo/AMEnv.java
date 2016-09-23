@@ -84,7 +84,9 @@ public class AMEnv {
         try {
             Class<?> secretClass = Class.forName("org.liberty.android.fantastischmemo.AMSecrets");
             for (Field f : secretClass.getFields()) {
-                secretValuesMap.put(f.getName(), (String) f.get(null));
+                if (f.getType().isAssignableFrom(String.class)) {
+                    secretValuesMap.put(f.getName(), (String) f.get(null));
+                }
             }
         } catch (ClassNotFoundException e) {
             Log.e(TAG, "AMSecrets class is not found. Please provide your own credentials and create AMSecrets file.", e);

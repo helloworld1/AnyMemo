@@ -19,31 +19,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.dropbox;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
+import android.content.Context;
 
-import javax.inject.Inject;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
-import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.downloader.DownloadItem;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
-import android.content.Context;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DropboxDownloadHelper {
 
@@ -66,7 +51,7 @@ public class DropboxDownloadHelper {
     }
 
     // Fetch the list of db files
-    public List<DownloadItem> fetchDBFileList() throws ClientProtocolException, IOException, JSONException {
+    public List<DownloadItem> fetchDBFileList() throws IOException, JSONException {
         List<DownloadItem> dbFileList = new ArrayList<DownloadItem>();
 
         // TODO: Stub
@@ -75,7 +60,7 @@ public class DropboxDownloadHelper {
     }
 
 
-    public String downloadDBFromDropbox(DownloadItem di) throws ClientProtocolException, IOException  {
+    public String downloadDBFromDropbox(DownloadItem di) throws IOException  {
         // TODO: Stub
 
         return null;

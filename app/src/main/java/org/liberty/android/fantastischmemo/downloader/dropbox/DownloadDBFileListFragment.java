@@ -23,9 +23,6 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-import javax.inject.Inject;
-
-import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.liberty.android.fantastischmemo.downloader.AbstractDownloaderFragment;
 import org.liberty.android.fantastischmemo.downloader.DownloadItem;
@@ -52,8 +49,7 @@ public class DownloadDBFileListFragment extends AbstractDownloaderFragment {
     }
 
     @Override
-    protected List<DownloadItem> initialRetrieve() throws ClientProtocolException,
-              IOException, JSONException {
+    protected List<DownloadItem> initialRetrieve() throws IOException, JSONException {
         return downloadHelper.fetchDBFileList();
     }
 

@@ -3,9 +3,6 @@ package org.liberty.android.fantastischmemo.downloader.dropbox;
 import java.io.File;
 import java.io.IOException;
 
-import javax.inject.Inject;
-
-import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.ui.FileBrowserFragment;
@@ -69,7 +66,7 @@ public class UploadDropboxScreen extends DropboxAccountActivity {
     }
 
 
-    private void uploadToDropbox(File file) throws ClientProtocolException, IOException, JSONException {
+    private void uploadToDropbox(File file) throws IOException, JSONException {
         uploadHelper.upload(file.getName(), file.getAbsolutePath());
     }
 
