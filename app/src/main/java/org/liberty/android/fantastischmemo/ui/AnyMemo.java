@@ -52,7 +52,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.common.base.Objects;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.apache.commons.io.FileUtils;
 import org.liberty.android.fantastischmemo.AMEnv;
@@ -90,8 +89,6 @@ public class AnyMemo extends BaseActivity {
     @Inject MultipleLoaderManager multipleLoaderManager;
 
     @Inject AboutUtil aboutUtil;
-
-    @Inject FirebaseAnalytics firebaseAnalytics;
 
     private static final int PERMISSION_REQUEST_EXTERNAL_STORAGE = 1;
 

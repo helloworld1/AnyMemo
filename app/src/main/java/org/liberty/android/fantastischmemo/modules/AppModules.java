@@ -2,8 +2,6 @@ package org.liberty.android.fantastischmemo.modules;
 
 import android.content.Context;
 
-import com.google.firebase.analytics.FirebaseAnalytics;
-
 import org.liberty.android.fantastischmemo.AMApplication;
 import org.liberty.android.fantastischmemo.converter.CSVExporter;
 import org.liberty.android.fantastischmemo.converter.CSVImporter;
@@ -57,13 +55,6 @@ public class AppModules {
     @PerApplication
     Scheduler providesScheduler(DefaultScheduler scheduler) {
         return scheduler;
-    }
-
-    @Provides
-    @PerApplication
-    FirebaseAnalytics providesFirebaseAnalytics(AMApplication context) {
-        FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(context);
-        return firebaseAnalytics;
     }
 
     @Provides

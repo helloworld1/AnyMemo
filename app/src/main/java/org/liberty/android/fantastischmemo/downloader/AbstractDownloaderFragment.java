@@ -38,8 +38,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.firebase.crash.FirebaseCrash;
-
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.BaseFragment;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
@@ -211,8 +209,6 @@ public abstract class AbstractDownloaderFragment extends BaseFragment {
             progressDialog.dismiss();
             if (e != null) {
                 AMGUIUtility.displayError(mActivity, getString(R.string.downloader_connection_error), getString(R.string.downloader_connection_error_message), e);
-                FirebaseCrash.log("Retrieve task got exception");
-                FirebaseCrash.report(e);
                 return;
             }
 

@@ -75,9 +75,6 @@ dependencies {
     compile 'com.j256.ormlite:ormlite-android:4.48'
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
 
-    compile 'com.google.firebase:firebase-core:9.8.0'
-    compile 'com.google.firebase:firebase-crash:9.8.0'
-
     compile 'commons-io:commons-io:2.4'
 
     compile 'com.google.guava:guava:19.0'
@@ -117,18 +114,6 @@ task copySecretsIfNotExists << {
             include "AMSecrets.java.template"
         }
     }
-    if (!file('src/free/google-services.json').exists()) {
-        logger.warn('google-services.json is not found .Created from templateservices.json. Please use your own version instead!')
-        copy {
-            from "src/free"
-            into "./"
-            rename "templateservices.json", "google-services.json"
-            include "templateservices.json"
-        }
-    }
 }
 
 preBuild.dependsOn copySecretsIfNotExists 
-
-// Needs to be at the bottom to have all dependencies ready
-apply plugin: 'com.google.gms.google-services'

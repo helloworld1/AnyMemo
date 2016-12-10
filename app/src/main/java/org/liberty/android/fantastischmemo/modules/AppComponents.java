@@ -2,8 +2,6 @@ package org.liberty.android.fantastischmemo.modules;
 
 import android.content.Context;
 
-import com.google.firebase.analytics.FirebaseAnalytics;
-
 import org.liberty.android.fantastischmemo.AMApplication;
 import org.liberty.android.fantastischmemo.converter.Converter;
 import org.liberty.android.fantastischmemo.downloader.DownloaderUtils;
@@ -34,7 +32,6 @@ import dagger.Component;
 public interface AppComponents {
     AMApplication application();
     Scheduler scheduler();
-    FirebaseAnalytics firebaseAnalytics();
     AMFileUtil amFileUtil();
     AMPrefUtil amPrefUtil();
     AMDateUtil amDateUtil();
