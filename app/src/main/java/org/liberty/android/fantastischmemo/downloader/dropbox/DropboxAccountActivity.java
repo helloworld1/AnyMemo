@@ -14,11 +14,6 @@ public abstract class DropboxAccountActivity extends OauthAccountActivity {
 
     private String oauthAccessTokenSecret;
 
-    private static final String ACCESS_TOKEN_URL = "https://api.dropbox.com/1/oauth/access_token";
-
-    // Use the Account info API to verify the token is valid.
-    private static final String ACCOUNT_INFO_URL = "https://api.dropbox.com/1/account/info";
-
     @Override
     protected boolean verifyAccessToken(final String[] accessTokens) throws IOException {
         // TODO: Stub
