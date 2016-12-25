@@ -56,6 +56,7 @@ import org.liberty.android.fantastischmemo.common.BaseFragment;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.ui.helper.SelectableAdapter;
 import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
+import org.liberty.android.fantastischmemo.utils.RecentListActionModeUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 import javax.inject.Inject;
@@ -79,6 +80,8 @@ public class RecentListFragment extends BaseFragment {
     @Inject RecentListUtil recentListUtil;
 
     @Inject DatabaseUtil databaseUtil;
+
+    @Inject RecentListActionModeUtil recentListActionModeUtil;
 
     private BroadcastReceiver mRemoveSelectedReceiver = new BroadcastReceiver() {
         @Override
@@ -108,9 +111,9 @@ public class RecentListFragment extends BaseFragment {
         mActivity = (Activity) activity;
         setHasOptionsMenu(true);
         LocalBroadcastManager.getInstance(mActivity).registerReceiver(mClearSelectionReceiver,
-                new IntentFilter("recent-list-clear-selection"));
+                new IntentFilter(RecentListActionModeUtil.ACTION_CLEAR_SELECTION));
         LocalBroadcastManager.getInstance(mActivity).registerReceiver(mRemoveSelectedReceiver,
-                new IntentFilter("recent-list-remove-selected"));
+                new IntentFilter(RecentListActionModeUtil.ACTION_REMOVE_SELECTED));
     }
 
     @Override
@@ -140,7 +143,8 @@ public class RecentListFragment extends BaseFragment {
         recentListRecyclerView.setLayoutManager(new LinearLayoutManager(recentListRecyclerView.getContext()));
 
         /* pre loading stat */
-        recentListAdapter = new RecentListAdapter(mActivity, recentListUtil);
+        recentListAdapter = new RecentListAdapter(mActivity, recentListUtil,
+                                                  recentListActionModeUtil);
 
         recentListRecyclerView.setAdapter(recentListAdapter);
 
@@ -302,7 +306,7 @@ public class RecentListFragment extends BaseFragment {
 
         private final RecentListUtil recentListUtil;
 
-        private ActionMode actionMode;
+        private final RecentListActionModeUtil recentListActionModeUtil;
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
             private TextView filenameView;
@@ -324,9 +328,11 @@ public class RecentListFragment extends BaseFragment {
             }
         }
 
-        public RecentListAdapter(Context context, RecentListUtil recentListUtil) {
+        public RecentListAdapter(Context context, RecentListUtil recentListUtil,
+                                 RecentListActionModeUtil recentListActionModeUtil) {
             this.context = context;
             this.recentListUtil = recentListUtil;
+            this.recentListActionModeUtil = recentListActionModeUtil;
         }
 
         @Override
@@ -357,7 +363,7 @@ public class RecentListFragment extends BaseFragment {
                     } else {
                         toggleSelection(position);
                     }
-                    updateActionMode();
+                    recentListActionModeUtil.updateActionMode(getSelectedItemCount());
                 }
             });
 
@@ -365,11 +371,10 @@ public class RecentListFragment extends BaseFragment {
                 @Override
                 public boolean onLongClick(View v) {
                     if (getSelectedItemCount() == 0) {
-                        Intent intent = new Intent("recent-list-start-action-mode");
-                        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                        recentListActionModeUtil.startActionMode();
                     }
                     toggleSelection(position);
-                    updateActionMode();
+                    recentListActionModeUtil.updateActionMode(getItemCount());
                     return true;
                 }
             });
@@ -402,15 +407,8 @@ public class RecentListFragment extends BaseFragment {
             this.notifyDataSetChanged();
         }
 
-        private void updateActionMode() {
-            Intent intent = new Intent("recent-list-update-action-mode");
-            intent.putExtra("selectedItemCount", getSelectedItemCount());
-            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-        }
-
         public void stopActionMode() {
-            Intent intent = new Intent("recent-list-stop-action-mode");
-            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+            recentListActionModeUtil.stopActionMode();
         }
 
         public void removeSelected() {

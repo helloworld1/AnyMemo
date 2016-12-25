@@ -112,7 +112,7 @@ public class AnyMemo extends BaseActivity {
         } else {
             loadUiComponents();
         }
-        recentListActionModeUtil.register();
+        recentListActionModeUtil.registerForActivity();
     }
 
     @Override
@@ -332,7 +332,7 @@ public class AnyMemo extends BaseActivity {
 
     @Override
     public void onDestroy() {
-        recentListActionModeUtil.deregister();
+        recentListActionModeUtil.unregisterForActivity();
 
         super.onDestroy();
         // Update the widget and cancel the notification.

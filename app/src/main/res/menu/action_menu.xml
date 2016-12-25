@@ -6,5 +6,5 @@
 		android:icon="@drawable/delete"
 		android:orderInCategory="1"
 		app:showAsAction="ifRoom"
-		android:title="Delete" />
+		android:title="@string/delete_text" />
 </menu>

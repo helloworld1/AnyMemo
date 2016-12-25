@@ -8,4 +8,6 @@
     <dimen name="text_size_14">14sp</dimen>
     <dimen name="text_size_20">20sp</dimen>
     <dimen name="space_2">16dp</dimen>
+    <dimen name="nav_item_vertical_padding">20dp</dimen>
+    <dimen name="nav_item_start_padding">10dp</dimen>
 </resources>
