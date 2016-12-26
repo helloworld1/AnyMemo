@@ -13,6 +13,7 @@
     <color name="primary">#607D8B</color>
     <color name="primary_dark">#455A64</color>
     <color name="accent">#FF4081</color>
+    <color name="selected_item">#60FF4081</color>
     <color name="background">#303030</color>
     <color name="cards_dialog">#424242</color>
 
