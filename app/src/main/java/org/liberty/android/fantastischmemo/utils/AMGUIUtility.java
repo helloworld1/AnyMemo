@@ -35,7 +35,7 @@ import com.google.common.base.Throwables;
  * that generate dialogs or etc
  */
 public class AMGUIUtility{
-    private final static String TAG = "org.liberty.android.fantastischmemo.AMGUIUtility";
+    private final static String TAG = AMGUIUtility.class.getName();
     private AMGUIUtility(){
         /* Shouldn't be invoked */
     }
@@ -60,7 +60,7 @@ public class AMGUIUtility{
     }
 
     // Display recoverable exception
-    public static void displayException(final Activity activity, final String title, final String text, final Exception e){
+    public static void displayException(final Activity activity, final String title, final String text, final Throwable e){
         Log.e(TAG, "displayException", e);
         new AlertDialog.Builder(activity)
             .setTitle(title)

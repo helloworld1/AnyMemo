@@ -89,7 +89,9 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void restartActivity(){
-        startActivity(new Intent(this, this.getClass()));
+        Intent intent = new Intent(this, this.getClass());
+        intent.putExtras(getIntent().getExtras());
+        startActivity(intent);
         finish();
     }
 

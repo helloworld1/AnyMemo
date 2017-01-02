@@ -3,6 +3,7 @@ package org.liberty.android.fantastischmemo.downloader.dropbox;
 import android.support.annotation.NonNull;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,6 +17,7 @@ import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -41,6 +43,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okio.BufferedSink;
+import okio.Okio;
 
 @ForApplication
 public class DropboxApiHelper {
@@ -49,8 +53,10 @@ public class DropboxApiHelper {
     private static final String LIST_FOLDER_ENDPOINT = "https://api.dropboxapi.com/2/files/list_folder";
     private static final String CONTINUE_LIST_FOLDER_ENDPOINT = "https://api.dropboxapi.com/2/files/list_folder/continue";
     private static final String TEMPORARY_LINK_ENDPOINT = "https://api.dropboxapi.com/2/files/get_temporary_link";
+    private static final String UPLOAD_ENDPOINT = "https://content.dropboxapi.com/2/files/upload";
 
     private static final MediaType JSON_TYPE = MediaType.parse("application/json; charset=utf-8");
+    private static final MediaType OCTET_STREAM_TYPE = MediaType.parse("application/octet-stream");
 
     private final AMFileUtil amFileUtil;
 
@@ -217,10 +223,43 @@ public class DropboxApiHelper {
                 InputStream inputStream = downloadResponse.body().byteStream();
 
                 File outputFile = new File(AMEnv.DEFAULT_ROOT_PATH + fileName);
+                BufferedSink sink = null;
+                try {
+                    sink = Okio.buffer(Okio.sink(outputFile));
+                    sink.writeAll(Okio.source(inputStream));
+                } finally {
+                    IOUtils.closeQuietly(sink);
+                }
                 FileUtils.copyInputStreamToFile(inputStream, outputFile);
                 recentListUtil.addToRecentList(outputFile.getAbsolutePath());
 
                 return outputFile.getAbsolutePath();
+            }
+        });
+    }
+
+    public Completable uploadDropbox(@NonNull final String token, @NonNull final File fileToUpload, @NonNull final String uploadPath) {
+        return Completable.fromCallable(new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                if (!fileToUpload.exists()) {
+                    throw new FileNotFoundException("Could not find file: " + fileToUpload.getAbsolutePath());
+                }
+
+                RequestBody requestBody = RequestBody.create(OCTET_STREAM_TYPE, fileToUpload);
+                Request request = new Request.Builder()
+                        .url(UPLOAD_ENDPOINT)
+                        .addHeader("Authorization", "Bearer " + token)
+                        .addHeader("Dropbox-API-Arg", String.format("{\"path\": \"%1$s\",\"mode\": \"add\",\"autorename\": true,\"mute\": false}",
+                                uploadPath))
+                        .post(requestBody)
+                        .build();
+                Response response = okHttpClient.newCall(request).execute();
+                if (!response.isSuccessful()) {
+                    throw new IOException(getResponseErrorString(request, response));
+                }
+
+                return null;
             }
         });
     }

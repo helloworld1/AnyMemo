@@ -2,6 +2,7 @@ package org.liberty.android.fantastischmemo.modules;
 
 import android.content.Context;
 
+import org.greenrobot.eventbus.EventBus;
 import org.liberty.android.fantastischmemo.AMApplication;
 import org.liberty.android.fantastischmemo.converter.Converter;
 import org.liberty.android.fantastischmemo.downloader.DownloaderUtils;
@@ -45,6 +46,7 @@ public interface AppComponents {
     DatabaseUtil databaseUtil();
     DropboxApiHelper dropboxApiHelper();
     QuizletDownloadHelper quizletDownloadHelper();
+    EventBus eventBus();
     Map<Class<?>, Converter> converterMap();
     Option option();
 

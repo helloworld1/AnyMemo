@@ -26,6 +26,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -297,12 +298,17 @@ public class FileBrowserFragment extends BaseDialogFragment {
                         /* Save the current path */
                         editor.putString(AMPrefKeys.SAVED_FILEBROWSER_PATH_KEY, clickedFile.getParent());
                         editor.commit();
+
                         if (onFileClickListener != null) {
                             onFileClickListener.onClick(clickedFile);
-                            // dismiss on demand
-                            if (dismissOnSelect) {
-                                dismiss();
-                            }
+                        } else {
+                            // Use event bus if the onFileClickListener is not set
+                            appComponents().eventBus().post(new FileClickEvent(clickedFile));
+                        }
+
+                        // dismiss on demand
+                        if (dismissOnSelect) {
+                            dismiss();
                         }
                     }
                 }
@@ -598,6 +604,14 @@ public class FileBrowserFragment extends BaseDialogFragment {
 
     public interface OnFileClickListener {
         void onClick(File file);
+    }
+
+    public static class FileClickEvent {
+        public final File clickedFile;
+
+        public FileClickEvent(@NonNull File clickedFile) {
+            this.clickedFile = clickedFile;
+        }
     }
 }
 

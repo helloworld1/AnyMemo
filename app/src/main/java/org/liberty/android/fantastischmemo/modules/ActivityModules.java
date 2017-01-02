@@ -1,7 +1,6 @@
 package org.liberty.android.fantastischmemo.modules;
 
 import android.app.Activity;
-import android.content.Context;
 
 import org.liberty.android.fantastischmemo.common.BaseActivity;
 import org.liberty.android.fantastischmemo.entity.Option;
@@ -49,5 +48,4 @@ public class ActivityModules {
     DictionaryUtil providesDictionaryUtil(Activity activity, Option option) {
         return new DictionaryUtil(activity, option);
     }
-
 }
