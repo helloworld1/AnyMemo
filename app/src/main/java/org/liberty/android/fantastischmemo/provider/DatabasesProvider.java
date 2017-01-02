@@ -20,17 +20,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo.provider;
 
-import java.io.File;
-import java.io.FilenameFilter;
-
-import org.liberty.android.fantastischmemo.AMEnv;
-import org.liberty.android.fantastischmemo.BuildConfig;
-
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
+
+import org.liberty.android.fantastischmemo.common.AMEnv;
+import org.liberty.android.fantastischmemo.BuildConfig;
+
+import java.io.File;
+import java.io.FilenameFilter;
 
 /**
  * Query a list of database names from the default

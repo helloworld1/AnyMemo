@@ -19,20 +19,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui.widgets;
 
-import java.util.Arrays;
-import java.util.List;
+import android.content.Context;
+import android.content.res.TypedArray;
+import android.util.AttributeSet;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import org.liberty.android.fantastischmemo.R;
 
-
-import android.content.Context;
-
-import android.content.res.TypedArray;
-
-import android.util.AttributeSet;
-
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
+import java.util.Arrays;
+import java.util.List;
 
 /*
  * This is a spinner used in AnyMemo.

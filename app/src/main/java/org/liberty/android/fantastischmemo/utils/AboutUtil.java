@@ -2,7 +2,6 @@ package org.liberty.android.fantastischmemo.utils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,14 +12,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.entity.Option;
-import org.liberty.android.fantastischmemo.modules.ForApplication;
 import org.liberty.android.fantastischmemo.modules.PerActivity;
-import org.liberty.android.fantastischmemo.modules.PerApplication;
 
 import javax.inject.Inject;
-
-import dagger.Provides;
 
 @PerActivity
 public class AboutUtil {

@@ -1,14 +1,12 @@
 package org.liberty.android.fantastischmemo.dao;
 
-import java.sql.SQLException;
+import com.j256.ormlite.dao.BaseDaoImpl;
+import com.j256.ormlite.support.ConnectionSource;
+import com.j256.ormlite.table.DatabaseTableConfig;
 
 import org.liberty.android.fantastischmemo.entity.Stat;
 
-import com.j256.ormlite.dao.BaseDaoImpl;
-
-import com.j256.ormlite.support.ConnectionSource;
-
-import com.j256.ormlite.table.DatabaseTableConfig;
+import java.sql.SQLException;
 
 public class StatDaoImpl extends BaseDaoImpl<Stat, Integer> implements StatDao {
     public StatDaoImpl(ConnectionSource connectionSource,  DatabaseTableConfig<Stat> tableConfig)

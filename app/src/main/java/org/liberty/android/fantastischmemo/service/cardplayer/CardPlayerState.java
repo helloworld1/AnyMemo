@@ -21,10 +21,10 @@ package org.liberty.android.fantastischmemo.service.cardplayer;
 
 import android.util.Log;
 
+import com.google.common.base.Objects;
+
 import org.liberty.android.fantastischmemo.entity.Card;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
-
-import com.google.common.base.Objects;
 
 /*
  * State object representing the state machine of card player 

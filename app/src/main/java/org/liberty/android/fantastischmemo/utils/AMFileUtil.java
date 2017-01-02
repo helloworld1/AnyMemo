@@ -20,20 +20,20 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo.utils;
 
+import android.content.Context;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.liberty.android.fantastischmemo.common.AMEnv;
+import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.modules.ForApplication;
+import org.liberty.android.fantastischmemo.modules.PerApplication;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.liberty.android.fantastischmemo.AMEnv;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.modules.ForApplication;
-import org.liberty.android.fantastischmemo.modules.PerApplication;
-
-import android.content.Context;
 
 import javax.inject.Inject;
 

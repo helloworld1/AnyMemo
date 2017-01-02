@@ -19,13 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.dao.CardDao;
-import org.liberty.android.fantastischmemo.dao.SettingDao;
-import org.liberty.android.fantastischmemo.entity.Card;
-import org.liberty.android.fantastischmemo.entity.Setting;
-import org.liberty.android.fantastischmemo.service.CardPlayerService;
-
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -37,6 +30,13 @@ import android.os.IBinder;
 import android.support.v4.app.FragmentTransaction;
 
 import com.google.common.base.Preconditions;
+
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.dao.CardDao;
+import org.liberty.android.fantastischmemo.dao.SettingDao;
+import org.liberty.android.fantastischmemo.entity.Card;
+import org.liberty.android.fantastischmemo.entity.Setting;
+import org.liberty.android.fantastischmemo.service.CardPlayerService;
 
 public class CardPlayerActivity extends QACardActivity {
     public static final String EXTRA_START_CARD_ID = "start_card_id";

@@ -1,12 +1,11 @@
 package org.liberty.android.fantastischmemo.entity;
 
-import java.util.Date;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
 import org.liberty.android.fantastischmemo.dao.FilterDaoImpl;
 
-import com.j256.ormlite.field.DatabaseField;
-
-import com.j256.ormlite.table.DatabaseTable;
+import java.util.Date;
 
 @DatabaseTable(tableName = "filters", daoClass = FilterDaoImpl.class)
 public class Filter {

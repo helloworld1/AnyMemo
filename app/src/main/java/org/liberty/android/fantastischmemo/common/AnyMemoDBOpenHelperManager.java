@@ -1,4 +1,11 @@
-package org.liberty.android.fantastischmemo;
+package org.liberty.android.fantastischmemo.common;
+
+import android.content.Context;
+import android.util.Log;
+
+import com.j256.ormlite.dao.DaoManager;
+
+import org.apache.commons.io.FilenameUtils;
 
 import java.lang.ref.WeakReference;
 import java.util.Collections;
@@ -6,13 +13,6 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.locks.ReentrantLock;
-
-import org.apache.commons.io.FilenameUtils;
-
-import android.content.Context;
-import android.util.Log;
-
-import com.j256.ormlite.dao.DaoManager;
 
 /*
  * Keep the reference count of each AnyMemoDBOpenHelper.

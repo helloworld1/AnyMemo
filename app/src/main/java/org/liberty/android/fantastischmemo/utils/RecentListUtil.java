@@ -19,18 +19,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.utils;
 
-import javax.inject.Inject;
-
-import org.apache.commons.io.FilenameUtils;
-import org.liberty.android.fantastischmemo.AMPrefKeys;
-import org.liberty.android.fantastischmemo.entity.Option;
-import org.liberty.android.fantastischmemo.modules.ForApplication;
-import org.liberty.android.fantastischmemo.modules.PerActivity;
-import org.liberty.android.fantastischmemo.modules.PerApplication;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
+import org.apache.commons.io.FilenameUtils;
+import org.liberty.android.fantastischmemo.common.AMPrefKeys;
+import org.liberty.android.fantastischmemo.entity.Option;
+import org.liberty.android.fantastischmemo.modules.ForApplication;
+import org.liberty.android.fantastischmemo.modules.PerApplication;
+
+import javax.inject.Inject;
 
 /* This class handles the operations on recent list */
 @PerApplication

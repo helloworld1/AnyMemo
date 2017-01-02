@@ -8,8 +8,8 @@ import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 
 import org.apache.commons.io.FileUtils;
-import org.liberty.android.fantastischmemo.AMEnv;
-import org.liberty.android.fantastischmemo.AMPrefKeys;
+import org.liberty.android.fantastischmemo.common.AMEnv;
+import org.liberty.android.fantastischmemo.common.AMPrefKeys;
 
 import java.io.File;
 import java.io.IOException;

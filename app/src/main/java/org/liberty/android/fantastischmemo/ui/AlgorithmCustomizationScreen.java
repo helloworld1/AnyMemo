@@ -19,10 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import org.liberty.android.fantastischmemo.AMPrefKeys;
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.entity.SchedulingAlgorithmParameters;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -32,6 +28,10 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+
+import org.liberty.android.fantastischmemo.common.AMPrefKeys;
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.entity.SchedulingAlgorithmParameters;
 
 public class AlgorithmCustomizationScreen extends PreferenceActivity {
     private static final String RESET_CUSTOMIZED_ALGORITHM_KEY

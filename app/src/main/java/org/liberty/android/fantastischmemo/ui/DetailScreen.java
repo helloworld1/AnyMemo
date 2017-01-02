@@ -33,8 +33,8 @@ import android.widget.EditText;
 
 import com.google.common.base.Optional;
 
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.BaseActivity;
 import org.liberty.android.fantastischmemo.dao.CardDao;

@@ -20,30 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import org.apache.commons.io.FilenameUtils;
-import org.liberty.android.fantastischmemo.AMEnv;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.common.BaseActivity;
-import org.liberty.android.fantastischmemo.entity.Card;
-import org.liberty.android.fantastischmemo.entity.Option;
-import org.liberty.android.fantastischmemo.entity.Setting;
-import org.liberty.android.fantastischmemo.service.AnyMemoService;
-import org.liberty.android.fantastischmemo.ui.loader.CardTTSUtilLoader;
-import org.liberty.android.fantastischmemo.ui.loader.MultipleLoaderManager;
-import org.liberty.android.fantastischmemo.ui.loader.SettingLoader;
-import org.liberty.android.fantastischmemo.utils.AMFileUtil;
-import org.liberty.android.fantastischmemo.utils.AMStringUtils;
-import org.liberty.android.fantastischmemo.utils.CardTTSUtil;
-import org.liberty.android.fantastischmemo.widget.AnyMemoWidgetProvider;
-
 import android.content.Intent;
 import android.gesture.Gesture;
 import android.gesture.GestureLibraries;
@@ -62,6 +38,30 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.google.common.base.Strings;
+
+import org.apache.commons.io.FilenameUtils;
+import org.liberty.android.fantastischmemo.common.AMEnv;
+import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseActivity;
+import org.liberty.android.fantastischmemo.entity.Card;
+import org.liberty.android.fantastischmemo.entity.Option;
+import org.liberty.android.fantastischmemo.entity.Setting;
+import org.liberty.android.fantastischmemo.service.AnyMemoService;
+import org.liberty.android.fantastischmemo.ui.loader.CardTTSUtilLoader;
+import org.liberty.android.fantastischmemo.ui.loader.MultipleLoaderManager;
+import org.liberty.android.fantastischmemo.ui.loader.SettingLoader;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
+import org.liberty.android.fantastischmemo.utils.AMStringUtils;
+import org.liberty.android.fantastischmemo.utils.CardTTSUtil;
+import org.liberty.android.fantastischmemo.widget.AnyMemoWidgetProvider;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
 
 /**
  * The base class for all activities that displays cards.

@@ -20,20 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 
-import javax.inject.Inject;
-
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.common.BaseFragment;
-import org.liberty.android.fantastischmemo.dao.CardDao;
-import org.liberty.android.fantastischmemo.dao.LearningDataDao;
-import org.liberty.android.fantastischmemo.entity.Card;
-import org.liberty.android.fantastischmemo.entity.LearningData;
-import org.liberty.android.fantastischmemo.entity.Option;
-import org.liberty.android.fantastischmemo.scheduler.Scheduler;
-import org.liberty.android.fantastischmemo.utils.AMDateUtil;
-
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -50,6 +36,20 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.common.base.Strings;
+
+import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseFragment;
+import org.liberty.android.fantastischmemo.dao.CardDao;
+import org.liberty.android.fantastischmemo.dao.LearningDataDao;
+import org.liberty.android.fantastischmemo.entity.Card;
+import org.liberty.android.fantastischmemo.entity.LearningData;
+import org.liberty.android.fantastischmemo.entity.Option;
+import org.liberty.android.fantastischmemo.scheduler.Scheduler;
+import org.liberty.android.fantastischmemo.utils.AMDateUtil;
+
+import javax.inject.Inject;
 
 
 /*

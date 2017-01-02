@@ -19,14 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.google;
 
-import java.io.File;
-
-import javax.inject.Inject;
-
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.ui.FileBrowserFragment;
-import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -36,6 +28,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.ui.FileBrowserFragment;
+import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
+
+import java.io.File;
 
 public class UploadGoogleDriveScreen extends GoogleAccountActivity {
     /** Called when the activity is first created. */

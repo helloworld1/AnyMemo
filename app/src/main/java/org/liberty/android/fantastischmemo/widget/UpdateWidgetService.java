@@ -1,8 +1,8 @@
 package org.liberty.android.fantastischmemo.widget;
 
-import android.widget.RemoteViewsService;
-import android.content.Intent;
 import android.annotation.TargetApi;
+import android.content.Intent;
+import android.widget.RemoteViewsService;
 
 
 @TargetApi(11)

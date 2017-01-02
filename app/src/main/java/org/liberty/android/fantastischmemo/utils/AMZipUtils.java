@@ -1,5 +1,11 @@
 package org.liberty.android.fantastischmemo.utils;
 
+import android.util.Log;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.liberty.android.fantastischmemo.common.AMEnv;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -13,12 +19,6 @@ import java.util.LinkedList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.liberty.android.fantastischmemo.AMEnv;
-
-import android.util.Log;
 
 public class AMZipUtils {
     private static final int BUFFER_SIZE = 8192;

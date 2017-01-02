@@ -19,14 +19,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.google;
 
+import android.util.Log;
+
+import org.liberty.android.fantastischmemo.common.AMEnv;
+import org.liberty.android.fantastischmemo.downloader.oauth.OauthAccessCodeRetrievalFragment;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-
-import org.liberty.android.fantastischmemo.AMEnv;
-import org.liberty.android.fantastischmemo.downloader.oauth.OauthAccessCodeRetrievalFragment;
-
-import android.util.Log;
 
 public final class GoogleOAuth2AccessCodeRetrievalFragment extends OauthAccessCodeRetrievalFragment {
 

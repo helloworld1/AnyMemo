@@ -20,16 +20,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo.ui.widgets;
 
-import java.util.Date;
-
-import org.liberty.android.fantastischmemo.R;
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import org.liberty.android.fantastischmemo.R;
+
+import java.util.Date;
 
 /**
  * A button that is only effective after double click,

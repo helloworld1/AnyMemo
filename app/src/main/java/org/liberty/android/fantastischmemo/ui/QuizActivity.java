@@ -19,20 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import javax.inject.Inject;
-
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.entity.Card;
-import org.liberty.android.fantastischmemo.entity.Category;
-import org.liberty.android.fantastischmemo.entity.Option;
-import org.liberty.android.fantastischmemo.entity.Setting;
-import org.liberty.android.fantastischmemo.modules.AppComponents;
-import org.liberty.android.fantastischmemo.queue.QueueManager;
-import org.liberty.android.fantastischmemo.queue.QuizQueueManager;
-import org.liberty.android.fantastischmemo.scheduler.Scheduler;
-import org.liberty.android.fantastischmemo.ui.loader.DBLoader;
-import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -51,6 +37,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.common.base.Strings;
+
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.entity.Card;
+import org.liberty.android.fantastischmemo.entity.Category;
+import org.liberty.android.fantastischmemo.entity.Option;
+import org.liberty.android.fantastischmemo.entity.Setting;
+import org.liberty.android.fantastischmemo.modules.AppComponents;
+import org.liberty.android.fantastischmemo.queue.QueueManager;
+import org.liberty.android.fantastischmemo.queue.QuizQueueManager;
+import org.liberty.android.fantastischmemo.scheduler.Scheduler;
+import org.liberty.android.fantastischmemo.ui.loader.DBLoader;
+import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
+
+import javax.inject.Inject;
 
 public class QuizActivity extends QACardActivity {
     public static String EXTRA_CATEGORY_ID = "category_id";

@@ -19,14 +19,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui.loader;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.content.Context;
 
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.entity.Card;
 import org.liberty.android.fantastischmemo.ui.CardListActivity.CardWrapper;
 
-import android.content.Context;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CardWrapperListLoader extends DBLoader<List<CardWrapper>> {
 

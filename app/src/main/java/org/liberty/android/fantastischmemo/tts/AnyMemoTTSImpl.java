@@ -20,21 +20,21 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo.tts;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.ReentrantLock;
-
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.tts.SpeakWord.OnCompletedListener;
-
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.common.base.Strings;
+
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.tts.SpeakWord.OnCompletedListener;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
 

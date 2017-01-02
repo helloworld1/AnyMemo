@@ -1,16 +1,16 @@
 package org.liberty.android.fantastischmemo.downloader.quizlet;
 
+import android.os.Bundle;
+
+import com.google.common.base.Strings;
+
+import org.liberty.android.fantastischmemo.downloader.common.AbstractDownloaderFragment;
+import org.liberty.android.fantastischmemo.downloader.common.DownloadItem;
+
 import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
-
-import org.liberty.android.fantastischmemo.downloader.AbstractDownloaderFragment;
-import org.liberty.android.fantastischmemo.downloader.DownloadItem;
-
-import android.os.Bundle;
-
-import com.google.common.base.Strings;
 
 public class CardsetsListFragment extends AbstractDownloaderFragment {
 

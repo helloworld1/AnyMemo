@@ -5,10 +5,10 @@ import android.support.annotation.Nullable;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.liberty.android.fantastischmemo.AMEnv;
-import org.liberty.android.fantastischmemo.downloader.AbstractDownloaderFragment;
-import org.liberty.android.fantastischmemo.downloader.DownloadItem;
-import org.liberty.android.fantastischmemo.downloader.DownloaderUtils;
+import org.liberty.android.fantastischmemo.common.AMEnv;
+import org.liberty.android.fantastischmemo.downloader.common.AbstractDownloaderFragment;
+import org.liberty.android.fantastischmemo.downloader.common.DownloadItem;
+import org.liberty.android.fantastischmemo.downloader.common.DownloaderUtils;
 import org.liberty.android.fantastischmemo.utils.AMZipUtils;
 
 import java.io.File;

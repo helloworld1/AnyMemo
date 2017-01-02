@@ -2,17 +2,17 @@ package org.liberty.android.fantastischmemo.dao;
 
 import android.util.Log;
 
+import com.j256.ormlite.dao.BaseDaoImpl;
+import com.j256.ormlite.support.ConnectionSource;
+import com.j256.ormlite.table.DatabaseTableConfig;
+
+import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.entity.VersionableDomainObject;
+
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
-
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
-import org.liberty.android.fantastischmemo.entity.VersionableDomainObject;
-
-import com.j256.ormlite.dao.BaseDaoImpl;
-import com.j256.ormlite.support.ConnectionSource;
-import com.j256.ormlite.table.DatabaseTableConfig;
 
 public abstract class AbstractHelperDaoImpl<E, T> extends BaseDaoImpl<E, T> {
     private static final String TAG = AbstractHelperDaoImpl.class.getSimpleName();

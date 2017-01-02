@@ -1,11 +1,11 @@
 package org.liberty.android.fantastischmemo.dao;
 
-import java.util.Date;
-import java.util.List;
-
 import org.liberty.android.fantastischmemo.entity.Card;
 import org.liberty.android.fantastischmemo.entity.Category;
 import org.liberty.android.fantastischmemo.entity.ReviewOrdering;
+
+import java.util.Date;
+import java.util.List;
 
 public interface CardDao extends HelperDao<Card, Integer> {
     Card queryFirstOrdinal();

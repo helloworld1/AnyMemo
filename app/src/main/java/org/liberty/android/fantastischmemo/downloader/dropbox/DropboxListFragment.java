@@ -19,16 +19,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.dropbox;
 
+import android.os.Bundle;
+
+import org.json.JSONException;
+import org.liberty.android.fantastischmemo.downloader.common.AbstractDownloaderFragment;
+import org.liberty.android.fantastischmemo.downloader.common.DownloadItem;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import org.json.JSONException;
-import org.liberty.android.fantastischmemo.downloader.AbstractDownloaderFragment;
-import org.liberty.android.fantastischmemo.downloader.DownloadItem;
-
-import android.os.Bundle;
 
 import io.reactivex.functions.Consumer;
 

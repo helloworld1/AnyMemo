@@ -1,13 +1,13 @@
 package org.liberty.android.fantastischmemo.entity;
 
-import java.util.Date;
+import com.j256.ormlite.field.DataType;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
 import org.liberty.android.fantastischmemo.dao.LearningDataDaoImpl;
 import org.liberty.android.fantastischmemo.utils.AMDateUtil;
 
-import com.j256.ormlite.field.DataType;
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
+import java.util.Date;
 
 @DatabaseTable(tableName = "learning_data", daoClass = LearningDataDaoImpl.class)
 public class LearningData {

@@ -1,5 +1,26 @@
 package org.liberty.android.fantastischmemo.downloader.quizlet;
 
+import android.net.Uri;
+import android.util.Log;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.liberty.android.fantastischmemo.common.AMEnv;
+import org.liberty.android.fantastischmemo.common.AMSecrets;
+import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.dao.CardDao;
+import org.liberty.android.fantastischmemo.downloader.common.DownloadItem;
+import org.liberty.android.fantastischmemo.downloader.common.DownloaderUtils;
+import org.liberty.android.fantastischmemo.entity.Card;
+import org.liberty.android.fantastischmemo.entity.Category;
+import org.liberty.android.fantastischmemo.entity.LearningData;
+import org.liberty.android.fantastischmemo.modules.PerApplication;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -9,27 +30,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.net.ssl.HttpsURLConnection;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.liberty.android.fantastischmemo.AMEnv;
-import org.liberty.android.fantastischmemo.AMSecrets;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.dao.CardDao;
-import org.liberty.android.fantastischmemo.entity.Card;
-import org.liberty.android.fantastischmemo.entity.Category;
-import org.liberty.android.fantastischmemo.entity.LearningData;
-import org.liberty.android.fantastischmemo.downloader.DownloadItem;
-import org.liberty.android.fantastischmemo.downloader.DownloaderUtils;
-import org.liberty.android.fantastischmemo.modules.PerApplication;
-import org.liberty.android.fantastischmemo.utils.AMFileUtil;
-
-import android.net.Uri;
-import android.util.Log;
 
 @PerApplication
 public class QuizletDownloadHelper {

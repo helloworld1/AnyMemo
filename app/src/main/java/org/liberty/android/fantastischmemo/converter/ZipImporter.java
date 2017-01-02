@@ -1,13 +1,9 @@
 package org.liberty.android.fantastischmemo.converter;
 
-import java.io.File;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
 import org.apache.commons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.utils.AMZipUtils;
+
+import java.io.File;
 
 public class ZipImporter implements Converter {
 

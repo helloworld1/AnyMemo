@@ -19,21 +19,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import org.liberty.android.fantastischmemo.AMPrefKeys;
-import org.liberty.android.fantastischmemo.R;
-
 import android.app.AlertDialog;
-
 import android.content.DialogInterface;
 import android.content.Intent;
-
+import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.content.pm.ActivityInfo;
-import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.content.res.Configuration;
+
+import org.liberty.android.fantastischmemo.common.AMPrefKeys;
+import org.liberty.android.fantastischmemo.R;
 
 public class OptionScreen extends PreferenceActivity {
 	public static final String PREFS_NAME = "fantastischhMemoPrefs";

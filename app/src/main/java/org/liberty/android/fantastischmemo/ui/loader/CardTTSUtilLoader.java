@@ -19,9 +19,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui.loader;
 
-import org.liberty.android.fantastischmemo.utils.CardTTSUtil;
-
 import android.content.Context;
+
+import org.liberty.android.fantastischmemo.utils.CardTTSUtil;
 
 public class CardTTSUtilLoader extends
         DBLoader<CardTTSUtil> {

@@ -1,8 +1,8 @@
 package org.liberty.android.fantastischmemo.modules;
 
 
-import org.liberty.android.fantastischmemo.downloader.AbstractDownloaderFragment;
 import org.liberty.android.fantastischmemo.downloader.anymemo.AnyMemoDownloaderFragment;
+import org.liberty.android.fantastischmemo.downloader.common.AbstractDownloaderFragment;
 import org.liberty.android.fantastischmemo.downloader.quizlet.CardsetsListFragment;
 import org.liberty.android.fantastischmemo.ui.CardPlayerFragment;
 import org.liberty.android.fantastischmemo.ui.ConverterFragment;

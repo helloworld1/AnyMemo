@@ -10,8 +10,6 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import org.liberty.android.fantastischmemo.AMApplication;
-import org.liberty.android.fantastischmemo.AMPrefKeys;
 import org.liberty.android.fantastischmemo.modules.ActivityComponents;
 import org.liberty.android.fantastischmemo.modules.ActivityModules;
 import org.liberty.android.fantastischmemo.modules.AppComponents;

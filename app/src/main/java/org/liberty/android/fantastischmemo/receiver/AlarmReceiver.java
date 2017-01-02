@@ -19,14 +19,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.receiver;
 
-import org.liberty.android.fantastischmemo.service.AnyMemoService;
-import org.liberty.android.fantastischmemo.widget.AnyMemoWidgetProvider;
-
-import android.content.Intent;
-import android.content.Context;
 import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+
+import org.liberty.android.fantastischmemo.service.AnyMemoService;
+import org.liberty.android.fantastischmemo.widget.AnyMemoWidgetProvider;
 
 
 public class AlarmReceiver extends BroadcastReceiver{

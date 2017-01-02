@@ -19,14 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.utils;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
-import javax.inject.Inject;
-
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.entity.Option;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -36,6 +28,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.entity.Option;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+import javax.inject.Inject;
 
 public class DictionaryUtil {
 

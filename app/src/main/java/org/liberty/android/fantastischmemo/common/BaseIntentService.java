@@ -2,7 +2,6 @@ package org.liberty.android.fantastischmemo.common;
 
 import android.app.IntentService;
 
-import org.liberty.android.fantastischmemo.AMApplication;
 import org.liberty.android.fantastischmemo.modules.AppComponents;
 
 public abstract class BaseIntentService extends IntentService {

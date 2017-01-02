@@ -1,16 +1,16 @@
 package org.liberty.android.fantastischmemo.entity;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.EnumSet;
-
-import org.liberty.android.fantastischmemo.dao.SettingDaoImpl;
-import org.liberty.android.fantastischmemo.utils.AMStringUtils;
-
 import com.google.common.base.Strings;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+
+import org.liberty.android.fantastischmemo.dao.SettingDaoImpl;
+import org.liberty.android.fantastischmemo.utils.AMStringUtils;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.EnumSet;
 
 @DatabaseTable(tableName = "settings", daoClass = SettingDaoImpl.class)
 public class Setting implements Serializable, VersionableDomainObject {

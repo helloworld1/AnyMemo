@@ -1,5 +1,18 @@
 package org.liberty.android.fantastischmemo.dao;
 
+import com.google.common.base.Strings;
+import com.j256.ormlite.stmt.PreparedQuery;
+import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.UpdateBuilder;
+import com.j256.ormlite.stmt.Where;
+import com.j256.ormlite.support.ConnectionSource;
+import com.j256.ormlite.table.DatabaseTableConfig;
+
+import org.liberty.android.fantastischmemo.entity.Card;
+import org.liberty.android.fantastischmemo.entity.Category;
+import org.liberty.android.fantastischmemo.entity.LearningData;
+import org.liberty.android.fantastischmemo.entity.ReviewOrdering;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -10,19 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
-
-import org.liberty.android.fantastischmemo.entity.Card;
-import org.liberty.android.fantastischmemo.entity.Category;
-import org.liberty.android.fantastischmemo.entity.LearningData;
-
-import com.google.common.base.Strings;
-import com.j256.ormlite.stmt.PreparedQuery;
-import com.j256.ormlite.stmt.QueryBuilder;
-import com.j256.ormlite.stmt.UpdateBuilder;
-import com.j256.ormlite.stmt.Where;
-import com.j256.ormlite.support.ConnectionSource;
-import com.j256.ormlite.table.DatabaseTableConfig;
-import org.liberty.android.fantastischmemo.entity.ReviewOrdering;
 
 public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements CardDao {
     public CardDaoImpl(ConnectionSource connectionSource, DatabaseTableConfig<Card> config)

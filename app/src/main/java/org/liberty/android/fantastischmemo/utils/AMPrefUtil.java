@@ -19,17 +19,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.utils;
 
-import java.util.Map;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import org.liberty.android.fantastischmemo.modules.ForApplication;
 import org.liberty.android.fantastischmemo.modules.PerApplication;
+
+import java.util.Map;
+
+import javax.inject.Inject;
 
 @PerApplication
 public class AMPrefUtil {

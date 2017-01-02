@@ -21,9 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui.widgets;
 
 import android.content.Context;
-
 import android.preference.EditTextPreference;
-
 import android.util.AttributeSet;
 
 

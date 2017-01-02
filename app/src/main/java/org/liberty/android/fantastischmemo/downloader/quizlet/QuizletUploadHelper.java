@@ -2,6 +2,12 @@ package org.liberty.android.fantastischmemo.downloader.quizlet;
 
 import android.util.Log;
 
+import org.apache.commons.io.IOUtils;
+import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.dao.CardDao;
+import org.liberty.android.fantastischmemo.entity.Card;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -10,12 +16,6 @@ import java.net.URLEncoder;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
-
-import org.apache.commons.io.IOUtils;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.dao.CardDao;
-import org.liberty.android.fantastischmemo.entity.Card;
 
 class QuizletUploadHelper {
     private static final String TAG = QuizletUploadHelper.class.getSimpleName();

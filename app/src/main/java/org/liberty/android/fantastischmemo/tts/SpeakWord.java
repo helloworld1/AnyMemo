@@ -19,15 +19,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.tts;
 
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
+import android.util.Log;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnCompletionListener;
-import android.util.Log;
 
 public class SpeakWord {
     private volatile MediaPlayer mp;

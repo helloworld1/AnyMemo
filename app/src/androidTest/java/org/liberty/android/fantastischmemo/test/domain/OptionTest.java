@@ -3,7 +3,7 @@ package org.liberty.android.fantastischmemo.test.domain;
 import android.support.test.filters.SmallTest;
 
 import org.junit.Test;
-import org.liberty.android.fantastischmemo.AMPrefKeys;
+import org.liberty.android.fantastischmemo.common.AMPrefKeys;
 import org.liberty.android.fantastischmemo.entity.Option;
 import org.liberty.android.fantastischmemo.test.AbstractPreferencesTest;
 

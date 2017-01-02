@@ -1,13 +1,5 @@
 package org.liberty.android.fantastischmemo.downloader.quizlet;
 
-import java.io.File;
-
-import javax.inject.Inject;
-
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.ui.FileBrowserFragment;
-import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -17,6 +9,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.ui.FileBrowserFragment;
+import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
+
+import java.io.File;
+
+import javax.inject.Inject;
 
 public class QuizletUploadActivity extends QuizletAccountActivity {
 

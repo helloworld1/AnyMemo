@@ -1,14 +1,14 @@
 package org.liberty.android.fantastischmemo.entity;
 
-import javax.inject.Inject;
-
-import org.liberty.android.fantastischmemo.AMPrefKeys;
-import org.liberty.android.fantastischmemo.modules.ForApplication;
-import org.liberty.android.fantastischmemo.modules.PerApplication;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
+import org.liberty.android.fantastischmemo.common.AMPrefKeys;
+import org.liberty.android.fantastischmemo.modules.ForApplication;
+import org.liberty.android.fantastischmemo.modules.PerApplication;
+
+import javax.inject.Inject;
 
 @PerApplication
 public class SchedulingAlgorithmParameters {

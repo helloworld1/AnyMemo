@@ -1,9 +1,7 @@
 package org.liberty.android.fantastischmemo.common;
 
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 
-import org.liberty.android.fantastischmemo.AMApplication;
 import org.liberty.android.fantastischmemo.modules.ActivityComponents;
 import org.liberty.android.fantastischmemo.modules.AppComponents;
 import org.liberty.android.fantastischmemo.modules.DaggerFragmentComponents;

@@ -19,10 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 package org.liberty.android.fantastischmemo.ui;
 
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.common.BaseFragment;
-import org.liberty.android.fantastischmemo.entity.Setting;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -31,6 +27,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout.LayoutParams;
+
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseFragment;
+import org.liberty.android.fantastischmemo.entity.Setting;
 
 /**
  * This fragment is for a card of two fields, field1 is the upper field and filed2

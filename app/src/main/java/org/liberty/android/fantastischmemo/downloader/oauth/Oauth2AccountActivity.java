@@ -12,7 +12,7 @@ import android.util.Log;
 
 import com.google.common.base.Strings;
 
-import org.liberty.android.fantastischmemo.AMPrefKeys;
+import org.liberty.android.fantastischmemo.common.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.BaseActivity;
 

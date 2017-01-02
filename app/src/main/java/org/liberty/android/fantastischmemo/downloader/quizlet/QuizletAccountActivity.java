@@ -1,21 +1,21 @@
 package org.liberty.android.fantastischmemo.downloader.quizlet;
 
+import android.util.Base64;
+import android.util.Log;
+
+import org.apache.commons.io.IOUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.liberty.android.fantastischmemo.common.AMEnv;
+import org.liberty.android.fantastischmemo.downloader.oauth.OauthAccessCodeRetrievalFragment;
+import org.liberty.android.fantastischmemo.downloader.oauth.OauthAccountActivity;
+
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLEncoder;
 
 import javax.net.ssl.HttpsURLConnection;
-
-import org.apache.commons.io.IOUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.liberty.android.fantastischmemo.AMEnv;
-import org.liberty.android.fantastischmemo.downloader.oauth.OauthAccessCodeRetrievalFragment;
-import org.liberty.android.fantastischmemo.downloader.oauth.OauthAccountActivity;
-
-import android.util.Log;
-import android.util.Base64;
 
 public abstract class QuizletAccountActivity extends OauthAccountActivity {
     private String[] authToken;

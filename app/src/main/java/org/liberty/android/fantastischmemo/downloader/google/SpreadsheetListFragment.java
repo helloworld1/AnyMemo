@@ -19,18 +19,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.google;
 
+import android.os.Bundle;
+
+import org.liberty.android.fantastischmemo.downloader.common.AbstractDownloaderFragment;
+import org.liberty.android.fantastischmemo.downloader.common.DownloadItem;
+
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-
-import javax.inject.Inject;
-
-import org.liberty.android.fantastischmemo.downloader.AbstractDownloaderFragment;
-import org.liberty.android.fantastischmemo.downloader.DownloadItem;
-
-import android.os.Bundle;
 
 public class SpreadsheetListFragment extends AbstractDownloaderFragment {
 

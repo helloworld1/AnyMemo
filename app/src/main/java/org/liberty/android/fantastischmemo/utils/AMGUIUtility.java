@@ -19,8 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.utils;
 
-import org.liberty.android.fantastischmemo.R;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -29,6 +27,8 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.google.common.base.Throwables;
+
+import org.liberty.android.fantastischmemo.R;
 
 /*
  * This utility class provides some useful static rucurring GUI methods

@@ -19,14 +19,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import java.io.File;
-
 import android.app.Activity;
-
 import android.os.Bundle;
-
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+
+import java.io.File;
 
 public class OpenTabFragment extends FileBrowserFragment {
     Activity mActivity;

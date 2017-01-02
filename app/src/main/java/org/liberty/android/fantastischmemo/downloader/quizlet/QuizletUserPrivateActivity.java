@@ -1,7 +1,5 @@
 package org.liberty.android.fantastischmemo.downloader.quizlet;
 
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.downloader.quizlet.CardsetsListFragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +8,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import org.liberty.android.fantastischmemo.R;
 
 public class QuizletUserPrivateActivity extends QuizletAccountActivity {
 

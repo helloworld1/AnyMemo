@@ -1,14 +1,12 @@
 package org.liberty.android.fantastischmemo.dao;
 
-import java.sql.SQLException;
+import com.j256.ormlite.dao.BaseDaoImpl;
+import com.j256.ormlite.support.ConnectionSource;
+import com.j256.ormlite.table.DatabaseTableConfig;
 
 import org.liberty.android.fantastischmemo.entity.Deck;
 
-import com.j256.ormlite.dao.BaseDaoImpl;
-
-import com.j256.ormlite.support.ConnectionSource;
-
-import com.j256.ormlite.table.DatabaseTableConfig;
+import java.sql.SQLException;
 
 public class DeckDaoImpl extends BaseDaoImpl<Deck, Integer> implements DeckDao {
     public DeckDaoImpl(ConnectionSource connectionSource, DatabaseTableConfig<Deck> tableConfig)

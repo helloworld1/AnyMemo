@@ -20,18 +20,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo.widget;
 
+import android.annotation.TargetApi;
 import android.app.PendingIntent;
-import android.content.ComponentName;
-import android.content.Intent;
-import android.content.Context;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.widget.RemoteViews;
+
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.ui.StudyActivity;
-
-import android.net.Uri;
-import android.annotation.TargetApi;
 
 
 public class AnyMemoWidgetProvider extends AppWidgetProvider{

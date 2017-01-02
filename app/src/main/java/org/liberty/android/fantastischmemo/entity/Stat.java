@@ -1,12 +1,12 @@
 package org.liberty.android.fantastischmemo.entity;
 
-import java.util.Date;
-
-import org.liberty.android.fantastischmemo.dao.StatDaoImpl;
-
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+
+import org.liberty.android.fantastischmemo.dao.StatDaoImpl;
+
+import java.util.Date;
 
 @DatabaseTable(tableName = "stats", daoClass = StatDaoImpl.class)
 public class Stat {

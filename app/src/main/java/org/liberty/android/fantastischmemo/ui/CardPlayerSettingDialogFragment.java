@@ -20,9 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 
-import org.liberty.android.fantastischmemo.AMPrefKeys;
-import org.liberty.android.fantastischmemo.R;
-
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -35,6 +32,9 @@ import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+
+import org.liberty.android.fantastischmemo.common.AMPrefKeys;
+import org.liberty.android.fantastischmemo.R;
 
 public class CardPlayerSettingDialogFragment extends DialogFragment{
     private static final int DEFAULT_QA_SLEEP_TIME_IN_SEC = 1;

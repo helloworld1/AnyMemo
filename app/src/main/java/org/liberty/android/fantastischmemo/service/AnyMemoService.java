@@ -20,19 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo.service;
 
-import javax.inject.Inject;
-
-import android.support.v7.app.NotificationCompat;
-import org.apache.commons.io.FilenameUtils;
-import org.liberty.android.fantastischmemo.AMPrefKeys;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.common.BaseService;
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.dao.CardDao;
-import org.liberty.android.fantastischmemo.ui.AnyMemo;
-import org.liberty.android.fantastischmemo.utils.RecentListUtil;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -42,9 +29,22 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.common.base.Strings;
+
+import org.apache.commons.io.FilenameUtils;
+import org.liberty.android.fantastischmemo.common.AMPrefKeys;
+import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseService;
+import org.liberty.android.fantastischmemo.dao.CardDao;
+import org.liberty.android.fantastischmemo.ui.AnyMemo;
+import org.liberty.android.fantastischmemo.utils.RecentListUtil;
+
+import javax.inject.Inject;
 
 public class AnyMemoService extends BaseService {
     public static int UPDATE_NOTIFICATION = 2;

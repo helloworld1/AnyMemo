@@ -1,11 +1,11 @@
 package org.liberty.android.fantastischmemo.dao;
 
+import com.j256.ormlite.dao.Dao;
+
+import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelper;
+
 import java.util.List;
 import java.util.concurrent.Callable;
-
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
-
-import com.j256.ormlite.dao.Dao;
 
 public interface HelperDao<E, T> extends Dao<E, T> {
 

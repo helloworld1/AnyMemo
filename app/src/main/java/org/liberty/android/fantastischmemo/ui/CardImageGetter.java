@@ -19,17 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import java.io.File;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.modules.AppComponents;
-import org.liberty.android.fantastischmemo.utils.AMFileUtil;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -40,6 +29,15 @@ import android.text.Html.ImageGetter;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
+
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.modules.AppComponents;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
+
+import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.List;
 
 /**
  * This class is used display images in a card.

@@ -19,16 +19,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.receiver;
 
-import android.content.Intent;
-import android.content.Context;
-import android.content.BroadcastReceiver;
-import android.app.PendingIntent;
 import android.app.AlarmManager;
-import java.util.Calendar;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import org.liberty.android.fantastischmemo.AMPrefKeys;
-import org.liberty.android.fantastischmemo.receiver.AlarmReceiver;
+
+import org.liberty.android.fantastischmemo.common.AMPrefKeys;
+
+import java.util.Calendar;
 
 public class SetAlarmReceiver extends BroadcastReceiver{
     /* This class contains the static methods to set up the alarm

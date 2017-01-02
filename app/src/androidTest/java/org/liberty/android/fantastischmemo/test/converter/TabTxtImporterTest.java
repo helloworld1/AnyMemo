@@ -1,7 +1,7 @@
 package org.liberty.android.fantastischmemo.test.converter;
 
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.converter.Converter;
 import org.liberty.android.fantastischmemo.converter.TabTxtImporter;
 import org.liberty.android.fantastischmemo.dao.CardDao;

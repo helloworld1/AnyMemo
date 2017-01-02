@@ -20,13 +20,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.utils;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.content.Context;
+import android.util.Log;
+
+import com.google.common.base.Preconditions;
 
 import org.apache.commons.io.FilenameUtils;
-import org.liberty.android.fantastischmemo.AMEnv;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.common.AMEnv;
+import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.dao.SettingDao;
 import org.liberty.android.fantastischmemo.entity.Card;
 import org.liberty.android.fantastischmemo.entity.Setting;
@@ -34,10 +36,8 @@ import org.liberty.android.fantastischmemo.tts.AnyMemoTTS;
 import org.liberty.android.fantastischmemo.tts.AnyMemoTTSImpl;
 import org.liberty.android.fantastischmemo.tts.NullAnyMemoTTS;
 
-import android.content.Context;
-import android.util.Log;
-
-import com.google.common.base.Preconditions;
+import java.util.ArrayList;
+import java.util.List;
 
 /*
  * Utility for TTS of a card

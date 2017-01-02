@@ -19,8 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.google;
 
-import org.liberty.android.fantastischmemo.R;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,6 +27,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import org.liberty.android.fantastischmemo.R;
 
 public class SpreadsheetListScreen extends GoogleAccountActivity {
 

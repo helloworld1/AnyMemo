@@ -19,6 +19,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.google;
 
+import org.apache.commons.io.IOUtils;
+import org.xmlpull.v1.XmlPullParserException;
+
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.URL;
@@ -27,9 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
-
-import org.apache.commons.io.IOUtils;
-import org.xmlpull.v1.XmlPullParserException;
 
 public class FolderFactory {
     private FolderFactory() {

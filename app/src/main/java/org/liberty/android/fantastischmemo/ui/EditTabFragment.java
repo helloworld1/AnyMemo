@@ -17,14 +17,14 @@ You should have received a copy of the GNU General Public License along with thi
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import java.io.File;
-
-import javax.inject.Inject;
+import android.app.Activity;
+import android.content.Intent;
 
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
-import android.app.Activity;
-import android.content.Intent;
+import java.io.File;
+
+import javax.inject.Inject;
 
 public class EditTabFragment extends FileBrowserFragment {
 

@@ -19,22 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import java.util.HashMap;
-import java.util.regex.Pattern;
-
-import javax.inject.Inject;
-
-import org.liberty.android.fantastischmemo.AMPrefKeys;
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.entity.Card;
-import org.liberty.android.fantastischmemo.entity.Category;
-import org.liberty.android.fantastischmemo.entity.LearningData;
-import org.liberty.android.fantastischmemo.entity.Setting;
-import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
-import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
-import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
-import org.liberty.android.fantastischmemo.utils.ShareUtil;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -54,6 +38,22 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.common.base.Preconditions;
+
+import org.liberty.android.fantastischmemo.common.AMPrefKeys;
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.entity.Card;
+import org.liberty.android.fantastischmemo.entity.Category;
+import org.liberty.android.fantastischmemo.entity.LearningData;
+import org.liberty.android.fantastischmemo.entity.Setting;
+import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEditorResultListener;
+import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
+import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
+import org.liberty.android.fantastischmemo.utils.ShareUtil;
+
+import java.util.HashMap;
+import java.util.regex.Pattern;
+
+import javax.inject.Inject;
 
 public class PreviewEditActivity extends QACardActivity {
     private final int ACTIVITY_EDIT = 11;

@@ -19,21 +19,21 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.google;
 
+import android.util.Log;
+
+import org.apache.commons.io.IOUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.liberty.android.fantastischmemo.common.AMEnv;
+import org.liberty.android.fantastischmemo.downloader.oauth.OauthAccessCodeRetrievalFragment;
+import org.liberty.android.fantastischmemo.downloader.oauth.OauthAccountActivity;
+
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLEncoder;
 
 import javax.net.ssl.HttpsURLConnection;
-
-import org.apache.commons.io.IOUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.liberty.android.fantastischmemo.AMEnv;
-import org.liberty.android.fantastischmemo.downloader.oauth.OauthAccessCodeRetrievalFragment;
-import org.liberty.android.fantastischmemo.downloader.oauth.OauthAccountActivity;
-
-import android.util.Log;
 
 public abstract class GoogleAccountActivity extends OauthAccountActivity {
 

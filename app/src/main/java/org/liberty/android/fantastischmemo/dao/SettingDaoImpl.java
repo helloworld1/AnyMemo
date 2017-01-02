@@ -1,11 +1,11 @@
 package org.liberty.android.fantastischmemo.dao;
 
-import java.sql.SQLException;
+import com.j256.ormlite.support.ConnectionSource;
+import com.j256.ormlite.table.DatabaseTableConfig;
 
 import org.liberty.android.fantastischmemo.entity.Setting;
 
-import com.j256.ormlite.support.ConnectionSource;
-import com.j256.ormlite.table.DatabaseTableConfig;
+import java.sql.SQLException;
 
 public class SettingDaoImpl extends AbstractHelperDaoImpl<Setting, Integer> implements SettingDao {
     public SettingDaoImpl(ConnectionSource connectionSource, DatabaseTableConfig<Setting> config)

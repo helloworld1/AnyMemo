@@ -19,15 +19,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.google;
 
-import java.util.List;
+import android.content.Context;
 
-import javax.inject.Inject;
-
-import org.liberty.android.fantastischmemo.AMEnv;
+import org.liberty.android.fantastischmemo.common.AMEnv;
 import org.liberty.android.fantastischmemo.modules.AppComponents;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
-import android.content.Context;
+import java.util.List;
+
+import javax.inject.Inject;
 
 public class GoogleDriveDownloadHelper {
 

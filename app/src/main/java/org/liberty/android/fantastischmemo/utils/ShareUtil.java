@@ -1,14 +1,14 @@
 package org.liberty.android.fantastischmemo.utils;
 
-import javax.inject.Inject;
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 
 import org.apache.commons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.entity.Card;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.net.Uri;
+import javax.inject.Inject;
 
 public class ShareUtil {
 

@@ -3,7 +3,7 @@ package org.liberty.android.fantastischmemo.test.utils;
 import android.support.test.filters.SmallTest;
 
 import org.junit.Test;
-import org.liberty.android.fantastischmemo.AMEnv;
+import org.liberty.android.fantastischmemo.common.AMEnv;
 import org.liberty.android.fantastischmemo.entity.Option;
 import org.liberty.android.fantastischmemo.modules.AppComponents;
 import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;

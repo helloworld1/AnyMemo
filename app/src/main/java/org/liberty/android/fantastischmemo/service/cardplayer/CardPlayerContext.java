@@ -19,11 +19,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.service.cardplayer;
 
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
+import android.os.Handler;
+
+import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.entity.Card;
 import org.liberty.android.fantastischmemo.utils.CardTTSUtil;
-
-import android.os.Handler;
 
 /*
  * The context for the CardPlayer state machine. It include all the information

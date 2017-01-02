@@ -20,29 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo.ui;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import org.apache.commons.io.FilenameUtils;
-import org.liberty.android.fantastischmemo.AMEnv;
-import org.liberty.android.fantastischmemo.AMPrefKeys;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelper;
-import org.liberty.android.fantastischmemo.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.common.BaseActivity;
-import org.liberty.android.fantastischmemo.entity.Card;
-import org.liberty.android.fantastischmemo.entity.LearningData;
-import org.liberty.android.fantastischmemo.entity.SchedulingAlgorithmParameters;
-import org.liberty.android.fantastischmemo.scheduler.Scheduler;
-import org.liberty.android.fantastischmemo.ui.loader.CardWrapperListLoader;
-import org.liberty.android.fantastischmemo.ui.loader.MultipleLoaderManager;
-import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
-import org.liberty.android.fantastischmemo.utils.CardTextUtil;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -69,6 +46,29 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.google.common.base.Strings;
+
+import org.apache.commons.io.FilenameUtils;
+import org.liberty.android.fantastischmemo.common.AMEnv;
+import org.liberty.android.fantastischmemo.common.AMPrefKeys;
+import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelper;
+import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelperManager;
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseActivity;
+import org.liberty.android.fantastischmemo.entity.Card;
+import org.liberty.android.fantastischmemo.entity.LearningData;
+import org.liberty.android.fantastischmemo.entity.SchedulingAlgorithmParameters;
+import org.liberty.android.fantastischmemo.scheduler.Scheduler;
+import org.liberty.android.fantastischmemo.ui.loader.CardWrapperListLoader;
+import org.liberty.android.fantastischmemo.ui.loader.MultipleLoaderManager;
+import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
+import org.liberty.android.fantastischmemo.utils.CardTextUtil;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.inject.Inject;
 
 /**
  * The Card List activity is used for listing all cards in a db or learning in a list mode.

@@ -3,9 +3,9 @@ package org.liberty.android.fantastischmemo.modules;
 import android.content.Context;
 
 import org.greenrobot.eventbus.EventBus;
-import org.liberty.android.fantastischmemo.AMApplication;
+import org.liberty.android.fantastischmemo.common.AMApplication;
 import org.liberty.android.fantastischmemo.converter.Converter;
-import org.liberty.android.fantastischmemo.downloader.DownloaderUtils;
+import org.liberty.android.fantastischmemo.downloader.common.DownloaderUtils;
 import org.liberty.android.fantastischmemo.downloader.dropbox.DropboxApiHelper;
 import org.liberty.android.fantastischmemo.downloader.google.GoogleDriveDownloadHelper;
 import org.liberty.android.fantastischmemo.downloader.quizlet.QuizletDownloadHelper;

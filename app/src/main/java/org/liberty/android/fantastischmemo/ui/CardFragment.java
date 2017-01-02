@@ -19,17 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import java.io.File;
-import java.io.Serializable;
-
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import org.liberty.android.fantastischmemo.AMEnv;
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.common.BaseFragment;
-import org.liberty.android.fantastischmemo.entity.Setting;
-import org.liberty.android.fantastischmemo.utils.CardTextUtil;
-
 import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -37,8 +26,19 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import org.liberty.android.fantastischmemo.common.AMEnv;
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseFragment;
+import org.liberty.android.fantastischmemo.entity.Setting;
+import org.liberty.android.fantastischmemo.utils.CardTextUtil;
+
+import java.io.File;
+import java.io.Serializable;
 
 /*
  * This class display a side of the card and export necessary callbacks.

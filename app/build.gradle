@@ -115,11 +115,11 @@ def getBuildString () {
 }
 
 task copySecretsIfNotExists << {
-    if (!file('src/main/java/org/liberty/android/fantastischmemo/AMSecrets.java').exists()) {
+    if (!file('src/main/java/org/liberty/android/fantastischmemo/common/AMSecrets.java').exists()) {
         logger.warn('Empty AMSecrets.java is created from AMSecrets.java.template. Please fill in the values.')
         copy {
-            from "src/main/java/org/liberty/android/fantastischmemo/"
-            into "src/main/java/org/liberty/android/fantastischmemo/"
+            from "src/main/java/org/liberty/android/fantastischmemo/common/"
+            into "src/main/java/org/liberty/android/fantastischmemo/common/"
             rename "AMSecrets.java.template", "AMSecrets.java"
             include "AMSecrets.java.template"
         }

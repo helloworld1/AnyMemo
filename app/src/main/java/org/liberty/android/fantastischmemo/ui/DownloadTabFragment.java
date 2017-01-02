@@ -19,19 +19,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
-import org.liberty.android.fantastischmemo.R;
-import org.liberty.android.fantastischmemo.common.BaseFragment;
-import org.liberty.android.fantastischmemo.downloader.anymemo.AnyMemoDownloaderActivity;
-import org.liberty.android.fantastischmemo.downloader.dropbox.DropboxOauth2AccountActivity;
-import org.liberty.android.fantastischmemo.downloader.google.SpreadsheetListScreen;
-import org.liberty.android.fantastischmemo.downloader.quizlet.QuizletLauncher;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseFragment;
+import org.liberty.android.fantastischmemo.downloader.anymemo.AnyMemoDownloaderActivity;
+import org.liberty.android.fantastischmemo.downloader.dropbox.DropboxOauth2AccountActivity;
+import org.liberty.android.fantastischmemo.downloader.google.SpreadsheetListScreen;
+import org.liberty.android.fantastischmemo.downloader.quizlet.QuizletLauncher;
 
 /*
  * This class is invoked when the user share the card from other

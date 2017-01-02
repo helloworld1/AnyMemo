@@ -20,14 +20,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo.converter;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
 import javax.inject.Inject;
-
-import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
 public class TabTxtImporter extends CSVImporter {
 

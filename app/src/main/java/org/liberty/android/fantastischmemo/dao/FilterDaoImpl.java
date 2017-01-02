@@ -1,19 +1,15 @@
 package org.liberty.android.fantastischmemo.dao;
 
-import java.sql.SQLException;
-
-import java.util.List;
+import com.j256.ormlite.dao.BaseDaoImpl;
+import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.Where;
+import com.j256.ormlite.support.ConnectionSource;
+import com.j256.ormlite.table.DatabaseTableConfig;
 
 import org.liberty.android.fantastischmemo.entity.Filter;
 
-import com.j256.ormlite.dao.BaseDaoImpl;
-
-import com.j256.ormlite.stmt.QueryBuilder;
-import com.j256.ormlite.stmt.Where;
-
-import com.j256.ormlite.support.ConnectionSource;
-
-import com.j256.ormlite.table.DatabaseTableConfig;
+import java.sql.SQLException;
+import java.util.List;
 
 public class FilterDaoImpl extends BaseDaoImpl<Filter, Integer> implements FilterDao {
     public FilterDaoImpl(ConnectionSource connectionSource,  DatabaseTableConfig<Filter> tableConfig)

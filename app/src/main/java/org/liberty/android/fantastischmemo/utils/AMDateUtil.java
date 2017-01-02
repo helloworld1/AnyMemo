@@ -20,15 +20,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.utils;
 
-import java.util.Date;
-
-import javax.inject.Inject;
+import android.content.Context;
 
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.modules.ForApplication;
 import org.liberty.android.fantastischmemo.modules.PerApplication;
 
-import android.content.Context;
+import java.util.Date;
+
+import javax.inject.Inject;
 
 @PerApplication
 public class AMDateUtil {

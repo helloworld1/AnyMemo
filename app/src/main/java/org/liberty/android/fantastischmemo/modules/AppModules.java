@@ -3,7 +3,7 @@ package org.liberty.android.fantastischmemo.modules;
 import android.content.Context;
 
 import org.greenrobot.eventbus.EventBus;
-import org.liberty.android.fantastischmemo.AMApplication;
+import org.liberty.android.fantastischmemo.common.AMApplication;
 import org.liberty.android.fantastischmemo.converter.CSVExporter;
 import org.liberty.android.fantastischmemo.converter.CSVImporter;
 import org.liberty.android.fantastischmemo.converter.Converter;

@@ -2,12 +2,12 @@ package org.liberty.android.fantastischmemo.downloader.quizlet;
 
 import android.util.Log;
 
+import org.liberty.android.fantastischmemo.common.AMEnv;
+import org.liberty.android.fantastischmemo.downloader.oauth.OauthAccessCodeRetrievalFragment;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-
-import org.liberty.android.fantastischmemo.AMEnv;
-import org.liberty.android.fantastischmemo.downloader.oauth.OauthAccessCodeRetrievalFragment;
 
 public final class QuizletOAuth2AccessCodeRetrievalFragment extends OauthAccessCodeRetrievalFragment {
     private static final String TAG = QuizletOAuth2AccessCodeRetrievalFragment.class.getSimpleName();

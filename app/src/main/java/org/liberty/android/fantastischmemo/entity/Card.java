@@ -1,13 +1,13 @@
 package org.liberty.android.fantastischmemo.entity;
 
-import java.util.Date;
-
-import org.liberty.android.fantastischmemo.dao.CardDaoImpl;
-
 import com.google.common.base.Objects;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+
+import org.liberty.android.fantastischmemo.dao.CardDaoImpl;
+
+import java.util.Date;
 
 @DatabaseTable(tableName = "cards", daoClass = CardDaoImpl.class)
 public class Card implements VersionableDomainObject {

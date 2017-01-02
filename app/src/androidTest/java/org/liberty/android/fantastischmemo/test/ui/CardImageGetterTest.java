@@ -8,7 +8,7 @@ import android.view.WindowManager;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.liberty.android.fantastischmemo.AMEnv;
+import org.liberty.android.fantastischmemo.common.AMEnv;
 import org.liberty.android.fantastischmemo.modules.AppComponents;
 import org.liberty.android.fantastischmemo.test.BaseTest;
 import org.liberty.android.fantastischmemo.ui.CardImageGetter;

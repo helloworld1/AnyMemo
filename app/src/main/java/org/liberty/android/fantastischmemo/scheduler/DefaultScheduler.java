@@ -21,15 +21,15 @@ package org.liberty.android.fantastischmemo.scheduler;
 
 import android.util.Log;
 
-import java.util.Date;
-import java.util.Random;
-
-import javax.inject.Inject;
-
 import org.liberty.android.fantastischmemo.entity.LearningData;
 import org.liberty.android.fantastischmemo.entity.SchedulingAlgorithmParameters;
 import org.liberty.android.fantastischmemo.modules.ForApplication;
 import org.liberty.android.fantastischmemo.utils.AMDateUtil;
+
+import java.util.Date;
+import java.util.Random;
+
+import javax.inject.Inject;
 
 /*
  * Default scheduler read the algorithm parameters
