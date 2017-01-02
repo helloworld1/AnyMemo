@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.downloader.dropbox;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,28 +30,36 @@ import org.liberty.android.fantastischmemo.downloader.DownloadItem;
 
 import android.os.Bundle;
 
-public class DownloadDBFileListFragment extends AbstractDownloaderFragment {
+import io.reactivex.functions.Consumer;
 
-    private DropboxDownloadHelper downloadHelper;
+public class DropboxListFragment extends AbstractDownloaderFragment {
 
     public static final String EXTRA_AUTH_TOKEN = "authToken";
 
-    public static final String EXTRA_AUTH_TOKEN_SECRET = "autoTokenSecret";
+    private static final String ANYMEMO_FOLDER = "AnyMemo";
 
-    public DownloadDBFileListFragment() { }
+    private String authToken;
+
+    public DropboxListFragment() { }
 
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         Bundle args = getArguments();
-        assert args != null : "The DownloadDBFileListFragment must have authToken and autoTokenSecret";
-        String authToken = args.getString(EXTRA_AUTH_TOKEN);
-        String authTokenSecret = args.getString(EXTRA_AUTH_TOKEN_SECRET);
-        downloadHelper = new DropboxDownloadHelper(getContext(), appComponents().recenetListUtil(), authToken);
+        authToken = args.getString(EXTRA_AUTH_TOKEN);
     }
 
     @Override
     protected List<DownloadItem> initialRetrieve() throws IOException, JSONException {
-        return downloadHelper.fetchDBFileList();
+        final List<DownloadItem> result = new ArrayList<>();
+        appComponents().dropboxApiHelper().listFiles(authToken, ANYMEMO_FOLDER).blockingForEach(new Consumer<List<DownloadItem>>() {
+            @Override
+            public void accept(List<DownloadItem> downloadItems) throws Exception {
+                result.addAll(downloadItems);
+
+            }
+        });
+
+        return result;
     }
 
     @Override
@@ -65,7 +74,7 @@ public class DownloadDBFileListFragment extends AbstractDownloaderFragment {
 
     @Override
     protected String fetchDatabase(DownloadItem di) throws Exception {
-        return downloadHelper.downloadDBFromDropbox(di);
+        return null;
     }
 
     @Override

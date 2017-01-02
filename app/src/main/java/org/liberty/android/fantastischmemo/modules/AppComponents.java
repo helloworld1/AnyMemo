@@ -5,6 +5,7 @@ import android.content.Context;
 import org.liberty.android.fantastischmemo.AMApplication;
 import org.liberty.android.fantastischmemo.converter.Converter;
 import org.liberty.android.fantastischmemo.downloader.DownloaderUtils;
+import org.liberty.android.fantastischmemo.downloader.dropbox.DropboxApiHelper;
 import org.liberty.android.fantastischmemo.downloader.google.GoogleDriveDownloadHelper;
 import org.liberty.android.fantastischmemo.downloader.quizlet.QuizletDownloadHelper;
 import org.liberty.android.fantastischmemo.entity.Option;
@@ -26,6 +27,7 @@ import org.liberty.android.fantastischmemo.widget.WidgetRemoteViewsFactory;
 import java.util.Map;
 
 import dagger.Component;
+import okhttp3.OkHttpClient;
 
 @PerApplication
 @Component(modules = AppModules.class)
@@ -36,10 +38,12 @@ public interface AppComponents {
     AMPrefUtil amPrefUtil();
     AMDateUtil amDateUtil();
     AMUiUtil amUiUtil();
+    OkHttpClient okHttpClient();
     RecentListUtil recenetListUtil();
     SchedulingAlgorithmParameters schedulingAlgorithmParameters();
     DownloaderUtils downloaderUtils();
     DatabaseUtil databaseUtil();
+    DropboxApiHelper dropboxApiHelper();
     QuizletDownloadHelper quizletDownloadHelper();
     Map<Class<?>, Converter> converterMap();
     Option option();
