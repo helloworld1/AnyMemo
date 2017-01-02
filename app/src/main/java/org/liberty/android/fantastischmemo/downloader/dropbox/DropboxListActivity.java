@@ -50,9 +50,17 @@ public class DropboxListActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == OPEN_UPLOAD_DROPBOX_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            restartActivity();
+            refreshList();
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void refreshList() {
+        DropboxListFragment fragment = (DropboxListFragment) getSupportFragmentManager().findFragmentById(R.id.download_list_fragment);
+        if (fragment != null) {
+            fragment.refreshList();
+        }
+
     }
 
     private void openUploadDropbox() {

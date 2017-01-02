@@ -90,7 +90,10 @@ public class BaseActivity extends AppCompatActivity {
 
     public void restartActivity(){
         Intent intent = new Intent(this, this.getClass());
-        intent.putExtras(getIntent().getExtras());
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            intent.putExtras(extras);
+        }
         startActivity(intent);
         finish();
     }

@@ -3,7 +3,6 @@ package org.liberty.android.fantastischmemo.downloader.dropbox;
 import android.support.annotation.NonNull;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,8 +42,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okio.BufferedSink;
-import okio.Okio;
 
 @ForApplication
 public class DropboxApiHelper {
@@ -223,13 +220,7 @@ public class DropboxApiHelper {
                 InputStream inputStream = downloadResponse.body().byteStream();
 
                 File outputFile = new File(AMEnv.DEFAULT_ROOT_PATH + fileName);
-                BufferedSink sink = null;
-                try {
-                    sink = Okio.buffer(Okio.sink(outputFile));
-                    sink.writeAll(Okio.source(inputStream));
-                } finally {
-                    IOUtils.closeQuietly(sink);
-                }
+
                 FileUtils.copyInputStreamToFile(inputStream, outputFile);
                 recentListUtil.addToRecentList(outputFile.getAbsolutePath());
 

@@ -163,6 +163,16 @@ public abstract class AbstractDownloaderFragment extends BaseFragment {
         listView.setAdapter(dlAdapter);
         listView.removeFooterView(loadMoreFooter);
 
+        refreshList();
+
+        return v;
+    }
+
+    /**
+     * Clear the list and re-run initialRetrieve
+     */
+    public void refreshList() {
+        dlAdapter.clear();
         RetrieveTask task = new RetrieveTask();
         task.execute(new Callable<List<DownloadItem>>() {
             @Override
@@ -170,7 +180,6 @@ public abstract class AbstractDownloaderFragment extends BaseFragment {
                 return initialRetrieve();
             }
         });
-        return v;
     }
 
     private class RetrieveTask extends AsyncTask<Callable<List<DownloadItem>>, Void, Exception> {
