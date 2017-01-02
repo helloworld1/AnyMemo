@@ -19,7 +19,7 @@ public class DropboxOauth2AccountActivity extends Oauth2AccountActivity {
 
     @Override
     protected Completable verifyAccessToken(@NonNull String accessToken) {
-        return Completable.fromObservable(appComponents().dropboxApiHelper().getUserInfo(accessToken));
+        return Completable.fromSingle(appComponents().dropboxApiHelper().getUserInfo(accessToken));
     }
 
     @Override

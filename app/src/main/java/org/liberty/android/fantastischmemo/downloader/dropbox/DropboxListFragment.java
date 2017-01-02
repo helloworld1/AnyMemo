@@ -74,7 +74,7 @@ public class DropboxListFragment extends AbstractDownloaderFragment {
 
     @Override
     protected String fetchDatabase(DownloadItem di) throws Exception {
-        return null;
+        return appComponents().dropboxApiHelper().downloadFile(authToken, di.getAddress()).blockingGet();
     }
 
     @Override

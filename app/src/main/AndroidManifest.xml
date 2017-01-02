@@ -54,7 +54,8 @@
             android:name=".downloader.google.UploadGoogleDriveScreen"
             android:configChanges="orientation|keyboardHidden" />
         <activity
-            android:name=".downloader.dropbox.DropboxListActivity" />
+            android:name=".downloader.dropbox.DropboxListActivity"
+            android:configChanges="orientation|keyboardHidden" />
         <activity
             android:name=".downloader.dropbox.UploadDropboxActivity"
             android:configChanges="orientation|keyboardHidden" />

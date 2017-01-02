@@ -1,24 +1,26 @@
 package org.liberty.android.fantastischmemo.downloader.dropbox;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 
+import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.liberty.android.fantastischmemo.AMApplication;
+import org.liberty.android.fantastischmemo.AMEnv;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.downloader.DownloadItem;
 import org.liberty.android.fantastischmemo.downloader.dropbox.entity.UserInfo;
-import org.liberty.android.fantastischmemo.modules.AppComponents;
 import org.liberty.android.fantastischmemo.modules.ForApplication;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
+import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
@@ -29,7 +31,9 @@ import io.reactivex.CompletableOnSubscribe;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.ObservableSource;
+import io.reactivex.Single;
+import io.reactivex.SingleEmitter;
+import io.reactivex.SingleOnSubscribe;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -37,7 +41,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okio.BufferedSink;
 
 @ForApplication
 public class DropboxApiHelper {
@@ -45,6 +48,7 @@ public class DropboxApiHelper {
     private static final String CREATE_FOLDER_ENDPOINT = "https://api.dropboxapi.com/2/files/create_folder";
     private static final String LIST_FOLDER_ENDPOINT = "https://api.dropboxapi.com/2/files/list_folder";
     private static final String CONTINUE_LIST_FOLDER_ENDPOINT = "https://api.dropboxapi.com/2/files/list_folder/continue";
+    private static final String TEMPORARY_LINK_ENDPOINT = "https://api.dropboxapi.com/2/files/get_temporary_link";
 
     private static final MediaType JSON_TYPE = MediaType.parse("application/json; charset=utf-8");
 
@@ -54,20 +58,23 @@ public class DropboxApiHelper {
 
     private final AMApplication application;
 
+    private final RecentListUtil recentListUtil;
+
     @Inject
     public DropboxApiHelper(@NonNull AMApplication application,
                             @NonNull AMFileUtil amFileUtil,
-                            @NonNull OkHttpClient okHttpClient) {
+                            @NonNull OkHttpClient okHttpClient,
+                            @NonNull RecentListUtil recentListUtil) {
         this.amFileUtil = amFileUtil;
         this.okHttpClient = okHttpClient;
         this.application = application;
+        this.recentListUtil = recentListUtil;
     }
 
-    public Observable<UserInfo> getUserInfo(@NonNull final String token) {
-        return Observable.create(new ObservableOnSubscribe<UserInfo>() {
-
+    public Single<UserInfo> getUserInfo(@NonNull final String token) {
+        return Single.create(new SingleOnSubscribe<UserInfo>() {
             @Override
-            public void subscribe(@NonNull final ObservableEmitter<UserInfo> emitter) throws Exception {
+            public void subscribe(@NonNull final SingleEmitter<UserInfo> emitter) throws Exception {
                 RequestBody requestBody = RequestBody.create(null, new byte[0]);
                 Request request = new Request.Builder()
                         .url(USER_INFO_ENDPOINT)
@@ -93,8 +100,7 @@ public class DropboxApiHelper {
                             userInfo.email = userInfoObject.getString("email");
                             JSONObject nameObject = userInfoObject.getJSONObject("name");
                             userInfo.displayName = nameObject.getString("display_name");
-                            emitter.onNext(userInfo);
-                            emitter.onComplete();
+                            emitter.onSuccess(userInfo);
                         } catch (JSONException e) {
                             emitter.onError(e);
                         }
@@ -177,7 +183,44 @@ public class DropboxApiHelper {
                     emitter.onNext(parseListFolderResponse(continueEntryArray));
                 }
                 emitter.onComplete();
+            }
+        });
+    }
 
+    public Single<String> downloadFile(@NonNull final String token, @NonNull final String filePath) {
+        return Single.fromCallable(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                RequestBody requestBody = RequestBody.create(JSON_TYPE, String.format(
+                        "{\"path\": \"%1$s\"}",
+                        filePath));
+                Request request = new Request.Builder()
+                        .url(TEMPORARY_LINK_ENDPOINT)
+                        .addHeader("Authorization", "Bearer " + token)
+                        .post(requestBody)
+                        .build();
+                Response response = okHttpClient.newCall(request).execute();
+                if (!response.isSuccessful()) {
+                    throw new IOException(getResponseErrorString(request, response));
+                }
+
+                JSONObject temporaryLinkObject = new JSONObject(response.body().string());
+                String downloadLink = temporaryLinkObject.getString("link");
+                JSONObject metadataObject = temporaryLinkObject.getJSONObject("metadata");
+                String fileName = metadataObject.getString("name");
+
+                Request downloadRequest = new Request.Builder()
+                        .url(downloadLink)
+                        .get()
+                        .build();
+                Response downloadResponse = okHttpClient.newCall(downloadRequest).execute();
+                InputStream inputStream = downloadResponse.body().byteStream();
+
+                File outputFile = new File(AMEnv.DEFAULT_ROOT_PATH + fileName);
+                FileUtils.copyInputStreamToFile(inputStream, outputFile);
+                recentListUtil.addToRecentList(outputFile.getAbsolutePath());
+
+                return outputFile.getAbsolutePath();
             }
         });
     }
