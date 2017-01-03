@@ -42,8 +42,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="?attr/colorPrimary"
-        app:itemIconTint="?android:attr/textColor"
-        app:itemTextColor="?android:attr/textColor"
+        app:itemIconTint="@drawable/navigation_text_color"
+        app:itemTextColor="@drawable/navigation_text_color"
         android:id="@+id/navigation_view"
         app:menu="@menu/statistics_screen_menu"/>
 </android.support.v4.widget.DrawerLayout>

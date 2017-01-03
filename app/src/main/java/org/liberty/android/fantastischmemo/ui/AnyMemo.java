@@ -348,6 +348,10 @@ public class AnyMemo extends BaseActivity {
      * inside a ViewPager fragment.
      */
     private void initCreateDbFab() {
+        // Make sure the addDbFab is only shown on FileBrowser fragment
+        if (binding.tabs.getSelectedTabPosition() != 1) {
+            binding.addDbFab.setVisibility(View.GONE);
+        }
         binding.addDbFab.setOnClickListener(new CardFragment.OnClickListener() {
             @Override
             public void onClick(View v) {

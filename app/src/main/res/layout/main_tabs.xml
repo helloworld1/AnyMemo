@@ -10,7 +10,6 @@
         android:fitsSystemWindows="true">
 
         <android.support.design.widget.CoordinatorLayout
-            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/main_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -40,6 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/add_db_fab"
                 android:layout_height="wrap_content"
@@ -57,8 +57,10 @@
             android:layout_height="match_parent"
             android:layout_width="wrap_content"
             android:layout_gravity="start"
-            app:itemIconTint="?android:attr/textColor"
-            app:itemTextColor="?android:attr/textColor"
+            android:background="?attr/colorPrimary"
+            app:itemIconTint="@drawable/navigation_text_color"
+            app:itemTextColor="@drawable/navigation_text_color"
+            android:fitsSystemWindows="true"
             app:headerLayout="@layout/main_navigation_view_header"
             app:menu="@menu/main_screen_drawer_menu"/>
     </android.support.v4.widget.DrawerLayout>
