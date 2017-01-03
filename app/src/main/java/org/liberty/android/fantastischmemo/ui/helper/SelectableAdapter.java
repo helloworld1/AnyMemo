@@ -39,13 +39,13 @@ public abstract class SelectableAdapter<VH extends RecyclerView.ViewHolder> exte
     }
 
     /**
-     * Clear the selection status for all items
+     * Deselect all items
      */
-    public void clearSelection() {
+    public void deselectAll() {
         List<Integer> selection = getSelectedItems();
         selectedItems.clear();
         for (Integer i : selection) {
-            notifyItemRemoved(i);
+            notifyItemChanged(i);
         }
     }
 
