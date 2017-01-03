@@ -19,7 +19,7 @@ import javax.inject.Inject;
 @PerActivity
 public class RecentListActionModeUtil {
 
-    public static final String ACTION_CLEAR_SELECTION = "recent-list-clear-selection";
+    public static final String ACTION_DESELECT_ALL = "recent-list-deselect-all";
     public static final String ACTION_REMOVE_SELECTED = "recent-list-remove-selected";
     private static final String SELECTED_ITEM_COUNT = "selectedItemCount";
     private static final String ACTION_STOP_ACTION_MODE = "recent-list-stop-action-mode";
@@ -60,7 +60,7 @@ public class RecentListActionModeUtil {
             if (mActionMode != null) {
                 mActionMode.finish();
                 mActionMode = null;
-                Intent signalIntent = new Intent(ACTION_CLEAR_SELECTION);
+                Intent signalIntent = new Intent(ACTION_DESELECT_ALL);
                 LocalBroadcastManager.getInstance(mContext).sendBroadcast(signalIntent);
             }
         }
@@ -135,7 +135,7 @@ public class RecentListActionModeUtil {
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            Intent intent = new Intent(ACTION_CLEAR_SELECTION);
+            Intent intent = new Intent(ACTION_DESELECT_ALL);
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
         }
     }

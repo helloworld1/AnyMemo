@@ -92,7 +92,7 @@ public class RecentListFragment extends BaseFragment {
     private BroadcastReceiver mClearSelectionReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            recentListAdapter.clearSelection();
+            recentListAdapter.deselectAll();
         }
     };
 
@@ -109,7 +109,7 @@ public class RecentListFragment extends BaseFragment {
         super.onAttach(activity);
         setHasOptionsMenu(true);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mClearSelectionReceiver,
-                new IntentFilter(RecentListActionModeUtil.ACTION_CLEAR_SELECTION));
+                new IntentFilter(RecentListActionModeUtil.ACTION_DESELECT_ALL));
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mRemoveSelectedReceiver,
                 new IntentFilter(RecentListActionModeUtil.ACTION_REMOVE_SELECTED));
     }
