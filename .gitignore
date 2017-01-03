@@ -23,6 +23,3 @@ AMSecrets.java
 *.ipr
 *.iws
 .idea/
-
-gradle.properties
-google-services.json
