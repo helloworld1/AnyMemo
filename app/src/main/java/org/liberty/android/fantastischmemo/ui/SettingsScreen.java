@@ -465,7 +465,7 @@ public class SettingsScreen extends BaseActivity {
             colorButton.setTextColor(colorButtonTextColor);
         } else {
             final int defaultTextColor = ContextCompat.getColor(this, android.R.color.primary_text_dark);
-            colorButton.setText(defaultTextColor);
+            colorButton.setTextColor(defaultTextColor);
         }
 
         qTypefaceCheckbox.setChecked(!Strings.isNullOrEmpty(setting.getQuestionFont()));
