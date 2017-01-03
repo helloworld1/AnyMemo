@@ -9,7 +9,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.liberty.android.fantastischmemo.common.AMEnv;
-import org.liberty.android.fantastischmemo.common.AMSecrets;
 import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.dao.CardDao;
@@ -111,7 +110,7 @@ public class QuizletDownloadHelper {
             String urlString = String.format(AMEnv.QUIZLET_API_ENDPOINT
                     + "/sets/" + "%1$s?client_id=%2$s",
                     URLEncoder.encode(setId, "UTF-8"),
-                    URLEncoder.encode(AMSecrets.QUIZLET_CLIENT_ID, "UTF-8"));
+                    URLEncoder.encode(AMEnv.QUIZLET_CLIENT_ID, "UTF-8"));
             url = new URL(urlString);
         }
 
@@ -227,7 +226,7 @@ public class QuizletDownloadHelper {
             throws IOException {
         String urlString = String.format(AMEnv.QUIZLET_API_ENDPOINT
                 + "/search/sets?client_id=%1$s&q=%2$s&page=%3$d",
-                URLEncoder.encode(AMSecrets.QUIZLET_CLIENT_ID, "UTF-8"),
+                URLEncoder.encode(AMEnv.QUIZLET_CLIENT_ID, "UTF-8"),
                 URLEncoder.encode(title, "UTF-8"), page);
 
         URL url = new URL(urlString);
@@ -258,7 +257,7 @@ public class QuizletDownloadHelper {
             throws IOException {
         String urlString = String.format(AMEnv.QUIZLET_API_ENDPOINT
                 + "/search/sets?client_id=%1$s&creator=%2$s&page=%3$d",
-                URLEncoder.encode(AMSecrets.QUIZLET_CLIENT_ID, "UTF-8"),
+                URLEncoder.encode(AMEnv.QUIZLET_CLIENT_ID, "UTF-8"),
                 URLEncoder.encode(username, "UTF-8"), page);
 
         URL url = new URL(urlString);
