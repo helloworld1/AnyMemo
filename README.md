@@ -43,7 +43,7 @@ export ANDROID_HOME=~/android-sdk-linux/
 
 cd to the AnyMemo directory and Use gradle to compile the project
 
-Move AMSecrets.java.template in `src/org/liberty/android/fantastischmemo` to AMSecrets.
+Move AMSecrets.java.template in `src/org/liberty/android/fantastischmemo/common/` to AMSecrets.
 Provide the values to the fields in AMSecrets.java.
 
 Them compile using gradle:
@@ -54,6 +54,11 @@ cd AnyMemo
 To build pro version, use
 ```
 ./gradlew assembleProDebug
+```
+AnyMemo has a dev flavor that changes the min API level to 21 to make the build much faster.
+It is recommended for development only.
+```
+./gradlew assembleDevDebug
 ```
 
 The build artifacts are in
