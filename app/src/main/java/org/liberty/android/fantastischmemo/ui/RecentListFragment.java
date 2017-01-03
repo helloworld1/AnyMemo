@@ -372,7 +372,7 @@ public class RecentListFragment extends BaseFragment {
                         recentListActionModeUtil.startActionMode();
                     }
                     toggleSelection(position);
-                    recentListActionModeUtil.updateActionMode(getItemCount());
+                    recentListActionModeUtil.updateActionMode(getSelectedItemCount());
                     return true;
                 }
             });
