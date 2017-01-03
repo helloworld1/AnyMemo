@@ -55,9 +55,11 @@
             android:configChanges="orientation|keyboardHidden" />
         <activity
             android:name=".downloader.dropbox.DropboxListActivity"
+            android:theme="@style/AnyMemo.Theme.Dark.NoActionBar"
             android:configChanges="orientation|keyboardHidden" />
         <activity
             android:name=".downloader.dropbox.UploadDropboxActivity"
+            android:theme="@style/AnyMemo.Theme.Dark.NoActionBar"
             android:configChanges="orientation|keyboardHidden" />
         <activity
             android:name=".downloader.dropbox.DropboxOauth2AccountActivity"

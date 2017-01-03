@@ -54,6 +54,7 @@ import android.widget.Toast;
 import com.google.common.base.Objects;
 
 import org.apache.commons.io.FileUtils;
+import org.liberty.android.fantastischmemo.BuildConfig;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.AMEnv;
 import org.liberty.android.fantastischmemo.common.AMPrefKeys;
@@ -267,7 +268,9 @@ public class AnyMemo extends BaseActivity {
             thisVersionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
         } catch (PackageManager.NameNotFoundException e) {
             thisVersionCode = 0;
-            assert false : "The version code can not be retrieved. Is it defined in build.gradle?";
+            if (BuildConfig.DEBUG) {
+                throw new RuntimeException("The version code can not be retrieved. Is it defined in build.gradle?");
+            }
         }
 
         boolean firstTime = settings.getBoolean(AMPrefKeys.FIRST_TIME_KEY, true);
@@ -392,7 +395,6 @@ public class AnyMemo extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
-
     }
 
     /**

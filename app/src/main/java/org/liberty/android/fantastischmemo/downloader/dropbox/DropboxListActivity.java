@@ -3,8 +3,13 @@ package org.liberty.android.fantastischmemo.downloader.dropbox;
 import android.app.Activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import org.liberty.android.fantastischmemo.R;
@@ -31,6 +36,10 @@ public class DropboxListActivity extends BaseActivity {
         Bundle args = getIntent().getExtras();
         authToken = args.getString(EXTRA_AUTH_TOKEN);
 
+        // Sets the Toolbar to act as the ActionBar for this Activity window.
+        // Make sure the toolbar exists in the activity and is not null
+        setSupportActionBar(binding.toolbar);
+
         Fragment dropboxListFragment = new DropboxListFragment();
         // Passing the Activity args to Fragment.
         dropboxListFragment.setArguments(args);
@@ -45,6 +54,26 @@ public class DropboxListActivity extends BaseActivity {
                 openUploadDropbox();
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.dropbox_list_menu, menu);
+        Drawable drawable = DrawableCompat.wrap(menu.findItem(R.id.logout).getIcon()).mutate();
+        DrawableCompat.setTint(drawable, ContextCompat.getColor(this,R.color.menu_icon));
+        menu.findItem(R.id.logout).setIcon(drawable);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.logout) {
+            activityComponents().oauth2TokenUtil().invalidateSavedToken();
+            finish();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

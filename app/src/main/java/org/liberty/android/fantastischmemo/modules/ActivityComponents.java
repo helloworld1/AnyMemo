@@ -5,6 +5,7 @@ import android.content.Context;
 import org.liberty.android.fantastischmemo.common.BaseActivity;
 import org.liberty.android.fantastischmemo.converter.Converter;
 import org.liberty.android.fantastischmemo.downloader.common.DownloaderUtils;
+import org.liberty.android.fantastischmemo.downloader.oauth.Oauth2TokenUtil;
 import org.liberty.android.fantastischmemo.downloader.quizlet.QuizletDownloadHelper;
 import org.liberty.android.fantastischmemo.entity.Option;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
@@ -61,6 +62,8 @@ public interface ActivityComponents {
     AMPrefUtil amPrefUtil();
 
     AMFileUtil amFileUtil();
+
+    Oauth2TokenUtil oauth2TokenUtil();
 
     RecentListActionModeUtil recentListActionModeUtil();
 

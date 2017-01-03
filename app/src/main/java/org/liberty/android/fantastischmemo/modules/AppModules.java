@@ -1,6 +1,8 @@
 package org.liberty.android.fantastischmemo.modules;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.liberty.android.fantastischmemo.common.AMApplication;
@@ -56,6 +58,12 @@ public class AppModules {
     @PerApplication
     Scheduler providesScheduler(DefaultScheduler scheduler) {
         return scheduler;
+    }
+
+    @Provides
+    @PerApplication
+    SharedPreferences providesSharedPreferences() {
+        return PreferenceManager.getDefaultSharedPreferences(application);
     }
 
     @Provides

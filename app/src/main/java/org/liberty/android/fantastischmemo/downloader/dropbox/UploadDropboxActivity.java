@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.support.v4.app.Fragment;
 import org.greenrobot.eventbus.Subscribe;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.BaseActivity;
+import org.liberty.android.fantastischmemo.databinding.UploadDropboxScreenBinding;
 import org.liberty.android.fantastischmemo.ui.FileBrowserFragment;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 
@@ -30,17 +32,21 @@ public class UploadDropboxActivity extends BaseActivity {
 
     private CompositeDisposable disposables = new CompositeDisposable();
 
+    private UploadDropboxScreenBinding binding;
+
     private String authToken;
 
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        setContentView(R.layout.upload_dropbox_screen);
+        binding = DataBindingUtil.setContentView(this, R.layout.upload_dropbox_screen);
 
         Bundle extras = getIntent().getExtras();
         authToken = extras.getString(EXTRA_AUTH_TOKEN);
 
         setTitle(R.string.upload_text);
+        setSupportActionBar(binding.toolbar);
+
         Fragment fileFragment = new FileBrowserFragment();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.file_list_dropbox, fileFragment)

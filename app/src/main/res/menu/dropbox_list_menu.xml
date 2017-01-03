@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:anymemo="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/upload"
-    	android:icon="@android:drawable/ic_menu_upload"
-        anymemo:showAsAction="ifRoom"
-  		android:title="@string/upload_text" />
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/tools">
     <item android:id="@+id/logout"
-        android:icon="@android:drawable/ic_menu_delete"
+		app:showAsAction="ifRoom"
+		android:icon="@drawable/logout"
   		android:title="@string/logout_text" />
 </menu>

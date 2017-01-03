@@ -23,11 +23,6 @@ import io.reactivex.observers.DisposableCompletableObserver;
 
 public abstract class Oauth2AccountActivity extends BaseActivity {
 
-    // The preference key to save / retrieve the access token. The preference name is based
-    // on the prefix and the package of the class. So the same package use the same keys.
-    private final String oauthAccessTokenPrefKey = AMPrefKeys.OAUTH_ACCESS_TOKEN_KEY_PREFIX + getClass().getPackage().getName();
-
-    private SharedPreferences sharedPreferences;
 
     private CompositeDisposable disposables = new CompositeDisposable();
 
@@ -43,10 +38,7 @@ public abstract class Oauth2AccountActivity extends BaseActivity {
 
         setContentView(R.layout.oauth2_account_activity);
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        final String savedToken = sharedPreferences.getString(oauthAccessTokenPrefKey, null);
-
+        String savedToken = activityComponents().oauth2TokenUtil().getSavedToken();
         if (savedToken != null) {
             verifyTokenAndOnAuthenticate(savedToken);
         } else {
@@ -91,13 +83,13 @@ public abstract class Oauth2AccountActivity extends BaseActivity {
                 .subscribeWith(new DisposableCompletableObserver() {
                     @Override
                     public void onComplete() {
-                        saveToken(token);
+                        activityComponents().oauth2TokenUtil().saveToken(token);
                         onAuthenticated(token);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        invalidateSavedToken();
+                        activityComponents().oauth2TokenUtil().invalidateSavedToken();
                         requestAuth();
                     }
                 }));
@@ -109,15 +101,5 @@ public abstract class Oauth2AccountActivity extends BaseActivity {
                 .build();
         customTabsIntent.intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         customTabsIntent.launchUrl(this, Uri.parse(getLoginUrl()));
-    }
-
-    private void invalidateSavedToken() {
-        saveToken(null);
-    }
-
-    private void saveToken(@Nullable final String token) {
-        sharedPreferences.edit()
-                .putString(oauthAccessTokenPrefKey, token)
-                .apply();
     }
 }

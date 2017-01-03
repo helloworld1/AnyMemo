@@ -82,7 +82,7 @@ public class AMEnv {
         Map<String, String> secretValuesMap = new HashMap<String, String>(5);
 
         try {
-            Class<?> secretClass = Class.forName("org.liberty.android.fantastischmemo.AMSecrets");
+            Class<?> secretClass = Class.forName("org.liberty.android.fantastischmemo.common.AMSecrets");
             for (Field f : secretClass.getFields()) {
                 if (f.getType().isAssignableFrom(String.class)) {
                     secretValuesMap.put(f.getName(), (String) f.get(null));

@@ -1,6 +1,7 @@
 package org.liberty.android.fantastischmemo.modules;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import org.greenrobot.eventbus.EventBus;
 import org.liberty.android.fantastischmemo.common.AMApplication;
@@ -35,6 +36,7 @@ import okhttp3.OkHttpClient;
 public interface AppComponents {
     AMApplication application();
     Scheduler scheduler();
+    SharedPreferences sharedPreferences();
     AMFileUtil amFileUtil();
     AMPrefUtil amPrefUtil();
     AMDateUtil amDateUtil();
