@@ -51,6 +51,10 @@ android {
         pro {
             applicationId "org.liberty.android.fantastischmemopro"
         }
+        dev {
+            applicationId "org.liberty.android.fantastischmemodev"
+            minSdkVersion 21
+        }
     }
 
     lintOptions {
