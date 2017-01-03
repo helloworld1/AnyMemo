@@ -36,15 +36,4 @@
             android:textSize="@dimen/text_size_20"
             android:visibility="gone" />
     </LinearLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/add_db_fab"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_gravity="bottom|right"
-        app:srcCompat="@drawable/ic_add"
-        android:layout_margin="16dp"
-        app:layout_anchorGravity="bottom|right"
-        android:clickable="true"/>
-
 </android.support.design.widget.CoordinatorLayout>

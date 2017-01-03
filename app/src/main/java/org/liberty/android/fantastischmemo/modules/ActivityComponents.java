@@ -23,6 +23,7 @@ import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
 import org.liberty.android.fantastischmemo.utils.AMUiUtil;
 import org.liberty.android.fantastischmemo.utils.AboutUtil;
+import org.liberty.android.fantastischmemo.utils.DatabaseOperationDialogUtil;
 import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListActionModeUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
@@ -62,6 +63,8 @@ public interface ActivityComponents {
     AMFileUtil amFileUtil();
 
     RecentListActionModeUtil recentListActionModeUtil();
+
+    DatabaseOperationDialogUtil databaseOperationDialogUtil();
 
     Map<Class<?>, Converter> converterMap();
 

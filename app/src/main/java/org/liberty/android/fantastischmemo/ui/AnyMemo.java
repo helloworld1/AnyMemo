@@ -25,6 +25,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -41,7 +42,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -54,10 +54,11 @@ import android.widget.Toast;
 import com.google.common.base.Objects;
 
 import org.apache.commons.io.FileUtils;
+import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.AMEnv;
 import org.liberty.android.fantastischmemo.common.AMPrefKeys;
-import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.BaseActivity;
+import org.liberty.android.fantastischmemo.databinding.MainTabsBinding;
 import org.liberty.android.fantastischmemo.receiver.SetAlarmReceiver;
 import org.liberty.android.fantastischmemo.service.AnyMemoService;
 import org.liberty.android.fantastischmemo.ui.loader.MultipleLoaderManager;
@@ -74,12 +75,18 @@ import java.io.InputStream;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
+
 public class AnyMemo extends BaseActivity {
     private static final String WEBSITE_VERSION="https://anymemo.org/versions-view";
 
-    private DrawerLayout drawerLayout;
-
     private SharedPreferences settings;
+
+    private CompositeDisposable disposables;
+
+    private MainTabsBinding binding;
 
     @Inject AMFileUtil amFileUtil;
 
@@ -95,13 +102,13 @@ public class AnyMemo extends BaseActivity {
 
     private static final int PERMISSION_REQUEST_EXTERNAL_STORAGE = 1;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityComponents().inject(this);
+        disposables = new CompositeDisposable();
 
-        setContentView(R.layout.main_tabs);
+        binding = DataBindingUtil.setContentView(this, R.layout.main_tabs);
 
         // Request storage permission
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -134,9 +141,9 @@ public class AnyMemo extends BaseActivity {
 
     private void loadUiComponents() {
         settings = PreferenceManager.getDefaultSharedPreferences(this);
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         initDrawer();
+        initCreateDbFab();
 
         prepareStoreage();
         prepareFirstTimeRun();
@@ -162,7 +169,7 @@ public class AnyMemo extends BaseActivity {
         FragmentPagerAdapter adapter = new MainPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
 
-        final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        final TabLayout tabLayout = binding.tabs;
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.getTabAt(0).setIcon(R.drawable.clock);
         tabLayout.getTabAt(1).setIcon(R.drawable.cabinet);
@@ -196,7 +203,7 @@ public class AnyMemo extends BaseActivity {
                             break;
                     }
                     menuItem.setChecked(true);
-                    drawerLayout.closeDrawers();
+                    binding.drawerLayout.closeDrawers();
                     return true;
                 }
             }
@@ -212,6 +219,13 @@ public class AnyMemo extends BaseActivity {
               @Override
               public void onPageSelected(int position) {
                   navigationView.getMenu().getItem(position).setChecked(true);
+
+                  // Only add db FAB show in the file browser fragment
+                  if (position == 1) {
+                      binding.addDbFab.setVisibility(View.VISIBLE);
+                  } else {
+                      binding.addDbFab.setVisibility(View.GONE);
+                  }
               }
 
               @Override
@@ -220,8 +234,6 @@ public class AnyMemo extends BaseActivity {
               }
           }
         );
-
-
 
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -330,9 +342,31 @@ public class AnyMemo extends BaseActivity {
         multipleLoaderManager.startLoading();
     }
 
+    /**
+     * We create the FAB only at Activity level to make sure the FAB is not scrolling up and down
+     * with appbar_scrolling_view_behavior. The behavior will make the FAB half visible if the FAB is
+     * inside a ViewPager fragment.
+     */
+    private void initCreateDbFab() {
+        binding.addDbFab.setOnClickListener(new CardFragment.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                disposables.add(activityComponents().databaseOperationDialogUtil().showCreateDbDialog(AMEnv.DEFAULT_ROOT_PATH)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<File>() {
+                    @Override
+                    public void accept(File file) throws Exception {
+                        appComponents().eventBus().post(new FileBrowserFragment.RefreshFileListEvent(file.getParentFile()));
+                    }
+                }));
+            }
+        });
+    }
+
     @Override
     public void onDestroy() {
         recentListActionModeUtil.unregisterForActivity();
+        disposables.dispose();
 
         super.onDestroy();
         // Update the widget and cancel the notification.
@@ -349,7 +383,7 @@ public class AnyMemo extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            drawerLayout.openDrawer(GravityCompat.START);
+            binding.drawerLayout.openDrawer(GravityCompat.START);
             return true;
         }
 
@@ -414,7 +448,7 @@ public class AnyMemo extends BaseActivity {
         @Override
         public void onLoadFinished(Loader<File> loader, File newFile) {
             if (newFile == null) {
-                Snackbar.make(drawerLayout, R.string.db_file_is_corrupted_text, Snackbar.LENGTH_LONG)
+                Snackbar.make(binding.drawerLayout, R.string.db_file_is_corrupted_text, Snackbar.LENGTH_LONG)
                         .show(); // Don’t forget to show!
                 Log.e(TAG, "Could not load db from intent");
                 return;
@@ -469,6 +503,5 @@ public class AnyMemo extends BaseActivity {
             // Display icon only
             return null;
         }
-    };
-
+    }
 }

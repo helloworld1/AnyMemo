@@ -76,8 +76,6 @@ public class RecentListFragment extends BaseFragment {
 
     private final static String TAG = RecentListFragment.class.getSimpleName();
 
-    private Activity mActivity;
-
     @Inject RecentListUtil recentListUtil;
 
     @Inject DatabaseUtil databaseUtil;
@@ -109,18 +107,17 @@ public class RecentListFragment extends BaseFragment {
     @Override
     public void onAttach(Context activity) {
         super.onAttach(activity);
-        mActivity = (Activity) activity;
         setHasOptionsMenu(true);
-        LocalBroadcastManager.getInstance(mActivity).registerReceiver(mClearSelectionReceiver,
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mClearSelectionReceiver,
                 new IntentFilter(RecentListActionModeUtil.ACTION_CLEAR_SELECTION));
-        LocalBroadcastManager.getInstance(mActivity).registerReceiver(mRemoveSelectedReceiver,
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mRemoveSelectedReceiver,
                 new IntentFilter(RecentListActionModeUtil.ACTION_REMOVE_SELECTED));
     }
 
     @Override
     public void onDetach() {
-        LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(mClearSelectionReceiver);
-        LocalBroadcastManager.getInstance(mActivity).unregisterReceiver(mRemoveSelectedReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mClearSelectionReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mRemoveSelectedReceiver);
         super.onDetach();
     }
 
@@ -144,7 +141,7 @@ public class RecentListFragment extends BaseFragment {
         recentListRecyclerView.setLayoutManager(new LinearLayoutManager(recentListRecyclerView.getContext()));
 
         /* pre loading stat */
-        recentListAdapter = new RecentListAdapter(mActivity, recentListUtil,
+        recentListAdapter = new RecentListAdapter(getContext(), recentListUtil,
                                                   recentListActionModeUtil);
 
         recentListRecyclerView.setAdapter(recentListAdapter);
@@ -281,7 +278,7 @@ public class RecentListFragment extends BaseFragment {
                 if (context == null) {
                     break;
                 }
-                AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(mActivity, ri.dbPath);
+                AnyMemoDBOpenHelper helper = AnyMemoDBOpenHelperManager.getHelper(getContext(), ri.dbPath);
                 CardDao dao = helper.getCardDao();
                 ri.dbInfo = context.getString(R.string.stat_total) + dao.getTotalCount(null) + " " +
                         getContext().getString(R.string.stat_new) + dao.getNewCardCount(null) + " " +

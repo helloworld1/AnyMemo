@@ -27,7 +27,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -37,29 +37,31 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.common.base.Strings;
 
-import org.apache.commons.io.FileUtils;
+import org.greenrobot.eventbus.Subscribe;
+import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.AMEnv;
 import org.liberty.android.fantastischmemo.common.AMPrefKeys;
-import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.BaseDialogFragment;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import javax.inject.Inject;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
 
 public class FileBrowserFragment extends BaseDialogFragment {
     public final static String EXTRA_DEFAULT_ROOT = "default_root";
@@ -77,7 +79,6 @@ public class FileBrowserFragment extends BaseDialogFragment {
 
     private RecyclerView filesListRecyclerView;
     private FileBrowserAdapter fileListAdapter;
-    private FloatingActionButton addDbButton;
     private TextView filesListEmptyView;
 
     private TextView titleTextView;
@@ -86,6 +87,8 @@ public class FileBrowserFragment extends BaseDialogFragment {
 
     /* Used when the file is clicked. */
     private OnFileClickListener onFileClickListener;
+
+    private CompositeDisposable disposables;
 
     private final static String TAG = FileBrowserFragment.class.getSimpleName();
     private final static String UP_ONE_LEVEL_DIR = "..";
@@ -115,6 +118,8 @@ public class FileBrowserFragment extends BaseDialogFragment {
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         fragmentComponents().inject(this);
+
+        disposables = new CompositeDisposable();
         Bundle args = this.getArguments();
         if(args != null) {
             defaultRoot = args.getString(EXTRA_DEFAULT_ROOT);
@@ -156,6 +161,24 @@ public class FileBrowserFragment extends BaseDialogFragment {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        disposables.dispose();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        appComponents().eventBus().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        appComponents().eventBus().unregister(this);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 
@@ -170,18 +193,6 @@ public class FileBrowserFragment extends BaseDialogFragment {
         fileListAdapter = new FileBrowserAdapter(this);
         filesListRecyclerView.setAdapter(fileListAdapter);
 
-        addDbButton = (FloatingActionButton) v.findViewById(R.id.add_db_fab);
-        addDbButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showCreateDbDialog();
-            }
-        });
-
-        if (!showCreateDbButton) {
-            addDbButton.hide();
-        }
-
         return v;
     }
 
@@ -189,6 +200,15 @@ public class FileBrowserFragment extends BaseDialogFragment {
     public void onResume() {
         super.onResume();
         browseTo(currentDirectory);
+    }
+
+    @Subscribe
+    public void onRefreshFileListEvent(RefreshFileListEvent event) {
+        if (event.folderToRefresh != null) {
+            browseTo(event.folderToRefresh);
+        } else if (currentDirectory != null){
+            browseTo(currentDirectory);
+        }
     }
 
     private void browseTo(final File aDirectory){
@@ -261,12 +281,26 @@ public class FileBrowserFragment extends BaseDialogFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.file_browser_createdb:{
-                showCreateDbDialog();
+                disposables.add(activityComponents().databaseOperationDialogUtil().showCreateDbDialog(currentDirectory.getAbsolutePath())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Consumer<File>() {
+                            @Override
+                            public void accept(File file) throws Exception {
+                                browseTo(file.getParentFile());
+                            }
+                        }));
                 return true;
             }
 
             case R.id.file_browser_createdirectory:{
-                showCreateFolderDialog();
+                disposables.add(activityComponents().databaseOperationDialogUtil().showCreateFolderDialog(currentDirectory)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Consumer<File>() {
+                            @Override
+                            public void accept(File file) throws Exception {
+                                browseTo(file);
+                            }
+                        }));
                 return true;
 
             }
@@ -322,130 +356,6 @@ public class FileBrowserFragment extends BaseDialogFragment {
         }
     }
 
-    private void showCreateDbDialog() {
-        final EditText input = new EditText(mActivity);
-        new AlertDialog.Builder(mActivity)
-            .setTitle(mActivity.getString(R.string.fb_create_db))
-            .setMessage(mActivity.getString(R.string.fb_create_db_message))
-            .setView(input)
-            .setPositiveButton(mActivity.getString(R.string.ok_text), new DialogInterface.OnClickListener(){
-                @Override
-                public void onClick(DialogInterface dialog, int which ){
-                    String value = input.getText().toString();
-                    if(!value.endsWith(".db")){
-                        value += ".db";
-                    }
-                    File newDbFile = new File(currentDirectory.getAbsolutePath() + "/" + value);
-                    try {
-                        if (newDbFile.exists()) {
-                            amFileUtil.deleteFileWithBackup(newDbFile.getAbsolutePath());
-                        }
-
-                        amFileUtil.createDbFileWithDefaultSettings(newDbFile);
-                    } catch(IOException e){
-                        Log.e(TAG, "Fail to create file", e);
-                    }
-                    browseTo(currentDirectory);
-
-                }
-            })
-            .setNegativeButton(this.getString(R.string.cancel_text), null)
-            .create()
-            .show();
-    }
-
-    private void showCreateFolderDialog() {
-        final EditText input = new EditText(mActivity);
-        new AlertDialog.Builder(mActivity)
-            .setTitle(R.string.fb_create_dir)
-            .setMessage(R.string.fb_create_dir_message)
-            .setView(input)
-            .setPositiveButton(this.getString(R.string.ok_text), new DialogInterface.OnClickListener(){
-                @Override
-                public void onClick(DialogInterface dialog, int which ){
-                    String value = input.getText().toString();
-                    File newDir = new File(currentDirectory + "/" + value);
-                    newDir.mkdir();
-                    browseTo(currentDirectory);
-
-                }
-            })
-            .setNegativeButton(this.getString(R.string.cancel_text), null)
-            .create()
-            .show();
-    }
-
-    private void showCloneDbDialog(final File clickedFile) {
-        /* Clone */
-        String srcDir = clickedFile.getAbsolutePath();
-        String destDir = srcDir.replaceAll(".db", ".clone.db");
-        try {
-            FileUtils.copyFile(new File(srcDir), new File(destDir));
-        } catch(IOException e){
-            new AlertDialog.Builder(mActivity)
-                    .setTitle(getString(R.string.fail))
-                    .setMessage(getString(R.string.fb_fail_to_clone) + "\nError: " + e.toString())
-                    .setNeutralButton(getString(R.string.ok_text), null)
-                    .create()
-                    .show();
-        }
-
-        browseTo(new File(clickedFile.getParent()));
-
-    }
-
-    private void showDeleteDbDialog(final File clickedFile) {
-        new AlertDialog.Builder(mActivity)
-            .setTitle(getString(R.string.delete_text))
-            .setMessage(getString(R.string.fb_delete_message))
-            .setPositiveButton(getString(R.string.delete_text), new DialogInterface.OnClickListener(){
-                @Override
-                public void onClick(DialogInterface dialog, int which ){
-                    amFileUtil.deleteDbSafe(clickedFile.getAbsolutePath());
-                    File dir = new File(clickedFile.getParent());
-                    Log.v(TAG, "DIR: " + dir.toString());
-                    /* Refresh the list */
-                    browseTo(dir);
-                }
-            })
-            .setNegativeButton(getString(R.string.cancel_text), null)
-            .create()
-            .show();
-    }
-
-    private void showRenameDbDialog(final File clickedFile) {
-        final EditText input = new EditText(mActivity);
-        input.setText(clickedFile.getAbsolutePath());
-        new AlertDialog.Builder(mActivity)
-            .setTitle(getString(R.string.fb_rename))
-            .setMessage(getString(R.string.fb_rename_message))
-            .setView(input)
-            .setPositiveButton(getString(R.string.ok_text), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    String value = input.getText().toString();
-                    if (!value.equals(clickedFile.getAbsolutePath())) {
-                        try {
-                            FileUtils.copyFile(clickedFile, new File(value));
-                            amFileUtil.deleteDbSafe(clickedFile.getAbsolutePath());
-                            recentListUtil.deleteFromRecentList(clickedFile.getAbsolutePath());
-
-                        } catch (IOException e) {
-                            new AlertDialog.Builder(mActivity)
-                                    .setTitle(getString(R.string.fail))
-                                    .setMessage(getString(R.string.fb_rename_fail) + "\nError: " + e.toString())
-                                    .setNeutralButton(getString(R.string.ok_text), null)
-                                    .create()
-                                    .show();
-                        }
-
-                    }
-
-                    browseTo(currentDirectory);
-                }
-            })
-            .show();
-    }
 
     private static class FileBrowserAdapter extends RecyclerView.Adapter<FileBrowserAdapter.ViewHolder> {
         private final FileBrowserFragment fragment;
@@ -534,11 +444,32 @@ public class FileBrowserFragment extends BaseDialogFragment {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             if (which == 0) {
-                                                fragment.showDeleteDbDialog(clickedFile);
+                                                fragment.disposables.add(fragment.activityComponents().databaseOperationDialogUtil().showDeleteDbDialog(clickedFile)
+                                                        .observeOn(AndroidSchedulers.mainThread())
+                                                        .subscribe(new Consumer<File>() {
+                                                            @Override
+                                                            public void accept(File file) throws Exception {
+                                                                fragment.browseTo(file.getParentFile());
+                                                            }
+                                                        }));
                                             } else if (which == 1) {
-                                                fragment.showCloneDbDialog(clickedFile);
+                                                fragment.disposables.add(fragment.activityComponents().databaseOperationDialogUtil().showCloneDbDialog(clickedFile)
+                                                        .observeOn(AndroidSchedulers.mainThread())
+                                                        .subscribe(new Consumer<File>() {
+                                                            @Override
+                                                            public void accept(File file) throws Exception {
+                                                                fragment.browseTo(file.getParentFile());
+                                                            }
+                                                        }));
                                             } else if (which == 2) {
-                                                fragment.showRenameDbDialog(clickedFile);
+                                                fragment.disposables.add(fragment.activityComponents().databaseOperationDialogUtil().showRenameDbDialog(clickedFile)
+                                                        .observeOn(AndroidSchedulers.mainThread())
+                                                        .subscribe(new Consumer<File>() {
+                                                            @Override
+                                                            public void accept(File file) throws Exception {
+                                                                fragment.browseTo(file.getParentFile());
+                                                            }
+                                                        }));
                                             }
                                         }
                                     })
@@ -611,6 +542,19 @@ public class FileBrowserFragment extends BaseDialogFragment {
 
         public FileClickEvent(@NonNull File clickedFile) {
             this.clickedFile = clickedFile;
+        }
+    }
+
+    public static class RefreshFileListEvent {
+        @Nullable
+        public final File folderToRefresh;
+
+        public RefreshFileListEvent(@Nullable File folderToRefresh) {
+            if (folderToRefresh != null && folderToRefresh.isDirectory()) {
+                this.folderToRefresh = folderToRefresh;
+            } else {
+                this.folderToRefresh = null;
+            }
         }
     }
 }
