@@ -115,6 +115,10 @@ def getBuildString () {
 }
 
 task copySecretsIfNotExists << {
+    if (file('src/main/java/org/liberty/android/fantastischmemo/AMSecrets.java').exists()) {
+        logger.warn('Removing AMSecrets.java since it is now in common package.')
+        delete 'src/main/java/org/liberty/android/fantastischmemo/AMSecrets.java'
+    }
     if (!file('src/main/java/org/liberty/android/fantastischmemo/common/AMSecrets.java').exists()) {
         logger.warn('Empty AMSecrets.java is created from AMSecrets.java.template. Please fill in the values.')
         copy {
