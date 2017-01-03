@@ -156,8 +156,12 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
             database.execSQL("update settings set answerBackgroundColor = ? where answerBackgroundColor = ?", new Object[] {null, 0xFF000000});
         }
         if (oldVersion <= 4) {
-            database.execSQL("alter table learning_data add column firstLearnDate VARCHAR");
-            database.execSQL("update learning_data set firstLearnDate='2010-01-01 00:00:00.000000'");
+            try {
+                database.execSQL("alter table learning_data add column firstLearnDate VARCHAR");
+                database.execSQL("update learning_data set firstLearnDate='2010-01-01 00:00:00.000000'");
+            } catch (android.database.SQLException e) {
+                Log.e(TAG, "Upgrading failed, the column firstLearnData might already exists.", e);
+            }
         }
     }
 
@@ -253,6 +257,7 @@ public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
      */
     @Override
     public void finalize() throws Throwable {
+        super.finalize();
         // If the finalize kicked in before the db is released.
         // force release the helper!
         // This is usually a bug in program.
