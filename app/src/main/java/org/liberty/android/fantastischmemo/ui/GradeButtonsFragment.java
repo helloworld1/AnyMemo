@@ -116,7 +116,7 @@ public class GradeButtonsFragment extends BaseFragment {
 
         learningDataDao = dbOpenHelper.getLearningDataDao();
 
-        option = this.activity.getOption();
+        option = appComponents().option();
 
     }
 
