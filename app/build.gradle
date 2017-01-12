@@ -86,7 +86,7 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.5.0'
     compile 'org.greenrobot:eventbus:3.0.0'
 
-    compile 'io.reactivex.rxjava2:rxjava:2.0.2'
+    compile 'io.reactivex.rxjava2:rxjava:2.0.4'
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
 
     compile 'commons-io:commons-io:2.4'
@@ -96,7 +96,7 @@ dependencies {
     compile 'com.github.PhilJay:MPAndroidChart:v2.1.6'
     compile 'com.rarepebble:colorpicker:2.0.0'
     compile 'com.simplify:ink:0.2.1'
-    compile 'com.google.dagger:dagger:2.6.1'
+    compile 'com.google.dagger:dagger:2.8'
     provided 'javax.annotation:jsr250-api:1.0'
 
     androidTestCompile 'com.crittercism.dexmaker:dexmaker:1.4'
@@ -109,7 +109,7 @@ dependencies {
     androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.2'
     androidTestCompile 'com.android.support:support-annotations:25.1.0'
 
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.6.1'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.8'
 }
 
 def getBuildString () {
