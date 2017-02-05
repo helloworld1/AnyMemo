@@ -285,8 +285,6 @@
     <string name="today_text">Hodiaŭ</string>
     <string name="new_text">Nova</string>
     <string name="id_text">Identigilo</string>
-    <string name="entry_last_learn_date">last_learn_date</string>
-    <string name="entry_next_learn_date">next_learn_date</string>
     <string name="filter_category_text">Filtri kategorion</string>
     <string name="delete_text">Forigi</string>
     <string name="delete_text_short">For</string>
