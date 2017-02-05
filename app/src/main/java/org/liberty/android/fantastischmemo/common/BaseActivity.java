@@ -137,6 +137,8 @@ public class BaseActivity extends AppCompatActivity {
             locale = Locale.ITALIAN;
         } else if (localeSetting.equals("FI")) {
             locale = new Locale("FI");
+        } else if (localeSetting.equals("EO")) {
+            locale = new Locale("EO");
         } else {
             locale = Locale.getDefault();
         }
