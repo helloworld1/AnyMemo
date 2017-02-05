@@ -73,7 +73,6 @@
     <string name="settings_wipe_warning">CAŁY postęp nauki zostanie usunięty jeśli wybierzesz Zapisz!</string>
     <string name="settings_shuffle_warning">Ta operacja przetasuje wszystkie karty i jest NIEODWRACALNA. Upewnij się zanim zapiszesz zmiany.</string>
     <string name="settings_inverse_warning">Ta operacja zamieni pytania z odpowiedziami na WSZYSTKICH kartach.</string>
-    <!-- <string name="delete_text">Usuń</string> -->
     <string name="delete_warning">Czy na pewno chcesz usunąć tę kartę?</string>
     <string name="skip_text">Pomiń</string>
     <string name="stat_total">Wszystkich: </string>
