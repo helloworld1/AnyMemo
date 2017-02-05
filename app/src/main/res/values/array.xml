@@ -164,6 +164,7 @@
         <item>@string/locale_spanish_text</item>
         <item>@string/locale_italian_text</item>
         <item>@string/locale_finnish_text</item>
+        <item>@string/locale_esperanto_text</item>
     </string-array>
 
     <string-array name="interface_locale_list_values">
@@ -182,6 +183,7 @@
         <item>ES</item>
         <item>IT</item>
         <item>FI</item>
+        <item>EO</item>
     </string-array>
 
 
