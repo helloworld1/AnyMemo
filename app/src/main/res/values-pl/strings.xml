@@ -464,4 +464,5 @@
     <string name="directory_empty_text">(pusty katalog)</string>
     <string name="more_text">WIĘCEJ</string>
     <string name="dropbox_item_description">Data: %1$s&lt;br&gt;Rozmiar: %2$d bajtów</string>
+    <string name="locale_esperanto_text">Esperanto</string>
 </resources>
