@@ -284,8 +284,6 @@
     <string name="today_text">Dzisiaj</string>
     <string name="new_text">Nowy</string>
     <string name="id_text">ID</string>
-    <string name="entry_last_learn_date">last_learn_date</string>
-    <string name="entry_next_learn_date">next_learn_date</string>
     <string name="filter_category_text">Filtruj kategorie</string>
     <string name="delete_text">Usuń</string>
     <string name="delete_text_short">Usuń</string>
