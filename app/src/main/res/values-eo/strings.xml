@@ -283,8 +283,8 @@
     <string name="review_short_text">Rev</string>
     <string name="category_short_text">Kat</string>
     <string name="today_text">Hodiaŭ</string>
-    <string name="new_text">Nova</string>
-    <string name="id_text">Identigilo</string>
+    <string name="new_text">Novaj</string>
+    <string name="id_text">Num</string>
     <string name="filter_category_text">Filtri kategorion</string>
     <string name="delete_text">Forigi</string>
     <string name="delete_text_short">For</string>
