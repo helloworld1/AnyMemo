@@ -20,9 +20,6 @@ android {
         archivesBaseName = "AnyMemo"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
-        jackOptions {
-            enabled false
-        }
     }
 
     dataBinding {
