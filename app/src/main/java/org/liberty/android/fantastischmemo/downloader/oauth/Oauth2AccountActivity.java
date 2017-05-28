@@ -17,12 +17,15 @@ import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.BaseActivity;
 
 import io.reactivex.Completable;
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableCompletableObserver;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
 
 public abstract class Oauth2AccountActivity extends BaseActivity {
-
 
     private CompositeDisposable disposables = new CompositeDisposable();
 
@@ -56,30 +59,54 @@ public abstract class Oauth2AccountActivity extends BaseActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         Uri callbackUri = intent.getData();
+        fetchTokenAndOnAuthenticate(callbackUri);
+    }
+
+    protected Single<String> fetchAuthTokenFromCallback(Uri callbackUri) {
         String tokenPart = callbackUri.getFragment();
         String[] parts = tokenPart.split("&");
         String token = null;
-        final String partPrefix = "access_token=";
+        final String tokenPartPrefix = "access_token=";
         for (String part : parts) {
-            if (part.startsWith(partPrefix)) {
-                token = part.substring(partPrefix.length());
+            if (part.startsWith(tokenPartPrefix)) {
+                token = part.substring(tokenPartPrefix.length());
                 break;
             }
         }
 
         if (!Strings.isNullOrEmpty(token)) {
             Log.i(TAG, "Auth token: " + token);
-            verifyTokenAndOnAuthenticate(token);
-        } else {
-            Log.e(TAG, "Unable to find auth token");
-            finish();
+            return Single.just(token);
         }
+
+        return Single.error(new RuntimeException("Unable to find auth token from callback: " + callbackUri));
+    }
+
+    private void fetchTokenAndOnAuthenticate(@NonNull final Uri callbackUri) {
+        disposables.add(fetchAuthTokenFromCallback(callbackUri)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribeWith(new DisposableSingleObserver<String>() {
+                    @Override
+                    public void onSuccess(String token) {
+                        activityComponents().oauth2TokenUtil().saveToken(token);
+                        onAuthenticated(token);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(TAG, "Error verifying token", e);
+                        activityComponents().oauth2TokenUtil().invalidateSavedToken();
+                        requestAuth();
+                    }
+                }));
     }
 
     private void verifyTokenAndOnAuthenticate(@NonNull final String token) {
-        disposables.add(verifyAccessToken(token)
-                .subscribeOn(AndroidSchedulers.mainThread())
+        disposables.add(
+                verifyAccessToken(token)
                 .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
                 .subscribeWith(new DisposableCompletableObserver() {
                     @Override
                     public void onComplete() {
@@ -89,6 +116,7 @@ public abstract class Oauth2AccountActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
+                        Log.e(TAG, "Error verifying token", e);
                         activityComponents().oauth2TokenUtil().invalidateSavedToken();
                         requestAuth();
                     }

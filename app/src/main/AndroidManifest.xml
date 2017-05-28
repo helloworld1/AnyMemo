@@ -48,6 +48,17 @@
         <activity
             android:name=".downloader.quizlet.QuizletLauncher" />
         <activity
+            android:name=".downloader.google.GoogleAccountActivity"
+            android:launchMode="singleTask"
+            android:configChanges="orientation|keyboardHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="com.googleusercontent.apps.359646043594-6irntpqci3d0ootbspa1keauj7kt917r" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".downloader.google.SpreadsheetListScreen"
             android:configChanges="orientation|keyboardHidden" />
         <activity

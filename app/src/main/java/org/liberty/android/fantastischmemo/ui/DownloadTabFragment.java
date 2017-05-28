@@ -30,6 +30,7 @@ import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.BaseFragment;
 import org.liberty.android.fantastischmemo.downloader.anymemo.AnyMemoDownloaderActivity;
 import org.liberty.android.fantastischmemo.downloader.dropbox.DropboxOauth2AccountActivity;
+import org.liberty.android.fantastischmemo.downloader.google.GoogleAccountActivity;
 import org.liberty.android.fantastischmemo.downloader.google.SpreadsheetListScreen;
 import org.liberty.android.fantastischmemo.downloader.quizlet.QuizletLauncher;
 
@@ -78,7 +79,7 @@ public class DownloadTabFragment extends BaseFragment implements View.OnClickLis
         	startActivity(new Intent(mActivity, DropboxOauth2AccountActivity.class));
         }
         if (v == googleButton) {
-            startActivity(new Intent(mActivity, SpreadsheetListScreen.class));
+            startActivity(new Intent(mActivity, GoogleAccountActivity.class));
         }
     }
 }

@@ -29,8 +29,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseActivity;
+import org.liberty.android.fantastischmemo.downloader.oauth.Oauth2TokenUtil;
 
-public class SpreadsheetListScreen extends GoogleAccountActivity {
+public class SpreadsheetListScreen extends BaseActivity {
 
     private final static int UPLOAD_ACTIVITY = 1;
 
@@ -57,7 +59,7 @@ public class SpreadsheetListScreen extends GoogleAccountActivity {
             }
             case R.id.logout:
             {
-                invalidateSavedToken();
+                activityComponents().oauth2TokenUtil().invalidateSavedToken();
                 // After mark saved token to null, we should exit.
                 finish();
                 return true;
@@ -81,18 +83,5 @@ public class SpreadsheetListScreen extends GoogleAccountActivity {
                 break;
             }
         }
-    }
-
-    @Override
-    protected void onAuthenticated(final String[] authTokens) {
-        String authToken = authTokens[0];
-
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        Fragment newFragment = new SpreadsheetListFragment();
-        Bundle args = new Bundle();
-        args.putString(SpreadsheetListFragment.EXTRA_AUTH_TOKEN, authToken);
-        newFragment.setArguments(args);
-        ft.add(R.id.spreadsheet_list, newFragment);
-        ft.commit();
     }
 }

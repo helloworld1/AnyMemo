@@ -23,6 +23,8 @@ package org.liberty.android.fantastischmemo.common;
 import android.os.Environment;
 import android.util.Log;
 
+import org.liberty.android.fantastischmemo.BuildConfig;
+
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,7 +53,7 @@ public class AMEnv {
     public final static String GOOGLE_CLIENT_ID;
     public final static String GOOGLE_CLIENT_SECRET;
 
-    public final static String GOOGLE_REDIRECT_URI = "http://localhost";
+    public final static String GOOGLE_REDIRECT_URI = "com.googleusercontent.apps.359646043594-6irntpqci3d0ootbspa1keauj7kt917r:/oauthRedirect";
     public final static String GDRIVE_SCOPE ="https://docs.google.com/feeds/ https://docs.googleusercontent.com/ https://spreadsheets.google.com/feeds/";
 
 

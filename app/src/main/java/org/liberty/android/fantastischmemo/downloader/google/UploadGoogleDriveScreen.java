@@ -30,12 +30,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.BaseActivity;
 import org.liberty.android.fantastischmemo.ui.FileBrowserFragment;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 
 import java.io.File;
 
-public class UploadGoogleDriveScreen extends GoogleAccountActivity {
+public class UploadGoogleDriveScreen extends BaseActivity {
     /** Called when the activity is first created. */
 
     private String authToken = null;
@@ -48,7 +49,6 @@ public class UploadGoogleDriveScreen extends GoogleAccountActivity {
         setContentView(R.layout.upload_google_drive_screen);
     }
 
-    @Override
     protected void onAuthenticated(final String[] authTokens) {
 
         this.authToken = authTokens[0];
