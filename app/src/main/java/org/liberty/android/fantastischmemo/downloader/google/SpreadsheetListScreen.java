@@ -34,12 +34,26 @@ import org.liberty.android.fantastischmemo.downloader.oauth.Oauth2TokenUtil;
 
 public class SpreadsheetListScreen extends BaseActivity {
 
+    public static final String EXTRA_AUTH_TOKEN = "authToken";
+
     private final static int UPLOAD_ACTIVITY = 1;
+
+    private String authToken;
 
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.spreadsheet_list_screen);
+
+        SpreadsheetListFragment fragment = new SpreadsheetListFragment();
+        Bundle args = getIntent().getExtras();
+        fragment.setArguments(args);
+
+        authToken = args.getString(EXTRA_AUTH_TOKEN);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.spreadsheet_list, fragment)
+                .commit();
     }
 
     @Override
@@ -54,7 +68,9 @@ public class SpreadsheetListScreen extends BaseActivity {
         switch (item.getItemId()) {
             case R.id.upload:
             {
-                startActivityForResult(new Intent(this, UploadGoogleDriveScreen.class), UPLOAD_ACTIVITY);
+                Intent intent = new Intent(this, UploadGoogleDriveScreen.class);
+                intent.putExtra(UploadGoogleDriveScreen.EXTRA_AUTH_TOKEN, authToken);
+                startActivityForResult(intent, UPLOAD_ACTIVITY);
                 return true;
             }
             case R.id.logout:

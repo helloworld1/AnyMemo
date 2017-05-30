@@ -19,17 +19,32 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.downloader.google;
 
+import android.accounts.Account;
+import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.UiThread;
 import android.support.annotation.WorkerThread;
 import android.util.Log;
 
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.UserRecoverableAuthException;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.common.base.Strings;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.liberty.android.fantastischmemo.common.AMEnv;
+import org.liberty.android.fantastischmemo.common.BaseActivity;
 import org.liberty.android.fantastischmemo.downloader.oauth.Oauth2AccountActivity;
 import org.liberty.android.fantastischmemo.downloader.oauth.OauthAccessCodeRetrievalFragment;
 import org.liberty.android.fantastischmemo.downloader.oauth.OauthAccountActivity;
@@ -53,102 +68,97 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class GoogleAccountActivity extends Oauth2AccountActivity {
+public class GoogleAccountActivity extends BaseActivity {
 
     private static final String TAG = GoogleAccountActivity.class.getSimpleName();
 
-    @Override
-    protected void onAuthenticated(String authTokens) {
+    private static final int RC_SIGN_IN = 100;
 
-    }
+    private static final int RC_AUTHORIZATION= 101;
 
-    @Override
-    protected Single<String> fetchAuthTokenFromCallback(Uri callbackUri) {
-        final String codePartPrefix = "code=";
+    private GoogleApiClient googleApiClient;
 
-        String part = callbackUri.getEncodedQuery();
-
-        final String code = part.startsWith(codePartPrefix)
-                ? part.substring(codePartPrefix.length())
-                : null;
-
-        if (!Strings.isNullOrEmpty(code)) {
-            Log.i(TAG, "Auth code: " + code);
-
-            return Single.create(new SingleOnSubscribe<String>() {
-                @Override
-                public void subscribe(SingleEmitter<String> e) throws Exception {
-                    String token = getAccessTokensFromCode(code);
-                    Log.i(TAG, "Auth token: " + token);
-
-                }
-            });
-        }
-
-        return Single.error(new RuntimeException("Unable to find auth token from callback: " + callbackUri));
-    }
+    private final Handler handler = new Handler();
 
     @Override
-    protected Completable verifyAccessToken(@NonNull final String accessToken) {
-        return Completable.fromAction(new Action() {
-            @Override
-            public void run() throws Exception {
-                URL url1 = new URL("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=" + accessToken);
-                HttpsURLConnection conn = (HttpsURLConnection) url1.openConnection();
-
-                String s = new String(IOUtils.toByteArray(conn.getInputStream()));
-                JSONObject jsonObject = new JSONObject(s);
-                if (jsonObject.has("error")) {
-                    String error = jsonObject.getString("error");
-
-                    throw new RuntimeException("Token validation error: " + error);
-                }
-
-                String audience = jsonObject.getString("audience");
-                if (!AMEnv.GOOGLE_CLIENT_ID.equals(audience)) {
-                    throw new RuntimeException("Token validation error: Google Client id does not equal to audience");
-                }
-            }
-        });
-    }
-
-    @Override
-    protected String getLoginUrl() {
-        try {
-            return String.format("https://accounts.google.com/o/oauth2/v2/auth?client_id=%s&response_type=%s&redirect_uri=%s&scope=%s",
-                    URLEncoder.encode(AMEnv.GOOGLE_CLIENT_ID, "UTF-8"),
-                    URLEncoder.encode("code", "UTF-8"),
-                    URLEncoder.encode(AMEnv.GOOGLE_REDIRECT_URI, "UTF-8"),
-                    URLEncoder.encode(AMEnv.GDRIVE_SCOPE, "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            Log.e(TAG, "Login Url encoding error", e);
-            return null;
-        }
-    }
-
-    @WorkerThread
-    private String getAccessTokensFromCode(final String code) throws IOException, JSONException {
-        URL url1 = new URL("https://www.googleapis.com/oauth2/v4/token");
-
-        String payload = String.format("code=%s&client_id=%s&client_secret=%s&redirect_uri=%s&grant_type=%s",
-                code,
-                AMEnv.GOOGLE_CLIENT_ID,
-                AMEnv.GOOGLE_CLIENT_SECRET,
-                AMEnv.GOOGLE_REDIRECT_URI,
-                "authorization_code");
-
-        Request request = new Request.Builder()
-                .url(url1)
-                .post(RequestBody.create(MediaType.parse("application/x-www-form-urlencoded"), payload))
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Configure sign-in to request the user's ID, email address, and basic profile. ID and
+// basic profile are included in DEFAULT_SIGN_IN.
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
                 .build();
 
-        Response response = appComponents().okHttpClient().newCall(request).execute();
-        if (response.isSuccessful()) {
-            String stringBody = response.body().string();
-            JSONObject jsonObject = new JSONObject(stringBody);
-            return jsonObject.getString("access_token");
-        } else {
-            throw new IOException("Error getting google access token from code: " + response);
+// Build a GoogleApiClient with access to GoogleSignIn.API and the options above.
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+                        Log.e(TAG, "Connection failure: " + connectionResult.getErrorMessage());
+                        finish();
+                    }
+                })
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from
+        //   GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            if (result == null) {
+                Log.e(TAG, "Null google sign in result");
+                return;
+            }
+            if (!result.isSuccess()) {
+                Log.e(TAG, "Google sign in is not successful");
+                return;
+            }
+
+            GoogleSignInAccount acct = result.getSignInAccount();
+
+            if (acct == null) {
+                Log.e(TAG, "Getting null Google sign in account");
+                return;
+            }
+
+            // Get account information
+            final String email = acct.getEmail();
+            Log.i(TAG, "Google Authenticated. email: " + email);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        String token = GoogleAuthUtil.getToken(GoogleAccountActivity.this,
+                                email, AMEnv.GDRIVE_SCOPE);
+                        Log.i(TAG, "Google authenticated, token: " + token);
+                        onAuthenticated(token);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (UserRecoverableAuthException e) {
+                        startActivityForResult(e.getIntent(), RC_SIGN_IN);
+                    } catch (GoogleAuthException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }).start();
         }
     }
+
+    private void onAuthenticated(@NonNull String token) {
+        finish();
+        Intent intent = new Intent(this, SpreadsheetListScreen.class);
+        intent.putExtra(SpreadsheetListScreen.EXTRA_AUTH_TOKEN, token);
+        startActivity(intent);
+    }
 }
+

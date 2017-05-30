@@ -53,9 +53,7 @@ public class AMEnv {
     public final static String GOOGLE_CLIENT_ID;
     public final static String GOOGLE_CLIENT_SECRET;
 
-    public final static String GOOGLE_REDIRECT_URI = "com.googleusercontent.apps.359646043594-6irntpqci3d0ootbspa1keauj7kt917r:/oauthRedirect";
-    public final static String GDRIVE_SCOPE ="https://docs.google.com/feeds/ https://docs.googleusercontent.com/ https://spreadsheets.google.com/feeds/";
-
+    public final static String GDRIVE_SCOPE ="oauth2:https://www.googleapis.com/auth/plus.login https://docs.google.com/feeds/ https://docs.googleusercontent.com/ https://spreadsheets.google.com/feeds/ https://www.googleapis.com/auth/drive.file";
 
     // Dropbox oauth constants
     public final static String DROPBOX_REDIRECT_URI = "anymemo-dropbox://oauth";

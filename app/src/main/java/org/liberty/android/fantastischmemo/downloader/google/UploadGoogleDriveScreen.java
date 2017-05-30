@@ -29,6 +29,8 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
+import com.google.common.base.Strings;
+
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.BaseActivity;
 import org.liberty.android.fantastischmemo.ui.FileBrowserFragment;
@@ -37,24 +39,32 @@ import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 import java.io.File;
 
 public class UploadGoogleDriveScreen extends BaseActivity {
-    /** Called when the activity is first created. */
-
-    private String authToken = null;
+    private static final String TAG = UploadGoogleDriveScreen.class.getSimpleName();
 
     private GoogleDriveUploadHelper uploadHelper;
+
+    public static final String EXTRA_AUTH_TOKEN = "authToken";
 
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.upload_google_drive_screen);
-    }
 
-    protected void onAuthenticated(final String[] authTokens) {
+        Bundle extras = getIntent().getExtras();
 
-        this.authToken = authTokens[0];
+        if (extras == null) {
+            Log.e(TAG, "The extras is not set");
+            return;
+        }
 
-        uploadHelper = new GoogleDriveUploadHelper(this, authToken);
+        String token = extras.getString(EXTRA_AUTH_TOKEN);
 
+        if (Strings.isNullOrEmpty(token)) {
+            Log.e(TAG, "The extras does not have token");
+            return;
+        }
+
+        uploadHelper = new GoogleDriveUploadHelper(this, token);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         FileBrowserFragment fragment = new FileBrowserFragment();
         fragment.setOnFileClickListener(fileClickListener);
