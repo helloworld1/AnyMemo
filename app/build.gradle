@@ -8,11 +8,11 @@ repositories {
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "25.0.3"
 
     defaultConfig {
-        versionCode 224
-        versionName "10.9.994"
+        versionCode 225
+        versionName "10.10"
         minSdkVersion 15
         targetSdkVersion 25
         testApplicationId "org.liberty.android.fantastischmemo.test"
