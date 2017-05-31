@@ -1,7 +1,6 @@
 package org.liberty.android.fantastischmemo.modules;
 
 import android.app.Activity;
-import android.icu.text.IDNA;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.auth.api.Auth;

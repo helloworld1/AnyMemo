@@ -37,9 +37,9 @@ import android.widget.Toast;
 
 import com.google.common.base.Strings;
 
+import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.BaseFragment;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.dao.LearningDataDao;

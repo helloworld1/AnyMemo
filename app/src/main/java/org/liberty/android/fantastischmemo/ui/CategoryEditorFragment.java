@@ -18,9 +18,9 @@ import android.widget.ListView;
 
 import com.google.common.base.Strings;
 
+import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.BaseDialogFragment;
 import org.liberty.android.fantastischmemo.dao.CategoryDao;
 import org.liberty.android.fantastischmemo.entity.Category;

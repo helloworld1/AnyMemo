@@ -8,10 +8,10 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import org.apache.commons.io.FilenameUtils;
+import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.AMApplication;
 import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.ui.StudyActivity;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;

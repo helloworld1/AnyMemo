@@ -35,10 +35,10 @@ import android.util.Log;
 import com.google.common.base.Strings;
 
 import org.apache.commons.io.FilenameUtils;
+import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.AMPrefKeys;
 import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.BaseService;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.ui.AnyMemo;

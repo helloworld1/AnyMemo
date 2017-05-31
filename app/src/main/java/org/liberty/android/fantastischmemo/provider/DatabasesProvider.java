@@ -26,8 +26,8 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
 
-import org.liberty.android.fantastischmemo.common.AMEnv;
 import org.liberty.android.fantastischmemo.BuildConfig;
+import org.liberty.android.fantastischmemo.common.AMEnv;
 
 import java.io.File;
 import java.io.FilenameFilter;

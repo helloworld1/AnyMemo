@@ -4,9 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.GoogleApiClient;
-
 import org.greenrobot.eventbus.EventBus;
 import org.liberty.android.fantastischmemo.common.AMApplication;
 import org.liberty.android.fantastischmemo.converter.CSVExporter;
@@ -28,10 +25,8 @@ import org.liberty.android.fantastischmemo.scheduler.DefaultScheduler;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 import dagger.Module;
 import dagger.Provides;

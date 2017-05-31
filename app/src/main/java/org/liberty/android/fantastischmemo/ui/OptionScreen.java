@@ -30,8 +30,8 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
-import org.liberty.android.fantastischmemo.common.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.AMPrefKeys;
 
 public class OptionScreen extends PreferenceActivity {
 	public static final String PREFS_NAME = "fantastischhMemoPrefs";

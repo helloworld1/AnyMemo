@@ -36,9 +36,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.liberty.android.fantastischmemo.common.AMEnv;
 import org.liberty.android.fantastischmemo.BuildConfig;
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.AMEnv;
 import org.liberty.android.fantastischmemo.common.BaseFragment;
 import org.liberty.android.fantastischmemo.converter.CSVExporter;
 import org.liberty.android.fantastischmemo.converter.CSVImporter;

@@ -22,8 +22,6 @@ package org.liberty.android.fantastischmemo.downloader.google;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -35,7 +33,6 @@ import com.google.android.gms.common.api.Status;
 
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.BaseActivity;
-import org.liberty.android.fantastischmemo.downloader.oauth.Oauth2TokenUtil;
 
 public class SpreadsheetListScreen extends BaseActivity {
 

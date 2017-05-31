@@ -33,8 +33,8 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
-import org.liberty.android.fantastischmemo.common.AMPrefKeys;
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.AMPrefKeys;
 
 public class CardPlayerSettingDialogFragment extends DialogFragment{
     private static final int DEFAULT_QA_SLEEP_TIME_IN_SEC = 1;

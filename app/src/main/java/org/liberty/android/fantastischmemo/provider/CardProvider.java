@@ -28,10 +28,10 @@ import android.database.MatrixCursor;
 import android.net.Uri;
 import android.util.Log;
 
+import org.liberty.android.fantastischmemo.BuildConfig;
 import org.liberty.android.fantastischmemo.common.AMEnv;
 import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelper;
 import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelperManager;
-import org.liberty.android.fantastischmemo.BuildConfig;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.entity.Card;
 

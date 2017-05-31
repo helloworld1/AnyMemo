@@ -31,8 +31,8 @@ import android.view.animation.Animation;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.liberty.android.fantastischmemo.common.AMEnv;
 import org.liberty.android.fantastischmemo.R;
+import org.liberty.android.fantastischmemo.common.AMEnv;
 import org.liberty.android.fantastischmemo.common.BaseFragment;
 import org.liberty.android.fantastischmemo.entity.Setting;
 import org.liberty.android.fantastischmemo.utils.CardTextUtil;
