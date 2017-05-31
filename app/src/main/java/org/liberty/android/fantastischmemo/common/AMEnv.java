@@ -49,10 +49,6 @@ public class AMEnv {
     public final static String EMPTY_DB_NAME= "empty.db";
     public final static String ANYMEMO_SERVICE_ENDPOINT = "https://anymemo.org";
 
-    // Defined in AMSecrets.java
-    public final static String GOOGLE_CLIENT_ID;
-    public final static String GOOGLE_CLIENT_SECRET;
-
     public final static String GDRIVE_SCOPE ="oauth2:https://www.googleapis.com/auth/plus.login https://docs.google.com/feeds/ https://docs.googleusercontent.com/ https://spreadsheets.google.com/feeds/ https://www.googleapis.com/auth/drive.file";
 
     // Dropbox oauth constants
@@ -99,8 +95,6 @@ public class AMEnv {
         DROPBOX_CONSUMER_KEY = secretValuesMap.get("DROPBOX_CONSUMER_KEY");
         DROPBOX_CONSUMER_SECRET = secretValuesMap.get("DROPBOX_CONSUMER_SECRET");
 
-        GOOGLE_CLIENT_ID = secretValuesMap.get("GOOGLE_CLIENT_ID");
-        GOOGLE_CLIENT_SECRET = secretValuesMap.get("GOOGLE_CLIENT_SECRET");
         QUIZLET_CLIENT_ID = secretValuesMap.get("QUIZLET_CLIENT_ID");
         QUIZLET_CLIENT_SECRET = secretValuesMap.get("QUIZLET_CLIENT_SECRET");
         
@@ -111,9 +105,6 @@ public class AMEnv {
 
         assert DROPBOX_CONSUMER_KEY != null;
         assert DROPBOX_CONSUMER_SECRET != null;
-
-        assert GOOGLE_CLIENT_ID != null;
-        assert GOOGLE_CLIENT_SECRET != null;
 
         assert QUIZLET_CLIENT_ID != null;
         assert QUIZLET_CLIENT_SECRET != null;

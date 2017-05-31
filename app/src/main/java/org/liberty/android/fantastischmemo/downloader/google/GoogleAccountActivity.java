@@ -56,13 +56,7 @@ public class GoogleAccountActivity extends BaseActivity {
             return;
         }
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-
-        GoogleApiClient googleApiClient = activityComponents().googleApiClient();
-
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(activityComponents().googleApiClient());
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
