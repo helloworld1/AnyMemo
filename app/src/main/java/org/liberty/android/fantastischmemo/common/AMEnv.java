@@ -23,8 +23,6 @@ package org.liberty.android.fantastischmemo.common;
 import android.os.Environment;
 import android.util.Log;
 
-import org.liberty.android.fantastischmemo.BuildConfig;
-
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
