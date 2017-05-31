@@ -31,7 +31,6 @@ import org.liberty.android.fantastischmemo.common.BaseFragment;
 import org.liberty.android.fantastischmemo.downloader.anymemo.AnyMemoDownloaderActivity;
 import org.liberty.android.fantastischmemo.downloader.dropbox.DropboxOauth2AccountActivity;
 import org.liberty.android.fantastischmemo.downloader.google.GoogleAccountActivity;
-import org.liberty.android.fantastischmemo.downloader.google.SpreadsheetListScreen;
 import org.liberty.android.fantastischmemo.downloader.quizlet.QuizletLauncher;
 
 /*

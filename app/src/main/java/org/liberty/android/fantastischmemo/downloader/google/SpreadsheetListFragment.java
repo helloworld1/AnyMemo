@@ -50,13 +50,31 @@ public class SpreadsheetListFragment extends AbstractDownloaderFragment {
     }
 
     @Override
-    protected List<DownloadItem> initialRetrieve() throws Exception {
-        List<Spreadsheet> spreadsheetList = downloadHelper.getListSpreadsheets();
-        List<DownloadItem> downloadItemList = new ArrayList<DownloadItem>(50);
-        for (Spreadsheet spreadsheet : spreadsheetList) {
-            downloadItemList.add(convertSpreadsheetToDownloadItem(spreadsheet));
+    protected List<DownloadItem> initialRetrieve() {
+
+        try {
+            List<Spreadsheet> spreadsheetList;
+            spreadsheetList = downloadHelper.getListSpreadsheets();
+
+            List<DownloadItem> downloadItemList = new ArrayList<>(50);
+            for (Spreadsheet spreadsheet : spreadsheetList) {
+                downloadItemList.add(convertSpreadsheetToDownloadItem(spreadsheet));
+            }
+            return downloadItemList;
+
+        } catch (final Exception e) {
+            // Catch the exception here to give user change to log out to avoid invalid token exception
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        activityComponents().errorUtil().showNonFatalError("Error retrieving initial list. Please log out and try again", e);
+                    }
+                });
+            }
+            return Collections.emptyList();
         }
-        return downloadItemList;
+
     }
 
     @Override

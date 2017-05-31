@@ -71,7 +71,8 @@ public class ErrorUtil {
         }
 
         if (exception != null) {
-            errorBuilder.append(activity.getString(R.string.exception_text))
+            errorBuilder.append("\n")
+                    .append(activity.getString(R.string.exception_text))
                     .append(": ")
                     .append(Throwables.getRootCause(exception))
                     .append("\n")

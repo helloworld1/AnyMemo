@@ -163,9 +163,14 @@ public abstract class AbstractDownloaderFragment extends BaseFragment {
         listView.setAdapter(dlAdapter);
         listView.removeFooterView(loadMoreFooter);
 
-        refreshList();
-
         return v;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        refreshList();
     }
 
     /**
