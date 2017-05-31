@@ -21,6 +21,8 @@ package org.liberty.android.fantastischmemo.downloader.google;
 
 import android.os.Bundle;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import org.liberty.android.fantastischmemo.downloader.common.AbstractDownloaderFragment;
 import org.liberty.android.fantastischmemo.downloader.common.DownloadItem;
 

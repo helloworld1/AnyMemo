@@ -28,6 +28,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.BaseActivity;
 import org.liberty.android.fantastischmemo.downloader.oauth.Oauth2TokenUtil;
@@ -40,10 +45,14 @@ public class SpreadsheetListScreen extends BaseActivity {
 
     private String authToken;
 
+    private GoogleApiClient googleApiClient;
+
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.spreadsheet_list_screen);
+
+        this.googleApiClient = activityComponents().googleApiClient();
 
         SpreadsheetListFragment fragment = new SpreadsheetListFragment();
         Bundle args = getIntent().getExtras();
@@ -75,9 +84,17 @@ public class SpreadsheetListScreen extends BaseActivity {
             }
             case R.id.logout:
             {
-                activityComponents().oauth2TokenUtil().invalidateSavedToken();
-                // After mark saved token to null, we should exit.
-                finish();
+                Auth.GoogleSignInApi.revokeAccess(googleApiClient).setResultCallback(
+                        new ResultCallback<Status>() {
+                            @Override
+                            public void onResult(Status status) {
+                                if (status.isSuccess()) {
+                                    finish();
+                                } else {
+                                    activityComponents().errorUtil().showNonFatalError("Error signing off: " + status.getStatusMessage(), null);
+                                }
+                            }
+                        });
                 return true;
             }
 

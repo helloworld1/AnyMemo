@@ -30,8 +30,8 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.common.base.Strings;
 
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.AMEnv;
@@ -45,7 +45,7 @@ public class GoogleAccountActivity extends BaseActivity {
 
     private static final int RC_SIGN_IN = 100;
 
-    private GoogleApiClient googleApiClient;
+    private static final int RC_AUTH_TOKEN = 101;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,15 +60,7 @@ public class GoogleAccountActivity extends BaseActivity {
                 .requestEmail()
                 .build();
 
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
-                    @Override
-                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                        activityComponents().errorUtil().showFatalError("Connection failure: " + connectionResult.getErrorMessage(), null);
-                    }
-                })
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
+        GoogleApiClient googleApiClient = activityComponents().googleApiClient();
 
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -77,9 +69,6 @@ public class GoogleAccountActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (googleApiClient != null) {
-            googleApiClient.disconnect();
-        }
     }
 
     @Override
@@ -119,12 +108,26 @@ public class GoogleAccountActivity extends BaseActivity {
                     } catch (IOException e) {
                         activityComponents().errorUtil().showFatalError("IO Error", e);
                     } catch (UserRecoverableAuthException e) {
-                        startActivityForResult(e.getIntent(), RC_SIGN_IN);
+                        startActivityForResult(e.getIntent(), RC_AUTH_TOKEN);
                     } catch (GoogleAuthException e) {
                         activityComponents().errorUtil().showFatalError("GoogleAuthException", e);
                     }
                 }
             });
+        } else if (requestCode == RC_AUTH_TOKEN) {
+            Bundle extra = data.getExtras();
+            if (extra == null) {
+                activityComponents().errorUtil().showFatalError("RC_AUTH_TOKEN does not have extra", null);
+                return;
+            }
+            String token = extra.getString("authtoken");
+
+            if (Strings.isNullOrEmpty(token)) {
+                activityComponents().errorUtil().showFatalError("RC_AUTH_TOKEN does not have token", null);
+                return;
+            }
+
+            onAuthenticated(token);
         }
     }
 

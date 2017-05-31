@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import org.greenrobot.eventbus.EventBus;
 import org.liberty.android.fantastischmemo.common.AMApplication;
 import org.liberty.android.fantastischmemo.converter.CSVExporter;

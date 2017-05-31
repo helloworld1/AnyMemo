@@ -2,6 +2,8 @@ package org.liberty.android.fantastischmemo.modules;
 
 import android.content.Context;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import org.liberty.android.fantastischmemo.common.BaseActivity;
 import org.liberty.android.fantastischmemo.converter.Converter;
 import org.liberty.android.fantastischmemo.downloader.common.DownloaderUtils;
@@ -77,6 +79,8 @@ public interface ActivityComponents {
     ErrorUtil errorUtil();
 
     GooglePlayUtil googlePlayUtil();
+
+    GoogleApiClient googleApiClient();
 
     Map<Class<?>, Converter> converterMap();
 
