@@ -26,11 +26,14 @@ import org.liberty.android.fantastischmemo.utils.AMUiUtil;
 import org.liberty.android.fantastischmemo.utils.AboutUtil;
 import org.liberty.android.fantastischmemo.utils.DatabaseOperationDialogUtil;
 import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
+import org.liberty.android.fantastischmemo.utils.ErrorUtil;
+import org.liberty.android.fantastischmemo.utils.GooglePlayUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListActionModeUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 import org.liberty.android.fantastischmemo.utils.ShareUtil;
 
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 
 import dagger.Component;
 
@@ -68,6 +71,12 @@ public interface ActivityComponents {
     RecentListActionModeUtil recentListActionModeUtil();
 
     DatabaseOperationDialogUtil databaseOperationDialogUtil();
+
+    ExecutorService executorService();
+
+    ErrorUtil errorUtil();
+
+    GooglePlayUtil googlePlayUtil();
 
     Map<Class<?>, Converter> converterMap();
 

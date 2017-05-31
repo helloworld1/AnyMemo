@@ -27,6 +27,7 @@ import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 import org.liberty.android.fantastischmemo.widget.WidgetRemoteViewsFactory;
 
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 
 import dagger.Component;
 import okhttp3.OkHttpClient;
@@ -51,6 +52,7 @@ public interface AppComponents {
     EventBus eventBus();
     Map<Class<?>, Converter> converterMap();
     Option option();
+    ExecutorService executorService();
 
     @ForApplication Context applicationContext();
 

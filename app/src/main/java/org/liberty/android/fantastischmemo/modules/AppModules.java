@@ -25,6 +25,11 @@ import org.liberty.android.fantastischmemo.scheduler.DefaultScheduler;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
+
 import dagger.Module;
 import dagger.Provides;
 import dagger.multibindings.ClassKey;
@@ -46,7 +51,6 @@ public class AppModules {
         return application;
     }
 
-
     @Provides
     @PerApplication
     @ForApplication
@@ -58,6 +62,12 @@ public class AppModules {
     @PerApplication
     Scheduler providesScheduler(DefaultScheduler scheduler) {
         return scheduler;
+    }
+
+    @Provides
+    @PerApplication
+    ExecutorService provideExecutorService() {
+        return Executors.newFixedThreadPool(4);
     }
 
     @Provides
