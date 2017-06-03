@@ -24,7 +24,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.ColorRes;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -92,19 +97,24 @@ public class CardPlayerFragment extends BaseFragment {
         View v = inflater.inflate(R.layout.card_player_layout, container, false);
         playButton = (ImageButton) v.findViewById(R.id.card_player_play_button);
         playButton.setOnClickListener(buttonListener);
+        setButtonTintList(playButton, R.color.card_player_button_selectable_tint);
         playButton.setSelected(false);
 
         previousButton = (ImageButton) v.findViewById(R.id.card_player_previous_button);
+        setButtonTintList(previousButton, R.color.card_player_button_nonselectable_tint);
         previousButton.setOnClickListener(buttonListener);
 
         nextButton = (ImageButton) v.findViewById(R.id.card_player_next_button);
+        setButtonTintList(nextButton, R.color.card_player_button_nonselectable_tint);
         nextButton.setOnClickListener(buttonListener);
 
         repeatButton = (ImageButton) v.findViewById(R.id.card_player_repeat_button);
+        setButtonTintList(repeatButton, R.color.card_player_button_selectable_tint);
         repeatButton.setOnClickListener(buttonListener);
         repeatButton.setSelected(option.getCardPlayerRepeatEnabled());
 
         shuffleButton = (ImageButton) v.findViewById(R.id.card_player_shuffle_button);
+        setButtonTintList(shuffleButton, R.color.card_player_button_selectable_tint);
         shuffleButton.setOnClickListener(buttonListener);
         shuffleButton.setSelected(option.getCardPlayerShuffleEnabled());
 
@@ -239,4 +249,9 @@ public class CardPlayerFragment extends BaseFragment {
         }
     };
 
+    private void setButtonTintList(@NonNull ImageButton button, @ColorRes int tintColorStateList) {
+        Drawable drawable = DrawableCompat.wrap(button.getDrawable()).mutate();
+        DrawableCompat.setTintList(drawable, ContextCompat.getColorStateList(getContext(), tintColorStateList));
+        button.setImageDrawable(drawable);
+    }
 }

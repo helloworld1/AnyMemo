@@ -18,6 +18,7 @@
     <color name="cards_dialog">#424242</color>
     <color name="fab_icon">#FFFFFF</color>
     <color name="menu_icon">#FFFFFF</color>
+    <color name="card_player_button_color">#FFFFFF</color>
 
     <color name="drawer_background">#424242</color>
 </resources>
