@@ -157,7 +157,7 @@
     <string name="merging_summary">Объединение баз. Подождите.</string>
     <string name="copy_text">Копировать</string>
     <string name="paste_text">Вставить</string>
-    <string name="edit_dialog_unsave_warning">Текущая карточка изменена но не сохранена. Вы действительно хотите сохранить и выйти?</string>
+    <string name="edit_dialog_unsave_warning">Текущая карточка изменена, но не сохранена. Вы действительно хотите сохранить и выйти?</string>
     <string name="downloader_extract_zip">Извлечение... Подождите.</string>
     <string name="allow_orientation_title">Ориентация экрана</string>
     <string name="allow_orientation_summary">Автоматически менять ориентацию экрана. Требуется перезапуск AnyMemo.</string>
