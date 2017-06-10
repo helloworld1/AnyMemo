@@ -446,6 +446,8 @@
     <string name="greek_text">Греческий</string>
     <string name="hour_text">ч</string>
     <string name="minute_text">мин</string>
+    <string name="review_ordering_text">Порядок повторов</string>
+    <string name="review_ordering_summary">Порядок, в котором будут повторяться карточки</string>
     <string name="hardest_first_text">Сначала самые трудные</string>
     <string name="random_text">Случайно</string>
     <string name="record_audio_permission_denied_message">AnyMemo не удалось получить разрешение на запись аудио.</string>
