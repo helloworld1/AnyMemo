@@ -157,7 +157,7 @@
     <string name="merging_summary">Объединение баз. Подождите.</string>
     <string name="copy_text">Копировать</string>
     <string name="paste_text">Вставить</string>
-    <string name="edit_dialog_unsave_warning">Текущая карточка изменена но не сохранена. Вы действительно хотите сохранить и выйти?</string>
+    <string name="edit_dialog_unsave_warning">Текущая карточка изменена, но не сохранена. Вы действительно хотите сохранить и выйти?</string>
     <string name="downloader_extract_zip">Извлечение... Подождите.</string>
     <string name="allow_orientation_title">Ориентация экрана</string>
     <string name="allow_orientation_summary">Автоматически менять ориентацию экрана. Требуется перезапуск AnyMemo.</string>
@@ -187,7 +187,7 @@
     <string name="donate_summary">Вы можете поддержать проект AnyMemo, купив версию Pro в Android Market, или заплатить онлайн на &lt;a href="https://anymemo.org"&gt;https://anymemo.org&lt;/a&gt; &lt;br /&gt; Спасибо за вашу поддержку.</string>
     <string name="goto_prev_screen">Экран Просмотр/Правка</string>
     <string name="exception_text">Исключение</string>
-    <string name="advanced_setting_text">Продвинутый ...</string>
+    <string name="advanced_setting_text">Расширенные...</string>
     <string name="db_merger_title">Объединение баз</string>
     <string name="db_merger_explaination">Объединить базу-источник и базу-цель</string>
     <string name="target_db_text">База-цель (двойным щелчком выбрать)</string>
@@ -255,7 +255,7 @@
     <string name="locale_spanish_text">Испанский</string>
     <string name="dict_app">Словарь</string>
     <string name="dict_app_summary">Изменить словарь поиска при изучении.</string>
-    <string name="dict_colordict">ColorDict</string>
+    <string name="dict_colordict">ColorDict / GoldenDict</string>
     <string name="dict_fora">Fora Dictionary</string>
     <string name="error_no_dict">не установлен. Установите его из Android Market или укажите другой словарь в Опциях. Ошибка:</string>
     <string name="item_update_warning">Вы действительно хотите это обновить?</string>
@@ -290,8 +290,8 @@
     <string name="exit_text">Выход</string>
     <string name="sdcard_not_available_warning_title">SD-карта недоступна</string>
     <string name="sdcard_not_available_warning_message">Вставьте SD-карту и запустите снова!</string>
-    <string name="load_default_text">Загр умолч</string>
-    <string name="load_default_warning_text">Будут загружены настройки, установленные вами в настройках баз по умолчанию, текущие настройки не будут сохранены.</string>
+    <string name="load_default_text">Загрузить умолчания</string>
+    <string name="load_default_warning_text">Будут загружены настройки, установленные вами в настройках баз по умолчанию, а текущие настройки будут потеряны.</string>
     <string name="default_settings_text">Настройки баз по умолчанию</string>
     <string name="remove_dup_message">Удалить карточки с повторяющимися вопросами.</string>
     <string name="ordinal_text">Порядок</string>
@@ -338,7 +338,7 @@
     <string name="gdrive_successfully_uploaded_message">Успешно загружено в каталог AnyMemo на вашем Google Диске</string>
     <string name="upload_gdrive_message">Хотите загрузить %s в каталог AnyMemo на вашем Google Диске? Может занять несколько минут, если карточек более 1000.</string>
     <string name="loading_auth_text">Аутентификация на сервере. Подождите...</string>
-    <string name="auth_error_text">Ошибка авторизации.</string>
+    <string name="auth_error_text">Ошибка аутентификации.</string>
     <string name="locale_italian_text">Итальянский</string>
     <string name="record_your_memo_text">Запись звука</string>
     <string name="max_recent_list_size_text">Размер списка Недавние</string>
@@ -427,7 +427,7 @@
     <string name="mark_as_learned_text">Пометить как выучено</string>
     <string name="mark_as_forgotten_text">Пометить как забыто</string>
     <string name="mark_as_new_text">Пометить как новое</string>
-    <string name="mark_as_learned_forever_text">Пометить как выученное</string>
+    <string name="mark_as_learned_forever_text">Пометить как выучено навсегда</string>
     <string name="mark_as_learned_forever_warning_text">Этот объект никогда не появится для обучения. Хотите пометить его как выучено навсегда?</string>
     <string name="show_hide_answers_text">Показать/спрятать ответы</string>
     <string name="locale_finnish_text">Финский</string>
@@ -446,6 +446,8 @@
     <string name="greek_text">Греческий</string>
     <string name="hour_text">ч</string>
     <string name="minute_text">мин</string>
+    <string name="review_ordering_text">Порядок повторов</string>
+    <string name="review_ordering_summary">Порядок, в котором будут повторяться карточки</string>
     <string name="hardest_first_text">Сначала самые трудные</string>
     <string name="random_text">Случайно</string>
     <string name="record_audio_permission_denied_message">AnyMemo не удалось получить разрешение на запись аудио.</string>
