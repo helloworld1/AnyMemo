@@ -123,7 +123,7 @@ public class PaintActivity extends BaseActivity {
         SharedPreferences shre = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor edit=shre.edit();
         edit.putString("paint_image_data",encodedImage);
-        edit.commit();
+        edit.apply();
     }
 
 }
