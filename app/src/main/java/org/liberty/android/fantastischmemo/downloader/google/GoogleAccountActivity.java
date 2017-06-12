@@ -72,18 +72,18 @@ public class GoogleAccountActivity extends BaseActivity {
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result == null) {
-                activityComponents().errorUtil().showFatalError("Null google sign in result", null);
+                activityComponents().errorUtil().showFatalError(getString(R.string.google_sign_in_empty_error_text), null);
                 return;
             }
             if (!result.isSuccess()) {
-                activityComponents().errorUtil().showFatalError("Google sign in is not successful", null);
+                activityComponents().errorUtil().showFatalError(getString(R.string.google_sign_in_not_successful_error_text), null);
                 return;
             }
 
             GoogleSignInAccount acct = result.getSignInAccount();
 
             if (acct == null) {
-                activityComponents().errorUtil().showFatalError("Getting null Google sign in account", null);
+                activityComponents().errorUtil().showFatalError(getString(R.string.google_sign_in_account_empty_result), null);
                 return;
             }
 

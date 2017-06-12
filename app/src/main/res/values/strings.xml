@@ -465,4 +465,7 @@
     <string name="more_text">MORE</string>
     <string name="dropbox_item_description">Date: %1$s&lt;br&gt;Size: %2$d bytes</string>
     <string name="locale_esperanto_text">Esperanto</string>
+    <string name="google_sign_in_not_successful_error_text">Google sign in is not successful</string>
+    <string name="google_sign_in_empty_error_text">Google sign in result is empty</string>
+    <string name="google_sign_in_account_empty_result">Unable to get Google account</string>
 </resources>
