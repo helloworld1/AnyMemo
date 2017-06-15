@@ -70,7 +70,7 @@
     <string name="settings_inverse">Interŝanĝi d/r por ĉiuj kartoj</string>
     <string name="settings_save">Konservi</string>
     <string name="warning_text">Atentu</string>
-    <string name="settings_wipe_warning">ĈIU progreso de lernado estos vakigita!</string>
+    <string name="settings_wipe_warning">ĈIU progreso de lernado estos forviŝita!</string>
     <string name="settings_shuffle_warning">Tiu ĉi ago miksos ĉiujn kartojn NEINVERSIGEBLE.</string>
     <string name="settings_inverse_warning">Tiu ĉi ago interŝanĝos demandojn je respondoj. \'Interŝanĝi k duplikati\' aldonos ĉiujn interŝanĝitajn kartojn reen al nuna datumbazo anstataŭ anstataŭigi ilin.</string>
     <string name="delete_warning">Ĉu vi certe volas forigi tiun ĉi karton?</string>
@@ -98,13 +98,13 @@
     <string name="fb_rename">Alinomi</string>
     <string name="fb_rename_message">Bonvolu entajpu nomon sube.</string>
     <string name="fb_rename_fail">Alinomado fiaskis.</string>
-    <string name="loading_please_wait">Bonvolu atendi...</string>
-    <string name="loading_database">Ŝargado de datumbazo...</string>
+    <string name="loading_please_wait">Bonvolu atendi…</string>
+    <string name="loading_database">Ŝargado de datumbazo…</string>
     <string name="success">Sukcesis</string>
     <string name="fail">Fiaskis</string>
-    <string name="loading_save">Konservado de ŝanĝoj...</string>
-    <string name="loading_connect_net">Aktualigado de listo el interreto...</string>
-    <string name="loading_downloading">Elŝutado... Tio ĉi okupos iomete da tempo.</string>
+    <string name="loading_save">Konservado de ŝanĝoj…</string>
+    <string name="loading_connect_net">Aktualigado de listo el interreto…</string>
+    <string name="loading_downloading">Elŝutado… Tio ĉi okupos iomete da tempo.</string>
     <string name="downloader_connection_error">Eraro de konekto</string>
     <string name="downloader_connection_error_message">Ne povas konekti servilon. Bonvolu kontroli la interretan konekton.</string>
     <string name="downloader_download_success">Elŝutado sukcesis</string>
@@ -120,7 +120,7 @@
     <string name="downloader_categories">Kategorioj</string>
 
     <string name="interface_locale_title">Fasada lingvo</string>
-    <string name="interface_locale_summary">Elektu lingvon por fasado de uzanto. Bonvolu restartigi AnyMemo por apliki ŝanĝojn.</string>
+    <string name="interface_locale_summary">Elekti lingvon por fasado de uzanto. Bonvolu restartigi AnyMemo por apliki ŝanĝojn.</string>
     <string name="settings_typeface_question">Propra tiparo por demandoj (TTF)</string>
     <string name="settings_typeface_answer">Propra tiparo por respondoj (TTF)</string>
     <string name="learn_ahead">Lernegi</string>
@@ -140,7 +140,7 @@
     <string name="speech_ctl_title">Aŭtomata parolo</string>
     <string name="speech_ctl_summary">Kiel aktivigi parolon dum lernado.</string>
     <string name="button_style_title">Stilo de nota butono</string>
-    <string name="button_style_summary">Ŝanĝas stilon de nota butono dum lernado.</string>
+    <string name="button_style_summary">Ŝanĝi stilon de nota butono dum lernado.</string>
     <string name="settings_customize_color">Alĝustigi kolorojn</string>
     <string name="color_button_text">Elekti koloron</string>
     <string name="color_dialog_title">Elekti koloron</string>
@@ -148,7 +148,7 @@
     <string name="color_s">satureco</string>
     <string name="color_v">valoro</string>
     <string name="fullscreen_title">Plenekrana reĝimo</string>
-    <string name="fullscreen_summary">Montras kartojn en plenekrana reĝimo.</string>
+    <string name="fullscreen_summary">Montri kartojn en plenekrana reĝimo.</string>
     <string name="edit_dialog_category">Kategorio</string>
     <string name="settings_audio_location_title">Agordi lokon de sonoj de uzanto</string>
     <string name="what_is_new_message">Por vidi grafikan gvidilon pri novaj ebloj, bonvolu elekti butonon de ŝanĝoprotokolo, aŭ vizitu oficialan retejon:&lt;a href="https://anymemo.org/versions-view"&gt;https://anymemo.org/versions-view&lt;/a&gt;&lt;br /&gt;</string>
@@ -156,14 +156,14 @@
     <string name="merge_db_text">Kunfandi datumbazojn</string>
     <string name="merge_success_title">Sukcesa kunfando</string>
     <string name="merge_success_message">Sukcese kunfandis datumbazojn.</string>
-    <string name="merging_title">Kunfandado...</string>
+    <string name="merging_title">Kunfandado…</string>
     <string name="merging_summary">Kunfandado de datumbazoj. Bonvolu atendi.</string>
     <string name="copy_text">Kopii</string>
     <string name="paste_text">Alglui</string>
     <string name="edit_dialog_unsave_warning">La nuna karto estas modifita sed ne konservita. Ĉu vi volas konservi kaj eliri?</string>
-    <string name="downloader_extract_zip">Eltirado... Bonvolu atendi.</string>
+    <string name="downloader_extract_zip">Eltirado… Bonvolu atendi.</string>
     <string name="allow_orientation_title">Turniĝo</string>
-    <string name="allow_orientation_summary">Aŭtomate ŝanĝas ekranan turniĝon. Bonvolu restartigi AnyMemo por apliki ŝanĝojn.</string>
+    <string name="allow_orientation_summary">Aŭtomate ŝanĝi ekranan turniĝon. Bonvolu restartigi AnyMemo por apliki ŝanĝojn.</string>
     <string name="learn_queue_size_title">Grando de lern-vico</string>
     <string name="learn_queue_size_summary">Minimuma grando de aktivaj lernataj kartoj. Nova karto aperos nur kiam vi unue lernos unu karton el la lern-vico.</string>
     <string name="actions_category">Agoj</string>
@@ -171,27 +171,27 @@
     <string name="interface_category">Fasado</string>
     <string name="misc_category">Aliaj</string>
     <string name="shuffling_cards_title">Miksi kartojn</string>
-    <string name="shuffling_cards_summary">Miksas kartojn por antaŭmontro. Ne miksas novajn kartojn malloke.</string>
+    <string name="shuffling_cards_summary">Miksi kartojn por antaŭmontro. Ne miksi novajn kartojn malloke.</string>
     <string name="swap_qa_text">Interŝanĝi demandojn je respondoj</string>
     <string name="remove_dup_text">Forigi duplikatojn</string>
     <string name="removing_dup_title">Forigado de duplikatoj</string>
     <string name="removing_dup_warning">Forigado de duplikatoj povos okupiĝi multe da tempo depende de datumbaza grando. Frakasi la operacion igos la datumbazon difektita!</string>
-    <string name="detail_reset">Vakigi datumoj pri lernado</string>
+    <string name="detail_reset">Forviŝi datumoj pri lernado</string>
     <string name="db_text">Datumbazo</string>
     <string name="notification_text">Atentigo</string>
-    <string name="notification_summary">Montras informon en atentiga kampo eĉ tiam, kiam AnyMemo ne estas malfermita.</string>
+    <string name="notification_summary">Montri informon en atentiga kampo eĉ tiam, kiam AnyMemo ne estas malfermita.</string>
     <string name="edit_menu_br_text">Aldoni etikedon \'br\'</string>
     <string name="edit_menu_image_text">Aldoni bildon</string>
     <string name="grade_text">Noto</string>
     <string name="enable_volume_key_text">Aktivigi fulmoklavojn</string>
-    <string name="enable_volume_key_summary">Uzas sonfortecajn butonojn por atribui notojn al kartoj dum lernado.</string>
+    <string name="enable_volume_key_summary">Uzi sonfortecajn butonojn por atribui notojn al kartoj dum lernado.</string>
     <string name="donate_text">Donaci</string>
     <string name="buy_pro_text">Aĉeti pagan version</string>
     <string name="donate_summary">Vi povas donaci al AnyMemo projekto per aĉeti la pagan (\'Pro\') version en Android Market aŭ per pagi en &lt;a href="https://anymemo.org"&gt;https://anymemo.org&lt;/a&gt; &lt;br /&gt; Dankon al ci por cia subteno.</string>
     <string name="anymemo_pro_link">market://search?q=pname:org.liberty.android.fantastischmemopro</string>
     <string name="goto_prev_screen">Iri al ekrano de antaŭmontro/redakto</string>
     <string name="exception_text">Escepto</string>
-    <string name="advanced_setting_text">Spertaj ...</string>
+    <string name="advanced_setting_text">Spertaj …</string>
     <string name="db_merger_title">Datumbaza kunfandilo</string>
     <string name="db_merger_explaination">Kunfandas fontan datumbazon en celan datumbazon.</string>
     <string name="target_db_text">Cela datumbazo (frapetu por fokusi, frapetu denove por esplori)</string>
@@ -238,7 +238,7 @@
     <string name="paint_text">Pentri</string>
     <string name="search_tag">Serĉi laŭ etikedo</string>
     <string name="search_user">Serĉi laŭ uzanto</string>
-    <string name="upload_wait">Alŝutado... bonvolu atendi. Tio ĉi povos okupiĝi kelkaj minutoj por grandaj datumbazo.</string>
+    <string name="upload_wait">Alŝutado… bonvolu atendi. Tio ĉi povos okupi kelkajn minutojn por grandaj datumbazo.</string>
     <string name="fe_directory_text">Esplori dosierujojn</string>
     <string name="card_style">Stilo de kartoj</string>
     <string name="card_style_double">Duflanka</string>
@@ -258,7 +258,7 @@
     <string name="locale_japanese_text">Japana</string>
     <string name="locale_spanish_text">Hispana</string>
     <string name="dict_app">Vortara aplikaĵo</string>
-    <string name="dict_app_summary">Ŝanĝas la aplikaĵon de vortaro, en kiu oni povas rigardi senpere dum lernado.</string>
+    <string name="dict_app_summary">Ŝanĝi la aplikaĵon de vortaro, en kiu oni povas rigardi senpere dum lernado.</string>
     <string name="dict_colordict">ColorDict / GoldenDict</string>
     <string name="dict_fora">Fora Dictionary</string>
     <string name="error_no_dict">ne estas instalita. Bonvolu elŝuti ĝin el Android Market aŭ agordi alian vortaran aplikaĵon en agordoj. Eraro: </string>
@@ -327,7 +327,7 @@
     <string name="enable_noise_on_summary">La bruo estas uzata por kalkuli intervalon por disigi la intervalon.</string>
     <string name="enable_noise_off_summary">La intervalo ne enhavas bruon.</string>
     <string name="reset_customized_scheduling_algorithm_text">Restarigi alĝustigon de planada algoritmo</string>
-    <string name="reset_customized_scheduling_algorithm_summary">Restarigas alĝustigitan planadan algoritmon al implicita valoro.</string>
+    <string name="reset_customized_scheduling_algorithm_summary">Restarigi alĝustigitan planadan algoritmon al implicita valoro.</string>
     <string name="statistics_text">Statistikoj</string>
     <string name="statistics_type_text">Statistika speco</string>
     <string name="cards_to_review_text">Kartoj planitaj por tiu ĉi monato</string>
@@ -341,12 +341,12 @@
     <string name="successfully_uploaded_text">Alŝutis sukcese</string>
     <string name="gdrive_successfully_uploaded_message">Sukcese alŝutis al AnyMemo-dosierujo en Google Drive</string>
     <string name="upload_gdrive_message">Ĉu vi volas alŝuti %s al AnyMemo-dosierujo en via konto ĉe Google Drive? Tio ĉi povos okupiĝi kelkaj minutoj se vi havas pli ol 1000 kartojn.</string>
-    <string name="loading_auth_text">Aŭtentigado kun la servilo. Bonvolu atendi...</string>
+    <string name="loading_auth_text">Aŭtentigado kun la servilo. Bonvolu atendi…</string>
     <string name="auth_error_text">Aŭtentigada eraro.</string>
     <string name="locale_italian_text">Itala</string>
     <string name="record_your_memo_text">Registri memorigilon</string>
     <string name="max_recent_list_size_text">Elementoj en listo de lastaj</string>
-    <string name="recent_summary">Agordas maksimuman nombron da datumbazoj por montri en la listo de lastaj.</string>
+    <string name="recent_summary">Agordi maksimuman nombron da datumbazoj por montri en la listo de lastaj.</string>
     <string name="previous_text_short">Antaŭa</string>
     <string name="year_text">jaro</string>
     <string name="month_text">monato</string>
@@ -360,7 +360,7 @@
     <string name="start_quiz_text">Ekigi kvizon</string>
     <string name="override_audio_warning_text">Ĉu vi volas transpasi nunan sonaĵon?</string>
     <string name="enable_animation_text">Aktivigi movbildon</string>
-    <string name="enable_animation_summary">Aktivigas movbildan kart-transiron.</string>
+    <string name="enable_animation_summary">Aktivigi movbildan kart-transiron.</string>
     <string name="quiz_completed_text">Kvizo finita</string>
     <string name="new_cards_completed_summary">Vi finis la kvizon. Ĉu vi volas ĝin revizii?</string>
     <string name="review_text">Revizii</string>
@@ -463,4 +463,7 @@
     <string name="more_text">PLI</string>
     <string name="dropbox_item_description">Dato: %1$s&lt;br&gt;Grando: %2$d bitokoj</string>
     <string name="locale_esperanto_text">Esperanto</string>
+    <string name="google_sign_in_not_successful_error_text">Ensaluto al Google malsukcesis</string>
+    <string name="google_sign_in_empty_error_text">Rezulto de ensaluto al Google estas malplena</string>
+    <string name="google_sign_in_account_empty_result">Ne povis aliri al Google-konto</string>
 </resources>
