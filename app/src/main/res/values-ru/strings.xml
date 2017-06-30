@@ -127,10 +127,10 @@
     <string name="export_text">Экспорт</string>
     <string name="clear_filter_text">Очистить</string>
     <string name="import_mnemosyne_xml_text">Импорт Mnemosyne1 XML</string>
-    <string name="export_qa_txt">Экспорт QA TXT</string>
+    <string name="export_qa_txt">Экспорт Q/A TXT</string>
     <string name="export_tab_txt">Экспорт TXT с Tab-разделителем</string>
     <string name="export_csv">Экспорт CSV</string>
-    <string name="import_qa_txt">Импорт QA TXT</string>
+    <string name="import_qa_txt">Импорт Q/A TXT</string>
     <string name="import_tab_txt">Импорт TXT с Tab-разделителем </string>
     <string name="import_csv">Импорт CSV</string>
     <string name="import_supermemo_xml_text">Импорт SuperMemo PPC XML</string>
@@ -331,7 +331,7 @@
     <string name="number_of_new_cards_learned_in_a_day_text">Количество новых карточек, выученных за день</string>
     <string name="grade_statistics_text">Статистика по оценкам</string>
     <string name="accumulative_cards_scheduled_text">Суммарно пройдено карточек</string>
-    <string name="google_drive_spreadsheet_text">Google Диск</string>
+    <string name="google_drive_spreadsheet_text">Таблица на Google Диске</string>
     <string name="upload_text">Загрузить</string>
     <string name="logout_text">Выход</string>
     <string name="successfully_uploaded_text">Успешно загружено</string>
@@ -459,4 +459,7 @@
     <string name="more_text">ЕЩЁ</string>
     <string name="dropbox_item_description">Дата: %1$s&lt;br&gt;Размер: %2$d Б</string>
     <string name="locale_esperanto_text">Эсперанто</string>
+    <string name="google_sign_in_not_successful_error_text">Не удалось войти в аккаунт Google</string>
+    <string name="google_sign_in_empty_error_text">Результат входа в аккаунт Google пуст</string>
+    <string name="google_sign_in_account_empty_result">Не удалось получить аккаунт Google</string>
 </resources>
