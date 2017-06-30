@@ -460,6 +460,6 @@
     <string name="dropbox_item_description">Дата: %1$s&lt;br&gt;Размер: %2$d Б</string>
     <string name="locale_esperanto_text">Эсперанто</string>
     <string name="google_sign_in_not_successful_error_text">Не удалось войти в аккаунт Google</string>
-    <string name="google_sign_in_empty_error_text">Результат входа в аккаунт Google пуст</string>
+    <string name="google_sign_in_empty_error_text">Результат входа в аккаунт Google отсутствует</string>
     <string name="google_sign_in_account_empty_result">Не удалось получить аккаунт Google</string>
 </resources>
