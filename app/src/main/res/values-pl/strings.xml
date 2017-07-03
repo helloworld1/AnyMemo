@@ -462,4 +462,7 @@
     <string name="more_text">WIĘCEJ</string>
     <string name="dropbox_item_description">Data: %1$s&lt;br&gt;Rozmiar: %2$d bajtów</string>
     <string name="locale_esperanto_text">Esperanto</string>
+	<string name="google_sign_in_not_successful_error_text">Nie udało zalogować się do konta Google</string>
+	<string name="google_sign_in_empty_error_text">Rezultat uwierzytelnianiado konta Google jest pusty</string>
+	<string name="google_sign_in_account_empty_result">Nie można dostać się do konta Google</string>
 </resources>
