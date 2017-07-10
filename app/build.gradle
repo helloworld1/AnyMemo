@@ -13,7 +13,7 @@ android {
     defaultConfig {
         versionCode 226
         versionName "10.10.1"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 25
         testApplicationId "org.liberty.android.fantastischmemo.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
