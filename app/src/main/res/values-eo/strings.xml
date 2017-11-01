@@ -21,8 +21,8 @@
     <string name="help_button_text">Helpo</string>
     <string name="edit_button_text">Antaŭvidi/redakti</string>
     <string name="copyclipboard">Kopii al tondejo</string>
-    <string name="copyclipboard_summary">Aŭtomate kopias enhavon de karto al tondejo.</string>
-    <string name="memo_show_answer">Montri respondon</string>
+    <string name="copyclipboard_summary">Aŭtomate kopii enhavon de karto al tondejo.</string>
+    <string name="memo_show_answer">montri respondon</string>
     <string name="memo_no_item_title">Neniu elemento</string>
     <string name="memo_no_item_message">Estas neniu elemento por lerni nun. Se vi volas lernegi, vi povas provi vin en kvizoj per longe frapeti iun datumbazon en menuo \'lastaj\'.</string>
     <string name="memo_btn0_text">0 Forgesita</string>
@@ -114,7 +114,7 @@
     <string name="downloader_download_alert">Elŝuti: </string>
     <string name="downloader_download_alert_message">Detaloj:&lt;br&gt;</string>
     <string name="about_title">Pri</string>
-    <string name="about_text">Moderna programo por lerni per fulmokartoj.&lt;br /&gt;&lt;br /&gt;Authors: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;Retejo: &lt;a href="https://anymemo.org"&gt;https://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Dankojn al: Piotr Bazan, pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler, Dongping Xie&lt;br /&gt;&lt;br /&gt;Tradukintoj: Ladislav, jim4ever, paw3lk, Alexander Gomenyuk, Maksym Grinenko, Kim hyun-ho, Thomas Tempé, Alex Wirz Vieira, Neil Barry, Mattia Monga</string>
+    <string name="about_text">Moderna programo por lerni per fulmokartoj.&lt;br /&gt;&lt;br /&gt;Aŭtoroj: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;Retejo: &lt;a href="https://anymemo.org"&gt;https://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Dankojn al: Piotr Bazan, pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler, Dongping Xie&lt;br /&gt;&lt;br /&gt;Tradukintoj: Ladislav, jim4ever, paw3lk, Alexander Gomenyuk, Maksym Grinenko, Kim hyun-ho, Thomas Tempé, Alex Wirz Vieira, Neil Barry, Mattia Monga, Verdulo</string>
     <string name="about_version">Ŝanĝoprotokolo</string>
     <string name="what_is_new">Nova versio instalita</string>
     <string name="downloader_categories">Kategorioj</string>
@@ -238,16 +238,16 @@
     <string name="paint_text">Pentri</string>
     <string name="search_tag">Serĉi laŭ etikedo</string>
     <string name="search_user">Serĉi laŭ uzanto</string>
-    <string name="upload_wait">Alŝutado… bonvolu atendi. Tio ĉi povos okupi kelkajn minutojn por grandaj datumbazo.</string>
+    <string name="upload_wait">Alŝutado… bonvolu atendi. Tio ĉi povos okupi kelkajn minutojn por grandaj datumbazoj.</string>
     <string name="fe_directory_text">Esplori dosierujojn</string>
     <string name="card_style">Stilo de kartoj</string>
-    <string name="card_style_double">Duflanka</string>
-    <string name="card_style_single">Unuflanka</string>
+    <string name="card_style_double">duflanka</string>
+    <string name="card_style_single">unuflanka</string>
     <string name="settings_field1">Alĝustigi kart-kampon 1</string>
     <string name="settings_field2">Alĝustigi kart-kampon 2</string>
-    <string name="left_text">Maldekstren</string>
-    <string name="center_text">Centre</string>
-    <string name="right_text">Dekstren</string>
+    <string name="left_text">maldekstren</string>
+    <string name="center_text">centre</string>
+    <string name="right_text">dekstren</string>
     <string name="recent_tab_text">Lastaj</string>
     <string name="open_tab_text">Malfermi</string>
     <string name="download_tab_text">Elŝuti</string>
@@ -302,7 +302,7 @@
     <string name="import_zip_text">Enporti Zip</string>
     <string name="export_zip_text">Elporti Zip</string>
     <string name="customize_scheduling_algorithm_text">Alĝustigi algoritmon de planado</string>
-    <string name="customize_scheduling_algorithm_summary">Alĝustigas algoritmon de planado de lern-intervalo.</string>
+    <string name="customize_scheduling_algorithm_summary">Alĝustigi algoritmon de planado de lern-intervalo.</string>
     <string name="customize_scheduling_algorithm_warning">Alĝustigo de algoritmo estas nur por spertaj uzantoj.</string>
     <string name="queuing_text">Vico</string>
     <string name="when_first_grade_text">Dum atribui noton unuafoje</string>
@@ -403,8 +403,8 @@
     <string name="select_category_text">Elekti kategorion</string>
     <string name="dropbox_successfully_uploaded_message">Sukcese alŝutis dosieron al AnyMemo dosierujo en via Dropbox-konto</string>
     <string name="share_text">Kunhavigi</string>
-    <string name="center_left_text">Mez-maldekstre</string>
-    <string name="center_right_text">Mez-dekstre</string>
+    <string name="center_left_text">mez-maldekstre</string>
+    <string name="center_right_text">mez-dekstre</string>
     <string name="import_mnemosyne2_cards_text">Enporti kartojn Mnemosyne2</string>
     <string name="export_mnemosyne2_cards_text">Elporti kartojn Mnemosyne2</string>
     <string name="card_player_text">Kartludilo</string>
@@ -434,7 +434,7 @@
     <string name="mark_as_learned_forever_text">Marki kiel lernitan por ĉiam</string>
     <string name="mark_as_learned_forever_warning_text">Tiu ĉi elemento neniom aperos por lerni. Ĉu vi volas marki ĝin kiel lernitan por ĉiam?</string>
     <string name="show_hide_answers_text">Montri/kaŝi respondojn</string>
-    <string name="locale_finnish_text">Fini</string>
+    <string name="locale_finnish_text">Suoma</string>
     <string name="upload_quizlet_message">Ĉu vi volas alŝuti %s al via konto en Quizlet?</string>
     <string name="quizlet_successfully_uploaded_message">Sukcese alŝutis al via konto en Quizlet!</string>
     <string name="conversion_merge_text">Konverti kaj kunfandi</string>
