@@ -8,7 +8,7 @@ repositories {
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "25.0.3"
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
         versionCode 227
@@ -42,16 +42,28 @@ android {
         }
     }
 
+    flavorDimensions "mode", "api"
+
     productFlavors {
         free {
             applicationId "org.liberty.android.fantastischmemo"
+            dimension "mode"
         }
         pro {
             applicationId "org.liberty.android.fantastischmemopro"
+            dimension "mode"
         }
         dev {
             applicationId "org.liberty.android.fantastischmemodev"
+            dimension "mode"
+        }
+        api21 {
             minSdkVersion 21
+            dimension "api"
+        }
+        api16 {
+            minSdkVersion 16
+            dimension "api"
         }
     }
 
