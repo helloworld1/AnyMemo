@@ -28,7 +28,7 @@ order to build:
 * JDK: http://www.oracle.com/technetwork/java/javase/downloads/index.html
 
 In Android SDK tools' "Android SDK Manager", you need the following items:
-* Android 7.0 SDK platform
+* Android 8.0 SDK platform
 * Android SDK tools
 * Andoird SDK Build-tools version 24
 * Android support repository
@@ -49,16 +49,16 @@ Provide the values to the fields in AMSecrets.java.
 Them compile using gradle:
 ```
 cd AnyMemo
-./gradlew assembleFreeDebug
+./gradlew assembleFreeApi16Debug
 ```
 To build pro version, use
 ```
-./gradlew assembleProDebug
+./gradlew assembleProApi16Debug
 ```
 AnyMemo has a dev flavor that changes the min API level to 21 to make the build much faster.
 It is recommended for development only.
 ```
-./gradlew assembleDevDebug
+./gradlew assembleDevApi21Debug
 ```
 
 The build artifacts are in
@@ -71,14 +71,14 @@ Instrumentation tests
 There are hundreds of intrumentation tests that ensure the basic funciton of
 AnyMemo. To run these tests against free version, you need to run:
 ```
-./gradlew installFreeDebugTest
-./gradlew connectedInstrumentTestFreeDebug
+./gradlew installFreeApi16DebugTest
+./gradlew connectedInstrumentTestFreeApi16Debug
 ```
 
 To run against pro version:
 ```
-./gradlew installProDebugTest
-./gradlew connectedInstrumentTestProDebug
+./gradlew installProApi16DebugTest
+./gradlew connectedInstrumentTestProApi16Debug
 ```
 
 
