@@ -102,7 +102,7 @@ dependencies {
 
     compile 'commons-io:commons-io:2.4'
 
-    compile 'com.google.guava:guava:22.0-android'
+    compile 'com.google.guava:guava:23.4-android'
     compile 'com.opencsv:opencsv:3.4'
     compile 'com.github.PhilJay:MPAndroidChart:v2.1.6'
     compile 'com.rarepebble:colorpicker:2.0.0'
