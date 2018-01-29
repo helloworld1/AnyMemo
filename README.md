@@ -93,3 +93,4 @@ Android studio user
 It is easy! Install all the dependencies listed in the "How to compile" section
 and you can import directly into Android studio.
 
+initial commit
