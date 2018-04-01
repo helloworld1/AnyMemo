@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.support.test.filters.SmallTest;
 
 import org.junit.Test;
+import org.liberty.android.fantastischmemo.BuildConfig;
 import org.liberty.android.fantastischmemo.integrationtest.TestHelper;
 import org.liberty.android.fantastischmemo.test.AbstractExistingDBTest;
 
@@ -15,7 +16,7 @@ import static org.junit.Assert.assertTrue;
 
 public class CardProviderTest extends AbstractExistingDBTest {
 
-    private static String AUTHORITY = "org.liberty.android.fantastischmemo.cardprovider";
+    private static String AUTHORITY = BuildConfig.APPLICATION_ID + ".cardprovider";
 
     @SmallTest
     @Test
