@@ -52,7 +52,7 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
                 CategoryDao categoryDao = getHelper().getCategoryDao();
 
                 QueryBuilder<Card, Integer> qb = queryBuilder();
-                qb.limit(1L).orderBy("ordinal", true);
+                qb.orderBy("ordinal", true);
                 if (c != null) {
                     qb.setWhere(qb.where().eq("category_id", c.getId()));
                 }
@@ -76,7 +76,7 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
     public Card queryLastOrdinal() {
         try {
             QueryBuilder<Card, Integer> qb = queryBuilder();
-            PreparedQuery<Card> pq = qb.limit(1L).orderBy("ordinal", false).prepare();
+            PreparedQuery<Card> pq = qb.orderBy("ordinal", false).prepare();
 
             return queryForFirst(pq);
         } catch (SQLException e) {
@@ -93,7 +93,7 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
         }
         try {
             QueryBuilder<Card, Integer> qb = queryBuilder();
-            qb.limit(1L).orderBy("ordinal", false);
+            qb.orderBy("ordinal", false);
             PreparedQuery<Card> pq = qb.where().eq("category_id", c.getId()).prepare();
             return queryForFirst(pq);
         } catch (SQLException e) {
@@ -115,7 +115,7 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
                 CategoryDao categoryDao = getHelper().getCategoryDao();
 
                 QueryBuilder<Card, Integer> qb = queryBuilder();
-                qb.limit(1L).orderBy("ordinal", true);
+                qb.orderBy("ordinal", true);
                 PreparedQuery<Card> pq;
                 if (ct != null) {
                     pq = qb.where()
@@ -159,7 +159,7 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
                 CategoryDao categoryDao = getHelper().getCategoryDao();
 
                 QueryBuilder<Card, Integer> qb = queryBuilder();
-                qb.limit(1L).orderBy("ordinal", false);
+                qb.orderBy("ordinal", false);
                 PreparedQuery<Card> pq;
                 if (ct != null) {
                     pq = qb.where()
