@@ -30,10 +30,8 @@ public class CardImageGetterTest extends BaseTest {
         Display display = ((WindowManager)getContext().getSystemService(Context.WINDOW_SERVICE))
                 .getDefaultDisplay();
         screenWidth = display.getWidth();
-        AppComponents appComponents = Mockito.mock(AppComponents.class);
-        Mockito.when(appComponents.applicationContext()).thenReturn(getContext());
-        Mockito.when(appComponents.amFileUtil()).thenReturn(new AMFileUtil(getContext(), new AMPrefUtil(getContext())));
-        cardImageGetter = new CardImageGetter(appComponents, imageSearchPaths);
+        cardImageGetter = new CardImageGetter(getContext(),
+                new AMFileUtil(getContext(), new AMPrefUtil(getContext())), imageSearchPaths);
     }
 
     @SmallTest
