@@ -20,7 +20,6 @@ import org.liberty.android.fantastischmemo.ui.QuizLauncherDialogFragment;
 import org.liberty.android.fantastischmemo.ui.RecentListFragment;
 
 import dagger.BindsInstance;
-import dagger.Component;
 import dagger.Subcomponent;
 
 @PerFragment
