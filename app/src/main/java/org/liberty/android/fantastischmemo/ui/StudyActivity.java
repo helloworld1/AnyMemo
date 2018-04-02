@@ -21,6 +21,7 @@ package org.liberty.android.fantastischmemo.ui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -95,6 +96,8 @@ public class StudyActivity extends QACardActivity {
     @Inject DictionaryUtil dictionaryUtil;
 
     @Inject ShareUtil shareUtil;
+
+    @Inject SchedulingAlgorithmParameters schedulingAlgorithmParameters;
 
     private GradeButtonsFragment gradeButtonsFragment;
 
@@ -475,7 +478,12 @@ public class StudyActivity extends QACardActivity {
             LoaderManager.LoaderCallbacks<QueueManager> {
         @Override
         public Loader<QueueManager> onCreateLoader(int arg0, Bundle arg1) {
-             Loader<QueueManager> loader = new LearnQueueManagerLoader(appComponents(), dbPath, filterCategoryId);
+             Loader<QueueManager> loader = new LearnQueueManagerLoader(getApplicationContext(),
+                     scheduler,
+                     option,
+                     schedulingAlgorithmParameters,
+                     dbPath,
+                     filterCategoryId);
              loader.forceLoad();
              return loader;
         }
@@ -494,17 +502,24 @@ public class StudyActivity extends QACardActivity {
     public static class LearnQueueManagerLoader extends
             DBLoader<QueueManager> {
 
-        @Inject Option option;
+        private Option option;
 
-        @Inject Scheduler scheduler;
+        private Scheduler scheduler;
 
-        @Inject SchedulingAlgorithmParameters schedulingAlgorithmParameters;
+        private SchedulingAlgorithmParameters schedulingAlgorithmParameters;
 
         private final int filterCategoryId;
 
-        public LearnQueueManagerLoader(AppComponents appComponents, String dbPath, int filterCategoryId) {
-            super(appComponents.applicationContext(), dbPath);
-            appComponents.inject(this);
+        public LearnQueueManagerLoader(Context appContext,
+                                       Scheduler scheduler,
+                                       Option option,
+                                       SchedulingAlgorithmParameters schedulingAlgorithmParameters,
+                                       String dbPath,
+                                       int filterCategoryId) {
+            super(appContext, dbPath);
+            this.scheduler = scheduler;
+            this.option = option;
+            this.schedulingAlgorithmParameters = schedulingAlgorithmParameters;
             this.filterCategoryId = filterCategoryId;
         }
 

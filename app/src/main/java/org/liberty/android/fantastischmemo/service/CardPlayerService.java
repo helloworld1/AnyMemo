@@ -93,7 +93,7 @@ public class CardPlayerService extends BaseService {
 
         final int cardId = extras.getInt(EXTRA_CURRENT_CARD_ID);
         
-        cardTTSUtil = new CardTTSUtil(appComponents().applicationContext(), dbPath);
+        cardTTSUtil = new CardTTSUtil(getApplicationContext(), dbPath);
 
         dbOpenHelper = AnyMemoDBOpenHelperManager.getHelper(this, dbPath);
 

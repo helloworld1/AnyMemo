@@ -70,6 +70,8 @@ public class QuizActivity extends QACardActivity {
     /* Utils */
     @Inject DictionaryUtil dictionaryUtil;
 
+    @Inject Scheduler scheduler;
+
     private QuizQueueManager queueManager;
 
     private int startCardId = -1;
@@ -250,14 +252,16 @@ public class QuizActivity extends QACardActivity {
 
         private boolean shuffleCards = false;
 
-        @Inject Scheduler scheduler;
+        private Scheduler scheduler;
 
-        public QuizQueueManagerLoader(AppComponents appComponents,
-                String dbPath, int filterCategoryId,
-                int startCardOrd, int quizSize,
-                boolean shuffleCards) {
-            super(appComponents.applicationContext(), dbPath);
-            appComponents.inject(this);
+        public QuizQueueManagerLoader(Context appContext,
+                                      Scheduler scheduler,
+                                      String dbPath,
+                                      int filterCategoryId,
+                                      int startCardOrd,
+                                      int quizSize,
+                                      boolean shuffleCards) {
+            super(appContext, dbPath);
 
             this.filterCategoryId = filterCategoryId;
 
@@ -267,6 +271,7 @@ public class QuizActivity extends QACardActivity {
 
             this.shuffleCards = shuffleCards;
 
+            this.scheduler = scheduler;
         }
 
         @Override
@@ -298,7 +303,7 @@ public class QuizActivity extends QACardActivity {
             LoaderManager.LoaderCallbacks<QueueManager> {
         @Override
         public Loader<QueueManager> onCreateLoader(int arg0, Bundle arg1) {
-             Loader<QueueManager> loader = new QuizQueueManagerLoader(appComponents(), getDbPath(),
+             Loader<QueueManager> loader = new QuizQueueManagerLoader(getApplicationContext(), scheduler, getDbPath(),
                      categoryId, startCardOrd, quizSize, shuffleCards);
              loader.forceLoad();
              return loader;

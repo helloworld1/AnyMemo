@@ -60,6 +60,7 @@ import org.liberty.android.fantastischmemo.entity.SchedulingAlgorithmParameters;
 import org.liberty.android.fantastischmemo.scheduler.Scheduler;
 import org.liberty.android.fantastischmemo.ui.loader.CardWrapperListLoader;
 import org.liberty.android.fantastischmemo.ui.loader.MultipleLoaderManager;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
 import org.liberty.android.fantastischmemo.utils.CardTextUtil;
 
@@ -106,6 +107,8 @@ public class CardListActivity extends BaseActivity {
 
     @Inject SchedulingAlgorithmParameters schedulingAlgorithmParameters;
 
+    @Inject AMFileUtil amFileUtil;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityComponents().inject(this);
@@ -135,7 +138,7 @@ public class CardListActivity extends BaseActivity {
             AMEnv.DEFAULT_IMAGE_PATH,
         };
 
-        cardTextUtil = new CardTextUtil(appComponents(), imageSearchPaths);
+        cardTextUtil = new CardTextUtil(getApplicationContext(), amFileUtil, imageSearchPaths);
 
         // Use loader to load the cards.
         multipleLoaderManager.registerLoaderCallbacks(CARD_WRAPPER_LOADER_ID, new CardWrapperLoaderCallbacks(), false);
