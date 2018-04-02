@@ -287,7 +287,7 @@ public class FileBrowserFragment extends BaseDialogFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.file_browser_createdb:{
-                disposables.add(activityComponents().databaseOperationDialogUtil().showCreateDbDialog(currentDirectory.getAbsolutePath())
+                disposables.add(databaseOperationDialogUtil.showCreateDbDialog(currentDirectory.getAbsolutePath())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Consumer<File>() {
                             @Override
@@ -299,7 +299,7 @@ public class FileBrowserFragment extends BaseDialogFragment {
             }
 
             case R.id.file_browser_createdirectory:{
-                disposables.add(activityComponents().databaseOperationDialogUtil().showCreateFolderDialog(currentDirectory)
+                disposables.add(databaseOperationDialogUtil.showCreateFolderDialog(currentDirectory)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(new Consumer<File>() {
                             @Override
