@@ -18,23 +18,11 @@ import org.liberty.android.fantastischmemo.utils.ShareUtil;
 import dagger.Module;
 import dagger.Provides;
 
-@Module
+@Module(subcomponents = FragmentComponents.class)
 public class ActivityModules {
-    private final BaseActivity activity;
-
-    public ActivityModules(BaseActivity activity) {
-        this.activity = activity;
-    }
-
     @Provides
     @PerActivity
-    BaseActivity providesBaseActivity() {
-        return activity;
-    }
-
-    @Provides
-    @PerActivity
-    Activity providesActivity() {
+    Activity providesActivity(BaseActivity activity) {
         return activity;
     }
 

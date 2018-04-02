@@ -33,23 +33,28 @@ import com.google.android.gms.common.api.Status;
 
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.BaseActivity;
+import org.liberty.android.fantastischmemo.utils.ErrorUtil;
+
+import javax.inject.Inject;
 
 public class SpreadsheetListScreen extends BaseActivity {
 
     public static final String EXTRA_AUTH_TOKEN = "authToken";
 
+    @Inject GoogleApiClient googleApiClient;
+
+    @Inject ErrorUtil errorUtil;
+
     private final static int UPLOAD_ACTIVITY = 1;
 
     private String authToken;
 
-    private GoogleApiClient googleApiClient;
-
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        setContentView(R.layout.spreadsheet_list_screen);
+        activityComponents().inject(this);
 
-        this.googleApiClient = activityComponents().googleApiClient();
+        setContentView(R.layout.spreadsheet_list_screen);
 
         SpreadsheetListFragment fragment = new SpreadsheetListFragment();
         Bundle args = getIntent().getExtras();
@@ -88,7 +93,7 @@ public class SpreadsheetListScreen extends BaseActivity {
                                 if (status.isSuccess()) {
                                     finish();
                                 } else {
-                                    activityComponents().errorUtil().showNonFatalError("Error signing off: " + status.getStatusMessage(), null);
+                                    errorUtil.showNonFatalError("Error signing off: " + status.getStatusMessage(), null);
                                 }
                             }
                         });

@@ -1,14 +1,26 @@
 package org.liberty.android.fantastischmemo.downloader.dropbox;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import org.liberty.android.fantastischmemo.common.AMEnv;
 import org.liberty.android.fantastischmemo.downloader.oauth.Oauth2AccountActivity;
 
+import javax.inject.Inject;
+
 import io.reactivex.Completable;
 
 public class DropboxOauth2AccountActivity extends Oauth2AccountActivity {
+
+    @Inject DropboxApiHelper dropboxApiHelper;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        activityComponents().inject(this);
+    }
+
     @Override
     protected void onAuthenticated(String authTokens) {
         Intent intent = new Intent(this, DropboxListActivity.class);
@@ -19,7 +31,7 @@ public class DropboxOauth2AccountActivity extends Oauth2AccountActivity {
 
     @Override
     protected Completable verifyAccessToken(@NonNull String accessToken) {
-        return Completable.fromSingle(appComponents().dropboxApiHelper().getUserInfo(accessToken));
+        return Completable.fromSingle(dropboxApiHelper.getUserInfo(accessToken));
     }
 
     @Override

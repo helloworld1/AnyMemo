@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.BaseActivity;
@@ -17,6 +18,8 @@ import org.liberty.android.fantastischmemo.ui.FileBrowserFragment;
 import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 
 import java.io.File;
+
+import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -27,6 +30,10 @@ import io.reactivex.schedulers.Schedulers;
 public class UploadDropboxActivity extends BaseActivity {
 
     public static final String EXTRA_AUTH_TOKEN = "authToken";
+
+    @Inject EventBus eventBus;
+
+    @Inject DropboxApiHelper dropboxApiHelper;
 
     private static final String ANYMEMO_FOLDER = "AnyMemo";
 
@@ -39,6 +46,9 @@ public class UploadDropboxActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        activityComponents().inject(this);
+
+
         binding = DataBindingUtil.setContentView(this, R.layout.upload_dropbox_screen);
 
         Bundle extras = getIntent().getExtras();
@@ -62,13 +72,13 @@ public class UploadDropboxActivity extends BaseActivity {
     @Override
     public void onStart() {
         super.onStart();
-        appComponents().eventBus().register(this);
+        eventBus.register(this);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        appComponents().eventBus().unregister(this);
+        eventBus.unregister(this);
     }
 
     @Subscribe
@@ -98,7 +108,7 @@ public class UploadDropboxActivity extends BaseActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        disposables.add(appComponents().dropboxApiHelper().uploadDropbox(authToken, file,
+        disposables.add(dropboxApiHelper.uploadDropbox(authToken, file,
                 String.format("/%1$s/%2$s", ANYMEMO_FOLDER, file.getName()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())

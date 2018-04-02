@@ -29,15 +29,26 @@ import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.common.base.Strings;
 
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.AMEnv;
 import org.liberty.android.fantastischmemo.common.BaseActivity;
+import org.liberty.android.fantastischmemo.utils.ErrorUtil;
+import org.liberty.android.fantastischmemo.utils.GooglePlayUtil;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
+
 public class GoogleAccountActivity extends BaseActivity {
+
+    @Inject GoogleApiClient googleApiClient;
+
+    @Inject GooglePlayUtil googlePlayUtil;
+
+    @Inject ErrorUtil errorUtil;
 
     private static final String TAG = GoogleAccountActivity.class.getSimpleName();
 
@@ -48,13 +59,15 @@ public class GoogleAccountActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activityComponents().inject(this);
+
         setContentView(R.layout.oauth2_account_activity);
 
-        if (!activityComponents().googlePlayUtil().checkPlayServices(RC_SIGN_IN)) {
+        if (!googlePlayUtil.checkPlayServices(RC_SIGN_IN)) {
             return;
         }
 
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(activityComponents().googleApiClient());
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
@@ -72,18 +85,18 @@ public class GoogleAccountActivity extends BaseActivity {
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result == null) {
-                activityComponents().errorUtil().showFatalError(getString(R.string.google_sign_in_empty_error_text), null);
+                errorUtil.showFatalError(getString(R.string.google_sign_in_empty_error_text), null);
                 return;
             }
             if (!result.isSuccess()) {
-                activityComponents().errorUtil().showFatalError(getString(R.string.google_sign_in_not_successful_error_text), null);
+                errorUtil.showFatalError(getString(R.string.google_sign_in_not_successful_error_text), null);
                 return;
             }
 
             GoogleSignInAccount acct = result.getSignInAccount();
 
             if (acct == null) {
-                activityComponents().errorUtil().showFatalError(getString(R.string.google_sign_in_account_empty_result), null);
+                errorUtil.showFatalError(getString(R.string.google_sign_in_account_empty_result), null);
                 return;
             }
 
@@ -98,24 +111,24 @@ public class GoogleAccountActivity extends BaseActivity {
                                 email, AMEnv.GDRIVE_SCOPE);
                         onAuthenticated(token);
                     } catch (IOException e) {
-                        activityComponents().errorUtil().showFatalError("IO Error", e);
+                        errorUtil.showFatalError("IO Error", e);
                     } catch (UserRecoverableAuthException e) {
                         startActivityForResult(e.getIntent(), RC_AUTH_TOKEN);
                     } catch (GoogleAuthException e) {
-                        activityComponents().errorUtil().showFatalError("GoogleAuthException", e);
+                        errorUtil.showFatalError("GoogleAuthException", e);
                     }
                 }
             });
         } else if (requestCode == RC_AUTH_TOKEN) {
             Bundle extra = data.getExtras();
             if (extra == null) {
-                activityComponents().errorUtil().showFatalError("RC_AUTH_TOKEN does not have extra", null);
+                errorUtil.showFatalError("RC_AUTH_TOKEN does not have extra", null);
                 return;
             }
             String token = extra.getString("authtoken");
 
             if (Strings.isNullOrEmpty(token)) {
-                activityComponents().errorUtil().showFatalError("RC_AUTH_TOKEN does not have token", null);
+                errorUtil.showFatalError("RC_AUTH_TOKEN does not have token", null);
                 return;
             }
 

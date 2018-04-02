@@ -49,6 +49,7 @@ import org.liberty.android.fantastischmemo.common.AMEnv;
 import org.liberty.android.fantastischmemo.common.AMPrefKeys;
 import org.liberty.android.fantastischmemo.common.BaseDialogFragment;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
+import org.liberty.android.fantastischmemo.utils.DatabaseOperationDialogUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 import java.io.File;
@@ -103,6 +104,8 @@ public class FileBrowserFragment extends BaseDialogFragment {
     @Inject AMFileUtil amFileUtil;
 
     @Inject RecentListUtil recentListUtil;
+
+    @Inject DatabaseOperationDialogUtil databaseOperationDialogUtil;
 
     public FileBrowserFragment() { }
 
@@ -444,7 +447,7 @@ public class FileBrowserFragment extends BaseDialogFragment {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             if (which == 0) {
-                                                fragment.disposables.add(fragment.activityComponents().databaseOperationDialogUtil().showDeleteDbDialog(clickedFile)
+                                                fragment.disposables.add(fragment.databaseOperationDialogUtil.showDeleteDbDialog(clickedFile)
                                                         .observeOn(AndroidSchedulers.mainThread())
                                                         .subscribe(new Consumer<File>() {
                                                             @Override
@@ -453,7 +456,7 @@ public class FileBrowserFragment extends BaseDialogFragment {
                                                             }
                                                         }));
                                             } else if (which == 1) {
-                                                fragment.disposables.add(fragment.activityComponents().databaseOperationDialogUtil().showCloneDbDialog(clickedFile)
+                                                fragment.disposables.add(fragment.databaseOperationDialogUtil.showCloneDbDialog(clickedFile)
                                                         .observeOn(AndroidSchedulers.mainThread())
                                                         .subscribe(new Consumer<File>() {
                                                             @Override
@@ -462,7 +465,7 @@ public class FileBrowserFragment extends BaseDialogFragment {
                                                             }
                                                         }));
                                             } else if (which == 2) {
-                                                fragment.disposables.add(fragment.activityComponents().databaseOperationDialogUtil().showRenameDbDialog(clickedFile)
+                                                fragment.disposables.add(fragment.databaseOperationDialogUtil.showRenameDbDialog(clickedFile)
                                                         .observeOn(AndroidSchedulers.mainThread())
                                                         .subscribe(new Consumer<File>() {
                                                             @Override

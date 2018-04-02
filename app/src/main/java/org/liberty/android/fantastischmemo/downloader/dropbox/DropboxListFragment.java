@@ -30,11 +30,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.functions.Consumer;
 
 public class DropboxListFragment extends AbstractDownloaderFragment {
 
     public static final String EXTRA_AUTH_TOKEN = "authToken";
+
+    @Inject DropboxApiHelper dropboxApiHelper;
 
     private static final String ANYMEMO_FOLDER = "AnyMemo";
 
@@ -44,6 +48,8 @@ public class DropboxListFragment extends AbstractDownloaderFragment {
 
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        fragmentComponents().inject(this);
+
         Bundle args = getArguments();
         authToken = args.getString(EXTRA_AUTH_TOKEN);
     }
@@ -51,11 +57,10 @@ public class DropboxListFragment extends AbstractDownloaderFragment {
     @Override
     protected List<DownloadItem> initialRetrieve() throws IOException, JSONException {
         final List<DownloadItem> result = new ArrayList<>();
-        appComponents().dropboxApiHelper().listFiles(authToken, ANYMEMO_FOLDER).blockingForEach(new Consumer<List<DownloadItem>>() {
+        dropboxApiHelper.listFiles(authToken, ANYMEMO_FOLDER).blockingForEach(new Consumer<List<DownloadItem>>() {
             @Override
             public void accept(List<DownloadItem> downloadItems) throws Exception {
                 result.addAll(downloadItems);
-
             }
         });
 
@@ -74,7 +79,7 @@ public class DropboxListFragment extends AbstractDownloaderFragment {
 
     @Override
     protected String fetchDatabase(DownloadItem di) throws Exception {
-        return appComponents().dropboxApiHelper().downloadFile(authToken, di.getAddress()).blockingGet();
+        return dropboxApiHelper.downloadFile(authToken, di.getAddress()).blockingGet();
     }
 
     @Override

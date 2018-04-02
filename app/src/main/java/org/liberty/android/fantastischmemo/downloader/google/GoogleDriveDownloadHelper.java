@@ -22,12 +22,9 @@ package org.liberty.android.fantastischmemo.downloader.google;
 import android.content.Context;
 
 import org.liberty.android.fantastischmemo.common.AMEnv;
-import org.liberty.android.fantastischmemo.modules.AppComponents;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
 import java.util.List;
-
-import javax.inject.Inject;
 
 public class GoogleDriveDownloadHelper {
 
@@ -35,18 +32,14 @@ public class GoogleDriveDownloadHelper {
 
     private final String authToken;
 
-    @Inject AMFileUtil amFileUtil;
+    private AMFileUtil amFileUtil;
 
-    @Inject
-    public GoogleDriveDownloadHelper(AppComponents appComponents, String authToken) {
-        appComponents.inject(this);
-        mContext = appComponents.applicationContext();
-        this.authToken = authToken;
-    }
-
-    @Inject
-    public void setAmFileUtil(AMFileUtil amFileUtil) {
+    public GoogleDriveDownloadHelper(Context context,
+                                     AMFileUtil amFileUtil,
+                                     String authToken) {
+        mContext = context;
         this.amFileUtil = amFileUtil;
+        this.authToken = authToken;
     }
 
     public List<Spreadsheet> getListSpreadsheets() throws Exception {

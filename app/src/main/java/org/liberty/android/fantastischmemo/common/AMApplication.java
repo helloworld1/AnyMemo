@@ -20,15 +20,25 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo.common;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
+import android.support.v4.app.Fragment;
 
+import org.liberty.android.fantastischmemo.modules.ActivityComponents;
+import org.liberty.android.fantastischmemo.modules.ActivityModules;
 import org.liberty.android.fantastischmemo.modules.AppComponents;
 import org.liberty.android.fantastischmemo.modules.AppModules;
 import org.liberty.android.fantastischmemo.modules.DaggerAppComponents;
+import org.liberty.android.fantastischmemo.modules.FragmentComponents;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
 
 public class AMApplication extends Application {
+
+    @Inject Provider<ActivityComponents.Builder> activityComponentsBuilder;
 
     private static final String TAG = "AMApplication";
 
@@ -56,11 +66,28 @@ public class AMApplication extends Application {
         currentApplicationContext = this;
 
         appComponents = DaggerAppComponents.builder()
-                .appModules(new AppModules(this))
+                .application(this)
+                .applicationModule(new AppModules())
                 .build();
+        appComponents.inject(this);
     }
+
 
     public AppComponents appComponents() {
         return appComponents;
+    }
+
+    public ActivityComponents activityComponents(BaseActivity activity) {
+        return activityComponentsBuilder.get()
+                .activity(activity)
+                .activityModule(new ActivityModules())
+                .build();
+    }
+
+    public FragmentComponents fragmentComponents(ActivityComponents activityComponents, Fragment fragment) {
+        return activityComponents.fragmentsComponentsBuilder().get()
+                .fragment(fragment)
+                .build();
+
     }
 }

@@ -65,6 +65,7 @@ import org.liberty.android.fantastischmemo.service.AnyMemoService;
 import org.liberty.android.fantastischmemo.ui.loader.MultipleLoaderManager;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.AboutUtil;
+import org.liberty.android.fantastischmemo.utils.DatabaseOperationDialogUtil;
 import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListActionModeUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
@@ -100,6 +101,8 @@ public class AnyMemo extends BaseActivity {
     @Inject AboutUtil aboutUtil;
 
     @Inject RecentListActionModeUtil recentListActionModeUtil;
+
+    @Inject DatabaseOperationDialogUtil databaseOperationDialogUtil;
 
     private static final int PERMISSION_REQUEST_EXTERNAL_STORAGE = 1;
 
@@ -358,7 +361,7 @@ public class AnyMemo extends BaseActivity {
         binding.addDbFab.setOnClickListener(new CardFragment.OnClickListener() {
             @Override
             public void onClick(View v) {
-                disposables.add(activityComponents().databaseOperationDialogUtil().showCreateDbDialog(AMEnv.DEFAULT_ROOT_PATH)
+                disposables.add(databaseOperationDialogUtil.showCreateDbDialog(AMEnv.DEFAULT_ROOT_PATH)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<File>() {
                     @Override
