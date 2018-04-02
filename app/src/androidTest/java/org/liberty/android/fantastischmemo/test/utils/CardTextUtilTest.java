@@ -29,6 +29,8 @@ public class CardTextUtilTest extends AbstractExistingDBTest {
 
     private AppComponents appComponents;
 
+    private AMFileUtil amFileUtil;
+
     @Override
     public void setUp() throws Exception {
         super.setUp();
@@ -37,14 +39,13 @@ public class CardTextUtilTest extends AbstractExistingDBTest {
             .thenReturn(false);
 
         appComponents = Mockito.mock(AppComponents.class);
-        Mockito.when(appComponents.applicationContext()).thenReturn(getContext());
-        Mockito.when(appComponents.amFileUtil()).thenReturn(new AMFileUtil(getContext(), new AMPrefUtil(getContext())));
+        amFileUtil = new AMFileUtil(getContext(), new AMPrefUtil(getContext()));
     }
 
     @SmallTest
     @Test
     public void testEmptyCard() {
-        cardTextUtil = new CardTextUtil(appComponents, mockImagePaths);
+        cardTextUtil = new CardTextUtil(getContext(), amFileUtil, mockImagePaths);
         CharSequence result = cardTextUtil.getSpannableText("", true, false);
         assertEquals("", result.toString());
     }
@@ -52,7 +53,7 @@ public class CardTextUtilTest extends AbstractExistingDBTest {
     @SmallTest
     @Test
     public void testCardsWithPlainText() {
-        cardTextUtil = new CardTextUtil(appComponents, mockImagePaths);
+        cardTextUtil = new CardTextUtil(getContext(), amFileUtil, mockImagePaths);
         CharSequence result = cardTextUtil.getSpannableText("Plain text", true, false);
         assertEquals("Plain text", result.toString());
     }
@@ -60,7 +61,7 @@ public class CardTextUtilTest extends AbstractExistingDBTest {
     @SmallTest
     @Test
     public void testCardsWithHTMLAndHTMLEnabled() {
-        cardTextUtil = new CardTextUtil(appComponents, mockImagePaths);
+        cardTextUtil = new CardTextUtil(getContext(), amFileUtil, mockImagePaths);
         CharSequence result = cardTextUtil.getSpannableText("<b>HTML text</b>", true, false);
         assertEquals("HTML text", result.toString());
     }
@@ -68,7 +69,7 @@ public class CardTextUtilTest extends AbstractExistingDBTest {
     @SmallTest
     @Test
     public void testCardsWithHTMLAndHTMLDisabled() {
-        cardTextUtil = new CardTextUtil(appComponents, mockImagePaths);
+        cardTextUtil = new CardTextUtil(getContext(), amFileUtil, mockImagePaths);
         CharSequence result = cardTextUtil.getSpannableText("<b>HTML text</b>", false, false);
         assertEquals("<b>HTML text</b>", result.toString());
     }
