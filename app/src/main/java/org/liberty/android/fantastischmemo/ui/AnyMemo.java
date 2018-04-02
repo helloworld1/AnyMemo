@@ -54,6 +54,7 @@ import android.widget.Toast;
 import com.google.common.base.Objects;
 
 import org.apache.commons.io.FileUtils;
+import org.greenrobot.eventbus.EventBus;
 import org.liberty.android.fantastischmemo.BuildConfig;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.AMEnv;
@@ -103,6 +104,8 @@ public class AnyMemo extends BaseActivity {
     @Inject RecentListActionModeUtil recentListActionModeUtil;
 
     @Inject DatabaseOperationDialogUtil databaseOperationDialogUtil;
+
+    @Inject EventBus eventBus;
 
     private static final int PERMISSION_REQUEST_EXTERNAL_STORAGE = 1;
 
@@ -366,7 +369,7 @@ public class AnyMemo extends BaseActivity {
                 .subscribe(new Consumer<File>() {
                     @Override
                     public void accept(File file) throws Exception {
-                        appComponents().eventBus().post(new FileBrowserFragment.RefreshFileListEvent(file.getParentFile()));
+                        eventBus.post(new FileBrowserFragment.RefreshFileListEvent(file.getParentFile()));
                     }
                 }));
             }

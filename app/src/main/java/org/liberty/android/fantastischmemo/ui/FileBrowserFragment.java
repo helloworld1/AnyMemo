@@ -43,6 +43,7 @@ import android.widget.Toast;
 
 import com.google.common.base.Strings;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.AMEnv;
@@ -106,6 +107,8 @@ public class FileBrowserFragment extends BaseDialogFragment {
     @Inject RecentListUtil recentListUtil;
 
     @Inject DatabaseOperationDialogUtil databaseOperationDialogUtil;
+
+    @Inject EventBus eventBus;
 
     public FileBrowserFragment() { }
 
@@ -172,13 +175,13 @@ public class FileBrowserFragment extends BaseDialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-        appComponents().eventBus().register(this);
+        eventBus.register(this);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        appComponents().eventBus().unregister(this);
+        eventBus.unregister(this);
     }
 
     @Override
@@ -340,7 +343,7 @@ public class FileBrowserFragment extends BaseDialogFragment {
                             onFileClickListener.onClick(clickedFile);
                         } else {
                             // Use event bus if the onFileClickListener is not set
-                            appComponents().eventBus().post(new FileClickEvent(clickedFile));
+                            eventBus.post(new FileClickEvent(clickedFile));
                         }
 
                         // dismiss on demand

@@ -35,10 +35,13 @@ import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.AMEnv;
 import org.liberty.android.fantastischmemo.common.BaseFragment;
 import org.liberty.android.fantastischmemo.entity.Setting;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.CardTextUtil;
 
 import java.io.File;
 import java.io.Serializable;
+
+import javax.inject.Inject;
 
 /*
  * This class display a side of the card and export necessary callbacks.
@@ -46,6 +49,8 @@ import java.io.Serializable;
 public class CardFragment extends BaseFragment {
 
     public static final String EXTRA_CARD_TEXT = "cardText";
+
+    @Inject AMFileUtil amFileUtil;
 
     private String mCardText;
 
@@ -94,8 +99,10 @@ public class CardFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        fragmentComponents().inject(this);
+
         mCardText = getArguments().getString(EXTRA_CARD_TEXT);
-        cardTextUtil = new CardTextUtil(appComponents(), imageSearchPaths);
+        cardTextUtil = new CardTextUtil(getContext(), amFileUtil, imageSearchPaths);
     }
 
     @Override

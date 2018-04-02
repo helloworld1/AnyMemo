@@ -68,8 +68,6 @@ public class GradeButtonsFragment extends BaseFragment {
 
     private LinearLayout buttonView;
 
-    private Option option;
-
     private Button[] gradeButtons = new Button[6];
 
     private CardDao cardDao;
@@ -83,6 +81,8 @@ public class GradeButtonsFragment extends BaseFragment {
     @Inject Scheduler scheduler;
 
     @Inject AMDateUtil amDateUtil;
+
+    @Inject Option option;
 
     // The default button titles from the string
     private CharSequence[] defaultGradeButtonTitles = new CharSequence[6];
@@ -115,8 +115,6 @@ public class GradeButtonsFragment extends BaseFragment {
         cardDao = dbOpenHelper.getCardDao();
 
         learningDataDao = dbOpenHelper.getLearningDataDao();
-
-        option = appComponents().option();
 
     }
 

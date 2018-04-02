@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.utils;
 
+import android.content.Context;
 import android.text.Editable;
 import android.text.Html;
 import android.text.Html.ImageGetter;
@@ -36,8 +37,8 @@ import org.xml.sax.XMLReader;
 public class CardTextUtil {
     private ImageGetter imageGetter;
 
-    public CardTextUtil(AppComponents appComponents, String[] imageSearchPaths) {
-        imageGetter = new CardImageGetter(appComponents, imageSearchPaths);
+    public CardTextUtil(Context appContext, AMFileUtil amFileUtil, String[] imageSearchPaths) {
+        imageGetter = new CardImageGetter(appContext, amFileUtil, imageSearchPaths);
     }
 
     /**

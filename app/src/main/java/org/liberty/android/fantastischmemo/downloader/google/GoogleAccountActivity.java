@@ -39,6 +39,7 @@ import org.liberty.android.fantastischmemo.utils.ErrorUtil;
 import org.liberty.android.fantastischmemo.utils.GooglePlayUtil;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
 
 import javax.inject.Inject;
 
@@ -49,6 +50,8 @@ public class GoogleAccountActivity extends BaseActivity {
     @Inject GooglePlayUtil googlePlayUtil;
 
     @Inject ErrorUtil errorUtil;
+
+    @Inject ExecutorService executorService;
 
     private static final String TAG = GoogleAccountActivity.class.getSimpleName();
 
@@ -103,7 +106,7 @@ public class GoogleAccountActivity extends BaseActivity {
             // Get account information
             final String email = acct.getEmail();
 
-            appComponents().executorService().submit(new Runnable() {
+            executorService.submit(new Runnable() {
                 @Override
                 public void run() {
                     try {

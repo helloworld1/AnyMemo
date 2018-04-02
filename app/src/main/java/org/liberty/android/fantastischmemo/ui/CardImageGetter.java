@@ -54,12 +54,12 @@ public class CardImageGetter implements ImageGetter {
 
     private Context context;
     
-    public CardImageGetter (AppComponents appComponents, String[] imageSearchPaths) {
+    public CardImageGetter (Context appContext, AMFileUtil amFileUtil, String[] imageSearchPaths) {
         this.imageSearchPaths = imageSearchPaths;
 
-        context = appComponents.applicationContext();
+        context = appContext;
 
-        amFileUtil = appComponents.amFileUtil();
+        this.amFileUtil = amFileUtil;
 
         Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE))
                 .getDefaultDisplay();
