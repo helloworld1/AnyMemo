@@ -34,25 +34,13 @@ import dagger.multibindings.ClassKey;
 import dagger.multibindings.IntoMap;
 import okhttp3.OkHttpClient;
 
-@Module
+@Module(subcomponents = ActivityComponents.class)
 public class AppModules {
-
-    private AMApplication application;
-
-    public AppModules(AMApplication app) {
-        this.application = app;
-    }
-
-    @Provides
-    @PerApplication
-    AMApplication providesApplication() {
-        return application;
-    }
 
     @Provides
     @PerApplication
     @ForApplication
-    Context providesContext() {
+    Context provideContext(AMApplication application) {
         return application;
     }
 
@@ -70,7 +58,7 @@ public class AppModules {
 
     @Provides
     @PerApplication
-    SharedPreferences providesSharedPreferences() {
+    SharedPreferences providesSharedPreferences(AMApplication application) {
         return PreferenceManager.getDefaultSharedPreferences(application);
     }
 

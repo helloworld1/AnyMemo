@@ -1,8 +1,12 @@
 package org.liberty.android.fantastischmemo.modules;
 
 
+import android.support.v4.app.Fragment;
+
 import org.liberty.android.fantastischmemo.downloader.anymemo.AnyMemoDownloaderFragment;
 import org.liberty.android.fantastischmemo.downloader.common.AbstractDownloaderFragment;
+import org.liberty.android.fantastischmemo.downloader.dropbox.DropboxListFragment;
+import org.liberty.android.fantastischmemo.downloader.google.SpreadsheetListFragment;
 import org.liberty.android.fantastischmemo.downloader.quizlet.CardsetsListFragment;
 import org.liberty.android.fantastischmemo.ui.CardPlayerFragment;
 import org.liberty.android.fantastischmemo.ui.ConverterFragment;
@@ -14,10 +18,12 @@ import org.liberty.android.fantastischmemo.ui.OpenActionsFragment;
 import org.liberty.android.fantastischmemo.ui.QuizLauncherDialogFragment;
 import org.liberty.android.fantastischmemo.ui.RecentListFragment;
 
+import dagger.BindsInstance;
 import dagger.Component;
+import dagger.Subcomponent;
 
 @PerFragment
-@Component(dependencies = ActivityComponents.class, modules = FragmentModules.class)
+@Subcomponent
 public interface FragmentComponents {
 
     void inject(RecentListFragment fragment);
@@ -34,6 +40,10 @@ public interface FragmentComponents {
 
     void inject(AbstractDownloaderFragment fragment);
 
+    void inject(DropboxListFragment fragment);
+
+    void inject(SpreadsheetListFragment fragment);
+
     void inject(CardPlayerFragment fragment);
 
     void inject(ConverterFragment fragment);
@@ -44,4 +54,12 @@ public interface FragmentComponents {
 
     void inject(MiscTabFragment fragment);
 
+    @Subcomponent.Builder
+    interface Builder {
+
+        @BindsInstance
+        FragmentComponents.Builder fragment(Fragment fragment);
+
+        FragmentComponents build();
+    }
 }

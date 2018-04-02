@@ -1,5 +1,6 @@
 package org.liberty.android.fantastischmemo.modules;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -7,6 +8,11 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import org.liberty.android.fantastischmemo.common.BaseActivity;
 import org.liberty.android.fantastischmemo.converter.Converter;
 import org.liberty.android.fantastischmemo.downloader.common.DownloaderUtils;
+import org.liberty.android.fantastischmemo.downloader.dropbox.DropboxOauth2AccountActivity;
+import org.liberty.android.fantastischmemo.downloader.dropbox.UploadDropboxActivity;
+import org.liberty.android.fantastischmemo.downloader.google.GoogleAccountActivity;
+import org.liberty.android.fantastischmemo.downloader.google.SpreadsheetListScreen;
+import org.liberty.android.fantastischmemo.downloader.oauth.Oauth2AccountActivity;
 import org.liberty.android.fantastischmemo.downloader.oauth.Oauth2TokenUtil;
 import org.liberty.android.fantastischmemo.downloader.quizlet.QuizletDownloadHelper;
 import org.liberty.android.fantastischmemo.entity.Option;
@@ -37,12 +43,17 @@ import org.liberty.android.fantastischmemo.utils.ShareUtil;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
-import dagger.Component;
+import javax.inject.Provider;
+
+import dagger.BindsInstance;
+import dagger.Subcomponent;
 
 @PerActivity
-@Component(dependencies = AppComponents.class, modules = {ActivityModules.class})
+@Subcomponent(modules = {ActivityModules.class})
 public interface ActivityComponents {
-    BaseActivity activity();
+    Activity activity();
+
+    BaseActivity baseActivity();
 
     Scheduler scheduler();
 
@@ -105,4 +116,26 @@ public interface ActivityComponents {
     void inject(SettingsScreen activity);
 
     void inject(ShareScreen activity);
+
+    void inject(Oauth2AccountActivity activity);
+
+    void inject(DropboxOauth2AccountActivity activity);
+
+    void inject(GoogleAccountActivity activity);
+
+    void inject(SpreadsheetListScreen activity);
+
+    void inject(UploadDropboxActivity activity);
+
+    Provider<FragmentComponents.Builder> fragmentsComponentsBuilder();
+
+    @Subcomponent.Builder
+    interface Builder {
+        @BindsInstance
+        ActivityComponents.Builder activity(BaseActivity activity);
+
+        ActivityComponents.Builder activityModule(ActivityModules module);
+
+        ActivityComponents build();
+    }
 }

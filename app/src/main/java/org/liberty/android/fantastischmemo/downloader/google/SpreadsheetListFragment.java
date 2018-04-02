@@ -23,15 +23,23 @@ import android.os.Bundle;
 
 import org.liberty.android.fantastischmemo.downloader.common.AbstractDownloaderFragment;
 import org.liberty.android.fantastischmemo.downloader.common.DownloadItem;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
+import org.liberty.android.fantastischmemo.utils.ErrorUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class SpreadsheetListFragment extends AbstractDownloaderFragment {
 
     public static final String EXTRA_AUTH_TOKEN = "authToken";
+
+    @Inject ErrorUtil errorUtil;
+
+    @Inject AMFileUtil amFileUtil;
 
     private String authToken = null;
 
@@ -42,9 +50,10 @@ public class SpreadsheetListFragment extends AbstractDownloaderFragment {
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        fragmentComponents().inject(this);
         Bundle args = getArguments();
         this.authToken = args.getString(EXTRA_AUTH_TOKEN);
-        downloadHelper = new GoogleDriveDownloadHelper(appComponents(), authToken);
+        downloadHelper = new GoogleDriveDownloadHelper(getContext(), amFileUtil, authToken);
     }
 
     @Override
@@ -65,7 +74,7 @@ public class SpreadsheetListFragment extends AbstractDownloaderFragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        activityComponents().errorUtil().showNonFatalError("Error retrieving initial list. Please log out and try again.", e);
+                        errorUtil.showNonFatalError("Error retrieving initial list. Please log out and try again.", e);
                     }
                 });
             }

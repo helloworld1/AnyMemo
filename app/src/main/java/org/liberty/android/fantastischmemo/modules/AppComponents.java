@@ -1,5 +1,6 @@
 package org.liberty.android.fantastischmemo.modules;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -29,6 +30,7 @@ import org.liberty.android.fantastischmemo.widget.WidgetRemoteViewsFactory;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
+import dagger.BindsInstance;
 import dagger.Component;
 import okhttp3.OkHttpClient;
 
@@ -56,6 +58,8 @@ public interface AppComponents {
 
     @ForApplication Context applicationContext();
 
+    void inject(AMApplication application);
+
     void inject(StudyActivity.LearnQueueManagerLoader loader);
 
     void inject(QuizActivity.QuizQueueManagerLoader loader);
@@ -69,4 +73,15 @@ public interface AppComponents {
     void inject(WidgetRemoteViewsFactory factory);
 
     void inject(GoogleDriveDownloadHelper helper);
+
+
+    @Component.Builder
+    interface Builder {
+        @BindsInstance
+        AppComponents.Builder application(AMApplication application);
+
+        AppComponents.Builder applicationModule(AppModules module);
+
+        AppComponents build();
+    }
 }

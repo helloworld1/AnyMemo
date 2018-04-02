@@ -12,6 +12,8 @@ import com.google.common.base.Strings;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.BaseActivity;
 
+import javax.inject.Inject;
+
 import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -21,6 +23,8 @@ import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
 public abstract class Oauth2AccountActivity extends BaseActivity {
+
+    @Inject Oauth2TokenUtil oauth2TokenUtil;
 
     private CompositeDisposable disposables = new CompositeDisposable();
 
@@ -33,10 +37,11 @@ public abstract class Oauth2AccountActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activityComponents().inject(this);
 
         setContentView(R.layout.oauth2_account_activity);
 
-        String savedToken = activityComponents().oauth2TokenUtil().getSavedToken();
+        String savedToken = oauth2TokenUtil.getSavedToken();
         if (savedToken != null) {
             verifyTokenAndOnAuthenticate(savedToken);
         } else {
@@ -84,14 +89,14 @@ public abstract class Oauth2AccountActivity extends BaseActivity {
                 .subscribeWith(new DisposableSingleObserver<String>() {
                     @Override
                     public void onSuccess(String token) {
-                        activityComponents().oauth2TokenUtil().saveToken(token);
+                        oauth2TokenUtil.saveToken(token);
                         onAuthenticated(token);
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         Log.e(TAG, "Error verifying token", e);
-                        activityComponents().oauth2TokenUtil().invalidateSavedToken();
+                        oauth2TokenUtil.invalidateSavedToken();
                         requestAuth();
                     }
                 }));
@@ -105,14 +110,14 @@ public abstract class Oauth2AccountActivity extends BaseActivity {
                 .subscribeWith(new DisposableCompletableObserver() {
                     @Override
                     public void onComplete() {
-                        activityComponents().oauth2TokenUtil().saveToken(token);
+                        oauth2TokenUtil.saveToken(token);
                         onAuthenticated(token);
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         Log.e(TAG, "Error verifying token", e);
-                        activityComponents().oauth2TokenUtil().invalidateSavedToken();
+                        oauth2TokenUtil.invalidateSavedToken();
                         requestAuth();
                     }
                 }));

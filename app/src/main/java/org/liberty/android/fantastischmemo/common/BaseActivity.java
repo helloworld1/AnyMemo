@@ -11,16 +11,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import org.liberty.android.fantastischmemo.modules.ActivityComponents;
-import org.liberty.android.fantastischmemo.modules.ActivityModules;
 import org.liberty.android.fantastischmemo.modules.AppComponents;
-import org.liberty.android.fantastischmemo.modules.DaggerActivityComponents;
 
 import java.util.Locale;
 
 /**
  * Created by liberty on 8/28/16.
  */
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
     protected String TAG = getClass().getSimpleName();
 
     private boolean activityForeground = false;
@@ -78,10 +76,7 @@ public class BaseActivity extends AppCompatActivity {
 
     public ActivityComponents activityComponents() {
         if (activityComponents == null) {
-            activityComponents = DaggerActivityComponents.builder()
-                    .appComponents(appComponents())
-                    .activityModules(new ActivityModules(this))
-                    .build();
+            activityComponents = ((AMApplication) getApplication()).activityComponents(this);
         }
         return activityComponents;
     }

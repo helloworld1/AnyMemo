@@ -15,9 +15,14 @@ import android.view.View;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.BaseActivity;
 import org.liberty.android.fantastischmemo.databinding.DropboxListActivityBinding;
+import org.liberty.android.fantastischmemo.downloader.oauth.Oauth2TokenUtil;
 import org.liberty.android.fantastischmemo.ui.CardFragment;
 
+import javax.inject.Inject;
+
 public class DropboxListActivity extends BaseActivity {
+
+    @Inject Oauth2TokenUtil oauth2TokenUtil;
 
     public static final String EXTRA_AUTH_TOKEN = "authToken";
 
@@ -68,7 +73,7 @@ public class DropboxListActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.logout) {
-            activityComponents().oauth2TokenUtil().invalidateSavedToken();
+            oauth2TokenUtil.invalidateSavedToken();
             finish();
             return true;
         }
