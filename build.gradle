@@ -21,6 +21,6 @@ ext {
     espressoVersion = "3.0.1"
     ormliteVersion = "5.1"
     supportMultidexVersion = "1.0.3"
-    supportConstraintLayoutVersion = "1.1.0-beta5"
+    supportConstraintLayoutVersion = "1.1.0-beta6"
 }
 
