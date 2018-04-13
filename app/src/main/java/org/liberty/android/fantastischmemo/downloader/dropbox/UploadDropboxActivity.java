@@ -27,11 +27,9 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-public class UploadDropboxActivity extends BaseActivity {
+public class UploadDropboxActivity extends BaseActivity implements FileBrowserFragment.OnFileClickListener {
 
     public static final String EXTRA_AUTH_TOKEN = "authToken";
-
-    @Inject EventBus eventBus;
 
     @Inject DropboxApiHelper dropboxApiHelper;
 
@@ -72,18 +70,11 @@ public class UploadDropboxActivity extends BaseActivity {
     @Override
     public void onStart() {
         super.onStart();
-        eventBus.register(this);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        eventBus.unregister(this);
-    }
-
-    @Subscribe
-    public void onFileClickEvent(FileBrowserFragment.FileClickEvent event) {
-        showUploadDialog(event.clickedFile);
     }
 
     private void showUploadDialog(final File file) {
@@ -129,5 +120,10 @@ public class UploadDropboxActivity extends BaseActivity {
                         AMGUIUtility.displayException(UploadDropboxActivity.this, getString(R.string.error_text), getString(R.string.error_text), throwable);
                     }
                 }));
+    }
+
+    @Override
+    public void onFileBrowserFileClick(File file) {
+        showUploadDialog(file);
     }
 }

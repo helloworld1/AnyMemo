@@ -48,7 +48,7 @@ public class EditTabFragment extends FileBrowserFragment {
 
     private FileBrowserFragment.OnFileClickListener fileClickListener
         = new FileBrowserFragment.OnFileClickListener() {
-            public void onClick(File file) {
+            public void onFileBrowserFileClick(File file) {
                 String fullpath = file.getAbsolutePath();
                 recentListUtil.addToRecentList(fullpath);
                 Intent myIntent = new Intent(mActivity, PreviewEditActivity.class);

@@ -80,7 +80,7 @@ public class DoubleClickButton extends Button {
     public void setOnClickListener(View.OnClickListener onClickListener) {
         this.onClickListener = onClickListener;
 
-        // Always use the customOnClickListener to execute onClick.
+        // Always use the customOnClickListener to execute onFileBrowserFileClick.
         super.setOnClickListener(customOnClickListener);
     }
 

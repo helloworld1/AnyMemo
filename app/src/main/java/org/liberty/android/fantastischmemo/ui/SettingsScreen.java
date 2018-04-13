@@ -740,14 +740,14 @@ public class SettingsScreen extends BaseActivity {
 
     private FileBrowserFragment.OnFileClickListener qTypefaceEditFbListener
         = new FileBrowserFragment.OnFileClickListener() {
-            public void onClick(File file) {
+            public void onFileBrowserFileClick(File file) {
                 qTypefaceEdit.setText(file.getAbsolutePath());
             }
         };
 
     private FileBrowserFragment.OnFileClickListener aTypefaceEditFbListener
         = new FileBrowserFragment.OnFileClickListener() {
-            public void onClick(File file) {
+            public void onFileBrowserFileClick(File file) {
                 aTypefaceEdit.setText(file.getAbsolutePath());
             }
         };

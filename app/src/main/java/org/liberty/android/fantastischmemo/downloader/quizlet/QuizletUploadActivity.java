@@ -48,7 +48,7 @@ public class QuizletUploadActivity extends QuizletAccountActivity {
     private FileBrowserFragment.OnFileClickListener fileClickListener = new FileBrowserFragment.OnFileClickListener() {
 
         @Override
-        public void onClick(File file) {
+        public void onFileBrowserFileClick(File file) {
             showUploadDialog(file);
         }
     };

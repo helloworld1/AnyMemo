@@ -210,11 +210,11 @@ public class CardFragment extends BaseFragment {
     }
 
     public static interface OnClickListener extends View.OnClickListener {
-        // No definitions, inherrited void onClick(View v)
+        // No definitions, inherrited void onFileBrowserFileClick(View v)
     }
 
     public static interface OnLongClickListener extends View.OnLongClickListener{
-        // No definitions, inherrited void onClick(View v)
+        // No definitions, inherrited void onFileBrowserFileClick(View v)
     }
 
 
