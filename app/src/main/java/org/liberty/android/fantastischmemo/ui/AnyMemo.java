@@ -29,19 +29,17 @@ import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -54,7 +52,6 @@ import android.widget.Toast;
 import com.google.common.base.Objects;
 
 import org.apache.commons.io.FileUtils;
-import org.greenrobot.eventbus.EventBus;
 import org.liberty.android.fantastischmemo.BuildConfig;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.AMEnv;
@@ -78,9 +75,7 @@ import java.io.InputStream;
 
 import javax.inject.Inject;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
 
 public class AnyMemo extends BaseActivity {
     private static final String WEBSITE_VERSION="https://anymemo.org/versions-view";
@@ -105,8 +100,6 @@ public class AnyMemo extends BaseActivity {
 
     @Inject DatabaseOperationDialogUtil databaseOperationDialogUtil;
 
-    @Inject EventBus eventBus;
-
     private static final int PERMISSION_REQUEST_EXTERNAL_STORAGE = 1;
 
     @Override
@@ -130,7 +123,7 @@ public class AnyMemo extends BaseActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
             case PERMISSION_REQUEST_EXTERNAL_STORAGE: {
                 // If request is cancelled, the result arrays are empty.
@@ -150,7 +143,6 @@ public class AnyMemo extends BaseActivity {
         settings = PreferenceManager.getDefaultSharedPreferences(this);
 
         initDrawer();
-        initCreateDbFab();
 
         prepareStoreage();
         prepareFirstTimeRun();
@@ -169,41 +161,28 @@ public class AnyMemo extends BaseActivity {
      * Initialize the Navigation drawer UI.
      */
     private void initDrawer() {
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        FragmentPagerAdapter adapter = new MainPagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(adapter);
-
-        final TabLayout tabLayout = binding.tabs;
-        tabLayout.setupWithViewPager(viewPager);
-        tabLayout.getTabAt(0).setIcon(R.drawable.clock);
-        tabLayout.getTabAt(1).setIcon(R.drawable.cabinet);
-        tabLayout.getTabAt(2).setIcon(R.drawable.download_tab);
-        tabLayout.getTabAt(3).setIcon(R.drawable.misc);
-
-        final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-
-        navigationView.setNavigationItemSelectedListener(
+        binding.navView.setNavigationItemSelectedListener(
             new NavigationView.OnNavigationItemSelectedListener() {
                 @Override
-                public boolean onNavigationItemSelected(MenuItem menuItem) {
+                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                     switch (menuItem.getItemId()) {
                         case R.id.recent_tab_menu:
-                            tabLayout.getTabAt(0).select();
+                            binding.bottomNavigation.setSelectedItemId(R.id.recent_tab_menu);
                             break;
                         case R.id.open_tab_menu:
-                            tabLayout.getTabAt(1).select();
+                            binding.bottomNavigation.setSelectedItemId(R.id.open_tab_menu);
                             break;
                         case R.id.download_tab_menu:
-                            tabLayout.getTabAt(2).select();
+                            binding.bottomNavigation.setSelectedItemId(R.id.download_tab_menu);
                             break;
                         case R.id.misc_tab_menu:
-                            tabLayout.getTabAt(3).select();
+                            binding.bottomNavigation.setSelectedItemId(R.id.misc_tab_menu);
                             break;
                         case R.id.option_tab_menu:
-                            startActivity(new Intent(tabLayout.getContext(), OptionScreen.class));
+                            startActivity(new Intent(AnyMemo.this, OptionScreen.class));
                             break;
                         case R.id.about_tab_menu:
                             aboutUtil.createAboutDialog();
@@ -216,31 +195,43 @@ public class AnyMemo extends BaseActivity {
             }
         );
 
-        // Change the selected navigation view
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-              @Override
-              public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                  // Nothing
-              }
+        binding.bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
-              @Override
-              public void onPageSelected(int position) {
-                  navigationView.getMenu().getItem(position).setChecked(true);
+                Fragment fragment = null;
+                switch (menuItem.getItemId()) {
+                    case R.id.recent_tab_menu:
+                        fragment = new RecentListFragment();
+                        break;
 
-                  // Only add db FAB show in the file browser fragment
-                  if (position == 1) {
-                      binding.addDbFab.setVisibility(View.VISIBLE);
-                  } else {
-                      binding.addDbFab.setVisibility(View.GONE);
-                  }
-              }
+                    case R.id.open_tab_menu:
+                        fragment = new OpenTabFragment();
+                        Bundle args = new Bundle();
+                        args.putBoolean(FileBrowserFragment.EXTRA_SHOW_CREATE_DB_BUTTON, true);
+                        fragment.setArguments(args);
+                        break;
 
-              @Override
-              public void onPageScrollStateChanged(int state) {
-                  // Nothing
-              }
-          }
-        );
+                    case R.id.download_tab_menu:
+                        fragment = new DownloadTabFragment();
+                        break;
+
+                    case R.id.misc_tab_menu:
+                        fragment = new MiscTabFragment();
+                        break;
+                }
+
+                if (fragment != null) {
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.page_fragment_container, fragment)
+                            .commit();
+                }
+
+                return true;
+            }
+        });
+
+        binding.bottomNavigation.setSelectedItemId(R.id.recent_tab_menu);
 
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -249,7 +240,7 @@ public class AnyMemo extends BaseActivity {
     private void prepareStoreage() {
         File sdPath = new File(AMEnv.DEFAULT_ROOT_PATH);
         sdPath.mkdir();
-        if(!sdPath.canRead()){
+        if (!sdPath.canRead()){
             DialogInterface.OnClickListener exitButtonListener = new DialogInterface.OnClickListener(){
                 public void onClick(DialogInterface arg0, int arg1){
                     finish();
@@ -286,17 +277,17 @@ public class AnyMemo extends BaseActivity {
             firstTime = true;
             SharedPreferences.Editor editor = settings.edit();
             editor.clear();
-            editor.commit();
+            editor.apply();
         }
 
         /* First time installation! It will install the sample db
          * to /sdcard/AnyMemo
          */
-        if(firstTime == true){
+        if (firstTime){
             SharedPreferences.Editor editor = settings.edit();
             editor.putBoolean(AMPrefKeys.FIRST_TIME_KEY, false);
             editor.putString(AMPrefKeys.getRecentPathKey(0), AMEnv.DEFAULT_ROOT_PATH + AMEnv.DEFAULT_DB_NAME);
-            editor.commit();
+            editor.apply();
             try {
                 amFileUtil.copyFileFromAsset(AMEnv.DEFAULT_DB_NAME,  new File(sdPath + "/" + AMEnv.DEFAULT_DB_NAME));
 
@@ -314,7 +305,7 @@ public class AnyMemo extends BaseActivity {
             SharedPreferences.Editor editor = settings.edit();
             /* save new version number */
             editor.putInt(AMPrefKeys.SAVED_VERSION_CODE_KEY, thisVersionCode);
-            editor.commit();
+            editor.apply();
 
             View alertView = View.inflate(this, R.layout.link_alert, null);
             TextView textView = (TextView)alertView.findViewById(R.id.link_alert_message);
@@ -349,31 +340,6 @@ public class AnyMemo extends BaseActivity {
     private void handleOpenIntent() {
         multipleLoaderManager.registerLoaderCallbacks(1, new HandleOpenIntentLoaderCallbacks(getIntent().getData()), false);
         multipleLoaderManager.startLoading();
-    }
-
-    /**
-     * We create the FAB only at Activity level to make sure the FAB is not scrolling up and down
-     * with appbar_scrolling_view_behavior. The behavior will make the FAB half visible if the FAB is
-     * inside a ViewPager fragment.
-     */
-    private void initCreateDbFab() {
-        // Make sure the addDbFab is only shown on FileBrowser fragment
-        if (binding.tabs.getSelectedTabPosition() != 1) {
-            binding.addDbFab.setVisibility(View.GONE);
-        }
-        binding.addDbFab.setOnClickListener(new CardFragment.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                disposables.add(databaseOperationDialogUtil.showCreateDbDialog(AMEnv.DEFAULT_ROOT_PATH)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<File>() {
-                    @Override
-                    public void accept(File file) throws Exception {
-                        eventBus.post(new FileBrowserFragment.RefreshFileListEvent(file.getParentFile()));
-                    }
-                }));
-            }
-        });
     }
 
     @Override
@@ -416,43 +382,7 @@ public class AnyMemo extends BaseActivity {
 
         @Override
         public Loader<File> onCreateLoader(int id, Bundle args) {
-            Loader<File> loader = new AsyncTaskLoader<File>(AnyMemo.this) {
-                @Override
-                public File loadInBackground() {
-                    String[] splittedUri = contentUri.toString().split("/");
-                    String newFileName = splittedUri[splittedUri.length - 1];
-                    if (!newFileName.endsWith(".db")) {
-                        newFileName += ".db";
-                    }
-
-                    File newFile = new File(AMEnv.DEFAULT_ROOT_PATH + "/" + newFileName);
-                    // First detect if the db with the same name exists.
-                    // And back kup the db if
-                    try {
-                        amFileUtil.deleteFileWithBackup(newFile.getAbsolutePath());
-                    } catch (IOException e) {
-                        Log.e(TAG, "Failed to delete the exisitng db with backup", e);
-                    }
-
-                    InputStream inputStream;
-
-                    try {
-                        inputStream = AnyMemo.this.getContentResolver().openInputStream(contentUri);
-                        FileUtils.copyInputStreamToFile(inputStream, newFile);
-                    } catch (IOException e) {
-                        Log.e(TAG, "Error opening file from intent", e);
-                        return null;
-                    }
-
-                    if (!databaseUtil.checkDatabase(newFile.getAbsolutePath())) {
-                        Log.e(TAG, "Database is corrupted: " + newFile.getAbsolutePath());
-                        newFile.delete();
-                        return null;
-                    };
-
-                    return newFile;
-                }
-            };
+            Loader<File> loader = new FileAsyncTaskLoader();
             loader.forceLoad();
             return loader;
         }
@@ -479,41 +409,47 @@ public class AnyMemo extends BaseActivity {
         public void onLoaderReset(Loader<File> loader) {
             // Nothing
         }
-    }
 
+        private class FileAsyncTaskLoader extends AsyncTaskLoader<File> {
+            public FileAsyncTaskLoader() {
+                super(AnyMemo.this);
+            }
 
-    private static class MainPagerAdapter extends FragmentPagerAdapter {
-        private Fragment[] fragments = new Fragment[]{
-                new RecentListFragment(),
-                new OpenTabFragment(),
-                new DownloadTabFragment(),
-                new MiscTabFragment()
-        };
+            @Override
+            public File loadInBackground() {
+                String[] splittedUri = contentUri.toString().split("/");
+                String newFileName = splittedUri[splittedUri.length - 1];
+                if (!newFileName.endsWith(".db")) {
+                    newFileName += ".db";
+                }
 
-        public MainPagerAdapter(FragmentManager fm) {
-            super(fm);
+                File newFile = new File(AMEnv.DEFAULT_ROOT_PATH + "/" + newFileName);
+                // First detect if the db with the same name exists.
+                // And back kup the db if
+                try {
+                    amFileUtil.deleteFileWithBackup(newFile.getAbsolutePath());
+                } catch (IOException e) {
+                    Log.e(TAG, "Failed to delete the exisitng db with backup", e);
+                }
 
-            // Set arguments for the OpenTabFragment fragment
-            // to show the create action
-            Bundle bundle = new Bundle();
-            bundle.putBoolean(FileBrowserFragment.EXTRA_SHOW_CREATE_DB_BUTTON, true);
-            fragments[1].setArguments(bundle);
-        }
+                InputStream inputStream;
 
-        @Override
-        public Fragment getItem(int position) {
-            return fragments[position];
-        }
+                try {
+                    inputStream = AnyMemo.this.getContentResolver().openInputStream(contentUri);
+                    FileUtils.copyInputStreamToFile(inputStream, newFile);
+                } catch (IOException e) {
+                    Log.e(TAG, "Error opening file from intent", e);
+                    return null;
+                }
 
-        @Override
-        public int getCount() {
-            return fragments.length;
-        }
+                if (!databaseUtil.checkDatabase(newFile.getAbsolutePath())) {
+                    Log.e(TAG, "Database is corrupted: " + newFile.getAbsolutePath());
+                    newFile.delete();
+                    return null;
+                };
 
-        @Override
-        public CharSequence getPageTitle(int position) {
-            // Display icon only
-            return null;
+                return newFile;
+            }
         }
     }
 }

@@ -28,6 +28,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -43,8 +44,6 @@ import android.widget.Toast;
 
 import com.google.common.base.Strings;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.AMEnv;
 import org.liberty.android.fantastischmemo.common.AMPrefKeys;
@@ -84,6 +83,9 @@ public class FileBrowserFragment extends BaseDialogFragment {
     private TextView filesListEmptyView;
 
     private TextView titleTextView;
+    private FloatingActionButton addDbFab;
+
+
     private boolean dismissOnSelect = false;
     private boolean showCreateDbButton = false;
 
@@ -107,8 +109,6 @@ public class FileBrowserFragment extends BaseDialogFragment {
     @Inject RecentListUtil recentListUtil;
 
     @Inject DatabaseOperationDialogUtil databaseOperationDialogUtil;
-
-    @Inject EventBus eventBus;
 
     public FileBrowserFragment() { }
 
@@ -173,18 +173,6 @@ public class FileBrowserFragment extends BaseDialogFragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        eventBus.register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        eventBus.unregister(this);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 
@@ -195,6 +183,14 @@ public class FileBrowserFragment extends BaseDialogFragment {
 
         filesListEmptyView = (TextView) v.findViewById(R.id.empty_text_view);
         filesListEmptyView.setText(R.string.directory_empty_text);
+
+        addDbFab = v.findViewById(R.id.add_db_fab);
+
+        if (showCreateDbButton) {
+            initCreateDbFab();
+        } else {
+            addDbFab.setVisibility(View.GONE);
+        }
 
         fileListAdapter = new FileBrowserAdapter(this);
         filesListRecyclerView.setAdapter(fileListAdapter);
@@ -208,10 +204,9 @@ public class FileBrowserFragment extends BaseDialogFragment {
         browseTo(currentDirectory);
     }
 
-    @Subscribe
-    public void onRefreshFileListEvent(RefreshFileListEvent event) {
-        if (event.folderToRefresh != null) {
-            browseTo(event.folderToRefresh);
+    private void refreshFileList(@Nullable File folderToRefresh) {
+        if (folderToRefresh != null) {
+            browseTo(folderToRefresh);
         } else if (currentDirectory != null){
             browseTo(currentDirectory);
         }
@@ -342,8 +337,7 @@ public class FileBrowserFragment extends BaseDialogFragment {
                         if (onFileClickListener != null) {
                             onFileClickListener.onClick(clickedFile);
                         } else {
-                            // Use event bus if the onFileClickListener is not set
-                            eventBus.post(new FileClickEvent(clickedFile));
+                            notifyFileClick(clickedFile);
                         }
 
                         // dismiss on demand
@@ -362,6 +356,34 @@ public class FileBrowserFragment extends BaseDialogFragment {
         }
     }
 
+    private void notifyFileClick(File clickedFile) {
+        if (getParentFragment() instanceof OnFileClickListener) {
+            ((OnFileClickListener) getParentFragment()).onClick(clickedFile);
+        } else if (getActivity() instanceof OnFileClickListener) {
+            ((OnFileClickListener) getActivity()).onClick(clickedFile);
+        }
+    }
+
+    /**
+     * We create the FAB only at Activity level to make sure the FAB is not scrolling up and down
+     * with appbar_scrolling_view_behavior. The behavior will make the FAB half visible if the FAB is
+     * inside a ViewPager fragment.
+     */
+    private void initCreateDbFab() {
+        addDbFab.setOnClickListener(new CardFragment.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                disposables.add(databaseOperationDialogUtil.showCreateDbDialog(AMEnv.DEFAULT_ROOT_PATH)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Consumer<File>() {
+                            @Override
+                            public void accept(File file) {
+                                refreshFileList(file.getAbsoluteFile().getParentFile());
+                            }
+                        }));
+            }
+        });
+    }
 
     private static class FileBrowserAdapter extends RecyclerView.Adapter<FileBrowserAdapter.ViewHolder> {
         private final FileBrowserFragment fragment;
@@ -548,19 +570,6 @@ public class FileBrowserFragment extends BaseDialogFragment {
 
         public FileClickEvent(@NonNull File clickedFile) {
             this.clickedFile = clickedFile;
-        }
-    }
-
-    public static class RefreshFileListEvent {
-        @Nullable
-        public final File folderToRefresh;
-
-        public RefreshFileListEvent(@Nullable File folderToRefresh) {
-            if (folderToRefresh != null && folderToRefresh.isDirectory()) {
-                this.folderToRefresh = folderToRefresh;
-            } else {
-                this.folderToRefresh = null;
-            }
         }
     }
 }
