@@ -66,7 +66,7 @@ public class FileBrowserActivity extends BaseActivity {
 
     private FileBrowserFragment.OnFileClickListener fileClickListener
         = new FileBrowserFragment.OnFileClickListener() {
-        public void onClick(File file) {
+        public void onFileBrowserFileClick(File file) {
             fileClickAction(file);
         }
     };

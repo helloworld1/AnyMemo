@@ -26,7 +26,6 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
@@ -335,7 +334,7 @@ public class FileBrowserFragment extends BaseDialogFragment {
                         editor.commit();
 
                         if (onFileClickListener != null) {
-                            onFileClickListener.onClick(clickedFile);
+                            onFileClickListener.onFileBrowserFileClick(clickedFile);
                         } else {
                             notifyFileClick(clickedFile);
                         }
@@ -358,9 +357,9 @@ public class FileBrowserFragment extends BaseDialogFragment {
 
     private void notifyFileClick(File clickedFile) {
         if (getParentFragment() instanceof OnFileClickListener) {
-            ((OnFileClickListener) getParentFragment()).onClick(clickedFile);
+            ((OnFileClickListener) getParentFragment()).onFileBrowserFileClick(clickedFile);
         } else if (getActivity() instanceof OnFileClickListener) {
-            ((OnFileClickListener) getActivity()).onClick(clickedFile);
+            ((OnFileClickListener) getActivity()).onFileBrowserFileClick(clickedFile);
         }
     }
 
@@ -562,15 +561,7 @@ public class FileBrowserFragment extends BaseDialogFragment {
     }
 
     public interface OnFileClickListener {
-        void onClick(File file);
-    }
-
-    public static class FileClickEvent {
-        public final File clickedFile;
-
-        public FileClickEvent(@NonNull File clickedFile) {
-            this.clickedFile = clickedFile;
-        }
+        void onFileBrowserFileClick(File file);
     }
 }
 

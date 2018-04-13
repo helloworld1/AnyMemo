@@ -40,7 +40,7 @@ public class OpenTabFragment extends FileBrowserFragment {
 
     private FileBrowserFragment.OnFileClickListener fileClickListener
         = new FileBrowserFragment.OnFileClickListener() {
-            public void onClick(File file) {
+            public void onFileBrowserFileClick(File file) {
                 DialogFragment df = new OpenActionsFragment();
                 Bundle b = new Bundle();
                 b.putString(OpenActionsFragment.EXTRA_DBPATH, file.getAbsolutePath());
