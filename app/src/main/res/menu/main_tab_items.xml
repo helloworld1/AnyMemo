@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/recent_tab_menu"
+        android:checked="true"
+        android:icon="@drawable/clock"
+        android:title="@string/recent_tab_text"/>
+    <item
+        android:id="@+id/open_tab_menu"
+        android:icon="@drawable/cabinet"
+        android:title="@string/open_tab_text"/>
+    <item
+        android:id="@+id/download_tab_menu"
+        android:icon="@drawable/download_tab"
+        android:title="@string/download_tab_text"/>
+    <item
+        android:id="@+id/misc_tab_menu"
+        android:icon="@drawable/misc"
+        android:title="@string/misc_tab_text"/>
+</menu>
