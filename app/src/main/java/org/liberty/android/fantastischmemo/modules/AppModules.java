@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import org.greenrobot.eventbus.EventBus;
 import org.liberty.android.fantastischmemo.common.AMApplication;
 import org.liberty.android.fantastischmemo.converter.CSVExporter;
 import org.liberty.android.fantastischmemo.converter.CSVImporter;
@@ -66,12 +65,6 @@ public class AppModules {
     @PerApplication
     OkHttpClient providesOkHttpClient() {
         return new OkHttpClient();
-    }
-
-    @Provides
-    @PerApplication
-    EventBus providesEventBus() {
-        return new EventBus();
     }
 
     @Provides
