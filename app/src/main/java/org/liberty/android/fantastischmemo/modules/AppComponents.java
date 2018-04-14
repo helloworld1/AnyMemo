@@ -38,8 +38,6 @@ public interface AppComponents {
         @BindsInstance
         AppComponents.Builder application(AMApplication application);
 
-        AppComponents.Builder applicationModule(AppModules module);
-
         AppComponents build();
     }
 }
