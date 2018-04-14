@@ -110,8 +110,8 @@ public class CardListActivity extends BaseActivity {
     @Inject AMFileUtil amFileUtil;
 
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         activityComponents().inject(this);
+        super.onCreate(savedInstanceState);
 
         setContentView(R.layout.card_list);
 

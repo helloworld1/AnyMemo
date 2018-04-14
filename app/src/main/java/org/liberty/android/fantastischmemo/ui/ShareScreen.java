@@ -62,8 +62,8 @@ public class ShareScreen extends BaseActivity implements View.OnClickListener{
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         activityComponents().inject(this);
+        super.onCreate(savedInstanceState);
 
         setContentView(R.layout.share_screen);
         dbnameView = (TextView)findViewById(R.id.share_db_name_entry);

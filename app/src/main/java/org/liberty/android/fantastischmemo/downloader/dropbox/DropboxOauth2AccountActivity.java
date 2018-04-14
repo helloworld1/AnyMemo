@@ -17,8 +17,8 @@ public class DropboxOauth2AccountActivity extends Oauth2AccountActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         activityComponents().inject(this);
+        super.onCreate(savedInstanceState);
     }
 
     @Override
