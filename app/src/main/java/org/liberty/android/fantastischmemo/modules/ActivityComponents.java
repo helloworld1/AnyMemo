@@ -63,8 +63,6 @@ public interface ActivityComponents {
         @BindsInstance
         ActivityComponents.Builder activity(BaseActivity activity);
 
-        ActivityComponents.Builder activityModule(ActivityModules module);
-
         ActivityComponents build();
     }
 }

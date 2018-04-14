@@ -15,39 +15,38 @@ import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
 import org.liberty.android.fantastischmemo.utils.ErrorUtil;
 import org.liberty.android.fantastischmemo.utils.ShareUtil;
 
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 
 @Module(subcomponents = FragmentComponents.class)
-public class ActivityModules {
-    @Provides
+public abstract class ActivityModules {
+    @Binds
     @PerActivity
-    Activity providesActivity(BaseActivity activity) {
-        return activity;
-    }
+    abstract Activity providesActivity(BaseActivity activity);
 
     @Provides
     @PerActivity
-    MultipleLoaderManager providesMultipleLoaderManager(BaseActivity activity) {
+    static MultipleLoaderManager providesMultipleLoaderManager(BaseActivity activity) {
         return new MultipleLoaderManager(activity);
     }
 
     @Provides
     @PerActivity
-    ShareUtil providesShareUtil(Activity activity) {
+    static ShareUtil providesShareUtil(Activity activity) {
         return new ShareUtil(activity);
     }
 
     @Provides
     @PerActivity
-    DictionaryUtil providesDictionaryUtil(Activity activity, Option option) {
+    static DictionaryUtil providesDictionaryUtil(Activity activity, Option option) {
         return new DictionaryUtil(activity, option);
     }
 
 
     @Provides
     @PerActivity
-    GoogleSignInOptions provideGoogleSignInOptions() {
+    static GoogleSignInOptions provideGoogleSignInOptions() {
         return new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -55,7 +54,7 @@ public class ActivityModules {
 
     @Provides
     @PerActivity
-    GoogleApiClient provideGoogleApiClient(@NonNull final BaseActivity activity,
+    static GoogleApiClient provideGoogleApiClient(@NonNull final BaseActivity activity,
                                            @NonNull final ErrorUtil errorUtil,
                                            @NonNull final GoogleSignInOptions gso) {
         return new GoogleApiClient.Builder(activity)

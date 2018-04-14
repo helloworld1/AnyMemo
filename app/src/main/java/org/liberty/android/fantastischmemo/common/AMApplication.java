@@ -29,7 +29,6 @@ import android.support.v4.app.Fragment;
 import org.liberty.android.fantastischmemo.modules.ActivityComponents;
 import org.liberty.android.fantastischmemo.modules.ActivityModules;
 import org.liberty.android.fantastischmemo.modules.AppComponents;
-import org.liberty.android.fantastischmemo.modules.AppModules;
 import org.liberty.android.fantastischmemo.modules.DaggerAppComponents;
 import org.liberty.android.fantastischmemo.modules.FragmentComponents;
 
@@ -67,7 +66,6 @@ public class AMApplication extends Application {
 
         appComponents = DaggerAppComponents.builder()
                 .application(this)
-                .applicationModule(new AppModules())
                 .build();
         appComponents.inject(this);
     }
@@ -80,7 +78,6 @@ public class AMApplication extends Application {
     public ActivityComponents activityComponents(BaseActivity activity) {
         return activityComponentsBuilder.get()
                 .activity(activity)
-                .activityModule(new ActivityModules())
                 .build();
     }
 

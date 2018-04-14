@@ -27,6 +27,7 @@ import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 import dagger.multibindings.ClassKey;
@@ -34,36 +35,32 @@ import dagger.multibindings.IntoMap;
 import okhttp3.OkHttpClient;
 
 @Module(subcomponents = ActivityComponents.class)
-public class AppModules {
+public abstract class AppModules {
 
-    @Provides
+    @Binds
     @PerApplication
     @ForApplication
-    Context provideContext(AMApplication application) {
-        return application;
-    }
+    abstract Context provideContext(AMApplication application);
+
+    @Binds
+    @PerApplication
+    abstract Scheduler providesScheduler(DefaultScheduler scheduler);
 
     @Provides
     @PerApplication
-    Scheduler providesScheduler(DefaultScheduler scheduler) {
-        return scheduler;
-    }
-
-    @Provides
-    @PerApplication
-    ExecutorService provideExecutorService() {
+    static ExecutorService provideExecutorService() {
         return Executors.newFixedThreadPool(4);
     }
 
     @Provides
     @PerApplication
-    SharedPreferences providesSharedPreferences(AMApplication application) {
+    static SharedPreferences providesSharedPreferences(AMApplication application) {
         return PreferenceManager.getDefaultSharedPreferences(application);
     }
 
     @Provides
     @PerApplication
-    OkHttpClient providesOkHttpClient() {
+    static OkHttpClient providesOkHttpClient() {
         return new OkHttpClient();
     }
 
@@ -71,7 +68,7 @@ public class AppModules {
     @PerApplication
     @IntoMap
     @ClassKey(CSVExporter.class)
-    Converter providesCSVExporter() {
+    static Converter providesCSVExporter() {
         return new CSVExporter();
     }
 
@@ -79,7 +76,7 @@ public class AppModules {
     @PerApplication
     @IntoMap
     @ClassKey(CSVImporter.class)
-    Converter providesCSVImporter(AMFileUtil amFileUtil) {
+    static Converter providesCSVImporter(AMFileUtil amFileUtil) {
         return new CSVImporter(amFileUtil);
     }
 
@@ -87,7 +84,7 @@ public class AppModules {
     @PerApplication
     @IntoMap
     @ClassKey(Mnemosyne2CardsExporter.class)
-    Converter providesMnemosyne2CardsExporter(AMFileUtil amFileUtil) {
+    static Converter providesMnemosyne2CardsExporter(AMFileUtil amFileUtil) {
         return new Mnemosyne2CardsExporter(amFileUtil);
     }
 
@@ -95,7 +92,7 @@ public class AppModules {
     @PerApplication
     @IntoMap
     @ClassKey(Mnemosyne2CardsImporter.class)
-    Converter providesMnemosyne2CardsImporter(AMFileUtil amFileUtil) {
+    static Converter providesMnemosyne2CardsImporter(AMFileUtil amFileUtil) {
         return new Mnemosyne2CardsImporter(amFileUtil);
     }
 
@@ -103,7 +100,7 @@ public class AppModules {
     @PerApplication
     @IntoMap
     @ClassKey(MnemosyneXMLExporter.class)
-    Converter providesMnemosyneXMLExporter() {
+    static Converter providesMnemosyneXMLExporter() {
         return new MnemosyneXMLExporter();
     }
 
@@ -111,7 +108,7 @@ public class AppModules {
     @PerApplication
     @IntoMap
     @ClassKey(MnemosyneXMLImporter.class)
-    Converter providesMnemosyneXMLImporter(AMFileUtil amFileUtil) {
+    static Converter providesMnemosyneXMLImporter(AMFileUtil amFileUtil) {
         return new MnemosyneXMLImporter(amFileUtil);
     }
 
@@ -119,7 +116,7 @@ public class AppModules {
     @PerApplication
     @IntoMap
     @ClassKey(QATxtExporter.class)
-    Converter providesQATxtExporter() {
+    static Converter providesQATxtExporter() {
         return new QATxtExporter();
     }
 
@@ -127,7 +124,7 @@ public class AppModules {
     @PerApplication
     @IntoMap
     @ClassKey(QATxtImporter.class)
-    Converter providesQATxtImporter(AMFileUtil amFileUtil) {
+    static Converter providesQATxtImporter(AMFileUtil amFileUtil) {
         return new QATxtImporter(amFileUtil);
     }
 
@@ -135,7 +132,7 @@ public class AppModules {
     @PerApplication
     @IntoMap
     @ClassKey(Supermemo2008XMLImporter.class)
-    Converter providesSupermemo2008XMLImporter() {
+    static Converter providesSupermemo2008XMLImporter() {
         return new Supermemo2008XMLImporter();
     }
 
@@ -143,7 +140,7 @@ public class AppModules {
     @PerApplication
     @IntoMap
     @ClassKey(SupermemoXMLImporter.class)
-    Converter providesSupermemoXMLImporter(AMFileUtil amFileUtil) {
+    static Converter providesSupermemoXMLImporter(AMFileUtil amFileUtil) {
         return new SupermemoXMLImporter(amFileUtil);
     }
 
@@ -151,7 +148,7 @@ public class AppModules {
     @PerApplication
     @IntoMap
     @ClassKey(TabTxtExporter.class)
-    Converter providesTabTxtExporter() {
+    static Converter providesTabTxtExporter() {
         return new TabTxtExporter();
     }
 
@@ -159,7 +156,7 @@ public class AppModules {
     @PerApplication
     @IntoMap
     @ClassKey(TabTxtImporter.class)
-    Converter providesTabTxtImporter(AMFileUtil amFileUtil) {
+    static Converter providesTabTxtImporter(AMFileUtil amFileUtil) {
         return new TabTxtImporter(amFileUtil);
     }
 
@@ -167,7 +164,7 @@ public class AppModules {
     @PerApplication
     @IntoMap
     @ClassKey(ZipExporter.class)
-    Converter providesZipExporter() {
+    static Converter providesZipExporter() {
         return new ZipExporter();
     }
 
@@ -175,7 +172,7 @@ public class AppModules {
     @PerApplication
     @IntoMap
     @ClassKey(ZipImporter.class)
-    Converter providesZipImporter() {
+    static Converter providesZipImporter() {
         return new ZipImporter();
     }
 }
