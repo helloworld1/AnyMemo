@@ -104,8 +104,8 @@ public class AnyMemo extends BaseActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         activityComponents().inject(this);
+        super.onCreate(savedInstanceState);
         disposables = new CompositeDisposable();
 
         binding = DataBindingUtil.setContentView(this, R.layout.main_tabs);

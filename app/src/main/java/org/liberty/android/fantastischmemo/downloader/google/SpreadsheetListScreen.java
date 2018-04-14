@@ -51,8 +51,8 @@ public class SpreadsheetListScreen extends BaseActivity {
 
     @Override
     public void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
         activityComponents().inject(this);
+        super.onCreate(bundle);
 
         setContentView(R.layout.spreadsheet_list_screen);
 

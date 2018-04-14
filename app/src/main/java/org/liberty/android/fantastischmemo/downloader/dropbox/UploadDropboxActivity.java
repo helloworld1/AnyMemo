@@ -41,9 +41,8 @@ public class UploadDropboxActivity extends BaseActivity implements FileBrowserFr
 
     @Override
     public void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
         activityComponents().inject(this);
-
+        super.onCreate(bundle);
 
         binding = DataBindingUtil.setContentView(this, R.layout.upload_dropbox_screen);
 

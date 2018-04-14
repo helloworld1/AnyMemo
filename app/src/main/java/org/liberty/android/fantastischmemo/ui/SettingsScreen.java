@@ -123,8 +123,8 @@ public class SettingsScreen extends BaseActivity {
 
     @Override
     public void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
         activityComponents().inject(this);
+        super.onCreate(bundle);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             dbPath = extras.getString(EXTRA_DBPATH);

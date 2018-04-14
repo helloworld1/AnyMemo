@@ -133,8 +133,8 @@ public abstract class QACardActivity extends BaseActivity {
 
     @Override
     public void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
         activityComponents().inject(this);
+        super.onCreate(bundle);
         setContentView(getContentView());
     }
 

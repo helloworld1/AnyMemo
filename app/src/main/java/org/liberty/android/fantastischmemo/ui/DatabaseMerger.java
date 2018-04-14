@@ -51,8 +51,8 @@ public class DatabaseMerger extends BaseActivity implements View.OnClickListener
 
     @Override
     public void onCreate(Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
         activityComponents().inject(this);
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.merge_layout);
         Bundle extras = getIntent().getExtras();
         String dbPath = "";

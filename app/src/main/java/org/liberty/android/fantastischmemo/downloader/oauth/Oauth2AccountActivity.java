@@ -36,8 +36,8 @@ public abstract class Oauth2AccountActivity extends BaseActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         activityComponents().inject(this);
+        super.onCreate(savedInstanceState);
 
         setContentView(R.layout.oauth2_account_activity);
 
