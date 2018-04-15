@@ -27,6 +27,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
@@ -50,6 +52,7 @@ import org.liberty.android.fantastischmemo.utils.AMGUIUtility;
 import org.liberty.android.fantastischmemo.utils.AMPrefUtil;
 import org.liberty.android.fantastischmemo.utils.ShareUtil;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
@@ -119,8 +122,9 @@ public class PreviewEditActivity extends QACardActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState)
-    {
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
         Card currentCard = getCurrentCard();
         if (currentCard != null) {
             outState.putInt(EXTRA_CARD_ID, currentCard.getId());
@@ -570,7 +574,7 @@ public class PreviewEditActivity extends QACardActivity {
             .setPositiveButton(getString(R.string.yes_text),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface arg0, int arg1) {
-                            DeleteCardTask task = new DeleteCardTask();
+                            DeleteCardTask task = new DeleteCardTask(new WeakReference<>(PreviewEditActivity.this));
                             task.execute((Void)null);
                         }
                     })
@@ -691,27 +695,50 @@ public class PreviewEditActivity extends QACardActivity {
             }
         };
 
-    private class DeleteCardTask extends AsyncTask<Void, Void, Void> {
+    private static class DeleteCardTask extends AsyncTask<Void, Void, Void> {
         private ProgressDialog progressDialog;
+
+        private WeakReference<PreviewEditActivity> activityRef;
+
+        public DeleteCardTask(@NonNull WeakReference<PreviewEditActivity> activityRef) {
+            this.activityRef = activityRef;
+        }
+
+
         @Override
         public void onPreExecute() {
-            progressDialog = new ProgressDialog(PreviewEditActivity.this);
+            PreviewEditActivity activity = activityRef.get();
+            if (activity == null) {
+                return;
+            }
+
+            progressDialog = new ProgressDialog(activity);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setTitle(getString(R.string.loading_please_wait));
-            progressDialog.setMessage(getString(R.string.loading_database));
+            progressDialog.setTitle(activity.getString(R.string.loading_please_wait));
+            progressDialog.setMessage(activity.getString(R.string.loading_database));
             progressDialog.setCancelable(false);
             progressDialog.show();
         }
         @Override
         public Void doInBackground(Void... params) {
-            Card delCard = getCurrentCard();
-            setCurrentCard(getDbOpenHelper().getCardDao().queryNextCard(getCurrentCard(), currentCategory));
-            getDbOpenHelper().getCardDao().delete(delCard);
+            PreviewEditActivity activity = activityRef.get();
+            if (activity == null) {
+                return null;
+            }
+
+            Card delCard = activity.getCurrentCard();
+            activity.setCurrentCard(activity.getDbOpenHelper().getCardDao().queryNextCard(activity.getCurrentCard(), activity.currentCategory));
+            activity.getDbOpenHelper().getCardDao().delete(delCard);
             return null;
         }
         @Override
         public void onPostExecute(Void result){
-            restartActivity();
+            PreviewEditActivity activity = activityRef.get();
+            if (activity == null) {
+                return;
+            }
+
+            activity.restartActivity();
         }
     }
 
