@@ -63,11 +63,11 @@ public class AnyMemoService extends BaseService {
     }
 
     @Override
-    public void onStart(Intent intent, int startId){
+    public int onStartCommand(Intent intent, int flags, int startId){
         Bundle extras = intent.getExtras();
         if(extras == null){
             Log.e(TAG, "Extras is NULL!");
-            return;
+            return START_NOT_STICKY;
         }
             Log.v(TAG, "Service now!");
 
@@ -82,6 +82,7 @@ public class AnyMemoService extends BaseService {
         }
         stopSelf();
 
+        return START_NOT_STICKY;
     }
 
     @Override
