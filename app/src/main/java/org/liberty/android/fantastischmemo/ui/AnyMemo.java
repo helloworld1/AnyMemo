@@ -72,6 +72,7 @@ import org.liberty.android.fantastischmemo.widget.AnyMemoWidgetProvider;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 
 import javax.inject.Inject;
 
@@ -382,7 +383,7 @@ public class AnyMemo extends BaseActivity {
 
         @Override
         public Loader<File> onCreateLoader(int id, Bundle args) {
-            Loader<File> loader = new FileAsyncTaskLoader();
+            Loader<File> loader = new FileAsyncTaskLoader(AnyMemo.this, contentUri);
             loader.forceLoad();
             return loader;
         }
@@ -410,46 +411,58 @@ public class AnyMemo extends BaseActivity {
             // Nothing
         }
 
-        private class FileAsyncTaskLoader extends AsyncTaskLoader<File> {
-            public FileAsyncTaskLoader() {
-                super(AnyMemo.this);
+    }
+
+    private static class FileAsyncTaskLoader extends AsyncTaskLoader<File> {
+        private static final String TAG = FileAsyncTaskLoader.class.getSimpleName();
+        private WeakReference<AnyMemo> anyMemoRef;
+        private Uri contentUri;
+
+        public FileAsyncTaskLoader(@NonNull AnyMemo anyMemo, @NonNull Uri contentUri) {
+            super(anyMemo);
+            this.anyMemoRef = new WeakReference<>(anyMemo);
+            this.contentUri = contentUri;
+        }
+
+        @Override
+        public File loadInBackground() {
+            AnyMemo anyMemoActivity = anyMemoRef.get();
+            if (anyMemoActivity == null) {
+                return null;
             }
 
-            @Override
-            public File loadInBackground() {
-                String[] splittedUri = contentUri.toString().split("/");
-                String newFileName = splittedUri[splittedUri.length - 1];
-                if (!newFileName.endsWith(".db")) {
-                    newFileName += ".db";
-                }
-
-                File newFile = new File(AMEnv.DEFAULT_ROOT_PATH + "/" + newFileName);
-                // First detect if the db with the same name exists.
-                // And back kup the db if
-                try {
-                    amFileUtil.deleteFileWithBackup(newFile.getAbsolutePath());
-                } catch (IOException e) {
-                    Log.e(TAG, "Failed to delete the exisitng db with backup", e);
-                }
-
-                InputStream inputStream;
-
-                try {
-                    inputStream = AnyMemo.this.getContentResolver().openInputStream(contentUri);
-                    FileUtils.copyInputStreamToFile(inputStream, newFile);
-                } catch (IOException e) {
-                    Log.e(TAG, "Error opening file from intent", e);
-                    return null;
-                }
-
-                if (!databaseUtil.checkDatabase(newFile.getAbsolutePath())) {
-                    Log.e(TAG, "Database is corrupted: " + newFile.getAbsolutePath());
-                    newFile.delete();
-                    return null;
-                };
-
-                return newFile;
+            String[] splittedUri = contentUri.toString().split("/");
+            String newFileName = splittedUri[splittedUri.length - 1];
+            if (!newFileName.endsWith(".db")) {
+                newFileName += ".db";
             }
+
+            File newFile = new File(AMEnv.DEFAULT_ROOT_PATH + "/" + newFileName);
+            // First detect if the db with the same name exists.
+            // And back kup the db if
+            try {
+                anyMemoActivity.amFileUtil.deleteFileWithBackup(newFile.getAbsolutePath());
+            } catch (IOException e) {
+                Log.e(TAG, "Failed to delete the exisitng db with backup", e);
+            }
+
+            InputStream inputStream;
+
+            try {
+                inputStream = anyMemoActivity.getContentResolver().openInputStream(contentUri);
+                FileUtils.copyInputStreamToFile(inputStream, newFile);
+            } catch (IOException e) {
+                Log.e(TAG, "Error opening file from intent", e);
+                return null;
+            }
+
+            if (!anyMemoActivity.databaseUtil.checkDatabase(newFile.getAbsolutePath())) {
+                Log.e(TAG, "Database is corrupted: " + newFile.getAbsolutePath());
+                newFile.delete();
+                return null;
+            }
+
+            return newFile;
         }
     }
 }
