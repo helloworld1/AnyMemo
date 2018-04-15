@@ -22,9 +22,11 @@ package org.liberty.android.fantastischmemo.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
+import org.liberty.android.fantastischmemo.BuildConfig;
 import org.liberty.android.fantastischmemo.service.AnyMemoService;
 import org.liberty.android.fantastischmemo.widget.AnyMemoWidgetProvider;
 
@@ -46,7 +48,12 @@ public class AlarmReceiver extends BroadcastReceiver{
             Log.v(TAG, "ALARM NOTIFICATION_ALARM");
             Intent myIntent = new Intent(context, AnyMemoService.class);
             myIntent.putExtra("request_code", AnyMemoService.UPDATE_NOTIFICATION);
-            context.startService(myIntent);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.startForegroundService(myIntent);
+            } else {
+                context.startService(myIntent);
+            }
         }
 
         if((alarmReq & ALARM_WIDGET) != 0){
