@@ -67,7 +67,7 @@ public class SetAlarmReceiver extends BroadcastReceiver{
 
         AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent myIntent = new Intent(context, AlarmReceiver.class);
-        myIntent.putExtra("request_code", AlarmReceiver.ALARM_NOTIFICATION);
+        myIntent.putExtra("request_code", AlarmReceiver.ALARM_SHOW_NOTIFICATION);
         PendingIntent sender = PendingIntent.getBroadcast(context, ALARM_REQUEST_CODE, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         /* Set up the alarm time */
         Calendar due = Calendar.getInstance();
@@ -96,7 +96,7 @@ public class SetAlarmReceiver extends BroadcastReceiver{
         /* Set an alarm for the notification */
         AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent myIntent = new Intent(context, AlarmReceiver.class);
-        myIntent.putExtra("request_code", AlarmReceiver.ALARM_NOTIFICATION);
+        myIntent.putExtra("request_code", AlarmReceiver.ALARM_SHOW_NOTIFICATION);
         PendingIntent sender = PendingIntent.getBroadcast(context, ALARM_REQUEST_CODE, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         am.cancel(sender);
     }

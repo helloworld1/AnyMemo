@@ -127,7 +127,6 @@ public class AMPrefKeys {
 
     public static final String ALLOW_ORIENTATION_KEY= "allow_orientation";
 
-    // AnyMemoService
     public static final String NOTIFICATION_INTERVAL_KEY = "notification_interval";
 
     // Card player

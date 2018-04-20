@@ -22,41 +22,49 @@ package org.liberty.android.fantastischmemo.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
-import org.liberty.android.fantastischmemo.BuildConfig;
-import org.liberty.android.fantastischmemo.service.AnyMemoService;
+import org.liberty.android.fantastischmemo.common.AMApplication;
+import org.liberty.android.fantastischmemo.utils.NotificationUtil;
 import org.liberty.android.fantastischmemo.widget.AnyMemoWidgetProvider;
 
+import javax.inject.Inject;
 
-public class AlarmReceiver extends BroadcastReceiver{
-    public static int ALARM_NOTIFICATION = 1;
+
+public class AlarmReceiver extends BroadcastReceiver {
+    public static int ALARM_SHOW_NOTIFICATION = 1;
     public static int ALARM_WIDGET = 2;
+    public static int ALARM_CANCEL_NOTIFICATION = 4;
     private final static String TAG = AlarmReceiver.class.getSimpleName();
+
+    @Inject NotificationUtil notificationUtil;
+
     @Override
     public void onReceive(Context context, Intent intent){
+        ((AMApplication) context.getApplicationContext()).appComponents().inject(this);
         Bundle extras = intent.getExtras();
         if(extras == null){
             Log.e(TAG, "Receive NULL extras");
             return;
         }
-        int alarmReq = extras.getInt("request_code", 0);
-        Log.v(TAG, "Receive req: " + Integer.toString(alarmReq));
-        if((alarmReq & ALARM_NOTIFICATION) != 0){
-            Log.v(TAG, "ALARM NOTIFICATION_ALARM");
-            Intent myIntent = new Intent(context, AnyMemoService.class);
-            myIntent.putExtra("request_code", AnyMemoService.UPDATE_NOTIFICATION);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                context.startForegroundService(myIntent);
-            } else {
-                context.startService(myIntent);
-            }
+        int alarmReq = extras.getInt("request_code", 0);
+
+        Log.v(TAG, "Receive req: " + Integer.toString(alarmReq));
+        if ((alarmReq & ALARM_SHOW_NOTIFICATION) != 0) {
+            Log.v(TAG, "ALARM NOTIFICATION_ALARM");
+
+            notificationUtil.showNotification();
         }
 
-        if((alarmReq & ALARM_WIDGET) != 0){
+        if ((alarmReq & ALARM_CANCEL_NOTIFICATION) != 0) {
+            Log.v(TAG, "ALARM NOTIFICATION_ALARM");
+
+            notificationUtil.cancelNotification();
+        }
+
+        if ((alarmReq & ALARM_WIDGET) != 0) {
             Log.v(TAG, "ALARM WIDGET");
             AnyMemoWidgetProvider.updateWidget(context);
         }

@@ -2,7 +2,7 @@ package org.liberty.android.fantastischmemo.modules;
 
 import org.liberty.android.fantastischmemo.common.AMApplication;
 import org.liberty.android.fantastischmemo.downloader.google.GoogleDriveDownloadHelper;
-import org.liberty.android.fantastischmemo.service.AnyMemoService;
+import org.liberty.android.fantastischmemo.receiver.AlarmReceiver;
 import org.liberty.android.fantastischmemo.service.CardPlayerService;
 import org.liberty.android.fantastischmemo.service.ConvertIntentService;
 import org.liberty.android.fantastischmemo.ui.QuizActivity;
@@ -22,8 +22,6 @@ public interface AppComponents {
 
     void inject(QuizActivity.QuizQueueManagerLoader loader);
 
-    void inject(AnyMemoService service);
-
     void inject(CardPlayerService service);
 
     void inject(ConvertIntentService service);
@@ -32,6 +30,7 @@ public interface AppComponents {
 
     void inject(GoogleDriveDownloadHelper helper);
 
+    void inject(AlarmReceiver alarmReceiver);
 
     @Component.Builder
     interface Builder {
