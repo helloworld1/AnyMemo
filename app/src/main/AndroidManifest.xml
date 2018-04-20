@@ -168,8 +168,6 @@
             android:name=".widget.UpdateWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
         <service
-            android:name=".service.AnyMemoService" />
-        <service
             android:name=".service.CardPlayerService" />
         <service
             android:name=".service.ConvertIntentService" />

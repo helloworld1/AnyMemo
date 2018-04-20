@@ -59,12 +59,12 @@ import org.liberty.android.fantastischmemo.common.AMPrefKeys;
 import org.liberty.android.fantastischmemo.common.BaseActivity;
 import org.liberty.android.fantastischmemo.databinding.MainTabsBinding;
 import org.liberty.android.fantastischmemo.receiver.SetAlarmReceiver;
-import org.liberty.android.fantastischmemo.service.AnyMemoService;
 import org.liberty.android.fantastischmemo.ui.loader.MultipleLoaderManager;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.AboutUtil;
 import org.liberty.android.fantastischmemo.utils.DatabaseOperationDialogUtil;
 import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
+import org.liberty.android.fantastischmemo.utils.NotificationUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListActionModeUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 import org.liberty.android.fantastischmemo.widget.AnyMemoWidgetProvider;
@@ -100,6 +100,8 @@ public class AnyMemo extends BaseActivity {
     @Inject RecentListActionModeUtil recentListActionModeUtil;
 
     @Inject DatabaseOperationDialogUtil databaseOperationDialogUtil;
+
+    @Inject NotificationUtil notificationUtil;
 
     private static final int PERMISSION_REQUEST_EXTERNAL_STORAGE = 1;
 
@@ -351,9 +353,7 @@ public class AnyMemo extends BaseActivity {
         super.onDestroy();
         // Update the widget and cancel the notification.
         AnyMemoWidgetProvider.updateWidget(this);
-        Intent myIntent = new Intent(this, AnyMemoService.class);
-        myIntent.putExtra("request_code", AnyMemoService.CANCEL_NOTIFICATION);
-        startService(myIntent);
+        notificationUtil.cancelNotification();
 
         if (multipleLoaderManager != null) {
             multipleLoaderManager.destroy();

@@ -49,13 +49,13 @@ import org.liberty.android.fantastischmemo.common.BaseActivity;
 import org.liberty.android.fantastischmemo.entity.Card;
 import org.liberty.android.fantastischmemo.entity.Option;
 import org.liberty.android.fantastischmemo.entity.Setting;
-import org.liberty.android.fantastischmemo.service.AnyMemoService;
 import org.liberty.android.fantastischmemo.ui.loader.CardTTSUtilLoader;
 import org.liberty.android.fantastischmemo.ui.loader.MultipleLoaderManager;
 import org.liberty.android.fantastischmemo.ui.loader.SettingLoader;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.AMStringUtils;
 import org.liberty.android.fantastischmemo.utils.CardTTSUtil;
+import org.liberty.android.fantastischmemo.utils.NotificationUtil;
 import org.liberty.android.fantastischmemo.widget.AnyMemoWidgetProvider;
 
 import java.io.File;
@@ -115,6 +115,8 @@ public abstract class QACardActivity extends BaseActivity {
     @Inject AMFileUtil amFileUtil;
 
     @Inject Option option;
+
+    @Inject NotificationUtil notificationUtil;
 
     /**
      * This is for testing only.
@@ -483,9 +485,7 @@ public abstract class QACardActivity extends BaseActivity {
         multipleLoaderManager.destroy();
 
         /* Update the widget because StudyActivity can be accessed though widget*/
-        Intent myIntent = new Intent(this, AnyMemoService.class);
-        myIntent.putExtra("request_code", AnyMemoService.CANCEL_NOTIFICATION);
-        startService(myIntent);
+        notificationUtil.cancelNotification();
 
         AnyMemoWidgetProvider.updateWidget(this);
         super.onDestroy();
