@@ -59,7 +59,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         }
 
         if ((alarmReq & ALARM_CANCEL_NOTIFICATION) != 0) {
-            Log.v(TAG, "ALARM NOTIFICATION_ALARM");
+            Log.v(TAG, "ALARM CANCEL_NOTIFICATION");
 
             notificationUtil.cancelNotification();
         }
