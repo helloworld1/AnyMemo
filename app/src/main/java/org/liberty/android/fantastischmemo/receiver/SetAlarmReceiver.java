@@ -53,7 +53,7 @@ public class SetAlarmReceiver extends BroadcastReceiver{
             return;
         }
         else if(s.equals("1")){
-            interval = AlarmManager.INTERVAL_HOUR * 1;
+            interval = AlarmManager.INTERVAL_HOUR;
         }
         else if(s.equals("6")){
             interval = AlarmManager.INTERVAL_HOUR * 6;
@@ -80,7 +80,7 @@ public class SetAlarmReceiver extends BroadcastReceiver{
          * Decide to set the time to "due" or the now + interval
          * This will avoid the alarm triggering when setting.
          */
-        if(now.compareTo(due) == 1){
+        if(now.compareTo(due) > 0){
             now.add(Calendar.SECOND, (int)(interval / 1000));
             am.setInexactRepeating(AlarmManager.RTC, now.getTimeInMillis(), interval, sender);
         }
