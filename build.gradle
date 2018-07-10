@@ -14,13 +14,3 @@ allprojects {
         jcenter()
     }
 }
-
-ext {
-    androidSupportLibraryVersion = "27.1.1"
-    daggerVersion = "2.15"
-    espressoVersion = "3.0.1"
-    ormliteVersion = "5.1"
-    supportMultidexVersion = "1.0.3"
-    supportConstraintLayoutVersion = "1.1.0-beta6"
-}
-
