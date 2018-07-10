@@ -64,9 +64,7 @@ public class NotificationUtil {
             Log.v(TAG, "Notification Invoked!");
         }
         catch(Exception e){
-            /* Do not show notification when AnyMemo can not
-             * fetch the into
-             */
+            Log.e(TAG, "Error showing notification", e);
         }
     }
 
