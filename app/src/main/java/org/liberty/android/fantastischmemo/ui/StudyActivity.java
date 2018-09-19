@@ -342,7 +342,7 @@ public class StudyActivity extends QACardActivity {
             return;
         }
         setupGradeButtons();
-        displayCard(true);
+        displayCard(false);
         initialized = true;
         setTitle(getDbName());
     }
@@ -666,7 +666,7 @@ public class StudyActivity extends QACardActivity {
                     showNoItemDialog();
                 } else {
                     setCurrentCard(nextCard);
-                    displayCard(true);
+                    displayCard(false);
                 }
             }
         };
