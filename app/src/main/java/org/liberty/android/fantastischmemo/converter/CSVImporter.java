@@ -75,8 +75,12 @@ public class CSVImporter implements Converter {
             String[] nextLine;
             final List<Card> cardList = new LinkedList<Card>();
             while((nextLine = reader.readNext()) != null) {
+                if(nextLine.length == 1 && nextLine[0].isEmpty()){
+                    // ignore blank lines
+                    continue;
+                }
                 if(nextLine.length < 2){
-                    throw new Exception("Malformed CSV file. Please make sure the CSV's first column is question, second one is answer and the optinal third one is category");
+                    throw new Exception("Malformed CSV file. Please make sure the CSV's first column is question, second one is answer and the optional third one is category");
                 }
                 String note = "";
                 String category = "";
