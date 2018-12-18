@@ -20,7 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.ui;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,6 +27,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.BaseActivity;
@@ -121,18 +121,11 @@ public class DatabaseMerger extends BaseActivity implements View.OnClickListener
                 }
 
                 public void doUITask(){
-                    new AlertDialog.Builder(DatabaseMerger.this)
-                        .setTitle(R.string.merge_success_title)
-                        .setMessage(R.string.merge_success_message)
-                        .setPositiveButton(R.string.back_menu_text, new DialogInterface.OnClickListener(){
-                            public void onClick(DialogInterface arg0, int arg1){
-                                Intent resultIntent = new Intent();
-                                setResult(Activity.RESULT_OK, resultIntent);
-                                finish();
-                            }
-                        })
-                        .create()
+                    Toast.makeText(DatabaseMerger.this, getString(R.string.merge_success_message), Toast.LENGTH_LONG)
                         .show();
+                    Intent resultIntent = new Intent();
+                    setResult(Activity.RESULT_OK, resultIntent);
+                    finish();
                 }
             });
 
