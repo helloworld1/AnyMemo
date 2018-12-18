@@ -44,6 +44,9 @@ public class DatabaseUtil {
     }
 
     public void mergeDatabases(String destPath, String srcPath) throws Exception {
+        if (destPath.equals(srcPath)) {
+            throw new IllegalArgumentException("Cannot merge database into itself");
+        }
         AnyMemoDBOpenHelper destHelper = AnyMemoDBOpenHelperManager.getHelper(mContext, destPath);
         AnyMemoDBOpenHelper srcHelper = AnyMemoDBOpenHelperManager.getHelper(mContext, srcPath);
 

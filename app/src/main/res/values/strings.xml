@@ -156,6 +156,7 @@
     <string name="merge_db_text">Merge DB</string>
     <string name="merge_success_title">Merge success</string>
     <string name="merge_success_message">Successfully merge databases.</string>
+    <string name="merge_same_database">Cannot merge database into itself.</string>
     <string name="merging_title">Merging...</string>
     <string name="merging_summary">Merging databases. Please wait.</string>
     <string name="copy_text">Copy</string>

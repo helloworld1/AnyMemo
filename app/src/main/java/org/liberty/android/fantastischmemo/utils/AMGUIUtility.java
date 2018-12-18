@@ -25,6 +25,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.common.base.Throwables;
 
@@ -84,6 +85,17 @@ public class AMGUIUtility{
                         public void run(){
                             task.doUITask();
                             mProgressDialog.dismiss();
+                        }
+                    });
+                }
+                catch(final IllegalArgumentException iae){
+                    handler.post(new Runnable(){
+                        @Override
+                        public void run(){
+                            mProgressDialog.dismiss();
+                            Toast.makeText(activity,
+                                activity.getString(R.string.merge_same_database), Toast.LENGTH_LONG)
+                                .show();
                         }
                     });
                 }
