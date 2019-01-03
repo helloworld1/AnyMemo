@@ -1,6 +1,6 @@
 package org.liberty.android.fantastischmemo.common;
 
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 import org.liberty.android.fantastischmemo.modules.ActivityComponents;
 import org.liberty.android.fantastischmemo.modules.AppComponents;

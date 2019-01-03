@@ -183,7 +183,7 @@
             android:exported="true"
             android:multiprocess="true" />
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
             android:grantUriPermissions="true">
             <meta-data

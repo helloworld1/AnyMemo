@@ -3,7 +3,7 @@ package org.liberty.android.fantastischmemo.utils;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.Log;
 
 import com.google.common.base.Throwables;

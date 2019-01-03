@@ -23,9 +23,9 @@ package org.liberty.android.fantastischmemo.ui.loader;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Handler;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import androidx.fragment.app.FragmentActivity;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import android.util.Log;
 
 import org.liberty.android.fantastischmemo.R;

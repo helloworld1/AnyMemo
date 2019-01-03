@@ -1,7 +1,7 @@
 package org.liberty.android.fantastischmemo.modules;
 
 
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 import org.liberty.android.fantastischmemo.downloader.anymemo.AnyMemoDownloaderFragment;
 import org.liberty.android.fantastischmemo.downloader.common.AbstractDownloaderFragment;

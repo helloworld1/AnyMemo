@@ -1,6 +1,6 @@
 package org.liberty.android.fantastischmemo.downloader.dropbox;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
