@@ -7,14 +7,14 @@ repositories {
 }
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         versionCode 232
         versionName "10.11.2"
         minSdkVersion 16
-        targetSdkVersion 27
+        targetSdkVersion 28
         testApplicationId "org.liberty.android.fantastischmemo.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
         multiDexEnabled true
@@ -85,13 +85,12 @@ android {
 
 dependencies {
     ext {
-        androidSupportLibraryVersion = "27.1.1"
-        androidSupportLibraryVersion = "27.1.1"
+        androidSupportLibraryVersion = "28.0.0"
         daggerVersion = "2.15"
         espressoVersion = "3.0.1"
         ormliteVersion = "5.1"
         supportMultidexVersion = "1.0.3"
-        supportConstraintLayoutVersion = "1.1.2"
+        supportConstraintLayoutVersion = "1.1.3"
     }
 
     implementation "com.android.support:support-core-utils:$ext.androidSupportLibraryVersion"
@@ -112,13 +111,13 @@ dependencies {
 
     implementation "commons-io:commons-io:2.4"
 
-    implementation "com.google.guava:guava:23.4-android"
+    implementation "com.google.guava:guava:24.1-android"
     implementation "com.opencsv:opencsv:3.4"
     implementation "com.github.PhilJay:MPAndroidChart:v2.1.6"
     implementation "com.rarepebble:colorpicker:2.0.0"
     implementation "com.simplify:ink:1.0.0"
     implementation "com.google.dagger:dagger:$ext.daggerVersion"
-    implementation "com.google.android.gms:play-services-auth:15.0.1"
+    implementation "com.google.android.gms:play-services-auth:16.0.1"
     compileOnly "javax.annotation:jsr250-api:1.0"
 
     androidTestImplementation "com.crittercism.dexmaker:dexmaker:1.4"
