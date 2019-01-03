@@ -3,7 +3,7 @@ package org.liberty.android.fantastischmemo.test.provider;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
-import android.support.test.filters.SmallTest;
+import androidx.test.filters.SmallTest;
 
 import org.junit.Test;
 import org.liberty.android.fantastischmemo.BuildConfig;

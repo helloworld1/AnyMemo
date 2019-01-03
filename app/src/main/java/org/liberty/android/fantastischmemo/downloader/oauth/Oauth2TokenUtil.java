@@ -2,8 +2,8 @@ package org.liberty.android.fantastischmemo.downloader.oauth;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.liberty.android.fantastischmemo.common.AMPrefKeys;
 import org.liberty.android.fantastischmemo.modules.PerActivity;

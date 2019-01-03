@@ -3,7 +3,7 @@ package org.liberty.android.fantastischmemo.utils;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v4.content.FileProvider;
+import androidx.core.content.FileProvider;
 
 import org.apache.commons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.R;

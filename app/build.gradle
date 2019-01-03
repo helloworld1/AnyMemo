@@ -19,7 +19,7 @@ android {
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
         multiDexEnabled true
         archivesBaseName = "AnyMemo"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
 
@@ -83,27 +83,22 @@ android {
     }
 }
 
+configurations {
+    all*.exclude group: 'com.google.guava', module: 'listenablefuture'
+}
+
 dependencies {
-    ext {
-        androidSupportLibraryVersion = "28.0.0"
-        daggerVersion = "2.15"
-        espressoVersion = "3.0.1"
-        ormliteVersion = "5.1"
-        supportMultidexVersion = "1.0.3"
-        supportConstraintLayoutVersion = "1.1.3"
-    }
+    implementation 'androidx.legacy:legacy-support-core-utils:1.0.0'
+    implementation 'androidx.fragment:fragment:1.0.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.annotation:annotation:1.0.1'
+    implementation 'androidx.browser:browser:1.0.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 
-    implementation "com.android.support:support-core-utils:$ext.androidSupportLibraryVersion"
-    implementation "com.android.support:support-fragment:$ext.androidSupportLibraryVersion"
-    implementation "com.android.support:cardview-v7:$ext.androidSupportLibraryVersion"
-    implementation "com.android.support:design:$ext.androidSupportLibraryVersion"
-    implementation "com.android.support:support-annotations:$ext.androidSupportLibraryVersion"
-    implementation "com.android.support:customtabs:$ext.androidSupportLibraryVersion"
-    implementation "com.android.support:multidex:$ext.supportMultidexVersion"
-    implementation "com.android.support.constraint:constraint-layout:$ext.supportConstraintLayoutVersion"
-
-    implementation "com.j256.ormlite:ormlite-core:$ext.ormliteVersion"
-    implementation "com.j256.ormlite:ormlite-android:$ext.ormliteVersion"
+    implementation "com.j256.ormlite:ormlite-core:5.1"
+    implementation "com.j256.ormlite:ormlite-android:5.1"
     implementation "com.squareup.okhttp3:okhttp:3.10.0"
 
     implementation "io.reactivex.rxjava2:rxjava:2.0.4"
@@ -116,7 +111,10 @@ dependencies {
     implementation "com.github.PhilJay:MPAndroidChart:v2.1.6"
     implementation "com.rarepebble:colorpicker:2.0.0"
     implementation "com.simplify:ink:1.0.0"
-    implementation "com.google.dagger:dagger:$ext.daggerVersion"
+
+    implementation "com.google.dagger:dagger:2.20"
+    annotationProcessor "com.google.dagger:dagger-compiler:2.20"
+
     implementation "com.google.android.gms:play-services-auth:16.0.1"
     compileOnly "javax.annotation:jsr250-api:1.0"
 
@@ -124,17 +122,15 @@ dependencies {
     androidTestImplementation "com.crittercism.dexmaker:dexmaker-dx:1.4"
     androidTestImplementation "com.crittercism.dexmaker:dexmaker-mockito:1.4"
     androidTestImplementation "org.mockito:mockito-core:1.10.19"
-    androidTestImplementation "com.android.support:support-annotations:$ext.androidSupportLibraryVersion"
-    androidTestImplementation("com.android.support.test.espresso:espresso-core:$ext.espressoVersion") {
+    androidTestImplementation 'androidx.annotation:annotation:1.0.1'
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.1') {
         exclude group: "com.google.code.findbugs"
     }
-    androidTestImplementation("com.android.support.test.espresso:espresso-intents:$ext.espressoVersion") {
+    androidTestImplementation('androidx.test.espresso:espresso-intents:3.1.1') {
         exclude group: "com.google.code.findbugs"
     }
 
-    androidTestImplementation "com.android.support.test:runner:1.0.2"
-
-    annotationProcessor "com.google.dagger:dagger-compiler:$ext.daggerVersion"
+    androidTestImplementation "androidx.test:runner:1.1.1"
 }
 
 static def getBuildString () {

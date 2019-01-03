@@ -1,7 +1,7 @@
 package org.liberty.android.fantastischmemo.test.db;
 
 import android.graphics.Color;
-import android.support.test.filters.SmallTest;
+import androidx.test.filters.SmallTest;
 
 import org.junit.Test;
 import org.liberty.android.fantastischmemo.dao.SettingDao;

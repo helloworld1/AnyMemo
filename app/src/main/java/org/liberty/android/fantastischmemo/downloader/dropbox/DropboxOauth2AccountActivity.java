@@ -2,7 +2,7 @@ package org.liberty.android.fantastischmemo.downloader.dropbox;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.liberty.android.fantastischmemo.common.AMEnv;
 import org.liberty.android.fantastischmemo.downloader.oauth.Oauth2AccountActivity;
