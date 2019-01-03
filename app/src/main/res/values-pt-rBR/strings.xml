@@ -114,7 +114,7 @@
     <string name="downloader_download_alert">Baixar: </string>
     <string name="downloader_download_alert_message">Detalhes: </string>
     <string name="about_title">Sobre</string>
-    <string name="about_text">Advanced spaced repetition flashcard learning software.&lt;br /&gt;&lt;br /&gt;Autores: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;Website: &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Acknowledge: Piotr Bazan, pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;Tradutores: Ladislav, jim4ever, paw3lk, Александр Гоменюк, Maksym Grinenko, Kim hyun-ho, Thomas Tempé, Alex Wirz Vieira</string>
+    <string name="about_text">Advanced spaced repetition flashcard learning software.&lt;br /&gt;&lt;br /&gt;Autores: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;Website: &lt;a href="https://anymemo.org"&gt;https://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Acknowledge: Piotr Bazan, pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;Tradutores: Ladislav, jim4ever, paw3lk, Александр Гоменюк, Maksym Grinenko, Kim hyun-ho, Thomas Tempé, Alex Wirz Vieira</string>
     <string name="about_version">Histórico da Versão</string>
     <string name="what_is_new">Nova Versão Instalada</string>
     <string name="downloader_categories">Categorias</string>
@@ -150,7 +150,7 @@
     <string name="fullscreen_summary">Mostrar flashcards no Modo Tela Cheia.</string>
     <string name="edit_dialog_category">Categoria</string>
     <string name="settings_audio_location_title">Configurar a linguagem do áudio</string>
-    <string name="what_is_new_message">Para visualizar as novas features, clique no botão histórico da versão, ou, visite nosso site:&lt;a href=" http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt;&lt;br>/&gt;</string>
+    <string name="what_is_new_message">Para visualizar as novas features, clique no botão histórico da versão, ou, visite nosso site:&lt;a href=" https://anymemo.org"&gt;https://anymemo.org&lt;/a&gt;&lt;br>/&gt;</string>
     <string name="list_mode_text">Modo Lista</string>
     <string name="merge_db_text">Mesclar DB</string>
     <string name="merge_success_title">Mesclado com Sucesso</string>
@@ -186,7 +186,7 @@
     <string name="enable_volume_key_summary">Usar a tecla de volume cima/baixo para avaliar as cartas.</string>
     <string name="donate_text">Doações</string>
     <string name="buy_pro_text">Comprar a versão Pró</string>
-    <string name="donate_summary">Você pode fazer doações para o Projeto AnyMemo comprando a versão Pró no Mercado Android ou pelo site &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt; Obrigado pela ajuda.</string>
+    <string name="donate_summary">Você pode fazer doações para o Projeto AnyMemo comprando a versão Pró no Mercado Android ou pelo site &lt;a href="https://anymemo.org"&gt;https://anymemo.org&lt;/a&gt; &lt;br /&gt; Obrigado pela ajuda.</string>
     <string name="anymemo_pro_link">market://search?q=pname:org.liberty.android.fantastischmemopro</string>
     <string name="goto_prev_screen">Ir para a tela de Visualização/Edição</string>
     <string name="exception_text">Exceção</string>
@@ -221,7 +221,7 @@
     <string name="notification_6hr_text">6 horas</string>
     <string name="notification_12hr_text">12 horas</string>
     <string name="notification_24hr_text">Um Dia</string>
-    <string name="download_source_anymemo">http://anymemo.org (padrão)</string>
+    <string name="download_source_anymemo">https://anymemo.org (padrão)</string>
     <string name="swap_text">Trocar</string>
     <string name="swapdup_text">Trocar&amp;Dup</string>
     <string name="locale_german_text">Alemão</string>
