@@ -83,10 +83,6 @@ android {
     }
 }
 
-configurations {
-    all*.exclude group: 'com.google.guava', module: 'listenablefuture'
-}
-
 dependencies {
     implementation 'androidx.legacy:legacy-support-core-utils:1.0.0'
     implementation 'androidx.fragment:fragment:1.0.0'
@@ -106,7 +102,7 @@ dependencies {
 
     implementation "commons-io:commons-io:2.4"
 
-    implementation "com.google.guava:guava:24.1-android"
+    implementation "com.google.guava:guava:27.0.1-android"
     implementation "com.opencsv:opencsv:3.4"
     implementation "com.github.PhilJay:MPAndroidChart:v2.1.6"
     implementation "com.rarepebble:colorpicker:2.0.0"
