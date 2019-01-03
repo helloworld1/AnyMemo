@@ -113,7 +113,7 @@
     <string name="downloader_download_alert">Lataukset:</string>
     <string name="downloader_download_alert_message">Lisätiedot:</string>
     <string name="about_title">Tietoja sovelluksesta</string>
-    <string name="about_text">Edistyksellinen aikavälikertausta oppimismetodina käyttävä kysymyskorttiapplikaatio.&lt;br />&lt;br />Tekijät: Haowen Ning, Qi Wang&lt;br />&lt;br />Sivusto: &lt;a href=http://anymemo.org>http://anymemo.org&lt;/a> &lt;br />&lt;br />Kiitokset: Piotr Bazan, pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br />&lt;br />Käännökset: Ladislav, jim4ever, paw3lk, Alexander Gomenyuk, Maksym Grinenko, Kim hyun-ho, Thomas Tempé, Alex Wirz Vieira, Neil Barry, Mattia Monga, Ilari Tyni</string>
+    <string name="about_text">Edistyksellinen aikavälikertausta oppimismetodina käyttävä kysymyskorttiapplikaatio.&lt;br />&lt;br />Tekijät: Haowen Ning, Qi Wang&lt;br />&lt;br />Sivusto: &lt;a href=https://anymemo.org>https://anymemo.org&lt;/a> &lt;br />&lt;br />Kiitokset: Piotr Bazan, pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br />&lt;br />Käännökset: Ladislav, jim4ever, paw3lk, Alexander Gomenyuk, Maksym Grinenko, Kim hyun-ho, Thomas Tempé, Alex Wirz Vieira, Neil Barry, Mattia Monga, Ilari Tyni</string>
     <string name="about_version">Versiohistoria</string>
     <string name="what_is_new">Uusi versio on asennettuna</string>
     <string name="downloader_categories">Kategoria</string>
@@ -150,7 +150,7 @@
     <string name="fullscreen_summary">Näytä kortteja kokonäyttötilassa.</string>
     <string name="edit_dialog_category">Kategoria</string>
     <string name="settings_audio_location_title">Aseta käyttäjän äänen sijainti</string>
-    <string name="what_is_new_message">Katso graafinen opas uusista toiminnoista, klikkaamalla versiohistoria-painiketta tai käymällä virallisilla nettisivuillamme:&lt;a href=http://anymemo.org>http://anymemo.org&lt;/a>&lt;br /></string>
+    <string name="what_is_new_message">Katso graafinen opas uusista toiminnoista, klikkaamalla versiohistoria-painiketta tai käymällä virallisilla nettisivuillamme:&lt;a href=https://anymemo.org>https://anymemo.org&lt;/a>&lt;br /></string>
     <string name="list_mode_text">Lista korteista</string>
     <string name="merge_db_text">Yhdistä tietokannat</string>
     <string name="merge_success_title">Yhdistäminen onnistui</string>
@@ -186,7 +186,7 @@
     <string name="enable_volume_key_summary">Käytä äänenvoimakkuuden säädintä arvioidaksesi kortteja opiskelun aikana.</string>
     <string name="donate_text">Lahjoita</string>
     <string name="buy_pro_text">Osta Pro-versio</string>
-    <string name="donate_summary">Voit lahjoittaa AnyMemo-projektille ostamalla Pro-version Google Playsta tai lahjoittamalla AnyMemon omien sivujen kautta	&lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt; Kiitoksia tuestasi.</string>
+    <string name="donate_summary">Voit lahjoittaa AnyMemo-projektille ostamalla Pro-version Google Playsta tai lahjoittamalla AnyMemon omien sivujen kautta	&lt;a href="https://anymemo.org"&gt;https://anymemo.org&lt;/a&gt; &lt;br /&gt; Kiitoksia tuestasi.</string>
     <string name="anymemo_pro_link">market://search?q=pname:org.liberty.android.fantastischmemopro</string>
     <string name="goto_prev_screen">Esikatselu/muokkaustila</string>
     <string name="exception_text">Poikkeus</string>

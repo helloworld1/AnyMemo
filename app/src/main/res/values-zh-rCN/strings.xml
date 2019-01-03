@@ -111,7 +111,7 @@
     <string name="downloader_download_alert">下载: </string>
     <string name="downloader_download_alert_message">详情: </string>
     <string name="about_title">关于</string>
-    <string name="about_text">记忆辅助软件。&lt;br /&gt;&lt;br /&gt;作者: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;官方网站: &lt;a href="http://anymemo.org"&gt;anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;感谢: pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler, Dongping Xie&lt;br /&gt;&lt;br /&gt;翻译者: paw3lk, jim4ever, Maksym Grinenko</string>
+    <string name="about_text">记忆辅助软件。&lt;br /&gt;&lt;br /&gt;作者: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;官方网站: &lt;a href="https://anymemo.org"&gt;anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;感谢: pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler, Dongping Xie&lt;br /&gt;&lt;br /&gt;翻译者: paw3lk, jim4ever, Maksym Grinenko</string>
     <string name="about_version">版本历史</string>
     <string name="what_is_new">Changelog</string>
     <string name="downloader_categories">分类</string>
@@ -184,7 +184,7 @@
     <string name="enable_volume_key_summary">记忆卡片时可以用音量键来对当前卡片打分。</string>
     <string name="donate_text">捐款</string>
     <string name="buy_pro_text">购买Pro版</string>
-    <string name="donate_summary">您可以购买Pro版，或者到&lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;点击捐款链接连支持本软件。谢谢!</string>
+    <string name="donate_summary">您可以购买Pro版，或者到&lt;a href="https://anymemo.org"&gt;https://anymemo.org&lt;/a&gt; &lt;br /&gt;点击捐款链接连支持本软件。谢谢!</string>
     <string name="goto_prev_screen">到浏览/编辑界面</string>
     <string name="exception_text">遇到异常</string>
     <string name="advanced_setting_text">高级功能 ...</string>
@@ -218,7 +218,7 @@
     <string name="notification_6hr_text">6 小时</string>
     <string name="notification_12hr_text">半天</string>
     <string name="notification_24hr_text">一天</string>
-    <string name="download_source_anymemo">http://anymemo.org (默认)</string>
+    <string name="download_source_anymemo">https://anymemo.org (默认)</string>
     <string name="swap_text">交换</string>
     <string name="swapdup_text">交换且复制</string>
     <string name="locale_german_text">德语</string>
