@@ -113,7 +113,7 @@
     <string name="downloader_download_alert">Scaricamento: </string>
     <string name="downloader_download_alert_message">Dettagli: </string>
     <string name="about_title">Informazioni</string>
-    <string name="about_text">Advanced spaced repetition flashcard learning software.&lt;br /&gt;&lt;br /&gt;Authors: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;Website: &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Acknowledge: Piotr Bazan, pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;Translators: Ladislav, jim4ever, paw3lk, Alexander Gomenyuk, Maksym Grinenko, Kim hyun-ho, Thomas Tempé, Alex Wirz Vieira, Neil Barry, Mattia Monga</string>
+    <string name="about_text">Advanced spaced repetition flashcard learning software.&lt;br /&gt;&lt;br /&gt;Authors: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;Website: &lt;a href="https://anymemo.org"&gt;https://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Acknowledge: Piotr Bazan, pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;Translators: Ladislav, jim4ever, paw3lk, Alexander Gomenyuk, Maksym Grinenko, Kim hyun-ho, Thomas Tempé, Alex Wirz Vieira, Neil Barry, Mattia Monga</string>
     <string name="about_version">Elenco delle versioni</string>
     <string name="what_is_new">Ultimi cambiamenti</string>
     <string name="downloader_categories">Categorie</string>
@@ -150,7 +150,7 @@
     <string name="fullscreen_summary">Mostra le schede a tutto schermo.</string>
     <string name="edit_dialog_category">Categoria</string>
     <string name="settings_audio_location_title">Imposta il percorso dei file audio</string>
-    <string name="what_is_new_message">Vedi la guida grafica delle nuove funzionalità, clicca sull\'elenco delle novità o visita:&lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt;&lt;br /&gt;</string>
+    <string name="what_is_new_message">Vedi la guida grafica delle nuove funzionalità, clicca sull\'elenco delle novità o visita:&lt;a href="https://anymemo.org"&gt;https://anymemo.org&lt;/a&gt;&lt;br /&gt;</string>
     <string name="list_mode_text">Lista delle schede</string>
     <string name="merge_db_text">Fusione DB</string>
     <string name="merge_success_title">Fusione avvenuta correttamente</string>
@@ -186,7 +186,7 @@
     <string name="enable_volume_key_summary">Usa il volume alza/abbassa per dare i punteggi durante l\'apprendimento.</string>
     <string name="donate_text">Donazione</string>
     <string name="buy_pro_text">Compra la versione Donazione</string>
-    <string name="donate_summary">Si può fare una donazione al progetto AnyMemo project tramite Google Play o online &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt; Grazie per l\'aiuto.</string>
+    <string name="donate_summary">Si può fare una donazione al progetto AnyMemo project tramite Google Play o online &lt;a href="https://anymemo.org"&gt;https://anymemo.org&lt;/a&gt; &lt;br /&gt; Grazie per l\'aiuto.</string>
     <string name="anymemo_pro_link">market://search?q=pname:org.liberty.android.fantastischmemopro</string>
     <string name="goto_prev_screen">Vai all\'anteprima/modifica</string>
     <string name="exception_text">Eccezione</string>

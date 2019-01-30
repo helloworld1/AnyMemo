@@ -113,7 +113,7 @@
     <string name="downloader_download_alert">Download: </string>
     <string name="downloader_download_alert_message">Details: </string>
     <string name="about_title">프로그램 정보</string>
-    <string name="about_text">Advanced spaced repetition flashcard learning software.&lt;br /&gt;&lt;br /&gt;Authors: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;Website: &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Acknowledge: pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;Translators: Ladislav, jim4ever, paw3lk, Александр Гоменюк, Maksym Grinenko</string>
+    <string name="about_text">Advanced spaced repetition flashcard learning software.&lt;br /&gt;&lt;br /&gt;Authors: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;Website: &lt;a href="https://anymemo.org"&gt;https://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Acknowledge: pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;Translators: Ladislav, jim4ever, paw3lk, Александр Гоменюк, Maksym Grinenko</string>
     <string name="about_version">판올림 정보</string>
     <string name="what_is_new">New Version Installed</string>
     <string name="downloader_categories">카테고리</string>
@@ -149,7 +149,7 @@
     <string name="fullscreen_summary">전체화면 모드로 표시합니다</string>
     <string name="edit_dialog_category">카테고리</string>
     <string name="settings_audio_location_title">음성 설정</string>
-    <string name="what_is_new_message">도움말을 보려면 "판올림 정보"를 보거나 홈페이지 &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt;&lt;br /&gt;를 방문하세요</string>
+    <string name="what_is_new_message">도움말을 보려면 "판올림 정보"를 보거나 홈페이지 &lt;a href="https://anymemo.org"&gt;https://anymemo.org&lt;/a&gt;&lt;br /&gt;를 방문하세요</string>
     <string name="list_mode_text">목록 모드</string>
     <string name="merge_db_text">학습장 병합</string>
     <string name="merge_success_title">학습장 병합 성공</string>
@@ -185,7 +185,7 @@
     <string name="enable_volume_key_summary">학습중에 볼륨 up/down 키로 카드 등급을 조절할 수 있습니다</string>
     <string name="donate_text">기부</string>
     <string name="buy_pro_text">프로버전 구매</string>
-    <string name="donate_summary">프로버전을 안드로이드 마켓에서 구매하거나 &lt;a href="http://anymemo.org"&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;를 통해 기부할 수 있습니다. 고맙습니다.</string>
+    <string name="donate_summary">프로버전을 안드로이드 마켓에서 구매하거나 &lt;a href="https://anymemo.org"&gt;https://anymemo.org&lt;/a&gt; &lt;br /&gt;를 통해 기부할 수 있습니다. 고맙습니다.</string>
     <string name="goto_prev_screen">미리보기/편집 화면 가기</string>
     <string name="exception_text">예외상황</string>
     <string name="advanced_setting_text">진행중...</string>
@@ -220,7 +220,7 @@
     <string name="notification_6hr_text">6 시간</string>
     <string name="notification_12hr_text">12 시간</string>
     <string name="notification_24hr_text">하루</string>
-    <string name="download_source_anymemo">http://anymemo.org (default)</string>
+    <string name="download_source_anymemo">https://anymemo.org (default)</string>
     <string name="swap_text">교환</string>
     <string name="swapdup_text">교환&amp;복사</string>
     <string name="locale_german_text">German</string>

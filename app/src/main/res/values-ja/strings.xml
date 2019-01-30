@@ -111,7 +111,7 @@
     <string name="downloader_download_alert">ダウンロード：</string>
     <string name="downloader_download_alert_message">詳細：</string>
     <string name="about_title">AnyMemoについて</string>
-    <string name="about_text">暗記カードソフト。&lt;br /&gt;&lt;br /&gt;製作者: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;ウェブサイト: &lt;a href=&quot;http://anymemo.org&quot;&gt;http://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Acknowledge: Piotr Bazan, pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;Translators: Ladislav, jim4ever, paw3lk, Александр Гоменюк, Maksym Grinenko, Kim hyun-ho, Thomas Tempé, Alex Wirz Vieira</string>
+    <string name="about_text">暗記カードソフト。&lt;br /&gt;&lt;br /&gt;製作者: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;ウェブサイト: &lt;a href=&quot;https://anymemo.org&quot;&gt;https://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Acknowledge: Piotr Bazan, pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;Translators: Ladislav, jim4ever, paw3lk, Александр Гоменюк, Maksym Grinenko, Kim hyun-ho, Thomas Tempé, Alex Wirz Vieira</string>
     <string name="about_version">バージョン履歴：</string>
     <string name="what_is_new">新しいバージョンがインストールされました。</string>
     <string name="downloader_categories">カテゴリー</string>
@@ -148,7 +148,7 @@
     <string name="fullscreen_summary">フルスクリーンでカードを表示します。</string>
     <string name="edit_dialog_category">カテゴリー</string>
     <string name="settings_audio_location_title">オーディオファイルの場所</string>
-    <string name="what_is_new_message">新機能はバージョン履歴または、オフィシャルウェブサイト:&lt;a href=&quot;http://anymemo.org&quot;&gt;http://anymemo.org&lt;/a&gt;で確認してください。&lt;br /&gt;</string>
+    <string name="what_is_new_message">新機能はバージョン履歴または、オフィシャルウェブサイト:&lt;a href=&quot;https://anymemo.org&quot;&gt;https://anymemo.org&lt;/a&gt;で確認してください。&lt;br /&gt;</string>
     <string name="list_mode_text">リスト形式</string>
     <string name="merge_db_text">データベースの結合</string>
     <string name="merge_success_title">結合に成功しました。</string>
@@ -184,7 +184,7 @@
     <string name="enable_volume_key_summary">ボリュームキーを使い評価できます。</string>
     <string name="donate_text">寄付</string>
     <string name="buy_pro_text">プロバージョンを購入</string>
-    <string name="donate_summary">Android Marketでプロバージョンを購入することで寄付ができます。または、 &lt;a href=&quot;http://anymemo.org&quot;&gt;http://anymemo.org&lt;/a&gt;のサイトで直接寄付も可能です。 &lt;br /&gt; ご協力に感謝します。</string>
+    <string name="donate_summary">Android Marketでプロバージョンを購入することで寄付ができます。または、 &lt;a href=&quot;https://anymemo.org&quot;&gt;https://anymemo.org&lt;/a&gt;のサイトで直接寄付も可能です。 &lt;br /&gt; ご協力に感謝します。</string>
     <string name="anymemo_pro_link">market://search?q=pname:org.liberty.android.fantastischmemopro</string>
     <string name="goto_prev_screen">プレビュー/編集スクリーンへ</string>
     <string name="exception_text">例外</string>
@@ -219,7 +219,7 @@
     <string name="notification_6hr_text">6時間</string>
     <string name="notification_12hr_text">12時間</string>
     <string name="notification_24hr_text">1日</string>
-    <string name="download_source_anymemo">http://anymemo.org (default)</string>
+    <string name="download_source_anymemo">https://anymemo.org (default)</string>
     <string name="swap_text">交換</string>
     <string name="swapdup_text">交換して複製</string>
     <string name="locale_german_text">ドイツ語</string>
