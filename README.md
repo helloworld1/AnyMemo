@@ -10,7 +10,7 @@ It implements an advanced adaptive scheduling algorithm based on modified Mnemos
 AnyMemo will help you learn various languages like Arabic, Chinese, English, German, Spanish, French, Japanese, Italian, Korean, Esperanto.
 Also you can learn histories, computer related topics, religion, life styles using AnyMemo too!
 
-See detailed info at http://anymemo.org
+See detailed info at https://anymemo.org
 
 Directory structure
 -------------------
