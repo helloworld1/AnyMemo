@@ -378,6 +378,17 @@ public class CardListActivity extends BaseActivity {
                 };
             });
             break;
+        case DIFFICULTY:
+            cardListAdapter.sort(new Comparator<CardWrapper>() {
+                @Override
+                public int compare(CardWrapper c1, CardWrapper c2) {
+                    // Difficult card comes first
+                    return c1.getCard().getLearningData().getEasiness()
+                            .compareTo(c2.getCard().getLearningData().getEasiness());
+                };
+            });
+            break;
+
         default:
             throw new AssertionError(
                     "This case will not happen! Or the system has carshed.");
@@ -656,5 +667,7 @@ public class CardListActivity extends BaseActivity {
     private enum SortMethod {
         ORDINAL,
         QUESTION,
-        ANSWER};
+        ANSWER,
+        DIFFICULTY
+    };
 }
