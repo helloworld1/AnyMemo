@@ -68,7 +68,7 @@ build/apk/
 
 Instrumentation tests
 ---------------------
-There are hundreds of intrumentation tests that ensure the basic funciton of
+There are hundreds of instrumentation tests that ensure the basic function of
 AnyMemo. To run these tests against free version, you need to run:
 ```
 ./gradlew installFreeApi16DebugTest
