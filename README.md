@@ -30,7 +30,7 @@ order to build:
 In Android SDK tools' "Android SDK Manager", you need the following items:
 * Android 8.0 SDK platform
 * Android SDK tools
-* Andoird SDK Build-tools version 24
+* Android SDK Build-tools version 24
 * Android support repository
 * Android support library
 
