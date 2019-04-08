@@ -29,14 +29,18 @@ import org.liberty.android.fantastischmemo.entity.Category;
 import org.liberty.android.fantastischmemo.entity.LearningData;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
+import android.util.Log;
+
 import java.io.File;
 import java.io.FileReader;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 public class CSVImporter implements Converter {
+    private static final String TAG = CSVImporter.class.getSimpleName();
 
     private static final long serialVersionUID = 234745119864085982L;
 
@@ -74,13 +78,14 @@ public class CSVImporter implements Converter {
 
             String[] nextLine;
             final List<Card> cardList = new LinkedList<Card>();
-            while((nextLine = reader.readNext()) != null) {
+            for(int lineNo = 1; (nextLine = reader.readNext()) != null; ++lineNo) {
                 if(nextLine.length == 1 && nextLine[0].isEmpty()){
                     // ignore blank lines
                     continue;
                 }
                 if(nextLine.length < 2){
-                    throw new Exception("Malformed CSV file. Please make sure the CSV's first column is question, second one is answer and the optional third one is category");
+                    Log.w(TAG, "Malformed CSV file at line " + lineNo + ": " + Arrays.toString(nextLine));
+                    throw new Exception("Malformed CSV file at line " + lineNo + ". Please make sure the CSV's first column is question, second one is answer, the optional third is category, and the optional fourth one is note");
                 }
                 String note = "";
                 String category = "";
