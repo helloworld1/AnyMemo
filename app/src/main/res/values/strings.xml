@@ -23,8 +23,8 @@
     <string name="copyclipboard">Copy to clipboard</string>
     <string name="copyclipboard_summary">Automatically copy card content to clipboard.</string>
     <string name="memo_show_answer">Show answer</string>
-    <string name="memo_no_item_title">No item</string>
-    <string name="memo_no_item_message">There is no item to learn for now. If you want to cram, you can do quizzes by long clicking a db in the &quot;Recent&quot; tab.</string>
+    <string name="memo_no_item_title">No items</string>
+    <string name="memo_no_item_message">There are no items to learn right now. If you want to cram, you can do quizzes by long clicking a DB in the &quot;Recent&quot; tab.</string>
     <string name="memo_btn0_text">0 Forgot</string>
     <string name="memo_btn1_text">1 Forgot</string>
     <string name="memo_btn2_text">2 Very Hard</string>
