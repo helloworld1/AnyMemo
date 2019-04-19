@@ -431,6 +431,7 @@
     <string name="converting_success_text">AnyMemo conversion succeeded.</string>
     <string name="converting_failure_text">AnyMemo conversion failed.</string>
     <string name="conversion_started_text">Conversion started.</string>
+    <string name="conversion_result">Conversion result</string>
     <string name="mark_as_learned_text">Mark as learned</string>
     <string name="mark_as_forgotten_text">Mark as forgotten</string>
     <string name="mark_as_new_text">Mark as new</string>
