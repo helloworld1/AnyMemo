@@ -333,6 +333,7 @@ public class AnyMemo extends BaseActivity {
     }
 
     private void prepareNotification() {
+        notificationUtil.createNotificationChannel();
         SetAlarmReceiver.cancelNotificationAlarm(this);
         SetAlarmReceiver.setNotificationAlarm(this);
     }

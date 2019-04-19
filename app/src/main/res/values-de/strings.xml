@@ -424,6 +424,7 @@
     <string name="converting_success_text">AnyMemo Konvertierung erfolgreich.</string>
     <string name="converting_failure_text">AnyMemo Konvertierung fehlgeschlagen.</string>
     <string name="conversion_started_text">Konvertierung begonnen.</string>
+    <string name="conversion_result">Konvertierungsergebnis</string>
     <string name="mark_as_learned_text">Als gelernt markieren.</string>
     <string name="mark_as_forgotten_text">Als vergessen markieren.</string>
     <string name="mark_as_new_text">Als neu markieren.</string>
