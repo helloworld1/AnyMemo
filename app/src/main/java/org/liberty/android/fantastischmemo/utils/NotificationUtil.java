@@ -1,11 +1,13 @@
 package org.liberty.android.fantastischmemo.utils;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import androidx.core.app.NotificationCompat;
 import android.util.Log;
@@ -27,6 +29,9 @@ import javax.inject.Inject;
 @PerApplication
 public class NotificationUtil {
     private static final String TAG = NotificationUtil.class.getSimpleName();
+
+    private final String CHANNEL_ID = "REVIEW_REMINDER";
+
     private final int NOTIFICATION_ID = 4829352;
     private final int NOTIFICATION_REQ = 17239203;
 
@@ -35,6 +40,18 @@ public class NotificationUtil {
     @Inject
     public NotificationUtil(@ForApplication Context appContext) {
         this.appContext = appContext;
+    }
+
+    public void createNotificationChannel() {
+        // Create the Notification Channel, but only on API 26+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = appContext.getString(R.string.review_reminder);
+            int importance = NotificationManager.IMPORTANCE_LOW;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+
+            NotificationManager notificationManager = appContext.getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
     public void showNotification(){
@@ -49,16 +66,15 @@ public class NotificationUtil {
 
             PendingIntent pIntent = PendingIntent.getActivity(appContext, NOTIFICATION_REQ, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-            Notification notification = new NotificationCompat.Builder(appContext)
+            Notification notification = new NotificationCompat.Builder(appContext, CHANNEL_ID)
                     .setTicker("AnyMemo")
                     .setWhen(System.currentTimeMillis())
                     .setSmallIcon(R.drawable.anymemo_notification_icon)
                     .setContentTitle(dbInfo.getDbName())
                     .setContentText(appContext.getString(R.string.stat_scheduled) + " " + dbInfo.getRevCount())
                     .setContentIntent(pIntent)
+                    .setAutoCancel(true)
                     .build();
-
-            notification.flags = notification.flags | Notification.FLAG_AUTO_CANCEL;
 
             notificationManager.notify(NOTIFICATION_ID, notification);
             Log.v(TAG, "Notification Invoked!");
