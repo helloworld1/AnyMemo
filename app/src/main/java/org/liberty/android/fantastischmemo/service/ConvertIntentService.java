@@ -20,12 +20,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.liberty.android.fantastischmemo.service;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.TaskStackBuilder;
+
+import android.os.Build;
 import android.util.Log;
 
 import com.google.common.base.Objects;
@@ -56,6 +59,8 @@ public class ConvertIntentService extends BaseIntentService {
 
     private static final int CONVERSION_PROGRESS_NOTIFICATION_ID_BASE = 294;
 
+    private static final String CHANNEL_ID = "CONVERSION";
+
     private NotificationManager notificationManager;
 
     @Inject RecentListUtil recentListUtil;
@@ -72,6 +77,18 @@ public class ConvertIntentService extends BaseIntentService {
         appComponents().inject(this);
 
         notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        createNotificationChannel();
+    }
+
+    public void createNotificationChannel() {
+        // Create the Notification Channel, but only on API 26+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getApplicationContext().getString(R.string.conversion_result);
+            int importance = NotificationManager.IMPORTANCE_LOW;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
     @Override
@@ -113,7 +130,7 @@ public class ConvertIntentService extends BaseIntentService {
         // Dummy intent used for Android 2.3 compatibility
         PendingIntent dummyPendingIntent= PendingIntent.getActivity(this, 0, new Intent(), Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        Notification inProgressNotification = new NotificationCompat.Builder(getApplicationContext())
+        Notification inProgressNotification = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
             .setOngoing(true)
             .setContentTitle(getString(R.string.converting_wait_text))
             .setContentText(conversionFileInfo)
@@ -130,7 +147,7 @@ public class ConvertIntentService extends BaseIntentService {
         // Dummy intent used for Android 2.3 compatibility
         PendingIntent dummyPendingIntent= PendingIntent.getActivity(this, 0, new Intent(), Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        Notification failureNotification = new NotificationCompat.Builder(getApplicationContext())
+        Notification failureNotification = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
             .setOngoing(false)
             .setContentTitle(getString(R.string.converting_failure_text))
             .setContentText(conversionFileInfo)
@@ -139,6 +156,7 @@ public class ConvertIntentService extends BaseIntentService {
             .setAutoCancel(true)
             .setSmallIcon(R.drawable.anymemo_notification_icon)
             .build();
+
         notificationManager.notify(notificationId, failureNotification);
     }
 
@@ -164,7 +182,7 @@ public class ConvertIntentService extends BaseIntentService {
 
         //PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, resultIntent, 0);
 
-        Notification successNotification = new NotificationCompat.Builder(getApplicationContext())
+        Notification successNotification = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
             .setOngoing(false)
             .setContentTitle(getString(R.string.converting_success_text))
             .setContentText(FilenameUtils.getName(outputFilePath))
