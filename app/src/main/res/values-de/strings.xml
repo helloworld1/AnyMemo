@@ -179,6 +179,7 @@
     <string name="db_text">Datenbank</string>
     <string name="notification_text">Erinnerungen</string>
     <string name="notification_summary">Zeigt Erinnerungsmeldungen in der Taskleiste an. Funktioniert auch wenn AnyMemo geschlossen ist.</string>
+    <string name="review_reminder">Wiederholungserinnerungen</string>
     <string name="edit_menu_br_text">br-Tag hinzufügen</string>
     <string name="edit_menu_image_text">Grafik hinzufügen</string>
     <string name="grade_text">Note</string>

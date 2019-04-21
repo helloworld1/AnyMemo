@@ -181,6 +181,7 @@
     <string name="db_text">DB</string>
     <string name="notification_text">Notification</string>
     <string name="notification_summary">Display information on the notification area even when AnyMemo is not opened.</string>
+    <string name="review_reminder">Review reminders</string>
     <string name="edit_menu_br_text">Add br tag</string>
     <string name="edit_menu_image_text">Add image</string>
     <string name="grade_text">Grade</string>

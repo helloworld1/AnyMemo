@@ -59,7 +59,7 @@ public class ConvertIntentService extends BaseIntentService {
 
     private static final int CONVERSION_PROGRESS_NOTIFICATION_ID_BASE = 294;
 
-    private static final String CHANNEL_ID = "NOTIFICATION_CHANNEL_CONVERSION";
+    private static final String CHANNEL_ID = "CONVERSION";
 
     private NotificationManager notificationManager;
 
