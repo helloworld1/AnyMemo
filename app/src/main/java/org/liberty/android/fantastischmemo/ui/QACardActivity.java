@@ -393,6 +393,14 @@ public abstract class QACardActivity extends BaseActivity {
         // if there is no text
         smallTitleBar = (TextView) findViewById(R.id.small_title_bar);
 
+        // TODO: title bar should have its own colors but for now use question colors
+        if (setting.getAnswerTextColor() != null) {
+            smallTitleBar.setTextColor(setting.getAnswerTextColor());
+        }
+        if (setting.getQuestionBackgroundColor() != null) {
+            smallTitleBar.setBackgroundColor(setting.getQuestionBackgroundColor());
+        }
+
         // Only copy to clipboard if answer is show
         // as a feature request:
         // http://code.google.com/p/anymemo/issues/detail?id=239
