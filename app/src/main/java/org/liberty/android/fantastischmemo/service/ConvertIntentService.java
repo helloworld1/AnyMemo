@@ -25,8 +25,9 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.widget.Toast;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.TaskStackBuilder;
 
 import android.os.Build;
 import android.util.Log;
@@ -61,6 +62,8 @@ public class ConvertIntentService extends BaseIntentService {
 
     private static final String CHANNEL_ID = "CONVERSION";
 
+    private Handler handler;
+
     private NotificationManager notificationManager;
 
     @Inject RecentListUtil recentListUtil;
@@ -76,6 +79,7 @@ public class ConvertIntentService extends BaseIntentService {
         super.onCreate();
         appComponents().inject(this);
 
+        handler = new Handler();
         notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         createNotificationChannel();
     }
@@ -122,6 +126,8 @@ public class ConvertIntentService extends BaseIntentService {
         } catch (Exception e) {
             Log.e(TAG, "Error while converting", e);
             showFailureNotification(notificationId, conversionFileInfo, e);
+        } finally {
+            notificationManager.cancel(notificationId);
         }
     }
 
@@ -144,20 +150,13 @@ public class ConvertIntentService extends BaseIntentService {
     }
 
     private void showFailureNotification(int notificationId, String conversionFileInfo, Exception exception) {
-        // Dummy intent used for Android 2.3 compatibility
-        PendingIntent dummyPendingIntent= PendingIntent.getActivity(this, 0, new Intent(), Intent.FLAG_ACTIVITY_NEW_TASK);
-
-        Notification failureNotification = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
-            .setOngoing(false)
-            .setContentTitle(getString(R.string.converting_failure_text))
-            .setContentText(conversionFileInfo)
-            .setContentIntent(dummyPendingIntent)
-            .setSubText(exception.toString())
-            .setAutoCancel(true)
-            .setSmallIcon(R.drawable.anymemo_notification_icon)
-            .build();
-
-        notificationManager.notify(notificationId, failureNotification);
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getApplicationContext(), R.string.converting_failure_text, Toast.LENGTH_SHORT)
+                    .show();
+            }
+        });
     }
 
     private void showSuccessNotification(int notificationId, String outputFilePath) {
@@ -176,21 +175,12 @@ public class ConvertIntentService extends BaseIntentService {
             resultIntent = new Intent(this, AnyMemo.class);
         }
 
-        PendingIntent pendingIntent = TaskStackBuilder.create(this)
-            .addNextIntentWithParentStack(resultIntent)
-            .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        //PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, resultIntent, 0);
-
-        Notification successNotification = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
-            .setOngoing(false)
-            .setContentTitle(getString(R.string.converting_success_text))
-            .setContentText(FilenameUtils.getName(outputFilePath))
-            .setContentIntent(pendingIntent)
-            .setSmallIcon(R.drawable.anymemo_notification_icon)
-            .setAutoCancel(true)
-            .build();
-
-        notificationManager.notify(notificationId, successNotification);
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getApplicationContext(), R.string.converting_success_text, Toast.LENGTH_SHORT)
+                    .show();
+            }
+        });
     }
 }
