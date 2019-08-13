@@ -33,9 +33,9 @@ import javax.inject.Inject;
 
 
 public class AlarmReceiver extends BroadcastReceiver {
-    public static int ALARM_SHOW_NOTIFICATION = 1;
-    public static int ALARM_WIDGET = 2;
-    public static int ALARM_CANCEL_NOTIFICATION = 4;
+    public static final int ALARM_SHOW_NOTIFICATION = 1;
+    public static final int ALARM_WIDGET = 2;
+    public static final int ALARM_CANCEL_NOTIFICATION = 4;
     private final static String TAG = AlarmReceiver.class.getSimpleName();
 
     @Inject NotificationUtil notificationUtil;

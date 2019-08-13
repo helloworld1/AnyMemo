@@ -49,6 +49,7 @@ import javax.xml.parsers.SAXParserFactory;
 public class SupermemoXMLImporter extends org.xml.sax.helpers.DefaultHandler implements Converter{
 
     private static final long serialVersionUID = 8958250001470549241L;
+    private static final String TAG = "org.liberty.android.fantastischmemo.SupermemoXMLConverter";
 
     public Locator mLocator;
     private List<Card> cardList;
@@ -60,7 +61,6 @@ public class SupermemoXMLImporter extends org.xml.sax.helpers.DefaultHandler imp
 
 
     private StringBuffer characterBuf;
-    private final String TAG = "org.liberty.android.fantastischmemo.SupermemoXMLConverter";
 
     private AMFileUtil amFileUtil;
 

@@ -47,15 +47,15 @@ import javax.xml.parsers.SAXParserFactory;
 
 public class MnemosyneXMLImporter extends org.xml.sax.helpers.DefaultHandler implements Converter, Serializable {
     private static final long serialVersionUID = -7871484468353131221L;
+    private static final long MILLSECS_PER_DAY = 24 * 60 * 60 * 1000;
+    private static final String TAG = "org.liberty.android.fantastischmemo.MnemosyneXMLImporter";
 
     private long timeOfStart = 0L;
     public Locator mLocator;
     private int count = 1;
     private List<Card> cardList;
-    private final long MILLSECS_PER_DAY = 24 * 60 * 60 * 1000;
 
     private StringBuffer characterBuf;
-    private final String TAG = "org.liberty.android.fantastischmemo.MnemosyneXMLImporter";
     private Card card;
 
     private AMFileUtil amFileUtil;

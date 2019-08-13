@@ -76,7 +76,7 @@ import javax.inject.Inject;
  */
 public class CardListActivity extends BaseActivity {
 
-    public static String EXTRA_DBPATH = "dbpath";
+    public static final String EXTRA_DBPATH = "dbpath";
 
     private static final int CARD_WRAPPER_LOADER_ID = 0;
 

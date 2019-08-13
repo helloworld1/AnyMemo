@@ -29,8 +29,8 @@ import java.util.Comparator;
 import java.util.List;
 
 public class CategoryEditorFragment extends BaseDialogFragment {
-    public static String EXTRA_DBPATH = "dbpath";
-    public static String EXTRA_CATEGORY_ID = "id";
+    public static final String EXTRA_DBPATH = "dbpath";
+    public static final String EXTRA_CATEGORY_ID = "id";
     private Activity mActivity;
     private String dbPath;
     private CategoryDao categoryDao;

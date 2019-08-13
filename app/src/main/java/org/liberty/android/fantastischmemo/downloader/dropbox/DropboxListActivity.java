@@ -26,7 +26,7 @@ public class DropboxListActivity extends BaseActivity {
 
     public static final String EXTRA_AUTH_TOKEN = "authToken";
 
-    private static int OPEN_UPLOAD_DROPBOX_REQUEST_CODE = 1;
+    private static final int OPEN_UPLOAD_DROPBOX_REQUEST_CODE = 1;
 
     private String authToken;
 

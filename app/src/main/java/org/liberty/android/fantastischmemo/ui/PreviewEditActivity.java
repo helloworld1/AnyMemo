@@ -59,18 +59,18 @@ import java.util.regex.Pattern;
 import javax.inject.Inject;
 
 public class PreviewEditActivity extends QACardActivity {
-    private final int ACTIVITY_EDIT = 11;
-    private final int ACTIVITY_SETTINGS = 15;
-    private final int ACTIVITY_LIST = 16;
-    private final int ACTIVITY_MERGE = 17;
-    private final int ACTIVITY_DETAIL = 18;
-    private final int ACTIVITY_CARD_PLAYER = 19;
+    private static final int ACTIVITY_EDIT = 11;
+    private static final int ACTIVITY_SETTINGS = 15;
+    private static final int ACTIVITY_LIST = 16;
+    private static final int ACTIVITY_MERGE = 17;
+    private static final int ACTIVITY_DETAIL = 18;
+    private static final int ACTIVITY_CARD_PLAYER = 19;
     private final static String WEBSITE_HELP_EDIT = "https://anymemo.org/";
     private long totalCardCount = 0;
 
-    public static String EXTRA_DBPATH = "dbpath";
-    public static String EXTRA_CARD_ID = "id";
-    public static String EXTRA_CATEGORY = "category";
+    public static final String EXTRA_DBPATH = "dbpath";
+    public static final String EXTRA_CARD_ID = "id";
+    public static final String EXTRA_CATEGORY = "category";
 
     private static final String SEARCH_BY_ID_PATTERN = "#\\d+";
 

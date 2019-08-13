@@ -63,8 +63,8 @@ import org.liberty.android.fantastischmemo.ui.CategoryEditorFragment.CategoryEdi
 import java.io.File;
 
 public class CardEditor extends BaseActivity {
-    private final int ACTIVITY_IMAGE_FILE = 1;
-    private final int ACTIVITY_AUDIO_FILE = 2;
+    private static final int ACTIVITY_IMAGE_FILE = 1;
+    private static final int ACTIVITY_AUDIO_FILE = 2;
 
     private static final int PERMISSION_REQUEST_RECORD_AUDIO = 1;
 
@@ -92,10 +92,10 @@ public class CardEditor extends BaseActivity {
     private String originalAnswer;
     private String originalNote;
 
-    public static String EXTRA_DBPATH = "dbpath";
-    public static String EXTRA_CARD_ID = "id";
-    public static String EXTRA_RESULT_CARD_ID= "result_card_id";
-    public static String EXTRA_IS_EDIT_NEW = "is_edit_new";
+    public static final String EXTRA_DBPATH = "dbpath";
+    public static final String EXTRA_CARD_ID = "id";
+    public static final String EXTRA_RESULT_CARD_ID= "result_card_id";
+    public static final String EXTRA_IS_EDIT_NEW = "is_edit_new";
 
 
     @Override
