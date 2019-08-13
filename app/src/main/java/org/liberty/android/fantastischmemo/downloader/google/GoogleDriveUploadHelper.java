@@ -39,7 +39,7 @@ public class GoogleDriveUploadHelper {
 
     private final String authToken;
 
-    private static SimpleDateFormat ISO8601_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+    private static final SimpleDateFormat ISO8601_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
     public GoogleDriveUploadHelper(Context context, String authToken) {
         this.authToken = authToken;

@@ -41,7 +41,7 @@ import org.liberty.android.fantastischmemo.utils.ShareUtil;
 import javax.inject.Inject;
 
 public class OpenActionsFragment extends BaseDialogFragment {
-    public static String EXTRA_DBPATH = "dbpath";
+    public static final String EXTRA_DBPATH = "dbpath";
     private BaseActivity mActivity;
 
     private String dbPath;

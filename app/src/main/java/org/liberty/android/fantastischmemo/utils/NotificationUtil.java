@@ -30,10 +30,10 @@ import javax.inject.Inject;
 public class NotificationUtil {
     private static final String TAG = NotificationUtil.class.getSimpleName();
 
-    private final String CHANNEL_ID = "REVIEW_REMINDER";
+    private static final String CHANNEL_ID = "REVIEW_REMINDER";
 
-    private final int NOTIFICATION_ID = 4829352;
-    private final int NOTIFICATION_REQ = 17239203;
+    private static final int NOTIFICATION_ID = 4829352;
+    private static final int NOTIFICATION_REQ = 17239203;
 
     private Context appContext;
 

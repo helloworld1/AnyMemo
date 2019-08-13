@@ -61,16 +61,16 @@ import javax.inject.Inject;
  * The StudyActivity is used for the classic way of learning cards.
  */
 public class StudyActivity extends QACardActivity {
-    public static String EXTRA_DBPATH = "dbpath";
-    public static String EXTRA_CATEGORY_ID = "category_id";
-    public static String EXTRA_START_CARD_ID = "start_card_id";
+    public static final String EXTRA_DBPATH = "dbpath";
+    public static final String EXTRA_CATEGORY_ID = "category_id";
+    public static final String EXTRA_START_CARD_ID = "start_card_id";
     private static final int LEARN_QUEUE_MANAGER_LOADER_ID = 10;
 
-    private final int ACTIVITY_FILTER = 10;
-    private final int ACTIVITY_EDIT = 11;
-    private final int ACTIVITY_GOTO_PREV = 14;
-    private final int ACTIVITY_SETTINGS = 15;
-    private final int ACTIVITY_DETAIL = 16;
+    private static final int ACTIVITY_FILTER = 10;
+    private static final int ACTIVITY_EDIT = 11;
+    private static final int ACTIVITY_GOTO_PREV = 14;
+    private static final int ACTIVITY_SETTINGS = 15;
+    private static final int ACTIVITY_DETAIL = 16;
 
     private final static String WEBSITE_HELP_MEMO="https://anymemo.org";
 

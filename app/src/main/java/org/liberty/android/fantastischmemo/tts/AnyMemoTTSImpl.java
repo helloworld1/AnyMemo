@@ -49,7 +49,7 @@ public class AnyMemoTTSImpl implements AnyMemoTTS, TextToSpeech.OnInitListener{
     private volatile ReentrantLock speakLock = new ReentrantLock();
 
     /* TTS Init lock's timeout in seconds. */
-    private static long INIT_LOCK_TIMEOUT = 10L;
+    private static final long INIT_LOCK_TIMEOUT = 10L;
 
     public final static String TAG = "org.liberty.android.fantastischmemo.tts.AnyMemoTTSPlatform";
 

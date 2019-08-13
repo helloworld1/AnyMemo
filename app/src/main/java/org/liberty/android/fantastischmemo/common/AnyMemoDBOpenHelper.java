@@ -27,7 +27,7 @@ import java.sql.SQLException;
 
 public class AnyMemoDBOpenHelper extends OrmLiteSqliteOpenHelper {
 
-    private final String TAG = getClass().getSimpleName();
+    private static final String TAG = AnyMemoDBOpenHelper.class.getSimpleName();
 
     private final String dbPath;
 
