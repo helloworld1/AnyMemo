@@ -37,7 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EntryFactory {
-    private static SimpleDateFormat ISO8601_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+    private static final SimpleDateFormat ISO8601_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
     private EntryFactory() {
         throw new AssertionError("Don't call constructor");
     }

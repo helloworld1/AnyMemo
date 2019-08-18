@@ -74,8 +74,8 @@ public class DetailScreen extends BaseActivity {
     private SaveCardTask saveCardTask;
     private int cardId = -1;
 
-    public static String EXTRA_DBPATH = "dbpath";
-    public static String EXTRA_CARD_ID = "card_id";
+    public static final String EXTRA_DBPATH = "dbpath";
+    public static final String EXTRA_CARD_ID = "card_id";
 
     private static final SimpleDateFormat ISO_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
 

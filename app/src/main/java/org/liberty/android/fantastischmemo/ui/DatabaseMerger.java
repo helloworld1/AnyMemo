@@ -39,9 +39,9 @@ import javax.inject.Inject;
 public class DatabaseMerger extends BaseActivity implements View.OnClickListener{
     public static final String EXTRA_SRC_PATH = "src_path";
     private final static String TAG = DatabaseMerger.class.getSimpleName();
+    private static final int ACTIVITY_FB_TARGET = 1;
+    private static final int ACTIVITY_FB_SOURCE = 2;
 
-    private final int ACTIVITY_FB_TARGET = 1;
-    private final int ACTIVITY_FB_SOURCE = 2;
     private EditText targetEdit;
     private EditText sourceEdit;
     private Button mergeButton;

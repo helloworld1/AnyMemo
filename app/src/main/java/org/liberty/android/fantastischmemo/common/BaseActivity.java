@@ -19,7 +19,7 @@ import java.util.Locale;
  * Created by liberty on 8/28/16.
  */
 public abstract class BaseActivity extends AppCompatActivity {
-    protected String TAG = getClass().getSimpleName();
+    protected static final String TAG = BaseActivity.class.getSimpleName();
 
     private boolean activityForeground = false;
 

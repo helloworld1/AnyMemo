@@ -32,8 +32,8 @@ import java.util.regex.Pattern;
 public class SpeakWord {
     private volatile MediaPlayer mp;
     private final List<String> searchPath;
-    private final String[] SUPPORTED_AUDIO_FILE_TYPE = {".3gp", ".ogg", ".wav", ".mp3", ".amr"};
-    private final String TAG = "SpeakWord";
+    private static final String[] SUPPORTED_AUDIO_FILE_TYPE = {".3gp", ".ogg", ".wav", ".mp3", ".amr"};
+    private static final String TAG = "SpeakWord";
     private OnCompletedListener mOnCompletedListener = new OnCompletedListener() {
         @Override
         public void onCompleted() {

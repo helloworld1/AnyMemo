@@ -75,7 +75,7 @@ import javax.inject.Inject;
  * Override getContentView() for loading a customized layout that is compatible with qa_card_layout.
  */
 public abstract class QACardActivity extends BaseActivity {
-    public static String EXTRA_DBPATH = "dbpath";
+    public static final String EXTRA_DBPATH = "dbpath";
 
     private String dbPath;
 

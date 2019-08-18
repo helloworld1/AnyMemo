@@ -52,11 +52,11 @@ import org.liberty.android.fantastischmemo.utils.DictionaryUtil;
 import javax.inject.Inject;
 
 public class QuizActivity extends QACardActivity {
-    public static String EXTRA_CATEGORY_ID = "category_id";
-    public static String EXTRA_START_CARD_ORD = "start_card_ord";
-    public static String EXTRA_QUIZ_SIZE = "quiz_size";
-    public static String EXTRA_SHUFFLE_CARDS = "shuffle_cards";
-    public static String EXTRA_START_CARD_ID = "start_card_id";
+    public static final String EXTRA_CATEGORY_ID = "category_id";
+    public static final String EXTRA_START_CARD_ORD = "start_card_ord";
+    public static final String EXTRA_QUIZ_SIZE = "quiz_size";
+    public static final String EXTRA_SHUFFLE_CARDS = "shuffle_cards";
+    public static final String EXTRA_START_CARD_ID = "start_card_id";
 
     /* UI elements */
     private GradeButtonsFragment gradeButtonsFragment;

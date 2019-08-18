@@ -56,7 +56,7 @@ public class ShareScreen extends BaseActivity implements View.OnClickListener{
     private Button savePrevButton;
     private Button cancelButton;
     private SharedPreferences settings;
-    private final int ACTIVITY_FB = 1;
+    private static final int ACTIVITY_FB = 1;
 
     @Inject RecentListUtil recentListUtil;
 
