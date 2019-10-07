@@ -488,53 +488,9 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
      */
     public void createCards(final List<Card> cardList) {
         try {
-            final LearningDataDao learningDataDao = getHelper().getLearningDataDao();
-            final CategoryDao categoryDao = getHelper().getCategoryDao();
             callBatchTasks(new Callable<Void>() {
-                // Use the map to get rid of duplicate category creation
-                final Map<String, Category> categoryMap = new HashMap<String, Category>();
-
                 public Void call() throws Exception {
-                    List<Category> existingCategories = categoryDao.queryForAll();
-
-                    for (Category c : existingCategories) {
-                        assert c != null : "Null category in db";
-                        if (c != null) {
-                            categoryMap.put(c.getName(), c);
-                        }
-                    }
-
-                    // Set the oridinal to be right after the last ordinal
-                    // The "createCard" method can also set the correct ordinal
-                    // however it query the last ordinal each time it is called.
-                    // So we set the ordinal here for performance optimization.
-                    Card lastCard = queryLastOrdinal();
-                    int startOrdinal = 1;
-                    // If it is a new db the last oridinal will be null.
-                    if (lastCard != null) {
-                        startOrdinal = lastCard.getOrdinal() + 1;
-                    }
-
-                    for (int i = 0; i < cardList.size(); i++) {
-                        Card card = cardList.get(i);
-                        assert card.getCategory() != null : "Card's category must be populated";
-                        assert card.getLearningData() != null : "Card's learningData must be populated";
-                        String currentCategoryName = card.getCategory().getName();
-                        if (categoryMap.containsKey(currentCategoryName)) {
-                            card.setCategory(categoryMap.get(currentCategoryName));
-
-                        // Becuase the empty category is created by default
-                        // We do not
-                        } else if (!Strings.isNullOrEmpty(currentCategoryName)) {
-                            categoryDao.create(card.getCategory());
-                            categoryMap.put(currentCategoryName, card.getCategory());
-                        }
-                        learningDataDao.create(card.getLearningData());
-
-                        card.setOrdinal(startOrdinal + i);
-
-                        create(card);
-                    }
+                    createCardsNoBatch(cardList);
                     return null;
                 }
             });
@@ -657,7 +613,6 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
 
     public void swapAllQADup() {
         try {
-
             callBatchTasks(new Callable<Void>() {
                 public Void call() throws Exception {
                     final CategoryDao categoryDao = getHelper().getCategoryDao();
@@ -673,7 +628,7 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
                         c.setOrdinal(size + i + 1);
                         c.setLearningData(new LearningData());
                     }
-                    createCards(cards);
+                    createCardsNoBatch(cards);
                     return null;
                 }
             });
@@ -858,5 +813,52 @@ public class CardDaoImpl extends AbstractHelperDaoImpl<Card, Integer> implements
             throw new RuntimeException(e);
         }
     }
+
+    private void createCardsNoBatch(List<Card> cardList) {
+        final LearningDataDao learningDataDao = getHelper().getLearningDataDao();
+        final CategoryDao categoryDao = getHelper().getCategoryDao();
+        final Map<String, Category> categoryMap = new HashMap<String, Category>();
+        List<Category> existingCategories = categoryDao.queryForAll();
+
+        for (Category c : existingCategories) {
+            assert c != null : "Null category in db";
+            if (c != null) {
+                categoryMap.put(c.getName(), c);
+            }
+        }
+
+        // Set the oridinal to be right after the last ordinal
+        // The "createCard" method can also set the correct ordinal
+        // however it query the last ordinal each time it is called.
+        // So we set the ordinal here for performance optimization.
+        Card lastCard = queryLastOrdinal();
+        int startOrdinal = 1;
+        // If it is a new db the last oridinal will be null.
+        if (lastCard != null) {
+            startOrdinal = lastCard.getOrdinal() + 1;
+        }
+
+        for (int i = 0; i < cardList.size(); i++) {
+            Card card = cardList.get(i);
+            assert card.getCategory() != null : "Card's category must be populated";
+            assert card.getLearningData() != null : "Card's learningData must be populated";
+            String currentCategoryName = card.getCategory().getName();
+            if (categoryMap.containsKey(currentCategoryName)) {
+                card.setCategory(categoryMap.get(currentCategoryName));
+
+                // Becuase the empty category is created by default
+                // We do not
+            } else if (!Strings.isNullOrEmpty(currentCategoryName)) {
+                categoryDao.create(card.getCategory());
+                categoryMap.put(currentCategoryName, card.getCategory());
+            }
+            learningDataDao.create(card.getLearningData());
+
+            card.setOrdinal(startOrdinal + i);
+
+            create(card);
+        }
+    }
+
 }
 
