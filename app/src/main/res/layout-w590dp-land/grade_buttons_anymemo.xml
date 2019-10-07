@@ -12,7 +12,6 @@
         android:background="@drawable/red_button"
         style="@style/grade_button_text"
         android:layout_weight="1"
-        android:visibility="gone"
         android:text="@string/memo_btn0_text"
         android:layout_marginBottom="4dip" />
     <Button
