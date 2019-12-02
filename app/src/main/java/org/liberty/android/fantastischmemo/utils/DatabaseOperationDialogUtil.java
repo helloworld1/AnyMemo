@@ -153,15 +153,13 @@ public class DatabaseOperationDialogUtil {
                             public void onClick(DialogInterface dialog, int which) {
                                 String value = input.getText().toString();
                                 if (!value.equals(clickedFile.getAbsolutePath())) {
-                                    try {
-                                        FileUtils.copyFile(clickedFile, new File(value));
-                                        amFileUtil.deleteDbSafe(clickedFile.getAbsolutePath());
-                                        recentListUtil.deleteFromRecentList(clickedFile.getAbsolutePath());
+                                    recentListUtil.deleteFromRecentList(clickedFile.getAbsolutePath());
+                                    if (clickedFile.renameTo(new File(value))) {
                                         emitter.onSuccess(new File(value));
-                                    } catch (IOException e) {
+                                    } else {
                                         new AlertDialog.Builder(activity)
                                                 .setTitle(activity.getString(R.string.fail))
-                                                .setMessage(activity.getString(R.string.fb_rename_fail) + "\nError: " + e.toString())
+                                                .setMessage(activity.getString(R.string.fb_rename_fail))
                                                 .setNeutralButton(activity.getString(R.string.ok_text), null)
                                                 .create()
                                                 .show();
