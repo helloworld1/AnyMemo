@@ -23,6 +23,8 @@ public class NotificationChannelUtil {
 
     public static final String REVIEW_REMINDER_CHANNEL_ID = "REVIEW_REMINDER";
 
+    public static final String CONVERSATION_CHANNEL_ID = "CONVERSION";
+
     public Context context;
 
     @Inject
@@ -38,6 +40,7 @@ public class NotificationChannelUtil {
             List<NotificationChannel> notificationChannelList = new ArrayList<>();
             notificationChannelList.add(createCardPlayerNotificationChannel());
             notificationChannelList.add(createReviewReminderNotificationChannel());
+            notificationChannelList.add(createConversationNotificationChannel());
 
             NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
             if (notificationManager != null) {
@@ -53,8 +56,6 @@ public class NotificationChannelUtil {
         int importance = NotificationManager.IMPORTANCE_DEFAULT;
         NotificationChannel channel = new NotificationChannel(CARD_PLAYER_NOTIFICATION_CHANNEL_ID, name, importance);
         channel.setDescription(description);
-        // Register the channel with the system; you can't change the importance
-        // or other notification behaviors after this
 
         return channel;
     }
@@ -63,7 +64,13 @@ public class NotificationChannelUtil {
     private NotificationChannel createReviewReminderNotificationChannel() {
         CharSequence name = context.getString(R.string.review_reminder);
         int importance = NotificationManager.IMPORTANCE_LOW;
-        NotificationChannel channel = new NotificationChannel(REVIEW_REMINDER_CHANNEL_ID, name, importance);
-        return channel;
+        return new NotificationChannel(REVIEW_REMINDER_CHANNEL_ID, name, importance);
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private NotificationChannel createConversationNotificationChannel() {
+        CharSequence name = context.getString(R.string.conversion_result);
+        int importance = NotificationManager.IMPORTANCE_LOW;
+        return new NotificationChannel(CONVERSATION_CHANNEL_ID, name, importance);
     }
 }
