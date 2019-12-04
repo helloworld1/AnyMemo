@@ -471,4 +471,6 @@
     <string name="google_sign_in_not_successful_error_text">Google sign in is not successful</string>
     <string name="google_sign_in_empty_error_text">Google sign in result is empty</string>
     <string name="google_sign_in_account_empty_result">Unable to get Google account</string>
+    <string name="card_player_notification_channel_title">Card player notification</string>
+    <string name="card_player_notification_channel_description">Display the status of card player and support playing in background</string>
 </resources>

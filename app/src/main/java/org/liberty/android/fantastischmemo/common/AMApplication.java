@@ -29,6 +29,7 @@ import org.liberty.android.fantastischmemo.modules.ActivityComponents;
 import org.liberty.android.fantastischmemo.modules.AppComponents;
 import org.liberty.android.fantastischmemo.modules.DaggerAppComponents;
 import org.liberty.android.fantastischmemo.modules.FragmentComponents;
+import org.liberty.android.fantastischmemo.utils.NotificationChannelUtil;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -36,6 +37,7 @@ import javax.inject.Provider;
 public class AMApplication extends Application {
 
     @Inject Provider<ActivityComponents.Builder> activityComponentsBuilder;
+    @Inject NotificationChannelUtil notificationChannelUtil;
 
     private static final String TAG = "AMApplication";
 
@@ -66,6 +68,7 @@ public class AMApplication extends Application {
                 .application(this)
                 .build();
         appComponents.inject(this);
+        notificationChannelUtil.createNotificationChannels();
     }
 
 

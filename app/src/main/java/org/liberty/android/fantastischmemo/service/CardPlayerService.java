@@ -41,6 +41,8 @@ import org.liberty.android.fantastischmemo.service.cardplayer.CardPlayerEventHan
 import org.liberty.android.fantastischmemo.service.cardplayer.CardPlayerMessage;
 import org.liberty.android.fantastischmemo.ui.CardPlayerActivity;
 import org.liberty.android.fantastischmemo.utils.CardTTSUtil;
+import org.liberty.android.fantastischmemo.utils.NotificationChannelUtil;
+import org.liberty.android.fantastischmemo.utils.NotificationUtil;
 
 import javax.inject.Inject;
 
@@ -201,7 +203,7 @@ public class CardPlayerService extends BaseService {
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, resultIntent, 0);
         NotificationCompat.Builder mBuilder =
-            new NotificationCompat.Builder(this)
+            new NotificationCompat.Builder(this, NotificationChannelUtil.CARD_PLAYER_NOTIFICATION_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher)
             .setContentTitle(getString(R.string.card_player_notification_title))
             .setContentText(getString(R.string.card_player_notification_text))
