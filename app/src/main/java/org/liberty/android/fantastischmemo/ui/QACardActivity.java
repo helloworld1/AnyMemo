@@ -305,7 +305,10 @@ public abstract class QACardActivity extends BaseActivity {
             .setTypefaceFromFile(setting.getAnswerFont())
             .setDisplayInHtml(setting.getDisplayInHTMLEnum().contains(Setting.CardField.ANSWER))
             .setHtmlLinebreakConversion(setting.getHtmlLineBreakConversion())
-            .setImageSearchPaths(imageSearchPaths);
+            .setImageSearchPaths(imageSearchPaths)
+            // TODO: separate colors for note?
+            .setTextColor(setting.getAnswerTextColor())
+            .setBackgroundColor(setting.getAnswerBackgroundColor());
 
         // Long click to launch image viewer if the card has an image
         questionFragmentBuilder.setTextOnLongClickListener(
