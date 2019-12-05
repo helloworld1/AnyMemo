@@ -28,7 +28,7 @@ public class Card implements VersionableDomainObject {
     private String note = "";
 
     /* Category = 1 should be uncategorized */
-    @DatabaseField(foreign = true, index = true)
+    @DatabaseField(foreign = true, foreignAutoRefresh = true, index = true)
     private Category category;
 
     @DatabaseField(foreign = true)
