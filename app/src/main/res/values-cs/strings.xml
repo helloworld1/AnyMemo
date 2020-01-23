@@ -28,8 +28,8 @@
     <string name="memo_btn3_text">3 Těžké</string>
     <string name="memo_btn4_text">4 Lehké</string>
     <string name="memo_btn5_text">5 Moc lehké</string>
-    <string name="memo_btn0_help_text">Tuto kartu jste úplně zapoměli.</string>
-    <string name="memo_btn1_help_text">Tuto kartu jste úplně zapoměli.</string>
+    <string name="memo_btn0_help_text">Tuto kartu jste úplně zapomněli.</string>
+    <string name="memo_btn1_help_text">Tuto kartu jste úplně zapomněli.</string>
     <string name="memo_btn2_help_text">Tak tak správná odpověď. Interval je příliš dlouhý.</string>
     <string name="memo_btn3_help_text">Správná odpověď, ale s velkým úsilím. Interval je možná příliš dlouhý.</string>
     <string name="memo_btn4_help_text">Správná odpověď s jistým úsilím. Interval je správný.</string>
