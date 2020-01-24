@@ -8,7 +8,73 @@
     <string name="actions_category">Akce</string>
     <string name="add_back">Přidat kartu dozadu</string>
     <string name="add_in_place">Přidat kartu sem</string>
-    <string name="add_new_audio_text">Přidat novou nahrávku</string>
+    <string name="add_new_audio_text">Přidat novou nahrávku</string
+    <string name="help_button_text">Nápověda</string>
+    <string name="edit_button_text">Náhled/Úprava databáze</string>
+    <string name="copyclipboard">Zkopírovat do schránky</string>
+    <string name="copyclipboard_summary">Otázka se automaticky zkopíruje do schránky</string>
+    <string name="memo_show_answer">Ukázat odpověď</string>
+    <string name="memo_no_item_title">Žádná položka</string>
+    <string name="memo_no_item_message">Už neexistuje žádná položka k učení. Doporučen je návrat zpět. Použijte studijní přehled k dopřednému učení.</string>
+    <string name="memo_btn0_text">0 Nevím</string>
+    <string name="memo_btn1_text">1 Nevím</string>
+    <string name="memo_btn2_text">2 Moc těžké</string>
+    <string name="memo_btn3_text">3 Těžké</string>
+    <string name="memo_btn4_text">4 Lehké</string>
+    <string name="memo_btn5_text">5 Moc lehké</string>
+    <string name="memo_btn0_help_text">Tuto kartu jste úplně zapomněli.</string>
+    <string name="memo_btn1_help_text">Tuto kartu jste úplně zapomněli.</string>
+    <string name="memo_btn2_help_text">Tak tak správná odpověď. Interval je příliš dlouhý.</string>
+    <string name="memo_btn3_help_text">Správná odpověď, ale s velkým úsilím. Interval je možná příliš dlouhý.</string>
+    <string name="memo_btn4_help_text">Správná odpověď s jistým úsilím. Interval je správný.</string>
+    <string name="memo_btn5_help_text">Správná odpověď bez nějakých potíží. Interval je krátký.</string>
+    <string name="memo_btn0_brief_text">0</string>
+    <string name="memo_btn1_brief_text">1</string>
+    <string name="memo_btn2_brief_text">2</string>
+    <string name="memo_btn3_brief_text">3</string>
+    <string name="memo_btn4_brief_text">4</string>
+    <string name="memo_btn5_brief_text">5</string>
+    <string name="memo_btn0_anki_text">Nevím</string>
+    <string name="memo_btn1_anki_text">Nevím</string>
+    <string name="memo_btn2_anki_text">Těžké</string>
+    <string name="memo_btn3_anki_text">Těžké</string>
+    <string name="memo_btn4_anki_text">Lehké</string>
+    <string name="memo_btn5_anki_text">Moc lehké</string>
+    <string name="memo_edit_dialog_title">Editace</string>
+    <string name="global_settings">Všeobecná nastavení</string>
+    <string name="settings_question_font_size">Velikost fontu pro otázku</string>
+    <string name="settings_question_font_size_prompt">Velikost fontu</string>
+    <string name="settings_answer_font_size">Velikost fontu pro odpověď</string>
+    <string name="settings_answer_font_size_prompt">Velikost fontu</string>
+    <string name="settings_question_align">Zarovnání textu otázky</string>
+    <string name="settings_question_align_prompt">Zarovnání textu</string>
+    <string name="settings_answer_align">Zarovnání textu odpovědi</string>
+    <string name="settings_answer_align_prompt">Zarovnání textu</string>
+    <string name="settings_question_locale">Zvuková otázka</string>
+    <string name="settings_question_locale_prompt">Lokální</string>
+    <string name="settings_answer_locale">Zvuková odpověď</string>
+    <string name="settings_answer_locale_prompt">Lokální</string>
+    <string name="settings_html_display">Zobrazit v HTML</string>
+    <string name="settings_ratio">Poměr zobrazení ?/=</string>
+    <string name="settings_wipe">Smazat pokrok v učení</string>
+    <string name="settings_shuffle">Zamíchat karty</string>
+    <string name="settings_inverse">Prohodit ? a = karet</string>
+    <string name="settings_save">Uložit</string>
+    <string name="warning_text">Varování</string>
+    <string name="settings_wipe_warning">VŠECHNY pokroky v učení budou smazány po kliknutí na Uložit!</string>
+    <string name="settings_shuffle_warning">Tato operace zamíchá všechny karty a nemůže být vzata zpět. Rozmyslete se, než zapíšete změny.</string>
+    <string name="settings_inverse_warning">Tato operace prohodí otázky a odpovědi VŠECH karet.</string>
+    <string name="delete_text">Smazat</string>
+    <string name="delete_warning">Skutečně chcete smazat tuto kartu?</string>
+    <string name="skip_text">Přeskočit</string>
+    <string name="stat_total">Celkem: </string>
+    <string name="stat_scheduled">Plánováno: </string>
+    <string name="stat_new">Nové: </string>
+    <string name="open_open_new_db">Otevřít novou databázi</string>
+    <string name="clear_all_pref">Nulovat všechny volby</string>
+    <string name="clear_recent_list">Nulovat poslední seznam</string>
+    <string name="export_xml">Export Mnemosyne XML</string>
+    <string name="add_screen_question">Otázka</string>
     <string name="add_screen_answer">Odpověď</string>
     <string name="add_screen_new">Nová</string>
     <string name="add_screen_next">Další</string>
@@ -35,7 +101,6 @@
     <string name="button_style_title">Styl tlačítka hodnocení</string>
     <string name="buy_pro_text">Koupit Pro verzi</string>
     <string name="cancel_text">Cancel</string>
-    
     <string name="card_player_card_sleep_interval_text">Interval mezi jednotlivými kartami je %d sec</string>
     <string name="card_player_notification_channel_description">Zobrazit status hráče karet a podporovat hru na pozadí</string>
     <string name="card_player_notification_channel_title">Uporoznění hráče</string>
@@ -98,13 +163,9 @@
     <string name="detail_reset">Resetovat učební data</string>
     <string name="dict_app">slovníková aplikace</string>
     <string name="dict_app_summary">Změnit slovníkovou aplikaci pro přímé hledání v průběhu učení</string>
-    <!-- TO TRANSLATE -->
-    <string name="dict_bluedict">BlueDict</string>
-    <!-- TO TRANSLATE -->
-    <string name="dict_colordict">ColorDict / GoldenDict</string>
-    <!-- TO TRANSLATE -->
-    <string name="dict_fora">Fora Dictionary</string>
-    
+    <string name="dict_bluedict">ModrýSlovník</string>
+    <string name="dict_colordict">BarevnýSlovník/ ZlatýSlovník</string>
+    <string name="dict_fora">Fórum Slovník</string>
     <string name="directory_empty_text">(Prázdný adresář)</string>
     <string name="disabled_text">Zablokováno</string>
     
@@ -237,9 +298,7 @@
     <string name="load_default_text">Načíst výchozí</string>
     <string name="load_default_warning_text">Načte nastavení z &quot;Výchozí nastavení&quot; a o současné nastavení přijdete</string>
     <string name="load_more_text">Načíst více</string>
-    
-    <!-- TO TRANSLATE -->
-    <string name="loading_auth_text">Authenticating with the server. Please wait...</string>
+    <string name="loading_auth_text">Přihlašování k serveru. Prosím čekejte...</string>
     <string name="loading_connect_net">Obnova seznamu z internetu...\nStiskněte tlačítko Zpět ke zrušení.</string>
     <string name="loading_database">Nahrávám databázi...</string>
     <string name="loading_downloading">Stahování... To může chvíli trvat.</string>
