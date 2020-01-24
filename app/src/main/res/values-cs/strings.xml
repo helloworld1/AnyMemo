@@ -4,28 +4,18 @@
     <string name="about_text">Rozšířený výukový opakovací software s kartami.&lt;br /&gt;&lt;br /&gt;Authoři: Haowen Ning, Qi Wang&lt;br /&gt;&lt;br /&gt;Web: &lt;a href=&quot;https://anymemo.org&quot;&gt;https://anymemo.org&lt;/a&gt; &lt;br /&gt;&lt;br /&gt;Ocenění: pomelo422, Haimivan, williamfeng, Lyndsey Percival, John Rissler&lt;br /&gt;&lt;br /&gt;Překlady: Ladislav, jim4ever</string>
     <string name="about_title">O programu</string>
     <string name="about_version">Historie verzí</string>
-    
-    <!-- TO TRANSLATE -->
-    <string name="accumulative_cards_scheduled_text">Accumulative cards scheduled</string>
-    
+    <string name="accumulative_cards_scheduled_text">Nahromaděné karty naplánovány</string>
     <string name="actions_category">Akce</string>
-    
-    <!-- TO TRANSLATE -->
-    <string name="add_back">Add card to back</string>
-    <!-- TO TRANSLATE -->
-    <string name="add_in_place">Add card here</string>
-    <!-- TO TRANSLATE -->
-    <string name="add_new_audio_text">Add new audio</string>
+    <string name="add_back">Přidat kartu dozadu</string>
+    <string name="add_in_place">Přidat kartu sem</string>
+    <string name="add_new_audio_text">Přidat novou nahrávku</string>
     <string name="add_screen_answer">Odpověď</string>
     <string name="add_screen_new">Nová</string>
     <string name="add_screen_next">Další</string>
     <string name="add_screen_previous">Předchozí</string>
     <string name="add_screen_question">Otázka</string>
     <string name="add_existing_audio_text">Přidat existující audio</string>
-    
-    <!-- TO TRANSLATE -->
-    <string name="advanced_setting_text">Advanced ...</string>
-    
+    <string name="advanced_setting_text">Pokročilé...</string>
     <string name="afghanistan_text">Afgánistán</string>
     <string name="allow_orientation_summary">Automatická změna orientace displeje. Je nutný restart AnyMemo.</string>
     <string name="allow_orientation_title">Orientace</string>
