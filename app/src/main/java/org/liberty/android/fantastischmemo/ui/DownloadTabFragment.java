@@ -31,7 +31,6 @@ import org.liberty.android.fantastischmemo.common.BaseFragment;
 import org.liberty.android.fantastischmemo.downloader.anymemo.AnyMemoDownloaderActivity;
 import org.liberty.android.fantastischmemo.downloader.dropbox.DropboxOauth2AccountActivity;
 import org.liberty.android.fantastischmemo.downloader.google.GoogleAccountActivity;
-import org.liberty.android.fantastischmemo.downloader.quizlet.QuizletLauncher;
 
 /*
  * This class is invoked when the user share the card from other
@@ -39,7 +38,6 @@ import org.liberty.android.fantastischmemo.downloader.quizlet.QuizletLauncher;
  */
 public class DownloadTabFragment extends BaseFragment implements View.OnClickListener{
     private View amButton;
-    private View quizletButton;
     private View dropboxButton;
     private View googleButton;
     private Activity mActivity;
@@ -57,11 +55,9 @@ public class DownloadTabFragment extends BaseFragment implements View.OnClickLis
             Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.downloader_tab, container, false);
         amButton = v.findViewById(R.id.source_anymemo);
-        quizletButton = v.findViewById(R.id.source_quizlet);
         dropboxButton = v.findViewById(R.id.source_dropbox);
         googleButton = v.findViewById(R.id.source_google);
         amButton.setOnClickListener(this);
-        quizletButton.setOnClickListener(this);
         dropboxButton.setOnClickListener(this);
         googleButton.setOnClickListener(this);
         return v;
@@ -70,9 +66,6 @@ public class DownloadTabFragment extends BaseFragment implements View.OnClickLis
     public void onClick(View v){
         if (v == amButton){
             startActivity(new Intent(mActivity, AnyMemoDownloaderActivity.class));
-        }
-        if (v == quizletButton){
-            startActivity(new Intent(mActivity, QuizletLauncher.class));
         }
         if (v == dropboxButton){
         	startActivity(new Intent(mActivity, DropboxOauth2AccountActivity.class));

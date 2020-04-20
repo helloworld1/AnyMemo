@@ -7,7 +7,6 @@ import org.liberty.android.fantastischmemo.downloader.anymemo.AnyMemoDownloaderF
 import org.liberty.android.fantastischmemo.downloader.common.AbstractDownloaderFragment;
 import org.liberty.android.fantastischmemo.downloader.dropbox.DropboxListFragment;
 import org.liberty.android.fantastischmemo.downloader.google.SpreadsheetListFragment;
-import org.liberty.android.fantastischmemo.downloader.quizlet.CardsetsListFragment;
 import org.liberty.android.fantastischmemo.ui.CardFragment;
 import org.liberty.android.fantastischmemo.ui.CardPlayerFragment;
 import org.liberty.android.fantastischmemo.ui.ConverterFragment;
@@ -49,8 +48,6 @@ public interface FragmentComponents {
     void inject(ConverterFragment fragment);
 
     void inject(AnyMemoDownloaderFragment fragment);
-
-    void inject(CardsetsListFragment fragment);
 
     void inject(MiscTabFragment fragment);
 
