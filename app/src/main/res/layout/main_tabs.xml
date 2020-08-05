@@ -40,6 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_gravity="start|bottom"
+                android:background="?attr/colorPrimary"
                 app:itemBackground="@color/primary"
                 app:itemIconTint="@android:color/white"
                 app:itemTextColor="@android:color/white"
