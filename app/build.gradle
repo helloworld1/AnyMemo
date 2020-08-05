@@ -85,9 +85,9 @@ android {
 
 dependencies {
     implementation 'androidx.legacy:legacy-support-core-utils:1.0.0'
-    implementation 'androidx.fragment:fragment:1.2.4'
+    implementation 'androidx.fragment:fragment:1.2.5'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'com.google.android.material:material:1.2.0'
     implementation 'androidx.annotation:annotation:1.1.0'
     implementation 'androidx.browser:browser:1.2.0'
     implementation 'androidx.multidex:multidex:2.0.1'
@@ -111,7 +111,7 @@ dependencies {
     implementation "com.google.dagger:dagger:2.22.1"
     annotationProcessor "com.google.dagger:dagger-compiler:2.22.1"
 
-    implementation "com.google.android.gms:play-services-auth:18.0.0"
+    implementation "com.google.android.gms:play-services-auth:18.1.0"
     compileOnly "javax.annotation:jsr250-api:1.0"
 
     androidTestImplementation "com.crittercism.dexmaker:dexmaker:1.4"
