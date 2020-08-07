@@ -41,7 +41,7 @@ public class AlgorithmCustomizationScreen extends PreferenceActivity {
     @SuppressWarnings("deprecation")
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.layout.algorithm_customization_screen);
+        addPreferencesFromResource(R.xml.algorithm_customization_screen);
 
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
 

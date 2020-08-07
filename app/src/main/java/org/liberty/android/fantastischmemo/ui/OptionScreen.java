@@ -43,7 +43,7 @@ public class OptionScreen extends PreferenceActivity {
     @SuppressWarnings("deprecation")
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.layout.option_screen);
+        addPreferencesFromResource(R.xml.option_screen);
 
         // Lauch algorithm customization screen if click on the specific
         // preference item.
