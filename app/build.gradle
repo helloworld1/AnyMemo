@@ -10,8 +10,8 @@ android {
     compileSdkVersion 29
 
     defaultConfig {
-        versionCode 234
-        versionName "10.11.4"
+        versionCode 235
+        versionName "10.11.5"
         minSdkVersion 16
         targetSdkVersion 29
         testApplicationId "org.liberty.android.fantastischmemo.test"
