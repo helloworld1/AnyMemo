@@ -1,0 +1,2 @@
+<p><i>AnyMemo</i> is a spaced repetition flashcard learning software similar to SuperMemo for Android mobile phones. It implements an advanced adaptive scheduling algorithm based on modified Mnemosyne algorithm (Enhanced SuperMemo SM2 algorithm) to maximize the learning efficient.</p>
+<p><i>AnyMemo</i> will help you learn various languages like Arabic, Chinese, English, German, Spanish, French, Japanese, Italian, Korean, Esperanto. Also you can learn histories, computer related topics, religion, life styles using AnyMemo too!</p>
