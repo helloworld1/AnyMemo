@@ -35,28 +35,6 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:id="@+id/source_google"
-            style="@style/list_button"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:layout_width="@dimen/tab_icon_size"
-                android:layout_height="@dimen/tab_icon_size"
-                android:gravity="center"
-                android:layout_gravity="center"
-                app:srcCompat="@drawable/server" />
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="@string/google_drive_spreadsheet_text"
-                android:textSize="24dp"
-                android:clickable="false"
-                android:focusable="false"
-                android:gravity="center"/>
-        </LinearLayout>
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
             android:id="@+id/source_dropbox"
             style="@style/list_button"
             android:layout_height="wrap_content">

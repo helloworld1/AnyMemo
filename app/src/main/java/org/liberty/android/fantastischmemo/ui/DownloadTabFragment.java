@@ -30,7 +30,6 @@ import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.BaseFragment;
 import org.liberty.android.fantastischmemo.downloader.anymemo.AnyMemoDownloaderActivity;
 import org.liberty.android.fantastischmemo.downloader.dropbox.DropboxOauth2AccountActivity;
-import org.liberty.android.fantastischmemo.downloader.google.GoogleAccountActivity;
 
 /*
  * This class is invoked when the user share the card from other
@@ -56,10 +55,8 @@ public class DownloadTabFragment extends BaseFragment implements View.OnClickLis
         View v = inflater.inflate(R.layout.downloader_tab, container, false);
         amButton = v.findViewById(R.id.source_anymemo);
         dropboxButton = v.findViewById(R.id.source_dropbox);
-        googleButton = v.findViewById(R.id.source_google);
         amButton.setOnClickListener(this);
         dropboxButton.setOnClickListener(this);
-        googleButton.setOnClickListener(this);
         return v;
     }
     @Override
@@ -69,9 +66,6 @@ public class DownloadTabFragment extends BaseFragment implements View.OnClickLis
         }
         if (v == dropboxButton){
         	startActivity(new Intent(mActivity, DropboxOauth2AccountActivity.class));
-        }
-        if (v == googleButton) {
-            startActivity(new Intent(mActivity, GoogleAccountActivity.class));
         }
     }
 }

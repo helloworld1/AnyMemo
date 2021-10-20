@@ -1,7 +1,6 @@
 package org.liberty.android.fantastischmemo.modules;
 
 import org.liberty.android.fantastischmemo.common.AMApplication;
-import org.liberty.android.fantastischmemo.downloader.google.GoogleDriveDownloadHelper;
 import org.liberty.android.fantastischmemo.receiver.AlarmReceiver;
 import org.liberty.android.fantastischmemo.service.CardPlayerService;
 import org.liberty.android.fantastischmemo.service.ConvertIntentService;
@@ -27,8 +26,6 @@ public interface AppComponents {
     void inject(ConvertIntentService service);
 
     void inject(WidgetRemoteViewsFactory factory);
-
-    void inject(GoogleDriveDownloadHelper helper);
 
     void inject(AlarmReceiver alarmReceiver);
 

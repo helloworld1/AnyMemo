@@ -3,8 +3,6 @@ package org.liberty.android.fantastischmemo.modules;
 import org.liberty.android.fantastischmemo.common.BaseActivity;
 import org.liberty.android.fantastischmemo.downloader.dropbox.DropboxOauth2AccountActivity;
 import org.liberty.android.fantastischmemo.downloader.dropbox.UploadDropboxActivity;
-import org.liberty.android.fantastischmemo.downloader.google.GoogleAccountActivity;
-import org.liberty.android.fantastischmemo.downloader.google.SpreadsheetListScreen;
 import org.liberty.android.fantastischmemo.downloader.oauth.Oauth2AccountActivity;
 import org.liberty.android.fantastischmemo.ui.AnyMemo;
 import org.liberty.android.fantastischmemo.ui.CardEditor;
@@ -49,10 +47,6 @@ public interface ActivityComponents {
     void inject(Oauth2AccountActivity activity);
 
     void inject(DropboxOauth2AccountActivity activity);
-
-    void inject(GoogleAccountActivity activity);
-
-    void inject(SpreadsheetListScreen activity);
 
     void inject(UploadDropboxActivity activity);
 

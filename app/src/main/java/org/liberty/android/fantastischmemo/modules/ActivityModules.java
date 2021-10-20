@@ -3,11 +3,6 @@ package org.liberty.android.fantastischmemo.modules;
 import android.app.Activity;
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-
 import org.liberty.android.fantastischmemo.common.BaseActivity;
 import org.liberty.android.fantastischmemo.entity.Option;
 import org.liberty.android.fantastischmemo.ui.loader.MultipleLoaderManager;
@@ -42,30 +37,4 @@ public abstract class ActivityModules {
     static DictionaryUtil providesDictionaryUtil(Activity activity, Option option) {
         return new DictionaryUtil(activity, option);
     }
-
-
-    @Provides
-    @PerActivity
-    static GoogleSignInOptions provideGoogleSignInOptions() {
-        return new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-    }
-
-    @Provides
-    @PerActivity
-    static GoogleApiClient provideGoogleApiClient(@NonNull final BaseActivity activity,
-                                           @NonNull final ErrorUtil errorUtil,
-                                           @NonNull final GoogleSignInOptions gso) {
-        return new GoogleApiClient.Builder(activity)
-                .enableAutoManage(activity, new GoogleApiClient.OnConnectionFailedListener() {
-                    @Override
-                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                        errorUtil.showFatalError("Connection failure: " + connectionResult.getErrorMessage(), null);
-                    }
-                })
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-    }
-
 }

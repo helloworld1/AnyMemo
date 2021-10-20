@@ -339,7 +339,6 @@
     <string name="number_of_new_cards_learned_in_a_day_text">Number of new cards learned in a day</string>
     <string name="grade_statistics_text">Grade statistics</string>
     <string name="accumulative_cards_scheduled_text">Accumulative cards scheduled</string>
-    <string name="google_drive_spreadsheet_text">Google Drive spreadsheet</string>
     <string name="upload_text">Upload</string>
     <string name="logout_text">Logout</string>
     <string name="successfully_uploaded_text">Successfully uploaded</string>
@@ -468,9 +467,6 @@
     <string name="more_text">MORE</string>
     <string name="dropbox_item_description">Date: %1$s&lt;br&gt;Size: %2$d bytes</string>
     <string name="locale_esperanto_text">Esperanto</string>
-    <string name="google_sign_in_not_successful_error_text">Google sign in is not successful</string>
-    <string name="google_sign_in_empty_error_text">Google sign in result is empty</string>
-    <string name="google_sign_in_account_empty_result">Unable to get Google account</string>
     <string name="card_player_notification_channel_title">Card player notification</string>
     <string name="card_player_notification_channel_description">Display the status of card player and support playing in background</string>
 </resources>
