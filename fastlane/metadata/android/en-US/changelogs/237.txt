@@ -1,0 +1,2 @@
+10.11.7
+* Remove all Google Play support and google spreadsheet functions since it does not work anymore and is non-free
