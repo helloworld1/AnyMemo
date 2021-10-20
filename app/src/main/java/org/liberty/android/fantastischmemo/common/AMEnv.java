@@ -56,19 +56,7 @@ public class AMEnv {
     public final static String DROPBOX_CONSUMER_KEY;
     public final static String DROPBOX_CONSUMER_SECRET;
 
-    public final static String DROPBOX_OAUTH_VERSION = "1.0";
-    public final static String DROPBOX_OAUTH_SIGNATURE_METHOD="PLAINTEXT";
-    
     // Quizlet oauth constants
-    public final static String QUIZLET_CLIENT_ID;
-    public final static String QUIZLET_CLIENT_SECRET;
-    public final static String QUIZLET_REDIRECT_URI = "anymemo-quizlet://oauth";
-    public final static String QUIZLET_API_ENDPOINT = "https://api.quizlet.com/2.0";
-
-    // Cram (Formally FlashcardExchange)
-    public final static String CRAM_API_ENDPOINT = "https://api.cram.com/v2";
-    public final static String CRAM_CLIENT_ID;
-    public final static String CRAM_CLIENT_SECRET;
 
 
     // Load values from AMSecrets.
@@ -92,23 +80,5 @@ public class AMEnv {
 
         DROPBOX_CONSUMER_KEY = secretValuesMap.get("DROPBOX_CONSUMER_KEY");
         DROPBOX_CONSUMER_SECRET = secretValuesMap.get("DROPBOX_CONSUMER_SECRET");
-
-        QUIZLET_CLIENT_ID = secretValuesMap.get("QUIZLET_CLIENT_ID");
-        QUIZLET_CLIENT_SECRET = secretValuesMap.get("QUIZLET_CLIENT_SECRET");
-        
-
-        CRAM_CLIENT_ID = secretValuesMap.get("CRAM_CLIENT_ID");
-        CRAM_CLIENT_SECRET = secretValuesMap.get("CRAM_CLIENT_SECRET");
-
-
-        assert DROPBOX_CONSUMER_KEY != null;
-        assert DROPBOX_CONSUMER_SECRET != null;
-
-        assert QUIZLET_CLIENT_ID != null;
-        assert QUIZLET_CLIENT_SECRET != null;
-
-        assert CRAM_CLIENT_ID != null;
-        assert CRAM_CLIENT_SECRET != null;
-
     }
 }
