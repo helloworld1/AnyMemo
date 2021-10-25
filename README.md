@@ -12,6 +12,14 @@ Also you can learn histories, computer related topics, religion, life styles usi
 
 See detailed info at https://anymemo.org
 
+Download
+--------
+
+<a href="https://f-droid.org/en/packages/org.liberty.android.fantastischmemo/" target="_blank">
+<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="80"/></a>
+<a href="https://play.google.com/store/apps/details?id=org.liberty.android.fantastischmemo" target="_blank">
+<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" alt="Get it on Google Play" height="80"/></a>
+
 Directory structure
 -------------------
 
