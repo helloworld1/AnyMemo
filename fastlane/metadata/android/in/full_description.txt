@@ -1,0 +1,2 @@
+<p><i>AnyMemo</i> adalah aplikasi edukasi pengulangan kartu memori seperti SuperMemo untuk ponsel Android. Aplikasi ini menerapkan algoritma penjadwalan adaptif tingkat lanjut berdasarkan algoritma Mnemosyne yang diubah (Algortima Enhanced SuperMemo SM2) untuk memaksimalkan efisiensi pembelajaran.</p>
+<p><i>AnyMemo</i> akan membantu Anda mempelajari berbagai bahasa seperti Arab, Cina, Inggris, Jerman, Spanyol, Prancis, Jepang, Italia, Korea, dan Esperanto. Dan juga Anda bisa mempelajari sejarah, topik berkaitan komputer, agama, gaya hidup dll. menggunakan AnyMemo juga!</p>
