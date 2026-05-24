@@ -57,16 +57,15 @@ Provide the values to the fields in AMSecrets.java.
 Them compile using gradle:
 ```
 cd AnyMemo
-./gradlew assembleFreeApi16Debug
+./gradlew assembleFreeDebug
 ```
 To build pro version, use
 ```
-./gradlew assembleProApi16Debug
+./gradlew assembleProDebug
 ```
-AnyMemo has a dev flavor that changes the min API level to 21 to make the build much faster.
-It is recommended for development only.
+AnyMemo has a dev flavor that is recommended for development only.
 ```
-./gradlew assembleDevApi21Debug
+./gradlew assembleDevDebug
 ```
 
 The build artifacts are in
@@ -79,14 +78,14 @@ Instrumentation tests
 There are hundreds of instrumentation tests that ensure the basic function of
 AnyMemo. To run these tests against free version, you need to run:
 ```
-./gradlew installFreeApi16DebugTest
-./gradlew connectedInstrumentTestFreeApi16Debug
+./gradlew installFreeDebugTest
+./gradlew connectedInstrumentTestFreeDebug
 ```
 
 To run against pro version:
 ```
-./gradlew installProApi16DebugTest
-./gradlew connectedInstrumentTestProApi16Debug
+./gradlew installProDebugTest
+./gradlew connectedInstrumentTestProDebug
 ```
 
 
