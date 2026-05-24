@@ -4,6 +4,9 @@
     <item android:id="@+id/file_browser_createdb"
     	android:icon="@drawable/ic_add"
   		android:title="@string/fb_create_db" />
+    <item android:id="@+id/file_browser_importdb"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="@string/fb_import_db" />
     <item android:id="@+id/file_browser_createdirectory"
     	android:icon="@android:drawable/ic_menu_gallery"
   		android:title="@string/fb_create_dir" />

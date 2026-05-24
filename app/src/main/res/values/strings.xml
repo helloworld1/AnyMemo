@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     <string name="app_name">AnyMemo</string>
     <string name="app_full_name">AnyMemo</string>
@@ -89,6 +89,7 @@
     <string name="add_screen_previous">Previous</string>
     <string name="search_text">Search</string>
     <string name="fb_create_db">Create new DB</string>
+    <string name="fb_import_db">Import DB</string>
     <string name="fb_create_dir">Create new folder</string>
     <string name="fb_create_db_message">Please enter the name of new database.</string>
     <string name="fb_create_dir_message">Please enter the name of new folder.</string>

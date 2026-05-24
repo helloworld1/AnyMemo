@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.liberty.android.fantastischmemo.common;
 
+import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
@@ -33,16 +34,25 @@ import java.util.Map;
 public class AMEnv {
     private static final String TAG = AMEnv.class.getSimpleName();
 
-    public static final String EXTERNAL_STORAGE_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();
+    public static String EXTERNAL_STORAGE_PATH;
     private final static String DEFAULT_POSTFIX= "/anymemo/";
     private final static String DEFAULT_AUDIO_POSTFIX = "voice/";
     private final static String DEFAULT_IMAGE_POSTFIX = "images/";
     private final static String DEFAULT_TMP_POSTFIX = "tmp/";
 
-    public final static String DEFAULT_ROOT_PATH = EXTERNAL_STORAGE_PATH + DEFAULT_POSTFIX;
-    public final static String DEFAULT_AUDIO_PATH = DEFAULT_ROOT_PATH + DEFAULT_AUDIO_POSTFIX;
-    public final static String DEFAULT_IMAGE_PATH = DEFAULT_ROOT_PATH + DEFAULT_IMAGE_POSTFIX;
-    public final static String DEFAULT_TMP_PATH = DEFAULT_ROOT_PATH + DEFAULT_TMP_POSTFIX;
+    public static String DEFAULT_ROOT_PATH;
+    public static String DEFAULT_AUDIO_PATH;
+    public static String DEFAULT_IMAGE_PATH;
+    public static String DEFAULT_TMP_PATH;
+
+    public static void init(Context context) {
+        EXTERNAL_STORAGE_PATH = context.getExternalFilesDir(null).getAbsolutePath();
+        DEFAULT_ROOT_PATH = EXTERNAL_STORAGE_PATH + DEFAULT_POSTFIX;
+        DEFAULT_AUDIO_PATH = DEFAULT_ROOT_PATH + DEFAULT_AUDIO_POSTFIX;
+        DEFAULT_IMAGE_PATH = DEFAULT_ROOT_PATH + DEFAULT_IMAGE_POSTFIX;
+        DEFAULT_TMP_PATH = DEFAULT_ROOT_PATH + DEFAULT_TMP_POSTFIX;
+    }
+
     public final static String DEFAULT_DB_NAME= "french-body-parts.db";
     public final static String EMPTY_DB_NAME= "empty.db";
     public final static String ANYMEMO_SERVICE_ENDPOINT = "https://anymemo.org";

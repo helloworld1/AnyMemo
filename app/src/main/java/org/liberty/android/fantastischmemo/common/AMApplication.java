@@ -63,6 +63,7 @@ public class AMApplication extends Application {
     public void onCreate() {
         super.onCreate();
         currentApplicationContext = this;
+        AMEnv.init(this);
 
         appComponents = DaggerAppComponents.builder()
                 .application(this)

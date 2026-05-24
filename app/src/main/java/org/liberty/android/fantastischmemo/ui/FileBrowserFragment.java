@@ -62,6 +62,8 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
+import android.content.Intent;
+import android.net.Uri;
 
 public class FileBrowserFragment extends BaseDialogFragment {
     public final static String EXTRA_DEFAULT_ROOT = "default_root";
@@ -96,6 +98,7 @@ public class FileBrowserFragment extends BaseDialogFragment {
     private final static String TAG = FileBrowserFragment.class.getSimpleName();
     private final static String UP_ONE_LEVEL_DIR = "..";
     private final static String CURRENT_DIR = ".";
+    private static final int REQUEST_CODE_IMPORT_DB = 1001;
     private SharedPreferences settings;
     private SharedPreferences.Editor editor;
 
@@ -300,8 +303,51 @@ public class FileBrowserFragment extends BaseDialogFragment {
                         }
                     }));
             return true;
+        } else if (itemId == R.id.file_browser_importdb) {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("*/*");
+            startActivityForResult(intent, REQUEST_CODE_IMPORT_DB);
+            return true;
         }
         return false;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_IMPORT_DB && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
+            final Uri uri = data.getData();
+            disposables.add(io.reactivex.Observable.fromCallable(new java.util.concurrent.Callable<File>() {
+                @Override
+                public File call() throws Exception {
+                    String[] splittedUri = uri.toString().split("/");
+                    String newFileName = splittedUri[splittedUri.length - 1];
+                    // Clean up query parameters or encoded chars if necessary, but a simple append works for now
+                    if (!newFileName.endsWith(".db")) {
+                        newFileName += ".db";
+                    }
+                    File newFile = new File(currentDirectory.getAbsolutePath() + "/" + newFileName);
+                    java.io.InputStream inputStream = getContext().getContentResolver().openInputStream(uri);
+                    org.apache.commons.io.FileUtils.copyInputStreamToFile(inputStream, newFile);
+                    return newFile;
+                }
+            })
+            .subscribeOn(io.reactivex.schedulers.Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Consumer<File>() {
+                @Override
+                public void accept(File file) {
+                    refreshFileList(currentDirectory);
+                }
+            }, new Consumer<Throwable>() {
+                @Override
+                public void accept(Throwable throwable) {
+                    Log.e(TAG, "Error importing DB", throwable);
+                    Toast.makeText(getContext(), "Error importing DB", Toast.LENGTH_SHORT).show();
+                }
+            }));
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void openFile(final String selectedFileString) {

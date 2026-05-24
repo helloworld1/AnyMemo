@@ -115,8 +115,8 @@ public class AnyMemo extends BaseActivity {
 
         binding = DataBindingUtil.setContentView(this, R.layout.main_tabs);
 
-        // Request storage permission for API < 30
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.R) {
+        // Request storage permission for API < 29
+        if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.Q) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this,
@@ -128,6 +128,11 @@ public class AnyMemo extends BaseActivity {
                     isUiLoaded = true;
                 }
             }
+        } else {
+            if (!isUiLoaded) {
+                loadUiComponents();
+                isUiLoaded = true;
+            }
         }
         recentListActionModeUtil.registerForActivity();
     }
@@ -135,14 +140,10 @@ public class AnyMemo extends BaseActivity {
     @Override
     public void onResume() {
         super.onResume();
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
-            if (android.os.Environment.isExternalStorageManager()) {
-                if (!isUiLoaded) {
-                    loadUiComponents();
-                    isUiLoaded = true;
-                }
-            } else {
-                showPermissionRequiredDialog();
+        if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.Q) {
+            if (!isUiLoaded) {
+                loadUiComponents();
+                isUiLoaded = true;
             }
         } else {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -153,43 +154,6 @@ public class AnyMemo extends BaseActivity {
                 }
             }
         }
-    }
-
-    private void checkAndRequestStoragePermission() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
-            if (!android.os.Environment.isExternalStorageManager()) {
-                try {
-                    Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
-                    intent.addCategory("android.intent.category.DEFAULT");
-                    intent.setData(Uri.parse(String.format("package:%s", getApplicationContext().getPackageName())));
-                    startActivity(intent);
-                } catch (Exception e) {
-                    Intent intent = new Intent();
-                    intent.setAction(android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-                    startActivity(intent);
-                }
-            }
-        }
-    }
-
-    private void showPermissionRequiredDialog() {
-        new AlertDialog.Builder(this)
-            .setTitle(R.string.sdcard_not_available_warning_title)
-            .setMessage("AnyMemo requires All Files Access permission to read and write database files on storage.")
-            .setPositiveButton("Grant", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    checkAndRequestStoragePermission();
-                }
-            })
-            .setNegativeButton("Exit", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    finish();
-                }
-            })
-            .setCancelable(false)
-            .show();
     }
 
     @Override
