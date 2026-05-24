@@ -112,7 +112,7 @@ public class ConvertIntentService extends BaseIntentService {
     private void showInProgressNotification(int notificationId, String conversionFileInfo) {
 
         // Dummy intent used for Android 2.3 compatibility
-        PendingIntent dummyPendingIntent= PendingIntent.getActivity(this, 0, new Intent(), PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent dummyPendingIntent= PendingIntent.getActivity(this, 0, new Intent(), getPendingIntentFlags(PendingIntent.FLAG_UPDATE_CURRENT));
 
         Notification inProgressNotification = new NotificationCompat.Builder(getApplicationContext(), NotificationChannelUtil.CONVERSATION_CHANNEL_ID)
             .setOngoing(true)
@@ -129,7 +129,7 @@ public class ConvertIntentService extends BaseIntentService {
 
     private void showFailureNotification(int notificationId, String conversionFileInfo, Exception exception) {
         // Dummy intent used for Android 2.3 compatibility
-        PendingIntent dummyPendingIntent= PendingIntent.getActivity(this, 0, new Intent(), PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent dummyPendingIntent= PendingIntent.getActivity(this, 0, new Intent(), getPendingIntentFlags(PendingIntent.FLAG_UPDATE_CURRENT));
 
         Notification failureNotification = new NotificationCompat.Builder(getApplicationContext(), NotificationChannelUtil.CONVERSATION_CHANNEL_ID)
             .setOngoing(false)
@@ -162,7 +162,7 @@ public class ConvertIntentService extends BaseIntentService {
 
         PendingIntent pendingIntent = TaskStackBuilder.create(this)
             .addNextIntentWithParentStack(resultIntent)
-            .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+            .getPendingIntent(0, getPendingIntentFlags(PendingIntent.FLAG_UPDATE_CURRENT));
 
         //PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, resultIntent, 0);
 
@@ -176,5 +176,11 @@ public class ConvertIntentService extends BaseIntentService {
             .build();
 
         notificationManager.notify(notificationId, successNotification);
+    }
+    private int getPendingIntentFlags(int baseFlags) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            return baseFlags | PendingIntent.FLAG_IMMUTABLE;
+        }
+        return baseFlags;
     }
 }

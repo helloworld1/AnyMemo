@@ -1,29 +1,43 @@
 apply plugin: 'com.android.application'
 
+base {
+    archivesName = "AnyMemo"
+}
+
 repositories {
     mavenCentral()
     google()
     maven { url "https://jitpack.io" }
 }
 
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        if (details.requested.group == 'org.jetbrains.kotlin' &&
+            (details.requested.name == 'kotlin-stdlib-jdk7' || details.requested.name == 'kotlin-stdlib-jdk8')) {
+            details.useVersion '1.8.10'
+        }
+    }
+}
+
 android {
-    compileSdkVersion 29
+    namespace 'org.liberty.android.fantastischmemo'
+    compileSdk 35
 
     defaultConfig {
         versionCode 237
         versionName "10.11.7"
-        minSdkVersion 16
-        targetSdkVersion 29
+        minSdk 18
+        targetSdk 35
         testApplicationId "org.liberty.android.fantastischmemo.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
         multiDexEnabled true
-        archivesBaseName = "AnyMemo"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
 
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        dataBinding true
+        buildConfig true
     }
 
     compileOptions {
@@ -57,28 +71,31 @@ android {
             dimension "mode"
         }
         api21 {
-            minSdkVersion 21
+            minSdk 21
             dimension "api"
         }
-        api16 {
-            minSdkVersion 16
+        api18 {
+            minSdk 18
             dimension "api"
         }
     }
 
-    lintOptions {
-        disable 'MissingTranslation'
-        disable 'ExtraTranslation'
+    lint {
+        disable 'MissingTranslation', 'ExtraTranslation'
     }
 
-    packagingOptions {
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/NOTICE.txt'
-        exclude 'META-INF/maven/com.google.guava/guava/pom.properties'
-        exclude 'META-INF/maven/com.google.guava/guava/pom.xml'
+    packaging {
+        resources {
+            excludes += [
+                'META-INF/DEPENDENCIES',
+                'META-INF/LICENSE',
+                'META-INF/NOTICE',
+                'META-INF/LICENSE.txt',
+                'META-INF/NOTICE.txt',
+                'META-INF/maven/com.google.guava/guava/pom.properties',
+                'META-INF/maven/com.google.guava/guava/pom.xml'
+            ]
+        }
     }
 }
 
@@ -104,7 +121,7 @@ dependencies {
     implementation "com.google.guava:guava:27.0.1-android"
     implementation "com.opencsv:opencsv:3.4"
     implementation "com.github.PhilJay:MPAndroidChart:v2.1.6"
-    implementation "com.rarepebble:colorpicker:2.0.0"
+    implementation "com.github.martin-stone:hsv-alpha-color-picker-android:3.1.0"
     implementation "com.simplify:ink:1.0.0"
 
     implementation "com.google.dagger:dagger:2.22.1"

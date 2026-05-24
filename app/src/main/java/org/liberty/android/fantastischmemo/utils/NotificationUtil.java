@@ -48,7 +48,7 @@ public class NotificationUtil {
             myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             NotificationManager notificationManager = (NotificationManager) appContext.getSystemService(Context.NOTIFICATION_SERVICE);
 
-            PendingIntent pIntent = PendingIntent.getActivity(appContext, NOTIFICATION_REQ, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+            PendingIntent pIntent = PendingIntent.getActivity(appContext, NOTIFICATION_REQ, myIntent, getPendingIntentFlags(PendingIntent.FLAG_CANCEL_CURRENT));
 
             Notification notification = new NotificationCompat.Builder(appContext, NotificationChannelUtil.REVIEW_REMINDER_CHANNEL_ID)
                     .setTicker("AnyMemo")
@@ -113,4 +113,10 @@ public class NotificationUtil {
         }
     }
 
+    private int getPendingIntentFlags(int baseFlags) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            return baseFlags | PendingIntent.FLAG_IMMUTABLE;
+        }
+        return baseFlags;
+    }
 }

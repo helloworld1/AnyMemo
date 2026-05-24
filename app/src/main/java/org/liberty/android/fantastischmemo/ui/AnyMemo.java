@@ -105,6 +105,8 @@ public class AnyMemo extends BaseActivity {
 
     private static final int PERMISSION_REQUEST_EXTERNAL_STORAGE = 1;
 
+    private boolean isUiLoaded = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         activityComponents().inject(this);
@@ -113,16 +115,81 @@ public class AnyMemo extends BaseActivity {
 
         binding = DataBindingUtil.setContentView(this, R.layout.main_tabs);
 
-        // Request storage permission
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    PERMISSION_REQUEST_EXTERNAL_STORAGE);
-        } else {
-            loadUiComponents();
+        // Request storage permission for API < 30
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.R) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        PERMISSION_REQUEST_EXTERNAL_STORAGE);
+            } else {
+                if (!isUiLoaded) {
+                    loadUiComponents();
+                    isUiLoaded = true;
+                }
+            }
         }
         recentListActionModeUtil.registerForActivity();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            if (android.os.Environment.isExternalStorageManager()) {
+                if (!isUiLoaded) {
+                    loadUiComponents();
+                    isUiLoaded = true;
+                }
+            } else {
+                showPermissionRequiredDialog();
+            }
+        } else {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                if (!isUiLoaded) {
+                    loadUiComponents();
+                    isUiLoaded = true;
+                }
+            }
+        }
+    }
+
+    private void checkAndRequestStoragePermission() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            if (!android.os.Environment.isExternalStorageManager()) {
+                try {
+                    Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                    intent.addCategory("android.intent.category.DEFAULT");
+                    intent.setData(Uri.parse(String.format("package:%s", getApplicationContext().getPackageName())));
+                    startActivity(intent);
+                } catch (Exception e) {
+                    Intent intent = new Intent();
+                    intent.setAction(android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                    startActivity(intent);
+                }
+            }
+        }
+    }
+
+    private void showPermissionRequiredDialog() {
+        new AlertDialog.Builder(this)
+            .setTitle(R.string.sdcard_not_available_warning_title)
+            .setMessage("AnyMemo requires All Files Access permission to read and write database files on storage.")
+            .setPositiveButton("Grant", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    checkAndRequestStoragePermission();
+                }
+            })
+            .setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            })
+            .setCancelable(false)
+            .show();
     }
 
     @Override
@@ -132,7 +199,10 @@ public class AnyMemo extends BaseActivity {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    loadUiComponents();
+                    if (!isUiLoaded) {
+                        loadUiComponents();
+                        isUiLoaded = true;
+                    }
                 } else {
                     Toast.makeText(this, R.string.write_storage_permission_denied_message, Toast.LENGTH_LONG)
                             .show();

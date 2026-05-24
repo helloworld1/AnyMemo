@@ -201,7 +201,7 @@ public class CardPlayerService extends BaseService {
         // Make sure to resume the activity instead of creating a new one.
         resultIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, resultIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, resultIntent, getPendingIntentFlags(0));
         NotificationCompat.Builder mBuilder =
             new NotificationCompat.Builder(this, NotificationChannelUtil.CARD_PLAYER_NOTIFICATION_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher)
@@ -212,7 +212,11 @@ public class CardPlayerService extends BaseService {
 
         // Basically make the service foreground so a notification is shown
         // And the service is less susceptible to be kill by Android system.
-        startForeground(NOTIFICATION_ID, mBuilder.build());
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            startForeground(NOTIFICATION_ID, mBuilder.build(), android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK);
+        } else {
+            startForeground(NOTIFICATION_ID, mBuilder.build());
+        }
     }
 
     /*
@@ -256,5 +260,11 @@ public class CardPlayerService extends BaseService {
         }
     }
 
+    private int getPendingIntentFlags(int baseFlags) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            return baseFlags | PendingIntent.FLAG_IMMUTABLE;
+        }
+        return baseFlags;
+    }
 }
 

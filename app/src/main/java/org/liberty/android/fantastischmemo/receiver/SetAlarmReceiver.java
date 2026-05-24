@@ -68,7 +68,7 @@ public class SetAlarmReceiver extends BroadcastReceiver{
         AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent myIntent = new Intent(context, AlarmReceiver.class);
         myIntent.putExtra("request_code", AlarmReceiver.ALARM_SHOW_NOTIFICATION);
-        PendingIntent sender = PendingIntent.getBroadcast(context, ALARM_REQUEST_CODE, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent sender = PendingIntent.getBroadcast(context, ALARM_REQUEST_CODE, myIntent, getPendingIntentFlags(PendingIntent.FLAG_CANCEL_CURRENT));
         /* Set up the alarm time */
         Calendar due = Calendar.getInstance();
         due.set(Calendar.HOUR_OF_DAY, 7);
@@ -97,7 +97,7 @@ public class SetAlarmReceiver extends BroadcastReceiver{
         AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent myIntent = new Intent(context, AlarmReceiver.class);
         myIntent.putExtra("request_code", AlarmReceiver.ALARM_SHOW_NOTIFICATION);
-        PendingIntent sender = PendingIntent.getBroadcast(context, ALARM_REQUEST_CODE, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent sender = PendingIntent.getBroadcast(context, ALARM_REQUEST_CODE, myIntent, getPendingIntentFlags(PendingIntent.FLAG_CANCEL_CURRENT));
         am.cancel(sender);
     }
 
@@ -106,7 +106,7 @@ public class SetAlarmReceiver extends BroadcastReceiver{
         AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent myIntent = new Intent(context, AlarmReceiver.class);
         myIntent.putExtra("request_code", AlarmReceiver.ALARM_WIDGET);
-        PendingIntent sender = PendingIntent.getBroadcast(context, ALARM_REQUEST_CODE + 1, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent sender = PendingIntent.getBroadcast(context, ALARM_REQUEST_CODE + 1, myIntent, getPendingIntentFlags(PendingIntent.FLAG_CANCEL_CURRENT));
         am.setInexactRepeating(AlarmManager.RTC, System.currentTimeMillis(), AlarmManager.INTERVAL_HOUR, sender);
     }
 
@@ -114,9 +114,15 @@ public class SetAlarmReceiver extends BroadcastReceiver{
         AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent myIntent = new Intent(context, AlarmReceiver.class);
         myIntent.putExtra("request_code", AlarmReceiver.ALARM_WIDGET);
-        PendingIntent sender = PendingIntent.getBroadcast(context, ALARM_REQUEST_CODE + 1, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent sender = PendingIntent.getBroadcast(context, ALARM_REQUEST_CODE + 1, myIntent, getPendingIntentFlags(PendingIntent.FLAG_CANCEL_CURRENT));
         am.cancel(sender);
     }
 
+    private static int getPendingIntentFlags(int baseFlags) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            return baseFlags | PendingIntent.FLAG_IMMUTABLE;
+        }
+        return baseFlags;
+    }
 }
 
