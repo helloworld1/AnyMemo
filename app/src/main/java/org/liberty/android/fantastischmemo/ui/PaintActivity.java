@@ -82,10 +82,10 @@ public class PaintActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.clear_menu_item:
-                inkView.clear();
-                return true;
+        int itemId = item.getItemId();
+        if (itemId == R.id.clear_menu_item) {
+            inkView.clear();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

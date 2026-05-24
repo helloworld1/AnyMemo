@@ -159,13 +159,12 @@ public class SettingsScreen extends BaseActivity {
 
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-        case R.id.save:
+        int itemId = item.getItemId();
+        if (itemId == R.id.save) {
             SaveButtonTask task = new SaveButtonTask();
             task.execute((Void) null);
             return true;
-
-        case R.id.load_default:
+        } else if (itemId == R.id.load_default) {
             new AlertDialog.Builder(this)
                 .setTitle(R.string.load_default_text)
                 .setMessage(R.string.load_default_warning_text)
@@ -181,16 +180,13 @@ public class SettingsScreen extends BaseActivity {
                 .setNegativeButton(R.string.cancel_text, null)
                 .show();
             return true;
-
-
-        case R.id.settingsmenu_help:
+        } else if (itemId == R.id.settingsmenu_help) {
             Intent myIntent = new Intent();
             myIntent.setAction(Intent.ACTION_VIEW);
             myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
             myIntent.setData(Uri.parse(WEBSITE_HELP_SETTINGS));
             startActivity(myIntent);
             return true;
-
         }
         return false;
     }

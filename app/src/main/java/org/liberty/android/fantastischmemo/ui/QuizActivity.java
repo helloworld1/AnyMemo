@@ -152,27 +152,16 @@ public class QuizActivity extends QACardActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_lookup:
-            {
-                dictionaryUtil.showLookupListDialog("" + getCurrentCard().getQuestion() + " " + getCurrentCard().getAnswer());
-                break;
-            }
-            case R.id.menu_speak_question:
-            {
-                speakQuestion();
-                break;
-            }
-            case R.id.menu_speak_answer:
-            {
-                speakAnswer();
-                break;
-            }
-            case R.id.menu_paint:
-            {
-                Intent myIntent = new Intent(this, PaintActivity.class);
-                startActivity(myIntent);
-            }
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_lookup) {
+            dictionaryUtil.showLookupListDialog("" + getCurrentCard().getQuestion() + " " + getCurrentCard().getAnswer());
+        } else if (itemId == R.id.menu_speak_question) {
+            speakQuestion();
+        } else if (itemId == R.id.menu_speak_answer) {
+            speakAnswer();
+        } else if (itemId == R.id.menu_paint) {
+            Intent myIntent = new Intent(this, PaintActivity.class);
+            startActivity(myIntent);
         }
         return false;
     }

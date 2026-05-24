@@ -255,164 +255,109 @@ public class PreviewEditActivity extends QACardActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menuspeakquestion:
-            {
+        int itemId = item.getItemId();
+        if (itemId == R.id.menuspeakquestion) {
+            if (getCurrentCard() != null) {
+                return speakQuestion();
+            }
+            return true;
+        } else if (itemId == R.id.menuspeakanswer) {
+            if (getCurrentCard() != null) {
+                return speakAnswer();
+            }
+            return true;
+        } else if (itemId == R.id.editmenu_settings_id) {
+            Intent myIntent = new Intent(this, SettingsScreen.class);
+            myIntent.putExtra(SettingsScreen.EXTRA_DBPATH, dbPath);
+            startActivityForResult(myIntent, ACTIVITY_SETTINGS);
+            return true;
+        } else if (itemId == R.id.editmenu_delete_id) {
+            deleteCard(getCurrentCard());
+            return true;
+        } else if (itemId == R.id.editmenu_detail_id) {
+            if (getCurrentCard() != null) {
+                Intent myIntent = new Intent(this, DetailScreen.class);
+                myIntent.putExtra(DetailScreen.EXTRA_DBPATH, this.dbPath);
+                myIntent.putExtra(DetailScreen.EXTRA_CARD_ID, getCurrentCard().getId());
+                startActivityForResult(myIntent, ACTIVITY_DETAIL);
+            }
+            return true;
+        } else if (itemId == R.id.editmenu_list_id) {
+            // List edit mode
+            Intent myIntent = new Intent(this, SettingsScreen.class);
+            myIntent.setClass(this, CardListActivity.class);
+            myIntent.putExtra(CardListActivity.EXTRA_DBPATH, dbPath);
+            if(getCurrentCard() != null){
+                myIntent.putExtra("openid", getCurrentCard().getId());
+            }
+            startActivityForResult(myIntent, ACTIVITY_LIST);
+            return true;
+        } else if (itemId == R.id.menu_edit_categories) {
+            if (getCurrentCard() != null) {
+                showCategoriesDialog();
+            }
+            return true;
+        } else if (itemId == R.id.editmenu_help) {
+            Intent myIntent = new Intent();
+            myIntent.setAction(Intent.ACTION_VIEW);
+            myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
+            myIntent.setData(Uri.parse(WEBSITE_HELP_EDIT));
+            startActivity(myIntent);
+            return true;
+        } else if (itemId == R.id.menu_card_player) {
+            if (getCurrentCard()!= null){
+                Intent intent = new Intent(this, CardPlayerActivity.class);
+                intent.putExtra(CardPlayerActivity.EXTRA_DBPATH, dbPath);
                 if (getCurrentCard() != null) {
-                    return speakQuestion();
+                    intent.putExtra(CardPlayerActivity.EXTRA_START_CARD_ID, getCurrentCard().getId());
                 }
-                return true;
+                startActivityForResult(intent, ACTIVITY_CARD_PLAYER);
             }
-
-            case R.id.menuspeakanswer:
-            {
-                if (getCurrentCard() != null) {
-                    return speakAnswer();
-                }
-                return true;
+            return true;
+        } else if (itemId == R.id.menu_context_copy) {
+            if (getCurrentCard()!= null){
+                Toast.makeText(this, R.string.copy_text, Toast.LENGTH_LONG).show();
+                savedCardId = getCurrentCard().getId();
             }
-
-            case R.id.editmenu_settings_id:
-            {
-                Intent myIntent = new Intent(this, SettingsScreen.class);
-                myIntent.putExtra(SettingsScreen.EXTRA_DBPATH, dbPath);
-                startActivityForResult(myIntent, ACTIVITY_SETTINGS);
-            }
-                return true;
-
-            case R.id.editmenu_delete_id:
-            {
-                deleteCard(getCurrentCard());
-                return true;
-            }
-
-
-            case R.id.editmenu_detail_id:
-            {
-                if (getCurrentCard() != null) {
-                    Intent myIntent = new Intent(this, DetailScreen.class);
-                    myIntent.putExtra(DetailScreen.EXTRA_DBPATH, this.dbPath);
-                    myIntent.putExtra(DetailScreen.EXTRA_CARD_ID, getCurrentCard().getId());
-                    startActivityForResult(myIntent, ACTIVITY_DETAIL);
-                }
-                return true;
-            }
-            case R.id.editmenu_list_id:
-            {
-                // List edit mode
-                Intent myIntent = new Intent(this, SettingsScreen.class);
-                myIntent.setClass(this, CardListActivity.class);
-                myIntent.putExtra(CardListActivity.EXTRA_DBPATH, dbPath);
-                if(getCurrentCard() != null){
-                    myIntent.putExtra("openid", getCurrentCard().getId());
-                }
-                startActivityForResult(myIntent, ACTIVITY_LIST);
-                return true;
-            }
-
-            case R.id.menu_edit_categories:
-            {
-                if (getCurrentCard() != null) {
-                    showCategoriesDialog();
-                }
-                return true;
-            }
-
-            case R.id.editmenu_help:
-            {
-                Intent myIntent = new Intent();
-                myIntent.setAction(Intent.ACTION_VIEW);
-                myIntent.addCategory(Intent.CATEGORY_BROWSABLE);
-                myIntent.setData(Uri.parse(WEBSITE_HELP_EDIT));
-                startActivity(myIntent);
-                return true;
-            }
-
-            case R.id.menu_card_player:
-            {
-                if (getCurrentCard()!= null){
-                    Intent intent = new Intent(this, CardPlayerActivity.class);
-                    intent.putExtra(CardPlayerActivity.EXTRA_DBPATH, dbPath);
-                    if (getCurrentCard() != null) {
-                        intent.putExtra(CardPlayerActivity.EXTRA_START_CARD_ID, getCurrentCard().getId());
-                    }
-                    startActivityForResult(intent, ACTIVITY_CARD_PLAYER);
-                }
-                return true;
-            }
-
-            case R.id.menu_context_copy:
-            {
-
-                if (getCurrentCard()!= null){
-                    Toast.makeText(this, R.string.copy_text, Toast.LENGTH_LONG).show();
-                    savedCardId = getCurrentCard().getId();
-                }
-                return true;
-            }
-            case R.id.menu_context_paste:
-            {
-                if (savedCardId != null && getCurrentCard() != null) {
-                    Card savedCard = getDbOpenHelper().getCardDao().queryForId(savedCardId);
-                    LearningData ld = new LearningData();
-                    getDbOpenHelper().getLearningDataDao().create(ld);
-                    savedCard.setLearningData(ld);
-                    savedCard.setOrdinal(getCurrentCard().getOrdinal());
-                    getDbOpenHelper().getCardDao().create(savedCard);
-                    restartActivity();
-                }
-
-                return true;
-            }
-            case R.id.menu_context_swap_current:
-            {
-                getDbOpenHelper().getCardDao().swapQA(getCurrentCard());
+            return true;
+        } else if (itemId == R.id.menu_context_paste) {
+            if (savedCardId != null && getCurrentCard() != null) {
+                Card savedCard = getDbOpenHelper().getCardDao().queryForId(savedCardId);
+                LearningData ld = new LearningData();
+                getDbOpenHelper().getLearningDataDao().create(ld);
+                savedCard.setLearningData(ld);
+                savedCard.setOrdinal(getCurrentCard().getOrdinal());
+                getDbOpenHelper().getCardDao().create(savedCard);
                 restartActivity();
-                return true;
             }
-
-            case R.id.menu_context_reset_current:
-            {
-                getDbOpenHelper().getLearningDataDao().resetLearningData(getCurrentCard().getLearningData());
-                return true;
-            }
-
-            case R.id.menu_context_wipe:
-            {
-                AMGUIUtility.doConfirmProgressTask(this, R.string.settings_wipe, R.string.settings_wipe_warning, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask() {
-                    @Override
-                    public void doHeavyTask() {
-                        getDbOpenHelper().getLearningDataDao().resetAllLearningData();
-                    }
-                    @Override
-                    public void doUITask() {/* Do nothing */}
-                });
-                return true;
-            }
-
-            case R.id.menu_context_swap:
-            {
-                new AlertDialog.Builder(this)
-                    .setTitle(R.string.warning_text)
-                    .setIcon(R.drawable.alert_dialog_icon)
-                    .setMessage(R.string.settings_inverse_warning)
-                    .setPositiveButton(R.string.swap_text, new DialogInterface.OnClickListener(){
-                        public void onClick(DialogInterface arg0, int arg1){
-                            AMGUIUtility.doProgressTask(PreviewEditActivity.this, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask(){
-                                public void doHeavyTask(){
-                                    getDbOpenHelper().getCardDao().swapAllQA();
-                                }
-                                public void doUITask(){
-                                    restartActivity();
-                                }
-                            });
-                        }
-                    })
-                .setNeutralButton(R.string.swapdup_text, new DialogInterface.OnClickListener(){
+            return true;
+        } else if (itemId == R.id.menu_context_swap_current) {
+            getDbOpenHelper().getCardDao().swapQA(getCurrentCard());
+            restartActivity();
+            return true;
+        } else if (itemId == R.id.menu_context_reset_current) {
+            getDbOpenHelper().getLearningDataDao().resetLearningData(getCurrentCard().getLearningData());
+            return true;
+        } else if (itemId == R.id.menu_context_wipe) {
+            AMGUIUtility.doConfirmProgressTask(this, R.string.settings_wipe, R.string.settings_wipe_warning, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask() {
+                @Override
+                public void doHeavyTask() {
+                    getDbOpenHelper().getLearningDataDao().resetAllLearningData();
+                }
+                @Override
+                public void doUITask() {/* Do nothing */}
+            });
+            return true;
+        } else if (itemId == R.id.menu_context_swap) {
+            new AlertDialog.Builder(this)
+                .setTitle(R.string.warning_text)
+                .setIcon(R.drawable.alert_dialog_icon)
+                .setMessage(R.string.settings_inverse_warning)
+                .setPositiveButton(R.string.swap_text, new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface arg0, int arg1){
                         AMGUIUtility.doProgressTask(PreviewEditActivity.this, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask(){
                             public void doHeavyTask(){
-                                getDbOpenHelper().getCardDao().swapAllQADup();
+                                getDbOpenHelper().getCardDao().swapAllQA();
                             }
                             public void doUITask(){
                                 restartActivity();
@@ -420,62 +365,58 @@ public class PreviewEditActivity extends QACardActivity {
                         });
                     }
                 })
-                .setNegativeButton(R.string.cancel_text, null)
-                    .create()
-                    .show();
+            .setNeutralButton(R.string.swapdup_text, new DialogInterface.OnClickListener(){
+                public void onClick(DialogInterface arg0, int arg1){
+                    AMGUIUtility.doProgressTask(PreviewEditActivity.this, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask(){
+                        public void doHeavyTask(){
+                            getDbOpenHelper().getCardDao().swapAllQADup();
+                        }
+                        public void doUITask(){
+                            restartActivity();
+                        }
+                    });
+                }
+            })
+            .setNegativeButton(R.string.cancel_text, null)
+                .create()
+                .show();
 
-                return true;
-            }
-
-            case R.id.menu_gestures:
-            {
-                showGesturesDialog();
-                return true;
-            }
-
-            case R.id.menu_context_remove_dup:
-            {
-                AMGUIUtility.doConfirmProgressTask(this, R.string.remove_dup_text, R.string.remove_dup_message, R.string.removing_dup_title, R.string.removing_dup_warning, new AMGUIUtility.ProgressTask() {
-                    @Override
-                    public void doHeavyTask() {
-                        getDbOpenHelper().getCardDao().removeDuplicates();
-                    }
-                    @Override
-                    public void doUITask() {
-                        restartActivity();
-                    }
-                });
-                return true;
-            }
-
-            case R.id.menu_context_merge_db:
-            {
-                Intent myIntent = new Intent(this, DatabaseMerger.class);
-                myIntent.putExtra(DatabaseMerger.EXTRA_SRC_PATH, dbPath);
-                startActivityForResult(myIntent, ACTIVITY_MERGE);
-                return true;
-            }
-
-            case R.id.menu_context_shuffle:
-            {
-                AMGUIUtility.doConfirmProgressTask(this, R.string.settings_shuffle, R.string.settings_shuffle_warning, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask() {
-                    @Override
-                    public void doHeavyTask() {
-                        getDbOpenHelper().getCardDao().shuffleOrdinals();
-                    }
-                    @Override
-                    public void doUITask() {
-                        restartActivity();
-                    }
-                });
-                return true;
-            }
-
-            case R.id.menu_share:
-            {
-                shareUtil.shareCard(getCurrentCard());
-                return true;
-            }
+            return true;
+        } else if (itemId == R.id.menu_gestures) {
+            showGesturesDialog();
+            return true;
+        } else if (itemId == R.id.menu_context_remove_dup) {
+            AMGUIUtility.doConfirmProgressTask(this, R.string.remove_dup_text, R.string.remove_dup_message, R.string.removing_dup_title, R.string.removing_dup_warning, new AMGUIUtility.ProgressTask() {
+                @Override
+                public void doHeavyTask() {
+                    getDbOpenHelper().getCardDao().removeDuplicates();
+                }
+                @Override
+                public void doUITask() {
+                    restartActivity();
+                }
+            });
+            return true;
+        } else if (itemId == R.id.menu_context_merge_db) {
+            Intent myIntent = new Intent(this, DatabaseMerger.class);
+            myIntent.putExtra(DatabaseMerger.EXTRA_SRC_PATH, dbPath);
+            startActivityForResult(myIntent, ACTIVITY_MERGE);
+            return true;
+        } else if (itemId == R.id.menu_context_shuffle) {
+            AMGUIUtility.doConfirmProgressTask(this, R.string.settings_shuffle, R.string.settings_shuffle_warning, R.string.loading_please_wait, R.string.loading_save, new AMGUIUtility.ProgressTask() {
+                @Override
+                public void doHeavyTask() {
+                    getDbOpenHelper().getCardDao().shuffleOrdinals();
+                }
+                @Override
+                public void doUITask() {
+                    restartActivity();
+                }
+            });
+            return true;
+        } else if (itemId == R.id.menu_share) {
+            shareUtil.shareCard(getCurrentCard());
+            return true;
         }
 
         return false;

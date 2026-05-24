@@ -279,31 +279,27 @@ public class FileBrowserFragment extends BaseDialogFragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.file_browser_createdb:{
-                disposables.add(databaseOperationDialogUtil.showCreateDbDialog(currentDirectory.getAbsolutePath())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Consumer<File>() {
-                            @Override
-                            public void accept(File file) throws Exception {
-                                browseTo(file.getParentFile());
-                            }
-                        }));
-                return true;
-            }
-
-            case R.id.file_browser_createdirectory:{
-                disposables.add(databaseOperationDialogUtil.showCreateFolderDialog(currentDirectory)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Consumer<File>() {
-                            @Override
-                            public void accept(File file) throws Exception {
-                                browseTo(file);
-                            }
-                        }));
-                return true;
-
-            }
+        int itemId = item.getItemId();
+        if (itemId == R.id.file_browser_createdb) {
+            disposables.add(databaseOperationDialogUtil.showCreateDbDialog(currentDirectory.getAbsolutePath())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<File>() {
+                        @Override
+                        public void accept(File file) throws Exception {
+                            browseTo(file.getParentFile());
+                        }
+                    }));
+            return true;
+        } else if (itemId == R.id.file_browser_createdirectory) {
+            disposables.add(databaseOperationDialogUtil.showCreateFolderDialog(currentDirectory)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<File>() {
+                        @Override
+                        public void accept(File file) throws Exception {
+                            browseTo(file);
+                        }
+                    }));
+            return true;
         }
         return false;
     }

@@ -119,26 +119,22 @@ public class StatisticsScreen extends BaseActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
                  @Override
                  public boolean onNavigationItemSelected(MenuItem menuItem) {
-                 switch (menuItem.getItemId()) {
-                     case R.id.cards_scheduled_in_a_month_menu:
-                         setTitle(R.string.number_of_cards_scheduled_in_a_day_text);
-                         new CardToReviewTask()
-                                 .execute((Void)null);
-                         break;
-                     case R.id.accumulative_cards_scheduled_menu:
-                         setTitle(R.string.accumulative_cards_scheduled_text);
-                         new AccumulativeCardsToReviewTask()
-                                 .execute((Void) null);
-                         break;
-                     case R.id.new_cards_learned_in_the_past_month_menu:
-                         setTitle(R.string.number_of_new_cards_learned_in_a_day_text);
-                         new NewCardTask().execute((Void) null);
-                         break;
-                     case R.id.grade_statistics_menu:
-                         setTitle(R.string.grade_statistics_text);
-                         new GradeStatisticsTask()
-                                 .execute((Void)null);
-                         break;
+                 int itemId = menuItem.getItemId();
+                 if (itemId == R.id.cards_scheduled_in_a_month_menu) {
+                     setTitle(R.string.number_of_cards_scheduled_in_a_day_text);
+                     new CardToReviewTask()
+                             .execute((Void)null);
+                 } else if (itemId == R.id.accumulative_cards_scheduled_menu) {
+                     setTitle(R.string.accumulative_cards_scheduled_text);
+                     new AccumulativeCardsToReviewTask()
+                             .execute((Void) null);
+                 } else if (itemId == R.id.new_cards_learned_in_the_past_month_menu) {
+                     setTitle(R.string.number_of_new_cards_learned_in_a_day_text);
+                     new NewCardTask().execute((Void) null);
+                 } else if (itemId == R.id.grade_statistics_menu) {
+                     setTitle(R.string.grade_statistics_text);
+                     new GradeStatisticsTask()
+                             .execute((Void)null);
                  }
 
                  menuItem.setChecked(true);

@@ -136,12 +136,11 @@ public class CardPlayerFragment extends BaseFragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-        case R.id.card_player_settings:
+        int itemId = item.getItemId();
+        if (itemId == R.id.card_player_settings) {
             displaySettingsDialog();
             return true;
-
-        default:
+        } else {
             return false;
         }
     }

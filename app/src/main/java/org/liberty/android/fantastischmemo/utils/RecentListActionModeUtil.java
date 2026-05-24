@@ -120,16 +120,15 @@ public class RecentListActionModeUtil {
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.action_menu_remove:
-                    Intent intent = new Intent(ACTION_REMOVE_SELECTED);
-                    LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
-                    Log.d(TAG, "menu_remove");
-                    mode.finish();
-                    return true;
-
-                default:
-                    return false;
+            int itemId = item.getItemId();
+            if (itemId == R.id.action_menu_remove) {
+                Intent intent = new Intent(ACTION_REMOVE_SELECTED);
+                LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+                Log.d(TAG, "menu_remove");
+                mode.finish();
+                return true;
+            } else {
+                return false;
             }
         }
 

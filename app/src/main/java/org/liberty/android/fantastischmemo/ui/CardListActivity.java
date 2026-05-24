@@ -193,19 +193,15 @@ public class CardListActivity extends BaseActivity {
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                case R.id.mark_as_learned_menu:
+                int itemId = menuItem.getItemId();
+                if (itemId == R.id.mark_as_learned_menu) {
                     markAsLearned(card);
-                    break;
-                case R.id.mark_as_forgotten_menu:
+                } else if (itemId == R.id.mark_as_forgotten_menu) {
                     markAsForgotten(card);
-                    break;
-                case R.id.mark_as_new_menu:
+                } else if (itemId == R.id.mark_as_new_menu) {
                     markAsNew(card);
-                    break;
-                case R.id.mark_as_learned_forever_menu:
+                } else if (itemId == R.id.mark_as_learned_forever_menu) {
                     markAsLearnedForever(card);
-                    break;
                 }
                 return true;
             }
@@ -223,18 +219,13 @@ public class CardListActivity extends BaseActivity {
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                case R.id.edit:
+                int itemId = menuItem.getItemId();
+                if (itemId == R.id.edit) {
                     gotoCardEditorActivity(card);
-                    break;
-                case R.id.detail:
+                } else if (itemId == R.id.detail) {
                     gotoDetailActivity(card);
-                    break;
-
-                case R.id.preview_edit:
+                } else if (itemId == R.id.preview_edit) {
                     gotoPreviewEditActivity(card);
-                    break;
-
                 }
                 return true;
             }
@@ -417,14 +408,14 @@ public class CardListActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-        case R.id.sort:
+        int itemId = item.getItemId();
+        if (itemId == R.id.sort) {
             showSortListDialog();
             return true;
-        case R.id.show_hide_answers:
+        } else if (itemId == R.id.show_hide_answers) {
             showHideAnswers();
             return true;
-        default:
+        } else {
             return super.onOptionsItemSelected(item);
         }
     }

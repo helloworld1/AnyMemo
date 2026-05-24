@@ -162,13 +162,12 @@ public class RecentListFragment extends BaseFragment {
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-        case R.id.openmenu_clear:
+        int itemId = item.getItemId();
+        if (itemId == R.id.openmenu_clear) {
             recentListUtil.clearRecentList();
             onResume();
             return true;
         }
-
         return false;
     }
 

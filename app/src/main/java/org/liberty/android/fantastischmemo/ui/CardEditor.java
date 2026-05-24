@@ -167,45 +167,38 @@ public class CardEditor extends BaseActivity {
 
     public boolean onOptionsItemSelected(MenuItem item) {
         View focusView = getCurrentFocus();
-        switch (item.getItemId()) {
-
-            case R.id.save:
-                SaveCardTask task = new SaveCardTask();
-                task.execute((Void)null);
-                return true;
-
-            case R.id.editor_menu_br:
-                if(focusView == questionEdit || focusView ==answerEdit || focusView == noteEdit){
-                    addTextToView((EditText)focusView, "<br />");
-                }
-                return true;
-
-            case R.id.editor_menu_image:
-                if(focusView == questionEdit || focusView ==answerEdit || focusView == noteEdit){
-                    Intent myIntent = new Intent(this, FileBrowserActivity.class);
-                    myIntent.putExtra(FileBrowserActivity.EXTRA_FILE_EXTENSIONS, ".png,.jpg,.tif,.bmp");
-                    startActivityForResult(myIntent, ACTIVITY_IMAGE_FILE);
-                }
-                return true;
-
-            case R.id.add_existing_audio:
-                if (isViewEligibleToEditAudio()) {
-                    addExistingAudio();
-                }
-                return true;
-
-            case R.id.add_new_audio:
-                if (isViewEligibleToEditAudio()) {
-                    addNewAudio();
-                }
-                return true;
-
-            case R.id.remove_audio:
-                if (isViewEligibleToEditAudio()) {
-                    removeAudio();
-                }
-                return true;
-
+        int itemId = item.getItemId();
+        if (itemId == R.id.save) {
+            SaveCardTask task = new SaveCardTask();
+            task.execute((Void)null);
+            return true;
+        } else if (itemId == R.id.editor_menu_br) {
+            if(focusView == questionEdit || focusView ==answerEdit || focusView == noteEdit){
+                addTextToView((EditText)focusView, "<br />");
+            }
+            return true;
+        } else if (itemId == R.id.editor_menu_image) {
+            if(focusView == questionEdit || focusView ==answerEdit || focusView == noteEdit){
+                Intent myIntent = new Intent(this, FileBrowserActivity.class);
+                myIntent.putExtra(FileBrowserActivity.EXTRA_FILE_EXTENSIONS, ".png,.jpg,.tif,.bmp");
+                startActivityForResult(myIntent, ACTIVITY_IMAGE_FILE);
+            }
+            return true;
+        } else if (itemId == R.id.add_existing_audio) {
+            if (isViewEligibleToEditAudio()) {
+                addExistingAudio();
+            }
+            return true;
+        } else if (itemId == R.id.add_new_audio) {
+            if (isViewEligibleToEditAudio()) {
+                addNewAudio();
+            }
+            return true;
+        } else if (itemId == R.id.remove_audio) {
+            if (isViewEligibleToEditAudio()) {
+                removeAudio();
+            }
+            return true;
         }
         return false;
     }

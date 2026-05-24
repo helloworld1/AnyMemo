@@ -241,25 +241,19 @@ public class AnyMemo extends BaseActivity {
             new NavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                    switch (menuItem.getItemId()) {
-                        case R.id.recent_tab_menu:
-                            binding.bottomNavigation.setSelectedItemId(R.id.recent_tab_menu);
-                            break;
-                        case R.id.open_tab_menu:
-                            binding.bottomNavigation.setSelectedItemId(R.id.open_tab_menu);
-                            break;
-                        case R.id.download_tab_menu:
-                            binding.bottomNavigation.setSelectedItemId(R.id.download_tab_menu);
-                            break;
-                        case R.id.misc_tab_menu:
-                            binding.bottomNavigation.setSelectedItemId(R.id.misc_tab_menu);
-                            break;
-                        case R.id.option_tab_menu:
-                            startActivity(new Intent(AnyMemo.this, OptionScreen.class));
-                            break;
-                        case R.id.about_tab_menu:
-                            aboutUtil.createAboutDialog();
-                            break;
+                    int itemId = menuItem.getItemId();
+                    if (itemId == R.id.recent_tab_menu) {
+                        binding.bottomNavigation.setSelectedItemId(R.id.recent_tab_menu);
+                    } else if (itemId == R.id.open_tab_menu) {
+                        binding.bottomNavigation.setSelectedItemId(R.id.open_tab_menu);
+                    } else if (itemId == R.id.download_tab_menu) {
+                        binding.bottomNavigation.setSelectedItemId(R.id.download_tab_menu);
+                    } else if (itemId == R.id.misc_tab_menu) {
+                        binding.bottomNavigation.setSelectedItemId(R.id.misc_tab_menu);
+                    } else if (itemId == R.id.option_tab_menu) {
+                        startActivity(new Intent(AnyMemo.this, OptionScreen.class));
+                    } else if (itemId == R.id.about_tab_menu) {
+                        aboutUtil.createAboutDialog();
                     }
                     menuItem.setChecked(true);
                     binding.drawerLayout.closeDrawers();
@@ -273,25 +267,18 @@ public class AnyMemo extends BaseActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
                 Fragment fragment = null;
-                switch (menuItem.getItemId()) {
-                    case R.id.recent_tab_menu:
-                        fragment = new RecentListFragment();
-                        break;
-
-                    case R.id.open_tab_menu:
-                        fragment = new OpenTabFragment();
-                        Bundle args = new Bundle();
-                        args.putBoolean(FileBrowserFragment.EXTRA_SHOW_CREATE_DB_BUTTON, true);
-                        fragment.setArguments(args);
-                        break;
-
-                    case R.id.download_tab_menu:
-                        fragment = new DownloadTabFragment();
-                        break;
-
-                    case R.id.misc_tab_menu:
-                        fragment = new MiscTabFragment();
-                        break;
+                int itemId = menuItem.getItemId();
+                if (itemId == R.id.recent_tab_menu) {
+                    fragment = new RecentListFragment();
+                } else if (itemId == R.id.open_tab_menu) {
+                    fragment = new OpenTabFragment();
+                    Bundle args = new Bundle();
+                    args.putBoolean(FileBrowserFragment.EXTRA_SHOW_CREATE_DB_BUTTON, true);
+                    fragment.setArguments(args);
+                } else if (itemId == R.id.download_tab_menu) {
+                    fragment = new DownloadTabFragment();
+                } else if (itemId == R.id.misc_tab_menu) {
+                    fragment = new MiscTabFragment();
                 }
 
                 if (fragment != null) {

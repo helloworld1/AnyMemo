@@ -113,44 +113,39 @@ public class DetailScreen extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.save:
-            {
-                new AlertDialog.Builder(this)
-                    .setTitle(R.string.warning_text)
-                    .setMessage(R.string.item_update_warning)
-                    .setPositiveButton(R.string.ok_text,
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface arg0, int arg1) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.save) {
+            new AlertDialog.Builder(this)
+                .setTitle(R.string.warning_text)
+                .setMessage(R.string.item_update_warning)
+                .setPositiveButton(R.string.ok_text,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface arg0, int arg1) {
 
-                                    saveCardTask = new SaveCardTask();
-                                    saveCardTask.execute((Void) null);
+                                saveCardTask = new SaveCardTask();
+                                saveCardTask.execute((Void) null);
 
-                                }
-                            })
-                .setNegativeButton(R.string.cancel_text, null)
-                    .show();
-                return true;
-            }
-            case R.id.reset:
-            {
-                Calendar defaultLastLearnDate = Calendar.getInstance();
-                defaultLastLearnDate.set(2010, 0, 1);
+                            }
+                        })
+            .setNegativeButton(R.string.cancel_text, null)
+                .show();
+            return true;
+        } else if (itemId == R.id.reset) {
+            Calendar defaultLastLearnDate = Calendar.getInstance();
+            defaultLastLearnDate.set(2010, 0, 1);
 
-                lastLearnDateEntry.setText(ISO_TIME_FORMAT.format(defaultLastLearnDate.getTime()));
-                Calendar defaultNextLearnDate = Calendar.getInstance();
-                defaultNextLearnDate.set(2010, 0, 1);
-                nextLearnDateEntry.setText(ISO_TIME_FORMAT.format(defaultNextLearnDate.getTime()));
-                gradeEntry.setText("0");
-                easinessEntry.setText("2.5");
-                acqRepsEntry.setText("0");
-                retRepsEntry.setText("0");
-                lapsesEntry.setText("0");
-                acqRepsSinceLapseEntry.setText("0");
-                retRepsSinceLapseEntry.setText("0");
-                return true;
-            }
-
+            lastLearnDateEntry.setText(ISO_TIME_FORMAT.format(defaultLastLearnDate.getTime()));
+            Calendar defaultNextLearnDate = Calendar.getInstance();
+            defaultNextLearnDate.set(2010, 0, 1);
+            nextLearnDateEntry.setText(ISO_TIME_FORMAT.format(defaultNextLearnDate.getTime()));
+            gradeEntry.setText("0");
+            easinessEntry.setText("2.5");
+            acqRepsEntry.setText("0");
+            retRepsEntry.setText("0");
+            lapsesEntry.setText("0");
+            acqRepsSinceLapseEntry.setText("0");
+            retRepsSinceLapseEntry.setText("0");
+            return true;
         }
         return false;
     }

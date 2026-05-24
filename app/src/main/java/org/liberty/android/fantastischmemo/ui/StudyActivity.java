@@ -143,98 +143,54 @@ public class StudyActivity extends QACardActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_memo_help:
-            {
-                gotoHelp();
-                return true;
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_memo_help) {
+            gotoHelp();
+            return true;
+        } else if (itemId == R.id.menuspeakquestion) {
+            return speakQuestion();
+        } else if (itemId == R.id.menuspeakanswer) {
+            return speakAnswer();
+        } else if (itemId == R.id.menusettings) {
+            gotoSettings();
+            return true;
+        } else if (itemId == R.id.menudetail) {
+            gotoDetail();
+            return true;
+        } else if (itemId == R.id.menuundo) {
+            undoCard();
+            return true;
+        } else if (itemId == R.id.menu_memo_category) {
+            showCategoriesDialog();
+            return true;
+        } else if (itemId == R.id.menu_context_edit) {
+            showEditDialog();
+            return true;
+        } else if (itemId == R.id.menu_context_delete) {
+            showDeleteDialog();
+            return true;
+        } else if (itemId == R.id.menu_mark_as_learned_forever) {
+            showMarkAsLearnedForeverDialog();
+            return true;
+        } else if (itemId == R.id.menu_context_gotoprev) {
+            gotoPreviewEdit();
+            return true;
+        } else if (itemId == R.id.menu_context_lookup) {
+            if(getCurrentCard() == null){
+                return false;
             }
-            case R.id.menuspeakquestion:
-            {
-                return speakQuestion();
-            }
-
-            case R.id.menuspeakanswer:
-            {
-                return speakAnswer();
-            }
-
-            case R.id.menusettings:
-            {
-                gotoSettings();
-                return true;
-            }
-
-            case R.id.menudetail:
-            {
-                gotoDetail();
-                return true;
-            }
-
-            case R.id.menuundo:
-            {
-                undoCard();
-                return true;
-            }
-
-            case R.id.menu_memo_category:
-            {
-                showCategoriesDialog();
-                return true;
-            }
-
-            case R.id.menu_context_edit:
-            {
-                showEditDialog();
-                return true;
-            }
-            case R.id.menu_context_delete:
-            {
-                showDeleteDialog();
-                return true;
-
-            }
-            case R.id.menu_mark_as_learned_forever:
-            {
-                showMarkAsLearnedForeverDialog();
-                return true;
-            }
-            case R.id.menu_context_gotoprev:
-            {
-                gotoPreviewEdit();
-                return true;
-            }
-
-            case R.id.menu_context_lookup:
-            {
-                if(getCurrentCard() == null){
-                    return false;
-                }
-                // Look up words in both question and answer
-                lookupDictionary();
-
-                return true;
-
-            }
-
-            case R.id.menu_gestures:
-            {
-                showGesturesDialog();
-                return true;
-            }
-
-            case R.id.menu_context_paint:
-            {
-                gotoPaint();
-                return true;
-            }
-
-            case R.id.menu_share:
-            {
-                shareUtil.shareCard(getCurrentCard());
-                return true;
-            }
-
+            // Look up words in both question and answer
+            lookupDictionary();
+            return true;
+        } else if (itemId == R.id.menu_gestures) {
+            showGesturesDialog();
+            return true;
+        } else if (itemId == R.id.menu_context_paint) {
+            gotoPaint();
+            return true;
+        } else if (itemId == R.id.menu_share) {
+            shareUtil.shareCard(getCurrentCard());
+            return true;
         }
 
         return false;
