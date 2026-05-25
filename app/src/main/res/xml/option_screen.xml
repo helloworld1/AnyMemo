@@ -18,7 +18,7 @@
         <ListPreference
             android:key="copy_to_clipboard"
             android:title="@string/copyclipboard"
-            android:defaultValue="QUESTION"
+            android:defaultValue="DISABLED"
             android:entries="@array/copy_to_clipboard_options"
             android:entryValues="@array/copy_to_clipboard_options_values"
             android:summary="@string/copyclipboard_summary" />

@@ -50,7 +50,7 @@ public class Option {
     }
 
     public CopyToClipboard getCopyClipboard() {
-        return CopyToClipboard.valueOf(settings.getString(AMPrefKeys.COPY_CLIPBOARD_KEY, "QUESTION"));
+        return CopyToClipboard.valueOf(settings.getString(AMPrefKeys.COPY_CLIPBOARD_KEY, "DISABLED"));
     }
 
     public void setCopyClipboard(CopyToClipboard copyToClipboard) {
