@@ -153,6 +153,7 @@
     <string name="edit_dialog_category">Category</string>
     <string name="settings_audio_location_title">Set user audio location</string>
     <string name="what_is_new_message">See graphical guide of new features, please click version history button. or visit official website:&lt;a href="https://anymemo.org/versions-view"&gt;https://anymemo.org/versions-view&lt;/a&gt;&lt;br /&gt;</string>
+    <string name="upgrade_note_10_12">&lt;br /&gt;&lt;br /&gt;&lt;b&gt;IMPORTANT:&lt;/b&gt; Due to new Android Storage access permissions, database files are now stored internally in the AnyMemo app. &lt;a href="import_folder"&gt;Click here to import your original AnyMemo folder&lt;/a&gt;.</string>
     <string name="list_mode_text">Card list</string>
     <string name="merge_db_text">Merge DB</string>
     <string name="merge_success_title">Merge success</string>

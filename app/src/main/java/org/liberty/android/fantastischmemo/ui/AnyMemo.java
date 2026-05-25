@@ -43,6 +43,7 @@ import androidx.core.view.GravityCompat;
 import androidx.appcompat.widget.Toolbar;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -65,6 +66,7 @@ import org.liberty.android.fantastischmemo.utils.AboutUtil;
 import org.liberty.android.fantastischmemo.utils.DatabaseOperationDialogUtil;
 import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
 import org.liberty.android.fantastischmemo.utils.NotificationUtil;
+import org.liberty.android.fantastischmemo.utils.FolderImportExportUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListActionModeUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 import org.liberty.android.fantastischmemo.widget.AnyMemoWidgetProvider;
@@ -103,7 +105,10 @@ public class AnyMemo extends BaseActivity {
 
     @Inject NotificationUtil notificationUtil;
 
+    @Inject FolderImportExportUtil folderImportExportUtil;
+
     private static final int PERMISSION_REQUEST_EXTERNAL_STORAGE = 1;
+    private static final int REQUEST_CODE_IMPORT_FOLDER = 1006;
 
     private boolean isUiLoaded = false;
 
@@ -333,7 +338,31 @@ public class AnyMemo extends BaseActivity {
 
             View alertView = View.inflate(this, R.layout.link_alert, null);
             TextView textView = (TextView)alertView.findViewById(R.id.link_alert_message);
-            textView.setText(Html.fromHtml(getString(R.string.what_is_new_message)));
+
+            SpannableStringBuilder ssb = new SpannableStringBuilder();
+            ssb.append(Html.fromHtml(getString(R.string.what_is_new_message)));
+            if (savedVersionCode < 239 || firstTime) {
+                ssb.append(Html.fromHtml(getString(R.string.upgrade_note_10_12)));
+            }
+
+            android.text.style.URLSpan[] urls = ssb.getSpans(0, ssb.length(), android.text.style.URLSpan.class);
+            for (android.text.style.URLSpan span : urls) {
+                if ("import_folder".equals(span.getURL())) {
+                    int start = ssb.getSpanStart(span);
+                    int end = ssb.getSpanEnd(span);
+                    int flags = ssb.getSpanFlags(span);
+                    ssb.removeSpan(span);
+                    ssb.setSpan(new android.text.style.ClickableSpan() {
+                        @Override
+                        public void onClick(View widget) {
+                            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+                            startActivityForResult(intent, REQUEST_CODE_IMPORT_FOLDER);
+                        }
+                    }, start, end, flags);
+                }
+            }
+
+            textView.setText(ssb);
             textView.setMovementMethod(LinkMovementMethod.getInstance());
             new AlertDialog.Builder(this)
                 .setView(alertView)
@@ -389,6 +418,19 @@ public class AnyMemo extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_IMPORT_FOLDER && resultCode == RESULT_OK) {
+            if (data != null) {
+                Uri treeUri = data.getData();
+                if (treeUri != null) {
+                    folderImportExportUtil.importFolder(this, treeUri, disposables);
+                }
+            }
+        }
     }
 
     /**
