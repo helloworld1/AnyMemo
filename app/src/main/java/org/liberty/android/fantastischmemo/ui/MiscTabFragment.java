@@ -64,6 +64,7 @@ import android.widget.Toast;
 import org.apache.commons.io.FileUtils;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
+import org.liberty.android.fantastischmemo.utils.DatabaseImportUtil;
 
 import java.io.File;
 import java.io.InputStream;
@@ -89,6 +90,7 @@ public class MiscTabFragment extends BaseFragment implements View.OnClickListene
 
     @Inject RecentListUtil recentListUtil;
     @Inject AMFileUtil amFileUtil;
+    @Inject DatabaseImportUtil databaseImportUtil;
     private View importMnemosyneButton;
     private View importSupermemoButton;
     private View importZipButton;
@@ -416,58 +418,9 @@ public class MiscTabFragment extends BaseFragment implements View.OnClickListene
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_IMPORT_DB && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
             final Uri uri = data.getData();
-            String newFileName = amFileUtil.getFileNameFromUri(mActivity, uri);
-            if (newFileName == null) {
-                newFileName = "imported_db.db";
-            }
-            if (!newFileName.endsWith(".db")) {
-                newFileName += ".db";
-            }
-            final File newFile = new File(AMEnv.DEFAULT_ROOT_PATH + newFileName);
-
-            if (newFile.exists()) {
-                new AlertDialog.Builder(mActivity)
-                    .setTitle(R.string.overwrite_db_title)
-                    .setMessage(getString(R.string.overwrite_db_message, newFileName))
-                    .setPositiveButton(R.string.yes_text, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            importDb(uri, newFile);
-                        }
-                    })
-                    .setNegativeButton(R.string.no_text, null)
-                    .show();
-            } else {
-                importDb(uri, newFile);
-            }
+            databaseImportUtil.handleImportDbResult(mActivity, uri, disposables, null);
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
-    }
-
-    private void importDb(final Uri uri, final File newFile) {
-        disposables.add(Observable.fromCallable(new Callable<File>() {
-            @Override
-            public File call() throws Exception {
-                InputStream inputStream = mActivity.getContentResolver().openInputStream(uri);
-                FileUtils.copyInputStreamToFile(inputStream, newFile);
-                return newFile;
-            }
-        })
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Consumer<File>() {
-            @Override
-            public void accept(File file) {
-                recentListUtil.addToRecentList(file.getAbsolutePath());
-                Toast.makeText(mActivity, R.string.success, Toast.LENGTH_SHORT).show();
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) {
-                Log.e("MiscTabFragment", "Error importing DB", throwable);
-                Toast.makeText(mActivity, "Error importing DB", Toast.LENGTH_SHORT).show();
-            }
-        }));
     }
 }

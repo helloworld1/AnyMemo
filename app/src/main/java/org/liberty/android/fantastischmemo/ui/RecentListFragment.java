@@ -54,6 +54,7 @@ import org.liberty.android.fantastischmemo.common.AnyMemoDBOpenHelperManager;
 import org.liberty.android.fantastischmemo.common.BaseFragment;
 import org.liberty.android.fantastischmemo.dao.CardDao;
 import org.liberty.android.fantastischmemo.ui.helper.SelectableAdapter;
+import org.liberty.android.fantastischmemo.utils.DatabaseImportUtil;
 import org.liberty.android.fantastischmemo.utils.DatabaseUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListActionModeUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
@@ -61,6 +62,26 @@ import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.net.Uri;
+import android.widget.Toast;
+
+import org.apache.commons.io.FileUtils;
+import org.liberty.android.fantastischmemo.common.AMEnv;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
+
+import java.io.File;
+import java.io.InputStream;
+import java.util.concurrent.Callable;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 import javax.inject.Inject;
 
@@ -80,6 +101,12 @@ public class RecentListFragment extends BaseFragment {
     @Inject DatabaseUtil databaseUtil;
 
     @Inject RecentListActionModeUtil recentListActionModeUtil;
+
+    @Inject DatabaseImportUtil databaseImportUtil;
+
+    private CompositeDisposable disposables;
+
+    private static final int REQUEST_CODE_IMPORT_DB = 1001;
 
     private BroadcastReceiver mRemoveSelectedReceiver = new BroadcastReceiver() {
         @Override
@@ -101,6 +128,7 @@ public class RecentListFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         fragmentComponents().inject(this);
+        disposables = new CompositeDisposable();
     }
 
     @Override
@@ -118,6 +146,14 @@ public class RecentListFragment extends BaseFragment {
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mClearSelectionReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mRemoveSelectedReceiver);
         super.onDetach();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (disposables != null) {
+            disposables.dispose();
+        }
     }
 
     @Override
@@ -145,7 +181,35 @@ public class RecentListFragment extends BaseFragment {
 
         recentListRecyclerView.setAdapter(recentListAdapter);
 
+        View fab = v.findViewById(R.id.import_fab);
+        if (fab != null) {
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    intent.setType("*/*");
+                    startActivityForResult(intent, REQUEST_CODE_IMPORT_DB);
+                }
+            });
+        }
+
         return v;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_IMPORT_DB && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
+            final Uri uri = data.getData();
+            databaseImportUtil.handleImportDbResult(getActivity(), uri, disposables, new Runnable() {
+                @Override
+                public void run() {
+                    onResume();
+                }
+            });
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     @Override
