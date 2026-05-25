@@ -87,6 +87,8 @@ public class MiscTabFragment extends BaseFragment implements View.OnClickListene
 
     private CompositeDisposable disposables;
     private static final int REQUEST_CODE_IMPORT_DB = 1001;
+    private static final int REQUEST_CODE_IMPORT_CONVERT = 1005;
+    private Class<org.liberty.android.fantastischmemo.converter.Converter> pendingImportConverterClass;
 
     @Inject RecentListUtil recentListUtil;
     @Inject AMFileUtil amFileUtil;
@@ -124,10 +126,21 @@ public class MiscTabFragment extends BaseFragment implements View.OnClickListene
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (pendingImportConverterClass != null) {
+            outState.putSerializable("pendingImportConverterClass", pendingImportConverterClass);
+        }
+    }
+
+    @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         fragmentComponents().inject(this);
         disposables = new CompositeDisposable();
+        if (bundle != null && bundle.containsKey("pendingImportConverterClass")) {
+            pendingImportConverterClass = (Class<org.liberty.android.fantastischmemo.converter.Converter>) bundle.getSerializable("pendingImportConverterClass");
+        }
     }
 
 
@@ -233,68 +246,28 @@ public class MiscTabFragment extends BaseFragment implements View.OnClickListene
         }
 
         if(v == importMnemosyneButton){
-            DialogFragment df = new ConverterFragment();
-            Bundle b = new Bundle();
-            b.putSerializable(ConverterFragment.EXTRA_CONVERTER_CLASS, MnemosyneXMLImporter.class);
-            b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".xml");
-            df.setArguments(b);
-            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportMnemosyne");
+            launchImportConvert(MnemosyneXMLImporter.class);
         }
         if(v == importSupermemoButton){
-            DialogFragment df = new ConverterFragment();
-            Bundle b = new Bundle();
-            b.putSerializable(ConverterFragment.EXTRA_CONVERTER_CLASS, SupermemoXMLImporter.class);
-            b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".xml");
-            df.setArguments(b);
-            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportSuperMemo2008");
+            launchImportConvert(SupermemoXMLImporter.class);
         }
         if(v == importCSVButton) {
-            DialogFragment df = new ConverterFragment();
-            Bundle b = new Bundle();
-            b.putSerializable(ConverterFragment.EXTRA_CONVERTER_CLASS, CSVImporter.class);
-            b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".csv");
-            df.setArguments(b);
-            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportCSV");
+            launchImportConvert(CSVImporter.class);
         }
         if(v == importZipButton) {
-            DialogFragment df = new ConverterFragment();
-            Bundle b = new Bundle();
-            b.putSerializable(ConverterFragment.EXTRA_CONVERTER_CLASS, ZipImporter.class);
-            b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".zip");
-            df.setArguments(b);
-            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportZip");
+            launchImportConvert(ZipImporter.class);
         }
         if(v == importTabButton){
-            DialogFragment df = new ConverterFragment();
-            Bundle b = new Bundle();
-            b.putSerializable(ConverterFragment.EXTRA_CONVERTER_CLASS, TabTxtImporter.class);
-            b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".txt");
-            df.setArguments(b);
-            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportTabTxt");
+            launchImportConvert(TabTxtImporter.class);
         }
         if(v == importQAButton){
-            DialogFragment df = new ConverterFragment();
-            Bundle b = new Bundle();
-            b.putSerializable(ConverterFragment.EXTRA_CONVERTER_CLASS, QATxtImporter.class);
-            b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".txt");
-            df.setArguments(b);
-            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportCSV");
+            launchImportConvert(QATxtImporter.class);
         }
         if(v == importSupermemo2008Button) {
-            DialogFragment df = new ConverterFragment();
-            Bundle b = new Bundle();
-            b.putSerializable(ConverterFragment.EXTRA_CONVERTER_CLASS, Supermemo2008XMLImporter.class);
-            b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".xml");
-            df.setArguments(b);
-            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportSuperMemo2008");
+            launchImportConvert(Supermemo2008XMLImporter.class);
         }
         if(v == importMnemosyne2CardsButton) {
-            DialogFragment df = new ConverterFragment();
-            Bundle b = new Bundle();
-            b.putSerializable(ConverterFragment.EXTRA_CONVERTER_CLASS, Mnemosyne2CardsImporter.class);
-            b.putString(FileBrowserFragment.EXTRA_FILE_EXTENSIONS, ".cards");
-            df.setArguments(b);
-            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ImportMnemosyne2Cards");
+            launchImportConvert(Mnemosyne2CardsImporter.class);
         }
         if(v == exportMnemosyneButton){
             DialogFragment df = new ConverterFragment();
@@ -414,13 +387,72 @@ public class MiscTabFragment extends BaseFragment implements View.OnClickListene
         }
     }
 
+    private void launchImportConvert(Class<? extends org.liberty.android.fantastischmemo.converter.Converter> converterClass) {
+        pendingImportConverterClass = (Class<org.liberty.android.fantastischmemo.converter.Converter>) converterClass;
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("*/*");
+        startActivityForResult(intent, REQUEST_CODE_IMPORT_CONVERT);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_IMPORT_DB && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
             final Uri uri = data.getData();
             databaseImportUtil.handleImportDbResult(mActivity, uri, disposables, null);
+        } else if (requestCode == REQUEST_CODE_IMPORT_CONVERT && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
+            final Uri uri = data.getData();
+            if (pendingImportConverterClass != null) {
+                String newFileName = amFileUtil.getFileNameFromUri(mActivity, uri);
+                if (newFileName == null) {
+                    newFileName = "imported_db";
+                }
+                String baseName = org.apache.commons.io.FilenameUtils.removeExtension(newFileName);
+                final String outputPath = AMEnv.DEFAULT_ROOT_PATH + baseName + ".db";
+
+                if (new File(outputPath).exists()) {
+                    new AlertDialog.Builder(mActivity)
+                        .setTitle(R.string.conversion_merge_text)
+                        .setMessage(String.format(getString(R.string.conversion_merge_message), outputPath, newFileName, outputPath))
+                        .setPositiveButton(R.string.yes_text, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                invokeImportConversion(uri, outputPath);
+                            }
+                        })
+                        .setNeutralButton(R.string.no_text, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                try {
+                                    amFileUtil.deleteFileWithBackup(outputPath);
+                                    invokeImportConversion(uri, outputPath);
+                                } catch (Exception e) {
+                                    Log.e("MiscTabFragment", "Failed to deleteWithBackup: " + outputPath, e);
+                                    Toast.makeText(mActivity, getString(R.string.fail) + ": " + e.toString(), Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel_text, null)
+                        .show();
+                } else {
+                    invokeImportConversion(uri, outputPath);
+                }
+            }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    private void invokeImportConversion(Uri inputUri, String outputPath) {
+        Intent intent =  new Intent(mActivity, org.liberty.android.fantastischmemo.service.ConvertIntentService.class);
+        intent.setAction(org.liberty.android.fantastischmemo.service.ConvertIntentService.ACTION_CONVERT);
+        Bundle b = new Bundle();
+        b.putSerializable(org.liberty.android.fantastischmemo.service.ConvertIntentService.EXTRA_CONVERTER_CLASS, pendingImportConverterClass);
+        b.putString(org.liberty.android.fantastischmemo.service.ConvertIntentService.EXTRA_INPUT_FILE_PATH, amFileUtil.getFileNameFromUri(mActivity, inputUri));
+        b.putParcelable(org.liberty.android.fantastischmemo.service.ConvertIntentService.EXTRA_INPUT_URI, inputUri);
+        b.putString(org.liberty.android.fantastischmemo.service.ConvertIntentService.EXTRA_OUTPUT_FILE_PATH, outputPath);
+        intent.putExtras(b);
+        mActivity.startService(intent);
+        Toast.makeText(mActivity, R.string.conversion_started_text, Toast.LENGTH_SHORT).show();
     }
 }

@@ -24,6 +24,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.TaskStackBuilder;
 
@@ -54,6 +55,9 @@ public class ConvertIntentService extends BaseIntentService {
 
     public static final String EXTRA_CONVERTER_CLASS = "converterClass";
 
+    public static final String EXTRA_OUTPUT_URI = "outputUri";
+    public static final String EXTRA_INPUT_URI = "inputUri";
+
     public static final String TAG = ConvertIntentService.class.getSimpleName();
 
     private static final int CONVERSION_PROGRESS_NOTIFICATION_ID_BASE = 294;
@@ -81,10 +85,29 @@ public class ConvertIntentService extends BaseIntentService {
             throw new IllegalArgumentException("The Action is wrong");
         }
         String inputFilePath = intent.getStringExtra(EXTRA_INPUT_FILE_PATH);
-        assert inputFilePath != null : "Input file path should not be null";
+        Uri inputUri = intent.getParcelableExtra(EXTRA_INPUT_URI);
+
+        String finalInputFilePath = inputFilePath;
+        if (inputUri != null) {
+            finalInputFilePath = new java.io.File(getCacheDir(), "temp_input_" + System.currentTimeMillis()).getAbsolutePath();
+            try (java.io.InputStream is = getContentResolver().openInputStream(inputUri)) {
+                org.apache.commons.io.FileUtils.copyInputStreamToFile(is, new java.io.File(finalInputFilePath));
+            } catch (Exception e) {
+                Log.e(TAG, "Error copying input URI", e);
+                return;
+            }
+        } else {
+            assert inputFilePath != null : "Input file path should not be null";
+        }
 
         String outputFilePath = intent.getStringExtra(EXTRA_OUTPUT_FILE_PATH);
         assert outputFilePath != null : "Output file path should not be null";
+
+        Uri outputUri = intent.getParcelableExtra(EXTRA_OUTPUT_URI);
+        String finalOutputFilePath = outputFilePath;
+        if (outputUri != null) {
+            finalOutputFilePath = new java.io.File(getCacheDir(), FilenameUtils.getName(outputFilePath)).getAbsolutePath();
+        }
 
         @SuppressWarnings("unchecked")
         Class<Converter> converterClass = (Class<Converter>) intent.getSerializableExtra(EXTRA_CONVERTER_CLASS);
@@ -99,13 +122,24 @@ public class ConvertIntentService extends BaseIntentService {
 
         showInProgressNotification(notificationId, conversionFileInfo);
         try {
-            converter.convert(inputFilePath, outputFilePath);
+            converter.convert(finalInputFilePath, finalOutputFilePath);
+
+            if (outputUri != null) {
+                try (java.io.OutputStream os = getContentResolver().openOutputStream(outputUri)) {
+                    org.apache.commons.io.FileUtils.copyFile(new java.io.File(finalOutputFilePath), os);
+                }
+                new java.io.File(finalOutputFilePath).delete();
+            }
 
             showSuccessNotification(notificationId, outputFilePath);
 
         } catch (Exception e) {
             Log.e(TAG, "Error while converting", e);
             showFailureNotification(notificationId, conversionFileInfo, e);
+        } finally {
+            if (inputUri != null) {
+                new java.io.File(finalInputFilePath).delete();
+            }
         }
     }
 

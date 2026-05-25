@@ -19,9 +19,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 package org.liberty.android.fantastischmemo.ui;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -42,8 +44,11 @@ public class ConverterFragment extends FileBrowserFragment {
     private static final String TAG = ConverterFragment.class.getSimpleName();
 
     public static final String EXTRA_CONVERTER_CLASS = "converterClass";
+    private static final int REQUEST_CODE_EXPORT = 1003;
 
     private Class<Converter> converterClass;
+    private String pendingInputPath;
+    private String pendingOutputPath;
 
     @Inject Map<Class<?>, Converter> converterMap;
 
@@ -84,52 +89,75 @@ public class ConverterFragment extends FileBrowserFragment {
         final String outputPath = FilenameUtils.removeExtension(inputPath) + "." + converter.getDestExtension();
 
         // If a merge is possible, popup a dialog and ask user to confirm if merge is possible
-        // Only do the database merge on .db files, for other files,
-        // the dest will be deleted
-        if (new File(outputPath).exists() && converter.getDestExtension().equals("db")) {
-            new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.conversion_merge_text)
-                .setMessage(String.format(getString(R.string.conversion_merge_message),
-                            outputPath, inputPath, outputPath))
-                .setPositiveButton(R.string.yes_text,
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface arg0, int arg1) {
-                            invokeConverterService(inputPath, outputPath);
-
-                        }
-                    })
-                .setNeutralButton(R.string.no_text,
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface arg0, int arg1) {
-                            try {
-                                amFileUtil.deleteFileWithBackup(outputPath);
-                                invokeConverterService(inputPath, outputPath);
-                            } catch (IOException e) {
-                                Log.e(TAG, "Faield to deleteWithBackup: " + outputPath, e);
-                                Toast.makeText(getActivity(),
-                                    getString(R.string.fail) + ": " + e.toString(), Toast.LENGTH_LONG)
-                                    .show();
+        // Only do the database merge on .db files (importing into AnyMemo)
+        if (converter.getDestExtension().equals("db")) {
+            if (new File(outputPath).exists()) {
+                new AlertDialog.Builder(getActivity())
+                    .setTitle(R.string.conversion_merge_text)
+                    .setMessage(String.format(getString(R.string.conversion_merge_message),
+                                outputPath, inputPath, outputPath))
+                    .setPositiveButton(R.string.yes_text,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                invokeConverterService(inputPath, outputPath, null);
                             }
-                        }
-                    })
-                .setNegativeButton(R.string.cancel_text, null)
-                .show();
+                        })
+                    .setNeutralButton(R.string.no_text,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                try {
+                                    amFileUtil.deleteFileWithBackup(outputPath);
+                                    invokeConverterService(inputPath, outputPath, null);
+                                } catch (IOException e) {
+                                    Log.e(TAG, "Faield to deleteWithBackup: " + outputPath, e);
+                                    Toast.makeText(getActivity(),
+                                        getString(R.string.fail) + ": " + e.toString(), Toast.LENGTH_LONG)
+                                        .show();
+                                }
+                            }
+                        })
+                    .setNegativeButton(R.string.cancel_text, null)
+                    .show();
+            } else {
+                amFileUtil.deleteDbSafe(outputPath);
+                invokeConverterService(inputPath, outputPath, null);
+            }
         } else {
-            // If the merging is not possible, do normal conversion
-            amFileUtil.deleteDbSafe(outputPath);
-            invokeConverterService(inputPath, outputPath);
+            pendingInputPath = inputPath;
+            pendingOutputPath = outputPath;
+            Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("*/*");
+            intent.putExtra(Intent.EXTRA_TITLE, FilenameUtils.getName(outputPath));
+            startActivityForResult(intent, REQUEST_CODE_EXPORT);
         }
     }
 
-    private void invokeConverterService(String inputPath, String outputPath) {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_EXPORT && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
+            Uri uri = data.getData();
+            invokeConverterService(pendingInputPath, pendingOutputPath, uri);
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+            if (requestCode == REQUEST_CODE_EXPORT) {
+                dismiss();
+            }
+        }
+    }
+
+    private void invokeConverterService(String inputPath, String outputPath, Uri outputUri) {
         Intent intent =  new Intent(getActivity(), ConvertIntentService.class);
         intent.setAction(ConvertIntentService.ACTION_CONVERT);
         Bundle b = new Bundle();
         b.putSerializable(ConvertIntentService.EXTRA_CONVERTER_CLASS, converterClass);
         b.putString(ConvertIntentService.EXTRA_INPUT_FILE_PATH, inputPath);
         b.putString(ConvertIntentService.EXTRA_OUTPUT_FILE_PATH, outputPath);
+        if (outputUri != null) {
+            b.putParcelable(ConvertIntentService.EXTRA_OUTPUT_URI, outputUri);
+        }
         intent.putExtras(b);
         getActivity().startService(intent);
         Toast.makeText(getActivity(), R.string.conversion_started_text, Toast.LENGTH_SHORT)
