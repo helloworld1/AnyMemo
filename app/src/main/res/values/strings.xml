@@ -92,6 +92,7 @@
     <string name="fb_import_db">Import DB</string>
     <string name="fb_create_dir">Create new folder</string>
     <string name="fb_create_db_message">Please enter the name of new database.</string>
+    <string name="fb_go_home">Go to home folder</string>
     <string name="fb_create_dir_message">Please enter the name of new folder.</string>
     <string name="fb_delete_message">Are you sure to delete this file?</string>
     <string name="fb_edit_dialog_title">Edit</string>

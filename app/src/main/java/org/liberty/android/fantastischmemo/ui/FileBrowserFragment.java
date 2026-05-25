@@ -314,6 +314,9 @@ public class FileBrowserFragment extends BaseDialogFragment {
             intent.setType("*/*");
             startActivityForResult(intent, REQUEST_CODE_IMPORT_DB);
             return true;
+        } else if (itemId == R.id.file_browser_gohome) {
+            browseTo(new File(AMEnv.DEFAULT_ROOT_PATH));
+            return true;
         }
         return false;
     }
