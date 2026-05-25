@@ -98,6 +98,7 @@ dependencies {
     implementation 'androidx.annotation:annotation:1.10.0'
     implementation 'androidx.browser:browser:1.10.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
+    implementation 'androidx.documentfile:documentfile:1.0.1'
 
     implementation "com.j256.ormlite:ormlite-android:6.1"
     implementation "com.squareup.okhttp3:okhttp:4.12.0"

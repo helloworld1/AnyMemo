@@ -65,6 +65,7 @@ import org.apache.commons.io.FileUtils;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.DatabaseImportUtil;
+import org.liberty.android.fantastischmemo.utils.FolderImportExportUtil;
 
 import java.io.File;
 import java.io.InputStream;
@@ -84,15 +85,20 @@ public class MiscTabFragment extends BaseFragment implements View.OnClickListene
     private View exportItems;
     private View importAnyMemoButton;
     private View exportAnyMemoButton;
+    private View importAnyMemoFolderButton;
+    private View exportAnyMemoFolderButton;
 
     private CompositeDisposable disposables;
     private static final int REQUEST_CODE_IMPORT_DB = 1001;
     private static final int REQUEST_CODE_IMPORT_CONVERT = 1005;
+    private static final int REQUEST_CODE_IMPORT_FOLDER = 1006;
+    private static final int REQUEST_CODE_EXPORT_FOLDER = 1007;
     private Class<org.liberty.android.fantastischmemo.converter.Converter> pendingImportConverterClass;
 
     @Inject RecentListUtil recentListUtil;
     @Inject AMFileUtil amFileUtil;
     @Inject DatabaseImportUtil databaseImportUtil;
+    @Inject FolderImportExportUtil folderImportExportUtil;
     private View importMnemosyneButton;
     private View importSupermemoButton;
     private View importZipButton;
@@ -160,6 +166,10 @@ public class MiscTabFragment extends BaseFragment implements View.OnClickListene
         importAnyMemoButton.setOnClickListener(this);
         exportAnyMemoButton = v.findViewById(R.id.export_anymemo_db);
         exportAnyMemoButton.setOnClickListener(this);
+        importAnyMemoFolderButton = v.findViewById(R.id.import_anymemo_folder);
+        importAnyMemoFolderButton.setOnClickListener(this);
+        exportAnyMemoFolderButton = v.findViewById(R.id.export_anymemo_folder);
+        exportAnyMemoFolderButton.setOnClickListener(this);
         importMnemosyneButton = v.findViewById(R.id.import_mnemosyne);
         importMnemosyneButton.setOnClickListener(this);
         importSupermemoButton = v.findViewById(R.id.import_supermemo);
@@ -243,6 +253,14 @@ public class MiscTabFragment extends BaseFragment implements View.OnClickListene
         if(v == exportAnyMemoButton){
             DialogFragment df = new ExportAnyMemoDbFragment();
             df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ExportAnyMemoDb");
+        }
+        if(v == importAnyMemoFolderButton){
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+            startActivityForResult(intent, REQUEST_CODE_IMPORT_FOLDER);
+        }
+        if(v == exportAnyMemoFolderButton){
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+            startActivityForResult(intent, REQUEST_CODE_EXPORT_FOLDER);
         }
 
         if(v == importMnemosyneButton){
@@ -400,6 +418,10 @@ public class MiscTabFragment extends BaseFragment implements View.OnClickListene
         if (requestCode == REQUEST_CODE_IMPORT_DB && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
             final Uri uri = data.getData();
             databaseImportUtil.handleImportDbResult(mActivity, uri, disposables, null);
+        } else if (requestCode == REQUEST_CODE_IMPORT_FOLDER && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
+            folderImportExportUtil.importFolder(mActivity, data.getData(), disposables);
+        } else if (requestCode == REQUEST_CODE_EXPORT_FOLDER && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
+            folderImportExportUtil.exportFolder(mActivity, data.getData(), disposables);
         } else if (requestCode == REQUEST_CODE_IMPORT_CONVERT && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
             final Uri uri = data.getData();
             if (pendingImportConverterClass != null) {
