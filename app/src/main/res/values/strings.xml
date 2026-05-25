@@ -306,6 +306,8 @@
     <string name="ordinal_text">Ordinal</string>
     <string name="import_zip_text">Import Zip</string>
     <string name="import_anymemo_db_text">Import AnyMemo DB</string>
+    <string name="overwrite_db_title">Overwrite database?</string>
+    <string name="overwrite_db_message">The file %1$s already exists. Do you want to overwrite it?</string>
     <string name="export_zip_text">Export Zip</string>
     <string name="export_anymemo_db_text">Export AnyMemo DB</string>
     <string name="customize_scheduling_algorithm_text">Customize scheduling algorithm</string>

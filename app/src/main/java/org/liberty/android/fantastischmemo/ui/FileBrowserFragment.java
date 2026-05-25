@@ -49,10 +49,15 @@ import org.liberty.android.fantastischmemo.common.AMPrefKeys;
 import org.liberty.android.fantastischmemo.common.BaseDialogFragment;
 import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.DatabaseOperationDialogUtil;
+import org.liberty.android.fantastischmemo.utils.DatabaseOperationDialogUtil;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
+
+import org.apache.commons.io.FileUtils;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -317,39 +322,63 @@ public class FileBrowserFragment extends BaseDialogFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_IMPORT_DB && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
             final Uri uri = data.getData();
-            disposables.add(io.reactivex.Observable.fromCallable(new java.util.concurrent.Callable<File>() {
-                @Override
-                public File call() throws Exception {
-                    String newFileName = amFileUtil.getFileNameFromUri(getContext(), uri);
-                    if (newFileName == null) {
-                        newFileName = "imported_db.db";
-                    }
-                    // Clean up query parameters or encoded chars if necessary, but a simple append works for now
-                    if (!newFileName.endsWith(".db")) {
-                        newFileName += ".db";
-                    }
-                    File newFile = new File(currentDirectory.getAbsolutePath() + "/" + newFileName);
-                    java.io.InputStream inputStream = getContext().getContentResolver().openInputStream(uri);
-                    org.apache.commons.io.FileUtils.copyInputStreamToFile(inputStream, newFile);
-                    return newFile;
-                }
-            })
-            .subscribeOn(io.reactivex.schedulers.Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Consumer<File>() {
-                @Override
-                public void accept(File file) {
+            String newFileName = amFileUtil.getFileNameFromUri(getContext(), uri);
+            if (newFileName == null) {
+                newFileName = "imported_db.db";
+            }
+            // Clean up query parameters or encoded chars if necessary, but a simple append works for now
+            if (!newFileName.endsWith(".db")) {
+                newFileName += ".db";
+            }
+            final File newFile = new File(currentDirectory.getAbsolutePath() + "/" + newFileName);
+
+            if (newFile.exists()) {
+                new AlertDialog.Builder(getContext())
+                    .setTitle(R.string.overwrite_db_title)
+                    .setMessage(getString(R.string.overwrite_db_message, newFileName))
+                    .setPositiveButton(R.string.yes_text, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            importDb(uri, newFile);
+                        }
+                    })
+                    .setNegativeButton(R.string.no_text, null)
+                    .show();
+            } else {
+                importDb(uri, newFile);
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    private void importDb(final Uri uri, final File newFile) {
+        disposables.add(io.reactivex.Observable.fromCallable(new java.util.concurrent.Callable<File>() {
+            @Override
+            public File call() throws Exception {
+                InputStream inputStream = getContext().getContentResolver().openInputStream(uri);
+                FileUtils.copyInputStreamToFile(inputStream, newFile);
+                return newFile;
+            }
+        })
+        .subscribeOn(io.reactivex.schedulers.Schedulers.io())
+        .observeOn(io.reactivex.android.schedulers.AndroidSchedulers.mainThread())
+        .subscribe(new io.reactivex.functions.Consumer<File>() {
+            @Override
+            public void accept(File file) {
+                // If the user navigates away, we don't need to refresh anymore
+                if (getActivity() != null && isAdded()) {
                     refreshFileList(currentDirectory);
                 }
-            }, new Consumer<Throwable>() {
-                @Override
-                public void accept(Throwable throwable) {
-                    Log.e(TAG, "Error importing DB", throwable);
-                    Toast.makeText(getContext(), "Error importing DB", Toast.LENGTH_SHORT).show();
-                }
-            }));
-        }
-        super.onActivityResult(requestCode, resultCode, data);
+                Toast.makeText(getContext(), R.string.success, Toast.LENGTH_SHORT).show();
+            }
+        }, new io.reactivex.functions.Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) {
+                Log.e("FileBrowserFragment", "Error importing DB", throwable);
+                Toast.makeText(getContext(), "Error importing DB", Toast.LENGTH_SHORT).show();
+            }
+        }));
     }
 
     private void openFile(final String selectedFileString) {
