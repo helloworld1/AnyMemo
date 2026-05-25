@@ -21,13 +21,13 @@ configurations.all {
 
 android {
     namespace 'org.liberty.android.fantastischmemo'
-    compileSdk 35
+    compileSdk 36
 
     defaultConfig {
         versionCode 238
         versionName "10.11.8"
         minSdk 21
-        targetSdk 35
+        targetSdk 36
         testApplicationId "org.liberty.android.fantastischmemo.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
