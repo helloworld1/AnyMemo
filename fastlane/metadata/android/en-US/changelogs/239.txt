@@ -1,0 +1,6 @@
+10.12.0
+* Important: When upgrading to versions before 10.12, you will need to import your original DB files to AnyMemo internal storage.
+* Upgrade to support new Android Storage access API with restricted storage access.
+* Import / Export db files from / to external storage
+* Import / Export folder from / to external storage
+* Updated UI to import from external db file
