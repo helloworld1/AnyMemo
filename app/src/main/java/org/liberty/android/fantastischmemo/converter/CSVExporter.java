@@ -56,11 +56,11 @@ public class CSVExporter implements Converter {
         final CardDao cardDao = helper.getCardDao();
         final CategoryDao categoryDao = helper.getCategoryDao();
 
-        CSVWriter writer;
+        com.opencsv.ICSVWriter writer;
         if (separator == null) {
-            writer = new CSVWriter(new FileWriter(dest));
+            writer = new com.opencsv.CSVWriterBuilder(new FileWriter(dest)).build();
         } else {
-            writer = new CSVWriter(new FileWriter(dest), separator);
+            writer = new com.opencsv.CSVWriterBuilder(new FileWriter(dest)).withSeparator(separator).build();
         }
         try {
             final List<Card> cardList = cardDao.queryForAll();

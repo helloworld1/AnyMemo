@@ -68,9 +68,11 @@ public class CSVImporter implements Converter {
 
         CSVReader reader;
         if (separator == null) {
-            reader = new CSVReader(new FileReader(src));
+            reader = new com.opencsv.CSVReaderBuilder(new FileReader(src)).build();
         } else {
-            reader = new CSVReader(new FileReader(src), separator);
+            reader = new com.opencsv.CSVReaderBuilder(new FileReader(src))
+                    .withCSVParser(new com.opencsv.CSVParserBuilder().withSeparator(separator).build())
+                    .build();
         }
         try {
             final CardDao cardDao = helper.getCardDao();

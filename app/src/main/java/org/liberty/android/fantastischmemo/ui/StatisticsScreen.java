@@ -42,7 +42,8 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.github.mikephil.charting.formatter.YAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
@@ -72,7 +73,7 @@ public class StatisticsScreen extends BaseActivity {
 
     private static final ValueFormatter valueFormatter = new ChartValueFormatter();
 
-    private static final YAxisValueFormatter yAxisValueFormatter = new ChartYAxisValueFormatter();
+    private static final ValueFormatter yAxisValueFormatter = new ChartYAxisValueFormatter();
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -179,6 +180,7 @@ public class StatisticsScreen extends BaseActivity {
     }
 
     private class NewCardTask extends ChartTask<Void, Void, BarData> {
+        private List<String> xVals;
 
         private static final int INITIAL_CAPACITY = 30;
         private static final int MILLISECONDS_PER_DAY = 60 * 60 * 24 * 1000;
@@ -186,20 +188,19 @@ public class StatisticsScreen extends BaseActivity {
         @Override
         public BarData doInBackground(Void... params) {
             cardDao = dbOpenHelper.getCardDao();
-            List<String> xVals = new ArrayList<String>(INITIAL_CAPACITY);
+            xVals = new ArrayList<String>(INITIAL_CAPACITY);
             List<BarEntry> yVals = new ArrayList<BarEntry>(INITIAL_CAPACITY);
             Date now = new Date();
             for (int i = -INITIAL_CAPACITY; i < 1; i++) {
                 Date endDate = new Date(now.getTime() + i * MILLISECONDS_PER_DAY);
                 Date startDate = new Date(endDate.getTime() - MILLISECONDS_PER_DAY);
                 xVals.add("" + i);
-                yVals.add(new BarEntry((float)cardDao.getNewLearnedCardCount(null, startDate, endDate),
-                                       INITIAL_CAPACITY + i)); // the order has to be nonnegative
+                yVals.add(new BarEntry(INITIAL_CAPACITY + i, (float)cardDao.getNewLearnedCardCount(null, startDate, endDate))); // the order has to be nonnegative
 
             }
 
             BarDataSet dataSet = new BarDataSet(yVals, getString(R.string.number_of_new_cards_learned_in_a_day_text));
-            BarData data = new BarData(xVals, dataSet);
+            BarData data = new BarData(dataSet);
             data.setValueTextColor(Color.WHITE);
             data.setValueFormatter(valueFormatter);
 
@@ -219,28 +220,30 @@ public class StatisticsScreen extends BaseActivity {
             chart.getAxisRight().setValueFormatter(yAxisValueFormatter);
 
             chart.setData(data);
-            chart.setDescription("");
+            chart.getDescription().setEnabled(false);
+            chart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(xVals));
             return chart;
         }
     }
 
     private class CardToReviewTask extends ChartTask<Void, Void, BarData> {
+        private List<String> xVals;
         @Override
         public BarData doInBackground(Void... params) {
             cardDao = dbOpenHelper.getCardDao();
-            List<String> xVals = new ArrayList<String>(30);
+            xVals = new ArrayList<String>(30);
             List<BarEntry> yVals = new ArrayList<BarEntry>(30);
             Date now = new Date();
             for (int i = 0; i < 30; i++) {
                 Date startDate = new Date(now.getTime() + i * 60 * 60 * 24 * 1000);
                 Date endDate = new Date(startDate.getTime() + 1 * 60 * 60 * 24 * 1000);
                 xVals.add("" + i);
-                yVals.add(new BarEntry((float)cardDao.getScheduledCardCount(null, startDate, endDate), i));
+                yVals.add(new BarEntry(i, (float)cardDao.getScheduledCardCount(null, startDate, endDate)));
 
             }
 
             BarDataSet dataSet = new BarDataSet(yVals, getString(R.string.number_of_cards_scheduled_in_a_day_text));
-            BarData data = new BarData(xVals, dataSet);
+            BarData data = new BarData(dataSet);
             data.setValueTextColor(Color.WHITE);
             data.setValueFormatter(valueFormatter);
 
@@ -260,16 +263,18 @@ public class StatisticsScreen extends BaseActivity {
             chart.getAxisRight().setValueFormatter(yAxisValueFormatter);
 
             chart.setData(data);
-            chart.setDescription("");
+            chart.getDescription().setEnabled(false);
+            chart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(xVals));
             return chart;
         }
     }
 
     private class AccumulativeCardsToReviewTask extends ChartTask<Void, Void, BarData> {
+        private List<String> xVals;
         @Override
         public BarData doInBackground(Void... params) {
             cardDao = dbOpenHelper.getCardDao();
-            List<String> xVals = new ArrayList<String>(30);
+            xVals = new ArrayList<String>(30);
             List<BarEntry> yVals = new ArrayList<BarEntry>(30);
 
             Date now = new Date();
@@ -277,11 +282,11 @@ public class StatisticsScreen extends BaseActivity {
             for (int i = 0; i < 30; i++) {
                 Date endDate = new Date(now.getTime() + (i + 1) * 60 * 60 * 24 * 1000);
                 xVals.add("" + i);
-                yVals.add(new BarEntry((float)cardDao.getScheduledCardCount(null, startDate, endDate), i));
+                yVals.add(new BarEntry(i, (float)cardDao.getScheduledCardCount(null, startDate, endDate)));
             }
 
             BarDataSet dataSet = new BarDataSet(yVals, getString(R.string.accumulative_cards_scheduled_text));
-            BarData data = new BarData(xVals, dataSet);
+            BarData data = new BarData(dataSet);
             data.setValueTextColor(Color.WHITE);
             data.setValueFormatter(valueFormatter);
 
@@ -300,7 +305,8 @@ public class StatisticsScreen extends BaseActivity {
             chart.getAxisRight().setValueFormatter(yAxisValueFormatter);
 
             chart.setData(data);
-            chart.setDescription("");
+            chart.getDescription().setEnabled(false);
+            chart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(xVals));
             return chart;
         }
     }
@@ -312,12 +318,12 @@ public class StatisticsScreen extends BaseActivity {
             cardDao = dbOpenHelper.getCardDao();
 
             List<String> xVals = new ArrayList<String>(6);
-            List<Entry> yVals = new ArrayList<Entry>(6);
+            List<PieEntry> yVals = new ArrayList<PieEntry>(6);
 
             for (int i = 0; i < 6; i++) {
                 long n = cardDao.getNumberOfCardsWithGrade(i);
                 xVals.add("" + i);
-                yVals.add(new Entry((float)cardDao.getNumberOfCardsWithGrade(i), i));
+                yVals.add(new PieEntry((float)cardDao.getNumberOfCardsWithGrade(i), "" + i));
             }
 
             PieDataSet dataSet = new PieDataSet(yVals, getString(R.string.grade_statistics_text));
@@ -332,7 +338,7 @@ public class StatisticsScreen extends BaseActivity {
             dataSet.setSliceSpace(3f);
             dataSet.setSelectionShift(5f);
 
-            PieData data = new PieData(xVals, dataSet);
+            PieData data = new PieData(dataSet);
             data.setValueFormatter(valueFormatter);
 
             return data;
@@ -343,25 +349,24 @@ public class StatisticsScreen extends BaseActivity {
             PieChart chart = new PieChart(StatisticsScreen.this);
             chart.getLegend().setTextColor(Color.WHITE);
             chart.setData(data);
-            chart.setDescription("");
+            chart.getDescription().setEnabled(false);
 
             return chart;
         }
     }
 
-    private static final class ChartValueFormatter implements ValueFormatter {
+    private static final class ChartValueFormatter extends ValueFormatter {
         private static final DecimalFormat formatter = new DecimalFormat("###,###,##0");
 
-        public String getFormattedValue(float value, Entry entry, int dataSetIndex,
-                                        ViewPortHandler viewPortHandler) {
+        public String getFormattedValue(float value) {
             return formatter.format(value);
         }
     }
 
-    private static final class ChartYAxisValueFormatter implements YAxisValueFormatter {
+    private static final class ChartYAxisValueFormatter extends ValueFormatter {
         private static final DecimalFormat formatter = new DecimalFormat("###,###,##0");
 
-        public String getFormattedValue(float value, YAxis yAxis) {
+        public String getFormattedValue(float value) {
             return formatter.format(value);
         }
     }
