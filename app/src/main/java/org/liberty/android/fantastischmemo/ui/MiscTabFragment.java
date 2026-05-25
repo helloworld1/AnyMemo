@@ -58,6 +58,21 @@ import org.liberty.android.fantastischmemo.utils.AboutUtil;
 
 import javax.inject.Inject;
 
+import android.util.Log;
+import android.widget.Toast;
+
+import org.apache.commons.io.FileUtils;
+import org.liberty.android.fantastischmemo.utils.RecentListUtil;
+
+import java.io.File;
+import java.io.InputStream;
+import java.util.concurrent.Callable;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 public class MiscTabFragment extends BaseFragment implements View.OnClickListener {
     private Activity mActivity;
     private View optionButton;
@@ -65,6 +80,13 @@ public class MiscTabFragment extends BaseFragment implements View.OnClickListene
     private View exportButton;
     private View importItems;
     private View exportItems;
+    private View importAnyMemoButton;
+    private View exportAnyMemoButton;
+
+    private CompositeDisposable disposables;
+    private static final int REQUEST_CODE_IMPORT_DB = 1001;
+
+    @Inject RecentListUtil recentListUtil;
     private View importMnemosyneButton;
     private View importSupermemoButton;
     private View importZipButton;
@@ -101,6 +123,7 @@ public class MiscTabFragment extends BaseFragment implements View.OnClickListene
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         fragmentComponents().inject(this);
+        disposables = new CompositeDisposable();
     }
 
 
@@ -116,6 +139,10 @@ public class MiscTabFragment extends BaseFragment implements View.OnClickListene
         exportButton.setOnClickListener(this);
         importItems = v.findViewById(R.id.import_items);
         exportItems = v.findViewById(R.id.export_items);
+        importAnyMemoButton = v.findViewById(R.id.import_anymemo_db);
+        importAnyMemoButton.setOnClickListener(this);
+        exportAnyMemoButton = v.findViewById(R.id.export_anymemo_db);
+        exportAnyMemoButton.setOnClickListener(this);
         importMnemosyneButton = v.findViewById(R.id.import_mnemosyne);
         importMnemosyneButton.setOnClickListener(this);
         importSupermemoButton = v.findViewById(R.id.import_supermemo);
@@ -188,6 +215,17 @@ public class MiscTabFragment extends BaseFragment implements View.OnClickListene
             } else {
                 exportItems.setVisibility(View.GONE);
             }
+        }
+
+        if(v == importAnyMemoButton){
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("*/*");
+            startActivityForResult(intent, REQUEST_CODE_IMPORT_DB);
+        }
+        if(v == exportAnyMemoButton){
+            DialogFragment df = new ExportAnyMemoDbFragment();
+            df.show(((FragmentActivity)mActivity).getSupportFragmentManager(), "ExportAnyMemoDb");
         }
 
         if(v == importMnemosyneButton){
@@ -364,4 +402,49 @@ public class MiscTabFragment extends BaseFragment implements View.OnClickListene
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (disposables != null) {
+            disposables.dispose();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_IMPORT_DB && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
+            final Uri uri = data.getData();
+            disposables.add(Observable.fromCallable(new Callable<File>() {
+                @Override
+                public File call() throws Exception {
+                    String[] splittedUri = uri.toString().split("/");
+                    String newFileName = splittedUri[splittedUri.length - 1];
+                    if (!newFileName.endsWith(".db")) {
+                        newFileName += ".db";
+                    }
+                    File newFile = new File(AMEnv.DEFAULT_ROOT_PATH + newFileName);
+                    InputStream inputStream = mActivity.getContentResolver().openInputStream(uri);
+                    FileUtils.copyInputStreamToFile(inputStream, newFile);
+                    return newFile;
+                }
+            })
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Consumer<File>() {
+                @Override
+                public void accept(File file) {
+                    recentListUtil.addToRecentList(file.getAbsolutePath());
+                    Toast.makeText(mActivity, R.string.success, Toast.LENGTH_SHORT).show();
+                }
+            }, new Consumer<Throwable>() {
+                @Override
+                public void accept(Throwable throwable) {
+                    Log.e("MiscTabFragment", "Error importing DB", throwable);
+                    Toast.makeText(mActivity, "Error importing DB", Toast.LENGTH_SHORT).show();
+                }
+            }));
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
 }
