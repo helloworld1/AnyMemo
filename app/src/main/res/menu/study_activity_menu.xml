@@ -40,6 +40,4 @@
             android:title="@string/look_up_text" />
     <item android:id="@+id/menu_gestures"
             android:title="@string/gestures_text" />
-    <item android:id="@+id/menu_context_paint"
-            android:title="@string/paint_text" />
 </menu>

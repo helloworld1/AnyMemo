@@ -159,9 +159,6 @@ public class QuizActivity extends QACardActivity {
             speakQuestion();
         } else if (itemId == R.id.menu_speak_answer) {
             speakAnswer();
-        } else if (itemId == R.id.menu_paint) {
-            Intent myIntent = new Intent(this, PaintActivity.class);
-            startActivity(myIntent);
         }
         return false;
     }

@@ -239,7 +239,7 @@
     <string name="look_up_text">Look up in a dictionary</string>
     <string name="db_name_text">Database name</string>
     <string name="save_prev_text">Save&amp;prev</string>
-    <string name="paint_text">Paint</string>
+
     <string name="search_tag">Search by tag</string>
     <string name="search_user">Search by user</string>
     <string name="upload_wait">Uploading... please wait. It may take several minutes for a large db.</string>

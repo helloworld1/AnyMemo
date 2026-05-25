@@ -185,9 +185,6 @@ public class StudyActivity extends QACardActivity {
         } else if (itemId == R.id.menu_gestures) {
             showGesturesDialog();
             return true;
-        } else if (itemId == R.id.menu_context_paint) {
-            gotoPaint();
-            return true;
         } else if (itemId == R.id.menu_share) {
             shareUtil.shareCard(getCurrentCard());
             return true;
@@ -330,10 +327,6 @@ public class StudyActivity extends QACardActivity {
         switch (gestureName) {
             case O_SHAPE:
                 lookupDictionary();
-                break;
-
-            case S_SHAPE:
-                gotoPaint();
                 break;
             default:
                 break;
@@ -653,7 +646,6 @@ public class StudyActivity extends QACardActivity {
         final HashMap<String, String> gestureNameDescriptionMap
             = new HashMap<String, String>();
         gestureNameDescriptionMap.put(GestureName.O_SHAPE.getName(), getString(R.string.look_up_text));
-        gestureNameDescriptionMap.put(GestureName.S_SHAPE.getName(), getString(R.string.paint_text));
 
 
         GestureSelectionDialogFragment df = new GestureSelectionDialogFragment();
@@ -714,11 +706,6 @@ public class StudyActivity extends QACardActivity {
             myIntent.putExtra(PreviewEditActivity.EXTRA_CARD_ID, getCurrentCard().getId());
         }
 
-        startActivity(myIntent);
-    }
-
-    private void gotoPaint() {
-        Intent myIntent = new Intent(this, PaintActivity.class);
         startActivity(myIntent);
     }
 

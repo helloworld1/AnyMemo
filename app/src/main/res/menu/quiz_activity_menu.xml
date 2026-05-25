@@ -5,8 +5,6 @@
         anymemo:showAsAction="ifRoom"
   	    android:icon="@android:drawable/ic_menu_search"
         android:title="@string/look_up_text" />
-    <item android:id="@+id/menu_paint"
-        android:title="@string/paint_text" />
     <item android:id="@+id/menu_speak_question"
   		  android:icon="@drawable/speak_q_48"
           android:title="@string/speak_question_menu_text" />
