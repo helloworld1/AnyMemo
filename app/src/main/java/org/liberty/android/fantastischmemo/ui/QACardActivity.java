@@ -397,8 +397,8 @@ public abstract class QACardActivity extends BaseActivity {
         smallTitleBar = (TextView) findViewById(R.id.small_title_bar);
 
         // TODO: title bar should have its own colors but for now use question colors
-        if (setting.getAnswerTextColor() != null) {
-            smallTitleBar.setTextColor(setting.getAnswerTextColor());
+        if (setting.getQuestionTextColor() != null) {
+            smallTitleBar.setTextColor(setting.getQuestionTextColor());
         }
         if (setting.getQuestionBackgroundColor() != null) {
             smallTitleBar.setBackgroundColor(setting.getQuestionBackgroundColor());
