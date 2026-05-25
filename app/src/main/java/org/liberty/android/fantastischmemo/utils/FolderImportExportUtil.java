@@ -10,9 +10,13 @@ import org.apache.commons.io.FileUtils;
 import org.liberty.android.fantastischmemo.R;
 import org.liberty.android.fantastischmemo.common.AMEnv;
 
+import android.util.Pair;
+
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
@@ -25,16 +29,21 @@ import io.reactivex.schedulers.Schedulers;
 
 public class FolderImportExportUtil {
 
+    private final RecentListUtil recentListUtil;
+
     @Inject
-    public FolderImportExportUtil() {}
+    public FolderImportExportUtil(RecentListUtil recentListUtil) {
+        this.recentListUtil = recentListUtil;
+    }
 
     public void importFolder(final Activity activity, final Uri treeUri, final CompositeDisposable disposables) {
-        disposables.add(Observable.fromCallable(new Callable<Integer>() {
+        disposables.add(Observable.fromCallable(new Callable<Pair<Integer, List<String>>>() {
             @Override
-            public Integer call() throws Exception {
+            public Pair<Integer, List<String>> call() throws Exception {
                 DocumentFile pickedDir = DocumentFile.fromTreeUri(activity, treeUri);
-                if (pickedDir == null) return 0;
+                if (pickedDir == null) return new Pair<>(0, new ArrayList<String>());
                 int count = 0;
+                List<String> dbFiles = new ArrayList<>();
                 for (DocumentFile file : pickedDir.listFiles()) {
                     if (file.isFile()) {
                         File dest = new File(AMEnv.DEFAULT_ROOT_PATH + file.getName());
@@ -42,19 +51,25 @@ public class FolderImportExportUtil {
                             if (in != null) {
                                 FileUtils.copyInputStreamToFile(in, dest);
                                 count++;
+                                if (file.getName() != null && file.getName().toLowerCase().endsWith(".db")) {
+                                    dbFiles.add(dest.getAbsolutePath());
+                                }
                             }
                         }
                     }
                 }
-                return count;
+                return new Pair<>(count, dbFiles);
             }
         })
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Consumer<Integer>() {
+        .subscribe(new Consumer<Pair<Integer, List<String>>>() {
             @Override
-            public void accept(Integer count) {
-                Toast.makeText(activity, "Imported " + count + " files", Toast.LENGTH_SHORT).show();
+            public void accept(Pair<Integer, List<String>> result) {
+                Toast.makeText(activity, "Imported " + result.first + " files", Toast.LENGTH_SHORT).show();
+                for (String dbFile : result.second) {
+                    recentListUtil.addToRecentList(dbFile);
+                }
             }
         }, new Consumer<Throwable>() {
             @Override
