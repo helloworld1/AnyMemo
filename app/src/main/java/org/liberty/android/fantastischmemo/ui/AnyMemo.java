@@ -452,8 +452,10 @@ public class AnyMemo extends BaseActivity {
                 return null;
             }
 
-            String[] splittedUri = contentUri.toString().split("/");
-            String newFileName = splittedUri[splittedUri.length - 1];
+            String newFileName = anyMemoActivity.amFileUtil.getFileNameFromUri(anyMemoActivity, contentUri);
+            if (newFileName == null) {
+                newFileName = "imported_db.db";
+            }
             if (!newFileName.endsWith(".db")) {
                 newFileName += ".db";
             }

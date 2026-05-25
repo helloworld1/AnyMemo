@@ -320,8 +320,10 @@ public class FileBrowserFragment extends BaseDialogFragment {
             disposables.add(io.reactivex.Observable.fromCallable(new java.util.concurrent.Callable<File>() {
                 @Override
                 public File call() throws Exception {
-                    String[] splittedUri = uri.toString().split("/");
-                    String newFileName = splittedUri[splittedUri.length - 1];
+                    String newFileName = amFileUtil.getFileNameFromUri(getContext(), uri);
+                    if (newFileName == null) {
+                        newFileName = "imported_db.db";
+                    }
                     // Clean up query parameters or encoded chars if necessary, but a simple append works for now
                     if (!newFileName.endsWith(".db")) {
                         newFileName += ".db";

@@ -22,6 +22,11 @@ package org.liberty.android.fantastischmemo.utils;
 
 import android.content.Context;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.OpenableColumns;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.liberty.android.fantastischmemo.common.AMEnv;
@@ -116,5 +121,32 @@ public class AMFileUtil {
     public void createDbFileWithDefaultSettings(File newDbFile) throws IOException {
         String emptyDbPath = mContext.getApplicationContext().getFilesDir().getAbsolutePath() + "/" + AMEnv.EMPTY_DB_NAME;
         FileUtils.copyFile(new File(emptyDbPath), newDbFile);
+    }
+
+    /**
+     * Get real file name from URI
+     */
+    public String getFileNameFromUri(Context context, Uri uri) {
+        String result = null;
+        if (uri.getScheme() != null && uri.getScheme().equals("content")) {
+            try (Cursor cursor = context.getContentResolver().query(uri, null, null, null, null)) {
+                if (cursor != null && cursor.moveToFirst()) {
+                    int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                    if (nameIndex >= 0) {
+                        result = cursor.getString(nameIndex);
+                    }
+                }
+            }
+        }
+        if (result == null) {
+            result = uri.getPath();
+            if (result != null) {
+                int cut = result.lastIndexOf('/');
+                if (cut != -1) {
+                    result = result.substring(cut + 1);
+                }
+            }
+        }
+        return result;
     }
 }

@@ -63,6 +63,7 @@ import android.widget.Toast;
 
 import org.apache.commons.io.FileUtils;
 import org.liberty.android.fantastischmemo.utils.RecentListUtil;
+import org.liberty.android.fantastischmemo.utils.AMFileUtil;
 
 import java.io.File;
 import java.io.InputStream;
@@ -87,6 +88,7 @@ public class MiscTabFragment extends BaseFragment implements View.OnClickListene
     private static final int REQUEST_CODE_IMPORT_DB = 1001;
 
     @Inject RecentListUtil recentListUtil;
+    @Inject AMFileUtil amFileUtil;
     private View importMnemosyneButton;
     private View importSupermemoButton;
     private View importZipButton;
@@ -417,8 +419,10 @@ public class MiscTabFragment extends BaseFragment implements View.OnClickListene
             disposables.add(Observable.fromCallable(new Callable<File>() {
                 @Override
                 public File call() throws Exception {
-                    String[] splittedUri = uri.toString().split("/");
-                    String newFileName = splittedUri[splittedUri.length - 1];
+                    String newFileName = amFileUtil.getFileNameFromUri(mActivity, uri);
+                    if (newFileName == null) {
+                        newFileName = "imported_db.db";
+                    }
                     if (!newFileName.endsWith(".db")) {
                         newFileName += ".db";
                     }
