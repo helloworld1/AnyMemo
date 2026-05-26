@@ -81,7 +81,7 @@ public class CardPlayerFragment extends BaseFragment {
         IntentFilter filter = new IntentFilter();
         filter.addAction(CardPlayerService.ACTION_GO_TO_CARD);
         filter.addAction(CardPlayerService.ACTION_PLAYING_STOPPED);
-        getActivity().registerReceiver(serviceEventListener, filter);
+        ContextCompat.registerReceiver(getActivity(), serviceEventListener, filter, ContextCompat.RECEIVER_NOT_EXPORTED);
     }
 
     @Override

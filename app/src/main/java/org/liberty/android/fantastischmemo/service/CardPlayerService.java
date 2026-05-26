@@ -230,6 +230,7 @@ public class CardPlayerService extends BaseService {
             Intent intent = new Intent();
             intent.setAction(ACTION_GO_TO_CARD);
             intent.putExtra(EXTRA_CURRENT_CARD_ID, card.getId());
+            intent.setPackage(getPackageName());
             sendBroadcast(intent);
         }
 
@@ -237,6 +238,7 @@ public class CardPlayerService extends BaseService {
         public void onStopPlaying() {
             Intent intent = new Intent();
             intent.setAction(ACTION_PLAYING_STOPPED);
+            intent.setPackage(getPackageName());
             sendBroadcast(intent);
         }
     };
